@@ -1,5 +1,6 @@
 package net.demilich.metastone.gui.cards;
 
+import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
@@ -23,8 +24,12 @@ public class CardProxy extends Proxy<GameNotification> {
 			// ensure user's personal cards dir exists
 			Files.createDirectories(Paths.get(CardCatalogue.CARDS_FOLDER_PATH));
 			// ensure cards have been copied to ~/metastone/cards
-			CardCatalogue.copyCardsFromResources();
-			CardCatalogue.loadCardsFromFilesystem();
+			if (BuildConfig.PACKAGE_ONLY) {
+				CardCatalogue.loadCardsFromPackage();
+			} else {
+				CardCatalogue.copyCardsFromResources();
+				CardCatalogue.loadCardsFromFilesystem();
+			}
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

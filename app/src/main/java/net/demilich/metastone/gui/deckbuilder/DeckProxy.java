@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.game.decks.*;
 
 import com.google.gson.Gson;
@@ -93,7 +94,11 @@ public class DeckProxy extends Proxy<GameNotification> {
 
 	public void loadDecks() throws IOException, URISyntaxException {
 		// load decks from ~/metastone/decks on the filesystem
-		deckCatalogue.loadDecksFromFilesystem();
+		if (BuildConfig.PACKAGE_ONLY) {
+			DeckCatalogue.loadDecksFromPackage();
+		} else {
+			DeckCatalogue.loadDecksFromFilesystem();
+		}
 	}
 
 	public boolean nameAvailable(Deck deck) {
