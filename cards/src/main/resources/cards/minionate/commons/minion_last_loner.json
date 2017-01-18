@@ -1,10 +1,10 @@
 {
 	"id": "minion_last_loner",
 	"name": "Last Loner",
-	"baseManaCost": 0,
+	"baseManaCost": 5,
 	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
+	"baseAttack": 5,
+	"baseHp": 5,
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"race": "MURLOC",

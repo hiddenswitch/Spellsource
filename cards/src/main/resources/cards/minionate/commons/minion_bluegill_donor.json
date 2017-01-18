@@ -1,9 +1,9 @@
 {
 	"id": "minion_bluegill_donor",
 	"name": "Bluegill Donor",
-	"baseManaCost": 0,
+	"baseManaCost": 3,
 	"type": "MINION",
-	"baseAttack": 6,
+	"baseAttack": 4,
 	"baseHp": 4,
 	"heroClass": "ANY",
 	"rarity": "FREE",
