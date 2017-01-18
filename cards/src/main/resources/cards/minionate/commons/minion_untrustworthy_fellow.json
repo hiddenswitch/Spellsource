@@ -14,6 +14,12 @@
 			"class": "AddAttributeSpell",
 			"target": "ENEMY_HAND",
 			"attribute": "CHARGE",
+			"filter": {
+				"class": "AttributeFilter",
+				"attribute": "CHARGE",
+				"invert": true,
+				"operation": "HAS"
+			},
 			"randomTarget": true
 		}
 	},
