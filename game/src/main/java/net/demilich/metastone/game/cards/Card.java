@@ -133,11 +133,16 @@ public abstract class Card extends Entity {
 
 	public String getDescription() {
 		// Cleanup the html tags that appear in the description
-		// TODO: Show effects on card behaviour like increased spell damage
 		if (description == null || description.isEmpty()) {
 			return description;
 		}
+		// TODO: Show effects on card behaviour like increased spell damage
 		String descriptionCleaned = description.replaceAll("(</?[bi]>)|\\[x\\]", "");
+		// Include taunt if it doesn't seem to contain anything about taunt.
+		if (hasAttribute(Attribute.CHARGE)
+				&& !descriptionCleaned.matches("[Cc]harge")) {
+			descriptionCleaned += " (Charge)";
+		}
 		return descriptionCleaned;
 	}
 

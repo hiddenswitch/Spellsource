@@ -1,0 +1,38 @@
+{
+	"id": "minion_healthy_spell",
+	"name": "Healthy Spell",
+	"baseManaCost": 0,
+	"type": "MINION",
+	"baseAttack": 6,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Battlecry: If you have 15 or less Health, discover a spell.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "DiscoverRandomCardSpell",
+			"spell": {
+				"class": "ReceiveCardSpell",
+				"targetPlayer": "SELF"
+			},
+			"cardFilter": {
+				"class": "CardFilter",
+				"cardType": "SPELL"
+			}
+		},
+		"condition": {
+			"class": "AttributeCondition",
+			"target": "FRIENDLY_HERO",
+			"attribute": "HP",
+			"operation": "LESS_OR_EQUAL",
+			"value": 15
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
