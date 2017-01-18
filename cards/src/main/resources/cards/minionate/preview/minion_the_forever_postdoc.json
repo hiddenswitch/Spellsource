@@ -1,7 +1,7 @@
 {
   "id": "minion_the_forever_postdoc",
   "name": "The Forever Post-Doc",
-  "baseManaCost": 5,
+  "baseManaCost": 0,
   "type": "MINION",
   "baseAttack": 4,
   "baseHp": 4,
@@ -10,5 +10,14 @@
   "description": "If this is the first time you've played this minion, permanently cost (1) less.",
   "collectible": true,
   "set": "MINIONATE",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ForeverPostDocSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "fileFormatVersion": 1
 }
