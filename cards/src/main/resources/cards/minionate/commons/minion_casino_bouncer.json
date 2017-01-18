@@ -15,8 +15,14 @@
 		},
 		"spell": {
 			"class": "AddAttributeSpell",
-			"target": "FRIENDLY_MINIONS",
+			"target": "ALL_MINIONS",
 			"attribute": "TAUNT",
+			"filter": {
+				"class": "AttributeFilter",
+				"attribute": "TAUNT",
+				"invert": true,
+				"operation": "HAS"
+			},
 			"randomTarget": true
 		}
 	},
