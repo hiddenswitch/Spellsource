@@ -79,5 +79,8 @@ public enum Attribute {
 	ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION,
 
 	// AI flags
-	MARKED_FOR_DEATH, 
+	MARKED_FOR_DEATH,
+
+	// Networked attributes
+	FIRST_TIMED
 }
