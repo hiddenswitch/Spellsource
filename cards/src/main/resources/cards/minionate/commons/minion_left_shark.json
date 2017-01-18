@@ -8,7 +8,10 @@
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"race": "MURLOC",
-	"description": "Adjacent minions have -1 Attack.",
+	"description": "Divine Shield. Adjacent minions have -2 Attack.",
+	"attributes": {
+		"DIVINE_SHIELD": true
+	},
 	"aura": {
 		"class": "BuffAura",
 		"target": "ADJACENT_MINIONS",

@@ -1,13 +1,13 @@
 {
 	"id": "minion_shuffler",
 	"name": "Shuffler",
-	"baseManaCost": 0,
+	"baseManaCost": 2,
 	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 5,
+	"baseAttack": 3,
+	"baseHp": 2,
 	"heroClass": "ANY",
 	"rarity": "FREE",
-	"description": "Whenever a minion dies, shuffle it into your or your opponent's deck.",
+	"description": "Whenever a minion dies, shuffle it into its owner's deck.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "MinionDeathTrigger",
