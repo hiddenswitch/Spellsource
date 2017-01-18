@@ -1,0 +1,25 @@
+{
+	"id": "minion_random_destroyer",
+	"name": "Random Destroyer",
+	"baseManaCost": 0,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Combo: Destroy another random minion.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "DestroySpell",
+			"target": "ALL_OTHER_MINIONS",
+			"randomTarget": true
+		},
+		"condition": {
+			"class": "ComboCondition"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
