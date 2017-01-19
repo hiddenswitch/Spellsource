@@ -1,13 +1,13 @@
 {
 	"id": "minion_casino_bouncer",
 	"name": "Casino Bouncer",
-	"baseManaCost": 0,
+	"baseManaCost": 1,
 	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 5,
+	"baseAttack": 1,
+	"baseHp": 3,
 	"heroClass": "ANY",
 	"rarity": "FREE",
-	"description": "Inspire: Give a random minion Taunt.",
+	"description": "Inspire: Give a random friendly minion Taunt.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "InspireTrigger",
@@ -17,6 +17,12 @@
 			"class": "AddAttributeSpell",
 			"target": "ALL_MINIONS",
 			"attribute": "TAUNT",
+			"filter": {
+				"class": "AttributeFilter",
+				"attribute": "TAUNT",
+				"invert": true,
+				"operation": "HAS"
+			},
 			"randomTarget": true
 		}
 	},

@@ -1,10 +1,10 @@
 {
 	"id": "minion_casino_saboteur",
 	"name": "Casino Saboteur",
-	"baseManaCost": 0,
+	"baseManaCost": 4,
 	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 6,
+	"baseAttack": 2,
+	"baseHp": 5,
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"description": "At the end of your turn, give a random minion in your opponent's hand -1 Attack.",
