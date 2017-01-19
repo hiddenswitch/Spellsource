@@ -82,5 +82,5 @@ public enum Attribute {
 	MARKED_FOR_DEATH,
 
 	// Networked attributes
-	FIRST_TIMED
+	FIRST_TIME_PLAYS
 }
