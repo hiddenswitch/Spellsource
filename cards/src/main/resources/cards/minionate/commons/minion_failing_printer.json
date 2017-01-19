@@ -1,10 +1,10 @@
 {
 	"id": "minion_failing_printer",
 	"name": "Failing Printer",
-	"baseManaCost": 0,
+	"baseManaCost": 2,
 	"type": "MINION",
 	"baseAttack": 2,
-	"baseHp": 5,
+	"baseHp": 1,
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"description": "Inspire: Summon a 1/1 copy of a random minion in your opponent's deck.",

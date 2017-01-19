@@ -1,21 +1,31 @@
 {
 	"id": "minion_untrustworthy_fellow",
 	"name": "Untrustworthy Fellow",
-	"baseManaCost": 0,
+	"baseManaCost": 5,
 	"type": "MINION",
 	"baseAttack": 6,
-	"baseHp": 6,
+	"baseHp": 4,
 	"heroClass": "ANY",
 	"rarity": "FREE",
-	"description": "Battlecry: Give a random minion in your opponent's hand Charge.",
+	"description": "Charge. Battlecry: Give a random minion in your opponent's hand Charge.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {
 			"class": "AddAttributeSpell",
 			"target": "ENEMY_HAND",
 			"attribute": "CHARGE",
+			"filter": {
+				"class": "AttributeFilter",
+				"attribute": "CHARGE",
+				"invert": true,
+				"operation": "HAS"
+			},
 			"randomTarget": true
 		}
+	},
+	"attributes": {
+		"BATTLECRY": true,
+		"CHARGE": true
 	},
 	"collectible": true,
 	"set": "MINIONATE",

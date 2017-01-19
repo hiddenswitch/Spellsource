@@ -1,9 +1,9 @@
 {
 	"id": "minion_tomb_raider",
 	"name": "Tomb Raider",
-	"baseManaCost": 0,
+	"baseManaCost": 2,
 	"type": "MINION",
-	"baseAttack": 4,
+	"baseAttack": 2,
 	"baseHp": 3,
 	"heroClass": "ANY",
 	"rarity": "FREE",

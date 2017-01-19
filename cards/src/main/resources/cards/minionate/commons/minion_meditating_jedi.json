@@ -1,10 +1,10 @@
 {
 	"id": "minion_meditating_jedi",
 	"name": "Meditating Jedi",
-	"baseManaCost": 0,
+	"baseManaCost": 2,
 	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
+	"baseAttack": 1,
+	"baseHp": 2,
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"description": "At the end of your turn, gain +1/+1 if this is the only minion on the battlefield.",
