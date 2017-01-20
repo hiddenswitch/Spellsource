@@ -127,6 +127,10 @@ public class AccountsTest extends ServiceRuntime<AccountsImpl> {
 			instance.withEmbeddedConfiguration();
 			fut.complete();
 		}, then -> vertx.deployVerticle(instance, andThen -> {
+			if (instance.getDatabase() == null
+					|| andThen.failed()) {
+				throw new RuntimeException("The embedded DynamoDB server failed to start.");
+			}
 			done.handle(new Result<>(instance));
 		}));
 

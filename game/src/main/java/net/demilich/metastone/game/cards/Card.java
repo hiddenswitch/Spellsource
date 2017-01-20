@@ -13,11 +13,8 @@ import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.CardLocation;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.IdFactory;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.EnumMap;
-import java.util.Objects;
 
 public abstract class Card extends Entity {
 	private static final long serialVersionUID = 1L;
@@ -52,7 +49,7 @@ public abstract class Card extends Entity {
 
 		setAttribute(Attribute.BASE_MANA_COST, desc.baseManaCost);
 		if (desc.attributes != null) {
-			attributes.putAll(desc.attributes);
+			getAttributes().putAll(desc.attributes);
 		}
 
 		if (desc.manaCostModifier != null) {
@@ -60,18 +57,18 @@ public abstract class Card extends Entity {
 		}
 
 		if (desc.passiveTrigger != null) {
-			attributes.put(Attribute.PASSIVE_TRIGGER, desc.passiveTrigger);
+			getAttributes().put(Attribute.PASSIVE_TRIGGER, desc.passiveTrigger);
 		}
 
 		if (desc.deckTrigger != null) {
-			attributes.put(Attribute.DECK_TRIGGER, desc.deckTrigger);
+			getAttributes().put(Attribute.DECK_TRIGGER, desc.deckTrigger);
 		}
 	}
 
 	@Override
 	public Card clone() {
 		Card clone = (Card) super.clone();
-		clone.attributes = new EnumMap<>(getAttributes());
+		clone.setAttributes(new EnumMap<>(getAttributes()));
 		return clone;
 	}
 
