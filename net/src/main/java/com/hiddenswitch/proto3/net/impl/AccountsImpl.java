@@ -1,9 +1,10 @@
 package com.hiddenswitch.proto3.net.impl;
 
-import com.hiddenswitch.proto3.net.Accounts;
-import com.hiddenswitch.proto3.net.Service;
+import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.amazon.*;
 import com.hiddenswitch.proto3.net.models.*;
+import com.hiddenswitch.proto3.net.util.Broker;
+import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import com.lambdaworks.crypto.SCryptUtil;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -15,9 +16,16 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 	private Pattern usernamePattern = Pattern.compile("[A-Za-z0-9_]+");
 	private String userId;
 
+	// Services
+	private ServiceProxy<Cards> cards;
+	private ServiceProxy<Inventory> inventory;
+	private ServiceProxy<Decks> decks;
+
 	@Override
 	public void start() {
-
+		cards = Broker.proxy(Cards.class, vertx.eventBus());
+		inventory = Broker.proxy(Inventory.class, vertx.eventBus());
+		decks = Broker.proxy(Decks.class, vertx.eventBus());
 	}
 
 	@Override
@@ -65,6 +73,14 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 		String userId = save(user);
 
 		LoginToken loginToken = setPassword(userId, request.password);
+
+		// Add the basic cards to the user's collection
+		inventory.sync().createCollection(new CreateCollectionRequest()
+				.withType(CollectionTypes.USER)
+				.withUserId(userId));
+
+		// Open some card packs
+		// Create standard decks for the user
 
 		response.userId = userId;
 		response.loginToken = loginToken;
