@@ -8,14 +8,12 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public abstract class Entity extends CustomCloneable implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String name;
-	protected Map<Attribute, Object> attributes = new EnumMap<Attribute, Object>(Attribute.class);
+	private Map<Attribute, Object> attributes = new EnumMap<>(Attribute.class);
 	private int id = IdFactory.UNASSIGNED;
 	private int ownerIndex = -1;
 
@@ -29,7 +27,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	}
 
 	public Object getAttribute(Attribute attribute) {
-		return attributes.get(attribute);
+		return getAttributes().get(attribute);
 	}
 
 	public Map<Attribute, Object> getAttributes() {
@@ -37,7 +35,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	}
 
 	public int getAttributeValue(Attribute attribute) {
-		return attributes.containsKey(attribute) ? (int) attributes.get(attribute) : 0;
+		return getAttributes().containsKey(attribute) ? (int) getAttributes().get(attribute) : 0;
 	}
 
 	public abstract EntityType getEntityType();
@@ -59,7 +57,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	}
 
 	public boolean hasAttribute(Attribute attribute) {
-		Object value = attributes.get(attribute);
+		Object value = getAttributes().get(attribute);
 		if (value == null) {
 			return false;
 		}
@@ -74,7 +72,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	}
 
 	public void modifyAttribute(Attribute attribute, int value) {
-		if (!attributes.containsKey(attribute)) {
+		if (!getAttributes().containsKey(attribute)) {
 			setAttribute(attribute, 0);
 		}
 		setAttribute(attribute, getAttributeValue(attribute) + value);
@@ -85,19 +83,19 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	}
 
 	public void removeAttribute(Attribute attribute) {
-		attributes.remove(attribute);
+		getAttributes().remove(attribute);
 	}
 
 	public void setAttribute(Attribute attribute) {
-		attributes.put(attribute, 1);
+		getAttributes().put(attribute, 1);
 	}
 
 	public void setAttribute(Attribute attribute, int value) {
-		attributes.put(attribute, value);
+		getAttributes().put(attribute, value);
 	}
 
 	public void setAttribute(Attribute attribute, Object value) {
-		attributes.put(attribute, value);
+		getAttributes().put(attribute, value);
 	}
 
 	public void setId(int id) {
@@ -110,5 +108,9 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 
 	public void setOwner(int ownerIndex) {
 		this.ownerIndex = ownerIndex;
+	}
+
+	public void setAttributes(Map<Attribute, Object> attributes) {
+		this.attributes = attributes;
 	}
 }
