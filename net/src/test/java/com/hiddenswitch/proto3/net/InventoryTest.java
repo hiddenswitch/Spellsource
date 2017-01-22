@@ -6,7 +6,7 @@ import com.hiddenswitch.proto3.net.impl.CardsImpl;
 import com.hiddenswitch.proto3.net.impl.InventoryImpl;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Result;
-import com.hiddenswitch.proto3.net.util.ServiceRuntime;
+import com.hiddenswitch.proto3.net.util.ServiceTest;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
  * Created by bberman on 1/22/17.
  */
 @RunWith(VertxUnitRunner.class)
-public class InventoryTest extends ServiceRuntime<InventoryImpl> {
+public class InventoryTest extends ServiceTest<InventoryImpl> {
 	@Test
 	public void testCreateCollection(TestContext context) {
 		setLoggingLevel(Level.ERROR);

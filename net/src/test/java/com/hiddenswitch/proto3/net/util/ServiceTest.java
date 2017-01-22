@@ -21,13 +21,13 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 @RunWith(VertxUnitRunner.class)
-public abstract class ServiceRuntime<T extends Service<T>> {
+public abstract class ServiceTest<T extends Service<T>> {
 	public static TestContext getContext() {
 		return new Assert();
 	}
 
 	private static TestContext wrappedContext;
-	Logger logger = LoggerFactory.getLogger(ServiceRuntime.class);
+	Logger logger = LoggerFactory.getLogger(ServiceTest.class);
 	protected Vertx vertx;
 	protected T service;
 
@@ -80,14 +80,14 @@ public abstract class ServiceRuntime<T extends Service<T>> {
 
 	@Suspendable
 	protected void wrapSync(TestContext context, SuspendableRunnable code) {
-		ServiceRuntime.wrappedContext = context;
+		ServiceTest.wrappedContext = context;
 		final Async async = context.async();
 
 		// Create a verticle on the fly to run sync stuff in, then tear down the verticle
 		TestSyncVerticle testVerticle = new TestSyncVerticle(code);
 		vertx.deployVerticle(testVerticle, getContext().asyncAssertSuccess(fut -> {
 			vertx.undeploy(fut, then -> {
-				ServiceRuntime.wrappedContext = null;
+				ServiceTest.wrappedContext = null;
 				async.complete();
 			});
 		}));

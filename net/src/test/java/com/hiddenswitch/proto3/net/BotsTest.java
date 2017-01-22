@@ -38,7 +38,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_1;
  * Created by bberman on 12/7/16.
  */
 @RunWith(VertxUnitRunner.class)
-public class BotsTest extends ServiceRuntime<BotsImpl> {
+public class BotsTest extends ServiceTest<BotsImpl> {
 	@Test
 	public void testMulligan() throws Exception {
 		setLoggingLevel(Level.ERROR);

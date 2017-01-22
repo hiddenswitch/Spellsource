@@ -7,7 +7,7 @@ import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.impl.GamesImpl;
 import com.hiddenswitch.proto3.net.models.EndGameSessionRequest;
 import com.hiddenswitch.proto3.net.util.Result;
-import com.hiddenswitch.proto3.net.util.ServiceRuntime;
+import com.hiddenswitch.proto3.net.util.ServiceTest;
 import com.hiddenswitch.proto3.net.util.TwoClients;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
@@ -29,7 +29,7 @@ import java.util.List;
 import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
 @RunWith(VertxUnitRunner.class)
-public class GamesTest extends ServiceRuntime<GamesImpl> {
+public class GamesTest extends ServiceTest<GamesImpl> {
 	private Logger logger = LoggerFactory.getLogger(GamesTest.class);
 
 	@Test
@@ -43,7 +43,7 @@ public class GamesTest extends ServiceRuntime<GamesImpl> {
 		try {
 			twoClients = new TwoClients().invoke(this.service);
 		} catch (IOException | URISyntaxException | CardParseException e) {
-			ServiceRuntime.getContext().fail(e.getMessage());
+			ServiceTest.getContext().fail(e.getMessage());
 		}
 		try {
 			twoClients.play();
@@ -210,7 +210,7 @@ public class GamesTest extends ServiceRuntime<GamesImpl> {
 			try {
 				clients.add(new TwoClients().invoke(this.service));
 			} catch (IOException | URISyntaxException | CardParseException e) {
-				ServiceRuntime.getContext().fail(e.getMessage());
+				ServiceTest.getContext().fail(e.getMessage());
 			}
 		}
 

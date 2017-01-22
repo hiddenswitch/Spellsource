@@ -60,7 +60,7 @@ public class CardsImpl extends Service<CardsImpl> implements Cards {
 				boolean passes = true;
 
 				if (request.getRarity() != null) {
-					passes &= request.getRarity() == card.getRarity();
+					passes &= card.getRarity().isRarity(request.getRarity());
 				}
 
 				passes &= card.isCollectible();
