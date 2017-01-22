@@ -205,10 +205,10 @@ public class TwoClients {
 		} else {
 			logger.info("TwoClients match complete.");
 		}
-		ServiceRuntime.getContext().assertTrue(gameDecided());
-		ServiceRuntime.getContext().assertFalse(isTimedOut());
+		ServiceTest.getContext().assertTrue(gameDecided());
+		ServiceTest.getContext().assertFalse(isTimedOut());
 		if (playerContext2 != null) {
-			ServiceRuntime.getContext().assertTrue(playerContext1.getWinningPlayerId() == playerContext2.getWinningPlayerId());
+			ServiceTest.getContext().assertTrue(playerContext1.getWinningPlayerId() == playerContext2.getWinningPlayerId());
 		}
 
 		this.dispose();

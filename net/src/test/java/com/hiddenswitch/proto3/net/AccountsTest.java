@@ -7,7 +7,7 @@ import com.hiddenswitch.proto3.net.amazon.LoginRequest;
 import com.hiddenswitch.proto3.net.amazon.LoginResponse;
 import com.hiddenswitch.proto3.net.amazon.User;
 import com.hiddenswitch.proto3.net.util.Result;
-import com.hiddenswitch.proto3.net.util.ServiceRuntime;
+import com.hiddenswitch.proto3.net.util.ServiceTest;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -18,7 +18,7 @@ import java.time.Instant;
 
 import static org.junit.Assert.*;
 
-public class AccountsTest extends ServiceRuntime<AccountsImpl> {
+public class AccountsTest extends ServiceTest<AccountsImpl> {
 	@Test
 	public void testCreateAccount() throws Exception {
 		setLoggingLevel(Level.ERROR);
