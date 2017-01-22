@@ -22,7 +22,7 @@ task copyNativeDeps(type: Copy) {
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jp.classmethod.aws'
 apply plugin: 'application'
-apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
     zip64 true
@@ -104,22 +104,3 @@ run.dependsOn copyNativeDeps
 run.doFirst {
     systemProperty "sqlite4java.library.path", 'build/libs'
 }
-
-//compileJava.dependsOn processResources
-//compileJava {
-//    doLast {
-//        ant.taskdef(name:'instrumentation', classname:'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
-//        ant.instrumentation(verbose:'true', check:'true', debug:'true') {
-//            fileset(dir: sourceSets.main.output.classesDir)
-//        }
-//    }
-//}
-//compileTestJava.dependsOn processTestResources
-//compileTestJava {
-//    doLast {
-//        ant.taskdef(name:'instrumentation', classname:'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.testCompile.asPath)
-//        ant.instrumentation(verbose:'true', check:'true', debug:'true') {
-//            fileset(dir: sourceSets.test.output.classesDir)
-//        }
-//    }
-//}

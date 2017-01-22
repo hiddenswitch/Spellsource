@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.models.*;
 
 /**
@@ -8,6 +9,7 @@ import com.hiddenswitch.proto3.net.models.*;
 public interface Cards {
 	GetCardResponse getCard(GetCardRequest request);
 
+	@Suspendable
 	QueryCardsResponse queryCards(QueryCardsRequest request);
 
 	InsertCardResponse insertCard(InsertCardRequest request);

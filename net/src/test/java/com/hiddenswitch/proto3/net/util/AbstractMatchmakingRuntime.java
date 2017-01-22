@@ -31,12 +31,12 @@ public abstract class AbstractMatchmakingRuntime extends ServiceRuntime<Matchmak
 	@Suspendable
 	protected String createTwoPlayersAndMatchmake() throws SuspendExecution, InterruptedException {
 		logger.info("Starting matchmaking...");
-		String player1 = "player1";
-		String player2 = "player2";
+		String userId1 = "player1";
+		String userId2 = "player2";
 
 		// Assume player 1's identity
 		MatchmakingRequest request1 = new MatchmakingRequest();
-		request1.userId = player1;
+		request1.userId = userId1;
 		Deck deck1 = createDeckForMatchmaking(PLAYER_1);
 		request1.deck = deck1;
 		MatchmakingResponse response1 = null;
@@ -49,7 +49,7 @@ public abstract class AbstractMatchmakingRuntime extends ServiceRuntime<Matchmak
 
 		// Assume player 2's identity
 		MatchmakingRequest request2 = new MatchmakingRequest();
-		request2.userId = player2;
+		request2.userId = userId2;
 		Deck deck2 = createDeckForMatchmaking(PLAYER_2);
 		request2.deck = deck2;
 		MatchmakingResponse response2 = null;
