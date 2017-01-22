@@ -1,11 +1,13 @@
 package com.hiddenswitch.proto3.net.impl;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.amazon.*;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import com.lambdaworks.crypto.SCryptUtil;
+import net.demilich.metastone.game.cards.CardSet;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.Arrays;
@@ -23,7 +25,7 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 
 	@Override
 	public void start() {
-		cards = Broker.proxy(Cards.class, vertx.eventBus());
+
 		inventory = Broker.proxy(Inventory.class, vertx.eventBus());
 		decks = Broker.proxy(Decks.class, vertx.eventBus());
 	}
@@ -49,6 +51,7 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 	}
 
 	@Override
+	@Suspendable
 	public CreateAccountResponse createAccount(CreateAccountRequest request) {
 		CreateAccountResponse response = new CreateAccountResponse();
 
@@ -74,13 +77,22 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 
 		LoginToken loginToken = setPassword(userId, request.password);
 
-		// Add the basic cards to the user's collection
-		inventory.sync().createCollection(new CreateCollectionRequest()
-				.withType(CollectionTypes.USER)
-				.withUserId(userId));
+//		// Add the basic cards to the user's collection
+//
+//		CreateCollectionResponse createCollectionResponse = inventory.sync()
+//				.createCollection(new CreateCollectionRequest()
+//						.withType(CollectionTypes.USER)
+//						.withUserId(userId)
+//						.withOpenCardPack(new OpenCardPackRequest()
+//								.withUserId(userId)
+//								.withSets(CardSet.MINIONATE)
+//								.withNumberOfPacks(5)
+//								.withCardsPerPack(5))
+//						.withCardsQuery(new QueryCardsRequest()
+//								.withSets(CardSet.BASIC, CardSet.CLASSIC)));
 
-		// Open some card packs
-		// Create standard decks for the user
+		// TODO: Create standard decks for the user
+
 
 		response.userId = userId;
 		response.loginToken = loginToken;
@@ -89,6 +101,7 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 	}
 
 	@Override
+	@Suspendable
 	public LoginResponse login(LoginRequest request) {
 		LoginResponse response = new LoginResponse();
 		boolean valid = true;
