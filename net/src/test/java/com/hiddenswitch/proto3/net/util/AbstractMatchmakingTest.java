@@ -36,22 +36,22 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 
 		// Assume player 1's identity
 		MatchmakingRequest request1 = new MatchmakingRequest();
-		request1.userId = userId1;
+		request1.setUserId(userId1);
 		Deck deck1 = createDeckForMatchmaking(PLAYER_1);
-		request1.deck = deck1;
+		request1.setDeck(deck1);
 		MatchmakingResponse response1 = null;
 
 		response1 = service.matchmakeAndJoin(request1);
 		getContext().assertNotNull(response1.getRetry());
 		getContext().assertNull(response1.getConnection());
-		getContext().assertNull(response1.getRetry().deck);
+		getContext().assertNull(response1.getRetry().getDeck());
 		logger.info("Matchmaking for player1 entered.");
 
 		// Assume player 2's identity
 		MatchmakingRequest request2 = new MatchmakingRequest();
-		request2.userId = userId2;
+		request2.setUserId(userId2);
 		Deck deck2 = createDeckForMatchmaking(PLAYER_2);
-		request2.deck = deck2;
+		request2.setDeck(deck2);
 		MatchmakingResponse response2 = null;
 
 		response2 = service.matchmakeAndJoin(request2);

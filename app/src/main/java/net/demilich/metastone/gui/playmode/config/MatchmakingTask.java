@@ -1,6 +1,7 @@
 package net.demilich.metastone.gui.playmode.config;
 
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
+import com.hiddenswitch.proto3.net.common.MatchmakingQueuePut;
 import com.hiddenswitch.proto3.net.common.MatchmakingRequest;
 import com.hiddenswitch.proto3.net.common.MatchmakingResponse;
 import com.hiddenswitch.proto3.net.util.Serialization;
@@ -13,7 +14,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -48,8 +49,8 @@ public class MatchmakingTask extends Task<Void> {
 		this.isMatchmaking.set(true);
 		try {
 			// First request
-			MatchmakingRequest request = new MatchmakingRequest();
-			request.deck = deck;
+			MatchmakingQueuePut request = new MatchmakingQueuePut();
+			request.setDeck(deck);
 
 			MatchmakingResponse response = getMatchmakingResponse(request);
 
@@ -76,17 +77,16 @@ public class MatchmakingTask extends Task<Void> {
 		return null;
 	}
 
-	private MatchmakingResponse getMatchmakingResponse(MatchmakingRequest request) throws IOException {
+	private MatchmakingResponse getMatchmakingResponse(MatchmakingQueuePut request) throws IOException {
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		RequestConfig globalConfig = RequestConfig.custom().setCircularRedirectsAllowed(true).build();
-		HttpPost post1 = new HttpPost(BuildConfig.MATCHMAKING_URI);
+		HttpPut put = new HttpPut(BuildConfig.MATCHMAKING_URI);
 		String serialized = Serialization.serialize(request);
-		post1.setEntity(new StringEntity(serialized, ContentType.APPLICATION_JSON));
-		post1.addHeader("X-Auth-UserId", userId);
-		post1.setConfig(globalConfig);
-		HttpPost post = post1;
+		put.setEntity(new StringEntity(serialized, ContentType.APPLICATION_JSON));
+		put.addHeader("X-Auth-UserId", userId);
+		put.setConfig(globalConfig);
 
-		CloseableHttpResponse httpResponse = client.execute(post);
+		CloseableHttpResponse httpResponse = client.execute(put);
 
 		HttpEntity entity = httpResponse.getEntity();
 		MatchmakingResponse response = Serialization.deserialize(EntityUtils.toString(entity), MatchmakingResponse.class);
@@ -99,10 +99,10 @@ public class MatchmakingTask extends Task<Void> {
 	private void cancelMatchmaking() throws IOException {
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		RequestConfig globalConfig = RequestConfig.custom().setCircularRedirectsAllowed(true).build();
-		HttpDelete post1 = new HttpDelete(BuildConfig.MATCHMAKING_URI);
-		post1.addHeader("X-Auth-UserId", userId);
-		post1.setConfig(globalConfig);
-		CloseableHttpResponse httpResponse = client.execute(post1);
+		HttpDelete delete = new HttpDelete(BuildConfig.MATCHMAKING_URI);
+		delete.addHeader("X-Auth-UserId", userId);
+		delete.setConfig(globalConfig);
+		CloseableHttpResponse httpResponse = client.execute(delete);
 		httpResponse.close();
 		client.close();
 	}

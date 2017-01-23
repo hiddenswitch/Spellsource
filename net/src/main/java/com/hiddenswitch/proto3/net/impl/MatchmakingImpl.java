@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Matchmaking;
 import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
+import com.hiddenswitch.proto3.net.common.MatchmakingQueuePut;
 import com.hiddenswitch.proto3.net.common.MatchmakingRequest;
 import com.hiddenswitch.proto3.net.common.MatchmakingResponse;
 import com.hiddenswitch.proto3.net.impl.util.QueueEntry;
@@ -47,10 +48,10 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 	@Override
 	@Suspendable
 	public MatchmakingResponse matchmakeAndJoin(MatchmakingRequest matchmakingRequest) throws InterruptedException, SuspendExecution {
-		final String userId = matchmakingRequest.userId;
+		final String userId = matchmakingRequest.getUserId();
 		MatchmakingResponse response = new MatchmakingResponse();
 
-		final boolean isWaitingTooLong = matchmakingRequest.allowBots
+		final boolean isWaitingTooLong = matchmakingRequest.isAllowBots()
 				&& matchmaker.contains(userId)
 				&& matchmaker.get(userId).createdAt + (long) 25e9 < System.nanoTime();
 
@@ -79,10 +80,10 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 			return response;
 		}
 
-		Matchmaker.Match match = matchmaker.match(userId, matchmakingRequest.deck);
+		Matchmaker.Match match = matchmaker.match(userId, matchmakingRequest.getDeck());
 
 		if (match == null) {
-			response.setRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null));
+			response.setRetry(new MatchmakingQueuePut(matchmakingRequest).withDeck(null));
 			return response;
 		}
 

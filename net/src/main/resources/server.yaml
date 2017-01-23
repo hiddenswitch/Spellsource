@@ -1,0 +1,95 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Hidden Switch Minionate API
+  description: The Minionate API for matchmaking, user accounts, collections management and more
+  contact:
+    name: Benjamin Berman
+    email: benjamin.s.berman@gmail.com
+    url: http://hiddenswitch.com
+  license:
+    name: MIT
+    url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+host: api-us-east-2.hiddenswitch.com:8080
+basePath: /v1
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  DefaultSecurity:
+    type: basic
+  DisabledSecurity:
+    type: apiKey
+    in: header
+    name: X-Auth-UserId
+security:
+  - DefaultSecurity: []
+  - DisabledSecurity: []
+definitions:
+  JavaSerializationObject:
+    type: 'object'
+    required:
+      - 'javaSerialized'
+    properties:
+      javaSerialized:
+        type: 'string'
+  MatchmakingQueuePut:
+    type: 'object'
+    properties:
+      deck:
+        $ref: '#/definitions/JavaSerializationObject'
+      deckId:
+        type: 'string'
+      allowBots:
+        type: 'boolean'
+      clientType:
+        type: 'string'
+  MatchmakingResponse:
+    type: 'object'
+    properties:
+      connection:
+        $ref: '#/definitions/JavaSerializationObject'
+      retry:
+        $ref: '#/definitions/MatchmakingQueuePut'
+  MatchCancelResponse:
+    type: 'object'
+    properties:
+      isCanceled:
+        type: 'boolean'
+paths:
+  /matchmaking/constructed/queue:
+    put:
+      description: |
+        Enters your client into a matchmaking queue for constructed deck matchmaking. Clients have to keep their matchmaking queue entry alive by regularly retrying when they have not yet been matched. Retry within 5 seconds.
+      operationId: matchmakingConstructedQueuePut
+      parameters:
+        - name: unused
+          in: body
+          description: |
+            The matchmaking queue entry. Contains the deck.
+          required: true
+          schema:
+            $ref: '#/definitions/MatchmakingQueuePut'
+      responses:
+        "200":
+          description: |
+            The client has been matched with a client and is ready to connect. Use the "connection" field for connection information (client specific).
+          schema:
+            $ref: '#/definitions/MatchmakingResponse'
+        "202":
+          description: |
+            The client is waiting in the matchmaking queue and has been given a MatchmakingRequest object to retry with in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
+          schema:
+            $ref: '#/definitions/MatchmakingResponse'
+    delete:
+      description: Removes your client from the matchmaking queue.
+      operationId: matchmakingConstructedQueueDelete
+      responses:
+        "200":
+          description: |
+            The client's cancel request has been processed. The result can be found in the body's MatchCancelResponse.
+          schema:
+            $ref: '#/definitions/MatchCancelResponse'

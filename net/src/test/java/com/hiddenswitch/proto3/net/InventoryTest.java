@@ -29,6 +29,7 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 
 	private void createCollectionSync() throws SuspendExecution {
 		String userId = "user";
+		
 		CreateCollectionResponse createCollectionResponse = service
 				.createCollection(new CreateCollectionRequest()
 						.withType(CollectionTypes.USER)
