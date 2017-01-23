@@ -73,7 +73,6 @@ public class Serialization {
 		gsonBuilder.registerTypeAdapter(AuraDesc.class, new AuraDeserializer());
 		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDeserializer());
 		gsonBuilder.registerTypeAdapter(CardCostModifierDesc.class, new CardCostModifierDeserializer());
-		gsonBuilder.serializeNulls();
 		gsonBuilder.enableComplexMapKeySerialization();
 		gson = gsonBuilder.create();
 	}

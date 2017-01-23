@@ -9,7 +9,7 @@ public class MatchmakingResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private ClientConnectionConfiguration connection;
 
-	private MatchmakingRequest retry;
+	private MatchmakingQueuePut retry;
 
 	public ClientConnectionConfiguration getConnection() {
 		return connection;
@@ -19,11 +19,11 @@ public class MatchmakingResponse implements Serializable {
 		this.connection = connection;
 	}
 
-	public MatchmakingRequest getRetry() {
+	public MatchmakingQueuePut getRetry() {
 		return retry;
 	}
 
-	public void setRetry(MatchmakingRequest retry) {
+	public void setRetry(MatchmakingQueuePut retry) {
 		this.retry = retry;
 	}
 }
