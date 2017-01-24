@@ -1,0 +1,20 @@
+{
+	"id": "spell_enemy_copy",
+	"name": "Enemy Copy",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Battlecry: Summon a 1/1 copy of a random minion in your opponent’s deck.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "SummonOneOneCopySpell",
+		"cardSource": {
+			"class": "DeckSource",
+			"targetPlayer": "OPPONENT"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

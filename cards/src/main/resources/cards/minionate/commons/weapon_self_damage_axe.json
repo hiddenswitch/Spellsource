@@ -1,0 +1,26 @@
+{
+	"id": "weapon_self_damage_axe",
+	"name": "Battle Axe",
+	"baseManaCost": 1,
+	"type": "WEAPON",
+	"damage": 3,
+	"durability": 2,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "While equipped, take 2 damage at the start of each turn.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TurnStartTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "DamageSpell",
+			"target": "FRIENDLY_HERO",
+			"value": 2,
+			"ignoreSpellDamage": true
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
