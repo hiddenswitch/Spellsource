@@ -1,0 +1,37 @@
+{
+	"id": "minion_draw_summon",
+	"name": "Draw Summon",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Battlecry: Draw a card for every minion summoned next turn.",
+	"battlecry": {
+		"trigger": {
+			"eventTrigger": {
+				"class": "MinionSummonedTrigger",
+				"targetPlayer": "SELF"
+			},
+			"spell": {
+				"class": "DrawCardSpell",
+				"target": "FRIENDLY_PLAYER",
+				"value": 1,
+				"cardType": "SPELL",
+				"targetPlayer": "OPPONENT",
+				"operation": "ADD",
+				"expirationTrigger": {
+					"class": "TurnEndTrigger",
+					"targetPlayer": "OPPONENT"
+				}
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
