@@ -1,6 +1,5 @@
 {
-	"id": "minion_alarm-o-bot",
-	"name": "Alarm-o-bot",
+	"name": "Alarm-o-Bot",
 	"baseManaCost": 3,
 	"type": "MINION",
 	"baseAttack": 0,

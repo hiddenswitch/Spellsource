@@ -1,6 +1,5 @@
 {
-	"id": "minion_mogushan_warden",
-	"name": "Mogushan Warden",
+	"name": "Mogu'shan Warden",
 	"baseManaCost": 4,
 	"type": "MINION",
 	"baseAttack": 1,
