@@ -72,17 +72,10 @@ public class DraftLogic {
 		ArrayList<List<Card>> draftCards = new ArrayList<>(DRAFTS);
 
 		List<CardSet> equals = Arrays.asList(CardSet.BASIC,
-				CardSet.CLASSIC,
-				CardSet.BLACKROCK_MOUNTAIN,
-				CardSet.GOBLINS_VS_GNOMES,
-				CardSet.NAXXRAMAS,
-				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.LEAGUE_OF_EXPLORERS,
-				CardSet.THE_OLD_GODS,
-				CardSet.ONE_NIGHT_IN_KARAZHAN);
+				CardSet.CLASSIC);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.MEAN_STREETS_OF_GADGETZHAN;
+		CardSet latestExpansion = CardSet.MINIONATE;
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(
 				CardType.CHOOSE_ONE,
