@@ -1,15 +1,14 @@
 {
-	"id": "token_whelp_egg",
-	"name": "Whelp",
+	"name": "Piranha",
 	"baseManaCost": 1,
 	"type": "MINION",
-	"baseAttack": 2,
+	"baseAttack": 1,
 	"baseHp": 1,
-	"heroClass": "ANY",
+	"heroClass": "HUNTER",
 	"rarity": "FREE",
-	"race": "DRAGON",
+	"race": "BEAST",
 	"description": "",
 	"collectible": false,
-	"set": "BLACKROCK_MOUNTAIN",
+	"set": "MEAN_STREETS_OF_GADGETZAN",
 	"fileFormatVersion": 1
 }
