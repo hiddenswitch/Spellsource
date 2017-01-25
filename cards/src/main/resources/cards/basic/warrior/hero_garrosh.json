@@ -1,6 +1,10 @@
 {
+<<<<<<< HEAD
 	"id": "hero_garrosh",
 	"name": "Jeff",
+=======
+	"name": "Garrosh Hellscream",
+>>>>>>> b75cb4542fdfb9d6b887665ee27ff659279cfa79
 	"baseManaCost": 0,
 	"description": "The Gamer Hero",
 	"heroPower": "hero_power_armor_up",

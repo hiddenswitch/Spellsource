@@ -163,7 +163,7 @@ public class GameLogicAsync extends GameLogic {
 	@Suspendable
 	protected void summonAsync(int playerId, Minion minion, Card source, int index, boolean resolveBattlecry, Handler<AsyncResult<Boolean>> summoned) {
 		PreSummon preSummon = new PreSummon(playerId, minion, index, source).invoke();
-		if (preSummon.is()) {
+		if (preSummon.failed()) {
 			if (summoned != null) {
 				summoned.handle(SummonResult.NOT_SUMMONED);
 			}
