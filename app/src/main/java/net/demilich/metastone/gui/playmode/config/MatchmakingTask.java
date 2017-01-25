@@ -1,28 +1,23 @@
 package net.demilich.metastone.gui.playmode.config;
 
+import com.hiddenswitch.proto3.net.client.ApiClient;
+import com.hiddenswitch.proto3.net.client.Configuration;
+import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+import com.hiddenswitch.proto3.net.client.auth.ApiKeyAuth;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutRequest;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
-import com.hiddenswitch.proto3.net.common.MatchmakingQueuePut;
-import com.hiddenswitch.proto3.net.common.MatchmakingRequest;
-import com.hiddenswitch.proto3.net.common.MatchmakingResponse;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import javafx.concurrent.Task;
-import net.demilich.metastone.BuildConfig;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 /**
  * Created by bberman on 12/2/16.
@@ -48,63 +43,46 @@ public class MatchmakingTask extends Task<Void> {
 		Logger logger = LoggerFactory.getLogger(MatchmakingTask.class);
 		this.isMatchmaking.set(true);
 		try {
-			// First request
-			MatchmakingQueuePut request = new MatchmakingQueuePut();
-			request.setDeck(deck);
+			// Configure a client
+			ApiClient client = Configuration.getDefaultApiClient();
+			ApiKeyAuth DisabledSecurity = (ApiKeyAuth) client.getAuthentication("DisabledSecurity");
+			DisabledSecurity.setApiKey(userId);
+			DefaultApi api = new DefaultApi(client);
 
-			MatchmakingResponse response = getMatchmakingResponse(request);
+			// Make the first request
+			MatchmakingQueuePutRequest request = new MatchmakingQueuePutRequest();
+			final List<String> cardIds = this.deck.getCards().toList().stream()
+					.map(Card::getCardId)
+					.collect(Collectors.toList());
+			final com.hiddenswitch.proto3.net.client.models.Deck modelDeck =
+					new com.hiddenswitch.proto3.net.client.models.Deck().cards(cardIds);
+
+			modelDeck.setHeroClass(deck.getHeroClass().toString());
+			request.setDeck(modelDeck);
+
+			MatchmakingQueuePutResponse response = api.matchmakingConstructedQueuePut(request);
 
 			while (isMatchmaking.get()
 					&& response.getConnection() == null) {
 				logger.debug("Retrying multiplayer connection...");
 				Thread.sleep(2000);
 				request = response.getRetry();
-				response = getMatchmakingResponse(request);
+				response = api.matchmakingConstructedQueuePut(request);
 			}
 
 			if (!isMatchmaking.get()
 					&& (response.getConnection() == null)) {
 				logger.debug("Canceling matchmaking.");
-				cancelMatchmaking();
+				api.matchmakingConstructedQueueDelete();
 			} else {
 				logger.debug("Matchmaking successful!");
-				connection = response.getConnection();
+				connection = Serialization.deserialize(response.getConnection().getJavaSerialized());
 			}
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		return null;
-	}
-
-	private MatchmakingResponse getMatchmakingResponse(MatchmakingQueuePut request) throws IOException {
-		CloseableHttpClient client = HttpClientBuilder.create().build();
-		RequestConfig globalConfig = RequestConfig.custom().setCircularRedirectsAllowed(true).build();
-		HttpPut put = new HttpPut(BuildConfig.MATCHMAKING_URI);
-		String serialized = Serialization.serialize(request);
-		put.setEntity(new StringEntity(serialized, ContentType.APPLICATION_JSON));
-		put.addHeader("X-Auth-UserId", userId);
-		put.setConfig(globalConfig);
-
-		CloseableHttpResponse httpResponse = client.execute(put);
-
-		HttpEntity entity = httpResponse.getEntity();
-		MatchmakingResponse response = Serialization.deserialize(EntityUtils.toString(entity), MatchmakingResponse.class);
-		EntityUtils.consume(entity);
-		httpResponse.close();
-		client.close();
-		return response;
-	}
-
-	private void cancelMatchmaking() throws IOException {
-		CloseableHttpClient client = HttpClientBuilder.create().build();
-		RequestConfig globalConfig = RequestConfig.custom().setCircularRedirectsAllowed(true).build();
-		HttpDelete delete = new HttpDelete(BuildConfig.MATCHMAKING_URI);
-		delete.addHeader("X-Auth-UserId", userId);
-		delete.setConfig(globalConfig);
-		CloseableHttpResponse httpResponse = client.execute(delete);
-		httpResponse.close();
-		client.close();
 	}
 
 	public ClientConnectionConfiguration getConnection() {

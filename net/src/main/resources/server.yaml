@@ -36,24 +36,38 @@ definitions:
     properties:
       javaSerialized:
         type: 'string'
-  MatchmakingQueuePut:
+        format: 'byte'
+  Deck:
     type: 'object'
+    required:
+      - 'cards'
+    properties:
+      heroClass:
+        type: 'string'
+      cards:
+        type: 'array'
+        items:
+          type: 'string'
+  MatchmakingQueuePutRequest:
+    type: 'object'
+    required:
+      - 'deck'
     properties:
       deck:
-        $ref: '#/definitions/JavaSerializationObject'
+        $ref: '#/definitions/Deck'
       deckId:
         type: 'string'
       allowBots:
         type: 'boolean'
       clientType:
         type: 'string'
-  MatchmakingResponse:
+  MatchmakingQueuePutResponse:
     type: 'object'
     properties:
       connection:
         $ref: '#/definitions/JavaSerializationObject'
       retry:
-        $ref: '#/definitions/MatchmakingQueuePut'
+        $ref: '#/definitions/MatchmakingQueuePutRequest'
   MatchCancelResponse:
     type: 'object'
     properties:
@@ -72,18 +86,18 @@ paths:
             The matchmaking queue entry. Contains the deck.
           required: true
           schema:
-            $ref: '#/definitions/MatchmakingQueuePut'
+            $ref: '#/definitions/MatchmakingQueuePutRequest'
       responses:
         "200":
           description: |
             The client has been matched with a client and is ready to connect. Use the "connection" field for connection information (client specific).
           schema:
-            $ref: '#/definitions/MatchmakingResponse'
+            $ref: '#/definitions/MatchmakingQueuePutResponse'
         "202":
           description: |
             The client is waiting in the matchmaking queue and has been given a MatchmakingRequest object to retry with in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
           schema:
-            $ref: '#/definitions/MatchmakingResponse'
+            $ref: '#/definitions/MatchmakingQueuePutResponse'
     delete:
       description: Removes your client from the matchmaking queue.
       operationId: matchmakingConstructedQueueDelete

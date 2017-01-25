@@ -2,11 +2,13 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.net.common.MatchmakingQueuePut;
-import com.hiddenswitch.proto3.net.common.MatchmakingRequest;
-import com.hiddenswitch.proto3.net.common.MatchmakingResponse;
+import com.hiddenswitch.proto3.net.client.models.JavaSerializationObject;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutRequest;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.proto3.net.models.MatchCancelRequest;
 import com.hiddenswitch.proto3.net.models.MatchCancelResponse;
+import com.hiddenswitch.proto3.net.models.MatchmakingRequest;
+import com.hiddenswitch.proto3.net.models.MatchmakingResponse;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -20,6 +22,8 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.LoggerHandler;
+
+import java.io.IOException;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
@@ -87,13 +91,16 @@ public class ServerImpl extends SyncVerticle {
 	public void matchmakingConstructedQueueDelete(RoutingContext routingContext) {
 		String userId = routingContext.request().getHeader("X-Auth-UserId");
 		MatchCancelResponse response = matchmaking.cancel(new MatchCancelRequest(userId));
+		com.hiddenswitch.proto3.net.client.models.MatchCancelResponse userResponse =
+				new com.hiddenswitch.proto3.net.client.models.MatchCancelResponse()
+						.isCanceled(response.getCanceled());
 		routingContext.response().setStatusCode(200);
-		routingContext.response().end(Serialization.serialize(response));
+		routingContext.response().end(Serialization.serialize(userResponse));
 	}
 
 	@Suspendable
 	public void matchmakingConstructedQueuePut(RoutingContext routingContext) {
-		MatchmakingQueuePut userRequest = Serialization.deserialize(routingContext.getBodyAsString(), MatchmakingQueuePut.class);
+		MatchmakingQueuePutRequest userRequest = Serialization.deserialize(routingContext.getBodyAsString(), MatchmakingQueuePutRequest.class);
 		// TODO: Use real user IDs
 		String userId = routingContext.request().getHeader("X-Auth-UserId");
 		MatchmakingRequest request = new MatchmakingRequest(userRequest, userId);
@@ -104,8 +111,22 @@ public class ServerImpl extends SyncVerticle {
 			routingContext.fail(e);
 			return;
 		}
+		MatchmakingQueuePutResponse userResponse = new MatchmakingQueuePutResponse();
+		if (matchmakingResponse.getConnection() != null) {
+			final JavaSerializationObject connection;
+			try {
+				connection = new JavaSerializationObject()
+						.javaSerialized(Serialization.serializeBytes(matchmakingResponse.getConnection()));
+			} catch (IOException e) {
+				routingContext.fail(e);
+				return;
+			}
+			userResponse.connection(connection);
+		}
 		int statusCode = 200;
 		if (matchmakingResponse.getRetry() != null) {
+			userResponse.retry(new MatchmakingQueuePutRequest()
+					.deck(request.getDeck()));
 			statusCode = 202;
 		}
 		final HttpServerResponse response = routingContext.response();

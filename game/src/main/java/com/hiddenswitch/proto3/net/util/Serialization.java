@@ -85,6 +85,12 @@ public class Serialization {
 		return gson.toJson(object);
 	}
 
+	public static byte[] serializeBytes(Object object) throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		serialize(object, bos);
+		return bos.toByteArray();
+	}
+
 	public static <T> T deserialize(String json, Class<T> classOfT) throws JsonSyntaxException {
 		return gson.fromJson(json, classOfT);
 	}
@@ -97,7 +103,6 @@ public class Serialization {
 	public static <T> T deserialize(byte[] buffer) throws IOException, ClassNotFoundException {
 		return deserialize(new ByteArrayInputStream(buffer));
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {

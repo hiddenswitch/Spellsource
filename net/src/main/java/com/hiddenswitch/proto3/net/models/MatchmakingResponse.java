@@ -1,7 +1,6 @@
-package com.hiddenswitch.proto3.net.common;
+package com.hiddenswitch.proto3.net.models;
 
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
-import com.hiddenswitch.proto3.net.common.MatchmakingRequest;
 
 import java.io.Serializable;
 
@@ -9,7 +8,7 @@ public class MatchmakingResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private ClientConnectionConfiguration connection;
 
-	private MatchmakingQueuePut retry;
+	private MatchmakingRequest retry;
 
 	public ClientConnectionConfiguration getConnection() {
 		return connection;
@@ -19,11 +18,11 @@ public class MatchmakingResponse implements Serializable {
 		this.connection = connection;
 	}
 
-	public MatchmakingQueuePut getRetry() {
+	public MatchmakingRequest getRetry() {
 		return retry;
 	}
 
-	public void setRetry(MatchmakingQueuePut retry) {
+	public void setRetry(MatchmakingRequest retry) {
 		this.retry = retry;
 	}
 }

@@ -8,7 +8,7 @@
   "heroClass": "ANY",
   "rarity": "FREE",
   "description": "If this is the first time you've played this minion, permanently cost (1) less.",
-  "collectible": true,
+  "collectible": false,
   "set": "MINIONATE",
   "manaCostModifier": {
     "class": "AlgebraicValueProvider",

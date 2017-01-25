@@ -1,11 +1,9 @@
 package net.demilich.metastone.gui.playmode.config;
 
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
-import com.hiddenswitch.proto3.net.common.MatchmakingRequest;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -25,7 +23,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PlayModeConfigView extends BorderPane implements EventHandler<ActionEvent> {
 	private static final String sessionId = RandomStringUtils.randomAlphanumeric(36);

@@ -5,6 +5,7 @@ import com.hiddenswitch.proto3.draft.DraftContext;
 import com.hiddenswitch.proto3.net.util.AbstractMatchmakingTest;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.utils.Tuple;
 import org.junit.Test;
 
 /**
@@ -18,11 +19,11 @@ public class DraftTest extends AbstractMatchmakingTest {
 	}
 
 	@Override
-	protected Deck createDeckForMatchmaking(int playerId) {
+	protected Tuple<com.hiddenswitch.proto3.net.client.models.Deck, Deck> createDeckForMatchmaking(int playerId) {
 		setLoggingLevel(Level.ERROR);
 		DraftContext context = new DraftContext();
 		context.accept(done -> {
 		});
-		return context.getPublicState().createDeck();
+		return getTuple(context.getPublicState().createDeck());
 	}
 }
