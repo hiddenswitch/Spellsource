@@ -1,15 +1,14 @@
 {
-	"id": "token_whelp_egg",
-	"name": "Whelp",
+	"id": "token_minionate",
+	"name": "Temp Token",
 	"baseManaCost": 1,
 	"type": "MINION",
-	"baseAttack": 2,
+	"baseAttack": 1,
 	"baseHp": 1,
 	"heroClass": "ANY",
 	"rarity": "FREE",
-	"race": "DRAGON",
 	"description": "",
 	"collectible": false,
-	"set": "BLACKROCK_MOUNTAIN",
+	"set": "MINIONATE",
 	"fileFormatVersion": 1
 }
