@@ -1,26 +1,34 @@
-package com.hiddenswitch.proto3.net.common;
+package com.hiddenswitch.proto3.net.models;
 
-import net.demilich.metastone.game.decks.Deck;
+import com.hiddenswitch.proto3.net.client.models.Deck;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutRequest;
 
 import java.io.Serializable;
 
 /**
  * Created by bberman on 1/23/17.
  */
-public class MatchmakingQueuePut implements Serializable {
+public class MatchmakingRequest implements Serializable {
+	private static final long serialVersionUID = 1L;
 	protected Deck deck;
 	protected boolean allowBots;
+	protected String userId;
 	private String deckId;
 	private String clientType;
 
-	public MatchmakingQueuePut() {
+	public MatchmakingRequest() {
 	}
 
-	public MatchmakingQueuePut(MatchmakingRequest matchmakingRequest) {
+	public MatchmakingRequest(MatchmakingRequest matchmakingRequest) {
 		this.deck = matchmakingRequest.getDeck();
 		this.allowBots = matchmakingRequest.isAllowBots();
 		this.deckId = matchmakingRequest.getDeckId();
 		this.clientType = matchmakingRequest.getClientType();
+	}
+
+	public MatchmakingRequest(MatchmakingQueuePutRequest other, String userId) {
+		this.deck = other.getDeck();
+		this.userId = userId;
 	}
 
 	public Deck getDeck() {
@@ -39,12 +47,12 @@ public class MatchmakingQueuePut implements Serializable {
 		this.allowBots = allowBots;
 	}
 
-	public MatchmakingQueuePut withDeck(final Deck deck) {
+	public MatchmakingRequest withDeck(final Deck deck) {
 		this.deck = deck;
 		return this;
 	}
 
-	public MatchmakingQueuePut withAllowBots(final boolean allowBots) {
+	public MatchmakingRequest withAllowBots(final boolean allowBots) {
 		this.allowBots = allowBots;
 		return this;
 	}
@@ -65,13 +73,21 @@ public class MatchmakingQueuePut implements Serializable {
 		this.clientType = clientType;
 	}
 
-	public MatchmakingQueuePut withDeckId(final String deckId) {
+	public MatchmakingRequest withDeckId(final String deckId) {
 		this.deckId = deckId;
 		return this;
 	}
 
-	public MatchmakingQueuePut withClientType(final String clientType) {
+	public MatchmakingRequest withClientType(final String clientType) {
 		this.clientType = clientType;
 		return this;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

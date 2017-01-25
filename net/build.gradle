@@ -45,25 +45,18 @@ configurations {
 swagger {
     inputSpec = 'net/src/main/resources/server.yaml'
 
-    output = 'build/swagger'
+    output = '../client'
     language = 'java'
 
     additionalProperties = [
-            'invokerPackage'   : 'com.hiddenswitch.proto3.net.common',
-            'modelPackage'     : 'com.hiddenswitch.proto3.net.common',
-            'apiPackage'       : 'com.hiddenswitch.proto3.net.common',
+            'invokerPackage'   : 'com.hiddenswitch.proto3.net.client',
+            'modelPackage'     : 'com.hiddenswitch.proto3.net.client.models',
+            'apiPackage'       : 'com.hiddenswitch.proto3.net.client.api',
             'library'          : 'okhttp-gson',
             'serializableModel': 'true',
-            'dateLibrary'      : 'java8'
+            'dateLibrary'      : 'java8',
+            'artifactId'       : 'client'
     ]
-}
-
-sourceSets {
-    swagger {
-        java {
-            srcDir file("${project.buildDir.path}/swagger/src/main/java")
-        }
-    }
 }
 
 repositories {
@@ -103,6 +96,7 @@ dependencies {
 
     compile project(':game')
     compile project(':cards')
+    compile project(':client')
 
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'

@@ -6,9 +6,8 @@ import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Matchmaking;
 import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
-import com.hiddenswitch.proto3.net.common.MatchmakingQueuePut;
-import com.hiddenswitch.proto3.net.common.MatchmakingRequest;
-import com.hiddenswitch.proto3.net.common.MatchmakingResponse;
+import com.hiddenswitch.proto3.net.models.MatchmakingRequest;
+import com.hiddenswitch.proto3.net.models.MatchmakingResponse;
 import com.hiddenswitch.proto3.net.impl.util.QueueEntry;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.impl.util.Matchmaker;
@@ -16,7 +15,10 @@ import com.hiddenswitch.proto3.net.impl.server.GameSession;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import com.hiddenswitch.proto3.net.util.Broker;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFactory;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
@@ -80,10 +82,13 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 			return response;
 		}
 
-		Matchmaker.Match match = matchmaker.match(userId, matchmakingRequest.getDeck());
+		final com.hiddenswitch.proto3.net.client.models.Deck incomingDeck = matchmakingRequest.getDeck();
+		Deck deck = new Deck(HeroClass.valueOf(incomingDeck.getHeroClass()));
+		incomingDeck.getCards().forEach(cardId -> deck.getCards().add(CardCatalogue.getCardById(cardId)));
+		Matchmaker.Match match = matchmaker.match(userId, deck);
 
 		if (match == null) {
-			response.setRetry(new MatchmakingQueuePut(matchmakingRequest).withDeck(null));
+			response.setRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null));
 			return response;
 		}
 
