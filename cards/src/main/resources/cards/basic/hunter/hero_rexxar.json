@@ -1,8 +1,8 @@
 {
 	"id": "hero_rexxar",
-	"name": "Rexxar",
+	"name": "Ronda Carraway",
 	"baseManaCost": 0,
-	"description": "The Hunter Hero",
+	"description": "The Cyborg Hero",
 	"heroPower": "hero_power_steady_shot",
 	"type": "HERO",
 	"heroClass": "HUNTER",

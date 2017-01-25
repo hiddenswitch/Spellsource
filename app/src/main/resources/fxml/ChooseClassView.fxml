@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import java.net.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="760.0" styleClass="panel" type="BorderPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="760.0" styleClass="panel" type="BorderPane" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1">
    <padding>
       <Insets top="20.0" />
    </padding>
    <right>
       <VBox spacing="2.0">
          <children>
-            <CheckBox styleClass="name-small" fx:id="arbitraryCheckBox" mnemonicParsing="false" text="Arbitrary Deck?" />
+            <CheckBox fx:id="arbitraryCheckBox" mnemonicParsing="false" styleClass="name-small" text="Arbitrary Deck?" />
          </children>
       </VBox>
    </right>
@@ -33,7 +36,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="warriorButton" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Warrior" textAlignment="CENTER">
+            <Button fx:id="warriorButton" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Gamer" textAlignment="CENTER">
                <graphic>
                   <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -41,7 +44,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="paladinButton" alignment="CENTER" contentDisplay="TOP" layoutX="81.0" layoutY="29.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Paladin" textAlignment="CENTER" GridPane.columnIndex="1">
+            <Button fx:id="paladinButton" alignment="CENTER" contentDisplay="TOP" layoutX="81.0" layoutY="29.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Astronaut" textAlignment="CENTER" GridPane.columnIndex="1">
                <graphic>
                   <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -49,7 +52,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="druidButton" alignment="CENTER" contentDisplay="TOP" layoutX="423.0" layoutY="29.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Druid" textAlignment="CENTER" GridPane.columnIndex="2">
+            <Button fx:id="druidButton" alignment="CENTER" contentDisplay="TOP" layoutX="423.0" layoutY="29.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Chef" textAlignment="CENTER" GridPane.columnIndex="2">
                <graphic>
                   <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -57,7 +60,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="rogueButton" alignment="CENTER" contentDisplay="TOP" layoutX="764.0" layoutY="29.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Rogue" textAlignment="CENTER" GridPane.rowIndex="1">
+            <Button fx:id="rogueButton" alignment="CENTER" contentDisplay="TOP" layoutX="764.0" layoutY="29.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Biologist" textAlignment="CENTER" GridPane.rowIndex="1">
                <graphic>
                   <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -65,7 +68,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="warlockButton" alignment="CENTER" contentDisplay="TOP" layoutX="81.0" layoutY="267.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Warlock" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button fx:id="warlockButton" alignment="CENTER" contentDisplay="TOP" layoutX="81.0" layoutY="267.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Octopod" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <graphic>
                   <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -73,7 +76,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="hunterButton" alignment="CENTER" contentDisplay="TOP" layoutX="423.0" layoutY="267.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Hunter" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Button fx:id="hunterButton" alignment="CENTER" contentDisplay="TOP" layoutX="423.0" layoutY="267.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Cyborg" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <graphic>
                   <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -81,7 +84,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="shamanButton" alignment="CENTER" contentDisplay="TOP" layoutX="764.0" layoutY="267.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Shaman" textAlignment="CENTER" GridPane.rowIndex="2">
+            <Button fx:id="shamanButton" alignment="CENTER" contentDisplay="TOP" layoutX="764.0" layoutY="267.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Paleontologist" textAlignment="CENTER" GridPane.rowIndex="2">
                <graphic>
                   <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -89,7 +92,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="mageButton" alignment="CENTER" contentDisplay="TOP" layoutX="81.0" layoutY="504.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Mage" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Button fx:id="mageButton" alignment="CENTER" contentDisplay="TOP" layoutX="81.0" layoutY="504.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="CPU" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <graphic>
                   <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -97,7 +100,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="priestButton" alignment="CENTER" contentDisplay="TOP" layoutX="423.0" layoutY="504.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Priest" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Button fx:id="priestButton" alignment="CENTER" contentDisplay="TOP" layoutX="423.0" layoutY="504.0" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" styleClass="class-button" text="Resurrector" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <graphic>
                   <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                      <image>
