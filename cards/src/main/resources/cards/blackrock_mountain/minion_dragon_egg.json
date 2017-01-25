@@ -1,5 +1,4 @@
 {
-	"id": "minion_dragon_egg",
 	"name": "Dragon Egg",
 	"baseManaCost": 1,
 	"type": "MINION",
@@ -15,7 +14,7 @@
 		},
 		"spell": {
 			"class": "SummonSpell",
-			"card": "token_whelp_egg",
+			"card": "token_black_whelp",
 			"boardPositionRelative": "RIGHT"
 		}
 	},
