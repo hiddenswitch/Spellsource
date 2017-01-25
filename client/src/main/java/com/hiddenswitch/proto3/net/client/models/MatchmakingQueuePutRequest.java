@@ -27,7 +27,7 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.Deck;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -35,10 +35,10 @@ import java.io.Serializable;
 /**
  * MatchmakingQueuePutRequest
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2017-01-25T18:09:01.430-05:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2017-01-25T18:24:51.631-05:00")
 public class MatchmakingQueuePutRequest  implements Serializable {
   @SerializedName("deck")
-  private Deck deck = null;
+  private MatchmakingDeck deck = null;
 
   @SerializedName("deckId")
   private String deckId = null;
@@ -49,7 +49,7 @@ public class MatchmakingQueuePutRequest  implements Serializable {
   @SerializedName("clientType")
   private String clientType = null;
 
-  public MatchmakingQueuePutRequest deck(Deck deck) {
+  public MatchmakingQueuePutRequest deck(MatchmakingDeck deck) {
     this.deck = deck;
     return this;
   }
@@ -59,11 +59,11 @@ public class MatchmakingQueuePutRequest  implements Serializable {
    * @return deck
   **/
   @ApiModelProperty(example = "null", required = true, value = "")
-  public Deck getDeck() {
+  public MatchmakingDeck getDeck() {
     return deck;
   }
 
-  public void setDeck(Deck deck) {
+  public void setDeck(MatchmakingDeck deck) {
     this.deck = deck;
   }
 

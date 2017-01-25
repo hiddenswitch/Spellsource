@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net;
 
 import ch.qos.logback.classic.Level;
 import com.hiddenswitch.proto3.draft.DraftContext;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.util.AbstractMatchmakingTest;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.decks.Deck;
@@ -19,7 +20,7 @@ public class DraftTest extends AbstractMatchmakingTest {
 	}
 
 	@Override
-	protected Tuple<com.hiddenswitch.proto3.net.client.models.Deck, Deck> createDeckForMatchmaking(int playerId) {
+	protected Tuple<MatchmakingDeck, Deck> createDeckForMatchmaking(int playerId) {
 		setLoggingLevel(Level.ERROR);
 		DraftContext context = new DraftContext();
 		context.accept(done -> {

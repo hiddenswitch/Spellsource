@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**deck** | [**Deck**](Deck.md) |  | 
+**deck** | [**MatchmakingDeck**](MatchmakingDeck.md) |  | 
 **deckId** | **String** |  |  [optional]
 **allowBots** | **Boolean** |  |  [optional]
 **clientType** | **String** |  |  [optional]

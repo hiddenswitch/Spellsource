@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.MatchmakingTest;
-import com.hiddenswitch.proto3.net.client.models.Deck;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.models.MatchmakingRequest;
 import com.hiddenswitch.proto3.net.models.MatchmakingResponse;
 import com.hiddenswitch.proto3.net.impl.BotsImpl;
@@ -16,6 +16,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.utils.Tuple;
 
@@ -42,8 +43,8 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 		// Assume player 1's identity
 		MatchmakingRequest request1 = new MatchmakingRequest();
 		request1.setUserId(userId1);
-		final Tuple<Deck, net.demilich.metastone.game.decks.Deck> deckTuple1 = createDeckForMatchmaking(PLAYER_1);
-		Deck deck1 = deckTuple1.getFirst();
+		final Tuple<MatchmakingDeck, Deck> deckTuple1 = createDeckForMatchmaking(PLAYER_1);
+		MatchmakingDeck deck1 = deckTuple1.getFirst();
 		request1.setDeck(deck1);
 		MatchmakingResponse response1 = null;
 
@@ -56,8 +57,8 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 		// Assume player 2's identity
 		MatchmakingRequest request2 = new MatchmakingRequest();
 		request2.setUserId(userId2);
-		final Tuple<Deck, net.demilich.metastone.game.decks.Deck> deckTuple2 = createDeckForMatchmaking(PLAYER_2);
-		Deck deck2 = deckTuple2.getFirst();
+		final Tuple<MatchmakingDeck, Deck> deckTuple2 = createDeckForMatchmaking(PLAYER_2);
+		MatchmakingDeck deck2 = deckTuple2.getFirst();
 		request2.setDeck(deck2);
 		MatchmakingResponse response2 = null;
 
@@ -86,16 +87,16 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 		return response1.getConnection().getFirstMessage().getGameId();
 	}
 
-	protected Tuple<Deck, net.demilich.metastone.game.decks.Deck> createDeckForMatchmaking(int playerId) {
-		net.demilich.metastone.game.decks.Deck gameDeck = DeckFactory.getRandomDeck();
+	protected Tuple<MatchmakingDeck, Deck> createDeckForMatchmaking(int playerId) {
+		Deck gameDeck = DeckFactory.getRandomDeck();
 		return getTuple(gameDeck);
 	}
 
-	public static Tuple<Deck, net.demilich.metastone.game.decks.Deck> getTuple(net.demilich.metastone.game.decks.Deck gameDeck) {
-		List<String> cards = gameDeck.getCards().toList().stream().map(Card::getCardId).collect(Collectors.toList());
-		return new Tuple<>(new Deck()
-				.cards(cards)
-				.heroClass(gameDeck.getHeroClass().toString()), gameDeck);
+	protected static Tuple<MatchmakingDeck, Deck> getTuple(Deck gameDeck) {
+		final MatchmakingDeck matchmakingDeck = new MatchmakingDeck()
+				.cards(gameDeck.getCards().toList().stream().map(Card::getCardId).collect(Collectors.toList()))
+				.heroClass(gameDeck.getHeroClass().toString());
+		return new Tuple<>(matchmakingDeck, gameDeck);
 	}
 
 	@Override
