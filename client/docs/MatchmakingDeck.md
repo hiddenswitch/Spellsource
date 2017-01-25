@@ -1,5 +1,5 @@
 
-# Deck
+# MatchmakingDeck
 
 ## Properties
 Name | Type | Description | Notes

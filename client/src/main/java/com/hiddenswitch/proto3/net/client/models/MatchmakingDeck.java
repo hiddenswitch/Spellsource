@@ -34,17 +34,17 @@ import java.util.List;
 
 import java.io.Serializable;
 /**
- * Deck
+ * MatchmakingDeck
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2017-01-25T18:09:01.430-05:00")
-public class Deck  implements Serializable {
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2017-01-25T18:24:51.631-05:00")
+public class MatchmakingDeck  implements Serializable {
   @SerializedName("heroClass")
   private String heroClass = null;
 
   @SerializedName("cards")
   private List<String> cards = new ArrayList<String>();
 
-  public Deck heroClass(String heroClass) {
+  public MatchmakingDeck heroClass(String heroClass) {
     this.heroClass = heroClass;
     return this;
   }
@@ -62,12 +62,12 @@ public class Deck  implements Serializable {
     this.heroClass = heroClass;
   }
 
-  public Deck cards(List<String> cards) {
+  public MatchmakingDeck cards(List<String> cards) {
     this.cards = cards;
     return this;
   }
 
-  public Deck addCardsItem(String cardsItem) {
+  public MatchmakingDeck addCardsItem(String cardsItem) {
     this.cards.add(cardsItem);
     return this;
   }
@@ -94,9 +94,9 @@ public class Deck  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Deck deck = (Deck) o;
-    return Objects.equals(this.heroClass, deck.heroClass) &&
-        Objects.equals(this.cards, deck.cards);
+    MatchmakingDeck matchmakingDeck = (MatchmakingDeck) o;
+    return Objects.equals(this.heroClass, matchmakingDeck.heroClass) &&
+        Objects.equals(this.cards, matchmakingDeck.cards);
   }
 
   @Override
@@ -107,7 +107,7 @@ public class Deck  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Deck {\n");
+    sb.append("class MatchmakingDeck {\n");
     
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
     sb.append("    cards: ").append(toIndentedString(cards)).append("\n");

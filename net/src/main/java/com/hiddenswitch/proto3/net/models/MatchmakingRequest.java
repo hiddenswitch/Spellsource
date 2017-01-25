@@ -1,6 +1,6 @@
 package com.hiddenswitch.proto3.net.models;
 
-import com.hiddenswitch.proto3.net.client.models.Deck;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutRequest;
 
 import java.io.Serializable;
@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class MatchmakingRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
-	protected Deck deck;
+	protected MatchmakingDeck deck;
 	protected boolean allowBots;
 	protected String userId;
 	private String deckId;
@@ -31,11 +31,11 @@ public class MatchmakingRequest implements Serializable {
 		this.userId = userId;
 	}
 
-	public Deck getDeck() {
+	public MatchmakingDeck getDeck() {
 		return deck;
 	}
 
-	public void setDeck(Deck deck) {
+	public void setDeck(MatchmakingDeck deck) {
 		this.deck = deck;
 	}
 
@@ -47,7 +47,7 @@ public class MatchmakingRequest implements Serializable {
 		this.allowBots = allowBots;
 	}
 
-	public MatchmakingRequest withDeck(final Deck deck) {
+	public MatchmakingRequest withDeck(final MatchmakingDeck deck) {
 		this.deck = deck;
 		return this;
 	}
@@ -89,5 +89,10 @@ public class MatchmakingRequest implements Serializable {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public MatchmakingRequest withUserId(String userId) {
+		this.userId = userId;
+		return this;
 	}
 }

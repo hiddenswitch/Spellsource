@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Matchmaking;
 import com.hiddenswitch.proto3.net.Service;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.models.MatchmakingRequest;
 import com.hiddenswitch.proto3.net.models.MatchmakingResponse;
@@ -16,6 +17,7 @@ import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import com.hiddenswitch.proto3.net.util.Broker;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -53,8 +55,9 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 		final String userId = matchmakingRequest.getUserId();
 		MatchmakingResponse response = new MatchmakingResponse();
 
+		final boolean isRetry = matchmaker.contains(userId);
 		final boolean isWaitingTooLong = matchmakingRequest.isAllowBots()
-				&& matchmaker.contains(userId)
+				&& isRetry
 				&& matchmaker.get(userId).createdAt + (long) 25e9 < System.nanoTime();
 
 		// TODO: Deal with reconnecting to AI game
@@ -82,13 +85,20 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 			return response;
 		}
 
-		final com.hiddenswitch.proto3.net.client.models.Deck incomingDeck = matchmakingRequest.getDeck();
-		Deck deck = new Deck(HeroClass.valueOf(incomingDeck.getHeroClass()));
-		incomingDeck.getCards().forEach(cardId -> deck.getCards().add(CardCatalogue.getCardById(cardId)));
+		final MatchmakingDeck incomingDeck = matchmakingRequest.getDeck();
+		Deck deck = null;
+		if (incomingDeck != null) {
+			deck = new Deck(HeroClass.valueOf(incomingDeck.getHeroClass()));
+			final CardCollection cards = deck.getCards();
+			incomingDeck.getCards().forEach(cardId -> {
+				cards.add(CardCatalogue.getCardById(cardId));
+			});
+		}
+
 		Matchmaker.Match match = matchmaker.match(userId, deck);
 
 		if (match == null) {
-			response.setRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null));
+			response.setRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null).withUserId(userId));
 			return response;
 		}
 

@@ -107,9 +107,9 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
- - [Deck](docs/Deck.md)
  - [JavaSerializationObject](docs/JavaSerializationObject.md)
  - [MatchCancelResponse](docs/MatchCancelResponse.md)
+ - [MatchmakingDeck](docs/MatchmakingDeck.md)
  - [MatchmakingQueuePutRequest](docs/MatchmakingQueuePutRequest.md)
  - [MatchmakingQueuePutResponse](docs/MatchmakingQueuePutResponse.md)
 

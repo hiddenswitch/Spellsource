@@ -37,7 +37,7 @@ definitions:
       javaSerialized:
         type: 'string'
         format: 'byte'
-  Deck:
+  MatchmakingDeck:
     type: 'object'
     required:
       - 'cards'
@@ -54,7 +54,7 @@ definitions:
       - 'deck'
     properties:
       deck:
-        $ref: '#/definitions/Deck'
+        $ref: '#/definitions/MatchmakingDeck'
       deckId:
         type: 'string'
       allowBots:
