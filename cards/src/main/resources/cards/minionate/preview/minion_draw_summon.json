@@ -29,7 +29,7 @@
 		}
 	},
 	"attributes": {
-		"BATTLECRY": true
+		"BATTLECRY": false
 	},
 	"collectible": true,
 	"set": "MINIONATE",
