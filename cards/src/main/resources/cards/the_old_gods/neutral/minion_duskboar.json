@@ -1,6 +1,5 @@
 {
-	"id": "minion_dusk_boar",
-	"name": "Dusk Boar",
+	"name": "Duskboar",
 	"baseManaCost": 2,
 	"type": "MINION",
 	"baseAttack": 4,

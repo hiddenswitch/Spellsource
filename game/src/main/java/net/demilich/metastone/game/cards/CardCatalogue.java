@@ -1,17 +1,5 @@
 package net.demilich.metastone.game.cards;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Predicate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -21,6 +9,17 @@ import net.demilich.metastone.utils.MetastoneProperties;
 import net.demilich.metastone.utils.ResourceInputStream;
 import net.demilich.metastone.utils.ResourceLoader;
 import net.demilich.metastone.utils.UserHomeMetastone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class CardCatalogue {
 
@@ -135,7 +134,12 @@ public class CardCatalogue {
 			}
 
 			Collection<ResourceInputStream> inputStreams = ResourceLoader.loadJsonInputStreams(CARDS_FOLDER, false);
-			loadCards(inputStreams);
+			try {
+				loadCards(inputStreams);
+			} catch (CardParseException e) {
+				logger.error(e.getMessage());
+				throw e;
+			}
 		}
 	}
 
