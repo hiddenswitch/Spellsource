@@ -189,8 +189,8 @@ public class DraftLogic {
 				// Shuffle then choose until we're done
 				cards.shuffle(getRandom());
 
-				while (cards.getCount() > 0
-						&& draftChoices.stream().map(Card::getCardId).distinct().count() < CARDS_PER_DRAFT) {
+//				while (cards.getCount() > 0
+//						&& draftChoices.stream().map(Card::getCardId).distinct().count() < CARDS_PER_DRAFT) {
 					final Card nextCard = cards.removeFirst();
 
 					if (draftChoices.stream().anyMatch(c -> Objects.equals(c.getCardId(), nextCard.getCardId()))) {
@@ -198,7 +198,7 @@ public class DraftLogic {
 					}
 
 					draftChoices.add(nextCard);
-				}
+//				}
 			}
 
 			draftCards.add(draftChoices);
