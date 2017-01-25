@@ -1,6 +1,10 @@
 {
+<<<<<<< HEAD
 	"id": "hero_jaina",
 	"name": "Virginia Khan",
+=======
+	"name": "Jaina Proudmoore",
+>>>>>>> b75cb4542fdfb9d6b887665ee27ff659279cfa79
 	"baseManaCost": 0,
 	"description": "The CPU Hero",
 	"heroPower": "hero_power_fireblast",
