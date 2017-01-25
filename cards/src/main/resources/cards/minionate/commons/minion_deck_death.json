@@ -1,0 +1,29 @@
+{
+	"id": "minion_deck_death",
+	"name": "Deck Death",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "When 4 friendly minions have died this game, summon this minion from your deck.",
+	"deckTrigger": {
+		"eventTrigger": {
+			"class": "MinionDeathTrigger",
+			"targetPlayer": "SELF",
+			"queueCondition": {
+				"class": "GraveyardCountCondition",
+				"operation": "GREATER",
+				"value": 3
+			}
+		},
+		"spell": {
+			"class": "PutMinionOnBoardFromDeckSpell",
+			"target": "SELF"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

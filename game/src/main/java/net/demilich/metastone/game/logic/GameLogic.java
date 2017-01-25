@@ -1752,7 +1752,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public boolean summon(int playerId, Minion minion, Card source, int index, boolean resolveBattlecry) {
 		PreSummon preSummon = new PreSummon(playerId, minion, index, source).invoke();
-		if (preSummon.is()) return false;
+		if (preSummon.failed()) return false;
 		Player player = preSummon.getPlayer();
 
 		if (resolveBattlecry && minion.getBattlecry() != null) {
@@ -2021,7 +2021,7 @@ public class GameLogic implements Cloneable, Serializable {
 			this.source = source;
 		}
 
-		public boolean is() {
+		public boolean failed() {
 			return myResult;
 		}
 
