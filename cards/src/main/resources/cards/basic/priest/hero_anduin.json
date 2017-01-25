@@ -1,8 +1,8 @@
 {
 	"id": "hero_anduin",
-	"name": "Anduin Wrynn",
+	"name": "Lazurius",
 	"baseManaCost": 0,
-	"description": "The Priest Hero",
+	"description": "The Resurrector Hero",
 	"heroPower": "hero_power_lesser_heal",
 	"type": "HERO",
 	"heroClass": "PRIEST",

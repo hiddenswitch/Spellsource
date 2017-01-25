@@ -1,8 +1,8 @@
 {
 	"id": "hero_valeera",
-	"name": "Valeera Sanguinar",
+	"name": "Martin Lander",
 	"baseManaCost": 0,
-	"description": "The Rogue Hero",
+	"description": "The Biologist Hero",
 	"heroPower": "hero_power_dagger_mastery",
 	"type": "HERO",
 	"heroClass": "ROGUE",

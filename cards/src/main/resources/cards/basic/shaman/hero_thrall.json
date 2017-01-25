@@ -1,8 +1,8 @@
 {
 	"id": "hero_thrall",
-	"name": "Thrall",
+	"name": "Dinh Oh",
 	"baseManaCost": 0,
-	"description": "The Shaman Hero",
+	"description": "The Paleontologist Hero",
 	"heroPower": "hero_power_totemic_call",
 	"type": "HERO",
 	"heroClass": "SHAMAN",
