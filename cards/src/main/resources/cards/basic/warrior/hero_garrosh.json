@@ -1,7 +1,8 @@
 {
-	"name": "Garrosh Hellscream",
+	"id": "hero_garrosh",
+	"name": "Jeff",
 	"baseManaCost": 0,
-	"description": "The Warrior Hero",
+	"description": "Gamer",
 	"heroPower": "hero_power_armor_up",
 	"type": "HERO",
 	"heroClass": "WARRIOR",

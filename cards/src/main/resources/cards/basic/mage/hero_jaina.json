@@ -1,7 +1,8 @@
 {
-	"name": "Jaina Proudmoore",
+	"id": "hero_jaina",
+	"name": "Virginia Khan",
 	"baseManaCost": 0,
-	"description": "The Mage Hero",
+	"description": "CPU",
 	"heroPower": "hero_power_fireblast",
 	"type": "HERO",
 	"heroClass": "MAGE",
