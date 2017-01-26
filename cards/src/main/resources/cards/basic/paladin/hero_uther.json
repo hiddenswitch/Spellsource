@@ -1,7 +1,8 @@
 {
-	"name": "Uther Lightbringer",
+	"id": "hero_uther",
+	"name": "Yuri Grigorovich",
 	"baseManaCost": 0,
-	"description": "The Paladin Hero",
+	"description": "Astronaut",
 	"heroPower": "hero_power_reinforce",
 	"type": "HERO",
 	"heroClass": "PALADIN",
