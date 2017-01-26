@@ -91,6 +91,14 @@ public class Serialization {
 		return bos.toByteArray();
 	}
 
+	public static String serializeBase64(Object object) throws IOException {
+		return ObjectSerializer.serializeBase64(object);
+	}
+
+	public static <T> T deserialize(String base64String) {
+		return ObjectSerializer.deserializeBase64(base64String);
+	}
+
 	public static <T> T deserialize(String json, Class<T> classOfT) throws JsonSyntaxException {
 		return gson.fromJson(json, classOfT);
 	}

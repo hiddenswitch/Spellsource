@@ -10,7 +10,7 @@ info:
   license:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
-host: api-us-east-2.hiddenswitch.com:8080
+host: localhost:8080
 basePath: /v1
 schemes:
   - http
@@ -36,7 +36,6 @@ definitions:
     properties:
       javaSerialized:
         type: 'string'
-        format: 'byte'
   MatchmakingDeck:
     type: 'object'
     required:

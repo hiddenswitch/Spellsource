@@ -1,6 +1,6 @@
 # DefaultApi
 
-All URIs are relative to *http://api-us-east-2.hiddenswitch.com:8080/v1*
+All URIs are relative to *http://localhost:8080/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

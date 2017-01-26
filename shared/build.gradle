@@ -19,7 +19,6 @@ buildConfig {
 	buildConfigField 'int', 'CARD_REVISION', '13'
 	buildConfigField 'boolean', 'DEV_BUILD', project.hasProperty('DEV_BUILD').toString()
 	buildConfigField 'int', 'DEFAULT_SLEEP_DELAY', '100'
-	buildConfigField 'String', 'MATCHMAKING_URI', 'http://api-us-east-2.hiddenswitch.com:8080/v1/matchmaking/constructed/queue'
 	buildConfigField 'String', 'GAMESESSIONS_HOST', 'api-us-east-2.hiddenswitch.com'
 	buildConfigField 'boolean', 'DECK_BUILDER_ENABLED', 'true'
 	buildConfigField 'boolean', 'PACKAGE_ONLY', 'true'

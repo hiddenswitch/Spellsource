@@ -79,7 +79,7 @@ public class MatchmakingTask extends Task<Void> {
 				logger.debug("Matchmaking successful!");
 				connection = Serialization.deserialize(response.getConnection().getJavaSerialized());
 			}
-		} catch (IOException | InterruptedException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
