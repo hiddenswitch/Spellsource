@@ -63,6 +63,9 @@ public class ServerImpl extends SyncVerticle {
 			logger.info("Configuring router...");
 			final String MATCHMAKE_PATH = "/v1/matchmaking/constructed/queue";
 
+			router.route("/*")
+					.handler(LoggerHandler.create());
+
 			router.route(MATCHMAKE_PATH)
 					.method(HttpMethod.DELETE)
 					.blockingHandler(Sync.fiberHandler(this::matchmakingConstructedQueueDelete));
@@ -116,7 +119,7 @@ public class ServerImpl extends SyncVerticle {
 			final JavaSerializationObject connection;
 			try {
 				connection = new JavaSerializationObject()
-						.javaSerialized(Serialization.serializeBytes(matchmakingResponse.getConnection()));
+						.javaSerialized(Serialization.serializeBase64(matchmakingResponse.getConnection()));
 			} catch (IOException e) {
 				routingContext.fail(e);
 				return;

@@ -34,12 +34,12 @@ import java.io.Serializable;
 /**
  * JavaSerializationObject
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2017-01-25T18:24:51.631-05:00")
+
 public class JavaSerializationObject  implements Serializable {
   @SerializedName("javaSerialized")
-  private byte[] javaSerialized = null;
+  private String javaSerialized = null;
 
-  public JavaSerializationObject javaSerialized(byte[] javaSerialized) {
+  public JavaSerializationObject javaSerialized(String javaSerialized) {
     this.javaSerialized = javaSerialized;
     return this;
   }
@@ -49,11 +49,11 @@ public class JavaSerializationObject  implements Serializable {
    * @return javaSerialized
   **/
   @ApiModelProperty(example = "null", required = true, value = "")
-  public byte[] getJavaSerialized() {
+  public String getJavaSerialized() {
     return javaSerialized;
   }
 
-  public void setJavaSerialized(byte[] javaSerialized) {
+  public void setJavaSerialized(String javaSerialized) {
     this.javaSerialized = javaSerialized;
   }
 

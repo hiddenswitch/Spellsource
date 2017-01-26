@@ -25,7 +25,7 @@
 
 package com.hiddenswitch.proto3.net.client;
 
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2017-01-25T18:24:51.631-05:00")
+
 public class Configuration {
     private static ApiClient defaultApiClient = new ApiClient();
 

@@ -30,7 +30,8 @@ swagger {
             'library'          : 'okhttp-gson',
             'serializableModel': 'true',
             'dateLibrary'      : 'java8',
-            'artifactId'       : 'client'
+            'artifactId'       : 'client',
+            'hideGenerationTimestamp': 'true'
     ]
 }
 
