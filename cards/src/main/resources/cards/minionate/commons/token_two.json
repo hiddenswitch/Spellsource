@@ -1,0 +1,14 @@
+{
+	"id": "token_two",
+	"name": "Token Two",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "",
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

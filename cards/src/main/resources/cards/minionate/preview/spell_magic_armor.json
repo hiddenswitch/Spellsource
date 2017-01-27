@@ -1,0 +1,32 @@
+{
+	"id": "spell_magic_armor",
+	"name": "Magic Armor",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Take only 1 damage at a time until next turn.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "AddSpellTriggerSpell",
+		"target": "FRIENDLY_PLAYER",
+		"eventTrigger": {
+			"class": "PreDamageTrigger",
+			"sourcePlayer": "BOTH",
+			"targetPlayer": "SELF",
+			"targetEntityType": "HERO"
+		},
+		"spell": {
+			"class": "ModifyDamageSpell",
+			"operation": "SET",
+			"value": 1
+		},
+		"revertTrigger": {
+			"class": "TurnStartTrigger",
+			"targetPlayer": "SELF"
+		}	
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

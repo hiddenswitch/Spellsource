@@ -9,6 +9,10 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Created by finaris on 1/24/17.
+ */
+
 public class GraveyardSource extends CardSource implements Serializable {
 
     public GraveyardSource(SourceDesc desc) {
