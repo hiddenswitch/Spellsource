@@ -1,0 +1,21 @@
+{
+	"id": "minion_summon_two",
+	"name": "Summon Two",
+	"baseManaCost": 0,
+	"type": "MINION",
+	"baseAttack": 0,
+	"baseHp": 1,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Deathrattle: Summon a 2/2.",
+	"deathrattle": {
+		"class": "SummonSpell",
+		"card": "token_two"
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,24 @@
+{
+	"id": "minion_coin_inspire",
+	"name": "Coin Inspire",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 6,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Inspire: Draw a coin.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "InspireTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"card": "spell_the_coin"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
