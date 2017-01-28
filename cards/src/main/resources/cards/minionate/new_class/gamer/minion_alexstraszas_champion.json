@@ -1,0 +1,39 @@
+{
+	"name": "Alexstrasza's Champion",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "WARRIOR",
+	"rarity": "RARE",
+	"description": "Battlecry: If you're holding a Dragon, gain +1 Attack and Charge.",
+	"battlecry": {
+		"spell": {
+			"class": "MetaSpell",
+			"target": "SELF",
+			"spells": [
+				{
+					"class": "BuffSpell",
+					"attackBonus": 1
+				},
+				{
+					"class": "AddAttributeSpell",
+					"attribute": "CHARGE"
+				}
+			]
+		},
+		"condition": {
+			"class": "HoldsCardCondition",
+			"cardFilter": {
+				"class": "CardFilter",
+				"race": "DRAGON"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "THE_GRAND_TOURNAMENT",
+	"fileFormatVersion": 1
+}

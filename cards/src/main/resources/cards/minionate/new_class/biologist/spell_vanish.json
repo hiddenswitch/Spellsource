@@ -1,0 +1,16 @@
+{
+	"name": "Vanish",
+	"baseManaCost": 6,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "FREE",
+	"description": "Return all minions to their owner's hand.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "ReturnMinionToHandSpell",
+		"target": "ALL_MINIONS"
+	},
+	"collectible": true,
+	"set": "BASIC",
+	"fileFormatVersion": 1
+}

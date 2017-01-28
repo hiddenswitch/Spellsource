@@ -1,0 +1,19 @@
+{
+	"name": "Culinary Investor",
+	"baseManaCost": 9,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 5,
+	"heroClass": "DRUID",
+	"rarity": "LEGENDARY",
+	"description": "All of your minions now cost (1).",
+	"cardCostModifier": {
+		"class": "CardCostModifier",
+		"cardType": "MINION",
+		"operation": "SET",
+		"value": 1
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
