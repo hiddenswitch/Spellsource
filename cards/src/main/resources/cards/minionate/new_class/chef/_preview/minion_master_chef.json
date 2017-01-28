@@ -1,0 +1,16 @@
+{
+	"name": "Master Chef",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 5,
+	"heroClass": "DRUID",
+	"rarity": "LEGENDARY",
+	"description": "Your Select One cards combine both effects.",
+	"attributes": {
+		"BOTH_CHOOSE_ONE_OPTIONS": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

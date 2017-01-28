@@ -1,0 +1,17 @@
+{
+	"name": "Grocery Trip",
+	"baseManaCost": 1,
+	"type": "CHOOSE_ONE",
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Select One - Discover a power; or discover a minion.",
+	"targetSelection": "NONE",
+	"options": [
+		"spell_grocery_trip_2",
+		"spell_grocery_trip_1"
+	],
+	"bothOptions": "spell_grocery_trip_3",
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,27 @@
+{
+	"name": "Eviscerate",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "COMMON",
+	"description": "Deal 2 damage. Combo: Deal 4 damage instead.",
+	"targetSelection": "ANY",
+	"spell": {
+		"class": "ComboSpell",
+		"exclusive": true,
+		"spell1": {
+			"class": "DamageSpell",
+			"value": 2
+		},
+		"spell2": {
+			"class": "DamageSpell",
+			"value": 4
+		}
+	},
+	"attributes": {
+		"COMBO": true
+	},
+	"collectible": true,
+	"set": "CLASSIC",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,51 @@
+{
+	"name": "Intern Chef",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 3,
+	"heroClass": "DRUID",
+	"rarity": "RARE",
+	"description": "Select One - Hire a 2/2 token; or gain an empty Energy Cell.",
+	"options": [
+		{
+			"description": "Hire 2/2 token",
+			"spell": {
+				"class": "SummonSpell",
+				"targetPlayer": "SELF",
+				"card": "token_tauren_slime",
+				"boardPositionRelative": "RIGHT"
+			}
+		},
+		{
+			"description": "Energy Cell",
+			"spell": {
+				"class": "ModifyMaxManaSpell",
+				"targetPlayer": "SELF",
+				"value": 1
+			}
+		}
+	],
+	"bothOptions": {
+		"description": "Hire 2/2 token and Energy Cell.",
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "SummonSpell",
+					"targetPlayer": "SELF",
+					"card": "token_two",
+					"boardPositionRelative": "RIGHT"
+				},
+				{
+					"class": "ModifyMaxManaSpell",
+					"targetPlayer": "SELF",
+					"value": 1
+				}
+			]
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

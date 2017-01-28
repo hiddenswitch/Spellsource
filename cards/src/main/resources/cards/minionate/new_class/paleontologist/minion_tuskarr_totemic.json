@@ -1,0 +1,28 @@
+{
+	"name": "Tuskarr Totemic",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 2,
+	"heroClass": "SHAMAN",
+	"rarity": "COMMON",
+	"description": "Battlecry: Summon a random basic Totem.",
+	"battlecry": {
+		"spell": {
+			"class": "SummonRandomSpell",
+			"boardPositionRelative": "RIGHT",
+			"cards": [
+				"token_searing_totem",
+				"token_healing_totem",
+				"token_wrath_of_air_totem",
+				"token_stoneclaw_totem"
+			]
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "THE_GRAND_TOURNAMENT",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+	"name": "Dinner Prep",
+	"baseManaCost": 5,
+	"type": "CHOOSE_ONE",
+	"heroClass": "DRUID",
+	"rarity": "RARE",
+	"description": "Select One - Draw 3 cards; or gain 2 Energy Cells.",
+	"targetSelection": "NONE",
+	"options": [
+		"spell_dinner_prep_2",
+		"spell_dinner_prep_1"
+	],
+	"bothOptions": "spell_dinner_prep_3",
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
