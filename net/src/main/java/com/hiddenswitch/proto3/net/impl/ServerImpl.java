@@ -137,4 +137,10 @@ public class ServerImpl extends SyncVerticle {
 		response.headers().add("Content-Type", "application/json");
 		response.end(Serialization.serialize(matchmakingResponse));
 	}
+
+	@Suspendable
+	public void accountsCreatePush(RoutingContext routingContext) {
+//		AccountsCreatePushRequest userRequest = Serialization.deserialize(routingContext.getBodyAsString(), AccountsCreatePushRequest.class);
+
+	}
 }

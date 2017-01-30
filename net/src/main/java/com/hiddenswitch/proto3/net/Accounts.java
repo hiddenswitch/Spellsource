@@ -1,6 +1,8 @@
 package com.hiddenswitch.proto3.net;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.net.amazon.Profile;
+import com.hiddenswitch.proto3.net.amazon.UserRecord;
 import com.hiddenswitch.proto3.net.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.amazon.LoginRequest;
@@ -15,4 +17,7 @@ public interface Accounts {
 
 	@Suspendable
 	LoginResponse login(LoginRequest request);
+
+	@Suspendable
+	Profile get(String userId);
 }

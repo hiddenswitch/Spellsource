@@ -41,7 +41,12 @@ public class Consumer {
 
 					message.reply(reply);
 				} else {
-					message.fail(1, then.cause().getMessage());
+					Throwable deepest = then.cause();
+					while (deepest.getCause() != null) {
+						deepest = deepest.getCause();
+					}
+					deepest.printStackTrace();
+					message.fail(1, deepest.getMessage());
 				}
 			});
 		};
@@ -72,7 +77,12 @@ public class Consumer {
 				if (then.succeeded()) {
 					message.reply(then.result());
 				} else {
-					message.fail(1, then.cause().getMessage());
+					Throwable deepest = then.cause();
+					while (deepest.getCause() != null) {
+						deepest = deepest.getCause();
+					}
+					deepest.printStackTrace();
+					message.fail(1, deepest.getMessage());
 				}
 			});
 		};

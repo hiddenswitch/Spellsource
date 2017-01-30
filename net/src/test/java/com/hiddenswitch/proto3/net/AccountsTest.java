@@ -1,16 +1,23 @@
 package com.hiddenswitch.proto3.net;
 
 import ch.qos.logback.classic.Level;
+import com.hiddenswitch.proto3.net.amazon.UserRecord;
 import com.hiddenswitch.proto3.net.impl.AccountsImpl;
+import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
 import com.hiddenswitch.proto3.net.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.amazon.LoginRequest;
 import com.hiddenswitch.proto3.net.amazon.LoginResponse;
-import com.hiddenswitch.proto3.net.amazon.User;
+import com.hiddenswitch.proto3.net.amazon.Profile;
 import com.hiddenswitch.proto3.net.util.Result;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.AuthProvider;
+import io.vertx.ext.auth.User;
+import io.vertx.ext.sync.Sync;
+import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
 
 import java.sql.Date;
@@ -19,6 +26,44 @@ import java.time.Instant;
 import static org.junit.Assert.*;
 
 public class AccountsTest extends ServiceTest<AccountsImpl> {
+	@Test
+	public void testAuthProvider(TestContext context) throws Exception {
+		final AuthProvider tokenAuthProvider = new TokenAuthProvider(vertx);
+		final String username = "doctorpangloss";
+		final String password = "destructoid";
+		final String emailAddress = "benjamin.s.berman@gmail.com";
+		final CreateAccountResponse response = service.createAccount(emailAddress, password, username);
+
+		getContext().assertNotNull(response);
+
+		wrapSync(context, () -> {
+			User user = Sync.awaitResult(done -> tokenAuthProvider.authenticate(
+					new JsonObject()
+							.put("username", username)
+							.put("password", password),
+					done));
+
+			getContext().assertNotNull(user);
+			final UserRecord userRecord = (UserRecord) user;
+			getContext().assertNotNull(userRecord);
+			getContext().assertNotNull(userRecord.getProfile().getEmailAddress());
+			getContext().assertEquals(emailAddress, userRecord.getProfile().getEmailAddress());
+			getContext().assertNotNull(response.loginToken);
+			getContext().assertNotNull(response.loginToken.token);
+
+			final String token = response.loginToken.token;
+			User userTokened = Sync.awaitResult(done -> {
+
+				tokenAuthProvider.authenticate(
+						new JsonObject()
+								.put("username", username)
+								.put("token", token),
+						done);
+			});
+			getContext().assertNotNull(userTokened);
+		});
+	}
+
 	@Test
 	public void testCreateAccount() throws Exception {
 		setLoggingLevel(Level.ERROR);
@@ -36,24 +81,24 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 		setLoggingLevel(Level.ERROR);
 		CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
 		LoginResponse loginResponse = service.login("username", "password");
-		assertNotNull(loginResponse.token);
-		assertNotNull(loginResponse.token.token);
-		assertFalse(loginResponse.badPassword);
-		assertFalse(loginResponse.badUsername);
+		assertNotNull(loginResponse.getToken());
+		assertNotNull(loginResponse.getToken().token);
+		assertFalse(loginResponse.isBadPassword());
+		assertFalse(loginResponse.isBadUsername());
 
 		LoginRequest badUsername = new LoginRequest();
-		badUsername.userId = "blah";
-		badUsername.password = "*****dddd";
+		badUsername.setUserId("blah");
+		badUsername.setPassword("*****dddd");
 		LoginResponse badUsernameResponse = service.login(badUsername);
-		assertTrue(badUsernameResponse.badUsername);
-		assertNull(badUsernameResponse.token);
+		assertTrue(badUsernameResponse.isBadUsername());
+		assertNull(badUsernameResponse.getToken());
 
 		LoginRequest badPassword = new LoginRequest();
-		badPassword.userId = "username";
-		badPassword.password = "*****dddd";
+		badPassword.setUserId("username");
+		badPassword.setPassword("*****dddd");
 		LoginResponse basPasswordResponse = service.login(badPassword);
-		assertTrue(basPasswordResponse.badPassword);
-		assertNull(basPasswordResponse.token);
+		assertTrue(basPasswordResponse.isBadPassword());
+		assertNull(basPasswordResponse.getToken());
 	}
 
 	@Test
@@ -73,12 +118,12 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 	public void testGet() throws Exception {
 		setLoggingLevel(Level.ERROR);
 		CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
-		User user = service.get(response.userId);
-		assertNotNull(user);
-		assertEquals(user.getEmailAddress(), "test@test.com");
-		assertEquals(user.getName(), "username");
-		User user1 = service.get("a");
-		assertNull(user1);
+		Profile profile = service.get(response.userId);
+		assertNotNull(profile);
+		assertEquals(profile.getEmailAddress(), "test@test.com");
+		assertEquals(profile.getName(), "username");
+		Profile profile1 = service.get("a");
+		assertNull(profile1);
 		assertThrows(() -> service.get(null));
 	}
 
@@ -138,17 +183,6 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 
 	public interface ThrowingRunnable {
 		void run() throws Throwable;
-	}
-
-	@Test
-	public void testGetUserId() throws Exception {
-		setLoggingLevel(Level.ERROR);
-		CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
-		assertEquals(service.getUserId(), "username");
-		service.login("A", "");
-		assertNull(service.getUserId());
-		service.login("username", "password");
-		assertEquals(service.getUserId(), "username");
 	}
 
 	@Test
