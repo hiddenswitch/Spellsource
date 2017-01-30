@@ -5,29 +5,21 @@ import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.amazon.*;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import com.lambdaworks.crypto.SCryptUtil;
-import net.demilich.metastone.game.cards.CardSet;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 	private Pattern usernamePattern = Pattern.compile("[A-Za-z0-9_]+");
-	private String userId;
-
-	// Services
-	private ServiceProxy<Cards> cards;
-	private ServiceProxy<Inventory> inventory;
-	private ServiceProxy<Decks> decks;
 
 	@Override
 	public void start() {
-
-		inventory = Broker.proxy(Inventory.class, vertx.eventBus());
-		decks = Broker.proxy(Decks.class, vertx.eventBus());
+		Broker.of(this, Accounts.class, vertx.eventBus());
 	}
 
 	@Override
@@ -45,8 +37,8 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 
 	public LoginResponse login(String username, String password) {
 		LoginRequest request = new LoginRequest();
-		request.password = password;
-		request.userId = username;
+		request.setPassword(password);
+		request.setUserId(username);
 		return this.login(request);
 	}
 
@@ -70,10 +62,10 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 			return response;
 		}
 
-		User user = create();
-		user.setEmailAddress(request.emailAddress);
-		user.setName(request.name);
-		String userId = save(user);
+		Profile profile = create();
+		profile.setEmailAddress(request.emailAddress);
+		profile.setName(request.name);
+		String userId = save(profile);
 
 		LoginToken loginToken = setPassword(userId, request.password);
 
@@ -103,58 +95,45 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 	@Override
 	@Suspendable
 	public LoginResponse login(LoginRequest request) {
-		LoginResponse response = new LoginResponse();
-		boolean valid = true;
-		if (request == null) {
-			valid = false;
+		if (request.getToken() != null
+				&& request.getUserId() != null) {
+			boolean isAuthorized = isAuthorizedWithToken(request.getUserId(), request.getToken());
+			if (isAuthorized) {
+				return new LoginResponse(null, getRecord(request.getUserId()));
+			} else {
+				return new LoginResponse(true, true);
+			}
 		}
-		if (request.userId == null) {
-			valid = false;
-			response.badUsername = true;
+		if (request.getUserId() == null) {
+			return new LoginResponse(true, false);
 		}
-		if (request.password == null) {
-			valid = false;
-			response.badPassword = true;
+		if (request.getPassword() == null) {
+			return new LoginResponse(false, true);
 		}
-		AuthorizationRecord record = getAuthorizationRecord(request.userId);
+		AuthorizationRecord record = getAuthorizationRecord(request.getUserId());
 		if (record == null) {
-			valid = false;
-			response.badUsername = true;
+			return new LoginResponse(true, false);
 		}
 
-		if (request.password != null
-				&& record != null
-				&& !SCryptUtil.check(request.password, record.getScrypt())) {
-			valid = false;
-			response.badPassword = true;
+		if (request.getPassword() != null
+				&& !SCryptUtil.check(request.getPassword(), record.getScrypt())) {
+			return new LoginResponse(false, true);
 		}
 
 		LoginToken token = null;
-		if (valid) {
-			token = loginInternal(request, record);
-		}
+		token = loginInternal(request, record);
+		UserRecord userRecord = getRecord(request.getUserId());
 
-		if (token == null) {
-			setUserId(null);
-		} else {
-			setUserId(request.userId);
-		}
-
-		response.token = token;
-		return response;
+		return new LoginResponse(token, userRecord);
 	}
 
 	private LoginToken loginInternal(LoginRequest request, AuthorizationRecord record) {
 		LoginToken token = LoginToken.createSecure();
-		HashedLoginToken[] tokens = new HashedLoginToken[Math.max(record.getLoginTokens().size() + 1, 5)];
-		tokens[0] = new HashedLoginToken(token);
-
-		for (int i = 1; i < record.getLoginTokens().size(); i++) {
-			tokens[i] = record.getLoginTokens().get(i);
-		}
-
-		record.setLoginTokens(Arrays.asList(tokens));
-		record.setUserId(request.userId);
+		List<HashedLoginToken> hashedTokens = new ArrayList<>();
+		hashedTokens.add(new HashedLoginToken(token));
+		hashedTokens.addAll(record.getLoginTokens());
+		record.setLoginTokens(hashedTokens);
+		record.setUserId(request.getUserId());
 		save(record);
 		return token;
 	}
@@ -177,12 +156,12 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 		return false;
 	}
 
-	private String save(User user) {
+	private String save(Profile profile) {
 		UserRecord record = new UserRecord();
-		record.id = user.getName();
-		record.user = user;
+		record.setId(profile.getName());
+		record.setProfile(profile);
 		getDatabase().save(record);
-		return record.id;
+		return record.getId();
 	}
 
 	private boolean isValidPassword(String password) {
@@ -202,8 +181,8 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 		return false;
 	}
 
-	private User create() {
-		return new User();
+	private Profile create() {
+		return new Profile();
 	}
 
 	private LoginToken setPassword(String userId, String password) {
@@ -222,8 +201,6 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 		record.setLoginTokens(Collections.singletonList(new HashedLoginToken(token)));
 		save(record);
 
-		setUserId(userId);
-
 		return token;
 	}
 
@@ -236,21 +213,21 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 		return getDatabase().load(AuthorizationRecord.class, userId);
 	}
 
-	public User get(String id) {
-		UserRecord record = getDatabase().load(UserRecord.class, id);
+	public Profile get(String id) {
+		UserRecord record = getRecord(id);
 		if (record == null) {
 			return null;
 		}
 
-		return record.user;
+		return record.getProfile();
 	}
 
-	public String getUserId() {
-		return this.userId;
+	private UserRecord getRecord(String id) {
+		return getDatabase().load(UserRecord.class, id);
 	}
 
 	public PlayerProfile getProfileForId(String userId) {
-		User user = get(userId);
+		Profile user = get(userId);
 		if (user == null) {
 			return null;
 		}
@@ -261,9 +238,5 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 
 	private Pattern getUsernamePattern() {
 		return usernamePattern;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 }

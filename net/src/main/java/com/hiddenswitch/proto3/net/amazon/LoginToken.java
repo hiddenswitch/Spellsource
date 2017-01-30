@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.amazon;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.Instant;
@@ -9,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @DynamoDBDocument
-public class LoginToken {
+public class LoginToken implements Serializable {
 	public Date expiresAt;
 	public String token;
 

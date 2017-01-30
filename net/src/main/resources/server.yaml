@@ -73,6 +73,11 @@ definitions:
       isCanceled:
         type: 'boolean'
 paths:
+  /accounts:
+    post:
+      description: |
+        Create an account with Minionate.
+
   /matchmaking/constructed/queue:
     put:
       description: |

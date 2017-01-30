@@ -66,6 +66,7 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-sync', version: '3.3.3'
     compile group: 'io.vertx', name: 'vertx-service-discovery', version: '3.3.3'
     compile group: 'io.vertx', name: 'vertx-web', version: '3.3.3'
+    compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.3.3'
     compile group: 'org.elasticmq', name: 'elasticmq-rest-sqs_2.11', version: '0.10.0'
     compile group: 'com.almworks.sqlite4java', name: 'sqlite4java', version: '1.0.392'
     compile group: 'com.almworks.sqlite4java', name: 'sqlite4java-win32-x86', version: '1.0.392'
