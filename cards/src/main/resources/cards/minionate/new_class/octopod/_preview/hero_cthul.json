@@ -1,0 +1,16 @@
+{
+	"name": "C’thul",
+	"baseManaCost": 9,
+	"heroPower": "hero_power_void",
+	"type": "HERO",
+	"heroClass": "WARLOCK",
+	"rarity": "LEGENDARY",
+	"race": "DEMON",
+	"attributes": {
+		"HP": 15,
+		"MAX_HP": 15
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

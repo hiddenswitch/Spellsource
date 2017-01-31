@@ -1,0 +1,17 @@
+{
+	"name": "Steel Reel",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 2,
+	"heroClass": "HUNTER",
+	"rarity": "FREE",
+	"race": "BEAST",
+	"description": "Storm",
+	"attributes": {
+		"CHARGE": true
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

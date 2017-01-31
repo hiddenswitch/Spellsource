@@ -1,0 +1,26 @@
+{
+	"name": "Trojan Horse",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "COMMON",
+	"description": "Deal 3 damage. Shuffle a 'Payload' into your deck, which deals 6 damage.",
+	"targetSelection": "ANY",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"value": 3
+			},
+			{
+				"class": "ShuffleToDeckSpell",
+				"target": "NONE",
+				"card": "spell_roaring_torch"
+			}
+		]
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

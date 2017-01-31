@@ -1,0 +1,28 @@
+{
+	"name": "Medical Vessel",
+	"baseManaCost": 8,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 8,
+	"heroClass": "PALADIN",
+	"rarity": "LEGENDARY",
+	"description": "Restore 8 Health to a harmed friendly character at the end of your turn.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TurnEndTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "HealSpell",
+			"target": "FRIENDLY_CHARACTERS",
+			"value": 8,
+			"randomTarget": true,
+			"filter": {
+				"class": "DamagedFilter"
+			}
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,27 @@
+{
+	"name": "Timmy",
+	"baseManaCost": 8,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 9,
+	"heroClass": "WARRIOR",
+	"rarity": "LEGENDARY",
+	"description": "Storm. Bloodlust: Gain 6 Attack",
+	"trigger": {
+		"eventTrigger": {
+			"class": "EnrageChangedTrigger"
+		},
+		"spell": {
+			"class": "EnrageSpell",
+			"target": "SELF",
+			"attackBonus": 6
+		}
+	},
+	"attributes": {
+		"CHARGE": true,
+		"ENRAGABLE": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

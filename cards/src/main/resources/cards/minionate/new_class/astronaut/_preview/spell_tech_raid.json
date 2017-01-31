@@ -1,0 +1,17 @@
+{
+	"name": "Tech Raid",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "FREE",
+	"description": "Grant a target minion +4/+4.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "BuffSpell",
+		"attackBonus": 4,
+		"hpBonus": 4
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

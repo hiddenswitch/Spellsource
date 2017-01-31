@@ -1,0 +1,25 @@
+{
+	"name": "Deep Sea Squid",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 7,
+	"heroClass": "WARLOCK",
+	"rarity": "RARE",
+	"race": "DEMON",
+	"description": "Storm. Call to Arms: Discard two random cards.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "DiscardSpell",
+			"value": 2
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true,
+		"CHARGE": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

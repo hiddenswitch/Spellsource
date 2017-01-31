@@ -1,0 +1,33 @@
+{
+	"name": "Power Supply",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "EPIC",
+	"description": "Use all of your Energy. Heal for double the Energy spent.",
+	"targetSelection": "ANY",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "HealSpell",
+				"value": {
+					"class": "PlayerAttributeValueProvider",
+					"playerAttribute": "MANA",
+					"multiplier": 2
+				}
+			},
+			{
+				"class": "GainManaSpell",
+				"value": {
+					"class": "PlayerAttributeValueProvider",
+					"playerAttribute": "MANA",
+					"multiplier": -1
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,20 @@
+{
+	"name": "Devastate",
+	"baseManaCost": 6,
+	"type": "SPELL",
+	"heroClass": "PRIEST",
+	"rarity": "EPIC",
+	"description": "Deal damage to each minion equal to its own Attack.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DamageSpell",
+		"target": "ALL_MINIONS",
+		"value": {
+			"class": "AttributeValueProvider",
+			"attribute": "ATTACK"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
