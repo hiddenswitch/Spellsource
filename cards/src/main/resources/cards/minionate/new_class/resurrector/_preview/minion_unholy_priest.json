@@ -1,0 +1,16 @@
+{
+	"name": "Unholy Priest",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 5,
+	"heroClass": "PRIEST",
+	"rarity": "RARE",
+	"description": "Any ability which would normally restore health now deals damage instead.",
+	"attributes": {
+		"INVERT_HEALING": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+	"name": "Reanimator Shale",
+	"baseManaCost": 7,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 4,
+	"heroClass": "PRIEST",
+	"rarity": "LEGENDARY",
+	"description": "Energize: Hire a random 5 star minion.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "InspireTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "SummonRandomMinionFilteredSpell",
+			"cardFilter": {
+				"class": "CardFilter",
+				"rarity": "LEGENDARY"
+			}
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

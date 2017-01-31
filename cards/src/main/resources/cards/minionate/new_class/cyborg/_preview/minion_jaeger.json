@@ -1,0 +1,24 @@
+{
+	"name": "Jaeger",
+	"baseManaCost": 6,
+	"type": "MINION",
+	"baseAttack": 6,
+	"baseHp": 5,
+	"heroClass": "HUNTER",
+	"rarity": "RARE",
+	"race": "BEAST",
+	"description": "Revenge: Hire two 2/2 Robot Pilots.",
+	"deathrattle": {
+		"class": "SummonSpell",
+		"cards": [
+			"token_robot_pilot",
+			"token_robot_pilot"
+		]
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

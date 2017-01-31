@@ -1,0 +1,31 @@
+{
+	"name": "Sea Anomaly",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "COMMON",
+	"description": "Give an Octopus +3/+3 and give your opponent an Energy Cell.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "BuffSpell",
+				"attackBonus": 3,
+				"hpBonus": 3
+			},
+			{
+				"class": "ModifyMaxManaSpell",
+				"targetPlayer": "OPPONENT",
+				"value": 1
+			}
+		],
+		"filter": {
+			"class": "RaceFilter",
+			"race": "DEMON"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

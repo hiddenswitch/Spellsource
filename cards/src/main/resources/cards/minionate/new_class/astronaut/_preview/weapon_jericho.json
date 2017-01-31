@@ -1,0 +1,13 @@
+{
+	"name": "Jericho",
+	"baseManaCost": 5,
+	"type": "WEAPON",
+	"damage": 5,
+	"durability": 3,
+	"heroClass": "PALADIN",
+	"rarity": "LEGENDARY",
+	"description": "",
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,14 @@
+{
+	"name": "Kraken",
+	"baseManaCost": 6,
+	"type": "MINION",
+	"baseAttack": 6,
+	"baseHp": 6,
+	"heroClass": "WARLOCK",
+	"rarity": "COMMON",
+	"race": "DEMON",
+	"description": "",
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

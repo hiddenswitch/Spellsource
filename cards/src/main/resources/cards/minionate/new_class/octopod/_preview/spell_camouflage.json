@@ -1,0 +1,20 @@
+{
+	"name": "Camouflage",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "EPIC",
+	"description": "Replace your Superpower and Octopod Cards with another hero’s. These cards cost 1 less Energy.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "RenounceClassSpell",
+		"manaModifier": -1,
+		"cardFilter": {
+			"class": "CardFilter",
+			"heroClass": "WARLOCK"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,22 @@
+{
+	"name": "Johnny",
+	"baseManaCost": 7,
+	"type": "MINION",
+	"baseAttack": 6,
+	"baseHp": 5,
+	"heroClass": "WARRIOR",
+	"rarity": "LEGENDARY",
+	"description": "Call to Arms: Issue a random weapon.",
+	"battlecry": {
+		"spell": {
+			"class": "EquipRandomWeaponSpell",
+			"targetPlayer": "SELF"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

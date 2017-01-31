@@ -1,0 +1,17 @@
+{
+	"name": "Obituary",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "PRIEST",
+	"rarity": "FREE",
+	"description": "Place a copy of a random card that’s in your opponent's hand into your own hand.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "CopyCardSpell",
+		"value": 1,
+		"cardLocation": "HAND"
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

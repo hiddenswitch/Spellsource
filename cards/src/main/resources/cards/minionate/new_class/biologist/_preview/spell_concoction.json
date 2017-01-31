@@ -1,0 +1,27 @@
+{
+	"name": "Concoction",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "EPIC",
+	"description": "The next power you use this turn costs 3 less Energy.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "CardCostModifierSpell",
+		"target": "FRIENDLY_PLAYER",
+		"cardCostModifier": {
+			"class": "OneTurnCostModifier",
+			"cardType": "SPELL",
+			"operation": "SUBTRACT",
+			"value": 3,
+			"expirationTrigger": {
+				"class": "CardPlayedTrigger",
+				"cardType": "SPELL",
+				"targetPlayer": "SELF"
+			}
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
