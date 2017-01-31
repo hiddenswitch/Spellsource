@@ -1,0 +1,17 @@
+{
+	"name": "Mild Spices",
+	"baseManaCost": 3,
+	"type": "CHOOSE_ONE",
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Select One - Gain 8 Armor; or gain +4 Attack this turn only.",
+	"targetSelection": "NONE",
+	"options": [
+		"spell_mild_spices_2",
+		"spell_mild_spices_1"
+	],
+	"bothOptions": "spell_mild_spices_3",
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

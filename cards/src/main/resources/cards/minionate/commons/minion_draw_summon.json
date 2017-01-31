@@ -1,0 +1,24 @@
+{
+	"id": "minion_draw_summon",
+	"name": "Draw Summon",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 6,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Whenever your opponent summons a minion, draw a card.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "MinionSummonedTrigger",
+			"sourcePlayer": "OPPONENT"
+		},
+		"spell": {
+			"class": "DrawCardSpell",
+			"value": 1
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

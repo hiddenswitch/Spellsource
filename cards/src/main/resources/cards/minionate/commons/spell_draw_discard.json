@@ -1,0 +1,26 @@
+{
+	"id": "spell_draw_discard",
+	"name": "Draw Discard",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Discard a card. Draw two cards.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DiscardSpell",
+				"value": 1
+			},
+			{
+				"class": "DrawCardSpell",
+				"value": 2
+			}
+		]
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

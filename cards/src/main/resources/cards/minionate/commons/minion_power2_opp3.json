@@ -1,9 +1,9 @@
 {
-	"id": "minion_power2_opp4",
-	"name": "Power2 Opp4",
+	"id": "minion_power2_opp3",
+	"name": "Power2 Opp3",
 	"baseManaCost": 2,
 	"type": "MINION",
-	"baseAttack": 4,
+	"baseAttack": 5,
 	"baseHp": 5,
 	"heroClass": "ANY",
 	"rarity": "COMMON",

@@ -1,0 +1,17 @@
+{
+	"name": "+2 Energy Cells",
+	"baseManaCost": 5,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "RARE",
+	"description": "Gain 2 Energy Cells.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "ModifyMaxManaSpell",
+		"fullManaCrystals": true,
+		"value": 2
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

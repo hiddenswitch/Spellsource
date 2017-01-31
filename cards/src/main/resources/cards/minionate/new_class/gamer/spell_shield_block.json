@@ -1,0 +1,26 @@
+{
+	"name": "Shield Block",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "WARRIOR",
+	"rarity": "FREE",
+	"description": "Gain 5 Armor. Draw a card.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "BuffHeroSpell",
+				"target": "FRIENDLY_HERO",
+				"armorBonus": 5
+			},
+			{
+				"class": "DrawCardSpell",
+				"value": 1
+			}
+		]
+	},
+	"collectible": true,
+	"set": "BASIC",
+	"fileFormatVersion": 1
+}

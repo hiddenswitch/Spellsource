@@ -1,0 +1,16 @@
+{
+	"name": "Lord Jaraxxus",
+	"baseManaCost": 9,
+	"heroPower": "hero_power_inferno",
+	"type": "HERO",
+	"heroClass": "WARLOCK",
+	"rarity": "LEGENDARY",
+	"race": "DEMON",
+	"attributes": {
+		"HP": 15,
+		"MAX_HP": 15
+	},
+	"collectible": false,
+	"set": "CLASSIC",
+	"fileFormatVersion": 1
+}

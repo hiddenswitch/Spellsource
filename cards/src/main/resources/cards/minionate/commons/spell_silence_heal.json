@@ -1,0 +1,27 @@
+{
+	"name": "Silence Heal",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Restore a minion to full health and silence it.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "HealSpell",
+				"value": {
+					"class": "AttributeValueProvider",
+					"attribute": "MAX_HP"
+				}
+			},
+			{
+				"class": "SilenceSpell"
+			}
+		]
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

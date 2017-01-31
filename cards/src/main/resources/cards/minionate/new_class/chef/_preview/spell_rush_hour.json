@@ -1,0 +1,37 @@
+{
+	"name": "Rush Hour",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "EPIC",
+	"description": "Gain 10 Energy Cells. Discard all cards from your hand.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DiscardSpell",
+				"value": -1
+			},
+			{
+				"class": "EitherOrSpell",
+				"spell1": {
+					"class": "ReceiveCardSpell",
+					"targetPlayer": "SELF",
+					"card": "spell_excess_mana"
+				},
+				"spell2": {
+					"class": "ModifyMaxManaSpell",
+					"fullManaCrystals": true,
+					"value": 10
+				},
+				"condition": {
+					"class": "ManaMaxedCondition"
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
