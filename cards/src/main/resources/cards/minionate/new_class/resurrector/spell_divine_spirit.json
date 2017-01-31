@@ -1,0 +1,19 @@
+{
+	"name": "Divine Spirit",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "PRIEST",
+	"rarity": "FREE",
+	"description": "Double a minion's Health.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "BuffSpell",
+		"hpBonus": {
+			"class": "AttributeValueProvider",
+			"attribute": "HP"
+		}
+	},
+	"collectible": true,
+	"set": "BASIC",
+	"fileFormatVersion": 1
+}

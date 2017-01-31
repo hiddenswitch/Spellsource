@@ -1,0 +1,19 @@
+{
+	"name": "Summon two 1/1",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Hire two 1/1 tokens.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "SummonSpell",
+		"cards": [
+			"token_minionate",
+			"token_minionate"
+		]
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

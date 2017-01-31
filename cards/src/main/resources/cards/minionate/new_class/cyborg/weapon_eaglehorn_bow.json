@@ -1,0 +1,24 @@
+{
+	"name": "Eaglehorn Bow",
+	"baseManaCost": 3,
+	"type": "WEAPON",
+	"damage": 3,
+	"durability": 2,
+	"heroClass": "HUNTER",
+	"rarity": "RARE",
+	"description": "Whenever a Secret is revealed, gain +1 Durability.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "SecretRevealedTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "ModifyDurabilitySpell",
+			"targetPlayer": "SELF",
+			"value": 1
+		}
+	},
+	"collectible": true,
+	"set": "CLASSIC",
+	"fileFormatVersion": 1
+}

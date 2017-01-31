@@ -1,0 +1,28 @@
+{
+	"name": "Edwin VanCleef",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "ROGUE",
+	"rarity": "LEGENDARY",
+	"description": "Combo: Gain +2/+2 for each card played earlier this turn.",
+	"battlecry": {
+		"spell": {
+			"class": "BuffSpell",
+			"target": "SELF",
+			"value": {
+				"class": "AttributeValueProvider",
+				"target": "FRIENDLY_PLAYER",
+				"attribute": "COMBO",
+				"multiplier": 2
+			}
+		}
+	},
+	"attributes": {
+		"COMBO": true
+	},
+	"collectible": true,
+	"set": "CLASSIC",
+	"fileFormatVersion": 1
+}

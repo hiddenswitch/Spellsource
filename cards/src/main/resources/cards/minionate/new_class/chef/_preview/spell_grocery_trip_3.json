@@ -1,0 +1,39 @@
+{
+	"name": "Discover a power and a minion",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Discover a power. Discover a minion.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DiscoverRandomCardSpell",
+				"spell": {
+					"class": "ReceiveCardSpell",
+					"targetPlayer": "SELF"
+				},
+				"cardFilter": {
+					"class": "CardFilter",
+					"cardType": "SPELL"
+				}
+			},
+			{
+				"class": "DiscoverRandomCardSpell",
+				"spell": {
+					"class": "ReceiveCardSpell",
+					"targetPlayer": "SELF"
+				},
+				"cardFilter": {
+					"class": "CardFilter",
+					"cardType": "MINION"
+				}
+			}
+		]
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

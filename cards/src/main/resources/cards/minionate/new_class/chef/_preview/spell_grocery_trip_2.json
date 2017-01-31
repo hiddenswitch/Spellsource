@@ -1,0 +1,23 @@
+{
+	"name": "Discover a power",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Discover a power.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DiscoverRandomCardSpell",
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"targetPlayer": "SELF"
+		},
+		"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "SPELL"
+		}
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

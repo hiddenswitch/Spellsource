@@ -1,0 +1,24 @@
+{
+	"name": "Flamewaker",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 4,
+	"heroClass": "MAGE",
+	"rarity": "RARE",
+	"description": "After you cast a spell, deal 2 damage randomly split among all enemies.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "AfterSpellCastedTrigger",
+			"sourcePlayer": "SELF"
+		},
+		"spell": {
+			"class": "MissilesSpell",
+			"target": "ENEMY_CHARACTERS",
+			"howMany": 2
+		}
+	},
+	"collectible": true,
+	"set": "BLACKROCK_MOUNTAIN",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+	"name": "Appetizer",
+	"baseManaCost": 1,
+	"type": "CHOOSE_ONE",
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Select One - Summon two 1/1 tokens; or deal 2 damage.",
+	"targetSelection": "NONE",
+	"options": [
+		"spell_appetizer_2",
+		"spell_appetizer_1"
+	],
+	"bothOptions": "spell_appetizer_3",
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
