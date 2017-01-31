@@ -69,23 +69,6 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 
 		LoginToken loginToken = setPassword(userId, request.password);
 
-//		// Add the basic cards to the user's collection
-//
-//		CreateCollectionResponse createCollectionResponse = inventory.sync()
-//				.createCollection(new CreateCollectionRequest()
-//						.withType(CollectionTypes.USER)
-//						.withUserId(userId)
-//						.withOpenCardPack(new OpenCardPackRequest()
-//								.withUserId(userId)
-//								.withSets(CardSet.MINIONATE)
-//								.withNumberOfPacks(5)
-//								.withCardsPerPack(5))
-//						.withCardsQuery(new QueryCardsRequest()
-//								.withSets(CardSet.BASIC, CardSet.CLASSIC)));
-
-		// TODO: Create standard decks for the user
-
-
 		response.userId = userId;
 		response.loginToken = loginToken;
 
