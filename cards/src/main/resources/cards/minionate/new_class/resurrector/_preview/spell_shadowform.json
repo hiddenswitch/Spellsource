@@ -1,0 +1,48 @@
+{
+	"name": "Undeath",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "PRIEST",
+	"rarity": "EPIC",
+	"description": "Your Superpower becomes 'Deal 2 damage'. If already in Undeath: 3 damage.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "EitherOrSpell",
+		"targetPlayer": "SELF",
+		"spell1": {
+			"class": "ConditionalSpell",
+			"spell": {
+				"class": "ChangeHeroPowerSpell",
+				"card": "hero_power_necrosis"
+			},
+			"condition": {
+				"class": "HasHeroPowerCondition",
+				"cardId": "hero_power_necrosis",
+				"invert": true
+			}
+		},
+		"spell2": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "AddAttributeSpell",
+					"target": "FRIENDLY_HERO",
+					"attribute": "SHADOWFORM"
+				},
+				{
+					"class": "ChangeHeroPowerSpell",
+					"card": "hero_power_decay"
+				}
+			]
+		},
+		"condition": {
+			"class": "AttributeCondition",
+			"target": "FRIENDLY_HERO",
+			"attribute": "SHADOWFORM",
+			"operation": "HAS"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

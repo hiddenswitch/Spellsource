@@ -1,0 +1,23 @@
+{
+	"name": "Unearth",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "SHAMAN",
+	"rarity": "COMMON",
+	"description": "Deal 3-6 damage. Energy Surge: 1",
+	"targetSelection": "ANY",
+	"spell": {
+		"class": "DamageSpell",
+		"value": {
+			"class": "RandomValueProvider",
+			"min": 3,
+			"max": 6
+		}
+	},
+	"attributes": {
+		"OVERLOAD": 1
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

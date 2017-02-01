@@ -1,0 +1,30 @@
+{
+	"name": "Ancient Mystic",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 6,
+	"heroClass": "SHAMAN",
+	"rarity": "LEGENDARY",
+	"description": "Restore Health to your hero equal to damage dealt by powers.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "DamageCausedTrigger",
+			"cardType": "SPELL",
+			"sourcePlayer": "SELF",
+			"targetPlayer": "BOTH"
+		},
+		"spell": {
+			"class": "HealSpell",
+			"target": "FRIENDLY_HERO",
+			"value": {
+				"class": "AttributeValueProvider",
+				"target": "EVENT_TARGET",
+				"attribute": "LAST_HIT"
+			}
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

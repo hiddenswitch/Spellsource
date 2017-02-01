@@ -6,7 +6,7 @@
 	"baseHp": 5,
 	"heroClass": "DRUID",
 	"rarity": "LEGENDARY",
-	"description": "All of your minions now cost (1).",
+	"description": "All of your minions now cost 1 Energy.",
 	"cardCostModifier": {
 		"class": "CardCostModifier",
 		"cardType": "MINION",

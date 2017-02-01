@@ -1,0 +1,24 @@
+{
+	"name": "Upwelling",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "COMMON",
+	"description": "Destroy a minion in addition to one of your Energy Cells.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DestroySpell"
+			},
+			{
+				"class": "ModifyMaxManaSpell",
+				"value": -1
+			}
+		]
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

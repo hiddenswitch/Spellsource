@@ -1,0 +1,14 @@
+{
+	"name": "LOC",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"race": "BEAST",
+	"description": "",
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
