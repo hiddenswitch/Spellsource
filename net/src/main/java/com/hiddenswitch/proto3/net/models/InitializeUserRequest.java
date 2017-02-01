@@ -15,4 +15,9 @@ public class InitializeUserRequest implements Serializable {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
+	public InitializeUserRequest withUserId(String userId) {
+		this.userId = userId;
+		return this;
+	}
 }

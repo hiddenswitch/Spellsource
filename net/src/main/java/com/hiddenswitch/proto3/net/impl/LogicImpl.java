@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.impl;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Logic;
@@ -23,7 +24,7 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 
 	@Override
 	@Suspendable
-	public InitializeUserResponse initializeUser(InitializeUserRequest request) {
+	public InitializeUserResponse initializeUser(InitializeUserRequest request) throws InterruptedException, SuspendExecution {
 		final InitializeUserResponse response = new InitializeUserResponse();
 		final String userId = request.getUserId();
 

@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.impl.CardsImpl;
 import com.hiddenswitch.proto3.net.impl.InventoryImpl;
 import com.hiddenswitch.proto3.net.models.*;
@@ -27,7 +28,8 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 		wrapSync(context, this::createCollectionSync);
 	}
 
-	private void createCollectionSync() throws SuspendExecution {
+	@Suspendable
+	private void createCollectionSync() throws InterruptedException, SuspendExecution {
 		String userId = "user";
 		
 		CreateCollectionResponse createCollectionResponse = service

@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.models.*;
 
@@ -8,10 +9,10 @@ import com.hiddenswitch.proto3.net.models.*;
  */
 public interface Inventory {
 	@Suspendable
-	OpenCardPackResponse openCardPack(OpenCardPackRequest request);
+	OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws SuspendExecution, InterruptedException;
 
 	@Suspendable
-	CreateCollectionResponse createCollection(CreateCollectionRequest request);
+	CreateCollectionResponse createCollection(CreateCollectionRequest request) throws SuspendExecution, InterruptedException;
 
 	@Suspendable
 	AddToCollectionResponse addToCollection(AddToCollectionRequest request);
