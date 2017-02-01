@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.models.InitializeUserRequest;
 import com.hiddenswitch.proto3.net.models.InitializeUserResponse;
@@ -9,5 +10,5 @@ import com.hiddenswitch.proto3.net.models.InitializeUserResponse;
  */
 public interface Logic {
 	@Suspendable
-	InitializeUserResponse initializeUser(InitializeUserRequest request);
+	InitializeUserResponse initializeUser(InitializeUserRequest request) throws SuspendExecution, InterruptedException;
 }

@@ -8,13 +8,6 @@ buildscript {
     }
 }
 
-
-repositories {
-    jcenter()
-    mavenCentral()
-}
-
-
 apply plugin: 'org.detoeuf.swagger-codegen'
 
 swagger {
@@ -37,6 +30,8 @@ swagger {
 
 subprojects {
     repositories {
+        maven { url 'https://jitpack.io' }
+        jcenter()
         mavenCentral()
     }
 

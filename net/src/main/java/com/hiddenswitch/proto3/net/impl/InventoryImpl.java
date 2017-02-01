@@ -1,10 +1,10 @@
 package com.hiddenswitch.proto3.net.impl;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Cards;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Service;
-import com.hiddenswitch.proto3.net.impl.util.CardInstanceRecord;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
@@ -32,7 +32,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Override
 	@Suspendable
-	public OpenCardPackResponse openCardPack(OpenCardPackRequest request) {
+	public OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws InterruptedException, SuspendExecution {
 		QueryCardsRequest commons = new QueryCardsRequest()
 				.withFields(CardFields.ALL)
 				.withSets(CardSet.MINIONATE)
@@ -55,7 +55,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Override
 	@Suspendable
-	public CreateCollectionResponse createCollection(CreateCollectionRequest request) {
+	public CreateCollectionResponse createCollection(CreateCollectionRequest request) throws InterruptedException, SuspendExecution {
 		switch (request.getType()) {
 			case USER:
 				// The user can only have one collection
@@ -80,6 +80,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 		return new CreateCollectionResponse();
 	}
 
+	@Suspendable
 	protected void giveCardsToUser(String userId, List<Card> cardsToAdd) {
 		for (Card card : cardsToAdd) {
 			InventoryRecord cardRecord = new InventoryRecord(card);
