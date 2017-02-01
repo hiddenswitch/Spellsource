@@ -1,0 +1,30 @@
+{
+	"name": "The Leviathan",
+	"baseManaCost": 7,
+	"type": "MINION",
+	"baseAttack": 7,
+	"baseHp": 7,
+	"heroClass": "WARLOCK",
+	"rarity": "LEGENDARY",
+	"description": "Call to Arms: The next spell you cast this turn costs Health instead of Energy.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "AddAttributeSpell",
+			"target": "FRIENDLY_PLAYER",
+			"attribute": "SPELLS_COST_HEALTH",
+			"revertTrigger": {
+				"class": "TurnEndTrigger"
+			},
+			"secondRevertTrigger": {
+				"class": "SpellCastedTrigger"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

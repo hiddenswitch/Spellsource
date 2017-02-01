@@ -1,0 +1,31 @@
+{
+	"name": "Fresh Cadaver",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 1,
+	"heroClass": "PRIEST",
+	"rarity": "COMMON",
+	"race": "DRAGON",
+	"description": "Call to Arms: Gain +2 Health if you're holding a Zombie.",
+	"battlecry": {
+		"spell": {
+			"class": "BuffSpell",
+			"target": "SELF",
+			"hpBonus": 2
+		},
+		"condition": {
+			"class": "HoldsCardCondition",
+			"cardFilter": {
+				"class": "CardFilter",
+				"race": "DRAGON"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
