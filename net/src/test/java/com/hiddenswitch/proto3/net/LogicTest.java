@@ -52,11 +52,17 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		wrapSync(context, this::createInventorySync);
 	}
 
+	@Test
+	@Suspendable
+	public void testHandleGameEvent(TestContext context) {
+
+	}
+
 	@Suspendable
 	private void createInventorySync() throws SuspendExecution, InterruptedException {
 		final Method awaitFiber;
 		try {
-			awaitFiber =Sync.class.getMethod("awaitFiber", Consumer.class);
+			awaitFiber = Sync.class.getMethod("awaitFiber", Consumer.class);
 		} catch (NoSuchMethodException e) {
 			getContext().fail(e);
 			return;

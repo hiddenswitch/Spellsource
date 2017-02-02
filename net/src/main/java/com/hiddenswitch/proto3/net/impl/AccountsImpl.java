@@ -9,7 +9,6 @@ import com.lambdaworks.crypto.SCryptUtil;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -19,6 +18,7 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 
 	@Override
 	public void start() {
+		super.start();
 		Broker.of(this, Accounts.class, vertx.eventBus());
 	}
 
@@ -143,7 +143,7 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 		UserRecord record = new UserRecord();
 		record.setId(profile.getName());
 		record.setProfile(profile);
-		getDatabase().save(record);
+		getDynamo().save(record);
 		return record.getId();
 	}
 
@@ -188,12 +188,12 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 	}
 
 	private String save(AuthorizationRecord record) {
-		getDatabase().save(record);
+		getDynamo().save(record);
 		return record.getUserId();
 	}
 
 	private AuthorizationRecord getAuthorizationRecord(String userId) {
-		return getDatabase().load(AuthorizationRecord.class, userId);
+		return getDynamo().load(AuthorizationRecord.class, userId);
 	}
 
 	public Profile get(String id) {
@@ -206,7 +206,7 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 	}
 
 	private UserRecord getRecord(String id) {
-		return getDatabase().load(UserRecord.class, id);
+		return getDynamo().load(UserRecord.class, id);
 	}
 
 	public PlayerProfile getProfileForId(String userId) {

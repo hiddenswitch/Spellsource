@@ -10,9 +10,11 @@ import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.hiddenswitch.proto3.net.amazon.AwsStack;
 import com.hiddenswitch.proto3.net.amazon.AwsStackConfiguration;
+import com.hiddenswitch.proto3.net.util.LocalMongo;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.ext.mongo.MongoClient;
 import org.elasticmq.rest.sqs.SQSRestServer;
 import org.elasticmq.rest.sqs.SQSRestServerBuilder;
 
@@ -20,17 +22,20 @@ import java.io.File;
 
 public abstract class Service<T extends Service<T>> extends AbstractVerticle {
 	private static Logger logger = LoggerFactory.getLogger(Service.class);
-	private DynamoDBMapper database;
+	private DynamoDBMapper dynamo;
 	private AWSCredentials credentials;
 	private AmazonSQSClient queue;
+	private MongoClient mongo;
 	private static AmazonDynamoDB dynamoDBEmbedded;
 	private static SQSRestServer elasticMQ;
 	private static boolean embeddedConfigured;
+	private static LocalMongo localMongoServer;
+
 
 	@SuppressWarnings("unchecked")
 	public T withProductionConfiguration() {
 		setCredentials(getAWSCredentials());
-		setDatabase(new DynamoDBMapper(new AmazonDynamoDBClient(getCredentials())));
+		setDynamo(new DynamoDBMapper(new AmazonDynamoDBClient(getCredentials())));
 		setQueue(new AmazonSQSClient(getCredentials()));
 		return (T) this;
 	}
@@ -41,9 +46,10 @@ public abstract class Service<T extends Service<T>> extends AbstractVerticle {
 
 		logger.info("Setting default services...");
 		this.credentials = new BasicAWSCredentials("x", "y");
-		this.database = new DynamoDBMapper(dynamoDBEmbedded);
+		this.dynamo = new DynamoDBMapper(dynamoDBEmbedded);
 		this.queue = new AmazonSQSClient(credentials);
 		this.queue.setEndpoint("http://localhost:9324");
+
 		logger.info("Default services ready in embedded configuration.");
 		return (T) this;
 	}
@@ -51,6 +57,14 @@ public abstract class Service<T extends Service<T>> extends AbstractVerticle {
 	@SuppressWarnings("unchecked")
 	public T withEmbeddedConfiguration() {
 		return withEmbeddedConfiguration(null);
+	}
+
+	@Override
+	public void start() {
+		if (this.mongo == null
+				&& embeddedConfigured) {
+			this.mongo = MongoClient.createShared(vertx, localMongoServer.getConfig());
+		}
 	}
 
 	private synchronized static void createdEmbeddedServices(File dbFile) {
@@ -70,6 +84,20 @@ public abstract class Service<T extends Service<T>> extends AbstractVerticle {
 			logger.info("Started DynamoDB embedded.");
 		} else {
 			logger.info("DynamoDB already started.");
+		}
+
+		if (localMongoServer == null) {
+			logger.info("Starting Mongod embedded...");
+			localMongoServer = new LocalMongo();
+			try {
+				localMongoServer.start();
+			} catch (Exception e) {
+				logger.error("Mongo failed to start.", e);
+				return;
+			}
+			logger.info("Started Mongod embedded.");
+		} else {
+			logger.info("Mongod already started.");
 		}
 
 		if (embeddedConfigured) {
@@ -121,21 +149,29 @@ public abstract class Service<T extends Service<T>> extends AbstractVerticle {
 		return (T) this;
 	}
 
-	public DynamoDBMapper getDatabase() {
-		return database;
+	public DynamoDBMapper getDynamo() {
+		return dynamo;
 	}
 
-	public void setDatabase(DynamoDBMapper database) {
-		this.database = database;
+	public void setDynamo(DynamoDBMapper dynamo) {
+		this.dynamo = dynamo;
 	}
 
 	@SuppressWarnings("unchecked")
 	public T withDatabase(DynamoDBMapper database) {
-		setDatabase(database);
+		setDynamo(database);
 		return (T) this;
 	}
 
 	@Override
 	public void stop() {
+	}
+
+	public MongoClient getMongo() {
+		return mongo;
+	}
+
+	public void setMongo(MongoClient mongo) {
+		this.mongo = mongo;
 	}
 }
