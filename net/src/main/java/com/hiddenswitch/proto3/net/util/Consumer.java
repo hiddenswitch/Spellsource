@@ -147,49 +147,31 @@ public class Consumer {
 		@Suspendable
 		public void handle(Message<Buffer> message) {
 			VertxBufferInputStream inputStream = new VertxBufferInputStream(message.body());
-//			try {
 			T request = null;
 			try {
 				request = Serialization.deserialize(inputStream);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+			} catch (IOException | ClassNotFoundException e) {
+				message.fail(1, e.getMessage());
+				return;
 			}
-			R response = method.apply(request);
-				if (response == null) {
-					message.fail(1, new NullPointerException().getMessage());
-					return;
-				}
 
-				Buffer reply = Buffer.buffer(512);
+			R response = method.apply(request);
+
+			if (response == null) {
+				message.fail(1, new NullPointerException().getMessage());
+				return;
+			}
+
+			Buffer reply = Buffer.buffer(512);
+
 			try {
 				Serialization.serialize(response, new VertxBufferOutputStream(reply));
 			} catch (IOException e) {
-				e.printStackTrace();
+				message.fail(1, e.getMessage());
+				return;
 			}
-			message.reply(reply);
-//			} catch (Throwable e) {
-//				e.printStackTrace();
-//				message.fail(1, e.getMessage());
-//			}
 
-//			VertxBufferInputStream inputStream = new VertxBufferInputStream(message.body());
-//			try {
-//				T request = Serialization.deserialize(inputStream);
-//				R response = method.apply(request);
-//				if (response == null) {
-//					message.fail(1, new NullPointerException().getMessage());
-//					return;
-//				}
-//
-//				Buffer reply = Buffer.buffer(512);
-//				Serialization.serialize(response, new VertxBufferOutputStream(reply));
-//				message.reply(reply);
-//			} catch (Throwable e) {
-//				e.printStackTrace();
-//				message.fail(1, e.getMessage());
-//			}
+			message.reply(reply);
 
 //			context.executeBlocking(Sync.fiberHandler(new ExecuteBlockingMethodHandler<>(message, method)), false, new BlockingMethodCompletionHandler(message));
 		}
