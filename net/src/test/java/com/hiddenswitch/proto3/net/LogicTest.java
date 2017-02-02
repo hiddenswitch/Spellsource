@@ -22,6 +22,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -29,8 +30,11 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +54,14 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 	@Suspendable
 	private void createInventorySync() throws SuspendExecution, InterruptedException {
+		final Method awaitFiber;
+		try {
+			awaitFiber =Sync.class.getMethod("awaitFiber", Consumer.class);
+		} catch (NoSuchMethodException e) {
+			getContext().fail(e);
+			return;
+		}
+		getContext().assertTrue(Arrays.stream(awaitFiber.getAnnotations()).anyMatch(a -> a.annotationType().equals(Suspendable.class)));
 		getContext().assertTrue(Fiber.isCurrentFiber());
 		final String userId = "doctorpangloss";
 		CreateAccountResponse createAccountResponse = accounts.createAccount("benjamin.s.berman@gmail.com", "testpass", userId);

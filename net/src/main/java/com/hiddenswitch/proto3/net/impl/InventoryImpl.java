@@ -110,7 +110,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Override
 	@Suspendable
-	public GetCollectionResponse getCollection(GetCollectionRequest request) {
+	public GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution {
 		if (request.getUserId() != null) {
 			return new GetCollectionResponse()
 					.withInventoryRecords(userInventory.get(request.getUserId()));
