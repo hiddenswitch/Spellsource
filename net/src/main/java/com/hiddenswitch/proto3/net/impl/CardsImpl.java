@@ -39,14 +39,12 @@ public class CardsImpl extends Service<CardsImpl> implements Cards {
 	@Override
 	@Suspendable
 	public QueryCardsResponse queryCards(QueryCardsRequest request) throws SuspendExecution {
-//		System.err.println("queryCards 1");
 		// For now, just use the CardCatalogue
 		try {
 			CardCatalogue.loadCardsFromPackage();
 		} catch (IOException | URISyntaxException | CardParseException e) {
 			throw new RuntimeException("Could not load cards in CardsImpl::queryCards.");
 		}
-		System.err.println("queryCards 2");
 		final QueryCardsResponse response;
 
 		if (request.isBatchRequest()) {
@@ -54,11 +52,9 @@ public class CardsImpl extends Service<CardsImpl> implements Cards {
 					.withCards(new ArrayList<>());
 
 			for (QueryCardsRequest request1 : request.getRequests()) {
-				System.err.println("queryCards 3");
 				response.append(this.queryCards(request1));
 			}
 		} else {
-			System.err.println("queryCards 4");
 			CardCollection results = CardCatalogue.query(new DeckFormat()
 					.withCardSets(request.getSets()), (Card card) -> {
 				boolean passes = true;
@@ -86,7 +82,6 @@ public class CardsImpl extends Service<CardsImpl> implements Cards {
 			response = new QueryCardsResponse()
 					.withCards(cards);
 		}
-		System.err.println("queryCards 5");
 		return response;
 	}
 

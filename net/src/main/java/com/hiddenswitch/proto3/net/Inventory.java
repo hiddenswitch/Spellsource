@@ -24,5 +24,5 @@ public interface Inventory {
 	ReturnToCollectionResponse returnToCollection(ReturnToCollectionRequest request);
 
 	@Suspendable
-	GetCollectionResponse getCollection(GetCollectionRequest request);
+	GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution;
 }
