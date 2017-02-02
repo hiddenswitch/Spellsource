@@ -18,6 +18,7 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 
 	@Override
 	public void start() {
+		super.start();
 		Broker.of(this, Logic.class, vertx.eventBus());
 		inventory = Broker.proxy(Inventory.class, vertx.eventBus());
 	}

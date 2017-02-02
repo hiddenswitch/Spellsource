@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class BotsImpl extends Service<BotsImpl> implements Bots {
 	@Override
 	public void start() {
+		super.start();
 		Broker.of(this, Bots.class, vertx.eventBus());
 	}
 

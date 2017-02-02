@@ -32,6 +32,7 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 
 	@Override
 	public void start() {
+		super.start();
 		if (gameSessions == null) {
 			gameSessions = Broker.proxy(Games.class, vertx.eventBus());
 		}

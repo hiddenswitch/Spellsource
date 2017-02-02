@@ -26,6 +26,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Override
 	public void start() {
+		super.start();
 		Broker.of(this, Inventory.class, vertx.eventBus());
 		cards = Broker.proxy(Cards.class, vertx.eventBus());
 	}

@@ -27,6 +27,7 @@ public class CardsImpl extends Service<CardsImpl> implements Cards {
 
 	@Override
 	public void start() {
+		super.start();
 		Broker.of(this, Cards.class, vertx.eventBus());
 	}
 
