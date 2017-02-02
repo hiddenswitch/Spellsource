@@ -81,42 +81,6 @@ public class ServerImpl extends SyncVerticle {
 					.method(HttpMethod.PUT)
 					.blockingHandler(Sync.fiberHandler(this::matchmakingConstructedQueuePut));
 
-			router.route("/test")
-					.method(HttpMethod.GET)
-					.handler(Sync.fiberHandler(routingContext -> {
-						final String userId = "doctorpangloss";
-						CreateAccountResponse createAccountResponse = accounts.createAccount("benjamin.s.berman@gmail.com", "testpass", userId);
-
-						try {
-							logic.initializeUser(new InitializeUserRequest().withUserId(userId));
-						} catch (InterruptedException | SuspendExecution e) {
-							routingContext.fail(e);
-							return;
-						}
-
-						GetCollectionResponse response = null;
-						try {
-							response = inventory.getCollection(new GetCollectionRequest(userId));
-						} catch (SuspendExecution suspendExecution) {
-							routingContext.fail(suspendExecution);
-							return;
-						}
-
-						Set<String> cardIds = null;
-						if (response != null) {
-							cardIds = response.getInventoryRecords().stream().map(r -> r.card.getCardId()).collect(Collectors.toSet());
-						} else {
-							routingContext.fail(new NullPointerException());
-							return;
-						}
-
-						// Should contain the classic cards
-						final DeckFormat deckFormat = new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC);
-						final List<String> basicClassicCardIds = CardCatalogue.query(deckFormat).toList().stream().map(Card::getCardId).collect(Collectors.toList());
-						logger.info("Contains all? " + Boolean.toString(cardIds.containsAll(basicClassicCardIds)));
-						routingContext.response().end();
-					}));
-
 			router.route(MATCHMAKE_PATH).failureHandler(LoggerHandler.create());
 
 			logger.info("Router configured.");
