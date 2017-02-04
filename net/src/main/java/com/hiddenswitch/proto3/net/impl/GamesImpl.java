@@ -6,7 +6,7 @@ import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Matchmaking;
 import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
-import com.hiddenswitch.proto3.net.common.ServerGameContext;
+import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.impl.server.GameSession;
 import com.hiddenswitch.proto3.net.impl.server.ServerClientConnection;
 import com.hiddenswitch.proto3.net.impl.server.ServerGameSession;

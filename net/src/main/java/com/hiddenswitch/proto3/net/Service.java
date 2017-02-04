@@ -37,6 +37,7 @@ public abstract class Service<T extends Service<T>> extends AbstractVerticle {
 		setCredentials(getAWSCredentials());
 		setDynamo(new DynamoDBMapper(new AmazonDynamoDBClient(getCredentials())));
 		setQueue(new AmazonSQSClient(getCredentials()));
+		// TODO: Set production credentials for Mongo
 		return (T) this;
 	}
 

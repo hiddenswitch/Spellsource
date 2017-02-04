@@ -3,6 +3,7 @@ package com.hiddenswitch.proto3.net.impl.server;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.common.*;
+import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;

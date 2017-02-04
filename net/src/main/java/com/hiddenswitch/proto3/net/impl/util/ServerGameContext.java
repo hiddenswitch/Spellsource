@@ -1,6 +1,7 @@
-package com.hiddenswitch.proto3.net.common;
+package com.hiddenswitch.proto3.net.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.net.common.*;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.NotificationProxy;
@@ -15,7 +16,6 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.IdFactory;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.event.EventListenerSupport;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -218,6 +218,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	@Suspendable
+	@Override
 	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
 		String id = RandomStringUtils.randomAscii(8);
 		logger.debug("Requesting action with callback {} for playerId {}", id, playerId);
@@ -225,6 +226,7 @@ public class ServerGameContext extends GameContext {
 		getListenerMap().get(getPlayer(playerId)).onRequestAction(id, state, actions);
 	}
 
+	@Override
 	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
 		logger.debug("Requesting mulligan for playerId {} hashCode {}", player.getId(), player.hashCode());
 		String id = RandomStringUtils.randomAscii(8);
@@ -250,7 +252,8 @@ public class ServerGameContext extends GameContext {
 		((Handler<List<Card>>) handler).handle(discardedCards);
 	}
 
-	void sendGameOver(Player recipient, Player winner) {
+	@Override
+	public void sendGameOver(Player recipient, Player winner) {
 		getListenerMap().get(recipient).onGameEnd(winner);
 	}
 
@@ -258,7 +261,7 @@ public class ServerGameContext extends GameContext {
 	protected void notifyPlayersGameOver() {
 		for (Player player : getPlayers()) {
 			NetworkBehaviour networkBehaviour = (NetworkBehaviour) player.getBehaviour();
-			networkBehaviour.onGameOverAsync(this, player.getId(), getWinner() != null ? getWinner().getId() : -1);
+			networkBehaviour.onGameOverAuthoritative(this, player.getId(), getWinner() != null ? getWinner().getId() : -1);
 		}
 	}
 
