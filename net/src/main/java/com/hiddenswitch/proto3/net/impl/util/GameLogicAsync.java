@@ -1,6 +1,8 @@
-package com.hiddenswitch.proto3.net.common;
+package com.hiddenswitch.proto3.net.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.net.common.NetworkBehaviour;
+import com.hiddenswitch.proto3.net.common.NullResult;
 import com.hiddenswitch.proto3.net.util.LoggerUtils;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
@@ -34,7 +36,7 @@ public class GameLogicAsync extends GameLogic {
 
 		NetworkBehaviour networkBehaviour = (NetworkBehaviour) player.getBehaviour();
 
-		networkBehaviour.mulligan((ServerGameContext) context, player, firstHand.getStarterCards(), (List<Card> discardedCards) -> {
+		networkBehaviour.mulliganAsync((ServerGameContext) context, player, firstHand.getStarterCards(), (List<Card> discardedCards) -> {
 			logger.debug("Discarded cards from {}: {}", player.getName(), discardedCards.stream().map(Card::toString).reduce((a, b) -> a + ", " + b));
 			handleMulligan(player, begins, firstHand, discardedCards);
 			callback.handle(discardedCards);

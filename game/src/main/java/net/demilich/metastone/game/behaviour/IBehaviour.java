@@ -23,5 +23,11 @@ public interface IBehaviour extends Cloneable {
 	GameAction requestAction(GameContext context, Player player, List<GameAction> validActions);
 
 	@Suspendable
+	void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler);
+
+	@Suspendable
 	void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler);
+
+	@Suspendable
+	void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId);
 }

@@ -3,6 +3,7 @@ package net.demilich.metastone.game;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.annotations.Expose;
 import com.hiddenswitch.proto3.net.common.GameState;
+import io.vertx.core.Handler;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
@@ -139,6 +140,16 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		notifyPlayersGameOver();
 
 		calculateStatistics();
+	}
+
+	@Suspendable
+	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
+	}
+
+	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
+	}
+
+	public void sendGameOver(Player recipient, Player winner) {
 	}
 
 	protected void notifyPlayersGameOver() {
