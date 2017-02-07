@@ -1,5 +1,7 @@
 package com.hiddenswitch.proto3.net;
 
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
@@ -15,12 +17,13 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.MongoClient;
+import io.vertx.ext.sync.SyncVerticle;
 import org.elasticmq.rest.sqs.SQSRestServer;
 import org.elasticmq.rest.sqs.SQSRestServerBuilder;
 
 import java.io.File;
 
-public abstract class Service<T extends Service<T>> extends AbstractVerticle {
+public abstract class Service<T extends Service<T>> extends SyncVerticle {
 	private static Logger logger = LoggerFactory.getLogger(Service.class);
 	private DynamoDBMapper dynamo;
 	private AWSCredentials credentials;
@@ -61,7 +64,8 @@ public abstract class Service<T extends Service<T>> extends AbstractVerticle {
 	}
 
 	@Override
-	public void start() {
+	@Suspendable
+	public void start() throws SuspendExecution {
 		if (this.mongo == null
 				&& embeddedConfigured) {
 			this.mongo = MongoClient.createShared(vertx, localMongoServer.getConfig());

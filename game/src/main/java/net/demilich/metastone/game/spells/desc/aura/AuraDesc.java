@@ -1,15 +1,15 @@
 package net.demilich.metastone.game.spells.desc.aura;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.EnumMap;
-import java.util.Map;
-
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class AuraDesc extends Desc<AuraArg> {
 

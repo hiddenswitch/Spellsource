@@ -44,13 +44,13 @@ repositories {
     mavenCentral()
     jcenter()
     maven {
+        url 'http://oss.sonatype.org/content/repositories/snapshots'
+    }
+    maven {
         url 'https://s3-us-west-2.amazonaws.com/dynamodb-local/release'
     }
     maven {
         url 'https://jitpack.io'
-    }
-    maven {
-        url 'http://oss.sonatype.org/content/repositories/snapshots'
     }
 }
 
@@ -82,7 +82,7 @@ dependencies {
     compile group: 'com.almworks.sqlite4java', name: 'libsqlite4java-linux-i386', version: '1.0.392'
     compile group: 'com.almworks.sqlite4java', name: 'libsqlite4java-linux-amd64', version: '1.0.392'
     compile group: 'com.amazonaws', name: 'DynamoDBLocal', version: '1.11.0.1'
-    compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.0-SNAPSHOT'
+    compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.1-SNAPSHOT'
 
     compile project(':game')
     compile project(':cards')

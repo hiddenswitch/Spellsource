@@ -4,22 +4,17 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableRunnable;
-import com.hiddenswitch.proto3.net.amazon.LoginToken;
 import com.hiddenswitch.proto3.net.impl.AccountsImpl;
 import com.hiddenswitch.proto3.net.impl.CardsImpl;
 import com.hiddenswitch.proto3.net.impl.InventoryImpl;
 import com.hiddenswitch.proto3.net.impl.LogicImpl;
-import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.models.GetCollectionRequest;
 import com.hiddenswitch.proto3.net.models.GetCollectionResponse;
 import com.hiddenswitch.proto3.net.models.InitializeUserRequest;
-import com.hiddenswitch.proto3.net.util.AbstractMatchmakingTest;
 import com.hiddenswitch.proto3.net.util.Result;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.CompositeFuture;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.sync.Sync;
@@ -77,7 +72,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 		GetCollectionResponse response = inventory.getCollection(new GetCollectionRequest(userId));
 
-		Set<String> cardIds = response.getInventoryRecords().stream().map(r -> r.card.getCardId()).collect(Collectors.toSet());
+		Set<String> cardIds = response.getCardRecords().stream().map(r -> r.getCardDesc().id).collect(Collectors.toSet());
 
 		// Should contain the classic cards
 		final DeckFormat deckFormat = new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC);

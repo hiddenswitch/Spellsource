@@ -33,21 +33,12 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 		String userId = "user";
 		
 		CreateCollectionResponse createCollectionResponse = service
-				.createCollection(new CreateCollectionRequest()
-						.withType(CollectionTypes.USER)
-						.withUserId(userId)
-						.withOpenCardPack(new OpenCardPackRequest()
-								.withUserId(userId)
-								.withSets(CardSet.MINIONATE)
-								.withNumberOfPacks(5)
-								.withCardsPerPack(5))
-						.withCardsQuery(new QueryCardsRequest()
-								.withSets(CardSet.BASIC, CardSet.CLASSIC)));
+				.createCollection(CreateCollectionRequest.startingCollection(userId));
 	}
 
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<InventoryImpl>> done) {
-		final InventoryImpl inventory = new InventoryImpl();
+		final InventoryImpl inventory = new InventoryImpl().withEmbeddedConfiguration();
 		final CardsImpl cards = new CardsImpl();
 		vertx.deployVerticle(cards, then -> {
 			vertx.deployVerticle(inventory, then2 -> {

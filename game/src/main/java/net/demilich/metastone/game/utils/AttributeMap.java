@@ -11,6 +11,7 @@ import java.util.Set;
  * Created by bberman on 2/4/17.
  */
 public class AttributeMap implements Map<Attribute, Object> {
+	public static final AttributeMap EMPTY = new AttributeMap();
 	private EnumMap<Attribute, Object> attributes = new EnumMap<>(Attribute.class);
 
 	@Override

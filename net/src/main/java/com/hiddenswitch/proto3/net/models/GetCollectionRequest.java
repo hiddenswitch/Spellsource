@@ -7,6 +7,10 @@ import java.io.Serializable;
  */
 public class GetCollectionRequest implements Serializable {
 	private String userId;
+	private String deckId;
+
+	public GetCollectionRequest() {
+	}
 
 	public GetCollectionRequest(String userId) {
 		this.userId = userId;
@@ -24,6 +28,19 @@ public class GetCollectionRequest implements Serializable {
 	public GetCollectionRequest withUserId(final String userId) {
 		this.userId = userId;
 		return this;
+	}
+
+	public GetCollectionRequest withDeckId(String deckId) {
+		this.deckId = deckId;
+		return this;
+	}
+
+	public String getDeckId() {
+		return deckId;
+	}
+
+	public void setDeckId(String deckId) {
+		this.deckId = deckId;
 	}
 }
 

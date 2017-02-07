@@ -1,7 +1,6 @@
 package net.demilich.metastone.game;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.gson.annotations.Expose;
 import com.hiddenswitch.proto3.net.common.GameState;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.actions.ActionType;
@@ -23,14 +22,14 @@ import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.utils.AttributeMap;
 import net.demilich.metastone.utils.IDisposable;
-import org.apache.commons.lang3.SerializationUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class GameContext implements Cloneable, IDisposable, Serializable {
 	public static final int PLAYER_1 = 0;
@@ -733,5 +732,9 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	public boolean isDisposed() {
 		return disposed;
+	}
+
+	public Map<Attribute, Object> getNetworkAttributes(Entity entity) {
+		return AttributeMap.EMPTY;
 	}
 }
