@@ -108,6 +108,10 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Suspendable
 	protected void createCardsForUser(final String userId, final List<JsonObject> cardsToAdd) {
+		if (userId == null) {
+			throw new NullPointerException();
+		}
+
 		for (JsonObject card : cardsToAdd) {
 			CardRecord cardRecord = new CardRecord(card)
 					.withUserId(userId)
