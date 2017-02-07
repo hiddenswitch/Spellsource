@@ -26,7 +26,7 @@ public class CardsImpl extends Service<CardsImpl> implements Cards {
 	private Random random = new Random();
 
 	@Override
-	public void start() {
+	public void start() throws SuspendExecution {
 		super.start();
 		Broker.of(this, Cards.class, vertx.eventBus());
 	}

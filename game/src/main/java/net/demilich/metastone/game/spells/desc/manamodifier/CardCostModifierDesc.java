@@ -1,12 +1,12 @@
 package net.demilich.metastone.game.spells.desc.manamodifier;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.EnumMap;
-import java.util.Map;
-
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.logic.CustomCloneable;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class CardCostModifierDesc extends Desc<CardCostModifierArg> {
 

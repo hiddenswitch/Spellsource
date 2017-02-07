@@ -5,6 +5,7 @@ import com.hiddenswitch.proto3.net.common.*;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.NotificationProxy;
+import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
@@ -12,9 +13,11 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
@@ -349,5 +352,14 @@ public class ServerGameContext extends GameContext {
 		// Clear the listeners
 		listenerMap.clear();
 		onGameEndHandlers.clear();
+	}
+
+	@Override
+	public Map<Attribute, Object> getNetworkAttributes(Entity entity) {
+		// Get everything you need to know about the entity
+
+		// Call the appropriate service
+
+		return AttributeMap.EMPTY;
 	}
 }

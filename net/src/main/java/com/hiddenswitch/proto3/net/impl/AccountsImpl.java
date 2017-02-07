@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.impl;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.amazon.*;
@@ -17,7 +18,8 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 	private Pattern usernamePattern = Pattern.compile("[A-Za-z0-9_]+");
 
 	@Override
-	public void start() {
+	@Suspendable
+	public void start() throws SuspendExecution {
 		super.start();
 		Broker.of(this, Accounts.class, vertx.eventBus());
 	}

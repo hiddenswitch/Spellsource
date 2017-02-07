@@ -31,7 +31,7 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 	private Map<String, ClientConnectionConfiguration> connections = new HashMap<>();
 
 	@Override
-	public void start() {
+	public void start() throws SuspendExecution {
 		super.start();
 		if (gameSessions == null) {
 			gameSessions = Broker.proxy(Games.class, vertx.eventBus());

@@ -13,7 +13,6 @@ import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 
 public abstract class CardDesc implements Serializable {
-
 	public String id;
 	public String name;
 	public String description;
@@ -31,5 +30,4 @@ public abstract class CardDesc implements Serializable {
 	public TriggerDesc deckTrigger;
 
 	public abstract Card createInstance();
-
 }

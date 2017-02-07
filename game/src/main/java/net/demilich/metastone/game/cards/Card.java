@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.cards;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -29,12 +31,15 @@ public abstract class Card extends Entity {
 	private CardLocation location;
 	private ValueProvider manaCostModifier;
 	private String cardId;
+	private CardDesc desc;
 
 	public Card() {
 		super();
 	}
 
 	public Card(CardDesc desc) {
+		// Save a reference to the description for later use.
+		this.desc = desc;
 		cardId = desc.id;
 		setName(desc.name);
 		setDescription(desc.description);
@@ -138,7 +143,12 @@ public abstract class Card extends Entity {
 		// Include taunt if it doesn't seem to contain anything about taunt.
 		if (hasAttribute(Attribute.CHARGE)
 				&& !descriptionCleaned.matches("[Cc]harge")) {
-			descriptionCleaned += " (Charge)";
+			descriptionCleaned = "Charge. " + descriptionCleaned;
+		}
+
+		if (hasAttribute(Attribute.TAUNT)
+				&& !descriptionCleaned.matches("[Tt]aunt")) {
+			descriptionCleaned = "Taunt. " + descriptionCleaned;
 		}
 		return descriptionCleaned;
 	}
@@ -273,5 +283,9 @@ public abstract class Card extends Entity {
 	@Override
 	public String toString() {
 		return String.format("[%s '%s' %s Manacost:%d]", getCardType(), getName(), getReference(), getBaseManaCost());
+	}
+
+	public CardDesc getOriginalDesc() {
+		return desc;
 	}
 }

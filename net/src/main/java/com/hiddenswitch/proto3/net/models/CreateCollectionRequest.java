@@ -1,5 +1,8 @@
 package com.hiddenswitch.proto3.net.models;
 
+import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,7 +13,32 @@ public class CreateCollectionRequest implements Serializable {
 	private CollectionTypes type;
 	private String userId;
 	private List<String> cardIds;
+	private List<String> inventoryIds;
+	private String name;
 	private QueryCardsRequest queryCardsRequest;
+	private HeroClass heroClass;
+
+	public static CreateCollectionRequest deck(String userId, String name, HeroClass heroClass, List<String> inventoryIds) {
+		return new CreateCollectionRequest()
+				.withName(name)
+				.withUserId(userId)
+				.withHeroClass(heroClass)
+				.withInventoryIds(inventoryIds);
+	}
+
+	public static CreateCollectionRequest startingCollection(String userId) {
+		return new CreateCollectionRequest()
+				.withType(CollectionTypes.USER)
+				.withUserId(userId)
+				.withName(userId + "'s Collection")
+				.withOpenCardPack(new OpenCardPackRequest()
+						.withUserId(userId)
+						.withSets(CardSet.MINIONATE)
+						.withNumberOfPacks(5)
+						.withCardsPerPack(5))
+				.withCardsQuery(new QueryCardsRequest()
+						.withSets(CardSet.BASIC, CardSet.CLASSIC));
+	}
 
 	public void setUserId(String userId) {
 		this.userId = userId;
@@ -68,6 +96,53 @@ public class CreateCollectionRequest implements Serializable {
 
 	public CreateCollectionRequest withOpenCardPack(OpenCardPackRequest openCardPackRequest) {
 		this.openCardPackRequest = openCardPackRequest;
+		return this;
+	}
+
+	public List<String> getCardIds() {
+		return cardIds;
+	}
+
+	public void setCardIds(List<String> cardIds) {
+		this.cardIds = cardIds;
+	}
+
+	public List<String> getInventoryIds() {
+		return inventoryIds;
+	}
+
+	public void setInventoryIds(List<String> inventoryIds) {
+		this.inventoryIds = inventoryIds;
+	}
+
+	public CreateCollectionRequest withInventoryIds(final List<String> inventoryIds) {
+		this.inventoryIds = inventoryIds;
+		return this;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public CreateCollectionRequest withName(final String name) {
+		this.name = name;
+		return this;
+	}
+
+	public HeroClass getHeroClass() {
+		return heroClass;
+	}
+
+	public void setHeroClass(HeroClass heroClass) {
+		this.heroClass = heroClass;
+	}
+
+	public CreateCollectionRequest withHeroClass(HeroClass heroClass) {
+		this.heroClass = heroClass;
 		return this;
 	}
 }

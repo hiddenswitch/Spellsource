@@ -1,5 +1,7 @@
 package com.hiddenswitch.proto3.net.impl;
 
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Bots;
 import com.hiddenswitch.proto3.net.models.RequestActionRequest;
 import com.hiddenswitch.proto3.net.models.RequestActionResponse;
@@ -20,7 +22,8 @@ import java.util.stream.Collectors;
  */
 public class BotsImpl extends Service<BotsImpl> implements Bots {
 	@Override
-	public void start() {
+	@Suspendable
+	public void start() throws SuspendExecution {
 		super.start();
 		Broker.of(this, Bots.class, vertx.eventBus());
 	}

@@ -81,6 +81,32 @@ public enum Attribute {
 	// AI flags
 	MARKED_FOR_DEATH,
 
+
+	/**
+	 * Describes the instance of this specific entity
+	 */
+	ENTITY_INSTANCE_ID,
+	/**
+	 * Describes the instance of this card
+	 */
+	CARD_INSTANCE_ID,
+	/**
+	 * Describes the owner/donor
+	 */
+	DONOR_ID,
+	/**
+	 * Describes the current champion (usually this player)
+	 */
+	CHAMPION_ID,
+	/**
+	 * Describes the collection this card belongs to
+	 */
+	COLLECTION_ID,
+	/**
+	 * Describes the alliance this card belongs to, if any
+	 */
+	ALLIANCE_ID,
+
 	// Networked attributes
 	FIRST_TIME_PLAYS
 }
