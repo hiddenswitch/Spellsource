@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardParser;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 
+import java.io.IOException;
 import java.util.List;
 
-import static com.hiddenswitch.proto3.net.util.QuickJson.fromJson;
 import static com.hiddenswitch.proto3.net.util.QuickJson.toJson;
 
 /**
@@ -17,9 +18,6 @@ import static com.hiddenswitch.proto3.net.util.QuickJson.toJson;
 public class CardRecord extends MongoRecord {
 	@JsonProperty
 	private JsonObject cardDesc;
-
-	@JsonProperty
-	private String cardDescClass;
 
 	@JsonProperty
 	private String userId;
@@ -37,10 +35,13 @@ public class CardRecord extends MongoRecord {
 		this(card.getOriginalDesc());
 	}
 
+	public CardRecord(JsonObject card) {
+		this.cardDesc = card;
+	}
+
 	public CardRecord(CardDesc cardDesc) {
 		this();
 		this.cardDesc = toJson(cardDesc);
-		this.cardDescClass = cardDesc.getClass().getName();
 	}
 
 	@JsonIgnore
@@ -48,17 +49,12 @@ public class CardRecord extends MongoRecord {
 	public CardDesc getCardDesc() {
 		if (cardDescCached == null) {
 			try {
-				cardDescCached = fromJson(cardDesc, (Class<? extends CardDesc>) Class.forName(cardDescClass));
-			} catch (ClassNotFoundException e) {
+				cardDescCached = CardParser.parseCard(cardDesc).getDesc();
+			} catch (IOException e) {
 				throw new RuntimeException();
 			}
 		}
 		return cardDescCached;
-	}
-
-	@JsonIgnore
-	public String getCardDescClass() {
-		return cardDescClass;
 	}
 
 	@JsonIgnore
