@@ -9,10 +9,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.junit.Test;
 
@@ -29,9 +26,9 @@ public class CardsTest extends ServiceTest<CardsImpl> {
 
 	private void queryCardsSync() throws SuspendExecution {
 		// Query for a bunch of different things and compare the values
-		List<Card> commons = service.queryCards(new QueryCardsRequest()
+		List<CardCatalogueRecord> commons = service.queryCards(new QueryCardsRequest()
 				.withSets(CardSet.BASIC, CardSet.CLASSIC)
-				.withRarity(Rarity.COMMON)).getCards();
+				.withRarity(Rarity.COMMON)).getRecords();
 
 		int expectedCount = CardCatalogue.query(new DeckFormat()
 				.withCardSets(CardSet.BASIC, CardSet.CLASSIC), c -> c.isCollectible() && c.getRarity().isRarity(Rarity.COMMON))

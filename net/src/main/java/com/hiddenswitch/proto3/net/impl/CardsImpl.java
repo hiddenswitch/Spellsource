@@ -7,17 +7,15 @@ import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
 import io.vertx.core.Future;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardParseException;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by bberman on 1/20/17.
@@ -50,38 +48,44 @@ public class CardsImpl extends Service<CardsImpl> implements Cards {
 
 		if (request.isBatchRequest()) {
 			response = new QueryCardsResponse()
-					.withCards(new ArrayList<>());
+					.withRecords(new ArrayList<>());
 
 			for (QueryCardsRequest request1 : request.getRequests()) {
 				response.append(this.queryCards(request1));
 			}
 		} else {
-			CardCollection results = CardCatalogue.query(new DeckFormat()
-					.withCardSets(request.getSets()), (Card card) -> {
+			final EnumSet<CardSet> sets = EnumSet.noneOf(CardSet.class);
+			sets.addAll(Arrays.asList(request.getSets()));
+
+			List<CardCatalogueRecord> results = CardCatalogue.getRecords().values().stream().filter(r -> {
 				boolean passes = true;
 
+				final CardDesc desc = r.getDesc();
+
+				passes &= desc.collectible;
+				passes &= sets.contains(desc.set);
+
 				if (request.getRarity() != null) {
-					passes &= card.getRarity().isRarity(request.getRarity());
+					passes &= desc.rarity.isRarity(request.getRarity());
 				}
 
-				passes &= card.isCollectible();
 				return passes;
-			});
+			}).collect(Collectors.toList());
 
-			int count = results.getCount();
+			int count = results.size();
 
 			if (request.isRandomCountRequest()) {
-				results.shuffle(random);
+				Collections.shuffle(results, random);
 				count = Math.min(request.getRandomCount(), count);
 			}
 
-			List<Card> cards = results.toList();
+			List<CardCatalogueRecord> cards = results;
 			if (count != 0) {
 				cards = new ArrayList<>(cards.subList(0, count));
 			}
 
 			response = new QueryCardsResponse()
-					.withCards(cards);
+					.withRecords(cards);
 		}
 		return response;
 	}

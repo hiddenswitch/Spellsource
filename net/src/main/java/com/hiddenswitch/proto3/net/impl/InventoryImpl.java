@@ -12,15 +12,16 @@ import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
-import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.Rarity;
 
-import static io.vertx.ext.sync.Sync.*;
-import static com.hiddenswitch.proto3.net.util.QuickJson.*;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.hiddenswitch.proto3.net.util.QuickJson.*;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * Created by bberman on 1/19/17.
@@ -62,7 +63,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 				.queryCards(new QueryCardsRequest()
 						.withRequests(commons, allianceRares));
 
-		createCardsForUser(request.getUserId(), response.getCards());
+		createCardsForUser(request.getUserId(), response.getRecords().stream().map(CardCatalogueRecord::getJson).collect(Collectors.toList()));
 		return new OpenCardPackResponse();
 	}
 
@@ -79,7 +80,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 				if (request.getQueryCardsRequest() != null) {
 					final QueryCardsResponse cardsResponse = cards.sync().queryCards(request.getQueryCardsRequest());
-					List<Card> cardsToAdd = cardsResponse.getCards();
+					List<JsonObject> cardsToAdd = cardsResponse.getRecords().stream().map(CardCatalogueRecord::getJson).collect(Collectors.toList());
 					createCardsForUser(request.getUserId(), cardsToAdd);
 				}
 
@@ -106,8 +107,8 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 	}
 
 	@Suspendable
-	protected void createCardsForUser(final String userId, final List<Card> cardsToAdd) {
-		for (Card card : cardsToAdd) {
+	protected void createCardsForUser(final String userId, final List<JsonObject> cardsToAdd) {
+		for (JsonObject card : cardsToAdd) {
 			CardRecord cardRecord = new CardRecord(card)
 					.withUserId(userId)
 					.withCollectionIds(Collections.singletonList(userId));
