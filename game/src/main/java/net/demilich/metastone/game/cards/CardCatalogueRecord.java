@@ -33,7 +33,7 @@ public class CardCatalogueRecord implements Serializable {
 	@SuppressWarnings("unchecked")
 	public JsonObject getJson() {
 		if (cachedJson == null) {
-			cachedJson = new JsonObject(Json.decodeValue(json, Map.class));
+			cachedJson = new JsonObject(Json.decodeValue(json, Map.class)).put("id", id);
 		}
 		return cachedJson;
 	}

@@ -9,6 +9,7 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.toJson;
 
@@ -17,7 +18,7 @@ import static com.hiddenswitch.proto3.net.util.QuickJson.toJson;
  */
 public class CardRecord extends MongoRecord {
 	@JsonProperty
-	private JsonObject cardDesc;
+	private Map<String, Object> cardDesc;
 
 	@JsonProperty
 	private String userId;
@@ -36,12 +37,12 @@ public class CardRecord extends MongoRecord {
 	}
 
 	public CardRecord(JsonObject card) {
-		this.cardDesc = card;
+		this.cardDesc = card.getMap();
 	}
 
 	public CardRecord(CardDesc cardDesc) {
 		this();
-		this.cardDesc = toJson(cardDesc);
+		this.cardDesc = toJson(cardDesc).getMap();
 	}
 
 	@JsonIgnore
@@ -49,7 +50,7 @@ public class CardRecord extends MongoRecord {
 	public CardDesc getCardDesc() {
 		if (cardDescCached == null) {
 			try {
-				cardDescCached = CardParser.parseCard(cardDesc).getDesc();
+				cardDescCached = CardParser.parseCard(new JsonObject(cardDesc)).getDesc();
 			} catch (IOException e) {
 				throw new RuntimeException();
 			}

@@ -50,7 +50,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 	@Test
 	@Suspendable
 	public void testHandleGameEvent(TestContext context) {
-
+		context.async().complete();
 	}
 
 	@Suspendable

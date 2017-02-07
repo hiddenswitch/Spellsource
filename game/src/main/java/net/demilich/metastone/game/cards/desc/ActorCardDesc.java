@@ -6,11 +6,9 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 
 public abstract class ActorCardDesc extends CardDesc {
-
 	public BattlecryDesc battlecry;
 	public SpellDesc deathrattle;
 	public TriggerDesc trigger;
 	public TriggerDesc[] triggers;
 	public AuraDesc aura;
-
 }
