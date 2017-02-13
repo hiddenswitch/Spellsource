@@ -18,7 +18,7 @@ public interface Inventory {
 	AddToCollectionResponse addToCollection(AddToCollectionRequest request);
 
 	@Suspendable
-	BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request);
+	BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request) throws SuspendExecution, InterruptedException;
 
 	@Suspendable
 	ReturnToCollectionResponse returnToCollection(ReturnToCollectionRequest request);

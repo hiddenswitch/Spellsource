@@ -6,7 +6,7 @@ import com.hiddenswitch.proto3.net.models.*;
 
 public interface Decks {
 	@Suspendable
-	DeckCreateResponse createDeck(DeckCreateRequest request);
+	DeckCreateResponse createDeck(DeckCreateRequest request) throws SuspendExecution, InterruptedException;
 
 	@Suspendable
 	DeckUpdateResponse updateDeck(DeckUpdateRequest request);

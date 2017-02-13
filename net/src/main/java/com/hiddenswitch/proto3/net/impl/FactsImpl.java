@@ -1,8 +1,8 @@
 package com.hiddenswitch.proto3.net.impl;
 
 import com.hiddenswitch.proto3.net.Facts;
-import com.hiddenswitch.proto3.net.UpdateFactRequest;
-import com.hiddenswitch.proto3.net.UpdateFactResponse;
+import com.hiddenswitch.proto3.net.models.UpdateFactRequest;
+import com.hiddenswitch.proto3.net.models.UpdateFactResponse;
 
 /**
  * Created by bberman on 2/3/17.

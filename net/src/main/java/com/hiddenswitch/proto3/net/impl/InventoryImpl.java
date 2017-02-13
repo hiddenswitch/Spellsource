@@ -12,6 +12,7 @@ import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.Rarity;
@@ -129,8 +130,21 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Override
 	@Suspendable
-	public BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request) {
-		return null;
+	public BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request) throws SuspendExecution, InterruptedException {
+		List<String> collectionIds;
+		if (request.getCollectionId() != null) {
+			collectionIds = Collections.singletonList(request.getCollectionId());
+		} else if (request.getCollectionIds() != null) {
+			collectionIds = request.getCollectionIds();
+		} else {
+			throw new RuntimeException();
+		}
+
+		MongoClientUpdateResult update = awaitResult(h -> getMongo().updateCollection(INVENTORY,
+				json("collectionIds", json("$in", collectionIds)),
+				json("$set", json("borrowed", true)), h));
+
+		return new BorrowFromCollectionResponse(update.getDocModified());
 	}
 
 	@Override
@@ -170,9 +184,9 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 			}
 
 			CollectionRecord deck = fromJson(deckCollection.get(0), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getName(), deck.getHeroClass(), cardRecords);
+			return GetCollectionResponse.deck(request.getDeckId(), deck.getName(), deck.getHeroClass(), cardRecords);
 		} else /* if (type == CollectionTypes.USER) */ {
-			return GetCollectionResponse.user(cardRecords);
+			return GetCollectionResponse.user(request.getUserId(), cardRecords);
 		} /*  else {
 			return new GetCollectionResponse()
 					.withCardRecords(cardRecords);
