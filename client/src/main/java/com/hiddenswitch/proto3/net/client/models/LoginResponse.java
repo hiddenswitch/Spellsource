@@ -32,29 +32,29 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * JavaSerializationObject
+ * LoginResponse
  */
 
-public class JavaSerializationObject  implements Serializable {
-  @SerializedName("javaSerialized")
-  private String javaSerialized = null;
+public class LoginResponse  implements Serializable {
+  @SerializedName("loginToken")
+  private String loginToken = null;
 
-  public JavaSerializationObject javaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public LoginResponse loginToken(String loginToken) {
+    this.loginToken = loginToken;
     return this;
   }
 
    /**
-   * Get javaSerialized
-   * @return javaSerialized
+   * Get loginToken
+   * @return loginToken
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getJavaSerialized() {
-    return javaSerialized;
+  @ApiModelProperty(example = "null", value = "")
+  public String getLoginToken() {
+    return loginToken;
   }
 
-  public void setJavaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public void setLoginToken(String loginToken) {
+    this.loginToken = loginToken;
   }
 
 
@@ -66,21 +66,21 @@ public class JavaSerializationObject  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    JavaSerializationObject javaSerializationObject = (JavaSerializationObject) o;
-    return Objects.equals(this.javaSerialized, javaSerializationObject.javaSerialized);
+    LoginResponse loginResponse = (LoginResponse) o;
+    return Objects.equals(this.loginToken, loginResponse.loginToken);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(javaSerialized);
+    return Objects.hash(loginToken);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class JavaSerializationObject {\n");
+    sb.append("class LoginResponse {\n");
     
-    sb.append("    javaSerialized: ").append(toIndentedString(javaSerialized)).append("\n");
+    sb.append("    loginToken: ").append(toIndentedString(loginToken)).append("\n");
     sb.append("}");
     return sb.toString();
   }

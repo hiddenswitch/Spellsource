@@ -4,9 +4,437 @@ All URIs are relative to *http://localhost:8080/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**createAccount**](DefaultApi.md#createAccount) | **PUT** /accounts | 
+[**decksDelete**](DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
+[**decksPut**](DefaultApi.md#decksPut) | **PUT** /decks | 
+[**decksUpdate**](DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
+[**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{userId} | 
+[**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
+[**login**](DefaultApi.md#login) | **POST** /accounts/login | 
 [**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
 [**matchmakingConstructedQueuePut**](DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/constructed/queue | 
 
+
+<a name="createAccount"></a>
+# **createAccount**
+> CreateAccountResponse createAccount(request)
+
+
+
+Create an account with Minionate. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure HTTP basic authorization: DefaultSecurity
+HttpBasicAuth DefaultSecurity = (HttpBasicAuth) defaultClient.getAuthentication("DefaultSecurity");
+DefaultSecurity.setUsername("YOUR USERNAME");
+DefaultSecurity.setPassword("YOUR PASSWORD");
+
+// Configure API key authorization: DisabledSecurity
+ApiKeyAuth DisabledSecurity = (ApiKeyAuth) defaultClient.getAuthentication("DisabledSecurity");
+DisabledSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//DisabledSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+CreateAccountRequest request = new CreateAccountRequest(); // CreateAccountRequest | 
+try {
+    CreateAccountResponse result = apiInstance.createAccount(request);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#createAccount");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**CreateAccountRequest**](CreateAccountRequest.md)|  |
+
+### Return type
+
+[**CreateAccountResponse**](CreateAccountResponse.md)
+
+### Authorization
+
+[DefaultSecurity](../README.md#DefaultSecurity), [DisabledSecurity](../README.md#DisabledSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="decksDelete"></a>
+# **decksDelete**
+> decksDelete(deckId)
+
+
+
+Deletes the specified deck by ID. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure HTTP basic authorization: DefaultSecurity
+HttpBasicAuth DefaultSecurity = (HttpBasicAuth) defaultClient.getAuthentication("DefaultSecurity");
+DefaultSecurity.setUsername("YOUR USERNAME");
+DefaultSecurity.setPassword("YOUR PASSWORD");
+
+// Configure API key authorization: DisabledSecurity
+ApiKeyAuth DisabledSecurity = (ApiKeyAuth) defaultClient.getAuthentication("DisabledSecurity");
+DisabledSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//DisabledSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+String deckId = "deckId_example"; // String | The Deck ID to delete.
+try {
+    apiInstance.decksDelete(deckId);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#decksDelete");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **deckId** | **String**| The Deck ID to delete. |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[DefaultSecurity](../README.md#DefaultSecurity), [DisabledSecurity](../README.md#DisabledSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="decksPut"></a>
+# **decksPut**
+> DecksPutResponse decksPut(request)
+
+
+
+Creates a new deck with optionally specified inventory IDs, a name and a hero class. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure HTTP basic authorization: DefaultSecurity
+HttpBasicAuth DefaultSecurity = (HttpBasicAuth) defaultClient.getAuthentication("DefaultSecurity");
+DefaultSecurity.setUsername("YOUR USERNAME");
+DefaultSecurity.setPassword("YOUR PASSWORD");
+
+// Configure API key authorization: DisabledSecurity
+ApiKeyAuth DisabledSecurity = (ApiKeyAuth) defaultClient.getAuthentication("DisabledSecurity");
+DisabledSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//DisabledSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+DecksPutRequest request = new DecksPutRequest(); // DecksPutRequest | The deck creation request. 
+try {
+    DecksPutResponse result = apiInstance.decksPut(request);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#decksPut");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**DecksPutRequest**](DecksPutRequest.md)| The deck creation request.  |
+
+### Return type
+
+[**DecksPutResponse**](DecksPutResponse.md)
+
+### Authorization
+
+[DefaultSecurity](../README.md#DefaultSecurity), [DisabledSecurity](../README.md#DisabledSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="decksUpdate"></a>
+# **decksUpdate**
+> DecksUpdateResponse decksUpdate(deckId, updateCommand)
+
+
+
+Updates the deck by adding or removing cards, changing the hero class, or renaming the deck. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure HTTP basic authorization: DefaultSecurity
+HttpBasicAuth DefaultSecurity = (HttpBasicAuth) defaultClient.getAuthentication("DefaultSecurity");
+DefaultSecurity.setUsername("YOUR USERNAME");
+DefaultSecurity.setPassword("YOUR PASSWORD");
+
+// Configure API key authorization: DisabledSecurity
+ApiKeyAuth DisabledSecurity = (ApiKeyAuth) defaultClient.getAuthentication("DisabledSecurity");
+DisabledSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//DisabledSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+String deckId = "deckId_example"; // String | The Deck ID to update.
+DecksUpdateRequest updateCommand = new DecksUpdateRequest(); // DecksUpdateRequest | An update command modifying specified properties of the deck. 
+try {
+    DecksUpdateResponse result = apiInstance.decksUpdate(deckId, updateCommand);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#decksUpdate");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **deckId** | **String**| The Deck ID to update. |
+ **updateCommand** | [**DecksUpdateRequest**](DecksUpdateRequest.md)| An update command modifying specified properties of the deck.  |
+
+### Return type
+
+[**DecksUpdateResponse**](DecksUpdateResponse.md)
+
+### Authorization
+
+[DefaultSecurity](../README.md#DefaultSecurity), [DisabledSecurity](../README.md#DisabledSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getAccount"></a>
+# **getAccount**
+> GetAccountsResponse getAccount(userId)
+
+
+
+Get a specific account. Contains more information if the userId matches the requesting user. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure HTTP basic authorization: DefaultSecurity
+HttpBasicAuth DefaultSecurity = (HttpBasicAuth) defaultClient.getAuthentication("DefaultSecurity");
+DefaultSecurity.setUsername("YOUR USERNAME");
+DefaultSecurity.setPassword("YOUR PASSWORD");
+
+// Configure API key authorization: DisabledSecurity
+ApiKeyAuth DisabledSecurity = (ApiKeyAuth) defaultClient.getAuthentication("DisabledSecurity");
+DisabledSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//DisabledSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+String userId = "userId_example"; // String | 
+try {
+    GetAccountsResponse result = apiInstance.getAccount(userId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getAccount");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  |
+
+### Return type
+
+[**GetAccountsResponse**](GetAccountsResponse.md)
+
+### Authorization
+
+[DefaultSecurity](../README.md#DefaultSecurity), [DisabledSecurity](../README.md#DisabledSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getAccounts"></a>
+# **getAccounts**
+> GetAccountsResponse getAccounts(request)
+
+
+
+Get a list of accounts including user profile information. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure HTTP basic authorization: DefaultSecurity
+HttpBasicAuth DefaultSecurity = (HttpBasicAuth) defaultClient.getAuthentication("DefaultSecurity");
+DefaultSecurity.setUsername("YOUR USERNAME");
+DefaultSecurity.setPassword("YOUR PASSWORD");
+
+// Configure API key authorization: DisabledSecurity
+ApiKeyAuth DisabledSecurity = (ApiKeyAuth) defaultClient.getAuthentication("DisabledSecurity");
+DisabledSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//DisabledSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+GetAccountsRequest request = new GetAccountsRequest(); // GetAccountsRequest | 
+try {
+    GetAccountsResponse result = apiInstance.getAccounts(request);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getAccounts");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**GetAccountsRequest**](GetAccountsRequest.md)|  |
+
+### Return type
+
+[**GetAccountsResponse**](GetAccountsResponse.md)
+
+### Authorization
+
+[DefaultSecurity](../README.md#DefaultSecurity), [DisabledSecurity](../README.md#DisabledSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="login"></a>
+# **login**
+> LoginResponse login(request)
+
+
+
+Login with a username and password, receiving an authentication token to use for future sessions. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure HTTP basic authorization: DefaultSecurity
+HttpBasicAuth DefaultSecurity = (HttpBasicAuth) defaultClient.getAuthentication("DefaultSecurity");
+DefaultSecurity.setUsername("YOUR USERNAME");
+DefaultSecurity.setPassword("YOUR PASSWORD");
+
+// Configure API key authorization: DisabledSecurity
+ApiKeyAuth DisabledSecurity = (ApiKeyAuth) defaultClient.getAuthentication("DisabledSecurity");
+DisabledSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//DisabledSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+LoginRequest request = new LoginRequest(); // LoginRequest | 
+try {
+    LoginResponse result = apiInstance.login(request);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#login");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**LoginRequest**](LoginRequest.md)|  |
+
+### Return type
+
+[**LoginResponse**](LoginResponse.md)
+
+### Authorization
+
+[DefaultSecurity](../README.md#DefaultSecurity), [DisabledSecurity](../README.md#DisabledSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="matchmakingConstructedQueueDelete"></a>
 # **matchmakingConstructedQueueDelete**
@@ -66,7 +494,7 @@ This endpoint does not need any parameter.
 
 <a name="matchmakingConstructedQueuePut"></a>
 # **matchmakingConstructedQueuePut**
-> MatchmakingQueuePutResponse matchmakingConstructedQueuePut(unused)
+> MatchmakingQueuePutResponse matchmakingConstructedQueuePut(request)
 
 
 
@@ -95,9 +523,9 @@ DisabledSecurity.setApiKey("YOUR API KEY");
 //DisabledSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
-MatchmakingQueuePutRequest unused = new MatchmakingQueuePutRequest(); // MatchmakingQueuePutRequest | The matchmaking queue entry. Contains the deck. 
+MatchmakingQueuePutRequest request = new MatchmakingQueuePutRequest(); // MatchmakingQueuePutRequest | The matchmaking queue entry. Contains the deck. 
 try {
-    MatchmakingQueuePutResponse result = apiInstance.matchmakingConstructedQueuePut(unused);
+    MatchmakingQueuePutResponse result = apiInstance.matchmakingConstructedQueuePut(request);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#matchmakingConstructedQueuePut");
@@ -109,7 +537,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **unused** | [**MatchmakingQueuePutRequest**](MatchmakingQueuePutRequest.md)| The matchmaking queue entry. Contains the deck.  |
+ **request** | [**MatchmakingQueuePutRequest**](MatchmakingQueuePutRequest.md)| The matchmaking queue entry. Contains the deck.  |
 
 ### Return type
 

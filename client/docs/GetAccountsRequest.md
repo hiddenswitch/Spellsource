@@ -1,10 +1,10 @@
 
-# MatchmakingQueuePutRequest
+# GetAccountsRequest
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**deckId** | **String** |  | 
+**userIds** | **List&lt;String&gt;** | An array of user IDs to fetch.  | 
 
 
 

@@ -1,10 +1,10 @@
 
-# MatchmakingQueuePutRequest
+# GetAccountsResponse
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**deckId** | **String** |  | 
+**accounts** | [**List&lt;Account&gt;**](Account.md) |  |  [optional]
 
 
 

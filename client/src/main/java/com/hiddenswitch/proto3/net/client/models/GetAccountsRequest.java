@@ -29,32 +29,39 @@ import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.Serializable;
 /**
- * JavaSerializationObject
+ * GetAccountsRequest
  */
 
-public class JavaSerializationObject  implements Serializable {
-  @SerializedName("javaSerialized")
-  private String javaSerialized = null;
+public class GetAccountsRequest  implements Serializable {
+  @SerializedName("userIds")
+  private List<String> userIds = new ArrayList<String>();
 
-  public JavaSerializationObject javaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public GetAccountsRequest userIds(List<String> userIds) {
+    this.userIds = userIds;
+    return this;
+  }
+
+  public GetAccountsRequest addUserIdsItem(String userIdsItem) {
+    this.userIds.add(userIdsItem);
     return this;
   }
 
    /**
-   * Get javaSerialized
-   * @return javaSerialized
+   * An array of user IDs to fetch. 
+   * @return userIds
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getJavaSerialized() {
-    return javaSerialized;
+  @ApiModelProperty(example = "null", required = true, value = "An array of user IDs to fetch. ")
+  public List<String> getUserIds() {
+    return userIds;
   }
 
-  public void setJavaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public void setUserIds(List<String> userIds) {
+    this.userIds = userIds;
   }
 
 
@@ -66,21 +73,21 @@ public class JavaSerializationObject  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    JavaSerializationObject javaSerializationObject = (JavaSerializationObject) o;
-    return Objects.equals(this.javaSerialized, javaSerializationObject.javaSerialized);
+    GetAccountsRequest getAccountsRequest = (GetAccountsRequest) o;
+    return Objects.equals(this.userIds, getAccountsRequest.userIds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(javaSerialized);
+    return Objects.hash(userIds);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class JavaSerializationObject {\n");
+    sb.append("class GetAccountsRequest {\n");
     
-    sb.append("    javaSerialized: ").append(toIndentedString(javaSerialized)).append("\n");
+    sb.append("    userIds: ").append(toIndentedString(userIds)).append("\n");
     sb.append("}");
     return sb.toString();
   }

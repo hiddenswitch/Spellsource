@@ -1,11 +1,11 @@
 
-# MatchmakingDeck
+# LoginRequest
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**heroClass** | **String** |  |  [optional]
-**cards** | **List&lt;String&gt;** |  | 
+**userId** | **String** |  | 
+**password** | **String** |  | 
 
 
 

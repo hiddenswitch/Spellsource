@@ -1,10 +1,10 @@
 
-# MatchmakingQueuePutRequest
+# LoginResponse
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**deckId** | **String** |  | 
+**loginToken** | **String** |  |  [optional]
 
 
 

@@ -1,10 +1,11 @@
 
-# MatchmakingQueuePutRequest
+# Account
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**deckId** | **String** |  | 
+**id** | **String** |  |  [optional]
+**name** | **String** |  |  [optional]
 
 
 
