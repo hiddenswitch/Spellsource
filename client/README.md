@@ -83,11 +83,12 @@ public class DefaultApiExample {
         //DisabledSecurity.setApiKeyPrefix("Token");
 
         DefaultApi apiInstance = new DefaultApi();
+        CreateAccountRequest request = new CreateAccountRequest(); // CreateAccountRequest | 
         try {
-            MatchCancelResponse result = apiInstance.matchmakingConstructedQueueDelete();
+            CreateAccountResponse result = apiInstance.createAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#matchmakingConstructedQueueDelete");
+            System.err.println("Exception when calling DefaultApi#createAccount");
             e.printStackTrace();
         }
     }
@@ -101,15 +102,35 @@ All URIs are relative to *http://localhost:8080/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**createAccount**](docs/DefaultApi.md#createAccount) | **PUT** /accounts | 
+*DefaultApi* | [**decksDelete**](docs/DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
+*DefaultApi* | [**decksPut**](docs/DefaultApi.md#decksPut) | **PUT** /decks | 
+*DefaultApi* | [**decksUpdate**](docs/DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
+*DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{userId} | 
+*DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
+*DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts/login | 
 *DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
 *DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/constructed/queue | 
 
 
 ## Documentation for Models
 
+ - [Account](docs/Account.md)
+ - [CardRecord](docs/CardRecord.md)
+ - [CreateAccountRequest](docs/CreateAccountRequest.md)
+ - [CreateAccountResponse](docs/CreateAccountResponse.md)
+ - [DecksPutRequest](docs/DecksPutRequest.md)
+ - [DecksPutResponse](docs/DecksPutResponse.md)
+ - [DecksUpdateRequest](docs/DecksUpdateRequest.md)
+ - [DecksUpdateRequestPushInventoryIds](docs/DecksUpdateRequestPushInventoryIds.md)
+ - [DecksUpdateResponse](docs/DecksUpdateResponse.md)
+ - [GetAccountsRequest](docs/GetAccountsRequest.md)
+ - [GetAccountsResponse](docs/GetAccountsResponse.md)
+ - [InventoryCollection](docs/InventoryCollection.md)
  - [JavaSerializationObject](docs/JavaSerializationObject.md)
+ - [LoginRequest](docs/LoginRequest.md)
+ - [LoginResponse](docs/LoginResponse.md)
  - [MatchCancelResponse](docs/MatchCancelResponse.md)
- - [MatchmakingDeck](docs/MatchmakingDeck.md)
  - [MatchmakingQueuePutRequest](docs/MatchmakingQueuePutRequest.md)
  - [MatchmakingQueuePutResponse](docs/MatchmakingQueuePutResponse.md)
 

@@ -1,10 +1,10 @@
 
-# MatchmakingQueuePutRequest
+# DecksUpdateRequestPushInventoryIds
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**deckId** | **String** |  | 
+**each** | **List&lt;String&gt;** |  |  [optional]
 
 
 

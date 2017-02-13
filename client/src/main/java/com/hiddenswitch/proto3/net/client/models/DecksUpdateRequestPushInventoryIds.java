@@ -29,32 +29,39 @@ import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.Serializable;
 /**
- * JavaSerializationObject
+ * DecksUpdateRequestPushInventoryIds
  */
 
-public class JavaSerializationObject  implements Serializable {
-  @SerializedName("javaSerialized")
-  private String javaSerialized = null;
+public class DecksUpdateRequestPushInventoryIds  implements Serializable {
+  @SerializedName("$each")
+  private List<String> each = new ArrayList<String>();
 
-  public JavaSerializationObject javaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public DecksUpdateRequestPushInventoryIds each(List<String> each) {
+    this.each = each;
+    return this;
+  }
+
+  public DecksUpdateRequestPushInventoryIds addEachItem(String eachItem) {
+    this.each.add(eachItem);
     return this;
   }
 
    /**
-   * Get javaSerialized
-   * @return javaSerialized
+   * Get each
+   * @return each
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getJavaSerialized() {
-    return javaSerialized;
+  @ApiModelProperty(example = "null", value = "")
+  public List<String> getEach() {
+    return each;
   }
 
-  public void setJavaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public void setEach(List<String> each) {
+    this.each = each;
   }
 
 
@@ -66,21 +73,21 @@ public class JavaSerializationObject  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    JavaSerializationObject javaSerializationObject = (JavaSerializationObject) o;
-    return Objects.equals(this.javaSerialized, javaSerializationObject.javaSerialized);
+    DecksUpdateRequestPushInventoryIds decksUpdateRequestPushInventoryIds = (DecksUpdateRequestPushInventoryIds) o;
+    return Objects.equals(this.each, decksUpdateRequestPushInventoryIds.each);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(javaSerialized);
+    return Objects.hash(each);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class JavaSerializationObject {\n");
+    sb.append("class DecksUpdateRequestPushInventoryIds {\n");
     
-    sb.append("    javaSerialized: ").append(toIndentedString(javaSerialized)).append("\n");
+    sb.append("    each: ").append(toIndentedString(each)).append("\n");
     sb.append("}");
     return sb.toString();
   }

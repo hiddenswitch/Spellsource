@@ -27,34 +27,56 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * JavaSerializationObject
+ * DecksUpdateResponse
  */
 
-public class JavaSerializationObject  implements Serializable {
-  @SerializedName("javaSerialized")
-  private String javaSerialized = null;
+public class DecksUpdateResponse  implements Serializable {
+  @SerializedName("collection")
+  private InventoryCollection collection = null;
 
-  public JavaSerializationObject javaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  @SerializedName("inventoryIdsSize")
+  private Integer inventoryIdsSize = null;
+
+  public DecksUpdateResponse collection(InventoryCollection collection) {
+    this.collection = collection;
     return this;
   }
 
    /**
-   * Get javaSerialized
-   * @return javaSerialized
+   * Get collection
+   * @return collection
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getJavaSerialized() {
-    return javaSerialized;
+  @ApiModelProperty(example = "null", value = "")
+  public InventoryCollection getCollection() {
+    return collection;
   }
 
-  public void setJavaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public void setCollection(InventoryCollection collection) {
+    this.collection = collection;
+  }
+
+  public DecksUpdateResponse inventoryIdsSize(Integer inventoryIdsSize) {
+    this.inventoryIdsSize = inventoryIdsSize;
+    return this;
+  }
+
+   /**
+   * The current number of cards in this deck. 
+   * @return inventoryIdsSize
+  **/
+  @ApiModelProperty(example = "null", value = "The current number of cards in this deck. ")
+  public Integer getInventoryIdsSize() {
+    return inventoryIdsSize;
+  }
+
+  public void setInventoryIdsSize(Integer inventoryIdsSize) {
+    this.inventoryIdsSize = inventoryIdsSize;
   }
 
 
@@ -66,21 +88,23 @@ public class JavaSerializationObject  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    JavaSerializationObject javaSerializationObject = (JavaSerializationObject) o;
-    return Objects.equals(this.javaSerialized, javaSerializationObject.javaSerialized);
+    DecksUpdateResponse decksUpdateResponse = (DecksUpdateResponse) o;
+    return Objects.equals(this.collection, decksUpdateResponse.collection) &&
+        Objects.equals(this.inventoryIdsSize, decksUpdateResponse.inventoryIdsSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(javaSerialized);
+    return Objects.hash(collection, inventoryIdsSize);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class JavaSerializationObject {\n");
+    sb.append("class DecksUpdateResponse {\n");
     
-    sb.append("    javaSerialized: ").append(toIndentedString(javaSerialized)).append("\n");
+    sb.append("    collection: ").append(toIndentedString(collection)).append("\n");
+    sb.append("    inventoryIdsSize: ").append(toIndentedString(inventoryIdsSize)).append("\n");
     sb.append("}");
     return sb.toString();
   }

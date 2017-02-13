@@ -32,29 +32,29 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * JavaSerializationObject
+ * DecksPutResponse
  */
 
-public class JavaSerializationObject  implements Serializable {
-  @SerializedName("javaSerialized")
-  private String javaSerialized = null;
+public class DecksPutResponse  implements Serializable {
+  @SerializedName("deckId")
+  private String deckId = null;
 
-  public JavaSerializationObject javaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public DecksPutResponse deckId(String deckId) {
+    this.deckId = deckId;
     return this;
   }
 
    /**
-   * Get javaSerialized
-   * @return javaSerialized
+   * Get deckId
+   * @return deckId
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getJavaSerialized() {
-    return javaSerialized;
+  @ApiModelProperty(example = "null", value = "")
+  public String getDeckId() {
+    return deckId;
   }
 
-  public void setJavaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public void setDeckId(String deckId) {
+    this.deckId = deckId;
   }
 
 
@@ -66,21 +66,21 @@ public class JavaSerializationObject  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    JavaSerializationObject javaSerializationObject = (JavaSerializationObject) o;
-    return Objects.equals(this.javaSerialized, javaSerializationObject.javaSerialized);
+    DecksPutResponse decksPutResponse = (DecksPutResponse) o;
+    return Objects.equals(this.deckId, decksPutResponse.deckId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(javaSerialized);
+    return Objects.hash(deckId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class JavaSerializationObject {\n");
+    sb.append("class DecksPutResponse {\n");
     
-    sb.append("    javaSerialized: ").append(toIndentedString(javaSerialized)).append("\n");
+    sb.append("    deckId: ").append(toIndentedString(deckId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

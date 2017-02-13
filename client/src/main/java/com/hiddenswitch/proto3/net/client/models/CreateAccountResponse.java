@@ -27,34 +27,56 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.Account;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * JavaSerializationObject
+ * CreateAccountResponse
  */
 
-public class JavaSerializationObject  implements Serializable {
-  @SerializedName("javaSerialized")
-  private String javaSerialized = null;
+public class CreateAccountResponse  implements Serializable {
+  @SerializedName("loginToken")
+  private String loginToken = null;
 
-  public JavaSerializationObject javaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  @SerializedName("account")
+  private Account account = null;
+
+  public CreateAccountResponse loginToken(String loginToken) {
+    this.loginToken = loginToken;
     return this;
   }
 
    /**
-   * Get javaSerialized
-   * @return javaSerialized
+   * A string containing the token to login with via the standard Minionate authentication method. 
+   * @return loginToken
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getJavaSerialized() {
-    return javaSerialized;
+  @ApiModelProperty(example = "null", value = "A string containing the token to login with via the standard Minionate authentication method. ")
+  public String getLoginToken() {
+    return loginToken;
   }
 
-  public void setJavaSerialized(String javaSerialized) {
-    this.javaSerialized = javaSerialized;
+  public void setLoginToken(String loginToken) {
+    this.loginToken = loginToken;
+  }
+
+  public CreateAccountResponse account(Account account) {
+    this.account = account;
+    return this;
+  }
+
+   /**
+   * Get account
+   * @return account
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Account getAccount() {
+    return account;
+  }
+
+  public void setAccount(Account account) {
+    this.account = account;
   }
 
 
@@ -66,21 +88,23 @@ public class JavaSerializationObject  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    JavaSerializationObject javaSerializationObject = (JavaSerializationObject) o;
-    return Objects.equals(this.javaSerialized, javaSerializationObject.javaSerialized);
+    CreateAccountResponse createAccountResponse = (CreateAccountResponse) o;
+    return Objects.equals(this.loginToken, createAccountResponse.loginToken) &&
+        Objects.equals(this.account, createAccountResponse.account);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(javaSerialized);
+    return Objects.hash(loginToken, account);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class JavaSerializationObject {\n");
+    sb.append("class CreateAccountResponse {\n");
     
-    sb.append("    javaSerialized: ").append(toIndentedString(javaSerialized)).append("\n");
+    sb.append("    loginToken: ").append(toIndentedString(loginToken)).append("\n");
+    sb.append("    account: ").append(toIndentedString(account)).append("\n");
     sb.append("}");
     return sb.toString();
   }
