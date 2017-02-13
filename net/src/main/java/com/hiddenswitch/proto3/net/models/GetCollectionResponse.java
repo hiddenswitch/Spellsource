@@ -15,15 +15,18 @@ public class GetCollectionResponse implements Serializable {
 	private CollectionTypes collectionType;
 	private HeroClass heroClass;
 	private String name;
+	private String collectionId;
 
-	public static GetCollectionResponse user(List<CardRecord> cardRecords) {
+	public static GetCollectionResponse user(String collectionId, List<CardRecord> cardRecords) {
 		return new GetCollectionResponse()
+				.withCollectionId(collectionId)
 				.withCardRecords(cardRecords)
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String name, HeroClass heroClass, List<CardRecord> cardRecords) {
+	public static GetCollectionResponse deck(String deckId, String name, HeroClass heroClass, List<CardRecord> cardRecords) {
 		return new GetCollectionResponse()
+				.withCollectionId(deckId)
 				.withCardRecords(cardRecords)
 				.withHeroClass(heroClass)
 				.withName(name);
@@ -78,6 +81,19 @@ public class GetCollectionResponse implements Serializable {
 
 	public GetCollectionResponse withName(final String name) {
 		this.name = name;
+		return this;
+	}
+
+	public String getCollectionId() {
+		return collectionId;
+	}
+
+	public void setCollectionId(String collectionId) {
+		this.collectionId = collectionId;
+	}
+
+	private GetCollectionResponse withCollectionId(String collectionId) {
+		this.collectionId = collectionId;
 		return this;
 	}
 }

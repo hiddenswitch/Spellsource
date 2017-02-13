@@ -18,8 +18,12 @@ public class CreateCollectionRequest implements Serializable {
 	private QueryCardsRequest queryCardsRequest;
 	private HeroClass heroClass;
 
+	protected CreateCollectionRequest() {
+	}
+
 	public static CreateCollectionRequest deck(String userId, String name, HeroClass heroClass, List<String> inventoryIds) {
 		return new CreateCollectionRequest()
+				.withType(CollectionTypes.DECK)
 				.withName(name)
 				.withUserId(userId)
 				.withHeroClass(heroClass)

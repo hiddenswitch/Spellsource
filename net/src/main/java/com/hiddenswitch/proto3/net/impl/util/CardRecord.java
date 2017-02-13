@@ -20,11 +20,24 @@ public class CardRecord extends MongoRecord {
 	@JsonProperty
 	private Map<String, Object> cardDesc;
 
+	/**
+	 * The userId of the player who originally opened the pack containing the card.
+	 */
 	@JsonProperty
 	private String userId;
 
+	/**
+	 * The ID of the alliance this card belongs to, or null if this card is not shared with an alliance.
+	 * The ID is also a collection ID.
+	 */
+	@JsonProperty
+	private String allianceId;
+
 	@JsonProperty
 	private List<String> collectionIds;
+
+	@JsonProperty
+	private boolean borrowed;
 
 	@JsonIgnore
 	private transient CardDesc cardDescCached;
@@ -83,6 +96,36 @@ public class CardRecord extends MongoRecord {
 	public CardRecord withCollectionIds(List<String> collectionIds) {
 		this.collectionIds = collectionIds;
 		return this;
+	}
+
+	@JsonIgnore
+	public String getDonorUserId() {
+		// If this card is not currently in its owner's collection, it must be donated
+		if (getCollectionIds().contains(getUserId())) {
+			return null;
+		} else {
+			return getUserId();
+		}
+	}
+
+	@JsonIgnore
+	public String getAllianceId() {
+		return this.allianceId;
+	}
+
+	@JsonIgnore
+	public void setAllianceId(String allianceId) {
+		this.allianceId = allianceId;
+	}
+
+	@JsonIgnore
+	public boolean isBorrowed() {
+		return borrowed;
+	}
+
+	@JsonIgnore
+	public void setBorrowed(boolean borrowed) {
+		this.borrowed = borrowed;
 	}
 }
 

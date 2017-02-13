@@ -91,6 +91,10 @@ public enum Attribute {
 	 */
 	CARD_INSTANCE_ID,
 	/**
+	 * Describes the ID of the deck this card is currently put into.
+	 */
+	DECK_ID,
+	/**
 	 * Describes the owner/donor
 	 */
 	DONOR_ID,
@@ -99,9 +103,9 @@ public enum Attribute {
 	 */
 	CHAMPION_ID,
 	/**
-	 * Describes the collection this card belongs to
+	 * Describes the collections this card belongs to
 	 */
-	COLLECTION_ID,
+	COLLECTION_IDS,
 	/**
 	 * Describes the alliance this card belongs to, if any
 	 */
