@@ -1,10 +1,9 @@
-package net.demilich.metastone.gui.playmode.config;
+package com.hiddenswitch.minionate.tasks;
 
 import com.hiddenswitch.proto3.net.client.ApiClient;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 import com.hiddenswitch.proto3.net.client.auth.ApiKeyAuth;
-import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutRequest;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
@@ -15,7 +14,6 @@ import javafx.concurrent.Task;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -55,11 +53,7 @@ public class MatchmakingTask extends Task<Void> {
 			final List<String> cardIds = this.deck.getCards().toList().stream()
 					.map(Card::getCardId)
 					.collect(Collectors.toList());
-			final MatchmakingDeck modelDeck =
-					new MatchmakingDeck().cards(cardIds);
-
-			modelDeck.setHeroClass(deck.getHeroClass().toString());
-			request.setDeck(modelDeck);
+			request.setDeckId("1");
 
 			MatchmakingQueuePutResponse response = api.matchmakingConstructedQueuePut(request);
 
