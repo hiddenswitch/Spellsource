@@ -120,7 +120,7 @@ public class DefaultApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "DefaultSecurity", "DisabledSecurity" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -227,7 +227,7 @@ public class DefaultApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "DefaultSecurity", "DisabledSecurity" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -329,7 +329,7 @@ public class DefaultApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "DefaultSecurity", "DisabledSecurity" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -441,7 +441,7 @@ public class DefaultApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "DefaultSecurity", "DisabledSecurity" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -551,7 +551,7 @@ public class DefaultApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "DefaultSecurity", "DisabledSecurity" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -657,7 +657,7 @@ public class DefaultApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "DefaultSecurity", "DisabledSecurity" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -763,7 +763,7 @@ public class DefaultApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "DefaultSecurity", "DisabledSecurity" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -864,7 +864,7 @@ public class DefaultApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "DefaultSecurity", "DisabledSecurity" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -967,7 +967,7 @@ public class DefaultApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "DefaultSecurity", "DisabledSecurity" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 

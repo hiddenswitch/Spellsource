@@ -38,6 +38,7 @@ dependencies {
     compile project(':client')
     compile files('lib/controlsfx-8.40.10-20151003.010657-492.jar')
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+    compile group: 'commons-validator', name: 'commons-validator', version: '1.5.1'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
     testCompile group: 'org.testng', name: 'testng', version: '6.+'
 }

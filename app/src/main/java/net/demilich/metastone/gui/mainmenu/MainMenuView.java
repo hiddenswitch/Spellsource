@@ -16,6 +16,8 @@ import net.demilich.metastone.MetaStone;
 import net.demilich.metastone.NotificationProxy;
 
 public class MainMenuView extends BorderPane {
+	@FXML
+	private Button createAccountButton;
 
 	@FXML
 	private Button deckBuilderButton;
@@ -76,6 +78,8 @@ public class MainMenuView extends BorderPane {
 				.setOnAction(event -> NotificationProxy.sendNotification(GameNotification.BATTLE_OF_DECKS_SELECTED));
 
 		draftButton.setOnAction(event -> NotificationProxy.sendNotification(GameNotification.DRAFT_MODE_SELECTED));
+
+		createAccountButton.setOnAction(event -> NotificationProxy.sendNotification(GameNotification.CREATE_ACCOUNT_SELECTED));
 
 		if (!BuildConfig.DEV_BUILD) {
 			trainingModeButton.setVisible(false);

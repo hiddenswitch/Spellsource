@@ -6,7 +6,6 @@
         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;
-    -fx-text-fill: white;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
     -fx-font-family: "System";
     -fx-text-fill: linear-gradient(white, #d0d0d0);
@@ -14,8 +13,9 @@
     -fx-padding: 8 16 8 16;
 }
 
+
 .button:hover {
-	-fx-background-color: 
+	-fx-background-color:
         #090a0c,
         linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
         linear-gradient(#10161b, #090d12),
@@ -23,8 +23,13 @@
     -fx-text-fill: darkorange;
 }
 
+.button:disabled {
+    -fx-background-color: #c5c5c5;
+    -fx-text-fill: #e1e0e0;
+}
+
 .combo-box {
-	-fx-background-color: 
+	-fx-background-color:
         #090a0c,
         linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
         linear-gradient(#20262b, #191d22),
@@ -37,7 +42,7 @@
 }
 
 .combo-box .list-cell:selected {
-     -fx-text-fill: white; 
+     -fx-text-fill: white;
 }
 
 .panel {
@@ -57,10 +62,10 @@
 }
 
 .progress-bar .track {
-    -fx-background-color: 
+    -fx-background-color:
           -fx-shadow-highlight-color,
           linear-gradient(to bottom, derive(dimgray, 20%), dimgray),
-          linear-gradient(to bottom, 
+          linear-gradient(to bottom,
             derive(darkgray, 3%),
             derive(darkgray, 10%),
             derive(darkgray, 7%),
@@ -201,8 +206,8 @@
     -fx-background-radius: 2;
 }
 
-.separator *.line 
-{ 
+.separator *.line
+{
 	-fx-border-style: solid;
 	-fx-border-width: 0.5px;
 }
@@ -230,4 +235,8 @@
 
 .hidden {
     visibility: hidden;
+}
+
+.login-pane {
+    -fx-background-color: whitesmoke;
 }

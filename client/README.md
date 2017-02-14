@@ -69,19 +69,7 @@ import java.util.*;
 public class DefaultApiExample {
 
     public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
         
-        // Configure HTTP basic authorization: DefaultSecurity
-        HttpBasicAuth DefaultSecurity = (HttpBasicAuth) defaultClient.getAuthentication("DefaultSecurity");
-        DefaultSecurity.setUsername("YOUR USERNAME");
-        DefaultSecurity.setPassword("YOUR PASSWORD");
-
-        // Configure API key authorization: DisabledSecurity
-        ApiKeyAuth DisabledSecurity = (ApiKeyAuth) defaultClient.getAuthentication("DisabledSecurity");
-        DisabledSecurity.setApiKey("YOUR API KEY");
-        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-        //DisabledSecurity.setApiKeyPrefix("Token");
-
         DefaultApi apiInstance = new DefaultApi();
         CreateAccountRequest request = new CreateAccountRequest(); // CreateAccountRequest | 
         try {
@@ -138,15 +126,15 @@ Class | Method | HTTP request | Description
 ## Documentation for Authorization
 
 Authentication schemes defined for the API:
+### TokenSecurity
+
+- **Type**: API key
+- **API key parameter name**: X-Auth-Token
+- **Location**: HTTP header
+
 ### DefaultSecurity
 
 - **Type**: HTTP basic authentication
-
-### DisabledSecurity
-
-- **Type**: API key
-- **API key parameter name**: X-Auth-UserId
-- **Location**: HTTP header
 
 
 ## Recommendation
