@@ -62,14 +62,18 @@ public class TwoClients {
 		return thread2;
 	}
 
-	public TwoClients invoke(GamesImpl service) throws IOException, URISyntaxException, CardParseException, SuspendExecution {
+	public TwoClients invoke(GamesImpl service) throws SuspendExecution, InterruptedException {
 		return invoke(service, 120000L);
 	}
 
 	@Suspendable
-	public TwoClients invoke(GamesImpl service, long noActivityTimeout) throws IOException, URISyntaxException, CardParseException, SuspendExecution {
+	public TwoClients invoke(GamesImpl service, long noActivityTimeout) throws SuspendExecution, InterruptedException {
 		this.service = service;
-		CardCatalogue.loadCardsFromPackage();
+		try {
+			CardCatalogue.loadCardsFromPackage();
+		} catch (IOException | URISyntaxException | CardParseException e) {
+			e.printStackTrace();
+		}
 
 		AIPlayer player1 = new AIPlayer();
 		AIPlayer player2 = new AIPlayer();
@@ -93,7 +97,7 @@ public class TwoClients {
 	}
 
 	@Suspendable
-	public TwoClients invoke(GamesImpl service, boolean aiOpponent) throws IOException, URISyntaxException, CardParseException, SuspendExecution {
+	public TwoClients invoke(GamesImpl service, boolean aiOpponent) throws IOException, URISyntaxException, CardParseException, SuspendExecution, InterruptedException {
 		this.service = service;
 		CardCatalogue.loadCardsFromPackage();
 

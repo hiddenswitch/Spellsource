@@ -6,9 +6,10 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createAccount**](DefaultApi.md#createAccount) | **PUT** /accounts | 
 [**decksDelete**](DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
+[**decksGet**](DefaultApi.md#decksGet) | **GET** /decks/{deckId} | 
 [**decksPut**](DefaultApi.md#decksPut) | **PUT** /decks | 
 [**decksUpdate**](DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
-[**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{userId} | 
+[**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
 [**login**](DefaultApi.md#login) | **POST** /accounts/login | 
 [**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
@@ -104,6 +105,51 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
+<a name="decksGet"></a>
+# **decksGet**
+> DecksGetResponse decksGet(deckId)
+
+
+
+Gets a deck. Only viewable for the owner of the deck or players in the alliance. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+
+DefaultApi apiInstance = new DefaultApi();
+String deckId = "deckId_example"; // String | The Deck ID to get.
+try {
+    DecksGetResponse result = apiInstance.decksGet(deckId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#decksGet");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **deckId** | **String**| The Deck ID to get. |
+
+### Return type
+
+[**DecksGetResponse**](DecksGetResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
 <a name="decksPut"></a>
 # **decksPut**
 > DecksPutResponse decksPut(request)
@@ -151,7 +197,7 @@ No authorization required
 
 <a name="decksUpdate"></a>
 # **decksUpdate**
-> DecksUpdateResponse decksUpdate(deckId, updateCommand)
+> DecksGetResponse decksUpdate(deckId, updateCommand)
 
 
 
@@ -166,9 +212,9 @@ Updates the deck by adding or removing cards, changing the hero class, or renami
 
 DefaultApi apiInstance = new DefaultApi();
 String deckId = "deckId_example"; // String | The Deck ID to update.
-DecksUpdateRequest updateCommand = new DecksUpdateRequest(); // DecksUpdateRequest | An update command modifying specified properties of the deck. 
+DecksUpdateCommand updateCommand = new DecksUpdateCommand(); // DecksUpdateCommand | An update command modifying specified properties of the deck. 
 try {
-    DecksUpdateResponse result = apiInstance.decksUpdate(deckId, updateCommand);
+    DecksGetResponse result = apiInstance.decksUpdate(deckId, updateCommand);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#decksUpdate");
@@ -181,11 +227,11 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **deckId** | **String**| The Deck ID to update. |
- **updateCommand** | [**DecksUpdateRequest**](DecksUpdateRequest.md)| An update command modifying specified properties of the deck.  |
+ **updateCommand** | [**DecksUpdateCommand**](DecksUpdateCommand.md)| An update command modifying specified properties of the deck.  |
 
 ### Return type
 
-[**DecksUpdateResponse**](DecksUpdateResponse.md)
+[**DecksGetResponse**](DecksGetResponse.md)
 
 ### Authorization
 
@@ -198,7 +244,7 @@ No authorization required
 
 <a name="getAccount"></a>
 # **getAccount**
-> GetAccountsResponse getAccount(userId)
+> GetAccountsResponse getAccount(targetUserId)
 
 
 
@@ -212,9 +258,9 @@ Get a specific account. Contains more information if the userId matches the requ
 
 
 DefaultApi apiInstance = new DefaultApi();
-String userId = "userId_example"; // String | 
+String targetUserId = "targetUserId_example"; // String | 
 try {
-    GetAccountsResponse result = apiInstance.getAccount(userId);
+    GetAccountsResponse result = apiInstance.getAccount(targetUserId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#getAccount");
@@ -226,7 +272,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userId** | **String**|  |
+ **targetUserId** | **String**|  |
 
 ### Return type
 

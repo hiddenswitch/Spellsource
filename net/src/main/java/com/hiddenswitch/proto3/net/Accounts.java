@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.amazon.Profile;
 import com.hiddenswitch.proto3.net.amazon.UserRecord;
@@ -13,11 +14,11 @@ import com.hiddenswitch.proto3.net.amazon.LoginResponse;
  */
 public interface Accounts {
 	@Suspendable
-	CreateAccountResponse createAccount(CreateAccountRequest request);
+	CreateAccountResponse createAccount(CreateAccountRequest request) throws SuspendExecution, InterruptedException;
 
 	@Suspendable
 	LoginResponse login(LoginRequest request);
 
 	@Suspendable
-	Profile get(String userId);
+	UserRecord getWithToken(String token);
 }

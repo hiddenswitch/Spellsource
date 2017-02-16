@@ -5,11 +5,13 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.impl.GamesImpl;
+import com.hiddenswitch.proto3.net.impl.MatchmakingImpl;
 import com.hiddenswitch.proto3.net.models.EndGameSessionRequest;
 import com.hiddenswitch.proto3.net.util.Result;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
 import com.hiddenswitch.proto3.net.util.TwoClients;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
@@ -31,6 +33,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 @RunWith(VertxUnitRunner.class)
 public class GamesTest extends ServiceTest<GamesImpl> {
 	private Logger logger = LoggerFactory.getLogger(GamesTest.class);
+	private MatchmakingImpl matchmaking;
 
 	@Test
 	public void testCreateGameSession(TestContext context) throws CardParseException, IOException, URISyntaxException {
@@ -38,30 +41,24 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		wrapSync(context, this::getAndTestTwoClients);
 	}
 
-	private TwoClients getAndTestTwoClients() throws SuspendExecution {
+	private TwoClients getAndTestTwoClients() throws SuspendExecution, InterruptedException {
 		TwoClients twoClients = null;
-		try {
-			twoClients = new TwoClients().invoke(this.service);
-		} catch (IOException | URISyntaxException | CardParseException e) {
-			ServiceTest.getContext().fail(e.getMessage());
-		}
-		try {
-			twoClients.play();
-			float seconds = 0.0f;
-			while (seconds <= 40.0f && !twoClients.gameDecided()) {
-				if (twoClients.isInterrupted()) {
-					break;
-				}
-				Strand.sleep(1000);
-				seconds += 1.0f;
-			}
 
-			twoClients.assertGameOver();
-		} catch (Exception e) {
-			Assert.fail(e.getMessage());
-		} finally {
-			twoClients.dispose();
+		twoClients = new TwoClients().invoke(this.service);
+
+
+		twoClients.play();
+		float seconds = 0.0f;
+		while (seconds <= 40.0f && !twoClients.gameDecided()) {
+			if (twoClients.isInterrupted()) {
+				break;
+			}
+			Strand.sleep(1000);
+			seconds += 1.0f;
 		}
+
+		twoClients.assertGameOver();
+		twoClients.dispose();
 		return twoClients;
 	}
 
@@ -78,30 +75,26 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 	public void testTerminatingSession(TestContext context) throws CardParseException, IOException, URISyntaxException {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
-			try {
-				TwoClients clients1 = new TwoClients().invoke(this.service);
-				getContext().assertNotNull(clients1);
-				clients1.play();
-				logger.info("testTerminatingSession: Waiting for game to start...");
-				while (clients1.getServerGameContext() == null) {
-					Strand.sleep(100);
-				}
-				logger.info("testTerminatingSession: Waiting for game to reach turn 3...");
-				while (clients1.getServerGameContext().getTurn() < 3) {
-					Strand.sleep(100);
-				}
-				String gameId = clients1.getGameId();
-				service.endGameSession(new EndGameSessionRequest(gameId));
-				getContext().assertNull(service.getGameSession(gameId));
-				logger.info("testTerminatingSession: Waiting for players to receive game end message...");
-				while (!clients1.getPlayerContext1().gameDecided()
-						&& !clients1.getPlayerContext2().gameDecided()) {
-					Strand.sleep(100);
-				}
-				clients1.assertGameOver();
-			} catch (Throwable e) {
-				getContext().fail(e);
+			TwoClients clients1 = new TwoClients().invoke(this.service);
+			getContext().assertNotNull(clients1);
+			clients1.play();
+			logger.info("testTerminatingSession: Waiting for game to start...");
+			while (clients1.getServerGameContext() == null) {
+				Strand.sleep(100);
 			}
+			logger.info("testTerminatingSession: Waiting for game to reach turn 3...");
+			while (clients1.getServerGameContext().getTurn() < 3) {
+				Strand.sleep(100);
+			}
+			String gameId = clients1.getGameId();
+			service.endGameSession(new EndGameSessionRequest(gameId));
+			getContext().assertNull(service.getGameSession(gameId));
+			logger.info("testTerminatingSession: Waiting for players to receive game end message...");
+			while (!clients1.getPlayerContext1().gameDecided()
+					&& !clients1.getPlayerContext2().gameDecided()) {
+				Strand.sleep(100);
+			}
+			clients1.assertGameOver();
 		});
 	}
 
@@ -109,24 +102,19 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 	public void testTimeoutSession(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
-			try {
-				TwoClients clients1 = new TwoClients().invoke(this.service, 10000L);
-				clients1.play();
-				while (clients1.getServerGameContext() == null
-						|| clients1.getServerGameContext().getTurn() < 3) {
-					Strand.sleep(100);
-				}
-				String gameId = clients1.getGameId();
-				clients1.disconnect(0);
-				// This is greater than the timeout
-				Strand.sleep(14000L);
-				// From player 2's point of view, the game should be decided because it's over
-				getContext().assertNull(service.getGameSession(gameId));
-				getContext().assertTrue(clients1.getPlayerContext2().gameDecided());
-
-			} catch (Throwable e) {
-				getContext().fail(e);
+			TwoClients clients1 = new TwoClients().invoke(this.service, 10000L);
+			clients1.play();
+			while (clients1.getServerGameContext() == null
+					|| clients1.getServerGameContext().getTurn() < 3) {
+				Strand.sleep(100);
 			}
+			String gameId = clients1.getGameId();
+			clients1.disconnect(0);
+			// This is greater than the timeout
+			Strand.sleep(14000L);
+			// From player 2's point of view, the game should be decided because it's over
+			getContext().assertNull(service.getGameSession(gameId));
+			getContext().assertTrue(clients1.getPlayerContext2().gameDecided());
 		});
 	}
 
@@ -134,15 +122,11 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 	public void testRemoveSessionAfterNormalGameOver(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
-			try {
-				TwoClients twoClients = getAndTestTwoClients();
-				String gameId = twoClients.getGameId();
-				// Exceeds the cleanup time
-				Strand.sleep(1000L);
-				getContext().assertNull(service.getGameSession(gameId));
-			} catch (Throwable e) {
-				getContext().fail(e);
-			}
+			TwoClients twoClients = getAndTestTwoClients();
+			String gameId = twoClients.getGameId();
+			// Exceeds the cleanup time
+			Strand.sleep(4000L);
+			getContext().assertNull(service.getGameSession(gameId));
 		});
 	}
 
@@ -204,14 +188,10 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 
 
 	@Suspendable
-	private void simultaneousSessions(int sessions) throws SuspendExecution {
+	private void simultaneousSessions(int sessions) throws SuspendExecution, InterruptedException {
 		List<TwoClients> clients = new ArrayList<>();
 		for (int i = 0; i < sessions; i++) {
-			try {
-				clients.add(new TwoClients().invoke(this.service));
-			} catch (IOException | URISyntaxException | CardParseException e) {
-				ServiceTest.getContext().fail(e.getMessage());
-			}
+			clients.add(new TwoClients().invoke(this.service));
 		}
 
 		clients.forEach(TwoClients::play);
@@ -246,8 +226,11 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 	public void deployServices(Vertx vertx, Handler<AsyncResult<GamesImpl>> done) {
 		setLoggingLevel(Level.ERROR);
 		GamesImpl instance = new GamesImpl();
-		vertx.deployVerticle(instance, then -> {
-			done.handle(new Result<>(instance));
+		matchmaking = new MatchmakingImpl();
+		vertx.deployVerticle(matchmaking, then -> {
+			vertx.deployVerticle(instance, then2 -> {
+				done.handle(Future.succeededFuture(instance));
+			});
 		});
 	}
 }

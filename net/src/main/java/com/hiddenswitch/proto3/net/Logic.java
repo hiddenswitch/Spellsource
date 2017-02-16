@@ -11,7 +11,7 @@ public interface Logic {
 	@Suspendable
 	InitializeUserResponse initializeUser(InitializeUserRequest request) throws SuspendExecution, InterruptedException;
 
-	EndGameResponse endGame(EndGameRequest request) throws InterruptedException, SuspendExecution;
+	EndGameResponse endGame(EndGameRequest request) throws SuspendExecution, InterruptedException;
 
 	@Suspendable
 	StartGameResponse startGame(StartGameRequest request) throws SuspendExecution, InterruptedException;

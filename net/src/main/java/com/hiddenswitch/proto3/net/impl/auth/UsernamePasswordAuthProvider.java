@@ -9,6 +9,7 @@ import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.Result;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -36,17 +37,17 @@ public class UsernamePasswordAuthProvider implements AuthProvider {
 	public void authenticate(JsonObject authInfo, Handler<AsyncResult<User>> resultHandler) {
 		accounts.async((AsyncResult<LoginResponse> response) -> {
 			if (response.failed()) {
-				resultHandler.handle(new Result<>(response.cause()));
+				resultHandler.handle(Future.failedFuture(response.cause()));
 				return;
 			}
 
 			if (response.result().isBadPassword()
-					|| response.result().isBadUsername()) {
-				resultHandler.handle(new Result<>(new AuthenticationException(response.result()), null));
+					|| response.result().isBadEmail()) {
+				resultHandler.handle(Future.failedFuture(new AuthenticationException(response.result())));
 			} else {
-				resultHandler.handle(new Result<>(response.result().getRecord()));
+				resultHandler.handle(Future.succeededFuture(response.result().getRecord()));
 			}
-		}).login(new LoginRequest().withUserId(authInfo
+		}).login(new LoginRequest().withEmail(authInfo
 				.getString("username"))
 				.withPassword(authInfo.getString("password")));
 	}

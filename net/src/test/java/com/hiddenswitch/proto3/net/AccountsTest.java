@@ -1,6 +1,7 @@
 package com.hiddenswitch.proto3.net;
 
 import ch.qos.logback.classic.Level;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.amazon.UserRecord;
 import com.hiddenswitch.proto3.net.impl.AccountsImpl;
 import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
@@ -11,6 +12,7 @@ import com.hiddenswitch.proto3.net.amazon.Profile;
 import com.hiddenswitch.proto3.net.util.Result;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -32,14 +34,14 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 		final String username = "doctorpangloss";
 		final String password = "destructoid";
 		final String emailAddress = "benjamin.s.berman@gmail.com";
-		final CreateAccountResponse response = service.createAccount(emailAddress, password, username);
-
-		getContext().assertNotNull(response);
 
 		wrapSync(context, () -> {
+			final CreateAccountResponse response = service.createAccount(emailAddress, password, username);
+			getContext().assertNotNull(response);
+
 			User user = Sync.awaitResult(done -> tokenAuthProvider.authenticate(
 					new JsonObject()
-							.put("username", username)
+							.put("username", emailAddress)
 							.put("password", password),
 					done));
 
@@ -53,10 +55,8 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 
 			final String token = response.loginToken.token;
 			User userTokened = Sync.awaitResult(done -> {
-
 				tokenAuthProvider.authenticate(
 						new JsonObject()
-								.put("username", username)
 								.put("token", token),
 						done);
 			});
@@ -65,66 +65,75 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 	}
 
 	@Test
-	public void testCreateAccount() throws Exception {
+	public void testCreateAccount(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
-		CreateAccountResponse response = service.createAccount("benjamin.s.berman@gmail.com", "destructoid", "doctorpangloss");
-		assertNotNull(response.loginToken);
-		assertFalse(response.invalidEmailAddress);
-		assertFalse(response.invalidName);
-		assertFalse(response.invalidPassword);
-		assertNotNull(response.loginToken.token);
-		assertTrue(response.loginToken.expiresAt.after(Date.from(Instant.now())));
+		wrapSync(context, () -> {
+			setLoggingLevel(Level.ERROR);
+			CreateAccountResponse response = service.createAccount("benjamin.s.berman@gmail.com", "destructoid", "doctorpangloss");
+			assertNotNull(response.loginToken);
+			assertFalse(response.invalidEmailAddress);
+			assertFalse(response.invalidName);
+			assertFalse(response.invalidPassword);
+			assertNotNull(response.loginToken.token);
+			assertTrue(response.loginToken.expiresAt.after(Date.from(Instant.now())));
+		});
 	}
 
 	@Test
-	public void testLogin() throws Exception {
+	public void testLogin(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
-		CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
-		LoginResponse loginResponse = service.login("username", "password");
-		assertNotNull(loginResponse.getToken());
-		assertNotNull(loginResponse.getToken().token);
-		assertFalse(loginResponse.isBadPassword());
-		assertFalse(loginResponse.isBadUsername());
+		wrapSync(context, () -> {
+			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
+			LoginResponse loginResponse = service.login("test@test.com", "password");
+			assertNotNull(loginResponse.getToken());
+			assertNotNull(loginResponse.getToken().token);
+			assertFalse(loginResponse.isBadPassword());
+			assertFalse(loginResponse.isBadEmail());
 
-		LoginRequest badUsername = new LoginRequest();
-		badUsername.setUserId("blah");
-		badUsername.setPassword("*****dddd");
-		LoginResponse badUsernameResponse = service.login(badUsername);
-		assertTrue(badUsernameResponse.isBadUsername());
-		assertNull(badUsernameResponse.getToken());
+			LoginRequest badEmail = new LoginRequest();
+			badEmail.setEmail("test@fidoas.com");
+			badEmail.setPassword("*****dddd");
+			LoginResponse badEmailResponse = service.login(badEmail);
+			assertTrue(badEmailResponse.isBadEmail());
+			assertNull(badEmailResponse.getToken());
 
-		LoginRequest badPassword = new LoginRequest();
-		badPassword.setUserId("username");
-		badPassword.setPassword("*****dddd");
-		LoginResponse basPasswordResponse = service.login(badPassword);
-		assertTrue(basPasswordResponse.isBadPassword());
-		assertNull(basPasswordResponse.getToken());
+			LoginRequest badPassword = new LoginRequest();
+			badPassword.setEmail("test@test.com");
+			badPassword.setPassword("*****dddd");
+			LoginResponse basPasswordResponse = service.login(badPassword);
+			assertTrue(basPasswordResponse.isBadPassword());
+			assertNull(basPasswordResponse.getToken());
+		});
 	}
 
 	@Test
-	public void testIsAuthorizedWithToken() throws Exception {
+	public void testIsAuthorizedWithToken(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
-		CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
-		assertTrue(service.isAuthorizedWithToken(response.userId, response.loginToken.token));
-		assertFalse(service.isAuthorizedWithToken(response.userId, null));
-		assertFalse(service.isAuthorizedWithToken(response.userId, ""));
-		assertFalse(service.isAuthorizedWithToken(response.userId, "a"));
-		assertFalse(service.isAuthorizedWithToken("A", null));
-		assertFalse(service.isAuthorizedWithToken("A", ""));
-		assertFalse(service.isAuthorizedWithToken("A", "b"));
+		wrapSync(context, () -> {
+			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
+			final String secret = response.loginToken.getSecret();
+			getContext().assertTrue(service.isAuthorizedWithToken(response.userId, secret));
+			getContext().assertFalse(service.isAuthorizedWithToken(response.userId, null));
+			getContext().assertFalse(service.isAuthorizedWithToken(response.userId, ""));
+			getContext().assertFalse(service.isAuthorizedWithToken(response.userId, "a"));
+			getContext().assertFalse(service.isAuthorizedWithToken("A", null));
+			getContext().assertFalse(service.isAuthorizedWithToken("A", ""));
+			getContext().assertFalse(service.isAuthorizedWithToken("A", "b"));
+		});
 	}
 
 	@Test
-	public void testGet() throws Exception {
+	public void testGet(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
-		CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
-		Profile profile = service.get(response.userId);
-		assertNotNull(profile);
-		assertEquals(profile.getEmailAddress(), "test@test.com");
-		assertEquals(profile.getName(), "username");
-		Profile profile1 = service.get("a");
-		assertNull(profile1);
-		assertThrows(() -> service.get(null));
+		wrapSync(context, () -> {
+			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
+			UserRecord profile = service.get(response.userId);
+			getContext().assertNotNull(profile);
+			getContext().assertEquals(profile.getProfile().getEmailAddress(), "test@test.com");
+			getContext().assertEquals(profile.getProfile().getDisplayName(), "username");
+			assertThrows(() -> service.get("a"));
+			assertThrows(() -> service.get(null));
+		});
 	}
 
 	public static void assertThrows(ThrowingRunnable runnable) {
@@ -143,10 +152,12 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 	 * @since 6.9.5
 	 */
 	@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+	@Suspendable
 	public static <T extends Throwable> void assertThrows(Class<T> throwableClass, ThrowingRunnable runnable) {
 		expectThrows(throwableClass, runnable);
 	}
 
+	@Suspendable
 	public static <T extends Throwable> T expectThrows(Class<T> throwableClass, ThrowingRunnable runnable) {
 		try {
 			runnable.run();
@@ -157,12 +168,15 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 				String mismatchMessage = String.format("Expected %s to be thrown, but %s was thrown",
 						throwableClass.getSimpleName(), t.getClass().getSimpleName());
 
-				throw new AssertionError(mismatchMessage, t);
+				final AssertionError cause = new AssertionError(mismatchMessage, t);
+				getContext().fail(cause);
+				return null;
 			}
 		}
 		String message = String.format("Expected %s to be thrown, but nothing was thrown",
 				throwableClass.getSimpleName());
-		throw new AssertionError(message);
+		getContext().fail(new AssertionError(message));
+		return null;
 	}
 
 	@Override
@@ -171,28 +185,15 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 		vertx.executeBlocking(fut -> {
 			instance.withEmbeddedConfiguration();
 			fut.complete();
-		}, then -> vertx.deployVerticle(instance, andThen -> {
-			if (instance.getDynamo() == null
-					|| andThen.failed()) {
-				throw new RuntimeException("The embedded DynamoDB server failed to start.");
-			}
-			done.handle(new Result<>(instance));
-		}));
-
+		}, then -> {
+			vertx.deployVerticle(instance, andThen -> {
+				done.handle(Future.succeededFuture(instance));
+			});
+		});
 	}
 
 	public interface ThrowingRunnable {
+		@Suspendable
 		void run() throws Throwable;
-	}
-
-	@Test
-	public void testGetProfileForId() throws Exception {
-		setLoggingLevel(Level.ERROR);
-		service.createAccount("test@test.com", "password", "username");
-		assertEquals(service.getProfileForId("username").name, "username");
-		assertNull(service.getProfileForId("a"));
-		assertThrows(() -> {
-			service.getProfileForId(null);
-		});
 	}
 }

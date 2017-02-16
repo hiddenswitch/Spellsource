@@ -1,6 +1,7 @@
 package com.hiddenswitch.proto3.net.models;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,7 +18,12 @@ public class EndGameRequest implements Serializable {
 		this.players = players;
 	}
 
-	public static class Player {
+	public EndGameRequest withPlayers(EndGameRequest.Player... players) {
+		setPlayers(Arrays.asList(players));
+		return this;
+	}
+
+	public static class Player implements Serializable {
 		private String deckId;
 
 		public String getDeckId() {
@@ -26,6 +32,11 @@ public class EndGameRequest implements Serializable {
 
 		public void setDeckId(String deckId) {
 			this.deckId = deckId;
+		}
+
+		public Player withDeckId(String deckId) {
+			setDeckId(deckId);
+			return this;
 		}
 	}
 }

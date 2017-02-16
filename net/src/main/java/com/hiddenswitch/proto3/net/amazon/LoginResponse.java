@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class LoginResponse implements Serializable {
 	private LoginToken token;
 	private UserRecord record;
-	private boolean badUsername;
+	private boolean badEmail;
 	private boolean badPassword;
 	private boolean badToken;
 
@@ -13,14 +13,14 @@ public class LoginResponse implements Serializable {
 		this.token = token;
 		this.record = record;
 		this.badPassword = false;
-		this.badUsername = false;
+		this.badEmail = false;
 	}
 
-	public LoginResponse(boolean badUsername, boolean badPassword) {
+	public LoginResponse(boolean badEmail, boolean badPassword) {
 		this.token = null;
 		this.record = null;
 		this.badPassword = badPassword;
-		this.badUsername = badUsername;
+		this.badEmail = badEmail;
 	}
 
 	public LoginToken getToken() {
@@ -31,8 +31,8 @@ public class LoginResponse implements Serializable {
 		return record;
 	}
 
-	public boolean isBadUsername() {
-		return badUsername;
+	public boolean isBadEmail() {
+		return badEmail;
 	}
 
 	public boolean isBadPassword() {

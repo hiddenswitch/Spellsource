@@ -133,6 +133,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		getEnvironment().clear();
 	}
 
+	@Suspendable
 	protected void endGame() {
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
 
@@ -151,6 +152,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	public void sendGameOver(Player recipient, Player winner) {
 	}
 
+	@Suspendable
 	protected void notifyPlayersGameOver() {
 		for (Player player : getPlayers()) {
 			player.getBehaviour().onGameOver(this, player.getId(), getWinner() != null ? getWinner().getId() : -1);

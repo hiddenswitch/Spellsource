@@ -52,8 +52,8 @@ public class CardRecord  implements Serializable {
   @SerializedName("collectionIds")
   private List<String> collectionIds = new ArrayList<String>();
 
-  @SerializedName("borrowed")
-  private Boolean borrowed = null;
+  @SerializedName("borrowedByUserId")
+  private String borrowedByUserId = null;
 
   public CardRecord id(String id) {
     this.id = id;
@@ -137,22 +137,22 @@ public class CardRecord  implements Serializable {
     this.collectionIds = collectionIds;
   }
 
-  public CardRecord borrowed(Boolean borrowed) {
-    this.borrowed = borrowed;
+  public CardRecord borrowedByUserId(String borrowedByUserId) {
+    this.borrowedByUserId = borrowedByUserId;
     return this;
   }
 
    /**
-   * Get borrowed
-   * @return borrowed
+   * Get borrowedByUserId
+   * @return borrowedByUserId
   **/
   @ApiModelProperty(example = "null", value = "")
-  public Boolean getBorrowed() {
-    return borrowed;
+  public String getBorrowedByUserId() {
+    return borrowedByUserId;
   }
 
-  public void setBorrowed(Boolean borrowed) {
-    this.borrowed = borrowed;
+  public void setBorrowedByUserId(String borrowedByUserId) {
+    this.borrowedByUserId = borrowedByUserId;
   }
 
 
@@ -169,12 +169,12 @@ public class CardRecord  implements Serializable {
         Objects.equals(this.cardDesc, cardRecord.cardDesc) &&
         Objects.equals(this.userId, cardRecord.userId) &&
         Objects.equals(this.collectionIds, cardRecord.collectionIds) &&
-        Objects.equals(this.borrowed, cardRecord.borrowed);
+        Objects.equals(this.borrowedByUserId, cardRecord.borrowedByUserId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardDesc, userId, collectionIds, borrowed);
+    return Objects.hash(id, cardDesc, userId, collectionIds, borrowedByUserId);
   }
 
   @Override
@@ -186,7 +186,7 @@ public class CardRecord  implements Serializable {
     sb.append("    cardDesc: ").append(toIndentedString(cardDesc)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    collectionIds: ").append(toIndentedString(collectionIds)).append("\n");
-    sb.append("    borrowed: ").append(toIndentedString(borrowed)).append("\n");
+    sb.append("    borrowedByUserId: ").append(toIndentedString(borrowedByUserId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

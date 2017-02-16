@@ -34,34 +34,55 @@ import java.util.List;
 
 import java.io.Serializable;
 /**
- * DecksUpdateRequestPushInventoryIds
+ * MatchmakingDeck
  */
 
-public class DecksUpdateRequestPushInventoryIds  implements Serializable {
-  @SerializedName("$each")
-  private List<String> each = new ArrayList<String>();
+public class MatchmakingDeck  implements Serializable {
+  @SerializedName("heroClass")
+  private String heroClass = null;
 
-  public DecksUpdateRequestPushInventoryIds each(List<String> each) {
-    this.each = each;
-    return this;
-  }
+  @SerializedName("cards")
+  private List<String> cards = new ArrayList<String>();
 
-  public DecksUpdateRequestPushInventoryIds addEachItem(String eachItem) {
-    this.each.add(eachItem);
+  public MatchmakingDeck heroClass(String heroClass) {
+    this.heroClass = heroClass;
     return this;
   }
 
    /**
-   * Get each
-   * @return each
+   * Get heroClass
+   * @return heroClass
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<String> getEach() {
-    return each;
+  public String getHeroClass() {
+    return heroClass;
   }
 
-  public void setEach(List<String> each) {
-    this.each = each;
+  public void setHeroClass(String heroClass) {
+    this.heroClass = heroClass;
+  }
+
+  public MatchmakingDeck cards(List<String> cards) {
+    this.cards = cards;
+    return this;
+  }
+
+  public MatchmakingDeck addCardsItem(String cardsItem) {
+    this.cards.add(cardsItem);
+    return this;
+  }
+
+   /**
+   * Get cards
+   * @return cards
+  **/
+  @ApiModelProperty(example = "null", required = true, value = "")
+  public List<String> getCards() {
+    return cards;
+  }
+
+  public void setCards(List<String> cards) {
+    this.cards = cards;
   }
 
 
@@ -73,21 +94,23 @@ public class DecksUpdateRequestPushInventoryIds  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DecksUpdateRequestPushInventoryIds decksUpdateRequestPushInventoryIds = (DecksUpdateRequestPushInventoryIds) o;
-    return Objects.equals(this.each, decksUpdateRequestPushInventoryIds.each);
+    MatchmakingDeck matchmakingDeck = (MatchmakingDeck) o;
+    return Objects.equals(this.heroClass, matchmakingDeck.heroClass) &&
+        Objects.equals(this.cards, matchmakingDeck.cards);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(each);
+    return Objects.hash(heroClass, cards);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DecksUpdateRequestPushInventoryIds {\n");
+    sb.append("class MatchmakingDeck {\n");
     
-    sb.append("    each: ").append(toIndentedString(each)).append("\n");
+    sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
+    sb.append("    cards: ").append(toIndentedString(cards)).append("\n");
     sb.append("}");
     return sb.toString();
   }

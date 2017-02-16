@@ -27,56 +27,41 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.Serializable;
 /**
- * DecksUpdateResponse
+ * DecksUpdateCommandPushInventoryIds
  */
 
-public class DecksUpdateResponse  implements Serializable {
-  @SerializedName("collection")
-  private InventoryCollection collection = null;
+public class DecksUpdateCommandPushInventoryIds  implements Serializable {
+  @SerializedName("$each")
+  private List<String> each = new ArrayList<String>();
 
-  @SerializedName("inventoryIdsSize")
-  private Integer inventoryIdsSize = null;
+  public DecksUpdateCommandPushInventoryIds each(List<String> each) {
+    this.each = each;
+    return this;
+  }
 
-  public DecksUpdateResponse collection(InventoryCollection collection) {
-    this.collection = collection;
+  public DecksUpdateCommandPushInventoryIds addEachItem(String eachItem) {
+    this.each.add(eachItem);
     return this;
   }
 
    /**
-   * Get collection
-   * @return collection
+   * Get each
+   * @return each
   **/
   @ApiModelProperty(example = "null", value = "")
-  public InventoryCollection getCollection() {
-    return collection;
+  public List<String> getEach() {
+    return each;
   }
 
-  public void setCollection(InventoryCollection collection) {
-    this.collection = collection;
-  }
-
-  public DecksUpdateResponse inventoryIdsSize(Integer inventoryIdsSize) {
-    this.inventoryIdsSize = inventoryIdsSize;
-    return this;
-  }
-
-   /**
-   * The current number of cards in this deck. 
-   * @return inventoryIdsSize
-  **/
-  @ApiModelProperty(example = "null", value = "The current number of cards in this deck. ")
-  public Integer getInventoryIdsSize() {
-    return inventoryIdsSize;
-  }
-
-  public void setInventoryIdsSize(Integer inventoryIdsSize) {
-    this.inventoryIdsSize = inventoryIdsSize;
+  public void setEach(List<String> each) {
+    this.each = each;
   }
 
 
@@ -88,23 +73,21 @@ public class DecksUpdateResponse  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DecksUpdateResponse decksUpdateResponse = (DecksUpdateResponse) o;
-    return Objects.equals(this.collection, decksUpdateResponse.collection) &&
-        Objects.equals(this.inventoryIdsSize, decksUpdateResponse.inventoryIdsSize);
+    DecksUpdateCommandPushInventoryIds decksUpdateCommandPushInventoryIds = (DecksUpdateCommandPushInventoryIds) o;
+    return Objects.equals(this.each, decksUpdateCommandPushInventoryIds.each);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(collection, inventoryIdsSize);
+    return Objects.hash(each);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DecksUpdateResponse {\n");
+    sb.append("class DecksUpdateCommandPushInventoryIds {\n");
     
-    sb.append("    collection: ").append(toIndentedString(collection)).append("\n");
-    sb.append("    inventoryIdsSize: ").append(toIndentedString(inventoryIdsSize)).append("\n");
+    sb.append("    each: ").append(toIndentedString(each)).append("\n");
     sb.append("}");
     return sb.toString();
   }

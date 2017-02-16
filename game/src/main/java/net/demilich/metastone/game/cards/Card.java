@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.cards;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -31,7 +29,7 @@ public abstract class Card extends Entity {
 	private CardLocation location;
 	private ValueProvider manaCostModifier;
 	private String cardId;
-	private CardDesc desc;
+	private CardDesc originalDesc;
 
 	public Card() {
 		super();
@@ -39,7 +37,7 @@ public abstract class Card extends Entity {
 
 	public Card(CardDesc desc) {
 		// Save a reference to the description for later use.
-		this.desc = desc;
+		this.originalDesc = desc;
 		cardId = desc.id;
 		setName(desc.name);
 		setDescription(desc.description);
@@ -286,6 +284,6 @@ public abstract class Card extends Entity {
 	}
 
 	public CardDesc getOriginalDesc() {
-		return desc;
+		return originalDesc;
 	}
 }

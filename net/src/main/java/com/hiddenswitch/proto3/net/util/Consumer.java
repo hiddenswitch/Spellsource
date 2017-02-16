@@ -1,16 +1,14 @@
 package com.hiddenswitch.proto3.net.util;
 
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
-import io.vertx.ext.sync.Sync;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * Created by bberman on 12/7/16.
@@ -24,8 +22,7 @@ public class Consumer {
 	@Suspendable
 	public static <T, R> SyncMethodEventBusHandler<T, R> of(SuspendableFunction<T, R> method) {
 		// Get the context at the time of calling this function
-		final Context context = Vertx.currentContext();
-		return new SyncMethodEventBusHandler<>(context, method);
+		return new SyncMethodEventBusHandler<>(method);
 	}
 
 	private static class MethodExecutedHandler<R> implements Handler<AsyncResult<R>> {
@@ -84,11 +81,9 @@ public class Consumer {
 	}
 
 	private static class SyncMethodEventBusHandler<T, R> implements Handler<Message<Buffer>> {
-		private final Context context;
 		private final SuspendableFunction<T, R> method;
 
-		public SyncMethodEventBusHandler(Context context, SuspendableFunction<T, R> method) {
-			this.context = context;
+		public SyncMethodEventBusHandler(SuspendableFunction<T, R> method) {
 			this.method = method;
 		}
 

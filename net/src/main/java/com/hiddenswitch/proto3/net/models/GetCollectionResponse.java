@@ -5,7 +5,6 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by bberman on 1/22/17.
@@ -16,19 +15,22 @@ public class GetCollectionResponse implements Serializable {
 	private HeroClass heroClass;
 	private String name;
 	private String collectionId;
+	private String userId;
 
 	public static GetCollectionResponse user(String collectionId, List<CardRecord> cardRecords) {
 		return new GetCollectionResponse()
 				.withCollectionId(collectionId)
 				.withCardRecords(cardRecords)
+				.withUserId(collectionId)
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String deckId, String name, HeroClass heroClass, List<CardRecord> cardRecords) {
+	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<CardRecord> cardRecords) {
 		return new GetCollectionResponse()
 				.withCollectionId(deckId)
 				.withCardRecords(cardRecords)
 				.withHeroClass(heroClass)
+				.withUserId(userId)
 				.withName(name);
 	}
 
@@ -94,6 +96,19 @@ public class GetCollectionResponse implements Serializable {
 
 	private GetCollectionResponse withCollectionId(String collectionId) {
 		this.collectionId = collectionId;
+		return this;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public GetCollectionResponse withUserId(String userId) {
+		this.userId = userId;
 		return this;
 	}
 }

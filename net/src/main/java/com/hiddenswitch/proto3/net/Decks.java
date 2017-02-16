@@ -5,16 +5,13 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.models.*;
 
 public interface Decks {
-	@Suspendable
 	DeckCreateResponse createDeck(DeckCreateRequest request) throws SuspendExecution, InterruptedException;
 
-	@Suspendable
-	DeckUpdateResponse updateDeck(DeckUpdateRequest request);
+	DeckUpdateResponse updateDeck(DeckUpdateRequest request) throws SuspendExecution, InterruptedException;
 
 	@Suspendable
 	DeckDeleteResponse deleteDeck(DeckDeleteRequest request);
 
-	@Suspendable
 	DeckUseResponse useDeck(DeckUseRequest request) throws SuspendExecution, InterruptedException;
 
 	DeckReturnResponse returnDeck(DeckReturnRequest request);

@@ -6,8 +6,10 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hiddenswitch.proto3.net.Service;
 import io.vertx.core.*;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.ext.mongo.MongoClientDeleteResult;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
@@ -15,10 +17,13 @@ import io.vertx.ext.unit.junit.VertxUnitRunner;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(VertxUnitRunner.class)
 public abstract class ServiceTest<T extends Service<T>> {
@@ -66,6 +71,28 @@ public abstract class ServiceTest<T extends Service<T>> {
 						logger.info("Embedded configuration completed.");
 					}
 					context.assertNotNull(service);
+					async.complete();
+				});
+			});
+		} else {
+			async.complete();
+		}
+	}
+
+	@Before
+	public void clearMongoDatabase(TestContext context) {
+		final Async async = context.async();
+		if (service != null
+				&& service.getMongo() != null) {
+
+			service.getMongo().getCollections(collections -> {
+				final List<Future> futures = collections.result().stream().map(collection -> {
+					Future<MongoClientDeleteResult> thisFuture = Future.future();
+					service.getMongo().removeDocuments(collection, new JsonObject(), thisFuture.completer());
+					return thisFuture;
+				}).collect(Collectors.toList());
+
+				CompositeFuture.join(futures).setHandler(then -> {
 					async.complete();
 				});
 			});

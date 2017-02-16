@@ -92,9 +92,10 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**createAccount**](docs/DefaultApi.md#createAccount) | **PUT** /accounts | 
 *DefaultApi* | [**decksDelete**](docs/DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
+*DefaultApi* | [**decksGet**](docs/DefaultApi.md#decksGet) | **GET** /decks/{deckId} | 
 *DefaultApi* | [**decksPut**](docs/DefaultApi.md#decksPut) | **PUT** /decks | 
 *DefaultApi* | [**decksUpdate**](docs/DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
-*DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{userId} | 
+*DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts/login | 
 *DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
@@ -107,11 +108,11 @@ Class | Method | HTTP request | Description
  - [CardRecord](docs/CardRecord.md)
  - [CreateAccountRequest](docs/CreateAccountRequest.md)
  - [CreateAccountResponse](docs/CreateAccountResponse.md)
+ - [DecksGetResponse](docs/DecksGetResponse.md)
  - [DecksPutRequest](docs/DecksPutRequest.md)
  - [DecksPutResponse](docs/DecksPutResponse.md)
- - [DecksUpdateRequest](docs/DecksUpdateRequest.md)
- - [DecksUpdateRequestPushInventoryIds](docs/DecksUpdateRequestPushInventoryIds.md)
- - [DecksUpdateResponse](docs/DecksUpdateResponse.md)
+ - [DecksUpdateCommand](docs/DecksUpdateCommand.md)
+ - [DecksUpdateCommandPushInventoryIds](docs/DecksUpdateCommandPushInventoryIds.md)
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
@@ -119,6 +120,7 @@ Class | Method | HTTP request | Description
  - [LoginRequest](docs/LoginRequest.md)
  - [LoginResponse](docs/LoginResponse.md)
  - [MatchCancelResponse](docs/MatchCancelResponse.md)
+ - [MatchmakingDeck](docs/MatchmakingDeck.md)
  - [MatchmakingQueuePutRequest](docs/MatchmakingQueuePutRequest.md)
  - [MatchmakingQueuePutResponse](docs/MatchmakingQueuePutResponse.md)
 

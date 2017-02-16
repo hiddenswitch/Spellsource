@@ -37,7 +37,7 @@ public class CardRecord extends MongoRecord {
 	private List<String> collectionIds;
 
 	@JsonProperty
-	private boolean borrowed;
+	private String borrowedByUserId;
 
 	@JsonIgnore
 	private transient CardDesc cardDescCached;
@@ -120,12 +120,22 @@ public class CardRecord extends MongoRecord {
 
 	@JsonIgnore
 	public boolean isBorrowed() {
-		return borrowed;
+		return borrowedByUserId != null;
 	}
 
 	@JsonIgnore
-	public void setBorrowed(boolean borrowed) {
-		this.borrowed = borrowed;
+	public String getBorrowedByUserId() {
+		return borrowedByUserId;
+	}
+
+	@JsonIgnore
+	public void setBorrowedByUserId(String borrowedByUserId) {
+		this.borrowedByUserId = borrowedByUserId;
+	}
+
+	@JsonIgnore
+	public Map<String, Object> getCardDescMap() {
+		return cardDesc;
 	}
 }
 

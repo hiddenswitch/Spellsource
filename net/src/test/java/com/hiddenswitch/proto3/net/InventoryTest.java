@@ -29,7 +29,7 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 	}
 
 	@Suspendable
-	private void createCollectionSync() throws InterruptedException, SuspendExecution {
+	private void createCollectionSync() throws SuspendExecution, InterruptedException {
 		String userId = "user";
 		
 		CreateCollectionResponse createCollectionResponse = service

@@ -27,56 +27,56 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
+import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * MatchmakingQueuePutRequest
+ * DecksGetResponse
  */
 
-public class MatchmakingQueuePutRequest  implements Serializable {
-  @SerializedName("deckId")
-  private String deckId = null;
+public class DecksGetResponse  implements Serializable {
+  @SerializedName("collection")
+  private InventoryCollection collection = null;
 
-  @SerializedName("deck")
-  private MatchmakingDeck deck = null;
+  @SerializedName("inventoryIdsSize")
+  private Integer inventoryIdsSize = null;
 
-  public MatchmakingQueuePutRequest deckId(String deckId) {
-    this.deckId = deckId;
+  public DecksGetResponse collection(InventoryCollection collection) {
+    this.collection = collection;
     return this;
   }
 
    /**
-   * Get deckId
-   * @return deckId
+   * Get collection
+   * @return collection
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getDeckId() {
-    return deckId;
+  public InventoryCollection getCollection() {
+    return collection;
   }
 
-  public void setDeckId(String deckId) {
-    this.deckId = deckId;
+  public void setCollection(InventoryCollection collection) {
+    this.collection = collection;
   }
 
-  public MatchmakingQueuePutRequest deck(MatchmakingDeck deck) {
-    this.deck = deck;
+  public DecksGetResponse inventoryIdsSize(Integer inventoryIdsSize) {
+    this.inventoryIdsSize = inventoryIdsSize;
     return this;
   }
 
    /**
-   * Get deck
-   * @return deck
+   * The current number of cards in this deck. 
+   * @return inventoryIdsSize
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public MatchmakingDeck getDeck() {
-    return deck;
+  @ApiModelProperty(example = "null", value = "The current number of cards in this deck. ")
+  public Integer getInventoryIdsSize() {
+    return inventoryIdsSize;
   }
 
-  public void setDeck(MatchmakingDeck deck) {
-    this.deck = deck;
+  public void setInventoryIdsSize(Integer inventoryIdsSize) {
+    this.inventoryIdsSize = inventoryIdsSize;
   }
 
 
@@ -88,23 +88,23 @@ public class MatchmakingQueuePutRequest  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MatchmakingQueuePutRequest matchmakingQueuePutRequest = (MatchmakingQueuePutRequest) o;
-    return Objects.equals(this.deckId, matchmakingQueuePutRequest.deckId) &&
-        Objects.equals(this.deck, matchmakingQueuePutRequest.deck);
+    DecksGetResponse decksGetResponse = (DecksGetResponse) o;
+    return Objects.equals(this.collection, decksGetResponse.collection) &&
+        Objects.equals(this.inventoryIdsSize, decksGetResponse.inventoryIdsSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(deckId, deck);
+    return Objects.hash(collection, inventoryIdsSize);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MatchmakingQueuePutRequest {\n");
+    sb.append("class DecksGetResponse {\n");
     
-    sb.append("    deckId: ").append(toIndentedString(deckId)).append("\n");
-    sb.append("    deck: ").append(toIndentedString(deck)).append("\n");
+    sb.append("    collection: ").append(toIndentedString(collection)).append("\n");
+    sb.append("    inventoryIdsSize: ").append(toIndentedString(inventoryIdsSize)).append("\n");
     sb.append("}");
     return sb.toString();
   }

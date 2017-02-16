@@ -37,7 +37,7 @@ public class CardsImpl extends Service<CardsImpl> implements Cards {
 
 	@Override
 	@Suspendable
-	public QueryCardsResponse queryCards(QueryCardsRequest request) throws SuspendExecution {
+	public QueryCardsResponse queryCards(QueryCardsRequest request) throws SuspendExecution, InterruptedException {
 		// For now, just use the CardCatalogue
 		try {
 			CardCatalogue.loadCardsFromPackage();

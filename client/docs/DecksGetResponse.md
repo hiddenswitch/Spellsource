@@ -1,5 +1,5 @@
 
-# DecksUpdateResponse
+# DecksGetResponse
 
 ## Properties
 Name | Type | Description | Notes

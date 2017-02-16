@@ -1,10 +1,11 @@
 
-# DecksUpdateRequestPushInventoryIds
+# MatchmakingDeck
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**each** | **List&lt;String&gt;** |  |  [optional]
+**heroClass** | **String** |  |  [optional]
+**cards** | **List&lt;String&gt;** |  | 
 
 
 

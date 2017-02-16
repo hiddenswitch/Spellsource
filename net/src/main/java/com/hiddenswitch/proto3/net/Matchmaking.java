@@ -13,10 +13,9 @@ import com.hiddenswitch.proto3.net.models.MatchExpireResponse;
  * Created by bberman on 12/8/16.
  */
 public interface Matchmaking {
-	@Suspendable
-	MatchmakingResponse matchmakeAndJoin(MatchmakingRequest matchmakingRequest) throws InterruptedException, SuspendExecution;
+	MatchmakingResponse matchmakeAndJoin(MatchmakingRequest matchmakingRequest) throws SuspendExecution, InterruptedException;
 
-	MatchExpireResponse expireMatch(MatchExpireRequest request);
+	MatchExpireResponse expireOrEndMatch(MatchExpireRequest request) throws SuspendExecution, InterruptedException;
 
 	MatchCancelResponse cancel(MatchCancelRequest matchCancelRequest);
 }

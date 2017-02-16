@@ -17,6 +17,7 @@ public interface IBehaviour extends Cloneable {
 
 	List<Card> mulligan(GameContext context, Player player, List<Card> cards);
 
+	@Suspendable
 	void onGameOver(GameContext context, int playerId, int winningPlayerId);
 
 	@Suspendable

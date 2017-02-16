@@ -24,7 +24,7 @@ public class CardsTest extends ServiceTest<CardsImpl> {
 		wrapSync(context, this::queryCardsSync);
 	}
 
-	private void queryCardsSync() throws SuspendExecution {
+	private void queryCardsSync() throws SuspendExecution, InterruptedException {
 		// Query for a bunch of different things and compare the values
 		List<CardCatalogueRecord> commons = service.queryCards(new QueryCardsRequest()
 				.withSets(CardSet.BASIC, CardSet.CLASSIC)

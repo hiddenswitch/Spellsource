@@ -4,8 +4,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hiddenswitch.proto3.net.impl.util.MongoRecord;
 import com.hiddenswitch.proto3.net.util.Result;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.AuthProvider;
@@ -14,22 +17,23 @@ import io.vertx.ext.auth.User;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 
-@DynamoDBTable(tableName = "users")
-public class UserRecord implements User, Serializable {
-	private String id;
+import static com.hiddenswitch.proto3.net.util.QuickJson.json;
+
+public class UserRecord extends MongoRecord implements User, Serializable {
 	private Profile profile;
+	private AuthorizationRecord auth;
+
+	public UserRecord() {
+		super();
+	}
+
+	public UserRecord(String id) {
+		super(id);
+	}
+
+	@JsonIgnore
 	private transient WeakReference<AuthProvider> authProvider;
 
-	@DynamoDBHashKey
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	@DynamoDBAttribute
 	public Profile getProfile() {
 		return profile;
 	}
@@ -39,27 +43,35 @@ public class UserRecord implements User, Serializable {
 	}
 
 	@Override
-	@DynamoDBIgnore
+	@JsonIgnore
 	public User isAuthorised(String authority, Handler<AsyncResult<Boolean>> resultHandler) {
-		resultHandler.handle(new Result<>(true));
+		resultHandler.handle(Future.succeededFuture(true));
 		return this;
 	}
 
 	@Override
-	@DynamoDBIgnore
+	@JsonIgnore
 	public User clearCache() {
 		return null;
 	}
 
 	@Override
-	@DynamoDBIgnore
+	@JsonIgnore
 	public JsonObject principal() {
-		return new JsonObject().put("username", id);
+		return json(this);
 	}
 
 	@Override
-	@DynamoDBIgnore
+	@JsonIgnore
 	public void setAuthProvider(AuthProvider authProvider) {
 		this.authProvider = new WeakReference<>(authProvider);
+	}
+
+	public AuthorizationRecord getAuth() {
+		return auth;
+	}
+
+	public void setAuth(AuthorizationRecord auth) {
+		this.auth = auth;
 	}
 }
