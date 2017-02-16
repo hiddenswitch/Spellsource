@@ -1,4 +1,6 @@
 package com.hiddenswitch.proto3.net.models;
 
-public class DeckUpdateResponse {
+import java.io.Serializable;
+
+public class DeckUpdateResponse implements Serializable {
 }

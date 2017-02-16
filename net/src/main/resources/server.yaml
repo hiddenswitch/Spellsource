@@ -115,13 +115,17 @@ definitions:
     properties:
       deckId:
         type: 'string'
-  DecksUpdateRequest:
+  DecksUpdateCommand:
     type: 'object'
     properties:
       setHeroClass:
         type: 'string'
       setName:
         type: 'string'
+      setInventoryIds:
+        type: 'array'
+        items:
+          type: 'string'
       pushInventoryIds:
         type: 'object'
         properties:
@@ -133,7 +137,7 @@ definitions:
         type: 'array'
         items:
           type: 'string'
-  DecksUpdateResponse:
+  DecksGetResponse:
     type: 'object'
     properties:
       collection:
@@ -174,8 +178,8 @@ definitions:
         type: 'array'
         items:
           type: 'string'
-      borrowed:
-        type: 'boolean'
+      borrowedByUserId:
+        type: 'string'
   JavaSerializationObject:
     type: 'object'
     required:
@@ -183,13 +187,24 @@ definitions:
     properties:
       javaSerialized:
         type: 'string'
-  MatchmakingQueuePutRequest:
+  MatchmakingDeck:
     type: 'object'
     required:
-      - 'deckId'
+      - 'cards'
+    properties:
+      heroClass:
+        type: 'string'
+      cards:
+        type: 'array'
+        items:
+          type: 'string'
+  MatchmakingQueuePutRequest:
+    type: 'object'
     properties:
       deckId:
         type: 'string'
+      deck:
+        $ref: '#/definitions/MatchmakingDeck'
   MatchmakingQueuePutResponse:
     type: 'object'
     properties:
@@ -203,7 +218,7 @@ definitions:
       isCanceled:
         type: 'boolean'
 paths:
-  /accounts/{userId}:
+  /accounts/{targetUserId}:
     get:
       description: |
         Get a specific account. Contains more information if the userId matches the requesting user.
@@ -211,7 +226,7 @@ paths:
       security:
         TokenSecurity: []
       parameters:
-        - name: userId
+        - name: targetUserId
           in: path
           required: true
           type: 'string'
@@ -295,6 +310,23 @@ paths:
           schema:
             $ref: '#/definitions/DecksPutResponse'
   /decks/{deckId}:
+    get:
+      description: |
+        Gets a deck. Only viewable for the owner of the deck or players in the alliance.
+      operationId: decksGet
+      security:
+        TokenSecurity: []
+      parameters:
+        - name: deckId
+          in: path
+          description: The Deck ID to get.
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            The deck has been successfully retrieved.
+          schema:
+            $ref: '#/definitions/DecksGetResponse'
     post:
       description: |
         Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.
@@ -313,13 +345,13 @@ paths:
             An update command modifying specified properties of the deck.
           required: true
           schema:
-            $ref: '#/definitions/DecksUpdateRequest'
+            $ref: '#/definitions/DecksUpdateCommand'
       responses:
         "200":
           description: |
             The update has been successfully applied.
           schema:
-            $ref: '#/definitions/DecksUpdateResponse'
+            $ref: '#/definitions/DecksGetResponse'
     delete:
       description: |
         Deletes the specified deck by ID.

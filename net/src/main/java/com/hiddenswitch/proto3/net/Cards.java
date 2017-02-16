@@ -12,7 +12,7 @@ public interface Cards {
 	GetCardResponse getCard(GetCardRequest request);
 
 	@Suspendable
-	QueryCardsResponse queryCards(QueryCardsRequest request) throws SuspendExecution;
+	QueryCardsResponse queryCards(QueryCardsRequest request) throws SuspendExecution, InterruptedException;
 
 	@Suspendable
 	InsertCardResponse insertCard(InsertCardRequest request);

@@ -108,9 +108,8 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		}
 		getContext().assertTrue(Arrays.stream(awaitFiber.getAnnotations()).anyMatch(a -> a.annotationType().equals(Suspendable.class)));
 		getContext().assertTrue(Fiber.isCurrentFiber());
-		final String userId = "doctorpangloss";
-		CreateAccountResponse createAccountResponse = accounts.createAccount("benjamin.s.berman@gmail.com", "testpass", userId);
-		getContext().assertEquals(createAccountResponse.userId, userId);
+		CreateAccountResponse createAccountResponse = accounts.createAccount("benjamin.s.berman@gmail.com", "testpass", "doctorpangloss");
+		final String userId = createAccountResponse.userId;
 
 		service.initializeUser(new InitializeUserRequest().withUserId(userId));
 

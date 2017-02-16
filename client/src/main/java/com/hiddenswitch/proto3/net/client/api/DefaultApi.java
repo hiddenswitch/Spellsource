@@ -40,10 +40,10 @@ import java.io.IOException;
 
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
+import com.hiddenswitch.proto3.net.client.models.DecksGetResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksPutRequest;
 import com.hiddenswitch.proto3.net.client.models.DecksPutResponse;
-import com.hiddenswitch.proto3.net.client.models.DecksUpdateResponse;
-import com.hiddenswitch.proto3.net.client.models.DecksUpdateRequest;
+import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsResponse;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsRequest;
 import com.hiddenswitch.proto3.net.client.models.LoginResponse;
@@ -286,6 +286,113 @@ public class DefaultApi {
         apiClient.executeAsync(call, callback);
         return call;
     }
+    /* Build call for decksGet */
+    private com.squareup.okhttp.Call decksGetCall(String deckId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // verify the required parameter 'deckId' is set
+        if (deckId == null) {
+            throw new ApiException("Missing the required parameter 'deckId' when calling decksGet(Async)");
+        }
+        
+
+        // create path and map variables
+        String localVarPath = "/decks/{deckId}".replaceAll("\\{format\\}","json")
+        .replaceAll("\\{" + "deckId" + "\\}", apiClient.escapeString(deckId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] {  };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+
+    /**
+     * 
+     * Gets a deck. Only viewable for the owner of the deck or players in the alliance. 
+     * @param deckId The Deck ID to get. (required)
+     * @return DecksGetResponse
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public DecksGetResponse decksGet(String deckId) throws ApiException {
+        ApiResponse<DecksGetResponse> resp = decksGetWithHttpInfo(deckId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * Gets a deck. Only viewable for the owner of the deck or players in the alliance. 
+     * @param deckId The Deck ID to get. (required)
+     * @return ApiResponse&lt;DecksGetResponse&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<DecksGetResponse> decksGetWithHttpInfo(String deckId) throws ApiException {
+        com.squareup.okhttp.Call call = decksGetCall(deckId, null, null);
+        Type localVarReturnType = new TypeToken<DecksGetResponse>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * Gets a deck. Only viewable for the owner of the deck or players in the alliance. 
+     * @param deckId The Deck ID to get. (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call decksGetAsync(String deckId, final ApiCallback<DecksGetResponse> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = decksGetCall(deckId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DecksGetResponse>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
     /* Build call for decksPut */
     private com.squareup.okhttp.Call decksPutCall(DecksPutRequest request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = request;
@@ -393,7 +500,7 @@ public class DefaultApi {
         return call;
     }
     /* Build call for decksUpdate */
-    private com.squareup.okhttp.Call decksUpdateCall(String deckId, DecksUpdateRequest updateCommand, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call decksUpdateCall(String deckId, DecksUpdateCommand updateCommand, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = updateCommand;
         
         // verify the required parameter 'deckId' is set
@@ -450,11 +557,11 @@ public class DefaultApi {
      * Updates the deck by adding or removing cards, changing the hero class, or renaming the deck. 
      * @param deckId The Deck ID to update. (required)
      * @param updateCommand An update command modifying specified properties of the deck.  (required)
-     * @return DecksUpdateResponse
+     * @return DecksGetResponse
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public DecksUpdateResponse decksUpdate(String deckId, DecksUpdateRequest updateCommand) throws ApiException {
-        ApiResponse<DecksUpdateResponse> resp = decksUpdateWithHttpInfo(deckId, updateCommand);
+    public DecksGetResponse decksUpdate(String deckId, DecksUpdateCommand updateCommand) throws ApiException {
+        ApiResponse<DecksGetResponse> resp = decksUpdateWithHttpInfo(deckId, updateCommand);
         return resp.getData();
     }
 
@@ -463,12 +570,12 @@ public class DefaultApi {
      * Updates the deck by adding or removing cards, changing the hero class, or renaming the deck. 
      * @param deckId The Deck ID to update. (required)
      * @param updateCommand An update command modifying specified properties of the deck.  (required)
-     * @return ApiResponse&lt;DecksUpdateResponse&gt;
+     * @return ApiResponse&lt;DecksGetResponse&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<DecksUpdateResponse> decksUpdateWithHttpInfo(String deckId, DecksUpdateRequest updateCommand) throws ApiException {
+    public ApiResponse<DecksGetResponse> decksUpdateWithHttpInfo(String deckId, DecksUpdateCommand updateCommand) throws ApiException {
         com.squareup.okhttp.Call call = decksUpdateCall(deckId, updateCommand, null, null);
-        Type localVarReturnType = new TypeToken<DecksUpdateResponse>(){}.getType();
+        Type localVarReturnType = new TypeToken<DecksGetResponse>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -481,7 +588,7 @@ public class DefaultApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call decksUpdateAsync(String deckId, DecksUpdateRequest updateCommand, final ApiCallback<DecksUpdateResponse> callback) throws ApiException {
+    public com.squareup.okhttp.Call decksUpdateAsync(String deckId, DecksUpdateCommand updateCommand, final ApiCallback<DecksGetResponse> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -503,23 +610,23 @@ public class DefaultApi {
         }
 
         com.squareup.okhttp.Call call = decksUpdateCall(deckId, updateCommand, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<DecksUpdateResponse>(){}.getType();
+        Type localVarReturnType = new TypeToken<DecksGetResponse>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /* Build call for getAccount */
-    private com.squareup.okhttp.Call getAccountCall(String userId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call getAccountCall(String targetUserId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
-        // verify the required parameter 'userId' is set
-        if (userId == null) {
-            throw new ApiException("Missing the required parameter 'userId' when calling getAccount(Async)");
+        // verify the required parameter 'targetUserId' is set
+        if (targetUserId == null) {
+            throw new ApiException("Missing the required parameter 'targetUserId' when calling getAccount(Async)");
         }
         
 
         // create path and map variables
-        String localVarPath = "/accounts/{userId}".replaceAll("\\{format\\}","json")
-        .replaceAll("\\{" + "userId" + "\\}", apiClient.escapeString(userId.toString()));
+        String localVarPath = "/accounts/{targetUserId}".replaceAll("\\{format\\}","json")
+        .replaceAll("\\{" + "targetUserId" + "\\}", apiClient.escapeString(targetUserId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
@@ -558,24 +665,24 @@ public class DefaultApi {
     /**
      * 
      * Get a specific account. Contains more information if the userId matches the requesting user. 
-     * @param userId  (required)
+     * @param targetUserId  (required)
      * @return GetAccountsResponse
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public GetAccountsResponse getAccount(String userId) throws ApiException {
-        ApiResponse<GetAccountsResponse> resp = getAccountWithHttpInfo(userId);
+    public GetAccountsResponse getAccount(String targetUserId) throws ApiException {
+        ApiResponse<GetAccountsResponse> resp = getAccountWithHttpInfo(targetUserId);
         return resp.getData();
     }
 
     /**
      * 
      * Get a specific account. Contains more information if the userId matches the requesting user. 
-     * @param userId  (required)
+     * @param targetUserId  (required)
      * @return ApiResponse&lt;GetAccountsResponse&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<GetAccountsResponse> getAccountWithHttpInfo(String userId) throws ApiException {
-        com.squareup.okhttp.Call call = getAccountCall(userId, null, null);
+    public ApiResponse<GetAccountsResponse> getAccountWithHttpInfo(String targetUserId) throws ApiException {
+        com.squareup.okhttp.Call call = getAccountCall(targetUserId, null, null);
         Type localVarReturnType = new TypeToken<GetAccountsResponse>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -583,12 +690,12 @@ public class DefaultApi {
     /**
      *  (asynchronously)
      * Get a specific account. Contains more information if the userId matches the requesting user. 
-     * @param userId  (required)
+     * @param targetUserId  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getAccountAsync(String userId, final ApiCallback<GetAccountsResponse> callback) throws ApiException {
+    public com.squareup.okhttp.Call getAccountAsync(String targetUserId, final ApiCallback<GetAccountsResponse> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -609,7 +716,7 @@ public class DefaultApi {
             };
         }
 
-        com.squareup.okhttp.Call call = getAccountCall(userId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAccountCall(targetUserId, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<GetAccountsResponse>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

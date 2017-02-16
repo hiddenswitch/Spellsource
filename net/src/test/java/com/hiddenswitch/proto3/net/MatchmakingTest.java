@@ -29,7 +29,7 @@ public class MatchmakingTest extends AbstractMatchmakingTest {
 			Strand.sleep(1000L);
 			getContext().assertNull(gameSessions.getGameSession(gameId));
 			final MatchExpireRequest request = new MatchExpireRequest(gameId);
-			getContext().assertFalse(service.expireMatch(request).expired, "We should fail to expire an already expired match.");
+			getContext().assertFalse(service.expireOrEndMatch(request).expired, "We should fail to expire an already expired match.");
 			createTwoPlayersAndMatchmake();
 		});
 

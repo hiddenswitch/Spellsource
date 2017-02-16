@@ -3,12 +3,11 @@ package com.hiddenswitch.proto3.net.amazon;
 import java.io.Serializable;
 
 public class LoginRequest implements Serializable {
-	private String userId;
+	private String email;
 	private String password;
-	private String token;
 
-	public LoginRequest withUserId(String username) {
-		this.userId = username;
+	public LoginRequest withEmail(String username) {
+		this.email = username;
 		return this;
 	}
 
@@ -18,16 +17,15 @@ public class LoginRequest implements Serializable {
 	}
 
 	public LoginRequest withToken(String token) {
-		this.token = token;
 		return this;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -38,11 +36,4 @@ public class LoginRequest implements Serializable {
 		this.password = password;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
 }

@@ -15,7 +15,7 @@ import static org.testng.Assert.*;
  */
 public class DraftContextTest {
 	@Test
-	public void testDraftComplete() throws InterruptedException, SuspendExecution, CardParseException, IOException, URISyntaxException {
+	public void testDraftComplete() throws SuspendExecution, CardParseException, IOException, URISyntaxException {
 		CardCatalogue.loadCardsFromPackage();
 		DraftContext context = new DraftContext();
 		context.accept(then -> {

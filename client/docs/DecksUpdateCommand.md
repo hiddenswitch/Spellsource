@@ -1,12 +1,13 @@
 
-# DecksUpdateRequest
+# DecksUpdateCommand
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **setHeroClass** | **String** |  |  [optional]
 **setName** | **String** |  |  [optional]
-**pushInventoryIds** | [**DecksUpdateRequestPushInventoryIds**](DecksUpdateRequestPushInventoryIds.md) |  |  [optional]
+**setInventoryIds** | **List&lt;String&gt;** |  |  [optional]
+**pushInventoryIds** | [**DecksUpdateCommandPushInventoryIds**](DecksUpdateCommandPushInventoryIds.md) |  |  [optional]
 **pullAllInventoryIds** | **List&lt;String&gt;** |  |  [optional]
 
 

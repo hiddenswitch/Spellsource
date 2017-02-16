@@ -324,6 +324,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	@Override
+	@Suspendable
 	public void endGame() {
 		super.endGame();
 		onGameEndHandlers.forEach(h -> {
@@ -331,10 +332,12 @@ public class ServerGameContext extends GameContext {
 		});
 	}
 
+	@Suspendable
 	public void handleEndGame(Handler<ServerGameContext> handler) {
 		onGameEndHandlers.add(handler);
 	}
 
+	@Suspendable
 	public void kill() {
 		if (!gameDecided()) {
 			endGame();

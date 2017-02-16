@@ -49,7 +49,7 @@ public class ServiceProxy<T> {
 	 * @return {T} A proxy whose methods will return the actual values.
 	 */
 	@Suspendable
-	public T sync() throws InterruptedException, SuspendExecution {
+	public T sync() throws SuspendExecution, InterruptedException {
 		next = null;
 		sync = true;
 		return proxy;

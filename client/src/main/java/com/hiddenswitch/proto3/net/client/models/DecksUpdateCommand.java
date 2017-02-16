@@ -27,7 +27,7 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.DecksUpdateRequestPushInventoryIds;
+import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommandPushInventoryIds;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -35,23 +35,26 @@ import java.util.List;
 
 import java.io.Serializable;
 /**
- * DecksUpdateRequest
+ * DecksUpdateCommand
  */
 
-public class DecksUpdateRequest  implements Serializable {
+public class DecksUpdateCommand  implements Serializable {
   @SerializedName("setHeroClass")
   private String setHeroClass = null;
 
   @SerializedName("setName")
   private String setName = null;
 
+  @SerializedName("setInventoryIds")
+  private List<String> setInventoryIds = new ArrayList<String>();
+
   @SerializedName("pushInventoryIds")
-  private DecksUpdateRequestPushInventoryIds pushInventoryIds = null;
+  private DecksUpdateCommandPushInventoryIds pushInventoryIds = null;
 
   @SerializedName("pullAllInventoryIds")
   private List<String> pullAllInventoryIds = new ArrayList<String>();
 
-  public DecksUpdateRequest setHeroClass(String setHeroClass) {
+  public DecksUpdateCommand setHeroClass(String setHeroClass) {
     this.setHeroClass = setHeroClass;
     return this;
   }
@@ -69,7 +72,7 @@ public class DecksUpdateRequest  implements Serializable {
     this.setHeroClass = setHeroClass;
   }
 
-  public DecksUpdateRequest setName(String setName) {
+  public DecksUpdateCommand setName(String setName) {
     this.setName = setName;
     return this;
   }
@@ -87,7 +90,30 @@ public class DecksUpdateRequest  implements Serializable {
     this.setName = setName;
   }
 
-  public DecksUpdateRequest pushInventoryIds(DecksUpdateRequestPushInventoryIds pushInventoryIds) {
+  public DecksUpdateCommand setInventoryIds(List<String> setInventoryIds) {
+    this.setInventoryIds = setInventoryIds;
+    return this;
+  }
+
+  public DecksUpdateCommand addSetInventoryIdsItem(String setInventoryIdsItem) {
+    this.setInventoryIds.add(setInventoryIdsItem);
+    return this;
+  }
+
+   /**
+   * Get setInventoryIds
+   * @return setInventoryIds
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public List<String> getSetInventoryIds() {
+    return setInventoryIds;
+  }
+
+  public void setSetInventoryIds(List<String> setInventoryIds) {
+    this.setInventoryIds = setInventoryIds;
+  }
+
+  public DecksUpdateCommand pushInventoryIds(DecksUpdateCommandPushInventoryIds pushInventoryIds) {
     this.pushInventoryIds = pushInventoryIds;
     return this;
   }
@@ -97,20 +123,20 @@ public class DecksUpdateRequest  implements Serializable {
    * @return pushInventoryIds
   **/
   @ApiModelProperty(example = "null", value = "")
-  public DecksUpdateRequestPushInventoryIds getPushInventoryIds() {
+  public DecksUpdateCommandPushInventoryIds getPushInventoryIds() {
     return pushInventoryIds;
   }
 
-  public void setPushInventoryIds(DecksUpdateRequestPushInventoryIds pushInventoryIds) {
+  public void setPushInventoryIds(DecksUpdateCommandPushInventoryIds pushInventoryIds) {
     this.pushInventoryIds = pushInventoryIds;
   }
 
-  public DecksUpdateRequest pullAllInventoryIds(List<String> pullAllInventoryIds) {
+  public DecksUpdateCommand pullAllInventoryIds(List<String> pullAllInventoryIds) {
     this.pullAllInventoryIds = pullAllInventoryIds;
     return this;
   }
 
-  public DecksUpdateRequest addPullAllInventoryIdsItem(String pullAllInventoryIdsItem) {
+  public DecksUpdateCommand addPullAllInventoryIdsItem(String pullAllInventoryIdsItem) {
     this.pullAllInventoryIds.add(pullAllInventoryIdsItem);
     return this;
   }
@@ -137,25 +163,27 @@ public class DecksUpdateRequest  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DecksUpdateRequest decksUpdateRequest = (DecksUpdateRequest) o;
-    return Objects.equals(this.setHeroClass, decksUpdateRequest.setHeroClass) &&
-        Objects.equals(this.setName, decksUpdateRequest.setName) &&
-        Objects.equals(this.pushInventoryIds, decksUpdateRequest.pushInventoryIds) &&
-        Objects.equals(this.pullAllInventoryIds, decksUpdateRequest.pullAllInventoryIds);
+    DecksUpdateCommand decksUpdateCommand = (DecksUpdateCommand) o;
+    return Objects.equals(this.setHeroClass, decksUpdateCommand.setHeroClass) &&
+        Objects.equals(this.setName, decksUpdateCommand.setName) &&
+        Objects.equals(this.setInventoryIds, decksUpdateCommand.setInventoryIds) &&
+        Objects.equals(this.pushInventoryIds, decksUpdateCommand.pushInventoryIds) &&
+        Objects.equals(this.pullAllInventoryIds, decksUpdateCommand.pullAllInventoryIds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(setHeroClass, setName, pushInventoryIds, pullAllInventoryIds);
+    return Objects.hash(setHeroClass, setName, setInventoryIds, pushInventoryIds, pullAllInventoryIds);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DecksUpdateRequest {\n");
+    sb.append("class DecksUpdateCommand {\n");
     
     sb.append("    setHeroClass: ").append(toIndentedString(setHeroClass)).append("\n");
     sb.append("    setName: ").append(toIndentedString(setName)).append("\n");
+    sb.append("    setInventoryIds: ").append(toIndentedString(setInventoryIds)).append("\n");
     sb.append("    pushInventoryIds: ").append(toIndentedString(pushInventoryIds)).append("\n");
     sb.append("    pullAllInventoryIds: ").append(toIndentedString(pullAllInventoryIds)).append("\n");
     sb.append("}");

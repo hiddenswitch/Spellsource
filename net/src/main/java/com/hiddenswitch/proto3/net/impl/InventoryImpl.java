@@ -12,7 +12,6 @@ import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
-import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.Rarity;
@@ -38,16 +37,18 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 		super.start();
 		Broker.of(this, Inventory.class, vertx.eventBus());
 		cards = Broker.proxy(Cards.class, vertx.eventBus());
-
-		Void ignore = awaitResult(h -> getMongo().createCollection(INVENTORY, h));
-		ignore = awaitResult(h -> getMongo().createCollection(COLLECTIONS, h));
-		ignore = awaitResult(h -> getMongo().createIndex(INVENTORY, json("userId", 1), h));
-		ignore = awaitResult(h -> getMongo().createIndex(INVENTORY, json("collectionIds", 1), h));
+		List<String> collections = awaitResult(h -> getMongo().getCollections(h));
+		if (!collections.contains(INVENTORY) || !collections.contains(COLLECTIONS)) {
+			Void ignore = awaitResult(h -> getMongo().createCollection(INVENTORY, h));
+			ignore = awaitResult(h -> getMongo().createCollection(COLLECTIONS, h));
+			ignore = awaitResult(h -> getMongo().createIndex(INVENTORY, json("userId", 1), h));
+			ignore = awaitResult(h -> getMongo().createIndex(INVENTORY, json("collectionIds", 1), h));
+		}
 	}
 
 	@Override
 	@Suspendable
-	public OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws InterruptedException, SuspendExecution {
+	public OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws SuspendExecution, InterruptedException {
 		QueryCardsRequest commons = new QueryCardsRequest()
 				.withFields(CardFields.ALL)
 				.withSets(CardSet.MINIONATE)
@@ -70,7 +71,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Override
 	@Suspendable
-	public CreateCollectionResponse createCollection(CreateCollectionRequest request) throws InterruptedException, SuspendExecution {
+	public CreateCollectionResponse createCollection(CreateCollectionRequest request) throws SuspendExecution, InterruptedException {
 		switch (request.getType()) {
 			case USER:
 				Long count = awaitResult(h -> getMongo().count(COLLECTIONS, json("_id", request.getUserId()), h));
@@ -155,7 +156,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Override
 	@Suspendable
-	public GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution {
+	public GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution, InterruptedException {
 		final String collection;
 		final CollectionTypes type;
 		if (request.getUserId() != null
@@ -184,7 +185,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 			}
 
 			CollectionRecord deck = fromJson(deckCollection.get(0), CollectionRecord.class);
-			return GetCollectionResponse.deck(request.getDeckId(), deck.getName(), deck.getHeroClass(), cardRecords);
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), cardRecords);
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(request.getUserId(), cardRecords);
 		} /*  else {

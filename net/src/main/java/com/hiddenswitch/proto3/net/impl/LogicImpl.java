@@ -32,7 +32,7 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 
 	@Override
 	@Suspendable
-	public InitializeUserResponse initializeUser(InitializeUserRequest request) throws InterruptedException, SuspendExecution {
+	public InitializeUserResponse initializeUser(InitializeUserRequest request) throws SuspendExecution, InterruptedException {
 		final InitializeUserResponse response = new InitializeUserResponse();
 		final String userId = request.getUserId();
 
@@ -43,7 +43,7 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 	}
 
 	@Override
-	public EndGameResponse endGame(EndGameRequest request) throws InterruptedException, SuspendExecution {
+	public EndGameResponse endGame(EndGameRequest request) throws SuspendExecution, InterruptedException {
 		// Return all currently borrowed decks
 		final List<String> deckIds = request.getPlayers().stream().map(EndGameRequest.Player::getDeckId).collect(Collectors.toList());
 		inventory.sync().returnToCollection(new ReturnToCollectionRequest().withDeckIds(deckIds));

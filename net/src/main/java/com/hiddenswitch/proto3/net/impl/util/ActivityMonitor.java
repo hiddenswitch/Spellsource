@@ -1,12 +1,16 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
+
+import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
 
 /**
  * Created by bberman on 12/6/16.
@@ -17,17 +21,17 @@ public class ActivityMonitor {
 	private final long noActivityTimeout;
 	private final WeakReference<Vertx> vertx;
 	private long lastTimerId = Long.MIN_VALUE;
-	private final Handler<String> onTimeout;
+	private final SuspendableAction1<String> onTimeout;
 
-	public ActivityMonitor(Vertx vertx, String gameId, long noActivityTimeout, Handler<String> onTimeout) {
+	public ActivityMonitor(Vertx vertx, String gameId, long noActivityTimeout, SuspendableAction1<String> onTimeout) {
 		this.vertx = new WeakReference<>(vertx);
 		this.gameId = gameId;
 		this.noActivityTimeout = noActivityTimeout;
 		this.onTimeout = onTimeout;
 	}
 
-	private void handleTimeout(long t) {
-		onTimeout.handle(gameId);
+	private void handleTimeout(long t) throws InterruptedException, SuspendExecution {
+		onTimeout.call(gameId);
 	}
 
 	@Suspendable
@@ -39,7 +43,7 @@ public class ActivityMonitor {
 
 		cancel();
 
-		lastTimerId = vertx.setTimer(noActivityTimeout, this::handleTimeout);
+		lastTimerId = vertx.setTimer(noActivityTimeout, suspendableHandler(this::handleTimeout));
 	}
 
 	@Suspendable

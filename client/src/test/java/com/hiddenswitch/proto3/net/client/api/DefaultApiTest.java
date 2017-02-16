@@ -28,10 +28,10 @@ package com.hiddenswitch.proto3.net.client.api;
 import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
+import com.hiddenswitch.proto3.net.client.models.DecksGetResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksPutRequest;
 import com.hiddenswitch.proto3.net.client.models.DecksPutResponse;
-import com.hiddenswitch.proto3.net.client.models.DecksUpdateResponse;
-import com.hiddenswitch.proto3.net.client.models.DecksUpdateRequest;
+import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsResponse;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsRequest;
 import com.hiddenswitch.proto3.net.client.models.LoginResponse;
@@ -89,6 +89,22 @@ public class DefaultApiTest {
     /**
      * 
      *
+     * Gets a deck. Only viewable for the owner of the deck or players in the alliance. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void decksGetTest() throws ApiException {
+        String deckId = null;
+        // DecksGetResponse response = api.decksGet(deckId);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * Creates a new deck with optionally specified inventory IDs, a name and a hero class. 
      *
      * @throws ApiException
@@ -113,8 +129,8 @@ public class DefaultApiTest {
     @Test
     public void decksUpdateTest() throws ApiException {
         String deckId = null;
-        DecksUpdateRequest updateCommand = null;
-        // DecksUpdateResponse response = api.decksUpdate(deckId, updateCommand);
+        DecksUpdateCommand updateCommand = null;
+        // DecksGetResponse response = api.decksUpdate(deckId, updateCommand);
 
         // TODO: test validations
     }
@@ -129,8 +145,8 @@ public class DefaultApiTest {
      */
     @Test
     public void getAccountTest() throws ApiException {
-        String userId = null;
-        // GetAccountsResponse response = api.getAccount(userId);
+        String targetUserId = null;
+        // GetAccountsResponse response = api.getAccount(targetUserId);
 
         // TODO: test validations
     }
