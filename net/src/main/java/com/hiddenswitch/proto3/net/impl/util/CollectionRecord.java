@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class CollectionRecord extends MongoRecord {
 	private String userId;
 	private CollectionTypes type;
+	private boolean trashed;
 
 	/**
 	 * Hero class for deck collection records.
@@ -82,6 +83,19 @@ public class CollectionRecord extends MongoRecord {
 
 	public CollectionRecord withId(final String id) {
 		this._id = id;
+		return this;
+	}
+
+	public boolean isTrashed() {
+		return trashed;
+	}
+
+	public void setTrashed(boolean trashed) {
+		this.trashed = trashed;
+	}
+
+	public CollectionRecord withTrashed(boolean trashed) {
+		this.trashed = trashed;
 		return this;
 	}
 

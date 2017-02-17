@@ -36,6 +36,11 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 				.createCollection(CreateCollectionRequest.startingCollection(userId));
 	}
 
+	@Test
+	public void testCreateCollection2(TestContext context) {
+
+	}
+
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<InventoryImpl>> done) {
 		final InventoryImpl inventory = new InventoryImpl().withEmbeddedConfiguration();
