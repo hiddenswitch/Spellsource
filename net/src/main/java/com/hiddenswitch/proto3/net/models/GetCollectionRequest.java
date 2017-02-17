@@ -12,10 +12,6 @@ public class GetCollectionRequest implements Serializable {
 	public GetCollectionRequest() {
 	}
 
-	public GetCollectionRequest(String userId) {
-		this.userId = userId;
-	}
-
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
@@ -41,6 +37,16 @@ public class GetCollectionRequest implements Serializable {
 
 	public void setDeckId(String deckId) {
 		this.deckId = deckId;
+	}
+
+	public static GetCollectionRequest user(String userId) {
+		return new GetCollectionRequest()
+				.withUserId(userId);
+	}
+
+	public static GetCollectionRequest deck(String deckId) {
+		return new GetCollectionRequest()
+				.withDeckId(deckId);
 	}
 }
 

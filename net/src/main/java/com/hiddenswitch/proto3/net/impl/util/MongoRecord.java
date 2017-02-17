@@ -36,7 +36,12 @@ public class MongoRecord implements Serializable {
 		if (other == null) {
 			return false;
 		}
-		CardRecord rhs = (CardRecord) other;
+
+		if (!(other instanceof MongoRecord)) {
+			return false;
+		}
+
+		MongoRecord rhs = (MongoRecord) other;
 		return this._id.equals(rhs._id);
 	}
 }

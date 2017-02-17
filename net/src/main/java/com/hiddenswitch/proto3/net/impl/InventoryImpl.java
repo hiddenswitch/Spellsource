@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Cards;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Service;
+import com.hiddenswitch.proto3.net.SetCollectionResponse;
 import com.hiddenswitch.proto3.net.impl.util.CardRecord;
 import com.hiddenswitch.proto3.net.impl.util.CollectionRecord;
 import com.hiddenswitch.proto3.net.models.*;
@@ -12,6 +13,7 @@ import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.Rarity;
@@ -97,9 +99,11 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 				if (request.getInventoryIds() != null
 						&& request.getInventoryIds().size() > 0) {
-					final MongoClientUpdateResult update = awaitResult(h -> getMongo().updateCollection(INVENTORY,
+					final MongoClientUpdateResult update = awaitResult(h -> getMongo().updateCollectionWithOptions(INVENTORY,
 							json("_id", json("$in", request.getInventoryIds())),
-							json("$addToSet", json("collectionIds", deckId)), h));
+							json("$addToSet", json("collectionIds", deckId)),
+							new UpdateOptions().setMulti(true),
+							h));
 				}
 
 				return CreateCollectionResponse.deck(deckId);
@@ -124,9 +128,25 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 	}
 
 	@Override
-	@Suspendable
-	public AddToCollectionResponse addToCollection(AddToCollectionRequest request) {
-		return null;
+	public AddToCollectionResponse addToCollection(AddToCollectionRequest request) throws SuspendExecution, InterruptedException {
+		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollectionWithOptions(InventoryImpl.INVENTORY,
+				json("_id", json("$in", request.getInventoryIds())),
+				json("$addToSet", json("collectionIds", request.getCollectionId())),
+				new UpdateOptions().setMulti(true),
+				h));
+
+		return new AddToCollectionResponse(r);
+	}
+
+	@Override
+	public RemoveFromCollectionResponse removeFromCollection(RemoveFromCollectionRequest request) throws SuspendExecution, InterruptedException {
+		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollectionWithOptions(InventoryImpl.INVENTORY,
+				json("_id", json("$in", request.getInventoryIds())),
+				json("$pull", json("collectionIds", request.getCollectionId())),
+				new UpdateOptions().setMulti(true),
+				h));
+
+		return new RemoveFromCollectionResponse(r);
 	}
 
 	@Override
@@ -141,9 +161,11 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 			throw new RuntimeException();
 		}
 
-		MongoClientUpdateResult update = awaitResult(h -> getMongo().updateCollection(INVENTORY,
+		MongoClientUpdateResult update = awaitResult(h -> getMongo().updateCollectionWithOptions(INVENTORY,
 				json("collectionIds", json("$in", collectionIds)),
-				json("$set", json("borrowed", true)), h));
+				json("$set", json("borrowed", true)),
+				new UpdateOptions().setMulti(true),
+				h));
 
 		return new BorrowFromCollectionResponse(update.getDocModified());
 	}
@@ -157,29 +179,29 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 	@Override
 	@Suspendable
 	public GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution, InterruptedException {
-		final String collection;
+		final String collectionId;
 		final CollectionTypes type;
 		if (request.getUserId() != null
 				&& request.getDeckId() == null) {
-			collection = request.getUserId();
+			collectionId = request.getUserId();
 			type = CollectionTypes.USER;
 		} else if (request.getDeckId() != null) {
-			collection = request.getDeckId();
+			collectionId = request.getDeckId();
 			type = CollectionTypes.DECK;
 		} else {
-			collection = null;
+			collectionId = null;
 			type = null;
 		}
 
-		if (collection == null) {
-			return new GetCollectionResponse();
+		if (collectionId == null) {
+			throw new RuntimeException();
 		}
 
-		List<JsonObject> results = awaitResult(h -> getMongo().find(INVENTORY, json("collectionIds", collection), h));
+		List<JsonObject> results = awaitResult(h -> getMongo().find(INVENTORY, json("collectionIds", collectionId), h));
 		final List<CardRecord> cardRecords = results.stream().map(r -> fromJson(r, CardRecord.class)).collect(Collectors.toList());
 
 		if (type == CollectionTypes.DECK) {
-			List<JsonObject> deckCollection = awaitResult(h -> getMongo().find(COLLECTIONS, json("_id", collection), h));
+			List<JsonObject> deckCollection = awaitResult(h -> getMongo().find(COLLECTIONS, json("_id", collectionId), h));
 			if (deckCollection.size() == 0) {
 				throw new RuntimeException();
 			}
@@ -192,5 +214,41 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 			return new GetCollectionResponse()
 					.withCardRecords(cardRecords);
 		} */
+	}
+
+	@Override
+	public TrashCollectionResponse trashCollection(TrashCollectionRequest request) throws SuspendExecution, InterruptedException {
+		final String collectionId = request.getCollectionId();
+
+		MongoClientUpdateResult result1 = awaitResult(h -> getMongo()
+				.updateCollection(COLLECTIONS,
+						json("_id", collectionId, "trashed", false),
+						json("$set", json("trashed", true)), h));
+
+		MongoClientUpdateResult result2 = awaitResult(h -> getMongo()
+				.updateCollectionWithOptions(INVENTORY,
+						json("collectionIds", collectionId),
+						json("$pull", json("collectionIds", collectionId)),
+						new UpdateOptions().setMulti(true), h));
+
+		return new TrashCollectionResponse(result1.getDocModified() == 1, result2.getDocModified());
+	}
+
+	@Override
+	public SetCollectionResponse setCollection(SetCollectionRequest setCollectionRequest) throws SuspendExecution, InterruptedException {
+		String collectionId = setCollectionRequest.getCollectionId();
+		MongoClientUpdateResult r = awaitResult(h -> getMongo()
+				.updateCollectionWithOptions(InventoryImpl.INVENTORY,
+						json("collectionId", collectionId, "_id", json("$nin", setCollectionRequest.getInventoryIds())),
+						json("$pull", json("collectionIds", collectionId)),
+						new UpdateOptions().setMulti(true), h));
+
+		MongoClientUpdateResult r2 = awaitResult(h -> getMongo()
+				.updateCollectionWithOptions(InventoryImpl.INVENTORY,
+						json("_id", json("$in", setCollectionRequest.getInventoryIds())),
+						json("$addToSet", json("collectionIds", collectionId)),
+						new UpdateOptions().setMulti(true), h));
+
+		return new SetCollectionResponse(r2, r);
 	}
 }

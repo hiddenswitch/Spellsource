@@ -8,21 +8,21 @@ import com.hiddenswitch.proto3.net.models.*;
  * Created by bberman on 1/19/17.
  */
 public interface Inventory {
-	@Suspendable
 	OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws SuspendExecution, InterruptedException;
 
-	@Suspendable
 	CreateCollectionResponse createCollection(CreateCollectionRequest request) throws SuspendExecution, InterruptedException;
 
-	@Suspendable
-	AddToCollectionResponse addToCollection(AddToCollectionRequest request);
+	AddToCollectionResponse addToCollection(AddToCollectionRequest request) throws SuspendExecution, InterruptedException;
 
-	@Suspendable
+	RemoveFromCollectionResponse removeFromCollection(RemoveFromCollectionRequest request) throws SuspendExecution, InterruptedException;
+
 	BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request) throws SuspendExecution, InterruptedException;
 
-	@Suspendable
 	ReturnToCollectionResponse returnToCollection(ReturnToCollectionRequest request);
 
-	@Suspendable
 	GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution, InterruptedException;
+
+	TrashCollectionResponse trashCollection(TrashCollectionRequest request) throws SuspendExecution, InterruptedException;
+
+	SetCollectionResponse setCollection(SetCollectionRequest setCollectionRequest) throws SuspendExecution, InterruptedException;
 }

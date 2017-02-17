@@ -9,10 +9,5 @@ public interface Decks {
 
 	DeckUpdateResponse updateDeck(DeckUpdateRequest request) throws SuspendExecution, InterruptedException;
 
-	@Suspendable
-	DeckDeleteResponse deleteDeck(DeckDeleteRequest request);
-
-	DeckUseResponse useDeck(DeckUseRequest request) throws SuspendExecution, InterruptedException;
-
-	DeckReturnResponse returnDeck(DeckReturnRequest request);
+	DeckDeleteResponse deleteDeck(DeckDeleteRequest request) throws SuspendExecution, InterruptedException;
 }

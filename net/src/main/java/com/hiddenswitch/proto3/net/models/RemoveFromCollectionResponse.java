@@ -8,9 +8,9 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * Created by bberman on 1/19/17.
+ * Created by bberman on 2/16/17.
  */
-public class AddToCollectionResponse implements Serializable {
+public class RemoveFromCollectionResponse implements Serializable {
 	private final Map<String, Object> updateResult;
 
 	@JsonIgnore
@@ -18,7 +18,7 @@ public class AddToCollectionResponse implements Serializable {
 		return new MongoClientUpdateResult(new JsonObject(updateResult));
 	}
 
-	public AddToCollectionResponse(MongoClientUpdateResult updateResult) {
+	public RemoveFromCollectionResponse(MongoClientUpdateResult updateResult) {
 		this.updateResult = updateResult.toJson().getMap();
 	}
 }

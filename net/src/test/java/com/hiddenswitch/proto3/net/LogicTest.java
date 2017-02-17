@@ -43,35 +43,35 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		wrapSync(context, this::startsGameSync);
 	}
 
+	public static InitializeUserResponse initializeUserId(Logic service, String userId) throws SuspendExecution, InterruptedException {
+		return service.initializeUser(new InitializeUserRequest().withUserId(userId));
+	}
+
 	private void startsGameSync() throws SuspendExecution, InterruptedException {
 		// Create two players
+
 		CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
 		CreateAccountResponse player2 = accounts.createAccount("b@b.com", "b", "2");
+
+		final String userId1 = player1.userId;
+		final String userId2 = player2.userId;
 
 		List<String> deckIds = new ArrayList<>();
 
 		// Build two random decks
-		for (String userId : new String[]{"1", "2"}) {
-			service.initializeUser(new InitializeUserRequest().withUserId(userId));
-			GetCollectionResponse collection = inventory.getCollection(new GetCollectionRequest(userId));
-			Collections.shuffle(collection.getCardRecords());
-			List<String> inventoryIds = collection.getCardRecords().subList(0, 30).stream().map(CardRecord::getId).collect(Collectors.toList());
-			DeckCreateResponse deckCreateResponse = decks.createDeck(new DeckCreateRequest()
-					.withUserId(userId)
-					.withHeroClass(HeroClass.WARRIOR)
-					.withName("Test Deck")
-					.withInventoryIds(inventoryIds));
-
+		for (String userId : new String[]{userId1, userId2}) {
+			initializeUserId(service, userId);
+			DeckCreateResponse deckCreateResponse = DeckTest.createDeckForUserId(inventory, decks, userId);
 			deckIds.add(deckCreateResponse.getCollectionId());
 		}
 
 		StartGameResponse response = service.startGame(new StartGameRequest().withPlayers(
 				new StartGameRequest.Player()
-						.withUserId("1")
+						.withUserId(userId1)
 						.withId(0)
 						.withDeckId(deckIds.get(0)),
 				new StartGameRequest.Player()
-						.withUserId("2")
+						.withUserId(userId2)
 						.withId(1)
 						.withDeckId(deckIds.get(1))
 		));
@@ -113,7 +113,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 		service.initializeUser(new InitializeUserRequest().withUserId(userId));
 
-		GetCollectionResponse response = inventory.getCollection(new GetCollectionRequest(userId));
+		GetCollectionResponse response = inventory.getCollection(GetCollectionRequest.user(userId));
 
 		Set<String> cardIds = response.getCardRecords().stream().map(r -> r.getCardDesc().id).collect(Collectors.toSet());
 
