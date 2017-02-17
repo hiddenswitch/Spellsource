@@ -7,12 +7,10 @@ import java.util.List;
  * Created by bberman on 1/19/17.
  */
 public class ReturnToCollectionRequest implements Serializable {
-	private String deckId;
 	private List<String> userIds;
 	private List<String> deckIds;
 
 	public ReturnToCollectionRequest withCollectionId(String deckId) {
-		this.deckId = deckId;
 		return this;
 	}
 
