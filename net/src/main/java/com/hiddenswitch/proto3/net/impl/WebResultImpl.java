@@ -14,7 +14,7 @@ public class WebResultImpl<T> implements WebResult<T> {
 	public WebResultImpl(T result) {
 		this.result = result;
 		this.cause = null;
-		this.responseCode = 400;
+		this.responseCode = 200;
 	}
 
 	public WebResultImpl(Throwable cause) {

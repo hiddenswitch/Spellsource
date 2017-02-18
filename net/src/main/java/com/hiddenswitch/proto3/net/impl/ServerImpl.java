@@ -76,59 +76,66 @@ public class ServerImpl extends SyncVerticle implements Server {
 			// All routes need logging.
 			router.route().handler(LoggerHandler.create());
 
-			router.route("/v1/accounts/{targetUserId}")
+			router.route("/v1/accounts/:targetUserId")
+					.handler(authHandler);
+			router.route("/v1/accounts/:targetUserId")
 					.method(HttpMethod.GET)
-					.handler(authHandler)
 					.handler(HandlerFactory.handler("targetUserId", this::getAccount));
 
 			router.route("/v1/accounts")
+					.handler(bodyHandler);
+			router.route("/v1/accounts")
 					.method(HttpMethod.GET)
-					.handler(authHandler)
-					.handler(bodyHandler)
+					.handler(authHandler);
+			router.route("/v1/accounts")
+					.method(HttpMethod.GET)
 					.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
 
 			router.route("/v1/accounts")
 					.method(HttpMethod.PUT)
-					.handler(bodyHandler)
 					.handler(HandlerFactory.handler(CreateAccountRequest.class, this::createAccount));
 
 			router.route("/v1/accounts/login")
+					.handler(bodyHandler);
+			router.route("/v1/accounts/login")
 					.method(HttpMethod.POST)
-					.handler(bodyHandler)
 					.handler(HandlerFactory.handler(LoginRequest.class, this::login));
 
 			router.route("/v1/decks")
+					.handler(authHandler);
+			router.route("/v1/decks")
+					.handler(bodyHandler);
+			router.route("/v1/decks")
 					.method(HttpMethod.PUT)
-					.handler(authHandler)
-					.handler(bodyHandler)
 					.handler(HandlerFactory.handler(DecksPutRequest.class, this::decksPut));
 
-			router.route("/v1/decks/{deckId}")
+			router.route("/v1/decks/:deckId")
+					.handler(authHandler);
+			router.route("/v1/decks/:deckId")
 					.method(HttpMethod.GET)
-					.handler(authHandler)
 					.handler(HandlerFactory.handler("deckId", this::decksGet));
 
-			router.route("/v1/decks/{deckId}")
+			router.route("/v1/decks/:deckId")
+					.handler(bodyHandler);
+			router.route("/v1/decks/:deckId")
 					.method(HttpMethod.POST)
-					.handler(authHandler)
-					.handler(bodyHandler)
 					.handler(HandlerFactory.handler(DecksUpdateCommand.class, "deckId", this::decksUpdate));
 
-			router.route("/v1/decks/{deckId}")
+			router.route("/v1/decks/:deckId")
 					.method(HttpMethod.DELETE)
-					.handler(authHandler)
 					.handler(HandlerFactory.handler("deckId", this::decksDelete));
 
 
 			router.route("/v1/matchmaking/constructed/queue")
+					.handler(authHandler);
+			router.route("/v1/matchmaking/constructed/queue")
+					.handler(bodyHandler);
+			router.route("/v1/matchmaking/constructed/queue")
 					.method(HttpMethod.PUT)
-					.handler(authHandler)
-					.handler(bodyHandler)
 					.handler(HandlerFactory.handler(MatchmakingQueuePutRequest.class, this::matchmakingConstructedQueuePut));
 
 			router.route("/v1/matchmaking/constructed/queue")
 					.method(HttpMethod.DELETE)
-					.handler(authHandler)
 					.handler(HandlerFactory.handler(this::matchmakingConstructedQueueDelete));
 
 			logger.info("Router configured.");
