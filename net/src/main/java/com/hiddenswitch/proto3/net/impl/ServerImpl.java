@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.net.ApiKeyAuthHandler;
 import com.hiddenswitch.proto3.net.Server;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CardRecord;
@@ -10,6 +11,7 @@ import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.client.models.LoginRequest;
 import com.hiddenswitch.proto3.net.client.models.LoginResponse;
 import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
+import com.hiddenswitch.proto3.net.impl.util.HandlerFactory;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.models.MatchCancelResponse;
 import com.hiddenswitch.proto3.net.util.Serialization;
@@ -34,7 +36,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
@@ -67,37 +68,68 @@ public class ServerImpl extends SyncVerticle implements Server {
 			}
 
 			logger.info("Configuring router...");
-			final String MATCHMAKE_PATH = "/v1/matchmaking/constructed/queue";
 
-			TokenAuthProvider authProvider = new TokenAuthProvider(vertx);
-			router.route()
-					.handler(RedirectAuthHandler.create(authProvider));
+			final TokenAuthProvider authProvider = new TokenAuthProvider(vertx);
+			final ApiKeyAuthHandler authHandler = ApiKeyAuthHandler.create(authProvider, "X-Auth-Token");
+			final BodyHandler bodyHandler = BodyHandler.create();
 
-			router.route("/*")
-					.handler(LoggerHandler.create());
+			// All routes need logging.
+			router.route().handler(LoggerHandler.create());
 
-			router.route(MATCHMAKE_PATH)
+			router.route("/v1/accounts/{targetUserId}")
+					.method(HttpMethod.GET)
+					.handler(authHandler)
+					.handler(HandlerFactory.handler("targetUserId", this::getAccount));
+
+			router.route("/v1/accounts")
+					.method(HttpMethod.GET)
+					.handler(authHandler)
+					.handler(bodyHandler)
+					.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
+
+			router.route("/v1/accounts")
+					.method(HttpMethod.PUT)
+					.handler(bodyHandler)
+					.handler(HandlerFactory.handler(CreateAccountRequest.class, this::createAccount));
+
+			router.route("/v1/accounts/login")
+					.method(HttpMethod.POST)
+					.handler(bodyHandler)
+					.handler(HandlerFactory.handler(LoginRequest.class, this::login));
+
+			router.route("/v1/decks")
+					.method(HttpMethod.PUT)
+					.handler(authHandler)
+					.handler(bodyHandler)
+					.handler(HandlerFactory.handler(DecksPutRequest.class, this::decksPut));
+
+			router.route("/v1/decks/{deckId}")
+					.method(HttpMethod.GET)
+					.handler(authHandler)
+					.handler(HandlerFactory.handler("deckId", this::decksGet));
+
+			router.route("/v1/decks/{deckId}")
+					.method(HttpMethod.POST)
+					.handler(authHandler)
+					.handler(bodyHandler)
+					.handler(HandlerFactory.handler(DecksUpdateCommand.class, "deckId", this::decksUpdate));
+
+			router.route("/v1/decks/{deckId}")
 					.method(HttpMethod.DELETE)
-					.blockingHandler(Sync.fiberHandler((context) -> {
+					.handler(authHandler)
+					.handler(HandlerFactory.handler("deckId", this::decksDelete));
 
-					}));
 
-			router.route(MATCHMAKE_PATH)
+			router.route("/v1/matchmaking/constructed/queue")
 					.method(HttpMethod.PUT)
-					.consumes("application/json")
-					.produces("application/json")
-					.handler(BodyHandler.create());
+					.handler(authHandler)
+					.handler(bodyHandler)
+					.handler(HandlerFactory.handler(MatchmakingQueuePutRequest.class, this::matchmakingConstructedQueuePut));
 
-			router.route(MATCHMAKE_PATH)
-					.method(HttpMethod.PUT)
-					.blockingHandler(suspendableHandler(context -> {
-						String userId = context.user().principal().getString("userId");
-						MatchmakingQueuePutRequest request = Serialization.deserialize(context.getBodyAsString(), MatchmakingQueuePutRequest.class);
-						WebResult<MatchmakingQueuePutResponse> result = matchmakingConstructedQueuePut(context, userId, request);
-						context.response().setStatusCode(result.responseCode()).end(result.toString());
-					}));
-
-			router.route(MATCHMAKE_PATH).failureHandler(LoggerHandler.create());
+			router.route("/v1/matchmaking/constructed/queue")
+					.method(HttpMethod.DELETE)
+					.handler(authHandler)
+					.handler(HandlerFactory.handler(this::matchmakingConstructedQueueDelete));
 
 			logger.info("Router configured.");
 			HttpServer listening = awaitResult(done -> server.requestHandler(router::accept).listen(done));
@@ -109,7 +141,6 @@ public class ServerImpl extends SyncVerticle implements Server {
 
 	@Override
 	public WebResult<GetAccountsResponse> getAccount(RoutingContext context, String userId, String targetUserId) throws SuspendExecution, InterruptedException {
-
 		if (userId.equals(targetUserId)) {
 			// TODO: Include private information including entire account join if necessary
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(new Account().id(targetUserId))));
@@ -203,8 +234,8 @@ public class ServerImpl extends SyncVerticle implements Server {
 
 
 	@Override
-	public WebResult<Void> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException {
-		return null;
+	public WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(decks.deleteDeck(new DeckDeleteRequest(deckId)));
 	}
 
 	@Override
