@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.proto3.net.client.models.*;
+import com.hiddenswitch.proto3.net.models.DeckDeleteResponse;
 import com.hiddenswitch.proto3.net.util.WebResult;
 import io.vertx.ext.web.RoutingContext;
 
@@ -23,7 +24,7 @@ public interface Server {
 
 	WebResult<DecksGetResponse> decksGet(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException;
 
-	WebResult<Void> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException;
+	WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException;
 
 	WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext context, String userId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException;
 
