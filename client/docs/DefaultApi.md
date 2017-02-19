@@ -11,7 +11,7 @@ Method | HTTP request | Description
 [**decksUpdate**](DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
-[**login**](DefaultApi.md#login) | **POST** /accounts/login | 
+[**login**](DefaultApi.md#login) | **POST** /accounts | 
 [**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
 [**matchmakingConstructedQueuePut**](DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/constructed/queue | 
 

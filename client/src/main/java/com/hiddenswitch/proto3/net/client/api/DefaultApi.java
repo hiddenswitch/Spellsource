@@ -838,7 +838,7 @@ public class DefaultApi {
         
 
         // create path and map variables
-        String localVarPath = "/accounts/login".replaceAll("\\{format\\}","json");
+        String localVarPath = "/accounts".replaceAll("\\{format\\}","json");
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
