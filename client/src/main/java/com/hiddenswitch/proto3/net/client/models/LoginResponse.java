@@ -27,6 +27,7 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.Account;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -36,8 +37,29 @@ import java.io.Serializable;
  */
 
 public class LoginResponse  implements Serializable {
+  @SerializedName("account")
+  private Account account = null;
+
   @SerializedName("loginToken")
   private String loginToken = null;
+
+  public LoginResponse account(Account account) {
+    this.account = account;
+    return this;
+  }
+
+   /**
+   * Get account
+   * @return account
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Account getAccount() {
+    return account;
+  }
+
+  public void setAccount(Account account) {
+    this.account = account;
+  }
 
   public LoginResponse loginToken(String loginToken) {
     this.loginToken = loginToken;
@@ -67,12 +89,13 @@ public class LoginResponse  implements Serializable {
       return false;
     }
     LoginResponse loginResponse = (LoginResponse) o;
-    return Objects.equals(this.loginToken, loginResponse.loginToken);
+    return Objects.equals(this.account, loginResponse.account) &&
+        Objects.equals(this.loginToken, loginResponse.loginToken);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(loginToken);
+    return Objects.hash(account, loginToken);
   }
 
   @Override
@@ -80,6 +103,7 @@ public class LoginResponse  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class LoginResponse {\n");
     
+    sb.append("    account: ").append(toIndentedString(account)).append("\n");
     sb.append("    loginToken: ").append(toIndentedString(loginToken)).append("\n");
     sb.append("}");
     return sb.toString();

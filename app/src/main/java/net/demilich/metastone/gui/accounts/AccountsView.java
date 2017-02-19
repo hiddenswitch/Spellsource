@@ -1,14 +1,11 @@
 package net.demilich.metastone.gui.accounts;
 
+import com.hiddenswitch.minionate.Client;
 import com.hiddenswitch.minionate.tasks.ApiTask;
-import com.hiddenswitch.proto3.net.client.ApiClient;
-import com.hiddenswitch.proto3.net.client.Configuration;
-import com.hiddenswitch.proto3.net.client.api.DefaultApi;
-import com.hiddenswitch.proto3.net.client.auth.ApiKeyAuth;
-import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
-import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
-import com.hiddenswitch.proto3.net.client.models.LoginRequest;
-import com.hiddenswitch.proto3.net.client.models.LoginResponse;
+import com.hiddenswitch.proto3.net.client.models.*;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,12 +17,11 @@ import net.demilich.metastone.NotificationProxy;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.IOException;
-import java.util.prefs.Preferences;
 
 /**
  * Created by bberman on 2/13/17.
  */
-public class AccountsView extends BorderPane implements EventHandler<ActionEvent> {
+public class AccountsView extends BorderPane implements EventHandler<ActionEvent>, ChangeListener<Account> {
 	@FXML
 	protected TextField usernameField;
 
@@ -50,9 +46,9 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 	@FXML
 	protected Button backButton;
 
-	private LoginInfo loginInfo;
+	private AccountsViewOptions accountsViewOptions;
 
-	public AccountsView(LoginInfo loginInfo) {
+	public AccountsView(AccountsViewOptions accountsViewOptions) {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/AccountsView.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
@@ -68,13 +64,17 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 		logoutButton.setOnAction(this);
 		backButton.setOnAction(this);
 
-		injectLoginInfo(loginInfo);
+		update(accountsViewOptions);
+
+		final ReadOnlyObjectProperty<Account> account = Client.getInstance().getAccount();
+		account.addListener(this);
+		changed(account, null, account.getValue());
 	}
 
 	@Override
 	public void handle(ActionEvent event) {
 		// Until we have some sort of login info, don't do anything.
-		if (loginInfo == null) {
+		if (accountsViewOptions == null) {
 			return;
 		}
 
@@ -86,22 +86,19 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 			String loginToken = null;
 			String error = null;
 
-			if (loginInfo.isCreate()) {
+			if (accountsViewOptions.isCreate()) {
 				if (!validateUsername(username)
 						|| !validateEmail(email)
 						|| !validatePassword(password)) {
 					return;
 				}
 				// Everything seems valid!
-				ApiTask<CreateAccountResponse> createAccount = new ApiTask<CreateAccountResponse>(api -> api
-						.createAccount(new CreateAccountRequest().email(email).name(username).password(password)));
+				ApiTask<CreateAccountResponse> createAccount = Client.getInstance().createAccount(username, email, password);
 
 				createAccount.blockingDialogExecute("Accounts", "Creating the requested account...");
 
 				if (createAccount.getError() != null) {
 					error = createAccount.getError().getMessage();
-				} else {
-					loginToken = createAccount.getValue().getLoginToken();
 				}
 			} else {
 				if (!validateEmail(email)
@@ -109,27 +106,22 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 					return;
 				}
 
-				ApiTask<LoginResponse> login = new ApiTask<LoginResponse>(api -> api
-						.login(new LoginRequest().email(email).password(password)));
+				ApiTask<LoginResponse> login = Client.getInstance().login(email, password);
 
 				login.blockingDialogExecute("Accounts", "Logging in...");
 
 				if (login.getError() != null) {
 					error = login.getError().getMessage();
-				} else {
-					loginToken = login.getValue().getLoginToken();
 				}
 			}
 
 			if (error != null) {
 				messageLabel.setText("Error: " + error);
-			} else {
-				NotificationProxy.sendNotification(GameNotification.SAVE_LOGIN_INFO, loginToken);
 			}
 		} else if (event.getSource() == logoutButton) {
-			NotificationProxy.sendNotification(GameNotification.SAVE_LOGIN_INFO, null);
+			Client.getInstance().logout();
 		} else if (event.getSource() == switchTypeButton) {
-			injectLoginInfo(new LoginInfo().withCreate(!this.loginInfo.isCreate()).withToken(this.loginInfo.getToken()));
+			update(new AccountsViewOptions().withCreate(!this.accountsViewOptions.isCreate()));
 		} else if (event.getSource() == backButton) {
 			NotificationProxy.sendNotification(GameNotification.MAIN_MENU);
 		}
@@ -172,10 +164,10 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 		return true;
 	}
 
-	public void injectLoginInfo(LoginInfo info) {
-		this.loginInfo = info;
+	public void update(AccountsViewOptions info) {
+		this.accountsViewOptions = info;
 
-		final boolean loggedIn = info.getToken() != null && !info.getToken().isEmpty();
+		final boolean loggedIn = Client.getInstance().getAccount().get() != null;
 		final boolean creatingAccount = info.isCreate();
 
 		emailField.setDisable(loggedIn);
@@ -191,6 +183,23 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 		} else {
 			switchTypeButton.setText("Create an account instead.");
 			createOrLoginButton.setText("Login");
+		}
+	}
+
+	@Override
+	public void changed(ObservableValue<? extends Account> observable, Account oldValue, Account newValue) {
+		if (newValue == null) {
+			// Logged out
+			update(new AccountsViewOptions().withCreate(this.accountsViewOptions.isCreate()));
+			usernameField.setText("");
+			emailField.setText("");
+			passwordField.setText("");
+		} else {
+			// Logged in
+			update(new AccountsViewOptions().withCreate(this.accountsViewOptions.isCreate()));
+			usernameField.setText(newValue.getName());
+			emailField.setText(newValue.getEmail());
+			passwordField.setText("nopass");
 		}
 	}
 }

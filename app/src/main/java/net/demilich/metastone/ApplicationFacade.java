@@ -94,8 +94,6 @@ public class ApplicationFacade extends Facade<GameNotification> {
 
 		registerCommand(GameNotification.SAVE_TRAINING_DATA, new SaveTrainingDataCommand());
 		registerCommand(GameNotification.REQUEST_TRAINING_DATA, new RequestTrainingDataCommand());
-
-		registerCommand(GameNotification.SAVE_LOGIN_INFO, new SaveLoginTokenCommand());
 	}
 
 	public void startUp() {
