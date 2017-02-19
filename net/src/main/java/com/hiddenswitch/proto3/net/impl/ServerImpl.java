@@ -200,7 +200,9 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 			return WebResult.failed(new RuntimeException("Invalid email address."));
 		}
 
-		return WebResult.succeeded(new LoginResponse().loginToken(internalResponse.getToken().token));
+		return WebResult.succeeded(new LoginResponse()
+				.account(getAccount(internalResponse.getToken().getAccessKey()))
+				.loginToken(internalResponse.getToken().token));
 	}
 
 	@Override

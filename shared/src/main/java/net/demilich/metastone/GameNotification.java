@@ -99,6 +99,5 @@ public enum GameNotification {
 
 	// Accounts
 	CREATE_ACCOUNT_SELECTED,
-	REQUEST_LOGIN_INFO,
-	SAVE_LOGIN_INFO
+	REQUEST_LOGIN_INFO
 }
