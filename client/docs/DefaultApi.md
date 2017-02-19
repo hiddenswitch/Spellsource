@@ -72,9 +72,19 @@ Deletes the specified deck by ID.
 ### Example
 ```java
 // Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
 //import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
 //import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
 String deckId = "deckId_example"; // String | The Deck ID to delete.
@@ -98,7 +108,7 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[TokenSecurity](../README.md#TokenSecurity)
 
 ### HTTP request headers
 
@@ -116,9 +126,19 @@ Gets a deck. Only viewable for the owner of the deck or players in the alliance.
 ### Example
 ```java
 // Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
 //import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
 //import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
 String deckId = "deckId_example"; // String | The Deck ID to get.
@@ -143,7 +163,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[TokenSecurity](../README.md#TokenSecurity)
 
 ### HTTP request headers
 
@@ -161,9 +181,19 @@ Creates a new deck with optionally specified inventory IDs, a name and a hero cl
 ### Example
 ```java
 // Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
 //import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
 //import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
 DecksPutRequest request = new DecksPutRequest(); // DecksPutRequest | The deck creation request. 
@@ -188,7 +218,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[TokenSecurity](../README.md#TokenSecurity)
 
 ### HTTP request headers
 
@@ -206,9 +236,19 @@ Updates the deck by adding or removing cards, changing the hero class, or renami
 ### Example
 ```java
 // Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
 //import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
 //import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
 String deckId = "deckId_example"; // String | The Deck ID to update.
@@ -235,7 +275,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[TokenSecurity](../README.md#TokenSecurity)
 
 ### HTTP request headers
 
@@ -253,9 +293,19 @@ Get a specific account. Contains more information if the userId matches the requ
 ### Example
 ```java
 // Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
 //import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
 //import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
 String targetUserId = "targetUserId_example"; // String | 
@@ -280,7 +330,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[TokenSecurity](../README.md#TokenSecurity)
 
 ### HTTP request headers
 
@@ -298,9 +348,19 @@ Get a list of accounts including user profile information.
 ### Example
 ```java
 // Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
 //import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
 //import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
 GetAccountsRequest request = new GetAccountsRequest(); // GetAccountsRequest | 
@@ -325,7 +385,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[TokenSecurity](../README.md#TokenSecurity)
 
 ### HTTP request headers
 
@@ -388,9 +448,19 @@ Removes your client from the matchmaking queue.
 ### Example
 ```java
 // Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
 //import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
 //import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
 try {
@@ -411,7 +481,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[TokenSecurity](../README.md#TokenSecurity)
 
 ### HTTP request headers
 
@@ -429,9 +499,19 @@ Enters your client into a matchmaking queue for constructed deck matchmaking. Cl
 ### Example
 ```java
 // Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
 //import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
 //import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
 MatchmakingQueuePutRequest request = new MatchmakingQueuePutRequest(); // MatchmakingQueuePutRequest | The matchmaking queue entry. Contains the deck. 
@@ -456,7 +536,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[TokenSecurity](../README.md#TokenSecurity)
 
 ### HTTP request headers
 

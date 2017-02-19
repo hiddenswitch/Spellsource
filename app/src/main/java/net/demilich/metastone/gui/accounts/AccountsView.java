@@ -1,7 +1,9 @@
 package net.demilich.metastone.gui.accounts;
 
 import com.hiddenswitch.minionate.tasks.ApiTask;
+import com.hiddenswitch.proto3.net.client.ApiClient;
 import com.hiddenswitch.proto3.net.client.Configuration;
+import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 import com.hiddenswitch.proto3.net.client.auth.ApiKeyAuth;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
@@ -90,7 +92,6 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 						|| !validatePassword(password)) {
 					return;
 				}
-
 				// Everything seems valid!
 				ApiTask<CreateAccountResponse> createAccount = new ApiTask<CreateAccountResponse>(api -> api
 						.createAccount(new CreateAccountRequest().email(email).name(username).password(password)));
@@ -100,7 +101,7 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 				if (createAccount.getError() != null) {
 					error = createAccount.getError().getMessage();
 				} else {
-					loginToken = createAccount.getResult().getLoginToken();
+					loginToken = createAccount.getValue().getLoginToken();
 				}
 			} else {
 				if (!validateEmail(email)
@@ -116,7 +117,7 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 				if (login.getError() != null) {
 					error = login.getError().getMessage();
 				} else {
-					loginToken = login.getResult().getLoginToken();
+					loginToken = login.getValue().getLoginToken();
 				}
 			}
 
@@ -177,8 +178,8 @@ public class AccountsView extends BorderPane implements EventHandler<ActionEvent
 		final boolean loggedIn = info.getToken() != null && !info.getToken().isEmpty();
 		final boolean creatingAccount = info.isCreate();
 
-		emailField.setEditable(!loggedIn);
-		passwordField.setEditable(!loggedIn);
+		emailField.setDisable(loggedIn);
+		passwordField.setDisable(loggedIn);
 		createOrLoginButton.setDisable(loggedIn);
 		logoutButton.setDisable(!loggedIn);
 		switchTypeButton.setDisable(loggedIn);

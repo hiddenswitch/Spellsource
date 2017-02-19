@@ -1,9 +1,11 @@
 package com.hiddenswitch.minionate.tasks;
 
 import com.hiddenswitch.proto3.net.client.ApiClient;
+import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 import com.hiddenswitch.proto3.net.client.auth.ApiKeyAuth;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutRequest;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
@@ -42,22 +44,28 @@ public class MatchmakingTask extends Task<Void> {
 		Logger logger = LoggerFactory.getLogger(MatchmakingTask.class);
 		this.isMatchmaking.set(true);
 		try {
-			// Configure a client
-			ApiClient client = Configuration.getDefaultApiClient();
-			ApiKeyAuth DisabledSecurity = (ApiKeyAuth) client.getAuthentication("DisabledSecurity");
-			DisabledSecurity.setApiKey(userId);
-			DefaultApi api = new DefaultApi(client);
+			DefaultApi api = new DefaultApi();
 
 			// Make the first request
 			MatchmakingQueuePutRequest request = new MatchmakingQueuePutRequest();
 			final List<String> cardIds = this.deck.getCards().toList().stream()
 					.map(Card::getCardId)
 					.collect(Collectors.toList());
-			request.setDeckId("1");
 
-			MatchmakingQueuePutResponse response = api.matchmakingConstructedQueuePut(request);
+			// Legacy deck for now
+			request.setDeck(new MatchmakingDeck().cards(cardIds).heroClass(deck.getHeroClass().toString()));
+			MatchmakingQueuePutResponse response = null;
+			try {
+				response = api.matchmakingConstructedQueuePut(request);
+			} catch (ApiException e) {
+				if (e.getCode() == 401) {
+					logger.error("Unauthorized matchmaking. Did the client log in?");
+					this.isMatchmaking.set(false);
+				}
+			}
 
 			while (isMatchmaking.get()
+					&& response != null
 					&& response.getConnection() == null) {
 				logger.debug("Retrying multiplayer connection...");
 				Thread.sleep(2000);
@@ -66,7 +74,7 @@ public class MatchmakingTask extends Task<Void> {
 			}
 
 			if (!isMatchmaking.get()
-					&& (response.getConnection() == null)) {
+					&& (response == null || response.getConnection() == null)) {
 				logger.debug("Canceling matchmaking.");
 				api.matchmakingConstructedQueueDelete();
 			} else {

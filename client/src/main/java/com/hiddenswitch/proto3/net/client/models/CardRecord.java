@@ -55,6 +55,12 @@ public class CardRecord  implements Serializable {
   @SerializedName("borrowedByUserId")
   private String borrowedByUserId = null;
 
+  @SerializedName("allianceId")
+  private String allianceId = null;
+
+  @SerializedName("donorUserId")
+  private String donorUserId = null;
+
   public CardRecord id(String id) {
     this.id = id;
     return this;
@@ -155,6 +161,42 @@ public class CardRecord  implements Serializable {
     this.borrowedByUserId = borrowedByUserId;
   }
 
+  public CardRecord allianceId(String allianceId) {
+    this.allianceId = allianceId;
+    return this;
+  }
+
+   /**
+   * Get allianceId
+   * @return allianceId
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getAllianceId() {
+    return allianceId;
+  }
+
+  public void setAllianceId(String allianceId) {
+    this.allianceId = allianceId;
+  }
+
+  public CardRecord donorUserId(String donorUserId) {
+    this.donorUserId = donorUserId;
+    return this;
+  }
+
+   /**
+   * Get donorUserId
+   * @return donorUserId
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getDonorUserId() {
+    return donorUserId;
+  }
+
+  public void setDonorUserId(String donorUserId) {
+    this.donorUserId = donorUserId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -169,12 +211,14 @@ public class CardRecord  implements Serializable {
         Objects.equals(this.cardDesc, cardRecord.cardDesc) &&
         Objects.equals(this.userId, cardRecord.userId) &&
         Objects.equals(this.collectionIds, cardRecord.collectionIds) &&
-        Objects.equals(this.borrowedByUserId, cardRecord.borrowedByUserId);
+        Objects.equals(this.borrowedByUserId, cardRecord.borrowedByUserId) &&
+        Objects.equals(this.allianceId, cardRecord.allianceId) &&
+        Objects.equals(this.donorUserId, cardRecord.donorUserId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardDesc, userId, collectionIds, borrowedByUserId);
+    return Objects.hash(id, cardDesc, userId, collectionIds, borrowedByUserId, allianceId, donorUserId);
   }
 
   @Override
@@ -187,6 +231,8 @@ public class CardRecord  implements Serializable {
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    collectionIds: ").append(toIndentedString(collectionIds)).append("\n");
     sb.append("    borrowedByUserId: ").append(toIndentedString(borrowedByUserId)).append("\n");
+    sb.append("    allianceId: ").append(toIndentedString(allianceId)).append("\n");
+    sb.append("    donorUserId: ").append(toIndentedString(donorUserId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

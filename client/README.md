@@ -134,10 +134,6 @@ Authentication schemes defined for the API:
 - **API key parameter name**: X-Auth-Token
 - **Location**: HTTP header
 
-### DefaultSecurity
-
-- **Type**: HTTP basic authentication
-
 
 ## Recommendation
 
