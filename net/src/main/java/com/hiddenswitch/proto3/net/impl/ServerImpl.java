@@ -88,21 +88,18 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 			router.route("/v1/accounts")
 					.handler(bodyHandler);
 			router.route("/v1/accounts")
+					.method(HttpMethod.POST)
+					.handler(HandlerFactory.handler(LoginRequest.class, this::login));
+			router.route("/v1/accounts")
+					.method(HttpMethod.PUT)
+					.handler(HandlerFactory.handler(CreateAccountRequest.class, this::createAccount));
+			router.route("/v1/accounts")
 					.method(HttpMethod.GET)
 					.handler(authHandler);
 			router.route("/v1/accounts")
 					.method(HttpMethod.GET)
 					.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
 
-			router.route("/v1/accounts")
-					.method(HttpMethod.PUT)
-					.handler(HandlerFactory.handler(CreateAccountRequest.class, this::createAccount));
-
-			router.route("/v1/accounts/login")
-					.handler(bodyHandler);
-			router.route("/v1/accounts/login")
-					.method(HttpMethod.POST)
-					.handler(HandlerFactory.handler(LoginRequest.class, this::login));
 
 			router.route("/v1/decks")
 					.handler(bodyHandler);

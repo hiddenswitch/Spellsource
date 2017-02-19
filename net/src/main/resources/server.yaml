@@ -285,7 +285,6 @@ paths:
             An account has been successfully created.
           schema:
             $ref: '#/definitions/CreateAccountResponse'
-  /accounts/login:
     post:
       description: |
         Login with a username and password, receiving an authentication token to use for future sessions.
