@@ -39,6 +39,9 @@ import java.io.Serializable;
  */
 
 public class InventoryCollection  implements Serializable {
+  @SerializedName("_id")
+  private String id = null;
+
   @SerializedName("userId")
   private String userId = null;
 
@@ -53,6 +56,24 @@ public class InventoryCollection  implements Serializable {
 
   @SerializedName("inventory")
   private List<CardRecord> inventory = new ArrayList<CardRecord>();
+
+  public InventoryCollection id(String id) {
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public InventoryCollection userId(String userId) {
     this.userId = userId;
@@ -159,7 +180,8 @@ public class InventoryCollection  implements Serializable {
       return false;
     }
     InventoryCollection inventoryCollection = (InventoryCollection) o;
-    return Objects.equals(this.userId, inventoryCollection.userId) &&
+    return Objects.equals(this.id, inventoryCollection.id) &&
+        Objects.equals(this.userId, inventoryCollection.userId) &&
         Objects.equals(this.name, inventoryCollection.name) &&
         Objects.equals(this.heroClass, inventoryCollection.heroClass) &&
         Objects.equals(this.type, inventoryCollection.type) &&
@@ -168,7 +190,7 @@ public class InventoryCollection  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, name, heroClass, type, inventory);
+    return Objects.hash(id, userId, name, heroClass, type, inventory);
   }
 
   @Override
@@ -176,6 +198,7 @@ public class InventoryCollection  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class InventoryCollection {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");

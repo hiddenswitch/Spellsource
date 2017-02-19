@@ -4,6 +4,8 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.ApiKeyAuthHandler;
 import com.hiddenswitch.proto3.net.Server;
+import com.hiddenswitch.proto3.net.Service;
+import com.hiddenswitch.proto3.net.amazon.UserRecord;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CardRecord;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
@@ -41,7 +43,8 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 /**
  * Created by bberman on 11/27/16.
  */
-public class ServerImpl extends SyncVerticle implements Server {
+public class ServerImpl extends Service<ServerImpl> implements Server {
+	CardsImpl cards = new CardsImpl();
 	AccountsImpl accounts = new AccountsImpl().withEmbeddedConfiguration();
 	GamesImpl games = new GamesImpl();
 	MatchmakingImpl matchmaking = new MatchmakingImpl();
@@ -60,7 +63,7 @@ public class ServerImpl extends SyncVerticle implements Server {
 		Router router = Router.router(vertx);
 
 		try {
-			for (Verticle verticle : Arrays.asList(accounts, games, matchmaking, bots, logic, decks, inventory)) {
+			for (Verticle verticle : Arrays.asList(cards, accounts, games, matchmaking, bots, logic, decks, inventory)) {
 				final String name = verticle.getClass().getName();
 				logger.info("Deploying " + name + "...");
 				String deploymentId = Sync.awaitResult(done -> vertx.deployVerticle(verticle, done));
@@ -102,21 +105,22 @@ public class ServerImpl extends SyncVerticle implements Server {
 					.handler(HandlerFactory.handler(LoginRequest.class, this::login));
 
 			router.route("/v1/decks")
-					.handler(authHandler);
-			router.route("/v1/decks")
 					.handler(bodyHandler);
+			router.route("/v1/decks")
+					.handler(authHandler);
 			router.route("/v1/decks")
 					.method(HttpMethod.PUT)
 					.handler(HandlerFactory.handler(DecksPutRequest.class, this::decksPut));
 
 			router.route("/v1/decks/:deckId")
+					.handler(bodyHandler);
+			router.route("/v1/decks/:deckId")
 					.handler(authHandler);
+
 			router.route("/v1/decks/:deckId")
 					.method(HttpMethod.GET)
 					.handler(HandlerFactory.handler("deckId", this::decksGet));
 
-			router.route("/v1/decks/:deckId")
-					.handler(bodyHandler);
 			router.route("/v1/decks/:deckId")
 					.method(HttpMethod.POST)
 					.handler(HandlerFactory.handler(DecksUpdateCommand.class, "deckId", this::decksUpdate));
@@ -127,9 +131,9 @@ public class ServerImpl extends SyncVerticle implements Server {
 
 
 			router.route("/v1/matchmaking/constructed/queue")
-					.handler(authHandler);
-			router.route("/v1/matchmaking/constructed/queue")
 					.handler(bodyHandler);
+			router.route("/v1/matchmaking/constructed/queue")
+					.handler(authHandler);
 			router.route("/v1/matchmaking/constructed/queue")
 					.method(HttpMethod.PUT)
 					.handler(HandlerFactory.handler(MatchmakingQueuePutRequest.class, this::matchmakingConstructedQueuePut));
@@ -148,13 +152,18 @@ public class ServerImpl extends SyncVerticle implements Server {
 
 	@Override
 	public WebResult<GetAccountsResponse> getAccount(RoutingContext context, String userId, String targetUserId) throws SuspendExecution, InterruptedException {
+		// TODO: If it's an ally, send all the information
 		if (userId.equals(targetUserId)) {
-			// TODO: Include private information including entire account join if necessary
-			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(new Account().id(targetUserId))));
+			final Account account = getAccount(userId);
+			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(account)));
 		} else {
-			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(new Account().id(targetUserId))));
+			UserRecord record = accounts.get(userId);
+			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(new Account()
+					.name(record.getProfile().getDisplayName())
+					.id(targetUserId))));
 		}
 	}
+
 
 	@Override
 	public WebResult<GetAccountsResponse> getAccounts(RoutingContext context, String userId, GetAccountsRequest request) throws SuspendExecution, InterruptedException {
@@ -171,11 +180,14 @@ public class ServerImpl extends SyncVerticle implements Server {
 			return WebResult.failed(new RuntimeException("Invalid password."));
 		}
 
+		// Initialize the collection
+		final String userId = internalResponse.userId;
+		logic.initializeUser(new InitializeUserRequest().withUserId(userId));
+
+		final Account account = getAccount(userId);
 		return WebResult.succeeded(new CreateAccountResponse()
 				.loginToken(internalResponse.loginToken.token)
-				.account(new Account()
-						.id(internalResponse.userId)
-						.name(request.getName())));
+				.account(account));
 	}
 
 	@Override
@@ -273,10 +285,6 @@ public class ServerImpl extends SyncVerticle implements Server {
 			statusCode = 202;
 		}
 
-		final HttpServerResponse response = routingContext.response();
-		response.setStatusCode(statusCode);
-		response.headers().add("Content-Type", "application/json");
-
 		return WebResult.succeeded(statusCode, userResponse);
 	}
 
@@ -289,5 +297,31 @@ public class ServerImpl extends SyncVerticle implements Server {
 						.isCanceled(internalResponse.getCanceled());
 
 		return WebResult.succeeded(response);
+	}
+
+	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {
+		// Get the personal collection
+		UserRecord record = accounts.get(userId);
+		GetCollectionResponse personalCollection = inventory.getCollection(GetCollectionRequest.user(record.getId()));
+
+		final String displayName = record.getProfile().getDisplayName();
+		return new Account()
+				.id(record.getId())
+				.decks(Collections.emptyList())
+				.personalCollection(new InventoryCollection()
+						.name(String.format("The %s Collection", displayName))
+						.id(personalCollection.getCollectionId())
+						.type(CollectionTypes.USER.toString())
+						.inventory(personalCollection.getCardRecords().stream().map(cr ->
+								new CardRecord()
+										.userId(cr.getUserId())
+										.collectionIds(cr.getCollectionIds())
+										.cardDesc(cr.getCardDescMap())
+										.id(cr.getId())
+										.allianceId(cr.getAllianceId())
+										.donorUserId(cr.getDonorUserId()))
+								.collect(Collectors.toList())))
+				.email(record.getProfile().getEmailAddress())
+				.name(displayName);
 	}
 }

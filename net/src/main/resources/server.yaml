@@ -19,8 +19,6 @@ consumes:
 produces:
   - application/json
 securityDefinitions:
-  DefaultSecurity:
-    type: basic
   TokenSecurity:
     type: apiKey
     in: header
@@ -33,6 +31,14 @@ definitions:
         type: 'string'
       name:
         type: 'string'
+      email:
+        type: 'string'
+      decks:
+        type: 'array'
+        items:
+          $ref: '#/definitions/InventoryCollection'
+      personalCollection:
+        $ref: '#/definitions/InventoryCollection'
   GetAccountsRequest:
     type: 'object'
     required:
@@ -149,6 +155,8 @@ definitions:
   InventoryCollection:
     type: 'object'
     properties:
+      _id:
+        type: 'string'
       userId:
         type: 'string'
       name:
@@ -179,6 +187,10 @@ definitions:
         items:
           type: 'string'
       borrowedByUserId:
+        type: 'string'
+      allianceId:
+        type: 'string'
+      donorUserId:
         type: 'string'
   JavaSerializationObject:
     type: 'object'
@@ -224,7 +236,7 @@ paths:
         Get a specific account. Contains more information if the userId matches the requesting user.
       operationId: getAccount
       security:
-        TokenSecurity: []
+        - TokenSecurity: []
       parameters:
         - name: targetUserId
           in: path
@@ -242,7 +254,7 @@ paths:
         Get a list of accounts including user profile information.
       operationId: getAccounts
       security:
-        TokenSecurity: []
+        - TokenSecurity: []
       parameters:
         - name: request
           in: body
@@ -294,7 +306,7 @@ paths:
         Creates a new deck with optionally specified inventory IDs, a name and a hero class.
       operationId: decksPut
       security:
-        TokenSecurity: []
+        - TokenSecurity: []
       parameters:
         - name: request
           in: body
@@ -315,7 +327,7 @@ paths:
         Gets a deck. Only viewable for the owner of the deck or players in the alliance.
       operationId: decksGet
       security:
-        TokenSecurity: []
+        - TokenSecurity: []
       parameters:
         - name: deckId
           in: path
@@ -332,7 +344,7 @@ paths:
         Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.
       operationId: decksUpdate
       security:
-        TokenSecurity: []
+        - TokenSecurity: []
       parameters:
         - name: deckId
           in: path
@@ -357,7 +369,7 @@ paths:
         Deletes the specified deck by ID.
       operationId: decksDelete
       security:
-        TokenSecurity: []
+        - TokenSecurity: []
       parameters:
         - name: deckId
           in: path
@@ -374,7 +386,7 @@ paths:
         Enters your client into a matchmaking queue for constructed deck matchmaking. Clients have to keep their matchmaking queue entry alive by regularly retrying when they have not yet been matched. Retry within 5 seconds.
       operationId: matchmakingConstructedQueuePut
       security:
-        TokenSecurity: []
+        - TokenSecurity: []
       parameters:
         - name: request
           in: body
@@ -398,7 +410,7 @@ paths:
       description: Removes your client from the matchmaking queue.
       operationId: matchmakingConstructedQueueDelete
       security:
-        TokenSecurity: []
+        - TokenSecurity: []
       responses:
         "200":
           description: |

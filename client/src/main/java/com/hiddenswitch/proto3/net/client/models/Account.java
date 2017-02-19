@@ -27,8 +27,11 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.Serializable;
 /**
@@ -41,6 +44,15 @@ public class Account  implements Serializable {
 
   @SerializedName("name")
   private String name = null;
+
+  @SerializedName("email")
+  private String email = null;
+
+  @SerializedName("decks")
+  private List<InventoryCollection> decks = new ArrayList<InventoryCollection>();
+
+  @SerializedName("personalCollection")
+  private InventoryCollection personalCollection = null;
 
   public Account id(String id) {
     this.id = id;
@@ -78,6 +90,65 @@ public class Account  implements Serializable {
     this.name = name;
   }
 
+  public Account email(String email) {
+    this.email = email;
+    return this;
+  }
+
+   /**
+   * Get email
+   * @return email
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public Account decks(List<InventoryCollection> decks) {
+    this.decks = decks;
+    return this;
+  }
+
+  public Account addDecksItem(InventoryCollection decksItem) {
+    this.decks.add(decksItem);
+    return this;
+  }
+
+   /**
+   * Get decks
+   * @return decks
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public List<InventoryCollection> getDecks() {
+    return decks;
+  }
+
+  public void setDecks(List<InventoryCollection> decks) {
+    this.decks = decks;
+  }
+
+  public Account personalCollection(InventoryCollection personalCollection) {
+    this.personalCollection = personalCollection;
+    return this;
+  }
+
+   /**
+   * Get personalCollection
+   * @return personalCollection
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public InventoryCollection getPersonalCollection() {
+    return personalCollection;
+  }
+
+  public void setPersonalCollection(InventoryCollection personalCollection) {
+    this.personalCollection = personalCollection;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -89,12 +160,15 @@ public class Account  implements Serializable {
     }
     Account account = (Account) o;
     return Objects.equals(this.id, account.id) &&
-        Objects.equals(this.name, account.name);
+        Objects.equals(this.name, account.name) &&
+        Objects.equals(this.email, account.email) &&
+        Objects.equals(this.decks, account.decks) &&
+        Objects.equals(this.personalCollection, account.personalCollection);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name);
+    return Objects.hash(id, name, email, decks, personalCollection);
   }
 
   @Override
@@ -104,6 +178,9 @@ public class Account  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    decks: ").append(toIndentedString(decks)).append("\n");
+    sb.append("    personalCollection: ").append(toIndentedString(personalCollection)).append("\n");
     sb.append("}");
     return sb.toString();
   }

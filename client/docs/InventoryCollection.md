@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**id** | **String** |  |  [optional]
 **userId** | **String** |  |  [optional]
 **name** | **String** |  |  [optional]
 **heroClass** | **String** |  |  [optional]

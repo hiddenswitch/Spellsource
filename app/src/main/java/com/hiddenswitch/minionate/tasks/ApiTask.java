@@ -13,40 +13,23 @@ import javafx.scene.control.ButtonType;
  * Created by bberman on 2/13/17.
  */
 public class ApiTask<R> extends Task<R> {
-	private String token;
-	private R result;
 	private ApiException error;
-	private ApiRunnable<R> runnable;
+	private ApiRequestResponse<R> runnable;
 
 	@FunctionalInterface
-	public interface ApiRunnable<T> {
+	public interface ApiRequestResponse<T> {
 		T run(DefaultApi api) throws ApiException;
 	}
 
-	public ApiTask(ApiRunnable<R> runnable) {
+	public ApiTask(ApiRequestResponse<R> runnable) {
 		this.runnable = runnable;
-	}
-
-	public ApiTask(ApiRunnable<R> runnable, String token) {
-		this.runnable = runnable;
-		this.token = token;
-	}
-
-	public R getResult() {
-		return result;
 	}
 
 	@Override
 	protected R call() throws Exception {
-		ApiClient client = Configuration.getDefaultApiClient();
+		DefaultApi api = new DefaultApi();
 
-		if (this.token != null) {
-			ApiKeyAuth TokenSecurity = (ApiKeyAuth) client.getAuthentication("TokenSecurity");
-			TokenSecurity.setApiKey(this.token);
-		}
-
-		DefaultApi api = new DefaultApi(client);
-
+		R result;
 		try {
 			result = runnable.run(api);
 		} catch (ApiException e) {
@@ -57,16 +40,8 @@ public class ApiTask<R> extends Task<R> {
 		return result;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
 	public ApiException getError() {
 		return error;
-	}
-
-	public ApiRunnable<R> getRunnable() {
-		return runnable;
 	}
 
 	/**
@@ -80,8 +55,6 @@ public class ApiTask<R> extends Task<R> {
 		dialog.setTitle(title);
 		dialog.setHeaderText(null);
 
-		new Thread(this).start();
-
 		this.setOnSucceeded(e -> {
 			dialog.close();
 		});
@@ -90,7 +63,8 @@ public class ApiTask<R> extends Task<R> {
 			dialog.close();
 		});
 
+		new Thread(this).start();
+
 		dialog.showAndWait();
-		this.cancel(true);
 	}
 }

@@ -9,6 +9,8 @@ Name | Type | Description | Notes
 **userId** | **String** |  |  [optional]
 **collectionIds** | **List&lt;String&gt;** |  |  [optional]
 **borrowedByUserId** | **String** |  |  [optional]
+**allianceId** | **String** |  |  [optional]
+**donorUserId** | **String** |  |  [optional]
 
 
 

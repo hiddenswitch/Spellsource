@@ -3,10 +3,12 @@ package com.hiddenswitch.proto3.net.impl;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.WebResult;
 
+import java.io.Serializable;
+
 /**
  * Created by bberman on 2/15/17.
  */
-public class WebResultImpl<T> implements WebResult<T> {
+public class WebResultImpl<T> implements WebResult<T>, Serializable {
 	private final T result;
 	private final Throwable cause;
 	private final Integer responseCode;
@@ -37,12 +39,12 @@ public class WebResultImpl<T> implements WebResult<T> {
 
 	@Override
 	public T result() {
-		return null;
+		return this.result;
 	}
 
 	@Override
 	public Throwable cause() {
-		return null;
+		return this.cause;
 	}
 
 	@Override
