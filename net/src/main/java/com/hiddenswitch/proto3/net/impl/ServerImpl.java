@@ -7,11 +7,8 @@ import com.hiddenswitch.proto3.net.Server;
 import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.amazon.UserRecord;
 import com.hiddenswitch.proto3.net.client.models.*;
-import com.hiddenswitch.proto3.net.client.models.CardRecord;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
-import com.hiddenswitch.proto3.net.client.models.LoginRequest;
-import com.hiddenswitch.proto3.net.client.models.LoginResponse;
 import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
 import com.hiddenswitch.proto3.net.impl.util.HandlerFactory;
 import com.hiddenswitch.proto3.net.models.*;
@@ -22,45 +19,52 @@ import io.vertx.core.Verticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.sync.Sync;
-import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.*;
+import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.LoggerHandler;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.*;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by bberman on 11/27/16.
  */
 public class ServerImpl extends Service<ServerImpl> implements Server {
+	static Logger logger = LoggerFactory.getLogger(ServerImpl.class);
 	CardsImpl cards = new CardsImpl();
-	AccountsImpl accounts = new AccountsImpl().withEmbeddedConfiguration();
+	AccountsImpl accounts = new AccountsImpl();
 	GamesImpl games = new GamesImpl();
 	MatchmakingImpl matchmaking = new MatchmakingImpl();
 	BotsImpl bots = new BotsImpl();
 	LogicImpl logic = new LogicImpl();
 	DecksImpl decks = new DecksImpl();
-	InventoryImpl inventory = new InventoryImpl().withEmbeddedConfiguration();
+	InventoryImpl inventory = new InventoryImpl();
 
 	@Override
 	@Suspendable
-	public void start() {
-		Logger logger = LoggerFactory.getLogger(ServerImpl.class);
+	public void start() throws RuntimeException {
 		HttpServer server = vertx.createHttpServer(new HttpServerOptions()
 				.setHost("0.0.0.0")
 				.setPort(8080));
 		Router router = Router.router(vertx);
+
+		configureMongo();
 
 		try {
 			for (Verticle verticle : Arrays.asList(cards, accounts, games, matchmaking, bots, logic, decks, inventory)) {
@@ -225,7 +229,7 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 				.cardDesc(cr.getCardDescMap())
 				.collectionIds(cr.getCollectionIds())
 				.borrowedByUserId(cr.getBorrowedByUserId())
-				.userId(cr.getUserId())).collect(Collectors.toList());
+				.userId(cr.getUserId())).collect(toList());
 
 		return WebResult.succeeded(new DecksGetResponse()
 				.inventoryIdsSize(inventoryItems.size())
@@ -319,8 +323,64 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 										.id(cr.getId())
 										.allianceId(cr.getAllianceId())
 										.donorUserId(cr.getDonorUserId()))
-								.collect(Collectors.toList())))
+								.collect(toList())))
 				.email(record.getProfile().getEmailAddress())
 				.name(displayName);
+	}
+
+
+	private void configureMongo() {
+		// Get the Mongo URL
+		if (System.getProperties().containsKey("mongo.url")
+				|| System.getenv().containsKey("MONGO_URL")) {
+
+			String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017/local"));
+			URI url;
+			try {
+				url = new URI(mongoUrl);
+			} catch (URISyntaxException e) {
+				logger.error("The Mongo URL is malformed. We got " + mongoUrl);
+				throw new RuntimeException(e);
+			}
+
+			final JsonObject config = new JsonObject().put("host", url.getHost())
+					.put("port", url.getPort());
+
+			if (url.getUserInfo() != null && !url.getUserInfo().isEmpty()) {
+				String username = url.getUserInfo().split(":")[0];
+				String password = url.getUserInfo().split(":")[1];
+
+				config.put("username", username)
+						.put("password", password);
+			}
+
+			String db_name = MongoClient.DEFAULT_DB_NAME;
+			if (url.getPath() != null && !url.getPath().isEmpty()) {
+				db_name = url.getPath().startsWith("/") ? url.getPath().substring(1) : url.getPath();
+			}
+			config.put("db_name", db_name);
+
+			String query = url.getQuery();
+			if (query != null
+					&& !query.isEmpty()
+					&& query.contains("authSource")) {
+
+				List<NameValuePair> params = URLEncodedUtils.parse(url, "UTF-8");
+				Optional<NameValuePair> authSource = params.stream().filter(p -> Objects.equals(p.getName(), "authSource")).findFirst();
+				if (authSource.isPresent()) {
+					config.put("authSource", authSource.get().getValue());
+				}
+			}
+
+			MongoClient client = MongoClient.createShared(vertx, config);
+
+			accounts.withMongo(client);
+			inventory.withMongo(client);
+			decks.withMongo(client);
+		} else {
+			accounts.withEmbeddedConfiguration();
+			inventory.withEmbeddedConfiguration();
+			decks.withEmbeddedConfiguration();
+		}
 	}
 }
