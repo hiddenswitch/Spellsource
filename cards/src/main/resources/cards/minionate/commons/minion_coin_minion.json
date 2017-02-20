@@ -6,7 +6,7 @@
 	"baseAttack": 7,
 	"baseHp": 6,
 	"heroClass": "ANY",
-	"rarity": "COMMON",
+	"rarity": "LEGENDARY",
 	"description": "Whenever your opponent summons a minion, gain a Coin.",
 	"trigger": {
 		"eventTrigger": {

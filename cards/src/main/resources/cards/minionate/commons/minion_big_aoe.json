@@ -5,7 +5,7 @@
 	"baseAttack": 7,
 	"baseHp": 7,
 	"heroClass": "ANY",
-	"rarity": "COMMON",
+	"rarity": "LEGENDARY",
 	"description": "Battlecry: Deal damage to all minions equal to the number of minions on board.",
 	"battlecry": {
 		"spell": {
