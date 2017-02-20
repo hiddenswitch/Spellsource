@@ -85,6 +85,7 @@ public abstract class Service<T extends Service<T>> extends SyncVerticle {
 		this.mongo = mongo;
 	}
 
+	@SuppressWarnings("unchecked")
 	public T withMongo(MongoClient client) {
 		this.mongo = client;
 		return (T) this;

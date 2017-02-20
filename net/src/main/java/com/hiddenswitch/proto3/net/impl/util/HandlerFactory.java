@@ -52,10 +52,10 @@ public class HandlerFactory {
 		});
 	}
 
-	public static Handler<RoutingContext> handler(AuthorizedHandler internalHandler) {
+	public static <R> Handler<RoutingContext> handler(AuthorizedHandler<R> internalHandler) {
 		return suspendableHandler((context) -> {
 			String userId = context.user().principal().getString("_id");
-			WebResult result = internalHandler.call(context, userId);
+			WebResult<R> result = internalHandler.call(context, userId);
 			respond(context, result);
 		});
 	}

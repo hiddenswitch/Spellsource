@@ -36,7 +36,7 @@ public class GameLogicAsync extends GameLogic {
 
 		NetworkBehaviour networkBehaviour = (NetworkBehaviour) player.getBehaviour();
 
-		networkBehaviour.mulliganAsync((ServerGameContext) context, player, firstHand.getStarterCards(), (List<Card> discardedCards) -> {
+		networkBehaviour.mulliganAsync(context, player, firstHand.getStarterCards(), (List<Card> discardedCards) -> {
 			logger.debug("Discarded cards from {}: {}", player.getName(), discardedCards.stream().map(Card::toString).reduce((a, b) -> a + ", " + b));
 			handleMulligan(player, begins, firstHand, discardedCards);
 			callback.handle(discardedCards);
@@ -62,7 +62,7 @@ public class GameLogicAsync extends GameLogic {
 	@Suspendable
 	protected void resolveBattlecry(int playerId, Actor actor) {
 		logger.debug("AsyncDebug {} successfully called resolveBattlecry.", this.context);
-		Boolean result = Sync.awaitResult(new BattlecryResult(playerId, actor));
+		Boolean result = Sync.awaitFiber(new BattlecryResult(playerId, actor));
 	}
 
 	@Override
@@ -90,8 +90,8 @@ public class GameLogicAsync extends GameLogic {
 			}
 
 			NetworkBehaviour networkBehaviour = (NetworkBehaviour) player.getBehaviour();
-			networkBehaviour.requestActionAsync((ServerGameContext) context, player, battlecryActions, action -> {
-				BattlecryAction battlecryAction = (BattlecryAction)action;
+			networkBehaviour.requestActionAsync(context, player, battlecryActions, action -> {
+				BattlecryAction battlecryAction = (BattlecryAction) action;
 				performBattlecryAction(playerId, actor, player, battlecryAction);
 				logger.debug("AsyncDebug {} successfully called resolveBattlecryAsync", this.context);
 				if (result != null) {
@@ -113,7 +113,7 @@ public class GameLogicAsync extends GameLogic {
 		if (!resolveBattlecry) {
 			super.equipWeapon(playerId, weapon, false);
 		} else {
-			Boolean result = Sync.awaitResult(new EquipWeaponResult(playerId, weapon, resolveBattlecry));
+			Boolean result = Sync.awaitFiber(new EquipWeaponResult(playerId, weapon, resolveBattlecry));
 		}
 	}
 
@@ -152,7 +152,7 @@ public class GameLogicAsync extends GameLogic {
 
 		Boolean summonResult = false;
 		try {
-			summonResult = Sync.awaitResult(done -> summonAsync(playerId, minion, source, index, true, done));
+			summonResult = Sync.awaitFiber(done -> summonAsync(playerId, minion, source, index, true, done));
 		} catch (Throwable e) {
 			LoggerUtils.log(this, context, e);
 		}

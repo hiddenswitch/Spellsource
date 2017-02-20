@@ -3,6 +3,8 @@ package com.hiddenswitch.proto3.net.common;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.util.LoggerUtils;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
@@ -35,8 +37,19 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 	@Override
 	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		logger.debug("Requesting mulligan from wrapped behaviour. Player: {}, cards: {}", player, cards);
-		return getWrapBehaviour().mulligan(context, player, cards);
+		if (isServer()) {
+			logger.debug("Requesting mulligan from wrapped behaviour using blocking behaviour. Player: {}, cards: {}", player, cards);
+			List<Card> mulliganResults = null;
+			try {
+				mulliganResults = Sync.awaitFiber(done -> context.networkRequestMulligan(player, cards, result -> done.handle(Future.succeededFuture(result))));
+			} catch (Throwable e) {
+				LoggerUtils.log(this, context, e);
+			}
+			return mulliganResults;
+		} else {
+			logger.debug("Requesting mulligan from wrapped behaviour. Player: {}, cards: {}", player, cards);
+			return getWrapBehaviour().mulligan(context, player, cards);
+		}
 	}
 
 	@Override
@@ -53,7 +66,7 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 			logger.debug("Requesting action from network using blocking behaviour.");
 			GameAction action = null;
 			try {
-				action = Sync.awaitEvent(done -> requestActionAsync(context, player, validActions, done));
+				action = Sync.awaitFiber(done -> requestActionAsync(context, player, validActions, result -> done.handle(Future.succeededFuture(result))));
 			} catch (Throwable e) {
 				LoggerUtils.log(this, context, e);
 			}
@@ -78,6 +91,7 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 			super.requestActionAsync(context, player, validActions, handler);
 		}
 	}
+
 	@Override
 	@Suspendable
 	public void onGameOver(GameContext context, int playerId, int winningPlayerId) {
