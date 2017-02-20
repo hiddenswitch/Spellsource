@@ -1,0 +1,420 @@
+swagger: "2.0"
+info:
+  version: 1.0.1
+  title: Hidden Switch Minionate API
+  description: The Minionate API for matchmaking, user accounts, collections management and more
+  contact:
+    name: Benjamin Berman
+    email: benjamin.s.berman@gmail.com
+    url: http://hiddenswitch.com
+  license:
+    name: MIT
+    url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+host: api-us-east-2.hiddenswitch.com:8080
+basePath: /v1
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  TokenSecurity:
+    type: apiKey
+    in: header
+    name: X-Auth-Token
+definitions:
+  Account:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+      name:
+        type: 'string'
+      email:
+        type: 'string'
+      decks:
+        type: 'array'
+        items:
+          $ref: '#/definitions/InventoryCollection'
+      personalCollection:
+        $ref: '#/definitions/InventoryCollection'
+  GetAccountsRequest:
+    type: 'object'
+    required:
+      - userIds
+    properties:
+      userIds:
+        description: |
+          An array of user IDs to fetch.
+        type: 'array'
+        items:
+          type: 'string'
+  GetAccountsResponse:
+    type: 'object'
+    properties:
+      accounts:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Account'
+  CreateAccountRequest:
+    type: 'object'
+    required:
+      - name
+      - email
+      - password
+    properties:
+      name:
+        description: |
+          A display name for the user.
+        type: 'string'
+      email:
+        description: |
+          An email account for password resets.
+        type: 'string'
+        format: 'email'
+      password:
+        description: |
+          A password used to login to Minionate.
+        type: 'string'
+        format: 'password'
+  CreateAccountResponse:
+    type: 'object'
+    properties:
+      loginToken:
+        description: |
+          A string containing the token to login with via the standard Minionate authentication method.
+        type: 'string'
+      account:
+        $ref: '#/definitions/Account'
+  LoginRequest:
+    type: 'object'
+    required:
+      - userId
+      - password
+    properties:
+      email:
+        type: 'string'
+      password:
+        type: 'string'
+        format: 'password'
+  LoginResponse:
+    properties:
+      account:
+        $ref: '#/definitions/Account'
+      loginToken:
+        type: 'string'
+  DecksPutRequest:
+    type: 'object'
+    required:
+      - 'heroClass'
+      - 'name'
+    properties:
+      heroClass:
+        type: 'string'
+      name:
+        type: 'string'
+      inventoryIds:
+        type: 'array'
+        items:
+          type: 'string'
+  DecksPutResponse:
+    type: 'object'
+    properties:
+      deckId:
+        type: 'string'
+  DecksUpdateCommand:
+    type: 'object'
+    properties:
+      setHeroClass:
+        type: 'string'
+      setName:
+        type: 'string'
+      setInventoryIds:
+        type: 'array'
+        items:
+          type: 'string'
+      pushInventoryIds:
+        type: 'object'
+        properties:
+          $each:
+            type: 'array'
+            items:
+              type: 'string'
+      pullAllInventoryIds:
+        type: 'array'
+        items:
+          type: 'string'
+  DecksGetResponse:
+    type: 'object'
+    properties:
+      collection:
+        $ref: '#/definitions/InventoryCollection'
+      inventoryIdsSize:
+        description: |
+          The current number of cards in this deck.
+        type: 'integer'
+  InventoryCollection:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+      userId:
+        type: 'string'
+      name:
+        type: 'string'
+      heroClass:
+        type: 'string'
+      type:
+        type: 'string'
+      inventory:
+        type: 'array'
+        items:
+          $ref: '#/definitions/CardRecord'
+  CardRecord:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+      cardDesc:
+        description: |
+          A CardDesc object that represents the definition of the card, including any legacy (permanence) properties.
+        type: 'object'
+        additionalProperties:
+          type: 'object'
+      userId:
+        type: 'string'
+      collectionIds:
+        type: 'array'
+        items:
+          type: 'string'
+      borrowedByUserId:
+        type: 'string'
+      allianceId:
+        type: 'string'
+      donorUserId:
+        type: 'string'
+  JavaSerializationObject:
+    type: 'object'
+    required:
+      - 'javaSerialized'
+    properties:
+      javaSerialized:
+        type: 'string'
+  MatchmakingDeck:
+    type: 'object'
+    required:
+      - 'cards'
+    properties:
+      heroClass:
+        type: 'string'
+      cards:
+        type: 'array'
+        items:
+          type: 'string'
+  MatchmakingQueuePutRequest:
+    type: 'object'
+    properties:
+      deckId:
+        type: 'string'
+      deck:
+        $ref: '#/definitions/MatchmakingDeck'
+  MatchmakingQueuePutResponse:
+    type: 'object'
+    properties:
+      connection:
+        $ref: '#/definitions/JavaSerializationObject'
+      retry:
+        $ref: '#/definitions/MatchmakingQueuePutRequest'
+  MatchCancelResponse:
+    type: 'object'
+    properties:
+      isCanceled:
+        type: 'boolean'
+paths:
+  /accounts/{targetUserId}:
+    get:
+      description: |
+        Get a specific account. Contains more information if the userId matches the requesting user.
+      operationId: getAccount
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: targetUserId
+          in: path
+          required: true
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            A specific user account.
+          schema:
+            $ref: '#/definitions/GetAccountsResponse'
+  /accounts:
+    get:
+      description: |
+        Get a list of accounts including user profile information.
+      operationId: getAccounts
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GetAccountsRequest'
+      responses:
+        "200":
+          description: |
+            Gets a list of user profile accounts
+          schema:
+            $ref: '#/definitions/GetAccountsResponse'
+    put:
+      description: |
+        Create an account with Minionate.
+      operationId: createAccount
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CreateAccountRequest'
+      responses:
+        "200":
+          description: |
+            An account has been successfully created.
+          schema:
+            $ref: '#/definitions/CreateAccountResponse'
+    post:
+      description: |
+        Login with a username and password, receiving an authentication token to use for future sessions.
+      operationId: login
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/LoginRequest'
+      responses:
+        "200":
+          description: |
+            A response containing the token to put into future request headers.
+          schema:
+            $ref: '#/definitions/LoginResponse'
+  /decks:
+    put:
+      description: |
+        Creates a new deck with optionally specified inventory IDs, a name and a hero class.
+      operationId: decksPut
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: request
+          in: body
+          description: |
+            The deck creation request.
+          required: true
+          schema:
+            $ref: '#/definitions/DecksPutRequest'
+      responses:
+        "200":
+          description: |
+            The server has created a deck with the optionally specified cards and provides the ID of the deck for later use.
+          schema:
+            $ref: '#/definitions/DecksPutResponse'
+  /decks/{deckId}:
+    get:
+      description: |
+        Gets a deck. Only viewable for the owner of the deck or players in the alliance.
+      operationId: decksGet
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: deckId
+          in: path
+          description: The Deck ID to get.
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            The deck has been successfully retrieved.
+          schema:
+            $ref: '#/definitions/DecksGetResponse'
+    post:
+      description: |
+        Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.
+      operationId: decksUpdate
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: deckId
+          in: path
+          description: The Deck ID to update.
+          required: true
+          type: 'string'
+        - name: updateCommand
+          in: body
+          description: |
+            An update command modifying specified properties of the deck.
+          required: true
+          schema:
+            $ref: '#/definitions/DecksUpdateCommand'
+      responses:
+        "200":
+          description: |
+            The update has been successfully applied.
+          schema:
+            $ref: '#/definitions/DecksGetResponse'
+    delete:
+      description: |
+        Deletes the specified deck by ID.
+      operationId: decksDelete
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: deckId
+          in: path
+          description: The Deck ID to delete.
+          required: true
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            The deck has been deleted.
+  /matchmaking/constructed/queue:
+    put:
+      description: |
+        Enters your client into a matchmaking queue for constructed deck matchmaking. Clients have to keep their matchmaking queue entry alive by regularly retrying when they have not yet been matched. Retry within 5 seconds.
+      operationId: matchmakingConstructedQueuePut
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: request
+          in: body
+          description: |
+            The matchmaking queue entry. Contains the deck.
+          required: true
+          schema:
+            $ref: '#/definitions/MatchmakingQueuePutRequest'
+      responses:
+        "200":
+          description: |
+            The client has been matched with a client and is ready to connect. Use the "connection" field for connection information (client specific).
+          schema:
+            $ref: '#/definitions/MatchmakingQueuePutResponse'
+        "202":
+          description: |
+            The client is waiting in the matchmaking queue and has been given a MatchmakingRequest object to retry with in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
+          schema:
+            $ref: '#/definitions/MatchmakingQueuePutResponse'
+    delete:
+      description: Removes your client from the matchmaking queue.
+      operationId: matchmakingConstructedQueueDelete
+      security:
+        - TokenSecurity: []
+      responses:
+        "200":
+          description: |
+            The client's cancel request has been processed. The result can be found in the body's MatchCancelResponse.
+          schema:
+            $ref: '#/definitions/MatchCancelResponse'

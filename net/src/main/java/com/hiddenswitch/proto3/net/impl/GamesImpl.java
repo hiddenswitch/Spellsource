@@ -6,20 +6,22 @@ import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Matchmaking;
 import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
-import com.hiddenswitch.proto3.net.common.ServerGameContext;
 import com.hiddenswitch.proto3.net.impl.server.GameSession;
 import com.hiddenswitch.proto3.net.impl.server.ServerClientConnection;
 import com.hiddenswitch.proto3.net.impl.server.ServerGameSession;
 import com.hiddenswitch.proto3.net.impl.util.ActivityMonitor;
+import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.IncomingMessage;
 import com.hiddenswitch.proto3.net.util.Serialization;
+import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.netty.channel.DefaultChannelId;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
+import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.ReplyException;
+import io.vertx.core.eventbus.ReplyFailure;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.net.NetServer;
@@ -32,6 +34,8 @@ import org.apache.commons.lang3.RandomUtils;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
+
+import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
 
 public class GamesImpl extends Service<GamesImpl> implements Games {
 	private Logger logger = LoggerFactory.getLogger(GamesImpl.class);
@@ -106,13 +110,13 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 
 	@Override
 	@Suspendable
-	public ContainsGameSessionResponse containsGameSession(ContainsGameSessionRequest request) throws SuspendExecution {
+	public ContainsGameSessionResponse containsGameSession(ContainsGameSessionRequest request) throws SuspendExecution, InterruptedException {
 		return new ContainsGameSessionResponse(this.getGames().containsKey(request.gameId));
 	}
 
 	@Override
 	@Suspendable
-	public CreateGameSessionResponse createGameSession(CreateGameSessionRequest request) throws SuspendExecution {
+	public CreateGameSessionResponse createGameSession(CreateGameSessionRequest request) throws SuspendExecution, InterruptedException {
 		if (request.getGameId() == null) {
 			throw new RuntimeException("Game ID cannot be null in a create game session request.");
 		}
@@ -232,14 +236,15 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	}
 
 	@Override
-	public void stop(Future<Void> fut) {
+	@Suspendable
+	public void stop() throws Exception {
 		super.stop();
 		getGames().values().forEach(ServerGameSession::kill);
-		server.close(fut.completer());
+		server.close();
 	}
 
 	@Override
-	public EndGameSessionResponse endGameSession(EndGameSessionRequest request) {
+	public EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution {
 		if (request.getGameId() == null) {
 			throw new RuntimeException("Game ID cannot be null in an end game session request.");
 		}
@@ -249,8 +254,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		return new EndGameSessionResponse();
 	}
 
-	@Suspendable
-	public void kill(String gameId) {
+	public void kill(String gameId) throws SuspendExecution, InterruptedException {
 		ServerGameSession session = games.get(gameId);
 
 		if (session == null) {
@@ -274,7 +278,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		// Kill the session
 		session.kill();
 
-		// Clear our maps of these socketsz
+		// Clear our maps of these sockets
 		sockets.forEach(s -> {
 			if (s != null) {
 				gameForSocket.remove(s);
@@ -302,15 +306,24 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		return Collections.unmodifiableMap(games);
 	}
 
-	private void expireMatch(String gameId) {
-		matchmaking.async((AsyncResult<MatchExpireResponse> response) -> {
-		}).expireMatch(new MatchExpireRequest(gameId));
+	private void expireMatch(String gameId) throws InterruptedException, SuspendExecution {
+		try {
+			matchmaking.sync().expireOrEndMatch(new MatchExpireRequest(gameId));
+		} catch (VertxException vertxException) {
+			// If the matchmaking service isn't visible, don't sweat it.
+			if (vertxException.getCause() instanceof ReplyException) {
+				if (((ReplyException) vertxException.getCause()).failureType() == ReplyFailure.NO_HANDLERS) {
+					return;
+				}
+			}
+
+			throw vertxException;
+		}
 	}
 
+	@Suspendable
 	private void onGameOver(ServerGameSession sgs) {
 		final String gameOverId = sgs.getGameId();
-		vertx.setTimer(CLEANUP_DELAY_MILLISECONDS, t -> {
-			kill(gameOverId);
-		});
+		vertx.setTimer(CLEANUP_DELAY_MILLISECONDS, suspendableHandler(t -> kill(gameOverId)));
 	}
 }

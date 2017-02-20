@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.hiddenswitch.minionate.Client;
+import com.hiddenswitch.proto3.net.client.models.Account;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +19,9 @@ import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.MetaStone;
 import net.demilich.metastone.NotificationProxy;
 
-public class MainMenuView extends BorderPane {
+public class MainMenuView extends BorderPane implements ChangeListener<String> {
+	@FXML
+	private Button createAccountButton;
 
 	@FXML
 	private Button deckBuilderButton;
@@ -77,6 +83,8 @@ public class MainMenuView extends BorderPane {
 
 		draftButton.setOnAction(event -> NotificationProxy.sendNotification(GameNotification.DRAFT_MODE_SELECTED));
 
+		createAccountButton.setOnAction(event -> NotificationProxy.sendNotification(GameNotification.CREATE_ACCOUNT_SELECTED));
+
 		if (!BuildConfig.DEV_BUILD) {
 			trainingModeButton.setVisible(false);
 			trainingModeButton.setManaged(false);
@@ -91,6 +99,9 @@ public class MainMenuView extends BorderPane {
 		versionLabel.setText(BuildConfig.VERSION + (BuildConfig.DEV_BUILD ? " (Dev build)" : ""));
 
 		donationButton.setOnAction(this::openDonation);
+
+		Client.getInstance().getToken().addListener(this);
+		changed(Client.getInstance().getToken(), null, Client.getInstance().getToken().getValue());
 	}
 
 	private void openDonation(ActionEvent event) {
@@ -104,4 +115,11 @@ public class MainMenuView extends BorderPane {
 		}
 	}
 
+	@Override
+	public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+		boolean loggedIn = newValue != null && !newValue.isEmpty();
+
+		multiplayerButton.setDisable(!loggedIn);
+		draftButton.setDisable(!loggedIn);
+	}
 }

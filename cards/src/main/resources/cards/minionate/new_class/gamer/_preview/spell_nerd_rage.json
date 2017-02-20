@@ -1,0 +1,27 @@
+{
+	"name": "Nerd Rage",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "WARRIOR",
+	"rarity": "RARE",
+	"description": "Deal 1 damage to a minion. If the minion lives, hire a 2/2 Pawn.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "ConditionalEffectSpell",
+		"spell1": {
+			"class": "DamageSpell",
+			"value": 1
+		},
+		"spell2": {
+			"class": "SummonSpell",
+			"card": "token_tauren_slime"
+		},
+		"condition": {
+			"class": "IsDeadCondition",
+			"invert": true
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

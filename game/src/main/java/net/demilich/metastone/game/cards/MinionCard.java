@@ -11,14 +11,17 @@ import net.demilich.metastone.game.actions.PlayMinionCardAction;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MinionCard extends Card {
-
+	private static Logger logger = LoggerFactory.getLogger(MinionCard.class);
 	private static final Set<Attribute> ignoredAttributes = new HashSet<Attribute>(
-			Arrays.asList(new Attribute[] { Attribute.PASSIVE_TRIGGER, Attribute.DECK_TRIGGER, Attribute.MANA_COST_MODIFIER, Attribute.BASE_ATTACK,
-					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO }));
+			Arrays.asList(new Attribute[]{Attribute.PASSIVE_TRIGGER, Attribute.DECK_TRIGGER, Attribute.MANA_COST_MODIFIER, Attribute.BASE_ATTACK,
+					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO}));
 
 	private final MinionCardDesc desc;
 
@@ -70,7 +73,12 @@ public class MinionCard extends Card {
 			}
 		}
 		if (desc.aura != null) {
-			minion.addSpellTrigger(desc.aura.create());
+			final Aura spellTrigger = desc.aura.create();
+			if (spellTrigger == null) {
+				logger.error("Failed to create an aura for minion!. cardId {}", minion.getSourceCard().getCardId());
+			} else {
+				minion.addSpellTrigger(spellTrigger);
+			}
 		}
 		if (desc.cardCostModifier != null) {
 			minion.setCardCostModifier(desc.cardCostModifier.create());
@@ -82,7 +90,7 @@ public class MinionCard extends Card {
 	public int getAttack() {
 		return getAttributeValue(Attribute.ATTACK);
 	}
-	
+
 	public int getBonusAttack() {
 		return getAttributeValue(Attribute.ATTACK_BONUS);
 	}
@@ -90,7 +98,7 @@ public class MinionCard extends Card {
 	public int getHp() {
 		return getAttributeValue(Attribute.HP);
 	}
-	
+
 	public int getBonusHp() {
 		return getAttributeValue(Attribute.HP_BONUS);
 	}

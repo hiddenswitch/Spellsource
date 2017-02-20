@@ -1,0 +1,28 @@
+{
+	"name": "Deal 2 damage and summon two 1/1",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Deal 2 damage and hire two 1/1 tokens.",
+	"targetSelection": "ANY",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"value": 2
+			},
+			{
+				"class": "SummonSpell",
+				"cards": [
+					"token_sapling",
+					"token_sapling"
+				]
+			}
+		]
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

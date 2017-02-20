@@ -1,0 +1,16 @@
+{
+	"name": "Reduce",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "FREE",
+	"description": "Transform a minion into a 1/1 LOC.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "TransformMinionSpell",
+		"card": "token_loc"
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

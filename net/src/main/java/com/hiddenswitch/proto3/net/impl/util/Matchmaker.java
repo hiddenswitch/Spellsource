@@ -41,6 +41,11 @@ public class Matchmaker extends AbstractMap<String, QueueEntry> {
 			Matchmaker.this.remove(this.entry1.userId);
 			Matchmaker.this.remove(this.entry2.userId);
 		}
+
+		public boolean isAllianceMatch() {
+			return entry1.deck instanceof AllianceDeck
+					&& entry2.deck instanceof AllianceDeck;
+		}
 	}
 
 	public synchronized boolean expire(String gameId) {

@@ -1,5 +1,37 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath 'gradle.plugin.org.detoeuf:swagger-codegen-plugin:1.6.3'
+    }
+}
+
+apply plugin: 'org.detoeuf.swagger-codegen'
+
+swagger {
+    inputSpec = 'net/src/main/resources/server.yaml'
+
+    output = 'client'
+    language = 'java'
+
+    additionalProperties = [
+            'invokerPackage'   : 'com.hiddenswitch.proto3.net.client',
+            'modelPackage'     : 'com.hiddenswitch.proto3.net.client.models',
+            'apiPackage'       : 'com.hiddenswitch.proto3.net.client.api',
+            'library'          : 'okhttp-gson',
+            'serializableModel': 'true',
+            'dateLibrary'      : 'java8',
+            'artifactId'       : 'client',
+            'hideGenerationTimestamp': 'true'
+    ]
+}
+
 subprojects {
     repositories {
+        maven { url 'https://jitpack.io' }
+        jcenter()
         mavenCentral()
     }
 
@@ -9,7 +41,7 @@ subprojects {
 
     sourceCompatibility = 1.8
 
-    project.version = '1.2.0'
+    project.version = '1.3.0'
 
     compileJava {
         options.encoding = 'UTF-8'

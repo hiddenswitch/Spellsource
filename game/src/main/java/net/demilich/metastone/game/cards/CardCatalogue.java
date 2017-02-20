@@ -15,10 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class CardCatalogue {
@@ -31,6 +28,7 @@ public class CardCatalogue {
 	private static Logger logger = LoggerFactory.getLogger(CardCatalogue.class);
 
 	private final static CardCollection cards = new CardCollection();
+	private final static Map<String, CardCatalogueRecord> records = new HashMap<>();
 
 	public static void add(Card card) {
 		cards.add(card);
@@ -52,6 +50,10 @@ public class CardCatalogue {
 		}
 
 		return null;
+	}
+
+	public static Map<String, CardCatalogueRecord> getRecords() {
+		return Collections.unmodifiableMap(records);
 	}
 
 	public static Card getCardByName(String name) {
@@ -170,15 +172,18 @@ public class CardCatalogue {
 
 		for (ResourceInputStream resourceInputStream : inputStreams) {
 			try {
-				CardDesc desc = cardParser.parseCard(resourceInputStream);
+				final CardCatalogueRecord record = cardParser.parseCard(resourceInputStream);
+				CardDesc desc = record.getDesc();
 				if (cardDesc.containsKey(desc.id)) {
 					logger.error("Card id {} is duplicated!", desc.id);
 				}
 				cardDesc.put(desc.id, desc);
+				records.put(desc.id, record);
 			} catch (Exception e) {
 				//logger.error("Error parsing card '{}'", resourceInputStream.fileName);
 				logger.error(e.toString());
 				badCards.add(resourceInputStream.fileName);
+				throw e;
 			}
 		}
 

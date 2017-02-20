@@ -1,0 +1,69 @@
+{
+	"name": "Rorden Gamsey",
+	"baseManaCost": 10,
+	"type": "MINION",
+	"baseAttack": 7,
+	"baseHp": 7,
+	"heroClass": "DRUID",
+	"rarity": "LEGENDARY",
+	"description": "Select One - Renew your Energy Cells; or gain 10 Armor.",
+	"options": [
+		{
+			"description": "Refresh Energy",
+			"spell": {
+				"class": "GainManaSpell",
+				"value": {
+					"class": "AlgebraicValueProvider",
+					"operation": "SUBTRACT",
+					"value1": {
+						"class": "PlayerAttributeValueProvider",
+						"playerAttribute": "MAX_MANA"
+					},
+					"value2": {
+						"class": "PlayerAttributeValueProvider",
+						"playerAttribute": "MANA"
+					}
+				}
+			}
+		},
+		{
+			"description": "Gain 10 Armor",
+			"spell": {
+				"class": "BuffHeroSpell",
+				"target": "FRIENDLY_HERO",
+				"armorBonus": 10
+			}
+		}
+	],
+	"bothOptions": {
+		"description": "Renew and 10 Armor",
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "BuffHeroSpell",
+					"target": "FRIENDLY_HERO",
+					"armorBonus": 10
+				},
+				{
+					"class": "GainManaSpell",
+					"value": {
+						"class": "AlgebraicValueProvider",
+						"operation": "SUBTRACT",
+						"value1": {
+							"class": "PlayerAttributeValueProvider",
+							"playerAttribute": "MAX_MANA"
+						},
+						"value2": {
+							"class": "PlayerAttributeValueProvider",
+							"playerAttribute": "MANA"
+						}
+					}
+				}
+			]
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

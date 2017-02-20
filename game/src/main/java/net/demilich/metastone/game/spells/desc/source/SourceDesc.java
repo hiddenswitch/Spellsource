@@ -1,10 +1,10 @@
 package net.demilich.metastone.game.spells.desc.source;
 
+import net.demilich.metastone.game.cards.desc.Desc;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.Map;
-
-import net.demilich.metastone.game.cards.desc.Desc;
 
 public class SourceDesc extends Desc<SourceArg> {
 

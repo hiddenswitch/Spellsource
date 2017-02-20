@@ -31,7 +31,7 @@ public class DeckFactory {
 		Deck randomDeck = DeckFactory.getRandomDeck(
 				heroClasses[RandomUtils.nextInt(0, heroClasses.length)],
 				new DeckFormat().withCardSets(
-						CardSet.PROCEDURAL_PREVIEW,
+						CardSet.MINIONATE,
 						CardSet.BASIC,
 						CardSet.CLASSIC));
 		return randomDeck;

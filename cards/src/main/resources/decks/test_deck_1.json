@@ -1,0 +1,26 @@
+{
+  "cards": [
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon",
+    "minion_draw_summon"
+  ],
+  "name": test_deck_1,
+  "heroClass": "WARRIOR",
+  "arbitrary": false
+}

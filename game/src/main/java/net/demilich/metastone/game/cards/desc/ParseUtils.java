@@ -46,126 +46,126 @@ public class ParseUtils {
 	public static Object parse(String argName, JsonObject jsonData, ParseValueType valueType) {
 		JsonElement entry = jsonData.get(argName);
 		switch (valueType) {
-		case INTEGER:
-			return entry.getAsInt();
-		case BOOLEAN:
-			return entry.getAsBoolean();
-		case STRING:
-			return entry.getAsString();
-		case STRING_ARRAY: {
-			JsonArray jsonArray = entry.getAsJsonArray();
-			String[] array = new String[jsonArray.size()];
-			for (int i = 0; i < array.length; i++) {
-				array[i] = jsonArray.get(i).getAsString();
-			}
-			return array;
-		}
-		case TARGET_SELECTION:
-			return Enum.valueOf(TargetSelection.class, entry.getAsString());
-		case TARGET_REFERENCE:
-			return parseEntityReference(entry.getAsString());
-		case TARGET_PLAYER:
-			return Enum.valueOf(TargetPlayer.class, entry.getAsString());
-		case RACE:
-			return Enum.valueOf(Race.class, entry.getAsString());
-		case SPELL:
-			return spellParser.deserialize(entry, SpellDesc.class, null);
-		case SPELL_ARRAY: {
-			JsonArray jsonArray = entry.getAsJsonArray();
-			SpellDesc[] array = new SpellDesc[jsonArray.size()];
-			for (int i = 0; i < array.length; i++) {
-				array[i] = spellParser.deserialize(jsonArray.get(i), SpellDesc.class, null);
-			}
-			return array;
-		}
-		case ATTRIBUTE:
-			return Enum.valueOf(Attribute.class, entry.getAsString());
-		case PLAYER_ATTRIBUTE:
-			return Enum.valueOf(PlayerAttribute.class, entry.getAsString());
-		case RARITY:
-			return Enum.valueOf(Rarity.class, entry.getAsString());
-		case HERO_CLASS:
-			return Enum.valueOf(HeroClass.class, entry.getAsString());
-		case HERO_CLASS_ARRAY: {
-			JsonArray jsonArray = entry.getAsJsonArray();
-			HeroClass[] array = new HeroClass[jsonArray.size()];
-			for (int i = 0; i < array.length; i++) {
-				array[i] = Enum.valueOf(HeroClass.class, jsonArray.get(i).getAsString());
-			}
-			return array;
-		}
-		case BOARD_POSITION_RELATIVE:
-			return Enum.valueOf(RelativeToSource.class, entry.getAsString());
-		case CARD_LOCATION:
-			return Enum.valueOf(CardLocation.class, entry.getAsString());
-		case OPERATION:
-			return Enum.valueOf(Operation.class, entry.getAsString());
-		case CARD_TYPE:
-			return Enum.valueOf(CardType.class, entry.getAsString());
-		case ENTITY_TYPE:
-			return Enum.valueOf(EntityType.class, entry.getAsString());
-		case ACTION_TYPE:
-			return Enum.valueOf(ActionType.class, entry.getAsString());
-		case TARGET_TYPE:
-			return Enum.valueOf(TargetType.class, entry.getAsString());
-		case CARD_DESC_TYPE:
-			return Enum.valueOf(CardDescType.class, entry.getAsString());
-		case ALGEBRAIC_OPERATION:
-			return Enum.valueOf(AlgebraicOperation.class, entry.getAsString());
-		case VALUE:
-			// value is either an int or a ValueProvider
-			// if it is not an object, parse it as int, else fall-through to VALUE_PROVIDER case
-			if (!entry.isJsonObject()) {
+			case INTEGER:
 				return entry.getAsInt();
+			case BOOLEAN:
+				return entry.getAsBoolean();
+			case STRING:
+				return entry.getAsString();
+			case STRING_ARRAY: {
+				JsonArray jsonArray = entry.getAsJsonArray();
+				String[] array = new String[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = jsonArray.get(i).getAsString();
+				}
+				return array;
 			}
-		case VALUE_PROVIDER:
-			ValueProviderDesc valueProviderDesc = valueProviderParser.deserialize(entry, ValueProviderDesc.class, null);
-			return valueProviderDesc.create();
-		case ENTITY_FILTER: {
-			FilterDesc filterDesc = filterParser.deserialize(entry, FilterDesc.class, null);
-			return filterDesc.create();
-		}
-		case CARD_SOURCE: {
-			SourceDesc sourceDesc = sourceParser.deserialize(entry, SourceDesc.class, null);
-			return sourceDesc.create();
-		}
-		case ENTITY_FILTER_ARRAY: {
-			JsonArray jsonArray = entry.getAsJsonArray();
-			EntityFilter[] array = new EntityFilter[jsonArray.size()];
-			for (int i = 0; i < array.length; i++) {
-				FilterDesc filterDesc = filterParser.deserialize(jsonArray.get(i), FilterDesc.class, null);
-				array[i] = filterDesc.create();
+			case TARGET_SELECTION:
+				return Enum.valueOf(TargetSelection.class, entry.getAsString());
+			case TARGET_REFERENCE:
+				return parseEntityReference(entry.getAsString());
+			case TARGET_PLAYER:
+				return Enum.valueOf(TargetPlayer.class, entry.getAsString());
+			case RACE:
+				return Enum.valueOf(Race.class, entry.getAsString());
+			case SPELL:
+				return spellParser.deserialize(entry, SpellDesc.class, null);
+			case SPELL_ARRAY: {
+				JsonArray jsonArray = entry.getAsJsonArray();
+				SpellDesc[] array = new SpellDesc[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = spellParser.deserialize(jsonArray.get(i), SpellDesc.class, null);
+				}
+				return array;
 			}
-			return array;
-		}
-		case CONDITION: {
-			ConditionDesc conditionDesc = conditionParser.deserialize(entry, ConditionDesc.class, null);
-			return conditionDesc.create();
-		}
-		case CONDITION_ARRAY: {
-			JsonArray jsonArray = entry.getAsJsonArray();
-			Condition[] array = new Condition[jsonArray.size()];
-			for (int i = 0; i < array.length; i++) {
-				ConditionDesc conditionDesc = conditionParser.deserialize(jsonArray.get(i), ConditionDesc.class, null);
-				array[i] = conditionDesc.create();
+			case ATTRIBUTE:
+				return Enum.valueOf(Attribute.class, entry.getAsString());
+			case PLAYER_ATTRIBUTE:
+				return Enum.valueOf(PlayerAttribute.class, entry.getAsString());
+			case RARITY:
+				return Enum.valueOf(Rarity.class, entry.getAsString());
+			case HERO_CLASS:
+				return Enum.valueOf(HeroClass.class, entry.getAsString());
+			case HERO_CLASS_ARRAY: {
+				JsonArray jsonArray = entry.getAsJsonArray();
+				HeroClass[] array = new HeroClass[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = Enum.valueOf(HeroClass.class, jsonArray.get(i).getAsString());
+				}
+				return array;
 			}
-			return array;
-		}
-		case TRIGGER:
-			JsonObject triggerObject = entry.getAsJsonObject();
-			TriggerDesc triggerDesc = new TriggerDesc();
-			triggerDesc.eventTrigger = triggerParser.deserialize(triggerObject.get("eventTrigger"), EventTriggerDesc.class, null);
-			triggerDesc.spell = spellParser.deserialize(triggerObject.get("spell"), SpellDesc.class, null);
-			triggerDesc.oneTurn = triggerObject.has("oneTurn") ? triggerObject.get("oneTurn").getAsBoolean() : false;
-			triggerDesc.persistentOwner = triggerObject.has("persistentOwner") ? triggerObject.get("persistentOwner").getAsBoolean() : false;
-			triggerDesc.turnDelay = triggerObject.has("turnDelay") ? triggerObject.get("turnDelay").getAsInt() : 0;
-			return triggerDesc;
-		case EVENT_TRIGGER:
-			return triggerParser.deserialize(entry, EventTriggerDesc.class, null);
-		case CARD_COST_MODIFIER:
-			return manaModifierParser.deserialize(entry, CardCostModifierDesc.class, null);
-		default:
-			break;
+			case BOARD_POSITION_RELATIVE:
+				return Enum.valueOf(RelativeToSource.class, entry.getAsString());
+			case CARD_LOCATION:
+				return Enum.valueOf(CardLocation.class, entry.getAsString());
+			case OPERATION:
+				return Enum.valueOf(Operation.class, entry.getAsString());
+			case CARD_TYPE:
+				return Enum.valueOf(CardType.class, entry.getAsString());
+			case ENTITY_TYPE:
+				return Enum.valueOf(EntityType.class, entry.getAsString());
+			case ACTION_TYPE:
+				return Enum.valueOf(ActionType.class, entry.getAsString());
+			case TARGET_TYPE:
+				return Enum.valueOf(TargetType.class, entry.getAsString());
+			case CARD_DESC_TYPE:
+				return Enum.valueOf(CardDescType.class, entry.getAsString());
+			case ALGEBRAIC_OPERATION:
+				return Enum.valueOf(AlgebraicOperation.class, entry.getAsString());
+			case VALUE:
+				// value is either an int or a ValueProvider
+				// if it is not an object, parse it as int, else fall-through to VALUE_PROVIDER case
+				if (!entry.isJsonObject()) {
+					return entry.getAsInt();
+				}
+			case VALUE_PROVIDER:
+				ValueProviderDesc valueProviderDesc = valueProviderParser.deserialize(entry, ValueProviderDesc.class, null);
+				return valueProviderDesc.create();
+			case ENTITY_FILTER: {
+				FilterDesc filterDesc = filterParser.deserialize(entry, FilterDesc.class, null);
+				return filterDesc.create();
+			}
+			case CARD_SOURCE: {
+				SourceDesc sourceDesc = sourceParser.deserialize(entry, SourceDesc.class, null);
+				return sourceDesc.create();
+			}
+			case ENTITY_FILTER_ARRAY: {
+				JsonArray jsonArray = entry.getAsJsonArray();
+				EntityFilter[] array = new EntityFilter[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					FilterDesc filterDesc = filterParser.deserialize(jsonArray.get(i), FilterDesc.class, null);
+					array[i] = filterDesc.create();
+				}
+				return array;
+			}
+			case CONDITION: {
+				ConditionDesc conditionDesc = conditionParser.deserialize(entry, ConditionDesc.class, null);
+				return conditionDesc.create();
+			}
+			case CONDITION_ARRAY: {
+				JsonArray jsonArray = entry.getAsJsonArray();
+				Condition[] array = new Condition[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					ConditionDesc conditionDesc = conditionParser.deserialize(jsonArray.get(i), ConditionDesc.class, null);
+					array[i] = conditionDesc.create();
+				}
+				return array;
+			}
+			case TRIGGER:
+				JsonObject triggerObject = entry.getAsJsonObject();
+				TriggerDesc triggerDesc = new TriggerDesc();
+				triggerDesc.eventTrigger = triggerParser.deserialize(triggerObject.get("eventTrigger"), EventTriggerDesc.class, null);
+				triggerDesc.spell = spellParser.deserialize(triggerObject.get("spell"), SpellDesc.class, null);
+				triggerDesc.oneTurn = triggerObject.has("oneTurn") && triggerObject.get("oneTurn").getAsBoolean();
+				triggerDesc.persistentOwner = triggerObject.has("persistentOwner") && triggerObject.get("persistentOwner").getAsBoolean();
+				triggerDesc.turnDelay = triggerObject.has("turnDelay") ? triggerObject.get("turnDelay").getAsInt() : 0;
+				return triggerDesc;
+			case EVENT_TRIGGER:
+				return triggerParser.deserialize(entry, EventTriggerDesc.class, null);
+			case CARD_COST_MODIFIER:
+				return manaModifierParser.deserialize(entry, CardCostModifierDesc.class, null);
+			default:
+				break;
 		}
 		return null;
 	}
@@ -173,70 +173,72 @@ public class ParseUtils {
 	private static EntityReference parseEntityReference(String str) {
 		String lowerCaseName = str.toLowerCase();
 		switch (lowerCaseName) {
-		case "none":
-			return EntityReference.NONE;
-		case "enemy_characters":
-			return EntityReference.ENEMY_CHARACTERS;
-		case "enemy_minions":
-			return EntityReference.ENEMY_MINIONS;
-		case "enemy_hero":
-			return EntityReference.ENEMY_HERO;
-		case "enemy_weapon":
-			return EntityReference.ENEMY_WEAPON;
-		case "friendly_characters":
-			return EntityReference.FRIENDLY_CHARACTERS;
-		case "friendly_minions":
-			return EntityReference.FRIENDLY_MINIONS;
-		case "other_friendly_minions":
-			return EntityReference.OTHER_FRIENDLY_MINIONS;
-		case "adjacent_minions":
-			return EntityReference.ADJACENT_MINIONS;
-		case "opposite_minions":
-			return EntityReference.OPPOSITE_MINIONS;
-		case "friendly_hero":
-			return EntityReference.FRIENDLY_HERO;
-		case "friendly_weapon":
-			return EntityReference.FRIENDLY_WEAPON;
-		case "all_minions":
-			return EntityReference.ALL_MINIONS;
-		case "all_characters":
-			return EntityReference.ALL_CHARACTERS;
-		case "all_other_characters":
-			return EntityReference.ALL_OTHER_CHARACTERS;
-		case "all_other_minions":
-			return EntityReference.ALL_OTHER_MINIONS;
-		case "event_target":
-			return EntityReference.EVENT_TARGET;
-		case "target":
-			return EntityReference.TARGET;
-		case "spell_target":
-			return EntityReference.SPELL_TARGET;
-		case "pending_card":
-			return EntityReference.PENDING_CARD;
-		case "event_card":
-			return EntityReference.EVENT_CARD;
-		case "self":
-			return EntityReference.SELF;
-		case "attacker":
-			return EntityReference.ATTACKER_REFERENCE;
-		case "friendly_hand":
-			return EntityReference.FRIENDLY_HAND;
-		case "enemy_hand":
-			return EntityReference.ENEMY_HAND;
-		case "leftmost_friendly_minion":
-			return EntityReference.LEFTMOST_FRIENDLY_MINION;
-		case "leftmost_enemy_minion":
-			return EntityReference.LEFTMOST_ENEMY_MINION;
-		case "friendly_player":
-			return EntityReference.FRIENDLY_PLAYER;
-		case "enemy_player":
-			return EntityReference.ENEMY_PLAYER;
-		case "minions_to_left":
-			return EntityReference.MINIONS_TO_LEFT;
-		case "minions_to_right":
-			return EntityReference.MINIONS_TO_RIGHT;
-		default:
-			return null;
+			case "none":
+				return EntityReference.NONE;
+			case "enemy_characters":
+				return EntityReference.ENEMY_CHARACTERS;
+			case "enemy_minions":
+				return EntityReference.ENEMY_MINIONS;
+			case "enemy_hero":
+				return EntityReference.ENEMY_HERO;
+			case "enemy_weapon":
+				return EntityReference.ENEMY_WEAPON;
+			case "friendly_characters":
+				return EntityReference.FRIENDLY_CHARACTERS;
+			case "friendly_minions":
+				return EntityReference.FRIENDLY_MINIONS;
+			case "other_friendly_minions":
+				return EntityReference.OTHER_FRIENDLY_MINIONS;
+			case "adjacent_minions":
+				return EntityReference.ADJACENT_MINIONS;
+			case "opposite_minions":
+				return EntityReference.OPPOSITE_MINIONS;
+			case "friendly_hero":
+				return EntityReference.FRIENDLY_HERO;
+			case "friendly_weapon":
+				return EntityReference.FRIENDLY_WEAPON;
+			case "all_minions":
+				return EntityReference.ALL_MINIONS;
+			case "all_characters":
+				return EntityReference.ALL_CHARACTERS;
+			case "all_other_characters":
+				return EntityReference.ALL_OTHER_CHARACTERS;
+			case "all_other_minions":
+				return EntityReference.ALL_OTHER_MINIONS;
+			case "event_target":
+				return EntityReference.EVENT_TARGET;
+			case "target":
+				return EntityReference.TARGET;
+			case "spell_target":
+				return EntityReference.SPELL_TARGET;
+			case "pending_card":
+				return EntityReference.PENDING_CARD;
+			case "event_card":
+				return EntityReference.EVENT_CARD;
+			case "self":
+				return EntityReference.SELF;
+			case "attacker":
+				return EntityReference.ATTACKER_REFERENCE;
+			case "friendly_hand":
+				return EntityReference.FRIENDLY_HAND;
+			case "enemy_hand":
+				return EntityReference.ENEMY_HAND;
+			case "leftmost_friendly_minion":
+				return EntityReference.LEFTMOST_FRIENDLY_MINION;
+			case "leftmost_enemy_minion":
+				return EntityReference.LEFTMOST_ENEMY_MINION;
+			case "friendly_player":
+				return EntityReference.FRIENDLY_PLAYER;
+			case "enemy_player":
+				return EntityReference.ENEMY_PLAYER;
+			case "minions_to_left":
+				return EntityReference.MINIONS_TO_LEFT;
+			case "minions_to_right":
+				return EntityReference.MINIONS_TO_RIGHT;
+			case "networked_card_instance":
+				return EntityReference.NETWORKED_CARD_INSTANCE;
+			default:
+				return null;
 		}
 	}
 

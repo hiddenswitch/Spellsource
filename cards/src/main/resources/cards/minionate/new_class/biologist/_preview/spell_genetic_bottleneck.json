@@ -1,0 +1,16 @@
+{
+	"name": "Genetic Bottleneck",
+	"baseManaCost": 6,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "FREE",
+	"description": "Return every minion to its owner's hand.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "ReturnMinionToHandSpell",
+		"target": "ALL_MINIONS"
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

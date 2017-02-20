@@ -1,5 +1,6 @@
 package net.demilich.metastone;
 
+import net.demilich.metastone.gui.accounts.SaveLoginTokenCommand;
 import net.demilich.metastone.gui.draftmode.StartDraftCommand;
 import net.demilich.nittygrittymvc.Facade;
 import net.demilich.nittygrittymvc.interfaces.IFacade;

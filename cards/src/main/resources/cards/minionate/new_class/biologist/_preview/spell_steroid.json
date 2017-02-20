@@ -1,0 +1,16 @@
+{
+	"name": "Steroid",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "RARE",
+	"description": "Gain 1 Energy this turn.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "GainManaSpell",
+		"value": 1
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

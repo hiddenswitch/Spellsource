@@ -3,6 +3,7 @@ package net.demilich.metastone.gui.mainmenu;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.demilich.metastone.gui.accounts.AccountsMediator;
 import net.demilich.metastone.gui.draftmode.DraftModeMediator;
 import net.demilich.metastone.gui.draftmode.StartDraftOptions;
 import net.demilich.nittygrittymvc.Mediator;
@@ -56,6 +57,9 @@ public class MainMenuMediator extends Mediator<GameNotification> {
 			// TODO: Where would be the wiser place to put this?
 			getFacade().sendNotification(GameNotification.START_DRAFT, new StartDraftOptions(RandomStringUtils.randomAlphanumeric(35)));
 			break;
+		case CREATE_ACCOUNT_SELECTED:
+			getFacade().registerMediator(new AccountsMediator());
+			break;
 		default:
 			break;
 		}
@@ -73,6 +77,7 @@ public class MainMenuMediator extends Mediator<GameNotification> {
 		notificationInterests.add(GameNotification.TRAINING_MODE_SELECTED);
 		notificationInterests.add(GameNotification.BATTLE_OF_DECKS_SELECTED);
 		notificationInterests.add(GameNotification.DRAFT_MODE_SELECTED);
+		notificationInterests.add(GameNotification.CREATE_ACCOUNT_SELECTED);
 		return notificationInterests;
 	}
 

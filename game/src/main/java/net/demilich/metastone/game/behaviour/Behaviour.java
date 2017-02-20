@@ -8,6 +8,7 @@ import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Card;
 
 public abstract class Behaviour implements IBehaviour, Serializable {
 
@@ -21,7 +22,13 @@ public abstract class Behaviour implements IBehaviour, Serializable {
 	}
 
 	@Override
+	@Suspendable
 	public void onGameOver(GameContext context, int playerId, int winningPlayerId) {
+	}
+
+	@Override
+	@Suspendable
+	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler) {
 	}
 
 	@Override
@@ -31,5 +38,10 @@ public abstract class Behaviour implements IBehaviour, Serializable {
 		if (handler != null) {
 			handler.handle(action);
 		}
+	}
+
+	@Override
+	@Suspendable
+	public void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId) {
 	}
 }

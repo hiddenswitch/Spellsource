@@ -1,0 +1,24 @@
+{
+	"name": "Bloatware",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 6,
+	"heroClass": "MAGE",
+	"rarity": "FREE",
+	"description": "Shrink any character that has been damaged by this minion.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "DamageCausedTrigger",
+			"hostTargetType": "IGNORE_OTHER_SOURCES"
+		},
+		"spell": {
+			"class": "AddAttributeSpell",
+			"target": "EVENT_TARGET",
+			"attribute": "FROZEN"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

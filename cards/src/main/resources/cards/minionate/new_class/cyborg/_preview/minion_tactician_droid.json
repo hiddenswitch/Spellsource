@@ -1,0 +1,21 @@
+{
+	"name": "Tactition Droid",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 4,
+	"heroClass": "HUNTER",
+	"rarity": "COMMON",
+	"description": "Your Secrets cost 0 Energy.",
+	"cardCostModifier": {
+		"class": "CardCostModifier",
+		"cardType": "SPELL",
+		"targetPlayer": "SELF",
+		"operation": "SET",
+		"value": 0,
+		"requiredAttribute": "SECRET"
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

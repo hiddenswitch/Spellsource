@@ -3,7 +3,7 @@ package com.hiddenswitch.proto3.net;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.models.MatchExpireRequest;
-import com.hiddenswitch.proto3.net.util.AbstractMatchmakingRuntime;
+import com.hiddenswitch.proto3.net.util.AbstractMatchmakingTest;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @RunWith(VertxUnitRunner.class)
-public class MatchmakingTest extends AbstractMatchmakingRuntime {
+public class MatchmakingTest extends AbstractMatchmakingTest {
 	@Test(timeout = 80000L)
 	public void testMatchmakeAndJoin(TestContext context) {
 		setLoggingLevel(Level.ERROR);
@@ -29,7 +29,7 @@ public class MatchmakingTest extends AbstractMatchmakingRuntime {
 			Strand.sleep(1000L);
 			getContext().assertNull(gameSessions.getGameSession(gameId));
 			final MatchExpireRequest request = new MatchExpireRequest(gameId);
-			getContext().assertFalse(service.expireMatch(request).expired, "We should fail to expire an already expired match.");
+			getContext().assertFalse(service.expireOrEndMatch(request).expired, "We should fail to expire an already expired match.");
 			createTwoPlayersAndMatchmake();
 		});
 

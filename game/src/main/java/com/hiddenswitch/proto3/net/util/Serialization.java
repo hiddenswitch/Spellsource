@@ -73,7 +73,6 @@ public class Serialization {
 		gsonBuilder.registerTypeAdapter(AuraDesc.class, new AuraDeserializer());
 		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDeserializer());
 		gsonBuilder.registerTypeAdapter(CardCostModifierDesc.class, new CardCostModifierDeserializer());
-		gsonBuilder.serializeNulls();
 		gsonBuilder.enableComplexMapKeySerialization();
 		gson = gsonBuilder.create();
 	}
@@ -84,6 +83,20 @@ public class Serialization {
 
 	public static String serialize(Object object) {
 		return gson.toJson(object);
+	}
+
+	public static byte[] serializeBytes(Object object) throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		serialize(object, bos);
+		return bos.toByteArray();
+	}
+
+	public static String serializeBase64(Object object) throws IOException {
+		return ObjectSerializer.serializeBase64(object);
+	}
+
+	public static <T> T deserialize(String base64String) {
+		return ObjectSerializer.deserializeBase64(base64String);
 	}
 
 	public static <T> T deserialize(String json, Class<T> classOfT) throws JsonSyntaxException {
@@ -98,7 +111,6 @@ public class Serialization {
 	public static <T> T deserialize(byte[] buffer) throws IOException, ClassNotFoundException {
 		return deserialize(new ByteArrayInputStream(buffer));
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {

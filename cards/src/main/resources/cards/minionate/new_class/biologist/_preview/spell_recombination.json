@@ -1,0 +1,21 @@
+{
+	"name": "Recombination",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "RARE",
+	"description": "Add 2 random opponent class cards to your hand.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "ReceiveCardSpell",
+		"value": 2,
+		"card": "spell_the_coin",
+		"cardFilter": {
+			"class": "CardFilter",
+			"heroClass": "OPPONENT"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,20 @@
+{
+	"name": "Swarm",
+	"baseManaCost": 10,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "RARE",
+	"description": "Hire 7 Aliens that died this game.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "ResurrectFromBothSpell",
+		"value": 7,
+		"cardFilter": {
+			"class": "CardFilter",
+			"race": "MURLOC"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

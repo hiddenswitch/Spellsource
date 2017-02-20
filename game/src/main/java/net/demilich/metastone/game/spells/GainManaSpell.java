@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import java.util.Map;
 
+import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
