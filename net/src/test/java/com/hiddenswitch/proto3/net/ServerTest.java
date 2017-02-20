@@ -22,6 +22,7 @@ import org.junit.Test;
 public class ServerTest extends ServiceTest<ServerImpl> {
 	@Test
 	public void testAccountFlow(TestContext context) throws ApiException {
+		Configuration.getDefaultApiClient().setBasePath("http://localhost:8080/v1");
 		DefaultApi api = new DefaultApi();
 		CreateAccountResponse response1 = api.createAccount(new CreateAccountRequest()
 				.name("username")

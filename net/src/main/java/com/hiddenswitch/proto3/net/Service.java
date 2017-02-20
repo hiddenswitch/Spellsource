@@ -84,4 +84,9 @@ public abstract class Service<T extends Service<T>> extends SyncVerticle {
 	public void setMongo(MongoClient mongo) {
 		this.mongo = mongo;
 	}
+
+	public T withMongo(MongoClient client) {
+		this.mongo = client;
+		return (T) this;
+	}
 }
