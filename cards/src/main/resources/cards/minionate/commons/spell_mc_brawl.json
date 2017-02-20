@@ -1,0 +1,17 @@
+{
+	"id": "spell_mc_brawl",
+	"name": "MC Brawl",
+	"baseManaCost": 10,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Destroy all minions except one.  Keep control of that minion.(chosen randomly)",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DestroyAllExceptOneMCSpell",
+		"target": "ALL_MINIONS"
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

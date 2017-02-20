@@ -1,23 +1,12 @@
 package com.hiddenswitch.proto3.net.amazon;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-
+import java.io.Serializable;
 import java.util.List;
 
-@DynamoDBTable(tableName = "authorizations")
-public class AuthorizationRecord {
-	private String userId;
-	private List<HashedLoginToken> loginTokens;
+public class AuthorizationRecord implements Serializable {
+	private List<HashedLoginSecret> tokens;
 	private String scrypt;
 
-	@DynamoDBHashKey
-	public String getUserId() {
-		return userId;
-	}
-
-	@DynamoDBAttribute
 	public String getScrypt() {
 		return scrypt;
 	}
@@ -26,16 +15,11 @@ public class AuthorizationRecord {
 		this.scrypt = scrypt;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public List<HashedLoginSecret> getTokens() {
+		return tokens;
 	}
 
-	@DynamoDBAttribute
-	public List<HashedLoginToken> getLoginTokens() {
-		return loginTokens;
-	}
-
-	public void setLoginTokens(List<HashedLoginToken> loginTokens) {
-		this.loginTokens = loginTokens;
+	public void setTokens(List<HashedLoginSecret> tokens) {
+		this.tokens = tokens;
 	}
 }

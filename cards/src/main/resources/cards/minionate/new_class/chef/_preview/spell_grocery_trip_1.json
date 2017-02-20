@@ -1,0 +1,23 @@
+{
+	"name": "Discover a minion",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Discover a minion.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DiscoverRandomCardSpell",
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"targetPlayer": "SELF"
+		},
+		"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "MINION"
+		}
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

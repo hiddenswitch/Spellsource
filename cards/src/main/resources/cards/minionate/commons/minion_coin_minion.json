@@ -1,0 +1,35 @@
+{
+	"id": "minion_coin_minion",
+	"name": "Coin Minion",
+	"baseManaCost": 6,
+	"type": "MINION",
+	"baseAttack": 7,
+	"baseHp": 6,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Whenever your opponent summons a minion, gain a Coin.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "MinionSummonedTrigger",
+			"sourcePlayer": "OPPONENT",
+			"queueCondition": {
+				"class": "CardPropertyCondition",
+				"cardId": "spell_the_coin",
+				"invert": true
+			}
+		},
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "ReceiveCardSpell",
+					"targetPlayer": "SELF",
+					"card": "spell_the_coin"
+				}
+			]
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

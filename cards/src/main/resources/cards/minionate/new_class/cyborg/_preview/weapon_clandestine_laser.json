@@ -1,0 +1,24 @@
+{
+	"name": "Clandestine Laser",
+	"baseManaCost": 3,
+	"type": "WEAPON",
+	"damage": 3,
+	"durability": 2,
+	"heroClass": "HUNTER",
+	"rarity": "RARE",
+	"description": "Gain +1 Charge whenever a Secret is shown.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "SecretRevealedTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "ModifyDurabilitySpell",
+			"targetPlayer": "SELF",
+			"value": 1
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

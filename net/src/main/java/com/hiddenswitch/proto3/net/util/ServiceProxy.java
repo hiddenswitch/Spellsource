@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.util;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
@@ -48,7 +49,7 @@ public class ServiceProxy<T> {
 	 * @return {T} A proxy whose methods will return the actual values.
 	 */
 	@Suspendable
-	public T sync() {
+	public T sync() throws SuspendExecution, InterruptedException {
 		next = null;
 		sync = true;
 		return proxy;

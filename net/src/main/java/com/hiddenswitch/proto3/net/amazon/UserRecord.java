@@ -2,28 +2,76 @@ package com.hiddenswitch.proto3.net.amazon;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hiddenswitch.proto3.net.impl.util.MongoRecord;
+import com.hiddenswitch.proto3.net.util.Result;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.AuthProvider;
+import io.vertx.ext.auth.User;
 
-@DynamoDBTable(tableName = "users")
-public class UserRecord {
-	@DynamoDBHashKey
-	public String getId() {
-		return id;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+
+import static com.hiddenswitch.proto3.net.util.QuickJson.json;
+
+public class UserRecord extends MongoRecord implements User, Serializable {
+	private Profile profile;
+	private AuthorizationRecord auth;
+
+	public UserRecord() {
+		super();
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public UserRecord(String id) {
+		super(id);
 	}
 
-	@DynamoDBAttribute
-	public User getUser() {
-		return user;
+	@JsonIgnore
+	private transient WeakReference<AuthProvider> authProvider;
+
+	public Profile getProfile() {
+		return profile;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 
-	public String id;
-	public User user;
+	@Override
+	@JsonIgnore
+	public User isAuthorised(String authority, Handler<AsyncResult<Boolean>> resultHandler) {
+		resultHandler.handle(Future.succeededFuture(true));
+		return this;
+	}
+
+	@Override
+	@JsonIgnore
+	public User clearCache() {
+		return null;
+	}
+
+	@Override
+	@JsonIgnore
+	public JsonObject principal() {
+		return json(this);
+	}
+
+	@Override
+	@JsonIgnore
+	public void setAuthProvider(AuthProvider authProvider) {
+		this.authProvider = new WeakReference<>(authProvider);
+	}
+
+	public AuthorizationRecord getAuth() {
+		return auth;
+	}
+
+	public void setAuth(AuthorizationRecord auth) {
+		this.auth = auth;
+	}
 }

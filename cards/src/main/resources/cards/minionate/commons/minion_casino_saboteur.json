@@ -1,0 +1,30 @@
+{
+	"id": "minion_casino_saboteur",
+	"name": "Casino Saboteur",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 5,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "At the end of your turn, give a random minion in your opponent's hand -1 Attack.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TurnEndTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "BuffSpell",
+			"target": "ENEMY_HAND",
+			"attackBonus": -1,
+			"filter": {
+				"class": "CardFilter",
+				"cardType": "MINION"
+			},
+			"randomTarget": true
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

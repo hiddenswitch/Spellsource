@@ -1,0 +1,28 @@
+{
+	"id": "minion_power2_opp3",
+	"name": "Power2 Opp3",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 5,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Battlecry: Summon a random 3-Cost minion for your opponent.",
+	"battlecry": {
+		"spell": {
+			"class": "SummonRandomMinionFilteredSpell",
+			"targetPlayer": "OPPONENT",
+			"cardFilter": {
+				"class": "CardFilter",
+				"cardType": "MINION",
+				"manaCost": 3
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

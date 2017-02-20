@@ -1,7 +1,8 @@
 {
-	"name": "Malfurion Stormrage",
+	"id": "hero_malfurion",
+	"name": "François Brulée",
 	"baseManaCost": 0,
-	"description": "The Druid Hero",
+	"description": "Chef",
 	"heroPower": "hero_power_shapeshift",
 	"type": "HERO",
 	"heroClass": "DRUID",

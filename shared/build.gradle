@@ -16,11 +16,10 @@ buildConfig {
 	packageName = 'net.demilich.metastone'
 	version = project.version
 	appName = rootProject.name
-	buildConfigField 'int', 'CARD_REVISION', '13'
+	buildConfigField 'int', 'CARD_REVISION', '14'
 	buildConfigField 'boolean', 'DEV_BUILD', project.hasProperty('DEV_BUILD').toString()
 	buildConfigField 'int', 'DEFAULT_SLEEP_DELAY', '100'
-	buildConfigField 'String', 'MATCHMAKING_URI', 'http://ec2-34-193-238-52.compute-1.amazonaws.com:8080/v0/anonymous/matchmake'
-	buildConfigField 'String', 'GAMESESSIONS_HOST', 'ec2-34-193-238-52.compute-1.amazonaws.com'
+	buildConfigField 'String', 'GAMESESSIONS_HOST', 'api-us-east-2.hiddenswitch.com'
 	buildConfigField 'boolean', 'DECK_BUILDER_ENABLED', 'true'
 	buildConfigField 'boolean', 'PACKAGE_ONLY', 'true'
 }

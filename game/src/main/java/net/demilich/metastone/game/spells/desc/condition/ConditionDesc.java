@@ -4,8 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.demilich.metastone.game.cards.desc.Desc;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class ConditionDesc extends Desc<ConditionArg> {
 
 	public static Map<ConditionArg, Object> build(Class<? extends Condition> conditionClass) {

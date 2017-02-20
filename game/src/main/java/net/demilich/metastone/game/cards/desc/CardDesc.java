@@ -11,9 +11,9 @@ import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 public abstract class CardDesc implements Serializable {
-
 	public String id;
 	public String name;
 	public String description;
@@ -31,5 +31,4 @@ public abstract class CardDesc implements Serializable {
 	public TriggerDesc deckTrigger;
 
 	public abstract Card createInstance();
-
 }

@@ -1,0 +1,23 @@
+{
+	"id": "minion_left_shark",
+	"name": "Left Shark",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"race": "MURLOC",
+	"description": "Divine Shield. Adjacent minions have -2 Attack.",
+	"attributes": {
+		"DIVINE_SHIELD": true
+	},
+	"aura": {
+		"class": "BuffAura",
+		"target": "ADJACENT_MINIONS",
+		"attackBonus": -1
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

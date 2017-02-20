@@ -6,8 +6,8 @@ import com.hiddenswitch.proto3.net.impl.GamesImpl;
 import com.hiddenswitch.proto3.net.client.RemoteGameContext;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
-import com.hiddenswitch.proto3.net.common.MatchmakingResponse;
-import com.hiddenswitch.proto3.net.common.ServerGameContext;
+import com.hiddenswitch.proto3.net.models.MatchmakingResponse;
+import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.CreateGameSessionRequest;
 import com.hiddenswitch.proto3.net.models.CreateGameSessionResponse;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
@@ -62,14 +62,18 @@ public class TwoClients {
 		return thread2;
 	}
 
-	public TwoClients invoke(GamesImpl service) throws IOException, URISyntaxException, CardParseException, SuspendExecution {
+	public TwoClients invoke(GamesImpl service) throws SuspendExecution, InterruptedException {
 		return invoke(service, 120000L);
 	}
 
 	@Suspendable
-	public TwoClients invoke(GamesImpl service, long noActivityTimeout) throws IOException, URISyntaxException, CardParseException, SuspendExecution {
+	public TwoClients invoke(GamesImpl service, long noActivityTimeout) throws SuspendExecution, InterruptedException {
 		this.service = service;
-		CardCatalogue.loadCardsFromPackage();
+		try {
+			CardCatalogue.loadCardsFromPackage();
+		} catch (IOException | URISyntaxException | CardParseException e) {
+			e.printStackTrace();
+		}
 
 		AIPlayer player1 = new AIPlayer();
 		AIPlayer player2 = new AIPlayer();
@@ -93,7 +97,7 @@ public class TwoClients {
 	}
 
 	@Suspendable
-	public TwoClients invoke(GamesImpl service, boolean aiOpponent) throws IOException, URISyntaxException, CardParseException, SuspendExecution {
+	public TwoClients invoke(GamesImpl service, boolean aiOpponent) throws IOException, URISyntaxException, CardParseException, SuspendExecution, InterruptedException {
 		this.service = service;
 		CardCatalogue.loadCardsFromPackage();
 
@@ -205,10 +209,10 @@ public class TwoClients {
 		} else {
 			logger.info("TwoClients match complete.");
 		}
-		ServiceRuntime.getContext().assertTrue(gameDecided());
-		ServiceRuntime.getContext().assertFalse(isTimedOut());
+		ServiceTest.getContext().assertTrue(gameDecided());
+		ServiceTest.getContext().assertFalse(isTimedOut());
 		if (playerContext2 != null) {
-			ServiceRuntime.getContext().assertTrue(playerContext1.getWinningPlayerId() == playerContext2.getWinningPlayerId());
+			ServiceTest.getContext().assertTrue(playerContext1.getWinningPlayerId() == playerContext2.getWinningPlayerId());
 		}
 
 		this.dispose();

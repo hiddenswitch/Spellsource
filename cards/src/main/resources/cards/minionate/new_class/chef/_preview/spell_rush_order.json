@@ -1,0 +1,27 @@
+{
+	"name": "Rush Order",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "FREE",
+	"description": "Gain an an empty Energy Cell.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "EitherOrSpell",
+		"spell1": {
+			"class": "ReceiveCardSpell",
+			"targetPlayer": "SELF",
+			"card": "spell_excess_mana"
+		},
+		"spell2": {
+			"class": "ModifyMaxManaSpell",
+			"value": 1
+		},
+		"condition": {
+			"class": "ManaMaxedCondition"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+	"name": "Extra Ingredient",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "FREE",
+	"description": "Draw a card.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DrawCardSpell",
+		"targetPlayer": "SELF",
+		"value": 1
+	},
+	"collectible": false,
+	"set": "BASIC",
+	"fileFormatVersion": 1
+}

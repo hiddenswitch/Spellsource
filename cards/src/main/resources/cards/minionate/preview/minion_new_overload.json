@@ -1,0 +1,25 @@
+{
+	"id": "minion_new_overload",
+	"name": "New Overload",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 5,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Battlecry: Give your opponent (1) mana crystal next turn only.",
+	"battlecry": {
+		"spell": {
+			"class": "GainManaSpell",		
+			"targetSelection": "NONE",
+			"targetPlayer": "OPPONENT",
+			"value": 1
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

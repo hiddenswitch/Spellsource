@@ -1,0 +1,17 @@
+{
+	"name": "Cleanup",
+	"baseManaCost": 2,
+	"type": "CHOOSE_ONE",
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Select One - Deal 1 damage and draw a card; or deal 3 damage.",
+	"targetSelection": "NONE",
+	"options": [
+		"spell_cleanup_2",
+		"spell_cleanup_1"
+	],
+	"bothOptions": "spell_cleanup_3",
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

@@ -8,9 +8,7 @@ import java.util.stream.Collectors;
 
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.behaviour.IBehaviour;
-import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.decks.Deck;
@@ -76,7 +74,7 @@ public class Player extends Entity implements Serializable {
 		this.deckName = otherPlayer.getDeckName();
 		this.setHero(otherPlayer.getHero().clone());
 		this.deck = otherPlayer.getDeck().clone();
-		this.attributes.putAll(otherPlayer.getAttributes());
+		this.getAttributes().putAll(otherPlayer.getAttributes());
 		this.hand = otherPlayer.getHand().clone();
 		this.minions.addAll(otherPlayer.getMinions().stream().map(Minion::clone).collect(Collectors.toList()));
 		this.graveyard.addAll(otherPlayer.getGraveyard().stream().map(Entity::clone).collect(Collectors.toList()));

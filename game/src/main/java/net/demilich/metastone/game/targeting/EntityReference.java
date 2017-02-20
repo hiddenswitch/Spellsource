@@ -40,6 +40,9 @@ public class EntityReference implements Serializable {
 	public static final EntityReference PENDING_CARD = new EntityReference(-44);
 	public static final EntityReference EVENT_CARD = new EntityReference(-45);
 
+	// Networked entity references
+	public static final EntityReference NETWORKED_CARD_INSTANCE = new EntityReference(-1000);
+
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
 			return null;

@@ -1,6 +1,7 @@
 {
   "name": "Deckbuilding Format",
   "sets": [
-    "PROCEDURAL_PREVIEW"
+    "PROCEDURAL_PREVIEW",
+    "MINIONATE"
   ]
 }

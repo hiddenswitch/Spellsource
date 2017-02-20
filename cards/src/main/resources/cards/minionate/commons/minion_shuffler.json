@@ -1,0 +1,25 @@
+{
+	"id": "minion_shuffler",
+	"name": "Shuffler",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Whenever a minion dies, shuffle it into its owner's deck.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "MinionDeathTrigger",
+			"targetPlayer": "BOTH"
+		},
+		"spell": {
+			"class": "ShuffleMinionToDeckSpell",
+			"target": "EVENT_TARGET",
+			"targetPlayer": "OWNER"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

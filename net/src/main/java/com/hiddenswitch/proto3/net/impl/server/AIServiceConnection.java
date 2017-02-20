@@ -3,7 +3,7 @@ package com.hiddenswitch.proto3.net.impl.server;
 import com.hiddenswitch.proto3.net.Bots;
 import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.common.RemoteUpdateListener;
-import com.hiddenswitch.proto3.net.common.ServerGameContext;
+import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.MulliganRequest;
 import com.hiddenswitch.proto3.net.models.MulliganResponse;
 import com.hiddenswitch.proto3.net.models.RequestActionRequest;

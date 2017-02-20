@@ -72,17 +72,10 @@ public class DraftLogic {
 		ArrayList<List<Card>> draftCards = new ArrayList<>(DRAFTS);
 
 		List<CardSet> equals = Arrays.asList(CardSet.BASIC,
-				CardSet.CLASSIC,
-				CardSet.BLACKROCK_MOUNTAIN,
-				CardSet.GOBLINS_VS_GNOMES,
-				CardSet.NAXXRAMAS,
-				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.LEAGUE_OF_EXPLORERS,
-				CardSet.THE_OLD_GODS,
-				CardSet.ONE_NIGHT_IN_KARAZHAN);
+				CardSet.CLASSIC);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.MEAN_STREETS_OF_GADGETZHAN;
+		CardSet latestExpansion = CardSet.MINIONATE;
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(
 				CardType.CHOOSE_ONE,
@@ -196,8 +189,8 @@ public class DraftLogic {
 				// Shuffle then choose until we're done
 				cards.shuffle(getRandom());
 
-				while (cards.getCount() > 0
-						&& draftChoices.stream().map(Card::getCardId).distinct().count() < CARDS_PER_DRAFT) {
+//				while (cards.getCount() > 0
+//						&& draftChoices.stream().map(Card::getCardId).distinct().count() < CARDS_PER_DRAFT) {
 					final Card nextCard = cards.removeFirst();
 
 					if (draftChoices.stream().anyMatch(c -> Objects.equals(c.getCardId(), nextCard.getCardId()))) {
@@ -205,7 +198,7 @@ public class DraftLogic {
 					}
 
 					draftChoices.add(nextCard);
-				}
+//				}
 			}
 
 			draftCards.add(draftChoices);

@@ -1,0 +1,32 @@
+{
+	"id": "minion_last_loner",
+	"name": "Last Loner",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 5,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"race": "MURLOC",
+	"description": "Battlecry: If your hand is empty, draw a card for each enemy minion.",
+	"battlecry": {
+		"spell": {
+			"class": "DrawCardSpell",
+			"value": {
+				"class": "EntityCounter",
+				"target": "ENEMY_MINIONS"
+			}
+		},
+		"condition": {
+			"class": "CardCountCondition",
+			"operation": "LESS_OR_EQUAL",
+			"value": 0
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

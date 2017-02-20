@@ -3,8 +3,6 @@ package com.hiddenswitch.proto3.net.common;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.util.LoggerUtils;
-import com.hiddenswitch.proto3.net.util.Result;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
@@ -13,7 +11,6 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.IBehaviour;
 import net.demilich.metastone.game.cards.Card;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,12 +33,15 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 	}
 
 	@Override
+	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
 		logger.debug("Requesting mulligan from wrapped behaviour. Player: {}, cards: {}", player, cards);
 		return getWrapBehaviour().mulligan(context, player, cards);
 	}
 
-	public void mulligan(ServerGameContext context, Player player, List<Card> cards, Handler<List<Card>> handler) {
+	@Override
+	@Suspendable
+	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler) {
 		logger.debug("Requesting mulligan from network. Player: {}, cards: {}", player, cards);
 		context.networkRequestMulligan(player, cards, handler);
 	}
@@ -49,11 +49,11 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 	@Override
 	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-		if (context instanceof ServerGameContext) {
+		if (isServer()) {
 			logger.debug("Requesting action from network using blocking behaviour.");
 			GameAction action = null;
 			try {
-				action = Sync.awaitEvent(done -> requestActionAsync((ServerGameContext) context, player, validActions, done));
+				action = Sync.awaitEvent(done -> requestActionAsync(context, player, validActions, done));
 			} catch (Throwable e) {
 				LoggerUtils.log(this, context, e);
 			}
@@ -64,24 +64,29 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 		}
 	}
 
+	private boolean isServer() {
+		return Fiber.isCurrentFiber();
+	}
+
 	@Suspendable
 	@Override
 	public void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler) {
-		if (context instanceof ServerGameContext) {
-			ServerGameContext serverGameContext = (ServerGameContext) context;
+		if (isServer()) {
 			logger.debug("Requesting action from network. Player: {}, validActions: {}", player, validActions);
-			serverGameContext.networkRequestAction(new GameState(context), player.getId(), validActions, handler);
+			context.networkRequestAction(new GameState(context), player.getId(), validActions, handler);
 		} else {
 			super.requestActionAsync(context, player, validActions, handler);
 		}
 	}
-
 	@Override
+	@Suspendable
 	public void onGameOver(GameContext context, int playerId, int winningPlayerId) {
 		getWrapBehaviour().onGameOver(context, playerId, winningPlayerId);
 	}
 
-	public void onGameOverAsync(ServerGameContext context, int playerId, int winningPlayerId) {
+	@Override
+	@Suspendable
+	public void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId) {
 		if (winningPlayerId != -1) {
 			context.sendGameOver(context.getPlayer(playerId), context.getPlayer(winningPlayerId));
 		} else {

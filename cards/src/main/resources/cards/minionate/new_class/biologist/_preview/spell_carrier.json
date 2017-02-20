@@ -1,0 +1,27 @@
+{
+	"name": "Carrier",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "COMMON",
+	"description": "Grant your minions Invisible until your following turn.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "AddAttributeSpell",
+		"target": "FRIENDLY_MINIONS",
+		"attribute": "STEALTH",
+		"filter": {
+			"class": "AttributeFilter",
+			"attribute": "STEALTH",
+			"operation": "HAS",
+			"invert": true
+		},
+		"revertTrigger": {
+			"class": "TurnStartTrigger",
+			"targetPlayer": "SELF"
+		}
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

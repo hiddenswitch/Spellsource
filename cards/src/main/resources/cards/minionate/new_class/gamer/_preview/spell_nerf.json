@@ -1,0 +1,17 @@
+{
+	"name": "Nerf",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "WARRIOR",
+	"rarity": "FREE",
+	"description": "Deal 1 damage to EVERY minion.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DamageSpell",
+		"target": "ALL_MINIONS",
+		"value": 1
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

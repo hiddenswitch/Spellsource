@@ -79,5 +79,38 @@ public enum Attribute {
 	ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION,
 
 	// AI flags
-	MARKED_FOR_DEATH, 
+	MARKED_FOR_DEATH,
+
+
+	/**
+	 * Describes the instance of this specific entity
+	 */
+	ENTITY_INSTANCE_ID,
+	/**
+	 * Describes the instance of this card
+	 */
+	CARD_INSTANCE_ID,
+	/**
+	 * Describes the ID of the deck this card is currently put into.
+	 */
+	DECK_ID,
+	/**
+	 * Describes the owner/donor
+	 */
+	DONOR_ID,
+	/**
+	 * Describes the current champion (usually this player)
+	 */
+	CHAMPION_ID,
+	/**
+	 * Describes the collections this card belongs to
+	 */
+	COLLECTION_IDS,
+	/**
+	 * Describes the alliance this card belongs to, if any
+	 */
+	ALLIANCE_ID,
+
+	// Networked attributes
+	FIRST_TIME_PLAYS
 }

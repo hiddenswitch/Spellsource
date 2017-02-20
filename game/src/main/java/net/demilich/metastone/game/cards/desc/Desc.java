@@ -1,15 +1,12 @@
 package net.demilich.metastone.game.cards.desc;
 
-import java.io.Serializable;
-import java.util.Map;
-import java.util.Objects;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.io.Serializable;
+import java.util.Map;
 
 public class Desc<T> implements Serializable {
 

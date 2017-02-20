@@ -4,10 +4,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class EventTriggerDesc extends Desc<EventTriggerArg> {
 
 	public static Map<EventTriggerArg, Object> build(Class<? extends GameEventTrigger> triggerClass) {

@@ -5,7 +5,8 @@ public enum Rarity {
 	COMMON,
 	RARE,
 	EPIC,
-	LEGENDARY;
+	LEGENDARY,
+	ALLIANCE;
 	
 	public boolean isRarity(Rarity rarity) {
 		if (this == FREE && rarity == COMMON) {

@@ -1,0 +1,40 @@
+{
+	"name": "C’thul",
+	"baseManaCost": 9,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 15,
+	"heroClass": "WARLOCK",
+	"rarity": "LEGENDARY",
+	"race": "DEMON",
+	"description": "Call to Arms: Destroy your hero and replace him with C’thul.",
+	"battlecry": {
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "DestroySpell",
+					"target": "SELF"
+				},
+				{
+					"class": "ChangeHeroSpell",
+					"card": "hero_cthul"
+				},
+				{
+					"class": "EquipWeaponSpell",
+					"card": "weapon_tentaclaws"
+				},
+				{
+					"class": "OverrideTargetSpell",
+					"target": "FRIENDLY_HERO" 
+				}
+			]
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

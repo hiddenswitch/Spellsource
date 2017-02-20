@@ -1,0 +1,34 @@
+{
+	"id": "minion_self_cost_reduce",
+	"name": "Self Cost Reduce",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "If you control at least 3 minions, this card's Cost is 0.",
+	"passiveTrigger": {
+		"eventTrigger": {
+			"class": "AfterMinionPlayedTrigger",
+			"targetPlayer": "SELF",
+			"fireCondition": {
+				"class": "MinionOnBoardCondition",
+				"value": 3
+			}
+		},
+		"spell": {
+			"class": "CardCostModifierSpell",
+			"target": "FRIENDLY_PLAYER",
+			"cardCostModifier": {
+				"class": "CardCostModifier",
+				"target": "SELF",
+				"operation": "SUBTRACT",
+				"value": 2
+			}
+		}
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

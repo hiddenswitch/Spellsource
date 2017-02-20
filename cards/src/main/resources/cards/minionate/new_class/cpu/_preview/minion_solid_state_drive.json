@@ -1,0 +1,17 @@
+{
+	"name": "Solid State Drive",
+	"baseManaCost": 6,
+	"type": "MINION",
+	"baseAttack": 6,
+	"baseHp": 6,
+	"heroClass": "MAGE",
+	"rarity": "EPIC",
+	"description": "You can use your Supwerpower any number of times.",
+	"race": "DRAGON",
+	"attributes": {
+		"HERO_POWER_USAGES": -1
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

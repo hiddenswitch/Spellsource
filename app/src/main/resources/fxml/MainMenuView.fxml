@@ -20,6 +20,7 @@
          <children>
          	<Group>
          		<children>
+                   <Button fx:id="createAccountButton" mnemonicParsing="false" prefWidth="300.0" layoutY="222" styleClass = "main-button" text="Accounts" textAlignment="CENTER" />
                    <Button fx:id="playModeButton" mnemonicParsing="false" prefWidth="300.0" layoutY="300" styleClass = "main-button" text="Practice" textAlignment="CENTER" />
                    <Button fx:id="multiplayerButton" mnemonicParsing="false" prefWidth="300.0" layoutY="378" styleClass = "main-button" text="Constructed" textAlignment="CENTER" />
                    <Button fx:id="draftButton" mnemonicParsing="false" prefWidth="300.0" layoutY="456" styleClass = "main-button" text="Draft" textAlignment="CENTER" />

@@ -1,6 +1,6 @@
 package com.hiddenswitch.proto3.net.models;
 
-import com.hiddenswitch.proto3.net.common.ServerGameContext;
+import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import net.demilich.metastone.game.statistics.GameStatistics;
 import net.demilich.metastone.game.statistics.Statistic;
 

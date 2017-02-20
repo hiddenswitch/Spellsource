@@ -1,11 +1,11 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.targeting.EntityReference;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.Map;
-
-import net.demilich.metastone.game.cards.desc.Desc;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 public class ValueProviderDesc extends Desc<ValueProviderArg> {
 

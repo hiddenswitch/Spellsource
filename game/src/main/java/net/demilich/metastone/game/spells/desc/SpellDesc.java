@@ -1,15 +1,14 @@
 package net.demilich.metastone.game.spells.desc;
 
-import java.util.EnumMap;
-import java.util.Map;
-
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class SpellDesc extends Desc<SpellArg> {
 
