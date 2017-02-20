@@ -31,7 +31,7 @@
     "minion_coin_minion",
     "minion_random_destroyer"
   ],
-  "name":draft_deck_two,
+  "name": "Basic Chef",
   "heroClass": "DRUID",
   "arbitrary": false
 }

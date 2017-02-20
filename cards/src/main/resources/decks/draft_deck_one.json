@@ -31,7 +31,7 @@
     "minion_solo_resummon",
     "minion_solo_resummon"
   ],
-  "name":draft_deck_one,
+  "name": "Basic Resurrector",
   "heroClass": "PRIEST",
   "arbitrary": false
 }
