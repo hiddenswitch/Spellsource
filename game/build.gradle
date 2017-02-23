@@ -16,3 +16,16 @@ test {
         events "standardError"
     }
 }
+
+task scanSuspendables {
+    doLast {
+        ant.taskdef(name: 'scanSuspendables', classname: 'co.paralleluniverse.fibers.instrument.SuspendablesScanner',
+                classpath: "build/classes/main:build/resources/main:${configurations.runtime.asPath}")
+        ant.scanSuspendables(
+                auto: true,
+                suspendablesFile: "$sourceSets.main.output.resourcesDir/META-INF/suspendables",
+                supersFile: "$sourceSets.main.output.resourcesDir/META-INF/suspendable-supers") {
+            fileset(dir: sourceSets.main.output.classesDir)
+        }
+    }
+}

@@ -7,14 +7,14 @@
   "baseHp": 4,
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "If this is the first time you've played this minion, permanently cost (1) less.",
+  "description": "Call to Arms: If this is the first time you've played this minion, permanently cost (1) less.",
   "collectible": true,
   "set": "MINIONATE",
   "manaCostModifier": {
     "class": "AlgebraicValueProvider",
     "value1": {
       "class": "AttributeValueProvider",
-      "target": "NETWORKED_CARD_INSTANCE",
+      "target": "SELF",
       "attribute": "FIRST_TIME_PLAYS"
     },
     "value2": 5,

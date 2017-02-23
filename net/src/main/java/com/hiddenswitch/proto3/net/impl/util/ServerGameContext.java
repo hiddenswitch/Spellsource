@@ -1,11 +1,17 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.common.*;
+import com.hiddenswitch.proto3.net.util.Broker;
+import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.NotificationProxy;
-import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
@@ -13,11 +19,11 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.trigger.IGameEventListener;
 import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
@@ -29,8 +35,10 @@ public class ServerGameContext extends GameContext {
 	private final Map<CallbackId, GameplayRequest> requestCallbacks = new HashMap<>();
 	private boolean isRunning = true;
 	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
+	private final List<IGameEventListener> gameTriggers = new ArrayList<>();
+	private final transient ServiceProxy<Logic> logic;
 
-	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId) {
+	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, EventBus bus) {
 		// The player's IDs are set here
 		super(player1, player2, new GameLogicAsync(), deckFormat);
 		if (player1.getId() == player2.getId()
@@ -41,6 +49,10 @@ public class ServerGameContext extends GameContext {
 		}
 		NotificationProxy.init(new NullNotifier());
 		this.gameId = gameId;
+		this.logic = Broker.proxy(Logic.class, bus);
+
+		// Set up the alliance tracker
+		this.getGameTriggers().add(new AllianceGameEventListener(logic, gameId));
 	}
 
 	public GameLogicAsync getNetworkGameLogic() {
@@ -98,47 +110,52 @@ public class ServerGameContext extends GameContext {
 		setLocalPlayer1();
 		setLocalPlayer2();
 
-		getNetworkGameLogic().initAsync(getActivePlayerId(), true, _ap -> {
-			getNetworkGameLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, _op -> {
-				Recursive<Runnable> playTurnLoop = new Recursive<>();
-				playTurnLoop.func = () -> {
+		Future<Void> init1 = Future.future();
+		Future<Void> init2 = Future.future();
+
+		getNetworkGameLogic().initAsync(getActivePlayerId(), true, p -> init1.complete());
+		getNetworkGameLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, p -> init2.complete());
+
+		// Mulligan simultaneously now
+		CompositeFuture.join(init1, init2).setHandler(cf -> {
+			Recursive<Runnable> playTurnLoop = new Recursive<>();
+			playTurnLoop.func = () -> {
+				if (!isRunning) {
+					endGame();
+					return;
+				}
+
+				// Check if the game has been decided right at the end of the player's turn
+				if (gameDecided()) {
+					endGame();
+					return;
+				}
+
+				startTurn(getActivePlayerId());
+				Recursive<Handler<Boolean>> actionLoop = new Recursive<>();
+
+				actionLoop.func = hasMoreActions -> {
 					if (!isRunning) {
 						endGame();
 						return;
 					}
-
-					// Check if the game has been decided right at the end of the player's turn
-					if (gameDecided()) {
-						endGame();
-						return;
-					}
-
-					startTurn(getActivePlayerId());
-					Recursive<Handler<Boolean>> actionLoop = new Recursive<>();
-
-					actionLoop.func = hasMoreActions -> {
-						if (!isRunning) {
+					if (hasMoreActions) {
+						networkedPlayTurn(actionLoop.func);
+					} else {
+						if (getTurn() > GameLogic.TURN_LIMIT
+								|| gameDecided()) {
 							endGame();
-							return;
-						}
-						if (hasMoreActions) {
-							networkedPlayTurn(actionLoop.func);
 						} else {
-							if (getTurn() > GameLogic.TURN_LIMIT
-									|| gameDecided()) {
-								endGame();
-							} else {
-								playTurnLoop.func.run();
-							}
+							playTurnLoop.func.run();
 						}
-					};
-
-					networkedPlayTurn(actionLoop.func);
+					}
 				};
 
-				// Start the active player's turn once the game is initialized.
-				playTurnLoop.func.run();
-			});
+				networkedPlayTurn(actionLoop.func);
+			};
+
+			// Start the active player's turn once the game is initialized.
+			playTurnLoop.func.run();
 		});
 	}
 
@@ -214,10 +231,9 @@ public class ServerGameContext extends GameContext {
 
 	@Override
 	public void fireGameEvent(GameEvent gameEvent) {
-		super.fireGameEvent(gameEvent);
+		super.fireGameEvent(gameEvent, gameTriggers);
 		getListenerMap().get(getPlayer1()).onGameEvent(gameEvent);
 		getListenerMap().get(getPlayer2()).onGameEvent(gameEvent);
-
 	}
 
 	@Suspendable
@@ -273,6 +289,7 @@ public class ServerGameContext extends GameContext {
 		return String.format("[ServerGameContext gameId=%s turn=%d]", getGameId(), getTurn());
 	}
 
+	@Override
 	public String getGameId() {
 		return gameId;
 	}
@@ -357,12 +374,7 @@ public class ServerGameContext extends GameContext {
 		onGameEndHandlers.clear();
 	}
 
-	@Override
-	public Map<Attribute, Object> getNetworkAttributes(Entity entity) {
-		// Get everything you need to know about the entity
-
-		// Call the appropriate service
-
-		return AttributeMap.EMPTY;
+	public List<IGameEventListener> getGameTriggers() {
+		return gameTriggers;
 	}
 }

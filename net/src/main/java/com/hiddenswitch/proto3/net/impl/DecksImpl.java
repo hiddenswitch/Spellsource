@@ -11,7 +11,6 @@ import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
-import io.vertx.ext.mongo.UpdateOptions;
 
 import java.util.Collections;
 import java.util.List;
@@ -72,7 +71,7 @@ public class DecksImpl extends Service<DecksImpl> implements Decks {
 		}
 
 		if (!collectionUpdate.isEmpty()) {
-			MongoClientUpdateResult r = awaitResult(h -> mongo.updateCollection(InventoryImpl.COLLECTIONS,
+			MongoClientUpdateResult r = awaitResult(h -> mongo.updateCollection(Inventory.COLLECTIONS,
 					json("_id", deckId, "userId", userId),
 					collectionUpdate, h));
 		}

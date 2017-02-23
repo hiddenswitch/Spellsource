@@ -1,5 +1,6 @@
 package net.demilich.metastone.game;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.common.GameState;
 import io.vertx.core.Handler;
@@ -54,6 +55,8 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
 	private CardCollection tempCards = new CardCollection();
+
+	private GameEvent currentEvent;
 
 	public GameContext() {
 	}
@@ -188,17 +191,25 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return null;
 	}
 
+	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent) {
+		fireGameEvent(gameEvent, null);
+	}
+
+	@Suspendable
+	public void fireGameEvent(GameEvent gameEvent, List<IGameEventListener> otherTriggers) {
 		if (ignoreEvents()) {
 			return;
 		}
+		setCurrentEvent(gameEvent);
 		try {
-			getTriggerManager().fireGameEvent(gameEvent);
+			getTriggerManager().fireGameEvent(gameEvent, otherTriggers);
 		} catch (Exception e) {
 			logger.error("Error while processing gameEvent {}", gameEvent);
 			getLogic().panicDump();
 			throw e;
 		}
+		setCurrentEvent(null);
 	}
 
 	public boolean gameDecided() {
@@ -736,7 +747,15 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return disposed;
 	}
 
-	public Map<Attribute, Object> getNetworkAttributes(Entity entity) {
-		return AttributeMap.EMPTY;
+	public GameEvent getCurrentEvent() {
+		return currentEvent;
+	}
+
+	protected void setCurrentEvent(GameEvent currentEvent) {
+		this.currentEvent = currentEvent;
+	}
+
+	public String getGameId() {
+		return "local";
 	}
 }

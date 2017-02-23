@@ -29,8 +29,6 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * Created by bberman on 1/19/17.
  */
 public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
-	public static final String INVENTORY = "inventory.cards";
-	public static final String COLLECTIONS = "inventory.collections";
 	private ServiceProxy<Cards> cards;
 
 	@Override
@@ -129,7 +127,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Override
 	public AddToCollectionResponse addToCollection(AddToCollectionRequest request) throws SuspendExecution, InterruptedException {
-		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollectionWithOptions(InventoryImpl.INVENTORY,
+		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollectionWithOptions(Inventory.INVENTORY,
 				json("_id", json("$in", request.getInventoryIds())),
 				json("$addToSet", json("collectionIds", request.getCollectionId())),
 				new UpdateOptions().setMulti(true),
@@ -140,7 +138,7 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 
 	@Override
 	public RemoveFromCollectionResponse removeFromCollection(RemoveFromCollectionRequest request) throws SuspendExecution, InterruptedException {
-		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollectionWithOptions(InventoryImpl.INVENTORY,
+		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollectionWithOptions(Inventory.INVENTORY,
 				json("_id", json("$in", request.getInventoryIds())),
 				json("$pull", json("collectionIds", request.getCollectionId())),
 				new UpdateOptions().setMulti(true),
@@ -238,13 +236,13 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 	public SetCollectionResponse setCollection(SetCollectionRequest setCollectionRequest) throws SuspendExecution, InterruptedException {
 		String collectionId = setCollectionRequest.getCollectionId();
 		MongoClientUpdateResult r = awaitResult(h -> getMongo()
-				.updateCollectionWithOptions(InventoryImpl.INVENTORY,
+				.updateCollectionWithOptions(Inventory.INVENTORY,
 						json("collectionId", collectionId, "_id", json("$nin", setCollectionRequest.getInventoryIds())),
 						json("$pull", json("collectionIds", collectionId)),
 						new UpdateOptions().setMulti(true), h));
 
 		MongoClientUpdateResult r2 = awaitResult(h -> getMongo()
-				.updateCollectionWithOptions(InventoryImpl.INVENTORY,
+				.updateCollectionWithOptions(Inventory.INVENTORY,
 						json("_id", json("$in", setCollectionRequest.getInventoryIds())),
 						json("$addToSet", json("collectionIds", collectionId)),
 						new UpdateOptions().setMulti(true), h));

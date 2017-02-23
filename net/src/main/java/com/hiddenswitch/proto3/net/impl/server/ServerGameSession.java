@@ -5,6 +5,7 @@ import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.common.*;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.Player;
@@ -36,18 +37,20 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 	private Logger logger = LoggerFactory.getLogger(ServerGameSession.class);
 	private long noActivityTimeout = Games.DEFAULT_NO_ACTIVITY_TIMEOUT;
 	private final HashSet<Handler<ServerGameSession>> gameOverHandlers = new HashSet<>();
+	private final Vertx vertx;
 
-	private ServerGameSession(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId) {
+	private ServerGameSession(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx) {
 		super();
 		setHost(host);
 		setPort(port);
 		this.pregamePlayerConfiguration1 = p1;
 		this.pregamePlayerConfiguration2 = p2;
 		this.gameId = gameId;
+		this.vertx = vertx;
 	}
 
-	public ServerGameSession(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, long noActivityTimeout) {
-		this(host, port, p1, p2, gameId);
+	public ServerGameSession(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx, long noActivityTimeout) {
+		this(host, port, p1, p2, gameId, vertx);
 		this.noActivityTimeout = noActivityTimeout;
 	}
 
@@ -147,7 +150,7 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 
 		getPlayer1().setBehaviour(new NetworkBehaviour(getPlayer1().getBehaviour()));
 		getPlayer2().setBehaviour(new NetworkBehaviour(getPlayer2().getBehaviour()));
-		this.gameContext = new ServerGameContext(getPlayer1(), getPlayer2(), simpleFormat, getGameId());
+		this.gameContext = new ServerGameContext(getPlayer1(), getPlayer2(), simpleFormat, getGameId(), vertx.eventBus());
 		final RemoteUpdateListener listener1;
 		final RemoteUpdateListener listener2;
 

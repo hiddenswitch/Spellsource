@@ -116,4 +116,9 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	public void setAttributes(Map<Attribute, Object> attributes) {
 		this.attributes = attributes;
 	}
+
+	public boolean hasAllianceEffects() {
+		// TODO: look through the card description to see if it uses any network attributes or effects.
+		return true;
+	}
 }
