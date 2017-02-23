@@ -19,4 +19,7 @@ public interface Games {
 	DescribeGameSessionResponse describeGameSession(DescribeGameSessionRequest request);
 
 	EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution;
+
+	@Suspendable
+	UpdateEntityResponse updateEntity(UpdateEntityRequest request);
 }

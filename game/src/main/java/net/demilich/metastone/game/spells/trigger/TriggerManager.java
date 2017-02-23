@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.paralleluniverse.fibers.Suspendable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,14 +45,22 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 		triggers.clear();
 	}
 
-	public void fireGameEvent(GameEvent event) {
+	@Suspendable
+	public void fireGameEvent(GameEvent event, List<IGameEventListener> gameTriggers) {
+		List<IGameEventListener> triggers = new ArrayList<>(this.triggers);
+		if (gameTriggers != null
+				&& gameTriggers.size() > 0) {
+			// Game triggers execute first and do not serialize
+			triggers.addAll(0, gameTriggers);
+		}
 		List<IGameEventListener> eventTriggers = new ArrayList<IGameEventListener>();
 		List<IGameEventListener> removeTriggers = new ArrayList<IGameEventListener>();
+
 		for (IGameEventListener trigger : triggers) {
 			// In order to stop premature expiration, check
 			// for a oneTurnOnly tag and that it isn't delayed.
 			if (event.getEventType() == GameEventType.TURN_END) {
-				if(trigger.oneTurnOnly() && !trigger.isDelayed() &&
+				if (trigger.oneTurnOnly() && !trigger.isDelayed() &&
 						!trigger.interestedIn(GameEventType.TURN_START) &&
 						!trigger.interestedIn(GameEventType.TURN_END)) {
 					trigger.expire();
@@ -86,6 +95,10 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 		for (IGameEventListener trigger : removeTriggers) {
 			triggers.remove(trigger);
 		}
+	}
+
+	public void fireGameEvent(GameEvent event) {
+		fireGameEvent(event, null);
 	}
 
 	private List<IGameEventListener> getListSnapshot(List<IGameEventListener> triggerList) {

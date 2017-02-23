@@ -9,41 +9,41 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public interface IGameEventListener extends Serializable{
+public interface IGameEventListener extends Serializable {
 
-	public IGameEventListener clone();
-	
-	public abstract boolean canFire(GameEvent event);
+	IGameEventListener clone();
 
-	public abstract EntityReference getHostReference();
+	boolean canFire(GameEvent event);
 
-	public abstract int getOwner();
+	EntityReference getHostReference();
 
-	public abstract boolean interestedIn(GameEventType eventType);
+	int getOwner();
 
-	public abstract boolean isExpired();
+	boolean interestedIn(GameEventType eventType);
 
-	public abstract void onAdd(GameContext context);
+	boolean isExpired();
+
+	void onAdd(GameContext context);
 
 	@Suspendable
-	public abstract void onGameEvent(GameEvent event);
+	void onGameEvent(GameEvent event);
 
-	public abstract void onRemove(GameContext context);
+	void onRemove(GameContext context);
 
-	public abstract void setHost(Entity host);
+	void setHost(Entity host);
 
-	public abstract void setOwner(int playerIndex);
-	
-	public abstract boolean hasPersistentOwner();
+	void setOwner(int playerIndex);
 
-	public abstract boolean oneTurnOnly();
+	boolean hasPersistentOwner();
 
-	public abstract boolean isDelayed();
+	boolean oneTurnOnly();
 
-	public abstract void delayTimeDown();
+	boolean isDelayed();
 
-	public abstract void expire();
-	
-	public abstract boolean canFireCondition(GameEvent event);
+	void delayTimeDown();
+
+	void expire();
+
+	boolean canFireCondition(GameEvent event);
 
 }

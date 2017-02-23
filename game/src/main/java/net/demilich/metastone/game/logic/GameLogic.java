@@ -38,7 +38,6 @@ import java.util.*;
 
 public class GameLogic implements Cloneable, Serializable {
 	public static Logger logger = LoggerFactory.getLogger(GameLogic.class);
-
 	public static final int MAX_PLAYERS = 2;
 	public static final int MAX_MINIONS = 7;
 	public static final int MAX_HAND_CARDS = 10;
@@ -49,31 +48,17 @@ public class GameLogic implements Cloneable, Serializable {
 	public static final int DECK_SIZE = 30;
 	public static final int MAX_DECK_SIZE = 60;
 	public static final int TURN_LIMIT = 100;
-
 	public static final int WINDFURY_ATTACKS = 2;
 	public static final int MEGA_WINDFURY_ATTACKS = 4;
-
 	public static final String TEMP_CARD_LABEL = "temp_card_id_";
-
 	private static final int INFINITE = -1;
-
-	private static boolean hasPlayerLost(Player player) {
-		return player.getHero().getHp() < 1 || player.getHero().hasAttribute(Attribute.DESTROYED)
-				|| player.hasAttribute(Attribute.DESTROYED);
-	}
-
 	protected final TargetLogic targetLogic = new TargetLogic();
 	private final ActionLogic actionLogic = new ActionLogic();
 	private final SpellFactory spellFactory = new SpellFactory();
 	private IdFactory idFactory;
 	private final Random random = new Random();
-
-	@Expose(serialize = false, deserialize = false)
-	protected GameContext context;
-
+	protected transient GameContext context;
 	private boolean loggingEnabled = true;
-
-	// DEBUG
 	private final int MAX_HISTORY_ENTRIES = 100;
 	private ArrayDeque<String> debugHistory = new ArrayDeque<>();
 
@@ -85,6 +70,7 @@ public class GameLogic implements Cloneable, Serializable {
 		this.idFactory = idFactory;
 	}
 
+	@Suspendable
 	public void addGameEventListener(Player player, IGameEventListener gameEventListener, Entity target) {
 		if (isLoggingEnabled()) {
 			debugHistory.add("Player " + player.getId() + " has set event listener " + gameEventListener.getClass().getName() + " from entity " + target.getName() + "[Reference ID: " + target.getId() + "]");
@@ -100,11 +86,13 @@ public class GameLogic implements Cloneable, Serializable {
 		log("New spelltrigger was added for {} on {}: {}", player.getName(), target, gameEventListener);
 	}
 
+	@Suspendable
 	public void addManaModifier(Player player, CardCostModifier cardCostModifier, Entity target) {
 		context.getCardCostModifiers().add(cardCostModifier);
 		addGameEventListener(player, cardCostModifier, target);
 	}
 
+	@Suspendable
 	public void afterCardPlayed(int playerId, CardReference cardReference) {
 		Player player = context.getPlayer(playerId);
 
@@ -114,11 +102,13 @@ public class GameLogic implements Cloneable, Serializable {
 		card.removeAttribute(Attribute.MANA_COST_MODIFIER);
 	}
 
+	@Suspendable
 	public int applyAmplify(Player player, int baseValue, Attribute attribute) {
 		int amplify = getTotalAttributeMultiplier(player, attribute);
 		return baseValue * amplify;
 	}
 
+	@Suspendable
 	public void applyAttribute(Entity entity, Attribute attr) {
 		if (attr == Attribute.MEGA_WINDFURY && entity.hasAttribute(Attribute.WINDFURY) && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
 			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, MEGA_WINDFURY_ATTACKS - WINDFURY_ATTACKS);
@@ -140,6 +130,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @return
 	 * 			Increased hero power damage
 	 */
+	@Suspendable
 	public int applyHeroPowerDamage(Player player, int baseValue) {
 		int spellpower = getTotalAttributeValue(player, Attribute.HERO_POWER_DAMAGE);
 		return baseValue + spellpower;
@@ -156,6 +147,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @return
 	 * 			Increased spell damage
 	 */
+	@Suspendable
 	public int applySpellpower(Player player, Entity source, int baseValue) {
 		int spellpower = getTotalAttributeValue(player, Attribute.SPELL_DAMAGE)
 				+ getTotalAttributeValue(context.getOpponent(player), Attribute.OPPONENT_SPELL_DAMAGE);
@@ -170,6 +162,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param cardCollection
 	 * 		The Deck to assign IDs to
 	 */
+	@Suspendable
 	protected void assignCardIds(CardCollection cardCollection) {
 		for (Card card : cardCollection) {
 			card.setId(getIdFactory().generateId());
@@ -177,6 +170,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	@Suspendable
 	public boolean attributeExists(Attribute attr) {
 		for (Player player : context.getPlayers()) {
 			if (player.getHero().hasAttribute(attr)) {
@@ -192,6 +186,7 @@ public class GameLogic implements Cloneable, Serializable {
 		return false;
 	}
 
+	@Suspendable
 	public boolean canPlayCard(int playerId, CardReference cardReference) {
 		Player player = context.getPlayer(playerId);
 		Card card = context.resolveCardReference(cardReference);
@@ -240,6 +235,7 @@ public class GameLogic implements Cloneable, Serializable {
 		return player.getMinions().size() < MAX_MINIONS;
 	}
 
+	@Suspendable
 	public void castChooseOneSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference, String cardId) {
 		Player player = context.getPlayer(playerId);
 		Entity source = null;
@@ -426,10 +422,12 @@ public class GameLogic implements Cloneable, Serializable {
 		return clone;
 	}
 
+	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source) {
 		return damage(player, target, baseDamage, source, false);
 	}
 
+	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage) {
 		// sanity check to prevent StackOverFlowError with Mistress of Pain +
 		// Auchenai Soulpriest
@@ -1819,6 +1817,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param minion    The original minion in play
 	 * @param newMinion The new minion to transform into
 	 */
+	@Suspendable
 	public void transformMinion(Minion minion, Minion newMinion) {
 		// Remove any spell triggers associated with the old minion.
 		removeSpellTriggers(minion);
@@ -1889,6 +1888,7 @@ public class GameLogic implements Cloneable, Serializable {
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
+	@Suspendable
 	public void useHeroPower(int playerId) {
 		Player player = context.getPlayer(playerId);
 		HeroPower power = player.getHero().getHeroPower();
@@ -2029,6 +2029,7 @@ public class GameLogic implements Cloneable, Serializable {
 			return player;
 		}
 
+		@Suspendable
 		public PreSummon invoke() {
 			player = context.getPlayer(playerId);
 			if (!canSummonMoreMinions(player)) {
@@ -2056,4 +2057,8 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	private static boolean hasPlayerLost(Player player) {
+		return player.getHero().getHp() < 1 || player.getHero().hasAttribute(Attribute.DESTROYED)
+				|| player.hasAttribute(Attribute.DESTROYED);
+	}
 }

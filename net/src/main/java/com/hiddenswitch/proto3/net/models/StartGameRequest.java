@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class StartGameRequest implements Serializable {
 	private List<Player> players;
+	private String gameId;
 
 	public List<Player> getPlayers() {
 		return players;
@@ -20,6 +21,15 @@ public class StartGameRequest implements Serializable {
 
 	public StartGameRequest withPlayers(StartGameRequest.Player... players) {
 		this.players = Arrays.asList(players);
+		return this;
+	}
+
+	public String getGameId() {
+		return gameId;
+	}
+
+	public StartGameRequest withGameId(String gameId) {
+		this.gameId = gameId;
 		return this;
 	}
 

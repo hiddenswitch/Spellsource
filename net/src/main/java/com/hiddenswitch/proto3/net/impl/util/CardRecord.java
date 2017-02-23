@@ -39,8 +39,12 @@ public class CardRecord extends MongoRecord {
 	@JsonProperty
 	private String borrowedByUserId;
 
+	@JsonProperty
+	private Map<String, Object> facts;
+
 	@JsonIgnore
 	private transient CardDesc cardDescCached;
+	private int firstTimePlays;
 
 	protected CardRecord() {
 	}
@@ -136,6 +140,21 @@ public class CardRecord extends MongoRecord {
 	@JsonIgnore
 	public Map<String, Object> getCardDescMap() {
 		return cardDesc;
+	}
+
+	@JsonIgnore
+	public Map<String, Object> getFacts() {
+		return facts;
+	}
+
+	@JsonIgnore
+	public void setFacts(Map<String, Object> facts) {
+		this.facts = facts;
+	}
+
+	@JsonIgnore
+	public int getFirstTimePlays() {
+		return (int) facts.getOrDefault("uniqueChampionIdsSize", 0);
 	}
 }
 

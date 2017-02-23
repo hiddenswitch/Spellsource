@@ -117,8 +117,8 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 
 			// To run in alliance mode, both decks need to be references
 			if (match.isAllianceMatch()) {
-
 				StartGameResponse startGameResponse = logic.sync().startGame(new StartGameRequest()
+						.withGameId(match.gameId)
 						.withPlayers(new StartGameRequest.Player()
 										.withId(0)
 										.withUserId(match.entry1.userId)

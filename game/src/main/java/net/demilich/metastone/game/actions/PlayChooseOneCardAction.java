@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.actions;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -22,6 +23,7 @@ public class PlayChooseOneCardAction extends PlayCardAction {
 	}
 
 	@Override
+	@Suspendable
 	public void play(GameContext context, int playerId) {
 		context.getLogic().castChooseOneSpell(playerId, spell, cardReference, getTargetKey(), chosenCard);
 	}

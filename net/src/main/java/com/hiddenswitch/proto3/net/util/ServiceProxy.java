@@ -54,4 +54,11 @@ public class ServiceProxy<T> {
 		sync = true;
 		return proxy;
 	}
+
+	@Suspendable
+	public T uncheckedSync() {
+		next = null;
+		sync = true;
+		return proxy;
+	}
 }

@@ -18,6 +18,7 @@ import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.netty.channel.DefaultChannelId;
 import io.vertx.core.Future;
+import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.ReplyException;
@@ -121,7 +122,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 			throw new RuntimeException("Game ID cannot be null in a create game session request.");
 		}
 
-		ServerGameSession session = new ServerGameSession(getHost(), getPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), request.getNoActivityTimeout());
+		ServerGameSession session = new ServerGameSession(getHost(), getPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
 		session.handleGameOver(this::onGameOver);
 		final String finalGameId = session.getGameId();
 		games.put(finalGameId, session);
@@ -252,6 +253,12 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		this.kill(request.getGameId());
 
 		return new EndGameSessionResponse();
+	}
+
+	@Override
+	@Suspendable
+	public UpdateEntityResponse updateEntity(UpdateEntityRequest request) {
+		return null;
 	}
 
 	public void kill(String gameId) throws SuspendExecution, InterruptedException {

@@ -8,14 +8,29 @@ import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.events.AfterSummonEvent;
+import net.demilich.metastone.game.events.BeforeSummonEvent;
+import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.GameEventType;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.hiddenswitch.proto3.net.util.QuickJson.json;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * Created by bberman on 1/30/17.
@@ -74,12 +89,15 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 						if (desc.attributes == null) {
 							desc.attributes = new AttributeMap();
 						}
+						desc.attributes.put(Attribute.USER_ID, player.getUserId());
 						desc.attributes.put(Attribute.CARD_INSTANCE_ID, cardRecord.getId());
 						desc.attributes.put(Attribute.DECK_ID, player.getDeckId());
 						desc.attributes.put(Attribute.DONOR_ID, cardRecord.getDonorUserId());
 						desc.attributes.put(Attribute.CHAMPION_ID, player.getUserId());
 						desc.attributes.put(Attribute.COLLECTION_IDS, cardRecord.getCollectionIds());
 						desc.attributes.put(Attribute.ALLIANCE_ID, cardRecord.getAllianceId());
+						// Collect the facts
+						desc.attributes.put(Attribute.FIRST_TIME_PLAYS, cardRecord.getFirstTimePlays());
 						return desc;
 					})
 					.map(CardDesc::createInstance)
@@ -95,9 +113,51 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 
 		}
 
+		// Create a trigger that handles the appropriate game events
+		final TriggerDesc statisticsTriggers = new TriggerDesc();
+		final Map<EventTriggerArg, Object> args = new HashMap<>();
+		args.put(EventTriggerArg.CLASS, "GameStateChangedTrigger");
+		final EventTriggerDesc eventTriggerDesc = new EventTriggerDesc(args);
+
 		// Borrow the decks
 		final List<String> deckIds = request.getPlayers().stream().map(StartGameRequest.Player::getDeckId).collect(Collectors.toList());
 		inventory.sync().borrowFromCollection(new BorrowFromCollectionRequest().withCollectionIds(deckIds));
+
+		return response;
+	}
+
+	@Suspendable
+	@Override
+	public LogicResponse beforeSummon(EventLogicRequest<BeforeSummonEvent> request) {
+		LogicResponse response = new LogicResponse();
+		final String userId = request.getUserId();
+		final String gameId = request.getGameId();
+		final String id = request.getCardInstanceId();
+		final int entityId = request.getEntityId();
+		final BeforeSummonEvent beforeSummonEvent = request.getEvent();
+
+		if (beforeSummonEvent == null
+				|| beforeSummonEvent.getEventType() != GameEventType.AFTER_SUMMON) {
+			throw new RuntimeException();
+		}
+
+		// Add a unique champion ID only if this is the first time this champion has been added
+		MongoClientUpdateResult update1 = awaitResult(h -> getMongo()
+				.updateCollection(Inventory.INVENTORY,
+						json("_id", id, "facts.uniqueChampionIds", json("$ne", userId)),
+						json("$addToSet", json("facts.uniqueChampionIds", userId), "$inc", json("facts.uniqueChampionIdsSize", 1)),
+						h));
+
+		// Notify that a fact has changed
+		final boolean updated = update1.getDocModified() > 0L;
+
+		if (updated) {
+			response.withGameIdsAffected(Collections.singletonList(gameId))
+					.withEntityIdsAffected(Collections.singletonList(entityId));
+			AttributeMap map = new AttributeMap();
+			map.put(Attribute.FIRST_TIME_PLAYS, beforeSummonEvent.getMinion().getAttributeValue(Attribute.FIRST_TIME_PLAYS) + 1);
+			response.getModifiedAttributes().put(new EntityReference(entityId), map);
+		}
 
 		return response;
 	}

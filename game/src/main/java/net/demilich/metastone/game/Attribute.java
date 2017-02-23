@@ -81,7 +81,10 @@ public enum Attribute {
 	// AI flags
 	MARKED_FOR_DEATH,
 
-
+	/**
+	 * Describes the owner of this card.
+	 */
+	USER_ID,
 	/**
 	 * Describes the instance of this specific entity
 	 */
@@ -95,7 +98,7 @@ public enum Attribute {
 	 */
 	DECK_ID,
 	/**
-	 * Describes the owner/donor
+	 * Describes the donor of this card.
 	 */
 	DONOR_ID,
 	/**

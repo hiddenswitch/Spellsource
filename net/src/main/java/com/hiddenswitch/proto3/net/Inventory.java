@@ -8,6 +8,9 @@ import com.hiddenswitch.proto3.net.models.*;
  * Created by bberman on 1/19/17.
  */
 public interface Inventory {
+	String INVENTORY = "inventory.cards";
+	String COLLECTIONS = "inventory.collections";
+
 	OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws SuspendExecution, InterruptedException;
 
 	CreateCollectionResponse createCollection(CreateCollectionRequest request) throws SuspendExecution, InterruptedException;
