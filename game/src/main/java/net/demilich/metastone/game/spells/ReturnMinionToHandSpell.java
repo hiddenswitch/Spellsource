@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import java.util.Map;
 
+import co.paralleluniverse.fibers.Suspendable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +33,7 @@ public class ReturnMinionToHandSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
+	@Suspendable
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellDesc cardSpell = (SpellDesc) desc.get(SpellArg.SPELL);

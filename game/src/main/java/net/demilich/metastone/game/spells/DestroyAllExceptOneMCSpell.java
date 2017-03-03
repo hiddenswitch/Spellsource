@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -20,6 +21,7 @@ public class DestroyAllExceptOneMCSpell extends DestroySpell {
     public static Logger logger = LoggerFactory.getLogger(DestroyAllExceptOneSpell.class);
 
     @Override
+    @Suspendable
     public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
         if (targets == null || targets.isEmpty()) {
             return;

@@ -13,7 +13,6 @@ import javafx.scene.layout.BorderPane;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.MetaStone;
 import net.demilich.metastone.NotificationProxy;
-import net.demilich.metastone.game.decks.Bench;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.MetaDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -87,52 +86,29 @@ public class ChooseClassView extends BorderPane implements EventHandler<ActionEv
 	public void handle(ActionEvent event) {
 		Deck newDeck = null;
 
-		if (MetaStone.procedural) {
-			if (event.getSource() == warriorButton) {
-				newDeck = new Bench(HeroClass.WARRIOR, arbitrary);
-			} else if (event.getSource() == paladinButton) {
-				newDeck = new Bench(HeroClass.PALADIN, arbitrary);
-			} else if (event.getSource() == druidButton) {
-				newDeck = new Bench(HeroClass.DRUID, arbitrary);
-			} else if (event.getSource() == rogueButton) {
-				newDeck = new Bench(HeroClass.ROGUE, arbitrary);
-			} else if (event.getSource() == warlockButton) {
-				newDeck = new Bench(HeroClass.WARLOCK, arbitrary);
-			} else if (event.getSource() == hunterButton) {
-				newDeck = new Bench(HeroClass.HUNTER, arbitrary);
-			} else if (event.getSource() == shamanButton) {
-				newDeck = new Bench(HeroClass.SHAMAN, arbitrary);
-			} else if (event.getSource() == mageButton) {
-				newDeck = new Bench(HeroClass.MAGE, arbitrary);
-			} else if (event.getSource() == priestButton) {
-				newDeck = new Bench(HeroClass.PRIEST, arbitrary);
-			} else if (event.getSource() == collectionButton) {
-				newDeck = new MetaDeck();
-			}
-		} else {
-			if (event.getSource() == warriorButton) {
-				newDeck = new Deck(HeroClass.WARRIOR, arbitrary);
-			} else if (event.getSource() == paladinButton) {
-				newDeck = new Deck(HeroClass.PALADIN, arbitrary);
-			} else if (event.getSource() == druidButton) {
-				newDeck = new Deck(HeroClass.DRUID, arbitrary);
-			} else if (event.getSource() == rogueButton) {
-				newDeck = new Deck(HeroClass.ROGUE, arbitrary);
-			} else if (event.getSource() == warlockButton) {
-				newDeck = new Deck(HeroClass.WARLOCK, arbitrary);
-			} else if (event.getSource() == hunterButton) {
-				newDeck = new Deck(HeroClass.HUNTER, arbitrary);
-			} else if (event.getSource() == shamanButton) {
-				newDeck = new Deck(HeroClass.SHAMAN, arbitrary);
-			} else if (event.getSource() == mageButton) {
-				newDeck = new Deck(HeroClass.MAGE, arbitrary);
-			} else if (event.getSource() == priestButton) {
-				newDeck = new Deck(HeroClass.PRIEST, arbitrary);
-			} else if (event.getSource() == collectionButton) {
-				newDeck = new MetaDeck();
-			}
 
+		if (event.getSource() == warriorButton) {
+			newDeck = new Deck(HeroClass.WARRIOR, arbitrary);
+		} else if (event.getSource() == paladinButton) {
+			newDeck = new Deck(HeroClass.PALADIN, arbitrary);
+		} else if (event.getSource() == druidButton) {
+			newDeck = new Deck(HeroClass.DRUID, arbitrary);
+		} else if (event.getSource() == rogueButton) {
+			newDeck = new Deck(HeroClass.ROGUE, arbitrary);
+		} else if (event.getSource() == warlockButton) {
+			newDeck = new Deck(HeroClass.WARLOCK, arbitrary);
+		} else if (event.getSource() == hunterButton) {
+			newDeck = new Deck(HeroClass.HUNTER, arbitrary);
+		} else if (event.getSource() == shamanButton) {
+			newDeck = new Deck(HeroClass.SHAMAN, arbitrary);
+		} else if (event.getSource() == mageButton) {
+			newDeck = new Deck(HeroClass.MAGE, arbitrary);
+		} else if (event.getSource() == priestButton) {
+			newDeck = new Deck(HeroClass.PRIEST, arbitrary);
+		} else if (event.getSource() == collectionButton) {
+			newDeck = new MetaDeck();
 		}
+
 		NotificationProxy.sendNotification(GameNotification.SET_ACTIVE_DECK, newDeck);
 	}
 

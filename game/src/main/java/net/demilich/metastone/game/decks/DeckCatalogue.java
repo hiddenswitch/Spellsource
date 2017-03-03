@@ -6,7 +6,6 @@ import com.google.gson.reflect.TypeToken;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.logic.ProceduralGameLogic;
 import net.demilich.metastone.utils.MetastoneProperties;
 import net.demilich.metastone.utils.ResourceInputStream;
 import net.demilich.metastone.utils.ResourceLoader;
@@ -167,11 +166,6 @@ public class DeckCatalogue {
 		Deck deck = new Deck(heroClass, arbitrary);
 		@SuppressWarnings("unchecked")
 		List<String> cardIds = (List<String>) map.get("cards");
-
-		//TODO: fix bench exporting to json.
-		if (cardIds.size() == ProceduralGameLogic.BENCH_SIZE) {
-			deck = new Bench(heroClass, arbitrary);
-		}
 
 		for (String cardId : cardIds) {
 			Card card = CardCatalogue.getCardById(cardId);

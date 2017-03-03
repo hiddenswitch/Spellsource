@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import co.paralleluniverse.fibers.Suspendable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,7 @@ public class CopyCardSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(CopyCardSpell.class);
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int numberOfCardsToCopy = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		if (target != null) {

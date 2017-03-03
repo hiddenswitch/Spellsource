@@ -30,9 +30,7 @@ public class DiscoverDrawSpell extends Spell {
 		}
 		
 		if (!cards.isEmpty()) {
-			SpellUtils.getDiscoverAsync(context, player, desc, cards, discovered -> {
-				SpellUtils.castChildSpell(context, player, discovered.getSpell(), source, target);
-			});
+			SpellUtils.castChildSpell(context, player, SpellUtils.getDiscover(context, player, desc, cards).getSpell(), source, target);
 		}
 	}
 

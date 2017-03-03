@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.actions;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
@@ -42,6 +43,7 @@ public class PhysicalAttackAction extends GameAction {
 	}
 
 	@Override
+	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		Actor defender = (Actor) context.resolveSingleTarget(getTargetKey());
 		Actor attacker = (Actor) context.resolveSingleTarget(attackerReference);

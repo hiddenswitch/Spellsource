@@ -1,19 +1,14 @@
 package net.demilich.metastone.gui.playmode;
 
 import com.hiddenswitch.proto3.net.client.RemoteGameContext;
-import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
-import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
-
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.ProceduralPlayer;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.gameconfig.GameConfig;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.logic.ProceduralGameLogic;
 import net.demilich.metastone.game.visuals.GameContextVisualizable;
 import net.demilich.nittygrittymvc.SimpleCommand;
 import net.demilich.nittygrittymvc.interfaces.INotification;

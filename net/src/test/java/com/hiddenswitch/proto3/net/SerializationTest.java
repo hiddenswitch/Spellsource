@@ -115,8 +115,7 @@ public class SerializationTest extends TestBase {
 		SpellCard journeyBelow = (SpellCard) CardCatalogue.getCardById("spell_journey_below");
 		CardCollection discoverCards = new CardCollection();
 		discoverCards.add(fireball.getCopy());
-		List<GameAction> discoverActions = SpellUtils.getDiscoverActionsForDiscoverSpell(journeyBelow.getSpell(), discoverCards);
-		DiscoverAction discoverAction = (DiscoverAction) discoverActions.get(0);
+		DiscoverAction discoverAction = DiscoverAction.createDiscover(journeyBelow.getSpell());
 
 		ArrayList<GameAction> gameActions = new ArrayList<>();
 

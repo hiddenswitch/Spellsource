@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import java.util.List;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -17,6 +18,7 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 public class MissilesSpell extends DamageSpell {
 
 	@Override
+	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		int missiles = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 2);
 		int damage = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
@@ -48,6 +50,7 @@ public class MissilesSpell extends DamageSpell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 	}
 

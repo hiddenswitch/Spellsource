@@ -28,6 +28,7 @@ public interface IGameEventListener extends Serializable {
 	@Suspendable
 	void onGameEvent(GameEvent event);
 
+	@Suspendable
 	void onRemove(GameContext context);
 
 	void setHost(Entity host);

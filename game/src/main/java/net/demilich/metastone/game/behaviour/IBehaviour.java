@@ -15,6 +15,7 @@ public interface IBehaviour extends Cloneable {
 
 	String getName();
 
+	@Suspendable
 	List<Card> mulligan(GameContext context, Player player, List<Card> cards);
 
 	@Suspendable

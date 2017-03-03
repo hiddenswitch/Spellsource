@@ -123,7 +123,7 @@ public class CreateCardSpell extends Spell {
 			spellList.toArray(spellArray);
 			SpellDesc spell = MetaSpell.create(target != null ? target.getReference() : null, false, spellArray);
 			SpellCardDesc spellCardDesc = new SpellCardDesc();
-			spellCardDesc.id = context.getLogic().generateCardID();
+			spellCardDesc.id = context.getLogic().generateCardId();
 			spellCardDesc.name = desc.getString(SpellArg.SECONDARY_NAME);
 			spellCardDesc.heroClass = heroClass;
 			spellCardDesc.type = CardType.SPELL;

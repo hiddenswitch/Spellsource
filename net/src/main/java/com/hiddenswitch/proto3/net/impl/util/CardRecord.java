@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.CardParser;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +41,10 @@ public class CardRecord extends MongoRecord {
 	private String borrowedByUserId;
 
 	@JsonProperty
-	private Map<String, Object> facts;
+	private Map<String, Object> facts = new HashMap<>();
 
 	@JsonIgnore
 	private transient CardDesc cardDescCached;
-	private int firstTimePlays;
 
 	protected CardRecord() {
 	}
