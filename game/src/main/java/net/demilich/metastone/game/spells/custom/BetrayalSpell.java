@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.custom;
 
 import java.util.Map;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -18,6 +19,7 @@ public class BetrayalSpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Actor attacker = (Actor) target;
 		for (Actor adjacentMinion : context.getAdjacentMinions(player, target.getReference())) {

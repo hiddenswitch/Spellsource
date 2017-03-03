@@ -175,6 +175,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		}
 	}
 
+	@Suspendable
 	public void endTurn() {
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getActivePlayerId() == PLAYER_1 ? PLAYER_2 : PLAYER_1);
@@ -245,6 +246,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return adjacentMinions;
 	}
 
+	@Suspendable
 	public GameAction getAutoHeroPowerAction() {
 		return getLogic().getAutoHeroPowerAction(getActivePlayerId());
 	}
@@ -430,6 +432,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return turnState;
 	}
 
+	@Suspendable
 	public List<GameAction> getValidActions() {
 		if (gameDecided()) {
 			return new ArrayList<>();
@@ -445,6 +448,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return ignoreEvents;
 	}
 
+	@Suspendable
 	public void init() {
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
@@ -462,6 +466,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		onGameStateChanged();
 	}
 
+	@Suspendable
 	public void play() {
 		logger.debug("Game starts: " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
 		init();
@@ -476,6 +481,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		endGame();
 	}
 
+	@Suspendable
 	public boolean playTurn() {
 		setActionsThisTurn(getActionsThisTurn() + 1);
 		if (getActionsThisTurn() > 99) {
@@ -580,6 +586,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		}
 	}
 
+	@Suspendable
 	protected void startTurn(int playerId) {
 		setTurn(getTurn() + 1);
 		getLogic().startTurn(playerId);

@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import java.util.List;
 import java.util.Map;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -33,6 +34,7 @@ public class AdjacentEffectSpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		List<Actor> adjacentMinions = context.getAdjacentMinions(player, target.getReference());

@@ -39,12 +39,7 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
 		if (isServer()) {
 			logger.debug("Requesting mulligan from wrapped behaviour using blocking behaviour. Player: {}, cards: {}", player, cards);
-			List<Card> mulliganResults = null;
-			try {
-				mulliganResults = Sync.awaitFiber(done -> context.networkRequestMulligan(player, cards, result -> done.handle(Future.succeededFuture(result))));
-			} catch (Throwable e) {
-				LoggerUtils.log(this, context, e);
-			}
+			List<Card> mulliganResults = Sync.awaitFiber(done -> context.networkRequestMulligan(player, cards, result -> done.handle(Future.succeededFuture(result))));
 			return mulliganResults;
 		} else {
 			logger.debug("Requesting mulligan from wrapped behaviour. Player: {}, cards: {}", player, cards);
@@ -64,12 +59,7 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		if (isServer()) {
 			logger.debug("Requesting action from network using blocking behaviour.");
-			GameAction action = null;
-			try {
-				action = Sync.awaitFiber(done -> requestActionAsync(context, player, validActions, result -> done.handle(Future.succeededFuture(result))));
-			} catch (Throwable e) {
-				LoggerUtils.log(this, context, e);
-			}
+			GameAction action = Sync.awaitFiber(done -> requestActionAsync(context, player, validActions, result -> done.handle(Future.succeededFuture(result))));
 			return action;
 		} else {
 			logger.debug("Requesting action from wrapped behaviour. Player: {}, validActions: {}", player, validActions);

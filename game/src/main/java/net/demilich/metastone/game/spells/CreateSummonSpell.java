@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import co.paralleluniverse.fibers.Suspendable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +23,11 @@ public class CreateSummonSpell extends Spell {
 	Logger logger = LoggerFactory.getLogger(CreateSummonSpell.class);
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String description = "";
 		MinionCardDesc minionCardDesc = new MinionCardDesc();
-		minionCardDesc.id = context.getLogic().generateCardID();
+		minionCardDesc.id = context.getLogic().generateCardId();
 		minionCardDesc.name = desc.getString(SpellArg.NAME);
 		minionCardDesc.baseAttack = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		minionCardDesc.baseHp = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);

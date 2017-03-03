@@ -130,6 +130,7 @@ public class SpellTrigger extends CustomCloneable implements IGameEventListener 
 	}
 
 	@Override
+	@Suspendable
 	public void onRemove(GameContext context) {
 	}
 

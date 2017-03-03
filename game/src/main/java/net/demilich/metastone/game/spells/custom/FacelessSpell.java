@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.custom;
 
 import java.util.Map;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.Environment;
 import net.demilich.metastone.game.GameContext;
@@ -24,6 +25,7 @@ public class FacelessSpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Minion template = (Minion) target;
 		Minion clone = template.clone();

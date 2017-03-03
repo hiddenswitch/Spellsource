@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -24,6 +25,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		for (int i = 0; i < howMany; i++) {

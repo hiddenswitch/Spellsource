@@ -105,6 +105,7 @@ public class Aura extends SpellTrigger {
 	}
 
 	@Override
+	@Suspendable
 	public void onRemove(GameContext context) {
 		for (int targetId : affectedEntities) {
 			EntityReference targetKey = new EntityReference(targetId);

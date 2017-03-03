@@ -11,14 +11,9 @@
   "collectible": true,
   "set": "MINIONATE",
   "manaCostModifier": {
-    "class": "AlgebraicValueProvider",
-    "value1": {
-      "class": "AttributeValueProvider",
-      "target": "SELF",
-      "attribute": "FIRST_TIME_PLAYS"
-    },
-    "value2": 5,
-    "operation": "MAXIMUM"
+    "class": "AttributeValueProvider",
+    "target": "SELF",
+    "attribute": "FIRST_TIME_PLAYS"
   },
   "fileFormatVersion": 1
 }

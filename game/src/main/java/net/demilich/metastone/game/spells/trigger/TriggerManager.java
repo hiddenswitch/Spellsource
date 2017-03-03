@@ -97,6 +97,7 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 		}
 	}
 
+	@Suspendable
 	public void fireGameEvent(GameEvent event) {
 		fireGameEvent(event, null);
 	}

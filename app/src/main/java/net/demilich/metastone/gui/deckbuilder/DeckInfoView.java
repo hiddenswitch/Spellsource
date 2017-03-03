@@ -1,7 +1,5 @@
 package net.demilich.metastone.gui.deckbuilder;
 
-import java.io.IOException;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,17 +11,15 @@ import javafx.scene.paint.Color;
 import net.demilich.metastone.ApplicationFacade;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.NotificationProxy;
-import net.demilich.metastone.game.decks.Bench;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.MetaDeck;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.logic.ProceduralGameLogic;
 import net.demilich.metastone.gui.dialog.DialogNotification;
 import net.demilich.metastone.gui.dialog.DialogResult;
 import net.demilich.metastone.gui.dialog.DialogType;
 import net.demilich.metastone.gui.dialog.IDialogListener;
 
-import javax.swing.*;
+import java.io.IOException;
 
 public class DeckInfoView extends HBox implements EventHandler<ActionEvent>, IDialogListener {
 
@@ -92,9 +88,6 @@ public class DeckInfoView extends HBox implements EventHandler<ActionEvent>, IDi
 		} else {
 			typeLabel.setText("Cards");
 			int deckSize = GameLogic.DECK_SIZE;
-			if (deck instanceof Bench){
-				deckSize = ProceduralGameLogic.BENCH_SIZE;
-			}
 			if (deck.isTooBig()) {
 				countLabel.setText(deck.getCards().getCount() + "!/" + deckSize);
 				countLabel.setTextFill(Color.RED);

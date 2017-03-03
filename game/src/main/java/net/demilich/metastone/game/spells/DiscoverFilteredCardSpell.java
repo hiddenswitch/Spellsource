@@ -75,9 +75,7 @@ public class DiscoverFilteredCardSpell extends Spell {
 		}
 		
 		if (!discoverCards.isEmpty()) {
-			SpellUtils.getDiscoverAsync(context, player, desc, discoverCards, discovered -> {
-				SpellUtils.castChildSpell(context, player, discovered.getSpell(), source, target);
-			});
+			SpellUtils.castChildSpell(context, player, SpellUtils.getDiscover(context, player, desc, discoverCards).getSpell(), source, target);
 		}
 	}
 

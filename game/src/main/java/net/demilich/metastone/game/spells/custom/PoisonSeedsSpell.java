@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.custom;
 
 import java.util.Map;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -21,6 +22,7 @@ public class PoisonSeedsSpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Player opponent = context.getOpponent(player);
 
@@ -29,6 +31,7 @@ public class PoisonSeedsSpell extends Spell {
 		poisonSeeds(context, player, sourceReference);
 	}
 
+	@Suspendable
 	private void poisonSeeds(GameContext context, Player player, EntityReference source) {
 		int minionCount = player.getMinions().size();
 		if (minionCount == 0) {

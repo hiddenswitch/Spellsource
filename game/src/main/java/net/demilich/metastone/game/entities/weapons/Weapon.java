@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.entities.weapons;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -58,12 +59,14 @@ public class Weapon extends Actor {
 		return hasAttribute(Attribute.DESTROYED) || isBroken();
 	}
 
+	@Suspendable
 	public void onEquip(GameContext context, Player player) {
 		if (onEquip != null) {
 			context.getLogic().castSpell(player.getId(), onEquip, getReference(), EntityReference.NONE, false);
 		}
 	}
 
+	@Suspendable
 	public void onUnequip(GameContext context, Player player) {
 		if (onUnequip != null) {
 			context.getLogic().castSpell(player.getId(), onUnequip, getReference(), EntityReference.NONE, false);

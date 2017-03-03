@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -10,6 +11,7 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 public class ConditionalSpell extends Spell {
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// case 1 - only one condition
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);

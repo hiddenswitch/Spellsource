@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -13,6 +14,7 @@ import net.demilich.metastone.game.targeting.CardLocation;
 
 public class ReceiveCardAndDoSomethingSpell extends Spell {
 
+	@Suspendable
 	private void castSomethingSpell(GameContext context, Player player, SpellDesc spell, Entity source, Card card) {
 		context.getLogic().receiveCard(player.getId(), card);
 		// card may be null (i.e. try to draw from deck, but already in
@@ -26,6 +28,7 @@ public class ReceiveCardAndDoSomethingSpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		SpellDesc cardEffectSpell = (SpellDesc) desc.get(SpellArg.SPELL);

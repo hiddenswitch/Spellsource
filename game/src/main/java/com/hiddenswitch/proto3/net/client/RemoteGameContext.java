@@ -1,8 +1,5 @@
 package com.hiddenswitch.proto3.net.client;
 
-import java.util.*;
-import java.util.concurrent.PriorityBlockingQueue;
-
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.common.NetworkBehaviour;
@@ -24,8 +21,11 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.visuals.GameContextVisuals;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class RemoteGameContext extends GameContext implements GameContextVisuals, RemoteUpdateListener {
 	private final List<GameEvent> gameEvents = new ArrayList<>();

@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -41,6 +42,7 @@ public class HealSpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int healing = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		context.getLogic().heal(player, (Actor) target, healing, source);
