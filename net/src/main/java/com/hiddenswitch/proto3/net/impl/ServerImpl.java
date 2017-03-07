@@ -372,10 +372,12 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 
 			MongoClient client = MongoClient.createShared(vertx, config);
 
+			logic.withMongo(client);
 			accounts.withMongo(client);
 			inventory.withMongo(client);
 			decks.withMongo(client);
 		} else {
+			logic.withEmbeddedConfiguration();
 			accounts.withEmbeddedConfiguration();
 			inventory.withEmbeddedConfiguration();
 			decks.withEmbeddedConfiguration();
