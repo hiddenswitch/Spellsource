@@ -92,7 +92,7 @@ public enum Attribute {
 	/**
 	 * Describes the instance of this card
 	 */
-	CARD_INSTANCE_ID,
+	CARD_INVENTORY_ID,
 	/**
 	 * Describes the ID of the deck this card is currently put into.
 	 */

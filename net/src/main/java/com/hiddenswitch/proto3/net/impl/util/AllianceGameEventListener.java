@@ -41,7 +41,7 @@ public class AllianceGameEventListener implements IGameEventListener {
 		switch (event.getEventType()) {
 			case BEFORE_SUMMON:
 				final BeforeSummonEvent event1 = (BeforeSummonEvent) event;
-				final String cardInstanceId = (String) event1.getSource().getAttributes().getOrDefault(Attribute.CARD_INSTANCE_ID, null);
+				final String cardInstanceId = (String) event1.getSource().getAttributes().getOrDefault(Attribute.CARD_INVENTORY_ID, null);
 				if (cardInstanceId == null) {
 					// Can't process a non-alliance card.
 					return;
@@ -49,7 +49,7 @@ public class AllianceGameEventListener implements IGameEventListener {
 
 				final EventLogicRequest<BeforeSummonEvent> request = new EventLogicRequest<>();
 				request.setEvent(event1);
-				request.setCardInstanceId(cardInstanceId);
+				request.setCardInventoryId(cardInstanceId);
 				// Check if the entity has network sideeffects it needs to be notified about. Otherwise, do
 				// not wait.
 				if (event1.getMinion().hasAllianceEffects()) {

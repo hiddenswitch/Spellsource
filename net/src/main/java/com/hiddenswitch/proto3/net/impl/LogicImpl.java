@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.Service;
+import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
@@ -81,28 +82,8 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 			Deck deck = new Deck(deckCollection.getHeroClass());
 			deck.setName(deckCollection.getName());
 			deckCollection.getInventoryRecords().stream()
-					.map(cardRecord -> {
-						// Set up the attributes
-						CardDesc desc = cardRecord.getCardDesc();
-						if (desc.attributes == null) {
-							desc.attributes = new AttributeMap();
-						}
-						desc.attributes.put(Attribute.USER_ID, player.getUserId());
-						desc.attributes.put(Attribute.CARD_INSTANCE_ID, cardRecord.getId());
-						desc.attributes.put(Attribute.DECK_ID, player.getDeckId());
-						desc.attributes.put(Attribute.DONOR_ID, cardRecord.getDonorUserId());
-						desc.attributes.put(Attribute.CHAMPION_ID, player.getUserId());
-						desc.attributes.put(Attribute.COLLECTION_IDS, cardRecord.getCollectionIds());
-						desc.attributes.put(Attribute.ALLIANCE_ID, cardRecord.getAllianceId());
-						// Collect the facts
-						desc.attributes.put(Attribute.FIRST_TIME_PLAYS, cardRecord.getFirstTimePlays());
-						return desc;
-					})
+					.map(cardRecord -> getDescriptionFromRecord(cardRecord, player.getUserId(), player.getDeckId()))
 					.map(CardDesc::createInstance)
-					.map(instance -> {
-						instance.getAttributes().put(Attribute.ENTITY_INSTANCE_ID, RandomStringUtils.randomAlphanumeric(20).toLowerCase());
-						return instance;
-					})
 					.forEach(deck.getCards()::add);
 
 			// TODO: Add player information as attached to the hero card
@@ -130,12 +111,12 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 		LogicResponse response = new LogicResponse();
 		final String userId = request.getUserId();
 		final String gameId = request.getGameId();
-		final String id = request.getCardInstanceId();
+		final String id = request.getCardInventoryId();
 		final int entityId = request.getEntityId();
 		final BeforeSummonEvent beforeSummonEvent = request.getEvent();
 
 		if (beforeSummonEvent == null
-				|| beforeSummonEvent.getEventType() != GameEventType.AFTER_SUMMON) {
+				|| beforeSummonEvent.getEventType() != GameEventType.BEFORE_SUMMON) {
 			throw new RuntimeException();
 		}
 
@@ -155,9 +136,33 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 			AttributeMap map = new AttributeMap();
 			map.put(Attribute.FIRST_TIME_PLAYS, beforeSummonEvent.getMinion().getAttributeValue(Attribute.FIRST_TIME_PLAYS) + 1);
 			response.getModifiedAttributes().put(new EntityReference(entityId), map);
+		} else {
+			response.withGameIdsAffected(Collections.emptyList());
+			response.withEntityIdsAffected(Collections.emptyList());
+			response.withModifiedAttributes(Collections.emptyMap());
 		}
 
 		return response;
 	}
+
+	public static CardDesc getDescriptionFromRecord(InventoryRecord cardRecord, String userId, String deckId) {
+		// Set up the attributes
+		CardDesc desc = cardRecord.getCardDesc();
+		if (desc.attributes == null) {
+			desc.attributes = new AttributeMap();
+		}
+		desc.attributes.put(Attribute.USER_ID, userId);
+		desc.attributes.put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
+		desc.attributes.put(Attribute.DECK_ID, deckId);
+		desc.attributes.put(Attribute.DONOR_ID, cardRecord.getDonorUserId());
+		desc.attributes.put(Attribute.CHAMPION_ID, userId);
+		desc.attributes.put(Attribute.COLLECTION_IDS, cardRecord.getCollectionIds());
+		desc.attributes.put(Attribute.ALLIANCE_ID, cardRecord.getAllianceId());
+		// Collect the facts
+		desc.attributes.put(Attribute.FIRST_TIME_PLAYS, cardRecord.getFirstTimePlays());
+		desc.attributes.put(Attribute.ENTITY_INSTANCE_ID, RandomStringUtils.randomAlphanumeric(20).toLowerCase());
+		return desc;
+	}
+
 
 }

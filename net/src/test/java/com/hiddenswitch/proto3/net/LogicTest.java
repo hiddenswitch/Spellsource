@@ -6,6 +6,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.impl.*;
+import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
@@ -17,8 +18,13 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.events.BeforeSummonEvent;
+import net.demilich.metastone.game.targeting.EntityReference;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -79,7 +85,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 		for (StartGameResponse.Player player : response.getPlayers()) {
 			player.getDeck().getCards().toList().forEach(c -> {
-				final String cardInstanceId = (String) c.getAttribute(Attribute.CARD_INSTANCE_ID);
+				final String cardInstanceId = (String) c.getAttribute(Attribute.CARD_INVENTORY_ID);
 				getContext().assertNotNull(cardInstanceId);
 			});
 		}
@@ -210,6 +216,70 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 			time += 1.0f;
 		}
 		twoClients.assertGameOver();
+	}
+
+	@Test
+	public void testFirstTimePlaysStatistic(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		wrapSync(context, this::firstTimePlaysStatistic);
+	}
+
+	private void firstTimePlaysStatistic() throws SuspendExecution, InterruptedException {
+		CreateCollectionResponse car = inventory.createCollection(CreateCollectionRequest.startingCollection("1"));
+		AddToCollectionResponse atcr = inventory.addToCollection(new AddToCollectionRequest()
+				.withUserId("1")
+				.withCardIds(Collections.singletonList("minion_the_forever_postdoc")));
+		String foreverPostdocInventoryId = atcr.getInventoryIds().get(0);
+		EventLogicRequest<BeforeSummonEvent> elr = new EventLogicRequest<>();
+		elr.setCardInventoryId(foreverPostdocInventoryId);
+		elr.setUserId("1");
+		elr.setGameId("g1");
+		elr.setEntityId(1);
+		GetCollectionResponse gcr = inventory.getCollection(new GetCollectionRequest().withUserId("1"));
+		InventoryRecord record = gcr.getInventoryRecords().stream().filter(p -> Objects.equals(p.getId(), foreverPostdocInventoryId)).findFirst().get();
+		MinionCard foreverPostdocCard = (MinionCard) LogicImpl.getDescriptionFromRecord(record, "1", "d1").createInstance();
+		Minion foreverPostdoc = foreverPostdocCard.summon();
+		foreverPostdoc.setId(1);
+		elr.setEvent(new BeforeSummonEvent(null, foreverPostdoc.clone(), null));
+		LogicResponse lr1 = service.beforeSummon(elr);
+
+		getContext().assertTrue(lr1.getEntityIdsAffected().contains(1));
+		getContext().assertTrue(lr1.getGameIdsAffected().contains("g1"));
+		getContext().assertTrue(lr1.getModifiedAttributes().containsKey(new EntityReference(1)));
+		getContext().assertTrue(lr1.getModifiedAttributes().get(new EntityReference(1)).containsKey(Attribute.FIRST_TIME_PLAYS));
+		getContext().assertEquals(1, lr1.getModifiedAttributes().get(new EntityReference(1)).get(Attribute.FIRST_TIME_PLAYS));
+
+		// Modify the minion
+		foreverPostdoc.setAttribute(Attribute.FIRST_TIME_PLAYS, lr1.getModifiedAttributes().get(new EntityReference(foreverPostdoc.getId())).get(Attribute.FIRST_TIME_PLAYS));
+
+		// Try the call again
+		// I happen to know that we only need the minion for this event
+		elr.setEvent(new BeforeSummonEvent(null, foreverPostdoc.clone(), null));
+		LogicResponse lr2 = service.beforeSummon(elr);
+
+		// Should not have changed
+		getContext().assertTrue(lr2.getModifiedAttributes().isEmpty());
+
+		// Check that the database updated
+		gcr = inventory.getCollection(new GetCollectionRequest().withUserId("1"));
+		record = gcr.getInventoryRecords().stream().filter(p -> Objects.equals(p.getId(), foreverPostdocInventoryId)).findFirst().get();
+		// Different player
+		foreverPostdocCard = (MinionCard) LogicImpl.getDescriptionFromRecord(record, "2", "d1").createInstance();
+		foreverPostdoc = foreverPostdocCard.summon();
+		foreverPostdoc.setId(42);
+		getContext().assertEquals(1, foreverPostdoc.getAttribute(Attribute.FIRST_TIME_PLAYS));
+
+		// Try the call with a different player
+		elr = new EventLogicRequest<>();
+		elr.setEntityId(42);
+		elr.setCardInventoryId(foreverPostdocInventoryId);
+		elr.setUserId("2");
+		elr.setGameId("g1");
+		elr.setEvent(new BeforeSummonEvent(null, foreverPostdoc.clone(), null));
+		LogicResponse lr3 = service.beforeSummon(elr);
+
+		// Should have changed because we used a different user ID
+		getContext().assertEquals(2, lr3.getModifiedAttributes().get(new EntityReference(42)).get(Attribute.FIRST_TIME_PLAYS));
 	}
 
 	@Override
