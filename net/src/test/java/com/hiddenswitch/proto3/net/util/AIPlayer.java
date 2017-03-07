@@ -11,6 +11,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 public class AIPlayer extends Player {
 	private transient Deck configuredDeck;
+	private String userId;
 
 	public AIPlayer() {
 		this(DeckFactory.getRandomDeck());
@@ -32,6 +33,19 @@ public class AIPlayer extends Player {
 
 	public AIPlayer withConfiguredDeck(Deck configuredDeck) {
 		setConfiguredDeck(configuredDeck);
+		return this;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public AIPlayer withUserId(final String userId) {
+		this.userId = userId;
 		return this;
 	}
 }

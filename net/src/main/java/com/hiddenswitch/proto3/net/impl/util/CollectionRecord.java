@@ -1,12 +1,10 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hiddenswitch.proto3.net.models.CollectionTypes;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
-import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by bberman on 2/6/17.
@@ -15,6 +13,7 @@ public class CollectionRecord extends MongoRecord {
 	private String userId;
 	private CollectionTypes type;
 	private boolean trashed;
+	private List<String> friendUserIds;
 
 	/**
 	 * Hero class for deck collection records.
@@ -94,6 +93,19 @@ public class CollectionRecord extends MongoRecord {
 		this.trashed = trashed;
 	}
 
+	public CollectionRecord withFriendUserIds(final List<String> friendUserIds) {
+		this.friendUserIds = friendUserIds;
+		return this;
+	}
+
+	public List<String> getFriendUserIds() {
+		return friendUserIds;
+	}
+
+	public void setFriendUserIds(List<String> friendUserIds) {
+		this.friendUserIds = friendUserIds;
+	}
+
 	public CollectionRecord withTrashed(boolean trashed) {
 		this.trashed = trashed;
 		return this;
@@ -114,6 +126,13 @@ public class CollectionRecord extends MongoRecord {
 				.withType(CollectionTypes.USER);
 	}
 
+	public static CollectionRecord alliance(String allianceId, String ownerUserId) {
+		return new CollectionRecord()
+				.withId(allianceId)
+				.withType(CollectionTypes.ALLIANCE)
+				.withUserId(ownerUserId)
+				.withFriendUserIds(Arrays.asList(ownerUserId));
+	}
 }
 
 

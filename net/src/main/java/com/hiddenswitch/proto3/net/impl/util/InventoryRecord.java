@@ -17,7 +17,7 @@ import static com.hiddenswitch.proto3.net.util.QuickJson.toJson;
 /**
  * Created by bberman on 1/22/17.
  */
-public class CardRecord extends MongoRecord {
+public class InventoryRecord extends MongoRecord {
 	@JsonProperty
 	private Map<String, Object> cardDesc;
 
@@ -46,18 +46,18 @@ public class CardRecord extends MongoRecord {
 	@JsonIgnore
 	private transient CardDesc cardDescCached;
 
-	protected CardRecord() {
+	protected InventoryRecord() {
 	}
 
-	public CardRecord(Card card) {
+	public InventoryRecord(Card card) {
 		this(card.getOriginalDesc());
 	}
 
-	public CardRecord(JsonObject card) {
+	public InventoryRecord(JsonObject card) {
 		this.cardDesc = card.getMap();
 	}
 
-	public CardRecord(CardDesc cardDesc) {
+	public InventoryRecord(CardDesc cardDesc) {
 		this();
 		this.cardDesc = toJson(cardDesc).getMap();
 	}
@@ -76,7 +76,7 @@ public class CardRecord extends MongoRecord {
 	}
 
 	@JsonIgnore
-	public CardRecord withUserId(final String userId) {
+	public InventoryRecord withUserId(final String userId) {
 		this.userId = userId;
 		return this;
 	}
@@ -97,7 +97,7 @@ public class CardRecord extends MongoRecord {
 	}
 
 	@JsonIgnore
-	public CardRecord withCollectionIds(List<String> collectionIds) {
+	public InventoryRecord withCollectionIds(List<String> collectionIds) {
 		this.collectionIds = collectionIds;
 		return this;
 	}

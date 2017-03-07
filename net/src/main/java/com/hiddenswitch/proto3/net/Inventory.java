@@ -1,7 +1,6 @@
 package com.hiddenswitch.proto3.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.models.*;
 
 /**
@@ -18,6 +17,8 @@ public interface Inventory {
 	AddToCollectionResponse addToCollection(AddToCollectionRequest request) throws SuspendExecution, InterruptedException;
 
 	RemoveFromCollectionResponse removeFromCollection(RemoveFromCollectionRequest request) throws SuspendExecution, InterruptedException;
+
+	DonateToCollectionResponse donateToCollection(DonateToCollectionRequest request) throws SuspendExecution, InterruptedException;
 
 	BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request) throws SuspendExecution, InterruptedException;
 

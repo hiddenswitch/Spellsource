@@ -1,18 +1,35 @@
 package com.hiddenswitch.proto3.net.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by bberman on 1/19/17.
  */
 public class CreateCollectionResponse implements Serializable {
 	private String collectionId;
+	private List<String> createdInventoryIds;
 
-	protected CreateCollectionResponse() {}
+	public List<String> getCreatedInventoryIds() {
+		return createdInventoryIds;
+	}
 
-	public static CreateCollectionResponse user(String userId) {
+	public void setCreatedInventoryIds(List<String> createdInventoryIds) {
+		this.createdInventoryIds = createdInventoryIds;
+	}
+
+	public CreateCollectionResponse withCreatedInventoryIds(final List<String> createdInventoryIds) {
+		this.createdInventoryIds = createdInventoryIds;
+		return this;
+	}
+
+	protected CreateCollectionResponse() {
+	}
+
+	public static CreateCollectionResponse user(String userId, List<String> newInventoryIds) {
 		return new CreateCollectionResponse()
-				.withCollectionId(userId);
+				.withCollectionId(userId)
+				.withCreatedInventoryIds(newInventoryIds);
 	}
 
 	public static CreateCollectionResponse deck(String deckId) {
@@ -31,5 +48,10 @@ public class CreateCollectionResponse implements Serializable {
 	public CreateCollectionResponse withCollectionId(final String collectionId) {
 		this.collectionId = collectionId;
 		return this;
+	}
+
+	public static CreateCollectionResponse alliance(String allianceId) {
+		return new CreateCollectionResponse()
+				.withCollectionId(allianceId);
 	}
 }

@@ -12,9 +12,7 @@ import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.events.AfterSummonEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
-import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -50,9 +48,9 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 	public InitializeUserResponse initializeUser(InitializeUserRequest request) throws SuspendExecution, InterruptedException {
 		final InitializeUserResponse response = new InitializeUserResponse();
 		final String userId = request.getUserId();
-
-		response.createCollectionResponse = inventory.sync()
-				.createCollection(CreateCollectionRequest.startingCollection(userId));
+		final CreateCollectionRequest startingCollection = CreateCollectionRequest.startingCollection(userId);
+		response.setCreateCollectionResponse(inventory.sync()
+				.createCollection(startingCollection));
 
 		return response;
 	}
@@ -82,7 +80,7 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 			// Create the deck and assign all the appropriate IDs to the cards
 			Deck deck = new Deck(deckCollection.getHeroClass());
 			deck.setName(deckCollection.getName());
-			deckCollection.getCardRecords().stream()
+			deckCollection.getInventoryRecords().stream()
 					.map(cardRecord -> {
 						// Set up the attributes
 						CardDesc desc = cardRecord.getCardDesc();

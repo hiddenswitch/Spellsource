@@ -5,24 +5,20 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommandPushInventoryIds;
 import com.hiddenswitch.proto3.net.impl.*;
-import com.hiddenswitch.proto3.net.impl.util.CardRecord;
+import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.Result;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 
@@ -37,8 +33,8 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 
 	public static DeckCreateResponse createDeckForUserId(Inventory inventory, Decks decks, String userId) throws SuspendExecution, InterruptedException {
 		GetCollectionResponse collection = inventory.getCollection(GetCollectionRequest.user(userId));
-		Collections.shuffle(collection.getCardRecords());
-		List<String> inventoryIds = collection.getCardRecords().subList(0, 30).stream().map(CardRecord::getId).collect(Collectors.toList());
+		Collections.shuffle(collection.getInventoryRecords());
+		List<String> inventoryIds = collection.getInventoryRecords().subList(0, 30).stream().map(InventoryRecord::getId).collect(Collectors.toList());
 		return decks.createDeck(new DeckCreateRequest()
 				.withUserId(userId)
 				.withHeroClass(HeroClass.WARRIOR)
@@ -54,8 +50,8 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 			final String userId1 = player1.userId;
 			LogicTest.initializeUserId(logic, userId1);
 			DeckCreateResponse deckCreateResponse = createDeckForUserId(inventory, service, userId1);
-			GetCollectionResponse collectionResponse = getDeck(deckCreateResponse.getCollectionId());
-			getContext().assertEquals(collectionResponse.getCardRecords().size(), 30);
+			GetCollectionResponse collectionResponse = getDeck(deckCreateResponse.getDeckId());
+			getContext().assertEquals(collectionResponse.getInventoryRecords().size(), 30);
 		});
 	}
 
@@ -69,7 +65,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 			LogicTest.initializeUserId(logic, userId1);
 
 			for (int i = 0; i < 100; i++) {
-				getContext().assertEquals(getDeck(createDeckForUserId(inventory, service, userId1).getCollectionId()).getCardRecords().size(), 30);
+				getContext().assertEquals(getDeck(createDeckForUserId(inventory, service, userId1).getDeckId()).getInventoryRecords().size(), 30);
 			}
 		});
 	}
@@ -87,21 +83,21 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 			LogicTest.initializeUserId(logic, userId1);
 			// Get my card collection
 			GetCollectionResponse personalCollection = inventory.getCollection(GetCollectionRequest.user(userId1));
-			String deckId = createDeckForUserId(inventory, service, userId1).getCollectionId();
+			String deckId = createDeckForUserId(inventory, service, userId1).getDeckId();
 
 			GetCollectionResponse deck1 = getDeck(deckId);
 
 			// Pick a card at random to replace
-			CardRecord replacement = personalCollection.getCardRecords().get(nextInt(0, personalCollection.getCardRecords().size()));
-			CardRecord toReplace = deck1.getCardRecords().get(nextInt(0, deck1.getCardRecords().size()));
+			InventoryRecord replacement = personalCollection.getInventoryRecords().get(nextInt(0, personalCollection.getInventoryRecords().size()));
+			InventoryRecord toReplace = deck1.getInventoryRecords().get(nextInt(0, deck1.getInventoryRecords().size()));
 
 			service.updateDeck(new DeckUpdateRequest(userId1, deckId, new DecksUpdateCommand()
 					.pullAllInventoryIds(Collections.singletonList(toReplace.getId()))
 					.pushInventoryIds(new DecksUpdateCommandPushInventoryIds().each(Collections.singletonList(replacement.getId())))));
 
 			GetCollectionResponse deck2 = getDeck(deckId);
-			getContext().assertTrue(deck2.getCardRecords().contains(replacement));
-			getContext().assertFalse(deck2.getCardRecords().contains(toReplace));
+			getContext().assertTrue(deck2.getInventoryRecords().contains(replacement));
+			getContext().assertFalse(deck2.getInventoryRecords().contains(toReplace));
 		});
 	}
 
@@ -114,10 +110,10 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 			LogicTest.initializeUserId(logic, userId1);
 			// Get my card collection
 			GetCollectionResponse personalCollection = inventory.getCollection(GetCollectionRequest.user(userId1));
-			String deckId = createDeckForUserId(inventory, service, userId1).getCollectionId();
+			String deckId = createDeckForUserId(inventory, service, userId1).getDeckId();
 
 			GetCollectionResponse deck1 = getDeck(deckId);
-			getContext().assertEquals(deck1.getCardRecords().size(), 30);
+			getContext().assertEquals(deck1.getInventoryRecords().size(), 30);
 
 			// Delete the deck
 		});

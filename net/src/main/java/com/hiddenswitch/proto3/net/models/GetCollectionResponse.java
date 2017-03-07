@@ -1,6 +1,6 @@
 package com.hiddenswitch.proto3.net.models;
 
-import com.hiddenswitch.proto3.net.impl.util.CardRecord;
+import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
@@ -10,36 +10,36 @@ import java.util.List;
  * Created by bberman on 1/22/17.
  */
 public class GetCollectionResponse implements Serializable {
-	private List<CardRecord> cardRecords;
+	private List<InventoryRecord> inventoryRecords;
 	private CollectionTypes collectionType;
 	private HeroClass heroClass;
 	private String name;
 	private String collectionId;
 	private String userId;
 
-	public static GetCollectionResponse user(String collectionId, List<CardRecord> cardRecords) {
+	public static GetCollectionResponse user(String collectionId, List<InventoryRecord> inventoryRecords) {
 		return new GetCollectionResponse()
 				.withCollectionId(collectionId)
-				.withCardRecords(cardRecords)
+				.withCardRecords(inventoryRecords)
 				.withUserId(collectionId)
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<CardRecord> cardRecords) {
+	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<InventoryRecord> inventoryRecords) {
 		return new GetCollectionResponse()
 				.withCollectionId(deckId)
-				.withCardRecords(cardRecords)
+				.withCardRecords(inventoryRecords)
 				.withHeroClass(heroClass)
 				.withUserId(userId)
 				.withName(name);
 	}
 
-	public List<CardRecord> getCardRecords() {
-		return cardRecords;
+	public List<InventoryRecord> getInventoryRecords() {
+		return inventoryRecords;
 	}
 
-	public void setCardRecords(List<CardRecord> cardRecords) {
-		this.cardRecords = cardRecords;
+	public void setInventoryRecords(List<InventoryRecord> inventoryRecords) {
+		this.inventoryRecords = inventoryRecords;
 	}
 
 	public HeroClass getHeroClass() {
@@ -50,8 +50,8 @@ public class GetCollectionResponse implements Serializable {
 		this.heroClass = heroClass;
 	}
 
-	public GetCollectionResponse withCardRecords(List<CardRecord> cardRecords) {
-		this.cardRecords = cardRecords;
+	public GetCollectionResponse withCardRecords(List<InventoryRecord> inventoryRecords) {
+		this.inventoryRecords = inventoryRecords;
 		return this;
 	}
 

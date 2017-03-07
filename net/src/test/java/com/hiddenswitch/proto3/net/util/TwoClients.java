@@ -11,6 +11,7 @@ import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.CreateGameSessionRequest;
 import com.hiddenswitch.proto3.net.models.CreateGameSessionResponse;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
+import com.hiddenswitch.proto3.net.models.StartGameResponse;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.decks.Deck;
@@ -135,6 +136,27 @@ public class TwoClients {
 		firstMessage2.setPlayer1(player2);
 		configurationForPlayer1 = response1.getConnection();
 		configurationForPlayer2 = response2.getConnection();
+		connect(PLAYER_1);
+		connect(PLAYER_2);
+		return this;
+	}
+
+	@Suspendable
+	public TwoClients invoke(GamesImpl service, CreateGameSessionResponse cgsr, StartGameResponse sgr, String userId1, String userId2) {
+		this.service = service;
+		this.gameId = cgsr.getGameId();
+
+		// Manually override the player in the configurations
+		AIPlayer player1 = new AIPlayer(sgr.getPlayers().get(0).getDeck()).withUserId(userId1);
+		AIPlayer player2 = new AIPlayer(sgr.getPlayers().get(1).getDeck()).withUserId(userId2);
+		ClientToServerMessage firstMessage1 = cgsr.getConfigurationForPlayer1().getFirstMessage();
+		ClientToServerMessage firstMessage2 = cgsr.getConfigurationForPlayer2().getFirstMessage();
+		player1.setId(firstMessage1.getPlayer1().getId());
+		player2.setId(firstMessage2.getPlayer1().getId());
+		firstMessage1.setPlayer1(player1);
+		firstMessage2.setPlayer1(player2);
+		configurationForPlayer1 = cgsr.getConfigurationForPlayer1();
+		configurationForPlayer2 = cgsr.getConfigurationForPlayer2();
 		connect(PLAYER_1);
 		connect(PLAYER_2);
 		return this;

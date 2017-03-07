@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -264,6 +265,7 @@ public abstract class Card extends Entity {
 		return false;
 	}
 
+	@Suspendable
 	public abstract PlayCardAction play();
 
 	public void setCollectible(boolean collectible) {

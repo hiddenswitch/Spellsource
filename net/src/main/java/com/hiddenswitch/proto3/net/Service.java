@@ -2,11 +2,6 @@ package com.hiddenswitch.proto3.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.hiddenswitch.proto3.net.util.LocalMongo;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
