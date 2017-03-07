@@ -123,9 +123,9 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 	public void deployServices(Vertx vertx, Handler<AsyncResult<DecksImpl>> done) {
 		accounts = new AccountsImpl().withEmbeddedConfiguration();
 		cards = new CardsImpl();
-		inventory = new InventoryImpl();
-		logic = new LogicImpl();
-		DecksImpl instance = new DecksImpl();
+		inventory = new InventoryImpl().withEmbeddedConfiguration();
+		logic = new LogicImpl().withEmbeddedConfiguration();
+		DecksImpl instance = new DecksImpl().withEmbeddedConfiguration();
 
 		vertx.deployVerticle(accounts, then -> {
 			vertx.deployVerticle(cards, then2 -> {
