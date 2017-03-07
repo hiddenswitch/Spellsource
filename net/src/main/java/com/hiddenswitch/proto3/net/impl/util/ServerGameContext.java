@@ -52,7 +52,7 @@ public class ServerGameContext extends GameContext {
 		this.logic = Broker.proxy(Logic.class, bus);
 
 		// Set up the alliance tracker
-		this.getGameTriggers().add(new AllianceGameEventListener(logic, gameId));
+		this.getGameTriggers().add(new AllianceGameEventListener(logic, this, gameId));
 	}
 
 	public GameLogicAsync getNetworkGameLogic() {
@@ -230,6 +230,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	@Override
+	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent) {
 		super.fireGameEvent(gameEvent, gameTriggers);
 		getListenerMap().get(getPlayer1()).onGameEvent(gameEvent);
