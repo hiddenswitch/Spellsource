@@ -8,16 +8,16 @@ import java.io.Serializable;
  * Created by bberman on 2/19/17.
  */
 public class EventLogicRequest<T extends GameEvent> extends LogicRequest implements Serializable {
-	private String cardInstanceId;
+	private String cardInventoryId;
 	private int entityId;
 	private T event;
 
-	public String getCardInstanceId() {
-		return cardInstanceId;
+	public String getCardInventoryId() {
+		return cardInventoryId;
 	}
 
-	public void setCardInstanceId(String cardInstanceId) {
-		this.cardInstanceId = cardInstanceId;
+	public void setCardInventoryId(String cardInventoryId) {
+		this.cardInventoryId = cardInventoryId;
 	}
 
 	public int getEntityId() {
@@ -29,7 +29,7 @@ public class EventLogicRequest<T extends GameEvent> extends LogicRequest impleme
 	}
 
 	public EventLogicRequest withCardInstanceId(final String cardInstanceId) {
-		this.cardInstanceId = cardInstanceId;
+		this.cardInventoryId = cardInstanceId;
 		return this;
 	}
 
@@ -46,7 +46,7 @@ public class EventLogicRequest<T extends GameEvent> extends LogicRequest impleme
 		this.event = event;
 	}
 
-	public LogicRequest withEvent(final T event) {
+	public EventLogicRequest withEvent(final T event) {
 		this.event = event;
 		return this;
 	}
