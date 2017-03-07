@@ -6,6 +6,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.eventbus.ReplyException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
 import java.util.function.BiConsumer;
@@ -105,6 +107,8 @@ public class Consumer {
 				response = method.apply(request);
 			} catch (InterruptedException | SuspendExecution e) {
 				e.printStackTrace();
+			} catch (Throwable e) {
+				message.fail(-1, getMessage(e));
 			}
 
 			if (response == null) {
@@ -122,6 +126,16 @@ public class Consumer {
 			}
 
 			message.reply(reply);
+		}
+
+		private static String getMessage(Throwable e) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("\nMessage Reply Error\n");
+			sb.append(ExceptionUtils.getMessage(e));
+			sb.append("\nStart API Stack Trace\n");
+			sb.append(ExceptionUtils.getStackTrace(e));
+			sb.append("\nEnd API Stack Trace\nStart Caller Error");
+			return sb.toString();
 		}
 	}
 }

@@ -53,6 +53,9 @@ public class CardsImpl extends Service<CardsImpl> implements Cards {
 			for (QueryCardsRequest request1 : request.getRequests()) {
 				response.append(this.queryCards(request1));
 			}
+		} else if (request.getCardIds() != null) {
+			response = new QueryCardsResponse()
+					.withRecords(request.getCardIds().stream().map(CardCatalogue.getRecords()::get).collect(Collectors.toList()));
 		} else {
 			final EnumSet<CardSet> sets = EnumSet.noneOf(CardSet.class);
 			sets.addAll(Arrays.asList(request.getSets()));

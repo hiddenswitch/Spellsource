@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.util;
 
 import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
@@ -73,12 +74,12 @@ public class VertxInvocationHandler<T> implements InvocationHandler, Serializabl
 				if (reply.succeeded()) {
 					try {
 						Object body = Serialization.deserialize(new VertxBufferInputStream((Buffer) reply.result().body()));
-						next.handle(new Result<>(null, body));
+						next.handle(Future.succeededFuture(body));
 					} catch (IOException | ClassNotFoundException e) {
-						next.handle(new Result<>(e));
+						next.handle(Future.failedFuture(e));
 					}
 				} else {
-					next.handle(new Result<>(reply.cause()));
+					next.handle(Future.failedFuture(reply.cause()));
 				}
 			}
 		}));

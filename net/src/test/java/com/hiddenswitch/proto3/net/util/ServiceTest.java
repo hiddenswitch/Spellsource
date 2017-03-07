@@ -61,18 +61,8 @@ public abstract class ServiceTest<T extends Service<T>> {
 		if (service == null) {
 			deployServices(vertx, then -> {
 				service = then.result();
-				vertx.executeBlocking(done -> {
-					if (isEmbeddedServiceRequired()) {
-						service.withEmbeddedConfiguration();
-					}
-					done.complete();
-				}, then2 -> {
-					if (isEmbeddedServiceRequired()) {
-						logger.info("Embedded configuration completed.");
-					}
-					context.assertNotNull(service);
-					async.complete();
-				});
+				context.assertNotNull(service);
+				async.complete();
 			});
 		} else {
 			async.complete();
@@ -99,10 +89,6 @@ public abstract class ServiceTest<T extends Service<T>> {
 		} else {
 			async.complete();
 		}
-	}
-
-	public boolean isEmbeddedServiceRequired() {
-		return false;
 	}
 
 	@Suspendable

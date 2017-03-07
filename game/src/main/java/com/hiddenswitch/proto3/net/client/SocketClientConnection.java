@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
 import com.hiddenswitch.proto3.net.common.RemoteUpdateListener;
@@ -18,7 +17,7 @@ import net.demilich.metastone.game.cards.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SocketClientConnection implements ClientCommunicationReceive, ClientCommunicationSend, Runnable {
+public class SocketClientConnection implements ClientCommunicationReceive, ClientCommunicationSend, SendToServer, Runnable {
 	private final String host;
 	private final int port;
 	private BlockingQueue<ClientToServerMessage> queue = new LinkedBlockingDeque<>();
@@ -27,10 +26,6 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 	private Logger logger = LoggerFactory.getLogger(SocketClientConnection.class);
 	private boolean isGameEnded;
 
-	public SocketClientConnection() {
-		this("127.0.0.1", 11111);
-	}
-
 	public SocketClientConnection(String host, int port) {
 		this.host = host;
 		this.port = port;
@@ -38,23 +33,7 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 
 	@Override
 	public SendToServer getSendToServer() {
-		return new SendToServer() {
-
-			@Override
-			public void sendAction(String id, GameAction action) {
-				queue.add(new ClientToServerMessage(id, action));
-			}
-
-			@Override
-			public void sendMulligan(String id, Player player, List<Card> discardedCards) {
-				queue.add(new ClientToServerMessage(id, player, discardedCards));
-			}
-
-			@Override
-			public void sendGenericMessage(ClientToServerMessage message) {
-				queue.add(message);
-			}
-		};
+		return this;
 	}
 
 	@Override
@@ -95,14 +74,10 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 					InputStream inputStream = readSocket.getInputStream();
 					while (shouldRun) {
 						// Skip the header for now.
-						inputStream.read();
-						inputStream.read();
-						inputStream.read();
-						inputStream.read();
-						inputStream.read();
-						inputStream.read();
-						inputStream.read();
-						inputStream.read();
+						final int HEADER_SIZE = 8;
+						for (int i = 0; i < HEADER_SIZE; i++) {
+							int ignored = inputStream.read();
+						}
 						serverInputStream = new ObjectInputStream(inputStream);
 
 						ServerToClientMessage message = (ServerToClientMessage) serverInputStream.readObject();
@@ -135,7 +110,7 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 								updateListener.onMulligan(message.id, message.player1, message.startingCards);
 								break;
 							default:
-								System.err.println("Unexpected message from server received");
+								logger.error("Unexpected message from server received");
 								break;
 						}
 					}
@@ -225,5 +200,20 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 
 	public int getPort() {
 		return port;
+	}
+
+	@Override
+	public void sendAction(String id, GameAction action) {
+		queue.add(new ClientToServerMessage(id, action));
+	}
+
+	@Override
+	public void sendMulligan(String id, Player player, List<Card> discardedCards) {
+		queue.add(new ClientToServerMessage(id, player, discardedCards));
+	}
+
+	@Override
+	public void sendGenericMessage(ClientToServerMessage message) {
+		queue.add(message);
 	}
 }

@@ -12,6 +12,8 @@ import java.util.List;
 public class CreateCollectionRequest implements Serializable {
 	private CollectionTypes type;
 	private String userId;
+	private List<String> userIds;
+	private String allianceId;
 	private List<String> cardIds;
 	private List<String> inventoryIds;
 	private String name;
@@ -42,6 +44,17 @@ public class CreateCollectionRequest implements Serializable {
 						.withCardsPerPack(5))
 				.withCardsQuery(new QueryCardsRequest()
 						.withSets(CardSet.BASIC, CardSet.CLASSIC));
+	}
+
+	public static CreateCollectionRequest alliance(String allianceId, String ownerUserId, List<String> userIds, List<String> inventoryIds) {
+		return new CreateCollectionRequest()
+				.withType(CollectionTypes.ALLIANCE)
+				.withName(ownerUserId + "'s Alliance")
+				.withAllianceId(allianceId)
+				.withUserId(ownerUserId)
+				.withUserIds(userIds)
+				.withInventoryIds(inventoryIds);
+
 	}
 
 	public void setUserId(String userId) {
@@ -147,6 +160,32 @@ public class CreateCollectionRequest implements Serializable {
 
 	public CreateCollectionRequest withHeroClass(HeroClass heroClass) {
 		this.heroClass = heroClass;
+		return this;
+	}
+
+	public String getAllianceId() {
+		return allianceId;
+	}
+
+	public void setAllianceId(String allianceId) {
+		this.allianceId = allianceId;
+	}
+
+	public CreateCollectionRequest withAllianceId(final String allianceId) {
+		this.allianceId = allianceId;
+		return this;
+	}
+
+	public List<String> getUserIds() {
+		return userIds;
+	}
+
+	public void setUserIds(List<String> userIds) {
+		this.userIds = userIds;
+	}
+
+	public CreateCollectionRequest withUserIds(final List<String> userIds) {
+		this.userIds = userIds;
 		return this;
 	}
 }

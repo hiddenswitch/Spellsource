@@ -3,13 +3,13 @@ package com.hiddenswitch.proto3.net.models;
 import java.io.Serializable;
 
 public class DeckCreateResponse implements Serializable {
-	private final String collectionId;
+	private final String deckId;
 
-	public DeckCreateResponse(String collectionId) {
-		this.collectionId = collectionId;
+	public DeckCreateResponse(String deckId) {
+		this.deckId = deckId;
 	}
 
-	public String getCollectionId() {
-		return collectionId;
+	public String getDeckId() {
+		return deckId;
 	}
 }

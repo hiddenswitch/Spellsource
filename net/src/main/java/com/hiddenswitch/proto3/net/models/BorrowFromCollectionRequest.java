@@ -9,6 +9,8 @@ import java.util.List;
 public class BorrowFromCollectionRequest implements Serializable {
 	private String collectionId;
 	private List<String> collectionIds;
+	private String userId;
+	private List<String> inventoryIds;
 
 	public BorrowFromCollectionRequest withCollectionId(String collectionId) {
 		this.collectionId = collectionId;
@@ -33,6 +35,32 @@ public class BorrowFromCollectionRequest implements Serializable {
 
 	public BorrowFromCollectionRequest withCollectionIds(final List<String> collectionIds) {
 		this.collectionIds = collectionIds;
+		return this;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public List<String> getInventoryIds() {
+		return inventoryIds;
+	}
+
+	public void setInventoryIds(List<String> inventoryIds) {
+		this.inventoryIds = inventoryIds;
+	}
+
+	public BorrowFromCollectionRequest withUserId(final String userId) {
+		this.userId = userId;
+		return this;
+	}
+
+	public BorrowFromCollectionRequest withInventoryIds(final List<String> inventoryIds) {
+		this.inventoryIds = inventoryIds;
 		return this;
 	}
 }

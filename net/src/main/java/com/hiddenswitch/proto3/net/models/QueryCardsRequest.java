@@ -17,6 +17,7 @@ public class QueryCardsRequest implements Serializable {
 	private CardSet[] sets;
 	private Set<CardFields> fields;
 	private Rarity rarity;
+	private List<String> cardIds;
 	private int randomCount;
 
 	public void setRequests(List<QueryCardsRequest> requests) {
@@ -95,5 +96,18 @@ public class QueryCardsRequest implements Serializable {
 
 	public List<QueryCardsRequest> getRequests() {
 		return requests;
+	}
+
+	public List<String> getCardIds() {
+		return cardIds;
+	}
+
+	public void setCardIds(List<String> cardIds) {
+		this.cardIds = cardIds;
+	}
+
+	public QueryCardsRequest withCardIds(final List<String> cardIds) {
+		this.cardIds = cardIds;
+		return this;
 	}
 }

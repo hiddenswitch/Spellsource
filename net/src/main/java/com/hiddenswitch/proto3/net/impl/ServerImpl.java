@@ -214,7 +214,7 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 				.withHeroClass(heroClass)
 				.withUserId(userId));
 
-		return WebResult.succeeded(new DecksPutResponse().deckId(internalResponse.getCollectionId()));
+		return WebResult.succeeded(new DecksPutResponse().deckId(internalResponse.getDeckId()));
 	}
 
 	private WebResult<DecksGetResponse> getDeck(String userId, String deckId) throws SuspendExecution, InterruptedException {
@@ -222,7 +222,7 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 				.withUserId(userId)
 				.withDeckId(deckId));
 
-		List<CardRecord> inventoryItems = updatedCollection.getCardRecords().stream().map(cr -> new CardRecord()
+		List<CardRecord> inventoryItems = updatedCollection.getInventoryRecords().stream().map(cr -> new CardRecord()
 				.id(cr.getId())
 				.cardDesc(cr.getCardDescMap())
 				.collectionIds(cr.getCollectionIds())
@@ -313,7 +313,7 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 						.name(String.format("The %s Collection", displayName))
 						.id(personalCollection.getCollectionId())
 						.type(CollectionTypes.USER.toString())
-						.inventory(personalCollection.getCardRecords().stream().map(cr ->
+						.inventory(personalCollection.getInventoryRecords().stream().map(cr ->
 								new CardRecord()
 										.userId(cr.getUserId())
 										.collectionIds(cr.getCollectionIds())
