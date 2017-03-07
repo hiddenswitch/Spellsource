@@ -12,10 +12,14 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
+import net.demilich.metastone.game.spells.ModifyAttributeSpell;
+import net.demilich.metastone.game.spells.SetAttributeSpell;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,10 +28,12 @@ import java.util.Set;
 public class AllianceGameEventListener implements IGameEventListener {
 	private final ServiceProxy<Logic> logic;
 	private final String gameId;
+	private transient final GameContext context;
 
-	public AllianceGameEventListener(ServiceProxy<Logic> logicProxy, String gameId) {
-		logic = logicProxy;
+	public AllianceGameEventListener(ServiceProxy<Logic> logicProxy, GameContext context, String gameId) {
+		this.logic = logicProxy;
 		this.gameId = gameId;
+		this.context = context;
 	}
 
 	/**
@@ -38,10 +44,17 @@ public class AllianceGameEventListener implements IGameEventListener {
 	@Override
 	@Suspendable
 	public void onGameEvent(GameEvent event) {
+		if (isExpired()) {
+			return;
+		}
+
+		LogicResponse response = null;
+		EntityReference source = null;
+
 		switch (event.getEventType()) {
 			case BEFORE_SUMMON:
 				final BeforeSummonEvent event1 = (BeforeSummonEvent) event;
-				final String cardInstanceId = (String) event1.getSource().getAttributes().getOrDefault(Attribute.CARD_INVENTORY_ID, null);
+				final String cardInstanceId = (String) event1.getMinion().getAttributes().getOrDefault(Attribute.CARD_INVENTORY_ID, null);
 				if (cardInstanceId == null) {
 					// Can't process a non-alliance card.
 					return;
@@ -50,13 +63,14 @@ public class AllianceGameEventListener implements IGameEventListener {
 				final EventLogicRequest<BeforeSummonEvent> request = new EventLogicRequest<>();
 				request.setEvent(event1);
 				request.setCardInventoryId(cardInstanceId);
-				// Check if the entity has network sideeffects it needs to be notified about. Otherwise, do
+				// Check if the entity has network side effects it needs to be notified about. Otherwise, do
 				// not wait.
 				if (event1.getMinion().hasAllianceEffects()) {
-					LogicResponse response = logic.uncheckedSync().beforeSummon(request);
+					response = logic.uncheckedSync().beforeSummon(request);
+					source = ((BeforeSummonEvent) event).getSource().getReference();
 				} else {
 					// If we don't have effects we don't need to wait.
-					logic.async((AsyncResult<LogicResponse> response) -> {
+					logic.async((AsyncResult<LogicResponse> ignored) -> {
 						// TODO: Do nothing really
 					}).beforeSummon(request);
 				}
@@ -64,16 +78,38 @@ public class AllianceGameEventListener implements IGameEventListener {
 			default:
 				break;
 		}
+
+		// Process the effects
+		if (response != null) {
+			if (!response.getGameIdsAffected().contains(event.getGameContext().getGameId())) {
+				return;
+			}
+
+			for (Map.Entry<EntityReference, Map<Attribute, Object>> entry : response.getModifiedAttributes().entrySet()) {
+				Entity entity = event.getGameContext().tryFind(entry.getKey());
+
+				if (entity == null) {
+					continue;
+				}
+
+				for (Map.Entry<Attribute, Object> kv : entry.getValue().entrySet()) {
+					SpellDesc spell = SetAttributeSpell.create(entry.getKey(), kv.getKey(), kv.getValue());
+					// By setting childSpell to true, additional spell casting triggers don't get called
+					// But target overriding effects apply, as they should.
+					event.getGameContext().getLogic().castSpell(entity.getOwner(), spell, source, null, true);
+				}
+			}
+		}
 	}
 
 	@Override
 	public IGameEventListener clone() {
-		return new AllianceGameEventListener(logic, gameId);
+		return new AllianceGameEventListener(logic, context, gameId);
 	}
 
 	@Override
 	public boolean canFire(GameEvent event) {
-		return types.contains(event);
+		return types.contains(event.getEventType());
 	}
 
 	@Override
@@ -83,8 +119,8 @@ public class AllianceGameEventListener implements IGameEventListener {
 
 	@Override
 	public int getOwner() {
-		// This listener has no owner
-		return -1;
+		// This listener is owned by the currently playing player
+		return context.getActivePlayerId();
 	}
 
 	@Override

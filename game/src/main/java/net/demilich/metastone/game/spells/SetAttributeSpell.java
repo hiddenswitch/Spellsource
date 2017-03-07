@@ -10,9 +10,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
-public class ModifyAttributeSpell extends Spell {
-	public static SpellDesc create(EntityReference target, Attribute tag, int value) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ModifyAttributeSpell.class);
+public class SetAttributeSpell extends Spell {
+	public static SpellDesc create(EntityReference target, Attribute tag, Object value) {
+		Map<SpellArg, Object> arguments = SpellDesc.build(SetAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);
 		arguments.put(SpellArg.VALUE, value);
 		arguments.put(SpellArg.TARGET, target);
@@ -22,8 +22,8 @@ public class ModifyAttributeSpell extends Spell {
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
-		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-		target.modifyAttribute(attribute, value);
+		Object value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+		target.setAttribute(attribute, value);
 	}
 
 }
