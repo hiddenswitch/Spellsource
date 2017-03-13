@@ -12,6 +12,7 @@ import com.hiddenswitch.proto3.net.models.RequestActionRequest;
 import com.hiddenswitch.proto3.net.models.RequestActionResponse;
 import com.hiddenswitch.proto3.net.util.*;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.Async;
@@ -39,9 +40,15 @@ import static net.demilich.metastone.game.GameContext.PLAYER_1;
  */
 @RunWith(VertxUnitRunner.class)
 public class BotsTest extends ServiceTest<BotsImpl> {
+	private GamesImpl games;
+
 	@Test
-	public void testMulligan() throws Exception {
+	public void testMulligan(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
+		wrapSync(context, this::mulligan);
+	}
+
+	private void mulligan() throws SuspendExecution, InterruptedException {
 		MulliganRequest request = new MulliganRequest(
 				Arrays.asList(
 						CardCatalogue.getCardById("spell_fireball"),
@@ -51,9 +58,12 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 	}
 
 	@Test
-	@Ignore
-	public void testRequestAction() throws Exception {
+	public void testRequestAction(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
+		wrapSync(context, this::requestAction);
+	}
+
+	private void requestAction() throws SuspendExecution, InterruptedException {
 		DebugContext context = TestBase.createContext(HeroClass.HUNTER, HeroClass.PALADIN);
 		context.endTurn();
 		context.forceStartTurn(context.getActivePlayerId());
@@ -64,7 +74,8 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 			RequestActionRequest requestActionRequest = new RequestActionRequest(
 					new GameState(context),
 					context.getActivePlayerId(),
-					context.getValidActions());
+					context.getValidActions(),
+					context.getDeckFormat());
 
 			RequestActionResponse response = service.requestAction(requestActionRequest);
 			gameAction = response.gameAction;
@@ -75,52 +86,54 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 	}
 
 	@Test
-	@Ignore
 	public void testBroker(TestContext context) throws CardParseException, IOException, URISyntaxException {
 		setLoggingLevel(Level.ERROR);
-		final Async async = context.async();
-		ServiceProxy<Bots> bots = Broker.proxy(Bots.class, vertx.eventBus());
-		final MulliganRequest request = new MulliganRequest(
-				Arrays.asList(
-						CardCatalogue.getCardById("spell_fireball"),
-						CardCatalogue.getCardById("spell_arcane_missiles"),
-						CardCatalogue.getCardById("spell_assassinate")));
-		bots.async((AsyncResult<MulliganResponse> r) -> {
-			context.assertTrue(r.result().discardedCards.size() == 2);
-			async.complete();
-		}).mulligan(request);
+		wrapSync(context, () -> {
+			final ServiceProxy<Bots> bots = Broker.proxy(Bots.class, vertx.eventBus());
+			final MulliganRequest request = new MulliganRequest(
+					Arrays.asList(
+							CardCatalogue.getCardById("spell_fireball"),
+							CardCatalogue.getCardById("spell_arcane_missiles"),
+							CardCatalogue.getCardById("spell_assassinate")));
+			MulliganResponse r = bots.sync().mulligan(request);
+			context.assertTrue(r.discardedCards.size() == 2);
+		});
 	}
 
 	@Test
-	@Ignore
 	public void testPlaysGameAgainstAI(TestContext context) throws CardParseException, IOException, URISyntaxException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
-		final Async async = context.async();
-		GamesImpl games = new GamesImpl();
-		vertx.deployVerticle(games, then -> {
-			wrapSync(context, () -> {
-				try {
-					TwoClients twoClients = new TwoClients().invoke(games, true);
-					twoClients.play(PLAYER_1);
-					float time = 0f;
-					while (time < 60f && !twoClients.gameDecided()) {
-						Strand.sleep(1000);
-						time += 1.0f;
-					}
-					twoClients.assertGameOver();
-					async.complete();
-				} catch (IOException | URISyntaxException | CardParseException e) {
-					context.fail(e);
-				}
-			});
-		});
+		wrapSync(context, this::playAgainstAI);
+	}
+
+	private void playAgainstAI() throws SuspendExecution, InterruptedException {
+		TwoClients twoClients = null;
+
+		try {
+			twoClients = new TwoClients().invoke(games, true);
+		} catch (IOException | URISyntaxException | CardParseException e) {
+			throw new AssertionError();
+		}
+
+		twoClients.play(PLAYER_1);
+		float time = 0f;
+		while (time < 120f && !twoClients.gameDecided()) {
+			Strand.sleep(1000);
+			time += 1.0f;
+		}
+		twoClients.assertGameOver();
+
 	}
 
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<BotsImpl>> done) {
+		games = new GamesImpl();
 		BotsImpl instance = new BotsImpl();
-		vertx.deployVerticle(instance, then -> {
-			done.handle(new Result<>(instance));
+
+		vertx.deployVerticle(games, then1 -> {
+			vertx.deployVerticle(instance, then -> {
+				done.handle(Future.succeededFuture(instance));
+			});
 		});
 	}
 }
