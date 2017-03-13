@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.impl.server;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Bots;
 import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.common.RemoteUpdateListener;
@@ -30,8 +31,7 @@ public class AIServiceConnection implements RemoteUpdateListener {
 	final ServiceProxy<Bots> bots;
 	final WeakReference<ServerGameContext> context;
 
-	public AIServiceConnection(ServerGameContext context, int playerId) {
-		final EventBus eventBus = Vertx.currentContext().owner().eventBus();
+	public AIServiceConnection(ServerGameContext context, EventBus eventBus, int playerId) {
 		this.bots = Broker.proxy(Bots.class, eventBus);
 
 		this.context = new WeakReference<>(context);
@@ -63,9 +63,10 @@ public class AIServiceConnection implements RemoteUpdateListener {
 	}
 
 	@Override
-	public void onRequestAction(String messageId, GameState state, List<GameAction> actions) {
+	@Suspendable
+	public void onRequestAction(final String messageId, final GameState state, final List<GameAction> actions) {
+		final ServerGameContext gc = context.get();
 		bots.async((AsyncResult<RequestActionResponse> result) -> {
-			final ServerGameContext gc = context.get();
 			if (gc == null) {
 				return;
 			}
@@ -74,13 +75,14 @@ public class AIServiceConnection implements RemoteUpdateListener {
 			} else {
 				gc.onActionReceived(messageId, result.result().gameAction);
 			}
-		}).requestAction(new RequestActionRequest(state, playerId, actions));
+		}).requestAction(new RequestActionRequest(state, playerId, actions, gc.getDeckFormat()));
 	}
 
 	@Override
+	@Suspendable
 	public void onMulligan(String messageId, Player player, List<Card> cards) {
+		final ServerGameContext gc = context.get();
 		bots.async((AsyncResult<MulliganResponse> result) -> {
-			final ServerGameContext gc = context.get();
 			if (gc == null) {
 				return;
 			}

@@ -3,6 +3,7 @@ package net.demilich.metastone.game.behaviour.threat;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.NotificationProxy;
 import net.demilich.metastone.trainingmode.RequestTrainingDataNotification;
 import net.demilich.metastone.trainingmode.TrainingData;
@@ -35,6 +36,7 @@ public class GameStateValueBehaviour extends Behaviour {
 		this.heuristic = new ThreatBasedHeuristic(featureVector);
 	}
 
+	@Suspendable
 	private double alphaBeta(GameContext context, int playerId, GameAction action, int depth) {
 		GameContext simulation = getClone(context);
 		if (simulation.isDisposed()) {
@@ -99,6 +101,7 @@ public class GameStateValueBehaviour extends Behaviour {
 	}
 
 	@Override
+	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		if (validActions.size() == 1) {
 			return validActions.get(0);

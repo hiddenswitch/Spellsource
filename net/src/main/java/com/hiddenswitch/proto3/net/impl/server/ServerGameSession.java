@@ -157,11 +157,11 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 
 		if (isAgainstAI()) {
 			if (pregamePlayerConfiguration1.isAI()) {
-				listener1 = new AIServiceConnection(getGameContext(), PLAYER_1);
+				listener1 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_1);
 				listener2 = getPlayerListener(PLAYER_2);
 			} else {
 				listener1 = getPlayerListener(PLAYER_1);
-				listener2 = new AIServiceConnection(getGameContext(), PLAYER_2);
+				listener2 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_2);
 			}
 		} else {
 			listener1 = getPlayerListener(PLAYER_1);

@@ -63,7 +63,7 @@ public class VertxInvocationHandler<T> implements InvocationHandler, Serializabl
 		try {
 			Serialization.serialize(args[0], new VertxBufferOutputStream(result));
 		} catch (IOException e) {
-			next.handle(new Result<>(e));
+			next.handle(Future.failedFuture(e));
 			return;
 		}
 
