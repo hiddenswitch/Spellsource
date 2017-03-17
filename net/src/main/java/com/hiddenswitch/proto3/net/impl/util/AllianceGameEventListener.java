@@ -9,6 +9,7 @@ import io.vertx.core.AsyncResult;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
@@ -52,6 +53,28 @@ public class AllianceGameEventListener implements IGameEventListener {
 		EntityReference source = null;
 
 		switch (event.getEventType()) {
+			case AFTER_PHYSICAL_ATTACK:
+				final AfterPhysicalAttackEvent event2 = (AfterPhysicalAttackEvent) event;
+				final String attackerInstanceId = (String) event2.getAttacker().getAttributes().getOrDefault(Attribute.CARD_INVENTORY_ID, null);
+				final String defenderInstanceId = (String) event2.getDefender().getAttributes().getOrDefault(Attribute.CARD_INVENTORY_ID, null);
+				if (attackerInstanceId == null
+						|| defenderInstanceId == null) {
+					// Can't process a non-alliance card.
+					return;
+				}
+
+				final EventLogicRequest<AfterPhysicalAttackEvent> request1 = new EventLogicRequest<>();
+				request1.setEvent(event2);
+				request1.setCardInventoryId(attackerInstanceId);
+
+				if (event2.getAttacker().hasAllianceEffects()) {
+					response = logic.uncheckedSync().afterPhysicalAttack(request1);
+					source = event2.getEventSource().getReference();
+				} else {
+					logic.async((AsyncResult<LogicResponse> ignored) -> {
+						// TODO: Do nothing really
+					}).afterPhysicalAttack(request1);
+				}
 			case BEFORE_SUMMON:
 				final BeforeSummonEvent event1 = (BeforeSummonEvent) event;
 				final String cardInstanceId = (String) event1.getMinion().getAttributes().getOrDefault(Attribute.CARD_INVENTORY_ID, null);
