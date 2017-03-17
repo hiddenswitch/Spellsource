@@ -121,5 +121,6 @@ public class MainMenuView extends BorderPane implements ChangeListener<String> {
 
 		multiplayerButton.setDisable(!loggedIn);
 		draftButton.setDisable(!loggedIn);
+		deckBuilderButton.setDisable(!loggedIn);
 	}
 }
