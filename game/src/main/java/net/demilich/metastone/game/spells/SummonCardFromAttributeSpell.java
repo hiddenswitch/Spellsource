@@ -17,10 +17,11 @@ import java.util.Map;
  * Created by bberman on 3/17/17.
  */
 public class SummonCardFromAttributeSpell extends Spell {
-	public static SpellDesc create(Attribute attributeContainingCardId, EntityReference target) {
+	public static SpellDesc create(Attribute attributeContainingCardId, String defaultCardId, EntityReference target) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(SummonCardFromAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, attributeContainingCardId);
 		arguments.put(SpellArg.TARGET, target);
+		arguments.put(SpellArg.CARD, defaultCardId);
 		return new SpellDesc(arguments);
 	}
 
@@ -30,7 +31,16 @@ public class SummonCardFromAttributeSpell extends Spell {
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		String cardId = (String) target.getAttribute((Attribute) desc.get(SpellArg.ATTRIBUTE));
-		Card card = context.getCardById(cardId);
+		Card card = null;
+		if (cardId == null) {
+			// Check if there is a default card
+			card = SpellUtils.getCard(context, desc);
+		} else {
+			card = context.getCardById(cardId);
+		}
+		if (card == null) {
+			return;
+		}
 		for (int i = 0; i < count; i++) {
 			MinionCard minionCard = count == 1 ? (MinionCard) card : (MinionCard) card.clone();
 			context.getLogic().summon(player.getId(), minionCard.summon(), null, boardPosition, false);
