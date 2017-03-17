@@ -1,0 +1,24 @@
+{
+  "id": "minion_sourcing_specialist",
+  "name": "Sourcing Specialist",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Call to Arms: Summon the last minion Sourcing Specialist destroyed.",
+  "collectible": true,
+  "set": "MINIONATE",
+  "battlecry": {
+    "spell": {
+      "class": "SummonCardFromAttributeSpell",
+      "attribute": "LAST_MINION_DESTROYED_CARD_ID",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "fileFormatVersion": 1
+}

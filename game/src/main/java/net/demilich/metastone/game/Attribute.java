@@ -115,5 +115,11 @@ public enum Attribute {
 	ALLIANCE_ID,
 
 	// Networked attributes
-	FIRST_TIME_PLAYS
+	FIRST_TIME_PLAYS,
+
+	/**
+	 * Describes the last minion (not actor like hero) this actor (hero or minion) destroyed
+	 */
+	LAST_MINION_DESTROYED_CARD_ID,
+	LAST_MINION_DESTROYED_INVENTORY_ID
 }
