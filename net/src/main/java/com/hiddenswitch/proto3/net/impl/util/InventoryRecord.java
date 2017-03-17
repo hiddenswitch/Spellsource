@@ -156,5 +156,15 @@ public class InventoryRecord extends MongoRecord {
 	public int getFirstTimePlays() {
 		return (int) facts.getOrDefault("uniqueChampionIdsSize", 0);
 	}
+
+	@JsonIgnore
+	public String getLastMinionDestroyedCardId() {
+		return (String) facts.getOrDefault("lastMinionDestroyedCardId", null);
+	}
+
+	@JsonIgnore
+	public String getLastMinionDestroyedInventoryId() {
+		return (String) facts.getOrDefault("lastMinionDestroyedInventoryId", null);
+	}
 }
 

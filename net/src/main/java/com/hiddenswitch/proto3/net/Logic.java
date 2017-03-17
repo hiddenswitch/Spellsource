@@ -3,6 +3,7 @@ package com.hiddenswitch.proto3.net;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.models.*;
+import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 
 /**
@@ -19,4 +20,7 @@ public interface Logic {
 
 	@Suspendable
 	LogicResponse beforeSummon(EventLogicRequest<BeforeSummonEvent> request);
+
+	@Suspendable
+	LogicResponse afterPhysicalAttack(EventLogicRequest<AfterPhysicalAttackEvent> logicRequest);
 }

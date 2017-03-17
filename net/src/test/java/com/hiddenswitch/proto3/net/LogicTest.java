@@ -21,8 +21,10 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.junit.Test;
@@ -280,6 +282,100 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 		// Should have changed because we used a different user ID
 		getContext().assertEquals(2, lr3.getModifiedAttributes().get(new EntityReference(42)).get(Attribute.FIRST_TIME_PLAYS));
+	}
+
+	@Test
+	public void testLastMinionDestroyed(TestContext context) {
+		wrapSync(context, this::lastMinionDestroyed);
+	}
+
+	private void lastMinionDestroyed() throws SuspendExecution, InterruptedException {
+		String sourcingSpecialistInventoryId = createCardAndUser("minion_sourcing_specialist", "userId1");
+		Minion sourcingSpecialist = createMinionFromId(sourcingSpecialistInventoryId, 1, "userId1", "deckId1");
+
+		getContext().assertNull(sourcingSpecialist.getAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID));
+		getContext().assertNull(sourcingSpecialist.getAttribute(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID));
+
+		String opponentCardInventoryId = createCardAndUser("minion_wisp", "opponentUserId");
+		Minion opponentMinion = createMinionFromId(opponentCardInventoryId, 2, "opponentUserId", "deckId2");
+		opponentMinion.setAttribute(Attribute.DESTROYED);
+		EventLogicRequest<AfterPhysicalAttackEvent> logicRequest = new EventLogicRequest<>();
+
+		AfterPhysicalAttackEvent event = new AfterPhysicalAttackEvent(null, sourcingSpecialist, opponentMinion, 6);
+		logicRequest.setEvent(event);
+		logicRequest.setCardInventoryId(sourcingSpecialistInventoryId);
+		logicRequest.setEntityId(1);
+		logicRequest.setGameId("g1");
+		logicRequest.setUserId("userId1");
+
+		LogicResponse logicResponse = service.afterPhysicalAttack(logicRequest);
+
+		getContext().assertEquals("minion_wisp", logicResponse.getModifiedAttributes().get(new EntityReference(1)).get(Attribute.LAST_MINION_DESTROYED_CARD_ID));
+		getContext().assertEquals(opponentCardInventoryId, logicResponse.getModifiedAttributes().get(new EntityReference(1)).get(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID));
+
+		// Create the minion again and assert that it recorded the right card destroyed attributes
+		Minion newSourcingSpecialist = createMinionFromId(sourcingSpecialistInventoryId, 42, "userId1", "deckId1");
+		getContext().assertEquals("minion_wisp", newSourcingSpecialist.getAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID));
+		getContext().assertEquals(opponentCardInventoryId, newSourcingSpecialist.getAttribute(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID));
+
+		String stonetuskBoarInventoryId = addCardForUser("minion_stonetusk_boar", "opponentUserId");
+		Minion stonetuskBoar = createMinionFromId(stonetuskBoarInventoryId, 43, "opponentUserId", "deckId2");
+		stonetuskBoar.setAttribute(Attribute.DESTROYED);
+
+		logicRequest = new EventLogicRequest<>();
+
+		event = new AfterPhysicalAttackEvent(null, newSourcingSpecialist, stonetuskBoar, 6);
+		logicRequest.setEvent(event);
+		logicRequest.setCardInventoryId(sourcingSpecialistInventoryId);
+		logicRequest.setEntityId(newSourcingSpecialist.getId());
+		logicRequest.setGameId("g2");
+		logicRequest.setUserId("userId1");
+
+		logicResponse = service.afterPhysicalAttack(logicRequest);
+		getContext().assertEquals("minion_stonetusk_boar", logicResponse.getModifiedAttributes().get(new EntityReference(newSourcingSpecialist.getId())).get(Attribute.LAST_MINION_DESTROYED_CARD_ID));
+		getContext().assertEquals(stonetuskBoarInventoryId, logicResponse.getModifiedAttributes().get(new EntityReference(newSourcingSpecialist.getId())).get(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID));
+
+		newSourcingSpecialist = createMinionFromId(sourcingSpecialistInventoryId, 11, "userId1", "deckId1");
+		String boulderfistOgreInventoryId = addCardForUser("minion_boulderfist_ogre", "opponentUserId");
+		Minion boulderfistOgre = createMinionFromId(boulderfistOgreInventoryId, 10, "opponentUserId", "deckId2");
+
+		event = new AfterPhysicalAttackEvent(null, newSourcingSpecialist, boulderfistOgre, 6);
+		logicRequest.setEvent(event);
+		logicRequest.setCardInventoryId(sourcingSpecialistInventoryId);
+		logicRequest.setEntityId(newSourcingSpecialist.getId());
+		logicRequest.setGameId("g2");
+		logicRequest.setUserId("userId1");
+
+		logicResponse = service.afterPhysicalAttack(logicRequest);
+		getContext().assertTrue(logicResponse.getModifiedAttributes().isEmpty());
+
+		newSourcingSpecialist = createMinionFromId(sourcingSpecialistInventoryId, 11, "userId1", "deckId1");
+		getContext().assertEquals("minion_stonetusk_boar", newSourcingSpecialist.getAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID));
+		getContext().assertEquals(stonetuskBoarInventoryId, newSourcingSpecialist.getAttribute(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID));
+	}
+
+	private Minion createMinionFromId(String inventoryId, int entityId, String userId, String deckId) throws InterruptedException, SuspendExecution {
+		GetCollectionResponse gcr = inventory.getCollection(new GetCollectionRequest().withUserId(userId));
+		InventoryRecord record = gcr.getInventoryRecords().stream().filter(p -> Objects.equals(p.getId(), inventoryId)).findFirst().get();
+		MinionCard minionCard = (MinionCard) LogicImpl.getDescriptionFromRecord(record, userId, deckId).createInstance();
+		Minion minion = minionCard.summon();
+		minion.setId(entityId);
+		return minion;
+	}
+
+	private String addCardForUser(String cardId, String userId) throws InterruptedException, SuspendExecution {
+		AddToCollectionResponse atcr = inventory.addToCollection(new AddToCollectionRequest()
+				.withUserId(userId)
+				.withCardIds(Collections.singletonList(cardId)));
+		return atcr.getInventoryIds().get(0);
+	}
+
+	private String createCardAndUser(String cardId, String userId) throws InterruptedException, SuspendExecution {
+		CreateCollectionResponse car = inventory.createCollection(CreateCollectionRequest.startingCollection(userId));
+		AddToCollectionResponse atcr = inventory.addToCollection(new AddToCollectionRequest()
+				.withUserId(userId)
+				.withCardIds(Collections.singletonList(cardId)));
+		return atcr.getInventoryIds().get(0);
 	}
 
 	@Override

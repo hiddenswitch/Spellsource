@@ -71,6 +71,9 @@ public class SpellUtils {
 	public static Card getCard(GameContext context, SpellDesc spell) {
 		Card card = null;
 		String cardName = (String) spell.get(SpellArg.CARD);
+		if (cardName == null) {
+			return null;
+		}
 		card = CardCatalogue.getCardById(cardName);
 		if (spell.get(SpellArg.CARD).toString().toUpperCase().equals("PENDING_CARD")) {
 			card = (Card) context.getPendingCard();
