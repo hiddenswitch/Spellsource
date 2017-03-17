@@ -1,0 +1,16 @@
+{
+	"name": "Osha",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Guard",
+	"attributes": {
+		"TAUNT": true
+	},
+	"collectible": true,
+	"set": "BASIC",
+	"fileFormatVersion": 1
+}

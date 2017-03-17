@@ -1,0 +1,21 @@
+{
+	"name": "Nora",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Revenge: Deal 2 damage to the enemy hero.",
+	"deathrattle": {
+		"class": "DamageSpell",
+		"target": "ENEMY_HERO",
+		"value": 2
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "CLASSIC",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,13 @@
+{
+	"name": "Rabid Canine",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 6,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "",
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

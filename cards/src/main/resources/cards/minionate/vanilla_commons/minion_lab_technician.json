@@ -1,0 +1,13 @@
+{
+	"name": "Lab Technician",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 5,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "",
+	"collectible": true,
+	"set": "BASIC",
+	"fileFormatVersion": 1
+}
