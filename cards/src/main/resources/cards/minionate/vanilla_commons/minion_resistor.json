@@ -1,0 +1,16 @@
+{
+	"name": "Resistor",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Blastproof",
+	"attributes": {
+		"DIVINE_SHIELD": true
+	},
+	"collectible": true,
+	"set": "CLASSIC",
+	"fileFormatVersion": 1
+}
