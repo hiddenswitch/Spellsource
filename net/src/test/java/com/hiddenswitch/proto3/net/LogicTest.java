@@ -21,6 +21,7 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
@@ -333,6 +334,24 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		logicResponse = service.afterPhysicalAttack(logicRequest);
 		getContext().assertEquals("minion_stonetusk_boar", logicResponse.getModifiedAttributes().get(new EntityReference(newSourcingSpecialist.getId())).get(Attribute.LAST_MINION_DESTROYED_CARD_ID));
 		getContext().assertEquals(stonetuskBoarInventoryId, logicResponse.getModifiedAttributes().get(new EntityReference(newSourcingSpecialist.getId())).get(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID));
+
+		newSourcingSpecialist = createMinionFromId(sourcingSpecialistInventoryId, 11, "userId1", "deckId1");
+		String boulderfistOgreInventoryId = addCardForUser("minion_boulderfist_ogre", "opponentUserId");
+		Minion boulderfistOgre = createMinionFromId(boulderfistOgreInventoryId, 10, "opponentUserId", "deckId2");
+
+		event = new AfterPhysicalAttackEvent(null, newSourcingSpecialist, boulderfistOgre, 6);
+		logicRequest.setEvent(event);
+		logicRequest.setCardInventoryId(sourcingSpecialistInventoryId);
+		logicRequest.setEntityId(newSourcingSpecialist.getId());
+		logicRequest.setGameId("g2");
+		logicRequest.setUserId("userId1");
+
+		logicResponse = service.afterPhysicalAttack(logicRequest);
+		getContext().assertTrue(logicResponse.getModifiedAttributes().isEmpty());
+
+		newSourcingSpecialist = createMinionFromId(sourcingSpecialistInventoryId, 11, "userId1", "deckId1");
+		getContext().assertEquals("minion_stonetusk_boar", newSourcingSpecialist.getAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID));
+		getContext().assertEquals(stonetuskBoarInventoryId, newSourcingSpecialist.getAttribute(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID));
 	}
 
 	private Minion createMinionFromId(String inventoryId, int entityId, String userId, String deckId) throws InterruptedException, SuspendExecution {
