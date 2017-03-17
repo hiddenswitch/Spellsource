@@ -16,6 +16,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckCatalogue;
+import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
@@ -194,8 +195,50 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 		// Collect the facts
 		desc.attributes.put(Attribute.FIRST_TIME_PLAYS, cardRecord.getFirstTimePlays());
 		desc.attributes.put(Attribute.ENTITY_INSTANCE_ID, RandomStringUtils.randomAlphanumeric(20).toLowerCase());
+		desc.attributes.put(Attribute.LAST_MINION_DESTROYED_CARD_ID, cardRecord.getLastMinionDestroyedCardId());
+		desc.attributes.put(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID, cardRecord.getLastMinionDestroyedInventoryId());
 		return desc;
 	}
 
 
+	@Override
+	@Suspendable
+	public LogicResponse afterPhysicalAttack(EventLogicRequest<AfterPhysicalAttackEvent> request) {
+		LogicResponse response = new LogicResponse();
+		final String gameId = request.getGameId();
+		final AfterPhysicalAttackEvent event = request.getEvent();
+
+		if (event == null
+				|| event.getEventType() != GameEventType.AFTER_PHYSICAL_ATTACK) {
+			throw new RuntimeException();
+		}
+		final int entityId = event.getAttacker().getId();
+
+		// If the defender got destroyed, we need to update the last minion destroyed for the attacker
+		if (event.getDefender().isDestroyed()) {
+			final String attackerInventoryId = (String) event.getAttacker().getAttribute(Attribute.CARD_INVENTORY_ID);
+			final String defenderCardInventoryId = (String) event.getDefender().getAttribute(Attribute.CARD_INVENTORY_ID);
+			final String defenderCardId = event.getDefender().getSourceCard().getCardId();
+
+			MongoClientUpdateResult update = awaitResult(h -> getMongo()
+					.updateCollection(Inventory.INVENTORY,
+							json("_id", attackerInventoryId),
+							json("$set", json("facts.lastMinionDestroyedCardId", defenderCardId,
+									"facts.lastMinionDestroyedInventoryId", defenderCardInventoryId)), h));
+
+			response.withGameIdsAffected(Collections.singletonList(gameId))
+					.withEntityIdsAffected(Collections.singletonList(entityId));
+
+			AttributeMap map = new AttributeMap();
+			map.put(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID, defenderCardInventoryId);
+			map.put(Attribute.LAST_MINION_DESTROYED_CARD_ID, defenderCardId);
+			response.getModifiedAttributes().put(new EntityReference(entityId), map);
+		} else {
+			response.withGameIdsAffected(Collections.emptyList());
+			response.withEntityIdsAffected(Collections.emptyList());
+			response.withModifiedAttributes(Collections.emptyMap());
+		}
+
+		return response;
+	}
 }
