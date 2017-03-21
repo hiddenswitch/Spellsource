@@ -1,14 +1,14 @@
 {
-	"name": "Osha",
-	"baseManaCost": 3,
+	"name": "Voltage Regulator",
+	"baseManaCost": 2,
 	"type": "MINION",
-	"baseAttack": 3,
+	"baseAttack": 2,
 	"baseHp": 3,
 	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Guard",
+	"rarity": "COMMON",
+	"description": "Power Damage +1",
 	"attributes": {
-		"TAUNT": true
+		"SPELL_DAMAGE": 1
 	},
 	"collectible": true,
 	"set": "MINIONATE",

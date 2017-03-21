@@ -1,16 +1,17 @@
 {
-	"name": "Mad Scientist",
-	"baseManaCost": 2,
+	"name": "Daytime Donator",
+	"baseManaCost": 1,
 	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
+	"baseAttack": 1,
+	"baseHp": 2,
 	"heroClass": "ANY",
 	"rarity": "COMMON",
-	"description": "Call to Arms: Swap the Health and Attack of a minion.",
+	"description": "Call to Arms: Give a minion +2 Attack this turn only.",
 	"battlecry": {
 		"targetSelection": "MINIONS",
 		"spell": {
-			"class": "SwapAttackAndHpSpell"
+			"class": "TemporaryAttackSpell",
+			"value": 2
 		}
 	},
 	"attributes": {
