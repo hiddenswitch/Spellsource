@@ -28,6 +28,7 @@ public class MatchmakingRequest implements Serializable {
 
 	public MatchmakingRequest(MatchmakingQueuePutRequest other, String userId) {
 		this.deck = other.getDeck();
+		this.deckId = other.getDeckId();
 		this.userId = userId;
 	}
 

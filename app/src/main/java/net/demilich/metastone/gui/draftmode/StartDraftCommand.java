@@ -44,7 +44,7 @@ public class StartDraftCommand extends SimpleCommand<GameNotification> {
 			dialog.setHeaderText(null);
 
 
-			MatchmakingTask matchmaking = new MatchmakingTask(sessionId, deck);
+			MatchmakingTask matchmaking = new MatchmakingTask(deck);
 
 			matchmaking.setOnSucceeded(e -> {
 				dialog.close();

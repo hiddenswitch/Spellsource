@@ -1,10 +1,7 @@
 package com.hiddenswitch.minionate.tasks;
 
-import com.hiddenswitch.proto3.net.client.ApiClient;
 import com.hiddenswitch.proto3.net.client.ApiException;
-import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
-import com.hiddenswitch.proto3.net.client.auth.ApiKeyAuth;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutRequest;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponse;
@@ -25,14 +22,18 @@ import java.util.stream.Collectors;
  */
 public class MatchmakingTask extends Task<Void> {
 	private final Deck deck;
+	private final String deckId;
 	private ClientConnectionConfiguration connection;
-	private final String userId;
-	private final AtomicBoolean isMatchmaking;
+	private final AtomicBoolean isMatchmaking = new AtomicBoolean();
 
-	public MatchmakingTask(String userId, Deck deck) {
-		this.userId = userId;
+	public MatchmakingTask(String deckId) {
+		this.deck = null;
+		this.deckId = deckId;
+	}
+
+	public MatchmakingTask(Deck deck) {
 		this.deck = deck;
-		this.isMatchmaking = new AtomicBoolean();
+		this.deckId = null;
 	}
 
 	public void stop() {
@@ -48,12 +49,19 @@ public class MatchmakingTask extends Task<Void> {
 
 			// Make the first request
 			MatchmakingQueuePutRequest request = new MatchmakingQueuePutRequest();
-			final List<String> cardIds = this.deck.getCards().toList().stream()
-					.map(Card::getCardId)
-					.collect(Collectors.toList());
+			if (deck != null) {
+				final List<String> cardIds = this.deck.getCards().toList().stream()
+						.map(Card::getCardId)
+						.collect(Collectors.toList());
 
-			// Legacy deck for now
-			request.setDeck(new MatchmakingDeck().cards(cardIds).heroClass(deck.getHeroClass().toString()));
+				// Legacy deck for now
+				request.setDeck(new MatchmakingDeck().cards(cardIds).heroClass(deck.getHeroClass().toString()));
+			}
+
+			if (deckId != null) {
+				request.setDeckId(deckId);
+			}
+
 			MatchmakingQueuePutResponse response = null;
 			try {
 				response = api.matchmakingConstructedQueuePut(request);
