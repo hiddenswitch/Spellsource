@@ -132,6 +132,13 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 					.method(HttpMethod.DELETE)
 					.handler(HandlerFactory.handler("deckId", this::decksDelete));
 
+			router.route("/v1/matchmaking/constructed")
+					.handler(bodyHandler);
+			router.route("/v1/matchmaking/constructed")
+					.handler(authHandler);
+			router.route("/v1/matchmaking/constructed")
+					.method(HttpMethod.DELETE)
+					.handler(HandlerFactory.handler(this::matchmakingConstructedDelete));
 
 			router.route("/v1/matchmaking/constructed/queue")
 					.handler(bodyHandler);
