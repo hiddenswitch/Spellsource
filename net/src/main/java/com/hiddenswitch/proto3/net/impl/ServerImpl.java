@@ -303,6 +303,16 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 		return WebResult.succeeded(response);
 	}
 
+	@Override
+	public WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
+		MatchCancelResponse response = matchmaking.cancel(new MatchCancelRequest(userId));
+		if (response == null) {
+			return WebResult.failed(new RuntimeException());
+		}
+		games.concedeGameSession(new ConcedeGameSessionRequest(response.getGameId(), response.getPlayerId()));
+		return WebResult.succeeded(new MatchConcedeResponse().isConceded(true));
+	}
+
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {
 		// Get the personal collection
 		UserRecord record = accounts.get(userId);

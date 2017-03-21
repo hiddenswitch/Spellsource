@@ -158,13 +158,14 @@ public class Matchmaker extends AbstractMap<String, QueueEntry> {
 		return entry;
 	}
 
-	public synchronized boolean remove(String userId) {
+	public synchronized Match remove(String userId) {
+		Match match = usersToMatches.getOrDefault(userId, null);
 		QueueEntry entry = entries.get(userId);
 		entries.remove(userId);
 		if (entry != null) {
 			queue.remove(entry);
 		}
-		return true;
+		return match;
 	}
 
 	public synchronized boolean remove(QueueEntry entry) {
@@ -233,7 +234,8 @@ public class Matchmaker extends AbstractMap<String, QueueEntry> {
 		@Override
 		public boolean remove(Object e) {
 			if (e instanceof String) {
-				return Matchmaker.this.remove((String) e);
+				Matchmaker.this.remove((String) e);
+				return true;
 			} else if (e instanceof QueueEntry) {
 				return Matchmaker.this.remove((QueueEntry) e);
 			}

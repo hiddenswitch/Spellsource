@@ -238,6 +238,11 @@ definitions:
     properties:
       isCanceled:
         type: 'boolean'
+  MatchConcedeResponse:
+    type: 'object'
+    properties:
+      isConceded:
+        type: 'boolean'
 paths:
   /accounts/{targetUserId}:
     get:
@@ -400,6 +405,19 @@ paths:
         "200":
           description: |
             The deck has been deleted.
+  /matchmaking/constructed:
+    delete:
+      description: |
+        Concedes the player's current constructed game.
+      operationId: matchmakingConstructedDelete
+      security:
+        - TokenSecurity: []
+      responses:
+        "200":
+          description: |
+            The client's game was successfully conceded.
+          schema:
+            $ref: '#/definitions/MatchConcedeResponse'
   /matchmaking/constructed/queue:
     put:
       description: |

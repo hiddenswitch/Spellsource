@@ -31,5 +31,7 @@ public interface Server {
 	WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext context, String userId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException;
 
 	WebResult<MatchCancelResponse> matchmakingConstructedQueueDelete(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
+
+	WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
 }
 

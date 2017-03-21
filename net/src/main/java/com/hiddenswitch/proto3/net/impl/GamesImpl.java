@@ -261,6 +261,13 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		return null;
 	}
 
+	@Override
+	public ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution {
+		// TODO: Actually do something special when the player concedes
+		kill(request.getGameId());
+		return new ConcedeGameSessionResponse();
+	}
+
 	public void kill(String gameId) throws SuspendExecution, InterruptedException {
 		ServerGameSession session = games.get(gameId);
 

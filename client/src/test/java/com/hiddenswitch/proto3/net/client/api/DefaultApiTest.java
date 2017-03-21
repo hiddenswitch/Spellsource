@@ -37,6 +37,7 @@ import com.hiddenswitch.proto3.net.client.models.GetAccountsResponse;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsRequest;
 import com.hiddenswitch.proto3.net.client.models.LoginResponse;
 import com.hiddenswitch.proto3.net.client.models.LoginRequest;
+import com.hiddenswitch.proto3.net.client.models.MatchConcedeResponse;
 import com.hiddenswitch.proto3.net.client.models.MatchCancelResponse;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutRequest;
@@ -195,6 +196,21 @@ public class DefaultApiTest {
     public void loginTest() throws ApiException {
         LoginRequest request = null;
         // LoginResponse response = api.login(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Concedes the player&#39;s current constructed game. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void matchmakingConstructedDeleteTest() throws ApiException {
+        // MatchConcedeResponse response = api.matchmakingConstructedDelete();
 
         // TODO: test validations
     }
