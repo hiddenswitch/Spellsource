@@ -17,6 +17,7 @@ import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.NotificationProxy;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.gameconfig.GameConfig;
 import net.demilich.metastone.gui.common.DeckFormatStringConverter;
 import net.demilich.metastone.gui.gameconfig.PlayerConfigView;
@@ -118,7 +119,8 @@ public class PlayModeConfigView extends BorderPane implements EventHandler<Actio
 				dialog.setTitle("Matchmaking");
 				dialog.setHeaderText(null);
 
-				MatchmakingTask matchmaking = new MatchmakingTask(sessionId, player1Config.getPlayerConfig().getDeck());
+				final DeckWithId deck = (DeckWithId) player1Config.getPlayerConfig().getDeck();
+				MatchmakingTask matchmaking = new MatchmakingTask(deck.getDeckId());
 
 				matchmaking.setOnSucceeded(e -> {
 					dialog.close();

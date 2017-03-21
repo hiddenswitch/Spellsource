@@ -50,7 +50,6 @@ public class AllianceGameEventListener implements IGameEventListener {
 		}
 
 		LogicResponse response = null;
-		EntityReference source = null;
 
 		switch (event.getEventType()) {
 			case AFTER_PHYSICAL_ATTACK:
@@ -69,7 +68,6 @@ public class AllianceGameEventListener implements IGameEventListener {
 
 				if (event2.getAttacker().hasAllianceEffects()) {
 					response = logic.uncheckedSync().afterPhysicalAttack(request1);
-					source = event2.getEventSource().getReference();
 				} else {
 					logic.async((AsyncResult<LogicResponse> ignored) -> {
 						// TODO: Do nothing really
@@ -90,7 +88,6 @@ public class AllianceGameEventListener implements IGameEventListener {
 				// not wait.
 				if (event1.getMinion().hasAllianceEffects()) {
 					response = logic.uncheckedSync().beforeSummon(request);
-					source = ((BeforeSummonEvent) event).getSource().getReference();
 				} else {
 					// If we don't have effects we don't need to wait.
 					logic.async((AsyncResult<LogicResponse> ignored) -> {
@@ -119,7 +116,7 @@ public class AllianceGameEventListener implements IGameEventListener {
 					SpellDesc spell = SetAttributeSpell.create(entry.getKey(), kv.getKey(), kv.getValue());
 					// By setting childSpell to true, additional spell casting triggers don't get called
 					// But target overriding effects apply, as they should.
-					event.getGameContext().getLogic().castSpell(entity.getOwner(), spell, source, null, true);
+					event.getGameContext().getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), null, true);
 				}
 			}
 		}
