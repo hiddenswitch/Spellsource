@@ -83,9 +83,10 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 				}
 				List<String> newInventoryIds = Collections.emptyList();
 				if (request.getQueryCardsRequest() != null) {
+					int copies = request.getCopies();
 					final QueryCardsResponse cardsResponse = cards.sync().queryCards(request.getQueryCardsRequest());
 					List<JsonObject> cardsToAdd = cardsResponse.getRecords().stream().map(CardCatalogueRecord::getJson).collect(Collectors.toList());
-					newInventoryIds = createCardsForUser(request.getUserId(), cardsToAdd);
+					newInventoryIds = createCardsForUser(request.getUserId(), cardsToAdd, copies);
 				}
 
 				if (request.getOpenCardPackRequest() != null) {
@@ -117,27 +118,35 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 		}
 	}
 
-	@Suspendable
-	protected List<String> createCardsForUser(final String userId, final List<JsonObject> cardsToAdd) {
+	protected List<String> createCardsForUser(final String userId, final List<JsonObject> cardsToAdd, int copies) throws InterruptedException, SuspendExecution {
 		if (userId == null) {
 			throw new NullPointerException();
 		}
 
 		List<String> ids = new ArrayList<>();
 		for (JsonObject card : cardsToAdd) {
-			InventoryRecord cardRecord = new InventoryRecord(card)
-					.withUserId(userId)
-					.withCollectionIds(Collections.singletonList(userId));
+			for (int i = 0; i < copies; i++) {
+				InventoryRecord cardRecord = new InventoryRecord(card)
+						.withUserId(userId)
+						.withCollectionIds(Collections.singletonList(userId));
 
-			ids.add(awaitResult(h -> getMongo().insert(INVENTORY, toJson(cardRecord), h)));
+				ids.add(awaitResult(h -> getMongo().insert(INVENTORY, toJson(cardRecord), h)));
+			}
 		}
 		return ids;
 	}
 
-	@Suspendable
-	protected List<String> createCardsForUser(final List<String> cardIds, final String userId) throws InterruptedException, SuspendExecution {
+	protected List<String> createCardsForUser(final String userId, final List<JsonObject> cardsToAdd) throws InterruptedException, SuspendExecution {
+		return createCardsForUser(userId, cardsToAdd, 1);
+	}
+
+	protected List<String> createCardsForUser(final List<String> cardIds, final String userId, int copies) throws InterruptedException, SuspendExecution {
 		return createCardsForUser(userId,
-				cards.sync().queryCards(new QueryCardsRequest().withCardIds(cardIds)).getRecords().stream().map(CardCatalogueRecord::getJson).collect(Collectors.toList()));
+				cards.sync().queryCards(new QueryCardsRequest().withCardIds(cardIds)).getRecords().stream().map(CardCatalogueRecord::getJson).collect(Collectors.toList()), copies);
+	}
+
+	protected List<String> createCardsForUser(final List<String> cardIds, final String userId) throws InterruptedException, SuspendExecution {
+		return createCardsForUser(cardIds, userId, 1);
 	}
 
 	@Override
@@ -216,6 +225,16 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 	@Override
 	@Suspendable
 	public GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution, InterruptedException {
+		if (request.isBatchRequest()) {
+			List<GetCollectionResponse> responses = new ArrayList<>();
+
+			for (GetCollectionRequest subRequest : request.getRequests()) {
+				responses.add(getCollection(subRequest));
+			}
+
+			return GetCollectionResponse.batch(responses);
+		}
+
 		final String collectionId;
 		final CollectionTypes type;
 		if (request.getUserId() != null

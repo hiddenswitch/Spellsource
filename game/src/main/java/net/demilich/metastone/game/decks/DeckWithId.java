@@ -1,14 +1,14 @@
-package com.hiddenswitch.proto3.net.impl.util;
+package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.decks.Deck;
 
 /**
  * Created by bberman on 2/15/17.
  */
-public class AllianceDeck extends Deck {
+public class DeckWithId extends Deck {
 	private String deckId;
 
-	public AllianceDeck(String deckId) {
+	public DeckWithId(String deckId) {
 		super();
 		this.deckId = deckId;
 	}

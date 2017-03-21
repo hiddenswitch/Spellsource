@@ -44,9 +44,9 @@ public class FilterCardsCommand extends SimpleCommand<GameNotification> {
 	public void execute(INotification<GameNotification> notification) {
 		CardFilter filter = (CardFilter) notification.getBody();
 
-		DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
+		DeckEditor deckEditor = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
 
-		List<Card> cards = deckProxy.getCards(deckProxy.getActiveDeck().getHeroClass());
+		List<Card> cards = deckEditor.getCards(deckEditor.getActiveDeck().getHeroClass());
 		cards = filterByFormat(cards, filter.getFormat());
 		cards = filterBySet(cards, filter.getSet());
 		cards = filterByText(cards, filter.getText());

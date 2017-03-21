@@ -19,7 +19,7 @@ public class HandlerFactory {
 	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, AuthorizedRequestHandler<T, R> internalHandler) {
 		return suspendableHandler((context) -> {
 			String userId = context.user().principal().getString("_id");
-			T request = Json.decodeValue(context.getBodyAsString(), classT);
+			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			WebResult<R> result = internalHandler.call(context, userId, request);
 			respond(context, result);
 		});
@@ -27,7 +27,7 @@ public class HandlerFactory {
 
 	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, RequestHandler<T, R> internalHandler) {
 		return suspendableHandler((context) -> {
-			T request = Json.decodeValue(context.getBodyAsString(), classT);
+			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			WebResult<R> result = internalHandler.call(context, request);
 			respond(context, result);
 		});
@@ -45,7 +45,7 @@ public class HandlerFactory {
 	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, String paramName, AuthorizedBodyAndParamHandler<T, R> internalHandler) {
 		return suspendableHandler((context) -> {
 			String param = context.pathParam(paramName);
-			T request = Json.decodeValue(context.getBodyAsString(), classT);
+			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			String userId = context.user().principal().getString("_id");
 			WebResult<R> result = internalHandler.call(context, userId, param, request);
 			respond(context, result);

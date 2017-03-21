@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.vertx.core.json.Json;
@@ -44,9 +46,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDeserializer;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 
 public class CardParser {
-
 	private static Logger logger = LoggerFactory.getLogger(CardParser.class);
-
 	private static final Gson gson;
 
 	static {

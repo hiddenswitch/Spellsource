@@ -13,6 +13,10 @@ public class CardCollection implements Iterable<Card>, Cloneable, Serializable {
 	public CardCollection() {
 	}
 
+	public CardCollection(List<Card> cards) {
+		this.cards = new ArrayList<>(cards);
+	}
+
 	public CardCollection add(Card card) {
 		cards.add(card);
 		return this;

@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
@@ -110,6 +111,9 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 			router.route("/v1/decks")
 					.method(HttpMethod.PUT)
 					.handler(HandlerFactory.handler(DecksPutRequest.class, this::decksPut));
+			router.route("/v1/decks")
+					.method(HttpMethod.GET)
+					.handler(HandlerFactory.handler(this::decksGetAll));
 
 			router.route("/v1/decks/:deckId")
 					.handler(bodyHandler);
@@ -222,21 +226,9 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 				.withUserId(userId)
 				.withDeckId(deckId));
 
-		List<CardRecord> inventoryItems = updatedCollection.getInventoryRecords().stream().map(cr -> new CardRecord()
-				.id(cr.getId())
-				.cardDesc(cr.getCardDescMap())
-				.collectionIds(cr.getCollectionIds())
-				.borrowedByUserId(cr.getBorrowedByUserId())
-				.userId(cr.getUserId())).collect(toList());
-
 		return WebResult.succeeded(new DecksGetResponse()
-				.inventoryIdsSize(inventoryItems.size())
-				.collection(new InventoryCollection()
-						.inventory(inventoryItems)
-						.heroClass(updatedCollection.getHeroClass().toString())
-						.name(updatedCollection.getName())
-						.type(CollectionTypes.DECK.toString())
-						.userId(updatedCollection.getUserId())));
+				.inventoryIdsSize(updatedCollection.getInventoryRecords().size())
+				.collection(updatedCollection.asInventoryCollection()));
 	}
 
 	@Override
@@ -252,6 +244,17 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 		return getDeck(userId, deckId);
 	}
 
+	@Override
+	public WebResult<DecksGetAllResponse> decksGetAll(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
+		List<String> decks = accounts.get(userId).getDecks();
+
+		List<DecksGetResponse> responses = new ArrayList<>();
+		for (String deck : decks) {
+			responses.add(getDeck(userId, deck).result());
+		}
+
+		return WebResult.succeeded(new DecksGetAllResponse().decks(responses));
+	}
 
 	@Override
 	public WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException {
@@ -305,23 +308,14 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 		UserRecord record = accounts.get(userId);
 		GetCollectionResponse personalCollection = inventory.getCollection(GetCollectionRequest.user(record.getId()));
 
+		// Get the decks
+		GetCollectionResponse deckCollections = inventory.getCollection(GetCollectionRequest.decks(record.getDecks()));
+
 		final String displayName = record.getProfile().getDisplayName();
 		return new Account()
 				.id(record.getId())
-				.decks(Collections.emptyList())
-				.personalCollection(new InventoryCollection()
-						.name(String.format("The %s Collection", displayName))
-						.id(personalCollection.getCollectionId())
-						.type(CollectionTypes.USER.toString())
-						.inventory(personalCollection.getInventoryRecords().stream().map(cr ->
-								new CardRecord()
-										.userId(cr.getUserId())
-										.collectionIds(cr.getCollectionIds())
-										.cardDesc(cr.getCardDescMap())
-										.id(cr.getId())
-										.allianceId(cr.getAllianceId())
-										.donorUserId(cr.getDonorUserId()))
-								.collect(toList())))
+				.decks(deckCollections.getResponses().stream().map(GetCollectionResponse::asInventoryCollection).collect(toList()))
+				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getProfile().getEmailAddress())
 				.name(displayName);
 	}

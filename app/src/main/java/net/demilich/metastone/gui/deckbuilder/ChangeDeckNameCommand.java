@@ -8,10 +8,10 @@ public class ChangeDeckNameCommand extends SimpleCommand<GameNotification> {
 
 	@Override
 	public void execute(INotification<GameNotification> notification) {
-		DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
+		DeckEditor deckEditor = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
 
 		String newDeckName = (String) notification.getBody();
-		deckProxy.getActiveDeck().setName(newDeckName);
+		deckEditor.setDeckName(newDeckName);
 	}
 
 }

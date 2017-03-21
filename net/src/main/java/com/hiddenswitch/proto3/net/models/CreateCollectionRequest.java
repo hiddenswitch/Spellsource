@@ -19,6 +19,7 @@ public class CreateCollectionRequest implements Serializable {
 	private String name;
 	private QueryCardsRequest queryCardsRequest;
 	private HeroClass heroClass;
+	private int copies = 1;
 
 	protected CreateCollectionRequest() {
 	}
@@ -37,13 +38,9 @@ public class CreateCollectionRequest implements Serializable {
 				.withType(CollectionTypes.USER)
 				.withUserId(userId)
 				.withName(userId + "'s Collection")
-				.withOpenCardPack(new OpenCardPackRequest()
-						.withUserId(userId)
-						.withSets(CardSet.MINIONATE)
-						.withNumberOfPacks(5)
-						.withCardsPerPack(5))
+				.withCopies(2)
 				.withCardsQuery(new QueryCardsRequest()
-						.withSets(CardSet.BASIC, CardSet.CLASSIC));
+						.withSets(CardSet.MINIONATE));
 	}
 
 	public static CreateCollectionRequest alliance(String allianceId, String ownerUserId, List<String> userIds, List<String> inventoryIds) {
@@ -186,6 +183,19 @@ public class CreateCollectionRequest implements Serializable {
 
 	public CreateCollectionRequest withUserIds(final List<String> userIds) {
 		this.userIds = userIds;
+		return this;
+	}
+
+	public int getCopies() {
+		return copies;
+	}
+
+	public void setCopies(int copies) {
+		this.copies = copies;
+	}
+
+	public CreateCollectionRequest withCopies(final int copies) {
+		this.copies = copies;
 		return this;
 	}
 }

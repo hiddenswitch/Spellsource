@@ -100,6 +100,10 @@ public class Deck implements Serializable {
 		this.filename = filename;
 	}
 
+	public void setHeroClass(HeroClass heroClass) {
+		this.heroClass = heroClass;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

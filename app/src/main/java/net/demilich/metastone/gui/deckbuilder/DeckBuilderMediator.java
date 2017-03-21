@@ -3,6 +3,9 @@ package net.demilich.metastone.gui.deckbuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hiddenswitch.minionate.Client;
+import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
+import javafx.collections.ListChangeListener;
 import net.demilich.nittygrittymvc.Mediator;
 import net.demilich.nittygrittymvc.interfaces.INotification;
 import net.demilich.metastone.GameNotification;
@@ -27,39 +30,43 @@ public class DeckBuilderMediator extends Mediator<GameNotification> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void handleNotification(final INotification<GameNotification> notification) {
+		DeckEditor deckProxy = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
 		switch (notification.getId()) {
-		case CREATE_NEW_DECK:
-			DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
-			deckProxy.setActiveDeckValidator(new DefaultDeckValidator());
-			view.createNewDeck();
-			break;
-		case EDIT_DECK:
-			view.editDeck((Deck) notification.getBody());
-			break;
-		case ACTIVE_DECK_CHANGED:
-			view.activeDeckChanged((Deck) notification.getBody());
-			break;
-		case FILTERED_CARDS:
-			view.filteredCards((List<Card>) notification.getBody());
-			break;
-		case DECKS_LOADED:
-			view.displayDecks((List<Deck>) notification.getBody());
-			break;
-		case INVALID_DECK_NAME:
-			DialogNotification dialogNotification = new DialogNotification("Name your deck", "Please enter a valid name for this deck.",
-					DialogType.WARNING);
-			getFacade().notifyObservers(dialogNotification);
-			break;
-		case DECK_FORMATS_LOADED:
-			List<DeckFormat> deckFormats = (List<DeckFormat>) notification.getBody();
-			view.injectDeckFormats(deckFormats);
-			break;
-		case DUPLICATE_DECK_NAME:
-			getFacade().notifyObservers(new DialogNotification("Duplicate deck name",
-					"This deck name was already used for another deck. Please choose another name", DialogType.WARNING));
-			break;
-		default:
-			break;
+			case CREATE_NEW_DECK:
+				deckProxy.setActiveDeckValidator(new DefaultDeckValidator());
+				view.createNewDeck();
+				break;
+			case EDIT_DECK:
+				Deck deckToEdit = (Deck) notification.getBody();
+				if (deckToEdit == null) {
+					deckToEdit = deckProxy.getActiveDeck();
+				}
+				view.editDeck(deckToEdit);
+				break;
+			case ACTIVE_DECK_CHANGED:
+				view.activeDeckChanged((Deck) notification.getBody());
+				break;
+			case FILTERED_CARDS:
+				view.filteredCards((List<Card>) notification.getBody());
+				break;
+			case DECKS_LOADED:
+				view.displayDecks((List<Deck>) notification.getBody());
+				break;
+			case INVALID_DECK_NAME:
+				DialogNotification dialogNotification = new DialogNotification("Name your deck", "Please enter a valid name for this deck.",
+						DialogType.WARNING);
+				getFacade().notifyObservers(dialogNotification);
+				break;
+			case DECK_FORMATS_LOADED:
+				List<DeckFormat> deckFormats = (List<DeckFormat>) notification.getBody();
+				view.injectDeckFormats(deckFormats);
+				break;
+			case DUPLICATE_DECK_NAME:
+				getFacade().notifyObservers(new DialogNotification("Duplicate deck name",
+						"This deck name was already used for another deck. Please choose another name", DialogType.WARNING));
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -83,5 +90,4 @@ public class DeckBuilderMediator extends Mediator<GameNotification> {
 		getFacade().sendNotification(GameNotification.LOAD_DECKS);
 		getFacade().sendNotification(GameNotification.LOAD_DECK_FORMATS);
 	}
-
 }

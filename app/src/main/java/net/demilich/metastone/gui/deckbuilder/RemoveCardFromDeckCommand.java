@@ -9,11 +9,11 @@ public class RemoveCardFromDeckCommand extends SimpleCommand<GameNotification> {
 
 	@Override
 	public void execute(INotification<GameNotification> notification) {
-		DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
+		DeckEditor deckEditor = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
 		Card card = (Card) notification.getBody();
-		deckProxy.getActiveDeck().getCards().remove(card);
+		deckEditor.removeCardFromDeck(card);
 
-		getFacade().sendNotification(GameNotification.ACTIVE_DECK_CHANGED, deckProxy.getActiveDeck());
+		getFacade().sendNotification(GameNotification.ACTIVE_DECK_CHANGED, deckEditor.getActiveDeck());
 	}
 
 }

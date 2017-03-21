@@ -16,12 +16,14 @@ import io.vertx.ext.auth.User;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 
 public class UserRecord extends MongoRecord implements User, Serializable {
 	private Profile profile;
 	private AuthorizationRecord auth;
+	private List<String> decks;
 
 	public UserRecord() {
 		super();
@@ -73,5 +75,13 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	public void setAuth(AuthorizationRecord auth) {
 		this.auth = auth;
+	}
+
+	public List<String> getDecks() {
+		return decks;
+	}
+
+	public void setDecks(List<String> decks) {
+		this.decks = decks;
 	}
 }

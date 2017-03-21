@@ -93,6 +93,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**createAccount**](docs/DefaultApi.md#createAccount) | **PUT** /accounts | 
 *DefaultApi* | [**decksDelete**](docs/DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
 *DefaultApi* | [**decksGet**](docs/DefaultApi.md#decksGet) | **GET** /decks/{deckId} | 
+*DefaultApi* | [**decksGetAll**](docs/DefaultApi.md#decksGetAll) | **GET** /decks | 
 *DefaultApi* | [**decksPut**](docs/DefaultApi.md#decksPut) | **PUT** /decks | 
 *DefaultApi* | [**decksUpdate**](docs/DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
@@ -108,6 +109,7 @@ Class | Method | HTTP request | Description
  - [CardRecord](docs/CardRecord.md)
  - [CreateAccountRequest](docs/CreateAccountRequest.md)
  - [CreateAccountResponse](docs/CreateAccountResponse.md)
+ - [DecksGetAllResponse](docs/DecksGetAllResponse.md)
  - [DecksGetResponse](docs/DecksGetResponse.md)
  - [DecksPutRequest](docs/DecksPutRequest.md)
  - [DecksPutResponse](docs/DecksPutResponse.md)

@@ -43,7 +43,9 @@ public class DeckNameView extends HBox implements ChangeListener<String> {
 
 	public void updateDeck(Deck deck) {
 		classIcon.setImage(IconFactory.getClassIcon(deck.getHeroClass()));
-		nameField.setText(deck.getName());
+		nameField.textProperty().removeListener(this);
+		nameField.textProperty().setValue(deck.getName());
+		nameField.textProperty().addListener(this);
 	}
 
 }

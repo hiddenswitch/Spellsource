@@ -13,9 +13,6 @@ import java.util.List;
  * Created by bberman on 2/13/17.
  */
 public class AccountsMediator extends Mediator<GameNotification> {
-	public static String getToken() {
-		return ((ApiKeyAuth) Configuration.getDefaultApiClient().getAuthentication("TokenSecurity")).getApiKey();
-	}
 
 	public static final String NAME = "AccountsMediator";
 	private final AccountsView view;

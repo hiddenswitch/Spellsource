@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
+import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.decks.Deck;
 import org.apache.commons.collections.list.TreeList;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -43,8 +44,8 @@ public class Matchmaker extends AbstractMap<String, QueueEntry> {
 		}
 
 		public boolean isAllianceMatch() {
-			return entry1.deck instanceof AllianceDeck
-					&& entry2.deck instanceof AllianceDeck;
+			return entry1.deck instanceof DeckWithId
+					&& entry2.deck instanceof DeckWithId;
 		}
 	}
 

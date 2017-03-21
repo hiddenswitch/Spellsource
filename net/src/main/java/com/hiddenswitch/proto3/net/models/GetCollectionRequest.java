@@ -1,6 +1,8 @@
 package com.hiddenswitch.proto3.net.models;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by bberman on 1/22/17.
@@ -8,6 +10,7 @@ import java.io.Serializable;
 public class GetCollectionRequest implements Serializable {
 	private String userId;
 	private String deckId;
+	private List<GetCollectionRequest> requests;
 
 	public GetCollectionRequest() {
 	}
@@ -47,6 +50,28 @@ public class GetCollectionRequest implements Serializable {
 	public static GetCollectionRequest deck(String deckId) {
 		return new GetCollectionRequest()
 				.withDeckId(deckId);
+	}
+
+	public static GetCollectionRequest decks(List<String> decks) {
+		return new GetCollectionRequest()
+				.withRequests(decks.stream().map(GetCollectionRequest::deck).collect(Collectors.toList()));
+	}
+
+	public List<GetCollectionRequest> getRequests() {
+		return requests;
+	}
+
+	public void setRequests(List<GetCollectionRequest> requests) {
+		this.requests = requests;
+	}
+
+	public GetCollectionRequest withRequests(final List<GetCollectionRequest> requests) {
+		this.requests = requests;
+		return this;
+	}
+
+	public boolean isBatchRequest() {
+		return this.requests != null && this.requests.size() > 0;
 	}
 }
 

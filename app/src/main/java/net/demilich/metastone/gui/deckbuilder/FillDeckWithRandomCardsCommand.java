@@ -18,25 +18,24 @@ public class FillDeckWithRandomCardsCommand extends SimpleCommand<GameNotificati
 
 	@Override
 	public void execute(INotification<GameNotification> notification) {
-		DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
+		DeckEditor deckEditor = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
 
-		Deck activeDeck = deckProxy.getActiveDeck();
-		List<Card> cards = deckProxy.getCards(activeDeck.getHeroClass());
-		if (activeDeck.isTooBig()) {
-			while (!activeDeck.isComplete()) {
-				Card randomCard = activeDeck.getCards().getRandom();
-				deckProxy.removeCardFromDeck(randomCard);
+		List<Card> cards = deckEditor.getCards(deckEditor.getActiveDeck().getHeroClass());
+		if (deckEditor.getActiveDeck().isTooBig()) {
+			while (!deckEditor.getActiveDeck().isComplete()) {
+				Card randomCard = deckEditor.getActiveDeck().getCards().getRandom();
+				deckEditor.removeCardFromDeck(randomCard);
 				logger.debug("Removing card {} to deck.", randomCard);
 			}
 		} else {
-			while (!activeDeck.isComplete()) {
+			while (!deckEditor.getActiveDeck().isComplete()) {
 				Card randomCard = cards.get(ThreadLocalRandom.current().nextInt(cards.size()));
-				if (deckProxy.addCardToDeck(randomCard)) {
+				if (deckEditor.addCardToDeck(randomCard)) {
 					logger.debug("Adding card {} to deck.", randomCard);
 				}
 			}
 		}
-		getFacade().sendNotification(GameNotification.ACTIVE_DECK_CHANGED, activeDeck);
+		getFacade().sendNotification(GameNotification.ACTIVE_DECK_CHANGED, deckEditor.getActiveDeck());
 	}
 
 }

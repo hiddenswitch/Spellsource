@@ -40,6 +40,8 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 			context.assertNotNull(account.getEmail());
 			context.assertNotNull(account.getName());
 			context.assertNotNull(account.getPersonalCollection());
+			context.assertNotNull(account.getDecks());
+			context.assertTrue(account.getDecks().size() > 0);
 			context.assertTrue(account.getPersonalCollection().getInventory().size() > 0);
 		}
 

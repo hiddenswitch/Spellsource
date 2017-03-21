@@ -16,6 +16,7 @@ import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 
 import java.util.EnumMap;
+import java.util.List;
 
 public abstract class Card extends Entity {
 	private static final long serialVersionUID = 1L;
@@ -287,5 +288,9 @@ public abstract class Card extends Entity {
 
 	public CardDesc getOriginalDesc() {
 		return originalDesc;
+	}
+
+	public String getCardInventoryId() {
+		return (String) getAttribute(Attribute.CARD_INVENTORY_ID);
 	}
 }

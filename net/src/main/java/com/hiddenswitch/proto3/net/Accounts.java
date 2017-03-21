@@ -13,6 +13,8 @@ import com.hiddenswitch.proto3.net.amazon.LoginResponse;
  * Created by bberman on 12/8/16.
  */
 public interface Accounts {
+	String USERS = "accounts.users";
+
 	@Suspendable
 	CreateAccountResponse createAccount(CreateAccountRequest request) throws SuspendExecution, InterruptedException;
 
