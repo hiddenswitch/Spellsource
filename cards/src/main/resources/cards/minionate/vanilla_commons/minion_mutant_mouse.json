@@ -1,9 +1,9 @@
 {
-	"name": "Lab Technician",
-	"baseManaCost": 4,
+	"name": "Mutant Mouse",
+	"baseManaCost": 5,
 	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 5,
+	"baseAttack": 5,
+	"baseHp": 6,
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"description": "",

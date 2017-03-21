@@ -1,9 +1,9 @@
 {
-	"name": "Lab Technician",
-	"baseManaCost": 4,
+	"name": "Behemoth Rodent",
+	"baseManaCost": 8,
 	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 5,
+	"baseAttack": 8,
+	"baseHp": 8,
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"description": "",
