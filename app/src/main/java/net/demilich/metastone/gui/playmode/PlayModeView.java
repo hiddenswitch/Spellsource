@@ -2,6 +2,7 @@ package net.demilich.metastone.gui.playmode;
 
 import java.io.IOException;
 
+import com.hiddenswitch.minionate.Client;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -14,9 +15,11 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.human.HumanTargetOptions;
 
 public class PlayModeView extends BorderPane {
-
 	@FXML
 	private Button backButton;
+
+	@FXML
+	private Button concedeButton;
 
 	@FXML
 	private VBox sidePane;
@@ -51,6 +54,7 @@ public class PlayModeView extends BorderPane {
 		//sidePane.getChildren().add(actionPromptView);
 
 		backButton.setOnAction(actionEvent -> NotificationProxy.sendNotification(GameNotification.MAIN_MENU));
+		concedeButton.setOnAction(actionEvent -> Client.getInstance().concede());
 
 		sidePane.getChildren().setAll(actionPromptView, navigationPane);
 	}

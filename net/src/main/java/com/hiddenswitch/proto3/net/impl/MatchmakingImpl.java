@@ -47,7 +47,12 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 
 	@Override
 	public MatchCancelResponse cancel(MatchCancelRequest matchCancelRequest) {
-		return new MatchCancelResponse(matchmaker.remove(matchCancelRequest.getUserId()));
+		final String userId = matchCancelRequest.getUserId();
+		final Matchmaker.Match match = matchmaker.remove(userId);
+		if (match != null) {
+			return new MatchCancelResponse(true, match.gameId, match.entry1.userId.equals(userId) ? 0 : 1);
+		}
+		return new MatchCancelResponse(true, null, -1);
 	}
 
 	@Override
@@ -104,7 +109,7 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 		Matchmaker.Match match = matchmaker.match(userId, deck);
 
 		if (match == null) {
-			response.setRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null).withUserId(userId));
+			response.setRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null).withDeckId(null).withUserId(userId));
 			return response;
 		}
 
@@ -129,7 +134,7 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 										.withDeckId(((DeckWithId) deck2).getDeckId())));
 
 				deck1 = startGameResponse.getPlayers().get(0).getDeck();
-				deck2 = startGameResponse.getPlayers().get(0).getDeck();
+				deck2 = startGameResponse.getPlayers().get(1).getDeck();
 			} else if (deck1 instanceof DeckWithId
 					|| deck2 instanceof DeckWithId) {
 				// We can't run in alliance mode with only one of the decks references by ID.

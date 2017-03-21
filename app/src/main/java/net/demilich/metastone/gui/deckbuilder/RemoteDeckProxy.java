@@ -53,7 +53,8 @@ public class RemoteDeckProxy extends Proxy<GameNotification> implements DeckEdit
 				.getCardRecords()
 				.stream()
 				.map(Client.getInstance()::parseCard)
-				.filter(c -> c.getHeroClass().equals(heroClass))
+				.filter(c -> c.getHeroClass().equals(heroClass) || c.getHeroClass().equals(HeroClass.ANY))
+				.sorted((c1, c2) -> Integer.compare(c1.getBaseManaCost(), c2.getBaseManaCost()))
 				.collect(Collectors.toList());
 	}
 

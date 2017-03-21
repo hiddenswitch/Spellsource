@@ -265,6 +265,14 @@ public class Client {
 		});
 	}
 
+	public ApiTask<ConcedeResult> concede() {
+		return new ApiTask<>(api -> {
+			ConcedeResult response = api.concede(new ConcedeRequest());
+
+			return response;
+		});
+	}
+
 	public class PreferencesStringProperty extends StringPropertyBase {
 		private final String key;
 

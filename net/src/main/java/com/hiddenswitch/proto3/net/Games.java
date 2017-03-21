@@ -22,4 +22,7 @@ public interface Games {
 
 	@Suspendable
 	UpdateEntityResponse updateEntity(UpdateEntityRequest request);
+
+	@Suspendable
+	ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution;
 }
