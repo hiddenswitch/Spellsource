@@ -56,13 +56,13 @@ public class DeckInfoView extends HBox implements EventHandler<ActionEvent>, IDi
 					DialogType.WARNING);
 			ApplicationFacade.getInstance().notifyObservers(dialogNotification);
 		} else if (!activeDeck.isMetaDeck() && !activeDeck.isComplete() && !activeDeck.isTooBig() && !activeDeck.isArbitrary()) {
-			DialogNotification dialogNotification = new DialogNotification("Add random cards",
-					"Your deck is not complete yet. If you proceed, all open slots will be filled with random cards.", DialogType.CONFIRM);
+			DialogNotification dialogNotification = new DialogNotification("Not playable",
+					"Your deck is not complete yet. If you proceed, you will not be able to use this deck.", DialogType.CONFIRM);
 			dialogNotification.setHandler(this);
 			ApplicationFacade.getInstance().notifyObservers(dialogNotification);
 		} else if (!activeDeck.isMetaDeck() && !activeDeck.isComplete() && activeDeck.isTooBig() && !activeDeck.isArbitrary()) {
-			DialogNotification dialogNotification = new DialogNotification("Remove random cards",
-					"Your deck has too many cards. If you proceed, some cards will be removed at random.", DialogType.CONFIRM);
+			DialogNotification dialogNotification = new DialogNotification("Not playable",
+					"Your deck has too many cards. If you proceed, you will not be ablet o use this deck.", DialogType.CONFIRM);
 			dialogNotification.setHandler(this);
 			ApplicationFacade.getInstance().notifyObservers(dialogNotification);
 		} else {
@@ -74,7 +74,6 @@ public class DeckInfoView extends HBox implements EventHandler<ActionEvent>, IDi
 	@Override
 	public void onDialogClosed(DialogResult result) {
 		if (result == DialogResult.OK) {
-			NotificationProxy.sendNotification(GameNotification.FILL_DECK_WITH_RANDOM_CARDS);
 			NotificationProxy.sendNotification(GameNotification.SAVE_ACTIVE_DECK);
 		}
 	}

@@ -29,6 +29,7 @@ import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.DecksGetResponse;
+import com.hiddenswitch.proto3.net.client.models.DecksGetAllResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksPutRequest;
 import com.hiddenswitch.proto3.net.client.models.DecksPutResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
@@ -98,6 +99,21 @@ public class DefaultApiTest {
     public void decksGetTest() throws ApiException {
         String deckId = null;
         // DecksGetResponse response = api.decksGet(deckId);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Gets all the user&#39;s decks. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void decksGetAllTest() throws ApiException {
+        // DecksGetAllResponse response = api.decksGetAll();
 
         // TODO: test validations
     }

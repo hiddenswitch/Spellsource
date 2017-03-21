@@ -11,17 +11,17 @@ public class SetActiveDeckCommand extends SimpleCommand<GameNotification> {
 
 	@Override
 	public void execute(INotification<GameNotification> notification) {
-		DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
+		DeckEditor deckEditor = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
 		Deck activeDeck = (Deck) notification.getBody();
 		if (activeDeck.isArbitrary()) {
-			deckProxy.setActiveDeckValidator(new ArbitraryDeckValidator());
+			deckEditor.setActiveDeckValidator(new ArbitraryDeckValidator());
 		} else {
-			deckProxy.setActiveDeckValidator(new DefaultDeckValidator());
+			deckEditor.setActiveDeckValidator(new DefaultDeckValidator());
 		}
-		deckProxy.setActiveDeck(activeDeck);
+		deckEditor.setActiveDeck(activeDeck);
 
 		getFacade().sendNotification(GameNotification.EDIT_DECK, activeDeck);
-		getFacade().sendNotification(GameNotification.FILTERED_CARDS, deckProxy.getCards(activeDeck.getHeroClass()));
+		getFacade().sendNotification(GameNotification.FILTERED_CARDS, deckEditor.getCards(activeDeck.getHeroClass()));
 		getFacade().sendNotification(GameNotification.ACTIVE_DECK_CHANGED, activeDeck);
 	}
 

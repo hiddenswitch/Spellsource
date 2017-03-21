@@ -78,6 +78,7 @@ public class ChooseClassView extends BorderPane implements EventHandler<ActionEv
 		shamanButton.setOnAction(this);
 		mageButton.setOnAction(this);
 		priestButton.setOnAction(this);
+		collectionButton.setDisable(true);
 
 		collectionButton.setOnAction(this);
 	}
@@ -85,31 +86,32 @@ public class ChooseClassView extends BorderPane implements EventHandler<ActionEv
 	@Override
 	public void handle(ActionEvent event) {
 		Deck newDeck = null;
-
+		HeroClass heroClass = null;
 
 		if (event.getSource() == warriorButton) {
-			newDeck = new Deck(HeroClass.WARRIOR, arbitrary);
+			heroClass = HeroClass.WARRIOR;
 		} else if (event.getSource() == paladinButton) {
-			newDeck = new Deck(HeroClass.PALADIN, arbitrary);
+			heroClass = HeroClass.PALADIN;
 		} else if (event.getSource() == druidButton) {
-			newDeck = new Deck(HeroClass.DRUID, arbitrary);
+			heroClass = HeroClass.DRUID;
 		} else if (event.getSource() == rogueButton) {
-			newDeck = new Deck(HeroClass.ROGUE, arbitrary);
+			heroClass = HeroClass.ROGUE;
 		} else if (event.getSource() == warlockButton) {
-			newDeck = new Deck(HeroClass.WARLOCK, arbitrary);
+			heroClass = HeroClass.WARLOCK;
 		} else if (event.getSource() == hunterButton) {
-			newDeck = new Deck(HeroClass.HUNTER, arbitrary);
+			heroClass = HeroClass.HUNTER;
 		} else if (event.getSource() == shamanButton) {
-			newDeck = new Deck(HeroClass.SHAMAN, arbitrary);
+			heroClass = HeroClass.SHAMAN;
 		} else if (event.getSource() == mageButton) {
-			newDeck = new Deck(HeroClass.MAGE, arbitrary);
+			heroClass = HeroClass.MAGE;
 		} else if (event.getSource() == priestButton) {
-			newDeck = new Deck(HeroClass.PRIEST, arbitrary);
+			heroClass = HeroClass.PRIEST;
 		} else if (event.getSource() == collectionButton) {
 			newDeck = new MetaDeck();
 		}
 
-		NotificationProxy.sendNotification(GameNotification.SET_ACTIVE_DECK, newDeck);
+		NotificationProxy.sendNotification(GameNotification.NEW_DECK_CLASS_SELECTED, heroClass);
+		NotificationProxy.sendNotification(GameNotification.EDIT_DECK);
 	}
 
 	private void onArbitraryBoxChanged(ObservableValue<? extends Boolean> ov, Boolean oldValue, Boolean newValue) {

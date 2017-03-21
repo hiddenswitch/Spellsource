@@ -24,6 +24,8 @@ public interface Server {
 
 	WebResult<DecksGetResponse> decksGet(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException;
 
+	WebResult<DecksGetAllResponse> decksGetAll(RoutingContext context, String userId) throws  SuspendExecution, InterruptedException;
+
 	WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException;
 
 	WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext context, String userId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException;

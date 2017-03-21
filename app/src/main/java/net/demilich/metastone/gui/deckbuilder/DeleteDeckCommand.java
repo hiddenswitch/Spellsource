@@ -11,8 +11,8 @@ public class DeleteDeckCommand extends SimpleCommand<GameNotification> {
 	public void execute(INotification<GameNotification> notification) {
 		Deck deck = (Deck) notification.getBody();
 		
-		DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
-		deckProxy.deleteDeck(deck);
+		DeckEditor deckEditor = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
+		deckEditor.deleteDeck(deck);
 	}
 
 }

@@ -166,5 +166,10 @@ public class InventoryRecord extends MongoRecord {
 	public String getLastMinionDestroyedInventoryId() {
 		return (String) facts.getOrDefault("lastMinionDestroyedInventoryId", null);
 	}
+
+	@JsonIgnore
+	public String getCardId() {
+		return (String) cardDesc.get("id");
+	}
 }
 

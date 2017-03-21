@@ -1,18 +1,18 @@
 package net.demilich.metastone.gui.deckbuilder.metadeck;
 
+import net.demilich.metastone.gui.deckbuilder.DeckEditor;
 import net.demilich.nittygrittymvc.SimpleCommand;
 import net.demilich.nittygrittymvc.interfaces.INotification;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.MetaDeck;
-import net.demilich.metastone.gui.deckbuilder.DeckProxy;
 
 public class RemoveDeckFromMetaDeckCommand extends SimpleCommand<GameNotification> {
 
 	@Override
 	public void execute(INotification<GameNotification> notification) {
-		DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
-		MetaDeck metaDeck = (MetaDeck) deckProxy.getActiveDeck();
+		DeckEditor deckEditor = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
+		MetaDeck metaDeck = (MetaDeck) deckEditor.getActiveDeck();
 
 		Deck deck = (Deck) notification.getBody();
 		if (!metaDeck.getDecks().contains(deck)) {
@@ -20,7 +20,7 @@ public class RemoveDeckFromMetaDeckCommand extends SimpleCommand<GameNotificatio
 		}
 
 		metaDeck.getDecks().remove(deck);
-		getFacade().sendNotification(GameNotification.ACTIVE_DECK_CHANGED, deckProxy.getActiveDeck());
+		getFacade().sendNotification(GameNotification.ACTIVE_DECK_CHANGED, deckEditor.getActiveDeck());
 
 	}
 

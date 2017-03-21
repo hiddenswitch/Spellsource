@@ -10,6 +10,7 @@ public class DeckCreateRequest implements Serializable {
 	private String name;
 	private HeroClass heroClass;
 	private List<String> inventoryIds;
+	private List<String> cardIds;
 
 	public String getUserId() {
 		return userId;
@@ -56,6 +57,19 @@ public class DeckCreateRequest implements Serializable {
 
 	public DeckCreateRequest withInventoryIds(final List<String> inventoryIds) {
 		this.inventoryIds = inventoryIds;
+		return this;
+	}
+
+	public List<String> getCardIds() {
+		return cardIds;
+	}
+
+	public void setCardIds(List<String> cardIds) {
+		this.cardIds = cardIds;
+	}
+
+	public DeckCreateRequest withCardIds(final List<String> cardIds) {
+		this.cardIds = cardIds;
 		return this;
 	}
 }

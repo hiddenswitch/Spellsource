@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**createAccount**](DefaultApi.md#createAccount) | **PUT** /accounts | 
 [**decksDelete**](DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
 [**decksGet**](DefaultApi.md#decksGet) | **GET** /decks/{deckId} | 
+[**decksGetAll**](DefaultApi.md#decksGetAll) | **GET** /decks | 
 [**decksPut**](DefaultApi.md#decksPut) | **PUT** /decks | 
 [**decksUpdate**](DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
@@ -160,6 +161,57 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**DecksGetResponse**](DecksGetResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="decksGetAll"></a>
+# **decksGetAll**
+> DecksGetAllResponse decksGetAll()
+
+
+
+Gets all the user&#39;s decks. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+try {
+    DecksGetAllResponse result = apiInstance.decksGetAll();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#decksGetAll");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DecksGetAllResponse**](DecksGetAllResponse.md)
 
 ### Authorization
 

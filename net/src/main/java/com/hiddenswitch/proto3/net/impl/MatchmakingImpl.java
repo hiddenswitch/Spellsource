@@ -7,7 +7,7 @@ import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.impl.server.GameSession;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
-import com.hiddenswitch.proto3.net.impl.util.AllianceDeck;
+import net.demilich.metastone.game.decks.DeckWithId;
 import com.hiddenswitch.proto3.net.impl.util.Matchmaker;
 import com.hiddenswitch.proto3.net.impl.util.QueueEntry;
 import com.hiddenswitch.proto3.net.models.*;
@@ -98,7 +98,7 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 				});
 			}
 		} else if (matchmakingRequest.getDeckId() != null) {
-			deck = new AllianceDeck(matchmakingRequest.getDeckId());
+			deck = new DeckWithId(matchmakingRequest.getDeckId());
 		}
 
 		Matchmaker.Match match = matchmaker.match(userId, deck);
@@ -122,16 +122,16 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 						.withPlayers(new StartGameRequest.Player()
 										.withId(0)
 										.withUserId(match.entry1.userId)
-										.withDeckId(((AllianceDeck) deck1).getDeckId()),
+										.withDeckId(((DeckWithId) deck1).getDeckId()),
 								new StartGameRequest.Player()
 										.withId(1)
 										.withUserId(match.entry2.userId)
-										.withDeckId(((AllianceDeck) deck2).getDeckId())));
+										.withDeckId(((DeckWithId) deck2).getDeckId())));
 
 				deck1 = startGameResponse.getPlayers().get(0).getDeck();
 				deck2 = startGameResponse.getPlayers().get(0).getDeck();
-			} else if (deck1 instanceof AllianceDeck
-					|| deck2 instanceof AllianceDeck) {
+			} else if (deck1 instanceof DeckWithId
+					|| deck2 instanceof DeckWithId) {
 				// We can't run in alliance mode with only one of the decks references by ID.
 				throw new RuntimeException();
 			}
@@ -170,9 +170,9 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 			// End the game in alliance mode
 			logic.sync().endGame(new EndGameRequest()
 					.withPlayers(new EndGameRequest.Player()
-									.withDeckId(((AllianceDeck) match.entry1.deck).getDeckId()),
+									.withDeckId(((DeckWithId) match.entry1.deck).getDeckId()),
 							new EndGameRequest.Player()
-									.withDeckId(((AllianceDeck) match.entry2.deck).getDeckId())));
+									.withDeckId(((DeckWithId) match.entry2.deck).getDeckId())));
 		}
 
 		return response;

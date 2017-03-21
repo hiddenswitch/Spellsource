@@ -1,19 +1,25 @@
 package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
+import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 import static com.hiddenswitch.proto3.net.util.QuickJson.jsonPut;
@@ -35,19 +41,44 @@ public class DecksImpl extends Service<DecksImpl> implements Decks {
 
 	@Override
 	public DeckCreateResponse createDeck(DeckCreateRequest request) throws SuspendExecution, InterruptedException {
-		if (request.getInventoryIds() == null) {
-			request.setInventoryIds(Collections.emptyList());
+		List<String> inventoryIds = new ArrayList<>();
+		if (request.getInventoryIds() != null) {
+			inventoryIds.addAll(request.getInventoryIds());
 		}
 
-		if (request.getInventoryIds().size() > getMaxDeckSize()) {
+		if (request.getCardIds() != null) {
+			// Find the card IDs in the user's collection, using copies wherever available, to put into the deck
+			GetCollectionResponse userCollection = inventory.sync().getCollection(GetCollectionRequest.user(request.getUserId()));
+			Map<String, List<InventoryRecord>> cards = userCollection.getInventoryRecords().stream().collect(Collectors.groupingBy(InventoryRecord::getCardId));
+
+			for (String cardId : request.getCardIds()) {
+				final List<InventoryRecord> entry = cards.getOrDefault(cardId, /* TODO: Create the card on the fly? */ Collections.emptyList());
+				if (entry.size() > 0) {
+					InventoryRecord record = entry.remove(0);
+					inventoryIds.add(record.getId());
+				} else {
+					throw new RuntimeException();
+				}
+			}
+		}
+
+		if (inventoryIds.size() > getMaxDeckSize()) {
 			throw new RuntimeException();
 		}
 
 		// Creates a new collection representing this deck
+		final String userId = request.getUserId();
 		CreateCollectionResponse createCollectionResponse = inventory.sync()
-				.createCollection(CreateCollectionRequest.deck(request.getUserId(), request.getName(), request.getHeroClass(), request.getInventoryIds()));
+				.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds));
 
-		return new DeckCreateResponse(createCollectionResponse.getCollectionId());
+		// Update the user document with this deck ID
+		final String deckId = createCollectionResponse.getCollectionId();
+		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollection(Accounts.USERS,
+				json("_id", userId),
+				json("$addToSet", json("decks", deckId)),
+				h));
+
+		return new DeckCreateResponse(deckId, inventoryIds);
 	}
 
 	private int getMaxDeckSize() {
@@ -94,7 +125,23 @@ public class DecksImpl extends Service<DecksImpl> implements Decks {
 
 	@Override
 	public DeckDeleteResponse deleteDeck(DeckDeleteRequest request) throws SuspendExecution, InterruptedException {
-		TrashCollectionResponse response = inventory.sync().trashCollection(new TrashCollectionRequest(request.getDeckId()));
+		final String deckId = request.getDeckId();
+
+		List<JsonObject> decks = awaitResult(h -> getMongo().findWithOptions(Inventory.COLLECTIONS,
+				json("_id", deckId),
+				new FindOptions().setFields(json("userId", 1)),
+				h));
+
+		final String userId = decks.get(0).getString("userId");
+		// Sets the deck to trashed
+		TrashCollectionResponse response = inventory.sync().trashCollection(new TrashCollectionRequest(deckId));
+
+		// Remove the deckId from the user's decks
+		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollection(Accounts.USERS,
+				json("_id", userId),
+				json("$pull", json("decks", deckId)),
+				h));
+
 		return new DeckDeleteResponse(response);
 	}
 

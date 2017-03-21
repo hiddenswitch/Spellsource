@@ -154,6 +154,13 @@ definitions:
         description: |
           The current number of cards in this deck.
         type: 'integer'
+  DecksGetAllResponse:
+    type: 'object'
+    properties:
+      decks:
+        type: 'array'
+        items:
+          $ref: '#/definitions/DecksGetResponse'
   InventoryCollection:
     type: 'object'
     properties:
@@ -302,6 +309,18 @@ paths:
           schema:
             $ref: '#/definitions/LoginResponse'
   /decks:
+    get:
+      description: |
+        Gets all the user's decks.
+      operationId: decksGetAll
+      security:
+        - TokenSecurity: []
+      responses:
+        "200":
+          description: |
+            The server returns an array of DeckGetResponses for each deck
+          schema:
+            $ref: '#/definitions/DecksGetAllResponse'
     put:
       description: |
         Creates a new deck with optionally specified inventory IDs, a name and a hero class.

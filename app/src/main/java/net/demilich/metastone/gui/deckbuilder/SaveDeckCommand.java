@@ -8,16 +8,16 @@ public class SaveDeckCommand extends SimpleCommand<GameNotification> {
 
 	@Override
 	public void execute(INotification<GameNotification> notification) {
-		DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
-		String deckName = deckProxy.getActiveDeck().getName().trim();
-		if (deckName == null || deckName.equals("")) {
+		DeckEditor deckEditor = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
+		String deckName = deckEditor.getActiveDeck().getName().trim();
+		if (deckName.equals("")) {
 			getFacade().sendNotification(GameNotification.INVALID_DECK_NAME);
 			return;
-		} else if (!deckProxy.nameAvailable(deckProxy.getActiveDeck())) {
+		} else if (!deckEditor.nameAvailable(deckEditor.getActiveDeck())) {
 			getFacade().sendNotification(GameNotification.DUPLICATE_DECK_NAME);
 			return;
 		}
-		deckProxy.saveActiveDeck();
+		deckEditor.saveActiveDeck();
 
 		getFacade().removeMediator(DeckBuilderMediator.NAME);
 		getFacade().sendNotification(GameNotification.MAIN_MENU);

@@ -55,9 +55,10 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 		final InitializeUserResponse response = new InitializeUserResponse();
 		response.setDeckCreateResponses(new ArrayList<>());
 		final String userId = request.getUserId();
-		final CreateCollectionRequest startingCollection = CreateCollectionRequest.startingCollection(userId);
+		// At the moment, the player gets two copies of every card in Minionate (that's what a "starting collection" is)
+		final CreateCollectionRequest startingCollectionRequest = CreateCollectionRequest.startingCollection(userId);
 		response.setCreateCollectionResponse(inventory.sync()
-				.createCollection(startingCollection));
+				.createCollection(startingCollectionRequest));
 
 		// Create the starting decks
 		try {
@@ -72,17 +73,16 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 				if (deck == null) {
 					continue;
 				}
-				// Give the player the cards they need for their starting decks
-				final AddToCollectionResponse addToCollectionResponse = inventory.sync().addToCollection(new AddToCollectionRequest()
-						.withUserId(userId)
-						.withCardIds(deck.getCards().toList().stream().map(Card::getCardId).collect(Collectors.toList())));
+				// Figure out which cards go into which decks.
+				List<String> cardIds = deck.getCards().toList().stream().map(Card::getCardId).collect(Collectors.toList());
+
 				final DeckCreateResponse deckCreate = decks.sync().createDeck(new DeckCreateRequest()
 						.withUserId(userId)
 						.withHeroClass(deck.getHeroClass())
 						.withName(deck.getName())
-						.withInventoryIds(addToCollectionResponse.getInventoryIds()));
+						.withCardIds(cardIds));
 				response.getDeckCreateResponses().add(deckCreate);
-				response.getCreateCollectionResponse().getCreatedInventoryIds().addAll(addToCollectionResponse.getInventoryIds());
+				response.getCreateCollectionResponse().getCreatedInventoryIds().addAll(deckCreate.getInventoryIds());
 			}
 		}
 

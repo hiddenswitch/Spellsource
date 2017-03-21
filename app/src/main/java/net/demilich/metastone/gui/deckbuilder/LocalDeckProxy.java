@@ -26,15 +26,11 @@ import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
 import net.demilich.metastone.game.decks.validation.IDeckValidator;
 import net.demilich.nittygrittymvc.Proxy;
 
-public class DeckProxy extends Proxy<GameNotification> {
-
-	public static final String NAME = "DeckProxy";
-
-	private final DeckCatalogue deckCatalogue = new DeckCatalogue();
+public class LocalDeckProxy extends Proxy<GameNotification> implements DeckEditor {
 	private IDeckValidator activeDeckValidator = new DefaultDeckValidator();
 	private Deck activeDeck;
 
-	public DeckProxy() {
+	public LocalDeckProxy() {
 		super(NAME);
 		try {
 			// ensure user's personal deck dir exists
@@ -49,6 +45,7 @@ public class DeckProxy extends Proxy<GameNotification> {
 		}
 	}
 
+	@Override
 	public boolean addCardToDeck(Card card) {
 		boolean result = activeDeckValidator.canAddCardToDeck(card, activeDeck);
 		if (result) {
@@ -57,10 +54,12 @@ public class DeckProxy extends Proxy<GameNotification> {
 		return result;
 	}
 
+	@Override
 	public Deck getActiveDeck() {
 		return activeDeck;
 	}
 
+	@Override
 	public List<Card> getCards(HeroClass heroClass) {
 		DeckFormat deckFormat = new DeckFormat();
 		for (CardSet cardSet : CardSet.values()) {
@@ -79,19 +78,18 @@ public class DeckProxy extends Proxy<GameNotification> {
 		return cardCollection.toList();
 	}
 
-	public Deck getDeckByName(String deckName) {
-		return DeckCatalogue.getDeckByName(deckName);
-	}
-
+	@Override
 	public List<Deck> getDecks() {
 		return DeckCatalogue.getDecks();
 	}
 
+	@Override
 	public void deleteDeck(Deck deck) {
 		DeckCatalogue.deleteDeck(deck);
 		this.getFacade().sendNotification(GameNotification.DECKS_LOADED, DeckCatalogue.getDecks());
 	}
 
+	@Override
 	public void loadDecks() throws IOException, URISyntaxException {
 		// load decks from ~/metastone/decks on the filesystem
 		if (BuildConfig.PACKAGE_ONLY) {
@@ -101,14 +99,17 @@ public class DeckProxy extends Proxy<GameNotification> {
 		}
 	}
 
+	@Override
 	public boolean nameAvailable(Deck deck) {
 		return DeckCatalogue.nameAvailable(deck);
 	}
 
+	@Override
 	public void removeCardFromDeck(Card card) {
 		activeDeck.getCards().remove(card);
 	}
 
+	@Override
 	public void saveActiveDeck() {
 		DeckCatalogue.getDecks().add(activeDeck);
 		saveToJson(activeDeck);
@@ -151,12 +152,23 @@ public class DeckProxy extends Proxy<GameNotification> {
 		}
 	}
 
+	@Override
 	public void setActiveDeck(Deck activeDeck) {
 		this.activeDeck = activeDeck;
 	}
 
+	@Override
 	public void setActiveDeckValidator(IDeckValidator deckValidator) {
 		this.activeDeckValidator = deckValidator;
 	}
 
+	@Override
+	public void setDeckName(String newDeckName) {
+		getActiveDeck().setName(newDeckName);
+	}
+
+	@Override
+	public void createDeck(HeroClass heroClass) {
+		setActiveDeck(new Deck(heroClass, false));
+	}
 }

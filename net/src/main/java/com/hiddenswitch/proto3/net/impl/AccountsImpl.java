@@ -12,6 +12,7 @@ import io.vertx.ext.mongo.MongoClientUpdateResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -22,7 +23,6 @@ import static com.hiddenswitch.proto3.net.util.QuickJson.toJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
-	private static String USERS = "accounts.users";
 	private Pattern usernamePattern = Pattern.compile("[A-Za-z0-9_]+");
 
 	@Override
@@ -75,6 +75,7 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 
 		String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
 		UserRecord record = new UserRecord(userId);
+		record.setDecks(new ArrayList<>());
 		Profile profile = new Profile();
 		profile.setEmailAddress(request.emailAddress);
 		profile.setDisplayName(request.name);

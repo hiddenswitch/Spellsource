@@ -127,10 +127,10 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 		Set<String> cardIds = response.getInventoryRecords().stream().map(r -> r.getCardDesc().id).collect(Collectors.toSet());
 
-		// Should contain the classic cards
-		final DeckFormat deckFormat = new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC);
-		final List<String> basicClassicCardIds = CardCatalogue.query(deckFormat).toList().stream().map(Card::getCardId).collect(Collectors.toList());
-		getContext().assertTrue(cardIds.containsAll(basicClassicCardIds));
+		// Should contain two copies of all the minionate cards
+		final DeckFormat deckFormat = new DeckFormat().withCardSets(CardSet.MINIONATE);
+		final List<String> minionateCards = CardCatalogue.query(deckFormat).toList().stream().map(Card::getCardId).collect(Collectors.toList());
+		getContext().assertTrue(cardIds.containsAll(minionateCards));
 	}
 
 	@Test

@@ -1,7 +1,10 @@
 package net.demilich.metastone.gui.sandboxmode;
 
+import com.hiddenswitch.minionate.Client;
+import com.hiddenswitch.proto3.net.client.models.CardRecord;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

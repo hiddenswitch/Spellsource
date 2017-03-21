@@ -1,5 +1,8 @@
 package net.demilich.metastone.gui.deckbuilder;
 
+import com.hiddenswitch.minionate.Client;
+import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -24,7 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeckBuilderView extends BorderPane implements EventHandler<ActionEvent> {
+public class DeckBuilderView extends BorderPane implements EventHandler<ActionEvent>, ListChangeListener<InventoryCollection> {
 
 	@FXML
 	private ScrollPane scrollPane;
@@ -91,7 +94,6 @@ public class DeckBuilderView extends BorderPane implements EventHandler<ActionEv
 		}
 		deckInfoView.updateDeck(activeDeck);
 		deckNameView.updateDeck(activeDeck);
-
 	}
 
 	public void createNewDeck() {
@@ -115,7 +117,6 @@ public class DeckBuilderView extends BorderPane implements EventHandler<ActionEv
 		}
 		showLowerInfoArea(deckInfoView);
 		showUpperInfoArea(deckNameView);
-
 	}
 
 	public void filteredCards(List<Card> filteredCards) {
@@ -159,4 +160,8 @@ public class DeckBuilderView extends BorderPane implements EventHandler<ActionEv
 		upperInfoArea.getChildren().add(content);
 	}
 
+	@Override
+	public void onChanged(Change<? extends InventoryCollection> c) {
+
+	}
 }

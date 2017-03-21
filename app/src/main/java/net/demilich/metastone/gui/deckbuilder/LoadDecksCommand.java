@@ -12,10 +12,10 @@ public class LoadDecksCommand extends SimpleCommand<GameNotification> {
 
 	@Override
 	public void execute(INotification<GameNotification> notification) {
-		DeckProxy deckProxy = (DeckProxy) getFacade().retrieveProxy(DeckProxy.NAME);
+		DeckEditor deckEditor = (DeckEditor) getFacade().retrieveProxy(DeckEditor.NAME);
 
 		try {
-			deckProxy.loadDecks();
+			deckEditor.loadDecks();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
@@ -24,7 +24,7 @@ public class LoadDecksCommand extends SimpleCommand<GameNotification> {
 			e.printStackTrace();
 		}
 
-		getFacade().sendNotification(GameNotification.DECKS_LOADED, deckProxy.getDecks());
+		getFacade().sendNotification(GameNotification.DECKS_LOADED, deckEditor.getDecks());
 	}
 
 }

@@ -1,22 +1,12 @@
 package net.demilich.metastone;
 
 import net.demilich.metastone.gui.accounts.SaveLoginTokenCommand;
+import net.demilich.metastone.gui.deckbuilder.*;
 import net.demilich.metastone.gui.draftmode.StartDraftCommand;
 import net.demilich.nittygrittymvc.Facade;
 import net.demilich.nittygrittymvc.interfaces.IFacade;
 import net.demilich.metastone.gui.autoupdate.CheckForUpdateCommand;
 import net.demilich.metastone.gui.battleofdecks.StartBattleOfDecksCommand;
-import net.demilich.metastone.gui.deckbuilder.AddCardToDeckCommand;
-import net.demilich.metastone.gui.deckbuilder.ChangeDeckNameCommand;
-import net.demilich.metastone.gui.deckbuilder.DeleteDeckCommand;
-import net.demilich.metastone.gui.deckbuilder.FillDeckWithRandomCardsCommand;
-import net.demilich.metastone.gui.deckbuilder.FilterCardsCommand;
-import net.demilich.metastone.gui.deckbuilder.ImportDeckCommand;
-import net.demilich.metastone.gui.deckbuilder.LoadDeckFormatsCommand;
-import net.demilich.metastone.gui.deckbuilder.LoadDecksCommand;
-import net.demilich.metastone.gui.deckbuilder.RemoveCardFromDeckCommand;
-import net.demilich.metastone.gui.deckbuilder.SaveDeckCommand;
-import net.demilich.metastone.gui.deckbuilder.SetActiveDeckCommand;
 import net.demilich.metastone.gui.deckbuilder.metadeck.AddDeckToMetaDeckCommand;
 import net.demilich.metastone.gui.deckbuilder.metadeck.RemoveDeckFromMetaDeckCommand;
 import net.demilich.metastone.gui.playmode.StartGameCommand;
@@ -64,6 +54,7 @@ public class ApplicationFacade extends Facade<GameNotification> {
 
 		registerCommand(GameNotification.SET_ACTIVE_DECK, new SetActiveDeckCommand());
 		registerCommand(GameNotification.ADD_CARD_TO_DECK, new AddCardToDeckCommand());
+		registerCommand(GameNotification.NEW_DECK_CLASS_SELECTED, new CreateNewDeckCommand());
 		registerCommand(GameNotification.REMOVE_CARD_FROM_DECK, new RemoveCardFromDeckCommand());
 		registerCommand(GameNotification.SAVE_ACTIVE_DECK, new SaveDeckCommand());
 		registerCommand(GameNotification.LOAD_DECKS, new LoadDecksCommand());
