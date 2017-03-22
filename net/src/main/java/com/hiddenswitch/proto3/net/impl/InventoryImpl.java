@@ -219,7 +219,13 @@ public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
 	@Override
 	@Suspendable
 	public ReturnToCollectionResponse returnToCollection(ReturnToCollectionRequest request) {
-		return null;
+		MongoClientUpdateResult update = awaitResult(h -> getMongo().updateCollectionWithOptions(INVENTORY,
+				json("collectionIds", json("$in", request.getDeckIds())),
+				json("$set", json("borrowed", false, "borrowedByUserId", null)),
+				new UpdateOptions().setMulti(true),
+				h));
+
+		return new ReturnToCollectionResponse();
 	}
 
 	@Override

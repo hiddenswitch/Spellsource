@@ -361,6 +361,7 @@ public class GameLogic implements Cloneable, Serializable {
 		refreshAttacksPerRound(hero);
 	}
 
+	@Suspendable
 	public void checkForDeadEntities() {
 		checkForDeadEntities(0);
 	}
@@ -369,6 +370,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Checks all player minions and weapons for destroyed actors and proceeds
 	 * with the removal in correct order
 	 */
+	@Suspendable
 	public void checkForDeadEntities(int i) {
 		// sanity check, this method should never call itself that often
 		if (i > 20) {

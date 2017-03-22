@@ -289,8 +289,4 @@ public abstract class Card extends Entity {
 	public CardDesc getOriginalDesc() {
 		return originalDesc;
 	}
-
-	public String getCardInventoryId() {
-		return (String) getAttribute(Attribute.CARD_INVENTORY_ID);
-	}
 }

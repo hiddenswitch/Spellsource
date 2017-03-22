@@ -16,7 +16,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String name;
-	private Map<Attribute, Object> attributes = new EnumMap<>(Attribute.class);
+	private Map<Attribute, Object> attributes = new AttributeMap();
 	private int id = IdFactory.UNASSIGNED;
 	private int ownerIndex = -1;
 
@@ -120,5 +120,13 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	public boolean hasAllianceEffects() {
 		// TODO: look through the card description to see if it uses any network attributes or effects.
 		return true;
+	}
+
+	public String getUserId() {
+		return (String) getAttribute(Attribute.USER_ID);
+	}
+
+	public String getCardInventoryId() {
+		return (String) getAttribute(Attribute.CARD_INVENTORY_ID);
 	}
 }

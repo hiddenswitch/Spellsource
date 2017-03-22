@@ -8,6 +8,8 @@ import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.AsyncResult;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
@@ -54,8 +56,8 @@ public class AllianceGameEventListener implements IGameEventListener {
 		switch (event.getEventType()) {
 			case AFTER_PHYSICAL_ATTACK:
 				final AfterPhysicalAttackEvent event2 = (AfterPhysicalAttackEvent) event;
-				final String attackerInstanceId = (String) event2.getAttacker().getAttributes().getOrDefault(Attribute.CARD_INVENTORY_ID, null);
-				final String defenderInstanceId = (String) event2.getDefender().getAttributes().getOrDefault(Attribute.CARD_INVENTORY_ID, null);
+				final String attackerInstanceId = event2.getAttacker().getCardInventoryId();
+				final String defenderInstanceId = event2.getDefender().getCardInventoryId();
 				if (attackerInstanceId == null
 						|| defenderInstanceId == null) {
 					// Can't process a non-alliance card.
@@ -65,6 +67,8 @@ public class AllianceGameEventListener implements IGameEventListener {
 				final EventLogicRequest<AfterPhysicalAttackEvent> request1 = new EventLogicRequest<>();
 				request1.setEvent(event2);
 				request1.setCardInventoryId(attackerInstanceId);
+				request1.setGameId(gameId);
+				request1.setUserId(event2.getAttacker().getUserId());
 
 				if (event2.getAttacker().hasAllianceEffects()) {
 					response = logic.uncheckedSync().afterPhysicalAttack(request1);
@@ -75,7 +79,7 @@ public class AllianceGameEventListener implements IGameEventListener {
 				}
 			case BEFORE_SUMMON:
 				final BeforeSummonEvent event1 = (BeforeSummonEvent) event;
-				final String cardInstanceId = (String) event1.getMinion().getAttributes().getOrDefault(Attribute.CARD_INVENTORY_ID, null);
+				final String cardInstanceId = event1.getMinion().getCardInventoryId();
 				if (cardInstanceId == null) {
 					// Can't process a non-alliance card.
 					return;
@@ -84,6 +88,8 @@ public class AllianceGameEventListener implements IGameEventListener {
 				final EventLogicRequest<BeforeSummonEvent> request = new EventLogicRequest<>();
 				request.setEvent(event1);
 				request.setCardInventoryId(cardInstanceId);
+				request.setGameId(gameId);
+				request.setUserId(event1.getMinion().getUserId());
 				// Check if the entity has network side effects it needs to be notified about. Otherwise, do
 				// not wait.
 				if (event1.getMinion().hasAllianceEffects()) {
