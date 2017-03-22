@@ -49,7 +49,7 @@ public abstract class Actor extends Entity {
 	}
 
 	public void clearSpellTriggers() {
-		this.spellTriggers = new ArrayList<SpellTrigger>();
+		this.spellTriggers = new ArrayList<>();
 	}
 
 	@Override

@@ -18,8 +18,8 @@ public class PlayModeView extends BorderPane {
 	@FXML
 	private Button backButton;
 
-	@FXML
-	private Button concedeButton;
+//	@FXML
+//	private Button concedeButton;
 
 	@FXML
 	private VBox sidePane;
@@ -54,7 +54,7 @@ public class PlayModeView extends BorderPane {
 		//sidePane.getChildren().add(actionPromptView);
 
 		backButton.setOnAction(actionEvent -> NotificationProxy.sendNotification(GameNotification.MAIN_MENU));
-		concedeButton.setOnAction(actionEvent -> Client.getInstance().concede());
+//		concedeButton.setOnAction(actionEvent -> Client.getInstance().concede());
 
 		sidePane.getChildren().setAll(actionPromptView, navigationPane);
 	}

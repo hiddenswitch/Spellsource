@@ -265,9 +265,9 @@ public class Client {
 		});
 	}
 
-	public ApiTask<ConcedeResult> concede() {
+	public ApiTask<MatchConcedeResponse> concede() {
 		return new ApiTask<>(api -> {
-			ConcedeResult response = api.concede(new ConcedeRequest());
+			MatchConcedeResponse response = api.matchmakingConstructedDelete();
 
 			return response;
 		});
