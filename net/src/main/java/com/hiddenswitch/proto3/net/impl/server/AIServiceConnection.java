@@ -3,7 +3,7 @@ package com.hiddenswitch.proto3.net.impl.server;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Bots;
 import com.hiddenswitch.proto3.net.common.GameState;
-import com.hiddenswitch.proto3.net.common.RemoteUpdateListener;
+import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.MulliganRequest;
 import com.hiddenswitch.proto3.net.models.MulliganResponse;
@@ -12,7 +12,6 @@ import com.hiddenswitch.proto3.net.models.RequestActionResponse;
 import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
@@ -26,7 +25,7 @@ import java.util.List;
 /**
  * Created by bberman on 12/9/16.
  */
-public class AIServiceConnection implements RemoteUpdateListener {
+public class AIServiceConnection implements Client {
 	final int playerId;
 	final ServiceProxy<Bots> bots;
 	final WeakReference<ServerGameContext> context;

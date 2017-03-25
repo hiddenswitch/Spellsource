@@ -119,13 +119,22 @@ public class ParseUtils {
 					return entry.getAsInt();
 				}
 			case VALUE_PROVIDER:
+				if (entry.getAsJsonObject().has("desc")) {
+					entry = entry.getAsJsonObject().get("desc");
+				}
 				ValueProviderDesc valueProviderDesc = valueProviderParser.deserialize(entry, ValueProviderDesc.class, null);
 				return valueProviderDesc.create();
 			case ENTITY_FILTER: {
+				if (entry.getAsJsonObject().has("desc")) {
+					entry = entry.getAsJsonObject().get("desc");
+				}
 				FilterDesc filterDesc = filterParser.deserialize(entry, FilterDesc.class, null);
 				return filterDesc.create();
 			}
 			case CARD_SOURCE: {
+				if (entry.getAsJsonObject().has("desc")) {
+					entry = entry.getAsJsonObject().get("desc");
+				}
 				SourceDesc sourceDesc = sourceParser.deserialize(entry, SourceDesc.class, null);
 				return sourceDesc.create();
 			}
@@ -139,6 +148,9 @@ public class ParseUtils {
 				return array;
 			}
 			case CONDITION: {
+				if (entry.getAsJsonObject().has("desc")) {
+					entry = entry.getAsJsonObject().get("desc");
+				}
 				ConditionDesc conditionDesc = conditionParser.deserialize(entry, ConditionDesc.class, null);
 				return conditionDesc.create();
 			}
@@ -161,6 +173,9 @@ public class ParseUtils {
 				triggerDesc.turnDelay = triggerObject.has("turnDelay") ? triggerObject.get("turnDelay").getAsInt() : 0;
 				return triggerDesc;
 			case EVENT_TRIGGER:
+				if (entry.getAsJsonObject().has("desc")) {
+					entry = entry.getAsJsonObject().get("desc");
+				}
 				return triggerParser.deserialize(entry, EventTriggerDesc.class, null);
 			case CARD_COST_MODIFIER:
 				return manaModifierParser.deserialize(entry, CardCostModifierDesc.class, null);

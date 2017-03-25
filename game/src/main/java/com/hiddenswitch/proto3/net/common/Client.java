@@ -12,7 +12,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.events.GameEvent;
 
-public interface RemoteUpdateListener {
+public interface Client {
 	void onGameEvent(GameEvent event);
 
 	void onGameEnd(Player winner);

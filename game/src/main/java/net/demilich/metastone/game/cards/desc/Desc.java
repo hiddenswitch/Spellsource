@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -51,5 +52,29 @@ public class Desc<T> implements Serializable {
 	public String getClassName() {
 		final String simpleName = ((Class) arguments.get("class")).getSimpleName();
 		return simpleName;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+		if (!Desc.class.isAssignableFrom(other.getClass())) {
+			return false;
+		}
+		Desc rhs = (Desc) other;
+		if (arguments == null && rhs.arguments != null) {
+			return false;
+		}
+		if (rhs.arguments == null || rhs.arguments.size() != arguments.size()) {
+			return false;
+		}
+		EqualsBuilder eq = new EqualsBuilder();
+		for (Map.Entry entry : arguments.entrySet()) {
+			final Object left = entry.getValue();
+			final Object right = rhs.arguments.get(entry.getKey());
+			eq.append(left, right);
+		}
+		return eq.isEquals();
 	}
 }

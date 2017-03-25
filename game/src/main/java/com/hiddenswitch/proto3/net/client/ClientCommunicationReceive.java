@@ -1,5 +1,5 @@
 package com.hiddenswitch.proto3.net.client;
-import com.hiddenswitch.proto3.net.common.RemoteUpdateListener;
+import com.hiddenswitch.proto3.net.common.Client;
 public interface ClientCommunicationReceive {
-	void RegisterListener(RemoteUpdateListener remoteUpdateListener);
+	void RegisterListener(Client client);
 }
