@@ -1,0 +1,36 @@
+{
+	"name": "Visibility Machine",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"description": "Call to Arms: Destroy all enemy Secrets. Gain +1/+1 for each.",
+	"battlecry": {
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "BuffSpell",
+					"target": "SELF",
+					"value": {
+						"class": "PlayerAttributeValueProvider",
+						"targetPlayer": "OPPONENT",
+						"playerAttribute": "SECRET_COUNT"
+					}
+				},
+				{
+					"class": "DestroySecretsSpell",
+					"targetPlayer": "OPPONENT"
+				}
+			]
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

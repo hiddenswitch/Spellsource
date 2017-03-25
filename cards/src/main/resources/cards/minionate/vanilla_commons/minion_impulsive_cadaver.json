@@ -1,0 +1,27 @@
+{
+	"name": "Impulsive Cadaver",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 4,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Enrage: Windfury and +1 Attack",
+	"trigger": {
+		"eventTrigger": {
+			"class": "EnrageChangedTrigger"
+		},
+		"spell": {
+			"class": "EnrageSpell",
+			"target": "SELF",
+			"attribute": "WINDFURY",
+			"attackBonus": 1
+		}
+	},
+	"attributes": {
+		"ENRAGABLE": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

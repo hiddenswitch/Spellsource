@@ -1,0 +1,13 @@
+{
+	"name": "Behemoth Rodent",
+	"baseManaCost": 8,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 8,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "",
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
