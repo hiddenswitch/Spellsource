@@ -23,7 +23,7 @@ import java.util.List;
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_1;
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_2;
 
-public class ServerGameSession extends GameSession implements ServerCommunicationSend, ServerListener {
+public class ServerGameSession extends GameSession implements ServerCommunicationSend, Server, ClientConnectionHandler {
 	private String host;
 	private int port;
 	private ServerClientConnection c1;
@@ -151,8 +151,8 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 		getPlayer1().setBehaviour(new NetworkBehaviour(getPlayer1().getBehaviour()));
 		getPlayer2().setBehaviour(new NetworkBehaviour(getPlayer2().getBehaviour()));
 		this.gameContext = new ServerGameContext(getPlayer1(), getPlayer2(), simpleFormat, getGameId(), vertx.eventBus());
-		final RemoteUpdateListener listener1;
-		final RemoteUpdateListener listener2;
+		final Client listener1;
+		final Client listener2;
 
 
 		if (isAgainstAI()) {
@@ -195,7 +195,7 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 	}
 
 	@Override
-	public RemoteUpdateListener getPlayerListener(int player) {
+	public Client getPlayerListener(int player) {
 		if (player == 0) {
 			return getClient1();
 		} else {

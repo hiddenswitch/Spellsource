@@ -1,19 +1,13 @@
-package com.hiddenswitch.proto3.net.impl.server;
-
-import java.util.List;
+package com.hiddenswitch.proto3.net.common;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 
-public interface ServerListener {
-	@Suspendable
-	void onPlayerConnected(Player player, ServerClientConnection client);
+import java.util.List;
 
-	@Suspendable
-	void onPlayerReconnected(Player player, ServerClientConnection client);
-
+public interface Server {
 	@Suspendable
 	void onActionReceived(String id, GameAction action);
 	

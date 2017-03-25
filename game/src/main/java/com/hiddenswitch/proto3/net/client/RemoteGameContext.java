@@ -3,7 +3,7 @@ package com.hiddenswitch.proto3.net.client;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.common.NetworkBehaviour;
-import com.hiddenswitch.proto3.net.common.RemoteUpdateListener;
+import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.util.LoggerUtils;
 import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.GameNotification;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
-public class RemoteGameContext extends GameContext implements GameContextVisuals, RemoteUpdateListener {
+public class RemoteGameContext extends GameContext implements GameContextVisuals, Client {
 	private final List<GameEvent> gameEvents = new ArrayList<>();
 	private boolean blockedByAnimation;
 	private int localPlayerId = -1;

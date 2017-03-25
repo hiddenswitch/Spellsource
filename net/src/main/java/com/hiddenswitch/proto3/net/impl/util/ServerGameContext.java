@@ -8,7 +8,6 @@ import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.NotificationProxy;
@@ -21,7 +20,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
 import net.demilich.metastone.game.targeting.IdFactory;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -31,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class ServerGameContext extends GameContext {
 	private final String gameId;
-	private Map<Player, RemoteUpdateListener> listenerMap = new HashMap<>();
+	private Map<Player, Client> listenerMap = new HashMap<>();
 	private final Map<CallbackId, GameplayRequest> requestCallbacks = new HashMap<>();
 	private boolean isRunning = true;
 	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
@@ -59,7 +57,7 @@ public class ServerGameContext extends GameContext {
 		return (GameLogicAsync) getLogic();
 	}
 
-	public void setUpdateListener(Player player, RemoteUpdateListener listener) {
+	public void setUpdateListener(Player player, Client listener) {
 		listenerMap.put(player, listener);
 	}
 
@@ -295,13 +293,13 @@ public class ServerGameContext extends GameContext {
 		return gameId;
 	}
 
-	public Map<Player, RemoteUpdateListener> getListenerMap() {
+	public Map<Player, Client> getListenerMap() {
 		return Collections.unmodifiableMap(listenerMap);
 	}
 
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	public void onPlayerReconnected(Player player, RemoteUpdateListener client) {
+	public void onPlayerReconnected(Player player, Client client) {
 		// Update the client
 		setUpdateListener(player, client);
 

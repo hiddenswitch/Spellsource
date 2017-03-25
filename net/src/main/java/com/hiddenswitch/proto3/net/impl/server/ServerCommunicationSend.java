@@ -1,7 +1,7 @@
 package com.hiddenswitch.proto3.net.impl.server;
 
-import com.hiddenswitch.proto3.net.common.RemoteUpdateListener;
+import com.hiddenswitch.proto3.net.common.Client;
 
 public interface ServerCommunicationSend {
-	public RemoteUpdateListener getPlayerListener(int player);
+	public Client getPlayerListener(int player);
 }

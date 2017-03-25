@@ -1,7 +1,7 @@
 package com.hiddenswitch.proto3.net.impl.server;
 
 import com.hiddenswitch.proto3.net.common.GameState;
-import com.hiddenswitch.proto3.net.common.RemoteUpdateListener;
+import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.ServerToClientMessage;
 import com.hiddenswitch.proto3.net.util.IncomingMessage;
 import com.hiddenswitch.proto3.net.util.Serialization;
@@ -16,7 +16,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import java.io.IOException;
 import java.util.List;
 
-public class ServerClientConnection implements RemoteUpdateListener {
+public class ServerClientConnection implements Client {
 	private NetSocket privateSocket;
 
 	public ServerClientConnection(NetSocket socket) {

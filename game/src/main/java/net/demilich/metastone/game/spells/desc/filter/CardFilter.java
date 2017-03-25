@@ -18,18 +18,18 @@ public class CardFilter extends EntityFilter {
 	public CardFilter(FilterDesc desc) {
 		super(desc);
 	}
-	
+
 	private boolean heroClassTest(GameContext context, Player player, Card card, HeroClass heroClass) {
 		if (heroClass == HeroClass.OPPONENT) {
 			heroClass = context.getOpponent(player).getHero().getHeroClass();
 		} else if (heroClass == HeroClass.SELF) {
 			heroClass = player.getHero().getHeroClass();
 		}
-		
+
 		if (heroClass != null && card.hasHeroClass(heroClass)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -53,7 +53,7 @@ public class CardFilter extends EntityFilter {
 		if (race != null && race != card.getAttribute(Attribute.RACE)) {
 			return false;
 		}
-		
+
 		HeroClass[] heroClasses = (HeroClass[]) desc.get(FilterArg.HERO_CLASSES);
 		if (heroClasses != null && heroClasses.length > 0) {
 			boolean test = false;
@@ -64,12 +64,12 @@ public class CardFilter extends EntityFilter {
 				return false;
 			}
 		}
-		
+
 		HeroClass heroClass = (HeroClass) desc.get(FilterArg.HERO_CLASS);
 		if (heroClass != null && heroClassTest(context, player, card, heroClass)) {
 			return false;
 		}
-		
+
 		if (desc.contains(FilterArg.MANA_COST)) {
 			int manaCost = desc.getValue(FilterArg.MANA_COST, context, player, null, null, 0);
 			if (manaCost != card.getBaseManaCost()) {
@@ -80,20 +80,25 @@ public class CardFilter extends EntityFilter {
 		if (rarity != null && !card.getRarity().isRarity(rarity)) {
 			return false;
 		}
-		
+
 		if (desc.contains(FilterArg.ATTRIBUTE) && desc.contains(FilterArg.OPERATION)) {
 			Attribute attribute = (Attribute) desc.get(FilterArg.ATTRIBUTE);
 			Operation operation = (Operation) desc.get(FilterArg.OPERATION);
 			if (operation == Operation.HAS || operation == null) {
 				return card.hasAttribute(attribute);
 			}
-	
+
 			int targetValue = desc.getInt(FilterArg.VALUE);
 			int actualValue = card.getAttributeValue(attribute);
-	
+
 			return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
 		}
 
 		return true;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return super.equals(other);
 	}
 }
