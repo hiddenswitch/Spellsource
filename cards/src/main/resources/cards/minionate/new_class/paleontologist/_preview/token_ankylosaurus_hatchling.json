@@ -1,0 +1,17 @@
+{
+	"name": "Ankylosaurus Hatchling",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 0,
+	"baseHp": 2,
+	"heroClass": "SHAMAN",
+	"rarity": "FREE",
+	"race": "TOTEM",
+	"description": "Taunt",
+	"attributes": {
+		"TAUNT": true
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

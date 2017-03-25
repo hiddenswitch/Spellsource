@@ -1,0 +1,22 @@
+{
+	"name": "Hydrochloric Acid",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Call to Arms: Destroy your opponent's weapon.",
+	"battlecry": {
+		"spell": {
+			"class": "DestroySpell",
+			"target": "ENEMY_WEAPON"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

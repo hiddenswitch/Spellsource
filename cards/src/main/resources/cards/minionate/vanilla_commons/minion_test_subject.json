@@ -1,0 +1,13 @@
+{
+	"name": "Test Subject",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 4,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "",
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

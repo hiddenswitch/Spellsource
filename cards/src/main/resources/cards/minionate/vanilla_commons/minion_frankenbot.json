@@ -1,0 +1,13 @@
+{
+	"name": "Frankenbot",
+	"baseManaCost": 7,
+	"type": "MINION",
+	"baseAttack": 7,
+	"baseHp": 7,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "",
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

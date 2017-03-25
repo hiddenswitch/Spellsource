@@ -1,17 +1,17 @@
 {
-	"name": "Test Rat",
-	"baseManaCost": 1,
+	"name": "Maroon Ox",
+	"baseManaCost": 4,
 	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
+	"baseAttack": 4,
+	"baseHp": 4,
 	"heroClass": "ANY",
 	"rarity": "COMMON",
-	"description": "Call to Arms: Hire a 1/1 Rat.",
+	"description": "Call to Arms: Restore 4 Health.",
 	"battlecry": {
-		"targetSelection": "NONE",
+		"targetSelection": "ANY",
 		"spell": {
-			"class": "SummonSpell",
-			"card": "token_cloned_rat"
+			"class": "HealSpell",
+			"value": 3
 		}
 	},
 	"attributes": {

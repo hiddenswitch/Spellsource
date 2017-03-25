@@ -1,0 +1,21 @@
+{
+	"name": "Angel Investor",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Revenge: Restore 5 Health to the enemy hero.",
+	"deathrattle": {
+		"class": "HealSpell",
+		"target": "ENEMY_HERO",
+		"value": 5
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}

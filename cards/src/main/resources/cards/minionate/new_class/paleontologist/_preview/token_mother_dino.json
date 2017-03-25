@@ -1,0 +1,25 @@
+{
+	"name": "Mother Dino",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 0,
+	"baseHp": 2,
+	"heroClass": "SHAMAN",
+	"rarity": "FREE",
+	"race": "TOTEM",
+	"description": "At the end of your turn, restore 1 Health to all friendly minions.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TurnEndTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "HealSpell",
+			"target": "FRIENDLY_MINIONS",
+			"value": 1
+		}
+	},
+	"collectible": false,
+	"set": "MINIONATE",
+	"fileFormatVersion": 1
+}
