@@ -9,7 +9,7 @@ import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 
-public class CardCostModifierDeserializer implements JsonDeserializer<CardCostModifierDesc>, JsonSerializer<CardCostModifierDesc> {
+public class CardCostModifierDescSerializer implements JsonDeserializer<CardCostModifierDesc>, JsonSerializer<CardCostModifierDesc> {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -56,15 +56,15 @@ public class CardCostModifierDeserializer implements JsonDeserializer<CardCostMo
 	public JsonElement serialize(CardCostModifierDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
 		result.add("class", new JsonPrimitive(src.getManaModifierClass().getSimpleName()));
-		for (CardCostModifierArg spellArg : CardCostModifierArg.values()) {
-			if (spellArg == CardCostModifierArg.CLASS) {
+		for (CardCostModifierArg attribute : CardCostModifierArg.values()) {
+			if (attribute == CardCostModifierArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(spellArg)) {
+			if (!src.contains(attribute)) {
 				continue;
 			}
-			String argName = ParseUtils.toCamelCase(spellArg.toString());
-			result.add(argName, new JsonPrimitive(src.get(spellArg).toString()));
+			String argName = ParseUtils.toCamelCase(attribute.toString());
+			result.add(argName, context.serialize(src.get(attribute)));
 		}
 		return result;
 	}

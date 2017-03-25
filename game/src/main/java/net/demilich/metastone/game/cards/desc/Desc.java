@@ -47,4 +47,9 @@ public class Desc<T> implements Serializable {
 		}
 		return (int) storedValue;
 	}
+
+	public String getClassName() {
+		final String simpleName = ((Class) arguments.get("class")).getSimpleName();
+		return simpleName;
+	}
 }

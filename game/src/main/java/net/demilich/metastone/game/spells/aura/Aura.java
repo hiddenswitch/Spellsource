@@ -20,7 +20,6 @@ import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class Aura extends SpellTrigger {
-
 	private EntityReference targets;
 	private SpellDesc applyAuraEffect;
 	private SpellDesc removeAuraEffect;
@@ -122,5 +121,4 @@ public class Aura extends SpellTrigger {
 	public void setEntityFilter(EntityFilter entityFilter) {
 		this.entityFilter = entityFilter;
 	}
-
 }

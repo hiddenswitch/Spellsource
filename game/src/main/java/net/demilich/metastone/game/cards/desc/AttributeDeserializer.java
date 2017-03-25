@@ -48,6 +48,7 @@ public class AttributeDeserializer implements JsonDeserializer<Map<Attribute, Ob
 		parseAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);//TODO Remove from Spellstopper
 		parseAttribute(Attribute.TAUNT, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.WINDFURY, jsonData, map, ParseValueType.BOOLEAN);
+
 		return map;
 	}
 
@@ -58,7 +59,7 @@ public class AttributeDeserializer implements JsonDeserializer<Map<Attribute, Ob
 		}
 		Object value = ParseUtils.parse(argName, jsonData, valueType);
 		Boolean bool = value instanceof Boolean ? (Boolean) value : null;
-		if (bool != null && bool == true) {
+		if (bool != null && bool) {
 			value = 1;
 		}
 		map.put(attribute, value);
@@ -72,7 +73,7 @@ public class AttributeDeserializer implements JsonDeserializer<Map<Attribute, Ob
 				continue;
 			}
 			String argName = ParseUtils.toCamelCase(attribute.toString());
-			result.add(argName, new JsonPrimitive(src.get(attribute).toString()));
+			result.add(argName, context.serialize(src.get(attribute)));
 		}
 		return result;
 	}

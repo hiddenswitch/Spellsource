@@ -9,7 +9,7 @@ import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 
-public class ValueProviderDeserializer implements JsonDeserializer<ValueProviderDesc>, JsonSerializer<ValueProviderDesc> {
+public class ValueProviderDescSerializer implements JsonDeserializer<ValueProviderDesc>, JsonSerializer<ValueProviderDesc> {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -63,15 +63,15 @@ public class ValueProviderDeserializer implements JsonDeserializer<ValueProvider
 	public JsonElement serialize(ValueProviderDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
 		result.add("class", new JsonPrimitive(src.getValueProviderClass().getSimpleName()));
-		for (ValueProviderArg spellArg : ValueProviderArg.values()) {
-			if (spellArg == ValueProviderArg.CLASS) {
+		for (ValueProviderArg attribute : ValueProviderArg.values()) {
+			if (attribute == ValueProviderArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(spellArg)) {
+			if (!src.contains(attribute)) {
 				continue;
 			}
-			String argName = ParseUtils.toCamelCase(spellArg.toString());
-			result.add(argName, new JsonPrimitive(src.get(spellArg).toString()));
+			String argName = ParseUtils.toCamelCase(attribute.toString());
+			result.add(argName, context.serialize(src.get(attribute)));
 		}
 		return result;
 	}

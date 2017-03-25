@@ -9,7 +9,7 @@ import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.cards.desc.ParseValueType;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
 
-public class EventTriggerDeserializer implements JsonDeserializer<EventTriggerDesc>, JsonSerializer<EventTriggerDesc> {
+public class EventTriggerDescSerializer implements JsonDeserializer<EventTriggerDesc>, JsonSerializer<EventTriggerDesc> {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -57,15 +57,15 @@ public class EventTriggerDeserializer implements JsonDeserializer<EventTriggerDe
 	public JsonElement serialize(EventTriggerDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
 		result.add("class", new JsonPrimitive(src.getTriggerClass().getSimpleName()));
-		for (EventTriggerArg conditionArg : EventTriggerArg.values()) {
-			if (conditionArg == EventTriggerArg.CLASS) {
+		for (EventTriggerArg attribute : EventTriggerArg.values()) {
+			if (attribute == EventTriggerArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(conditionArg)) {
+			if (!src.contains(attribute)) {
 				continue;
 			}
-			String argName = ParseUtils.toCamelCase(conditionArg.toString());
-			result.add(argName, new JsonPrimitive(src.get(conditionArg).toString()));
+			String argName = ParseUtils.toCamelCase(attribute.toString());
+			result.add(argName, context.serialize(src.get(attribute)));
 		}
 		return result;
 	}

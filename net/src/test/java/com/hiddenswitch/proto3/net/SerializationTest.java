@@ -106,7 +106,6 @@ public class SerializationTest extends TestBase {
 	}
 
 	@Test
-	@Ignore
 	public void testAllGameActions() {
 		SpellCard fireball = (SpellCard) CardCatalogue.getCardById("spell_fireball");
 		MinionCard elven_archer = (MinionCard) CardCatalogue.getCardById("minion_elven_archer");
@@ -191,6 +190,10 @@ public class SerializationTest extends TestBase {
 		assertEquals(discoverAction1.getActionType(), ActionType.DISCOVER);
 		assertEquals(discoverAction1.getSpell().getSpellClass(), discoverAction.getSpell().getSpellClass());
 		assertSpellsEqual(discoverAction1.getSpell(), discoverAction.getSpell());
+	}
+
+	public void testGameStateSerialization() {
+
 	}
 
 	private void assertSpellsEqual(SpellDesc actual, SpellDesc expected) {

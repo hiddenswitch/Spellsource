@@ -9,7 +9,7 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
-public class SpellDeserializer implements JsonDeserializer<SpellDesc>, JsonSerializer<SpellDesc> {
+public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSerializer<SpellDesc> {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -89,15 +89,15 @@ public class SpellDeserializer implements JsonDeserializer<SpellDesc>, JsonSeria
 	public JsonElement serialize(SpellDesc src, Type type, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
 		result.add("class", new JsonPrimitive(src.getSpellClass().getSimpleName()));
-		for (SpellArg spellArg : SpellArg.values()) {
-			if (spellArg == SpellArg.CLASS) {
+		for (SpellArg attribute : SpellArg.values()) {
+			if (attribute == SpellArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(spellArg)) {
+			if (!src.contains(attribute)) {
 				continue;
 			}
-			String argName = ParseUtils.toCamelCase(spellArg.toString());
-			result.add(argName, new JsonPrimitive(src.get(spellArg).toString()));
+			String argName = ParseUtils.toCamelCase(attribute.toString());
+			result.add(argName, context.serialize(src.get(attribute)));
 		}
 		return result;
 	}

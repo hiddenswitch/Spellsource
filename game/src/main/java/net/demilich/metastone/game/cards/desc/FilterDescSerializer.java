@@ -3,17 +3,13 @@ package net.demilich.metastone.game.cards.desc;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
 
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.FilterArg;
 import net.demilich.metastone.game.spells.desc.filter.FilterDesc;
 
-public class FilterDeserializer implements JsonDeserializer<FilterDesc> {
+public class FilterDescSerializer implements JsonDeserializer<FilterDesc>, JsonSerializer<FilterDesc> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public FilterDesc deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
@@ -58,4 +54,20 @@ public class FilterDeserializer implements JsonDeserializer<FilterDesc> {
 		arguments.put(arg, value);
 	}
 
+	@Override
+	public JsonElement serialize(FilterDesc src, Type typeOfSrc, JsonSerializationContext context) {
+		JsonObject result = new JsonObject();
+		result.add("class", new JsonPrimitive(src.getFilterClass().getSimpleName()));
+		for (FilterArg attribute : FilterArg.values()) {
+			if (attribute == FilterArg.CLASS) {
+				continue;
+			}
+			if (!src.contains(attribute)) {
+				continue;
+			}
+			String argName = ParseUtils.toCamelCase(attribute.toString());
+			result.add(argName, context.serialize(src.get(attribute)));
+		}
+		return result;
+	}
 }
