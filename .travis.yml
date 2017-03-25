@@ -8,6 +8,8 @@ cache:
     - $HOME/.gradle/wrapper/
 jdk:
   - oraclejdk8
+script:
+  - ./gradlew check --max-workers=1
 dist: trusty
 sudo: false
 addons:
