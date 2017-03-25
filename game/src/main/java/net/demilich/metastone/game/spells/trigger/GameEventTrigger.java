@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
@@ -30,20 +31,20 @@ public abstract class GameEventTrigger extends CustomCloneable {
 			return true;
 		}
 		switch (targetPlayer) {
-		case ACTIVE:
-			return event.getGameContext().getActivePlayerId() == targetPlayerId;
-		case INACTIVE:
-			return event.getGameContext().getActivePlayerId() != targetPlayerId;
-		case BOTH:
-			return true;
-		case OPPONENT:
-			return getOwner() != targetPlayerId;
-		case OWNER:
-			return host.getOwner() == targetPlayerId;
-		case SELF:
-			return getOwner() == targetPlayerId;
-		default:
-			break;
+			case ACTIVE:
+				return event.getGameContext().getActivePlayerId() == targetPlayerId;
+			case INACTIVE:
+				return event.getGameContext().getActivePlayerId() != targetPlayerId;
+			case BOTH:
+				return true;
+			case OPPONENT:
+				return getOwner() != targetPlayerId;
+			case OWNER:
+				return host.getOwner() == targetPlayerId;
+			case SELF:
+				return getOwner() == targetPlayerId;
+			default:
+				break;
 		}
 		return false;
 	}
@@ -92,7 +93,7 @@ public abstract class GameEventTrigger extends CustomCloneable {
 	public String toString() {
 		return "[" + getClass().getSimpleName() + " owner:" + owner + "]";
 	}
-	
+
 	public boolean canFireCondition(GameEvent event) {
 		Condition condition = (Condition) desc.get(EventTriggerArg.FIRE_CONDITION);
 		Player owner = event.getGameContext().getPlayer(getOwner());
@@ -101,5 +102,4 @@ public abstract class GameEventTrigger extends CustomCloneable {
 		}
 		return true;
 	}
-
 }

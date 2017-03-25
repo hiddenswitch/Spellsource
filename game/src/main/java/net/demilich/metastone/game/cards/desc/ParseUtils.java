@@ -24,7 +24,7 @@ import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.source.SourceDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDeserializer;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerializer;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
@@ -35,13 +35,13 @@ import net.demilich.metastone.game.targeting.TargetType;
 
 public class ParseUtils {
 
-	private static SpellDeserializer spellParser = new SpellDeserializer();
-	private static ValueProviderDeserializer valueProviderParser = new ValueProviderDeserializer();
-	private static FilterDeserializer filterParser = new FilterDeserializer();
+	private static SpellDescSerializer spellParser = new SpellDescSerializer();
+	private static ValueProviderDescSerializer valueProviderParser = new ValueProviderDescSerializer();
+	private static FilterDescSerializer filterParser = new FilterDescSerializer();
 	private static SourceDeserializer sourceParser = new SourceDeserializer();
-	private static ConditionDeserializer conditionParser = new ConditionDeserializer();
-	private static EventTriggerDeserializer triggerParser = new EventTriggerDeserializer();
-	private static CardCostModifierDeserializer manaModifierParser = new CardCostModifierDeserializer();
+	private static ConditionDescSerializer conditionParser = new ConditionDescSerializer();
+	private static EventTriggerDescSerializer triggerParser = new EventTriggerDescSerializer();
+	private static CardCostModifierDescSerializer manaModifierParser = new CardCostModifierDescSerializer();
 
 	public static Object parse(String argName, JsonObject jsonData, ParseValueType valueType) {
 		JsonElement entry = jsonData.get(argName);

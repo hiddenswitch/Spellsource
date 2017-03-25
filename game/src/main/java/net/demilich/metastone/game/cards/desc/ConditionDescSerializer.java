@@ -9,7 +9,7 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 
-public class ConditionDeserializer implements JsonDeserializer<ConditionDesc>, JsonSerializer<ConditionDesc> {
+public class ConditionDescSerializer implements JsonDeserializer<ConditionDesc>, JsonSerializer<ConditionDesc> {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -59,15 +59,15 @@ public class ConditionDeserializer implements JsonDeserializer<ConditionDesc>, J
 	public JsonElement serialize(ConditionDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
 		result.add("class", new JsonPrimitive(src.getConditionClass().getSimpleName()));
-		for (ConditionArg conditionArg : ConditionArg.values()) {
-			if (conditionArg == ConditionArg.CLASS) {
+		for (ConditionArg attribute : ConditionArg.values()) {
+			if (attribute == ConditionArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(conditionArg)) {
+			if (!src.contains(attribute)) {
 				continue;
 			}
-			String argName = ParseUtils.toCamelCase(conditionArg.toString());
-			result.add(argName, new JsonPrimitive(src.get(conditionArg).toString()));
+			String argName = ParseUtils.toCamelCase(attribute.toString());
+			result.add(argName, context.serialize(src.get(attribute)));
 		}
 		return result;
 	}

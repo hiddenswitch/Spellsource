@@ -1,12 +1,7 @@
 package net.demilich.metastone.game.cards;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import io.vertx.core.json.Json;
@@ -23,26 +18,26 @@ import com.google.gson.reflect.TypeToken;
 
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.desc.AttributeDeserializer;
-import net.demilich.metastone.game.cards.desc.AuraDeserializer;
-import net.demilich.metastone.game.cards.desc.CardCostModifierDeserializer;
+import net.demilich.metastone.game.cards.desc.AuraDescSerializer;
+import net.demilich.metastone.game.cards.desc.CardCostModifierDescSerializer;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.ChooseBattlecryCardDesc;
 import net.demilich.metastone.game.cards.desc.ChooseOneCardDesc;
-import net.demilich.metastone.game.cards.desc.ConditionDeserializer;
+import net.demilich.metastone.game.cards.desc.ConditionDescSerializer;
 import net.demilich.metastone.game.cards.desc.HeroCardDesc;
 import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.cards.desc.SecretCardDesc;
 import net.demilich.metastone.game.cards.desc.SpellCardDesc;
-import net.demilich.metastone.game.cards.desc.SpellDeserializer;
-import net.demilich.metastone.game.cards.desc.ValueProviderDeserializer;
+import net.demilich.metastone.game.cards.desc.SpellDescSerializer;
+import net.demilich.metastone.game.cards.desc.ValueProviderDescSerializer;
 import net.demilich.metastone.game.cards.desc.WeaponCardDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDeserializer;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerializer;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 
 public class CardParser {
@@ -51,15 +46,15 @@ public class CardParser {
 
 	static {
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(SpellDesc.class, new SpellDeserializer());
+		gsonBuilder.registerTypeAdapter(SpellDesc.class, new SpellDescSerializer());
 		Type mapType = new TypeToken<Map<Attribute, Object>>() {
 		}.getType();
 		gsonBuilder.registerTypeAdapter(mapType, new AttributeDeserializer());
-		gsonBuilder.registerTypeAdapter(ConditionDesc.class, new ConditionDeserializer());
-		gsonBuilder.registerTypeAdapter(EventTriggerDesc.class, new EventTriggerDeserializer());
-		gsonBuilder.registerTypeAdapter(AuraDesc.class, new AuraDeserializer());
-		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDeserializer());
-		gsonBuilder.registerTypeAdapter(CardCostModifierDesc.class, new CardCostModifierDeserializer());
+		gsonBuilder.registerTypeAdapter(ConditionDesc.class, new ConditionDescSerializer());
+		gsonBuilder.registerTypeAdapter(EventTriggerDesc.class, new EventTriggerDescSerializer());
+		gsonBuilder.registerTypeAdapter(AuraDesc.class, new AuraDescSerializer());
+		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDescSerializer());
+		gsonBuilder.registerTypeAdapter(CardCostModifierDesc.class, new CardCostModifierDescSerializer());
 		gson = gsonBuilder.create();
 	}
 

@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import net.demilich.metastone.game.spells.desc.valueprovider.RandomValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
-import org.testng.Reporter;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Field;
@@ -14,11 +13,11 @@ import java.util.Map;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-public class ValueProviderDeserializerTest {
+public class ValueProviderDescSerializerTest {
 	@Test
 	public void testDeserialize() throws Exception {
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDeserializer());
+		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDescSerializer());
 		Gson gson = gsonBuilder.create();
 		String valueProvider = "{\n" +
 				"\t\t\t\t\t\"class\": \"RandomValueProvider\",\n" +
@@ -37,7 +36,7 @@ public class ValueProviderDeserializerTest {
 	@Test
 	public void testSerialize() throws Exception {
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDeserializer());
+		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDescSerializer());
 		Gson gson = gsonBuilder.create();
 
 		Map<ValueProviderArg, Object> map = ValueProviderDesc.build(RandomValueProvider.class);

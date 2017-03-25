@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import java.io.Serializable;
 import java.util.List;
 
 import co.paralleluniverse.fibers.Suspendable;
@@ -11,7 +12,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
-public abstract class Spell {
+public abstract class Spell implements Serializable {
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		// no target specified, cast the spell once with target NULL
@@ -78,5 +79,4 @@ public abstract class Spell {
 	public String toString() {
 		return "[SPELL " + getClass().getSimpleName() + "]";
 	}
-
 }

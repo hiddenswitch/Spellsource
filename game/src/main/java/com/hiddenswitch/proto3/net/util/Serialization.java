@@ -17,9 +17,10 @@ import net.demilich.metastone.game.heroes.powers.HeroPower;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
+import net.demilich.metastone.game.spells.desc.filter.FilterDesc;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDeserializer;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerializer;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -62,17 +63,21 @@ public class Serialization {
 		gsonBuilder.registerTypeAdapterFactory(cards);
 		Type mapType = new TypeToken<Map<Attribute, Object>>() {
 		}.getType();
+		gsonBuilder.registerTypeAdapter(mapType, new AttributeDeserializer());
+		gsonBuilder.registerTypeAdapter(ClientConnectionConfiguration.class, new ClientConnectionConfigurationSerializer());
+
 		gsonBuilder.registerTypeHierarchyAdapter(GameContext.class, new GameContextSerializer());
 		gsonBuilder.registerTypeHierarchyAdapter(Deck.class, new DeckSerializer());
-		gsonBuilder.registerTypeAdapter(ClientConnectionConfiguration.class, new ClientConnectionConfigurationSerializer());
-		gsonBuilder.registerTypeAdapter(mapType, new AttributeDeserializer());
 		gsonBuilder.registerTypeAdapter(EntityReference.class, new EntityReferenceSerializer());
-		gsonBuilder.registerTypeAdapter(SpellDesc.class, new SpellDeserializer());
-		gsonBuilder.registerTypeAdapter(ConditionDesc.class, new ConditionDeserializer());
-		gsonBuilder.registerTypeAdapter(EventTriggerDesc.class, new EventTriggerDeserializer());
-		gsonBuilder.registerTypeAdapter(AuraDesc.class, new AuraDeserializer());
-		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDeserializer());
-		gsonBuilder.registerTypeAdapter(CardCostModifierDesc.class, new CardCostModifierDeserializer());
+
+		// Descriptions
+		gsonBuilder.registerTypeAdapter(SpellDesc.class, new SpellDescSerializer());
+		gsonBuilder.registerTypeAdapter(ConditionDesc.class, new ConditionDescSerializer());
+		gsonBuilder.registerTypeAdapter(EventTriggerDesc.class, new EventTriggerDescSerializer());
+		gsonBuilder.registerTypeAdapter(AuraDesc.class, new AuraDescSerializer());
+		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDescSerializer());
+		gsonBuilder.registerTypeAdapter(CardCostModifierDesc.class, new CardCostModifierDescSerializer());
+		gsonBuilder.registerTypeAdapter(FilterDesc.class, new FilterDescSerializer());
 		gsonBuilder.enableComplexMapKeySerialization();
 		gson = gsonBuilder.create();
 	}

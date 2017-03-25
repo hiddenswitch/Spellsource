@@ -9,7 +9,7 @@ import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 
-public class AuraDeserializer implements JsonDeserializer<AuraDesc>, JsonSerializer<AuraDesc> {
+public class AuraDescSerializer implements JsonDeserializer<AuraDesc>, JsonSerializer<AuraDesc> {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -51,15 +51,15 @@ public class AuraDeserializer implements JsonDeserializer<AuraDesc>, JsonSeriali
 	public JsonElement serialize(AuraDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
 		result.add("class", new JsonPrimitive(src.getAuraClass().getSimpleName()));
-		for (AuraArg spellArg : AuraArg.values()) {
-			if (spellArg == AuraArg.CLASS) {
+		for (AuraArg attribute : AuraArg.values()) {
+			if (attribute == AuraArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(spellArg)) {
+			if (!src.contains(attribute)) {
 				continue;
 			}
-			String argName = ParseUtils.toCamelCase(spellArg.toString());
-			result.add(argName, new JsonPrimitive(src.get(spellArg).toString()));
+			String argName = ParseUtils.toCamelCase(attribute.toString());
+			result.add(argName, context.serialize(src.get(attribute)));
 		}
 		return result;
 	}

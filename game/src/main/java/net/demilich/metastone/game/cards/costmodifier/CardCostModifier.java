@@ -43,7 +43,7 @@ public class CardCostModifier extends CustomCloneable implements IGameEventListe
 		if (expired) {
 			return false;
 		}
-		
+
 		if (!getRequiredCardIds().isEmpty() && !getRequiredCardIds().contains(card.getId())) {
 			return false;
 		}
@@ -57,29 +57,29 @@ public class CardCostModifier extends CustomCloneable implements IGameEventListe
 		}
 
 		switch (getTargetPlayer()) {
-		case BOTH:
-			break;
-		case OPPONENT:
-			if (card.getOwner() == getOwner()) {
-				return false;
-			}
-			break;
-		case SELF:
-			if (card.getOwner() != getOwner()) {
-				return false;
-			}
-			break;
-		default:
-			break;
+			case BOTH:
+				break;
+			case OPPONENT:
+				if (card.getOwner() == getOwner()) {
+					return false;
+				}
+				break;
+			case SELF:
+				if (card.getOwner() != getOwner()) {
+					return false;
+				}
+				break;
+			default:
+				break;
 
 		}
 		if (getCardType() == null && !card.getCardType().isCardType(CardType.HERO_POWER)) {
 			return true;
 		}
-		
+
 		return card.getCardType().isCardType(getCardType());
 	}
-	
+
 	@Override
 	public boolean canFire(GameEvent event) {
 		return true;
@@ -121,7 +121,7 @@ public class CardCostModifier extends CustomCloneable implements IGameEventListe
 	protected Attribute getRequiredAttribute() {
 		return (Attribute) desc.get(CardCostModifierArg.REQUIRED_ATTRIBUTE);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	protected List<Integer> getRequiredCardIds() {
 		if (!desc.contains(CardCostModifierArg.CARD_IDS)) {
@@ -211,7 +211,7 @@ public class CardCostModifier extends CustomCloneable implements IGameEventListe
 
 	@Override
 	public void delayTimeDown() {
-		
+
 	}
 
 	@Override
@@ -221,5 +221,4 @@ public class CardCostModifier extends CustomCloneable implements IGameEventListe
 		}
 		return true;
 	}
-
 }

@@ -1,11 +1,12 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-import java.io.Serializable;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
+
+import java.io.Serializable;
 
 public abstract class EntityFilter implements Serializable {
 
@@ -58,5 +59,4 @@ public abstract class EntityFilter implements Serializable {
 	}
 
 	protected abstract boolean test(GameContext context, Player player, Entity entity);
-
 }
