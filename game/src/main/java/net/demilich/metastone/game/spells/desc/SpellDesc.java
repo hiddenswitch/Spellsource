@@ -27,7 +27,7 @@ public class SpellDesc extends Desc<SpellArg> {
 		clone.arguments.put(spellArg, value);
 		return clone;
 	}
-	
+
 	public SpellDesc removeArg(SpellArg spellArg) {
 		SpellDesc clone = clone();
 		clone.arguments.remove(spellArg);
@@ -82,5 +82,15 @@ public class SpellDesc extends Desc<SpellArg> {
 		}
 		result += "}";
 		return result;
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return super.equals(other);
 	}
 }

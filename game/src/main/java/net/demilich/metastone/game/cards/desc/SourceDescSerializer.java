@@ -3,17 +3,14 @@ package net.demilich.metastone.game.cards.desc;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
 
+import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.SourceArg;
 import net.demilich.metastone.game.spells.desc.source.SourceDesc;
 
-public class SourceDeserializer implements JsonDeserializer<SourceDesc> {
+public class SourceDescSerializer implements JsonDeserializer<SourceDesc>, JsonSerializer<SourceDesc> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public SourceDesc deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
@@ -58,4 +55,20 @@ public class SourceDeserializer implements JsonDeserializer<SourceDesc> {
 		arguments.put(arg, value);
 	}
 
+	@Override
+	public JsonElement serialize(SourceDesc src, Type typeOfSrc, JsonSerializationContext context) {
+		JsonObject result = new JsonObject();
+		result.add("class", new JsonPrimitive(src.getSourceClass().getSimpleName()));
+		for (SourceArg attribute : SourceArg.values()) {
+			if (attribute == SourceArg.CLASS) {
+				continue;
+			}
+			if (!src.contains(attribute)) {
+				continue;
+			}
+			String argName = ParseUtils.toCamelCase(attribute.toString());
+			result.add(argName, context.serialize(src.get(attribute)));
+		}
+		return result;
+	}
 }

@@ -50,7 +50,7 @@ public class InventoryRecord extends MongoRecord {
 	}
 
 	public InventoryRecord(Card card) {
-		this(card.getOriginalDesc());
+		this(card.getDesc());
 	}
 
 	public InventoryRecord(JsonObject card) {

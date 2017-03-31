@@ -9,7 +9,7 @@ import org.unitils.reflectionassert.report.impl.DefaultDifferenceReport;
 public class Assert {
 	public static void assertReflectionEquals(Object lhs, Object rhs) {
 		ReflectionComparator reflectionComparator = ReflectionComparatorFactory.createRefectionComparator(ReflectionComparatorMode.IGNORE_DEFAULTS);
-		Difference difference = reflectionComparator.getDifference(rhs, lhs);
+		Difference difference = reflectionComparator.getDifference(lhs, rhs);
 		if (difference != null) {
 			org.junit.Assert.fail(new DefaultDifferenceReport().createReport(difference));
 		}

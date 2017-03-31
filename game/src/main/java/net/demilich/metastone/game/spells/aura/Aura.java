@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells.aura;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
@@ -25,7 +22,7 @@ public class Aura extends SpellTrigger {
 	private SpellDesc removeAuraEffect;
 	private EntityFilter entityFilter;
 
-	private HashSet<Integer> affectedEntities = new HashSet<>();
+	private SortedSet<Integer> affectedEntities = new TreeSet<>();
 
 	public Aura(AuraDesc desc) {
 		this(desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
@@ -62,7 +59,7 @@ public class Aura extends SpellTrigger {
 		clone.targets = this.targets;
 		clone.applyAuraEffect = this.applyAuraEffect.clone();
 		clone.removeAuraEffect = this.removeAuraEffect.clone();
-		clone.affectedEntities = new HashSet<>(this.affectedEntities);
+		clone.affectedEntities = new TreeSet<>(this.affectedEntities);
 		return clone;
 	}
 

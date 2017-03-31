@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.google.gson.*;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Entity;
@@ -11,6 +12,8 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.TargetType;
+
+import java.lang.reflect.Type;
 
 public abstract class GameEventTrigger extends CustomCloneable {
 
@@ -101,5 +104,17 @@ public abstract class GameEventTrigger extends CustomCloneable {
 			return false;
 		}
 		return true;
+	}
+
+	public static class Serializer implements JsonSerializer<GameEventTrigger>, JsonDeserializer<GameEventTrigger> {
+		@Override
+		public GameEventTrigger deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+			return new GameStartTrigger(context.deserialize(json.getAsJsonObject().getAsJsonObject("desc"), EventTriggerDesc.class));
+		}
+
+		@Override
+		public JsonElement serialize(GameEventTrigger src, Type typeOfSrc, JsonSerializationContext context) {
+			return context.serialize(src.desc);
+		}
 	}
 }

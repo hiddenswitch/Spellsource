@@ -41,7 +41,7 @@ public class ShadowMadnessSpell extends MindControlSpell {
 		}
 
 		// minion should be able to attack this turn
-		target.removeAttribute(Attribute.SUMMONING_SICKNESS);
+		target.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
 		context.getLogic().refreshAttacksPerRound(target);
 
 		// mind control is terminated either when silenced or turn ends

@@ -34,11 +34,10 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.TargetType;
 
 public class ParseUtils {
-
 	private static SpellDescSerializer spellParser = new SpellDescSerializer();
 	private static ValueProviderDescSerializer valueProviderParser = new ValueProviderDescSerializer();
 	private static FilterDescSerializer filterParser = new FilterDescSerializer();
-	private static SourceDeserializer sourceParser = new SourceDeserializer();
+	private static SourceDescSerializer sourceParser = new SourceDescSerializer();
 	private static ConditionDescSerializer conditionParser = new ConditionDescSerializer();
 	private static EventTriggerDescSerializer triggerParser = new EventTriggerDescSerializer();
 	private static CardCostModifierDescSerializer manaModifierParser = new CardCostModifierDescSerializer();
@@ -47,9 +46,27 @@ public class ParseUtils {
 		JsonElement entry = jsonData.get(argName);
 		switch (valueType) {
 			case INTEGER:
+//				try {
+//					boolean value = entry.getAsBoolean();
+//					return value ? 1 : 0;
+//				} catch (Throwable e) {
 				return entry.getAsInt();
+//				}
+			case INTEGER_ARRAY: {
+				JsonArray jsonArray = entry.getAsJsonArray();
+				int[] array = new int[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = jsonArray.get(i).getAsInt();
+				}
+				return array;
+			}
 			case BOOLEAN:
+//				try {
+//					int value = entry.getAsInt();
+//					return value > 0;
+//				} catch (Throwable e) {
 				return entry.getAsBoolean();
+//				}
 			case STRING:
 				return entry.getAsString();
 			case STRING_ARRAY: {
@@ -74,7 +91,11 @@ public class ParseUtils {
 				JsonArray jsonArray = entry.getAsJsonArray();
 				SpellDesc[] array = new SpellDesc[jsonArray.size()];
 				for (int i = 0; i < array.length; i++) {
-					array[i] = spellParser.deserialize(jsonArray.get(i), SpellDesc.class, null);
+					JsonElement entry1 = jsonArray.get(i);
+					if (entry1.getAsJsonObject().has("desc")) {
+						entry1 = entry1.getAsJsonObject().get("desc");
+					}
+					array[i] = spellParser.deserialize(entry1, SpellDesc.class, null);
 				}
 				return array;
 			}
@@ -142,7 +163,11 @@ public class ParseUtils {
 				JsonArray jsonArray = entry.getAsJsonArray();
 				EntityFilter[] array = new EntityFilter[jsonArray.size()];
 				for (int i = 0; i < array.length; i++) {
-					FilterDesc filterDesc = filterParser.deserialize(jsonArray.get(i), FilterDesc.class, null);
+					JsonElement entry1 = jsonArray.get(i);
+					if (entry1.getAsJsonObject().has("desc")) {
+						entry1 = entry1.getAsJsonObject().get("desc");
+					}
+					FilterDesc filterDesc = filterParser.deserialize(entry1, FilterDesc.class, null);
 					array[i] = filterDesc.create();
 				}
 				return array;
@@ -158,7 +183,11 @@ public class ParseUtils {
 				JsonArray jsonArray = entry.getAsJsonArray();
 				Condition[] array = new Condition[jsonArray.size()];
 				for (int i = 0; i < array.length; i++) {
-					ConditionDesc conditionDesc = conditionParser.deserialize(jsonArray.get(i), ConditionDesc.class, null);
+					JsonElement entry1 = jsonArray.get(i);
+					if (entry1.getAsJsonObject().has("desc")) {
+						entry1 = entry1.getAsJsonObject().get("desc");
+					}
+					ConditionDesc conditionDesc = conditionParser.deserialize(entry1, ConditionDesc.class, null);
 					array[i] = conditionDesc.create();
 				}
 				return array;
@@ -178,6 +207,9 @@ public class ParseUtils {
 				}
 				return triggerParser.deserialize(entry, EventTriggerDesc.class, null);
 			case CARD_COST_MODIFIER:
+				if (entry.getAsJsonObject().has("desc")) {
+					entry = entry.getAsJsonObject().get("desc");
+				}
 				return manaModifierParser.deserialize(entry, CardCostModifierDesc.class, null);
 			default:
 				break;
@@ -187,6 +219,10 @@ public class ParseUtils {
 
 	private static EntityReference parseEntityReference(String str) {
 		String lowerCaseName = str.toLowerCase();
+		try {
+			return new EntityReference(Integer.parseInt(lowerCaseName));
+		} catch (Exception ignored) {
+		}
 		switch (lowerCaseName) {
 			case "none":
 				return EntityReference.NONE;

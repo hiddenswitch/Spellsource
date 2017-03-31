@@ -1,7 +1,10 @@
 package net.demilich.metastone.game.cards.desc;
 
 import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gson.*;
 
@@ -10,7 +13,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSerializer<SpellDesc> {
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public SpellDesc deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -18,14 +20,20 @@ public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSer
 			throw new JsonParseException("SpellDesc parser expected an JsonObject but found " + json + " instead");
 		}
 		JsonObject jsonData = (JsonObject) json;
-		String spellClassName = Spell.class.getPackage().getName() + "." + jsonData.get("class").getAsString();
-		Class<? extends Spell> spellClass;
-		try {
-			spellClass = (Class<? extends Spell>) Class.forName(spellClassName);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			throw new JsonParseException("SpellDesc parser encountered an invalid spell class: " + spellClassName);
+		final String suppliedClassName = jsonData.get("class").getAsString();
+		String[] spellClassNames = new String[]{Spell.class.getPackage().getName() + "." + suppliedClassName, Spell.class.getPackage().getName() + ".custom." + suppliedClassName};
+		Class<? extends Spell> spellClass = null;
+		for (String spellClassName : spellClassNames) {
+			try {
+				spellClass = (Class<? extends Spell>) Class.forName(spellClassName);
+			} catch (ClassNotFoundException e) {
+				continue;
+			}
 		}
+		if (spellClass == null) {
+			throw new JsonParseException("SpellDesc parser encountered an invalid spell class: " + suppliedClassName);
+		}
+
 		Map<SpellArg, Object> spellArgs = SpellDesc.build(spellClass);
 		parseArgument(SpellArg.ATTACK_BONUS, jsonData, spellArgs, ParseValueType.VALUE);
 		parseArgument(SpellArg.ATTRIBUTE, jsonData, spellArgs, ParseValueType.ATTRIBUTE);
@@ -85,8 +93,15 @@ public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSer
 		spellArgs.put(spellArg, value);
 	}
 
+	private ThreadLocal<Set<SpellDesc>> sources =  ThreadLocal.withInitial(LinkedHashSet::new);
+
 	@Override
 	public JsonElement serialize(SpellDesc src, Type type, JsonSerializationContext context) {
+		if (sources.get().contains(src)) {
+			return JsonNull.INSTANCE;
+//			throw new RuntimeException("Recursing!");
+		}
+		sources.get().add(src);
 		JsonObject result = new JsonObject();
 		result.add("class", new JsonPrimitive(src.getSpellClass().getSimpleName()));
 		for (SpellArg attribute : SpellArg.values()) {
@@ -99,6 +114,7 @@ public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSer
 			String argName = ParseUtils.toCamelCase(attribute.toString());
 			result.add(argName, context.serialize(src.get(attribute)));
 		}
+		sources.get().remove(src);
 		return result;
 	}
 }

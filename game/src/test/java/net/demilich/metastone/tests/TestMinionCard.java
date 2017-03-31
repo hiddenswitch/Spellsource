@@ -10,6 +10,7 @@ import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 public class TestMinionCard extends MinionCard {
 
@@ -23,7 +24,7 @@ public class TestMinionCard extends MinionCard {
 		desc.baseHp = hp;
 		desc.type = CardType.MINION;
 		desc.heroClass = HeroClass.ANY;
-		desc.attributes = new EnumMap<Attribute, Object>(Attribute.class);
+		desc.attributes = new AttributeMap();
 		for (Attribute gameTag : attributes) {
 			desc.attributes.put(gameTag, true);
 		}

@@ -1,14 +1,16 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
+import com.google.gson.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.ConditionDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 public abstract class Condition implements Serializable {
-
-	private final ConditionDesc desc;
+	private ConditionDesc desc;
 
 	public Condition(ConditionDesc desc) {
 		this.desc = desc;
@@ -19,5 +21,18 @@ public abstract class Condition implements Serializable {
 	public boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
 		boolean invert = desc.getBool(ConditionArg.INVERT);
 		return isFulfilled(context, player, desc, source, target) != invert;
+	}
+
+	public static class Serializer implements JsonSerializer<Condition>, JsonDeserializer<Condition> {
+		@Override
+		public Condition deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+			ConditionDesc desc = context.deserialize(json.getAsJsonObject().getAsJsonObject("desc"), ConditionDesc.class);
+			return desc == null ? null : desc.create();
+		}
+
+		@Override
+		public JsonElement serialize(Condition src, Type typeOfSrc, JsonSerializationContext context) {
+			return context.serialize(src.desc);
+		}
 	}
 }

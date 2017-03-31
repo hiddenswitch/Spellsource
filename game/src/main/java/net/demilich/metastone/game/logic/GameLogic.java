@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.gson.annotations.Expose;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.*;
@@ -99,7 +98,7 @@ public class GameLogic implements Cloneable, Serializable {
 		player.modifyAttribute(Attribute.COMBO, +1);
 		Card card = context.resolveCardReference(cardReference);
 
-		card.removeAttribute(Attribute.MANA_COST_MODIFIER);
+		card.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
 	}
 
 	@Suspendable
@@ -452,7 +451,7 @@ public class GameLogic implements Cloneable, Serializable {
 		context.fireGameEvent(new PreDamageEvent(context, target, source));
 		damage = context.getDamageStack().pop();
 		if (damage > 0) {
-			source.removeAttribute(Attribute.STEALTH);
+			source.getAttributes().remove(Attribute.STEALTH);
 		}
 		switch (target.getEntityType()) {
 			case MINION:
@@ -640,14 +639,14 @@ public class GameLogic implements Cloneable, Serializable {
 		Player player = context.getPlayer(playerId);
 
 		Hero hero = player.getHero();
-		hero.removeAttribute(Attribute.TEMPORARY_ATTACK_BONUS);
-		hero.removeAttribute(Attribute.HERO_POWER_USAGES);
+		hero.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
+		hero.getAttributes().remove(Attribute.HERO_POWER_USAGES);
 		handleFrozen(hero);
 		for (Minion minion : player.getMinions()) {
-			minion.removeAttribute(Attribute.TEMPORARY_ATTACK_BONUS);
+			minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 			handleFrozen(minion);
 		}
-		player.removeAttribute(Attribute.COMBO);
+		player.getAttributes().remove(Attribute.COMBO);
 		hero.activateWeapon(false);
 		log("{} ends his turn.", player.getName());
 		context.fireGameEvent(new TurnEndEvent(context, playerId));
@@ -749,7 +748,7 @@ public class GameLogic implements Cloneable, Serializable {
 			damage(player, attacker, defenderDamage, target);
 		}
 		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING)) {
-			attacker.removeAttribute(Attribute.IMMUNE);
+			attacker.getAttributes().remove(Attribute.IMMUNE);
 		}
 
 		if (attacker.getEntityType() == EntityType.HERO) {
@@ -951,7 +950,7 @@ public class GameLogic implements Cloneable, Serializable {
 			entity.setAttribute(Attribute.ENRAGED);
 		} else {
 			log("{} is no longer enraged", entity);
-			entity.removeAttribute(Attribute.ENRAGED);
+			entity.getAttributes().remove(Attribute.ENRAGED);
 		}
 
 		context.fireGameEvent(new EnrageChangedEvent(context, entity));
@@ -1463,7 +1462,7 @@ public class GameLogic implements Cloneable, Serializable {
 		} else if (attr == Attribute.MEGA_WINDFURY) {
 			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, 1 - MEGA_WINDFURY_ATTACKS);
 		}
-		entity.removeAttribute(attr);
+		entity.getAttributes().remove(attr);
 		log("Removing attribute {} from {}", attr, entity);
 	}
 
@@ -1758,16 +1757,16 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 		log("{} starts his turn with {} mana", player.getName(), manaString);
 
-		player.removeAttribute(Attribute.OVERLOAD);
+		player.getAttributes().remove(Attribute.OVERLOAD);
 		for (Minion minion : player.getMinions()) {
-			minion.removeAttribute(Attribute.TEMPORARY_ATTACK_BONUS);
+			minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		}
 
 		player.getHero().getHeroPower().setUsed(0);
 		player.getHero().activateWeapon(true);
 		refreshAttacksPerRound(player.getHero());
 		for (Entity minion : player.getMinions()) {
-			minion.removeAttribute(Attribute.SUMMONING_SICKNESS);
+			minion.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
 			refreshAttacksPerRound(minion);
 		}
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));

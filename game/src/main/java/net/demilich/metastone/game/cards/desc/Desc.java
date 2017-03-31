@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -76,5 +77,14 @@ public class Desc<T> implements Serializable {
 			eq.append(left, right);
 		}
 		return eq.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		HashCodeBuilder builder = new HashCodeBuilder(113, 71);
+		for (Map.Entry entry : arguments.entrySet()) {
+			builder.append(entry.hashCode());
+		}
+		return builder.toHashCode();
 	}
 }

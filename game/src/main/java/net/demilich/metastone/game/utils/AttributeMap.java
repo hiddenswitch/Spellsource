@@ -8,4 +8,11 @@ import java.util.*;
  * Created by bberman on 2/4/17.
  */
 public class AttributeMap extends HashMap<Attribute, Object> {
+	public AttributeMap() {
+		super();
+	}
+
+	public AttributeMap(Map<Attribute, Object> attributes) {
+		super(attributes);
+	}
 }

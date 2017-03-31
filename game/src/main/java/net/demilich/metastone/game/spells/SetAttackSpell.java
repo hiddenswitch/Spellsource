@@ -21,9 +21,9 @@ public class SetAttackSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		target.setAttribute(Attribute.ATTACK, value);
-		target.removeAttribute(Attribute.TEMPORARY_ATTACK_BONUS);
-		target.removeAttribute(Attribute.ATTACK_BONUS);
-		target.removeAttribute(Attribute.CONDITIONAL_ATTACK_BONUS);
+		target.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
+		target.getAttributes().remove(Attribute.ATTACK_BONUS);
+		target.getAttributes().remove(Attribute.CONDITIONAL_ATTACK_BONUS);
 	}
 
 }
