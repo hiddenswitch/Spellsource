@@ -24,7 +24,7 @@ public abstract class CardDesc implements Serializable {
 	public CardSet set;
 	public int baseManaCost;
 	public boolean collectible = true;
-	public Map<Attribute, Object> attributes;
+	public AttributeMap attributes;
 	public int fileFormatVersion = 1;
 	public ValueProviderDesc manaCostModifier;
 	public TriggerDesc passiveTrigger;

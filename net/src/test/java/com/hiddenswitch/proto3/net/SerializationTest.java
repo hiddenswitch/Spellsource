@@ -2,7 +2,9 @@ package com.hiddenswitch.proto3.net;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.SerializationTestContext;
 import net.demilich.metastone.game.GameContext;
@@ -51,34 +53,7 @@ public class SerializationTest extends TestBase {
 	@Before
 	public void loggerSetup() {
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.INFO);
-	}
-
-	@Test
-	@Ignore
-	public void testGameContextSerialization() {
-		DeckFormat deckFormat = new DeckFormat();
-		for (CardSet set : CardSet.values()) {
-			deckFormat.addSet(set);
-		}
-		HeroClass heroClass1 = getRandomClass();
-		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass1, deckFormat), new PlayRandomBehaviour());
-		player1Config.setName("Player 1");
-		player1Config.setHeroCard(getHeroCardForClass(heroClass1));
-		Player player1 = new Player(player1Config);
-
-		HeroClass heroClass2 = getRandomClass();
-		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass2, deckFormat), new PlayRandomBehaviour());
-		player2Config.setName("Player 2");
-		player2Config.setHeroCard(getHeroCardForClass(heroClass2));
-		Player player2 = new Player(player2Config);
-		GameContext context = new SerializationTestContext(player1, player2, new GameLogic(), deckFormat);
-		try {
-			context.play();
-			context.dispose();
-		} catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
+		root.setLevel(Level.ERROR);
 	}
 
 	@Test
@@ -192,8 +167,36 @@ public class SerializationTest extends TestBase {
 		assertSpellsEqual(discoverAction1.getSpell(), discoverAction.getSpell());
 	}
 
+	@Test
+	@Ignore
 	public void testGameStateSerialization() {
+		DeckFormat deckFormat = new DeckFormat();
+		for (CardSet set : CardSet.values()) {
+			deckFormat.addSet(set);
+		}
+		HeroClass heroClass1 = getRandomClass();
+		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass1, deckFormat), new PlayRandomBehaviour());
+		player1Config.setName("Player 1");
+		player1Config.setHeroCard(getHeroCardForClass(heroClass1));
+		Player player1 = new Player(player1Config);
 
+		HeroClass heroClass2 = getRandomClass();
+		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass2, deckFormat), new PlayRandomBehaviour());
+		player2Config.setName("Player 2");
+		player2Config.setHeroCard(getHeroCardForClass(heroClass2));
+		Player player2 = new Player(player2Config);
+		GameContext context = new SerializationTestContext(player1, player2, new GameLogic(), deckFormat);
+		try {
+			context.play();
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+
+		// Get the game state now
+		GameState state = new GameState(context);
+		String json = Serialization.serialize(state);
+		GameState state1 = Serialization.deserialize(json, GameState.class);
+		assertReflectionEquals(state, state1);
 	}
 
 	private void assertSpellsEqual(SpellDesc actual, SpellDesc expected) {

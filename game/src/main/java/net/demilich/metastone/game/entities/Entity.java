@@ -16,7 +16,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String name;
-	private Map<Attribute, Object> attributes = new AttributeMap();
+	private AttributeMap attributes = new AttributeMap();
 	private int id = IdFactory.UNASSIGNED;
 	private int ownerIndex = -1;
 
@@ -113,7 +113,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 		this.ownerIndex = ownerIndex;
 	}
 
-	public void setAttributes(Map<Attribute, Object> attributes) {
+	public void setAttributes(AttributeMap attributes) {
 		this.attributes = attributes;
 	}
 

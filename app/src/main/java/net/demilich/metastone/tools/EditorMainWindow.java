@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 
+import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.Gson;
@@ -187,7 +188,7 @@ class EditorMainWindow extends BorderPane {
 	}
 
 	private void onAttributesChanged() {
-		card.attributes = new EnumMap<Attribute, Object>(Attribute.class);
+		card.attributes = new AttributeMap();
 		for (int i = 0; i < attributeBoxes.size(); i++) {
 			ComboBox<Attribute> attributeBox = attributeBoxes.get(i);
 			TextField attributeField = attributeFields.get(i);

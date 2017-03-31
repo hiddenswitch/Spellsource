@@ -13,10 +13,8 @@ import net.demilich.metastone.game.heroes.powers.HeroPower;
 public class HeroCard extends Card {
 	private static final long serialVersionUID = 1L;
 
-	protected static final Set<Attribute> inheritedAttributes = new HashSet<Attribute>(
+	protected static final Set<Attribute> inheritedAttributes = new HashSet<>(
 			Arrays.asList(new Attribute[]{Attribute.HP, Attribute.MAX_HP, Attribute.BASE_HP, Attribute.ARMOR}));
-
-	private HeroCardDesc desc;
 
 	protected HeroCard() {
 		super();
@@ -25,10 +23,10 @@ public class HeroCard extends Card {
 	public HeroCard(HeroCardDesc desc) {
 		super(desc);
 		setAttribute(Attribute.BASE_HP, getAttributeValue(Attribute.MAX_HP));
-		this.desc = desc;
 	}
 
 	public Hero createHero() {
+		final HeroCardDesc desc = (HeroCardDesc) getDesc();
 		HeroPower heroPower = (HeroPower) CardCatalogue.getCardById(desc.heroPower);
 		Hero hero = new Hero(this, heroPower);
 		for (Attribute gameTag : getAttributes().keySet()) {

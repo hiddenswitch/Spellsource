@@ -47,7 +47,7 @@ public class TargetingTests extends TestBase {
 		validTargets = context.getLogic().getValidTargets(mage.getId(), fireblast);
 		Assert.assertEquals(validTargets.size(), 4);
 
-		defender.removeAttribute(Attribute.TAUNT);
+		defender.getAttributes().remove(Attribute.TAUNT);
 
 		validTargets = context.getLogic().getValidTargets(mage.getId(), attackAction);
 		Assert.assertEquals(validTargets.size(), 2);

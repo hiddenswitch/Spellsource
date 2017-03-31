@@ -12,6 +12,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 public abstract class Actor extends Entity {
 
@@ -55,7 +56,7 @@ public abstract class Actor extends Entity {
 	@Override
 	public Actor clone() {
 		Actor clone = (Actor) super.clone();
-		clone.setAttributes(new EnumMap<>(getAttributes()));
+		clone.setAttributes(new AttributeMap(getAttributes()));
 		clone.clearSpellTriggers();
 		for (SpellTrigger trigger : getSpellTriggers()) {
 			clone.spellTriggers.add(trigger.clone());

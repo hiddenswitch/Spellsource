@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.IBehaviour;
@@ -67,6 +68,7 @@ public class Player extends Entity implements Serializable {
 
 	private boolean hideCards;
 
+	@Expose(serialize = false, deserialize = false)
 	private IBehaviour behaviour;
 
 	private Player(Player otherPlayer) {

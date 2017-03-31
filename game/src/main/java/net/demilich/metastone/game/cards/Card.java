@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.gson.annotations.SerializedName;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -14,14 +15,13 @@ import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.CardLocation;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.IdFactory;
-
-import java.util.EnumMap;
-import java.util.List;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 public abstract class Card extends Entity {
 	private static final long serialVersionUID = 1L;
 
 	private String description = "";
+	@SerializedName("cardType2")
 	private CardType cardType;
 	private CardSet cardSet;
 	private Rarity rarity;
@@ -31,7 +31,7 @@ public abstract class Card extends Entity {
 	private CardLocation location;
 	private ValueProvider manaCostModifier;
 	private String cardId;
-	private CardDesc originalDesc;
+	private CardDesc desc;
 
 	public Card() {
 		super();
@@ -39,7 +39,7 @@ public abstract class Card extends Entity {
 
 	public Card(CardDesc desc) {
 		// Save a reference to the description for later use.
-		this.originalDesc = desc;
+		this.desc = desc;
 		cardId = desc.id;
 		setName(desc.name);
 		setDescription(desc.description);
@@ -73,7 +73,7 @@ public abstract class Card extends Entity {
 	@Override
 	public Card clone() {
 		Card clone = (Card) super.clone();
-		clone.setAttributes(new EnumMap<>(getAttributes()));
+		clone.setAttributes(new AttributeMap(getAttributes()));
 		return clone;
 	}
 
@@ -127,9 +127,9 @@ public abstract class Card extends Entity {
 		Card copy = clone();
 		copy.setId(IdFactory.UNASSIGNED);
 		copy.setLocation(CardLocation.PENDING);
-		copy.removeAttribute(Attribute.ATTACK_BONUS);
-		copy.removeAttribute(Attribute.HP_BONUS);
-		copy.removeAttribute(Attribute.MANA_COST_MODIFIER);
+		copy.getAttributes().remove(Attribute.ATTACK_BONUS);
+		copy.getAttributes().remove(Attribute.HP_BONUS);
+		copy.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
 		return copy;
 	}
 
@@ -286,7 +286,7 @@ public abstract class Card extends Entity {
 		return String.format("[%s '%s' %s Manacost:%d]", getCardType(), getName(), getReference(), getBaseManaCost());
 	}
 
-	public CardDesc getOriginalDesc() {
-		return originalDesc;
+	public CardDesc getDesc() {
+		return desc;
 	}
 }

@@ -7,25 +7,39 @@ import java.util.Map;
 import com.google.gson.*;
 
 import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.AttributeMap;
 
-public class AttributeDeserializer implements JsonDeserializer<Map<Attribute, Object>>, JsonSerializer<Map<Attribute, Object>> {
+public class AttributeSerializer implements JsonDeserializer<AttributeMap>, JsonSerializer<AttributeMap> {
 
 	@Override
-	public Map<Attribute, Object> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+	public AttributeMap deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
-		Map<Attribute, Object> map = new EnumMap<Attribute, Object>(Attribute.class);
+		AttributeMap map = new AttributeMap();
 		JsonObject jsonData = json.getAsJsonObject();
-		parseAttribute(Attribute.HP, jsonData, map, ParseValueType.INTEGER);//TODO Remove from Heroes
-		parseAttribute(Attribute.MAX_HP, jsonData, map, ParseValueType.INTEGER);//TODO Remove from Heroes
-		
+		parseAttribute(Attribute.HP, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.HP_BONUS, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.MAX_HP, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.ATTACK, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.ATTACK_BONUS, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.ATTACK_EQUALS_HP, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.BATTLECRY, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.BASE_ATTACK, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.BASE_HP, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.BASE_MANA_COST, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.MAX_HP, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.RACE, jsonData, map, ParseValueType.RACE);
+		parseAttribute(Attribute.LAST_HIT, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.BOTH_CHOOSE_ONE_OPTIONS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CANNOT_ATTACK, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.CHOOSE_ONE, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CANNOT_ATTACK_HERO_ON_SUMMON, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CANNOT_ATTACK_HEROES, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CHARGE, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.COMBO, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.DIED_ON_TURN, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.NUMBER_OF_ATTACKS, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.SUMMONING_SICKNESS, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.DESTROYED, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.DEATHRATTLES, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.DIVINE_SHIELD, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.DOUBLE_BATTLECRIES, jsonData, map, ParseValueType.BOOLEAN);
@@ -45,7 +59,8 @@ public class AttributeDeserializer implements JsonDeserializer<Map<Attribute, Ob
 		parseAttribute(Attribute.SPELL_DAMAGE_MULTIPLIER, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.STEALTH, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);
-		parseAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);//TODO Remove from Spellstopper
+		// TODO: Remove from Spellstopper
+		parseAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.TAUNT, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.WINDFURY, jsonData, map, ParseValueType.BOOLEAN);
 
@@ -66,14 +81,22 @@ public class AttributeDeserializer implements JsonDeserializer<Map<Attribute, Ob
 	}
 
 	@Override
-	public JsonElement serialize(Map<Attribute, Object> src, Type typeOfSrc, JsonSerializationContext context) {
+	public JsonElement serialize(AttributeMap src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
 		for (Attribute attribute : Attribute.values()) {
 			if (!src.containsKey(attribute)) {
 				continue;
 			}
-			String argName = ParseUtils.toCamelCase(attribute.toString());
-			result.add(argName, context.serialize(src.get(attribute)));
+			String argName = attribute.toString();
+			Object value = src.get(attribute);
+			switch (attribute) {
+				case BATTLECRY:
+				case DEATHRATTLES:
+					value = true;
+				default:
+					break;
+			}
+			result.add(argName, context.serialize(value));
 		}
 		return result;
 	}

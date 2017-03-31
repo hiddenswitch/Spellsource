@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
+import com.google.gson.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
@@ -7,6 +8,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 public abstract class ValueProvider implements Serializable {
 	protected final ValueProviderDesc desc;
@@ -55,4 +57,17 @@ public abstract class ValueProvider implements Serializable {
 	}
 
 	protected abstract int provideValue(GameContext context, Player player, Entity target, Entity host);
+
+	public static class Serializer implements JsonSerializer<ValueProvider>, JsonDeserializer<ValueProvider> {
+		@Override
+		public ValueProvider deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+			ValueProviderDesc desc = context.deserialize(json.getAsJsonObject().getAsJsonObject("desc"), ValueProviderDesc.class);
+			return desc == null ? null : desc.create();
+		}
+
+		@Override
+		public JsonElement serialize(ValueProvider src, Type typeOfSrc, JsonSerializationContext context) {
+			return context.serialize(src.desc);
+		}
+	}
 }

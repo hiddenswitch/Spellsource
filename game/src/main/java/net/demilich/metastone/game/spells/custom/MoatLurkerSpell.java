@@ -25,7 +25,7 @@ public class MoatLurkerSpell extends Spell {
 		if (minion.getOwner() != source.getOwner()) {
 			targetPlayer = TargetPlayer.OPPONENT;
 		}
-		source.removeAttribute(Attribute.DEATHRATTLES);
+		source.getAttributes().remove(Attribute.DEATHRATTLES);
 		SpellDesc deathrattle = SummonSpell.create(targetPlayer, (MinionCard) minion.getSourceCard());
 		SpellDesc addDeathrattleSpell = AddDeathrattleSpell.create(deathrattle);
 		SpellDesc destroySpell = DestroySpell.create(target.getReference());

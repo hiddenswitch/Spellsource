@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.util.HashMap;
 
@@ -27,7 +28,7 @@ public class NullHeroCard extends HeroCard {
 		heroCardDesc.name = "Powerless Hero";
 		heroCardDesc.type = CardType.HERO;
 		heroCardDesc.heroClass = forClass;
-		heroCardDesc.attributes = new HashMap<Attribute, Object>();
+		heroCardDesc.attributes = new AttributeMap();
 		heroCardDesc.attributes.put(Attribute.HP, 30);
 		heroCardDesc.attributes.put(Attribute.MAX_HP, 30);
 

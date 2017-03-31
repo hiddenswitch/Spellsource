@@ -1,9 +1,9 @@
 package net.demilich.metastone.game.cards;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Map;
 
+import com.hiddenswitch.proto3.net.util.Serialization;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.utils.ResourceInputStream;
@@ -12,65 +12,38 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
 
-import net.demilich.metastone.game.Attribute;
-import net.demilich.metastone.game.cards.desc.AttributeDeserializer;
-import net.demilich.metastone.game.cards.desc.AuraDescSerializer;
-import net.demilich.metastone.game.cards.desc.CardCostModifierDescSerializer;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.ChooseBattlecryCardDesc;
 import net.demilich.metastone.game.cards.desc.ChooseOneCardDesc;
-import net.demilich.metastone.game.cards.desc.ConditionDescSerializer;
 import net.demilich.metastone.game.cards.desc.HeroCardDesc;
 import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.cards.desc.SecretCardDesc;
 import net.demilich.metastone.game.cards.desc.SpellCardDesc;
-import net.demilich.metastone.game.cards.desc.SpellDescSerializer;
-import net.demilich.metastone.game.cards.desc.ValueProviderDescSerializer;
 import net.demilich.metastone.game.cards.desc.WeaponCardDesc;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
-import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
-import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerializer;
-import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 
 public class CardParser {
 	private static Logger logger = LoggerFactory.getLogger(CardParser.class);
-	private static final Gson gson;
-
-	static {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(SpellDesc.class, new SpellDescSerializer());
-		Type mapType = new TypeToken<Map<Attribute, Object>>() {
-		}.getType();
-		gsonBuilder.registerTypeAdapter(mapType, new AttributeDeserializer());
-		gsonBuilder.registerTypeAdapter(ConditionDesc.class, new ConditionDescSerializer());
-		gsonBuilder.registerTypeAdapter(EventTriggerDesc.class, new EventTriggerDescSerializer());
-		gsonBuilder.registerTypeAdapter(AuraDesc.class, new AuraDescSerializer());
-		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDescSerializer());
-		gsonBuilder.registerTypeAdapter(CardCostModifierDesc.class, new CardCostModifierDescSerializer());
-		gson = gsonBuilder.create();
-	}
 
 	public static CardCatalogueRecord parseCard(JsonObject card) throws IOException {
 		// Do something horrible: Serialize to json, then read it in with GSON. :(
 		String text = Json.encode(card);
 		final String id = card.getString("id");
-		CardDesc desc = getCardDesc(id, gson.fromJson(text, JsonElement.class));
+		CardDesc desc = getCardDesc(id, Serialization.getGson().fromJson(text, JsonElement.class));
 		return new CardCatalogueRecord(id, card, desc);
+	}
+
+	private static Gson getGson() {
+		return Serialization.getGson();
 	}
 
 	@SuppressWarnings("unchecked")
 	public CardCatalogueRecord parseCard(ResourceInputStream resourceInputStream) throws IOException {
 		String input = IOUtils.toString(resourceInputStream.inputStream);
 		JsonObject json = new JsonObject(Json.mapper.readValue(input, Map.class));
-		JsonElement jsonData = gson.fromJson(input, JsonElement.class);
+		JsonElement jsonData = Serialization.getGson().fromJson(input, JsonElement.class);
 
 		final String fileName = resourceInputStream.fileName;
 		String id = fileName.split("(\\.json)")[0];
@@ -114,12 +87,12 @@ public class CardParser {
 					throw new RuntimeException(id + " is missing 'spell' attribute!");
 				}
 				if (gsonObject.has("trigger")) {
-					return gson.fromJson(jsonData, SecretCardDesc.class);
+					return Serialization.getGson().fromJson(jsonData, SecretCardDesc.class);
 				} else {
 					if (!gsonObject.has("targetSelection")) {
 						throw new RuntimeException(id + " is missing 'targetSelection' attribute!");
 					}
-					return gson.fromJson(jsonData, SpellCardDesc.class);
+					return Serialization.getGson().fromJson(jsonData, SpellCardDesc.class);
 				}
 			case CHOOSE_ONE:
 				if (!gsonObject.has("description")) {
@@ -131,7 +104,7 @@ public class CardParser {
 				if (!gsonObject.has("bothOptions")) {
 					throw new RuntimeException(id + " is missing 'bothOptions' attribute!");
 				}
-				return gson.fromJson(jsonData, ChooseOneCardDesc.class);
+				return Serialization.getGson().fromJson(jsonData, ChooseOneCardDesc.class);
 			case MINION:
 				if (!gsonObject.has("baseAttack")) {
 					throw new RuntimeException(id + " is missing 'baseAttack' attribute!");
@@ -146,9 +119,9 @@ public class CardParser {
 					throw new RuntimeException(id + " is missing 'description' attribute!");
 				}
 				if (gsonObject.has("options")) {
-					return gson.fromJson(jsonData, ChooseBattlecryCardDesc.class);
+					return Serialization.getGson().fromJson(jsonData, ChooseBattlecryCardDesc.class);
 				} else {
-					return gson.fromJson(jsonData, MinionCardDesc.class);
+					return Serialization.getGson().fromJson(jsonData, MinionCardDesc.class);
 				}
 			case WEAPON:
 				if (!gsonObject.has("damage")) {
@@ -164,7 +137,7 @@ public class CardParser {
 						gsonObject.has("onUnequip"))) {
 					throw new RuntimeException(id + " is missing 'description' attribute!");
 				}
-				return gson.fromJson(jsonData, WeaponCardDesc.class);
+				return Serialization.getGson().fromJson(jsonData, WeaponCardDesc.class);
 			case HERO_POWER:
 				if (!gsonObject.has("description")) {
 					throw new RuntimeException(id + " is missing 'description' attribute!");
@@ -175,9 +148,9 @@ public class CardParser {
 				if (!gsonObject.has("targetSelection")) {
 					throw new RuntimeException(id + " is missing 'targetSelection' attribute!");
 				}
-				return gson.fromJson(jsonData, HeroPowerCardDesc.class);
+				return Serialization.getGson().fromJson(jsonData, HeroPowerCardDesc.class);
 			case HERO:
-				return gson.fromJson(jsonData, HeroCardDesc.class);
+				return Serialization.getGson().fromJson(jsonData, HeroCardDesc.class);
 			default:
 				logger.error("Unknown cardType: " + type);
 				break;

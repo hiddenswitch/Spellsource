@@ -1,6 +1,7 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.gson.annotations.Expose;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.models.EventLogicRequest;
 import com.hiddenswitch.proto3.net.models.LogicResponse;
@@ -29,8 +30,10 @@ import java.util.Set;
  * Created by bberman on 2/21/17.
  */
 public class AllianceGameEventListener implements IGameEventListener {
-	private final ServiceProxy<Logic> logic;
+	@Expose(serialize = false, deserialize = false)
+	private transient final ServiceProxy<Logic> logic;
 	private final String gameId;
+	@Expose(serialize = false, deserialize = false)
 	private transient final GameContext context;
 
 	public AllianceGameEventListener(ServiceProxy<Logic> logicProxy, GameContext context, String gameId) {

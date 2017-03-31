@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.gson.annotations.Expose;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,11 +13,14 @@ import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.lang.ref.WeakReference;
+
 public class SpellTrigger extends CustomCloneable implements IGameEventListener {
 	private final static Logger logger = LoggerFactory.getLogger(SpellTrigger.class);
 
 	private GameEventTrigger primaryTrigger;
 	private GameEventTrigger secondaryTrigger;
+	@Expose(serialize = false, deserialize = false)
 	private SpellDesc spell;
 	private EntityReference hostReference;
 	private final boolean oneTurn;
@@ -31,7 +35,7 @@ public class SpellTrigger extends CustomCloneable implements IGameEventListener 
 		this.oneTurn = oneTurn;
 		this.turnDelay = turnDelay;
 	}
-	
+
 	public SpellTrigger(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
 		this(primaryTrigger, secondaryTrigger, spell, oneTurn, 0);
 	}
@@ -120,7 +124,7 @@ public class SpellTrigger extends CustomCloneable implements IGameEventListener 
 			} else {
 				event.getGameContext().getEventTargetStack().push(null);
 			}
-			onFire(ownerId, spell, event);
+			onFire(ownerId, getSpell(), event);
 			event.getGameContext().getEventTargetStack().pop();
 		} catch (Exception e) {
 			event.getGameContext().printCurrentTriggers();
@@ -159,7 +163,7 @@ public class SpellTrigger extends CustomCloneable implements IGameEventListener 
 		if (turnDelay > 0) {
 			return false;
 		}
-		
+
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference);
 		return (triggerFires(primaryTrigger, event, host) || triggerFires(secondaryTrigger, event, host));
 	}
@@ -181,21 +185,21 @@ public class SpellTrigger extends CustomCloneable implements IGameEventListener 
 	public void setPersistentOwner(boolean persistentOwner) {
 		this.persistentOwner = persistentOwner;
 	}
-	
+
 	public void delayTimeDown() {
 		if (turnDelay > 0) {
 			turnDelay--;
 		}
 	}
-	
+
 	public boolean isDelayed() {
 		return turnDelay > 0 ? true : false;
 	}
-	
+
 	public boolean oneTurnOnly() {
 		return oneTurn;
 	}
-	
+
 	public boolean canFireCondition(GameEvent event) {
 		if (primaryTrigger.canFireCondition(event) || (secondaryTrigger != null && secondaryTrigger.canFireCondition(event))) {
 			return true;

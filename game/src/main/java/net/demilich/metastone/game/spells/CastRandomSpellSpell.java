@@ -127,8 +127,8 @@ public class CastRandomSpellSpell extends Spell {
 			context.getLogic().checkForDeadEntities();
 		}
 
-		opponent.removeAttribute(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION);
-		originalPlayer.removeAttribute(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION);
+		opponent.getAttributes().remove(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION);
+		originalPlayer.getAttributes().remove(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION);
 		// *ahem* Back to normal.
 	}
 
