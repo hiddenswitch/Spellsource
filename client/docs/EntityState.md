@@ -1,0 +1,45 @@
+
+# EntityState
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**background** | **String** |  |  [optional]
+**portrait** | **String** |  |  [optional]
+**gold** | **Boolean** |  |  [optional]
+**hp** | **Integer** |  |  [optional]
+**durability** | **Integer** |  |  [optional]
+**maxHp** | **Integer** |  |  [optional]
+**baseAttack** | **Integer** |  |  [optional]
+**attack** | **Integer** |  |  [optional]
+**baseManaCost** | **Integer** |  |  [optional]
+**manaCost** | **Integer** |  |  [optional]
+**armor** | **Integer** |  |  [optional]
+**destroyed** | **Boolean** |  |  [optional]
+**pendingDestroy** | **Boolean** |  |  [optional]
+**summoningSickness** | **Boolean** |  |  [optional]
+**frozen** | **Boolean** |  |  [optional]
+**silenced** | **Boolean** |  |  [optional]
+**windfury** | **Boolean** |  |  [optional]
+**taunt** | **Boolean** |  |  [optional]
+**spellDamage** | **Integer** |  |  [optional]
+**charge** | **Boolean** |  |  [optional]
+**enraged** | **Boolean** |  |  [optional]
+**battlecry** | **Boolean** |  |  [optional]
+**deathrattles** | **Boolean** |  |  [optional]
+**immune** | **Boolean** |  |  [optional]
+**divineShield** | **Boolean** |  |  [optional]
+**stealth** | **Boolean** |  |  [optional]
+**secret** | **Boolean** |  |  [optional]
+**combo** | **Boolean** |  |  [optional]
+**overload** | **Integer** |  |  [optional]
+**chooseOne** | **Boolean** |  |  [optional]
+**untargetableBySpells** | **Boolean** |  |  [optional]
+**cannotAttack** | **Boolean** |  |  [optional]
+**underAura** | **Boolean** |  |  [optional]
+**customRenderer** | **String** |  |  [optional]
+**customData** | **String** |  |  [optional]
+**playable** | **Boolean** |  |  [optional]
+
+
+

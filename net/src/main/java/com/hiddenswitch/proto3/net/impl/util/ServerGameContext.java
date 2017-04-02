@@ -222,6 +222,10 @@ public class ServerGameContext extends GameContext {
 
 	@Override
 	protected void onGameStateChanged() {
+		updateClientsWithGameState();
+	}
+
+	public void updateClientsWithGameState() {
 		GameState state = new GameState(this);
 		getListenerMap().get(getPlayer1()).onUpdate(state);
 		getListenerMap().get(getPlayer2()).onUpdate(state);

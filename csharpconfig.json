@@ -1,0 +1,8 @@
+{
+  "packageName": "Minionate.Client",
+  "targetFramework": "v3.5",
+  "sourceFolder": "Scripts",
+  "hideGenerationTimestamp": true,
+  "optionalProjectFile": false,
+  "optionalAssemblyFile": false
+}

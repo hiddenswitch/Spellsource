@@ -78,8 +78,8 @@ public class TwoClients {
 
 		AIPlayer player1 = new AIPlayer();
 		AIPlayer player2 = new AIPlayer();
-		pregame1 = new PregamePlayerConfiguration(player1.getConfiguredDeck(), "Player 1").withPlayer(player1);
-		pregame2 = new PregamePlayerConfiguration(player2.getConfiguredDeck(), "Player 2").withPlayer(player2);
+		pregame1 = new PregamePlayerConfiguration(player1.getConfiguredDeck(), "Player 1").withPlayer(player1.withUserId("userId1"));
+		pregame2 = new PregamePlayerConfiguration(player2.getConfiguredDeck(), "Player 2").withPlayer(player2.withUserId("userId2"));
 
 		CreateGameSessionRequest request = new CreateGameSessionRequest();
 		request.setPregame1(pregame1);
@@ -103,7 +103,7 @@ public class TwoClients {
 		CardCatalogue.loadCardsFromPackage();
 
 		AIPlayer player1 = new AIPlayer();
-		pregame1 = new PregamePlayerConfiguration(player1.getConfiguredDeck(), "Player 1").withPlayer(player1);
+		pregame1 = new PregamePlayerConfiguration(player1.getConfiguredDeck(), "Player 1").withPlayer(player1.withUserId("localPlayerUserId1"));
 		pregame2 = new PregamePlayerConfiguration(DeckFactory.getRandomDeck(), "Player 2").withAI(true);
 
 		CreateGameSessionRequest request = new CreateGameSessionRequest();
@@ -126,8 +126,8 @@ public class TwoClients {
 		this.service = service;
 		this.gameId = gameId;
 		// Manually override the player in the configurations
-		AIPlayer player1 = new AIPlayer(deck1);
-		AIPlayer player2 = new AIPlayer(deck2);
+		AIPlayer player1 = new AIPlayer(deck1).withUserId(response1.getConnection().getFirstMessage().getPlayer1().getUserId());
+		AIPlayer player2 = new AIPlayer(deck2).withUserId(response2.getConnection().getFirstMessage().getPlayer1().getUserId());
 		ClientToServerMessage firstMessage1 = response1.getConnection().getFirstMessage();
 		ClientToServerMessage firstMessage2 = response2.getConnection().getFirstMessage();
 		player1.setId(firstMessage1.getPlayer1().getId());

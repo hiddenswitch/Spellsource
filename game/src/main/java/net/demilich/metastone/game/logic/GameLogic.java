@@ -31,6 +31,7 @@ import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Attr;
 
 import java.io.Serializable;
 import java.util.*;
@@ -49,6 +50,7 @@ public class GameLogic implements Cloneable, Serializable {
 	public static final int TURN_LIMIT = 100;
 	public static final int WINDFURY_ATTACKS = 2;
 	public static final int MEGA_WINDFURY_ATTACKS = 4;
+	public static final Set<Attribute> immuneToSilence = new HashSet<>();
 	public static final String TEMP_CARD_LABEL = "temp_card_id_";
 	private static final int INFINITE = -1;
 	protected final TargetLogic targetLogic = new TargetLogic();
@@ -60,6 +62,19 @@ public class GameLogic implements Cloneable, Serializable {
 	private boolean loggingEnabled = true;
 	private final int MAX_HISTORY_ENTRIES = 100;
 	private ArrayDeque<String> debugHistory = new ArrayDeque<>();
+
+	static {
+		immuneToSilence.add(Attribute.HP);
+		immuneToSilence.add(Attribute.MAX_HP);
+		immuneToSilence.add(Attribute.BASE_HP);
+		immuneToSilence.add(Attribute.BASE_ATTACK);
+		immuneToSilence.add(Attribute.SUMMONING_SICKNESS);
+		immuneToSilence.add(Attribute.AURA_ATTACK_BONUS);
+		immuneToSilence.add(Attribute.AURA_HP_BONUS);
+		immuneToSilence.add(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
+		immuneToSilence.add(Attribute.RACE);
+		immuneToSilence.add(Attribute.NUMBER_OF_ATTACKS);
+	}
 
 	public GameLogic() {
 		idFactory = new IdFactory();
@@ -1706,17 +1721,6 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void silence(int playerId, Minion target) {
 		context.fireGameEvent(new SilenceEvent(context, playerId, target));
-		final HashSet<Attribute> immuneToSilence = new HashSet<Attribute>();
-		immuneToSilence.add(Attribute.HP);
-		immuneToSilence.add(Attribute.MAX_HP);
-		immuneToSilence.add(Attribute.BASE_HP);
-		immuneToSilence.add(Attribute.BASE_ATTACK);
-		immuneToSilence.add(Attribute.SUMMONING_SICKNESS);
-		immuneToSilence.add(Attribute.AURA_ATTACK_BONUS);
-		immuneToSilence.add(Attribute.AURA_HP_BONUS);
-		immuneToSilence.add(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
-		immuneToSilence.add(Attribute.RACE);
-		immuneToSilence.add(Attribute.NUMBER_OF_ATTACKS);
 
 		List<Attribute> tags = new ArrayList<Attribute>();
 		tags.addAll(target.getAttributes().keySet());
@@ -1727,6 +1731,7 @@ public class GameLogic implements Cloneable, Serializable {
 			removeAttribute(target, attr);
 		}
 		removeSpellTriggers(target);
+		target.setAttribute(Attribute.SILENCED);
 
 		int oldMaxHp = target.getMaxHp();
 		target.setMaxHp(target.getAttributeValue(Attribute.BASE_HP));

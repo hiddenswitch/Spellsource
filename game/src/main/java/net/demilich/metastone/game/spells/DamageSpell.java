@@ -52,6 +52,13 @@ public class DamageSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		int damage = getDamage(context, player, desc, source, target);
+		
+		boolean ignoreSpellDamage = desc.getBool(SpellArg.IGNORE_SPELL_DAMAGE);
+		context.getLogic().damage(player, (Actor) target, damage, source, ignoreSpellDamage);
+	}
+
+	public static int getDamage(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int damage = 0;
 		// TODO Rewrite to more accurate way to grab Damage Stack damage.
 		if (!desc.contains(SpellArg.VALUE) && !context.getDamageStack().isEmpty()) {
@@ -59,9 +66,7 @@ public class DamageSpell extends Spell {
 		} else {
 			damage = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		}
-		
-		boolean ignoreSpellDamage = desc.getBool(SpellArg.IGNORE_SPELL_DAMAGE);
-		context.getLogic().damage(player, (Actor) target, damage, source, ignoreSpellDamage);
+		return damage;
 	}
 
 }
