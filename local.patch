@@ -1,0 +1,26 @@
+diff --git a/net/src/main/resources/server.yaml b/net/src/main/resources/server.yaml
+index aa78eed7..07e4bf7d 100644
+--- a/net/src/main/resources/server.yaml
++++ b/net/src/main/resources/server.yaml
+@@ -10,7 +10,7 @@ info:
+   license:
+     name: MIT
+     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+-host: api-us-east-2.hiddenswitch.com:8080
++host: localhost:8080
+ basePath: /v1
+ schemes:
+   - http
+diff --git a/shared/build.gradle b/shared/build.gradle
+index 667710da..97f12cf4 100644
+--- a/shared/build.gradle
++++ b/shared/build.gradle
+@@ -19,7 +19,7 @@ buildConfig {
+ 	buildConfigField 'int', 'CARD_REVISION', '14'
+ 	buildConfigField 'boolean', 'DEV_BUILD', project.hasProperty('DEV_BUILD').toString()
+ 	buildConfigField 'int', 'DEFAULT_SLEEP_DELAY', '100'
+-	buildConfigField 'String', 'GAMESESSIONS_HOST', 'api-us-east-2.hiddenswitch.com'
++	buildConfigField 'String', 'GAMESESSIONS_HOST', 'localhost'
+ 	buildConfigField 'boolean', 'DECK_BUILDER_ENABLED', 'true'
+ 	buildConfigField 'boolean', 'PACKAGE_ONLY', 'true'
+ }
