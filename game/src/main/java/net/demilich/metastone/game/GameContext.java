@@ -9,6 +9,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
@@ -714,6 +715,12 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		this.setCardCostModifiers(state.cardCostModifiers);
 		this.setEnvironment(state.environment);
 		this.setTriggerManager(state.triggerManager);
+		if (getLogic() == null) {
+			setLogic(new GameLogic());
+		}
+		if (getDeckFormat() == null) {
+			setDeckFormat(new DeckFormat().withCardSets(CardSet.values()));
+		}
 		this.getLogic().setIdFactory(new IdFactory(state.currentId));
 		this.setTurnState(state.turnState);
 	}

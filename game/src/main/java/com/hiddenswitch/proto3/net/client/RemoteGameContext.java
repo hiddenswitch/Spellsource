@@ -382,6 +382,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 		}
 		if (lastUpdatedAt > state.timestamp) {
 			logger.error("State from wire out of date!");
+			return;
 		}
 		this.lastUpdatedAt = state.timestamp;
 		loadState(state);

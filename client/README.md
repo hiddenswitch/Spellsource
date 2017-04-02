@@ -100,6 +100,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
 *DefaultApi* | [**matchmakingConstructedDelete**](docs/DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/constructed | 
+*DefaultApi* | [**matchmakingConstructedGet**](docs/DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/constructed | 
 *DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
 *DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/constructed/queue | 
 
@@ -116,6 +117,9 @@ Class | Method | HTTP request | Description
  - [DecksPutResponse](docs/DecksPutResponse.md)
  - [DecksUpdateCommand](docs/DecksUpdateCommand.md)
  - [DecksUpdateCommandPushInventoryIds](docs/DecksUpdateCommandPushInventoryIds.md)
+ - [Entity](docs/Entity.md)
+ - [EntityState](docs/EntityState.md)
+ - [GameState](docs/GameState.md)
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
@@ -127,6 +131,7 @@ Class | Method | HTTP request | Description
  - [MatchmakingDeck](docs/MatchmakingDeck.md)
  - [MatchmakingQueuePutRequest](docs/MatchmakingQueuePutRequest.md)
  - [MatchmakingQueuePutResponse](docs/MatchmakingQueuePutResponse.md)
+ - [Zone](docs/Zone.md)
 
 
 ## Documentation for Authorization

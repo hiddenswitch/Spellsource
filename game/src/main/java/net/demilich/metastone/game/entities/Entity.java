@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.logic.CustomCloneable;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -90,14 +91,23 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	}
 
 	public void setAttribute(Attribute attribute) {
+		if (!GameLogic.immuneToSilence.contains(attribute)) {
+			removeAttribute(Attribute.SILENCED);
+		}
 		getAttributes().put(attribute, 1);
 	}
 
 	public void setAttribute(Attribute attribute, int value) {
+		if (!GameLogic.immuneToSilence.contains(attribute)) {
+			removeAttribute(Attribute.SILENCED);
+		}
 		getAttributes().put(attribute, value);
 	}
 
 	public void setAttribute(Attribute attribute, Object value) {
+		if (!GameLogic.immuneToSilence.contains(attribute)) {
+			removeAttribute(Attribute.SILENCED);
+		}
 		getAttributes().put(attribute, value);
 	}
 

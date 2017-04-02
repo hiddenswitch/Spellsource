@@ -62,7 +62,6 @@ public class ServerClientConnection implements Client {
 	@Override
 	public void onGameEnd(Player winner) {
 		sendMessage(new ServerToClientMessage(winner, true));
-
 	}
 
 	@Override

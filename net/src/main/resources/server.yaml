@@ -243,6 +243,120 @@ definitions:
     properties:
       isConceded:
         type: 'boolean'
+  GameState:
+    type: 'object'
+    properties:
+      zones:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Zone'
+      entities:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Entity'
+      turnState:
+        type: 'string'
+      timestamp:
+        type: 'integer'
+        format: 'int64'
+  Zone:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+      entities:
+        type: 'array'
+        items:
+          type: 'integer'
+  Entity:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+      cardId:
+        type: 'string'
+      entityType:
+        type: 'string'
+        enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON']
+      name:
+        type: 'string'
+      description: 
+        type: 'string'
+      state:
+        type: 'object'
+        properties:
+          background:
+            type: 'string'
+          portrait:
+            type: 'string'
+          gold:
+            type: 'boolean'
+          hp:
+            type: 'integer'
+          durability:
+            type: 'integer'
+          maxHp:
+            type: 'integer'
+          baseAttack:
+            type: 'integer'
+          attack:
+            type: 'integer'
+          baseManaCost:
+            type: 'integer'
+          manaCost:
+            type: 'integer'
+          armor:
+            type: 'integer'
+          destroyed:
+            type: 'boolean'
+          pendingDestroy:
+            type: 'boolean'
+          summoningSickness:
+            type: 'boolean'
+          frozen:
+            type: 'boolean'
+          silenced:
+            type: 'boolean'
+          windfury:
+            type: 'boolean'
+          taunt:
+            type: 'boolean'
+          spellDamage:
+            type: 'integer'
+          charge:
+            type: 'boolean'
+          enraged:
+            type: 'boolean'
+          battlecry:
+            type: 'boolean'
+          deathrattles:
+            type: 'boolean'
+          immune:
+            type: 'boolean'
+          divineShield:
+            type: 'boolean'
+          stealth:
+            type: 'boolean'
+          secret:
+            type: 'boolean'
+          combo:
+            type: 'boolean'
+          overload:
+            type: 'integer'
+          chooseOne:
+            type: 'boolean'
+          untargetableBySpells:
+            type: 'boolean'
+          cannotAttack:
+            type: 'boolean'
+          underAura:
+            type: 'boolean'
+          customRenderer:
+            type: 'string'
+          customData:
+            type: 'string'
+          playable:
+            type: 'boolean'
 paths:
   /accounts/{targetUserId}:
     get:
@@ -406,6 +520,21 @@ paths:
           description: |
             The deck has been deleted.
   /matchmaking/constructed:
+    get:
+      description: |
+        Gets a renderable gamestate representing this player's current game.
+      operationId: matchmakingConstructedGet
+      security:
+        - TokenSecurity: []
+      responses:
+        "404":
+          description: |
+            There is no game currently available.
+        "200":
+          description: |
+            The client has a game and its state was delivered.
+          schema:
+            $ref: '#/definitions/GameState'
     delete:
       description: |
         Concedes the player's current constructed game.

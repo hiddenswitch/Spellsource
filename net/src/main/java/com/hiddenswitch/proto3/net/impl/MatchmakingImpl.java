@@ -25,7 +25,6 @@ import java.util.Map;
 
 public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchmaking {
 	private ServiceProxy<Games> gameSessions;
-	private ServiceProxy<Decks> decks;
 	private ServiceProxy<Logic> logic;
 
 	private Matchmaker matchmaker = new Matchmaker();
@@ -36,7 +35,6 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 		super.start();
 		Broker.of(this, Matchmaking.class, vertx.eventBus());
 		gameSessions = Broker.proxy(Games.class, vertx.eventBus());
-		decks = Broker.proxy(Decks.class, vertx.eventBus());
 		logic = Broker.proxy(Logic.class, vertx.eventBus());
 	}
 
@@ -156,10 +154,19 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 	}
 
 	@Override
+	public CurrentMatchResponse getCurrentMatch(CurrentMatchRequest request) throws SuspendExecution, InterruptedException {
+		if (matchmaker.contains(request.getUserId())) {
+			return new CurrentMatchResponse(matchmaker.indexedByUserIds().get(request.getUserId()).gameId);
+		} else {
+			return new CurrentMatchResponse(null);
+		}
+	}
+
+	@Override
 	public MatchExpireResponse expireOrEndMatch(MatchExpireRequest request) throws SuspendExecution, InterruptedException {
 		// TODO: Clear out old connections from AI games
 		final MatchExpireResponse response = new MatchExpireResponse();
-		final Matchmaker.Match match = matchmaker.asMatches().get(request.gameId);
+		final Matchmaker.Match match = matchmaker.indexedByUserIds().get(request.gameId);
 
 		if (match == null) {
 			response.matchNotFoundOrAlreadyExpired = true;
