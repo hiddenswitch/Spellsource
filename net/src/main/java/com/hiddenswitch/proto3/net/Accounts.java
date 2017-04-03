@@ -23,4 +23,7 @@ public interface Accounts {
 
 	@Suspendable
 	UserRecord getWithToken(String token);
+
+	@Suspendable
+	UserRecord get(String userId);
 }
