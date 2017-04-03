@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.impl.server;
 
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ public class PregamePlayerConfiguration implements Serializable {
 	private final Deck deck;
 	private final String name;
 	private Player player;
+	private AttributeMap attributes;
 	private boolean isAI;
 
 	public PregamePlayerConfiguration(Deck deck, String name) {
@@ -48,5 +50,18 @@ public class PregamePlayerConfiguration implements Serializable {
 	public PregamePlayerConfiguration withAI(boolean AI) {
 		isAI = AI;
 		return this;
+	}
+
+	public PregamePlayerConfiguration withAttributes(final AttributeMap attributes) {
+		this.attributes = attributes;
+		return this;
+	}
+
+	public AttributeMap getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(AttributeMap attributes) {
+		this.attributes = attributes;
 	}
 }

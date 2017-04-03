@@ -406,7 +406,6 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 							|| hostsTrigger);
 					break;
 				case SPELL:
-				case CHOOSE_ONE:
 					SpellCard spellCard = (SpellCard) card;
 					int damage = 0;
 					int spellpowerDamage = 0;
@@ -417,6 +416,9 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 					entityState.underAura(spellpowerDamage > damage
 							|| hostsTrigger);
 					entityState.spellDamage(spellpowerDamage);
+					break;
+				case CHOOSE_ONE:
+					// Do nothing special for choose one cards
 					break;
 			}
 			entity.state(entityState);
