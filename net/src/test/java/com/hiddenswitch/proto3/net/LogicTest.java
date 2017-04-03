@@ -218,6 +218,12 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 			time += 1.0f;
 		}
 		twoClients.assertGameOver();
+
+		// Assert that there are minions who recorded some stats
+		getContext().assertTrue(inventory.getCollection(GetCollectionRequest.user(userId1)).getInventoryRecords().stream().anyMatch(ir -> ir.getFirstTimePlays() > 0));
+		final boolean inventory1 = inventory.getCollection(GetCollectionRequest.user(userId1)).getInventoryRecords().stream().anyMatch(ir -> ir.getLastMinionDestroyedCardId() != null);
+		final boolean inventory2 = inventory.getCollection(GetCollectionRequest.user(userId2)).getInventoryRecords().stream().anyMatch(ir -> ir.getLastMinionDestroyedCardId() != null);
+		getContext().assertTrue(inventory1 || inventory2);
 	}
 
 	@Test

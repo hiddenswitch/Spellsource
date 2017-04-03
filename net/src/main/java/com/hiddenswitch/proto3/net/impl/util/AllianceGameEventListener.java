@@ -45,7 +45,7 @@ public class AllianceGameEventListener implements IGameEventListener {
 	/**
 	 * These are the current events we are listening to.
 	 */
-	private Set<GameEventType> types = EnumSet.of(GameEventType.BEFORE_SUMMON);
+	private Set<GameEventType> types = EnumSet.of(GameEventType.BEFORE_SUMMON, GameEventType.AFTER_PHYSICAL_ATTACK);
 
 	@Override
 	@Suspendable
@@ -80,6 +80,7 @@ public class AllianceGameEventListener implements IGameEventListener {
 						// TODO: Do nothing really
 					}).afterPhysicalAttack(request1);
 				}
+				break;
 			case BEFORE_SUMMON:
 				final BeforeSummonEvent event1 = (BeforeSummonEvent) event;
 				final String cardInstanceId = event1.getMinion().getCardInventoryId();
