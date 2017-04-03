@@ -222,6 +222,8 @@ definitions:
   MatchmakingQueuePutRequest:
     type: 'object'
     properties:
+      casual:
+        type: 'boolean'
       deckId:
         type: 'string'
       deck:

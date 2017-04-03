@@ -67,7 +67,8 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 		// TODO: Deal with reconnecting to AI game
 
 		// Setup a user with a game against an AI if they've been waiting more than 10 seconds
-		if (isWaitingTooLong) {
+		if (isWaitingTooLong
+				|| matchmakingRequest.isBotMatch()) {
 			QueueEntry entry = matchmaker.get(userId);
 			String gameId = RandomStringUtils.randomAlphanumeric(8).toLowerCase();
 			String aiUserId = RandomStringUtils.randomAlphanumeric(8).toLowerCase();
@@ -166,7 +167,7 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 	public MatchExpireResponse expireOrEndMatch(MatchExpireRequest request) throws SuspendExecution, InterruptedException {
 		// TODO: Clear out old connections from AI games
 		final MatchExpireResponse response = new MatchExpireResponse();
-		final Matchmaker.Match match = matchmaker.indexedByUserIds().get(request.gameId);
+		final Matchmaker.Match match = matchmaker.indexedByGameIds().get(request.gameId);
 
 		if (match == null) {
 			response.matchNotFoundOrAlreadyExpired = true;

@@ -90,11 +90,11 @@ public class Matchmaker extends AbstractMap<String, QueueEntry> {
 		return null;
 	}
 
-	public Map<String, Match> indexedByUserIds() {
+	public Map<String, Match> indexedByGameIds() {
 		return Collections.unmodifiableMap(this.gamesToMatches);
 	}
 
-	public Map<String, Match> indexedByGameIds() {
+	public Map<String, Match> indexedByUserIds() {
 		return Collections.unmodifiableMap(this.usersToMatches);
 	}
 
