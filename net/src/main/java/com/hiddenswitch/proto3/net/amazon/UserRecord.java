@@ -24,6 +24,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	private Profile profile;
 	private AuthorizationRecord auth;
 	private List<String> decks;
+	private boolean bot;
 
 	public UserRecord() {
 		super();
@@ -83,5 +84,13 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	public void setDecks(List<String> decks) {
 		this.decks = decks;
+	}
+
+	public boolean isBot() {
+		return bot;
+	}
+
+	public void setBot(boolean bot) {
+		this.bot = bot;
 	}
 }

@@ -14,4 +14,6 @@ public interface Matchmaking {
 	MatchExpireResponse expireOrEndMatch(MatchExpireRequest request) throws SuspendExecution, InterruptedException;
 
 	MatchCancelResponse cancel(MatchCancelRequest matchCancelRequest);
+
+	MatchCreateResponse createMatch(MatchCreateRequest request) throws SuspendExecution, InterruptedException;
 }

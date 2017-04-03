@@ -39,9 +39,9 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 
 	public CreateAccountResponse createAccount(String emailAddress, String password, String username) throws SuspendExecution, InterruptedException {
 		CreateAccountRequest request = new CreateAccountRequest();
-		request.emailAddress = emailAddress;
-		request.password = password;
-		request.name = username;
+		request.setEmailAddress(emailAddress);
+		request.setPassword(password);
+		request.setName(username);
 		return this.createAccount(request);
 	}
 
@@ -56,18 +56,18 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 	public CreateAccountResponse createAccount(CreateAccountRequest request) throws SuspendExecution, InterruptedException {
 		CreateAccountResponse response = new CreateAccountResponse();
 
-		if (!isValidName(request.name)) {
+		if (!isValidName(request.getName())) {
 			response.invalidName = true;
 			return response;
 		}
 
-		if (!isValidEmailAddress(request.emailAddress)
-				|| emailExists(request.emailAddress)) {
+		if (!isValidEmailAddress(request.getEmailAddress())
+				|| emailExists(request.getEmailAddress())) {
 			response.invalidEmailAddress = true;
 			return response;
 		}
 
-		final String password = request.password;
+		final String password = request.getPassword();
 		if (!isValidPassword(password)) {
 			response.invalidPassword = true;
 			return response;
@@ -77,8 +77,8 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 		UserRecord record = new UserRecord(userId);
 		record.setDecks(new ArrayList<>());
 		Profile profile = new Profile();
-		profile.setEmailAddress(request.emailAddress);
-		profile.setDisplayName(request.name);
+		profile.setEmailAddress(request.getEmailAddress());
+		profile.setDisplayName(request.getName());
 		record.setProfile(profile);
 
 		final String scrypt = hashedPassword(password);

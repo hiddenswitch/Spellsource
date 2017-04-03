@@ -5,10 +5,7 @@ import com.hiddenswitch.proto3.net.Bots;
 import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
-import com.hiddenswitch.proto3.net.models.MulliganRequest;
-import com.hiddenswitch.proto3.net.models.MulliganResponse;
-import com.hiddenswitch.proto3.net.models.RequestActionRequest;
-import com.hiddenswitch.proto3.net.models.RequestActionResponse;
+import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.AsyncResult;
@@ -43,6 +40,10 @@ public class AIServiceConnection implements Client {
 
 	@Override
 	public void onGameEnd(Player winner) {
+		final ServerGameContext gc = context.get();
+		bots.async((AsyncResult<NotifyGameOverResponse> result) -> {
+			// Do nothing
+		}).notifyGameOver(new NotifyGameOverRequest(gc.getGameId()));
 	}
 
 	@Override

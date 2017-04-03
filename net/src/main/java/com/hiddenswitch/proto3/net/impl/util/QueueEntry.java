@@ -3,6 +3,7 @@ package com.hiddenswitch.proto3.net.impl.util;
 import net.demilich.metastone.game.decks.Deck;
 import org.joda.time.DateTimeComparator;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
@@ -10,7 +11,7 @@ import java.util.Objects;
 /**
  * Created by bberman on 11/30/16.
  */
-public class QueueEntry implements Comparable<QueueEntry>, Cloneable {
+public class QueueEntry implements Comparable<QueueEntry>, Cloneable, Serializable {
 	public final String userId;
 	public final Deck deck;
 	public final Date lastTouchedAt;

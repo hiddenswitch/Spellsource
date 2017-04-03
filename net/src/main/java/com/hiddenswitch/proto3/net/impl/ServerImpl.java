@@ -286,7 +286,7 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext routingContext, String userId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException {
-		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId);
+		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.getCasual());
 		MatchmakingResponse internalResponse = matchmaking.matchmakeAndJoin(internalRequest);
 
 		// Compute the appropriate response
@@ -573,11 +573,13 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 			accounts.withMongo(client);
 			inventory.withMongo(client);
 			decks.withMongo(client);
+			bots.withMongo(client);
 		} else {
 			logic.withEmbeddedConfiguration();
 			accounts.withEmbeddedConfiguration();
 			inventory.withEmbeddedConfiguration();
 			decks.withEmbeddedConfiguration();
+			bots.withEmbeddedConfiguration();
 		}
 	}
 }

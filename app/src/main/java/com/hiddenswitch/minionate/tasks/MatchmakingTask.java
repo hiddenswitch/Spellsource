@@ -69,6 +69,8 @@ public class MatchmakingTask extends Task<Void> {
 				request.setDeckId(deckId);
 			}
 
+			request.setCasual(isCasual);
+
 			MatchmakingQueuePutResponse response = null;
 			try {
 				response = api.matchmakingConstructedQueuePut(request);
