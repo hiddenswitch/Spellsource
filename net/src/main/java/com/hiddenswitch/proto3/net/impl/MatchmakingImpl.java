@@ -107,14 +107,16 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 			QueueEntry entry = matchmaker.get(userId);
 			final BotsStartGameRequest request;
 			if (entry != null) {
+				matchmaker.remove(entry);
 				request = new BotsStartGameRequest(entry.userId, ((DeckWithId) entry.deck).getDeckId());
 			} else {
 				request = new BotsStartGameRequest(matchmakingRequest.getUserId(), matchmakingRequest.getDeckId());
 			}
+
 			BotsStartGameResponse response1 = bots.sync().startGame(request);
+			matchmaker.match(response1.getGameId(), matchmakingRequest.getUserId(), response1.getBotUserId(), matchmakingRequest.getDeckId(), response1.getBotDeckId());
 			final ClientConnectionConfiguration connection = response1.getPlayerConnection();
 			connections.put(userId, connection);
-			matchmaker.remove(userId);
 			response.setConnection(connection);
 			return response;
 		}
@@ -173,7 +175,7 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 
 	@Override
 	public CurrentMatchResponse getCurrentMatch(CurrentMatchRequest request) throws SuspendExecution, InterruptedException {
-		if (matchmaker.contains(request.getUserId())) {
+		if (matchmaker.indexedByUserIds().containsKey(request.getUserId())) {
 			return new CurrentMatchResponse(matchmaker.indexedByUserIds().get(request.getUserId()).gameId);
 		} else {
 			return new CurrentMatchResponse(null);

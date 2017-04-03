@@ -25,11 +25,23 @@ public class Matchmaker extends AbstractMap<String, QueueEntry> {
 		public final QueueEntry entry2;
 		public final Date createdAt;
 
+		public Match(String gameId, String userId1, String userId2, String deckId1, String deckId2) {
+			this.createdAt = Date.from(Instant.now());
+			this.gameId = gameId;
+			this.entry1 = new QueueEntry(userId1, new DeckWithId(deckId1));
+			this.entry2 = new QueueEntry(userId2, new DeckWithId(deckId2));
+			add();
+		}
+
 		public Match(QueueEntry entry1, QueueEntry entry2) {
 			this.gameId = RandomStringUtils.randomAlphanumeric(10).toLowerCase();
 			this.entry1 = entry1;
 			this.entry2 = entry2;
 			this.createdAt = Date.from(Instant.now());
+			add();
+		}
+
+		public void add() {
 			usersToMatches.put(this.entry1.userId, this);
 			usersToMatches.put(this.entry2.userId, this);
 			gamesToMatches.put(this.gameId, this);
@@ -57,6 +69,10 @@ public class Matchmaker extends AbstractMap<String, QueueEntry> {
 		match.remove();
 
 		return true;
+	}
+
+	public synchronized Match match(String gameId, String userId1, String userId2, String deckId1, String deckId2) {
+		return new Match(gameId, userId1, userId2, deckId1, deckId2);
 	}
 
 	public synchronized Match match(String userId, Deck deck) {

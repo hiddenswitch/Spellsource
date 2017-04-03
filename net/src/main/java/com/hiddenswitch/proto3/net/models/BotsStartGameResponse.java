@@ -9,6 +9,9 @@ import java.io.Serializable;
  */
 public class BotsStartGameResponse implements Serializable {
 	private ClientConnectionConfiguration playerConnection;
+	private String gameId;
+	private String botUserId;
+	private String botDeckId;
 
 	public ClientConnectionConfiguration getPlayerConnection() {
 		return playerConnection;
@@ -16,5 +19,29 @@ public class BotsStartGameResponse implements Serializable {
 
 	public void setPlayerConnection(ClientConnectionConfiguration playerConnection) {
 		this.playerConnection = playerConnection;
+	}
+
+	public String getGameId() {
+		return gameId;
+	}
+
+	public void setGameId(String gameId) {
+		this.gameId = gameId;
+	}
+
+	public String getBotUserId() {
+		return botUserId;
+	}
+
+	public void setBotUserId(String botUserId) {
+		this.botUserId = botUserId;
+	}
+
+	public String getBotDeckId() {
+		return botDeckId;
+	}
+
+	public void setBotDeckId(String botDeckId) {
+		this.botDeckId = botDeckId;
 	}
 }

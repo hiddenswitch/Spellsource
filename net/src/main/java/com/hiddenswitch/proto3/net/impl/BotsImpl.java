@@ -82,6 +82,9 @@ public class BotsImpl extends Service<BotsImpl> implements Bots {
 
 		MatchCreateResponse matchCreateResponse = matchmaking.sync().createMatch(new MatchCreateRequest(gameId, request.getUserId(), bot.getId(), true, request.getDeckId(), botDeckId));
 		response.setPlayerConnection(matchCreateResponse.getCreateGameSessionResponse().getConfigurationForPlayer1());
+		response.setGameId(matchCreateResponse.getCreateGameSessionResponse().getGameId());
+		response.setBotUserId(bot.getId());
+		response.setBotDeckId(botDeckId);
 		return response;
 	}
 

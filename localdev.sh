@@ -4,7 +4,7 @@ git apply local.patch
 git update-index --assume-unchanged $PATHS
 ./gradlew swagger
 ./makecsharp.sh
-./gradlew net:run
+./gradlew net:run $@
 git update-index --no-assume-unchanged $PATHS
 git apply -R local.patch
 ./gradlew swagger
