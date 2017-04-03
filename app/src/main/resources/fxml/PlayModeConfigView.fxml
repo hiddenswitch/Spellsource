@@ -18,6 +18,7 @@
             </HBox>
             <HBox fx:id="playerArea" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="0.0"
                   BorderPane.alignment="CENTER"/>
+            <CheckBox fx:id="casualCheckBox" text="Casual"/>
         </VBox>
     </center>
     <bottom>

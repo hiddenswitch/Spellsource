@@ -13,6 +13,7 @@ public class MatchmakingRequest implements Serializable {
 	protected MatchmakingDeck deck;
 	protected boolean allowBots;
 	protected String userId;
+	private boolean botMatch;
 	private String deckId;
 	private String clientType;
 
@@ -94,6 +95,19 @@ public class MatchmakingRequest implements Serializable {
 
 	public MatchmakingRequest withUserId(String userId) {
 		this.userId = userId;
+		return this;
+	}
+
+	public boolean isBotMatch() {
+		return botMatch;
+	}
+
+	public void setBotMatch(boolean botMatch) {
+		this.botMatch = botMatch;
+	}
+
+	public MatchmakingRequest withBotMatch(final boolean botMatch) {
+		this.botMatch = botMatch;
 		return this;
 	}
 }

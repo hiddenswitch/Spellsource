@@ -14,6 +14,7 @@ public class GameConfig implements Cloneable, Serializable {
 	private boolean isMultiplayer;
 
 	private ClientConnectionConfiguration connection;
+	private boolean casual;
 
 	public GameConfig() {
 	}
@@ -86,5 +87,13 @@ public class GameConfig implements Cloneable, Serializable {
 		builder.append("\nplayerConfig2:\n");
 		builder.append(getPlayerConfig2().toString());
 		return builder.toString();
+	}
+
+	public void setCasual(boolean casual) {
+		this.casual = casual;
+	}
+
+	public boolean isCasual() {
+		return casual;
 	}
 }

@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class MatchmakingTask extends Task<Void> {
 	private final Deck deck;
 	private final String deckId;
+	private boolean isCasual = false;
 	private ClientConnectionConfiguration connection;
 	private final AtomicBoolean isMatchmaking = new AtomicBoolean();
 
@@ -34,6 +35,12 @@ public class MatchmakingTask extends Task<Void> {
 	public MatchmakingTask(Deck deck) {
 		this.deck = deck;
 		this.deckId = null;
+	}
+
+	public MatchmakingTask(String deckId, boolean isCasual) {
+		this.deck = null;
+		this.deckId = deckId;
+		this.isCasual = isCasual;
 	}
 
 	public void stop() {

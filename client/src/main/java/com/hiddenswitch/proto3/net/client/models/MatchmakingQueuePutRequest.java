@@ -37,11 +37,32 @@ import java.io.Serializable;
  */
 
 public class MatchmakingQueuePutRequest  implements Serializable {
+  @SerializedName("casual")
+  private Boolean casual = null;
+
   @SerializedName("deckId")
   private String deckId = null;
 
   @SerializedName("deck")
   private MatchmakingDeck deck = null;
+
+  public MatchmakingQueuePutRequest casual(Boolean casual) {
+    this.casual = casual;
+    return this;
+  }
+
+   /**
+   * Get casual
+   * @return casual
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Boolean getCasual() {
+    return casual;
+  }
+
+  public void setCasual(Boolean casual) {
+    this.casual = casual;
+  }
 
   public MatchmakingQueuePutRequest deckId(String deckId) {
     this.deckId = deckId;
@@ -89,13 +110,14 @@ public class MatchmakingQueuePutRequest  implements Serializable {
       return false;
     }
     MatchmakingQueuePutRequest matchmakingQueuePutRequest = (MatchmakingQueuePutRequest) o;
-    return Objects.equals(this.deckId, matchmakingQueuePutRequest.deckId) &&
+    return Objects.equals(this.casual, matchmakingQueuePutRequest.casual) &&
+        Objects.equals(this.deckId, matchmakingQueuePutRequest.deckId) &&
         Objects.equals(this.deck, matchmakingQueuePutRequest.deck);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(deckId, deck);
+    return Objects.hash(casual, deckId, deck);
   }
 
   @Override
@@ -103,6 +125,7 @@ public class MatchmakingQueuePutRequest  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class MatchmakingQueuePutRequest {\n");
     
+    sb.append("    casual: ").append(toIndentedString(casual)).append("\n");
     sb.append("    deckId: ").append(toIndentedString(deckId)).append("\n");
     sb.append("    deck: ").append(toIndentedString(deck)).append("\n");
     sb.append("}");

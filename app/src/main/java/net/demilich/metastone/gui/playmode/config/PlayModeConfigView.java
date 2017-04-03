@@ -40,6 +40,9 @@ public class PlayModeConfigView extends BorderPane implements EventHandler<Actio
 	@FXML
 	protected Button backButton;
 
+	@FXML
+	protected CheckBox casualCheckBox;
+
 	protected PlayerConfigView player1Config;
 	protected PlayerConfigView player2Config;
 
@@ -110,6 +113,8 @@ public class PlayModeConfigView extends BorderPane implements EventHandler<Actio
 			gameConfig.setPlayerConfig1(player1Config.getPlayerConfig());
 			gameConfig.setPlayerConfig2(player2Config.getPlayerConfig());
 			gameConfig.setDeckFormat(formatBox.getValue());
+			final boolean isCasual = casualCheckBox.isSelected();
+			gameConfig.setCasual(isCasual);
 
 			if (isMultiplayer) {
 				Alert dialog = new Alert(Alert.AlertType.INFORMATION,
@@ -120,7 +125,7 @@ public class PlayModeConfigView extends BorderPane implements EventHandler<Actio
 				dialog.setHeaderText(null);
 
 				final DeckWithId deck = (DeckWithId) player1Config.getPlayerConfig().getDeck();
-				MatchmakingTask matchmaking = new MatchmakingTask(deck.getDeckId());
+				MatchmakingTask matchmaking = new MatchmakingTask(deck.getDeckId(), isCasual);
 
 				matchmaking.setOnSucceeded(e -> {
 					dialog.close();
