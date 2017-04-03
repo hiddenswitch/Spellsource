@@ -111,6 +111,12 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 					.withUserId(player.getUserId())
 					.withDeckId(player.getDeckId()));
 
+
+			// TODO: Get more attributes from database
+			AttributeMap attributes = new AttributeMap();
+			attributes.put(Attribute.USER_ID, player.getUserId());
+			attributes.put(Attribute.DECK_ID, player.getDeckId());
+
 			// TODO: Check that we're not using an already borrowed deck!
 
 			// Create the deck and assign all the appropriate IDs to the cards
@@ -124,7 +130,8 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 
 			// TODO: Add player information as attached to the hero card
 			response.getPlayers().set(player.getId(), new StartGameResponse.Player()
-					.withDeck(deck));
+					.withDeck(deck)
+					.withAttributes(attributes));
 
 		}
 

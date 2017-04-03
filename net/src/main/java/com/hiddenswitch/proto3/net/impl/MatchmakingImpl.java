@@ -78,8 +78,12 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 		final Deck deck2 = startGameResponse.getPlayers().get(1).getDeck();
 
 		final CreateGameSessionRequest request2 = new CreateGameSessionRequest()
-				.withPregame1(new PregamePlayerConfiguration(deck1, userId1).withAI(request.isBot1()))
-				.withPregame2(new PregamePlayerConfiguration(deck2, userId2).withAI(request.isBot2()))
+				.withPregame1(new PregamePlayerConfiguration(deck1, userId1)
+						.withAI(request.isBot1())
+						.withAttributes(startGameResponse.getPregamePlayerConfiguration1().getAttributes()))
+				.withPregame2(new PregamePlayerConfiguration(deck2, userId2)
+						.withAI(request.isBot2())
+						.withAttributes(startGameResponse.getPregamePlayerConfiguration2().getAttributes()))
 				.withGameId(gameId);
 		CreateGameSessionResponse createGameSessionResponse = gameSessions.sync().createGameSession(request2);
 		GameSession session = createGameSessionResponse.toSession();

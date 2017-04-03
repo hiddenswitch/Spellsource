@@ -8,6 +8,7 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
@@ -19,6 +20,7 @@ import net.demilich.metastone.game.targeting.IdFactory;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_1;
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_2;
@@ -167,6 +169,15 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 			listener1 = getPlayerListener(PLAYER_1);
 			listener2 = getPlayerListener(PLAYER_2);
 		}
+
+		// Merge in attributes
+		for (int i = 0; i < 2; i++) {
+			PregamePlayerConfiguration config = new PregamePlayerConfiguration[]{pregamePlayerConfiguration1, pregamePlayerConfiguration2}[i];
+			for (Map.Entry<Attribute, Object> kv : config.getAttributes().entrySet()) {
+				getGameContext().getPlayer(i).getAttributes().put(kv.getKey(), kv.getValue());
+			}
+		}
+
 
 		getGameContext().setUpdateListener(getPlayer1(), listener1);
 		getGameContext().setUpdateListener(getPlayer2(), listener2);

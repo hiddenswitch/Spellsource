@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.models;
 
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class StartGameResponse implements Serializable {
 
 	public static class Player implements Serializable {
 		private Deck deck;
+		private AttributeMap attributes;
 		private String name;
 
 		public Player withDeck(Deck deck) {
@@ -46,15 +48,28 @@ public class StartGameResponse implements Serializable {
 		public String getName() {
 			return name;
 		}
+
+		public AttributeMap getAttributes() {
+			return attributes;
+		}
+
+		public void setAttributes(AttributeMap attributes) {
+			this.attributes = attributes;
+		}
+
+		public Player withAttributes(final AttributeMap attributes) {
+			this.attributes = attributes;
+			return this;
+		}
 	}
 
 	public PregamePlayerConfiguration getPregamePlayerConfiguration1() {
 		final Player p = players.get(0);
-		return new PregamePlayerConfiguration(p.getDeck(), p.getName());
+		return new PregamePlayerConfiguration(p.getDeck(), p.getName()).withAttributes(p.attributes);
 	}
 
 	public PregamePlayerConfiguration getPregamePlayerConfiguration2() {
 		final Player p = players.get(1);
-		return new PregamePlayerConfiguration(p.getDeck(), p.getName());
+		return new PregamePlayerConfiguration(p.getDeck(), p.getName()).withAttributes(p.attributes);
 	}
 }
