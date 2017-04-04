@@ -1,4 +1,4 @@
-package com.hiddenswitch.proto3.net;
+package com.hiddenswitch.proto3.net.models;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientDeleteResult;

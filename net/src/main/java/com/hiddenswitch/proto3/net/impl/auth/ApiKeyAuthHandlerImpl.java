@@ -1,6 +1,6 @@
 package com.hiddenswitch.proto3.net.impl.auth;
 
-import com.hiddenswitch.proto3.net.ApiKeyAuthHandler;
+import com.hiddenswitch.proto3.net.util.ApiKeyAuthHandler;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonObject;

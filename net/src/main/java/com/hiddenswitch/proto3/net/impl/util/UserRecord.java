@@ -1,12 +1,6 @@
-package com.hiddenswitch.proto3.net.amazon;
+package com.hiddenswitch.proto3.net.impl.util;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hiddenswitch.proto3.net.impl.util.MongoRecord;
-import com.hiddenswitch.proto3.net.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;

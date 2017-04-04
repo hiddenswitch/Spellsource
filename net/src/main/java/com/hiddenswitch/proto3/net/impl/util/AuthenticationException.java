@@ -1,7 +1,6 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
-import com.hiddenswitch.proto3.net.amazon.LoginResponse;
-import io.vertx.ext.auth.User;
+import com.hiddenswitch.proto3.net.models.LoginResponse;
 
 import java.io.Serializable;
 

@@ -1,4 +1,7 @@
-package com.hiddenswitch.proto3.net.amazon;
+package com.hiddenswitch.proto3.net.models;
+
+import com.hiddenswitch.proto3.net.impl.util.LoginToken;
+import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 
 import java.io.Serializable;
 

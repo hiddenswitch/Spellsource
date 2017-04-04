@@ -2,21 +2,19 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.net.ApiKeyAuthHandler;
 import com.hiddenswitch.proto3.net.Server;
 import com.hiddenswitch.proto3.net.Service;
-import com.hiddenswitch.proto3.net.amazon.UserRecord;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
-import com.hiddenswitch.proto3.net.client.models.Entity;
-import com.hiddenswitch.proto3.net.client.models.GameState;
-import com.hiddenswitch.proto3.net.common.*;
+import com.hiddenswitch.proto3.net.client.models.LoginRequest;
 import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
 import com.hiddenswitch.proto3.net.impl.util.HandlerFactory;
+import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.impl.util.Zones;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.models.MatchCancelResponse;
+import com.hiddenswitch.proto3.net.util.ApiKeyAuthHandler;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.WebResult;
 import io.vertx.core.Verticle;
@@ -35,8 +33,10 @@ import io.vertx.ext.web.handler.LoggerHandler;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.entities.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.SpellCard;
+import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.DamageSpell;
@@ -48,8 +48,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
@@ -217,8 +215,8 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 	}
 
 	@Override
-	public WebResult<LoginResponse> login(RoutingContext context, LoginRequest request) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.proto3.net.amazon.LoginResponse internalResponse = accounts.login(request.getEmail(), request.getPassword());
+	public WebResult<com.hiddenswitch.proto3.net.client.models.LoginResponse> login(RoutingContext context, com.hiddenswitch.proto3.net.client.models.LoginRequest request) throws SuspendExecution, InterruptedException {
+		com.hiddenswitch.proto3.net.models.LoginResponse internalResponse = accounts.login(request.getEmail(), request.getPassword());
 
 		if (internalResponse.isBadPassword()) {
 			return WebResult.failed(new RuntimeException("Invalid password."));
@@ -226,7 +224,7 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 			return WebResult.failed(new RuntimeException("Invalid email address."));
 		}
 
-		return WebResult.succeeded(new LoginResponse()
+		return WebResult.succeeded(new com.hiddenswitch.proto3.net.client.models.LoginResponse()
 				.account(getAccount(internalResponse.getToken().getAccessKey()))
 				.loginToken(internalResponse.getToken().token));
 	}
