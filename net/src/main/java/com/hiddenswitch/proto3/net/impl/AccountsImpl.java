@@ -3,7 +3,7 @@ package com.hiddenswitch.proto3.net.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.*;
-import com.hiddenswitch.proto3.net.amazon.*;
+import com.hiddenswitch.proto3.net.impl.util.*;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
 import com.lambdaworks.crypto.SCryptUtil;

@@ -2,11 +2,10 @@ package com.hiddenswitch.proto3.net.impl.auth;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Accounts;
-import com.hiddenswitch.proto3.net.amazon.LoginRequest;
-import com.hiddenswitch.proto3.net.amazon.LoginResponse;
+import com.hiddenswitch.proto3.net.models.LoginRequest;
+import com.hiddenswitch.proto3.net.models.LoginResponse;
 import com.hiddenswitch.proto3.net.impl.util.AuthenticationException;
 import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.Result;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;

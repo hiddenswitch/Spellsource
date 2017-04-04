@@ -2,14 +2,12 @@ package com.hiddenswitch.proto3.net;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.net.amazon.UserRecord;
+import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.impl.AccountsImpl;
 import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
 import com.hiddenswitch.proto3.net.models.CreateAccountResponse;
-import com.hiddenswitch.proto3.net.amazon.LoginRequest;
-import com.hiddenswitch.proto3.net.amazon.LoginResponse;
-import com.hiddenswitch.proto3.net.amazon.Profile;
-import com.hiddenswitch.proto3.net.util.Result;
+import com.hiddenswitch.proto3.net.models.LoginRequest;
+import com.hiddenswitch.proto3.net.models.LoginResponse;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;

@@ -1,8 +1,5 @@
-package com.hiddenswitch.proto3.net.amazon;
+package com.hiddenswitch.proto3.net.impl.util;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedTimestamp;
 import com.lambdaworks.crypto.SCryptUtil;
 
 import java.io.Serializable;

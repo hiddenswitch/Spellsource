@@ -1,10 +1,7 @@
 package com.hiddenswitch.proto3.net.impl.auth;
 
-import com.hiddenswitch.proto3.net.amazon.LoginRequest;
-import com.hiddenswitch.proto3.net.amazon.LoginResponse;
-import com.hiddenswitch.proto3.net.amazon.UserRecord;
+import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.impl.util.AuthenticationException;
-import com.hiddenswitch.proto3.net.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;

@@ -1,4 +1,4 @@
-package com.hiddenswitch.proto3.net.amazon;
+package com.hiddenswitch.proto3.net.impl.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -1,4 +1,4 @@
-package com.hiddenswitch.proto3.net;
+package com.hiddenswitch.proto3.net.util;
 
 import com.hiddenswitch.proto3.net.impl.auth.ApiKeyAuthHandlerImpl;
 import io.vertx.ext.auth.AuthProvider;
