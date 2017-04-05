@@ -69,8 +69,7 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 		}
 
 		if (DeckCatalogue.getDecks().size() > 0) {
-			for (String deckName : new String[]{"Basic Resurrector", "Basic Chef", "Basic CPU", "Basic Octopod",
-					"Basic Astronaut", "Basic Gamer", "Basic Biologist", "Basic Paleontologist", "Basic Octopod",}) {
+			for (String deckName : new String[]{"Basic Resurrector", "Basic Chef"}) {
 				Deck deck = DeckCatalogue.getDeckByName(deckName);
 				if (deck == null) {
 					continue;
