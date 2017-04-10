@@ -26,23 +26,23 @@ import java.util.Map;
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_1;
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_2;
 
-public class ServerGameSession extends GameSession implements ServerCommunicationSend, Server, ClientConnectionHandler {
+public class GameSessionImpl implements ServerCommunicationSend, Server, ClientConnectionHandler, GameSession {
 	private String host;
 	private int port;
-	private ServerClientConnection c1;
-	private ServerClientConnection c2;
+	private Client c1;
+	private Client c2;
 	private PregamePlayerConfiguration pregamePlayerConfiguration1;
 	private PregamePlayerConfiguration pregamePlayerConfiguration2;
 	private ServerGameContext gameContext;
 	private Player player1;
 	private Player player2;
 	private final String gameId;
-	private Logger logger = LoggerFactory.getLogger(ServerGameSession.class);
+	private Logger logger = LoggerFactory.getLogger(GameSessionImpl.class);
 	private long noActivityTimeout = Games.DEFAULT_NO_ACTIVITY_TIMEOUT;
-	private final HashSet<Handler<ServerGameSession>> gameOverHandlers = new HashSet<>();
+	private final HashSet<Handler<GameSessionImpl>> gameOverHandlers = new HashSet<>();
 	private final Vertx vertx;
 
-	private ServerGameSession(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx) {
+	private GameSessionImpl(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx) {
 		super();
 		setHost(host);
 		setPort(port);
@@ -52,7 +52,7 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 		this.vertx = vertx;
 	}
 
-	public ServerGameSession(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx, long noActivityTimeout) {
+	public GameSessionImpl(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx, long noActivityTimeout) {
 		this(host, port, p1, p2, gameId, vertx);
 		this.noActivityTimeout = noActivityTimeout;
 	}
@@ -71,7 +71,7 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 
 	@Override
 	@Suspendable
-	public void onPlayerConnected(Player player, ServerClientConnection client) {
+	public void onPlayerConnected(Player player, Client client) {
 		logger.debug("Receive connections from {}", player.toString());
 		if (player.getId() == PLAYER_1) {
 			if (getPlayer1() != null) {
@@ -96,7 +96,7 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 
 	@Override
 	@Suspendable
-	public void onPlayerReconnected(Player player, ServerClientConnection client) {
+	public void onPlayerReconnected(Player player, Client client) {
 		checkContext();
 		if (player.getId() == PLAYER_1) {
 			if (getClient1() != null) {
@@ -268,19 +268,19 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 		this.port = port;
 	}
 
-	public ServerClientConnection getClient1() {
+	public Client getClient1() {
 		return c1;
 	}
 
-	private void setClient1(ServerClientConnection c1) {
+	private void setClient1(Client c1) {
 		this.c1 = c1;
 	}
 
-	public ServerClientConnection getClient2() {
+	public Client getClient2() {
 		return c2;
 	}
 
-	private void setClient2(ServerClientConnection c2) {
+	private void setClient2(Client c2) {
 		this.c2 = c2;
 	}
 
@@ -312,7 +312,7 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 		return noActivityTimeout;
 	}
 
-	public void handleGameOver(Handler<ServerGameSession> handler) {
+	public void handleGameOver(Handler<GameSessionImpl> handler) {
 		gameOverHandlers.add(handler);
 	}
 }

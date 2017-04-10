@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
+import io.vertx.core.net.NetSocket;
 import net.demilich.metastone.game.Environment;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
@@ -28,5 +29,9 @@ public interface Client {
 	void onRequestAction(String messageId, GameState state, List<GameAction> actions);
 	
 	void onMulligan(String messageId, Player player, List<Card> cards);
+
+	void close();
+
+	Object getPrivateSocket();
 }
 
