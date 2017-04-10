@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **background** | **String** |  |  [optional]
 **portrait** | **String** |  |  [optional]
 **gold** | **Boolean** |  |  [optional]
+**heroClass** | **String** |  |  [optional]
 **hp** | **Integer** |  |  [optional]
 **durability** | **Integer** |  |  [optional]
 **maxHp** | **Integer** |  |  [optional]
@@ -40,6 +41,9 @@ Name | Type | Description | Notes
 **customRenderer** | **String** |  |  [optional]
 **customData** | **String** |  |  [optional]
 **playable** | **Boolean** |  |  [optional]
+**mana** | **Integer** |  |  [optional]
+**maxMana** | **Integer** |  |  [optional]
+**lockedMana** | **Integer** |  |  [optional]
 
 
 

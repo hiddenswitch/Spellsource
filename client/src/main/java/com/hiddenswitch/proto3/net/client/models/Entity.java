@@ -60,7 +60,10 @@ public class Entity  implements Serializable {
     MINION("MINION"),
     
     @SerializedName("WEAPON")
-    WEAPON("WEAPON");
+    WEAPON("WEAPON"),
+    
+    @SerializedName("SECRET")
+    SECRET("SECRET");
 
     private String value;
 

@@ -7,6 +7,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 public class Secret extends SpellTrigger {
 
@@ -15,6 +16,7 @@ public class Secret extends SpellTrigger {
 	public Secret(GameEventTrigger trigger, SpellDesc spell, Card source) {
 		super(trigger, spell);
 		this.source = source;
+		setAttributes((AttributeMap) source.getAttributes().clone());
 	}
 
 	public Card getSource() {
@@ -39,4 +41,13 @@ public class Secret extends SpellTrigger {
 		super.onGameEvent(event);
 	}
 
+	@Override
+	public String getName() {
+		return getSource().getName();
+	}
+
+	@Override
+	public Secret clone() {
+		return (Secret) super.clone();
+	}
 }

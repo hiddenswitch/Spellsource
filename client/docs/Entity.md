@@ -21,6 +21,7 @@ HERO | &quot;HERO&quot;
 CARD | &quot;CARD&quot;
 MINION | &quot;MINION&quot;
 WEAPON | &quot;WEAPON&quot;
+SECRET | &quot;SECRET&quot;
 
 
 

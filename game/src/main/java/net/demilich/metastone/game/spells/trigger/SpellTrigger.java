@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.annotations.Expose;
+import net.demilich.metastone.game.entities.EntityType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.lang.ref.WeakReference;
 
-public class SpellTrigger extends CustomCloneable implements IGameEventListener {
+public class SpellTrigger extends Entity implements IGameEventListener {
 	private final static Logger logger = LoggerFactory.getLogger(SpellTrigger.class);
 
 	private GameEventTrigger primaryTrigger;
@@ -57,6 +58,11 @@ public class SpellTrigger extends CustomCloneable implements IGameEventListener 
 		}
 		clone.spell = spell.clone();
 		return clone;
+	}
+
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.SECRET;
 	}
 
 	public void expire() {
@@ -206,5 +212,4 @@ public class SpellTrigger extends CustomCloneable implements IGameEventListener 
 		}
 		return false;
 	}
-
 }
