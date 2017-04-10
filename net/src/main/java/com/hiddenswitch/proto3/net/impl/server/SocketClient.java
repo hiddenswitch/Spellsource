@@ -16,10 +16,10 @@ import net.demilich.metastone.game.events.GameEvent;
 import java.io.IOException;
 import java.util.List;
 
-public class ServerClientConnection implements Client {
+public class SocketClient implements Client {
 	private NetSocket privateSocket;
 
-	public ServerClientConnection(NetSocket socket) {
+	public SocketClient(NetSocket socket) {
 		this.setPrivateSocket(socket);
 	}
 
