@@ -8,7 +8,7 @@ import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
 import com.hiddenswitch.proto3.net.impl.server.GameSession;
 import com.hiddenswitch.proto3.net.impl.server.ServerClientConnection;
-import com.hiddenswitch.proto3.net.impl.server.ServerGameSession;
+import com.hiddenswitch.proto3.net.impl.server.GameSessionImpl;
 import com.hiddenswitch.proto3.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
@@ -18,7 +18,6 @@ import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.netty.channel.DefaultChannelId;
 import io.vertx.core.Future;
-import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.ReplyException;
@@ -43,9 +42,9 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 
 	private static final long CLEANUP_DELAY_MILLISECONDS = 500L;
 
-	private final Map<String, ServerGameSession> games = new HashMap<>();
-	private final Map<NetSocket, ServerGameSession> gameForSocket = new HashMap<>();
-	private final Map<NetSocket, IncomingMessage> messages = new HashMap<>();
+	private final Map<String, GameSessionImpl> games = new HashMap<>();
+	private final Map<Object, GameSessionImpl> gameForSocket = new HashMap<>();
+	private final Map<Object, IncomingMessage> messages = new HashMap<>();
 	private final Map<String, ActivityMonitor> gameActivityMonitors = new HashMap<>();
 
 	private NetServer server;
@@ -74,7 +73,6 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 			logger.info("Socket server configured.");
 			blocking.complete();
 		}, then -> {
-
 			server = vertx.createNetServer();
 
 			server.connectHandler(socket -> {
@@ -96,7 +94,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	}
 
 	public ServerGameContext getGameContext(String gameId) {
-		ServerGameSession session = this.getGames().get(gameId);
+		GameSessionImpl session = this.getGames().get(gameId);
 		if (session == null) {
 			return null;
 		}
@@ -122,7 +120,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 			throw new RuntimeException("Game ID cannot be null in a create game session request.");
 		}
 
-		ServerGameSession session = new ServerGameSession(getHost(), getPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
+		GameSessionImpl session = new GameSessionImpl(getHost(), getPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
 		session.handleGameOver(this::onGameOver);
 		final String finalGameId = session.getGameId();
 		games.put(finalGameId, session);
@@ -138,7 +136,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	}
 
 	@Suspendable
-	protected void receiveData(NetSocket socket, Buffer messageBuffer) {
+	private void receiveData(NetSocket socket, Buffer messageBuffer) {
 		logger.trace("Getting buffer from socket with hashCode {} length {}. Incoming message count: {}", socket.hashCode(), messageBuffer.length(), messages.size());
 		// Do we have a reader for this socket?
 		ClientToServerMessage message = null;
@@ -185,7 +183,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 			return;
 		}
 
-		ServerGameSession session = null;
+		GameSessionImpl session = null;
 		if (message.getGameId() != null) {
 			session = getGames().get(message.getGameId());
 		} else {
@@ -203,6 +201,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		ActivityMonitor activityMonitor = gameActivityMonitors.get(gameId);
 		if (activityMonitor == null) {
 			gameActivityMonitors.put(gameId, new ActivityMonitor(getVertx(), gameId, session.getNoActivityTimeout(), this::kill));
+			activityMonitor = gameActivityMonitors.get(gameId);
 		}
 		activityMonitor.activity();
 
@@ -240,7 +239,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-		getGames().values().forEach(ServerGameSession::kill);
+		getGames().values().forEach(GameSessionImpl::kill);
 		server.close();
 	}
 
@@ -269,7 +268,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	}
 
 	public void kill(String gameId) throws SuspendExecution, InterruptedException {
-		ServerGameSession session = games.get(gameId);
+		GameSessionImpl session = games.get(gameId);
 
 		if (session == null) {
 			// The session was already removed
@@ -281,7 +280,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		gameActivityMonitors.remove(gameId);
 
 		// Get the sockets associated with the session
-		List<NetSocket> sockets = new ArrayList<>();
+		List<Object> sockets = new ArrayList<>();
 		if (session.getClient1() != null) {
 			sockets.add(session.getClient1().getPrivateSocket());
 		}
@@ -307,16 +306,16 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		games.remove(gameId);
 	}
 
-	public int getPort() {
+	private int getPort() {
 		return port;
 	}
 
-	public String getHost() {
+	private String getHost() {
 		// TODO: Look up this host correctly
 		return "0.0.0.0";
 	}
 
-	public Map<String, ServerGameSession> getGames() {
+	private Map<String, GameSessionImpl> getGames() {
 		return Collections.unmodifiableMap(games);
 	}
 
@@ -336,7 +335,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	}
 
 	@Suspendable
-	private void onGameOver(ServerGameSession sgs) {
+	private void onGameOver(GameSessionImpl sgs) {
 		final String gameOverId = sgs.getGameId();
 		vertx.setTimer(CLEANUP_DELAY_MILLISECONDS, suspendableHandler(t -> kill(gameOverId)));
 	}

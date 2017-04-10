@@ -89,4 +89,13 @@ public class AIServiceConnection implements Client {
 			gc.onMulliganReceived(messageId, player, result.result().discardedCards);
 		}).mulligan(new MulliganRequest(cards));
 	}
+
+	@Override
+	public void close() {
+	}
+
+	@Override
+	public Object getPrivateSocket() {
+		return bots;
+	}
 }

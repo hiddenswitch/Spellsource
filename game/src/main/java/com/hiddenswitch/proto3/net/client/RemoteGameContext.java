@@ -413,6 +413,16 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	@Override
+	public void close() {
+		dispose();
+	}
+
+	@Override
+	public Object getPrivateSocket() {
+		return socketClientConnection;
+	}
+
+	@Override
 	public void setPlayer(int index, Player player) {
 		// Don't override the existing behaviour
 		if (hasPlayer(index)) {
