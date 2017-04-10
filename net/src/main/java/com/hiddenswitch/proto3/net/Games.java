@@ -15,8 +15,13 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.WeaponCard;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.utils.Tuple;
 
 import java.util.ArrayList;
@@ -72,61 +77,7 @@ public interface Games {
 
 		List<Entity> localHand = new ArrayList<>();
 		for (Card card : local.getHand()) {
-			final Entity entity = new Entity()
-					.description(card.getDescription())
-					.entityType(Entity.EntityTypeEnum.CARD)
-					.name(card.getName())
-					.description(card.getDescription())
-					.id(card.getId())
-					.cardId(card.getCardId());
-			final EntityState entityState = new EntityState();
-			entityState.playable(workingContext.getLogic().canPlayCard(card.getOwner(), card.getCardReference()));
-			final Player localPlayer = workingContext.getPlayer(card.getOwner());
-			entityState.manaCost(workingContext.getLogic().getModifiedManaCost(localPlayer, card));
-			entityState.baseManaCost(card.getBaseManaCost());
-			entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
-			entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
-			final boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
-			// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
-			switch (card.getCardType()) {
-				case MINION:
-					MinionCard minionCard = (MinionCard) card;
-					entityState.attack(minionCard.getAttack() + minionCard.getBonusAttack());
-					entityState.baseAttack(minionCard.getBaseAttack());
-					entityState.baseManaCost(minionCard.getBaseManaCost());
-					entityState.hp(minionCard.getHp());
-					entityState.maxHp(minionCard.getBaseHp() + minionCard.getBonusHp());
-					entityState.underAura(minionCard.getBonusAttack() > 0
-							|| minionCard.getBonusAttack() > 0
-							|| hostsTrigger);
-					break;
-				case WEAPON:
-					WeaponCard weaponCard = (WeaponCard) card;
-					entityState.durability(weaponCard.getDurability());
-					entityState.hp(weaponCard.getDurability());
-					entityState.maxHp(weaponCard.getBaseDurability() + weaponCard.getBonusDurability());
-					entityState.attack(weaponCard.getDamage() + weaponCard.getBonusDamage());
-					entityState.underAura(weaponCard.getBonusDamage() > 0
-							|| weaponCard.getBonusDurability() > 0
-							|| hostsTrigger);
-					break;
-				case SPELL:
-					SpellCard spellCard = (SpellCard) card;
-					int damage = 0;
-					int spellpowerDamage = 0;
-					if (DamageSpell.class.isAssignableFrom(spellCard.getSpell().getSpellClass())) {
-						damage = DamageSpell.getDamage(workingContext, localPlayer, spellCard.getSpell(), card, null);
-						spellpowerDamage = workingContext.getLogic().applySpellpower(localPlayer, spellCard, damage);
-					}
-					entityState.underAura(spellpowerDamage > damage
-							|| hostsTrigger);
-					entityState.spellDamage(spellpowerDamage);
-					break;
-				case CHOOSE_ONE:
-					// Do nothing special for choose one cards
-					break;
-			}
-			entity.state(entityState);
+			final Entity entity = getEntity(workingContext, card);
 			localHand.add(entity);
 		}
 
@@ -141,44 +92,7 @@ public interface Games {
 			List<Minion> battlefield = minionTuple.getSecond();
 			List<Entity> minions = new ArrayList<>();
 			for (Minion minion : battlefield) {
-				final Card card = minion.getSourceCard();
-				final Entity entity = new Entity()
-						.description(card.getDescription())
-						.entityType(Entity.EntityTypeEnum.MINION)
-						.name(card.getName())
-						.description(card.getDescription())
-						.id(card.getId())
-						.cardId(card.getCardId());
-				final EntityState entityState = new EntityState();
-				entityState.playable(workingContext.getLogic().canPlayCard(card.getOwner(), card.getCardReference()));
-				final Player localPlayer = workingContext.getPlayer(card.getOwner());
-				entityState.manaCost(workingContext.getLogic().getModifiedManaCost(localPlayer, card));
-				entityState.baseManaCost(card.getBaseManaCost());
-				entityState.silenced(minion.hasAttribute(Attribute.SILENCED));
-				entityState.deathrattles(minion.getDeathrattles() != null);
-				entityState.playable(minion.canAttackThisTurn());
-				entityState.attack(minion.getAttack());
-				entityState.hp(minion.getHp());
-				entityState.maxHp(minion.getMaxHp());
-				entityState.underAura(minion.hasAttribute(Attribute.AURA_ATTACK_BONUS)
-						|| minion.hasAttribute(Attribute.AURA_HP_BONUS)
-						|| minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
-						|| minion.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)
-						|| minion.hasAttribute(Attribute.HP_BONUS)
-						|| minion.hasAttribute(Attribute.ATTACK_BONUS)
-						|| minion.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
-						|| minion.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
-				entityState.frozen(minion.hasAttribute(Attribute.FROZEN));
-				entityState.stealth(minion.hasAttribute(Attribute.STEALTH));
-				entityState.taunt(minion.hasAttribute(Attribute.TAUNT));
-				entityState.divineShield(minion.hasAttribute(Attribute.DIVINE_SHIELD));
-				entityState.enraged(minion.hasAttribute(Attribute.ENRAGED));
-				entityState.destroyed(minion.hasAttribute(Attribute.DESTROYED));
-				entityState.cannotAttack(minion.hasAttribute(Attribute.CANNOT_ATTACK));
-				entityState.spellDamage(minion.getAttributeValue(Attribute.SPELL_DAMAGE));
-				entityState.windfury(minion.hasAttribute(Attribute.WINDFURY));
-				entityState.untargetableBySpells(minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
-				entity.state(entityState);
+				final Entity entity = getEntity(workingContext, minion);
 				minions.add(entity);
 			}
 
@@ -188,6 +102,78 @@ public interface Games {
 					.id(zone)
 					.entities(minions.stream().map(Entity::getId).collect(toList())));
 		}
+
+		List<Entity> localSecrets = new ArrayList<>();
+		// Add complete information for the local secrets
+		for (IGameEventListener iSecret : workingContext.getLogic().getSecrets(local)) {
+			Secret secret = (Secret) iSecret;
+			final Entity entity = getEntity(workingContext, secret);
+			localSecrets.add(entity);
+		}
+
+		entities.addAll(localSecrets);
+		zones.add(new Zone()
+				.id(Zones.LOCAL_SECRET)
+				.entities(localSecrets.stream().map(Entity::getId).collect(toList())));
+
+		// Add limited information for opposing secrets
+		List<Entity> opposingSecrets = new ArrayList<>();
+		for (IGameEventListener iSecret : workingContext.getLogic().getSecrets(opponent)) {
+			Secret secret = (Secret) iSecret;
+			final Entity entity = new Entity()
+					.id(secret.getId())
+					.entityType(Entity.EntityTypeEnum.SECRET)
+					.state(new EntityState()
+							.heroClass(secret.getSource().getHeroClass().toString()));
+			opposingSecrets.add(entity);
+		}
+
+		entities.addAll(opposingSecrets);
+		zones.add(new Zone()
+				.id(Zones.OPPONENT_SECRET)
+				.entities(opposingSecrets.stream().map(Entity::getId).collect(toList())));
+
+		List<Entity> playerEntities = new ArrayList<>();
+		// Create the heroes
+		for (Tuple<Integer, Player> heroTuple : Arrays.asList(new Tuple<>(Zones.LOCAL_HERO, local), new Tuple<>(Zones.OPPONENT_HERO, opponent))) {
+			final Player player = heroTuple.getSecond();
+			int heroZone = heroTuple.getFirst();
+			int playerZone = Zones.LOCAL_PLAYER - Zones.LOCAL_HERO + heroZone;
+			int heroPowerZone = Zones.LOCAL_HERO_POWER - Zones.LOCAL_HERO + heroZone;
+			int weaponZone = Zones.LOCAL_WEAPON - Zones.LOCAL_HERO + heroZone;
+			Entity playerEntity = new Entity()
+					.id(player.getId())
+					.name(player.getName())
+					.entityType(Entity.EntityTypeEnum.PLAYER)
+					.state(new EntityState()
+							.lockedMana(player.getLockedMana())
+							.maxMana(player.getMaxMana())
+							.mana(player.getMana()));
+			playerEntities.add(playerEntity);
+			final Entity heroEntity = getEntity(workingContext, player.getHero());
+			playerEntities.add(heroEntity);
+			final Entity heroPowerEntity = getEntity(workingContext, player.getHero().getHeroPower());
+			playerEntities.add(heroPowerEntity);
+			if (player.getHero().getWeapon() != null) {
+				final Entity weaponEntity = getEntity(workingContext, player.getHero().getWeapon());
+				playerEntities.add(weaponEntity);
+				zones.add(new Zone()
+						.id(weaponZone)
+						.addEntitiesItem(weaponEntity.getId()));
+			}
+			zones.add(new Zone()
+					.id(heroZone)
+					.addEntitiesItem(heroEntity.getId()));
+			zones.add(new Zone()
+					.id(playerZone)
+					.addEntitiesItem(playerEntity.getId()));
+			zones.add(new Zone()
+					.id(heroPowerZone)
+					.addEntitiesItem(heroPowerEntity.getId()));
+
+		}
+
+		entities.addAll(playerEntities);
 
 		// Add IDs for the decks and the opposing hand.
 		List<Entity> localDeck = local.getDeck().toList().stream().map(c -> new Entity().id(c.getId())).collect(toList());
@@ -211,5 +197,127 @@ public interface Games {
 				.zones(zones)
 				.timestamp(System.nanoTime())
 				.turnState(workingContext.getTurnState().toString());
+	}
+
+	default Entity getEntity(GameContext workingContext, Actor actor) {
+
+		final Card card = actor.getSourceCard();
+		final Entity entity = new Entity()
+				.description(card.getDescription())
+				.name(card.getName())
+				.description(card.getDescription())
+				.id(card.getId())
+				.cardId(card.getCardId());
+		if (actor instanceof Minion) {
+			entity.setEntityType(Entity.EntityTypeEnum.MINION);
+		} else if (actor instanceof Hero) {
+			entity.setEntityType(Entity.EntityTypeEnum.HERO);
+		} else if (actor instanceof Weapon) {
+			entity.setEntityType(Entity.EntityTypeEnum.WEAPON);
+		}
+		final EntityState entityState = new EntityState();
+		entityState.playable(workingContext.getLogic().canPlayCard(card.getOwner(), card.getCardReference()));
+		final Player localPlayer = workingContext.getPlayer(card.getOwner());
+		entityState.heroClass(card.getHeroClass().toString());
+		entityState.manaCost(workingContext.getLogic().getModifiedManaCost(localPlayer, card));
+		entityState.baseManaCost(card.getBaseManaCost());
+		entityState.silenced(actor.hasAttribute(Attribute.SILENCED));
+		entityState.deathrattles(actor.getDeathrattles() != null);
+		entityState.playable(actor.canAttackThisTurn());
+		entityState.attack(actor.getAttack());
+		entityState.hp(actor.getHp());
+		entityState.maxHp(actor.getMaxHp());
+		entityState.heroClass(actor.getHeroClass().toString());
+		entityState.underAura(actor.hasAttribute(Attribute.AURA_ATTACK_BONUS)
+				|| actor.hasAttribute(Attribute.AURA_HP_BONUS)
+				|| actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
+				|| actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)
+				|| actor.hasAttribute(Attribute.HP_BONUS)
+				|| actor.hasAttribute(Attribute.ATTACK_BONUS)
+				|| actor.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
+				|| actor.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
+		entityState.frozen(actor.hasAttribute(Attribute.FROZEN));
+		entityState.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING));
+		entityState.stealth(actor.hasAttribute(Attribute.STEALTH));
+		entityState.taunt(actor.hasAttribute(Attribute.TAUNT));
+		entityState.divineShield(actor.hasAttribute(Attribute.DIVINE_SHIELD));
+		entityState.enraged(actor.hasAttribute(Attribute.ENRAGED));
+		entityState.destroyed(actor.hasAttribute(Attribute.DESTROYED));
+		entityState.cannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK));
+		entityState.spellDamage(actor.getAttributeValue(Attribute.SPELL_DAMAGE));
+		entityState.windfury(actor.hasAttribute(Attribute.WINDFURY));
+		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+		entity.state(entityState);
+		return entity;
+	}
+
+	default Entity getEntity(GameContext workingContext, Secret secret) {
+		Entity cardEntity = getEntity(workingContext, secret.getSource());
+		cardEntity.id(secret.getId())
+				.entityType(Entity.EntityTypeEnum.SECRET)
+				.getState()
+				.playable(false);
+		return cardEntity;
+	}
+
+	default Entity getEntity(GameContext workingContext, Card card) {
+		final Entity entity = new Entity()
+				.description(card.getDescription())
+				.entityType(Entity.EntityTypeEnum.CARD)
+				.name(card.getName())
+				.description(card.getDescription())
+				.id(card.getId())
+				.cardId(card.getCardId());
+		final EntityState entityState = new EntityState();
+		entityState.playable(workingContext.getLogic().canPlayCard(card.getOwner(), card.getCardReference()));
+		final Player localPlayer = workingContext.getPlayer(card.getOwner());
+		entityState.manaCost(workingContext.getLogic().getModifiedManaCost(localPlayer, card));
+		entityState.baseManaCost(card.getBaseManaCost());
+		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
+		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
+		entityState.heroClass(card.getHeroClass().toString());
+		final boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
+		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
+		switch (card.getCardType()) {
+			case MINION:
+				MinionCard minionCard = (MinionCard) card;
+				entityState.attack(minionCard.getAttack() + minionCard.getBonusAttack());
+				entityState.baseAttack(minionCard.getBaseAttack());
+				entityState.baseManaCost(minionCard.getBaseManaCost());
+				entityState.hp(minionCard.getHp());
+				entityState.maxHp(minionCard.getBaseHp() + minionCard.getBonusHp());
+				entityState.underAura(minionCard.getBonusAttack() > 0
+						|| minionCard.getBonusAttack() > 0
+						|| hostsTrigger);
+				break;
+			case WEAPON:
+				WeaponCard weaponCard = (WeaponCard) card;
+				entityState.durability(weaponCard.getDurability());
+				entityState.hp(weaponCard.getDurability());
+				entityState.maxHp(weaponCard.getBaseDurability() + weaponCard.getBonusDurability());
+				entityState.attack(weaponCard.getDamage() + weaponCard.getBonusDamage());
+				entityState.underAura(weaponCard.getBonusDamage() > 0
+						|| weaponCard.getBonusDurability() > 0
+						|| hostsTrigger);
+				break;
+			case SPELL:
+			case HERO_POWER:
+				SpellCard spellCard = (SpellCard) card;
+				int damage = 0;
+				int spellpowerDamage = 0;
+				if (DamageSpell.class.isAssignableFrom(spellCard.getSpell().getSpellClass())) {
+					damage = DamageSpell.getDamage(workingContext, localPlayer, spellCard.getSpell(), card, null);
+					spellpowerDamage = workingContext.getLogic().applySpellpower(localPlayer, spellCard, damage);
+				}
+				entityState.underAura(spellpowerDamage > damage
+						|| hostsTrigger);
+				entityState.spellDamage(spellpowerDamage);
+				break;
+			case CHOOSE_ONE:
+				// TODO: Handle choose one cards
+				break;
+		}
+		entity.state(entityState);
+		return entity;
 	}
 }

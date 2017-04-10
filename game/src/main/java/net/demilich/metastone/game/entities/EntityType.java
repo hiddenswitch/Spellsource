@@ -7,4 +7,5 @@ public enum EntityType {
 	WEAPON,
 	CARD,
 	PLAYER,
+	SECRET
 }

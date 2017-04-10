@@ -40,10 +40,6 @@ public class Hero extends Actor {
 		return clone;
 	}
 
-	public int getArmor() {
-		return getAttributeValue(Attribute.ARMOR);
-	}
-
 	@Override
 	public int getAttack() {
 		int attack = super.getAttack();
@@ -70,6 +66,7 @@ public class Hero extends Actor {
 		return EntityType.HERO;
 	}
 
+	@Override
 	public HeroClass getHeroClass() {
 		return heroClass;
 	}

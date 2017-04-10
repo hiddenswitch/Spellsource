@@ -34,7 +34,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 		return getAttributes().get(attribute);
 	}
 
-	public Map<Attribute, Object> getAttributes() {
+	public AttributeMap getAttributes() {
 		return attributes;
 	}
 

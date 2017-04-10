@@ -279,7 +279,7 @@ definitions:
         type: 'string'
       entityType:
         type: 'string'
-        enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON']
+        enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON', 'SECRET']
       name:
         type: 'string'
       description: 
@@ -293,6 +293,8 @@ definitions:
             type: 'string'
           gold:
             type: 'boolean'
+          heroClass:
+            type: 'string'
           hp:
             type: 'integer'
           durability:
@@ -359,6 +361,12 @@ definitions:
             type: 'string'
           playable:
             type: 'boolean'
+          mana:
+            type: 'integer'
+          maxMana:
+            type: 'integer'
+          lockedMana:
+            type: 'integer'
 paths:
   /accounts/{targetUserId}:
     get:

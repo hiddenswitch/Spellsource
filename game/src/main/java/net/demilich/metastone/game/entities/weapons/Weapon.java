@@ -25,6 +25,21 @@ public class Weapon extends Actor {
 		return (Weapon) super.clone();
 	}
 
+	@Override
+	public int getHp() {
+		return getDurability();
+	}
+
+	@Override
+	public int getMaxHp() {
+		return getMaxDurability();
+	}
+
+	@Override
+	public int getAttack() {
+		return getWeaponDamage();
+	}
+
 	public int getBaseDurability() {
 		return getAttributeValue(Attribute.BASE_HP);
 	}

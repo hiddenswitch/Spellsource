@@ -1382,10 +1382,12 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void playSecret(Player player, Secret secret, boolean fromHand) {
 		log("{} has a new secret activated: {}", player.getName(), secret.getSource());
-		addGameEventListener(player, secret, player.getHero());
-		player.getSecrets().add(secret.getSource().getCardId());
+		Secret newSecret = secret.clone();
+		newSecret.setId(getIdFactory().generateId());
+		addGameEventListener(player, newSecret, player.getHero());
+		player.getSecrets().add(newSecret.getSource().getCardId());
 		if (fromHand) {
-			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), (SecretCard) secret.getSource()));
+			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), (SecretCard) newSecret.getSource()));
 		}
 	}
 

@@ -45,6 +45,9 @@ public class EntityState  implements Serializable {
   @SerializedName("gold")
   private Boolean gold = null;
 
+  @SerializedName("heroClass")
+  private String heroClass = null;
+
   @SerializedName("hp")
   private Integer hp = null;
 
@@ -144,6 +147,15 @@ public class EntityState  implements Serializable {
   @SerializedName("playable")
   private Boolean playable = null;
 
+  @SerializedName("mana")
+  private Integer mana = null;
+
+  @SerializedName("maxMana")
+  private Integer maxMana = null;
+
+  @SerializedName("lockedMana")
+  private Integer lockedMana = null;
+
   public EntityState background(String background) {
     this.background = background;
     return this;
@@ -196,6 +208,24 @@ public class EntityState  implements Serializable {
 
   public void setGold(Boolean gold) {
     this.gold = gold;
+  }
+
+  public EntityState heroClass(String heroClass) {
+    this.heroClass = heroClass;
+    return this;
+  }
+
+   /**
+   * Get heroClass
+   * @return heroClass
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getHeroClass() {
+    return heroClass;
+  }
+
+  public void setHeroClass(String heroClass) {
+    this.heroClass = heroClass;
   }
 
   public EntityState hp(Integer hp) {
@@ -792,6 +822,60 @@ public class EntityState  implements Serializable {
     this.playable = playable;
   }
 
+  public EntityState mana(Integer mana) {
+    this.mana = mana;
+    return this;
+  }
+
+   /**
+   * Get mana
+   * @return mana
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getMana() {
+    return mana;
+  }
+
+  public void setMana(Integer mana) {
+    this.mana = mana;
+  }
+
+  public EntityState maxMana(Integer maxMana) {
+    this.maxMana = maxMana;
+    return this;
+  }
+
+   /**
+   * Get maxMana
+   * @return maxMana
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getMaxMana() {
+    return maxMana;
+  }
+
+  public void setMaxMana(Integer maxMana) {
+    this.maxMana = maxMana;
+  }
+
+  public EntityState lockedMana(Integer lockedMana) {
+    this.lockedMana = lockedMana;
+    return this;
+  }
+
+   /**
+   * Get lockedMana
+   * @return lockedMana
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getLockedMana() {
+    return lockedMana;
+  }
+
+  public void setLockedMana(Integer lockedMana) {
+    this.lockedMana = lockedMana;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -805,6 +889,7 @@ public class EntityState  implements Serializable {
     return Objects.equals(this.background, entityState.background) &&
         Objects.equals(this.portrait, entityState.portrait) &&
         Objects.equals(this.gold, entityState.gold) &&
+        Objects.equals(this.heroClass, entityState.heroClass) &&
         Objects.equals(this.hp, entityState.hp) &&
         Objects.equals(this.durability, entityState.durability) &&
         Objects.equals(this.maxHp, entityState.maxHp) &&
@@ -837,12 +922,15 @@ public class EntityState  implements Serializable {
         Objects.equals(this.underAura, entityState.underAura) &&
         Objects.equals(this.customRenderer, entityState.customRenderer) &&
         Objects.equals(this.customData, entityState.customData) &&
-        Objects.equals(this.playable, entityState.playable);
+        Objects.equals(this.playable, entityState.playable) &&
+        Objects.equals(this.mana, entityState.mana) &&
+        Objects.equals(this.maxMana, entityState.maxMana) &&
+        Objects.equals(this.lockedMana, entityState.lockedMana);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(background, portrait, gold, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, pendingDestroy, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, secret, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable);
+    return Objects.hash(background, portrait, gold, heroClass, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, pendingDestroy, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, secret, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana);
   }
 
   @Override
@@ -853,6 +941,7 @@ public class EntityState  implements Serializable {
     sb.append("    background: ").append(toIndentedString(background)).append("\n");
     sb.append("    portrait: ").append(toIndentedString(portrait)).append("\n");
     sb.append("    gold: ").append(toIndentedString(gold)).append("\n");
+    sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
     sb.append("    hp: ").append(toIndentedString(hp)).append("\n");
     sb.append("    durability: ").append(toIndentedString(durability)).append("\n");
     sb.append("    maxHp: ").append(toIndentedString(maxHp)).append("\n");
@@ -886,6 +975,9 @@ public class EntityState  implements Serializable {
     sb.append("    customRenderer: ").append(toIndentedString(customRenderer)).append("\n");
     sb.append("    customData: ").append(toIndentedString(customData)).append("\n");
     sb.append("    playable: ").append(toIndentedString(playable)).append("\n");
+    sb.append("    mana: ").append(toIndentedString(mana)).append("\n");
+    sb.append("    maxMana: ").append(toIndentedString(maxMana)).append("\n");
+    sb.append("    lockedMana: ").append(toIndentedString(lockedMana)).append("\n");
     sb.append("}");
     return sb.toString();
   }

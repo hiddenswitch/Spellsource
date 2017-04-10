@@ -8,6 +8,7 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -78,6 +79,10 @@ public abstract class Actor extends Entity {
 				|| tag == Attribute.MEGA_WINDFURY;
 	}
 
+	public int getArmor() {
+		return getAttributeValue(Attribute.ARMOR);
+	}
+
 	public int getAttack() {
 		int attack = getAttributeValue(Attribute.ATTACK) + getAttributeValue(Attribute.ATTACK_BONUS)
 				+ getAttributeValue(Attribute.AURA_ATTACK_BONUS) + getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS)
@@ -130,7 +135,7 @@ public abstract class Actor extends Entity {
 	public boolean hasSpellTrigger() {
 		return spellTriggers.size() != 0;
 	}
-	
+
 	public int getMaxNumberOfAttacks() {
 		if (hasAttribute(Attribute.MEGA_WINDFURY)) {
 			return GameLogic.MEGA_WINDFURY_ATTACKS;
@@ -169,7 +174,7 @@ public abstract class Actor extends Entity {
 		if (getHp() > getMaxHp()) {
 			setHp(getMaxHp());
 		}
-			
+
 	}
 
 	public void setAttack(int value) {
@@ -198,6 +203,10 @@ public abstract class Actor extends Entity {
 
 	public void setMaxHp(int value) {
 		setAttribute(Attribute.MAX_HP, value);
+	}
+
+	public HeroClass getHeroClass() {
+		return getSourceCard().getHeroClass();
 	}
 
 	@Override
