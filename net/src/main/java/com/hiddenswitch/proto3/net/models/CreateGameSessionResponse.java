@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.models;
 
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.impl.server.GameSession;
+import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 
 import java.io.Serializable;
 
@@ -36,24 +37,5 @@ public class CreateGameSessionResponse implements Serializable {
 
 	public String getGameId() {
 		return gameId;
-	}
-
-	public GameSession toSession() {
-		return new GameSession() {
-			@Override
-			public ClientConnectionConfiguration getConfigurationForPlayer1() {
-				return player1;
-			}
-
-			@Override
-			public ClientConnectionConfiguration getConfigurationForPlayer2() {
-				return player2;
-			}
-
-			@Override
-			public String getGameId() {
-				return gameId;
-			}
-		};
 	}
 }

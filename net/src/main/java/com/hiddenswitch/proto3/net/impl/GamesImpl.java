@@ -5,9 +5,11 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Matchmaking;
 import com.hiddenswitch.proto3.net.Service;
+import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
+import com.hiddenswitch.proto3.net.common.Server;
 import com.hiddenswitch.proto3.net.impl.server.GameSession;
-import com.hiddenswitch.proto3.net.impl.server.ServerClientConnection;
+import com.hiddenswitch.proto3.net.impl.server.SocketClient;
 import com.hiddenswitch.proto3.net.impl.server.GameSessionImpl;
 import com.hiddenswitch.proto3.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
@@ -22,6 +24,7 @@ import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.ReplyException;
 import io.vertx.core.eventbus.ReplyFailure;
+import io.vertx.core.http.HttpServer;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.net.NetServer;
@@ -36,65 +39,82 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class GamesImpl extends Service<GamesImpl> implements Games {
 	private Logger logger = LoggerFactory.getLogger(GamesImpl.class);
 
 	private static final long CLEANUP_DELAY_MILLISECONDS = 500L;
 
-	private final Map<String, GameSessionImpl> games = new HashMap<>();
-	private final Map<Object, GameSessionImpl> gameForSocket = new HashMap<>();
-	private final Map<Object, IncomingMessage> messages = new HashMap<>();
+	private final Map<String, GameSession> games = new HashMap<>();
+	private final Map<Object, GameSession> gameForSocket = new HashMap<>();
+	private final Map<Object, IncomingMessage> netMessages = new HashMap<>();
 	private final Map<String, ActivityMonitor> gameActivityMonitors = new HashMap<>();
 
 	private NetServer server;
-	private final int port;
+	private HttpServer websocketServer;
+	private final int legacyPort;
+	private final int websocketPort;
 
 	private ServiceProxy<Matchmaking> matchmaking;
 
 	public GamesImpl() {
-		this.port = RandomUtils.nextInt(6200, 16200);
+		this.legacyPort = RandomUtils.nextInt(6200, 8080);
+		// Skip 8080
+		this.websocketPort = RandomUtils.nextInt(8081, 16200);
 	}
 
 	@Override
-	public void start(Future<Void> fut) {
+	@Suspendable
+	public void start() throws SuspendExecution {
+		super.start();
 		matchmaking = Broker.proxy(Matchmaking.class, vertx.eventBus());
 
-		vertx.executeBlocking(blocking -> {
+		Void ignored = awaitResult(h -> vertx.executeBlocking(blocking -> {
 			try {
 				CardCatalogue.loadCardsFromPackage();
 			} catch (IOException | URISyntaxException | CardParseException e) {
-				fut.fail(e);
+				blocking.fail(e);
+				return;
 			}
 
 			DefaultChannelId.newInstance();
 			// TODO: These ports shouldn't be totally randomized because of AWS security groups
-
-			logger.info("Socket server configured.");
 			blocking.complete();
 		}, then -> {
+			h.handle(Future.succeededFuture());
+		}));
+
+		logger.debug("GamesImpl::start Loaded cards.");
+
+		ignored = awaitResult(then -> {
 			server = vertx.createNetServer();
 
 			server.connectHandler(socket -> {
 				socket.handler(Sync.fiberHandler(messageBuffer -> {
-					receiveData(socket, messageBuffer);
+					receiveNetSocketData(socket, messageBuffer);
 				}));
 			});
 
-			server.listen(getPort(), getHost(), listenResult -> {
+			server.listen(getLegacyPort(), getHost(), listenResult -> {
 				if (!listenResult.succeeded()) {
 					logger.error("Failure deploying socket listener: {}", listenResult.cause());
-					fut.fail(listenResult.cause());
+					then.handle(Future.failedFuture(listenResult.cause()));
 				} else {
-					Broker.of(this, Games.class, vertx.eventBus());
-					fut.complete();
+					then.handle(Future.succeededFuture());
 				}
 			});
 		});
+
+		logger.debug("GamesImpl::start Created socket server.");
+
+		Broker.of(this, Games.class, vertx.eventBus());
+
+		logger.debug("GamesImpl::start Registered on event bus.");
 	}
 
 	public ServerGameContext getGameContext(String gameId) {
-		GameSessionImpl session = this.getGames().get(gameId);
+		GameSession session = this.getGames().get(gameId);
 		if (session == null) {
 			return null;
 		}
@@ -120,7 +140,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 			throw new RuntimeException("Game ID cannot be null in a create game session request.");
 		}
 
-		GameSessionImpl session = new GameSessionImpl(getHost(), getPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
+		GameSessionImpl session = new GameSessionImpl(getHost(), getLegacyPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
 		session.handleGameOver(this::onGameOver);
 		final String finalGameId = session.getGameId();
 		games.put(finalGameId, session);
@@ -136,26 +156,26 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	}
 
 	@Suspendable
-	private void receiveData(NetSocket socket, Buffer messageBuffer) {
-		logger.trace("Getting buffer from socket with hashCode {} length {}. Incoming message count: {}", socket.hashCode(), messageBuffer.length(), messages.size());
+	private void receiveNetSocketData(NetSocket socket, Buffer messageBuffer) {
+		logger.trace("Getting buffer from socket with hashCode {} length {}. Incoming message count: {}", socket.hashCode(), messageBuffer.length(), netMessages.size());
 		// Do we have a reader for this socket?
 		ClientToServerMessage message = null;
 		int bytesRead = 0;
 		Buffer remainder = null;
-		if (!messages.containsKey(socket)) {
+		if (!netMessages.containsKey(socket)) {
 			try {
 				IncomingMessage firstMessage = new IncomingMessage(messageBuffer);
-				messages.put(socket, firstMessage);
+				netMessages.put(socket, firstMessage);
 				bytesRead = firstMessage.getBufferWithoutHeader().length() + IncomingMessage.HEADER_SIZE;
 			} catch (IOException e) {
 				e.printStackTrace();
 				return;
 			}
 		} else {
-			bytesRead = messages.get(socket).append(messageBuffer);
+			bytesRead = netMessages.get(socket).append(messageBuffer);
 		}
 
-		IncomingMessage incomingMessage = messages.get(socket);
+		IncomingMessage incomingMessage = netMessages.get(socket);
 
 		if (!incomingMessage.isComplete()) {
 			return;
@@ -174,7 +194,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		} catch (Exception e) {
 			logger.error("A different deserialization error occurred!", e);
 		} finally {
-			messages.remove(socket);
+			netMessages.remove(socket);
 		}
 
 		logger.trace("IncomingMessage complete on socket {}, expectedLength {} actual {}", socket.hashCode(), incomingMessage.getExpectedLength(), incomingMessage.getBufferWithoutHeader().length());
@@ -183,7 +203,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 			return;
 		}
 
-		GameSessionImpl session = null;
+		GameSession session = null;
 		if (message.getGameId() != null) {
 			session = getGames().get(message.getGameId());
 		} else {
@@ -208,8 +228,8 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		switch (message.getMt()) {
 			case FIRST_MESSAGE:
 				logger.debug("First message received from {}", message.getPlayer1().toString());
-				ServerClientConnection client = new ServerClientConnection(socket);
-				gameForSocket.put(socket, session);
+				Client client = new SocketClient(socket);
+				gameForSocket.put(client.getPrivateSocket(), session);
 				// Is this a reconnect?
 				if (session.isGameReady()) {
 					// TODO: Remove references to the old socket
@@ -231,7 +251,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		}
 
 		if (remainder != null) {
-			receiveData(socket, remainder);
+			receiveNetSocketData(socket, remainder);
 		}
 	}
 
@@ -239,7 +259,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-		getGames().values().forEach(GameSessionImpl::kill);
+		getGames().values().forEach(GameSession::kill);
 		server.close();
 	}
 
@@ -268,7 +288,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	}
 
 	public void kill(String gameId) throws SuspendExecution, InterruptedException {
-		GameSessionImpl session = games.get(gameId);
+		GameSession session = games.get(gameId);
 
 		if (session == null) {
 			// The session was already removed
@@ -295,7 +315,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		sockets.forEach(s -> {
 			if (s != null) {
 				gameForSocket.remove(s);
-				messages.remove(s);
+				netMessages.remove(s);
 			}
 		});
 
@@ -306,8 +326,8 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		games.remove(gameId);
 	}
 
-	private int getPort() {
-		return port;
+	private int getLegacyPort() {
+		return legacyPort;
 	}
 
 	private String getHost() {
@@ -315,7 +335,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		return "0.0.0.0";
 	}
 
-	private Map<String, GameSessionImpl> getGames() {
+	private Map<String, GameSession> getGames() {
 		return Collections.unmodifiableMap(games);
 	}
 

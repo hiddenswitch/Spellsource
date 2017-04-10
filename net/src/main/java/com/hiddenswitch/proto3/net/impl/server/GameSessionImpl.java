@@ -26,7 +26,7 @@ import java.util.Map;
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_1;
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_2;
 
-public class GameSessionImpl implements ServerCommunicationSend, Server, ClientConnectionHandler, GameSession {
+public class GameSessionImpl implements Server, GameSession {
 	private String host;
 	private int port;
 	private Client c1;
@@ -123,6 +123,7 @@ public class GameSessionImpl implements ServerCommunicationSend, Server, ClientC
 		getGameContext().onActionReceived(id, action);
 	}
 
+	@Override
 	public boolean isGameReady() {
 		return (isAgainstAI()
 				&& isExactlyOnePlayerJoined())
@@ -210,8 +211,7 @@ public class GameSessionImpl implements ServerCommunicationSend, Server, ClientC
 		return getConfigurationFor(pregamePlayerConfiguration2, PLAYER_2);
 	}
 
-	@Override
-	public Client getPlayerListener(int player) {
+	private Client getPlayerListener(int player) {
 		if (player == 0) {
 			return getClient1();
 		} else {
@@ -220,6 +220,7 @@ public class GameSessionImpl implements ServerCommunicationSend, Server, ClientC
 	}
 
 	@Suspendable
+	@Override
 	public void kill() {
 		// The game never started if this were null
 		if (getGameContext() != null) {
@@ -284,6 +285,7 @@ public class GameSessionImpl implements ServerCommunicationSend, Server, ClientC
 		this.c2 = c2;
 	}
 
+	@Override
 	public ServerGameContext getGameContext() {
 		return gameContext;
 	}
@@ -308,6 +310,7 @@ public class GameSessionImpl implements ServerCommunicationSend, Server, ClientC
 		return gameId;
 	}
 
+	@Override
 	public long getNoActivityTimeout() {
 		return noActivityTimeout;
 	}

@@ -96,6 +96,6 @@ public class AIServiceConnection implements Client {
 
 	@Override
 	public Object getPrivateSocket() {
-		return bots;
+		return this;
 	}
 }

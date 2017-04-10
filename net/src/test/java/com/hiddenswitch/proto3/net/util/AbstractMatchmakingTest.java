@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.util;
 
+import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;

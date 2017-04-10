@@ -86,9 +86,8 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 						.withAttributes(startGameResponse.getPregamePlayerConfiguration2().getAttributes()))
 				.withGameId(gameId);
 		CreateGameSessionResponse createGameSessionResponse = gameSessions.sync().createGameSession(request2);
-		GameSession session = createGameSessionResponse.toSession();
-		connections.put(userId1, session.getConfigurationForPlayer1());
-		connections.put(userId2, session.getConfigurationForPlayer2());
+		connections.put(userId1, createGameSessionResponse.getConfigurationForPlayer1());
+		connections.put(userId2, createGameSessionResponse.getConfigurationForPlayer2());
 		return new MatchCreateResponse(createGameSessionResponse);
 	}
 
@@ -172,9 +171,8 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 				.withPregame2(new PregamePlayerConfiguration(deck2, match.entry2.userId))
 				.withGameId(match.gameId);
 		CreateGameSessionResponse createGameSessionResponse = gameSessions.sync().createGameSession(request);
-		GameSession session = createGameSessionResponse.toSession();
-		connections.put(match.entry1.userId, session.getConfigurationForPlayer1());
-		connections.put(match.entry2.userId, session.getConfigurationForPlayer2());
+		connections.put(match.entry1.userId, createGameSessionResponse.getConfigurationForPlayer1());
+		connections.put(match.entry2.userId, createGameSessionResponse.getConfigurationForPlayer2());
 	}
 
 	@Override
