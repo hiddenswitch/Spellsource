@@ -17,6 +17,7 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.util.HashSet;
 import java.util.List;
@@ -173,7 +174,11 @@ public class ServerGameSession extends GameSession implements ServerCommunicatio
 		// Merge in attributes
 		for (int i = 0; i < 2; i++) {
 			PregamePlayerConfiguration config = new PregamePlayerConfiguration[]{pregamePlayerConfiguration1, pregamePlayerConfiguration2}[i];
-			for (Map.Entry<Attribute, Object> kv : config.getAttributes().entrySet()) {
+			final AttributeMap attributes = config.getAttributes();
+			if (attributes == null) {
+				continue;
+			}
+			for (Map.Entry<Attribute, Object> kv : attributes.entrySet()) {
 				getGameContext().getPlayer(i).getAttributes().put(kv.getKey(), kv.getValue());
 			}
 		}

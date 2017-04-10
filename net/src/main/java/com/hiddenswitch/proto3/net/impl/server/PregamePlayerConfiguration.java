@@ -16,6 +16,7 @@ public class PregamePlayerConfiguration implements Serializable {
 	public PregamePlayerConfiguration(Deck deck, String name) {
 		this.deck = deck;
 		this.name = name;
+		this.attributes = new AttributeMap();
 	}
 
 	public Player getPlayer() {
