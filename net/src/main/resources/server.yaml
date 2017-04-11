@@ -276,11 +276,11 @@ definitions:
       actionGroups:
         type: 'array'
         items:
-          $ref: '#/defintions/ActionGroup'
+          $ref: '#/definitions/ActionGroup'
       actions:
         type: 'array'
         items:
-          $ref: '#/defintions/Action'
+          $ref: '#/definitions/Action'
   ActionGroup:
     type: 'object'
     properties:

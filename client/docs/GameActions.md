@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**actionGroups** | [**List&lt;DefintionsActionGroup&gt;**](DefintionsActionGroup.md) |  |  [optional]
-**actions** | [**List&lt;DefintionsAction&gt;**](DefintionsAction.md) |  |  [optional]
+**actionGroups** | [**List&lt;ActionGroup&gt;**](ActionGroup.md) |  |  [optional]
+**actions** | [**List&lt;Action&gt;**](Action.md) |  |  [optional]
 
 
 

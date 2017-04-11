@@ -27,8 +27,8 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.DefintionsAction;
-import com.hiddenswitch.proto3.net.client.models.DefintionsActionGroup;
+import com.hiddenswitch.proto3.net.client.models.Action;
+import com.hiddenswitch.proto3.net.client.models.ActionGroup;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -41,17 +41,17 @@ import java.io.Serializable;
 
 public class GameActions  implements Serializable {
   @SerializedName("actionGroups")
-  private List<DefintionsActionGroup> actionGroups = new ArrayList<DefintionsActionGroup>();
+  private List<ActionGroup> actionGroups = new ArrayList<ActionGroup>();
 
   @SerializedName("actions")
-  private List<DefintionsAction> actions = new ArrayList<DefintionsAction>();
+  private List<Action> actions = new ArrayList<Action>();
 
-  public GameActions actionGroups(List<DefintionsActionGroup> actionGroups) {
+  public GameActions actionGroups(List<ActionGroup> actionGroups) {
     this.actionGroups = actionGroups;
     return this;
   }
 
-  public GameActions addActionGroupsItem(DefintionsActionGroup actionGroupsItem) {
+  public GameActions addActionGroupsItem(ActionGroup actionGroupsItem) {
     this.actionGroups.add(actionGroupsItem);
     return this;
   }
@@ -61,20 +61,20 @@ public class GameActions  implements Serializable {
    * @return actionGroups
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<DefintionsActionGroup> getActionGroups() {
+  public List<ActionGroup> getActionGroups() {
     return actionGroups;
   }
 
-  public void setActionGroups(List<DefintionsActionGroup> actionGroups) {
+  public void setActionGroups(List<ActionGroup> actionGroups) {
     this.actionGroups = actionGroups;
   }
 
-  public GameActions actions(List<DefintionsAction> actions) {
+  public GameActions actions(List<Action> actions) {
     this.actions = actions;
     return this;
   }
 
-  public GameActions addActionsItem(DefintionsAction actionsItem) {
+  public GameActions addActionsItem(Action actionsItem) {
     this.actions.add(actionsItem);
     return this;
   }
@@ -84,11 +84,11 @@ public class GameActions  implements Serializable {
    * @return actions
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<DefintionsAction> getActions() {
+  public List<Action> getActions() {
     return actions;
   }
 
-  public void setActions(List<DefintionsAction> actions) {
+  public void setActions(List<Action> actions) {
     this.actions = actions;
   }
 
