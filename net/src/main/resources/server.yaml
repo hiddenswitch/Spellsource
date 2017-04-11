@@ -270,6 +270,73 @@ definitions:
         type: 'array'
         items:
           type: 'integer'
+  GameActions:
+    type: 'object'
+    properties:
+      actionGroups:
+        type: 'array'
+        items:
+          $ref: '#/defintions/ActionGroup'
+      actions:
+        type: 'array'
+        items:
+          $ref: '#/defintions/Action'
+  ActionGroup:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+      actions:
+        type: 'array'
+        items:
+          type: 'integer'
+  Action:
+    type: 'object'
+    properties:
+      targetRequirement:
+        type: 'string'
+        enum:
+          - 'NONE'
+          - 'AUTO'
+          - 'ANY'
+          - 'MINIONS'
+          - 'ENEMY_CHARACTERS'
+          - 'FRIENDLY_CHARACTERS'
+          - 'ENEMY_MINIONS'
+          - 'FRIENDLY_MINIONS'
+          - 'HEROES'
+          - 'ENEMY_HERO'
+          - 'FRIENDLY_HERO'
+      actionType:
+        type: 'string'
+        enum:
+          - 'SYSTEM'
+          - 'END_TURN'
+          - 'PHYSICAL_ATTACK'
+          - 'SPELL'
+          - 'SUMMON'
+          - 'HERO_POWER'
+          - 'BATTLECRY'
+          - 'EQUIP_WEAPON'
+          - 'DISCOVER'
+      source:
+        type: 'integer'
+      targetKey:
+        type: 'integer'
+      actionSuffix:
+        type: 'string'
+      canBeExecutedOnEntities:
+        type: 'array'
+        items:
+          type: 'integer'
+      discoverActionEntityId:
+        type: 'integer'
+      physicalAttackActionAttackerReference:
+        type: 'integer'
+      setAsideEntities:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Entity'
   Entity:
     type: 'object'
     properties:
