@@ -1,10 +1,10 @@
 {
-	"name": "Life Tap",
+	"name": "Explore the Deep",
 	"baseManaCost": 2,
 	"type": "HERO_POWER",
 	"heroClass": "WARLOCK",
 	"rarity": "FREE",
-	"description": "Draw a card and take 2 damage.",
+	"description": "Take 2 damage and draw a card.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",

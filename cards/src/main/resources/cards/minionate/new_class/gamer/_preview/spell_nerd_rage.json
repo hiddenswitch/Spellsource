@@ -14,7 +14,7 @@
 		},
 		"spell2": {
 			"class": "SummonSpell",
-			"card": "token_tauren_slime"
+			"card": "token_plastic_pawn"
 		},
 		"condition": {
 			"class": "IsDeadCondition",
