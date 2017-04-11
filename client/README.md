@@ -108,6 +108,8 @@ Class | Method | HTTP request | Description
 ## Documentation for Models
 
  - [Account](docs/Account.md)
+ - [Action](docs/Action.md)
+ - [ActionGroup](docs/ActionGroup.md)
  - [CardRecord](docs/CardRecord.md)
  - [CreateAccountRequest](docs/CreateAccountRequest.md)
  - [CreateAccountResponse](docs/CreateAccountResponse.md)
@@ -119,6 +121,7 @@ Class | Method | HTTP request | Description
  - [DecksUpdateCommandPushInventoryIds](docs/DecksUpdateCommandPushInventoryIds.md)
  - [Entity](docs/Entity.md)
  - [EntityState](docs/EntityState.md)
+ - [GameActions](docs/GameActions.md)
  - [GameState](docs/GameState.md)
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)

@@ -22,4 +22,5 @@ public class Zones {
 	public static final int OPPONENT_HERO_POWER = 17;
 	public static final int OPPONENT_SECRET = 18;
 	public static final int OPPONENT_WEAPON = 19;
+	public static final int SET_ASIDE = 20;
 }
