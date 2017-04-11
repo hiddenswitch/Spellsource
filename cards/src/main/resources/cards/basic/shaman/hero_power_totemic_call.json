@@ -1,10 +1,10 @@
 {
-	"name": "Totemic Call",
+	"name": "Baby Dino",
 	"baseManaCost": 2,
 	"type": "HERO_POWER",
 	"heroClass": "SHAMAN",
 	"rarity": "FREE",
-	"description": "Summon a random Totem.",
+	"description": "Hire a Baby Dino.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonRandomNotOnBoardSpell",
