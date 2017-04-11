@@ -1,10 +1,10 @@
 {
-	"name": "Dagger Mastery",
+	"name": "Syringe",
 	"baseManaCost": 2,
 	"type": "HERO_POWER",
 	"heroClass": "ROGUE",
 	"rarity": "FREE",
-	"description": "Equip a 1/2 Dagger.",
+	"description": "Equip a 1/2 Syringe.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "ConditionalSpell",
