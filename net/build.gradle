@@ -73,6 +73,7 @@ dependencies {
     testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.3.3'
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
+    testCompile group: 'javax.websocket', name: 'javax.websocket-client-api', version: '1.1'
 }
 
 tasks.withType(JavaExec) {

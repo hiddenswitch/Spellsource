@@ -201,6 +201,278 @@ definitions:
         type: 'string'
       donorUserId:
         type: 'string'
+  MessageType:
+    type: 'string'
+    enum:
+      - 'REGISTER_PLAYER'
+      - 'UPDATE_ACTION'
+      - 'ON_GAME_EVENT'
+      - 'ON_GAME_END'
+      - 'SET_PLAYERS'
+      - 'ON_ACTIVE_PLAYER'
+      - 'ON_UPDATE'
+      - 'ON_TURN_END'
+      - 'ON_REQUEST_ACTION'
+      - 'FIRST_MESSAGE'
+      - 'ON_MULLIGAN'
+      - 'UPDATE_MULLIGAN'
+  ServerToClientMessage:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+        description: |
+          An optional ID used to disambiguate multiple client replies. Include this ID in the repliesTo field of your
+          ClientToServerMessage if this field is not null.
+      messageType:
+        $ref: '#/definitions/MessageType'
+      gameState:
+        $ref: '#/definitions/GameState'
+      actions:
+        $ref: '#/definitions/GameActions'
+      startingCards:
+        description: |
+          Used for a mulligan request. An array of entities representing the cards you may mulligan.
+        type: 'array'
+        items:
+          $ref: '#/definitions/Entity'
+      event:
+        $ref: '#/definitions/GameEvent'
+  ClientToServerMessage:
+    type: 'object'
+    properties:
+      messageType:
+        $ref: '#/definitions/MessageType'
+      repliesTo:
+        type: 'string'
+        description: |
+          The ID of the server message this client message is replying to.
+      firstMessage:
+        type: 'object'
+        properties:
+          playerKey:
+            type: 'string'
+            description: |
+              A key authenticating this connection. Used only for the first message.
+          playerSecret:
+            type: 'string'
+            description: |
+              A server-signed secret that authenticates this player for this match. Used only for the first message.
+      actionIndex:
+        type: 'integer'
+        description: |
+          The index of the available actions to use.
+      discardedCardIndices:
+        type: 'array'
+        items:
+          type: 'integer'
+        description:
+          The indices of cards to discard in a mulligan.
+  GameEvent:
+    type: 'object'
+    properties:
+      eventType:
+        type: 'string'
+        description: |
+          The game event type corresponding to this game event.
+        enum:
+          - 'AFTER_PHYSICAL_ATTACK'
+          - 'AFTER_SPELL_CASTED'
+          - 'AFTER_SUMMON'
+          - 'ARMOR_GAINED'
+          - 'BEFORE_SUMMON'
+          - 'BOARD_CHANGED'
+          - 'DAMAGE'
+          - 'DISCARD'
+          - 'DRAW_CARD'
+          - 'ENRAGE_CHANGED'
+          - 'GAME_START'
+          - 'HEAL'
+          - 'HERO_POWER_USED'
+          - 'JOUST'
+          - 'KILL'
+          - 'OVERLOAD'
+          - 'PHYSICAL_ATTACK'
+          - 'PLAY_CARD'
+          - 'PRE_DAMAGE'
+          - 'REVEAL_CARD'
+          - 'SECRET_PLAYED'
+          - 'SECRET_REVEALED'
+          - 'SPELL_CASTED'
+          - 'SUMMON'
+          - 'TARGET_ACQUISITION'
+          - 'TURN_END'
+          - 'TURN_START'
+          - 'SILENCE'
+          - 'WEAPON_DESTROYED'
+          - 'WEAPON_EQUIPPED'
+      afterPhysicalAttack:
+        type: 'object'
+        properties:
+          attacker:
+            $ref: '#/definitions/Entity'
+          defender:
+            $ref: '#/definitions/Entity'
+          damageDealt:
+            type: 'integer'
+      drawCard:
+        type: 'object'
+        properties:
+          card:
+            $ref: '#/definitions/Entity'
+          drawn:
+            type: 'boolean'
+      preDamage:
+        type: 'object'
+        properties:
+          victim:
+            $ref: '#/definitions/Entity'
+          source:
+            $ref: '#/definitions/Entity'
+      silence:
+        type: 'object'
+        properties:
+          target:
+            $ref: '#/definitions/Entity'
+      secretPlayed:
+        type: 'object'
+        properties:
+          secretCard:
+            $ref: '#/definitions/Entity'
+      beforeSummon:
+        type: 'object'
+        properties:
+          minion:
+            $ref: '#/definitions/Entity'
+          source:
+            $ref: '#/definitions/Entity'
+      cardPlayed:
+        type: 'object'
+        properties:
+          card:
+            $ref: '#/definitions/Entity'
+      armorGained:
+        type: 'object'
+        properties:
+          hero:
+            $ref: '#/definitions/Entity'
+      afterSummon:
+        type: 'object'
+        properties:
+          minion:
+            $ref: '#/definitions/Entity'
+          source:
+            $ref: '#/definitions/Entity'
+      spellCasted:
+        type: 'object'
+        properties:
+          sourceCard:
+            $ref: '#/definitions/Entity'
+      joust:
+        type: 'object'
+        properties:
+          won:
+            type: 'boolean'
+          ownCard:
+            $ref: '#/definitions/Entity'
+          opponentCard:
+            $ref: '#/definitions/Entity'
+      weaponDestroyed:
+        type: 'object'
+        properties:
+          weapon:
+            $ref: '#/definitions/Entity'
+      heroPowerUsed:
+        type: 'object'
+        properties:
+          heroPower:
+            $ref: '#/definitions/Entity'
+      cardRevealed:
+        type: 'object'
+        properties:
+          card:
+            $ref: '#/definitions/Entity'
+          delay:
+            type: 'number'
+            format: 'double'
+      enrageChanged:
+        type: 'object'
+        properties:
+          target:
+            $ref: '#/definitions/Entity'
+      targetAcquisition:
+        type: 'object'
+        properties:
+          target:
+            $ref: '#/definitions/Entity'
+          source:
+            $ref: '#/definitions/Entity'
+          actionType:
+            $ref: '#/definitions/ActionType'
+      damage:
+        type: 'object'
+        properties:
+          victim:
+            $ref: '#/definitions/Entity'
+          damage:
+            type: 'integer'
+          source:
+            $ref: '#/definitions/Entity'
+      weaponEquipped:
+        type: 'object'
+        properties:
+          weapon:
+            $ref: '#/definitions/Entity'
+      physicalAttack:
+        type: 'object'
+        properties:
+          attacker:
+            $ref: '#/definitions/Entity'
+          defender:
+            $ref: '#/definitions/Entity'
+          damageDealt:
+            type: 'integer'
+      overload:
+        type: 'object'
+        properties:
+          card:
+            $ref: '#/definitions/Entity'
+      heal:
+        type: 'object'
+        properties:
+          target:
+            $ref: '#/definitions/Entity'
+          healing:
+            type: 'integer'
+      secretRevealed:
+        type: 'object'
+        properties:
+          secret:
+            $ref: '#/definitions/Entity'
+      summon:
+        type: 'object'
+        properties:
+          minion:
+            $ref: '#/definitions/Entity'
+          source:
+            $ref: '#/definitions/Entity'
+      afterSpellCasted:
+        type: 'object'
+        properties:
+          sourceCard:
+            $ref: '#/definitions/Entity'
+          spellTarget:
+            $ref: '#/definitions/Entity'
+      discard:
+        type: 'object'
+        properties:
+          card:
+            $ref: '#/definitions/Entity'
+      kill:
+        type: 'object'
+        properties:
+          victim:
+            $ref: '#/definitions/Entity'
   JavaSerializationObject:
     type: 'object'
     required:
@@ -233,6 +505,15 @@ definitions:
     properties:
       connection:
         $ref: '#/definitions/JavaSerializationObject'
+      unityConnection:
+        type: 'object'
+        properties:
+          url:
+            type: 'string'
+            description: |
+              The websocket URL to connect to.
+          firstMessage:
+            $ref: '#/definitions/ClientToServerMessage'
       retry:
         $ref: '#/definitions/MatchmakingQueuePutRequest'
   MatchCancelResponse:
@@ -258,6 +539,8 @@ definitions:
           $ref: '#/definitions/Entity'
       turnState:
         type: 'string'
+      turnNumber:
+        type: 'integer'
       timestamp:
         type: 'integer'
         format: 'int64'
@@ -290,6 +573,18 @@ definitions:
         type: 'array'
         items:
           type: 'integer'
+  ActionType:
+    type: 'string'
+    enum:
+      - 'SYSTEM'
+      - 'END_TURN'
+      - 'PHYSICAL_ATTACK'
+      - 'SPELL'
+      - 'SUMMON'
+      - 'HERO_POWER'
+      - 'BATTLECRY'
+      - 'EQUIP_WEAPON'
+      - 'DISCOVER'
   Action:
     type: 'object'
     properties:
@@ -308,17 +603,7 @@ definitions:
           - 'ENEMY_HERO'
           - 'FRIENDLY_HERO'
       actionType:
-        type: 'string'
-        enum:
-          - 'SYSTEM'
-          - 'END_TURN'
-          - 'PHYSICAL_ATTACK'
-          - 'SPELL'
-          - 'SUMMON'
-          - 'HERO_POWER'
-          - 'BATTLECRY'
-          - 'EQUIP_WEAPON'
-          - 'DISCOVER'
+        $ref: '#/definitions/ActionType'
       source:
         type: 'integer'
       targetKey:

@@ -27,6 +27,7 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.ActionType;
 import com.hiddenswitch.proto3.net.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -91,51 +92,8 @@ public class Action  implements Serializable {
   @SerializedName("targetRequirement")
   private TargetRequirementEnum targetRequirement = null;
 
-  /**
-   * Gets or Sets actionType
-   */
-  public enum ActionTypeEnum {
-    @SerializedName("SYSTEM")
-    SYSTEM("SYSTEM"),
-    
-    @SerializedName("END_TURN")
-    END_TURN("END_TURN"),
-    
-    @SerializedName("PHYSICAL_ATTACK")
-    PHYSICAL_ATTACK("PHYSICAL_ATTACK"),
-    
-    @SerializedName("SPELL")
-    SPELL("SPELL"),
-    
-    @SerializedName("SUMMON")
-    SUMMON("SUMMON"),
-    
-    @SerializedName("HERO_POWER")
-    HERO_POWER("HERO_POWER"),
-    
-    @SerializedName("BATTLECRY")
-    BATTLECRY("BATTLECRY"),
-    
-    @SerializedName("EQUIP_WEAPON")
-    EQUIP_WEAPON("EQUIP_WEAPON"),
-    
-    @SerializedName("DISCOVER")
-    DISCOVER("DISCOVER");
-
-    private String value;
-
-    ActionTypeEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-  }
-
   @SerializedName("actionType")
-  private ActionTypeEnum actionType = null;
+  private ActionType actionType = null;
 
   @SerializedName("source")
   private Integer source = null;
@@ -176,7 +134,7 @@ public class Action  implements Serializable {
     this.targetRequirement = targetRequirement;
   }
 
-  public Action actionType(ActionTypeEnum actionType) {
+  public Action actionType(ActionType actionType) {
     this.actionType = actionType;
     return this;
   }
@@ -186,11 +144,11 @@ public class Action  implements Serializable {
    * @return actionType
   **/
   @ApiModelProperty(example = "null", value = "")
-  public ActionTypeEnum getActionType() {
+  public ActionType getActionType() {
     return actionType;
   }
 
-  public void setActionType(ActionTypeEnum actionType) {
+  public void setActionType(ActionType actionType) {
     this.actionType = actionType;
   }
 

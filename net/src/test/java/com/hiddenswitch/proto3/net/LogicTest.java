@@ -11,6 +11,7 @@ import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
 import com.hiddenswitch.proto3.net.util.TwoClients;
+import com.hiddenswitch.proto3.net.util.UnityClient;
 import io.vertx.core.*;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.TestContext;
@@ -382,6 +383,24 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 				.withUserId(userId)
 				.withCardIds(Collections.singletonList(cardId)));
 		return atcr.getInventoryIds().get(0);
+	}
+
+	@Test
+	public void testUnityClient(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		wrapSync(context, this::unityClient);
+	}
+
+	private void unityClient() throws SuspendExecution, InterruptedException {
+		UnityClient client = new UnityClient();
+		client.createUserAccount(null);
+		client.matchmakeAndPlayAgainstAI(null);
+		float time = 0f;
+		while (!(time > 120f || client.isGameOver())) {
+			Strand.sleep(1000);
+			time += 1f;
+		}
+		getContext().assertTrue(client.isGameOver());
 	}
 
 	@Override
