@@ -49,6 +49,9 @@ public class GameState  implements Serializable {
   @SerializedName("turnState")
   private String turnState = null;
 
+  @SerializedName("turnNumber")
+  private Integer turnNumber = null;
+
   @SerializedName("timestamp")
   private Long timestamp = null;
 
@@ -116,6 +119,24 @@ public class GameState  implements Serializable {
     this.turnState = turnState;
   }
 
+  public GameState turnNumber(Integer turnNumber) {
+    this.turnNumber = turnNumber;
+    return this;
+  }
+
+   /**
+   * Get turnNumber
+   * @return turnNumber
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getTurnNumber() {
+    return turnNumber;
+  }
+
+  public void setTurnNumber(Integer turnNumber) {
+    this.turnNumber = turnNumber;
+  }
+
   public GameState timestamp(Long timestamp) {
     this.timestamp = timestamp;
     return this;
@@ -147,12 +168,13 @@ public class GameState  implements Serializable {
     return Objects.equals(this.zones, gameState.zones) &&
         Objects.equals(this.entities, gameState.entities) &&
         Objects.equals(this.turnState, gameState.turnState) &&
+        Objects.equals(this.turnNumber, gameState.turnNumber) &&
         Objects.equals(this.timestamp, gameState.timestamp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(zones, entities, turnState, timestamp);
+    return Objects.hash(zones, entities, turnState, turnNumber, timestamp);
   }
 
   @Override
@@ -163,6 +185,7 @@ public class GameState  implements Serializable {
     sb.append("    zones: ").append(toIndentedString(zones)).append("\n");
     sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
     sb.append("    turnState: ").append(toIndentedString(turnState)).append("\n");
+    sb.append("    turnNumber: ").append(toIndentedString(turnNumber)).append("\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("}");
     return sb.toString();

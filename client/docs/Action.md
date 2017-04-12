@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **targetRequirement** | [**TargetRequirementEnum**](#TargetRequirementEnum) |  |  [optional]
-**actionType** | [**ActionTypeEnum**](#ActionTypeEnum) |  |  [optional]
+**actionType** | [**ActionType**](ActionType.md) |  |  [optional]
 **source** | **Integer** |  |  [optional]
 **targetKey** | **Integer** |  |  [optional]
 **actionSuffix** | **String** |  |  [optional]
@@ -30,21 +30,6 @@ FRIENDLY_MINIONS | &quot;FRIENDLY_MINIONS&quot;
 HEROES | &quot;HEROES&quot;
 ENEMY_HERO | &quot;ENEMY_HERO&quot;
 FRIENDLY_HERO | &quot;FRIENDLY_HERO&quot;
-
-
-<a name="ActionTypeEnum"></a>
-## Enum: ActionTypeEnum
-Name | Value
----- | -----
-SYSTEM | &quot;SYSTEM&quot;
-END_TURN | &quot;END_TURN&quot;
-PHYSICAL_ATTACK | &quot;PHYSICAL_ATTACK&quot;
-SPELL | &quot;SPELL&quot;
-SUMMON | &quot;SUMMON&quot;
-HERO_POWER | &quot;HERO_POWER&quot;
-BATTLECRY | &quot;BATTLECRY&quot;
-EQUIP_WEAPON | &quot;EQUIP_WEAPON&quot;
-DISCOVER | &quot;DISCOVER&quot;
 
 
 
