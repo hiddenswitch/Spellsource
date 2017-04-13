@@ -22,6 +22,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.utils.Tuple;
 
@@ -204,7 +205,26 @@ public interface Games {
 				.turnState(workingContext.getTurnState().toString());
 	}
 
+	static Entity getEntity(final GameContext workingContext, final net.demilich.metastone.game.entities.Entity entity) {
+		if (entity == null) {
+			return null;
+		}
+
+		if (entity instanceof Actor) {
+			return getEntity(workingContext, (Actor) entity);
+		} else if (entity instanceof Card) {
+			return getEntity(workingContext, (Card) entity);
+		} else if (entity instanceof SpellTrigger) {
+			return getEntity(workingContext, workingContext.tryFind(((SpellTrigger) entity).getHostReference()));
+		}
+
+		return null;
+	}
+
 	static Entity getEntity(final GameContext workingContext, final Actor actor) {
+		if (actor == null) {
+			return null;
+		}
 
 		final Card card = actor.getSourceCard();
 		final Entity entity = new Entity()
@@ -255,6 +275,10 @@ public interface Games {
 	}
 
 	static Entity getEntity(final GameContext workingContext, final Secret secret) {
+		if (secret == null) {
+			return null;
+		}
+
 		Entity cardEntity = getEntity(workingContext, secret.getSource());
 		cardEntity.id(secret.getId())
 				.entityType(Entity.EntityTypeEnum.SECRET)
@@ -264,6 +288,10 @@ public interface Games {
 	}
 
 	static Entity getEntity(final GameContext workingContext, final Card card) {
+		if (card == null) {
+			return null;
+		}
+
 		final Entity entity = new Entity()
 				.description(card.getDescription())
 				.entityType(Entity.EntityTypeEnum.CARD)

@@ -3,6 +3,9 @@ package com.hiddenswitch.proto3.net.impl.server;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.models.*;
+import com.hiddenswitch.proto3.net.client.models.GameEvent;
+import com.hiddenswitch.proto3.net.client.models.GameEvent.EventTypeEnum;
+import com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.GameState;
 import io.vertx.core.buffer.Buffer;
@@ -11,12 +14,10 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.proto3.net.client.models.GameEvent.EventTypeEnum;
+import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.logic.GameLogic;
 
 import java.io.IOException;
@@ -52,11 +53,52 @@ public class WebsocketClient implements Client {
 	}
 
 	@Override
-	public void onGameEvent(GameEvent event) {
-		final com.hiddenswitch.proto3.net.client.models.GameEvent clientEvent
-				= new com.hiddenswitch.proto3.net.client.models.GameEvent();
+	public void onGameEvent(net.demilich.metastone.game.events.GameEvent event) {
+		final GameEvent clientEvent = new GameEvent();
 
 		clientEvent.eventType(EventTypeEnum.valueOf(event.getEventType().toString()));
+
+		GameContext workingContext = event.getGameContext().clone();
+
+		// Handle the event types here.
+		if (event instanceof net.demilich.metastone.game.events.PhysicalAttackEvent) {
+			final net.demilich.metastone.game.events.PhysicalAttackEvent physicalAttackEvent
+					= (net.demilich.metastone.game.events.PhysicalAttackEvent) event;
+			clientEvent.physicalAttack(new com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent()
+					.attacker(Games.getEntity(workingContext, physicalAttackEvent.getAttacker()))
+					.defender(Games.getEntity(workingContext, physicalAttackEvent.getDefender()))
+					.damageDealt(physicalAttackEvent.getDamageDealt()));
+		} else if (event instanceof DrawCardEvent) {
+			final DrawCardEvent drawCardEvent = (DrawCardEvent) event;
+			clientEvent.drawCard(new GameEventDrawCard()
+					.card(Games.getEntity(workingContext, drawCardEvent.getCard()))
+					.drawn(drawCardEvent.isDrawn()));
+		} else if (event instanceof KillEvent) {
+			final KillEvent killEvent = (KillEvent) event;
+			clientEvent.kill(new GameEventKill()
+					.victim(Games.getEntity(workingContext, killEvent.getVictim())));
+		} else if (event instanceof CardPlayedEvent) {
+			final CardPlayedEvent cardPlayedEvent = (CardPlayedEvent) event;
+			clientEvent.cardPlayed(new GameEventCardPlayed()
+					.card(Games.getEntity(workingContext, cardPlayedEvent.getCard())));
+		} else if (event instanceof SummonEvent) {
+			final SummonEvent summonEvent = (SummonEvent) event;
+			clientEvent.summon(new GameEventBeforeSummon()
+					.minion(Games.getEntity(workingContext, summonEvent.getMinion()))
+					.source(Games.getEntity(workingContext, summonEvent.getSource())));
+		} else if (event instanceof DamageEvent) {
+			final DamageEvent damageEvent = (DamageEvent) event;
+			clientEvent.damage(new GameEventDamage()
+					.damage(damageEvent.getDamage())
+					.source(Games.getEntity(workingContext, damageEvent.getSource()))
+					.victim(Games.getEntity(workingContext, damageEvent.getVictim())));
+		}
+
+		clientEvent.eventSource(Games.getEntity(workingContext, event.getEventSource()));
+		clientEvent.eventTarget(Games.getEntity(workingContext, event.getEventTarget()));
+		clientEvent.targetPlayerId(event.getTargetPlayerId());
+		clientEvent.sourcePlayerId(event.getSourcePlayerId());
+
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
 				.event(clientEvent));
