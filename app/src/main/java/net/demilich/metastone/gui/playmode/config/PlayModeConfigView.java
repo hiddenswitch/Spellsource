@@ -146,7 +146,10 @@ public class PlayModeConfigView extends BorderPane implements EventHandler<Actio
 					gameConfig.setConnection(new ClientConnectionConfiguration(
 							BuildConfig.GAMESESSIONS_HOST,
 							clientConnectionConfiguration.getPort(),
-							clientConnectionConfiguration.getFirstMessage()
+							clientConnectionConfiguration.getFirstMessage(),
+							null,
+							null,
+							null
 					));
 				} else {
 					// Do nothing and cancel.

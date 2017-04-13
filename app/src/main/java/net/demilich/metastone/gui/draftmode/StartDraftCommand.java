@@ -20,7 +20,7 @@ public class StartDraftCommand extends SimpleCommand<GameNotification> {
 
 	@Override
 	public void execute(INotification<GameNotification> notification) {
-		StartDraftOptions options = (StartDraftOptions)notification.getBody();
+		StartDraftOptions options = (StartDraftOptions) notification.getBody();
 		final String sessionId = options.sessionId;
 
 		HumanDraftBehaviour behaviour = new HumanDraftBehaviour();
@@ -65,7 +65,10 @@ public class StartDraftCommand extends SimpleCommand<GameNotification> {
 				gameConfig.setConnection(new ClientConnectionConfiguration(
 						BuildConfig.GAMESESSIONS_HOST,
 						clientConnectionConfiguration.getPort(),
-						clientConnectionConfiguration.getFirstMessage()
+						clientConnectionConfiguration.getFirstMessage(),
+						null,
+						null,
+						null
 				));
 			} else {
 				// Do nothing and cancel.
