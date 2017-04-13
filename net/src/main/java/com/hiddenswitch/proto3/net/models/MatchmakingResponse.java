@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.models;
 
+import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponseUnityConnection;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 
 import java.io.Serializable;

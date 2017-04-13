@@ -9,6 +9,9 @@ public class ClientConnectionConfiguration implements Serializable {
 	private final String host;
 	private final int port;
 	private final ClientToServerMessage firstMessage;
+	private final String url;
+	private final String playerKey;
+	private final String playerSecret;
 
 	/**
 	 * Create a new client connection configuration. This will be returned to the client from the matchmaking service
@@ -23,10 +26,13 @@ public class ClientConnectionConfiguration implements Serializable {
 	 *                     The server CANNOT tell this information to the client first, because the matchamking service
 	 *                     has decided which two players should play together, not the server.
 	 */
-	public ClientConnectionConfiguration(String host, int port, ClientToServerMessage firstMessage) {
+	public ClientConnectionConfiguration(String host, int port, ClientToServerMessage firstMessage, String url, String playerKey, String playerSecret) {
 		this.host = host;
 		this.port = port;
 		this.firstMessage = firstMessage;
+		this.playerKey = playerKey;
+		this.playerSecret = playerSecret;
+		this.url = url;
 	}
 
 	public String getHost() {
@@ -39,5 +45,17 @@ public class ClientConnectionConfiguration implements Serializable {
 
 	public ClientToServerMessage getFirstMessage() {
 		return firstMessage;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public String getPlayerKey() {
+		return playerKey;
+	}
+
+	public String getPlayerSecret() {
+		return playerSecret;
 	}
 }

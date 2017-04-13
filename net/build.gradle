@@ -74,6 +74,7 @@ dependencies {
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
     testCompile group: 'javax.websocket', name: 'javax.websocket-client-api', version: '1.1'
+    testCompile group: 'org.glassfish.tyrus', name: 'tyrus-container-grizzly-client', version: '1.13.1'
 }
 
 tasks.withType(JavaExec) {

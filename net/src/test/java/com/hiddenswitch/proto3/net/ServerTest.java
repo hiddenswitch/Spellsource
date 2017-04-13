@@ -1,5 +1,8 @@
 package com.hiddenswitch.proto3.net;
 
+import ch.qos.logback.classic.Level;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
@@ -9,6 +12,7 @@ import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsResponse;
 import com.hiddenswitch.proto3.net.impl.ServerImpl;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
+import com.hiddenswitch.proto3.net.util.UnityClient;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -46,6 +50,24 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		}
 
 		context.async().complete();
+	}
+
+	@Test
+	public void testUnityClient(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		wrapSync(context, this::unityClient);
+	}
+
+	private void unityClient() throws SuspendExecution, InterruptedException {
+		UnityClient client = new UnityClient();
+		client.createUserAccount(null);
+		client.matchmakeAndPlayAgainstAI(null);
+		float time = 0f;
+		while (!(time > 120f || client.isGameOver())) {
+			Strand.sleep(1000);
+			time += 1f;
+		}
+		getContext().assertTrue(client.isGameOver());
 	}
 
 	@Override

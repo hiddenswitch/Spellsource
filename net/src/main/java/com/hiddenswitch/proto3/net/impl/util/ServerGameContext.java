@@ -384,4 +384,21 @@ public class ServerGameContext extends GameContext {
 	public List<IGameEventListener> getGameTriggers() {
 		return gameTriggers;
 	}
+
+	public GameAction getActionForMessage(String messageId, int actionIndex) {
+		return requestCallbacks.get(CallbackId.of(messageId)).actions.get(actionIndex);
+	}
+
+	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
+		// Get the player reference
+		final Optional<CallbackId> reqResult = requestCallbacks.keySet().stream().filter(ci -> ci.id.equals(messageId)).findFirst();
+		if (!reqResult.isPresent()) {
+			throw new RuntimeException();
+		}
+		CallbackId reqId = reqResult.get();
+		List<Card> discardedCards = new ArrayList<>();
+		GameplayRequest request = requestCallbacks.get(reqId);
+		discardedCards.addAll(discardedCardIndices.stream().map(i -> request.starterCards.get(i)).collect(Collectors.toList()));
+		onMulliganReceived(messageId, getPlayer(reqId.playerId), discardedCards);
+	}
 }

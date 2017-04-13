@@ -4,10 +4,12 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.common.*;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
+import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -18,7 +20,9 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.apache.commons.lang3.RandomStringUtils;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +33,7 @@ import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_2;
 public class GameSessionImpl implements Server, GameSession {
 	private String host;
 	private int port;
+	private int websocketPort;
 	private Client c1;
 	private Client c2;
 	private PregamePlayerConfiguration pregamePlayerConfiguration1;
@@ -37,12 +42,13 @@ public class GameSessionImpl implements Server, GameSession {
 	private Player player1;
 	private Player player2;
 	private final String gameId;
+	private final Map<String, String> secretForUserId = new HashMap<>();
 	private Logger logger = LoggerFactory.getLogger(GameSessionImpl.class);
 	private long noActivityTimeout = Games.DEFAULT_NO_ACTIVITY_TIMEOUT;
 	private final HashSet<Handler<GameSessionImpl>> gameOverHandlers = new HashSet<>();
 	private final Vertx vertx;
 
-	private GameSessionImpl(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx) {
+	private GameSessionImpl(String host, int port, int websocketPort, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx) {
 		super();
 		setHost(host);
 		setPort(port);
@@ -50,10 +56,16 @@ public class GameSessionImpl implements Server, GameSession {
 		this.pregamePlayerConfiguration2 = p2;
 		this.gameId = gameId;
 		this.vertx = vertx;
+		this.websocketPort = websocketPort;
+		for (String userId : new String[]{p1.getUserId(), p2.getUserId()}) {
+			if (userId != null) {
+				this.secretForUserId.put(userId, RandomStringUtils.randomAlphanumeric(40));
+			}
+		}
 	}
 
-	public GameSessionImpl(String host, int port, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx, long noActivityTimeout) {
-		this(host, port, p1, p2, gameId, vertx);
+	public GameSessionImpl(String host, int port, int websocketPort, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx, long noActivityTimeout) {
+		this(host, port, websocketPort, p1, p2, gameId, vertx);
 		this.noActivityTimeout = noActivityTimeout;
 	}
 
@@ -66,7 +78,12 @@ public class GameSessionImpl implements Server, GameSession {
 		}
 		tempPlayer.setId(id);
 		return new ClientConnectionConfiguration(getHost(), getPort(),
-				new ClientToServerMessage(tempPlayer, getGameId()));
+				new ClientToServerMessage(tempPlayer, getGameId()),
+				getUrl(), player.getUserId(), getSecret(player.getUserId()));
+	}
+
+	public String getSecret(String userId) {
+		return secretForUserId.getOrDefault(userId, null);
 	}
 
 	@Override
@@ -114,6 +131,12 @@ public class GameSessionImpl implements Server, GameSession {
 		}
 
 		getGameContext().onPlayerReconnected(player, client);
+	}
+
+	@Override
+	@Suspendable
+	public void onActionReceived(String id, int actionIndex) {
+		onActionReceived(id, getActionForMessage(id, actionIndex));
 	}
 
 	@Override
@@ -290,6 +313,42 @@ public class GameSessionImpl implements Server, GameSession {
 		return gameContext;
 	}
 
+	@Override
+	public Player getPlayer(String userId) {
+		if (getPlayer1() != null
+				&& getPlayer1().getUserId().equals(userId)) {
+			return getPlayer1();
+		} else if (getPlayer2() != null
+				&& getPlayer2().getUserId().equals(userId)) {
+			return getPlayer2();
+		} else {
+			if (pregamePlayerConfiguration1.getUserId().equals(userId)) {
+				if (pregamePlayerConfiguration1.getPlayer() != null) {
+					return pregamePlayerConfiguration1.getPlayer();
+				} else {
+					return Player.forUser(userId, IdFactory.PLAYER_1).withDeck(pregamePlayerConfiguration1.getDeck());
+				}
+			} else if (pregamePlayerConfiguration2.getUserId().equals(userId)) {
+				if (pregamePlayerConfiguration2.getPlayer() != null) {
+					return pregamePlayerConfiguration2.getPlayer();
+				} else {
+					return Player.forUser(userId, IdFactory.PLAYER_2).withDeck(pregamePlayerConfiguration2.getDeck());
+				}
+			}
+		}
+		throw new RuntimeException();
+	}
+
+	@Override
+	public GameAction getActionForMessage(String messageId, int actionIndex) {
+		return getGameContext().getActionForMessage(messageId, actionIndex);
+	}
+
+	@Override
+	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
+		getGameContext().onMulliganReceived(messageId, discardedCardIndices);
+	}
+
 	private Player getPlayer1() {
 		return player1;
 	}
@@ -317,5 +376,9 @@ public class GameSessionImpl implements Server, GameSession {
 
 	public void handleGameOver(Handler<GameSessionImpl> handler) {
 		gameOverHandlers.add(handler);
+	}
+
+	public String getUrl() {
+		return "ws://" + getHost() + ":" + Integer.toString(websocketPort) + "/" + Games.WEBSOCKET_PATH;
 	}
 }
