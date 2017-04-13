@@ -11,6 +11,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -82,12 +83,15 @@ public class WebsocketClient implements Client {
 
 	@Override
 	public void onActivePlayer(Player activePlayer) {
-		// TODO: Do nothing?
+		sendMessage(new ServerToClientMessage()
+				.messageType(MessageType.ON_ACTIVE_PLAYER));
 	}
 
 	@Override
 	public void onTurnEnd(Player activePlayer, int turnNumber, TurnState turnState) {
 		// TODO: Do nothing?
+		sendMessage(new ServerToClientMessage()
+				.messageType(MessageType.ON_TURN_END));
 	}
 
 	@Override
@@ -125,9 +129,23 @@ public class WebsocketClient implements Client {
 				.actions(new GameActions()
 						.actions(availableActions.stream().map(ga -> {
 							Action action = new Action();
-							action.actionType(ActionType.valueOf(ga.getActionType().toString()))
+							final ActionType actionType = ActionType.valueOf(ga.getActionType().toString());
+							action.actionType(actionType)
 									.actionSuffix(ga.getActionSuffix());
-							// TODO: Do more advanced stuff with the action.
+
+							if (ga.getTargetRequirement() != null) {
+								final Action.TargetRequirementEnum targetRequirement = Action.TargetRequirementEnum.valueOf(ga.getTargetRequirement().toString());
+								action.targetRequirement(targetRequirement);
+							}
+
+							if (ga.getTargetKey() != null) {
+								action.targetKey(ga.getTargetKey().getId());
+							}
+
+							if (ga.getSource() != null) {
+								action.source(ga.getSource().getId());
+							}
+
 							return action;
 						}).collect(Collectors.toList()))
 				));
