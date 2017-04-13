@@ -9,6 +9,7 @@ import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.sync.SyncVerticle;
 
 import java.io.File;
+import java.util.logging.Level;
 
 public abstract class Service<T extends Service<T>> extends SyncVerticle {
 	private static Logger logger = LoggerFactory.getLogger(Service.class);
@@ -45,6 +46,9 @@ public abstract class Service<T extends Service<T>> extends SyncVerticle {
 				&& embeddedConfigured) {
 			this.mongo = MongoClient.createShared(vertx, localMongoServer.getConfig());
 		}
+		ch.qos.logback.classic.Logger mongoLogger = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
+				.getLogger("org.mongodb.driver");
+		mongoLogger.setLevel(ch.qos.logback.classic.Level.ERROR);
 	}
 
 	private synchronized static void createdEmbeddedServices(File dbFile) {
