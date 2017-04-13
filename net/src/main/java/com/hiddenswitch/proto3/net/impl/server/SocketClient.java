@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.common.ServerToClientMessage;
 import com.hiddenswitch.proto3.net.util.IncomingMessage;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.VertxBufferOutputStream;
+import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.net.NetSocket;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;

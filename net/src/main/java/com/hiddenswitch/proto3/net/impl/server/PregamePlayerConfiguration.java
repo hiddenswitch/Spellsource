@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.impl.server;
 
+import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -64,5 +65,13 @@ public class PregamePlayerConfiguration implements Serializable {
 
 	public void setAttributes(AttributeMap attributes) {
 		this.attributes = attributes;
+	}
+
+	public String getUserId() {
+		if (getAttributes() != null) {
+			return (String) getAttributes().get(Attribute.USER_ID);
+		} else {
+			return null;
+		}
 	}
 }

@@ -316,7 +316,7 @@ public class GameBoardView extends BorderPane {
 				if (context.hasPlayer(localPlayerId)) {
 					localPlayer = context.getPlayer(localPlayerId);
 				} else {
-					localPlayer = Player.Empty();
+					localPlayer = Player.empty();
 					localPlayer.setId(localPlayerId);
 				}
 
@@ -325,7 +325,7 @@ public class GameBoardView extends BorderPane {
 				if (context.hasPlayer(opponentId)) {
 					opponentPlayer = context.getOpponent(localPlayer);
 				} else {
-					opponentPlayer = Player.Empty();
+					opponentPlayer = Player.empty();
 					opponentPlayer.setId(opponentId);
 				}
 			}

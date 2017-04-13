@@ -4,6 +4,10 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.common.Server;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
+
+import java.util.List;
 
 public interface GameSession extends Server {
 
@@ -37,4 +41,8 @@ public interface GameSession extends Server {
 	long getNoActivityTimeout();
 
 	ServerGameContext getGameContext();
+
+	Player getPlayer(String userId);
+
+	GameAction getActionForMessage(String messageId, int actionIndex);
 }

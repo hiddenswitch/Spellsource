@@ -385,24 +385,6 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		return atcr.getInventoryIds().get(0);
 	}
 
-	@Test
-	public void testUnityClient(TestContext context) {
-		setLoggingLevel(Level.ERROR);
-		wrapSync(context, this::unityClient);
-	}
-
-	private void unityClient() throws SuspendExecution, InterruptedException {
-		UnityClient client = new UnityClient();
-		client.createUserAccount(null);
-		client.matchmakeAndPlayAgainstAI(null);
-		float time = 0f;
-		while (!(time > 120f || client.isGameOver())) {
-			Strand.sleep(1000);
-			time += 1f;
-		}
-		getContext().assertTrue(client.isGameOver());
-	}
-
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<LogicImpl>> done) {
 		accounts = new AccountsImpl().withEmbeddedConfiguration();

@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.behaviour.IBehaviour;
+import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.decks.Deck;
@@ -26,27 +28,18 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static Player Empty() {
+	public static Player empty() {
 		Player player = new Player();
-
-		PlayerConfig config = new PlayerConfig(Deck.EMPTY, new Behaviour() {
-			@Override
-			public String getName() {
-				return "Waiting for player to connect...";
-			}
-
-			@Override
-			public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-				return null;
-			}
-
-			@Override
-			public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-				return null;
-			}
-		});
-
+		PlayerConfig config = new PlayerConfig(Deck.EMPTY, new DoNothingBehaviour());
 		player.buildFromConfig(config);
+		return player;
+	}
+
+	public static Player forUser(String userId, int id) {
+		Player player = empty();
+		player.setBehaviour(new HumanBehaviour());
+		player.setId(id);
+		player.setUserId(userId);
 		return player;
 	}
 
@@ -89,6 +82,7 @@ public class Player extends Entity implements Serializable {
 		this.behaviour = otherPlayer.behaviour;
 		this.getStatistics().merge(otherPlayer.getStatistics());
 	}
+
 	/**
 	 * Use build from config to actually build the class.
 	 */
@@ -237,5 +231,20 @@ public class Player extends Entity implements Serializable {
 				.append(getId(), rhd.getId())
 				.append(getName(), rhd.getName())
 				.isEquals();
+	}
+
+	public Player withDeck(Deck deck) {
+		if (deck == null) {
+			return this;
+		}
+
+		if (getDeck() == null
+				|| getDeck().getCount() > 0) {
+			this.deck = deck.getCardsCopy();
+		} else if (getDeck().getCount() == 0) {
+			this.deck.addAll(deck.getCards());
+		}
+
+		return this;
 	}
 }

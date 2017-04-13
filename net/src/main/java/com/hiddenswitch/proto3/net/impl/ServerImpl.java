@@ -300,6 +300,13 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 				return WebResult.failed(e);
 			}
 			userResponse.connection(connection);
+			userResponse.unityConnection(new MatchmakingQueuePutResponseUnityConnection()
+					.url(internalResponse.getConnection().getUrl())
+					.firstMessage(new ClientToServerMessage()
+							.messageType(MessageType.FIRST_MESSAGE)
+							.firstMessage(new ClientToServerMessageFirstMessage()
+									.playerKey(internalResponse.getConnection().getPlayerKey())
+									.playerSecret(internalResponse.getConnection().getPlayerSecret()))));
 		}
 
 		// Determine status code

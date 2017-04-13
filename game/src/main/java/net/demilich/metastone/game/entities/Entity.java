@@ -136,6 +136,10 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 		return (String) getAttribute(Attribute.USER_ID);
 	}
 
+	protected void setUserId(String userId) {
+		setAttribute(Attribute.USER_ID, userId);
+	}
+
 	public String getCardInventoryId() {
 		return (String) getAttribute(Attribute.CARD_INVENTORY_ID);
 	}

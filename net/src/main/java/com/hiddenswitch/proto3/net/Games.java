@@ -35,6 +35,7 @@ import static java.util.stream.Collectors.toList;
  */
 public interface Games {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 180000L;
+	String WEBSOCKET_PATH = "/games";
 
 	@Suspendable
 	ContainsGameSessionResponse containsGameSession(ContainsGameSessionRequest request) throws SuspendExecution, InterruptedException;
@@ -55,7 +56,8 @@ public interface Games {
 	default GameState getClientGameState(String gameId, String userId) {
 		DescribeGameSessionResponse gameSession = describeGameSession(new DescribeGameSessionRequest(gameId));
 		final com.hiddenswitch.proto3.net.common.GameState state = gameSession.getState();
-
+		GameContext workingContext = new GameContext();
+		workingContext.loadState(state);
 		final Player local;
 		final Player opponent;
 		if (state.player1.getUserId().equals(userId)) {
@@ -66,14 +68,16 @@ public interface Games {
 			opponent = state.player1;
 		}
 
+		return getGameState(workingContext, local, opponent);
+	}
+
+	static GameState getGameState(GameContext workingContext, final Player local, final Player opponent) {
 		List<Zone> zones = new ArrayList<>();
 		List<Entity> entities = new ArrayList<>();
 		// Censor the opponent hand and deck entities
 		// All minions are visible
 		// Heroes and players are visible
 
-		GameContext workingContext = new GameContext();
-		workingContext.loadState(state);
 
 		List<Entity> localHand = new ArrayList<>();
 		for (Card card : local.getHand()) {
@@ -199,7 +203,7 @@ public interface Games {
 				.turnState(workingContext.getTurnState().toString());
 	}
 
-	default Entity getEntity(GameContext workingContext, Actor actor) {
+	static Entity getEntity(final GameContext workingContext, final Actor actor) {
 
 		final Card card = actor.getSourceCard();
 		final Entity entity = new Entity()
@@ -216,10 +220,8 @@ public interface Games {
 			entity.setEntityType(Entity.EntityTypeEnum.WEAPON);
 		}
 		final EntityState entityState = new EntityState();
-		entityState.playable(workingContext.getLogic().canPlayCard(card.getOwner(), card.getCardReference()));
-		final Player localPlayer = workingContext.getPlayer(card.getOwner());
+		entityState.manaCost(card.getBaseManaCost());
 		entityState.heroClass(card.getHeroClass().toString());
-		entityState.manaCost(workingContext.getLogic().getModifiedManaCost(localPlayer, card));
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.silenced(actor.hasAttribute(Attribute.SILENCED));
 		entityState.deathrattles(actor.getDeathrattles() != null);
@@ -251,7 +253,7 @@ public interface Games {
 		return entity;
 	}
 
-	default Entity getEntity(GameContext workingContext, Secret secret) {
+	static Entity getEntity(final GameContext workingContext, final Secret secret) {
 		Entity cardEntity = getEntity(workingContext, secret.getSource());
 		cardEntity.id(secret.getId())
 				.entityType(Entity.EntityTypeEnum.SECRET)
@@ -260,7 +262,7 @@ public interface Games {
 		return cardEntity;
 	}
 
-	default Entity getEntity(GameContext workingContext, Card card) {
+	static Entity getEntity(final GameContext workingContext, final Card card) {
 		final Entity entity = new Entity()
 				.description(card.getDescription())
 				.entityType(Entity.EntityTypeEnum.CARD)
@@ -269,9 +271,18 @@ public interface Games {
 				.id(card.getId())
 				.cardId(card.getCardId());
 		final EntityState entityState = new EntityState();
-		entityState.playable(workingContext.getLogic().canPlayCard(card.getOwner(), card.getCardReference()));
-		final Player localPlayer = workingContext.getPlayer(card.getOwner());
-		entityState.manaCost(workingContext.getLogic().getModifiedManaCost(localPlayer, card));
+		int owner = card.getOwner();
+		Player localPlayer;
+		if (owner != -1) {
+			entityState.playable(workingContext.getLogic().canPlayCard(owner, card.getCardReference()));
+			entityState.manaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
+			localPlayer = workingContext.getPlayer(card.getOwner());
+		} else {
+			entityState.playable(false);
+			entityState.manaCost(card.getBaseManaCost());
+			localPlayer = Player.empty();
+		}
+
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
 		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));

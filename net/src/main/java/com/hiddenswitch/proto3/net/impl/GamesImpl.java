@@ -5,12 +5,14 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Matchmaking;
 import com.hiddenswitch.proto3.net.Service;
+import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
 import com.hiddenswitch.proto3.net.common.Server;
 import com.hiddenswitch.proto3.net.impl.server.GameSession;
 import com.hiddenswitch.proto3.net.impl.server.SocketClient;
 import com.hiddenswitch.proto3.net.impl.server.GameSessionImpl;
+import com.hiddenswitch.proto3.net.impl.server.WebsocketClient;
 import com.hiddenswitch.proto3.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
@@ -25,6 +27,8 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.ReplyException;
 import io.vertx.core.eventbus.ReplyFailure;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.net.NetServer;
@@ -40,6 +44,7 @@ import java.util.*;
 
 import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.fiberHandler;
 
 public class GamesImpl extends Service<GamesImpl> implements Games {
 	private Logger logger = LoggerFactory.getLogger(GamesImpl.class);
@@ -47,9 +52,11 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	private static final long CLEANUP_DELAY_MILLISECONDS = 500L;
 
 	private final Map<String, GameSession> games = new HashMap<>();
+	private final Map<String, GameSession> gameForUserId = new HashMap<>();
 	private final Map<Object, GameSession> gameForSocket = new HashMap<>();
 	private final Map<Object, IncomingMessage> netMessages = new HashMap<>();
 	private final Map<String, ActivityMonitor> gameActivityMonitors = new HashMap<>();
+	private final Map<String, String> keyToSecret = new HashMap<>();
 
 	private NetServer server;
 	private HttpServer websocketServer;
@@ -91,7 +98,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 			server = vertx.createNetServer();
 
 			server.connectHandler(socket -> {
-				socket.handler(Sync.fiberHandler(messageBuffer -> {
+				socket.handler(fiberHandler(messageBuffer -> {
 					receiveNetSocketData(socket, messageBuffer);
 				}));
 			});
@@ -107,6 +114,78 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		});
 
 		logger.debug("GamesImpl::start Created socket server.");
+
+		HttpServer listenResult = awaitResult(then -> {
+			websocketServer = vertx.createHttpServer(new HttpServerOptions()
+					.setPort(websocketPort)
+					.setMaxWebsocketFrameSize(1500));
+
+			websocketServer.websocketHandler(socket -> {
+				if (!socket.uri().startsWith(Games.WEBSOCKET_PATH)) {
+					throw new RuntimeException();
+				}
+
+				socket.handler(fiberHandler(messageBuffer -> {
+					com.hiddenswitch.proto3.net.client.models.ClientToServerMessage message =
+							Configuration.getDefaultApiClient().getJSON().deserialize(messageBuffer.toString(),
+									com.hiddenswitch.proto3.net.client.models.ClientToServerMessage.class);
+
+					GameSession session = gameForSocket.getOrDefault(socket, null);
+
+					if (session != null) {
+						updateActivity(session);
+					}
+
+					switch (message.getMessageType()) {
+						case FIRST_MESSAGE:
+							// Make sure this connection is authorized
+							final String userId = message.getFirstMessage().getPlayerKey();
+							String secret = message.getFirstMessage().getPlayerSecret();
+							if (!keyToSecret.containsKey(userId) ||
+									!keyToSecret.get(userId).equals(secret)) {
+								throw new RuntimeException("Invalid secret.");
+							}
+
+							Client client = new WebsocketClient(socket, userId);
+
+							if (session == null) {
+								session = gameForUserId.get(userId);
+							}
+
+							gameForSocket.put(client.getPrivateSocket(), session);
+
+							updateActivity(session);
+
+							if (session.isGameReady()) {
+								// TODO: Remove references to the old socket
+								// Replace the client
+								session.onPlayerReconnected(session.getPlayer(userId), client);
+							} else {
+								session.onPlayerConnected(session.getPlayer(userId), client);
+							}
+							break;
+						case UPDATE_ACTION:
+							if (session == null) {
+								throw new RuntimeException();
+							}
+							final String messageId = message.getRepliesTo();
+							session.onActionReceived(messageId, message.getActionIndex());
+							break;
+						case UPDATE_MULLIGAN:
+							if (session == null) {
+								throw new RuntimeException();
+							}
+							final String messageId2 = message.getRepliesTo();
+							session.onMulliganReceived(messageId2, message.getDiscardedCardIndices());
+							break;
+					}
+				}));
+			});
+
+			websocketServer.listen(then);
+		});
+
+		logger.debug("GamesImpl::start Created websocket server.");
 
 		Broker.of(this, Games.class, vertx.eventBus());
 
@@ -140,10 +219,17 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 			throw new RuntimeException("Game ID cannot be null in a create game session request.");
 		}
 
-		GameSessionImpl session = new GameSessionImpl(getHost(), getLegacyPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
+		GameSessionImpl session = new GameSessionImpl(getHost(), getLegacyPort(), getWebsocketPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
 		session.handleGameOver(this::onGameOver);
 		final String finalGameId = session.getGameId();
 		games.put(finalGameId, session);
+		for (String userId : new String[]{request.getPregame1().getUserId(), request.getPregame2().getUserId()}) {
+			if (userId != null) {
+				gameForUserId.put(userId, session);
+				keyToSecret.put(userId, session.getSecret(userId));
+			}
+		}
+
 		// If the game has no activity after a certain amount of time, kill it automatically.
 		gameActivityMonitors.put(finalGameId, new ActivityMonitor(vertx, finalGameId, request.getNoActivityTimeout(), this::kill));
 
@@ -217,13 +303,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 			return;
 		}
 
-		String gameId = session.getGameId();
-		ActivityMonitor activityMonitor = gameActivityMonitors.get(gameId);
-		if (activityMonitor == null) {
-			gameActivityMonitors.put(gameId, new ActivityMonitor(getVertx(), gameId, session.getNoActivityTimeout(), this::kill));
-			activityMonitor = gameActivityMonitors.get(gameId);
-		}
-		activityMonitor.activity();
+		updateActivity(session);
 
 		switch (message.getMt()) {
 			case FIRST_MESSAGE:
@@ -253,6 +333,16 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 		if (remainder != null) {
 			receiveNetSocketData(socket, remainder);
 		}
+	}
+
+	private void updateActivity(GameSession session) {
+		String gameId = session.getGameId();
+		ActivityMonitor activityMonitor = gameActivityMonitors.get(gameId);
+		if (activityMonitor == null) {
+			gameActivityMonitors.put(gameId, new ActivityMonitor(getVertx(), gameId, session.getNoActivityTimeout(), this::kill));
+			activityMonitor = gameActivityMonitors.get(gameId);
+		}
+		activityMonitor.activity();
 	}
 
 	@Override
@@ -358,5 +448,9 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	private void onGameOver(GameSessionImpl sgs) {
 		final String gameOverId = sgs.getGameId();
 		vertx.setTimer(CLEANUP_DELAY_MILLISECONDS, suspendableHandler(t -> kill(gameOverId)));
+	}
+
+	public int getWebsocketPort() {
+		return websocketPort;
 	}
 }
