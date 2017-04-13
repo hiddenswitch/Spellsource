@@ -126,7 +126,6 @@ Class | Method | HTTP request | Description
  - [EntityState](docs/EntityState.md)
  - [GameActions](docs/GameActions.md)
  - [GameEvent](docs/GameEvent.md)
- - [GameEventAfterPhysicalAttack](docs/GameEventAfterPhysicalAttack.md)
  - [GameEventAfterSpellCasted](docs/GameEventAfterSpellCasted.md)
  - [GameEventArmorGained](docs/GameEventArmorGained.md)
  - [GameEventBeforeSummon](docs/GameEventBeforeSummon.md)
@@ -159,6 +158,7 @@ Class | Method | HTTP request | Description
  - [MatchmakingQueuePutResponse](docs/MatchmakingQueuePutResponse.md)
  - [MatchmakingQueuePutResponseUnityConnection](docs/MatchmakingQueuePutResponseUnityConnection.md)
  - [MessageType](docs/MessageType.md)
+ - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
  - [Zone](docs/Zone.md)
 

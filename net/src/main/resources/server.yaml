@@ -268,9 +268,28 @@ definitions:
           type: 'integer'
         description:
           The indices of cards to discard in a mulligan.
+  PhysicalAttackEvent:
+    type: 'object'
+    properties:
+      attacker:
+        $ref: '#/definitions/Entity'
+      defender:
+        $ref: '#/definitions/Entity'
+      damageDealt:
+        type: 'integer'
   GameEvent:
     type: 'object'
     properties:
+      eventTarget:
+        $ref: '#/definitions/Entity'
+      eventSource:
+        $ref: '#/definitions/Entity'
+      targetPlayerId:
+        type: 'integer'
+      sourcePlayerId:
+        type: 'integer'
+      description:
+        type: 'string'
       eventType:
         type: 'string'
         description: |
@@ -307,14 +326,7 @@ definitions:
           - 'WEAPON_DESTROYED'
           - 'WEAPON_EQUIPPED'
       afterPhysicalAttack:
-        type: 'object'
-        properties:
-          attacker:
-            $ref: '#/definitions/Entity'
-          defender:
-            $ref: '#/definitions/Entity'
-          damageDealt:
-            type: 'integer'
+        $ref: '#/definitions/PhysicalAttackEvent'
       drawCard:
         type: 'object'
         properties:
@@ -424,14 +436,7 @@ definitions:
           weapon:
             $ref: '#/definitions/Entity'
       physicalAttack:
-        type: 'object'
-        properties:
-          attacker:
-            $ref: '#/definitions/Entity'
-          defender:
-            $ref: '#/definitions/Entity'
-          damageDealt:
-            type: 'integer'
+        $ref: '#/definitions/PhysicalAttackEvent'
       overload:
         type: 'object'
         properties:

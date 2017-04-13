@@ -1,5 +1,5 @@
 
-# GameEventAfterPhysicalAttack
+# PhysicalAttackEvent
 
 ## Properties
 Name | Type | Description | Notes

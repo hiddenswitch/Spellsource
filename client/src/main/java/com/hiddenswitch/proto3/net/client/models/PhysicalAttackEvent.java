@@ -33,10 +33,10 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * GameEventAfterPhysicalAttack
+ * PhysicalAttackEvent
  */
 
-public class GameEventAfterPhysicalAttack  implements Serializable {
+public class PhysicalAttackEvent  implements Serializable {
   @SerializedName("attacker")
   private Entity attacker = null;
 
@@ -46,7 +46,7 @@ public class GameEventAfterPhysicalAttack  implements Serializable {
   @SerializedName("damageDealt")
   private Integer damageDealt = null;
 
-  public GameEventAfterPhysicalAttack attacker(Entity attacker) {
+  public PhysicalAttackEvent attacker(Entity attacker) {
     this.attacker = attacker;
     return this;
   }
@@ -64,7 +64,7 @@ public class GameEventAfterPhysicalAttack  implements Serializable {
     this.attacker = attacker;
   }
 
-  public GameEventAfterPhysicalAttack defender(Entity defender) {
+  public PhysicalAttackEvent defender(Entity defender) {
     this.defender = defender;
     return this;
   }
@@ -82,7 +82,7 @@ public class GameEventAfterPhysicalAttack  implements Serializable {
     this.defender = defender;
   }
 
-  public GameEventAfterPhysicalAttack damageDealt(Integer damageDealt) {
+  public PhysicalAttackEvent damageDealt(Integer damageDealt) {
     this.damageDealt = damageDealt;
     return this;
   }
@@ -109,10 +109,10 @@ public class GameEventAfterPhysicalAttack  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GameEventAfterPhysicalAttack gameEventAfterPhysicalAttack = (GameEventAfterPhysicalAttack) o;
-    return Objects.equals(this.attacker, gameEventAfterPhysicalAttack.attacker) &&
-        Objects.equals(this.defender, gameEventAfterPhysicalAttack.defender) &&
-        Objects.equals(this.damageDealt, gameEventAfterPhysicalAttack.damageDealt);
+    PhysicalAttackEvent physicalAttackEvent = (PhysicalAttackEvent) o;
+    return Objects.equals(this.attacker, physicalAttackEvent.attacker) &&
+        Objects.equals(this.defender, physicalAttackEvent.defender) &&
+        Objects.equals(this.damageDealt, physicalAttackEvent.damageDealt);
   }
 
   @Override
@@ -123,7 +123,7 @@ public class GameEventAfterPhysicalAttack  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GameEventAfterPhysicalAttack {\n");
+    sb.append("class PhysicalAttackEvent {\n");
     
     sb.append("    attacker: ").append(toIndentedString(attacker)).append("\n");
     sb.append("    defender: ").append(toIndentedString(defender)).append("\n");
