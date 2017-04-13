@@ -15,6 +15,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.WeaponCard;
+import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -35,7 +36,7 @@ import static java.util.stream.Collectors.toList;
  */
 public interface Games {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 180000L;
-	String WEBSOCKET_PATH = "/games";
+	String WEBSOCKET_PATH = "games";
 
 	@Suspendable
 	ContainsGameSessionResponse containsGameSession(ContainsGameSessionRequest request) throws SuspendExecution, InterruptedException;
@@ -316,8 +317,15 @@ public interface Games {
 				SpellCard spellCard = (SpellCard) card;
 				int damage = 0;
 				int spellpowerDamage = 0;
-				if (DamageSpell.class.isAssignableFrom(spellCard.getSpell().getSpellClass())) {
-					damage = DamageSpell.getDamage(workingContext, localPlayer, spellCard.getSpell(), card, null);
+				if (DamageSpell.class.isAssignableFrom(spellCard.getSpell().getSpellClass())
+						&& localPlayer != null) {
+					// Use a zero zero minion as the target entity
+					final MinionCardDesc desc = new MinionCardDesc();
+					desc.baseAttack = 0;
+					desc.baseHp = 0;
+					Minion zeroZero = ((MinionCard) desc.createInstance()).summon();
+					zeroZero.setId(65535);
+					damage = DamageSpell.getDamage(workingContext, localPlayer, spellCard.getSpell(), card, zeroZero);
 					spellpowerDamage = workingContext.getLogic().applySpellpower(localPlayer, spellCard, damage);
 				}
 				entityState.underAura(spellpowerDamage > damage

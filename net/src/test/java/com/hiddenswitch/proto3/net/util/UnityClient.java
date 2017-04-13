@@ -71,7 +71,7 @@ public class UnityClient {
 
 			// Get the port from the url
 
-			url = "ws://localhost:" + Integer.toString((new URI(url)).getPort()) + Games.WEBSOCKET_PATH;
+			url = "ws://localhost:" + Integer.toString((new URI(url)).getPort()) + "/" + Games.WEBSOCKET_PATH;
 
 			WebsocketClientEndpoint endpoint = new WebsocketClientEndpoint(new URI(url));
 
