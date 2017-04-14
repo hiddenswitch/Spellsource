@@ -271,6 +271,10 @@ definitions:
   PhysicalAttackEvent:
     type: 'object'
     properties:
+      attackerLocation:
+        $ref: '#/definitions/CardLocation'
+      defenderLocation:
+        $ref: '#/definitions/CardLocation'
       attacker:
         $ref: '#/definitions/Entity'
       defender:

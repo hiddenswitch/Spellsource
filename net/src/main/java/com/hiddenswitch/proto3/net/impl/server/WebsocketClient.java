@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.Entity;
 import com.hiddenswitch.proto3.net.client.models.GameEvent;
 import com.hiddenswitch.proto3.net.client.models.GameEvent.EventTypeEnum;
+import com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.impl.util.Zones;
@@ -70,10 +71,18 @@ public class WebsocketClient implements Client {
 		if (event instanceof net.demilich.metastone.game.events.PhysicalAttackEvent) {
 			final net.demilich.metastone.game.events.PhysicalAttackEvent physicalAttackEvent
 					= (net.demilich.metastone.game.events.PhysicalAttackEvent) event;
-			clientEvent.physicalAttack(new com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent()
-					.attacker(Games.getEntity(workingContext, physicalAttackEvent.getAttacker()))
-					.defender(Games.getEntity(workingContext, physicalAttackEvent.getDefender()))
-					.damageDealt(physicalAttackEvent.getDamageDealt()));
+			final Actor attacker = physicalAttackEvent.getAttacker();
+			final Actor defender = physicalAttackEvent.getDefender();
+			final int damageDealt = physicalAttackEvent.getDamageDealt();
+			final PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt);
+			clientEvent.physicalAttack(physicalAttack);
+		} else if (event instanceof AfterPhysicalAttackEvent) {
+			final AfterPhysicalAttackEvent physicalAttackEvent = (AfterPhysicalAttackEvent) event;
+			final Actor attacker = physicalAttackEvent.getAttacker();
+			final Actor defender = physicalAttackEvent.getDefender();
+			final int damageDealt = physicalAttackEvent.getDamageDealt();
+			final PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt);
+			clientEvent.afterPhysicalAttack(physicalAttack);
 		} else if (event instanceof DrawCardEvent) {
 			final DrawCardEvent drawCardEvent = (DrawCardEvent) event;
 			clientEvent.drawCard(new GameEventDrawCard()
@@ -141,6 +150,15 @@ public class WebsocketClient implements Client {
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
 				.event(clientEvent));
+	}
+
+	private PhysicalAttackEvent getPhysicalAttack(GameContext workingContext, Actor attacker, Actor defender, int damageDealt) {
+		return new PhysicalAttackEvent()
+				.attackerLocation(Games.getLocation(workingContext, userId, attacker))
+				.attacker(Games.getEntity(workingContext, attacker))
+				.defenderLocation(Games.getLocation(workingContext, userId, defender))
+				.defender(Games.getEntity(workingContext, defender))
+				.damageDealt(damageDealt);
 	}
 
 	@Override
