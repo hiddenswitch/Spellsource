@@ -27,78 +27,55 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.CardLocation;
-import com.hiddenswitch.proto3.net.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * GameEventDrawCard
+ * CardLocation
  */
 
-public class GameEventDrawCard  implements Serializable {
-  @SerializedName("to")
-  private CardLocation to = null;
+public class CardLocation  implements Serializable {
+  @SerializedName("zone")
+  private Integer zone = null;
 
-  @SerializedName("card")
-  private Entity card = null;
+  @SerializedName("position")
+  private Integer position = null;
 
-  @SerializedName("drawn")
-  private Boolean drawn = null;
-
-  public GameEventDrawCard to(CardLocation to) {
-    this.to = to;
+  public CardLocation zone(Integer zone) {
+    this.zone = zone;
     return this;
   }
 
    /**
-   * Get to
-   * @return to
+   * Get zone
+   * @return zone
   **/
   @ApiModelProperty(example = "null", value = "")
-  public CardLocation getTo() {
-    return to;
+  public Integer getZone() {
+    return zone;
   }
 
-  public void setTo(CardLocation to) {
-    this.to = to;
+  public void setZone(Integer zone) {
+    this.zone = zone;
   }
 
-  public GameEventDrawCard card(Entity card) {
-    this.card = card;
+  public CardLocation position(Integer position) {
+    this.position = position;
     return this;
   }
 
    /**
-   * Get card
-   * @return card
+   * Get position
+   * @return position
   **/
   @ApiModelProperty(example = "null", value = "")
-  public Entity getCard() {
-    return card;
+  public Integer getPosition() {
+    return position;
   }
 
-  public void setCard(Entity card) {
-    this.card = card;
-  }
-
-  public GameEventDrawCard drawn(Boolean drawn) {
-    this.drawn = drawn;
-    return this;
-  }
-
-   /**
-   * Get drawn
-   * @return drawn
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Boolean getDrawn() {
-    return drawn;
-  }
-
-  public void setDrawn(Boolean drawn) {
-    this.drawn = drawn;
+  public void setPosition(Integer position) {
+    this.position = position;
   }
 
 
@@ -110,25 +87,23 @@ public class GameEventDrawCard  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GameEventDrawCard gameEventDrawCard = (GameEventDrawCard) o;
-    return Objects.equals(this.to, gameEventDrawCard.to) &&
-        Objects.equals(this.card, gameEventDrawCard.card) &&
-        Objects.equals(this.drawn, gameEventDrawCard.drawn);
+    CardLocation cardLocation = (CardLocation) o;
+    return Objects.equals(this.zone, cardLocation.zone) &&
+        Objects.equals(this.position, cardLocation.position);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(to, card, drawn);
+    return Objects.hash(zone, position);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GameEventDrawCard {\n");
+    sb.append("class CardLocation {\n");
     
-    sb.append("    to: ").append(toIndentedString(to)).append("\n");
-    sb.append("    card: ").append(toIndentedString(card)).append("\n");
-    sb.append("    drawn: ").append(toIndentedString(drawn)).append("\n");
+    sb.append("    zone: ").append(toIndentedString(zone)).append("\n");
+    sb.append("    position: ").append(toIndentedString(position)).append("\n");
     sb.append("}");
     return sb.toString();
   }

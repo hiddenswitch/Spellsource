@@ -34,20 +34,41 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * GameEventDrawCard
+ * GameEventSummon
  */
 
-public class GameEventDrawCard  implements Serializable {
+public class GameEventSummon  implements Serializable {
+  @SerializedName("from")
+  private CardLocation from = null;
+
   @SerializedName("to")
   private CardLocation to = null;
 
-  @SerializedName("card")
-  private Entity card = null;
+  @SerializedName("minion")
+  private Entity minion = null;
 
-  @SerializedName("drawn")
-  private Boolean drawn = null;
+  @SerializedName("source")
+  private Entity source = null;
 
-  public GameEventDrawCard to(CardLocation to) {
+  public GameEventSummon from(CardLocation from) {
+    this.from = from;
+    return this;
+  }
+
+   /**
+   * Get from
+   * @return from
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public CardLocation getFrom() {
+    return from;
+  }
+
+  public void setFrom(CardLocation from) {
+    this.from = from;
+  }
+
+  public GameEventSummon to(CardLocation to) {
     this.to = to;
     return this;
   }
@@ -65,40 +86,40 @@ public class GameEventDrawCard  implements Serializable {
     this.to = to;
   }
 
-  public GameEventDrawCard card(Entity card) {
-    this.card = card;
+  public GameEventSummon minion(Entity minion) {
+    this.minion = minion;
     return this;
   }
 
    /**
-   * Get card
-   * @return card
+   * Get minion
+   * @return minion
   **/
   @ApiModelProperty(example = "null", value = "")
-  public Entity getCard() {
-    return card;
+  public Entity getMinion() {
+    return minion;
   }
 
-  public void setCard(Entity card) {
-    this.card = card;
+  public void setMinion(Entity minion) {
+    this.minion = minion;
   }
 
-  public GameEventDrawCard drawn(Boolean drawn) {
-    this.drawn = drawn;
+  public GameEventSummon source(Entity source) {
+    this.source = source;
     return this;
   }
 
    /**
-   * Get drawn
-   * @return drawn
+   * Get source
+   * @return source
   **/
   @ApiModelProperty(example = "null", value = "")
-  public Boolean getDrawn() {
-    return drawn;
+  public Entity getSource() {
+    return source;
   }
 
-  public void setDrawn(Boolean drawn) {
-    this.drawn = drawn;
+  public void setSource(Entity source) {
+    this.source = source;
   }
 
 
@@ -110,25 +131,27 @@ public class GameEventDrawCard  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GameEventDrawCard gameEventDrawCard = (GameEventDrawCard) o;
-    return Objects.equals(this.to, gameEventDrawCard.to) &&
-        Objects.equals(this.card, gameEventDrawCard.card) &&
-        Objects.equals(this.drawn, gameEventDrawCard.drawn);
+    GameEventSummon gameEventSummon = (GameEventSummon) o;
+    return Objects.equals(this.from, gameEventSummon.from) &&
+        Objects.equals(this.to, gameEventSummon.to) &&
+        Objects.equals(this.minion, gameEventSummon.minion) &&
+        Objects.equals(this.source, gameEventSummon.source);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(to, card, drawn);
+    return Objects.hash(from, to, minion, source);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GameEventDrawCard {\n");
+    sb.append("class GameEventSummon {\n");
     
+    sb.append("    from: ").append(toIndentedString(from)).append("\n");
     sb.append("    to: ").append(toIndentedString(to)).append("\n");
-    sb.append("    card: ").append(toIndentedString(card)).append("\n");
-    sb.append("    drawn: ").append(toIndentedString(drawn)).append("\n");
+    sb.append("    minion: ").append(toIndentedString(minion)).append("\n");
+    sb.append("    source: ").append(toIndentedString(source)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -2,10 +2,8 @@ package com.hiddenswitch.proto3.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.Entity;
-import com.hiddenswitch.proto3.net.client.models.EntityState;
-import com.hiddenswitch.proto3.net.client.models.GameState;
-import com.hiddenswitch.proto3.net.client.models.Zone;
 import com.hiddenswitch.proto3.net.impl.util.Zones;
 import com.hiddenswitch.proto3.net.models.*;
 import net.demilich.metastone.game.Attribute;
@@ -16,7 +14,7 @@ import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
-import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
@@ -130,6 +128,7 @@ public interface Games {
 					.id(secret.getId())
 					.entityType(Entity.EntityTypeEnum.SECRET)
 					.state(new EntityState()
+							.owner(secret.getOwner())
 							.heroClass(secret.getSource().getHeroClass().toString()));
 			opposingSecrets.add(entity);
 		}
@@ -152,6 +151,7 @@ public interface Games {
 					.name(player.getName())
 					.entityType(Entity.EntityTypeEnum.PLAYER)
 					.state(new EntityState()
+							.owner(player.getId())
 							.lockedMana(player.getLockedMana())
 							.maxMana(player.getMaxMana())
 							.mana(player.getMana()));
@@ -182,10 +182,10 @@ public interface Games {
 		entities.addAll(playerEntities);
 
 		// Add IDs for the decks and the opposing hand.
-		List<Entity> localDeck = local.getDeck().toList().stream().map(c -> new Entity().id(c.getId())).collect(toList());
-		List<Entity> opposingDeck = opponent.getDeck().toList().stream().map(c -> new Entity().id(c.getId())).collect(toList());
+		List<Entity> localDeck = local.getDeck().toList().stream().map(c -> new Entity().id(c.getId()).state(new EntityState().owner(local.getId()))).collect(toList());
+		List<Entity> opposingDeck = opponent.getDeck().toList().stream().map(c -> new Entity().id(c.getId()).state(new EntityState().owner(opponent.getId()))).collect(toList());
 		// TODO: The opposing hand should show auras
-		List<Entity> opposingHand = opponent.getHand().toList().stream().map(c -> new Entity().id(c.getId())).collect(toList());
+		List<Entity> opposingHand = opponent.getHand().toList().stream().map(c -> new Entity().id(c.getId()).state(new EntityState().owner(opponent.getId()))).collect(toList());
 
 		zones.add(new Zone()
 				.id(Zones.LOCAL_DECK)
@@ -196,7 +196,6 @@ public interface Games {
 		zones.add(new Zone()
 				.id(Zones.OPPONENT_HAND)
 				.entities(opposingHand.stream().map(Entity::getId).collect(toList())));
-
 
 		return new GameState()
 				.entities(entities)
@@ -227,20 +226,23 @@ public interface Games {
 		}
 
 		final Card card = actor.getSourceCard();
+		final EntityState entityState = new EntityState();
 		final Entity entity = new Entity()
 				.description(card.getDescription())
 				.name(card.getName())
-				.description(card.getDescription())
-				.id(card.getId())
+				.id(actor.getId())
 				.cardId(card.getCardId());
+
 		if (actor instanceof Minion) {
 			entity.setEntityType(Entity.EntityTypeEnum.MINION);
+			entityState.boardPosition(workingContext.getBoardPosition((Minion) actor));
 		} else if (actor instanceof Hero) {
 			entity.setEntityType(Entity.EntityTypeEnum.HERO);
 		} else if (actor instanceof Weapon) {
 			entity.setEntityType(Entity.EntityTypeEnum.WEAPON);
 		}
-		final EntityState entityState = new EntityState();
+
+		entityState.owner(actor.getOwner());
 		entityState.manaCost(card.getBaseManaCost());
 		entityState.heroClass(card.getHeroClass().toString());
 		entityState.baseManaCost(card.getBaseManaCost());
@@ -283,6 +285,7 @@ public interface Games {
 		cardEntity.id(secret.getId())
 				.entityType(Entity.EntityTypeEnum.SECRET)
 				.getState()
+				.owner(secret.getOwner())
 				.playable(false);
 		return cardEntity;
 	}
@@ -301,17 +304,18 @@ public interface Games {
 				.cardId(card.getCardId());
 		final EntityState entityState = new EntityState();
 		int owner = card.getOwner();
-		Player localPlayer;
+		Player owningPlayer;
 		if (owner != -1) {
 			entityState.playable(workingContext.getLogic().canPlayCard(owner, card.getCardReference()));
 			entityState.manaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
-			localPlayer = workingContext.getPlayer(card.getOwner());
+			owningPlayer = workingContext.getPlayer(card.getOwner());
 		} else {
 			entityState.playable(false);
 			entityState.manaCost(card.getBaseManaCost());
-			localPlayer = Player.empty();
+			owningPlayer = Player.empty();
 		}
 
+		entityState.owner(card.getOwner());
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
 		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
@@ -346,15 +350,15 @@ public interface Games {
 				int damage = 0;
 				int spellpowerDamage = 0;
 				if (DamageSpell.class.isAssignableFrom(spellCard.getSpell().getSpellClass())
-						&& localPlayer != null) {
+						&& owningPlayer != null) {
 					// Use a zero zero minion as the target entity
 					final MinionCardDesc desc = new MinionCardDesc();
 					desc.baseAttack = 0;
 					desc.baseHp = 0;
 					Minion zeroZero = ((MinionCard) desc.createInstance()).summon();
 					zeroZero.setId(65535);
-					damage = DamageSpell.getDamage(workingContext, localPlayer, spellCard.getSpell(), card, zeroZero);
-					spellpowerDamage = workingContext.getLogic().applySpellpower(localPlayer, spellCard, damage);
+					damage = DamageSpell.getDamage(workingContext, owningPlayer, spellCard.getSpell(), card, zeroZero);
+					spellpowerDamage = workingContext.getLogic().applySpellpower(owningPlayer, spellCard, damage);
 				}
 				entityState.underAura(spellpowerDamage > damage
 						|| hostsTrigger);
@@ -366,5 +370,64 @@ public interface Games {
 		}
 		entity.state(entityState);
 		return entity;
+	}
+
+	static CardLocation getLocation(GameContext context, String userId, net.demilich.metastone.game.entities.Entity entity) {
+		Player local;
+		Player opponent;
+		if (userId.equals(context.getPlayer2().getUserId())) {
+			local = context.getPlayer2();
+			opponent = context.getPlayer1();
+		} else {
+			local = context.getPlayer1();
+			opponent = context.getPlayer2();
+		}
+
+		int zone = Zones.SET_ASIDE;
+		int position = 0;
+		if (entity instanceof Minion) {
+			if (local.getMinions().stream().anyMatch(m -> m.getId() == entity.getId())) {
+				zone = Zones.LOCAL_BATTLEFIELD;
+			} else if (opponent.getMinions().stream().anyMatch(m -> m.getId() == entity.getId())) {
+				zone = Zones.OPPONENT_BATTLEFIELD;
+			}
+		} else if (entity instanceof Hero) {
+			if (local.getHero().getId() == entity.getId()) {
+				zone = Zones.LOCAL_HERO;
+			} else if (opponent.getHero().getId() == entity.getId()) {
+				zone = Zones.OPPONENT_HERO;
+			}
+		} else if (entity instanceof Player) {
+			if (local.getId() == entity.getId()) {
+				zone = Zones.LOCAL_PLAYER;
+			} else if (opponent.getId() == entity.getId()) {
+				zone = Zones.OPPONENT_PLAYER;
+			}
+		} else if (entity instanceof Weapon) {
+			if (local.getHero().getWeapon().getId() == entity.getId()) {
+				zone = Zones.LOCAL_WEAPON;
+			} else if (opponent.getHero().getWeapon().getId() == entity.getId()) {
+				zone = Zones.OPPONENT_WEAPON;
+			}
+		} else if (entity instanceof Secret) {
+			// TODO: Deal with secret "locations"
+		} else if (entity instanceof Card) {
+			final Card card = (Card) entity;
+			if (local.getHand().toList().stream().anyMatch(c -> c.getId() == card.getId())) {
+				zone = Zones.LOCAL_HAND;
+				position = local.getHand().indexOf(card.getId());
+			} else if (opponent.getHand().toList().stream().anyMatch(c -> c.getId() == card.getId())) {
+				zone = Zones.OPPONENT_HAND;
+				position = opponent.getHand().indexOf(card.getId());
+			} else if (local.getHero().getHeroPower().getId() == entity.getId()) {
+				zone = Zones.LOCAL_HERO_POWER;
+			} else if (opponent.getHero().getHeroPower().getId() == entity.getId()) {
+				zone = Zones.OPPONENT_HERO_POWER;
+			}
+		}
+
+		// TODO: Deal with graveyard.
+
+		return new CardLocation().zone(zone).position(position);
 	}
 }
