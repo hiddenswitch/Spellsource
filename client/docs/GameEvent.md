@@ -29,12 +29,12 @@ Name | Type | Description | Notes
 **damage** | [**GameEventDamage**](GameEventDamage.md) |  |  [optional]
 **weaponEquipped** | [**GameEventWeaponDestroyed**](GameEventWeaponDestroyed.md) |  |  [optional]
 **physicalAttack** | [**PhysicalAttackEvent**](PhysicalAttackEvent.md) |  |  [optional]
-**overload** | [**GameEventCardPlayed**](GameEventCardPlayed.md) |  |  [optional]
+**overload** | [**GameEventOverload**](GameEventOverload.md) |  |  [optional]
 **heal** | [**GameEventHeal**](GameEventHeal.md) |  |  [optional]
 **secretRevealed** | [**GameEventSecretRevealed**](GameEventSecretRevealed.md) |  |  [optional]
-**summon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
+**summon** | [**GameEventSummon**](GameEventSummon.md) |  |  [optional]
 **afterSpellCasted** | [**GameEventAfterSpellCasted**](GameEventAfterSpellCasted.md) |  |  [optional]
-**discard** | [**GameEventCardPlayed**](GameEventCardPlayed.md) |  |  [optional]
+**discard** | [**GameEventOverload**](GameEventOverload.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
 
 

@@ -27,45 +27,20 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.CardLocation;
 import com.hiddenswitch.proto3.net.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * GameEventDrawCard
+ * GameEventOverload
  */
 
-public class GameEventDrawCard  implements Serializable {
-  @SerializedName("to")
-  private CardLocation to = null;
-
+public class GameEventOverload  implements Serializable {
   @SerializedName("card")
   private Entity card = null;
 
-  @SerializedName("drawn")
-  private Boolean drawn = null;
-
-  public GameEventDrawCard to(CardLocation to) {
-    this.to = to;
-    return this;
-  }
-
-   /**
-   * Get to
-   * @return to
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public CardLocation getTo() {
-    return to;
-  }
-
-  public void setTo(CardLocation to) {
-    this.to = to;
-  }
-
-  public GameEventDrawCard card(Entity card) {
+  public GameEventOverload card(Entity card) {
     this.card = card;
     return this;
   }
@@ -83,24 +58,6 @@ public class GameEventDrawCard  implements Serializable {
     this.card = card;
   }
 
-  public GameEventDrawCard drawn(Boolean drawn) {
-    this.drawn = drawn;
-    return this;
-  }
-
-   /**
-   * Get drawn
-   * @return drawn
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Boolean getDrawn() {
-    return drawn;
-  }
-
-  public void setDrawn(Boolean drawn) {
-    this.drawn = drawn;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -110,25 +67,21 @@ public class GameEventDrawCard  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GameEventDrawCard gameEventDrawCard = (GameEventDrawCard) o;
-    return Objects.equals(this.to, gameEventDrawCard.to) &&
-        Objects.equals(this.card, gameEventDrawCard.card) &&
-        Objects.equals(this.drawn, gameEventDrawCard.drawn);
+    GameEventOverload gameEventOverload = (GameEventOverload) o;
+    return Objects.equals(this.card, gameEventOverload.card);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(to, card, drawn);
+    return Objects.hash(card);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GameEventDrawCard {\n");
+    sb.append("class GameEventOverload {\n");
     
-    sb.append("    to: ").append(toIndentedString(to)).append("\n");
     sb.append("    card: ").append(toIndentedString(card)).append("\n");
-    sb.append("    drawn: ").append(toIndentedString(drawn)).append("\n");
     sb.append("}");
     return sb.toString();
   }

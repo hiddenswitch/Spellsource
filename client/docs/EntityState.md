@@ -7,6 +7,8 @@ Name | Type | Description | Notes
 **background** | **String** |  |  [optional]
 **portrait** | **String** |  |  [optional]
 **gold** | **Boolean** |  |  [optional]
+**boardPosition** | **Integer** |  |  [optional]
+**owner** | **Integer** |  |  [optional]
 **heroClass** | **String** |  |  [optional]
 **hp** | **Integer** |  |  [optional]
 **durability** | **Integer** |  |  [optional]

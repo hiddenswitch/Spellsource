@@ -163,4 +163,13 @@ public class CardCollection implements Iterable<Card>, Cloneable, Serializable {
 		return new ArrayList<>(cards);
 	}
 
+	public int indexOf(int id) {
+		for (int i = 0; i < cards.size(); i++) {
+			if (cards.get(i).getId() == id) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
 }
