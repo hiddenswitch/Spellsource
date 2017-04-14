@@ -149,6 +149,7 @@ public class WebsocketClient implements Client {
 
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
+				.gameState(getClientGameState(new GameState(event.getGameContext())))
 				.event(clientEvent));
 	}
 

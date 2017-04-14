@@ -158,6 +158,11 @@ public interface Games {
 							.mana(player.getMana()));
 			playerEntities.add(playerEntity);
 			final Entity heroEntity = getEntity(workingContext, player.getHero());
+			// Include the player's mana, locked mana and max mana in the hero entity for convenience
+			heroEntity.getState().mana(
+					player.getMana())
+					.maxMana(player.getMaxMana())
+					.lockedMana(player.getLockedMana());
 			playerEntities.add(heroEntity);
 			final Entity heroPowerEntity = getEntity(workingContext, player.getHero().getHeroPower());
 			playerEntities.add(heroPowerEntity);
