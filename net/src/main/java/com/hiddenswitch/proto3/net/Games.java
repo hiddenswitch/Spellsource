@@ -27,6 +27,7 @@ import net.demilich.metastone.utils.Tuple;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -385,29 +386,29 @@ public interface Games {
 
 		int zone = Zones.SET_ASIDE;
 		int position = 0;
-		if (entity instanceof Minion) {
-			if (local.getMinions().stream().anyMatch(m -> m.getId() == entity.getId())) {
+		if (Actor.class.isAssignableFrom(entity.getClass())) {
+			final Optional<Minion> localMinion = local.getMinions().stream().filter(m -> m.getId() == entity.getId()).findFirst();
+			final Optional<Minion> opponentMinion = opponent.getMinions().stream().filter(m -> m.getId() == entity.getId()).findFirst();
+			if (localMinion.isPresent()) {
 				zone = Zones.LOCAL_BATTLEFIELD;
-			} else if (opponent.getMinions().stream().anyMatch(m -> m.getId() == entity.getId())) {
+				position = context.getBoardPosition(localMinion.get());
+			} else if (opponentMinion.isPresent()) {
 				zone = Zones.OPPONENT_BATTLEFIELD;
-			}
-		} else if (entity instanceof Hero) {
-			if (local.getHero().getId() == entity.getId()) {
+				position = context.getBoardPosition(opponentMinion.get());
+			} else if (local.getHero().getId() == entity.getId()) {
 				zone = Zones.LOCAL_HERO;
 			} else if (opponent.getHero().getId() == entity.getId()) {
 				zone = Zones.OPPONENT_HERO;
+			} else if (local.getHero().getWeapon().getId() == entity.getId()) {
+				zone = Zones.LOCAL_WEAPON;
+			} else if (opponent.getHero().getWeapon().getId() == entity.getId()) {
+				zone = Zones.OPPONENT_WEAPON;
 			}
 		} else if (entity instanceof Player) {
 			if (local.getId() == entity.getId()) {
 				zone = Zones.LOCAL_PLAYER;
 			} else if (opponent.getId() == entity.getId()) {
 				zone = Zones.OPPONENT_PLAYER;
-			}
-		} else if (entity instanceof Weapon) {
-			if (local.getHero().getWeapon().getId() == entity.getId()) {
-				zone = Zones.LOCAL_WEAPON;
-			} else if (opponent.getHero().getWeapon().getId() == entity.getId()) {
-				zone = Zones.OPPONENT_WEAPON;
 			}
 		} else if (entity instanceof Secret) {
 			// TODO: Deal with secret "locations"
