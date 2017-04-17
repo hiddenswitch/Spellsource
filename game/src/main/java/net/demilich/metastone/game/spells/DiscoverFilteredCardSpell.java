@@ -17,14 +17,14 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class DiscoverFilteredCardSpell extends Spell {
-	
+
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(DiscoverFilteredCardSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.SPELL, spell);
 		return new SpellDesc(arguments);
 	}
-	
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -46,7 +46,7 @@ public class DiscoverFilteredCardSpell extends Spell {
 						result.addCard(card);
 					}
 				}
-				
+
 				if (!result.isEmpty()) {
 					discoverCards.addCard(result.getRandom());
 				}
@@ -59,7 +59,7 @@ public class DiscoverFilteredCardSpell extends Spell {
 				}
 			}
 			discoverCards = new CardCollectionImpl();
-			
+
 			for (int i = 0; i < count; i++) {
 				if (!result.isEmpty()) {
 					Card card = null;
@@ -72,11 +72,9 @@ public class DiscoverFilteredCardSpell extends Spell {
 					}
 				}
 			}
-			
 		}
-		
 		if (!discoverCards.isEmpty()) {
-			SpellUtils.castChildSpell(context, player, SpellUtils.getDiscover(context, player, desc, discoverCards).getSpell(), source, target);
+			SpellUtils.castChildSpell(context, player, SpellUtils.getDiscover(context, player, desc, discoverCards.getCopy()).getSpell(), source, target);
 		}
 	}
 

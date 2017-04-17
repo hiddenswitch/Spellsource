@@ -131,7 +131,7 @@ public abstract class Card extends Entity {
 		copy.getAttributes().remove(Attribute.ATTACK_BONUS);
 		copy.getAttributes().remove(Attribute.HP_BONUS);
 		copy.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
-		copy.setLocation(EntityLocation.NONE);
+		copy.setEntityLocation(EntityLocation.NONE);
 		return copy;
 	}
 

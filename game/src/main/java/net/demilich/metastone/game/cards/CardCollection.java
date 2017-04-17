@@ -93,4 +93,10 @@ public interface CardCollection extends Iterable<Card> {
 	void sortByName();
 
 	List<Card> toList();
+
+	default CardCollection getCopy() {
+		CardCollection copiedCards = new CardCollectionImpl();
+		toList().stream().map(Card::getCopy).forEach(copiedCards::addCard);
+		return copiedCards;
+	};
 }

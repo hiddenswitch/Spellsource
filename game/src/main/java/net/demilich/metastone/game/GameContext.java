@@ -649,13 +649,25 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	}
 
 	public String toLongString() {
-		StringBuilder builder = new StringBuilder("GameContext hashCode: " + hashCode() + "\nPlayer: ");
+		StringBuilder builder = new StringBuilder("GameContext hashCode: " + hashCode() + "\n");
+		if (getTriggerManager().getCurrentEvent() != null) {
+			builder.append("\nCurrent event:\n");
+			builder.append('\t');
+			builder.append(getTriggerManager().getCurrentEvent());
+			builder.append('\n');
+		}
+		if (getLogic().getCurrentAction() != null) {
+			builder.append("\nCurrent action:\n");
+			builder.append('\t');
+			builder.append(getLogic().getCurrentAction());
+			builder.append('\n');
+		}
 		for (Player player : getPlayers()) {
 			if (player == null) {
 				builder.append("(null player)\n");
 				continue;
 			}
-			builder.append(player.getName());
+			builder.append("Player " + player.getName() + "\n");
 			builder.append(" Mana: ");
 			builder.append(player.getMana());
 			builder.append('/');
@@ -674,6 +686,18 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 			for (Card card : player.getHand()) {
 				builder.append('\t');
 				builder.append(card);
+				builder.append('\n');
+			}
+			builder.append("Set aside:\n");
+			for (Entity entity : player.getSetAsideZone()) {
+				builder.append('\t');
+				builder.append(entity);
+				builder.append('\n');
+			}
+			builder.append("Graveyard:\n");
+			for (Entity entity : player.getGraveyard()) {
+				builder.append('\t');
+				builder.append(entity);
 				builder.append('\n');
 			}
 			builder.append("Secrets:\n");

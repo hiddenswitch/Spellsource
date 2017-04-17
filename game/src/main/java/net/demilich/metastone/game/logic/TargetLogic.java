@@ -110,9 +110,10 @@ public class TargetLogic implements Serializable {
 			return cardResult;
 		}
 
-		logger.error("Id " + targetId + " not found!");
-		logger.error(context.toString());
-		logger.error(context.getEnvironment().toString());
+
+		System.err.println("Id " + targetId + " not found!");
+		System.err.println(context.toLongString());
+		System.err.println(context.getEnvironment().toString());
 		throw new NullPointerException("Target not found exception: " + targetKey);
 	}
 

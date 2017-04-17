@@ -13,6 +13,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 public abstract class Actor extends Entity {

@@ -36,8 +36,8 @@ public class ReceiveCardSpell extends Spell {
 					card = context.getCardById(replacementCard);
 				}
 				if (card != null) {
-					Card clone = card.getCopy();
-					context.getLogic().receiveCard(player.getId(), clone);
+					Card copy = card.getCopy();
+					context.getLogic().receiveCard(player.getId(), copy);
 				}
 			}
 		} else {
