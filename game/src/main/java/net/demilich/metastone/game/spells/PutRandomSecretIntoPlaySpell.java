@@ -6,6 +6,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.cards.SecretCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -15,10 +16,10 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 public class PutRandomSecretIntoPlaySpell extends Spell {
 
 	private CardCollection findSecretCards(CardCollection cardCollection) {
-		CardCollection secretCards = new CardCollection();
+		CardCollection secretCards = new CardCollectionImpl();
 		for (Card card : cardCollection) {
 			if (card.hasAttribute(Attribute.SECRET)) {
-				secretCards.add(card);
+				secretCards.addCard(card);
 			}
 		}
 		return secretCards;

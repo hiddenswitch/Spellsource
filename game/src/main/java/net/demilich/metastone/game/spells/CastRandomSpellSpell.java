@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.cards.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,12 +14,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.ChooseOneCard;
-import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.CardRevealedEvent;
 import net.demilich.metastone.game.events.OverloadEvent;
@@ -53,10 +48,10 @@ public class CastRandomSpellSpell extends Spell {
 		if (cardSource != null) {
 			spells = cardSource.getCards(context, player);
 		}
-		CardCollection filteredSpells = new CardCollection();
+		CardCollection filteredSpells = new CardCollectionImpl();
 		for (Card spell : spells) {
 			if (filter == null || filter.matches(context, player, spell)) {
-				filteredSpells.add(spell);
+				filteredSpells.addCard(spell);
 			}
 		}
 		// Straight up insane.

@@ -49,7 +49,7 @@ public class LocalDeckProxy extends Proxy<GameNotification> implements DeckEdito
 	public boolean addCardToDeck(Card card) {
 		boolean result = activeDeckValidator.canAddCardToDeck(card, activeDeck);
 		if (result) {
-			activeDeck.getCards().add(card);
+			activeDeck.getCards().addCard(card);
 		}
 		return result;
 	}

@@ -3,11 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -20,18 +16,18 @@ public class SummonRandomMinionFilteredSpell extends Spell {
 		CardCollection relevantMinions = null;
 		if (cardSource != null) {
 			CardCollection allCards = cardSource.getCards(context, player);
-			relevantMinions = new CardCollection();
+			relevantMinions = new CardCollectionImpl();
 			for (Card card : allCards) {
 				if (card.getCardType().isCardType(CardType.MINION) && (cardFilter == null || cardFilter.matches(context, player, card))) {
-					relevantMinions.add(card);
+					relevantMinions.addCard(card);
 				}
 			}
 		} else {
 			CardCollection allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
-			relevantMinions = new CardCollection();
+			relevantMinions = new CardCollectionImpl();
 			for (Card card : allMinions) {
 				if (cardFilter == null || cardFilter.matches(context, player, card)) {
-					relevantMinions.add(card);
+					relevantMinions.addCard(card);
 				}
 			}
 		}

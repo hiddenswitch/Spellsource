@@ -8,6 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -35,29 +36,29 @@ public class DiscoverFilteredCardSpell extends Spell {
 			cards = cardSource.getCards(context, player);
 		}
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
-		CardCollection discoverCards = new CardCollection();
+		CardCollection discoverCards = new CardCollectionImpl();
 
 		if (cardFilters != null) {
 			for (EntityFilter filter : cardFilters) {
-				CardCollection result = new CardCollection();
+				CardCollection result = new CardCollectionImpl();
 				for (Card card : cards) {
 					if (filter == null || filter.matches(context, player, card)) {
-						result.add(card);
+						result.addCard(card);
 					}
 				}
 				
 				if (!result.isEmpty()) {
-					discoverCards.add(result.getRandom());
+					discoverCards.addCard(result.getRandom());
 				}
 			}
 		} else {
-			CardCollection result = new CardCollection();
+			CardCollection result = new CardCollectionImpl();
 			for (Card card : cards) {
 				if (cardFilter == null || cardFilter.matches(context, player, card)) {
-					result.add(card);
+					result.addCard(card);
 				}
 			}
-			discoverCards = new CardCollection();
+			discoverCards = new CardCollectionImpl();
 			
 			for (int i = 0; i < count; i++) {
 				if (!result.isEmpty()) {
@@ -67,7 +68,7 @@ public class DiscoverFilteredCardSpell extends Spell {
 						result.remove(card);
 					} while (discoverCards.containsCard(card));
 					if (card != null) {
-						discoverCards.add(card);
+						discoverCards.addCard(card);
 					}
 				}
 			}

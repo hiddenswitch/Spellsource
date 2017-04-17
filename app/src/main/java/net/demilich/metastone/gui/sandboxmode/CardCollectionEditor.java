@@ -1,10 +1,7 @@
 package net.demilich.metastone.gui.sandboxmode;
 
-import com.hiddenswitch.minionate.Client;
-import com.hiddenswitch.proto3.net.client.models.CardRecord;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,10 +12,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.*;
 
 public class CardCollectionEditor extends SandboxEditor {
 
@@ -101,9 +95,9 @@ public class CardCollectionEditor extends SandboxEditor {
 	}
 
 	private void handleOkButton(ActionEvent actionEvent) {
-		CardCollection changedCollection = new CardCollection();
+		CardCollection changedCollection = new CardCollectionImpl();
 		for (Card card : editableListView.getItems()) {
-			changedCollection.add(card);
+			changedCollection.addCard(card);
 		}
 		listener.onFinishedEditing(changedCollection);
 		this.getScene().getWindow().hide();

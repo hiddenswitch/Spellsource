@@ -7,9 +7,7 @@ import net.demilich.metastone.game.*;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -31,7 +29,6 @@ import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Attr;
 
 import java.io.Serializable;
 import java.util.*;
@@ -525,23 +522,21 @@ public class GameLogic implements Cloneable, Serializable {
 
 	@Suspendable
 	public void destroy(Actor... targets) {
-		int[] boardPositions = new int[targets.length];
+		// Reverse the targets
+		Map<Actor, EntityLocation> previousLocation = new HashMap<>();
 
-		for (int i = 0; i < targets.length; i++) {
-			Actor target = targets[i];
+		List<Actor> reversed = new ArrayList<>(Arrays.asList(targets));
+		reversed.sort((a, b) -> -Integer.compare(a.getLocation().getIndex(), b.getLocation().getIndex()));
+
+		for (Actor target : reversed) {
 			removeSpellTriggers(target, false);
 			Player owner = context.getPlayer(target.getOwner());
-			context.getPlayer(target.getOwner()).getGraveyard().add(target);
-
-			int boardPosition = owner.getMinions().indexOf(target);
-			boardPositions[i] = boardPosition;
-		}
-
-		for (int i = 0; i < targets.length; i++) {
-			Actor target = targets[i];
+			previousLocation.put(target, target.getLocation());
 			log("{} is destroyed", target);
-			Player owner = context.getPlayer(target.getOwner());
-			owner.getMinions().remove(target);
+
+			final EntityZone zone = owner.getZone(target.getLocation().getZone());
+			zone.remove(target);
+			owner.getGraveyard().add(target);
 		}
 
 		for (int i = 0; i < targets.length; i++) {
@@ -565,7 +560,7 @@ public class GameLogic implements Cloneable, Serializable {
 					break;
 			}
 
-			resolveDeathrattles(owner, target, boardPositions[i]);
+			resolveDeathrattles(owner, target, previousLocation.get(target).getIndex());
 
 		}
 		for (Actor target : targets) {
@@ -605,7 +600,7 @@ public class GameLogic implements Cloneable, Serializable {
 	public void discardCard(Player player, Card card) {
 		logger.debug("{} discards {}", player.getName(), card);
 		// only a 'real' discard should fire a DiscardEvent
-		if (card.getLocation() == CardLocation.HAND) {
+		if (card.getCardLocation() == CardLocation.HAND) {
 			context.fireGameEvent(new DiscardEvent(context, player.getId(), card));
 		}
 
@@ -1281,7 +1276,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 		// put the networkRequestMulligan cards back in the deck
 		for (Card discardedCard : discardedCards) {
-			player.getDeck().add(discardedCard);
+			player.getDeck().addCard(discardedCard);
 		}
 
 		for (Card starterCard : starterCards) {
@@ -1443,7 +1438,10 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 
 			log("{} receives card {}", player.getName(), card);
-			hand.add(card);
+			if (!card.getLocation().equals(EntityLocation.NONE)) {
+				player.getZone(card.getLocation().getZone()).remove(card);
+			}
+			hand.addCard(card);
 			card.setLocation(CardLocation.HAND);
 			CardType sourceType = null;
 			if (source instanceof Card) {
@@ -1512,7 +1510,9 @@ public class GameLogic implements Cloneable, Serializable {
 		minion.setAttribute(Attribute.DESTROYED);
 
 		Player owner = context.getPlayer(minion.getOwner());
-		owner.getMinions().remove(minion);
+		if (!minion.getLocation().getZone().equals(PlayerZones.NONE)) {
+			owner.getZone(minion.getLocation().getZone()).remove(minion);
+		}
 		if (peacefully) {
 			owner.getSetAsideZone().add(minion);
 		} else {
@@ -2032,6 +2032,7 @@ public class GameLogic implements Cloneable, Serializable {
 			currentWeapon = player.getHero().getWeapon();
 
 			if (currentWeapon != null) {
+				player.getWeaponZone().remove(currentWeapon);
 				player.getSetAsideZone().add(currentWeapon);
 			}
 
@@ -2093,7 +2094,9 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	private static boolean hasPlayerLost(Player player) {
-		return player.getHero().getHp() < 1 || player.getHero().hasAttribute(Attribute.DESTROYED)
+		return player.getHero() == null
+				|| player.getHero().getHp() < 1
+				|| player.getHero().hasAttribute(Attribute.DESTROYED)
 				|| player.hasAttribute(Attribute.DESTROYED);
 	}
 }

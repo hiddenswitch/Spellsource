@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -19,7 +20,7 @@ public class ReceiveCardAndDoSomethingSpell extends Spell {
 		context.getLogic().receiveCard(player.getId(), card);
 		// card may be null (i.e. try to draw from deck, but already in
 		// fatigue)
-		if (card == null || card.getLocation() == CardLocation.GRAVEYARD) {
+		if (card == null || card.getCardLocation() == CardLocation.GRAVEYARD) {
 			return;
 		}
 		context.setEventCard(card);
@@ -35,11 +36,11 @@ public class ReceiveCardAndDoSomethingSpell extends Spell {
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		if (cardFilter != null) {
 			CardCollection cards = CardCatalogue.query(context.getDeckFormat());
-			CardCollection result = new CardCollection();
+			CardCollection result = new CardCollectionImpl();
 			String replacementCard = (String) desc.get(SpellArg.CARD);
 			for (Card card : cards) {
 				if (cardFilter.matches(context, player, card)) {
-					result.add(card);
+					result.addCard(card);
 				}
 			}
 			for (int i = 0; i < count; i++) {

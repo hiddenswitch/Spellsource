@@ -7,6 +7,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -34,10 +35,10 @@ public class DiscardSpell extends Spell {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		int numberOfCards = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 
-		CardCollection discardableCards = new CardCollection();
+		CardCollection discardableCards = new CardCollectionImpl();
 		for (Card card : player.getHand()) {
 			if (cardFilter == null || cardFilter.matches(context, player, card)) {
-				discardableCards.add(card);
+				discardableCards.addCard(card);
 			}
 		}
 		

@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells.desc.source;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
 import java.io.Serializable;
@@ -34,7 +35,7 @@ public abstract class CardSource implements Serializable {
 			providingPlayer = context.getActivePlayer();
 			break;
 		case BOTH:
-			CardCollection cards = new CardCollection();
+			CardCollection cards = new CardCollectionImpl();
 			for (Player selectedPlayer : context.getPlayers()) {
 				cards.addAll(this.match(context, selectedPlayer));
 			}

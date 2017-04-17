@@ -109,7 +109,7 @@ public class HearthPwnImporter implements IDeckImporter {
 		Deck deck = new Deck(heroClass);
 		deck.setName(deckName);
 		for (Card card : cards) {
-			deck.getCards().add(card);
+			deck.getCards().addCard(card);
 		}
 		if (!deck.isComplete()) {
 			return null;

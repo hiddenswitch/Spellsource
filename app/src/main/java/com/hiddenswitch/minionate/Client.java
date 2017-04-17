@@ -6,16 +6,13 @@ import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 import com.hiddenswitch.proto3.net.client.models.*;
-import com.sun.javafx.collections.ObservableListWrapper;
 import io.vertx.core.json.JsonObject;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.cards.CardParser;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -86,7 +83,7 @@ public class Client {
 		DeckWithId deck = new DeckWithId(collection.getId());
 		deck.setName(collection.getName());
 		deck.setHeroClass(HeroClass.valueOf(collection.getHeroClass()));
-		collection.getInventory().stream().map(this::parseCard).forEach(deck.getCards()::add);
+		collection.getInventory().stream().map(this::parseCard).forEach(deck.getCards()::addCard);
 		return deck;
 	}
 

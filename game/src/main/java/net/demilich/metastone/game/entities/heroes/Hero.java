@@ -6,15 +6,17 @@ import java.util.Map;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.targeting.PlayerZones;
 
 public class Hero extends Actor {
-
 	private HeroClass heroClass;
-	private HeroPower heroPower;
-	private Weapon weapon;
+	private EntityZone<HeroPower> heroPowerZone = new EntityZone<>(getOwner(), PlayerZones.HERO_POWER);
+	private EntityZone<Weapon> weaponZone = new EntityZone<>(getOwner(), PlayerZones.WEAPON);
 
 	public Hero(HeroCard heroCard, HeroPower heroPower) {
 		super(heroCard);
@@ -24,27 +26,24 @@ public class Hero extends Actor {
 	}
 
 	public void activateWeapon(boolean active) {
-		if (weapon != null) {
-			weapon.setActive(active);
+		if (getWeapon() != null) {
+			getWeapon().setActive(active);
 		}
 	}
 
 	@Override
 	public Hero clone() {
 		Hero clone = (Hero) super.clone();
-		if (weapon != null) {
-			clone.setWeapon(getWeapon().clone());
-		}
-		
-		clone.setHeroPower((HeroPower) getHeroPower().clone());
+		clone.heroPowerZone = heroPowerZone.clone();
+		clone.weaponZone = weaponZone.clone();
 		return clone;
 	}
 
 	@Override
 	public int getAttack() {
 		int attack = super.getAttack();
-		if (weapon != null && weapon.isActive()) {
-			attack += weapon.getWeaponDamage();
+		if (getWeapon() != null && getWeapon().isActive()) {
+			attack += getWeapon().getWeaponDamage();
 		}
 		return attack;
 	}
@@ -72,11 +71,19 @@ public class Hero extends Actor {
 	}
 
 	public HeroPower getHeroPower() {
-		return heroPower;
+		if (heroPowerZone.size() > 0) {
+			return heroPowerZone.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	public Weapon getWeapon() {
-		return weapon;
+		if (weaponZone.size() > 0) {
+			return weaponZone.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	public void modifyArmor(int armor) {
@@ -84,27 +91,50 @@ public class Hero extends Actor {
 		int newArmor = Math.max(getArmor() + armor, 0);
 		setAttribute(Attribute.ARMOR, newArmor);
 	}
-	
+
 	public void setHeroClass(HeroClass heroClass) {
 		this.heroClass = heroClass;
 	}
 
 	public void setHeroPower(HeroPower heroPower) {
-		this.heroPower = heroPower;
+		if (heroPowerZone.size() > 0) {
+			heroPowerZone.remove(0);
+		}
 		heroPower.setOwner(getOwner());
+		this.heroPowerZone.add(heroPower);
+
 	}
 
 	@Override
 	public void setOwner(int ownerIndex) {
 		super.setOwner(ownerIndex);
-		heroPower.setOwner(ownerIndex);
-	}
-
-	public void setWeapon(Weapon weapon) {
-		this.weapon = weapon;
-		if (weapon != null) {
-			weapon.setOwner(getOwner());
+		if (heroPowerZone.getPlayer() == -1) {
+			heroPowerZone.setPlayer(ownerIndex);
+		}
+		if (weaponZone.getPlayer() == -1) {
+			weaponZone.setPlayer(ownerIndex);
+		}
+		getHeroPower().setOwner(ownerIndex);
+		if (getWeapon() != null) {
+			getWeapon().setOwner(ownerIndex);
 		}
 	}
 
+	public void setWeapon(Weapon weapon) {
+		if (weaponZone.size() > 0) {
+			weaponZone.remove(0);
+		}
+		if (weapon != null) {
+			weapon.setOwner(getOwner());
+			this.weaponZone.add(weapon);
+		}
+	}
+
+	public EntityZone<HeroPower> getHeroPowerZone() {
+		return heroPowerZone;
+	}
+
+	public EntityZone getWeaponZone() {
+		return weaponZone;
+	}
 }

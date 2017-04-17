@@ -43,8 +43,8 @@ public class ConfigGeneratorForCard implements PairFlatMapFunction<Card, TestCon
 
 		// Add two copies of the card under test to the test deck
 		if (card != null) {
-			testDeck.getCards().add(card);
-			testDeck.getCards().add(card);
+			testDeck.getCards().addCard(card);
+			testDeck.getCards().addCard(card);
 		}
 
 		PlayerConfig testPlayerConfig = new PlayerConfig(testDeck, new GameStateValueBehaviour(FeatureVector.getFittest(), "testPlayer "));

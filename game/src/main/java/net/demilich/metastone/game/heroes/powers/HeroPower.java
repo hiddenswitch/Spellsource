@@ -6,7 +6,9 @@ import net.demilich.metastone.game.actions.HeroPowerAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.targeting.CardLocation;
+import net.demilich.metastone.game.targeting.PlayerZones;
 
 public class HeroPower extends SpellCard {
 

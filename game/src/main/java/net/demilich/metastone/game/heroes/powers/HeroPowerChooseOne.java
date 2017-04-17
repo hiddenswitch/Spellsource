@@ -24,7 +24,7 @@ public class HeroPowerChooseOne extends HeroPower implements IChooseOneCard {
 
 	private SpellCard getCard(String cardId) {
 		SpellCard card = (SpellCard) CardCatalogue.getCardById(cardId);
-		card.setLocation(getLocation());
+		card.setLocation(getCardLocation());
 		card.setOwner(getOwner());
 		card.setId(getId());
 		return card;

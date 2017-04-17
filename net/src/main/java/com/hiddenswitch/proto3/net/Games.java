@@ -16,6 +16,7 @@ import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
@@ -91,7 +92,7 @@ public interface Games {
 				.id(Zones.LOCAL_HAND)
 				.entities(localHand.stream().map(Entity::getId).collect(toList())));
 
-		for (Tuple<Integer, List<Minion>> minionTuple : Arrays.asList(new Tuple<>(Zones.LOCAL_BATTLEFIELD, local.getMinions()), new Tuple<>(Zones.OPPONENT_BATTLEFIELD, opponent.getMinions()))) {
+		for (Tuple<Integer, EntityZone<Minion>> minionTuple : Arrays.asList(new Tuple<>(Zones.LOCAL_BATTLEFIELD, local.getMinions()), new Tuple<>(Zones.OPPONENT_BATTLEFIELD, opponent.getMinions()))) {
 			int zone = minionTuple.getFirst();
 			List<Minion> battlefield = minionTuple.getSecond();
 			List<Entity> minions = new ArrayList<>();

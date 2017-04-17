@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells.desc.source;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -21,13 +22,13 @@ public class GraveyardSource extends CardSource implements Serializable {
 
     @Override
     protected CardCollection match(GameContext context, Player player) {
-        CardCollection deadMinions = new CardCollection();
+        CardCollection deadMinions = new CardCollectionImpl();
         ArrayList<Entity> graveyard = new ArrayList<>();
         graveyard.addAll(player.getGraveyard());
         for (Entity deadEntity : graveyard) {
             if (deadEntity.getEntityType() == EntityType.MINION) {
                 Minion graveMinion = (Minion) deadEntity;
-                deadMinions.add(graveMinion.getSourceCard());
+                deadMinions.addCard(graveMinion.getSourceCard());
             }
         }
         return deadMinions.clone();

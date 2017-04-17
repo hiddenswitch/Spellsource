@@ -27,17 +27,17 @@ public class CardCatalogue {
 
 	private static Logger logger = LoggerFactory.getLogger(CardCatalogue.class);
 
-	private final static CardCollection cards = new CardCollection();
+	private final static CardCollection cards = new CardCollectionImpl();
 	private final static Map<String, CardCatalogueRecord> records = new HashMap<>();
 
 	public static void add(Card card) {
-		cards.add(card);
+		cards.addCard(card);
 	}
 
 	public static CardCollection getAll() {
-		CardCollection result = new CardCollection();
+		CardCollection result = new CardCollectionImpl();
 		for (Card card : cards) {
-			result.add(card);
+			result.addCard(card.clone());
 		}
 		return result;
 	}
@@ -99,7 +99,7 @@ public class CardCatalogue {
 	}
 
 	public static CardCollection query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass, Attribute tag, HeroClass actualHeroClass) {
-		CardCollection result = new CardCollection();
+		CardCollection result = new CardCollectionImpl();
 		for (Card card : cards) {
 			if (!deckFormat.isInFormat(card)) {
 				continue;
@@ -123,7 +123,7 @@ public class CardCatalogue {
 			if (tag != null && !card.hasAttribute(tag)) {
 				continue;
 			}
-			result.add(card.clone());
+			result.addCard(card.clone());
 		}
 
 		return result;
@@ -146,13 +146,13 @@ public class CardCatalogue {
 	}
 
 	public static CardCollection query(DeckFormat deckFormat, Predicate<Card> filter) {
-		CardCollection result = new CardCollection();
+		CardCollection result = new CardCollectionImpl();
 		for (Card card : cards) {
 			if (deckFormat != null && !deckFormat.isInFormat(card)) {
 				continue;
 			}
 			if (filter.test(card)) {
-				result.add(card);
+				result.addCard(card.clone());
 			}
 		}
 		return result;

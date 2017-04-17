@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -20,11 +21,11 @@ public class ReceiveCardSpell extends Spell {
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		if (cardFilter != null) {
 			CardCollection cards = CardCatalogue.query(context.getDeckFormat());
-			CardCollection result = new CardCollection();
+			CardCollection result = new CardCollectionImpl();
 			String replacementCard = (String) desc.get(SpellArg.CARD);
 			for (Card card : cards) {
 				if (cardFilter.matches(context, player, card)) {
-					result.add(card);
+					result.addCard(card);
 				}
 			}
 			for (int i = 0; i < count; i++) {
@@ -35,14 +36,14 @@ public class ReceiveCardSpell extends Spell {
 					card = context.getCardById(replacementCard);
 				}
 				if (card != null) {
-					Card clone = card.clone();
+					Card clone = card.getCopy();
 					context.getLogic().receiveCard(player.getId(), clone);
 				}
 			}
 		} else {
 			for (Card card : SpellUtils.getCards(context, desc)) {
 				for (int i = 0; i < count; i++) {
-					context.getLogic().receiveCard(player.getId(), card);
+					context.getLogic().receiveCard(player.getId(), card.getCopy());
 				}
 			}
 		}
