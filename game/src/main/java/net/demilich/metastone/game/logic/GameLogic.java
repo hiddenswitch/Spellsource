@@ -550,7 +550,13 @@ public class GameLogic implements Cloneable, Serializable {
 					applyAttribute(context.getPlayer(target.getOwner()), Attribute.DESTROYED);
 					break;
 				case MINION:
-					destroyMinion((Minion) target);
+					context.getEnvironment().put(Environment.KILLED_MINION, target.getReference());
+					KillEvent killEvent = new KillEvent(context, target, previousLocation.get(target).getIndex());
+					context.fireGameEvent(killEvent);
+					context.getEnvironment().remove(Environment.KILLED_MINION);
+
+					target.setAttribute(Attribute.DESTROYED);
+					target.setAttribute(Attribute.DIED_ON_TURN, context.getTurn());
 					break;
 				case WEAPON:
 					destroyWeapon((Weapon) target);
@@ -569,17 +575,6 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		context.fireGameEvent(new BoardChangedEvent(context));
-	}
-
-	@Suspendable
-	private void destroyMinion(Minion minion) {
-		context.getEnvironment().put(Environment.KILLED_MINION, minion.getReference());
-		KillEvent killEvent = new KillEvent(context, minion);
-		context.fireGameEvent(killEvent);
-		context.getEnvironment().remove(Environment.KILLED_MINION);
-
-		minion.setAttribute(Attribute.DESTROYED);
-		minion.setAttribute(Attribute.DIED_ON_TURN, context.getTurn());
 	}
 
 	@Suspendable
@@ -1441,6 +1436,7 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 
 			log("{} receives card {}", player.getName(), card);
+			CardLocation oldLocation = card.getCardLocation();
 			if (!card.getEntityLocation().equals(EntityLocation.NONE)) {
 				player.getZone(card.getEntityLocation().getZone()).remove(card);
 			}
@@ -1451,7 +1447,7 @@ public class GameLogic implements Cloneable, Serializable {
 				Card sourceCard = (Card) source;
 				sourceType = sourceCard.getCardType();
 			}
-			context.fireGameEvent(new DrawCardEvent(context, playerId, card, sourceType, drawn));
+			context.fireGameEvent(new DrawCardEvent(context, playerId, card, sourceType, oldLocation, drawn));
 		} else {
 			log("{} has too many cards on his hand, card destroyed: {}", player.getName(), card);
 			discardCard(player, card);
@@ -1582,7 +1578,7 @@ public class GameLogic implements Cloneable, Serializable {
 		hand.replace(oldCard, newCard);
 		removeCard(playerId, oldCard);
 		newCard.setLocation(CardLocation.HAND);
-		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, null, false));
+		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, null, oldCard.getCardLocation(), false));
 	}
 
 	@Suspendable
@@ -2049,7 +2045,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 	protected class PreSummon {
 		private Card source;
-		private boolean myResult;
+		private boolean failed;
 		private int playerId;
 		private Minion minion;
 		private int index;
@@ -2063,7 +2059,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		public boolean failed() {
-			return myResult;
+			return failed;
 		}
 
 		public Player getPlayer() {
@@ -2075,7 +2071,7 @@ public class GameLogic implements Cloneable, Serializable {
 			player = context.getPlayer(playerId);
 			if (!canSummonMoreMinions(player)) {
 				log("{} cannot summon any more minions, {} is destroyed", player.getName(), minion);
-				myResult = true;
+				failed = true;
 				return this;
 			}
 			minion.setId(getIdFactory().generateId());
@@ -2093,7 +2089,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 			context.fireGameEvent(new BeforeSummonEvent(context, minion, source));
 			context.fireGameEvent(new BoardChangedEvent(context));
-			myResult = false;
+			failed = false;
 			return this;
 		}
 	}

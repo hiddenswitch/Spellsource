@@ -4,6 +4,7 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.targeting.IdFactory;
 
 public class Minion extends Actor {
 
@@ -37,4 +38,21 @@ public class Minion extends Actor {
 		setBaseHp(baseHp);
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+
+		if (!(other instanceof Minion)) {
+			return false;
+		}
+
+		Minion rhs = (Minion) other;
+		if (getId() == IdFactory.UNASSIGNED || ((Minion) other).getId() == IdFactory.UNASSIGNED) {
+			return super.equals(other);
+		}
+
+		return this.getId() == rhs.getId();
+	}
 }

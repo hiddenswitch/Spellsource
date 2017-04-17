@@ -121,7 +121,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 					.setMaxWebsocketFrameSize(1500));
 
 			websocketServer.websocketHandler(socket -> {
-				if (!socket.uri().startsWith(Games.WEBSOCKET_PATH)) {
+				if (!socket.uri().startsWith("/" + Games.WEBSOCKET_PATH)) {
 					throw new RuntimeException();
 				}
 
