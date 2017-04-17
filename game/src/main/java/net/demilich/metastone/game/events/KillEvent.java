@@ -6,10 +6,12 @@ import net.demilich.metastone.game.entities.Entity;
 public class KillEvent extends GameEvent {
 
 	private final Entity victim;
+	private final int formerBoardPosition;
 
-	public KillEvent(GameContext context, Entity victim) {
+	public KillEvent(GameContext context, Entity victim, int formerBoardPosition) {
 		super(context, victim.getOwner(), -1);
 		this.victim = victim;
+		this.formerBoardPosition = formerBoardPosition;
 	}
 	
 	@Override
@@ -26,4 +28,7 @@ public class KillEvent extends GameEvent {
 		return victim;
 	}
 
+	public int getFormerBoardPosition() {
+		return formerBoardPosition;
+	}
 }

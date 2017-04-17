@@ -4,8 +4,13 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**eventTarget** | [**Entity**](Entity.md) |  |  [optional]
+**eventSource** | [**Entity**](Entity.md) |  |  [optional]
+**targetPlayerId** | **Integer** |  |  [optional]
+**sourcePlayerId** | **Integer** |  |  [optional]
+**description** | **String** |  |  [optional]
 **eventType** | [**EventTypeEnum**](#EventTypeEnum) | The game event type corresponding to this game event.  |  [optional]
-**afterPhysicalAttack** | [**GameEventAfterPhysicalAttack**](GameEventAfterPhysicalAttack.md) |  |  [optional]
+**afterPhysicalAttack** | [**PhysicalAttackEvent**](PhysicalAttackEvent.md) |  |  [optional]
 **drawCard** | [**GameEventDrawCard**](GameEventDrawCard.md) |  |  [optional]
 **preDamage** | [**GameEventPreDamage**](GameEventPreDamage.md) |  |  [optional]
 **silence** | [**GameEventSilence**](GameEventSilence.md) |  |  [optional]
@@ -23,13 +28,13 @@ Name | Type | Description | Notes
 **targetAcquisition** | [**GameEventTargetAcquisition**](GameEventTargetAcquisition.md) |  |  [optional]
 **damage** | [**GameEventDamage**](GameEventDamage.md) |  |  [optional]
 **weaponEquipped** | [**GameEventWeaponDestroyed**](GameEventWeaponDestroyed.md) |  |  [optional]
-**physicalAttack** | [**GameEventAfterPhysicalAttack**](GameEventAfterPhysicalAttack.md) |  |  [optional]
-**overload** | [**GameEventCardPlayed**](GameEventCardPlayed.md) |  |  [optional]
+**physicalAttack** | [**PhysicalAttackEvent**](PhysicalAttackEvent.md) |  |  [optional]
+**overload** | [**GameEventOverload**](GameEventOverload.md) |  |  [optional]
 **heal** | [**GameEventHeal**](GameEventHeal.md) |  |  [optional]
 **secretRevealed** | [**GameEventSecretRevealed**](GameEventSecretRevealed.md) |  |  [optional]
-**summon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
+**summon** | [**GameEventSummon**](GameEventSummon.md) |  |  [optional]
 **afterSpellCasted** | [**GameEventAfterSpellCasted**](GameEventAfterSpellCasted.md) |  |  [optional]
-**discard** | [**GameEventCardPlayed**](GameEventCardPlayed.md) |  |  [optional]
+**discard** | [**GameEventOverload**](GameEventOverload.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
 
 

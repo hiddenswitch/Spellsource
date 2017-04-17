@@ -45,6 +45,12 @@ public class EntityState  implements Serializable {
   @SerializedName("gold")
   private Boolean gold = null;
 
+  @SerializedName("boardPosition")
+  private Integer boardPosition = null;
+
+  @SerializedName("owner")
+  private Integer owner = null;
+
   @SerializedName("heroClass")
   private String heroClass = null;
 
@@ -208,6 +214,42 @@ public class EntityState  implements Serializable {
 
   public void setGold(Boolean gold) {
     this.gold = gold;
+  }
+
+  public EntityState boardPosition(Integer boardPosition) {
+    this.boardPosition = boardPosition;
+    return this;
+  }
+
+   /**
+   * Get boardPosition
+   * @return boardPosition
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getBoardPosition() {
+    return boardPosition;
+  }
+
+  public void setBoardPosition(Integer boardPosition) {
+    this.boardPosition = boardPosition;
+  }
+
+  public EntityState owner(Integer owner) {
+    this.owner = owner;
+    return this;
+  }
+
+   /**
+   * Get owner
+   * @return owner
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getOwner() {
+    return owner;
+  }
+
+  public void setOwner(Integer owner) {
+    this.owner = owner;
   }
 
   public EntityState heroClass(String heroClass) {
@@ -889,6 +931,8 @@ public class EntityState  implements Serializable {
     return Objects.equals(this.background, entityState.background) &&
         Objects.equals(this.portrait, entityState.portrait) &&
         Objects.equals(this.gold, entityState.gold) &&
+        Objects.equals(this.boardPosition, entityState.boardPosition) &&
+        Objects.equals(this.owner, entityState.owner) &&
         Objects.equals(this.heroClass, entityState.heroClass) &&
         Objects.equals(this.hp, entityState.hp) &&
         Objects.equals(this.durability, entityState.durability) &&
@@ -930,7 +974,7 @@ public class EntityState  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(background, portrait, gold, heroClass, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, pendingDestroy, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, secret, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana);
+    return Objects.hash(background, portrait, gold, boardPosition, owner, heroClass, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, pendingDestroy, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, secret, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana);
   }
 
   @Override
@@ -941,6 +985,8 @@ public class EntityState  implements Serializable {
     sb.append("    background: ").append(toIndentedString(background)).append("\n");
     sb.append("    portrait: ").append(toIndentedString(portrait)).append("\n");
     sb.append("    gold: ").append(toIndentedString(gold)).append("\n");
+    sb.append("    boardPosition: ").append(toIndentedString(boardPosition)).append("\n");
+    sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
     sb.append("    hp: ").append(toIndentedString(hp)).append("\n");
     sb.append("    durability: ").append(toIndentedString(durability)).append("\n");

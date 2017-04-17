@@ -268,9 +268,43 @@ definitions:
           type: 'integer'
         description:
           The indices of cards to discard in a mulligan.
+  PhysicalAttackEvent:
+    type: 'object'
+    properties:
+      attackerLocation:
+        $ref: '#/definitions/CardLocation'
+      defenderLocation:
+        $ref: '#/definitions/CardLocation'
+      attacker:
+        $ref: '#/definitions/Entity'
+      defender:
+        $ref: '#/definitions/Entity'
+      damageDealt:
+        type: 'integer'
+  CardLocation:
+    type: 'object'
+    properties:
+      zone:
+        type: 'integer'
+        default: 0
+        required: true
+      position:
+        type: 'integer'
+        default: 0
+        required: true
   GameEvent:
     type: 'object'
     properties:
+      eventTarget:
+        $ref: '#/definitions/Entity'
+      eventSource:
+        $ref: '#/definitions/Entity'
+      targetPlayerId:
+        type: 'integer'
+      sourcePlayerId:
+        type: 'integer'
+      description:
+        type: 'string'
       eventType:
         type: 'string'
         description: |
@@ -307,17 +341,12 @@ definitions:
           - 'WEAPON_DESTROYED'
           - 'WEAPON_EQUIPPED'
       afterPhysicalAttack:
-        type: 'object'
-        properties:
-          attacker:
-            $ref: '#/definitions/Entity'
-          defender:
-            $ref: '#/definitions/Entity'
-          damageDealt:
-            type: 'integer'
+        $ref: '#/definitions/PhysicalAttackEvent'
       drawCard:
         type: 'object'
         properties:
+          to:
+            $ref: '#/definitions/CardLocation'
           card:
             $ref: '#/definitions/Entity'
           drawn:
@@ -349,6 +378,8 @@ definitions:
       cardPlayed:
         type: 'object'
         properties:
+          location:
+            $ref: '#/definitions/CardLocation'
           card:
             $ref: '#/definitions/Entity'
       armorGained:
@@ -424,14 +455,7 @@ definitions:
           weapon:
             $ref: '#/definitions/Entity'
       physicalAttack:
-        type: 'object'
-        properties:
-          attacker:
-            $ref: '#/definitions/Entity'
-          defender:
-            $ref: '#/definitions/Entity'
-          damageDealt:
-            type: 'integer'
+        $ref: '#/definitions/PhysicalAttackEvent'
       overload:
         type: 'object'
         properties:
@@ -452,6 +476,10 @@ definitions:
       summon:
         type: 'object'
         properties:
+          from:
+            $ref: '#/definitions/CardLocation'
+          to:
+            $ref: '#/definitions/CardLocation'
           minion:
             $ref: '#/definitions/Entity'
           source:
@@ -471,6 +499,8 @@ definitions:
       kill:
         type: 'object'
         properties:
+          location:
+            $ref: '#/definitions/CardLocation'
           victim:
             $ref: '#/definitions/Entity'
   JavaSerializationObject:
@@ -549,6 +579,8 @@ definitions:
     properties:
       id:
         type: 'integer'
+        required: true
+        default: 0
       entities:
         type: 'array'
         items:
@@ -627,6 +659,8 @@ definitions:
     properties:
       id:
         type: 'integer'
+        required: true
+        default: -1
       cardId:
         type: 'string'
       entityType:
@@ -645,6 +679,10 @@ definitions:
             type: 'string'
           gold:
             type: 'boolean'
+          boardPosition:
+            type: 'integer'
+          owner:
+            type: 'integer'
           heroClass:
             type: 'string'
           hp:
