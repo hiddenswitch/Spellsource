@@ -67,7 +67,6 @@ public class Player extends Entity implements Serializable {
 	private Player(Player otherPlayer) {
 		this.setName(otherPlayer.getName());
 		this.deckName = otherPlayer.getDeckName();
-		this.setHero(otherPlayer.getHero().clone());
 		this.getAttributes().putAll(otherPlayer.getAttributes());
 		this.secrets.addAll(otherPlayer.secrets);
 		this.setId(otherPlayer.getId());
@@ -149,6 +148,7 @@ public class Player extends Entity implements Serializable {
 			// Check the graveyard
 			Optional<Entity> hero = getGraveyard().stream().filter(e -> e.getEntityType() == EntityType.HERO).findFirst();
 			if (hero.isPresent()) {
+				hero.get().setAttribute(Attribute.DESTROYED);
 				return (Hero) hero.get();
 			} else {
 				return null;
