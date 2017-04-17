@@ -85,10 +85,20 @@ public class TestBase {
 	}
 
 	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2) {
-		DeckFormat deckFormat = new DeckFormat();
-		for (CardSet set : CardSet.values()) {
-			deckFormat.addSet(set);
-		}
+		DeckFormat deckFormat = new DeckFormat().withCardSets(
+				CardSet.BASIC,
+				CardSet.CLASSIC,
+				CardSet.BLACKROCK_MOUNTAIN,
+				CardSet.GOBLINS_VS_GNOMES,
+				CardSet.LEAGUE_OF_EXPLORERS,
+				CardSet.MEAN_STREETS_OF_GADGETZHAN,
+				CardSet.NAXXRAMAS,
+				CardSet.ONE_NIGHT_IN_KARAZHAN,
+				CardSet.PROMO,
+				CardSet.REWARD,
+				CardSet.THE_GRAND_TOURNAMENT,
+				CardSet.THE_OLD_GODS
+		);
 		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(hero1, deckFormat), new TestBehaviour());
 		player1Config.setName("Player 1");
 		player1Config.setHeroCard(getHeroCardForClass(hero1));

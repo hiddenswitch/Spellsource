@@ -59,6 +59,7 @@ public class GameLogic implements Cloneable, Serializable {
 	private boolean loggingEnabled = true;
 	private final int MAX_HISTORY_ENTRIES = 100;
 	private ArrayDeque<String> debugHistory = new ArrayDeque<>();
+	private Stack<GameAction> currentActions = new Stack<>();
 
 	static {
 		immuneToSilence.add(Attribute.HP);
@@ -526,15 +527,15 @@ public class GameLogic implements Cloneable, Serializable {
 		Map<Actor, EntityLocation> previousLocation = new HashMap<>();
 
 		List<Actor> reversed = new ArrayList<>(Arrays.asList(targets));
-		reversed.sort((a, b) -> -Integer.compare(a.getLocation().getIndex(), b.getLocation().getIndex()));
+		reversed.sort((a, b) -> -Integer.compare(a.getEntityLocation().getIndex(), b.getEntityLocation().getIndex()));
 
 		for (Actor target : reversed) {
 			removeSpellTriggers(target, false);
 			Player owner = context.getPlayer(target.getOwner());
-			previousLocation.put(target, target.getLocation());
+			previousLocation.put(target, target.getEntityLocation());
 			log("{} is destroyed", target);
 
-			final EntityZone zone = owner.getZone(target.getLocation().getZone());
+			final EntityZone zone = owner.getZone(target.getEntityLocation().getZone());
 			zone.remove(target);
 			owner.getGraveyard().add(target);
 		}
@@ -1300,6 +1301,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 	@Suspendable
 	public void performGameAction(int playerId, GameAction action) {
+		currentActions.push(action);
 		if (isLoggingEnabled()) {
 			debugHistory.add(action.toString());
 		}
@@ -1322,6 +1324,7 @@ public class GameLogic implements Cloneable, Serializable {
 		if (action.getActionType() != ActionType.BATTLECRY) {
 			checkForDeadEntities();
 		}
+		currentActions.pop();
 	}
 
 	@Suspendable
@@ -1438,8 +1441,8 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 
 			log("{} receives card {}", player.getName(), card);
-			if (!card.getLocation().equals(EntityLocation.NONE)) {
-				player.getZone(card.getLocation().getZone()).remove(card);
+			if (!card.getEntityLocation().equals(EntityLocation.NONE)) {
+				player.getZone(card.getEntityLocation().getZone()).remove(card);
 			}
 			hand.addCard(card);
 			card.setLocation(CardLocation.HAND);
@@ -1510,8 +1513,8 @@ public class GameLogic implements Cloneable, Serializable {
 		minion.setAttribute(Attribute.DESTROYED);
 
 		Player owner = context.getPlayer(minion.getOwner());
-		if (!minion.getLocation().getZone().equals(PlayerZones.NONE)) {
-			owner.getZone(minion.getLocation().getZone()).remove(minion);
+		if (!minion.getEntityLocation().getZone().equals(PlayerZones.NONE)) {
+			owner.getZone(minion.getEntityLocation().getZone()).remove(minion);
 		}
 		if (peacefully) {
 			owner.getSetAsideZone().add(minion);
@@ -1858,8 +1861,12 @@ public class GameLogic implements Cloneable, Serializable {
 		removeSpellTriggers(minion);
 
 		Player owner = context.getPlayer(minion.getOwner());
-		int index = owner.getMinions().indexOf(minion);
-		owner.getMinions().remove(minion);
+		int index = -1;
+		if (!minion.getEntityLocation().equals(EntityLocation.NONE)
+				&& owner != null) {
+			index = minion.getEntityLocation().getIndex();
+			owner.getZone(minion.getEntityLocation().getZone()).remove(index);
+		}
 
 		// If we want to straight up remove a minion from existence without
 		// killing it, this would be the best way.
@@ -1909,8 +1916,6 @@ public class GameLogic implements Cloneable, Serializable {
 				handleEnrage(newMinion);
 			} else {
 				owner.getSetAsideZone().add(newMinion);
-				newMinion.setId(getIdFactory().generateId());
-				newMinion.setOwner(owner.getId());
 				removeSpellTriggers(newMinion);
 				return;
 			}
@@ -2098,5 +2103,12 @@ public class GameLogic implements Cloneable, Serializable {
 				|| player.getHero().getHp() < 1
 				|| player.getHero().hasAttribute(Attribute.DESTROYED)
 				|| player.hasAttribute(Attribute.DESTROYED);
+	}
+
+	public GameAction getCurrentAction() {
+		if (currentActions.isEmpty()) {
+			return null;
+		}
+		return currentActions.peek();
 	}
 }

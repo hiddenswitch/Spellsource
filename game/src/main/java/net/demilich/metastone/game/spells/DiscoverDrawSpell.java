@@ -10,7 +10,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
-public class DiscoverDrawSpell extends Spell {
+public class  DiscoverDrawSpell extends Spell {
 	
 	@Override
 	@Suspendable

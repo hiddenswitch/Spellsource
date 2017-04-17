@@ -46,7 +46,7 @@ public class DiscoverCardSpell extends Spell {
 		}
 		
 		if (!cards.isEmpty()) {
-			SpellUtils.castChildSpell(context, player, SpellUtils.getDiscover(context, player, desc, cards).getSpell(), source, target);
+			SpellUtils.castChildSpell(context, player, SpellUtils.getDiscover(context, player, desc, cards.getCopy()).getSpell(), source, target);
 		}
 	}
 

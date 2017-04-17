@@ -40,8 +40,8 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	}
 
 	private void checkElement(E element) {
-		if (!element.getLocation().equals(EntityLocation.NONE)
-				&& element.getLocation().getZone() != getZone()) {
+		if (!element.getEntityLocation().equals(EntityLocation.NONE)
+				&& element.getEntityLocation().getZone() != getZone()) {
 			throw new ArrayStoreException("You must (1) remove an entity from its previous zone or " +
 					"(2) clone the entity in order to add it to another zone.");
 		}
@@ -49,7 +49,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 
 	protected E setUnchecked(int index, E element) {
 		if (internal.size() > index) {
-			internal.get(index).setLocation(EntityLocation.NONE);
+			internal.get(index).setEntityLocation(EntityLocation.NONE);
 		} else if (internal.size() == index) {
 			if (element == null) {
 				remove(index);
@@ -60,7 +60,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 			return element;
 		}
 		internal.set(index, element);
-		element.setLocation(new EntityLocation(zone, player, index));
+		element.setEntityLocation(new EntityLocation(zone, player, index));
 		return element;
 	}
 
@@ -73,16 +73,16 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	protected void uncheckedAdd(int index, E element) {
 		internal.add(index, element);
 		for (int i = index; i < internal.size(); i++) {
-			internal.get(i).setLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
 	}
 
 	@Override
 	public E remove(int index) {
 		E result = internal.remove(index);
-		result.setLocation(EntityLocation.NONE);
+		result.setEntityLocation(EntityLocation.NONE);
 		for (int i = index; i < internal.size(); i++) {
-			internal.get(i).setLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
 		return result;
 	}
@@ -110,7 +110,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 
 		player = playerIndex;
 		for (int i = 0; i < internal.size(); i++) {
-			internal.get(i).setLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
 	}
 
