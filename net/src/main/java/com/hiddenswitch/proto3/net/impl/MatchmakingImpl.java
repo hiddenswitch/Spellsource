@@ -5,7 +5,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
-import com.hiddenswitch.proto3.net.impl.server.GameSession;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
 import net.demilich.metastone.game.decks.DeckWithId;
 import com.hiddenswitch.proto3.net.impl.util.Matchmaker;
@@ -16,9 +15,7 @@ import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -132,7 +129,7 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 				deck = new Deck(HeroClass.valueOf(incomingDeck.getHeroClass()));
 				final CardCollection cards = deck.getCards();
 				incomingDeck.getCards().forEach(cardId -> {
-					cards.add(CardCatalogue.getCardById(cardId));
+					cards.addCard(CardCatalogue.getCardById(cardId));
 				});
 			}
 		} else if (matchmakingRequest.getDeckId() != null) {

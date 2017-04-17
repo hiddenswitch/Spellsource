@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -23,10 +24,10 @@ public class ShuffleToDeckSpell extends Spell {
 		} else if (desc.contains(SpellArg.CARD_FILTER)){
 			EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 			CardCollection cards = CardCatalogue.query(context.getDeckFormat());
-			CardCollection result = new CardCollection();
+			CardCollection result = new CardCollectionImpl();
 			for (Card cardResult : cards) {
 				if (cardFilter.matches(context, player, cardResult)) {
-					result.add(cardResult);
+					result.addCard(cardResult);
 				}
 			}
 			card = result.getRandom();

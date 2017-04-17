@@ -275,6 +275,7 @@ public class AdvancedMechanicTests extends BasicTests {
 		MinionCard spellPowerMinionCard = (MinionCard) CardCatalogue.getCardById("minion_kobold_geomancer");
 		context.getLogic().receiveCard(mage.getId(), spellPowerMinionCard);
 		context.getLogic().performGameAction(mage.getId(), spellPowerMinionCard.play());
+		damageSpell = damageSpell.getCopy();
 		context.getLogic().receiveCard(mage.getId(), damageSpell);
 		context.getLogic().performGameAction(mage.getId(), damageSpell.play());
 		int spellPower = getSingleMinion(mage.getMinions()).getAttributeValue(Attribute.SPELL_DAMAGE);

@@ -65,8 +65,8 @@ public class TestCardsApplication {
 			// Add the cards
 			if (testConfig.getCardId() != null) {
 				Card card = CardCatalogue.getCardById(testConfig.getCardId());
-				deck1.getCards().add(card);
-				deck1.getCards().add(card);
+				deck1.getCards().addCard(card);
+				deck1.getCards().addCard(card);
 			}
 			playerConfig1.setDeck(deck1);
 			playerConfig1.setHeroCard(MetaHero.getHeroCard(deck1.getHeroClass()));

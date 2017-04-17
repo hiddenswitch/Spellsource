@@ -3,11 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
@@ -18,10 +14,10 @@ public class SummonRandomMinionFromSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card fromCard = SpellUtils.getCard(context, desc);
 		CardCollection allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
-		CardCollection relevantMinions = new CardCollection();
+		CardCollection relevantMinions = new CardCollectionImpl();
 		for (Card card : allMinions) {
 			if (context.getLogic().getModifiedManaCost(player, fromCard) == card.getBaseManaCost()) {
-				relevantMinions.add(card);
+				relevantMinions.addCard(card);
 			}
 		}
 		

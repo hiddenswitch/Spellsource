@@ -11,10 +11,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -59,10 +56,10 @@ public class SpellUtils {
 	}
 
 	public static CardCollection getCards(CardCollection source, Predicate<Card> filter) {
-		CardCollection result = new CardCollection();
+		CardCollection result = new CardCollectionImpl();
 		for (Card card : source) {
 			if (filter == null || filter.test(card)) {
-				result.add(card);
+				result.addCard(card);
 			}
 		}
 		return result;

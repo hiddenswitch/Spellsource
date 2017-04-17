@@ -2,7 +2,6 @@ package com.hiddenswitch.proto3.net;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.util.Serialization;
@@ -19,7 +18,6 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.heroes.powers.HeroPower;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -32,7 +30,6 @@ import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.hiddenswitch.proto3.Assert.assertReflectionEquals;
@@ -87,8 +84,8 @@ public class SerializationTest extends TestBase {
 		HeroPower heroPowerFireblast = (HeroPower) CardCatalogue.getCardById("hero_power_fireblast");
 		WeaponCard assassinsBlade = (WeaponCard) CardCatalogue.getCardById("weapon_assassins_blade");
 		SpellCard journeyBelow = (SpellCard) CardCatalogue.getCardById("spell_journey_below");
-		CardCollection discoverCards = new CardCollection();
-		discoverCards.add(fireball.getCopy());
+		CardCollection discoverCards = new CardCollectionImpl();
+		discoverCards.addCard(fireball.getCopy());
 		DiscoverAction discoverAction = DiscoverAction.createDiscover(journeyBelow.getSpell());
 
 		ArrayList<GameAction> gameActions = new ArrayList<>();

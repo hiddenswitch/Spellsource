@@ -1,25 +1,25 @@
 package net.demilich.metastone.game.entities;
 
 import java.io.Serializable;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
 
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.targeting.PlayerZones;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.AttributeMap;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public abstract class Entity extends CustomCloneable implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private static final int NO_OWNER = -1;
 
 	private String name;
 	private AttributeMap attributes = new AttributeMap();
 	private int id = IdFactory.UNASSIGNED;
-	private int ownerIndex = -1;
+	private int ownerIndex = NO_OWNER;
+	EntityLocation location = EntityLocation.NONE;
 
 	protected Entity() {
 	}
@@ -142,5 +142,13 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 
 	public String getCardInventoryId() {
 		return (String) getAttribute(Attribute.CARD_INVENTORY_ID);
+	}
+
+	public EntityLocation getLocation() {
+		return location;
+	}
+
+	public void setLocation(EntityLocation location) {
+		this.location = location;
 	}
 }

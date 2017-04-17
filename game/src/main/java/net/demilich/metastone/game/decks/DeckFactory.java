@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomUtils;
@@ -11,10 +12,10 @@ import org.apache.commons.lang3.RandomUtils;
 public class DeckFactory {
 
 	public static Deck getDeckConsistingof(int count, Card... cards) {
-		CardCollection cardCollection = new CardCollection();
+		CardCollection cardCollection = new CardCollectionImpl();
 		for (int i = 0; i < count; i++) {
 			int randomIndex = ThreadLocalRandom.current().nextInt(cards.length);
-			cardCollection.add(cards[randomIndex].clone());
+			cardCollection.addCard(cards[randomIndex].clone());
 		}
 		Deck deck = new Deck(HeroClass.ANY);
 		deck.setName("[Debug deck]");
@@ -31,7 +32,6 @@ public class DeckFactory {
 		Deck randomDeck = DeckFactory.getRandomDeck(
 				heroClasses[RandomUtils.nextInt(0, heroClasses.length)],
 				new DeckFormat().withCardSets(
-						CardSet.MINIONATE,
 						CardSet.BASIC,
 						CardSet.CLASSIC));
 		return randomDeck;

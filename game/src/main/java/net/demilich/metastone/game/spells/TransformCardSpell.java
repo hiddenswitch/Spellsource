@@ -20,7 +20,7 @@ public class TransformCardSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = (Card) target;
-		if (card.getLocation() == CardLocation.HAND) {
+		if (card.getCardLocation() == CardLocation.HAND) {
 			context.getLogic().removeCard(player.getId(), card);
 		} else {
 			// logger.warn("Trying to transform card {} in invalid location {}",

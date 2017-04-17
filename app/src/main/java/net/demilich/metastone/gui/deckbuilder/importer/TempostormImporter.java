@@ -11,7 +11,6 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -60,7 +59,7 @@ public class TempostormImporter implements IDeckImporter{
             deck.setName(deckName);
 
             for (Card card : cards)
-                deck.getCards().add(card);
+                deck.getCards().addCard(card);
 
             if (!deck.isComplete())
                 return null;

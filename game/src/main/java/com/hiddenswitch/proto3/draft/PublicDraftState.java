@@ -5,7 +5,6 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class PublicDraftState {
 
 	public Deck createDeck() {
 		Deck deck = new Deck(this.heroClass);
-		this.selectedCards.forEach(deck.getCards()::add);
+		this.selectedCards.forEach(deck.getCards()::addCard);
 		return deck;
 	}
 }

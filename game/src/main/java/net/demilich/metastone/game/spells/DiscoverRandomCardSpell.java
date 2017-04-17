@@ -8,6 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -43,7 +44,7 @@ public class DiscoverRandomCardSpell extends Spell {
 				heroClass = SpellUtils.getRandomHeroClass();
 			}
 		}
-		CardCollection cards = new CardCollection();
+		CardCollection cards = new CardCollectionImpl();
 		if (heroClass == HeroClass.ANY) {
 			CardCollection classCards = CardCatalogue.query(context.getDeckFormat());
 			cards.addAll(classCards);
@@ -55,13 +56,13 @@ public class DiscoverRandomCardSpell extends Spell {
 			}
 		}
 		
-		CardCollection result = new CardCollection();
+		CardCollection result = new CardCollectionImpl();
 		for (Card card : cards) {
 			if (cardFilter.matches(context, player, card)) {
-				result.add(card);
+				result.addCard(card);
 			}
 		}
-		cards = new CardCollection();
+		cards = new CardCollectionImpl();
 		
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
 		for (int i = 0; i < count; i++) {
@@ -72,7 +73,7 @@ public class DiscoverRandomCardSpell extends Spell {
 					result.remove(card);
 				} while (cards.containsCard(card));
 				if (card != null) {
-					cards.add(card);
+					cards.addCard(card);
 				}
 			}
 		}

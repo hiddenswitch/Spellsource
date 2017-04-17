@@ -49,7 +49,7 @@ public class ProceduralRandomDeck extends Deck {
 
 			Card randomCard = ThreadLocalRandom.current().nextBoolean() ? classCards.getRandom() : neutralCards.getRandom();
 			if (deckValidator.canAddCardToDeck(randomCard, copyDeck)) {
-				copyDeck.getCards().add(randomCard);
+				copyDeck.getCards().addCard(randomCard);
 			}
 		}
 		return copyDeck.getCardsCopy();

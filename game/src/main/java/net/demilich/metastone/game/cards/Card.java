@@ -8,6 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -104,7 +105,7 @@ public abstract class Card extends Entity {
 	}
 
 	public CardReference getCardReference() {
-		return new CardReference(getOwner(), getLocation(), getId(), getName());
+		return new CardReference(getOwner(), getCardLocation(), getId(), getName());
 	}
 
 	public CardSet getCardSet() {
@@ -130,6 +131,7 @@ public abstract class Card extends Entity {
 		copy.getAttributes().remove(Attribute.ATTACK_BONUS);
 		copy.getAttributes().remove(Attribute.HP_BONUS);
 		copy.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
+		copy.setLocation(EntityLocation.NONE);
 		return copy;
 	}
 
@@ -158,7 +160,7 @@ public abstract class Card extends Entity {
 		return EntityType.CARD;
 	}
 
-	public CardLocation getLocation() {
+	public CardLocation getCardLocation() {
 		return location;
 	}
 

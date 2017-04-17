@@ -173,7 +173,7 @@ public class DeckCatalogue {
 				logger.error("Deck {} contains invalid cardId '{}'", deckName, cardId);
 				continue;
 			}
-			deck.getCards().add(card);
+			deck.getCards().addCard(card);
 		}
 		return deck;
 	}

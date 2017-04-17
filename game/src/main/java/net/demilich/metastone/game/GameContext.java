@@ -1,15 +1,11 @@
 package net.demilich.metastone.game;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.common.GameState;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
@@ -24,14 +20,12 @@ import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.utils.AttributeMap;
 import net.demilich.metastone.utils.IDisposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class GameContext implements Cloneable, IDisposable, Serializable {
 	public static final int PLAYER_1 = 0;
@@ -55,9 +49,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private int turn;
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
-	private CardCollection tempCards = new CardCollection();
-
-	private GameEvent currentEvent;
+	private CardCollection tempCards = new CardCollectionImpl();
 
 	public GameContext() {
 	}
@@ -85,7 +77,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	}
 
 	public void addTempCard(Card card) {
-		getTempCards().add(card);
+		getTempCards().addCard(card);
 	}
 
 	public void addTrigger(IGameEventListener trigger) {
@@ -203,7 +195,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		if (ignoreEvents()) {
 			return;
 		}
-		setCurrentEvent(gameEvent);
 		try {
 			getTriggerManager().fireGameEvent(gameEvent, otherTriggers);
 		} catch (Exception e) {
@@ -211,7 +202,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 			getLogic().panicDump();
 			throw e;
 		}
-		setCurrentEvent(null);
 	}
 
 	public boolean gameDecided() {
@@ -759,14 +749,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	public boolean isDisposed() {
 		return disposed;
-	}
-
-	public GameEvent getCurrentEvent() {
-		return currentEvent;
-	}
-
-	protected void setCurrentEvent(GameEvent currentEvent) {
-		this.currentEvent = currentEvent;
 	}
 
 	public String getGameId() {

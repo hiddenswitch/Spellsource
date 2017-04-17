@@ -7,6 +7,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -24,22 +25,22 @@ public class DiscoverCardSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardCollection result = new CardCollection();
+		CardCollection result = new CardCollectionImpl();
 		boolean cannotReceiveOwned = desc.getBool(SpellArg.CANNOT_RECEIVE_OWNED);
 		for (Card card : SpellUtils.getCards(context, desc)) {
 			if (!cannotReceiveOwned || !context.getLogic().hasCard(player, card)) {
-				result.add(card);
+				result.addCard(card);
 			}
 		}
 		
 		
-		CardCollection cards = new CardCollection();
+		CardCollection cards = new CardCollectionImpl();
 		
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
 		for (int i = 0; i < count; i++) {
 			if (!result.isEmpty()) {
 				Card card = result.getRandom();
-				cards.add(card);
+				cards.addCard(card);
 				result.remove(card);
 			}
 		}

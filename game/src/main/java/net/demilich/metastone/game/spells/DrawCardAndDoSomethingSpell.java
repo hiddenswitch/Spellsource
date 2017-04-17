@@ -19,7 +19,7 @@ public class DrawCardAndDoSomethingSpell extends Spell {
 			Card card = context.getLogic().drawCard(player.getId(), source);
 			// card may be null (i.e. try to draw from deck, but already in
 			// fatigue)
-			if (card == null || card.getLocation() == CardLocation.GRAVEYARD) {
+			if (card == null || card.getCardLocation() == CardLocation.GRAVEYARD) {
 				return;
 			}
 			SpellDesc cardEffectSpell = (SpellDesc) desc.get(SpellArg.SPELL);

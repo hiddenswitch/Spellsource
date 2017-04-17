@@ -35,7 +35,7 @@ public class RandomDeck extends Deck {
 
 			Card randomCard = ThreadLocalRandom.current().nextBoolean() ? classCards.getRandom() : neutralCards.getRandom();
 			if (deckValidator.canAddCardToDeck(randomCard, this)) {
-				this.getCards().add(randomCard);
+				this.getCards().addCard(randomCard.clone());
 			}
 		}
 

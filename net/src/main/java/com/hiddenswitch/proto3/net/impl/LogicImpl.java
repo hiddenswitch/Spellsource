@@ -20,9 +20,6 @@ import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -127,7 +124,7 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 			deckCollection.getInventoryRecords().stream()
 					.map(cardRecord -> getDescriptionFromRecord(cardRecord, player.getUserId(), player.getDeckId()))
 					.map(CardDesc::createInstance)
-					.forEach(deck.getCards()::add);
+					.forEach(deck.getCards()::addCard);
 
 			// TODO: Add player information as attached to the hero card
 			response.getPlayers().set(player.getId(), new StartGameResponse.Player()
