@@ -10,6 +10,7 @@ import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -20,12 +21,14 @@ import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.PlayerZones;
 import net.demilich.metastone.utils.IDisposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class GameContext implements Cloneable, IDisposable, Serializable {
 	public static final int PLAYER_1 = 0;
@@ -701,7 +704,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 				builder.append('\n');
 			}
 			builder.append("Secrets:\n");
-			for (String secretId : player.getSecrets()) {
+			for (String secretId : player.getSecretCardIds()) {
 				builder.append('\t');
 				builder.append(secretId);
 				builder.append('\n');
@@ -777,5 +780,19 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	public String getGameId() {
 		return "local";
+	}
+
+	@SuppressWarnings("unchecked")
+	public Stream<Entity> getEntities() {
+		return getPlayers().stream().flatMap(p -> Stream.of(new PlayerZones[]{
+				PlayerZones.BATTLEFIELD,
+				PlayerZones.DECK,
+				PlayerZones.GRAVEYARD,
+				PlayerZones.HAND,
+				PlayerZones.HERO_POWER,
+				PlayerZones.SET_ASIDE_ZONE,
+				PlayerZones.WEAPON,
+				PlayerZones.SECRET
+		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 }
