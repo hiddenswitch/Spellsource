@@ -25,7 +25,7 @@ public class StealRandomSecretSpell extends Spell {
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Player opponent = context.getOpponent(player);
-		List<IGameEventListener> secrets = context.getLogic().getSecrets(opponent);
+		List<Secret> secrets = opponent.getSecrets();
 
 		if (secrets.isEmpty()) {
 			return;
@@ -35,25 +35,24 @@ public class StealRandomSecretSpell extends Spell {
 		List<Secret> validSecrets = new ArrayList<>();
 		for (IGameEventListener trigger : secrets) {
 			Secret secret = (Secret) trigger;
-			if (!player.getSecrets().contains(secret.getSource().getCardId()) && player.getSecrets().size() < GameLogic.MAX_SECRETS) {
+			if (!player.getSecretCardIds().contains(secret.getSource().getCardId()) && player.getSecrets().size() < GameLogic.MAX_SECRETS) {
 				validSecrets.add(secret);
 			}
 		}
 
 		if (!validSecrets.isEmpty()) {
 			Secret secret = validSecrets.get(context.getLogic().random(validSecrets.size()));
+			opponent.getSecrets().remove(secret);
 			secret.setHost(player.getHero());
 			secret.setOwner(player.getId());
-			player.getSecrets().add(secret.getSource().getCardId());
-			opponent.getSecrets().remove(secret.getSource().getCardId());
+			player.getSecrets().add(secret);
 		} else {
 			// no valid secret to steal; instead destroy one for the opponent at
 			// least
-			Secret secret = (Secret) secrets.get(context.getLogic().random(secrets.size()));
+			Secret secret = secrets.get(context.getLogic().random(secrets.size()));
+			opponent.getSecrets().remove(secret);
 			context.removeTrigger(secret);
-			opponent.getSecrets().remove(secret.getSource().getCardId());
 		}
-
 	}
 
 }

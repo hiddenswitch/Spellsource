@@ -1,15 +1,14 @@
 package net.demilich.metastone.game;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.behaviour.IBehaviour;
 import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.Actor;
@@ -20,6 +19,8 @@ import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.spells.trigger.SecretPlayedTrigger;
+import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.targeting.PlayerZones;
@@ -51,7 +52,7 @@ public class Player extends Entity implements Serializable {
 	private EntityZone<Entity> graveyard = new EntityZone<>(getId(), PlayerZones.GRAVEYARD);
 	private EntityZone<Minion> minions = new EntityZone<>(getId(), PlayerZones.BATTLEFIELD);
 	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), PlayerZones.HERO);
-	private HashSet<String> secrets = new HashSet<>();
+	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), PlayerZones.SECRET);
 
 	private final GameStatistics statistics = new GameStatistics();
 
@@ -68,8 +69,8 @@ public class Player extends Entity implements Serializable {
 		this.setName(otherPlayer.getName());
 		this.deckName = otherPlayer.getDeckName();
 		this.getAttributes().putAll(otherPlayer.getAttributes());
-		this.secrets.addAll(otherPlayer.secrets);
 		this.setId(otherPlayer.getId());
+		this.secretZone = otherPlayer.getSecrets().clone();
 		this.deck = otherPlayer.getDeck().clone();
 		this.hand = otherPlayer.getHand().clone();
 		this.minions = otherPlayer.getMinions().clone();
@@ -175,8 +176,12 @@ public class Player extends Entity implements Serializable {
 		return minions;
 	}
 
-	public HashSet<String> getSecrets() {
-		return secrets;
+	public Set<String> getSecretCardIds() {
+		return secretZone.stream().map(Secret::getSource).map(Card::getCardId).collect(Collectors.toSet());
+	}
+
+	public EntityZone<Secret> getSecrets() {
+		return secretZone;
 	}
 
 	public EntityZone<Entity> getSetAsideZone() {
@@ -269,8 +274,6 @@ public class Player extends Entity implements Serializable {
 		hand.setPlayer(id);
 		deck.setPlayer(id);
 		heroZone.setPlayer(id);
-//		getHeroPowerZone().setPlayer(id);
-//		getWeaponZone().setPlayer(id);
 	}
 
 	public EntityZone getZone(PlayerZones zone) {
@@ -291,9 +294,9 @@ public class Player extends Entity implements Serializable {
 				return getSetAsideZone();
 			case WEAPON:
 				return getWeaponZone();
-			case NONE:
-				return null;
 			case SECRET:
+				return getSecrets();
+			case NONE:
 			case HIDDEN:
 				// TODO: Deal with secret zones
 				return null;

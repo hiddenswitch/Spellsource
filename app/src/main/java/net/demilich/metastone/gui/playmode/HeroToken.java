@@ -123,7 +123,7 @@ public class HeroToken extends GameToken {
 
 	private void updateSecrets(Player player) {
 		secretsAnchor.getChildren().clear();
-		HashSet<String> secretsCopy = new HashSet<String>(player.getSecrets());
+		HashSet<String> secretsCopy = new HashSet<String>(player.getSecretCardIds());
 		for (String secretId : secretsCopy) {
 			ImageView secretIcon = new ImageView(IconFactory.getImageUrl("common/secret.png"));
 			secretsAnchor.getChildren().add(secretIcon);
