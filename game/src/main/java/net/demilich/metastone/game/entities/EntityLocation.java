@@ -38,7 +38,10 @@ public final class EntityLocation implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(zone).append(player).toHashCode();
+		return new HashCodeBuilder()
+				.append(index)
+				.append(zone)
+				.append(player).toHashCode();
 	}
 
 	public PlayerZones getZone() {
