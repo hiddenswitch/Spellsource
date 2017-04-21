@@ -222,6 +222,7 @@ public class WebsocketClient implements Client {
 
 	@Override
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
+
 		sendMessage(new ServerToClientMessage()
 				.id(id)
 				.messageType(MessageType.ON_REQUEST_ACTION)
