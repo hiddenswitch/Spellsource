@@ -30,11 +30,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class WebsocketClient implements Client {
+public class WebSocketClient implements Client {
 	private final String userId;
 	private ServerWebSocket privateSocket;
 
-	public WebsocketClient(ServerWebSocket socket, String userId) {
+	public WebSocketClient(ServerWebSocket socket, String userId) {
 		this.setPrivateSocket(socket);
 		this.userId = userId;
 	}
