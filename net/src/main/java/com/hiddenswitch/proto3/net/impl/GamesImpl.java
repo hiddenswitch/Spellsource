@@ -8,11 +8,10 @@ import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
-import com.hiddenswitch.proto3.net.common.Server;
 import com.hiddenswitch.proto3.net.impl.server.GameSession;
 import com.hiddenswitch.proto3.net.impl.server.SocketClient;
 import com.hiddenswitch.proto3.net.impl.server.GameSessionImpl;
-import com.hiddenswitch.proto3.net.impl.server.WebsocketClient;
+import com.hiddenswitch.proto3.net.impl.server.WebSocketClient;
 import com.hiddenswitch.proto3.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
@@ -28,12 +27,10 @@ import io.vertx.core.eventbus.ReplyException;
 import io.vertx.core.eventbus.ReplyFailure;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetSocket;
-import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import org.apache.commons.lang3.RandomUtils;
@@ -146,7 +143,7 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 								throw new RuntimeException("Invalid secret.");
 							}
 
-							Client client = new WebsocketClient(socket, userId);
+							Client client = new WebSocketClient(socket, userId);
 
 							if (session == null) {
 								session = gameForUserId.get(userId);
