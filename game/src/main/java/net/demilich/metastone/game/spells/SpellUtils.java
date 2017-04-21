@@ -141,7 +141,7 @@ public class SpellUtils {
 		if (result.isEmpty()) {
 			return null;
 		}
-		return result.getRandom().getCopy();
+		return result.getRandom();
 	}
 
 	@Suspendable

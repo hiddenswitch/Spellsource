@@ -89,6 +89,7 @@ public class CardZone extends EntityZone<Card> implements CardCollection {
 	public boolean replace(Card oldCard, Card newCard) {
 		int index = indexOf(oldCard);
 		if (index != -1) {
+			oldCard.resetEntityLocations();
 			set(index, newCard);
 			return true;
 		}
