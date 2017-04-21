@@ -629,7 +629,7 @@ public class GameLogic implements Cloneable, Serializable {
 	public Card drawCard(int playerId, Card card, Entity source) {
 		Player player = context.getPlayer(playerId);
 		player.getStatistics().cardDrawn();
-		player.getDeck().remove(card);
+//		player.getDeck().remove(card);
 		receiveCard(playerId, card, source, true);
 		return card;
 	}
@@ -1436,7 +1436,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		card.setOwner(playerId);
-		CardCollection hand = player.getHand();
+		CardZone hand = player.getHand();
 
 		if (hand.getCount() < MAX_HAND_CARDS) {
 			if (card.getAttribute(Attribute.PASSIVE_TRIGGER) != null) {
@@ -1447,9 +1447,10 @@ public class GameLogic implements Cloneable, Serializable {
 			log("{} receives card {}", player.getName(), card);
 			CardLocation oldLocation = card.getCardLocation();
 			if (!card.getEntityLocation().equals(EntityLocation.NONE)) {
-				player.getZone(card.getEntityLocation().getZone()).remove(card);
+				player.getZone(card.getEntityLocation().getZone()).move(card, hand);
+			} else {
+				hand.addCard(card);
 			}
-			hand.addCard(card);
 			card.setLocation(CardLocation.HAND);
 			CardType sourceType = null;
 			if (source instanceof Card) {
@@ -1500,12 +1501,11 @@ public class GameLogic implements Cloneable, Serializable {
 			return;
 		}
 		// TODO: It's not necessarily in the hand when it's removed!
-//		player.getHand().remove(card);
 		if (!card.getEntityLocation().equals(EntityLocation.NONE)) {
-			player.getZone(card.getEntityLocation().getZone()).remove(card);
+			player.getZone(card.getEntityLocation().getZone()).move(card, player.getGraveyard());
+		} else {
+			player.getGraveyard().add(card);
 		}
-
-		player.getGraveyard().add(card);
 	}
 
 	@Suspendable
@@ -1514,8 +1514,7 @@ public class GameLogic implements Cloneable, Serializable {
 		log("Card {} has been moved from the DECK to the GRAVEYARD", card);
 		card.setLocation(CardLocation.GRAVEYARD);
 		removeSpellTriggers(card);
-		player.getDeck().remove(card);
-		player.getGraveyard().add(card);
+		player.getDeck().move(card, player.getGraveyard());
 	}
 
 	@Suspendable

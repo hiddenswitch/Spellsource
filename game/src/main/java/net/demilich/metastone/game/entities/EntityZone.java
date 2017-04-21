@@ -80,6 +80,23 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	}
 
 	@Override
+	public int indexOf(Object e) {
+		if (e == null) {
+			return -1;
+		}
+		if (Entity.class.isAssignableFrom(e.getClass())) {
+			final Entity entity = (Entity) e;
+			final EntityLocation location = entity.getEntityLocation();
+			if (location.getZone() == getZone()
+					&& location.getPlayer() == getPlayer()) {
+				return location.getIndex();
+			}
+		}
+
+		return super.indexOf(e);
+	}
+
+	@Override
 	public boolean remove(Object e) {
 		int index = indexOf(e);
 		if (index == -1) {
@@ -88,6 +105,28 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 			remove(index);
 			return true;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void move(int index, EntityZone destination, int destinationIndex) {
+		Entity result = internal.remove(index);
+		for (int i = index; i < internal.size(); i++) {
+			internal.get(i).pushEntityLocation(new EntityLocation(zone, player, i));
+		}
+		destination.uncheckedAdd(destinationIndex, result);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void move(Entity source, EntityZone destination) {
+		if (source.getEntityLocation().equals(EntityLocation.NONE)) {
+			destination.uncheckedAdd(destination.size(), source);
+		} else if (source.getEntityLocation().getZone() != getZone()
+				|| source.getEntityLocation().getPlayer() != getPlayer()) {
+			throw new ArrayStoreException("Cannot move an element that could not possible be inside this EntityZone.");
+		} else {
+			move(indexOf(source), destination, destination.size());
+		}
+
 	}
 
 	@Override
