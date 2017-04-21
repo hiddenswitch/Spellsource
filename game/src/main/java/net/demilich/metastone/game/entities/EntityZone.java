@@ -10,9 +10,9 @@ import java.util.*;
  */
 public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		List<E>, Cloneable, Serializable {
-	private final PlayerZones zone;
-	private int player = -1;
-	private List<E> internal = new ArrayList<>();
+	protected final PlayerZones zone;
+	protected int player = -1;
+	protected List<E> internal = new ArrayList<>();
 
 	public EntityZone(int player, PlayerZones zone) {
 		this.zone = zone;
@@ -40,6 +40,9 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	}
 
 	private void checkElement(E element) {
+		if (contains(element)) {
+			throw new ArrayStoreException("You cannot add the same element twice to this zone.");
+		}
 		if (!element.getEntityLocation().equals(EntityLocation.NONE)
 				&& element.getEntityLocation().getZone() != getZone()) {
 			throw new ArrayStoreException("You must (1) remove an entity from its previous zone or " +

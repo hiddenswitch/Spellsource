@@ -170,9 +170,10 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param cardCollection The Deck to assign IDs to
 	 */
 	@Suspendable
-	protected void assignCardIds(CardCollection cardCollection) {
+	protected void assignCardIds(CardCollection cardCollection, int ownerIndex) {
 		for (Card card : cardCollection) {
 			card.setId(getIdFactory().generateId());
+			card.setOwner(ownerIndex);
 			card.setLocation(CardLocation.DECK);
 		}
 	}
@@ -1097,8 +1098,8 @@ public class GameLogic implements Cloneable, Serializable {
 		player.getHero().setHp(player.getHero().getAttributeValue(Attribute.BASE_HP));
 
 		player.getHero().getHeroPower().setId(getIdFactory().generateId());
-		assignCardIds(player.getDeck());
-		assignCardIds(player.getHand());
+		assignCardIds(player.getDeck(), playerId);
+		assignCardIds(player.getHand(), playerId);
 
 		log("Setting hero hp to {} for {}", player.getHero().getHp(), player.getName());
 		player.getDeck().shuffle();
@@ -1384,6 +1385,7 @@ public class GameLogic implements Cloneable, Serializable {
 		log("{} has a new secret activated: {}", player.getName(), secret.getSource());
 		Secret newSecret = secret.clone();
 		newSecret.setId(getIdFactory().generateId());
+		newSecret.setOwner(player.getId());
 		addGameEventListener(player, newSecret, player.getHero());
 		player.getSecrets().add(newSecret);
 		if (fromHand) {
@@ -1493,7 +1495,16 @@ public class GameLogic implements Cloneable, Serializable {
 		log("Card {} has been moved from the HAND to the GRAVEYARD", card);
 		card.setLocation(CardLocation.GRAVEYARD);
 		removeSpellTriggers(card);
-		player.getHand().remove(card);
+		// If it's already in the graveyard, do nothing
+		if (card.getEntityLocation().getZone() == PlayerZones.GRAVEYARD) {
+			return;
+		}
+		// TODO: It's not necessarily in the hand when it's removed!
+//		player.getHand().remove(card);
+		if (!card.getEntityLocation().equals(EntityLocation.NONE)) {
+			player.getZone(card.getEntityLocation().getZone()).remove(card);
+		}
+
 		player.getGraveyard().add(card);
 	}
 

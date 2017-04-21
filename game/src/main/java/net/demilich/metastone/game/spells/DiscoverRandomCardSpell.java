@@ -11,6 +11,7 @@ import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -18,14 +19,14 @@ import net.demilich.metastone.game.spells.desc.filter.FilterArg;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class DiscoverRandomCardSpell extends Spell {
-	
+
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(DiscoverRandomCardSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.SPELL, spell);
 		return new SpellDesc(arguments);
 	}
-	
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -39,10 +40,20 @@ public class DiscoverRandomCardSpell extends Spell {
 		}
 		if (heroClass != HeroClass.ANY && !heroClass.isBaseClass()) {
 			Card card = context.getPendingCard();
-			heroClass = card.getHeroClass();
-			if (heroClass == HeroClass.ANY) {
-				heroClass = SpellUtils.getRandomHeroClass();
+			if (card != null) {
+				heroClass = card.getHeroClass();
+				if (heroClass == HeroClass.ANY) {
+					heroClass = SpellUtils.getRandomHeroClass();
+				}
+			} else {
+				// see if the source is a minion and use its class
+				if (source instanceof Minion) {
+					heroClass = ((Minion) source).getHeroClass();
+				} else {
+					heroClass = SpellUtils.getRandomHeroClass();
+				}
 			}
+
 		}
 		CardCollection cards = new CardCollectionImpl();
 		if (heroClass == HeroClass.ANY) {
@@ -55,7 +66,7 @@ public class DiscoverRandomCardSpell extends Spell {
 				cards.addAll(classCards);
 			}
 		}
-		
+
 		CardCollection result = new CardCollectionImpl();
 		for (Card card : cards) {
 			if (cardFilter.matches(context, player, card)) {
@@ -63,7 +74,7 @@ public class DiscoverRandomCardSpell extends Spell {
 			}
 		}
 		cards = new CardCollectionImpl();
-		
+
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
 		for (int i = 0; i < count; i++) {
 			if (!result.isEmpty()) {
@@ -77,7 +88,7 @@ public class DiscoverRandomCardSpell extends Spell {
 				}
 			}
 		}
-		
+
 		if (!cards.isEmpty()) {
 			SpellUtils.castChildSpell(context, player, SpellUtils.getDiscover(context, player, desc, cards.getCopy()).getSpell(), source, target);
 		}

@@ -274,6 +274,7 @@ public class Player extends Entity implements Serializable {
 		hand.setPlayer(id);
 		deck.setPlayer(id);
 		heroZone.setPlayer(id);
+		secretZone.setPlayer(id);
 	}
 
 	public EntityZone getZone(PlayerZones zone) {
