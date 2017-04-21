@@ -20,12 +20,6 @@ public final class EntityLocation implements Serializable {
 		this.index = index;
 	}
 
-	public EntityLocation(EntityLocation original, int newIndex) {
-		this.zone = original.getZone();
-		this.player = original.getPlayer();
-		this.index = newIndex;
-	}
-
 	@Override
 	public boolean equals(Object other) {
 		if (other == null) {

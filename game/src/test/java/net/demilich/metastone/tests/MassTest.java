@@ -1,8 +1,10 @@
 package net.demilich.metastone.tests;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.PlayerZones;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -38,8 +40,13 @@ public class MassTest extends TestBase {
 		root.setLevel(Level.ERROR);
 	}
 
-	@Test(threadPoolSize = 16, invocationCount = 1000)
+	@Test
 	public void testRandomMassPlay() {
+		loggerSetup();
+		IntStream.range(0, 1000).parallel().forEach(i -> oneGame());
+	}
+
+	private void oneGame() {
 		DeckFormat deckFormat = new DeckFormat();
 		for (CardSet set : CardSet.values()) {
 			deckFormat.addSet(set);
@@ -76,14 +83,11 @@ public class MassTest extends TestBase {
 							}
 						}
 				);
+				Assert.assertEquals(getEntities().map(Entity::getEntityLocation).distinct().count(), getEntities().count(), "Entities do not have distinct locations.");
 			}
 		};
-		try {
-			context.play();
-			context.dispose();
-		} catch (Exception e) {
-			Assert.fail("Exception occured", e);
-		}
+		context.play();
+		context.dispose();
 
 	}
 
