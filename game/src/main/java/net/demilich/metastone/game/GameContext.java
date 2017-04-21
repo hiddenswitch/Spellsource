@@ -789,10 +789,18 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 				PlayerZones.DECK,
 				PlayerZones.GRAVEYARD,
 				PlayerZones.HAND,
+				PlayerZones.HERO,
 				PlayerZones.HERO_POWER,
 				PlayerZones.SET_ASIDE_ZONE,
 				PlayerZones.WEAPON,
 				PlayerZones.SECRET
 		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
+	}
+
+	public void onWillPerformGameAction(int playerId, GameAction action) {
+	}
+
+	public void onDidPerformGameAction(int playerId, GameAction action) {
+
 	}
 }

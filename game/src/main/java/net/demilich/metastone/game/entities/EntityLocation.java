@@ -52,4 +52,9 @@ public final class EntityLocation implements Serializable {
 	public int getIndex() {
 		return index;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("[player:%d zone:%s index:%d]", player, zone, index);
+	}
 }

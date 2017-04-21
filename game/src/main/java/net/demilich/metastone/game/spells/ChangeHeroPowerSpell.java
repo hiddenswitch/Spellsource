@@ -17,6 +17,8 @@ public class ChangeHeroPowerSpell extends Spell {
 
 	protected void changeHeroPower(GameContext context, String newHeroPower, Hero hero) {
 		HeroPower heroPower = (HeroPower) context.getCardById(newHeroPower);
+		heroPower.setId(context.getLogic().getIdFactory().generateId());
+		heroPower.setOwner(hero.getOwner());
 		logger.debug("{}'s hero power was changed to {}", hero.getName(), heroPower);
 		hero.setHeroPower(heroPower);
 	}

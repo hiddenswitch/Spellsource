@@ -370,6 +370,8 @@ public class GameLogic implements Cloneable, Serializable {
 		hero.setOwner(player.getId());
 		hero.setWeapon(player.getHero().getWeapon());
 		player.setHero(hero);
+		hero.getHeroPower().setId(getIdFactory().generateId());
+		hero.getHeroPower().setOwner(hero.getOwner());
 		refreshAttacksPerRound(hero);
 	}
 
@@ -1297,6 +1299,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void performGameAction(int playerId, GameAction action) {
 		currentActions.push(action);
+		context.onWillPerformGameAction(playerId, action);
 		if (isLoggingEnabled()) {
 			debugHistory.add(action.toString());
 		}
@@ -1319,6 +1322,10 @@ public class GameLogic implements Cloneable, Serializable {
 		if (action.getActionType() != ActionType.BATTLECRY) {
 			checkForDeadEntities();
 		}
+
+		// Calculate how all the entities changed.
+
+		context.onDidPerformGameAction(playerId, action);
 		currentActions.pop();
 	}
 

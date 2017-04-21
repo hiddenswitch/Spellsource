@@ -1,6 +1,8 @@
 package net.demilich.metastone.game.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.logic.CustomCloneable;
@@ -17,14 +19,18 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	private AttributeMap attributes = new AttributeMap();
 	private int id = IdFactory.UNASSIGNED;
 	private int ownerIndex = NO_OWNER;
-	EntityLocation entityLocation = EntityLocation.NONE;
+	protected List<EntityLocation> entityLocations = new ArrayList<>();
 
 	protected Entity() {
+		super();
+		entityLocations.add(EntityLocation.NONE);
 	}
 
 	@Override
 	public Entity clone() {
 		Entity clone = (Entity) super.clone();
+		clone.entityLocations = new ArrayList<>();
+		clone.entityLocations.add(EntityLocation.NONE);
 		return clone;
 	}
 
@@ -143,10 +149,25 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	}
 
 	public EntityLocation getEntityLocation() {
-		return entityLocation;
+		return entityLocations.get(entityLocations.size() - 1);
 	}
 
-	public void setEntityLocation(EntityLocation entityLocation) {
-		this.entityLocation = entityLocation;
+	public void pushEntityLocation(EntityLocation entityLocation) {
+		this.entityLocations.add(entityLocation);
+	}
+
+	public void resetEntityLocations() {
+		entityLocations.clear();
+		entityLocations.add(EntityLocation.NONE);
+	}
+
+	public void forgetEntityLocations() {
+		EntityLocation last = getEntityLocation();
+		entityLocations.clear();
+		entityLocations.add(last);
+	}
+
+	public List<EntityLocation> getEntityLocations() {
+		return entityLocations;
 	}
 }

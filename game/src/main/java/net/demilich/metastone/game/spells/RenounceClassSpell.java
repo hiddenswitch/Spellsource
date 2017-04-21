@@ -48,6 +48,8 @@ public class RenounceClassSpell extends Spell {
 		for (Card heroPowerCard : heroPowers) {
 			if (heroPowerCard.getHeroClass() == rebornClass) {
 				HeroPower heroPower = (HeroPower) heroPowerCard;
+				heroPower.setId(context.getLogic().getIdFactory().generateId());
+				heroPower.setOwner(player.getHero().getOwner());
 				player.getHero().setHeroPower(heroPower);
 			}
 		}

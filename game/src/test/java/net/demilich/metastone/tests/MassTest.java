@@ -2,6 +2,8 @@ package net.demilich.metastone.tests;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.targeting.PlayerZones;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
@@ -33,7 +35,7 @@ public class MassTest extends TestBase {
 	@BeforeTest
 	private void loggerSetup() {
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.INFO);
+		root.setLevel(Level.ERROR);
 	}
 
 	@Test(threadPoolSize = 16, invocationCount = 1000)
@@ -53,7 +55,29 @@ public class MassTest extends TestBase {
 		player2Config.setName("Player 2");
 		player2Config.setHeroCard(getHeroCardForClass(heroClass2));
 		Player player2 = new Player(player2Config);
-		GameContext context = new GameContext(player1, player2, new GameLogic(), deckFormat);
+		GameContext context = new GameContext(player1, player2, new GameLogic(), deckFormat) {
+			@Override
+			public void onDidPerformGameAction(int playerId, GameAction action) {
+				// Assert that at the end of every game action, all the entities have valid
+				// locations and indices
+				super.onDidPerformGameAction(playerId, action);
+				getEntities().forEach(e -> {
+							final boolean isValid = e.getEntityLocation().getIndex() >= 0
+									&& e.getEntityLocation().getZone() != PlayerZones.NONE
+									&& e.getId() >= 0;
+							if (!isValid) {
+								final String message = "Action:\n"
+										+ action.toString()
+										+ "\nEntity:\n"
+										+ e.toString()
+										+ "\nLocation:\n"
+										+ e.getEntityLocation().toString();
+								Assert.fail(message);
+							}
+						}
+				);
+			}
+		};
 		try {
 			context.play();
 			context.dispose();
