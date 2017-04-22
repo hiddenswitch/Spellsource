@@ -27,6 +27,7 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.EntityLocation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -36,6 +37,9 @@ import java.io.Serializable;
  */
 
 public class EntityState  implements Serializable {
+  @SerializedName("location")
+  private EntityLocation location = null;
+
   @SerializedName("background")
   private String background = null;
 
@@ -161,6 +165,24 @@ public class EntityState  implements Serializable {
 
   @SerializedName("lockedMana")
   private Integer lockedMana = null;
+
+  public EntityState location(EntityLocation location) {
+    this.location = location;
+    return this;
+  }
+
+   /**
+   * Get location
+   * @return location
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public EntityLocation getLocation() {
+    return location;
+  }
+
+  public void setLocation(EntityLocation location) {
+    this.location = location;
+  }
 
   public EntityState background(String background) {
     this.background = background;
@@ -928,7 +950,8 @@ public class EntityState  implements Serializable {
       return false;
     }
     EntityState entityState = (EntityState) o;
-    return Objects.equals(this.background, entityState.background) &&
+    return Objects.equals(this.location, entityState.location) &&
+        Objects.equals(this.background, entityState.background) &&
         Objects.equals(this.portrait, entityState.portrait) &&
         Objects.equals(this.gold, entityState.gold) &&
         Objects.equals(this.boardPosition, entityState.boardPosition) &&
@@ -974,7 +997,7 @@ public class EntityState  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(background, portrait, gold, boardPosition, owner, heroClass, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, pendingDestroy, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, secret, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, pendingDestroy, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, secret, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana);
   }
 
   @Override
@@ -982,6 +1005,7 @@ public class EntityState  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class EntityState {\n");
     
+    sb.append("    location: ").append(toIndentedString(location)).append("\n");
     sb.append("    background: ").append(toIndentedString(background)).append("\n");
     sb.append("    portrait: ").append(toIndentedString(portrait)).append("\n");
     sb.append("    gold: ").append(toIndentedString(gold)).append("\n");

@@ -404,12 +404,13 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	@Override
-	public void onMulligan(String id, Player player, List<Card> cards) {
+	public void onMulligan(String messageId, GameState state, List<Card> cards, int playerId) {
 		mulligan = false;
 		logger.debug("Mulligan requested.");
+		final Player player = getPlayer(playerId);
 		List<Card> discardedCards = player.getBehaviour().mulligan(this, player, cards);
 		mulligan = true;
-		ccs.getSendToServer().sendMulligan(id, player, discardedCards);
+		ccs.getSendToServer().sendMulligan(messageId, player, discardedCards);
 	}
 
 	@Override

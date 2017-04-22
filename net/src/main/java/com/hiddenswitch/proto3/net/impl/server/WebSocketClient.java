@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.impl.server;
 
+import com.google.common.collect.MapDifference;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.models.*;
@@ -9,20 +10,16 @@ import com.hiddenswitch.proto3.net.client.models.GameEvent.EventTypeEnum;
 import com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.GameState;
-import com.hiddenswitch.proto3.net.impl.util.Zones;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.*;
-import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.logic.GameLogic;
 
@@ -33,6 +30,7 @@ import java.util.stream.Collectors;
 public class WebSocketClient implements Client {
 	private final String userId;
 	private ServerWebSocket privateSocket;
+	private GameState lastStateSent;
 
 	public WebSocketClient(ServerWebSocket socket, String userId) {
 		this.setPrivateSocket(socket);
@@ -62,7 +60,6 @@ public class WebSocketClient implements Client {
 	public void onGameEvent(net.demilich.metastone.game.events.GameEvent event) {
 		final GameEvent clientEvent = new GameEvent();
 
-
 		clientEvent.eventType(EventTypeEnum.valueOf(event.getEventType().toString()));
 
 		GameContext workingContext = event.getGameContext().clone();
@@ -86,49 +83,26 @@ public class WebSocketClient implements Client {
 		} else if (event instanceof DrawCardEvent) {
 			final DrawCardEvent drawCardEvent = (DrawCardEvent) event;
 			clientEvent.drawCard(new GameEventDrawCard()
-					.to(Games.getLocation(workingContext, userId, drawCardEvent.getCard()))
 					.card(Games.getEntity(workingContext, drawCardEvent.getCard()))
 					.drawn(drawCardEvent.isDrawn()));
 		} else if (event instanceof KillEvent) {
 			final KillEvent killEvent = (KillEvent) event;
 			final net.demilich.metastone.game.entities.Entity victim = killEvent.getVictim();
 			final Entity entity = Games.getEntity(workingContext, victim);
-			CardLocation location = null;
-			if (victim instanceof Minion) {
-				location = localPlayerId == victim.getOwner()
-						? new CardLocation().zone(Zones.LOCAL_BATTLEFIELD).position(killEvent.getFormerBoardPosition())
-						: new CardLocation().zone(Zones.OPPONENT_BATTLEFIELD).position(killEvent.getFormerBoardPosition());
-			} else if (victim instanceof Weapon) {
-				location = localPlayerId == victim.getOwner()
-						? new CardLocation().zone(Zones.LOCAL_WEAPON).position(0)
-						: new CardLocation().zone(Zones.OPPONENT_WEAPON).position(0);
-			} else if (victim instanceof Hero) {
-				location = localPlayerId == victim.getOwner()
-						? new CardLocation().zone(Zones.LOCAL_HERO).position(0)
-						: new CardLocation().zone(Zones.OPPONENT_HERO).position(0);
-			}
 
 			clientEvent.kill(new GameEventKill()
-					.location(location)
 					.victim(entity));
 		} else if (event instanceof CardPlayedEvent) {
 			final CardPlayedEvent cardPlayedEvent = (CardPlayedEvent) event;
 			final Card card = cardPlayedEvent.getCard();
 			clientEvent.cardPlayed(new GameEventCardPlayed()
-					.location(Games.getLocation(workingContext, userId, card))
 					.card(Games.getEntity(workingContext, card)));
 		} else if (event instanceof SummonEvent) {
 			final SummonEvent summonEvent = (SummonEvent) event;
-			final Minion minion = (Minion) summonEvent.getMinion();
 
-			clientEvent.summon(new GameEventSummon()
-					.to(Games.getLocation(workingContext, userId, minion))
+			clientEvent.summon(new GameEventBeforeSummon()
 					.minion(Games.getEntity(workingContext, summonEvent.getMinion()))
 					.source(Games.getEntity(workingContext, summonEvent.getSource())));
-
-			if (summonEvent.getSource() != null) {
-				clientEvent.getSummon().from(Games.getLocation(workingContext, userId, summonEvent.getSource()));
-			}
 		} else if (event instanceof DamageEvent) {
 			final DamageEvent damageEvent = (DamageEvent) event;
 			clientEvent.damage(new GameEventDamage()
@@ -147,17 +121,17 @@ public class WebSocketClient implements Client {
 		clientEvent.targetPlayerId(event.getTargetPlayerId());
 		clientEvent.sourcePlayerId(event.getSourcePlayerId());
 
+		final GameState state = new GameState(event.getGameContext());
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
-				.gameState(getClientGameState(new GameState(event.getGameContext())))
+				.changes(getChangeSet(state))
+				.gameState(getClientGameState(state))
 				.event(clientEvent));
 	}
 
 	private PhysicalAttackEvent getPhysicalAttack(GameContext workingContext, Actor attacker, Actor defender, int damageDealt) {
 		return new PhysicalAttackEvent()
-				.attackerLocation(Games.getLocation(workingContext, userId, attacker))
 				.attacker(Games.getEntity(workingContext, attacker))
-				.defenderLocation(Games.getLocation(workingContext, userId, defender))
 				.defender(Games.getEntity(workingContext, defender))
 				.damageDealt(damageDealt);
 	}
@@ -170,15 +144,7 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void setPlayers(Player localPlayer, Player remotePlayer) {
-		// TODO: For now, simulate a game state.
-		GameContext simulatedContext = new GameContext(localPlayer.clone(), remotePlayer.clone(), new GameLogic(), new DeckFormat());
-		simulatedContext.getPlayer1().setBehaviour(new DoNothingBehaviour());
-		simulatedContext.getPlayer2().setBehaviour(new DoNothingBehaviour());
-		simulatedContext.setIgnoreEvents(true);
-		simulatedContext.init();
-		sendMessage(new ServerToClientMessage()
-				.messageType(MessageType.ON_UPDATE)
-				.gameState(Games.getGameState(simulatedContext, localPlayer, remotePlayer)));
+		// Skip this for websocket clients. It's deprecated.
 	}
 
 	@Override
@@ -199,6 +165,7 @@ public class WebSocketClient implements Client {
 		final com.hiddenswitch.proto3.net.client.models.GameState gameState = getClientGameState(state);
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.ON_UPDATE)
+				.changes(getChangeSet(state))
 				.gameState(gameState));
 	}
 
@@ -222,10 +189,10 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
-
 		sendMessage(new ServerToClientMessage()
 				.id(id)
 				.messageType(MessageType.ON_REQUEST_ACTION)
+				.changes(getChangeSet(state))
 				.gameState(getClientGameState(state))
 				.actions(new GameActions()
 						.actions(availableActions.stream().map(ga -> {
@@ -252,9 +219,11 @@ public class WebSocketClient implements Client {
 				));
 	}
 
+
 	@Override
-	public void onMulligan(String id, Player player, List<Card> cards) {
-		final GameContext simulatedContext = new GameContext(player, null, new GameLogic(), new DeckFormat());
+	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
+		final GameContext simulatedContext = new GameContext();
+		simulatedContext.loadState(state);
 		sendMessage(new ServerToClientMessage()
 				.id(id)
 				.messageType(MessageType.ON_MULLIGAN)
@@ -269,4 +238,38 @@ public class WebSocketClient implements Client {
 		this.privateSocket = privateSocket;
 	}
 
+	private EntityChangeSet getChangeSet(GameState current) {
+		final MapDifference<Integer, EntityLocation> difference;
+		if (lastStateSent == null) {
+			difference = current.start();
+		} else {
+			difference = lastStateSent.to(current);
+		}
+
+		EntityChangeSet changes = new EntityChangeSet();
+		difference.entriesDiffering().entrySet().stream().map(i -> new EntityChangeSetInner()
+				.id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.C)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue().rightValue())))
+				.p0(new EntityState()
+						.location(Games.toClientLocation(i.getValue().leftValue()))))
+				.forEach(changes::add);
+
+		difference.entriesOnlyOnRight().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.A)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue()))))
+				.forEach(changes::add);
+
+		difference.entriesOnlyOnLeft().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.R)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue()))))
+				.forEach(changes::add);
+
+		lastStateSent = current;
+
+		return changes;
+	}
 }

@@ -28,6 +28,7 @@ package com.hiddenswitch.proto3.net.client.models;
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.hiddenswitch.proto3.net.client.models.Entity;
+import com.hiddenswitch.proto3.net.client.models.EntityChangeSet;
 import com.hiddenswitch.proto3.net.client.models.GameActions;
 import com.hiddenswitch.proto3.net.client.models.GameEvent;
 import com.hiddenswitch.proto3.net.client.models.GameState;
@@ -48,6 +49,9 @@ public class ServerToClientMessage  implements Serializable {
 
   @SerializedName("messageType")
   private MessageType messageType = null;
+
+  @SerializedName("changes")
+  private EntityChangeSet changes = null;
 
   @SerializedName("gameState")
   private GameState gameState = null;
@@ -95,6 +99,24 @@ public class ServerToClientMessage  implements Serializable {
 
   public void setMessageType(MessageType messageType) {
     this.messageType = messageType;
+  }
+
+  public ServerToClientMessage changes(EntityChangeSet changes) {
+    this.changes = changes;
+    return this;
+  }
+
+   /**
+   * Get changes
+   * @return changes
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public EntityChangeSet getChanges() {
+    return changes;
+  }
+
+  public void setChanges(EntityChangeSet changes) {
+    this.changes = changes;
   }
 
   public ServerToClientMessage gameState(GameState gameState) {
@@ -186,6 +208,7 @@ public class ServerToClientMessage  implements Serializable {
     ServerToClientMessage serverToClientMessage = (ServerToClientMessage) o;
     return Objects.equals(this.id, serverToClientMessage.id) &&
         Objects.equals(this.messageType, serverToClientMessage.messageType) &&
+        Objects.equals(this.changes, serverToClientMessage.changes) &&
         Objects.equals(this.gameState, serverToClientMessage.gameState) &&
         Objects.equals(this.actions, serverToClientMessage.actions) &&
         Objects.equals(this.startingCards, serverToClientMessage.startingCards) &&
@@ -194,7 +217,7 @@ public class ServerToClientMessage  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, messageType, gameState, actions, startingCards, event);
+    return Objects.hash(id, messageType, changes, gameState, actions, startingCards, event);
   }
 
   @Override
@@ -204,6 +227,7 @@ public class ServerToClientMessage  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    messageType: ").append(toIndentedString(messageType)).append("\n");
+    sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
     sb.append("    gameState: ").append(toIndentedString(gameState)).append("\n");
     sb.append("    actions: ").append(toIndentedString(actions)).append("\n");
     sb.append("    startingCards: ").append(toIndentedString(startingCards)).append("\n");

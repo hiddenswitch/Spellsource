@@ -11,10 +11,7 @@ import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
@@ -315,5 +312,10 @@ public class Player extends Entity implements Serializable {
 
 	public EntityZone getWeaponZone() {
 		return getHero().getWeaponZone();
+	}
+
+	@Override
+	public EntityLocation getEntityLocation() {
+		return new EntityLocation(PlayerZones.PLAYER, getId(), 0);
 	}
 }

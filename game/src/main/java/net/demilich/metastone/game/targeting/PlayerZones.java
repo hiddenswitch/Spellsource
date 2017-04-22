@@ -11,5 +11,6 @@ public enum PlayerZones {
 	HERO,
 	WEAPON,
 	SET_ASIDE_ZONE,
-	HIDDEN
+	HIDDEN,
+	PLAYER
 }

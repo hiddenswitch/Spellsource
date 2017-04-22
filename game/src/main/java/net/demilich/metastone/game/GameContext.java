@@ -58,15 +58,18 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	}
 
 	public GameContext(Player player1, Player player2, GameLogic logic, DeckFormat deckFormat) {
-		this.setPlayer1(player1);
 		if (player1.getId() == IdFactory.UNASSIGNED) {
 			player1.setId(PLAYER_1);
 		}
+
+		setPlayer(player1.getId(), player1);
+
 		if (player2 != null) {
-			this.setPlayer2(player2);
 			if (player2.getId() == IdFactory.UNASSIGNED) {
 				player2.setId(PLAYER_2);
 			}
+
+			this.setPlayer(player2.getId(), player2);
 		}
 
 		this.setLogic(logic);
@@ -179,7 +182,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		setTurnState(TurnState.TURN_ENDED);
 	}
 
-	private Card findCardinCollection(CardCollection cardCollection, int cardId) {
+	private Card findCardinCollection(Iterable<Card> cardCollection, int cardId) {
 		for (Card card : cardCollection) {
 			if (card.getId() == cardId) {
 				return card;
@@ -447,6 +450,8 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
 		logger.debug(getActivePlayer().getName() + " begins");
+		getLogic().initializePlayer(PLAYER_1);
+		getLogic().initializePlayer(PLAYER_2);
 		getLogic().init(getActivePlayerId(), true);
 		getLogic().init(getOpponent(getActivePlayer()).getId(), false);
 	}
@@ -527,6 +532,13 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 			card = getPendingCard();
 		} else {
 			switch (cardReference.getLocation()) {
+				case SET_ASIDE_ZONE:
+					final Optional<Entity> first = player.getSetAsideZone().stream().filter(e -> e.getId() == cardReference.getCardId()).findFirst();
+					if (first.isPresent()
+							&& Card.class.isAssignableFrom(first.get().getClass())) {
+						card = (Card) first.get();
+					}
+					break;
 				case DECK:
 					card = findCardinCollection(player.getDeck(), cardReference.getCardId());
 					break;

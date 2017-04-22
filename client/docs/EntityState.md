@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**location** | [**EntityLocation**](EntityLocation.md) |  |  [optional]
 **background** | **String** |  |  [optional]
 **portrait** | **String** |  |  [optional]
 **gold** | **Boolean** |  |  [optional]

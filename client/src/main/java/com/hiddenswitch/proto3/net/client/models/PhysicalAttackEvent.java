@@ -27,7 +27,6 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.CardLocation;
 import com.hiddenswitch.proto3.net.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,12 +37,6 @@ import java.io.Serializable;
  */
 
 public class PhysicalAttackEvent  implements Serializable {
-  @SerializedName("attackerLocation")
-  private CardLocation attackerLocation = null;
-
-  @SerializedName("defenderLocation")
-  private CardLocation defenderLocation = null;
-
   @SerializedName("attacker")
   private Entity attacker = null;
 
@@ -52,42 +45,6 @@ public class PhysicalAttackEvent  implements Serializable {
 
   @SerializedName("damageDealt")
   private Integer damageDealt = null;
-
-  public PhysicalAttackEvent attackerLocation(CardLocation attackerLocation) {
-    this.attackerLocation = attackerLocation;
-    return this;
-  }
-
-   /**
-   * Get attackerLocation
-   * @return attackerLocation
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public CardLocation getAttackerLocation() {
-    return attackerLocation;
-  }
-
-  public void setAttackerLocation(CardLocation attackerLocation) {
-    this.attackerLocation = attackerLocation;
-  }
-
-  public PhysicalAttackEvent defenderLocation(CardLocation defenderLocation) {
-    this.defenderLocation = defenderLocation;
-    return this;
-  }
-
-   /**
-   * Get defenderLocation
-   * @return defenderLocation
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public CardLocation getDefenderLocation() {
-    return defenderLocation;
-  }
-
-  public void setDefenderLocation(CardLocation defenderLocation) {
-    this.defenderLocation = defenderLocation;
-  }
 
   public PhysicalAttackEvent attacker(Entity attacker) {
     this.attacker = attacker;
@@ -153,16 +110,14 @@ public class PhysicalAttackEvent  implements Serializable {
       return false;
     }
     PhysicalAttackEvent physicalAttackEvent = (PhysicalAttackEvent) o;
-    return Objects.equals(this.attackerLocation, physicalAttackEvent.attackerLocation) &&
-        Objects.equals(this.defenderLocation, physicalAttackEvent.defenderLocation) &&
-        Objects.equals(this.attacker, physicalAttackEvent.attacker) &&
+    return Objects.equals(this.attacker, physicalAttackEvent.attacker) &&
         Objects.equals(this.defender, physicalAttackEvent.defender) &&
         Objects.equals(this.damageDealt, physicalAttackEvent.damageDealt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(attackerLocation, defenderLocation, attacker, defender, damageDealt);
+    return Objects.hash(attacker, defender, damageDealt);
   }
 
   @Override
@@ -170,8 +125,6 @@ public class PhysicalAttackEvent  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class PhysicalAttackEvent {\n");
     
-    sb.append("    attackerLocation: ").append(toIndentedString(attackerLocation)).append("\n");
-    sb.append("    defenderLocation: ").append(toIndentedString(defenderLocation)).append("\n");
     sb.append("    attacker: ").append(toIndentedString(attacker)).append("\n");
     sb.append("    defender: ").append(toIndentedString(defender)).append("\n");
     sb.append("    damageDealt: ").append(toIndentedString(damageDealt)).append("\n");

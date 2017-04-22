@@ -27,7 +27,6 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.CardLocation;
 import com.hiddenswitch.proto3.net.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,32 +37,11 @@ import java.io.Serializable;
  */
 
 public class GameEventDrawCard  implements Serializable {
-  @SerializedName("to")
-  private CardLocation to = null;
-
   @SerializedName("card")
   private Entity card = null;
 
   @SerializedName("drawn")
   private Boolean drawn = null;
-
-  public GameEventDrawCard to(CardLocation to) {
-    this.to = to;
-    return this;
-  }
-
-   /**
-   * Get to
-   * @return to
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public CardLocation getTo() {
-    return to;
-  }
-
-  public void setTo(CardLocation to) {
-    this.to = to;
-  }
 
   public GameEventDrawCard card(Entity card) {
     this.card = card;
@@ -111,14 +89,13 @@ public class GameEventDrawCard  implements Serializable {
       return false;
     }
     GameEventDrawCard gameEventDrawCard = (GameEventDrawCard) o;
-    return Objects.equals(this.to, gameEventDrawCard.to) &&
-        Objects.equals(this.card, gameEventDrawCard.card) &&
+    return Objects.equals(this.card, gameEventDrawCard.card) &&
         Objects.equals(this.drawn, gameEventDrawCard.drawn);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(to, card, drawn);
+    return Objects.hash(card, drawn);
   }
 
   @Override
@@ -126,7 +103,6 @@ public class GameEventDrawCard  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameEventDrawCard {\n");
     
-    sb.append("    to: ").append(toIndentedString(to)).append("\n");
     sb.append("    card: ").append(toIndentedString(card)).append("\n");
     sb.append("    drawn: ").append(toIndentedString(drawn)).append("\n");
     sb.append("}");

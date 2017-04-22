@@ -6,7 +6,6 @@ import com.hiddenswitch.proto3.net.common.ServerToClientMessage;
 import com.hiddenswitch.proto3.net.util.IncomingMessage;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.VertxBufferOutputStream;
-import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.net.NetSocket;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
@@ -91,8 +90,8 @@ public class SocketClient implements Client {
 	}
 
 	@Override
-	public void onMulligan(String id, Player player, List<Card> cards) {
-		sendMessage(new ServerToClientMessage(id, player, cards));
+	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
+		sendMessage(new ServerToClientMessage(id, state.player1.getId() == playerId ? state.player1 : state.player2, cards, state));
 	}
 
 	public NetSocket getPrivateSocket() {

@@ -27,7 +27,6 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.CardLocation;
 import com.hiddenswitch.proto3.net.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,29 +37,8 @@ import java.io.Serializable;
  */
 
 public class GameEventKill  implements Serializable {
-  @SerializedName("location")
-  private CardLocation location = null;
-
   @SerializedName("victim")
   private Entity victim = null;
-
-  public GameEventKill location(CardLocation location) {
-    this.location = location;
-    return this;
-  }
-
-   /**
-   * Get location
-   * @return location
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public CardLocation getLocation() {
-    return location;
-  }
-
-  public void setLocation(CardLocation location) {
-    this.location = location;
-  }
 
   public GameEventKill victim(Entity victim) {
     this.victim = victim;
@@ -90,13 +68,12 @@ public class GameEventKill  implements Serializable {
       return false;
     }
     GameEventKill gameEventKill = (GameEventKill) o;
-    return Objects.equals(this.location, gameEventKill.location) &&
-        Objects.equals(this.victim, gameEventKill.victim);
+    return Objects.equals(this.victim, gameEventKill.victim);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, victim);
+    return Objects.hash(victim);
   }
 
   @Override
@@ -104,7 +81,6 @@ public class GameEventKill  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameEventKill {\n");
     
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
     sb.append("    victim: ").append(toIndentedString(victim)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -226,6 +226,8 @@ definitions:
           ClientToServerMessage if this field is not null.
       messageType:
         $ref: '#/definitions/MessageType'
+      changes:
+        $ref: '#/definitions/EntityChangeSet'
       gameState:
         $ref: '#/definitions/GameState'
       actions:
@@ -271,27 +273,68 @@ definitions:
   PhysicalAttackEvent:
     type: 'object'
     properties:
-      attackerLocation:
-        $ref: '#/definitions/CardLocation'
-      defenderLocation:
-        $ref: '#/definitions/CardLocation'
       attacker:
         $ref: '#/definitions/Entity'
       defender:
         $ref: '#/definitions/Entity'
       damageDealt:
         type: 'integer'
-  CardLocation:
+  EntityLocation:
     type: 'object'
+    required:
+     - zone
+     - index
+     - player
     properties:
+      player:
+        type: 'integer'
+        enum:
+          - -1
+          - 0
+          - 1
+      index:
+        type: 'integer'
       zone:
-        type: 'integer'
-        default: 0
-        required: true
-      position:
-        type: 'integer'
-        default: 0
-        required: true
+        type: 'string'
+        enum: 
+          - 'NONE'
+          - 'HAND'
+          - 'DECK'
+          - 'GRAVEYARD'
+          - 'BATTLEFIELD'
+          - 'SECRET'
+          - 'HERO_POWER'
+          - 'HERO'
+          - 'WEAPON'
+          - 'SET_ASIDE_ZONE'
+          - 'HIDDEN'
+          - 'PLAYER'
+  EntityChangeSet:
+    description: |
+      An abbreviated description of changes since the last change set this client received.
+    type: 'array'
+    items:
+      type: 'object'
+      properties:
+        op:
+          description: |
+            Describes a change to an entity. 'A' corresponds to added/inserted, 'C' corresponds to changed, 'R' corresponds to
+            removed. p0 is the previous value, if it exists. p1 is the current value. Only the entity's locatino is currently
+            populated in this changeset.
+          type: 'string'
+          enum:
+            - 'A'
+            - 'C'
+            - 'R'
+        id:
+          description: |
+            The ID of the entity in this change set.
+          type: 'integer'
+        p0:
+          $ref: '#/definitions/EntityState'
+        p1:
+          $ref: '#/definitions/EntityState'
+
   GameEvent:
     type: 'object'
     properties:
@@ -345,8 +388,6 @@ definitions:
       drawCard:
         type: 'object'
         properties:
-          to:
-            $ref: '#/definitions/CardLocation'
           card:
             $ref: '#/definitions/Entity'
           drawn:
@@ -378,8 +419,6 @@ definitions:
       cardPlayed:
         type: 'object'
         properties:
-          location:
-            $ref: '#/definitions/CardLocation'
           card:
             $ref: '#/definitions/Entity'
       armorGained:
@@ -476,10 +515,6 @@ definitions:
       summon:
         type: 'object'
         properties:
-          from:
-            $ref: '#/definitions/CardLocation'
-          to:
-            $ref: '#/definitions/CardLocation'
           minion:
             $ref: '#/definitions/Entity'
           source:
@@ -499,8 +534,6 @@ definitions:
       kill:
         type: 'object'
         properties:
-          location:
-            $ref: '#/definitions/CardLocation'
           victim:
             $ref: '#/definitions/Entity'
   JavaSerializationObject:
@@ -559,10 +592,6 @@ definitions:
   GameState:
     type: 'object'
     properties:
-      zones:
-        type: 'array'
-        items:
-          $ref: '#/definitions/Zone'
       entities:
         type: 'array'
         items:
@@ -574,17 +603,6 @@ definitions:
       timestamp:
         type: 'integer'
         format: 'int64'
-  Zone:
-    type: 'object'
-    properties:
-      id:
-        type: 'integer'
-        required: true
-        default: 0
-      entities:
-        type: 'array'
-        items:
-          type: 'integer'
   GameActions:
     type: 'object'
     properties:
@@ -671,92 +689,96 @@ definitions:
       description: 
         type: 'string'
       state:
-        type: 'object'
-        properties:
-          background:
-            type: 'string'
-          portrait:
-            type: 'string'
-          gold:
-            type: 'boolean'
-          boardPosition:
-            type: 'integer'
-          owner:
-            type: 'integer'
-          heroClass:
-            type: 'string'
-          hp:
-            type: 'integer'
-          durability:
-            type: 'integer'
-          maxHp:
-            type: 'integer'
-          baseAttack:
-            type: 'integer'
-          attack:
-            type: 'integer'
-          baseManaCost:
-            type: 'integer'
-          manaCost:
-            type: 'integer'
-          armor:
-            type: 'integer'
-          destroyed:
-            type: 'boolean'
-          pendingDestroy:
-            type: 'boolean'
-          summoningSickness:
-            type: 'boolean'
-          frozen:
-            type: 'boolean'
-          silenced:
-            type: 'boolean'
-          windfury:
-            type: 'boolean'
-          taunt:
-            type: 'boolean'
-          spellDamage:
-            type: 'integer'
-          charge:
-            type: 'boolean'
-          enraged:
-            type: 'boolean'
-          battlecry:
-            type: 'boolean'
-          deathrattles:
-            type: 'boolean'
-          immune:
-            type: 'boolean'
-          divineShield:
-            type: 'boolean'
-          stealth:
-            type: 'boolean'
-          secret:
-            type: 'boolean'
-          combo:
-            type: 'boolean'
-          overload:
-            type: 'integer'
-          chooseOne:
-            type: 'boolean'
-          untargetableBySpells:
-            type: 'boolean'
-          cannotAttack:
-            type: 'boolean'
-          underAura:
-            type: 'boolean'
-          customRenderer:
-            type: 'string'
-          customData:
-            type: 'string'
-          playable:
-            type: 'boolean'
-          mana:
-            type: 'integer'
-          maxMana:
-            type: 'integer'
-          lockedMana:
-            type: 'integer'
+        $ref: '#/definitions/EntityState'
+  EntityState:
+    type: 'object'
+    properties:
+      location:
+        $ref: '#/definitions/EntityLocation'
+      background:
+        type: 'string'
+      portrait:
+        type: 'string'
+      gold:
+        type: 'boolean'
+      boardPosition:
+        type: 'integer'
+      owner:
+        type: 'integer'
+      heroClass:
+        type: 'string'
+      hp:
+        type: 'integer'
+      durability:
+        type: 'integer'
+      maxHp:
+        type: 'integer'
+      baseAttack:
+        type: 'integer'
+      attack:
+        type: 'integer'
+      baseManaCost:
+        type: 'integer'
+      manaCost:
+        type: 'integer'
+      armor:
+        type: 'integer'
+      destroyed:
+        type: 'boolean'
+      pendingDestroy:
+        type: 'boolean'
+      summoningSickness:
+        type: 'boolean'
+      frozen:
+        type: 'boolean'
+      silenced:
+        type: 'boolean'
+      windfury:
+        type: 'boolean'
+      taunt:
+        type: 'boolean'
+      spellDamage:
+        type: 'integer'
+      charge:
+        type: 'boolean'
+      enraged:
+        type: 'boolean'
+      battlecry:
+        type: 'boolean'
+      deathrattles:
+        type: 'boolean'
+      immune:
+        type: 'boolean'
+      divineShield:
+        type: 'boolean'
+      stealth:
+        type: 'boolean'
+      secret:
+        type: 'boolean'
+      combo:
+        type: 'boolean'
+      overload:
+        type: 'integer'
+      chooseOne:
+        type: 'boolean'
+      untargetableBySpells:
+        type: 'boolean'
+      cannotAttack:
+        type: 'boolean'
+      underAura:
+        type: 'boolean'
+      customRenderer:
+        type: 'string'
+      customData:
+        type: 'string'
+      playable:
+        type: 'boolean'
+      mana:
+        type: 'integer'
+      maxMana:
+        type: 'integer'
+      lockedMana:
+        type: 'integer'
 paths:
   /accounts/{targetUserId}:
     get:

@@ -111,6 +111,7 @@ public class ServerGameContext extends GameContext {
 
 		setLocalPlayer1();
 		setLocalPlayer2();
+		updateClientsWithGameState();
 
 		Future<Void> init1 = Future.future();
 		Future<Void> init2 = Future.future();
@@ -257,7 +258,7 @@ public class ServerGameContext extends GameContext {
 		logger.debug("Requesting mulligan for playerId {} hashCode {}", player.getId(), player.hashCode());
 		String id = RandomStringUtils.randomAscii(8);
 		requestCallbacks.put(new CallbackId(id, player.getId()), new GameplayRequest(GameplayRequestType.MULLIGAN, starterCards, callback));
-		getListenerMap().get(player).onMulligan(id, player, starterCards);
+		getListenerMap().get(player).onMulligan(id, new GameState(this), starterCards, player.getId());
 	}
 
 	@Suspendable

@@ -1,12 +1,7 @@
 package com.hiddenswitch.proto3.net.common;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
 
-import io.vertx.core.net.NetSocket;
-import net.demilich.metastone.game.Environment;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
@@ -28,7 +23,7 @@ public interface Client {
 
 	void onRequestAction(String messageId, GameState state, List<GameAction> actions);
 	
-	void onMulligan(String messageId, Player player, List<Card> cards);
+	void onMulligan(String messageId, GameState state, List<Card> cards, int playerId);
 
 	void close();
 

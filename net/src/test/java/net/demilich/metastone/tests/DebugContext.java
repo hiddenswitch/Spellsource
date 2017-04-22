@@ -14,6 +14,8 @@ public class DebugContext extends GameContext {
 	@Override
 	public void init() {
 		setActivePlayerId(getPlayer(PLAYER_1).getId());
+		getLogic().initializePlayer(PLAYER_1);
+		getLogic().initializePlayer(PLAYER_2);
 		getLogic().init(getActivePlayerId(), true);
 		getLogic().init(getOpponent(getActivePlayer()).getId(), false);
 	}

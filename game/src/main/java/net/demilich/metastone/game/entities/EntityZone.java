@@ -9,7 +9,7 @@ import java.util.*;
  * Created by bberman on 4/16/17.
  */
 public class EntityZone<E extends Entity> extends AbstractList<E> implements
-		List<E>, Cloneable, Serializable {
+		List<E>, Iterable<E>, Cloneable, Serializable {
 	protected final PlayerZones zone;
 	protected int player = -1;
 	protected List<E> internal = new ArrayList<>();
@@ -63,6 +63,9 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	}
 
 	protected void uncheckedAdd(int index, E element) {
+		if (index > size()) {
+			throw new IndexOutOfBoundsException();
+		}
 		internal.add(index, element);
 		for (int i = index; i < internal.size(); i++) {
 			internal.get(i).pushEntityLocation(new EntityLocation(zone, player, i));
