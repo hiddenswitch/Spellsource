@@ -26,65 +26,18 @@
 package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
-import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.EntityChangeSetInner;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.io.Serializable;
 /**
- * Zone
+ * An abbreviated description of changes since the last change set this client received. 
  */
+@ApiModel(description = "An abbreviated description of changes since the last change set this client received. ")
 
-public class Zone  implements Serializable {
-  @SerializedName("id")
-  private Integer id = null;
-
-  @SerializedName("entities")
-  private List<Integer> entities = new ArrayList<Integer>();
-
-  public Zone id(Integer id) {
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public Zone entities(List<Integer> entities) {
-    this.entities = entities;
-    return this;
-  }
-
-  public Zone addEntitiesItem(Integer entitiesItem) {
-    this.entities.add(entitiesItem);
-    return this;
-  }
-
-   /**
-   * Get entities
-   * @return entities
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public List<Integer> getEntities() {
-    return entities;
-  }
-
-  public void setEntities(List<Integer> entities) {
-    this.entities = entities;
-  }
-
+public class EntityChangeSet extends ArrayList<EntityChangeSetInner> implements Serializable {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -94,23 +47,19 @@ public class Zone  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Zone zone = (Zone) o;
-    return Objects.equals(this.id, zone.id) &&
-        Objects.equals(this.entities, zone.entities);
+    return true;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, entities);
+    return Objects.hash(super.hashCode());
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Zone {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
+    sb.append("class EntityChangeSet {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();
   }

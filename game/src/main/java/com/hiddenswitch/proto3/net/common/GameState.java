@@ -1,5 +1,7 @@
 package com.hiddenswitch.proto3.net.common;
 
+import com.google.common.collect.MapDifference;
+import com.google.common.collect.Maps;
 import net.demilich.metastone.game.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -7,15 +9,18 @@ import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
+import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.PlayerZones;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GameState implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -53,5 +58,33 @@ public class GameState implements Serializable {
 				&& environment != null
 				&& triggerManager != null
 				&& turnState != null;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Stream<Entity> getEntities() {
+		return Stream.of(player1, player2).flatMap(p -> Stream.of(new PlayerZones[]{
+				PlayerZones.BATTLEFIELD,
+				PlayerZones.DECK,
+				PlayerZones.GRAVEYARD,
+				PlayerZones.HAND,
+				PlayerZones.HERO,
+				PlayerZones.HERO_POWER,
+				PlayerZones.SET_ASIDE_ZONE,
+				PlayerZones.WEAPON,
+				PlayerZones.SECRET
+		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
+	}
+
+	protected Map<Integer, EntityLocation> getMap() {
+		return getEntities().collect(Collectors.toMap(Entity::getId,
+				Entity::getEntityLocation));
+	}
+
+	public MapDifference<Integer, EntityLocation> to(GameState nextState) {
+		return Maps.difference(getMap(), nextState.getMap());
+	}
+
+	public MapDifference<Integer, EntityLocation> start() {
+		return Maps.difference(Collections.emptyMap(), getMap());
 	}
 }

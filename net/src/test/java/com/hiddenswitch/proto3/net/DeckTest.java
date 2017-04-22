@@ -116,6 +116,8 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 			getContext().assertEquals(deck1.getInventoryRecords().size(), 30);
 
 			// Delete the deck
+			DeckDeleteResponse response = service.deleteDeck(new DeckDeleteRequest(deckId));
+			getContext().assertFalse(accounts.get(userId1).getDecks().contains(deckId));
 		});
 	}
 

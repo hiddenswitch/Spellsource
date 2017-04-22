@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GameLogic implements Cloneable, Serializable {
 	public static Logger logger = LoggerFactory.getLogger(GameLogic.class);
@@ -1062,11 +1064,9 @@ public class GameLogic implements Cloneable, Serializable {
 
 	@Suspendable
 	public void init(int playerId, boolean begins) {
-		Player player = initializePlayer(playerId);
+		mulligan(context.getPlayer(playerId), begins);
 
-		mulligan(player, begins);
-
-		startGameForPlayer(player);
+		startGameForPlayer(context.getPlayer(playerId));
 	}
 
 	@Suspendable
@@ -1256,6 +1256,11 @@ public class GameLogic implements Cloneable, Serializable {
 
 	@Suspendable
 	protected void handleMulligan(Player player, boolean begins, FirstHand firstHand, List<Card> discardedCards) {
+		// Get the entity ids of the discarded cards and then replace the discarded cards with them
+		final Map<Integer, Entity> setAsideZone = player.getSetAsideZone().stream().collect(Collectors.toMap(Entity::getId, Function.identity()));
+		discardedCards = discardedCards.stream().map(Card::getId).map(setAsideZone::get).map(e -> (Card) e).collect(Collectors.toList());
+
+		// The starter cards have been put into the setAsideZone
 		List<Card> starterCards = firstHand.getStarterCards();
 		int numberOfStarterCards = firstHand.getNumberOfStarterCards();
 
@@ -1269,13 +1274,15 @@ public class GameLogic implements Cloneable, Serializable {
 		// reached
 		while (starterCards.size() < numberOfStarterCards) {
 			Card randomCard = player.getDeck().getRandom();
-			player.getDeck().remove(randomCard);
+			player.getDeck().move(randomCard, player.getSetAsideZone());
+			randomCard.setLocation(CardLocation.SET_ASIDE_ZONE);
 			starterCards.add(randomCard);
 		}
 
 		// put the networkRequestMulligan cards back in the deck
 		for (Card discardedCard : discardedCards) {
-			player.getDeck().addCard(discardedCard);
+			player.getSetAsideZone().move(discardedCard, player.getDeck());
+			discardedCard.setLocation(CardLocation.DECK);
 		}
 
 		for (Card starterCard : starterCards) {
@@ -1283,6 +1290,8 @@ public class GameLogic implements Cloneable, Serializable {
 				receiveCard(player.getId(), starterCard);
 			}
 		}
+
+		player.getDeck().shuffle();
 
 		// second player gets the coin additionally
 		if (!begins) {
@@ -2015,7 +2024,8 @@ public class GameLogic implements Cloneable, Serializable {
 			for (int j = 0; j < numberOfStarterCards; j++) {
 				Card randomCard = player.getDeck().getRandom();
 				if (randomCard != null) {
-					player.getDeck().remove(randomCard);
+					player.getDeck().move(randomCard, player.getSetAsideZone());
+					randomCard.setLocation(CardLocation.SET_ASIDE_ZONE);
 					log("Player {} been offered card {} for networkRequestMulligan", player.getName(), randomCard);
 					starterCards.add(randomCard);
 				}

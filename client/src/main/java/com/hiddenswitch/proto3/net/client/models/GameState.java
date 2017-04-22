@@ -28,7 +28,6 @@ package com.hiddenswitch.proto3.net.client.models;
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.hiddenswitch.proto3.net.client.models.Entity;
-import com.hiddenswitch.proto3.net.client.models.Zone;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -40,9 +39,6 @@ import java.io.Serializable;
  */
 
 public class GameState  implements Serializable {
-  @SerializedName("zones")
-  private List<Zone> zones = new ArrayList<Zone>();
-
   @SerializedName("entities")
   private List<Entity> entities = new ArrayList<Entity>();
 
@@ -54,29 +50,6 @@ public class GameState  implements Serializable {
 
   @SerializedName("timestamp")
   private Long timestamp = null;
-
-  public GameState zones(List<Zone> zones) {
-    this.zones = zones;
-    return this;
-  }
-
-  public GameState addZonesItem(Zone zonesItem) {
-    this.zones.add(zonesItem);
-    return this;
-  }
-
-   /**
-   * Get zones
-   * @return zones
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public List<Zone> getZones() {
-    return zones;
-  }
-
-  public void setZones(List<Zone> zones) {
-    this.zones = zones;
-  }
 
   public GameState entities(List<Entity> entities) {
     this.entities = entities;
@@ -165,8 +138,7 @@ public class GameState  implements Serializable {
       return false;
     }
     GameState gameState = (GameState) o;
-    return Objects.equals(this.zones, gameState.zones) &&
-        Objects.equals(this.entities, gameState.entities) &&
+    return Objects.equals(this.entities, gameState.entities) &&
         Objects.equals(this.turnState, gameState.turnState) &&
         Objects.equals(this.turnNumber, gameState.turnNumber) &&
         Objects.equals(this.timestamp, gameState.timestamp);
@@ -174,7 +146,7 @@ public class GameState  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(zones, entities, turnState, turnNumber, timestamp);
+    return Objects.hash(entities, turnState, turnNumber, timestamp);
   }
 
   @Override
@@ -182,7 +154,6 @@ public class GameState  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameState {\n");
     
-    sb.append("    zones: ").append(toIndentedString(zones)).append("\n");
     sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
     sb.append("    turnState: ").append(toIndentedString(turnState)).append("\n");
     sb.append("    turnNumber: ").append(toIndentedString(turnNumber)).append("\n");

@@ -39,13 +39,11 @@ import com.hiddenswitch.proto3.net.client.models.GameEventHeal;
 import com.hiddenswitch.proto3.net.client.models.GameEventHeroPowerUsed;
 import com.hiddenswitch.proto3.net.client.models.GameEventJoust;
 import com.hiddenswitch.proto3.net.client.models.GameEventKill;
-import com.hiddenswitch.proto3.net.client.models.GameEventOverload;
 import com.hiddenswitch.proto3.net.client.models.GameEventPreDamage;
 import com.hiddenswitch.proto3.net.client.models.GameEventSecretPlayed;
 import com.hiddenswitch.proto3.net.client.models.GameEventSecretRevealed;
 import com.hiddenswitch.proto3.net.client.models.GameEventSilence;
 import com.hiddenswitch.proto3.net.client.models.GameEventSpellCasted;
-import com.hiddenswitch.proto3.net.client.models.GameEventSummon;
 import com.hiddenswitch.proto3.net.client.models.GameEventTargetAcquisition;
 import com.hiddenswitch.proto3.net.client.models.GameEventWeaponDestroyed;
 import com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent;
@@ -240,7 +238,7 @@ public class GameEvent  implements Serializable {
   private PhysicalAttackEvent physicalAttack = null;
 
   @SerializedName("overload")
-  private GameEventOverload overload = null;
+  private GameEventCardPlayed overload = null;
 
   @SerializedName("heal")
   private GameEventHeal heal = null;
@@ -249,13 +247,13 @@ public class GameEvent  implements Serializable {
   private GameEventSecretRevealed secretRevealed = null;
 
   @SerializedName("summon")
-  private GameEventSummon summon = null;
+  private GameEventBeforeSummon summon = null;
 
   @SerializedName("afterSpellCasted")
   private GameEventAfterSpellCasted afterSpellCasted = null;
 
   @SerializedName("discard")
-  private GameEventOverload discard = null;
+  private GameEventCardPlayed discard = null;
 
   @SerializedName("kill")
   private GameEventKill kill = null;
@@ -710,7 +708,7 @@ public class GameEvent  implements Serializable {
     this.physicalAttack = physicalAttack;
   }
 
-  public GameEvent overload(GameEventOverload overload) {
+  public GameEvent overload(GameEventCardPlayed overload) {
     this.overload = overload;
     return this;
   }
@@ -720,11 +718,11 @@ public class GameEvent  implements Serializable {
    * @return overload
   **/
   @ApiModelProperty(example = "null", value = "")
-  public GameEventOverload getOverload() {
+  public GameEventCardPlayed getOverload() {
     return overload;
   }
 
-  public void setOverload(GameEventOverload overload) {
+  public void setOverload(GameEventCardPlayed overload) {
     this.overload = overload;
   }
 
@@ -764,7 +762,7 @@ public class GameEvent  implements Serializable {
     this.secretRevealed = secretRevealed;
   }
 
-  public GameEvent summon(GameEventSummon summon) {
+  public GameEvent summon(GameEventBeforeSummon summon) {
     this.summon = summon;
     return this;
   }
@@ -774,11 +772,11 @@ public class GameEvent  implements Serializable {
    * @return summon
   **/
   @ApiModelProperty(example = "null", value = "")
-  public GameEventSummon getSummon() {
+  public GameEventBeforeSummon getSummon() {
     return summon;
   }
 
-  public void setSummon(GameEventSummon summon) {
+  public void setSummon(GameEventBeforeSummon summon) {
     this.summon = summon;
   }
 
@@ -800,7 +798,7 @@ public class GameEvent  implements Serializable {
     this.afterSpellCasted = afterSpellCasted;
   }
 
-  public GameEvent discard(GameEventOverload discard) {
+  public GameEvent discard(GameEventCardPlayed discard) {
     this.discard = discard;
     return this;
   }
@@ -810,11 +808,11 @@ public class GameEvent  implements Serializable {
    * @return discard
   **/
   @ApiModelProperty(example = "null", value = "")
-  public GameEventOverload getDiscard() {
+  public GameEventCardPlayed getDiscard() {
     return discard;
   }
 
-  public void setDiscard(GameEventOverload discard) {
+  public void setDiscard(GameEventCardPlayed discard) {
     this.discard = discard;
   }
 

@@ -19,6 +19,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	private AttributeMap attributes = new AttributeMap();
 	private int id = IdFactory.UNASSIGNED;
 	private int ownerIndex = NO_OWNER;
+	private boolean entityLocationHistory = false;
 	protected List<EntityLocation> entityLocations = new ArrayList<>();
 
 	protected Entity() {
@@ -153,7 +154,11 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	}
 
 	public void pushEntityLocation(EntityLocation entityLocation) {
-		this.entityLocations.add(entityLocation);
+		if (entityLocationHistory) {
+			this.entityLocations.add(entityLocation);
+		} else {
+			this.entityLocations.set(entityLocations.size() - 1, entityLocation);
+		}
 	}
 
 	public void resetEntityLocations() {

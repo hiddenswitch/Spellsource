@@ -76,8 +76,9 @@ public class ServerToClientMessage implements Serializable {
 		this.mt = MessageType.ON_REQUEST_ACTION;
 	}
 
-	public ServerToClientMessage(String id, Player player, List<Card> cards) {
+	public ServerToClientMessage(String id, Player player, List<Card> cards, GameState state) {
 		this.id = id;
+		this.gameState = state;
 		this.player1 = player;
 		this.startingCards = cards;
 		this.mt = MessageType.ON_MULLIGAN;

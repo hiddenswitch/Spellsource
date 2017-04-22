@@ -80,13 +80,13 @@ public class AIServiceConnection implements Client {
 
 	@Override
 	@Suspendable
-	public void onMulligan(String messageId, Player player, List<Card> cards) {
+	public void onMulligan(String messageId, GameState state, List<Card> cards, int playerId) {
 		final ServerGameContext gc = context.get();
 		bots.async((AsyncResult<MulliganResponse> result) -> {
 			if (gc == null) {
 				return;
 			}
-			gc.onMulliganReceived(messageId, player, result.result().discardedCards);
+			gc.onMulliganReceived(messageId, gc.getPlayer(playerId), result.result().discardedCards);
 		}).mulligan(new MulliganRequest(cards));
 	}
 

@@ -74,16 +74,17 @@ public class UnityClient {
 			url = "ws://localhost:" + Integer.toString((new URI(url)).getPort()) + "/" + Games.WEBSOCKET_PATH;
 
 			WebsocketClientEndpoint endpoint = new WebsocketClientEndpoint(new URI(url));
-
 			endpoint.addMessageHandler(h -> {
 				ServerToClientMessage message = apiClient.getJSON().deserialize(h, ServerToClientMessage.class);
 
 				switch (message.getMessageType()) {
 					case ON_UPDATE:
+						Assert.assertNotNull(message.getChanges());
 						Assert.assertNotNull(message.getGameState());
 						break;
 					case ON_GAME_EVENT:
 						Assert.assertNotNull(message.getEvent());
+						Assert.assertNotNull(message.getChanges());
 						break;
 					case ON_MULLIGAN:
 						Assert.assertNotNull(message.getStartingCards());
@@ -94,6 +95,7 @@ public class UnityClient {
 								.discardedCardIndices(Collections.singletonList(0))));
 						break;
 					case ON_REQUEST_ACTION:
+						Assert.assertNotNull(message.getChanges());
 						Assert.assertNotNull(message.getActions());
 						Assert.assertNotNull(message.getActions().getActions());
 						final int actionCount = message.getActions().getActions().size();

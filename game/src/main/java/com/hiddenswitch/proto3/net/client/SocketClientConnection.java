@@ -107,7 +107,7 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 								updateListener.onRequestAction(message.id, message.gameState, message.actions);
 								break;
 							case ON_MULLIGAN:
-								updateListener.onMulligan(message.id, message.player1, message.startingCards);
+								updateListener.onMulligan(message.id, message.gameState, message.startingCards, message.player1.getId());
 								break;
 							default:
 								logger.error("Unexpected message from server received");
