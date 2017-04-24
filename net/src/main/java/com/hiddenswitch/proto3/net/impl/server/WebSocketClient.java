@@ -87,12 +87,12 @@ public class WebSocketClient implements Client {
 		} else if (event instanceof DrawCardEvent) {
 			final DrawCardEvent drawCardEvent = (DrawCardEvent) event;
 			clientEvent.drawCard(new GameEventDrawCard()
-					.card(Games.getEntity(workingContext, drawCardEvent.getCard()))
+					.card(Games.getEntity(workingContext, drawCardEvent.getCard(), playerId))
 					.drawn(drawCardEvent.isDrawn()));
 		} else if (event instanceof KillEvent) {
 			final KillEvent killEvent = (KillEvent) event;
 			final net.demilich.metastone.game.entities.Entity victim = killEvent.getVictim();
-			final Entity entity = Games.getEntity(workingContext, victim);
+			final Entity entity = Games.getEntity(workingContext, victim, playerId);
 
 			clientEvent.kill(new GameEventKill()
 					.victim(entity));
@@ -100,28 +100,28 @@ public class WebSocketClient implements Client {
 			final CardPlayedEvent cardPlayedEvent = (CardPlayedEvent) event;
 			final Card card = cardPlayedEvent.getCard();
 			clientEvent.cardPlayed(new GameEventCardPlayed()
-					.card(Games.getEntity(workingContext, card)));
+					.card(Games.getEntity(workingContext, card, playerId)));
 		} else if (event instanceof SummonEvent) {
 			final SummonEvent summonEvent = (SummonEvent) event;
 
 			clientEvent.summon(new GameEventBeforeSummon()
-					.minion(Games.getEntity(workingContext, summonEvent.getMinion()))
-					.source(Games.getEntity(workingContext, summonEvent.getSource())));
+					.minion(Games.getEntity(workingContext, summonEvent.getMinion(), localPlayerId))
+					.source(Games.getEntity(workingContext, summonEvent.getSource(), localPlayerId)));
 		} else if (event instanceof DamageEvent) {
 			final DamageEvent damageEvent = (DamageEvent) event;
 			clientEvent.damage(new GameEventDamage()
 					.damage(damageEvent.getDamage())
-					.source(Games.getEntity(workingContext, damageEvent.getSource()))
-					.victim(Games.getEntity(workingContext, damageEvent.getVictim())));
+					.source(Games.getEntity(workingContext, damageEvent.getSource(), localPlayerId))
+					.victim(Games.getEntity(workingContext, damageEvent.getVictim(), localPlayerId)));
 		} else if (event instanceof AfterSpellCastedEvent) {
 			final AfterSpellCastedEvent afterSpellCastedEvent = (AfterSpellCastedEvent) event;
 			clientEvent.afterSpellCasted(new GameEventAfterSpellCasted()
-					.sourceCard(Games.getEntity(workingContext, afterSpellCastedEvent.getSourceCard()))
-					.spellTarget(Games.getEntity(workingContext, afterSpellCastedEvent.getEventTarget())));
+					.sourceCard(Games.getEntity(workingContext, afterSpellCastedEvent.getSourceCard(), localPlayerId))
+					.spellTarget(Games.getEntity(workingContext, afterSpellCastedEvent.getEventTarget(), localPlayerId)));
 		}
 
-		clientEvent.eventSource(Games.getEntity(workingContext, event.getEventSource()));
-		clientEvent.eventTarget(Games.getEntity(workingContext, event.getEventTarget()));
+		clientEvent.eventSource(Games.getEntity(workingContext, event.getEventSource(), localPlayerId));
+		clientEvent.eventTarget(Games.getEntity(workingContext, event.getEventTarget(), localPlayerId));
 		clientEvent.targetPlayerId(event.getTargetPlayerId());
 		clientEvent.sourcePlayerId(event.getSourcePlayerId());
 
@@ -135,8 +135,8 @@ public class WebSocketClient implements Client {
 
 	private PhysicalAttackEvent getPhysicalAttack(GameContext workingContext, Actor attacker, Actor defender, int damageDealt) {
 		return new PhysicalAttackEvent()
-				.attacker(Games.getEntity(workingContext, attacker))
-				.defender(Games.getEntity(workingContext, defender))
+				.attacker(Games.getEntity(workingContext, attacker, playerId))
+				.defender(Games.getEntity(workingContext, defender, playerId))
 				.damageDealt(damageDealt);
 	}
 
@@ -231,7 +231,7 @@ public class WebSocketClient implements Client {
 		sendMessage(new ServerToClientMessage()
 				.id(id)
 				.messageType(MessageType.ON_MULLIGAN)
-				.startingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c)).collect(Collectors.toList())));
+				.startingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c, playerId)).collect(Collectors.toList())));
 	}
 
 	public ServerWebSocket getPrivateSocket() {

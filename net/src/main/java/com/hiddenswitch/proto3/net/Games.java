@@ -5,7 +5,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.Entity;
 import com.hiddenswitch.proto3.net.client.models.EntityLocation;
-import com.hiddenswitch.proto3.net.impl.util.Zones;
 import com.hiddenswitch.proto3.net.models.*;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
@@ -17,7 +16,6 @@ import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
-import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
@@ -25,12 +23,9 @@ import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
-import net.demilich.metastone.utils.Tuple;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Created by bberman on 12/8/16.
@@ -78,11 +73,11 @@ public interface Games {
 		// Censor the opponent hand and deck entities
 		// All minions are visible
 		// Heroes and players are visible
-
+		int localPlayerId = local.getId();
 
 		List<Entity> localHand = new ArrayList<>();
 		for (Card card : local.getHand()) {
-			final Entity entity = getEntity(workingContext, card);
+			final Entity entity = getEntity(workingContext, card, localPlayerId);
 			localHand.add(entity);
 		}
 
@@ -92,7 +87,7 @@ public interface Games {
 		for (EntityZone<Minion> battlefield : Arrays.asList(local.getMinions(), opponent.getMinions())) {
 			List<Entity> minions = new ArrayList<>();
 			for (Minion minion : battlefield) {
-				final Entity entity = getEntity(workingContext, minion);
+				final Entity entity = getEntity(workingContext, minion, localPlayerId);
 				minions.add(entity);
 			}
 
@@ -102,9 +97,8 @@ public interface Games {
 
 		List<Entity> localSecrets = new ArrayList<>();
 		// Add complete information for the local secrets
-		for (IGameEventListener iSecret : workingContext.getLogic().getSecrets(local)) {
-			Secret secret = (Secret) iSecret;
-			final Entity entity = getEntity(workingContext, secret);
+		for (Secret secret : local.getSecrets()) {
+			final Entity entity = getEntity(workingContext, secret, localPlayerId);
 			localSecrets.add(entity);
 		}
 
@@ -112,8 +106,7 @@ public interface Games {
 
 		// Add limited information for opposing secrets
 		List<Entity> opposingSecrets = new ArrayList<>();
-		for (IGameEventListener iSecret : workingContext.getLogic().getSecrets(opponent)) {
-			Secret secret = (Secret) iSecret;
+		for (Secret secret : opponent.getSecrets()) {
 			final Entity entity = new Entity()
 					.id(secret.getId())
 					.entityType(Entity.EntityTypeEnum.SECRET)
@@ -139,17 +132,17 @@ public interface Games {
 							.mana(player.getMana())
 							.location(Games.toClientLocation(player.getEntityLocation())));
 			playerEntities.add(playerEntity);
-			final Entity heroEntity = getEntity(workingContext, player.getHero());
+			final Entity heroEntity = getEntity(workingContext, player.getHero(), localPlayerId);
 			// Include the player's mana, locked mana and max mana in the hero entity for convenience
 			heroEntity.getState()
 					.mana(player.getMana())
 					.maxMana(player.getMaxMana())
 					.lockedMana(player.getLockedMana());
 			playerEntities.add(heroEntity);
-			final Entity heroPowerEntity = getEntity(workingContext, player.getHero().getHeroPower());
+			final Entity heroPowerEntity = getEntity(workingContext, player.getHero().getHeroPower(), localPlayerId);
 			playerEntities.add(heroPowerEntity);
 			if (player.getHero().getWeapon() != null) {
-				final Entity weaponEntity = getEntity(workingContext, player.getHero().getWeapon());
+				final Entity weaponEntity = getEntity(workingContext, player.getHero().getWeapon(), localPlayerId);
 				playerEntities.add(weaponEntity);
 			}
 		}
@@ -171,23 +164,23 @@ public interface Games {
 				.turnState(workingContext.getTurnState().toString());
 	}
 
-	static Entity getEntity(final GameContext workingContext, final net.demilich.metastone.game.entities.Entity entity) {
+	static Entity getEntity(final GameContext workingContext, final net.demilich.metastone.game.entities.Entity entity, int localPlayerId) {
 		if (entity == null) {
 			return null;
 		}
 
 		if (entity instanceof Actor) {
-			return getEntity(workingContext, (Actor) entity);
+			return getEntity(workingContext, (Actor) entity, localPlayerId);
 		} else if (entity instanceof Card) {
-			return getEntity(workingContext, (Card) entity);
-		} else if (entity instanceof SpellTrigger) {
-			return getEntity(workingContext, workingContext.tryFind(((SpellTrigger) entity).getHostReference()));
+			return getEntity(workingContext, (Card) entity, localPlayerId);
+		} else if (entity instanceof Secret) {
+			return getEntity(workingContext, (Secret) entity, localPlayerId);
 		}
 
 		return null;
 	}
 
-	static Entity getEntity(final GameContext workingContext, final Actor actor) {
+	static Entity getEntity(final GameContext workingContext, final Actor actor, int localPlayerId) {
 		if (actor == null) {
 			return null;
 		}
@@ -216,7 +209,10 @@ public interface Games {
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.silenced(actor.hasAttribute(Attribute.SILENCED));
 		entityState.deathrattles(actor.getDeathrattles() != null);
-		entityState.playable(actor.canAttackThisTurn());
+		final boolean playable = actor.getOwner() == workingContext.getActivePlayerId()
+				&& actor.getOwner() == localPlayerId
+				&& actor.canAttackThisTurn();
+		entityState.playable(playable);
 		entityState.attack(actor.getAttack());
 		entityState.hp(actor.getHp());
 		entityState.maxHp(actor.getMaxHp());
@@ -244,12 +240,12 @@ public interface Games {
 		return entity;
 	}
 
-	static Entity getEntity(final GameContext workingContext, final Secret secret) {
+	static Entity getEntity(final GameContext workingContext, final Secret secret, int localPlayerId) {
 		if (secret == null) {
 			return null;
 		}
 
-		Entity cardEntity = getEntity(workingContext, secret.getSource());
+		Entity cardEntity = getEntity(workingContext, secret.getSource(), localPlayerId);
 		cardEntity.id(secret.getId())
 				.entityType(Entity.EntityTypeEnum.SECRET)
 				.getState()
@@ -259,7 +255,7 @@ public interface Games {
 		return cardEntity;
 	}
 
-	static Entity getEntity(final GameContext workingContext, final Card card) {
+	static Entity getEntity(final GameContext workingContext, final Card card, int localPlayerId) {
 		if (card == null) {
 			return null;
 		}
@@ -275,7 +271,10 @@ public interface Games {
 		int owner = card.getOwner();
 		Player owningPlayer;
 		if (owner != -1) {
-			entityState.playable(workingContext.getLogic().canPlayCard(owner, card.getCardReference()));
+			final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getCardReference())
+					&& card.getOwner() == workingContext.getActivePlayerId()
+					&& localPlayerId == card.getOwner();
+			entityState.playable(playable);
 			entityState.manaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 		} else {
