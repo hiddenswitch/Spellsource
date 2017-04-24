@@ -59,7 +59,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 	}
 
 	private void unityClient() throws SuspendExecution, InterruptedException {
-		UnityClient client = new UnityClient();
+		UnityClient client = new UnityClient(getContext());
 		client.createUserAccount(null);
 		client.matchmakeAndPlayAgainstAI(null);
 		float time = 0f;

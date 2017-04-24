@@ -29,10 +29,12 @@ import java.util.stream.Collectors;
 
 public class WebSocketClient implements Client {
 	private final String userId;
+	private final int playerId;
 	private ServerWebSocket privateSocket;
 	private GameState lastStateSent;
 
-	public WebSocketClient(ServerWebSocket socket, String userId) {
+	public WebSocketClient(ServerWebSocket socket, String userId, int playerId) {
+		this.playerId = playerId;
 		this.setPrivateSocket(socket);
 		this.userId = userId;
 	}
@@ -46,6 +48,8 @@ public class WebSocketClient implements Client {
 	}
 
 	private void sendMessage(ServerWebSocket socket, ServerToClientMessage message) throws IOException {
+		// Always include the playerId in the message
+		message.setLocalPlayerId(playerId);
 		socket.write(Buffer.buffer(Configuration.getDefaultApiClient().getJSON().serialize(message)));
 	}
 

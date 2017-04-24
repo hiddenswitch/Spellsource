@@ -50,6 +50,7 @@ public class Player extends Entity implements Serializable {
 	private EntityZone<Minion> minions = new EntityZone<>(getId(), PlayerZones.BATTLEFIELD);
 	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), PlayerZones.HERO);
 	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), PlayerZones.SECRET);
+	private EntityZone<Player> playerZone = new EntityZone<>(getId(), PlayerZones.PLAYER);
 
 	private final GameStatistics statistics = new GameStatistics();
 
@@ -66,6 +67,7 @@ public class Player extends Entity implements Serializable {
 		this.setName(otherPlayer.getName());
 		this.deckName = otherPlayer.getDeckName();
 		this.getAttributes().putAll(otherPlayer.getAttributes());
+		this.playerZone.add(this);
 		this.setId(otherPlayer.getId());
 		this.secretZone = otherPlayer.getSecrets().clone();
 		this.deck = otherPlayer.getDeck().clone();
@@ -79,15 +81,18 @@ public class Player extends Entity implements Serializable {
 		this.lockedMana = otherPlayer.lockedMana;
 		this.behaviour = otherPlayer.behaviour;
 		this.getStatistics().merge(otherPlayer.getStatistics());
+
 	}
 
 	/**
 	 * Use build from config to actually build the class.
 	 */
 	protected Player() {
+		this.playerZone.add(this);
 	}
 
 	public Player(PlayerConfig config) {
+		this();
 		buildFromConfig(config);
 	}
 
@@ -95,7 +100,6 @@ public class Player extends Entity implements Serializable {
 		config.build();
 		Deck selectedDeck = config.getDeckForPlay();
 
-		//gets overwritten by procedural player with a random deck.
 		this.deck = new CardZone(getId(), PlayerZones.DECK, selectedDeck.getCardsCopy());
 		this.setHero(config.getHeroForPlay().createHero());
 		this.setName(config.getName() + " - " + getHero().getName());
@@ -272,10 +276,15 @@ public class Player extends Entity implements Serializable {
 		deck.setPlayer(id);
 		heroZone.setPlayer(id);
 		secretZone.setPlayer(id);
+		playerZone.setPlayer(id);
 	}
 
 	public EntityZone getZone(PlayerZones zone) {
 		switch (zone) {
+			case PLAYER:
+				final EntityZone<Player> playerZone = new EntityZone<>(getId(), PlayerZones.PLAYER);
+				playerZone.add(this);
+				return playerZone;
 			case BATTLEFIELD:
 				return getMinions();
 			case DECK:
@@ -314,8 +323,8 @@ public class Player extends Entity implements Serializable {
 		return getHero().getWeaponZone();
 	}
 
-	@Override
-	public EntityLocation getEntityLocation() {
-		return new EntityLocation(PlayerZones.PLAYER, getId(), 0);
-	}
+//	@Override
+//	public EntityLocation getEntityLocation() {
+//		return new EntityLocation(PlayerZones.PLAYER, getId(), 0);
+//	}
 }

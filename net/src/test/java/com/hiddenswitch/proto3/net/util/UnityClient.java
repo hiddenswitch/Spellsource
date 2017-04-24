@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 import com.hiddenswitch.proto3.net.client.models.*;
 import io.vertx.core.Handler;
+import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Assert;
@@ -13,9 +14,8 @@ import org.junit.Assert;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by bberman on 4/10/17.
@@ -26,11 +26,13 @@ public class UnityClient {
 	private boolean gameOver;
 	private Handler<UnityClient> onGameOver;
 	private Account account;
+	private TestContext context;
 
-	public UnityClient() {
+	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
 		apiClient.setBasePath("http://localhost:8080/v1");
 		api = new DefaultApi(apiClient);
+		this.context = context;
 	}
 
 	public void createUserAccount(String username) {
@@ -79,29 +81,29 @@ public class UnityClient {
 
 				switch (message.getMessageType()) {
 					case ON_UPDATE:
-						Assert.assertNotNull(message.getChanges());
-						Assert.assertNotNull(message.getGameState());
+						assertValidStateAndChanges(message);
 						break;
 					case ON_GAME_EVENT:
-						Assert.assertNotNull(message.getEvent());
-						Assert.assertNotNull(message.getChanges());
+						context.assertNotNull(message.getEvent());
+						assertValidStateAndChanges(message);
 						break;
 					case ON_MULLIGAN:
-						Assert.assertNotNull(message.getStartingCards());
-						Assert.assertTrue(message.getStartingCards().size() > 0);
+						context.assertNotNull(message.getStartingCards());
+						context.assertTrue(message.getStartingCards().size() > 0);
 						endpoint.sendMessage(serialize(new ClientToServerMessage()
 								.messageType(MessageType.UPDATE_MULLIGAN)
 								.repliesTo(message.getId())
 								.discardedCardIndices(Collections.singletonList(0))));
 						break;
 					case ON_REQUEST_ACTION:
-						Assert.assertNotNull(message.getChanges());
-						Assert.assertNotNull(message.getActions());
-						Assert.assertNotNull(message.getActions().getActions());
+						context.assertNotNull(message.getGameState());
+						context.assertNotNull(message.getChanges());
+						context.assertNotNull(message.getActions());
+						context.assertNotNull(message.getActions().getActions());
 						final int actionCount = message.getActions().getActions().size();
-						Assert.assertTrue(actionCount > 0);
+						context.assertTrue(actionCount > 0);
 						// There should always be an end turn, choose one, discover or battlecry action
-						Assert.assertTrue(message.getActions().getActions().stream().anyMatch(p -> EnumSet.of(
+						context.assertTrue(message.getActions().getActions().stream().anyMatch(p -> EnumSet.of(
 								ActionType.BATTLECRY,
 								ActionType.DISCOVER,
 								ActionType.END_TURN
@@ -130,8 +132,19 @@ public class UnityClient {
 			endpoint.sendMessage(serialize(mqpr.getUnityConnection().getFirstMessage()));
 
 		} catch (ApiException | URISyntaxException e) {
-			Assert.fail(e.getMessage());
+			context.fail(e.getMessage());
 		}
+	}
+
+	private void assertValidStateAndChanges(ServerToClientMessage message) {
+		context.assertNotNull(message.getGameState());
+		context.assertNotNull(message.getChanges());
+		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
+		context.assertTrue(message.getChanges().stream().allMatch(e -> e.getId() >= 0));
+		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
+		final List<Integer> changeIds = message.getChanges().stream().map(EntityChangeSetInner::getId).collect(Collectors.toList());
+		final boolean contains = entityIds.containsAll(changeIds);
+		context.assertTrue(contains);
 	}
 
 	private int random(int upper) {
