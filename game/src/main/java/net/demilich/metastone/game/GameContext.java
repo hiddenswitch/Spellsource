@@ -797,6 +797,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	@SuppressWarnings("unchecked")
 	public Stream<Entity> getEntities() {
 		return getPlayers().stream().flatMap(p -> Stream.of(new PlayerZones[]{
+				PlayerZones.PLAYER,
 				PlayerZones.BATTLEFIELD,
 				PlayerZones.DECK,
 				PlayerZones.GRAVEYARD,

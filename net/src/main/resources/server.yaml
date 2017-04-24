@@ -224,6 +224,10 @@ definitions:
         description: |
           An optional ID used to disambiguate multiple client replies. Include this ID in the repliesTo field of your
           ClientToServerMessage if this field is not null.
+      localPlayerId:
+        type: 'integer'
+        description: |
+          The ID of the player that corresponds to the local player (the recipient).
       messageType:
         $ref: '#/definitions/MessageType'
       changes:

@@ -143,15 +143,14 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 								throw new RuntimeException("Invalid secret.");
 							}
 
-							Client client = new WebSocketClient(socket, userId);
-
 							if (session == null) {
 								session = gameForUserId.get(userId);
 							}
 
-							gameForSocket.put(client.getPrivateSocket(), session);
-
 							updateActivity(session);
+
+							Client client = new WebSocketClient(socket, userId, session.getPlayer(userId).getId());
+							gameForSocket.put(client.getPrivateSocket(), session);
 
 							if (session.isGameReady()) {
 								// TODO: Remove references to the old socket

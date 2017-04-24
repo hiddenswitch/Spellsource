@@ -47,6 +47,9 @@ public class ServerToClientMessage  implements Serializable {
   @SerializedName("id")
   private String id = null;
 
+  @SerializedName("localPlayerId")
+  private Integer localPlayerId = null;
+
   @SerializedName("messageType")
   private MessageType messageType = null;
 
@@ -81,6 +84,24 @@ public class ServerToClientMessage  implements Serializable {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public ServerToClientMessage localPlayerId(Integer localPlayerId) {
+    this.localPlayerId = localPlayerId;
+    return this;
+  }
+
+   /**
+   * The ID of the player that corresponds to the local player (the recipient). 
+   * @return localPlayerId
+  **/
+  @ApiModelProperty(example = "null", value = "The ID of the player that corresponds to the local player (the recipient). ")
+  public Integer getLocalPlayerId() {
+    return localPlayerId;
+  }
+
+  public void setLocalPlayerId(Integer localPlayerId) {
+    this.localPlayerId = localPlayerId;
   }
 
   public ServerToClientMessage messageType(MessageType messageType) {
@@ -207,6 +228,7 @@ public class ServerToClientMessage  implements Serializable {
     }
     ServerToClientMessage serverToClientMessage = (ServerToClientMessage) o;
     return Objects.equals(this.id, serverToClientMessage.id) &&
+        Objects.equals(this.localPlayerId, serverToClientMessage.localPlayerId) &&
         Objects.equals(this.messageType, serverToClientMessage.messageType) &&
         Objects.equals(this.changes, serverToClientMessage.changes) &&
         Objects.equals(this.gameState, serverToClientMessage.gameState) &&
@@ -217,7 +239,7 @@ public class ServerToClientMessage  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, messageType, changes, gameState, actions, startingCards, event);
+    return Objects.hash(id, localPlayerId, messageType, changes, gameState, actions, startingCards, event);
   }
 
   @Override
@@ -226,6 +248,7 @@ public class ServerToClientMessage  implements Serializable {
     sb.append("class ServerToClientMessage {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    localPlayerId: ").append(toIndentedString(localPlayerId)).append("\n");
     sb.append("    messageType: ").append(toIndentedString(messageType)).append("\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
     sb.append("    gameState: ").append(toIndentedString(gameState)).append("\n");

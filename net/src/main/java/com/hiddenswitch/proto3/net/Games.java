@@ -27,10 +27,8 @@ import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.utils.Tuple;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -157,6 +155,15 @@ public interface Games {
 		}
 
 		entities.addAll(playerEntities);
+
+		// Any missing entities will get a stand-in entry
+		Set<Integer> visibleEntityIds = entities.stream().map(Entity::getId).collect(Collectors.toSet());
+		entities.addAll(workingContext.getEntities().filter(e -> !visibleEntityIds.contains(e.getId())).map(e -> new Entity()
+				.id(e.getId())
+				.cardId("hidden")
+				.state(new EntityState()
+						.location(toClientLocation(e.getEntityLocation())))
+				.entityType(Entity.EntityTypeEnum.valueOf(e.getEntityType().toString()))).collect(Collectors.toList()));
 
 		return new GameState()
 				.entities(entities)

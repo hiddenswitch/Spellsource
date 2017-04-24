@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **String** | An optional ID used to disambiguate multiple client replies. Include this ID in the repliesTo field of your ClientToServerMessage if this field is not null.  |  [optional]
+**localPlayerId** | **Integer** | The ID of the player that corresponds to the local player (the recipient).  |  [optional]
 **messageType** | [**MessageType**](MessageType.md) |  |  [optional]
 **changes** | [**EntityChangeSet**](EntityChangeSet.md) |  |  [optional]
 **gameState** | [**GameState**](GameState.md) |  |  [optional]

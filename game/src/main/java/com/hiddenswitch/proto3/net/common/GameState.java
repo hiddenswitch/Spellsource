@@ -63,6 +63,7 @@ public class GameState implements Serializable {
 	@SuppressWarnings("unchecked")
 	protected Stream<Entity> getEntities() {
 		return Stream.of(player1, player2).flatMap(p -> Stream.of(new PlayerZones[]{
+				PlayerZones.PLAYER,
 				PlayerZones.BATTLEFIELD,
 				PlayerZones.DECK,
 				PlayerZones.GRAVEYARD,
@@ -76,8 +77,7 @@ public class GameState implements Serializable {
 	}
 
 	protected Map<Integer, EntityLocation> getMap() {
-		return getEntities().collect(Collectors.toMap(Entity::getId,
-				Entity::getEntityLocation));
+		return getEntities().collect(Collectors.toMap(Entity::getId, Entity::getEntityLocation));
 	}
 
 	public MapDifference<Integer, EntityLocation> to(GameState nextState) {
