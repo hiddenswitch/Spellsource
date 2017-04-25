@@ -56,7 +56,8 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 	@Test
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
-		final int tests = 10;
+		final String property = System.getProperty("minionate.unityTests");
+		final int tests = Integer.parseInt(property != null ? property : "1");
 		final Async async = context.async();
 
 		for (int i = 0; i < tests; i++) {
