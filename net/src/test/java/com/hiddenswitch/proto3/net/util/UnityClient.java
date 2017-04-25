@@ -146,11 +146,6 @@ public class UnityClient {
 		final boolean contains = entityIds.containsAll(changeIds);
 		context.assertTrue(contains);
 		context.assertNotNull(message.getGameState().getActionStack());
-		if (message.getEvent() != null) {
-			final List<GameEvent> eventStack = message.getGameState().getEventStack();
-			context.assertTrue(eventStack.size() > 0);
-			context.assertEquals(eventStack.get(eventStack.size() - 1).getEventType(), message.getEvent().getEventType());
-		}
 	}
 
 	private int random(int upper) {
