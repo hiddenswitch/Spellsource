@@ -17,6 +17,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
 
@@ -53,21 +54,23 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 	}
 
 	@Test
-	public void testUnityClient(TestContext context) {
+	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
-		wrapSync(context, this::unityClient);
-	}
+		final int tests = 10;
+		final Async async = context.async();
 
-	private void unityClient() throws SuspendExecution, InterruptedException {
-		UnityClient client = new UnityClient(getContext());
-		client.createUserAccount(null);
-		client.matchmakeAndPlayAgainstAI(null);
-		float time = 0f;
-		while (!(time > 120f || client.isGameOver())) {
-			Strand.sleep(1000);
-			time += 1f;
+		for (int i = 0; i < tests; i++) {
+			UnityClient client = new UnityClient(getContext());
+			client.createUserAccount(null);
+			client.matchmakeAndPlayAgainstAI(null);
+			float time = 0f;
+			while (!(time > 120f || client.isGameOver())) {
+				Strand.sleep(1000);
+				time += 1f;
+			}
+			getContext().assertTrue(client.isGameOver());
 		}
-		getContext().assertTrue(client.isGameOver());
+		async.complete();
 	}
 
 	@Override
