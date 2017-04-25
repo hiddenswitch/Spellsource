@@ -4,10 +4,7 @@ import com.google.common.collect.MapDifference;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.models.*;
-import com.hiddenswitch.proto3.net.client.models.Entity;
 import com.hiddenswitch.proto3.net.client.models.GameEvent;
-import com.hiddenswitch.proto3.net.client.models.GameEvent.EventTypeEnum;
-import com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.GameState;
 import io.vertx.core.buffer.Buffer;
@@ -18,18 +15,19 @@ import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.EntityLocation;
-import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.logic.GameLogic;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 public class WebSocketClient implements Client {
 	private final String userId;
 	private final int playerId;
+	private final Queue<ServerToClientMessage> messageEventBuffer;
 	private ServerWebSocket privateSocket;
 	private GameState lastStateSent;
 
@@ -37,6 +35,7 @@ public class WebSocketClient implements Client {
 		this.playerId = playerId;
 		this.setPrivateSocket(socket);
 		this.userId = userId;
+		this.messageEventBuffer = new ConcurrentLinkedQueue<>();
 	}
 
 	private void sendMessage(ServerToClientMessage message) {
@@ -62,82 +61,19 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void onGameEvent(net.demilich.metastone.game.events.GameEvent event) {
-		final GameEvent clientEvent = new GameEvent();
-
-		clientEvent.eventType(EventTypeEnum.valueOf(event.getEventType().toString()));
-
-		GameContext workingContext = event.getGameContext().clone();
-		final int localPlayerId = userId.equals(workingContext.getPlayer1().getUserId()) ? workingContext.getPlayer1().getId() : workingContext.getPlayer2().getId();
-		// Handle the event types here.
-		if (event instanceof net.demilich.metastone.game.events.PhysicalAttackEvent) {
-			final net.demilich.metastone.game.events.PhysicalAttackEvent physicalAttackEvent
-					= (net.demilich.metastone.game.events.PhysicalAttackEvent) event;
-			final Actor attacker = physicalAttackEvent.getAttacker();
-			final Actor defender = physicalAttackEvent.getDefender();
-			final int damageDealt = physicalAttackEvent.getDamageDealt();
-			final PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt);
-			clientEvent.physicalAttack(physicalAttack);
-		} else if (event instanceof AfterPhysicalAttackEvent) {
-			final AfterPhysicalAttackEvent physicalAttackEvent = (AfterPhysicalAttackEvent) event;
-			final Actor attacker = physicalAttackEvent.getAttacker();
-			final Actor defender = physicalAttackEvent.getDefender();
-			final int damageDealt = physicalAttackEvent.getDamageDealt();
-			final PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt);
-			clientEvent.afterPhysicalAttack(physicalAttack);
-		} else if (event instanceof DrawCardEvent) {
-			final DrawCardEvent drawCardEvent = (DrawCardEvent) event;
-			clientEvent.drawCard(new GameEventDrawCard()
-					.card(Games.getEntity(workingContext, drawCardEvent.getCard(), playerId))
-					.drawn(drawCardEvent.isDrawn()));
-		} else if (event instanceof KillEvent) {
-			final KillEvent killEvent = (KillEvent) event;
-			final net.demilich.metastone.game.entities.Entity victim = killEvent.getVictim();
-			final Entity entity = Games.getEntity(workingContext, victim, playerId);
-
-			clientEvent.kill(new GameEventKill()
-					.victim(entity));
-		} else if (event instanceof CardPlayedEvent) {
-			final CardPlayedEvent cardPlayedEvent = (CardPlayedEvent) event;
-			final Card card = cardPlayedEvent.getCard();
-			clientEvent.cardPlayed(new GameEventCardPlayed()
-					.card(Games.getEntity(workingContext, card, playerId)));
-		} else if (event instanceof SummonEvent) {
-			final SummonEvent summonEvent = (SummonEvent) event;
-
-			clientEvent.summon(new GameEventBeforeSummon()
-					.minion(Games.getEntity(workingContext, summonEvent.getMinion(), localPlayerId))
-					.source(Games.getEntity(workingContext, summonEvent.getSource(), localPlayerId)));
-		} else if (event instanceof DamageEvent) {
-			final DamageEvent damageEvent = (DamageEvent) event;
-			clientEvent.damage(new GameEventDamage()
-					.damage(damageEvent.getDamage())
-					.source(Games.getEntity(workingContext, damageEvent.getSource(), localPlayerId))
-					.victim(Games.getEntity(workingContext, damageEvent.getVictim(), localPlayerId)));
-		} else if (event instanceof AfterSpellCastedEvent) {
-			final AfterSpellCastedEvent afterSpellCastedEvent = (AfterSpellCastedEvent) event;
-			clientEvent.afterSpellCasted(new GameEventAfterSpellCasted()
-					.sourceCard(Games.getEntity(workingContext, afterSpellCastedEvent.getSourceCard(), localPlayerId))
-					.spellTarget(Games.getEntity(workingContext, afterSpellCastedEvent.getEventTarget(), localPlayerId)));
-		}
-
-		clientEvent.eventSource(Games.getEntity(workingContext, event.getEventSource(), localPlayerId));
-		clientEvent.eventTarget(Games.getEntity(workingContext, event.getEventTarget(), localPlayerId));
-		clientEvent.targetPlayerId(event.getTargetPlayerId());
-		clientEvent.sourcePlayerId(event.getSourcePlayerId());
-
+		final GameEvent clientEvent = Games.getClientEvent(event, playerId);
 		final GameState state = new GameState(event.getGameContext());
-		sendMessage(new ServerToClientMessage()
+		final ServerToClientMessage message = new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
 				.gameState(getClientGameState(state))
-				.event(clientEvent));
-	}
-
-	private PhysicalAttackEvent getPhysicalAttack(GameContext workingContext, Actor attacker, Actor defender, int damageDealt) {
-		return new PhysicalAttackEvent()
-				.attacker(Games.getEntity(workingContext, attacker, playerId))
-				.defender(Games.getEntity(workingContext, defender, playerId))
-				.damageDealt(damageDealt);
+				.event(clientEvent);
+		messageEventBuffer.offer(message);
+		if (event.getGameContext().getEventStack().size() == 0) {
+			while (!messageEventBuffer.isEmpty()) {
+				sendMessage(messageEventBuffer.poll());
+			}
+		}
 	}
 
 	@Override
@@ -199,30 +135,9 @@ public class WebSocketClient implements Client {
 				.changes(getChangeSet(state))
 				.gameState(getClientGameState(state))
 				.actions(new GameActions()
-						.actions(availableActions.stream().map(ga -> {
-							Action action = new Action();
-							final ActionType actionType = ActionType.valueOf(ga.getActionType().toString());
-							action.actionType(actionType)
-									.actionSuffix(ga.getActionSuffix());
-
-							if (ga.getTargetRequirement() != null) {
-								final Action.TargetRequirementEnum targetRequirement = Action.TargetRequirementEnum.valueOf(ga.getTargetRequirement().toString());
-								action.targetRequirement(targetRequirement);
-							}
-
-							if (ga.getTargetKey() != null) {
-								action.targetKey(ga.getTargetKey().getId());
-							}
-
-							if (ga.getSource() != null) {
-								action.source(ga.getSource().getId());
-							}
-
-							return action;
-						}).collect(Collectors.toList()))
+						.actions(availableActions.stream().map(Games::getClientAction).collect(Collectors.toList()))
 				));
 	}
-
 
 	@Override
 	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {

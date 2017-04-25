@@ -6,12 +6,14 @@ import net.demilich.metastone.game.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.PlayerZones;
@@ -25,6 +27,8 @@ import java.util.stream.Stream;
 public class GameState implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public final List<GameAction> actionStack;
+	public final List<GameEvent> eventStack;
 	public final Player player1;
 	public final Player player2;
 	public final CardCollection tempCards;
@@ -32,6 +36,7 @@ public class GameState implements Serializable {
 	public final List<CardCostModifier> cardCostModifiers;
 	public final TriggerManager triggerManager;
 	public final int currentId;
+	public final int activePlayerId;
 	public final TurnState turnState;
 	public final long timestamp;
 
@@ -49,6 +54,9 @@ public class GameState implements Serializable {
 		currentId = clone.getLogic().getIdFactory().getInternalId();
 		triggerManager = clone.getTriggerManager();
 		cardCostModifiers = clone.getCardCostModifiers();
+		actionStack = clone.getActionStack();
+		eventStack = clone.getEventStack();
+		activePlayerId = clone.getActivePlayerId();
 		this.turnState = turnState;
 	}
 

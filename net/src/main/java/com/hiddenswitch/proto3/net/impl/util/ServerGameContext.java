@@ -239,9 +239,11 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent) {
-		super.fireGameEvent(gameEvent, gameTriggers);
+		getEventStack().push(gameEvent);
 		getListenerMap().get(getPlayer1()).onGameEvent(gameEvent);
 		getListenerMap().get(getPlayer2()).onGameEvent(gameEvent);
+		super.fireGameEvent(gameEvent, gameTriggers);
+		getEventStack().pop();
 	}
 
 	@Suspendable
@@ -402,4 +404,5 @@ public class ServerGameContext extends GameContext {
 		discardedCards.addAll(discardedCardIndices.stream().map(i -> request.starterCards.get(i)).collect(Collectors.toList()));
 		onMulliganReceived(messageId, getPlayer(reqId.playerId), discardedCards);
 	}
+
 }
