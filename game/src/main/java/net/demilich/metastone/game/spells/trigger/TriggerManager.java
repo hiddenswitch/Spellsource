@@ -17,7 +17,6 @@ import net.demilich.metastone.utils.IDisposable;
 
 public class TriggerManager implements Cloneable, IDisposable, Serializable {
 	public static Logger logger = LoggerFactory.getLogger(TriggerManager.class);
-	private Stack<GameEvent> currentEvents = new Stack<>();
 
 	private final List<IGameEventListener> triggers = new ArrayList<IGameEventListener>();
 
@@ -49,7 +48,6 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 
 	@Suspendable
 	public void fireGameEvent(GameEvent event, List<IGameEventListener> gameTriggers) {
-		currentEvents.push(event);
 		List<IGameEventListener> triggers = new ArrayList<>(this.triggers);
 		if (gameTriggers != null
 				&& gameTriggers.size() > 0) {
@@ -98,7 +96,6 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 		for (IGameEventListener trigger : removeTriggers) {
 			triggers.remove(trigger);
 		}
-		currentEvents.pop();
 	}
 
 	@Suspendable
@@ -142,14 +139,6 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 				}
 				triggers.remove(trigger);
 			}
-		}
-	}
-
-	public GameEvent getCurrentEvent() {
-		if (currentEvents.isEmpty()) {
-			return null;
-		} else {
-			return currentEvents.peek();
 		}
 	}
 }

@@ -53,6 +53,8 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
 	private CardCollection tempCards = new CardCollectionImpl();
+	private Stack<GameAction> actionStack = new Stack<>();
+	private Stack<GameEvent> eventStack = new Stack<>();
 
 	public GameContext() {
 	}
@@ -123,6 +125,8 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 				clone.getEnvironment().put(key, getEnvironment().get(key));
 			}
 		}
+		clone.actionStack.addAll(actionStack);
+		clone.getEventStack().addAll(getEventStack());
 		return clone;
 	}
 
@@ -228,7 +232,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		List<Actor> adjacentMinions = new ArrayList<>();
 		Actor minion = (Actor) resolveSingleTarget(minionReference);
 		List<Minion> minions = getPlayer(minion.getOwner()).getMinions();
-		int index = minions.indexOf(minion);
+		int index = minion.getEntityLocation().getIndex();
 		if (index == -1) {
 			return adjacentMinions;
 		}
@@ -249,15 +253,16 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	}
 
 	public int getBoardPosition(Minion minion) {
-		for (Player player : getPlayers()) {
-			List<Minion> minions = player.getMinions();
-			for (int i = 0; i < minions.size(); i++) {
-				if (minions.get(i) == minion) {
-					return i;
-				}
-			}
-		}
-		return -1;
+		return minion.getEntityLocation().getIndex();
+//		for (Player player : getPlayers()) {
+//			List<Minion> minions = player.getMinions();
+//			for (int i = 0; i < minions.size(); i++) {
+//				if (minions.get(i) == minion) {
+//					return i;
+//				}
+//			}
+//		}
+//		return -1;
 	}
 
 	public Card getCardById(String cardId) {
@@ -335,7 +340,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		Actor minion = (Actor) resolveSingleTarget(minionReference);
 		Player owner = getPlayer(minion.getOwner());
 		Player opposingPlayer = getOpponent(owner);
-		int index = owner.getMinions().indexOf(minion);
+		int index = minion.getEntityLocation().getIndex();
 		if (opposingPlayer.getMinions().size() == 0 || owner.getMinions().size() == 0 || index == -1) {
 			return oppositeMinions;
 		}
@@ -391,7 +396,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		List<Actor> rightMinions = new ArrayList<>();
 		Actor minion = (Actor) resolveSingleTarget(minionReference);
 		List<Minion> minions = getPlayer(minion.getOwner()).getMinions();
-		int index = minions.indexOf(minion);
+		int index = minion.getEntityLocation().getIndex();
 		if (index == -1) {
 			return rightMinions;
 		}
@@ -665,16 +670,16 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	public String toLongString() {
 		StringBuilder builder = new StringBuilder("GameContext hashCode: " + hashCode() + "\n");
-		if (getTriggerManager().getCurrentEvent() != null) {
+		if (getCurrentEvent() != null) {
 			builder.append("\nCurrent event:\n");
 			builder.append('\t');
-			builder.append(getTriggerManager().getCurrentEvent());
+			builder.append(getCurrentEvent());
 			builder.append('\n');
 		}
-		if (getLogic().getCurrentAction() != null) {
+		if (getCurrentAction() != null) {
 			builder.append("\nCurrent action:\n");
 			builder.append('\t');
-			builder.append(getLogic().getCurrentAction());
+			builder.append(getCurrentAction());
 			builder.append('\n');
 		}
 		for (Player player : getPlayers()) {
@@ -751,7 +756,11 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 			setDeckFormat(new DeckFormat().withCardSets(CardSet.values()));
 		}
 		this.getLogic().setIdFactory(new IdFactory(state.currentId));
+		this.getLogic().setContext(this);
+		this.getActionStack().addAll(state.actionStack);
+		this.getEventStack().addAll(state.eventStack);
 		this.setTurnState(state.turnState);
+		this.setActivePlayerId(state.activePlayerId);
 	}
 
 	public void setPlayer(int index, Player player) {
@@ -814,6 +823,29 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	}
 
 	public void onDidPerformGameAction(int playerId, GameAction action) {
+	}
 
+	public Stack<GameAction> getActionStack() {
+		return actionStack;
+	}
+
+	public Stack<GameEvent> getEventStack() {
+		return eventStack;
+	}
+
+	public GameEvent getCurrentEvent() {
+		if (eventStack.isEmpty()) {
+			return null;
+		}
+
+		return eventStack.get(eventStack.size());
+	}
+
+	public GameAction getCurrentAction() {
+		if (actionStack.isEmpty()) {
+			return null;
+		}
+
+		return actionStack.peek();
 	}
 }

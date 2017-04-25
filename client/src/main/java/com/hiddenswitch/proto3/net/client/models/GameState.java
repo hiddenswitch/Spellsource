@@ -27,7 +27,9 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.Action;
 import com.hiddenswitch.proto3.net.client.models.Entity;
+import com.hiddenswitch.proto3.net.client.models.GameEvent;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -39,6 +41,12 @@ import java.io.Serializable;
  */
 
 public class GameState  implements Serializable {
+  @SerializedName("actionStack")
+  private List<Action> actionStack = new ArrayList<Action>();
+
+  @SerializedName("eventStack")
+  private List<GameEvent> eventStack = new ArrayList<GameEvent>();
+
   @SerializedName("entities")
   private List<Entity> entities = new ArrayList<Entity>();
 
@@ -50,6 +58,52 @@ public class GameState  implements Serializable {
 
   @SerializedName("timestamp")
   private Long timestamp = null;
+
+  public GameState actionStack(List<Action> actionStack) {
+    this.actionStack = actionStack;
+    return this;
+  }
+
+  public GameState addActionStackItem(Action actionStackItem) {
+    this.actionStack.add(actionStackItem);
+    return this;
+  }
+
+   /**
+   * Get actionStack
+   * @return actionStack
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public List<Action> getActionStack() {
+    return actionStack;
+  }
+
+  public void setActionStack(List<Action> actionStack) {
+    this.actionStack = actionStack;
+  }
+
+  public GameState eventStack(List<GameEvent> eventStack) {
+    this.eventStack = eventStack;
+    return this;
+  }
+
+  public GameState addEventStackItem(GameEvent eventStackItem) {
+    this.eventStack.add(eventStackItem);
+    return this;
+  }
+
+   /**
+   * Get eventStack
+   * @return eventStack
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public List<GameEvent> getEventStack() {
+    return eventStack;
+  }
+
+  public void setEventStack(List<GameEvent> eventStack) {
+    this.eventStack = eventStack;
+  }
 
   public GameState entities(List<Entity> entities) {
     this.entities = entities;
@@ -138,7 +192,9 @@ public class GameState  implements Serializable {
       return false;
     }
     GameState gameState = (GameState) o;
-    return Objects.equals(this.entities, gameState.entities) &&
+    return Objects.equals(this.actionStack, gameState.actionStack) &&
+        Objects.equals(this.eventStack, gameState.eventStack) &&
+        Objects.equals(this.entities, gameState.entities) &&
         Objects.equals(this.turnState, gameState.turnState) &&
         Objects.equals(this.turnNumber, gameState.turnNumber) &&
         Objects.equals(this.timestamp, gameState.timestamp);
@@ -146,7 +202,7 @@ public class GameState  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(entities, turnState, turnNumber, timestamp);
+    return Objects.hash(actionStack, eventStack, entities, turnState, turnNumber, timestamp);
   }
 
   @Override
@@ -154,6 +210,8 @@ public class GameState  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameState {\n");
     
+    sb.append("    actionStack: ").append(toIndentedString(actionStack)).append("\n");
+    sb.append("    eventStack: ").append(toIndentedString(eventStack)).append("\n");
     sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
     sb.append("    turnState: ").append(toIndentedString(turnState)).append("\n");
     sb.append("    turnNumber: ").append(toIndentedString(turnNumber)).append("\n");

@@ -61,7 +61,6 @@ public class GameLogic implements Cloneable, Serializable {
 	private boolean loggingEnabled = true;
 	private final int MAX_HISTORY_ENTRIES = 100;
 	private ArrayDeque<String> debugHistory = new ArrayDeque<>();
-	private Stack<GameAction> currentActions = new Stack<>();
 
 	static {
 		immuneToSilence.add(Attribute.HP);
@@ -1308,7 +1307,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 	@Suspendable
 	public void performGameAction(int playerId, GameAction action) {
-		currentActions.push(action);
+		getActionStack().push(action);
 		context.onWillPerformGameAction(playerId, action);
 		if (isLoggingEnabled()) {
 			debugHistory.add(action.toString());
@@ -1336,7 +1335,7 @@ public class GameLogic implements Cloneable, Serializable {
 		// Calculate how all the entities changed.
 
 		context.onDidPerformGameAction(playerId, action);
-		currentActions.pop();
+		getActionStack().pop();
 	}
 
 	@Suspendable
@@ -1999,6 +1998,10 @@ public class GameLogic implements Cloneable, Serializable {
 		this.idFactory = idFactory;
 	}
 
+	public Stack<GameAction> getActionStack() {
+		return context.getActionStack();
+	}
+
 	protected class FirstHand {
 		private Player player;
 		private boolean begins;
@@ -2126,12 +2129,5 @@ public class GameLogic implements Cloneable, Serializable {
 				|| player.getHero().getHp() < 1
 				|| player.getHero().hasAttribute(Attribute.DESTROYED)
 				|| player.hasAttribute(Attribute.DESTROYED);
-	}
-
-	public GameAction getCurrentAction() {
-		if (currentActions.isEmpty()) {
-			return null;
-		}
-		return currentActions.peek();
 	}
 }

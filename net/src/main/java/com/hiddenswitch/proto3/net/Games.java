@@ -5,10 +5,13 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.Entity;
 import com.hiddenswitch.proto3.net.client.models.EntityLocation;
+import com.hiddenswitch.proto3.net.client.models.GameEvent;
+import com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent;
 import com.hiddenswitch.proto3.net.models.*;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
@@ -19,6 +22,7 @@ import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
@@ -33,6 +37,100 @@ import java.util.stream.Collectors;
 public interface Games {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 180000L;
 	String WEBSOCKET_PATH = "games";
+
+	static Action getClientAction(GameAction ga) {
+		Action action = new Action();
+		final ActionType actionType = ActionType.valueOf(ga.getActionType().toString());
+		action.actionType(actionType)
+				.actionSuffix(ga.getActionSuffix());
+
+		if (ga.getTargetRequirement() != null) {
+			final Action.TargetRequirementEnum targetRequirement = Action.TargetRequirementEnum.valueOf(ga.getTargetRequirement().toString());
+			action.targetRequirement(targetRequirement);
+		}
+
+		if (ga.getTargetKey() != null) {
+			action.targetKey(ga.getTargetKey().getId());
+		}
+
+		if (ga.getSource() != null) {
+			action.source(ga.getSource().getId());
+		}
+
+		return action;
+	}
+
+	static GameEvent getClientEvent(net.demilich.metastone.game.events.GameEvent event, int playerId) {
+		final GameEvent clientEvent = new GameEvent();
+
+		clientEvent.eventType(GameEvent.EventTypeEnum.valueOf(event.getEventType().toString()));
+
+		GameContext workingContext = event.getGameContext().clone();
+		// Handle the event types here.
+		if (event instanceof net.demilich.metastone.game.events.PhysicalAttackEvent) {
+			final net.demilich.metastone.game.events.PhysicalAttackEvent physicalAttackEvent
+					= (net.demilich.metastone.game.events.PhysicalAttackEvent) event;
+			final Actor attacker = physicalAttackEvent.getAttacker();
+			final Actor defender = physicalAttackEvent.getDefender();
+			final int damageDealt = physicalAttackEvent.getDamageDealt();
+			final PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
+			clientEvent.physicalAttack(physicalAttack);
+		} else if (event instanceof AfterPhysicalAttackEvent) {
+			final AfterPhysicalAttackEvent physicalAttackEvent = (AfterPhysicalAttackEvent) event;
+			final Actor attacker = physicalAttackEvent.getAttacker();
+			final Actor defender = physicalAttackEvent.getDefender();
+			final int damageDealt = physicalAttackEvent.getDamageDealt();
+			final PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
+			clientEvent.afterPhysicalAttack(physicalAttack);
+		} else if (event instanceof DrawCardEvent) {
+			final DrawCardEvent drawCardEvent = (DrawCardEvent) event;
+			clientEvent.drawCard(new GameEventDrawCard()
+					.card(getEntity(workingContext, drawCardEvent.getCard(), playerId))
+					.drawn(drawCardEvent.isDrawn()));
+		} else if (event instanceof KillEvent) {
+			final KillEvent killEvent = (KillEvent) event;
+			final net.demilich.metastone.game.entities.Entity victim = killEvent.getVictim();
+			final Entity entity = getEntity(workingContext, victim, playerId);
+
+			clientEvent.kill(new GameEventKill()
+					.victim(entity));
+		} else if (event instanceof CardPlayedEvent) {
+			final CardPlayedEvent cardPlayedEvent = (CardPlayedEvent) event;
+			final Card card = cardPlayedEvent.getCard();
+			clientEvent.cardPlayed(new GameEventCardPlayed()
+					.card(getEntity(workingContext, card, playerId)));
+		} else if (event instanceof SummonEvent) {
+			final SummonEvent summonEvent = (SummonEvent) event;
+
+			clientEvent.summon(new GameEventBeforeSummon()
+					.minion(getEntity(workingContext, summonEvent.getMinion(), playerId))
+					.source(getEntity(workingContext, summonEvent.getSource(), playerId)));
+		} else if (event instanceof DamageEvent) {
+			final DamageEvent damageEvent = (DamageEvent) event;
+			clientEvent.damage(new GameEventDamage()
+					.damage(damageEvent.getDamage())
+					.source(getEntity(workingContext, damageEvent.getSource(), playerId))
+					.victim(getEntity(workingContext, damageEvent.getVictim(), playerId)));
+		} else if (event instanceof AfterSpellCastedEvent) {
+			final AfterSpellCastedEvent afterSpellCastedEvent = (AfterSpellCastedEvent) event;
+			clientEvent.afterSpellCasted(new GameEventAfterSpellCasted()
+					.sourceCard(getEntity(workingContext, afterSpellCastedEvent.getSourceCard(), playerId))
+					.spellTarget(getEntity(workingContext, afterSpellCastedEvent.getEventTarget(), playerId)));
+		}
+
+		clientEvent.eventSource(getEntity(workingContext, event.getEventSource(), playerId));
+		clientEvent.eventTarget(getEntity(workingContext, event.getEventTarget(), playerId));
+		clientEvent.targetPlayerId(event.getTargetPlayerId());
+		clientEvent.sourcePlayerId(event.getSourcePlayerId());
+		return clientEvent;
+	}
+
+	static PhysicalAttackEvent getPhysicalAttack(GameContext workingContext, Actor attacker, Actor defender, int damageDealt, int playerId) {
+		return new PhysicalAttackEvent()
+				.attacker(getEntity(workingContext, attacker, playerId))
+				.defender(getEntity(workingContext, defender, playerId))
+				.damageDealt(damageDealt);
+	}
 
 	@Suspendable
 	ContainsGameSessionResponse containsGameSession(ContainsGameSessionRequest request) throws SuspendExecution, InterruptedException;
@@ -158,7 +256,12 @@ public interface Games {
 						.location(toClientLocation(e.getEntityLocation())))
 				.entityType(Entity.EntityTypeEnum.valueOf(e.getEntityType().toString()))).collect(Collectors.toList()));
 
+		final List<GameEvent> eventStack = workingContext.getEventStack().stream()
+				.map(e -> Games.getClientEvent(e, localPlayerId)).collect(Collectors.toList());
+		final List<Action> actionStack = workingContext.getLogic().getActionStack().stream().map(Games::getClientAction).collect(Collectors.toList());
 		return new GameState()
+				.eventStack(eventStack)
+				.actionStack(actionStack)
 				.entities(entities)
 				.timestamp(System.nanoTime())
 				.turnState(workingContext.getTurnState().toString());
@@ -198,6 +301,7 @@ public interface Games {
 			entityState.boardPosition(actor.getEntityLocation().getIndex());
 		} else if (actor instanceof Hero) {
 			entity.setEntityType(Entity.EntityTypeEnum.HERO);
+			entityState.armor(actor.getArmor());
 		} else if (actor instanceof Weapon) {
 			entity.setEntityType(Entity.EntityTypeEnum.WEAPON);
 		}

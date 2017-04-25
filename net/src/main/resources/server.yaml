@@ -596,6 +596,14 @@ definitions:
   GameState:
     type: 'object'
     properties:
+      actionStack:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Action'
+      eventStack:
+        type: 'array'
+        items:
+          $ref: '#/definitions/GameEvent'
       entities:
         type: 'array'
         items:

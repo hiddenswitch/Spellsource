@@ -11,7 +11,7 @@ public abstract class GameEvent implements Serializable {
 	private final int sourcePlayerId;
 
 	public GameEvent(GameContext context, int targetPlayerId, int sourcePlayerId) {
-		this.context = context;
+		this.context = context.clone();
 		this.targetPlayerId = targetPlayerId;
 		this.sourcePlayerId = sourcePlayerId;
 	}
