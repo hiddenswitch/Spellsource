@@ -69,15 +69,11 @@ public class WebSocketClient implements Client {
 				.gameState(getClientGameState(state))
 				.event(clientEvent);
 		messageEventBuffer.offer(message);
-		if (event.getGameContext().getEventStack().size() == 0) {
-			while (!messageEventBuffer.isEmpty()) {
-				sendMessage(messageEventBuffer.poll());
-			}
-		}
 	}
 
 	@Override
 	public void onGameEnd(Player winner) {
+		flushEvents();
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_END));
 	}
@@ -129,6 +125,7 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
+		flushEvents();
 		sendMessage(new ServerToClientMessage()
 				.id(id)
 				.messageType(MessageType.ON_REQUEST_ACTION)
@@ -141,6 +138,7 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
+		flushEvents();
 		final GameContext simulatedContext = new GameContext();
 		simulatedContext.loadState(state);
 		sendMessage(new ServerToClientMessage()
@@ -151,6 +149,17 @@ public class WebSocketClient implements Client {
 
 	public ServerWebSocket getPrivateSocket() {
 		return privateSocket;
+	}
+
+	@Override
+	public void lastEvent() {
+		flushEvents();
+	}
+
+	private void flushEvents() {
+		while (!messageEventBuffer.isEmpty()) {
+			sendMessage(messageEventBuffer.poll());
+		}
 	}
 
 	private void setPrivateSocket(ServerWebSocket privateSocket) {

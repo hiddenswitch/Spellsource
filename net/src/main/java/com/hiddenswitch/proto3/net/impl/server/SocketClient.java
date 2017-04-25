@@ -98,6 +98,10 @@ public class SocketClient implements Client {
 		return privateSocket;
 	}
 
+	@Override
+	public void lastEvent() {
+	}
+
 	private void setPrivateSocket(NetSocket privateSocket) {
 		this.privateSocket = privateSocket;
 	}
