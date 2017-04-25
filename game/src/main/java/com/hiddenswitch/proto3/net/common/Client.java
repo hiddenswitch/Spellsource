@@ -28,5 +28,6 @@ public interface Client {
 	void close();
 
 	Object getPrivateSocket();
-}
 
+	void lastEvent();
+}

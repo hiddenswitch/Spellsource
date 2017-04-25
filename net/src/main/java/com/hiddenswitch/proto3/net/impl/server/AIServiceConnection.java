@@ -98,4 +98,8 @@ public class AIServiceConnection implements Client {
 	public Object getPrivateSocket() {
 		return this;
 	}
+
+	@Override
+	public void lastEvent() {
+	}
 }

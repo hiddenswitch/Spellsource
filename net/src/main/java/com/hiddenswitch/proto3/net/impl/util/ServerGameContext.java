@@ -244,6 +244,10 @@ public class ServerGameContext extends GameContext {
 		getListenerMap().get(getPlayer2()).onGameEvent(gameEvent);
 		super.fireGameEvent(gameEvent, gameTriggers);
 		getEventStack().pop();
+		if (getEventStack().isEmpty()) {
+			getListenerMap().get(getPlayer1()).lastEvent();
+			getListenerMap().get(getPlayer2()).lastEvent();
+		}
 	}
 
 	@Suspendable
