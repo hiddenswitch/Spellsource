@@ -123,6 +123,38 @@ public interface Games {
 						).collect(Collectors.toList())))
 				.forEach(clientActions::addPhysicalAttacksItem);
 
+		// Hero powers
+		Optional<SpellAction> heroPowerSpell = actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
+				.map(ga -> (HeroPowerAction)ga)
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getCardId()))
+				.entrySet()
+				.stream()
+				.map(kv -> {
+					SpellAction spellAction = new SpellAction()
+							.sourceId(kv.getKey());
+
+					// Targetable spell
+					if (kv.getValue().size() == 1
+							&& (kv.getValue().get(0).getTargetKey() == null
+							|| kv.getValue().get(0).getTargetKey().isTargetGroup())) {
+						spellAction.action(kv.getValue().get(0).getId());
+					} else {
+						// Add all the valid targets
+						kv.getValue().stream()
+								.map(t -> new TargetActionPair()
+										.action(t.getId())
+										.target(t.getTargetKey().getId()))
+								.forEach(spellAction::addTargetKeyToActionsItem);
+					}
+
+					return spellAction;
+				}).findFirst();
+
+		if (heroPowerSpell.isPresent()) {
+			clientActions.heroPower(heroPowerSpell.get());
+		}
+
 		Optional<EndTurnAction> endTurnAction = actions
 				.stream()
 				.filter(ga -> ga.getActionType() == ActionType.END_TURN)
