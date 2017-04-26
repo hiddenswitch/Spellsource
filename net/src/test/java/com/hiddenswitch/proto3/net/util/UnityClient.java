@@ -99,15 +99,9 @@ public class UnityClient {
 						context.assertNotNull(message.getGameState());
 						context.assertNotNull(message.getChanges());
 						context.assertNotNull(message.getActions());
-						context.assertNotNull(message.getActions().getActions());
-						final int actionCount = message.getActions().getActions().size();
+						final int actionCount = message.getActions().getCompatibility().size();
 						context.assertTrue(actionCount > 0);
 						// There should always be an end turn, choose one, discover or battlecry action
-						context.assertTrue(message.getActions().getActions().stream().anyMatch(p -> EnumSet.of(
-								ActionType.BATTLECRY,
-								ActionType.DISCOVER,
-								ActionType.END_TURN
-						).contains(p.getActionType())));
 						// Pick a random action
 						endpoint.sendMessage(serialize(new ClientToServerMessage()
 								.messageType(MessageType.UPDATE_ACTION)
@@ -145,7 +139,6 @@ public class UnityClient {
 		final List<Integer> changeIds = message.getChanges().stream().map(EntityChangeSetInner::getId).collect(Collectors.toList());
 		final boolean contains = entityIds.containsAll(changeIds);
 		context.assertTrue(contains);
-		context.assertNotNull(message.getGameState().getActionStack());
 	}
 
 	private int random(int upper) {

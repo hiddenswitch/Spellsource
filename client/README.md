@@ -108,7 +108,6 @@ Class | Method | HTTP request | Description
 ## Documentation for Models
 
  - [Account](docs/Account.md)
- - [Action](docs/Action.md)
  - [ActionType](docs/ActionType.md)
  - [CardRecord](docs/CardRecord.md)
  - [ClientToServerMessage](docs/ClientToServerMessage.md)
@@ -127,6 +126,11 @@ Class | Method | HTTP request | Description
  - [EntityLocation](docs/EntityLocation.md)
  - [EntityState](docs/EntityState.md)
  - [GameActions](docs/GameActions.md)
+ - [GameActionsChooseOnes](docs/GameActionsChooseOnes.md)
+ - [GameActionsChooseOnesSpells](docs/GameActionsChooseOnesSpells.md)
+ - [GameActionsChooseOnesSummons](docs/GameActionsChooseOnesSummons.md)
+ - [GameActionsDiscoveries](docs/GameActionsDiscoveries.md)
+ - [GameActionsPhysicalAttacks](docs/GameActionsPhysicalAttacks.md)
  - [GameEvent](docs/GameEvent.md)
  - [GameEventAfterSpellCasted](docs/GameEventAfterSpellCasted.md)
  - [GameEventArmorGained](docs/GameEventArmorGained.md)
@@ -162,6 +166,10 @@ Class | Method | HTTP request | Description
  - [MessageType](docs/MessageType.md)
  - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
+ - [SpellAction](docs/SpellAction.md)
+ - [SummonAction](docs/SummonAction.md)
+ - [SummonActionIndexToActions](docs/SummonActionIndexToActions.md)
+ - [TargetActionPair](docs/TargetActionPair.md)
 
 
 ## Documentation for Authorization

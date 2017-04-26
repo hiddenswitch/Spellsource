@@ -59,6 +59,11 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	public GameContext() {
 	}
 
+	public GameContext(GameState state) {
+		this();
+		loadState(state);
+	}
+
 	public GameContext(Player player1, Player player2, GameLogic logic, DeckFormat deckFormat) {
 		if (player1.getId() == IdFactory.UNASSIGNED) {
 			player1.setId(PLAYER_1);

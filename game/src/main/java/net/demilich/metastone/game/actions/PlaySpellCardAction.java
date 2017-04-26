@@ -41,5 +41,7 @@ public class PlaySpellCardAction extends PlayCardAction {
 		this.spell = spell;
 	}
 
-
+	public EntityReference getSourceCardEntityId() {
+		return cardReference;
+	}
 }

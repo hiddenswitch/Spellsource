@@ -11,13 +11,14 @@ import com.hiddenswitch.proto3.net.models.*;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PlayCardAction;
+import net.demilich.metastone.game.actions.*;
+import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -30,6 +31,7 @@ import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -39,31 +41,104 @@ public interface Games {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 180000L;
 	String WEBSOCKET_PATH = "games";
 
-	static Action getClientAction(GameAction ga) {
-		Action action = new Action();
-		final ActionType actionType = ActionType.valueOf(ga.getActionType().toString());
-		action.actionType(actionType)
-				.actionSuffix(ga.getActionSuffix());
+	static GameActions getClientActions(GameContext workingContext, List<GameAction> actions, int playerId) {
+		final GameActions clientActions = new GameActions();
 
-		if (ga.getTargetRequirement() != null) {
-			final Action.TargetRequirementEnum targetRequirement = Action.TargetRequirementEnum.valueOf(ga.getTargetRequirement().toString());
-			action.targetRequirement(targetRequirement);
+		// Get the minions targeted
+		Map<Integer, Integer> minions = workingContext.getEntities()
+				.filter(e -> e.getEntityType() == EntityType.MINION)
+				.collect(Collectors.toMap(net.demilich.metastone.game.entities.Entity::getId, e -> e.getEntityLocation().getIndex()));
+
+		// Just do spells and summons for now
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.SPELL)
+				.map(ga -> (PlaySpellCardAction) ga)
+				.collect(Collectors.groupingBy(ga -> ga.getSourceCardEntityId().getId()))
+				.entrySet()
+				.stream()
+				.map(kv -> {
+					SpellAction spellAction = new SpellAction()
+							.sourceId(kv.getKey());
+
+					// Targetable spell
+					if (kv.getValue().size() == 1
+							&& (kv.getValue().get(0).getTargetKey() == null
+							|| kv.getValue().get(0).getTargetKey().isTargetGroup())) {
+						spellAction.action(kv.getValue().get(0).getId());
+					} else {
+						// Add all the valid targets
+						kv.getValue().stream()
+								.map(t -> new TargetActionPair()
+										.action(t.getId())
+										.target(t.getTargetKey().getId()))
+								.forEach(spellAction::addTargetKeyToActionsItem);
+					}
+
+					return spellAction;
+				})
+				.forEach(clientActions::addSpellsItem);
+
+		// Choose one summons are actually play one cards with the same action
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
+				.map(ga -> (PlayMinionCardAction) ga)
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getCardId()))
+				.entrySet()
+				.stream()
+				.map(kv -> {
+					SummonAction summonAction = new SummonAction()
+							.sourceId(kv.getKey())
+							.indexToActions(kv.getValue().stream()
+									.filter(a -> a.getTargetKey() != null)
+									.map(a -> new SummonActionIndexToActions()
+											.action(a.getId())
+											.index(minions.get(a.getTargetKey().getId()))).collect(Collectors.toList()));
+
+					// Add the null targeted action, if it exists
+					Optional<PlayMinionCardAction> nullPlay = kv.getValue().stream()
+							.filter(a -> a.getTargetKey() == null).findFirst();
+					if (nullPlay.isPresent()) {
+						GameAction a = nullPlay.get();
+						summonAction.addIndexToActionsItem(
+								new SummonActionIndexToActions()
+										.action(a.getId())
+										.index(workingContext.getPlayer(playerId).getMinions().size()));
+					}
+
+					return summonAction;
+				}).forEach(clientActions::addSummonsItem);
+
+		// Physical attacks
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK)
+				.map(ga -> (PhysicalAttackAction) ga)
+				.collect(Collectors.groupingBy(ga -> ga.getAttackerReference().getId()))
+				.entrySet()
+				.stream()
+				.map(kv -> new GameActionsPhysicalAttacks()
+						.sourceId(kv.getKey())
+						.defenders(kv.getValue().stream().map(ga ->
+								new TargetActionPair().target(ga.getTargetKey().getId())
+										.action(ga.getId())
+						).collect(Collectors.toList())))
+				.forEach(clientActions::addPhysicalAttacksItem);
+
+		Optional<EndTurnAction> endTurnAction = actions
+				.stream()
+				.filter(ga -> ga.getActionType() == ActionType.END_TURN)
+				.map(ga -> (EndTurnAction) ga)
+				.findFirst();
+
+		if (endTurnAction.isPresent()) {
+			clientActions.endTurn(endTurnAction.get().getId());
 		}
 
-		if (ga.getTargetKey() != null) {
-			action.targetKey(ga.getTargetKey().getId());
-		}
+		// Add all the action indices for compatibility purposes
+		clientActions.compatibility(actions.stream()
+				.map(GameAction::getId)
+				.collect(Collectors.toList()));
 
-		if (ga.getSource() != null) {
-			action.source(ga.getSource().getId());
-		}
-
-		if (PlayCardAction.class.isAssignableFrom(ga.getClass())) {
-			PlayCardAction pca = (PlayCardAction) ga;
-			action.playCardCardReference(((PlayCardAction) ga).getCardReference().getCardId());
-		}
-
-		return action;
+		return clientActions;
 	}
 
 	static GameEvent getClientEvent(net.demilich.metastone.game.events.GameEvent event, int playerId) {
@@ -264,10 +339,8 @@ public interface Games {
 
 		final List<GameEvent> eventStack = workingContext.getEventStack().stream()
 				.map(e -> Games.getClientEvent(e, localPlayerId)).collect(Collectors.toList());
-		final List<Action> actionStack = workingContext.getLogic().getActionStack().stream().map(Games::getClientAction).collect(Collectors.toList());
 		return new GameState()
 				.eventStack(eventStack)
-				.actionStack(actionStack)
 				.entities(entities)
 				.timestamp(System.nanoTime())
 				.turnState(workingContext.getTurnState().toString());

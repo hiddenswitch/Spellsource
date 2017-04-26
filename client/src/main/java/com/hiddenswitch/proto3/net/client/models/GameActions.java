@@ -27,7 +27,11 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.Action;
+import com.hiddenswitch.proto3.net.client.models.GameActionsChooseOnes;
+import com.hiddenswitch.proto3.net.client.models.GameActionsDiscoveries;
+import com.hiddenswitch.proto3.net.client.models.GameActionsPhysicalAttacks;
+import com.hiddenswitch.proto3.net.client.models.SpellAction;
+import com.hiddenswitch.proto3.net.client.models.SummonAction;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -35,34 +39,254 @@ import java.util.List;
 
 import java.io.Serializable;
 /**
- * GameActions
+ * An object representing all valid game actions in this action request. 
  */
+@ApiModel(description = "An object representing all valid game actions in this action request. ")
 
 public class GameActions  implements Serializable {
-  @SerializedName("actions")
-  private List<Action> actions = new ArrayList<Action>();
+  @SerializedName("compatibility")
+  private List<Integer> compatibility = new ArrayList<Integer>();
 
-  public GameActions actions(List<Action> actions) {
-    this.actions = actions;
+  @SerializedName("endTurn")
+  private Integer endTurn = null;
+
+  @SerializedName("physicalAttacks")
+  private List<GameActionsPhysicalAttacks> physicalAttacks = new ArrayList<GameActionsPhysicalAttacks>();
+
+  @SerializedName("summons")
+  private List<SummonAction> summons = new ArrayList<SummonAction>();
+
+  @SerializedName("heroPower")
+  private SpellAction heroPower = null;
+
+  @SerializedName("spells")
+  private List<SpellAction> spells = new ArrayList<SpellAction>();
+
+  @SerializedName("battlecries")
+  private List<SpellAction> battlecries = new ArrayList<SpellAction>();
+
+  @SerializedName("discoveries")
+  private List<GameActionsDiscoveries> discoveries = new ArrayList<GameActionsDiscoveries>();
+
+  @SerializedName("weapons")
+  private List<SummonAction> weapons = new ArrayList<SummonAction>();
+
+  @SerializedName("chooseOnes")
+  private GameActionsChooseOnes chooseOnes = null;
+
+  public GameActions compatibility(List<Integer> compatibility) {
+    this.compatibility = compatibility;
     return this;
   }
 
-  public GameActions addActionsItem(Action actionsItem) {
-    this.actions.add(actionsItem);
+  public GameActions addCompatibilityItem(Integer compatibilityItem) {
+    this.compatibility.add(compatibilityItem);
     return this;
   }
 
    /**
-   * Get actions
-   * @return actions
+   * An array of game action indices. Choose one at random for compatibility purposes until the client can support all actions 
+   * @return compatibility
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public List<Action> getActions() {
-    return actions;
+  @ApiModelProperty(example = "null", value = "An array of game action indices. Choose one at random for compatibility purposes until the client can support all actions ")
+  public List<Integer> getCompatibility() {
+    return compatibility;
   }
 
-  public void setActions(List<Action> actions) {
-    this.actions = actions;
+  public void setCompatibility(List<Integer> compatibility) {
+    this.compatibility = compatibility;
+  }
+
+  public GameActions endTurn(Integer endTurn) {
+    this.endTurn = endTurn;
+    return this;
+  }
+
+   /**
+   * The end turn action. Not necessarily always available, because you cannot end your turn in the middle of a discover or a battlecry. The value corresponds to which integer index to reply with. 
+   * @return endTurn
+  **/
+  @ApiModelProperty(example = "null", value = "The end turn action. Not necessarily always available, because you cannot end your turn in the middle of a discover or a battlecry. The value corresponds to which integer index to reply with. ")
+  public Integer getEndTurn() {
+    return endTurn;
+  }
+
+  public void setEndTurn(Integer endTurn) {
+    this.endTurn = endTurn;
+  }
+
+  public GameActions physicalAttacks(List<GameActionsPhysicalAttacks> physicalAttacks) {
+    this.physicalAttacks = physicalAttacks;
+    return this;
+  }
+
+  public GameActions addPhysicalAttacksItem(GameActionsPhysicalAttacks physicalAttacksItem) {
+    this.physicalAttacks.add(physicalAttacksItem);
+    return this;
+  }
+
+   /**
+   * An array of entity ID - target IDs pairs that represent valid physical attacks. 
+   * @return physicalAttacks
+  **/
+  @ApiModelProperty(example = "null", value = "An array of entity ID - target IDs pairs that represent valid physical attacks. ")
+  public List<GameActionsPhysicalAttacks> getPhysicalAttacks() {
+    return physicalAttacks;
+  }
+
+  public void setPhysicalAttacks(List<GameActionsPhysicalAttacks> physicalAttacks) {
+    this.physicalAttacks = physicalAttacks;
+  }
+
+  public GameActions summons(List<SummonAction> summons) {
+    this.summons = summons;
+    return this;
+  }
+
+  public GameActions addSummonsItem(SummonAction summonsItem) {
+    this.summons.add(summonsItem);
+    return this;
+  }
+
+   /**
+   * The cards in your hand that can be summoned. These are typically only minions. 
+   * @return summons
+  **/
+  @ApiModelProperty(example = "null", value = "The cards in your hand that can be summoned. These are typically only minions. ")
+  public List<SummonAction> getSummons() {
+    return summons;
+  }
+
+  public void setSummons(List<SummonAction> summons) {
+    this.summons = summons;
+  }
+
+  public GameActions heroPower(SpellAction heroPower) {
+    this.heroPower = heroPower;
+    return this;
+  }
+
+   /**
+   * Get heroPower
+   * @return heroPower
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public SpellAction getHeroPower() {
+    return heroPower;
+  }
+
+  public void setHeroPower(SpellAction heroPower) {
+    this.heroPower = heroPower;
+  }
+
+  public GameActions spells(List<SpellAction> spells) {
+    this.spells = spells;
+    return this;
+  }
+
+  public GameActions addSpellsItem(SpellAction spellsItem) {
+    this.spells.add(spellsItem);
+    return this;
+  }
+
+   /**
+   * The cards in your hand that are spells that take targets. 
+   * @return spells
+  **/
+  @ApiModelProperty(example = "null", value = "The cards in your hand that are spells that take targets. ")
+  public List<SpellAction> getSpells() {
+    return spells;
+  }
+
+  public void setSpells(List<SpellAction> spells) {
+    this.spells = spells;
+  }
+
+  public GameActions battlecries(List<SpellAction> battlecries) {
+    this.battlecries = battlecries;
+    return this;
+  }
+
+  public GameActions addBattlecriesItem(SpellAction battlecriesItem) {
+    this.battlecries.add(battlecriesItem);
+    return this;
+  }
+
+   /**
+   * A set of possible targetable battlecry actions. 
+   * @return battlecries
+  **/
+  @ApiModelProperty(example = "null", value = "A set of possible targetable battlecry actions. ")
+  public List<SpellAction> getBattlecries() {
+    return battlecries;
+  }
+
+  public void setBattlecries(List<SpellAction> battlecries) {
+    this.battlecries = battlecries;
+  }
+
+  public GameActions discoveries(List<GameActionsDiscoveries> discoveries) {
+    this.discoveries = discoveries;
+    return this;
+  }
+
+  public GameActions addDiscoveriesItem(GameActionsDiscoveries discoveriesItem) {
+    this.discoveries.add(discoveriesItem);
+    return this;
+  }
+
+   /**
+   * Card discovers. 
+   * @return discoveries
+  **/
+  @ApiModelProperty(example = "null", value = "Card discovers. ")
+  public List<GameActionsDiscoveries> getDiscoveries() {
+    return discoveries;
+  }
+
+  public void setDiscoveries(List<GameActionsDiscoveries> discoveries) {
+    this.discoveries = discoveries;
+  }
+
+  public GameActions weapons(List<SummonAction> weapons) {
+    this.weapons = weapons;
+    return this;
+  }
+
+  public GameActions addWeaponsItem(SummonAction weaponsItem) {
+    this.weapons.add(weaponsItem);
+    return this;
+  }
+
+   /**
+   * The weapons in your hand that can be equipped. These are the equivalent of summons that only have a single index, but do not require targeting on the battlefield. 
+   * @return weapons
+  **/
+  @ApiModelProperty(example = "null", value = "The weapons in your hand that can be equipped. These are the equivalent of summons that only have a single index, but do not require targeting on the battlefield. ")
+  public List<SummonAction> getWeapons() {
+    return weapons;
+  }
+
+  public void setWeapons(List<SummonAction> weapons) {
+    this.weapons = weapons;
+  }
+
+  public GameActions chooseOnes(GameActionsChooseOnes chooseOnes) {
+    this.chooseOnes = chooseOnes;
+    return this;
+  }
+
+   /**
+   * Get chooseOnes
+   * @return chooseOnes
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public GameActionsChooseOnes getChooseOnes() {
+    return chooseOnes;
+  }
+
+  public void setChooseOnes(GameActionsChooseOnes chooseOnes) {
+    this.chooseOnes = chooseOnes;
   }
 
 
@@ -75,12 +299,21 @@ public class GameActions  implements Serializable {
       return false;
     }
     GameActions gameActions = (GameActions) o;
-    return Objects.equals(this.actions, gameActions.actions);
+    return Objects.equals(this.compatibility, gameActions.compatibility) &&
+        Objects.equals(this.endTurn, gameActions.endTurn) &&
+        Objects.equals(this.physicalAttacks, gameActions.physicalAttacks) &&
+        Objects.equals(this.summons, gameActions.summons) &&
+        Objects.equals(this.heroPower, gameActions.heroPower) &&
+        Objects.equals(this.spells, gameActions.spells) &&
+        Objects.equals(this.battlecries, gameActions.battlecries) &&
+        Objects.equals(this.discoveries, gameActions.discoveries) &&
+        Objects.equals(this.weapons, gameActions.weapons) &&
+        Objects.equals(this.chooseOnes, gameActions.chooseOnes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(actions);
+    return Objects.hash(compatibility, endTurn, physicalAttacks, summons, heroPower, spells, battlecries, discoveries, weapons, chooseOnes);
   }
 
   @Override
@@ -88,7 +321,16 @@ public class GameActions  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameActions {\n");
     
-    sb.append("    actions: ").append(toIndentedString(actions)).append("\n");
+    sb.append("    compatibility: ").append(toIndentedString(compatibility)).append("\n");
+    sb.append("    endTurn: ").append(toIndentedString(endTurn)).append("\n");
+    sb.append("    physicalAttacks: ").append(toIndentedString(physicalAttacks)).append("\n");
+    sb.append("    summons: ").append(toIndentedString(summons)).append("\n");
+    sb.append("    heroPower: ").append(toIndentedString(heroPower)).append("\n");
+    sb.append("    spells: ").append(toIndentedString(spells)).append("\n");
+    sb.append("    battlecries: ").append(toIndentedString(battlecries)).append("\n");
+    sb.append("    discoveries: ").append(toIndentedString(discoveries)).append("\n");
+    sb.append("    weapons: ").append(toIndentedString(weapons)).append("\n");
+    sb.append("    chooseOnes: ").append(toIndentedString(chooseOnes)).append("\n");
     sb.append("}");
     return sb.toString();
   }
