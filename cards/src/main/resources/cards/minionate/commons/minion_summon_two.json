@@ -7,7 +7,7 @@
 	"baseHp": 1,
 	"heroClass": "ANY",
 	"rarity": "COMMON",
-	"description": "Deathrattle: Summon a 2/2.",
+	"description": "Revenge: Summon a 2/2.",
 	"deathrattle": {
 		"class": "SummonSpell",
 		"card": "token_two"
