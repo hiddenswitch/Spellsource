@@ -51,7 +51,8 @@ public interface Games {
 
 		// Just do spells and summons for now
 		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.SPELL)
+				.filter(ga -> ga.getActionType() == ActionType.SPELL
+						&& !(ga instanceof PlayChooseOneCardAction))
 				.map(ga -> (PlaySpellCardAction) ga)
 				.collect(Collectors.groupingBy(ga -> ga.getSourceCardEntityId().getId()))
 				.entrySet()
@@ -126,7 +127,7 @@ public interface Games {
 		// Hero powers
 		Optional<SpellAction> heroPowerSpell = actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
-				.map(ga -> (HeroPowerAction)ga)
+				.map(ga -> (HeroPowerAction) ga)
 				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getCardId()))
 				.entrySet()
 				.stream()
