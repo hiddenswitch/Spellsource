@@ -131,9 +131,7 @@ public class WebSocketClient implements Client {
 				.messageType(MessageType.ON_REQUEST_ACTION)
 				.changes(getChangeSet(state))
 				.gameState(getClientGameState(state))
-				.actions(new GameActions()
-						.actions(availableActions.stream().map(Games::getClientAction).collect(Collectors.toList()))
-				));
+				.actions(Games.getClientActions(new GameContext(state), availableActions, playerId)));
 	}
 
 	@Override

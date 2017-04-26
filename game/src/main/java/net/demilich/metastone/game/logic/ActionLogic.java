@@ -117,6 +117,11 @@ public class ActionLogic implements Serializable {
 			validActions.add(new EndTurnAction());
 		}
 
+		// Assign the ids
+		for (int i = 0; i < validActions.size(); i++) {
+			validActions.get(i).setId(i);
+		}
+
 		return validActions;
 	}
 

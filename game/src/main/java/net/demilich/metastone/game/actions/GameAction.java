@@ -13,7 +13,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public abstract class GameAction implements Cloneable, Serializable {
-
+	private int id;
 	private TargetSelection targetRequirement = TargetSelection.NONE;
 	private ActionType actionType = ActionType.SYSTEM;
 	private EntityReference source;
@@ -27,7 +27,9 @@ public abstract class GameAction implements Cloneable, Serializable {
 	@Override
 	public GameAction clone() {
 		try {
-			return (GameAction) super.clone();
+			final GameAction clone = (GameAction) super.clone();
+			clone.setId(getId());
+			return clone;
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -92,7 +94,8 @@ public abstract class GameAction implements Cloneable, Serializable {
 			return (this.actionType == otherAction.actionType)
 					&& (this.targetRequirement == otherAction.targetRequirement)
 					&& (this.getSource().equals(otherAction.getSource()))
-					&& (this.getTargetKey().equals(otherAction.getTargetKey()));
+					&& (this.getTargetKey().equals(otherAction.getTargetKey()))
+					&& (this.getId() == otherAction.getId());
 		} else {
 			return false;
 		}
@@ -101,11 +104,20 @@ public abstract class GameAction implements Cloneable, Serializable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
+				.append(id)
 				.append(targetRequirement)
 				.append(actionType)
 				.append(source)
 				.append(targetKey)
 				.append(actionSuffix)
 				.toHashCode();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

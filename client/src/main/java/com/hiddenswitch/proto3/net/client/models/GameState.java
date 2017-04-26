@@ -27,7 +27,6 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.Action;
 import com.hiddenswitch.proto3.net.client.models.Entity;
 import com.hiddenswitch.proto3.net.client.models.GameEvent;
 import io.swagger.annotations.ApiModel;
@@ -41,9 +40,6 @@ import java.io.Serializable;
  */
 
 public class GameState  implements Serializable {
-  @SerializedName("actionStack")
-  private List<Action> actionStack = new ArrayList<Action>();
-
   @SerializedName("eventStack")
   private List<GameEvent> eventStack = new ArrayList<GameEvent>();
 
@@ -58,29 +54,6 @@ public class GameState  implements Serializable {
 
   @SerializedName("timestamp")
   private Long timestamp = null;
-
-  public GameState actionStack(List<Action> actionStack) {
-    this.actionStack = actionStack;
-    return this;
-  }
-
-  public GameState addActionStackItem(Action actionStackItem) {
-    this.actionStack.add(actionStackItem);
-    return this;
-  }
-
-   /**
-   * Get actionStack
-   * @return actionStack
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public List<Action> getActionStack() {
-    return actionStack;
-  }
-
-  public void setActionStack(List<Action> actionStack) {
-    this.actionStack = actionStack;
-  }
 
   public GameState eventStack(List<GameEvent> eventStack) {
     this.eventStack = eventStack;
@@ -192,8 +165,7 @@ public class GameState  implements Serializable {
       return false;
     }
     GameState gameState = (GameState) o;
-    return Objects.equals(this.actionStack, gameState.actionStack) &&
-        Objects.equals(this.eventStack, gameState.eventStack) &&
+    return Objects.equals(this.eventStack, gameState.eventStack) &&
         Objects.equals(this.entities, gameState.entities) &&
         Objects.equals(this.turnState, gameState.turnState) &&
         Objects.equals(this.turnNumber, gameState.turnNumber) &&
@@ -202,7 +174,7 @@ public class GameState  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(actionStack, eventStack, entities, turnState, turnNumber, timestamp);
+    return Objects.hash(eventStack, entities, turnState, turnNumber, timestamp);
   }
 
   @Override
@@ -210,7 +182,6 @@ public class GameState  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameState {\n");
     
-    sb.append("    actionStack: ").append(toIndentedString(actionStack)).append("\n");
     sb.append("    eventStack: ").append(toIndentedString(eventStack)).append("\n");
     sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
     sb.append("    turnState: ").append(toIndentedString(turnState)).append("\n");
