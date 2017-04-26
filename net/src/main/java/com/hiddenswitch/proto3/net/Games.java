@@ -12,6 +12,7 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
@@ -55,6 +56,11 @@ public interface Games {
 
 		if (ga.getSource() != null) {
 			action.source(ga.getSource().getId());
+		}
+
+		if (PlayCardAction.class.isAssignableFrom(ga.getClass())) {
+			PlayCardAction pca = (PlayCardAction) ga;
+			action.playCardCardReference(((PlayCardAction) ga).getCardReference().getCardId());
 		}
 
 		return action;

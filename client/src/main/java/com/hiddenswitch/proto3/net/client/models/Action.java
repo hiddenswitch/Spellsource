@@ -40,8 +40,11 @@ import java.io.Serializable;
  */
 
 public class Action  implements Serializable {
+  @SerializedName("actionType")
+  private ActionType actionType = null;
+
   /**
-   * Gets or Sets targetRequirement
+   * The target requirements of this action. 
    */
   public enum TargetRequirementEnum {
     @SerializedName("NONE")
@@ -92,9 +95,6 @@ public class Action  implements Serializable {
   @SerializedName("targetRequirement")
   private TargetRequirementEnum targetRequirement = null;
 
-  @SerializedName("actionType")
-  private ActionType actionType = null;
-
   @SerializedName("source")
   private Integer source = null;
 
@@ -107,6 +107,9 @@ public class Action  implements Serializable {
   @SerializedName("canBeExecutedOnEntities")
   private List<Integer> canBeExecutedOnEntities = new ArrayList<Integer>();
 
+  @SerializedName("playCardCardReference")
+  private Integer playCardCardReference = null;
+
   @SerializedName("discoverActionEntityId")
   private Integer discoverActionEntityId = null;
 
@@ -115,24 +118,6 @@ public class Action  implements Serializable {
 
   @SerializedName("setAsideEntities")
   private List<Entity> setAsideEntities = new ArrayList<Entity>();
-
-  public Action targetRequirement(TargetRequirementEnum targetRequirement) {
-    this.targetRequirement = targetRequirement;
-    return this;
-  }
-
-   /**
-   * Get targetRequirement
-   * @return targetRequirement
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public TargetRequirementEnum getTargetRequirement() {
-    return targetRequirement;
-  }
-
-  public void setTargetRequirement(TargetRequirementEnum targetRequirement) {
-    this.targetRequirement = targetRequirement;
-  }
 
   public Action actionType(ActionType actionType) {
     this.actionType = actionType;
@@ -152,16 +137,34 @@ public class Action  implements Serializable {
     this.actionType = actionType;
   }
 
+  public Action targetRequirement(TargetRequirementEnum targetRequirement) {
+    this.targetRequirement = targetRequirement;
+    return this;
+  }
+
+   /**
+   * The target requirements of this action. 
+   * @return targetRequirement
+  **/
+  @ApiModelProperty(example = "null", value = "The target requirements of this action. ")
+  public TargetRequirementEnum getTargetRequirement() {
+    return targetRequirement;
+  }
+
+  public void setTargetRequirement(TargetRequirementEnum targetRequirement) {
+    this.targetRequirement = targetRequirement;
+  }
+
   public Action source(Integer source) {
     this.source = source;
     return this;
   }
 
    /**
-   * Get source
+   * An entity corresponding to the source of this action. For battlecries, the source is the minion with the battlecry. Otherwise, it is the player. 
    * @return source
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "An entity corresponding to the source of this action. For battlecries, the source is the minion with the battlecry. Otherwise, it is the player. ")
   public Integer getSource() {
     return source;
   }
@@ -176,10 +179,10 @@ public class Action  implements Serializable {
   }
 
    /**
-   * Get targetKey
+   * The target of the action. For summons, it is the index to summon into. For spell-like actions without predefined targets, like playing a spell card or a battlecry that has a user-selected target, it corresponds to the entity that can be targeted. For discovers, it corresponds to the choice's target. 
    * @return targetKey
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The target of the action. For summons, it is the index to summon into. For spell-like actions without predefined targets, like playing a spell card or a battlecry that has a user-selected target, it corresponds to the entity that can be targeted. For discovers, it corresponds to the choice's target. ")
   public Integer getTargetKey() {
     return targetKey;
   }
@@ -194,10 +197,10 @@ public class Action  implements Serializable {
   }
 
    /**
-   * Get actionSuffix
+   * A human-readable string describing the action. 
    * @return actionSuffix
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "A human-readable string describing the action. ")
   public String getActionSuffix() {
     return actionSuffix;
   }
@@ -217,16 +220,34 @@ public class Action  implements Serializable {
   }
 
    /**
-   * Get canBeExecutedOnEntities
+   * A list of entitiy IDs for valid targets of a battlecry, physical attack or discover action. 
    * @return canBeExecutedOnEntities
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "A list of entitiy IDs for valid targets of a battlecry, physical attack or discover action. ")
   public List<Integer> getCanBeExecutedOnEntities() {
     return canBeExecutedOnEntities;
   }
 
   public void setCanBeExecutedOnEntities(List<Integer> canBeExecutedOnEntities) {
     this.canBeExecutedOnEntities = canBeExecutedOnEntities;
+  }
+
+  public Action playCardCardReference(Integer playCardCardReference) {
+    this.playCardCardReference = playCardCardReference;
+    return this;
+  }
+
+   /**
+   * The entity ID of the card that generated this play card action. Play card actions include summons, spells, weapon equips and hero powers. 
+   * @return playCardCardReference
+  **/
+  @ApiModelProperty(example = "null", value = "The entity ID of the card that generated this play card action. Play card actions include summons, spells, weapon equips and hero powers. ")
+  public Integer getPlayCardCardReference() {
+    return playCardCardReference;
+  }
+
+  public void setPlayCardCardReference(Integer playCardCardReference) {
+    this.playCardCardReference = playCardCardReference;
   }
 
   public Action discoverActionEntityId(Integer discoverActionEntityId) {
@@ -298,12 +319,13 @@ public class Action  implements Serializable {
       return false;
     }
     Action action = (Action) o;
-    return Objects.equals(this.targetRequirement, action.targetRequirement) &&
-        Objects.equals(this.actionType, action.actionType) &&
+    return Objects.equals(this.actionType, action.actionType) &&
+        Objects.equals(this.targetRequirement, action.targetRequirement) &&
         Objects.equals(this.source, action.source) &&
         Objects.equals(this.targetKey, action.targetKey) &&
         Objects.equals(this.actionSuffix, action.actionSuffix) &&
         Objects.equals(this.canBeExecutedOnEntities, action.canBeExecutedOnEntities) &&
+        Objects.equals(this.playCardCardReference, action.playCardCardReference) &&
         Objects.equals(this.discoverActionEntityId, action.discoverActionEntityId) &&
         Objects.equals(this.physicalAttackActionAttackerReference, action.physicalAttackActionAttackerReference) &&
         Objects.equals(this.setAsideEntities, action.setAsideEntities);
@@ -311,7 +333,7 @@ public class Action  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(targetRequirement, actionType, source, targetKey, actionSuffix, canBeExecutedOnEntities, discoverActionEntityId, physicalAttackActionAttackerReference, setAsideEntities);
+    return Objects.hash(actionType, targetRequirement, source, targetKey, actionSuffix, canBeExecutedOnEntities, playCardCardReference, discoverActionEntityId, physicalAttackActionAttackerReference, setAsideEntities);
   }
 
   @Override
@@ -319,12 +341,13 @@ public class Action  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class Action {\n");
     
-    sb.append("    targetRequirement: ").append(toIndentedString(targetRequirement)).append("\n");
     sb.append("    actionType: ").append(toIndentedString(actionType)).append("\n");
+    sb.append("    targetRequirement: ").append(toIndentedString(targetRequirement)).append("\n");
     sb.append("    source: ").append(toIndentedString(source)).append("\n");
     sb.append("    targetKey: ").append(toIndentedString(targetKey)).append("\n");
     sb.append("    actionSuffix: ").append(toIndentedString(actionSuffix)).append("\n");
     sb.append("    canBeExecutedOnEntities: ").append(toIndentedString(canBeExecutedOnEntities)).append("\n");
+    sb.append("    playCardCardReference: ").append(toIndentedString(playCardCardReference)).append("\n");
     sb.append("    discoverActionEntityId: ").append(toIndentedString(discoverActionEntityId)).append("\n");
     sb.append("    physicalAttackActionAttackerReference: ").append(toIndentedString(physicalAttackActionAttackerReference)).append("\n");
     sb.append("    setAsideEntities: ").append(toIndentedString(setAsideEntities)).append("\n");

@@ -618,23 +618,10 @@ definitions:
   GameActions:
     type: 'object'
     properties:
-      actionGroups:
-        type: 'array'
-        items:
-          $ref: '#/definitions/ActionGroup'
       actions:
         type: 'array'
         items:
           $ref: '#/definitions/Action'
-  ActionGroup:
-    type: 'object'
-    properties:
-      id:
-        type: 'integer'
-      actions:
-        type: 'array'
-        items:
-          type: 'integer'
   ActionType:
     type: 'string'
     enum:
@@ -650,7 +637,11 @@ definitions:
   Action:
     type: 'object'
     properties:
+      actionType:
+        $ref: '#/definitions/ActionType'
       targetRequirement:
+        description: |
+          The target requirements of this action.
         type: 'string'
         enum:
           - 'NONE'
@@ -664,18 +655,32 @@ definitions:
           - 'HEROES'
           - 'ENEMY_HERO'
           - 'FRIENDLY_HERO'
-      actionType:
-        $ref: '#/definitions/ActionType'
       source:
+        description: |
+          An entity corresponding to the source of this action. For battlecries, the source is the minion with the
+          battlecry. Otherwise, it is the player.
         type: 'integer'
       targetKey:
+        description: |
+          The target of the action. For summons, it is the index to summon into. For spell-like actions without
+          predefined targets, like playing a spell card or a battlecry that has a user-selected target, it corresponds
+          to the entity that can be targeted. For discovers, it corresponds to the choice's target.
         type: 'integer'
       actionSuffix:
+        description: |
+          A human-readable string describing the action.
         type: 'string'
       canBeExecutedOnEntities:
+        description: |
+          A list of entitiy IDs for valid targets of a battlecry, physical attack or discover action.
         type: 'array'
         items:
           type: 'integer'
+      playCardCardReference:
+        description: |
+          The entity ID of the card that generated this play card action. Play card actions include summons, spells,
+          weapon equips and hero powers.
+        type: 'integer'
       discoverActionEntityId:
         type: 'integer'
       physicalAttackActionAttackerReference:

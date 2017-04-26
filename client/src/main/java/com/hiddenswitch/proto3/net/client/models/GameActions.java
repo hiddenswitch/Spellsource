@@ -28,7 +28,6 @@ package com.hiddenswitch.proto3.net.client.models;
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.hiddenswitch.proto3.net.client.models.Action;
-import com.hiddenswitch.proto3.net.client.models.ActionGroup;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -40,34 +39,8 @@ import java.io.Serializable;
  */
 
 public class GameActions  implements Serializable {
-  @SerializedName("actionGroups")
-  private List<ActionGroup> actionGroups = new ArrayList<ActionGroup>();
-
   @SerializedName("actions")
   private List<Action> actions = new ArrayList<Action>();
-
-  public GameActions actionGroups(List<ActionGroup> actionGroups) {
-    this.actionGroups = actionGroups;
-    return this;
-  }
-
-  public GameActions addActionGroupsItem(ActionGroup actionGroupsItem) {
-    this.actionGroups.add(actionGroupsItem);
-    return this;
-  }
-
-   /**
-   * Get actionGroups
-   * @return actionGroups
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public List<ActionGroup> getActionGroups() {
-    return actionGroups;
-  }
-
-  public void setActionGroups(List<ActionGroup> actionGroups) {
-    this.actionGroups = actionGroups;
-  }
 
   public GameActions actions(List<Action> actions) {
     this.actions = actions;
@@ -102,13 +75,12 @@ public class GameActions  implements Serializable {
       return false;
     }
     GameActions gameActions = (GameActions) o;
-    return Objects.equals(this.actionGroups, gameActions.actionGroups) &&
-        Objects.equals(this.actions, gameActions.actions);
+    return Objects.equals(this.actions, gameActions.actions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(actionGroups, actions);
+    return Objects.hash(actions);
   }
 
   @Override
@@ -116,7 +88,6 @@ public class GameActions  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameActions {\n");
     
-    sb.append("    actionGroups: ").append(toIndentedString(actionGroups)).append("\n");
     sb.append("    actions: ").append(toIndentedString(actions)).append("\n");
     sb.append("}");
     return sb.toString();
