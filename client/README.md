@@ -109,7 +109,6 @@ Class | Method | HTTP request | Description
 
  - [Account](docs/Account.md)
  - [Action](docs/Action.md)
- - [ActionGroup](docs/ActionGroup.md)
  - [ActionType](docs/ActionType.md)
  - [CardRecord](docs/CardRecord.md)
  - [ClientToServerMessage](docs/ClientToServerMessage.md)
