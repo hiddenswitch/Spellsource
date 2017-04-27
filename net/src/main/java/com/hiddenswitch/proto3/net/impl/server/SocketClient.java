@@ -15,6 +15,7 @@ import net.demilich.metastone.game.events.GameEvent;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SocketClient implements Client {
 	private NetSocket privateSocket;

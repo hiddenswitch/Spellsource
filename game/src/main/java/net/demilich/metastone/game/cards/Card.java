@@ -143,13 +143,15 @@ public abstract class Card extends Entity {
 		String descriptionCleaned = description.replaceAll("(</?[bi]>)|\\[x\\]", "");
 		// Include taunt if it doesn't seem to contain anything about taunt.
 		if (hasAttribute(Attribute.CHARGE)
-				&& !descriptionCleaned.matches("[Cc]harge")) {
-			descriptionCleaned = "Charge. " + descriptionCleaned;
+				&& !descriptionCleaned.matches("[Cc]harge")
+				&& !descriptionCleaned.matches("[Ss]torm")) {
+			descriptionCleaned = "Storm. " + descriptionCleaned;
 		}
 
 		if (hasAttribute(Attribute.TAUNT)
-				&& !descriptionCleaned.matches("[Tt]aunt")) {
-			descriptionCleaned = "Taunt. " + descriptionCleaned;
+				&& !descriptionCleaned.matches("[Tt]aunt")
+				&& !descriptionCleaned.matches("[Gt]uard]")) {
+			descriptionCleaned = "Guard. " + descriptionCleaned;
 		}
 		return descriptionCleaned;
 	}
