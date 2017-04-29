@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.common.ServerToClientMessage;
 import com.hiddenswitch.proto3.net.util.IncomingMessage;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.VertxBufferOutputStream;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.NetSocket;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
@@ -19,6 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SocketClient implements Client {
 	private NetSocket privateSocket;
+	private ConcurrentLinkedQueue<Buffer> messageBuffer = new ConcurrentLinkedQueue<>();
 
 	public SocketClient(NetSocket socket) {
 		this.setPrivateSocket(socket);
@@ -32,7 +34,12 @@ public class SocketClient implements Client {
 		}
 	}
 
-	private void sendMessage(NetSocket socket, ServerToClientMessage message) throws IOException {
+	private synchronized void sendMessage(NetSocket socket, ServerToClientMessage message) throws IOException {
+		final Buffer buffer = getBuffer(message);
+		socket.write(buffer);
+	}
+
+	private Buffer getBuffer(ServerToClientMessage message) {
 		// Serialize message
 		VertxBufferOutputStream out = new VertxBufferOutputStream();
 		// Write the magic header
@@ -42,41 +49,47 @@ public class SocketClient implements Client {
 		// Serialize the message
 		int before = out.size();
 
-		synchronized (this) {
+		try {
 			Serialization.serialize(message, out);
+		} catch (Exception ignored) {
 		}
 
 		int messageSize = out.size() - before;
 		// Set the second set of four bytes to the message length.
-		socket.write(out.getBuffer().setInt(4, messageSize));
+		return out.getBuffer().setInt(4, messageSize);
 	}
 
 	public void close() {
+		flushEvents();
 		privateSocket.close();
 	}
 
 	@Override
 	public void onGameEvent(GameEvent event) {
-		sendMessage(new ServerToClientMessage(event));
+		messageBuffer.offer(getBuffer(new ServerToClientMessage(event)));
 	}
 
 	@Override
 	public void onGameEnd(Player winner) {
+		flushEvents();
 		sendMessage(new ServerToClientMessage(winner, true));
 	}
 
 	@Override
 	public void setPlayers(Player localPlayer, Player remotePlayer) {
+		flushEvents();
 		sendMessage(new ServerToClientMessage(localPlayer, remotePlayer));
 	}
 
 	@Override
 	public void onActivePlayer(Player activePlayer) {
+		flushEvents();
 		sendMessage(new ServerToClientMessage(activePlayer, false));
 	}
 
 	@Override
 	public void onTurnEnd(Player activePlayer, int turnNumber, TurnState turnState) {
+		flushEvents();
 		sendMessage(new ServerToClientMessage(activePlayer, turnNumber, turnState));
 	}
 
@@ -87,11 +100,13 @@ public class SocketClient implements Client {
 
 	@Override
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
+		flushEvents();
 		sendMessage(new ServerToClientMessage(id, state, availableActions));
 	}
 
 	@Override
 	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
+		flushEvents();
 		sendMessage(new ServerToClientMessage(id, state.player1.getId() == playerId ? state.player1 : state.player2, cards, state));
 	}
 
@@ -101,10 +116,17 @@ public class SocketClient implements Client {
 
 	@Override
 	public void lastEvent() {
+		// flush events
+		flushEvents();
 	}
 
 	private void setPrivateSocket(NetSocket privateSocket) {
 		this.privateSocket = privateSocket;
 	}
 
+	private void flushEvents() {
+		while (!messageBuffer.isEmpty()) {
+			privateSocket.write(messageBuffer.poll());
+		}
+	}
 }
