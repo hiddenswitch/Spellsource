@@ -58,7 +58,7 @@ public class GameLogic implements Cloneable, Serializable {
 	private IdFactory idFactory;
 	private final Random random = new Random();
 	protected transient GameContext context;
-	private boolean loggingEnabled = true;
+	private boolean loggingEnabled = false;
 	private final int MAX_HISTORY_ENTRIES = 100;
 	private ArrayDeque<String> debugHistory = new ArrayDeque<>();
 
