@@ -11,10 +11,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Assert;
 
+import javax.websocket.CloseReason;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -27,12 +29,20 @@ public class UnityClient {
 	private Handler<UnityClient> onGameOver;
 	private Account account;
 	private TestContext context;
+	private WebsocketClientEndpoint endpoint;
+	private String gameId;
+	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 
 	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
 		apiClient.setBasePath("http://localhost:8080/v1");
 		api = new DefaultApi(apiClient);
 		this.context = context;
+	}
+
+	public UnityClient(TestContext context, int turnsToPlay) {
+		this(context);
+		this.turnsToPlay = new AtomicInteger(turnsToPlay);
 	}
 
 	public void createUserAccount(String username) {
@@ -75,11 +85,16 @@ public class UnityClient {
 
 			url = "ws://localhost:" + Integer.toString((new URI(url)).getPort()) + "/" + Games.WEBSOCKET_PATH;
 
-			WebsocketClientEndpoint endpoint = new WebsocketClientEndpoint(new URI(url));
+			endpoint = new WebsocketClientEndpoint(new URI(url));
 			endpoint.addMessageHandler(h -> {
 				ServerToClientMessage message = apiClient.getJSON().deserialize(h, ServerToClientMessage.class);
 
 				switch (message.getMessageType()) {
+					case ON_TURN_END:
+						if (turnsToPlay.getAndDecrement() <= 0) {
+							disconnect();
+						}
+						break;
 					case ON_UPDATE:
 						assertValidStateAndChanges(message);
 						break;
@@ -111,7 +126,7 @@ public class UnityClient {
 					case ON_GAME_END:
 						// The game has ended.
 						try {
-							endpoint.userSession.close();
+							endpoint.getUserSession().close();
 						} catch (IOException ignored) {
 						}
 						this.gameOver = true;
@@ -127,6 +142,14 @@ public class UnityClient {
 
 		} catch (ApiException | URISyntaxException e) {
 			context.fail(e.getMessage());
+		}
+	}
+
+	public void disconnect() {
+		try {
+			endpoint.getUserSession().close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -173,4 +196,11 @@ public class UnityClient {
 		this.gameOver = gameOver;
 	}
 
+	public Account getAccount() {
+		return account;
+	}
+
+	public AtomicInteger getTurnsToPlay() {
+		return turnsToPlay;
+	}
 }

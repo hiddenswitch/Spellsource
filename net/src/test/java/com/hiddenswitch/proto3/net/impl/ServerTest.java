@@ -1,8 +1,9 @@
-package com.hiddenswitch.proto3.net;
+package com.hiddenswitch.proto3.net.impl;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
@@ -10,7 +11,7 @@ import com.hiddenswitch.proto3.net.client.models.Account;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsResponse;
-import com.hiddenswitch.proto3.net.impl.ServerImpl;
+import com.hiddenswitch.proto3.net.models.CurrentMatchRequest;
 import com.hiddenswitch.proto3.net.util.ServiceTest;
 import com.hiddenswitch.proto3.net.util.UnityClient;
 import io.vertx.core.AsyncResult;
@@ -20,6 +21,8 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
+
+import javax.websocket.Session;
 
 /**
  * Created by bberman on 2/18/17.
@@ -74,8 +77,29 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		async.complete();
 	}
 
+	@Test
+	public void testDisconnectingUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
+		setLoggingLevel(Level.ERROR);
+		getContext().assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
+		final Async async = context.async();
+
+		UnityClient client = new UnityClient(getContext(), 5);
+		Thread clientThread = new Thread(() -> {
+			client.createUserAccount(null);
+			client.matchmakeAndPlayAgainstAI(null);
+		});
+		clientThread.start();
+
+		// wait 16 seconds
+		Strand.sleep(16000);
+		// Assert that session was closed
+		getContext().assertEquals(service.matchmaking.getCurrentMatch(new CurrentMatchRequest(client.getAccount().getId())).getGameId(), null);
+		async.complete();
+	}
+
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<ServerImpl>> done) {
+		System.setProperty("games.defaultNoActivityTimeout", "8000");
 		ServerImpl instance = new ServerImpl();
 		vertx.deployVerticle(instance, then -> {
 			done.handle(Future.succeededFuture(instance));

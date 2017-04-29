@@ -30,12 +30,19 @@ public class WebSocketClient implements Client {
 	private final Queue<ServerToClientMessage> messageEventBuffer;
 	private ServerWebSocket privateSocket;
 	private GameState lastStateSent;
+	private boolean open = true;
 
 	public WebSocketClient(ServerWebSocket socket, String userId, int playerId) {
+		// Be notified when the socket is closed
+		socket.endHandler(this::onSocketClosed);
 		this.playerId = playerId;
 		this.setPrivateSocket(socket);
 		this.userId = userId;
 		this.messageEventBuffer = new ConcurrentLinkedQueue<>();
+	}
+
+	private void onSocketClosed(Void ignored) {
+		open = false;
 	}
 
 	private void sendMessage(ServerToClientMessage message) {
@@ -49,11 +56,18 @@ public class WebSocketClient implements Client {
 	private void sendMessage(ServerWebSocket socket, ServerToClientMessage message) throws IOException {
 		// Always include the playerId in the message
 		message.setLocalPlayerId(playerId);
+		// Don't send the message if the socket is closed
+		if (!open) {
+			return;
+		}
 		socket.write(Buffer.buffer(Configuration.getDefaultApiClient().getJSON().serialize(message)));
 	}
 
 	public void close() {
 		try {
+			if (!open) {
+				return;
+			}
 			privateSocket.close();
 		} catch (Exception ignored) {
 		}
