@@ -563,4 +563,8 @@ public interface Games {
 				.index(location.getIndex())
 				.player(location.getPlayer());
 	}
+
+	static long getDefaultNoActivityTimeout() {
+		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
+	}
 }

@@ -44,7 +44,7 @@ public class GameSessionImpl implements Server, GameSession {
 	private final String gameId;
 	private final Map<String, String> secretForUserId = new HashMap<>();
 	private Logger logger = LoggerFactory.getLogger(GameSessionImpl.class);
-	private long noActivityTimeout = Games.DEFAULT_NO_ACTIVITY_TIMEOUT;
+	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
 	private final HashSet<Handler<GameSessionImpl>> gameOverHandlers = new HashSet<>();
 	private final Vertx vertx;
 

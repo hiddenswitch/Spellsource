@@ -14,8 +14,7 @@ import java.nio.charset.Charset;
  */
 @ClientEndpoint
 public class WebsocketClientEndpoint {
-
-	Session userSession = null;
+	private Session userSession = null;
 	private MessageHandler messageHandler;
 
 	public WebsocketClientEndpoint(URI endpointURI) {
@@ -45,7 +44,6 @@ public class WebsocketClientEndpoint {
 	 */
 	@OnClose
 	public void onClose(Session userSession, CloseReason reason) {
-		this.userSession = null;
 	}
 
 	/**
@@ -89,6 +87,10 @@ public class WebsocketClientEndpoint {
 	 */
 	public void sendMessage(String message) {
 		this.userSession.getAsyncRemote().sendText(message);
+	}
+
+	public Session getUserSession() {
+		return userSession;
 	}
 
 	@FunctionalInterface

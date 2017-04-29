@@ -11,7 +11,7 @@ public class CreateGameSessionRequest implements Serializable {
 	private String gameId;
 	private PregamePlayerConfiguration pregame1;
 	private PregamePlayerConfiguration pregame2;
-	private long noActivityTimeout = Games.DEFAULT_NO_ACTIVITY_TIMEOUT;
+	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
 
 	public PregamePlayerConfiguration getPregame1() {
 		return pregame1;
