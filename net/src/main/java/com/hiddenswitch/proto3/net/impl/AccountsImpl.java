@@ -80,6 +80,7 @@ public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
 		profile.setEmailAddress(request.getEmailAddress());
 		profile.setDisplayName(request.getName());
 		record.setProfile(profile);
+		record.setBot(request.isBot());
 
 		final String scrypt = hashedPassword(password);
 		LoginToken token = LoginToken.createSecure(userId);

@@ -18,6 +18,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
@@ -28,6 +29,28 @@ import javax.websocket.Session;
  * Created by bberman on 2/18/17.
  */
 public class ServerTest extends ServiceTest<ServerImpl> {
+	private String deploymentId;
+
+	@Test
+	public void testShutdownAndRestartServer(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		wrapSync(context, () -> {
+			// Play a match
+			UnityClient client = new UnityClient(getContext());
+			client.createUserAccount("testaccount");
+			client.matchmakeAndPlayAgainstAI(null);
+			client.waitUntilDone();
+			getContext().assertTrue(client.isGameOver());
+			Void r = Sync.awaitResult(h -> vertx.undeploy(deploymentId, h));
+			ServerImpl r2 = Sync.awaitResult(h -> deployServices(vertx, h));
+			UnityClient client2 = new UnityClient(getContext());
+			client2.loginWithUserAccount("testaccount");
+			client2.matchmakeAndPlayAgainstAI(null);
+			client2.waitUntilDone();
+			getContext().assertTrue(client2.isGameOver());
+		});
+	}
+
 	@Test
 	public void testAccountFlow(TestContext context) throws ApiException {
 		Configuration.getDefaultApiClient().setBasePath("http://localhost:8080/v1");
@@ -102,6 +125,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
 		ServerImpl instance = new ServerImpl();
 		vertx.deployVerticle(instance, then -> {
+			deploymentId = then.result();
 			done.handle(Future.succeededFuture(instance));
 		});
 	}

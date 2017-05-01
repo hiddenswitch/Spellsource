@@ -65,11 +65,12 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 	LogicImpl logic = new LogicImpl();
 	DecksImpl decks = new DecksImpl();
 	InventoryImpl inventory = new InventoryImpl();
+	HttpServer server;
 
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException {
-		HttpServer server = vertx.createHttpServer(new HttpServerOptions()
+		server = vertx.createHttpServer(new HttpServerOptions()
 				.setHost("0.0.0.0")
 				.setPort(8080));
 		Router router = Router.router(vertx);
@@ -426,5 +427,11 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 			decks.withEmbeddedConfiguration();
 			bots.withEmbeddedConfiguration();
 		}
+	}
+
+	@Suspendable
+	@Override
+	public void stop() throws SuspendExecution, InterruptedException {
+		Void r = awaitResult(h -> server.close(h));
 	}
 }

@@ -64,6 +64,7 @@ public class BotsImpl extends Service<BotsImpl> implements Bots {
 		context.setDeckFormat(request.format);
 		context.loadState(request.gameState);
 		context.setActivePlayerId(request.playerId);
+		context.getLogic().setLoggingEnabled(false);
 		GameAction action = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
 		response.gameAction = action;
 		return response;
