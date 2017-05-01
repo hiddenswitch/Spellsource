@@ -1,5 +1,8 @@
 package com.hiddenswitch.proto3.net.util;
 
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.client.ApiClient;
 import com.hiddenswitch.proto3.net.client.ApiException;
@@ -54,10 +57,21 @@ public class UnityClient {
 			CreateAccountResponse car = api.createAccount(new CreateAccountRequest().email(username + "@hiddenswitch.com").name(username).password("testpass"));
 			api.getApiClient().setApiKey(car.getLoginToken());
 			account = car.getAccount();
-			Assert.assertNotNull(account);
-			Assert.assertTrue(account.getDecks().size() > 0);
+			context.assertNotNull(account);
+			context.assertTrue(account.getDecks().size() > 0);
 		} catch (ApiException e) {
-			Assert.fail(e.getMessage());
+			context.fail(e.getMessage());
+		}
+	}
+
+	public void loginWithUserAccount(String username) {
+		try {
+			LoginResponse lr = api.login(new LoginRequest().email(username + "@hiddenswitch.com").password("testpass"));
+			api.getApiClient().setApiKey(lr.getLoginToken());
+			account = lr.getAccount();
+			context.assertNotNull(account);
+		} catch (ApiException e) {
+			context.fail(e.getMessage());
 		}
 	}
 
@@ -202,5 +216,19 @@ public class UnityClient {
 
 	public AtomicInteger getTurnsToPlay() {
 		return turnsToPlay;
+	}
+
+	@Suspendable
+	public void waitUntilDone() {
+		float time = 0f;
+		while (!(time > 36f || this.isGameOver())) {
+			try {
+				Strand.sleep(1000);
+			} catch (SuspendExecution | InterruptedException suspendExecution) {
+				suspendExecution.printStackTrace();
+			}
+
+			time += 1f;
+		}
 	}
 }
