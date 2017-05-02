@@ -3,35 +3,30 @@ package com.hiddenswitch.proto3.net;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.client.models.*;
-import com.hiddenswitch.proto3.net.client.models.Entity;
-import com.hiddenswitch.proto3.net.client.models.EntityLocation;
 import com.hiddenswitch.proto3.net.client.models.GameEvent;
 import com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent;
 import com.hiddenswitch.proto3.net.models.*;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.WeaponCard;
+import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.spells.DamageSpell;
-import net.demilich.metastone.game.spells.trigger.IGameEventListener;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +44,29 @@ public interface Games {
 				.filter(e -> e.getEntityType() == EntityType.MINION)
 				.collect(Collectors.toMap(net.demilich.metastone.game.entities.Entity::getId, e -> e.getEntityLocation().getIndex()));
 
-		// Just do spells and summons for now
+		// Battlecries
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.BATTLECRY)
+				.map(ga -> (BattlecryAction) ga)
+				.collect(Collectors.groupingBy(ga -> ga.getSource().getId()))
+				.entrySet()
+				.stream()
+				.map(kv -> {
+					SpellAction spellAction = new SpellAction()
+							.sourceId(kv.getKey());
+
+					// Targetable battlecry
+					kv.getValue().stream()
+							.map(t -> new TargetActionPair()
+									.action(t.getId())
+									.target(t.getTargetKey().getId()))
+							.forEach(spellAction::addTargetKeyToActionsItem);
+
+					return spellAction;
+				})
+				.forEach(clientActions::addBattlecriesItem);
+
+		// Spells
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SPELL
 						&& !(ga instanceof PlayChooseOneCardAction))
