@@ -170,8 +170,9 @@ public class DeckCatalogue {
 		for (String cardId : cardIds) {
 			Card card = CardCatalogue.getCardById(cardId);
 			if (card == null) {
-				logger.error("Deck {} contains invalid cardId '{}'", deckName, cardId);
-				continue;
+				throw new RuntimeException(deckName);
+//				logger.error("Deck {} contains invalid cardId '{}'", deckName, cardId);
+//				continue;
 			}
 			deck.getCards().addCard(card);
 		}

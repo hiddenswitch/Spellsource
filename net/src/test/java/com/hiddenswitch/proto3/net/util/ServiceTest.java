@@ -272,9 +272,9 @@ public abstract class ServiceTest<T extends Service<T>> {
 		@Suspendable
 		public TestContext assertNotEquals(Object first, Object second, String message) {
 			if (wrappedContext == null) {
-				org.junit.Assert.assertEquals(message, first, second);
+				org.junit.Assert.assertNotEquals(message, first, second);
 			} else {
-				wrappedContext.assertEquals(first, second, message);
+				wrappedContext.assertNotEquals(first, second, message);
 			}
 			return this;
 		}
@@ -357,5 +357,13 @@ public abstract class ServiceTest<T extends Service<T>> {
 		public void start() throws SuspendExecution, InterruptedException {
 			code.run();
 		}
+	}
+
+	protected void wrap(TestContext context) {
+		ServiceTest.wrappedContext = context;
+	}
+
+	protected void unwrap() {
+		ServiceTest.wrappedContext = null;
 	}
 }

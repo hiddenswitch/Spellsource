@@ -346,7 +346,8 @@ public class GamesImpl extends Service<GamesImpl> implements Games {
 	public void stop() throws Exception {
 		super.stop();
 		getGames().values().forEach(GameSession::kill);
-		server.close();
+		Void r = awaitResult(h -> server.close(h));
+		r = awaitResult(h -> websocketServer.close(h));
 	}
 
 	@Override

@@ -58,18 +58,11 @@ public class LogicImpl extends Service<LogicImpl> implements Logic {
 		response.setCreateCollectionResponse(inventory.sync()
 				.createCollection(startingCollectionRequest));
 
-		// Create the starting decks
-		try {
-			DeckCatalogue.loadDecksFromPackage();
-		} catch (IOException | URISyntaxException e) {
-			throw new RuntimeException();
-		}
-
 		if (DeckCatalogue.getDecks().size() > 0) {
-			for (String deckName : new String[]{"Basic Resurrector", "Basic Octopod Demo", "Basic Cyborg", "Basic Biologist", "Basic Biologist", "Basic Gamer", /* "Test Battlecries"*/}) {
+			for (String deckName : STARTING_DECKS) {
 				Deck deck = DeckCatalogue.getDeckByName(deckName);
 				if (deck == null) {
-					continue;
+					throw new RuntimeException("Deck not found.");
 				}
 				// Figure out which cards go into which decks.
 				List<String> cardIds = deck.getCards().toList().stream().map(Card::getCardId).collect(Collectors.toList());

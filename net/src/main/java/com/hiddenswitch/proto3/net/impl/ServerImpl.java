@@ -65,6 +65,7 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 	LogicImpl logic = new LogicImpl();
 	DecksImpl decks = new DecksImpl();
 	InventoryImpl inventory = new InventoryImpl();
+	List<String> deployments = new ArrayList<>();
 	HttpServer server;
 
 	@Override
@@ -82,6 +83,7 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 				final String name = verticle.getClass().getName();
 				logger.info("Deploying " + name + "...");
 				String deploymentId = Sync.awaitResult(done -> vertx.deployVerticle(verticle, done));
+				deployments.add(deploymentId);
 				logger.info("Deployed " + name + " with ID " + deploymentId);
 			}
 
@@ -433,5 +435,8 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 	@Override
 	public void stop() throws SuspendExecution, InterruptedException {
 		Void r = awaitResult(h -> server.close(h));
+		for (String deploymentId : deployments) {
+			r = awaitResult(h -> vertx.undeploy(deploymentId, h));
+		}
 	}
 }

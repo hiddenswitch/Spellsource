@@ -32,14 +32,6 @@ public class MatchCreateRequest implements Serializable {
 		gameId = match.gameId;
 	}
 
-	public MatchCreateRequest(String gameId, String userId1, String userId2, String deckId1, String deckId2) {
-		this.deckId2 = deckId2;
-		this.userId1 = userId1;
-		this.userId2 = userId2;
-		this.gameId = gameId;
-		this.deckId1 = deckId1;
-	}
-
 	public MatchCreateRequest(String gameId, String userId1, String userId2, boolean bot2, String deckId1, String deckId2) {
 		this.deckId2 = deckId2;
 		this.userId1 = userId1;
@@ -47,14 +39,6 @@ public class MatchCreateRequest implements Serializable {
 		this.gameId = gameId;
 		this.deckId1 = deckId1;
 		this.bot2 = bot2;
-	}
-
-	public MatchCreateRequest(String gameId, String userId1, String userId2, Deck deck1, Deck deck2) {
-		this.userId1 = userId1;
-		this.userId2 = userId2;
-		this.gameId = gameId;
-		this.deck1 = deck1;
-		this.deck2 = deck2;
 	}
 
 	public String getDeckId1() {

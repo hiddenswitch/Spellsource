@@ -50,6 +50,7 @@ public class RenounceClassSpell extends Spell {
 				HeroPower heroPower = (HeroPower) heroPowerCard;
 				heroPower.setId(context.getLogic().getIdFactory().generateId());
 				heroPower.setOwner(player.getHero().getOwner());
+				player.getHero().getHeroPowerZone().move(player.getHero().getHeroPower(), player.getGraveyard());
 				player.getHero().setHeroPower(heroPower);
 			}
 		}
