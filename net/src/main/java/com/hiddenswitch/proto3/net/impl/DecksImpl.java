@@ -14,7 +14,10 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import net.demilich.metastone.game.decks.DeckCatalogue;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +38,12 @@ public class DecksImpl extends Service<DecksImpl> implements Decks {
 	public void start() throws SuspendExecution {
 		super.start();
 		inventory = Broker.proxy(Inventory.class, vertx.eventBus());
+		// Create the starting decks
+		try {
+			DeckCatalogue.loadDecksFromPackage();
+		} catch (IOException | URISyntaxException e) {
+			throw new RuntimeException();
+		}
 
 		Broker.of(this, Decks.class, vertx.eventBus());
 	}

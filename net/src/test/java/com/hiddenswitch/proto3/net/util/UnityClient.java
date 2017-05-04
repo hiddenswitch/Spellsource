@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +37,7 @@ public class UnityClient {
 	private WebsocketClientEndpoint endpoint;
 	private String gameId;
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
+	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 
 	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
@@ -88,75 +91,106 @@ public class UnityClient {
 					.casual(true)
 					.deckId(deckId));
 
-			Assert.assertNotNull(mqpr.getUnityConnection());
-			Assert.assertNotNull(mqpr.getConnection());
-			Assert.assertNotNull(mqpr.getUnityConnection().getFirstMessage());
-
-			String url = mqpr.getUnityConnection().getUrl();
-			Assert.assertNotNull(url);
-
-			// Get the port from the url
-
-			url = "ws://localhost:" + Integer.toString((new URI(url)).getPort()) + "/" + Games.WEBSOCKET_PATH;
-
-			endpoint = new WebsocketClientEndpoint(new URI(url));
-			endpoint.addMessageHandler(h -> {
-				ServerToClientMessage message = apiClient.getJSON().deserialize(h, ServerToClientMessage.class);
-
-				switch (message.getMessageType()) {
-					case ON_TURN_END:
-						if (turnsToPlay.getAndDecrement() <= 0) {
-							disconnect();
-						}
-						break;
-					case ON_UPDATE:
-						assertValidStateAndChanges(message);
-						break;
-					case ON_GAME_EVENT:
-						context.assertNotNull(message.getEvent());
-						assertValidStateAndChanges(message);
-						break;
-					case ON_MULLIGAN:
-						context.assertNotNull(message.getStartingCards());
-						context.assertTrue(message.getStartingCards().size() > 0);
-						endpoint.sendMessage(serialize(new ClientToServerMessage()
-								.messageType(MessageType.UPDATE_MULLIGAN)
-								.repliesTo(message.getId())
-								.discardedCardIndices(Collections.singletonList(0))));
-						break;
-					case ON_REQUEST_ACTION:
-						context.assertNotNull(message.getGameState());
-						context.assertNotNull(message.getChanges());
-						context.assertNotNull(message.getActions());
-						final int actionCount = message.getActions().getCompatibility().size();
-						context.assertTrue(actionCount > 0);
-						// There should always be an end turn, choose one, discover or battlecry action
-						// Pick a random action
-						endpoint.sendMessage(serialize(new ClientToServerMessage()
-								.messageType(MessageType.UPDATE_ACTION)
-								.repliesTo(message.getId())
-								.actionIndex(random(actionCount))));
-						break;
-					case ON_GAME_END:
-						// The game has ended.
-						try {
-							endpoint.getUserSession().close();
-						} catch (IOException ignored) {
-						}
-						this.gameOver = true;
-						if (onGameOver != null) {
-							onGameOver.handle(this);
-						}
-						break;
-
-				}
-			});
-
-			endpoint.sendMessage(serialize(mqpr.getUnityConnection().getFirstMessage()));
+			final MatchmakingQueuePutResponseUnityConnection unityConnection = mqpr.getUnityConnection();
+			play(unityConnection);
 
 		} catch (ApiException | URISyntaxException e) {
 			context.fail(e.getMessage());
 		}
+	}
+
+	public void matchmakeAndPlay(String deckId) throws InterruptedException {
+		if (deckId == null) {
+			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
+		}
+
+		try {
+			MatchmakingQueuePutResponseUnityConnection unityConnection = null;
+			while (unityConnection == null) {
+				MatchmakingQueuePutResponse mqpr = api.matchmakingConstructedQueuePut(new MatchmakingQueuePutRequest()
+						.casual(false)
+						.deckId(deckId));
+				unityConnection = mqpr.getUnityConnection();
+				Thread.sleep(500);
+			}
+
+			play(unityConnection);
+		} catch (ApiException | URISyntaxException e) {
+			context.fail(e.getMessage());
+		}
+	}
+
+	private void play(MatchmakingQueuePutResponseUnityConnection unityConnection) throws URISyntaxException {
+		Assert.assertNotNull(unityConnection);
+		Assert.assertNotNull(unityConnection.getFirstMessage());
+
+		String url = unityConnection.getUrl();
+		Assert.assertNotNull(url);
+
+		// Get the port from the url
+
+		url = "ws://localhost:" + Integer.toString((new URI(url)).getPort()) + "/" + Games.WEBSOCKET_PATH;
+
+		endpoint = new WebsocketClientEndpoint(new URI(url));
+		endpoint.addMessageHandler(h -> {
+			ServerToClientMessage message = apiClient.getJSON().deserialize(h, ServerToClientMessage.class);
+
+			for (java.util.function.Consumer<ServerToClientMessage> handler : handlers) {
+				if (handler != null) {
+					handler.accept(message);
+				}
+			}
+
+			switch (message.getMessageType()) {
+				case ON_TURN_END:
+					if (turnsToPlay.getAndDecrement() <= 0) {
+						disconnect();
+					}
+					break;
+				case ON_UPDATE:
+					assertValidStateAndChanges(message);
+					break;
+				case ON_GAME_EVENT:
+					context.assertNotNull(message.getEvent());
+					assertValidStateAndChanges(message);
+					break;
+				case ON_MULLIGAN:
+					context.assertNotNull(message.getStartingCards());
+					context.assertTrue(message.getStartingCards().size() > 0);
+					endpoint.sendMessage(serialize(new ClientToServerMessage()
+							.messageType(MessageType.UPDATE_MULLIGAN)
+							.repliesTo(message.getId())
+							.discardedCardIndices(Collections.singletonList(0))));
+					break;
+				case ON_REQUEST_ACTION:
+					context.assertNotNull(message.getGameState());
+					context.assertNotNull(message.getChanges());
+					context.assertNotNull(message.getActions());
+					final int actionCount = message.getActions().getCompatibility().size();
+					context.assertTrue(actionCount > 0);
+					// There should always be an end turn, choose one, discover or battlecry action
+					// Pick a random action
+					endpoint.sendMessage(serialize(new ClientToServerMessage()
+							.messageType(MessageType.UPDATE_ACTION)
+							.repliesTo(message.getId())
+							.actionIndex(random(actionCount))));
+					break;
+				case ON_GAME_END:
+					// The game has ended.
+					try {
+						endpoint.getUserSession().close();
+					} catch (IOException ignored) {
+					}
+					this.gameOver = true;
+					if (onGameOver != null) {
+						onGameOver.handle(this);
+					}
+					break;
+
+			}
+		});
+
+		endpoint.sendMessage(serialize(unityConnection.getFirstMessage()));
 	}
 
 	public void disconnect() {
@@ -175,6 +209,9 @@ public class UnityClient {
 		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
 		final List<Integer> changeIds = message.getChanges().stream().map(EntityChangeSetInner::getId).collect(Collectors.toList());
 		final boolean contains = entityIds.containsAll(changeIds);
+		if (!contains) {
+			System.err.println(message.toString());
+		}
 		context.assertTrue(contains);
 	}
 
@@ -216,6 +253,10 @@ public class UnityClient {
 
 	public AtomicInteger getTurnsToPlay() {
 		return turnsToPlay;
+	}
+
+	public void addMessageHandler(java.util.function.Consumer<ServerToClientMessage> handler) {
+		handlers.add(handler);
 	}
 
 	@Suspendable

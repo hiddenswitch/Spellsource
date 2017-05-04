@@ -1501,7 +1501,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void removeCard(int playerId, Card card) {
 		Player player = context.getPlayer(playerId);
-		log("Card {} has been moved from the HAND to the GRAVEYARD", card);
+		log("Card {} has been moved from the {} to the GRAVEYARD", card, card.getEntityLocation().getZone().toString());
 		card.setLocation(CardLocation.GRAVEYARD);
 		removeSpellTriggers(card);
 		// If it's already in the graveyard, do nothing
@@ -1713,7 +1713,8 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void secretTriggered(Player player, Secret secret) {
 		log("Secret was trigged: {}", secret.getSource());
-		player.getSecrets().remove(secret);
+		// Move the secret to the graveyard instead of removing it. What does this do?
+		player.getSecrets().move(secret, player.getGraveyard());
 		context.fireGameEvent(new SecretRevealedEvent(context, (SecretCard) secret.getSource(), player.getId()));
 	}
 

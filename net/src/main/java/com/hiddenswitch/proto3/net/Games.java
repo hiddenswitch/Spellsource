@@ -368,8 +368,10 @@ public interface Games {
 					.maxMana(player.getMaxMana())
 					.lockedMana(player.getLockedMana());
 			playerEntities.add(heroEntity);
-			final Entity heroPowerEntity = getEntity(workingContext, player.getHero().getHeroPower(), localPlayerId);
-			playerEntities.add(heroPowerEntity);
+			if (player.getHero().getHeroPower() != null) {
+				final Entity heroPowerEntity = getEntity(workingContext, player.getHero().getHeroPower(), localPlayerId);
+				playerEntities.add(heroPowerEntity);
+			}
 			if (player.getHero().getWeapon() != null) {
 				final Entity weaponEntity = getEntity(workingContext, player.getHero().getWeapon(), localPlayerId);
 				playerEntities.add(weaponEntity);
