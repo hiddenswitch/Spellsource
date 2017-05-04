@@ -139,7 +139,7 @@ public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchma
 		Matchmaker.Match match = matchmaker.match(userId, deck);
 
 		if (match == null) {
-			response.setRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null).withDeckId(null).withUserId(userId));
+			response.setRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null).withDeckId(matchmakingRequest.getDeckId()).withUserId(userId));
 			return response;
 		}
 
