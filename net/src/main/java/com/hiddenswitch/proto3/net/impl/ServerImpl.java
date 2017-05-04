@@ -316,7 +316,7 @@ public class ServerImpl extends Service<ServerImpl> implements Server {
 		int statusCode = 200;
 		if (internalResponse.getRetry() != null) {
 			userResponse.retry(new MatchmakingQueuePutRequest()
-					.deckId(request.getDeckId()));
+					.deckId(internalResponse.getRetry().getDeckId()));
 			statusCode = 202;
 		}
 

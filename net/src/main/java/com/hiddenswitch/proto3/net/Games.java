@@ -470,6 +470,7 @@ public interface Games {
 		entityState.cannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK));
 		entityState.spellDamage(actor.getAttributeValue(Attribute.SPELL_DAMAGE));
 		entityState.windfury(actor.hasAttribute(Attribute.WINDFURY));
+		entityState.summoningSickness(actor.hasAttribute(Attribute.SUMMONING_SICKNESS));
 		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
 		entity.state(entityState);
 		return entity;
