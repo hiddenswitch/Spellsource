@@ -2,7 +2,7 @@ package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
-import net.demilich.metastone.game.targeting.PlayerZones;
+import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;
@@ -12,11 +12,11 @@ import java.util.function.Predicate;
  * Created by bberman on 4/16/17.
  */
 public class CardZone extends EntityZone<Card> implements CardCollection {
-	public CardZone(int player, PlayerZones zone) {
+	public CardZone(int player, Zones zone) {
 		super(player, zone);
 	}
 
-	public CardZone(int player, PlayerZones zone, CardCollection cardsCopy) {
+	public CardZone(int player, Zones zone, CardCollection cardsCopy) {
 		super(player, zone);
 		addAll(cardsCopy);
 	}
@@ -106,7 +106,7 @@ public class CardZone extends EntityZone<Card> implements CardCollection {
 	public void shuffle(Random random) {
 		Collections.shuffle(internal, random);
 		for (int i = 0; i < internal.size(); i++) {
-			internal.get(i).pushEntityLocation(new EntityLocation(getZone(), getPlayer(), i));
+			internal.get(i).setEntityLocation(new EntityLocation(getZone(), getPlayer(), i));
 		}
 	}
 

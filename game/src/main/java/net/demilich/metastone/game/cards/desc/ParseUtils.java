@@ -28,7 +28,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerialize
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
-import net.demilich.metastone.game.targeting.CardLocation;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.TargetType;
@@ -46,12 +46,7 @@ public class ParseUtils {
 		JsonElement entry = jsonData.get(argName);
 		switch (valueType) {
 			case INTEGER:
-//				try {
-//					boolean value = entry.getAsBoolean();
-//					return value ? 1 : 0;
-//				} catch (Throwable e) {
 				return entry.getAsInt();
-//				}
 			case INTEGER_ARRAY: {
 				JsonArray jsonArray = entry.getAsJsonArray();
 				int[] array = new int[jsonArray.size()];
@@ -61,12 +56,7 @@ public class ParseUtils {
 				return array;
 			}
 			case BOOLEAN:
-//				try {
-//					int value = entry.getAsInt();
-//					return value > 0;
-//				} catch (Throwable e) {
 				return entry.getAsBoolean();
-//				}
 			case STRING:
 				return entry.getAsString();
 			case STRING_ARRAY: {
@@ -118,7 +108,7 @@ public class ParseUtils {
 			case BOARD_POSITION_RELATIVE:
 				return Enum.valueOf(RelativeToSource.class, entry.getAsString());
 			case CARD_LOCATION:
-				return Enum.valueOf(CardLocation.class, entry.getAsString());
+				return Enum.valueOf(Zones.class, entry.getAsString());
 			case OPERATION:
 				return Enum.valueOf(Operation.class, entry.getAsString());
 			case CARD_TYPE:

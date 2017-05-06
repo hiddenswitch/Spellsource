@@ -2,13 +2,13 @@ package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 
 public class HeroPowerUsedEvent extends GameEvent {
 
-	private final HeroPower heroPower;
+	private final HeroPowerCard heroPower;
 
-	public HeroPowerUsedEvent(GameContext context, int playerId, HeroPower heroPower) {
+	public HeroPowerUsedEvent(GameContext context, int playerId, HeroPowerCard heroPower) {
 		super(context, playerId, -1);
 		this.heroPower = heroPower;
 	}
@@ -23,7 +23,7 @@ public class HeroPowerUsedEvent extends GameEvent {
 		return GameEventType.HERO_POWER_USED;
 	}
 
-	public HeroPower getHeroPower() {
+	public HeroPowerCard getHeroPower() {
 		return heroPower;
 	}
 

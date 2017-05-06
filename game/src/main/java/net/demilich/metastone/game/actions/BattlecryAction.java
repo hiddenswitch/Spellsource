@@ -64,8 +64,12 @@ public class BattlecryAction extends GameAction {
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		EntityReference target = getSpell().hasPredefinedTarget() ? getSpell().getTarget() : getTargetKey();
+		EntityReference target = getPredefinedSpellTargetOrUserTarget();
 		context.getLogic().castSpell(playerId, getSpell(), getSource(), target, getTargetRequirement(), false);
+	}
+
+	public EntityReference getPredefinedSpellTargetOrUserTarget() {
+		return getSpell().hasPredefinedTarget() ? getSpell().getTarget() : getTargetKey();
 	}
 
 	private Condition getCondition() {

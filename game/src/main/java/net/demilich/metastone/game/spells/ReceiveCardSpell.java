@@ -12,6 +12,8 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
+import java.util.Optional;
+
 public class ReceiveCardSpell extends Spell {
 
 	@Override
@@ -19,9 +21,12 @@ public class ReceiveCardSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+		// If a card is being received from a filter, we're creating new cards
 		if (cardFilter != null) {
+			// Cards that come from the query are always copies
 			CardCollection cards = CardCatalogue.query(context.getDeckFormat());
 			CardCollection result = new CardCollectionImpl();
+
 			String replacementCard = (String) desc.get(SpellArg.CARD);
 			for (Card card : cards) {
 				if (cardFilter.matches(context, player, card)) {
@@ -32,22 +37,21 @@ public class ReceiveCardSpell extends Spell {
 				Card card = null;
 				if (!result.isEmpty()) {
 					card = result.getRandom();
+					result.remove(card);
 				} else if (replacementCard != null) {
 					card = context.getCardById(replacementCard);
 				}
 				if (card != null) {
-					Card copy = card.getCopy();
-					context.getLogic().receiveCard(player.getId(), copy);
+					context.getLogic().receiveCard(player.getId(), card);
 				}
 			}
 		} else {
+			// If a card isn't received from a filter, it's coming from a description
 			for (Card card : SpellUtils.getCards(context, desc)) {
-				for (int i = 0; i < count; i++) {
-					context.getLogic().receiveCard(player.getId(), card.getCopy());
-				}
+				// Move at most one card from discover or create a card. Handled by get cards.
+				context.getLogic().receiveCard(player.getId(), card, count);
 			}
 		}
-		
 	}
 
 }

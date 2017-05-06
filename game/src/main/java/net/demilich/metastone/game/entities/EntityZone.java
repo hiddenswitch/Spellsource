@@ -1,22 +1,20 @@
 package net.demilich.metastone.game.entities;
 
-import net.demilich.metastone.game.targeting.PlayerZones;
+import net.demilich.metastone.game.targeting.Zones;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by bberman on 4/16/17.
  */
 public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		List<E>, Iterable<E>, Cloneable, Serializable {
-	protected final PlayerZones zone;
+	protected final Zones zone;
 	protected int player = -1;
 	protected List<E> internal = new ArrayList<>();
 
-	public EntityZone(int player, PlayerZones zone) {
+	public EntityZone(int player, Zones zone) {
 		this.zone = zone;
 		this.player = player;
 	}
@@ -54,7 +52,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 
 	protected E setUnchecked(int index, E element) {
 		internal.set(index, element);
-		element.pushEntityLocation(new EntityLocation(zone, player, index));
+		element.setEntityLocation(new EntityLocation(zone, player, index));
 		return element;
 	}
 
@@ -70,16 +68,16 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		}
 		internal.add(index, element);
 		for (int i = index; i < internal.size(); i++) {
-			internal.get(i).pushEntityLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
 	}
 
 	@Override
 	public E remove(int index) {
 		E result = internal.remove(index);
-		result.pushEntityLocation(EntityLocation.NONE);
+		result.setEntityLocation(EntityLocation.NONE);
 		for (int i = index; i < internal.size(); i++) {
-			internal.get(i).pushEntityLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
 		return result;
 	}
@@ -116,7 +114,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public void move(int index, EntityZone destination, int destinationIndex) {
 		Entity result = internal.remove(index);
 		for (int i = index; i < internal.size(); i++) {
-			internal.get(i).pushEntityLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
 		destination.uncheckedAdd(destinationIndex, result);
 	}
@@ -146,11 +144,11 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 
 		player = playerIndex;
 		for (int i = 0; i < internal.size(); i++) {
-			internal.get(i).pushEntityLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
 	}
 
-	public PlayerZones getZone() {
+	public Zones getZone() {
 		return zone;
 	}
 

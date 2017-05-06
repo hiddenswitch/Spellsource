@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.entities;
 
-import net.demilich.metastone.game.targeting.PlayerZones;
+import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
@@ -9,12 +9,12 @@ import java.io.Serializable;
  * Created by bberman on 4/16/17.
  */
 public final class EntityLocation implements Serializable {
-	public static final EntityLocation NONE = new EntityLocation(PlayerZones.NONE, -1, -1);
-	private final PlayerZones zone;
+	public static final EntityLocation NONE = new EntityLocation(Zones.NONE, -1, -1);
+	private final Zones zone;
 	private final int player;
 	private final int index;
 
-	public EntityLocation(PlayerZones zone, int player, int index) {
+	public EntityLocation(Zones zone, int player, int index) {
 		this.zone = zone;
 		this.player = player;
 		this.index = index;
@@ -38,7 +38,7 @@ public final class EntityLocation implements Serializable {
 				.append(player).toHashCode();
 	}
 
-	public PlayerZones getZone() {
+	public Zones getZone() {
 		return zone;
 	}
 

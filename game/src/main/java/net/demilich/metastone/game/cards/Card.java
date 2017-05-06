@@ -12,10 +12,11 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
-import net.demilich.metastone.game.targeting.CardLocation;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.apache.commons.lang3.RandomUtils;
 
 public abstract class Card extends Entity {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +29,6 @@ public abstract class Card extends Entity {
 	private HeroClass heroClass;
 	private HeroClass[] heroClasses;
 	private boolean collectible = true;
-	private CardLocation location;
 	private ValueProvider manaCostModifier;
 	private String cardId;
 	private CardDesc desc;
@@ -77,7 +77,7 @@ public abstract class Card extends Entity {
 		return clone;
 	}
 
-	public boolean evaluateExpression(String operator, int value1, int value2) {
+	public static boolean evaluateExpression(String operator, int value1, int value2) {
 		switch (operator) {
 			case "=":
 				return value1 == value2;
@@ -100,11 +100,14 @@ public abstract class Card extends Entity {
 	}
 
 	public String getCardId() {
-		return cardId;
+		if (cardId == null) {
+			return null;
+		}
+		return cardId.toLowerCase();
 	}
 
 	public CardReference getCardReference() {
-		return new CardReference(getOwner(), getCardLocation(), getId(), getName());
+		return new CardReference(getOwner(), getZone(), getId(), getName());
 	}
 
 	public CardSet getCardSet() {
@@ -126,7 +129,7 @@ public abstract class Card extends Entity {
 	public Card getCopy() {
 		Card copy = clone();
 		copy.setId(IdFactory.UNASSIGNED);
-		copy.setLocation(CardLocation.PENDING);
+		copy.setOwner(IdFactory.UNASSIGNED);
 		copy.getAttributes().remove(Attribute.ATTACK_BONUS);
 		copy.getAttributes().remove(Attribute.HP_BONUS);
 		copy.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
@@ -161,8 +164,8 @@ public abstract class Card extends Entity {
 		return EntityType.CARD;
 	}
 
-	public CardLocation getCardLocation() {
-		return location;
+	public Zones getZone() {
+		return getEntityLocation().getZone();
 	}
 
 	public int getManaCost(GameContext context, Player player) {
@@ -278,10 +281,6 @@ public abstract class Card extends Entity {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public void setLocation(CardLocation location) {
-		this.location = location;
 	}
 
 	@Override

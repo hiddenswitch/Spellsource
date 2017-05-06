@@ -1,8 +1,8 @@
 package net.demilich.metastone.game.cards.desc;
 
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
-import net.demilich.metastone.game.heroes.powers.HeroPowerChooseOne;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
+import net.demilich.metastone.game.heroes.powers.HeroPowerChooseOneCard;
 
 public class HeroPowerCardDesc extends SpellCardDesc {
 	
@@ -12,9 +12,9 @@ public class HeroPowerCardDesc extends SpellCardDesc {
 	@Override
 	public Card createInstance() {
 		if (options != null && options.length > 0) {
-			return new HeroPowerChooseOne(this);
+			return new HeroPowerChooseOneCard(this);
 		}
-		return new HeroPower(this);
+		return new HeroPowerCard(this);
 	}
 
 }

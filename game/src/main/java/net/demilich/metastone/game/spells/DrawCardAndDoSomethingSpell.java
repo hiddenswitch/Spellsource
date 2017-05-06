@@ -7,7 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.CardLocation;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class DrawCardAndDoSomethingSpell extends Spell {
 
@@ -19,7 +19,7 @@ public class DrawCardAndDoSomethingSpell extends Spell {
 			Card card = context.getLogic().drawCard(player.getId(), source);
 			// card may be null (i.e. try to draw from deck, but already in
 			// fatigue)
-			if (card == null || card.getCardLocation() == CardLocation.GRAVEYARD) {
+			if (card == null || card.getZone() == Zones.GRAVEYARD) {
 				return;
 			}
 			SpellDesc cardEffectSpell = (SpellDesc) desc.get(SpellArg.SPELL);

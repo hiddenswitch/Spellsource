@@ -11,7 +11,7 @@ import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.cards.CardCollectionImpl;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
@@ -47,7 +47,7 @@ public class RenounceClassSpell extends Spell {
 		CardCollection heroPowers = CardCatalogue.getHeroPowers(context.getDeckFormat());
 		for (Card heroPowerCard : heroPowers) {
 			if (heroPowerCard.getHeroClass() == rebornClass) {
-				HeroPower heroPower = (HeroPower) heroPowerCard;
+				HeroPowerCard heroPower = (HeroPowerCard) heroPowerCard;
 				heroPower.setId(context.getLogic().getIdFactory().generateId());
 				heroPower.setOwner(player.getHero().getOwner());
 				player.getHero().getHeroPowerZone().move(player.getHero().getHeroPower(), player.getGraveyard());

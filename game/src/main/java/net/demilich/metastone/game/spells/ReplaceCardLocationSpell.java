@@ -12,7 +12,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.targeting.CardLocation;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class ReplaceCardLocationSpell extends Spell {
 
@@ -29,7 +29,7 @@ public class ReplaceCardLocationSpell extends Spell {
 			}
 		}
 		
-		CardLocation location = (CardLocation) desc.get(SpellArg.CARD_LOCATION);
+		Zones location = (Zones) desc.get(SpellArg.CARD_LOCATION);
 		int count = 0;
 		switch(location) {
 		default:

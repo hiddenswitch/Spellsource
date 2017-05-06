@@ -6,19 +6,18 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.Serializable;
 
 public class CardReference implements Serializable {
-
 	private int playerId;
-	private CardLocation location;
+	private Zones zone;
 	private int cardId;
 	private String cardName;
 
 	protected CardReference() {
-		location = CardLocation.NONE;
+		zone = Zones.NONE;
 	}
 
-	public CardReference(int playerId, CardLocation location, int cardId, String cardName) {
+	public CardReference(int playerId, Zones zone, int cardId, String cardName) {
 		this.playerId = playerId;
-		this.location = location;
+		this.zone = zone;
 		this.cardId = cardId;
 		this.cardName = cardName;
 	}
@@ -49,8 +48,8 @@ public class CardReference implements Serializable {
 		return cardName;
 	}
 
-	public CardLocation getLocation() {
-		return location;
+	public Zones getZone() {
+		return zone;
 	}
 
 	public int getPlayerId() {
@@ -59,7 +58,7 @@ public class CardReference implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("[CardReference playerId:%d cardName:%s cardLocation:%s cardId:%d]", playerId, cardName, location.toString(),
+		return String.format("[CardReference playerId:%d cardName:%s cardLocation:%s cardId:%d]", playerId, cardName, zone.toString(),
 				cardId);
 	}
 

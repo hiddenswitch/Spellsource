@@ -18,9 +18,9 @@ import net.demilich.metastone.game.cards.IChooseOneCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
-import net.demilich.metastone.game.targeting.CardLocation;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.targeting.CardReference;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class ActionLogic implements Serializable {
@@ -46,9 +46,9 @@ public class ActionLogic implements Serializable {
 	@Suspendable
 	private List<GameAction> getHeroPowerActions(GameContext context, Player player) {
 		List<GameAction> heroPowerActions = new ArrayList<GameAction>();
-		HeroPower heroPower = player.getHero().getHeroPower();
+		HeroPowerCard heroPower = player.getHero().getHeroPower();
 		heroPower.onWillUse(context, player);
-		CardReference heroPowerReference = new CardReference(player.getId(), CardLocation.HERO_POWER, heroPower.getId(),
+		CardReference heroPowerReference = new CardReference(player.getId(), Zones.HERO_POWER, heroPower.getId(),
 				heroPower.getName());
 		if (!context.getLogic().canPlayCard(player.getId(), heroPowerReference)) {
 			return heroPowerActions;
@@ -85,7 +85,7 @@ public class ActionLogic implements Serializable {
 		playCardActions.addAll(getHeroPowerActions(context, player));
 
 		for (Card card : player.getHand()) {
-			CardReference cardReference = new CardReference(player.getId(), CardLocation.HAND, card.getId(), card.getName());
+			CardReference cardReference = new CardReference(player.getId(), Zones.HAND, card.getId(), card.getName());
 			if (!context.getLogic().canPlayCard(player.getId(), cardReference)) {
 				continue;
 			}
@@ -127,9 +127,9 @@ public class ActionLogic implements Serializable {
 
 	@Suspendable
 	public boolean hasAutoHeroPower(GameContext context, Player player) {
-		HeroPower heroPower = player.getHero().getHeroPower();
+		HeroPowerCard heroPower = player.getHero().getHeroPower();
 		heroPower.onWillUse(context, player);
-		CardReference heroPowerReference = new CardReference(player.getId(), CardLocation.HERO_POWER, heroPower.getId(),
+		CardReference heroPowerReference = new CardReference(player.getId(), Zones.HERO_POWER, heroPower.getId(),
 				heroPower.getName());
 		return (context.getLogic().canPlayCard(player.getId(), heroPowerReference) && heroPower.getTargetRequirement() == TargetSelection.AUTO);
 	}

@@ -16,7 +16,7 @@ import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -81,7 +81,7 @@ public class SerializationTest extends TestBase {
 	public void testAllGameActions() {
 		SpellCard fireball = (SpellCard) CardCatalogue.getCardById("spell_fireball");
 		MinionCard elven_archer = (MinionCard) CardCatalogue.getCardById("minion_elven_archer");
-		HeroPower heroPowerFireblast = (HeroPower) CardCatalogue.getCardById("hero_power_fireblast");
+		HeroPowerCard heroPowerFireblast = (HeroPowerCard) CardCatalogue.getCardById("hero_power_fireblast");
 		WeaponCard assassinsBlade = (WeaponCard) CardCatalogue.getCardById("weapon_assassins_blade");
 		SpellCard journeyBelow = (SpellCard) CardCatalogue.getCardById("spell_journey_below");
 		CardCollection discoverCards = new CardCollectionImpl();

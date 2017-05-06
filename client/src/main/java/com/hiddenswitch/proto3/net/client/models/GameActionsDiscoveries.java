@@ -27,39 +27,38 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * Cards and their corresponding action indices. 
+ * Card IDs and their corresponding action indices. 
  */
-@ApiModel(description = "Cards and their corresponding action indices. ")
+@ApiModel(description = "Card IDs and their corresponding action indices. ")
 
 public class GameActionsDiscoveries  implements Serializable {
-  @SerializedName("card")
-  private Entity card = null;
+  @SerializedName("cardId")
+  private Integer cardId = null;
 
   @SerializedName("action")
   private Integer action = null;
 
-  public GameActionsDiscoveries card(Entity card) {
-    this.card = card;
+  public GameActionsDiscoveries cardId(Integer cardId) {
+    this.cardId = cardId;
     return this;
   }
 
    /**
-   * Get card
-   * @return card
+   * Get cardId
+   * @return cardId
   **/
   @ApiModelProperty(example = "null", value = "")
-  public Entity getCard() {
-    return card;
+  public Integer getCardId() {
+    return cardId;
   }
 
-  public void setCard(Entity card) {
-    this.card = card;
+  public void setCardId(Integer cardId) {
+    this.cardId = cardId;
   }
 
   public GameActionsDiscoveries action(Integer action) {
@@ -90,13 +89,13 @@ public class GameActionsDiscoveries  implements Serializable {
       return false;
     }
     GameActionsDiscoveries gameActionsDiscoveries = (GameActionsDiscoveries) o;
-    return Objects.equals(this.card, gameActionsDiscoveries.card) &&
+    return Objects.equals(this.cardId, gameActionsDiscoveries.cardId) &&
         Objects.equals(this.action, gameActionsDiscoveries.action);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(card, action);
+    return Objects.hash(cardId, action);
   }
 
   @Override
@@ -104,7 +103,7 @@ public class GameActionsDiscoveries  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameActionsDiscoveries {\n");
     
-    sb.append("    card: ").append(toIndentedString(card)).append("\n");
+    sb.append("    cardId: ").append(toIndentedString(cardId)).append("\n");
     sb.append("    action: ").append(toIndentedString(action)).append("\n");
     sb.append("}");
     return sb.toString();

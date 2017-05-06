@@ -14,7 +14,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.Aura;
@@ -175,7 +175,6 @@ public class GameLogic implements Cloneable, Serializable {
 		for (Card card : cardCollection) {
 			card.setId(getIdFactory().generateId());
 			card.setOwner(ownerIndex);
-			card.setLocation(CardLocation.DECK);
 		}
 	}
 
@@ -217,7 +216,7 @@ public class GameLogic implements Cloneable, Serializable {
 			return false;
 		}
 		if (card.getCardType().isCardType(CardType.HERO_POWER)) {
-			HeroPower power = (HeroPower) card;
+			HeroPowerCard power = (HeroPowerCard) card;
 			int heroPowerUsages = getGreatestAttributeValue(player, Attribute.HERO_POWER_USAGES);
 			if (heroPowerUsages == 0) {
 				heroPowerUsages = 1;
@@ -397,7 +396,8 @@ public class GameLogic implements Cloneable, Serializable {
 		List<Actor> destroyList = new ArrayList<>();
 		for (Player player : context.getPlayers()) {
 
-			if (player.getHero().isDestroyed() || player.hasAttribute(Attribute.DESTROYED)) {
+			if ((player.getHero().isDestroyed() || player.hasAttribute(Attribute.DESTROYED)) &&
+					player.getHero().getZone() != Zones.GRAVEYARD) {
 				destroyList.add(player.getHero());
 			}
 
@@ -415,7 +415,7 @@ public class GameLogic implements Cloneable, Serializable {
 			return;
 		}
 
-		// sort the destroyed actors by their id. This implies that actors with a lower id entered the game ealier than those with higher ids!
+		// sort the destroyed actors by their id. This implies that actors with a lower id entered the game earlier than those with higher ids!
 		Collections.sort(destroyList, (a1, a2) -> Integer.compare(a1.getId(), a2.getId()));
 		// this method performs the actual removal
 		destroy(destroyList.toArray(new Actor[0]));
@@ -535,13 +535,9 @@ public class GameLogic implements Cloneable, Serializable {
 
 		for (Actor target : reversed) {
 			removeSpellTriggers(target, false);
-			Player owner = context.getPlayer(target.getOwner());
 			previousLocation.put(target, target.getEntityLocation());
 			log("{} is destroyed", target);
-
-			final EntityZone zone = owner.getZone(target.getEntityLocation().getZone());
-			zone.remove(target);
-			owner.getGraveyard().add(target);
+			target.moveOrAddTo(context, Zones.GRAVEYARD);
 		}
 
 		for (int i = 0; i < targets.length; i++) {
@@ -572,7 +568,6 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 
 			resolveDeathrattles(owner, target, previousLocation.get(target).getIndex());
-
 		}
 		for (Actor target : targets) {
 			removeSpellTriggers(target, true);
@@ -600,7 +595,7 @@ public class GameLogic implements Cloneable, Serializable {
 	public void discardCard(Player player, Card card) {
 		logger.debug("{} discards {}", player.getName(), card);
 		// only a 'real' discard should fire a DiscardEvent
-		if (card.getCardLocation() == CardLocation.HAND) {
+		if (card.getZone() == Zones.HAND) {
 			context.fireGameEvent(new DiscardEvent(context, player.getId(), card));
 		}
 
@@ -1274,14 +1269,12 @@ public class GameLogic implements Cloneable, Serializable {
 		while (starterCards.size() < numberOfStarterCards) {
 			Card randomCard = player.getDeck().getRandom();
 			player.getDeck().move(randomCard, player.getSetAsideZone());
-			randomCard.setLocation(CardLocation.SET_ASIDE_ZONE);
 			starterCards.add(randomCard);
 		}
 
 		// put the networkRequestMulligan cards back in the deck
 		for (Card discardedCard : discardedCards) {
 			player.getSetAsideZone().move(discardedCard, player.getDeck());
-			discardedCard.setLocation(CardLocation.DECK);
 		}
 
 		for (Card starterCard : starterCards) {
@@ -1402,7 +1395,7 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	public void processTargetModifiers(Player player, GameAction action) {
-		HeroPower heroPower = player.getHero().getHeroPower();
+		HeroPowerCard heroPower = player.getHero().getHeroPower();
 		if (heroPower.getHeroClass() != HeroClass.HUNTER) {
 			return;
 		}
@@ -1432,6 +1425,17 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	@Suspendable
+	public void receiveCard(int playerId, Card card, int copies) {
+		for (int i = 0; i < Math.min(copies, 1); i++) {
+			receiveCard(playerId, card, null);
+		}
+
+		for (int i = 1; i < copies; i++) {
+			receiveCard(playerId, card.getCopy(), null);
+		}
+	}
+
+	@Suspendable
 	public void receiveCard(int playerId, Card card, Entity source) {
 		receiveCard(playerId, card, source, false);
 	}
@@ -1453,19 +1457,13 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 
 			log("{} receives card {}", player.getName(), card);
-			CardLocation oldLocation = card.getCardLocation();
-			if (!card.getEntityLocation().equals(EntityLocation.NONE)) {
-				player.getZone(card.getEntityLocation().getZone()).move(card, hand);
-			} else {
-				hand.addCard(card);
-			}
-			card.setLocation(CardLocation.HAND);
+			card.moveOrAddTo(context, Zones.HAND);
 			CardType sourceType = null;
 			if (source instanceof Card) {
 				Card sourceCard = (Card) source;
 				sourceType = sourceCard.getCardType();
 			}
-			context.fireGameEvent(new DrawCardEvent(context, playerId, card, sourceType, oldLocation, drawn));
+			context.fireGameEvent(new DrawCardEvent(context, playerId, card, sourceType, drawn));
 		} else {
 			log("{} has too many cards on his hand, card destroyed: {}", player.getName(), card);
 			discardCard(player, card);
@@ -1500,27 +1498,20 @@ public class GameLogic implements Cloneable, Serializable {
 
 	@Suspendable
 	public void removeCard(int playerId, Card card) {
-		Player player = context.getPlayer(playerId);
 		log("Card {} has been moved from the {} to the GRAVEYARD", card, card.getEntityLocation().getZone().toString());
-		card.setLocation(CardLocation.GRAVEYARD);
 		removeSpellTriggers(card);
 		// If it's already in the graveyard, do nothing
-		if (card.getEntityLocation().getZone() == PlayerZones.GRAVEYARD) {
+		if (card.getEntityLocation().getZone() == Zones.GRAVEYARD) {
 			return;
 		}
 		// TODO: It's not necessarily in the hand when it's removed!
-		if (!card.getEntityLocation().equals(EntityLocation.NONE)) {
-			player.getZone(card.getEntityLocation().getZone()).move(card, player.getGraveyard());
-		} else {
-			player.getGraveyard().add(card);
-		}
+		card.moveOrAddTo(context, Zones.GRAVEYARD);
 	}
 
 	@Suspendable
 	public void removeCardFromDeck(int playerID, Card card) {
 		Player player = context.getPlayer(playerID);
 		log("Card {} has been moved from the DECK to the GRAVEYARD", card);
-		card.setLocation(CardLocation.GRAVEYARD);
 		removeSpellTriggers(card);
 		player.getDeck().move(card, player.getGraveyard());
 	}
@@ -1528,20 +1519,9 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void removeMinion(Minion minion, boolean peacefully) {
 		removeSpellTriggers(minion);
-
 		log("{} was removed", minion);
-
 		minion.setAttribute(Attribute.DESTROYED);
-
-		Player owner = context.getPlayer(minion.getOwner());
-		if (!minion.getEntityLocation().getZone().equals(PlayerZones.NONE)) {
-			owner.getZone(minion.getEntityLocation().getZone()).remove(minion);
-		}
-		if (peacefully) {
-			owner.getSetAsideZone().add(minion);
-		} else {
-			owner.getGraveyard().add(minion);
-		}
+		minion.moveOrAddTo(context, peacefully ? Zones.SET_ASIDE_ZONE : Zones.GRAVEYARD);
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -1602,8 +1582,7 @@ public class GameLogic implements Cloneable, Serializable {
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
 		hand.replace(oldCard, newCard);
 		removeCard(playerId, oldCard);
-		newCard.setLocation(CardLocation.HAND);
-		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, null, oldCard.getCardLocation(), false));
+		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, null, false));
 	}
 
 	@Suspendable
@@ -1628,7 +1607,6 @@ public class GameLogic implements Cloneable, Serializable {
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
 		deck.replace(oldCard, newCard);
 		removeCardFromDeck(playerId, oldCard);
-		newCard.setLocation(CardLocation.DECK);
 	}
 
 	@Suspendable
@@ -1677,7 +1655,12 @@ public class GameLogic implements Cloneable, Serializable {
 		if (hasAttribute(player, Attribute.DOUBLE_BATTLECRIES) && actor.getSourceCard().hasAttribute(Attribute.BATTLECRY)) {
 			// You need DOUBLE_BATTLECRIES before your battlecry action, not after.
 			performGameAction(playerId, battlecryAction);
-			if (!battlecryAction.canBeExecuted(context, player)) {
+			// Make sure the battlecry is still targetable
+			final EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
+			final boolean targetable = target == null
+					|| target.isTargetGroup()
+					|| getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target));
+			if (!battlecryAction.canBeExecuted(context, player) || !targetable) {
 				return;
 			}
 			performGameAction(playerId, battlecryAction);
@@ -1714,7 +1697,7 @@ public class GameLogic implements Cloneable, Serializable {
 	public void secretTriggered(Player player, Secret secret) {
 		log("Secret was trigged: {}", secret.getSource());
 		// Move the secret to the graveyard instead of removing it. What does this do?
-		player.getSecrets().move(secret, player.getGraveyard());
+		player.getSecrets().move(secret, player.getRemovedFromPlay());
 		context.fireGameEvent(new SecretRevealedEvent(context, (SecretCard) secret.getSource(), player.getId()));
 	}
 
@@ -1732,7 +1715,6 @@ public class GameLogic implements Cloneable, Serializable {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(getIdFactory().generateId());
 		}
-		card.setLocation(CardLocation.DECK);
 
 		if (player.getDeck().getCount() < MAX_DECK_SIZE) {
 			player.getDeck().addRandomly(card);
@@ -1953,7 +1935,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void useHeroPower(int playerId) {
 		Player player = context.getPlayer(playerId);
-		HeroPower power = player.getHero().getHeroPower();
+		HeroPowerCard power = player.getHero().getHeroPower();
 		int modifiedManaCost = getModifiedManaCost(player, power);
 		modifyCurrentMana(playerId, -modifiedManaCost);
 		log("{} uses {}", player.getName(), power);
@@ -2029,7 +2011,6 @@ public class GameLogic implements Cloneable, Serializable {
 				Card randomCard = player.getDeck().getRandom();
 				if (randomCard != null) {
 					player.getDeck().move(randomCard, player.getSetAsideZone());
-					randomCard.setLocation(CardLocation.SET_ASIDE_ZONE);
 					log("Player {} been offered card {} for networkRequestMulligan", player.getName(), randomCard);
 					starterCards.add(randomCard);
 				}

@@ -6,19 +6,18 @@ import java.util.Map;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
-import net.demilich.metastone.game.targeting.PlayerZones;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class Hero extends Actor {
 	private HeroClass heroClass;
-	private EntityZone<HeroPower> heroPowerZone = new EntityZone<>(getOwner(), PlayerZones.HERO_POWER);
-	private EntityZone<Weapon> weaponZone = new EntityZone<>(getOwner(), PlayerZones.WEAPON);
+	private EntityZone<HeroPowerCard> heroPowerZone = new EntityZone<>(getOwner(), Zones.HERO_POWER);
+	private EntityZone<Weapon> weaponZone = new EntityZone<>(getOwner(), Zones.WEAPON);
 
-	public Hero(HeroCard heroCard, HeroPower heroPower) {
+	public Hero(HeroCard heroCard, HeroPowerCard heroPower) {
 		super(heroCard);
 		setName(heroCard.getName());
 		this.setHeroClass(heroCard.getHeroClass());
@@ -70,7 +69,7 @@ public class Hero extends Actor {
 		return heroClass;
 	}
 
-	public HeroPower getHeroPower() {
+	public HeroPowerCard getHeroPower() {
 		if (heroPowerZone.size() > 0) {
 			return heroPowerZone.get(0);
 		} else {
@@ -96,7 +95,7 @@ public class Hero extends Actor {
 		this.heroClass = heroClass;
 	}
 
-	public void setHeroPower(HeroPower heroPower) {
+	public void setHeroPower(HeroPowerCard heroPower) {
 		if (heroPowerZone.size() > 0) {
 			heroPowerZone.remove(0);
 		}
@@ -130,7 +129,7 @@ public class Hero extends Actor {
 		}
 	}
 
-	public EntityZone<HeroPower> getHeroPowerZone() {
+	public EntityZone<HeroPowerCard> getHeroPowerZone() {
 		return heroPowerZone;
 	}
 

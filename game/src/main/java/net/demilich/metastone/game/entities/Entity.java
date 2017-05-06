@@ -1,14 +1,15 @@
 package net.demilich.metastone.game.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 public abstract class Entity extends CustomCloneable implements Serializable {
@@ -19,19 +20,15 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	private AttributeMap attributes = new AttributeMap();
 	private int id = IdFactory.UNASSIGNED;
 	private int ownerIndex = NO_OWNER;
-	private boolean entityLocationHistory = false;
-	protected List<EntityLocation> entityLocations = new ArrayList<>();
+	protected EntityLocation entityLocation = EntityLocation.NONE;
 
 	protected Entity() {
 		super();
-		entityLocations.add(EntityLocation.NONE);
 	}
 
 	@Override
 	public Entity clone() {
 		Entity clone = (Entity) super.clone();
-		clone.entityLocations = new ArrayList<>();
-		clone.entityLocations.add(EntityLocation.NONE);
 		return clone;
 	}
 
@@ -150,29 +147,36 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	}
 
 	public EntityLocation getEntityLocation() {
-		return entityLocations.get(entityLocations.size() - 1);
+		return entityLocation;
 	}
 
-	public void pushEntityLocation(EntityLocation entityLocation) {
-		if (entityLocationHistory) {
-			this.entityLocations.add(entityLocation);
-		} else {
-			this.entityLocations.set(entityLocations.size() - 1, entityLocation);
-		}
+	public void setEntityLocation(EntityLocation entityLocation) {
+		this.entityLocation = entityLocation;
 	}
 
 	public void resetEntityLocations() {
-		entityLocations.clear();
-		entityLocations.add(EntityLocation.NONE);
+		entityLocation = EntityLocation.NONE;
 	}
 
-	public void forgetEntityLocations() {
-		EntityLocation last = getEntityLocation();
-		entityLocations.clear();
-		entityLocations.add(last);
+	@SuppressWarnings("unchecked")
+	public void moveOrAddTo(GameContext context, Zones destination) {
+		if (getOwner() == -1) {
+			throw new RuntimeException("No owner for card.");
+		}
+
+		final Player player = context.getPlayer(getOwner());
+		if (getEntityLocation().equals(EntityLocation.NONE)) {
+			player.getZone(destination).add(this);
+		} else if (getEntityLocation().getZone() == destination) {
+			// Already in the destination.
+			throw new RuntimeException("Already in destination.");
+		} else {
+			final Zones currentZone = getEntityLocation().getZone();
+			player.getZone(currentZone).move(this, player.getZone(destination));
+		}
 	}
 
-	public List<EntityLocation> getEntityLocations() {
-		return entityLocations;
+	public Zones getZone() {
+		return entityLocation.getZone();
 	}
 }
