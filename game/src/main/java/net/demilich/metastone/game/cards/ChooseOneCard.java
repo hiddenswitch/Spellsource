@@ -31,7 +31,6 @@ public class ChooseOneCard extends Card implements IChooseOneCard {
 
 	private Card getCard(String cardId) {
 		Card card = CardCatalogue.getCardById(cardId);
-		card.setLocation(getCardLocation());
 		card.setOwner(getOwner());
 		card.setId(getId());
 		return card;

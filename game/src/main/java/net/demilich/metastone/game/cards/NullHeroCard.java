@@ -5,10 +5,8 @@ import net.demilich.metastone.game.cards.desc.HeroCardDesc;
 import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.utils.AttributeMap;
-
-import java.util.HashMap;
 
 public class NullHeroCard extends HeroCard {
 	private HeroClass heroClass;
@@ -38,7 +36,7 @@ public class NullHeroCard extends HeroCard {
 	@Override
 	public Hero createHero() {
 		HeroPowerCardDesc heroPowerCardDesc = getHeroPowerCardDesc();
-		HeroPower powerCard = (HeroPower) heroPowerCardDesc.createInstance();
+		HeroPowerCard powerCard = (HeroPowerCard) heroPowerCardDesc.createInstance();
 
 		HeroCardDesc heroCardDesc = getNullHeroCardDesc(getHeroClass());
 		HeroCard heroCard = new HeroCard(heroCardDesc);

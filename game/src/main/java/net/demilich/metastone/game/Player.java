@@ -14,13 +14,11 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
-import net.demilich.metastone.game.spells.trigger.SecretPlayedTrigger;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
-import net.demilich.metastone.game.targeting.PlayerZones;
+import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -43,14 +41,16 @@ public class Player extends Entity implements Serializable {
 	}
 
 	protected String deckName;
-	protected CardZone deck = new CardZone(getId(), PlayerZones.DECK);
-	private CardZone hand = new CardZone(getId(), PlayerZones.HAND);
-	private EntityZone<Entity> setAsideZone = new EntityZone<>(getId(), PlayerZones.SET_ASIDE_ZONE);
-	private EntityZone<Entity> graveyard = new EntityZone<>(getId(), PlayerZones.GRAVEYARD);
-	private EntityZone<Minion> minions = new EntityZone<>(getId(), PlayerZones.BATTLEFIELD);
-	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), PlayerZones.HERO);
-	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), PlayerZones.SECRET);
-	private EntityZone<Player> playerZone = new EntityZone<>(getId(), PlayerZones.PLAYER);
+	protected CardZone deck = new CardZone(getId(), Zones.DECK);
+	private CardZone hand = new CardZone(getId(), Zones.HAND);
+	private CardZone discoverZone = new CardZone(getId(), Zones.DISCOVER);
+	private EntityZone<Entity> setAsideZone = new EntityZone<>(getId(), Zones.SET_ASIDE_ZONE);
+	private EntityZone<Entity> graveyard = new EntityZone<>(getId(), Zones.GRAVEYARD);
+	private EntityZone<Entity> removedFromPlay = new EntityZone<>(getId(), Zones.REMOVED_FROM_PLAY);
+	private EntityZone<Minion> minions = new EntityZone<>(getId(), Zones.BATTLEFIELD);
+	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), Zones.HERO);
+	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), Zones.SECRET);
+	private EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER);
 
 	private final GameStatistics statistics = new GameStatistics();
 
@@ -73,6 +73,8 @@ public class Player extends Entity implements Serializable {
 		this.deck = otherPlayer.getDeck().clone();
 		this.hand = otherPlayer.getHand().clone();
 		this.minions = otherPlayer.getMinions().clone();
+		this.discoverZone = otherPlayer.getDiscoverZone().clone();
+		this.removedFromPlay = otherPlayer.getRemovedFromPlay().clone();
 		this.graveyard = otherPlayer.getGraveyard().clone();
 		this.setAsideZone = otherPlayer.getSetAsideZone().clone();
 		this.heroZone = otherPlayer.getHeroZone().clone();
@@ -100,7 +102,7 @@ public class Player extends Entity implements Serializable {
 		config.build();
 		Deck selectedDeck = config.getDeckForPlay();
 
-		this.deck = new CardZone(getId(), PlayerZones.DECK, selectedDeck.getCardsCopy());
+		this.deck = new CardZone(getId(), Zones.DECK, selectedDeck.getCardsCopy());
 		this.setHero(config.getHeroForPlay().createHero());
 		this.setName(config.getName() + " - " + getHero().getName());
 		this.deckName = selectedDeck.getName();
@@ -115,13 +117,6 @@ public class Player extends Entity implements Serializable {
 
 	public IBehaviour getBehaviour() {
 		return behaviour;
-	}
-
-	public List<Actor> getCharacters() {
-		List<Actor> characters = new ArrayList<Actor>();
-		characters.add(getHero());
-		characters.addAll(getMinions());
-		return characters;
 	}
 
 	public CardZone getDeck() {
@@ -258,7 +253,7 @@ public class Player extends Entity implements Serializable {
 
 		if (getDeck() == null
 				|| getDeck().getCount() > 0) {
-			this.deck = new CardZone(getId(), PlayerZones.DECK, deck.getCardsCopy());
+			this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy());
 		} else if (getDeck().getCount() == 0) {
 			this.deck.addAll(deck.getCards());
 		}
@@ -270,6 +265,8 @@ public class Player extends Entity implements Serializable {
 	public void setId(int id) {
 		super.setId(id);
 		minions.setPlayer(id);
+		discoverZone.setPlayer(id);
+		removedFromPlay.setPlayer(id);
 		graveyard.setPlayer(id);
 		setAsideZone.setPlayer(id);
 		hand.setPlayer(id);
@@ -279,10 +276,10 @@ public class Player extends Entity implements Serializable {
 		playerZone.setPlayer(id);
 	}
 
-	public EntityZone getZone(PlayerZones zone) {
+	public EntityZone getZone(Zones zone) {
 		switch (zone) {
 			case PLAYER:
-				final EntityZone<Player> playerZone = new EntityZone<>(getId(), PlayerZones.PLAYER);
+				final EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER);
 				playerZone.add(this);
 				return playerZone;
 			case BATTLEFIELD:
@@ -303,6 +300,10 @@ public class Player extends Entity implements Serializable {
 				return getWeaponZone();
 			case SECRET:
 				return getSecrets();
+			case DISCOVER:
+				return getDiscovers();
+			case REMOVED_FROM_PLAY:
+				return getRemovedFromPlay();
 			case NONE:
 			case HIDDEN:
 				// TODO: Deal with secret zones
@@ -315,7 +316,7 @@ public class Player extends Entity implements Serializable {
 		return heroZone;
 	}
 
-	public EntityZone<HeroPower> getHeroPowerZone() {
+	public EntityZone<HeroPowerCard> getHeroPowerZone() {
 		return getHero().getHeroPowerZone();
 	}
 
@@ -323,8 +324,15 @@ public class Player extends Entity implements Serializable {
 		return getHero().getWeaponZone();
 	}
 
-//	@Override
-//	public EntityLocation getEntityLocation() {
-//		return new EntityLocation(PlayerZones.PLAYER, getId(), 0);
-//	}
+	public CardZone getDiscovers() {
+		return discoverZone;
+	}
+
+	public CardZone getDiscoverZone() {
+		return discoverZone;
+	}
+
+	public EntityZone<Entity> getRemovedFromPlay() {
+		return removedFromPlay;
+	}
 }

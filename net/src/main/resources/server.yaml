@@ -312,6 +312,8 @@ definitions:
           - 'WEAPON'
           - 'SET_ASIDE_ZONE'
           - 'HIDDEN'
+          - 'DISCOVER'
+          - 'REMOVED_FROM_PLAY'
           - 'PLAYER'
   EntityChangeSet:
     description: |
@@ -338,7 +340,6 @@ definitions:
           $ref: '#/definitions/EntityState'
         p1:
           $ref: '#/definitions/EntityState'
-
   GameEvent:
     type: 'object'
     properties:
@@ -727,11 +728,11 @@ definitions:
         type: 'array'
         items:
           description: |
-            Cards and their corresponding action indices.
+            Card IDs and their corresponding action indices.
           type: 'object'
           properties:
-            card:
-              $ref: '#/definitions/Entity'
+            cardId:
+              type: 'integer'
             action:
               type: 'integer'
       weapons:

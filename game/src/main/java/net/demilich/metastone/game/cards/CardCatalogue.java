@@ -27,29 +27,27 @@ public class CardCatalogue {
 
 	private static Logger logger = LoggerFactory.getLogger(CardCatalogue.class);
 
-	private final static CardCollection cards = new CardCollectionImpl();
+	private final static Map<String, Card> cards = new HashMap<>();
 	private final static Map<String, CardCatalogueRecord> records = new HashMap<>();
 
 	public static void add(Card card) {
-		cards.addCard(card);
+		cards.put(card.getCardId(), card);
 	}
 
 	public static CardCollection getAll() {
 		CardCollection result = new CardCollectionImpl();
-		for (Card card : cards) {
+		for (Card card : cards.values()) {
 			result.addCard(card.clone());
 		}
 		return result;
 	}
 
 	public static Card getCardById(String id) {
-		for (Card card : cards) {
-			if (card.getCardId() != null && card.getCardId().equalsIgnoreCase(id)) {
-				return card.clone();
-			}
+		Card card = cards.getOrDefault(id.toLowerCase(), null);
+		if (card != null) {
+			card = card.getCopy();
 		}
-
-		return null;
+		return card;
 	}
 
 	public static Map<String, CardCatalogueRecord> getRecords() {
@@ -57,7 +55,7 @@ public class CardCatalogue {
 	}
 
 	public static Card getCardByName(String name) {
-		for (Card card : cards) {
+		for (Card card : cards.values()) {
 			if (card.isCollectible() && card.getName().equals(name)) {
 				return card.clone();
 			}
@@ -100,7 +98,7 @@ public class CardCatalogue {
 
 	public static CardCollection query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass, Attribute tag, HeroClass actualHeroClass) {
 		CardCollection result = new CardCollectionImpl();
-		for (Card card : cards) {
+		for (Card card : cards.values()) {
 			if (!deckFormat.isInFormat(card)) {
 				continue;
 			}
@@ -147,7 +145,7 @@ public class CardCatalogue {
 
 	public static CardCollection query(DeckFormat deckFormat, Predicate<Card> filter) {
 		CardCollection result = new CardCollectionImpl();
-		for (Card card : cards) {
+		for (Card card : cards.values()) {
 			if (deckFormat != null && !deckFormat.isInFormat(card)) {
 				continue;
 			}
@@ -193,7 +191,7 @@ public class CardCatalogue {
 
 		}
 
-		logger.debug("{} cards loaded.", CardCatalogue.cards.getCount());
+		logger.debug("{} cards loaded.", CardCatalogue.cards.size());
 
 		if (!badCards.isEmpty()) {
 			throw new CardParseException(badCards);

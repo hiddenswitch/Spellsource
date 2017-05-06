@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
@@ -24,6 +25,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class SpellUtils {
 
@@ -67,54 +70,87 @@ public class SpellUtils {
 
 	public static Card getCard(GameContext context, SpellDesc spell) {
 		Card card = null;
-		String cardName = (String) spell.get(SpellArg.CARD);
-		if (cardName == null) {
+		String cardId = (String) spell.get(SpellArg.CARD);
+		if (cardId == null) {
 			return null;
 		}
-		card = CardCatalogue.getCardById(cardName);
+		card = getCardFromContextOrDiscover(context, cardId);
 		if (spell.get(SpellArg.CARD).toString().toUpperCase().equals("PENDING_CARD")) {
-			card = (Card) context.getPendingCard();
+			card = context.getPendingCard();
 		} else if (spell.get(SpellArg.CARD).toString().toUpperCase().equals("EVENT_CARD")) {
-			card = (Card) context.getEventCard();
+			card = context.getEventCard();
 		}
 		return card;
 	}
 
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
-		String[] cardNames = null;
+		String[] cardIds = null;
 		if (spell.contains(SpellArg.CARDS)) {
-			cardNames = (String[]) spell.get(SpellArg.CARDS);
+			cardIds = (String[]) spell.get(SpellArg.CARDS);
 		} else {
-			cardNames = new String[1];
-			cardNames[0] = (String) spell.get(SpellArg.CARD);
+			cardIds = new String[1];
+			cardIds[0] = (String) spell.get(SpellArg.CARD);
 		}
-		Card[] cards = new Card[cardNames.length];
+		Card[] cards = new Card[cardIds.length];
 		for (int i = 0; i < cards.length; i++) {
-			cards[i] = context.getCardById(cardNames[i]);
+			// If the discover zone contains the card, reference it instead
+			final String cardId = cardIds[i];
+			cards[i] = getCardFromContextOrDiscover(context, cardId);
 		}
 		return cards;
 	}
 
+	public static Card getCardFromContextOrDiscover(GameContext context, String cardId) {
+		Card cardToAdd;Optional<Card> discoverCard = context.getPlayers().stream().flatMap(p -> p.getDiscoverZone().stream()).filter(c -> c.getCardId().equals(cardId)).findFirst();
+		if (discoverCard.isPresent()) {
+			cardToAdd = discoverCard.get();
+		} else {
+			cardToAdd = context.getCardById(cardId);
+		}
+		return cardToAdd;
+	}
+
 	@Suspendable
-	public static DiscoverAction getDiscover(GameContext context, Player player, SpellDesc desc, CardCollection cards) {
+	public static DiscoverAction discoverCard(GameContext context, Player player, SpellDesc desc, CardCollection cards) {
+		// Discovers always work with a copy of the incoming cards
+		cards = cards.getCopy();
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		List<GameAction> discoverActions = new ArrayList<>();
 		for (Card card : cards) {
+			card.setId(context.getLogic().getIdFactory().generateId());
+			card.setOwner(player.getId());
+			card.moveOrAddTo(context, Zones.DISCOVER);
+
 			SpellDesc spellClone = spell.addArg(SpellArg.CARD, card.getCardId());
 			DiscoverAction discover = DiscoverAction.createDiscover(spellClone);
 			discover.setCard(card);
 			discover.setActionSuffix(card.getName());
 			discoverActions.add(discover);
 		}
+
 		if (discoverActions.size() == 0) {
 			return null;
 		}
 
+		final DiscoverAction discoverAction;
+
 		if (context.getLogic().attributeExists(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION)) {
-			return (DiscoverAction) discoverActions.get(context.getLogic().random(discoverActions.size()));
+			discoverAction = (DiscoverAction) discoverActions.get(context.getLogic().random(discoverActions.size()));
 		} else {
-			return (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
+			discoverAction = (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
 		}
+
+		int discoveredCard = discoverAction.getCard().getId();
+
+		// Move the cards back
+		for (Card card : cards) {
+			// Cards that are being discovered are always copies, so they are always removed from play afterwards.
+			if (card.getId() != discoveredCard) {
+				card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			}
+		}
+
+		return discoverAction;
 	}
 
 	@Suspendable

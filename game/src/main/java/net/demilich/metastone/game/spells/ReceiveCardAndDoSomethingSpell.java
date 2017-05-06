@@ -11,7 +11,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.targeting.CardLocation;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class ReceiveCardAndDoSomethingSpell extends Spell {
 
@@ -20,7 +20,7 @@ public class ReceiveCardAndDoSomethingSpell extends Spell {
 		context.getLogic().receiveCard(player.getId(), card);
 		// card may be null (i.e. try to draw from deck, but already in
 		// fatigue)
-		if (card == null || card.getCardLocation() == CardLocation.GRAVEYARD) {
+		if (card == null || card.getZone() == Zones.GRAVEYARD) {
 			return;
 		}
 		context.setEventCard(card);

@@ -8,7 +8,6 @@ import com.hiddenswitch.proto3.net.messages.*;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
-import net.demilich.metastone.game.behaviour.IBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.costmodifier.OneTurnCostModifier;
@@ -20,7 +19,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.aura.AttributeAura;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.aura.BuffAura;
@@ -43,7 +42,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.*;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.Map;
 
@@ -101,7 +99,7 @@ public class Serialization {
 			factory.registerSubtype(MinionCard.class, "MINION_CARD");
 			factory.registerSubtype(SpellCard.class, "SPELL_CARD");
 			factory.registerSubtype(WeaponCard.class, "WEAPON_CARD");
-			factory.registerSubtype(HeroPower.class, "HERO_POWER_CARD");
+			factory.registerSubtype(HeroPowerCard.class, "HERO_POWER_CARD");
 			factory.registerSubtype(SecretCard.class, "SECRET_CARD");
 		}
 

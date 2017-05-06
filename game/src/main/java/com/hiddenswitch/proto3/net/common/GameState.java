@@ -7,7 +7,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.Entity;
@@ -15,9 +14,7 @@ import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
-import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.targeting.PlayerZones;
-import org.apache.commons.lang3.SerializationUtils;
+import net.demilich.metastone.game.targeting.Zones;
 
 import java.io.Serializable;
 import java.util.*;
@@ -70,17 +67,18 @@ public class GameState implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	protected Stream<Entity> getEntities() {
-		return Stream.of(player1, player2).flatMap(p -> Stream.of(new PlayerZones[]{
-				PlayerZones.PLAYER,
-				PlayerZones.BATTLEFIELD,
-				PlayerZones.DECK,
-				PlayerZones.GRAVEYARD,
-				PlayerZones.HAND,
-				PlayerZones.HERO,
-				PlayerZones.HERO_POWER,
-				PlayerZones.SET_ASIDE_ZONE,
-				PlayerZones.WEAPON,
-				PlayerZones.SECRET
+		return Stream.of(player1, player2).flatMap(p -> Stream.of(new Zones[]{
+				Zones.PLAYER,
+				Zones.BATTLEFIELD,
+				Zones.DECK,
+				Zones.GRAVEYARD,
+				Zones.HAND,
+				Zones.HERO,
+				Zones.HERO_POWER,
+				Zones.SET_ASIDE_ZONE,
+				Zones.DISCOVER,
+				Zones.WEAPON,
+				Zones.SECRET
 		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 

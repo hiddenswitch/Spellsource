@@ -10,7 +10,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.targeting.CardLocation;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class PutRandomMinionOnBoardSpell extends Spell {
 
@@ -18,9 +18,9 @@ public class PutRandomMinionOnBoardSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-		CardLocation cardLocation = (CardLocation) desc.get(SpellArg.CARD_LOCATION);
+		Zones cardLocation = (Zones) desc.get(SpellArg.CARD_LOCATION);
 		if (cardLocation == null) {
-			cardLocation = CardLocation.DECK;
+			cardLocation = Zones.DECK;
 		}
 		int numberToSummon = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < numberToSummon; i++) {
@@ -29,9 +29,9 @@ public class PutRandomMinionOnBoardSpell extends Spell {
 	}
 
 	@Suspendable
-	private void putRandomMinionFromDeckOnBoard(GameContext context, Player player, EntityFilter cardFilter, CardLocation cardLocation) {
+	private void putRandomMinionFromDeckOnBoard(GameContext context, Player player, EntityFilter cardFilter, Zones cardLocation) {
 		MinionCard minionCard = null;
-		CardCollection collection = cardLocation == CardLocation.HAND ? player.getHand() : player.getDeck();
+		CardCollection collection = cardLocation == Zones.HAND ? player.getHand() : player.getDeck();
 		if (cardFilter == null) {
 			minionCard = (MinionCard) collection.getRandomOfType(CardType.MINION);
 		} else {
@@ -44,19 +44,19 @@ public class PutRandomMinionOnBoardSpell extends Spell {
 		
 		// we need to remove the card temporarily here, because there are card interactions like Starving Buzzard + Desert Camel
 		// which could result in the card being drawn while a minion is summoned
-		if (cardLocation == CardLocation.DECK) {
+		if (cardLocation == Zones.DECK) {
 			player.getDeck().move(minionCard, player.getSetAsideZone());;
 		}
 
 		boolean summonSuccess = context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false);
 		
 		// re-add the card here if we removed it before
-		if (cardLocation == CardLocation.DECK) {
+		if (cardLocation == Zones.DECK) {
 			player.getSetAsideZone().move(minionCard, player.getDeck());
 		}
 		
 		if (summonSuccess) {
-			if (cardLocation == CardLocation.HAND) {
+			if (cardLocation == Zones.HAND) {
 				context.getLogic().removeCard(player.getId(), minionCard);
 			} else {
 				context.getLogic().removeCardFromDeck(player.getId(), minionCard);

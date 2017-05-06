@@ -5,12 +5,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.net.common.GameState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
-import net.demilich.metastone.game.targeting.PlayerZones;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
@@ -48,7 +47,7 @@ public class MassTest extends TestBase {
 	@Test
 	public void testRandomMassPlay() {
 		loggerSetup();
-		IntStream.range(0, 1000).parallel().forEach(i -> oneGame());
+		IntStream.range(0, 10000).parallel().forEach(i -> oneGame());
 	}
 
 	private void oneGame() {
@@ -71,7 +70,7 @@ public class MassTest extends TestBase {
 			protected void assertValidEntities() {
 				getEntities().forEach(e -> {
 							final boolean isValid = e.getEntityLocation().getIndex() >= 0
-									&& e.getEntityLocation().getZone() != PlayerZones.NONE
+									&& e.getEntityLocation().getZone() != Zones.NONE
 									&& e.getId() >= 0;
 							if (!isValid) {
 								final String message =

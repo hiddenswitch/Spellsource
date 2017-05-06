@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.CardLocation;
 
 public class TransformCardSpell extends Spell {
 
@@ -20,11 +20,11 @@ public class TransformCardSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = (Card) target;
-		if (card.getCardLocation() == CardLocation.HAND) {
+		if (card.getZone() == Zones.HAND) {
 			context.getLogic().removeCard(player.getId(), card);
 		} else {
 			// logger.warn("Trying to transform card {} in invalid location {}",
-			// card, card.getLocation());
+			// card, card.getZone());
 			return;
 		}
 

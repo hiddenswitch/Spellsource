@@ -21,7 +21,7 @@ import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.targeting.PlayerZones;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.utils.IDisposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -259,15 +259,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	public int getBoardPosition(Minion minion) {
 		return minion.getEntityLocation().getIndex();
-//		for (Player player : getPlayers()) {
-//			List<Minion> minions = player.getMinions();
-//			for (int i = 0; i < minions.size(); i++) {
-//				if (minions.get(i) == minion) {
-//					return i;
-//				}
-//			}
-//		}
-//		return -1;
 	}
 
 	public Card getCardById(String cardId) {
@@ -541,7 +532,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		if (getPendingCard() != null && getPendingCard().getCardReference().equals(cardReference)) {
 			card = getPendingCard();
 		} else {
-			switch (cardReference.getLocation()) {
+			switch (cardReference.getZone()) {
 				case SET_ASIDE_ZONE:
 					final Optional<Entity> first = player.getSetAsideZone().stream().filter(e -> e.getId() == cardReference.getCardId()).findFirst();
 					if (first.isPresent()
@@ -554,9 +545,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 					break;
 				case HAND:
 					card = findCardinCollection(player.getHand(), cardReference.getCardId());
-					break;
-				case PENDING:
-					card = getPendingCard();
 					break;
 				case HERO_POWER:
 					card = player.getHero().getHeroPower();
@@ -810,17 +798,17 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	@SuppressWarnings("unchecked")
 	public Stream<Entity> getEntities() {
-		return getPlayers().stream().flatMap(p -> Stream.of(new PlayerZones[]{
-				PlayerZones.PLAYER,
-				PlayerZones.BATTLEFIELD,
-				PlayerZones.DECK,
-				PlayerZones.GRAVEYARD,
-				PlayerZones.HAND,
-				PlayerZones.HERO,
-				PlayerZones.HERO_POWER,
-				PlayerZones.SET_ASIDE_ZONE,
-				PlayerZones.WEAPON,
-				PlayerZones.SECRET
+		return getPlayers().stream().flatMap(p -> Stream.of(new Zones[]{
+				Zones.PLAYER,
+				Zones.BATTLEFIELD,
+				Zones.DECK,
+				Zones.GRAVEYARD,
+				Zones.HAND,
+				Zones.HERO,
+				Zones.HERO_POWER,
+				Zones.SET_ASIDE_ZONE,
+				Zones.WEAPON,
+				Zones.SECRET
 		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 

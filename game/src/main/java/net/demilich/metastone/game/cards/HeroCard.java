@@ -8,7 +8,7 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.desc.HeroCardDesc;
 import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 
 public class HeroCard extends Card {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class HeroCard extends Card {
 
 	public Hero createHero() {
 		final HeroCardDesc desc = (HeroCardDesc) getDesc();
-		HeroPower heroPower = (HeroPower) CardCatalogue.getCardById(desc.heroPower);
+		HeroPowerCard heroPower = (HeroPowerCard) CardCatalogue.getCardById(desc.heroPower);
 		Hero hero = new Hero(this, heroPower);
 		for (Attribute gameTag : getAttributes().keySet()) {
 			if (inheritedAttributes.contains(gameTag)) {

@@ -169,6 +169,15 @@ public interface Games {
 					return spellAction;
 				}).findFirst();
 
+		// discovers
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.DISCOVER)
+				.map(ga -> (DiscoverAction) ga)
+				.map(da -> new GameActionsDiscoveries()
+						.action(da.getId())
+						.cardId(da.getCard().getId()))
+				.forEach(clientActions::addDiscoveriesItem);
+
 		if (heroPowerSpell.isPresent()) {
 			clientActions.heroPower(heroPowerSpell.get());
 		}

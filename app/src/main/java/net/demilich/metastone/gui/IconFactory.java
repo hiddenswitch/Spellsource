@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.gui.dialog.DialogType;
 
 public class IconFactory {
@@ -85,7 +85,7 @@ public class IconFactory {
 		return iconPath + ".png";
 	}
 
-	public static String getHeroPowerIconUrl(HeroPower heroPower) {
+	public static String getHeroPowerIconUrl(HeroPowerCard heroPower) {
 		String iconPath = RESOURCE_PATH + "/img/powers/";
 		switch (heroPower.getHeroClass()) {
 		case DRUID:

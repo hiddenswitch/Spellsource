@@ -13,7 +13,7 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.CardLocation;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class CopyCardSpell extends Spell {
 
@@ -37,7 +37,7 @@ public class CopyCardSpell extends Spell {
 			return;
 		}
 
-		CardLocation cardLocation = (CardLocation) desc.get(SpellArg.CARD_LOCATION);
+		Zones cardLocation = (Zones) desc.get(SpellArg.CARD_LOCATION);
 
 		Player opponent = context.getOpponent(player);
 		CardCollection sourceCollection = null;

@@ -3,7 +3,7 @@ package net.demilich.metastone.game.spells.desc.condition;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.heroes.powers.HeroPower;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 
 public class HasHeroPowerCondition extends Condition {
 
@@ -13,7 +13,7 @@ public class HasHeroPowerCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		HeroPower heroPower = player.getHero().getHeroPower();
+		HeroPowerCard heroPower = player.getHero().getHeroPower();
 		if (heroPower.getCardId() == null) {
 			return false;
 		}

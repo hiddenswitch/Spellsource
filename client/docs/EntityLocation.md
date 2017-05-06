@@ -24,6 +24,7 @@ HERO | &quot;HERO&quot;
 WEAPON | &quot;WEAPON&quot;
 SET_ASIDE_ZONE | &quot;SET_ASIDE_ZONE&quot;
 HIDDEN | &quot;HIDDEN&quot;
+DISCOVER | &quot;DISCOVER&quot;
 PLAYER | &quot;PLAYER&quot;
 
 

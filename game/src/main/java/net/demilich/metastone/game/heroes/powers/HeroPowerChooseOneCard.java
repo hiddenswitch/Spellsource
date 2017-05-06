@@ -9,12 +9,12 @@ import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
 import net.demilich.metastone.game.spells.NullSpell;
 
-public class HeroPowerChooseOne extends HeroPower implements IChooseOneCard {
+public class HeroPowerChooseOneCard extends HeroPowerCard implements IChooseOneCard {
 
 	private String[] cardIds;
 	private String cardId;
 
-	public HeroPowerChooseOne(HeroPowerCardDesc desc) {
+	public HeroPowerChooseOneCard(HeroPowerCardDesc desc) {
 		super(desc);
 		setAttribute(Attribute.CHOOSE_ONE);
 		this.cardIds = desc.options;
@@ -24,7 +24,6 @@ public class HeroPowerChooseOne extends HeroPower implements IChooseOneCard {
 
 	private SpellCard getCard(String cardId) {
 		SpellCard card = (SpellCard) CardCatalogue.getCardById(cardId);
-		card.setLocation(getCardLocation());
 		card.setOwner(getOwner());
 		card.setId(getId());
 		return card;
