@@ -3,6 +3,8 @@ package net.demilich.metastone.game.spells;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +46,10 @@ public class ReturnMinionToHandSpell extends Spell {
 			context.getLogic().markAsDestroyed((Actor) target);
 		} else {
 			logger.debug("{} is returned to {}'s hand", minion, owner.getName());
-			context.getLogic().removeMinion(minion, true);
+			// The minion might be destroyed or already returned to hand due to Baron Rivendare at this point.
+			if (minion.getZone() == Zones.BATTLEFIELD) {
+				context.getLogic().removeMinion(minion, true);
+			}
 			Card sourceCard = minion.getSourceCard().getCopy();
 			context.getLogic().receiveCard(minion.getOwner(), sourceCard);
 			if (cardSpell != null) {

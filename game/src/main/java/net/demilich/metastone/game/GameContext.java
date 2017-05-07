@@ -810,7 +810,8 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 				Zones.HERO_POWER,
 				Zones.SET_ASIDE_ZONE,
 				Zones.WEAPON,
-				Zones.SECRET
+				Zones.SECRET,
+				Zones.REMOVED_FROM_PLAY
 		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 

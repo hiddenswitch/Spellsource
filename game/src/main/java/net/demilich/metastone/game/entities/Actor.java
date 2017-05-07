@@ -36,6 +36,7 @@ public abstract class Actor extends Entity {
 
 	public void addSpellTrigger(SpellTrigger spellTrigger) {
 		spellTriggers.add(spellTrigger);
+		spellTrigger.setHost(this);
 	}
 
 	public boolean canAttackThisTurn() {
@@ -70,6 +71,7 @@ public abstract class Actor extends Entity {
 				clone.addDeathrattle(deathrattleClone);
 			}
 		}
+		updateTriggers();
 		return clone;
 	}
 
@@ -213,6 +215,16 @@ public abstract class Actor extends Entity {
 	@Override
 	public void setOwner(int ownerIndex) {
 		super.setOwner(ownerIndex);
+		updateTriggers();
+	}
+
+	@Override
+	public void setId(int id) {
+		super.setId(id);
+		updateTriggers();
+	}
+
+	private void updateTriggers() {
 		for (SpellTrigger trigger : spellTriggers) {
 			trigger.setHost(this);
 		}

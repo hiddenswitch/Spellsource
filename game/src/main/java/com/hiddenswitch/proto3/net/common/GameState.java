@@ -78,7 +78,8 @@ public class GameState implements Serializable {
 				Zones.SET_ASIDE_ZONE,
 				Zones.DISCOVER,
 				Zones.WEAPON,
-				Zones.SECRET
+				Zones.SECRET,
+				Zones.REMOVED_FROM_PLAY
 		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 

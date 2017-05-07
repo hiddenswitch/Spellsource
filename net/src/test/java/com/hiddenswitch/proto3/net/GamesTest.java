@@ -130,14 +130,14 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test(timeout = 10 * 60 * 1000L)
+	@Test(timeout = 33 * 1000L)
 	public void testTwoSimultaneousSessions(TestContext context) throws Exception {
 		wrapSync(context, () -> {
 			simultaneousSessions(2);
 		});
 	}
 
-	@Test(timeout = 45 * 60 * 1000L)
+	@Test(timeout = 4 * 60 * 1000L)
 	public void testTenSimultaneousSessionsTwice(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
