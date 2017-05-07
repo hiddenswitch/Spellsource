@@ -389,6 +389,11 @@ public interface Games {
 
 		entities.addAll(playerEntities);
 
+		// Get local discoveries
+		entities.addAll(local.getDiscoverZone().stream()
+				.map(c -> getEntity(workingContext, c, localPlayerId))
+				.collect(Collectors.toList()));
+
 		// Any missing entities will get a stand-in entry
 		Set<Integer> visibleEntityIds = entities.stream().map(Entity::getId).collect(Collectors.toSet());
 		entities.addAll(workingContext.getEntities().filter(e -> !visibleEntityIds.contains(e.getId())).map(e -> new Entity()

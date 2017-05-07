@@ -526,6 +526,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		triggerManager.removeTriggersAssociatedWith(entityReference, removeAuras);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Card resolveCardReference(CardReference cardReference) {
 		Player player = getPlayer(cardReference.getPlayerId());
 		Card card = null;
@@ -534,7 +535,8 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		} else {
 			switch (cardReference.getZone()) {
 				case SET_ASIDE_ZONE:
-					final Optional<Entity> first = player.getSetAsideZone().stream().filter(e -> e.getId() == cardReference.getCardId()).findFirst();
+				case DISCOVER:
+					final Optional<Entity> first = ((EntityZone<Entity>) player.getZone(cardReference.getZone())).stream().filter(e -> e.getId() == cardReference.getCardId()).findFirst();
 					if (first.isPresent()
 							&& Card.class.isAssignableFrom(first.get().getClass())) {
 						card = (Card) first.get();

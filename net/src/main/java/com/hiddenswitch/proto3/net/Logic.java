@@ -10,7 +10,7 @@ import net.demilich.metastone.game.events.BeforeSummonEvent;
  * Created by bberman on 1/30/17.
  */
 public interface Logic {
-	String[] STARTING_DECKS = {"Basic Resurrector", "Basic Octopod Demo", "Basic Cyborg", "Basic Biologist", "Basic Biologist", "Basic Gamer" /* "Test Battlecries"*/};
+	String[] STARTING_DECKS = {"Basic Resurrector", "Basic Octopod Demo", "Basic Cyborg", "Basic Biologist", "Basic Biologist", "Basic Gamer",/* "Test Discoveries",  "Test Battlecries"*/};
 
 	@Suspendable
 	InitializeUserResponse initializeUser(InitializeUserRequest request) throws SuspendExecution, InterruptedException;

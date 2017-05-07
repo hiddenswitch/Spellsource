@@ -140,6 +140,11 @@ public class WebSocketClient implements Client {
 	@Override
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
 		flushEvents();
+		// Set the ids on the available actions
+		for (int i = 0; i < availableActions.size(); i++) {
+			availableActions.get(i).setId(i);
+		}
+
 		sendMessage(new ServerToClientMessage()
 				.id(id)
 				.messageType(MessageType.ON_REQUEST_ACTION)

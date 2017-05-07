@@ -116,7 +116,8 @@ public class SpellUtils {
 		cards = cards.getCopy();
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		List<GameAction> discoverActions = new ArrayList<>();
-		for (Card card : cards) {
+		for (int i = 0; i < cards.getCount(); i++) {
+			Card card = cards.get(i);
 			card.setId(context.getLogic().getIdFactory().generateId());
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.DISCOVER);
@@ -125,13 +126,13 @@ public class SpellUtils {
 			DiscoverAction discover = DiscoverAction.createDiscover(spellClone);
 			discover.setCard(card);
 			discover.setActionSuffix(card.getName());
+			discover.setId(i);
 			discoverActions.add(discover);
 		}
 
 		if (discoverActions.size() == 0) {
 			return null;
 		}
-
 		final DiscoverAction discoverAction;
 
 		if (context.getLogic().attributeExists(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION)) {

@@ -25,6 +25,7 @@ WEAPON | &quot;WEAPON&quot;
 SET_ASIDE_ZONE | &quot;SET_ASIDE_ZONE&quot;
 HIDDEN | &quot;HIDDEN&quot;
 DISCOVER | &quot;DISCOVER&quot;
+REMOVED_FROM_PLAY | &quot;REMOVED_FROM_PLAY&quot;
 PLAYER | &quot;PLAYER&quot;
 
 
