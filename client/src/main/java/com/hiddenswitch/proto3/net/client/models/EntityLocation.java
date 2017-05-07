@@ -82,6 +82,9 @@ public class EntityLocation  implements Serializable {
     @SerializedName("DISCOVER")
     DISCOVER("DISCOVER"),
     
+    @SerializedName("REMOVED_FROM_PLAY")
+    REMOVED_FROM_PLAY("REMOVED_FROM_PLAY"),
+    
     @SerializedName("PLAYER")
     PLAYER("PLAYER");
 
