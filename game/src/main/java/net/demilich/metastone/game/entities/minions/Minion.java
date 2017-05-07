@@ -3,6 +3,7 @@ package net.demilich.metastone.game.entities.minions;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.targeting.IdFactory;
 
@@ -54,5 +55,13 @@ public class Minion extends Actor {
 		}
 
 		return this.getId() == rhs.getId();
+	}
+
+	public Minion getCopy() {
+		Minion clone = this.clone();
+		clone.setEntityLocation(EntityLocation.NONE);
+		clone.setId(IdFactory.UNASSIGNED);
+		clone.setOwner(IdFactory.UNASSIGNED);
+		return clone;
 	}
 }

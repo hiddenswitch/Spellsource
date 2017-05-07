@@ -98,10 +98,6 @@ public class BattlecryAction extends GameAction {
 		this.condition = condition;
 	}
 
-	public void setEntityFilter(Predicate<Entity> entityFilter) {
-		// this.entityFilter = entityFilter;
-	}
-
 	@Override
 	public String toString() {
 		return String.format("[%s '%s']", getActionType(), getSpell().getSpellClass().getSimpleName());

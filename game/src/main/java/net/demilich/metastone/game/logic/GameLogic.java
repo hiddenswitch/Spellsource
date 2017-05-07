@@ -89,6 +89,9 @@ public class GameLogic implements Cloneable, Serializable {
 			debugHistory.add("Player " + player.getId() + " has set event listener " + gameEventListener.getClass().getName() + " from entity " + target.getName() + "[Reference ID: " + target.getId() + "]");
 		}
 
+		if (target.getId() == IdFactory.UNASSIGNED) {
+			System.err.println("Don't add game event listeners to unassigned targets.");
+		}
 		gameEventListener.setHost(target);
 		if (!gameEventListener.hasPersistentOwner() || gameEventListener.getOwner() == -1) {
 			gameEventListener.setOwner(player.getId());
@@ -1688,6 +1691,7 @@ public class GameLogic implements Cloneable, Serializable {
 			SpellDesc deathrattle = deathrattleTemplate.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, boardPosition);
 			castSpell(player.getId(), deathrattle, sourceReference, EntityReference.NONE, false);
 			if (doubleDeathrattles) {
+				// TODO: Likewise, with double deathrattles, make sure that we can still target whatever we're targeting in the spells (possibly metaspells!)
 				castSpell(player.getId(), deathrattle, sourceReference, EntityReference.NONE, false);
 			}
 		}
@@ -1696,8 +1700,8 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void secretTriggered(Player player, Secret secret) {
 		log("Secret was trigged: {}", secret.getSource());
-		// Move the secret to the graveyard instead of removing it. What does this do?
-		player.getSecrets().move(secret, player.getRemovedFromPlay());
+		// Move the secret to removed from play.
+		secret.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		context.fireGameEvent(new SecretRevealedEvent(context, (SecretCard) secret.getSource(), player.getId()));
 	}
 
@@ -2094,7 +2098,7 @@ public class GameLogic implements Cloneable, Serializable {
 			log("{} summons {}", player.getName(), minion);
 
 			if (index < 0 || index >= player.getMinions().size()) {
-				player.getMinions().add(minion);
+				minion.moveOrAddTo(context, Zones.BATTLEFIELD);
 			} else {
 				player.getMinions().add(index, minion);
 			}

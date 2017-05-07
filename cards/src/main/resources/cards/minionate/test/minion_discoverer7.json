@@ -24,7 +24,7 @@
 	"attributes": {
 		"BATTLECRY": true
 	},
-	"collectible": true,
+	"collectible": false,
 	"set": "MINIONATE",
 	"fileFormatVersion": 1
 }

@@ -28,7 +28,7 @@ public class FacelessSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Minion template = (Minion) target;
-		Minion clone = template.clone();
+		Minion clone = template.getCopy();
 		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
