@@ -88,3 +88,9 @@ test {
         events "failed"
     }
 }
+
+task(runDebug, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.hiddenswitch.proto3.net.applications.Embedded'
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005", "-javaagent:${configurations.quasar.iterator().next()}"]
+}
