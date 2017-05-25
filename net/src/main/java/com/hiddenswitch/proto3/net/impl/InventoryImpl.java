@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Cards;
 import com.hiddenswitch.proto3.net.Inventory;
-import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.models.SetCollectionResponse;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.impl.util.CollectionRecord;
@@ -29,7 +28,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 /**
  * Created by bberman on 1/19/17.
  */
-public class InventoryImpl extends Service<InventoryImpl> implements Inventory {
+public class InventoryImpl extends AbstractService<InventoryImpl> implements Inventory {
 	private ServiceProxy<Cards> cards;
 
 	@Override

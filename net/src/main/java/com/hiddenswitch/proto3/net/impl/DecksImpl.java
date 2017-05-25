@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Inventory;
-import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
@@ -31,7 +30,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 /**
  * Created by bberman on 2/4/17.
  */
-public class DecksImpl extends Service<DecksImpl> implements Decks {
+public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 	private ServiceProxy<Inventory> inventory;
 
 	@Override

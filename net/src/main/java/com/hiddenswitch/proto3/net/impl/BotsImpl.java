@@ -27,7 +27,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 /**
  * Created by bberman on 12/7/16.
  */
-public class BotsImpl extends Service<BotsImpl> implements Bots {
+public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	private ServiceProxy<Accounts> accounts;
 	private ServiceProxy<Logic> logic;
 	private ServiceProxy<Matchmaking> matchmaking;

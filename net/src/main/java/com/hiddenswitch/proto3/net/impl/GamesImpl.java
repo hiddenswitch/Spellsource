@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Matchmaking;
-import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
@@ -43,7 +42,7 @@ import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static io.vertx.ext.sync.Sync.fiberHandler;
 
-public class GamesImpl extends Service<GamesImpl> implements Games {
+public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	private Logger logger = LoggerFactory.getLogger(GamesImpl.class);
 
 	private static final long CLEANUP_DELAY_MILLISECONDS = 500L;

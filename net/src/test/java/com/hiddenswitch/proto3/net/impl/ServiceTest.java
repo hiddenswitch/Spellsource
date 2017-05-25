@@ -1,10 +1,9 @@
-package com.hiddenswitch.proto3.net.util;
+package com.hiddenswitch.proto3.net.impl;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
-import com.hiddenswitch.proto3.net.Service;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
@@ -17,7 +16,6 @@ import io.vertx.ext.unit.junit.VertxUnitRunner;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
@@ -26,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RunWith(VertxUnitRunner.class)
-public abstract class ServiceTest<T extends Service<T>> {
+public abstract class ServiceTest<T extends AbstractService<T>> {
 	public static TestContext getContext() {
 		return new Assert();
 	}

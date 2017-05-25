@@ -1,11 +1,11 @@
 package com.hiddenswitch.proto3.net.util;
 
-import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.MatchmakingTest;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
+import com.hiddenswitch.proto3.net.impl.ServiceTest;
 import com.hiddenswitch.proto3.net.models.MatchmakingRequest;
 import com.hiddenswitch.proto3.net.models.MatchmakingResponse;
 import com.hiddenswitch.proto3.net.impl.BotsImpl;
@@ -21,7 +21,6 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.utils.Tuple;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
