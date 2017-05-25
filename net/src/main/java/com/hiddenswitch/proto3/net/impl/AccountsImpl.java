@@ -22,7 +22,7 @@ import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 import static com.hiddenswitch.proto3.net.util.QuickJson.toJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
-public class AccountsImpl extends Service<AccountsImpl> implements Accounts {
+public class AccountsImpl extends AbstractService<AccountsImpl> implements Accounts {
 	private Pattern usernamePattern = Pattern.compile("[A-Za-z0-9_]+");
 
 	@Override

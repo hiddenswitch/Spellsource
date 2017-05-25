@@ -20,7 +20,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MatchmakingImpl extends Service<MatchmakingImpl> implements Matchmaking {
+public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements Matchmaking {
 	private ServiceProxy<Games> gameSessions;
 	private ServiceProxy<Logic> logic;
 	private ServiceProxy<Bots> bots;

@@ -8,7 +8,7 @@ import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
 import com.hiddenswitch.proto3.net.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.models.LoginRequest;
 import com.hiddenswitch.proto3.net.models.LoginResponse;
-import com.hiddenswitch.proto3.net.util.ServiceTest;
+import com.hiddenswitch.proto3.net.impl.ServiceTest;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;

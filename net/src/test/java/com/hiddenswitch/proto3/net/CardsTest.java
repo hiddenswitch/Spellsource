@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.proto3.net.impl.CardsImpl;
 import com.hiddenswitch.proto3.net.models.QueryCardsRequest;
 import com.hiddenswitch.proto3.net.util.Result;
-import com.hiddenswitch.proto3.net.util.ServiceTest;
+import com.hiddenswitch.proto3.net.impl.ServiceTest;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;

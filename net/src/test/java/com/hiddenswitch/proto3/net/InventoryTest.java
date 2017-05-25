@@ -7,13 +7,12 @@ import com.hiddenswitch.proto3.net.impl.CardsImpl;
 import com.hiddenswitch.proto3.net.impl.InventoryImpl;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Result;
-import com.hiddenswitch.proto3.net.util.ServiceTest;
+import com.hiddenswitch.proto3.net.impl.ServiceTest;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import net.demilich.metastone.game.cards.CardSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

@@ -3,7 +3,6 @@ package com.hiddenswitch.proto3.net.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Server;
-import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
@@ -11,7 +10,6 @@ import com.hiddenswitch.proto3.net.client.models.LoginRequest;
 import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
 import com.hiddenswitch.proto3.net.impl.util.HandlerFactory;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
-import com.hiddenswitch.proto3.net.impl.util.Zones;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.models.MatchCancelResponse;
 import com.hiddenswitch.proto3.net.util.ApiKeyAuthHandler;
@@ -30,17 +28,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.LoggerHandler;
-import net.demilich.metastone.game.Attribute;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.cards.SpellCard;
-import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.spells.DamageSpell;
-import net.demilich.metastone.utils.Tuple;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
@@ -55,7 +43,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * Created by bberman on 11/27/16.
  */
-public class ServerImpl extends Service<ServerImpl> implements Server {
+public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 	static Logger logger = LoggerFactory.getLogger(ServerImpl.class);
 	CardsImpl cards = new CardsImpl();
 	AccountsImpl accounts = new AccountsImpl();

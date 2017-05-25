@@ -3,24 +3,20 @@ package com.hiddenswitch.proto3.net.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Cards;
-import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
-import io.vertx.core.Future;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.DeckFormat;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by bberman on 1/20/17.
  */
-public class CardsImpl extends Service<CardsImpl> implements Cards {
+public class CardsImpl extends AbstractService<CardsImpl> implements Cards {
 	private Random random = new Random();
 
 	@Override

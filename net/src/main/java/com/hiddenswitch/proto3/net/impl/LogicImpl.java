@@ -5,7 +5,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Logic;
-import com.hiddenswitch.proto3.net.Service;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
@@ -24,8 +23,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,7 +32,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 /**
  * Created by bberman on 1/30/17.
  */
-public class LogicImpl extends Service<LogicImpl> implements Logic {
+public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	private ServiceProxy<Inventory> inventory;
 	private ServiceProxy<Decks> decks;
 

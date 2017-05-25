@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.impl.GamesImpl;
 import com.hiddenswitch.proto3.net.client.RemoteGameContext;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.common.ClientToServerMessage;
+import com.hiddenswitch.proto3.net.impl.ServiceTest;
 import com.hiddenswitch.proto3.net.models.MatchmakingResponse;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.CreateGameSessionRequest;
