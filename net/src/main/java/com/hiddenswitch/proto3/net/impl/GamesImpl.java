@@ -362,8 +362,8 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 	@Override
 	@Suspendable
-	public UpdateEntityResponse updateEntity(UpdateEntityRequest request) {
-		return null;
+	public UpdateEntityResponse updateEntity(UpdateEntityRequest request) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

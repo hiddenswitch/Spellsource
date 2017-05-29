@@ -54,6 +54,10 @@ public class QuickJson {
 		return Json.mapper.convertValue(json.getMap(), classOfT);
 	}
 
+	public static <T> List<T> fromJson(List<JsonObject> jsons, Class<T> elementClass) {
+		return jsons.stream().map(o -> fromJson(o, elementClass)).collect(Collectors.toList());
+	}
+
 	public static <T> List<T> fromJson(JsonArray json, Class<T> listElement) {
 		return json.stream().map(o -> {
 			JsonObject jo = (JsonObject) o;
