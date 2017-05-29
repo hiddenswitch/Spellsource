@@ -26,6 +26,7 @@ import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 	private String deploymentId;
 
 	@Test
+	@Ignore
 	public void testShutdownAndRestartServer(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
