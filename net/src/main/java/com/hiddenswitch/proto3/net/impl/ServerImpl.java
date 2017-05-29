@@ -189,19 +189,19 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 	public WebResult<CreateAccountResponse> createAccount(RoutingContext context, CreateAccountRequest request) throws SuspendExecution, InterruptedException {
 		com.hiddenswitch.proto3.net.models.CreateAccountResponse internalResponse = accounts.createAccount(request.getEmail(), request.getPassword(), request.getName());
 
-		if (internalResponse.invalidEmailAddress) {
+		if (internalResponse.isInvalidEmailAddress()) {
 			return WebResult.failed(new RuntimeException("Invalid email address."));
-		} else if (internalResponse.invalidPassword) {
+		} else if (internalResponse.isInvalidPassword()) {
 			return WebResult.failed(new RuntimeException("Invalid password."));
 		}
 
 		// Initialize the collection
-		final String userId = internalResponse.userId;
+		final String userId = internalResponse.getUserId();
 		logic.initializeUser(new InitializeUserRequest().withUserId(userId));
 
 		final Account account = getAccount(userId);
 		return WebResult.succeeded(new CreateAccountResponse()
-				.loginToken(internalResponse.loginToken.token)
+				.loginToken(internalResponse.getLoginToken().token)
 				.account(account));
 	}
 

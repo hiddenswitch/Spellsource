@@ -20,9 +20,9 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  * Created by bberman on 2/1/17.
  */
 public class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
-	protected ServiceProxy<T> serviceProxy;
+	ServiceProxy<T> serviceProxy;
 	protected String name;
-	protected EventBus eb;
+	EventBus eb;
 
 	@Override
 	@Suspendable

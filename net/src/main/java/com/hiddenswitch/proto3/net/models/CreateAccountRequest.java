@@ -9,6 +9,10 @@ public class CreateAccountRequest implements Serializable {
 	private String password;
 	private boolean bot;
 
+	/**
+	 * The username. Visible to opponents. Not used for logging in.
+	 * @return The username.
+	 */
 	public String getName() {
 		return name;
 	}
@@ -17,6 +21,10 @@ public class CreateAccountRequest implements Serializable {
 		this.name = name;
 	}
 
+	/**
+	 * The user's email address. Not visible to the public. Used for logging in.
+	 * @return The email.
+	 */
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -25,6 +33,10 @@ public class CreateAccountRequest implements Serializable {
 		this.emailAddress = emailAddress;
 	}
 
+	/**
+	 * A plaintext password. Must be at least 6 characters long.
+	 * @return The plaintext password.
+	 */
 	public String getPassword() {
 		return password;
 	}
@@ -33,6 +45,10 @@ public class CreateAccountRequest implements Serializable {
 		this.password = password;
 	}
 
+	/**
+	 * Set to true if the account should be a special bot account, managed by the server to play bot games.
+	 * @return True if the newly created account should be owned by a bot.
+	 */
 	public boolean isBot() {
 		return bot;
 	}
@@ -41,21 +57,41 @@ public class CreateAccountRequest implements Serializable {
 		this.bot = bot;
 	}
 
+	/**
+	 * The username. Visible to opponents. Not used for logging in.
+	 * @param name
+	 * @return
+	 */
 	public CreateAccountRequest withName(final String name) {
 		this.name = name;
 		return this;
 	}
 
+	/**
+	 * The user's email address. Not visible to the public. Used for logging in.
+	 * @param emailAddress
+	 * @return
+	 */
 	public CreateAccountRequest withEmailAddress(final String emailAddress) {
 		this.emailAddress = emailAddress;
 		return this;
 	}
 
+	/**
+	 * A plaintext password. Must be at least 6 characters long.
+	 * @param password
+	 * @return
+	 */
 	public CreateAccountRequest withPassword(final String password) {
 		this.password = password;
 		return this;
 	}
 
+	/**
+	 * Set to true if the account should be a special bot account, managed by the server to play bot games.
+	 * @param bot
+	 * @return
+	 */
 	public CreateAccountRequest withBot(final boolean bot) {
 		this.bot = bot;
 		return this;

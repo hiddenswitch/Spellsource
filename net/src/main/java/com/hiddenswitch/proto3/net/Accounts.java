@@ -7,6 +7,8 @@ import com.hiddenswitch.proto3.net.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.models.LoginRequest;
 import com.hiddenswitch.proto3.net.models.LoginResponse;
+import com.hiddenswitch.proto3.net.util.Broker;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
@@ -30,8 +32,9 @@ public interface Accounts {
 
 	/**
 	 * Updates an account. Useful for joining data into the account object, like deck or statistics information.
-	 * @param client A database client
-	 * @param userId The user's ID
+	 *
+	 * @param client        A database client
+	 * @param userId        The user's ID
 	 * @param updateCommand A JSON object that corresponds to a Mongo update command.
 	 * @return The mongo client update result
 	 * @throws SuspendExecution
@@ -43,8 +46,9 @@ public interface Accounts {
 
 	/**
 	 * Finds a user account with the given options.
-	 * @param client A database client
-	 * @param query The user's ID
+	 *
+	 * @param client  A database client
+	 * @param query   The user's ID
 	 * @param options Mongo FindOptions
 	 * @return Documents with the specified fields.
 	 * @throws SuspendExecution
@@ -56,8 +60,9 @@ public interface Accounts {
 
 	/**
 	 * Finds user accounts with the given options.
+	 *
 	 * @param client A database client
-	 * @param query The user's ID
+	 * @param query  The user's ID
 	 * @return User records with all the fields. Careful with these documents, since they contain password hashes.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
@@ -69,6 +74,7 @@ public interface Accounts {
 
 	/**
 	 * Creates an account.
+	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
 	 * set to true, the account creation failed with the specified handled reason.
@@ -83,6 +89,7 @@ public interface Accounts {
 	/**
 	 * Login with the provided email and password to receive a login token. Pass the login token in the X-Auth-Token
 	 * header for subsequent requests in the HTTP API. Save the user ID.
+	 *
 	 * @param request An email and password combination.
 	 * @return The result of logging in, or information about why the login failed if it was for a handled reason (bad
 	 * email or password).
@@ -92,6 +99,7 @@ public interface Accounts {
 
 	/**
 	 * Gets a user record for the given token.
+	 *
 	 * @param token The token that was returned by a login or create account request.
 	 * @return The user record.
 	 */
@@ -100,6 +108,7 @@ public interface Accounts {
 
 	/**
 	 * Gets a user record for the given user ID.
+	 *
 	 * @param userId The user's ID as returned by a login or create account request.
 	 * @return The user record.
 	 */
