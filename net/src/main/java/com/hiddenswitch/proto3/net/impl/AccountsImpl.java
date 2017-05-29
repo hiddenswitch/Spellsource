@@ -57,19 +57,19 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 		CreateAccountResponse response = new CreateAccountResponse();
 
 		if (!isValidName(request.getName())) {
-			response.invalidName = true;
+			response.setInvalidName(true);
 			return response;
 		}
 
 		if (!isValidEmailAddress(request.getEmailAddress())
 				|| emailExists(request.getEmailAddress())) {
-			response.invalidEmailAddress = true;
+			response.setInvalidEmailAddress(true);
 			return response;
 		}
 
 		final String password = request.getPassword();
 		if (!isValidPassword(password)) {
-			response.invalidPassword = true;
+			response.setInvalidPassword(true);
 			return response;
 		}
 
@@ -92,8 +92,8 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 
 		String ignored = awaitResult(h -> getMongo().insert(USERS, toJson(record), h));
 
-		response.userId = userId;
-		response.loginToken = token;
+		response.setUserId(userId);
+		response.setLoginToken(token);
 
 		return response;
 	}

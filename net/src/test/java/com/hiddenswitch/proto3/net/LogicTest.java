@@ -60,8 +60,8 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
 		CreateAccountResponse player2 = accounts.createAccount("b@b.com", "b", "2");
 
-		final String userId1 = player1.userId;
-		final String userId2 = player2.userId;
+		final String userId1 = player1.getUserId();
+		final String userId2 = player2.getUserId();
 
 		List<String> deckIds = new ArrayList<>();
 
@@ -117,7 +117,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		getContext().assertTrue(Fiber.isCurrentFiber());
 
 		CreateAccountResponse createAccountResponse = accounts.createAccount("benjamin.s.berman@gmail.com", "testpass", "doctorpangloss");
-		final String userId = createAccountResponse.userId;
+		final String userId = createAccountResponse.getUserId();
 
 		service.initializeUser(new InitializeUserRequest().withUserId(userId));
 
@@ -139,8 +139,8 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 	private void allianceCardExtensionsDontBreak() throws SuspendExecution, InterruptedException {
 		// Create the users
-		String userId1 = accounts.createAccount("a@b.com", "123567", "abfdsc").userId;
-		String userId2 = accounts.createAccount("a@c.com", "1235688", "abde").userId;
+		String userId1 = accounts.createAccount("a@b.com", "123567", "abfdsc").getUserId();
+		String userId2 = accounts.createAccount("a@c.com", "1235688", "abde").getUserId();
 
 		// Initialize them
 		InitializeUserResponse userResponse1 = service.initializeUser(new InitializeUserRequest().withUserId(userId1));

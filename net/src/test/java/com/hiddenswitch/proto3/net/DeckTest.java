@@ -47,7 +47,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
-			final String userId1 = player1.userId;
+			final String userId1 = player1.getUserId();
 			LogicTest.initializeUserId(logic, userId1);
 			DeckCreateResponse deckCreateResponse = createDeckForUserId(inventory, service, userId1);
 			GetCollectionResponse collectionResponse = getDeck(deckCreateResponse.getDeckId());
@@ -61,7 +61,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 
 		wrapSync(context, () -> {
 			CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
-			final String userId1 = player1.userId;
+			final String userId1 = player1.getUserId();
 			LogicTest.initializeUserId(logic, userId1);
 
 			for (int i = 0; i < 100; i++) {
@@ -79,7 +79,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
-			final String userId1 = player1.userId;
+			final String userId1 = player1.getUserId();
 			LogicTest.initializeUserId(logic, userId1);
 			// Get my card collection
 			GetCollectionResponse personalCollection = inventory.getCollection(GetCollectionRequest.user(userId1));
@@ -106,7 +106,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
-			final String userId1 = player1.userId;
+			final String userId1 = player1.getUserId();
 			LogicTest.initializeUserId(logic, userId1);
 			// Get my card collection
 			GetCollectionResponse personalCollection = inventory.getCollection(GetCollectionRequest.user(userId1));

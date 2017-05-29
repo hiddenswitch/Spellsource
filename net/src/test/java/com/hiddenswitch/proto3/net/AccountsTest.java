@@ -48,10 +48,10 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 			getContext().assertNotNull(userRecord);
 			getContext().assertNotNull(userRecord.getProfile().getEmailAddress());
 			getContext().assertEquals(emailAddress, userRecord.getProfile().getEmailAddress());
-			getContext().assertNotNull(response.loginToken);
-			getContext().assertNotNull(response.loginToken.token);
+			getContext().assertNotNull(response.getLoginToken());
+			getContext().assertNotNull(response.getLoginToken().token);
 
-			final String token = response.loginToken.token;
+			final String token = response.getLoginToken().token;
 			User userTokened = Sync.awaitResult(done -> {
 				tokenAuthProvider.authenticate(
 						new JsonObject()
@@ -68,12 +68,12 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 		wrapSync(context, () -> {
 			setLoggingLevel(Level.ERROR);
 			CreateAccountResponse response = service.createAccount("benjamin.s.berman@gmail.com", "destructoid", "doctorpangloss");
-			assertNotNull(response.loginToken);
-			assertFalse(response.invalidEmailAddress);
-			assertFalse(response.invalidName);
-			assertFalse(response.invalidPassword);
-			assertNotNull(response.loginToken.token);
-			assertTrue(response.loginToken.expiresAt.after(Date.from(Instant.now())));
+			assertNotNull(response.getLoginToken());
+			assertFalse(response.isInvalidEmailAddress());
+			assertFalse(response.isInvalidName());
+			assertFalse(response.isInvalidPassword());
+			assertNotNull(response.getLoginToken().token);
+			assertTrue(response.getLoginToken().expiresAt.after(Date.from(Instant.now())));
 		});
 	}
 
@@ -109,11 +109,11 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
-			final String secret = response.loginToken.getSecret();
-			getContext().assertTrue(service.isAuthorizedWithToken(response.userId, secret));
-			getContext().assertFalse(service.isAuthorizedWithToken(response.userId, null));
-			getContext().assertFalse(service.isAuthorizedWithToken(response.userId, ""));
-			getContext().assertFalse(service.isAuthorizedWithToken(response.userId, "a"));
+			final String secret = response.getLoginToken().getSecret();
+			getContext().assertTrue(service.isAuthorizedWithToken(response.getUserId(), secret));
+			getContext().assertFalse(service.isAuthorizedWithToken(response.getUserId(), null));
+			getContext().assertFalse(service.isAuthorizedWithToken(response.getUserId(), ""));
+			getContext().assertFalse(service.isAuthorizedWithToken(response.getUserId(), "a"));
 			getContext().assertFalse(service.isAuthorizedWithToken("A", null));
 			getContext().assertFalse(service.isAuthorizedWithToken("A", ""));
 			getContext().assertFalse(service.isAuthorizedWithToken("A", "b"));
@@ -125,7 +125,7 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
-			UserRecord profile = service.get(response.userId);
+			UserRecord profile = service.get(response.getUserId());
 			getContext().assertNotNull(profile);
 			getContext().assertEquals(profile.getProfile().getEmailAddress(), "test@test.com");
 			getContext().assertEquals(profile.getProfile().getDisplayName(), "username");

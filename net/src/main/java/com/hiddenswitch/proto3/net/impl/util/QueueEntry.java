@@ -38,7 +38,7 @@ public class QueueEntry implements Comparable<QueueEntry>, Cloneable, Serializab
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof String) {
-			return this.userId.equals((String) other);
+			return this.userId.equals(other);
 		}
 
 		return Objects.equals(((QueueEntry) other).userId, this.userId);

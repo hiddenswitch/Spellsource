@@ -10,7 +10,6 @@ public class LoginResponse implements Serializable {
 	private UserRecord record;
 	private boolean badEmail;
 	private boolean badPassword;
-	private boolean badToken;
 
 	public LoginResponse(LoginToken token, UserRecord record) {
 		this.token = token;
@@ -26,23 +25,39 @@ public class LoginResponse implements Serializable {
 		this.badEmail = badEmail;
 	}
 
+	/**
+	 * The token the client should use in the X-Auth-Token header field for future HTTP API calls.
+	 * @return The token object.
+	 */
 	public LoginToken getToken() {
 		return token;
 	}
 
+	/**
+	 * A complete view of the user record, including all internal information.
+	 * @return The UserRecord object.
+	 */
 	public UserRecord getRecord() {
 		return record;
 	}
 
+	/**
+	 * A bad email address was provided and login failed.
+	 * @return True if the email address is bad.
+	 */
 	public boolean isBadEmail() {
 		return badEmail;
 	}
 
+	/**
+	 * A bad password was provided for the specified email and login failed.
+	 * @return True if the password for the specified email was bad.
+	 */
 	public boolean isBadPassword() {
 		return badPassword;
 	}
 
-	public boolean isBadToken() {
-		return badToken;
+	public boolean succeeded() {
+		return getToken() != null;
 	}
 }
