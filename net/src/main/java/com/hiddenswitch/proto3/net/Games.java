@@ -29,13 +29,22 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 /**
- * Created by bberman on 12/8/16.
+ * A service that starts a game session, accepts connections from players and manages the state of the game.
  */
 public interface Games {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 180000L;
 	String WEBSOCKET_PATH = "games";
 
+	/**
+	 * Get a client's view of the current game actions.
+	 *
+	 * @param workingContext A game context that contains the players and state.
+	 * @param actions        The possible actions ot process against the context.
+	 * @param playerId       The player to process actions for.
+	 * @return A list of game client actions.
+	 */
 	static GameActions getClientActions(GameContext workingContext, List<GameAction> actions, int playerId) {
 		final GameActions clientActions = new GameActions();
 
@@ -200,6 +209,16 @@ public interface Games {
 		return clientActions;
 	}
 
+	/**
+	 * Gets a client view of a game event.
+	 * <p>
+	 * This method does not correctly consider security issues accurately. It leaks which cards the opponent draws and
+	 * which secrets the opponent plays. In the future, it will respect these limitations.
+	 *
+	 * @param event    A game engine event.
+	 * @param playerId The player requesting the view.
+	 * @return A client-specific view of the event.
+	 */
 	static GameEvent getClientEvent(net.demilich.metastone.game.events.GameEvent event, int playerId) {
 		final GameEvent clientEvent = new GameEvent();
 
@@ -272,22 +291,81 @@ public interface Games {
 				.damageDealt(damageDealt);
 	}
 
+	/**
+	 * Requests if this particular game service contains the game session.
+	 * <p>
+	 * In the future, it should punt the request to the next Games service instance if it doesn't have the requested
+	 * session.
+	 *
+	 * @param request Information to help query for game sessions.
+	 * @return A reference to the game session and useful information about it.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	@Suspendable
 	ContainsGameSessionResponse containsGameSession(ContainsGameSessionRequest request) throws SuspendExecution, InterruptedException;
 
+	/**
+	 * Creates a game session on this instance.
+	 *
+	 * @param request Information needed to start a game.
+	 * @return Information for the users to connect to the game.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	@Suspendable
 	CreateGameSessionResponse createGameSession(CreateGameSessionRequest request) throws SuspendExecution, InterruptedException;
 
+	/**
+	 * Gets the current game state of a requested game ID. In the future, this method should punt the request to the
+	 * next Games service instance if it can't find the given session.
+	 *
+	 * @param request The game ID to describe.
+	 * @return The game state of the requested game.
+	 */
 	DescribeGameSessionResponse describeGameSession(DescribeGameSessionRequest request);
 
+	/**
+	 * Possibly prematurely ends the game session. Typically this is done due to timeouts or some external action that
+	 * would concede a game (like a ban or profanity). This will send the correct game over notifications to the bots/
+	 * players who are connected to this game.
+	 *
+	 * @param request The game to end.
+	 * @return Information about ending the specified game session.
+	 * @throws InterruptedException
+	 * @throws SuspendExecution
+	 */
 	EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution;
 
+	/**
+	 * Updates an entity specified inside the game with specific attributes. Currently unsupported. This allows
+	 * real-time manipulation of a game in progress. This call should punt the request to the next instance in the
+	 * cluster if it does not have the specified game.
+	 * @param request Information about the game and the updates to the entity this service should do.
+	 * @return Information about the entity update.
+	 * @throws UnsupportedOperationException
+	 */
 	@Suspendable
-	UpdateEntityResponse updateEntity(UpdateEntityRequest request);
+	UpdateEntityResponse updateEntity(UpdateEntityRequest request) throws UnsupportedOperationException;
 
+	/**
+	 * Concedes the specified game session. Unlike ending a game session prematurely, a concession may trigger some
+	 * additional notifications and scoring consequences.
+	 * @param request The player and game conceding.
+	 * @return Any consequences of the concession.
+	 * @throws InterruptedException
+	 * @throws SuspendExecution
+	 */
 	@Suspendable
 	ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution;
 
+	/**
+	 * Gets a complete view of the game for the specified user, respecting security (i.e., information about the
+	 * user's opponent's deck, hand and secrets is not leaked).
+	 * @param gameId The game to get client state for.
+	 * @param userId The user ID whose point of view this state should be generated for.
+	 * @return A client view game state.
+	 */
 	default GameState getClientGameState(String gameId, String userId) {
 		DescribeGameSessionResponse gameSession = describeGameSession(new DescribeGameSessionRequest(gameId));
 		final com.hiddenswitch.proto3.net.common.GameState state = gameSession.getState();
@@ -306,6 +384,14 @@ public interface Games {
 		return getGameState(workingContext, local, opponent);
 	}
 
+	/**
+	 * Given a context and a specification of who the local and opposing players are, generate a client game state view.
+	 * This view does not leak secure information.
+	 * @param workingContext A context containing the complete game state.
+	 * @param local The local player.
+	 * @param opponent The opposing player.
+	 * @return A client view game state.
+	 */
 	static GameState getGameState(GameContext workingContext, final Player local, final Player opponent) {
 		List<Entity> entities = new ArrayList<>();
 		// Censor the opponent hand and deck entities
@@ -412,11 +498,19 @@ public interface Games {
 				.turnState(workingContext.getTurnState().toString());
 	}
 
+	/**
+	 * Gets a client view of the specified game engine entity. Tries its best to not leak information given the specified user.
+	 * @param workingContext A context to generate the entity view for.
+	 * @param entity The entity.
+	 * @param localPlayerId The point of view this method should use o determine which information to show the client.
+	 * @return A client entity view.
+	 */
 	static Entity getEntity(final GameContext workingContext, final net.demilich.metastone.game.entities.Entity entity, int localPlayerId) {
 		if (entity == null) {
 			return null;
 		}
 
+		// TODO: Shouldn't this use isAssignableFrom?
 		if (entity instanceof Actor) {
 			return getEntity(workingContext, (Actor) entity, localPlayerId);
 		} else if (entity instanceof Card) {
@@ -428,6 +522,13 @@ public interface Games {
 		return null;
 	}
 
+	/**
+	 * Gets the client's view of an actor in the game engine.
+	 * @param workingContext A context to generate the entity view for.
+	 * @param actor The specified actor.
+	 * @param localPlayerId The point of view this method should use o determine which information to show the client.
+	 * @return A client entity view.
+	 */
 	static Entity getEntity(final GameContext workingContext, final Actor actor, int localPlayerId) {
 		if (actor == null) {
 			return null;
@@ -490,12 +591,24 @@ public interface Games {
 		return entity;
 	}
 
+	/**
+	 * A view of a secret. Censors information from opposing players.
+	 * @param workingContext The context to generate the client view for.
+	 * @param secret The secret entity.
+	 * @param localPlayerId The point of view this method should use o determine which information to show the client.
+	 * @return A client entity view.
+	 */
 	static Entity getEntity(final GameContext workingContext, final Secret secret, int localPlayerId) {
 		if (secret == null) {
 			return null;
 		}
 
 		Entity cardEntity = getEntity(workingContext, secret.getSource(), localPlayerId);
+		if (localPlayerId != secret.getOwner()) {
+			// Censor information about the secret if it does not belong to the player.
+			cardEntity.description("Secret")
+					.cardId("unknown");
+		}
 		cardEntity.id(secret.getId())
 				.entityType(Entity.EntityTypeEnum.SECRET)
 				.getState()
@@ -505,6 +618,14 @@ public interface Games {
 		return cardEntity;
 	}
 
+	/**
+	 * A view of a card. This does not censor information from opposing player's—the calling method should handle
+	 * the censoring.
+	 * @param workingContext The context to generate the client view for.
+	 * @param card The card entity.
+	 * @param localPlayerId The point of view this method should use o determine which information to show the client.
+	 * @return A client entity view.
+	 */
 	static Entity getEntity(final GameContext workingContext, final Card card, int localPlayerId) {
 		if (card == null) {
 			return null;
@@ -591,6 +712,11 @@ public interface Games {
 		return entity;
 	}
 
+	/**
+	 * Converts an in-game entity location to a client view location.
+	 * @param location A game engine entity location.
+	 * @return A client view entity location.
+	 */
 	static EntityLocation toClientLocation(net.demilich.metastone.game.entities.EntityLocation location) {
 		return new EntityLocation()
 				.zone(EntityLocation.ZoneEnum.valueOf(location.getZone().toString()))
@@ -598,6 +724,12 @@ public interface Games {
 				.player(location.getPlayer());
 	}
 
+	/**
+	 * Gets the default no activity timeout as configured across the cluster. This timeout is used to determine when
+	 * to end games that have received no actions from either client connected to them.
+	 * @return A value in milliseconds of how long to wait for an action from a client before marking a game as over
+	 * due to disconnection.
+	 */
 	static long getDefaultNoActivityTimeout() {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
 	}

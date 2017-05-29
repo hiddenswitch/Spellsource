@@ -32,11 +32,13 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  */
 public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 	private ServiceProxy<Inventory> inventory;
+	private ServiceProxy<Accounts> accounts;
 
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
 		inventory = Broker.proxy(Inventory.class, vertx.eventBus());
+		accounts = Broker.proxy(Accounts.class, vertx.eventBus());
 		// Create the starting decks
 		try {
 			DeckCatalogue.loadDecksFromPackage();
@@ -81,10 +83,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 
 		// Update the user document with this deck ID
 		final String deckId = createCollectionResponse.getCollectionId();
-		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollection(Accounts.USERS,
-				json("_id", userId),
-				json("$addToSet", json("decks", deckId)),
-				h));
+		Accounts.updateAccount(getMongo(), userId, json("$addToSet", json("decks", deckId)));
 
 		return new DeckCreateResponse(deckId, inventoryIds);
 	}
@@ -145,10 +144,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		TrashCollectionResponse response = inventory.sync().trashCollection(new TrashCollectionRequest(deckId));
 
 		// Remove the deckId from the user's decks
-		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollection(Accounts.USERS,
-				json("_id", userId),
-				json("$pull", json("decks", deckId)),
-				h));
+		Accounts.updateAccount(getMongo(), userId, json("$pull", json("decks", deckId)));
 
 		return new DeckDeleteResponse(response);
 	}

@@ -28,7 +28,7 @@ public class CardsImpl extends AbstractService<CardsImpl> implements Cards {
 	@Override
 	@Suspendable
 	public GetCardResponse getCard(GetCardRequest request) {
-		return null;
+		return new GetCardResponse().withRecord(CardCatalogue.getRecords().get(request.getCardId()));
 	}
 
 	@Override
@@ -92,12 +92,14 @@ public class CardsImpl extends AbstractService<CardsImpl> implements Cards {
 	@Override
 	@Suspendable
 	public InsertCardResponse insertCard(InsertCardRequest request) {
-		return null;
+		CardCatalogue.getRecords().put(request.getCard().getId(), request.getCard());
+		return new InsertCardResponse();
 	}
 
 	@Override
 	@Suspendable
 	public UpdateCardResponse updateCard(UpdateCardRequest request) {
-		return null;
+		insertCard(new InsertCardRequest().withCard(request.getCard()));
+		return new UpdateCardResponse();
 	}
 }

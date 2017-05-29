@@ -7,7 +7,7 @@ import com.hiddenswitch.proto3.net.util.WebResult;
 import io.vertx.ext.web.RoutingContext;
 
 /**
- * Created by bberman on 1/22/17.
+ * A specification for the HTTP API that clients can access. See the Swagger specification for detailed documentation.
  */
 public interface Server {
 	WebResult<GetAccountsResponse> getAccount(RoutingContext context, String userId, String targetUserId) throws SuspendExecution, InterruptedException;

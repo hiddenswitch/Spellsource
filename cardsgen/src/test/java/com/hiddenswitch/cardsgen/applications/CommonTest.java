@@ -1,5 +1,6 @@
 package com.hiddenswitch.cardsgen.applications;
 
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCatalogue;
 import org.testng.annotations.Test;
 
@@ -13,6 +14,7 @@ public class CommonTest {
 
 	@Test
 	public void testAllDecksValid() throws Exception {
+		CardCatalogue.loadCardsFromPackage();
 		DeckCatalogue.loadDecksFromPackage();
 		Common.getDefaultDecks().forEach(d -> {
 			assertNotNull(DeckCatalogue.getDeckByName(d));
