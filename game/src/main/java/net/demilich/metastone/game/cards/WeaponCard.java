@@ -57,7 +57,7 @@ public class WeaponCard extends Card {
 		}
 	
 		if (desc.deathrattle != null) {
-			weapon.removeAttribute(Attribute.DEATHRATTLES);
+			weapon.getAttributes().remove(Attribute.DEATHRATTLES);
 			weapon.addDeathrattle(desc.deathrattle);
 		}
 		if (desc.trigger != null) {

@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.entities;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 
 import net.demilich.metastone.game.Attribute;
@@ -13,7 +12,6 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 public abstract class Actor extends Entity {
@@ -65,7 +63,7 @@ public abstract class Actor extends Entity {
 			clone.spellTriggers.add(trigger.clone());
 		}
 		if (hasAttribute(Attribute.DEATHRATTLES)) {
-			clone.removeAttribute(Attribute.DEATHRATTLES);
+			clone.getAttributes().remove(Attribute.DEATHRATTLES);
 			for (SpellDesc deathrattleSpell : getDeathrattles()) {
 				SpellDesc deathrattleClone = deathrattleSpell.clone();
 				clone.addDeathrattle(deathrattleClone);

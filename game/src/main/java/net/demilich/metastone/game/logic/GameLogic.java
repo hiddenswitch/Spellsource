@@ -1870,7 +1870,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 		Player owner = context.getPlayer(minion.getOwner());
 		int index = -1;
-		if (!minion.getEntityLocation().equals(EntityLocation.NONE)
+		if (!minion.getEntityLocation().equals(EntityLocation.UNASSIGNED)
 				&& owner != null) {
 			index = minion.getEntityLocation().getIndex();
 			owner.getZone(minion.getEntityLocation().getZone()).remove(index);
