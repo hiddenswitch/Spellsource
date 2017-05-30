@@ -8,10 +8,12 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.List;
+
 public enum Attribute {
-	DEBUG,
 	/**
 	 * The base mana cost of the {@link Card}.
 	 *
@@ -90,8 +92,11 @@ public enum Attribute {
 	 */
 	DESTROYED,
 	/**
-	 * Fatigue tracks how much damage a {@link net.demilich.metastone.game.entities.heroes.Hero} should take when the
-	 * player's deck is empty.
+	 * Fatigue is a game mechanic that deals increasing damage to players who have already drawn all of the cards in
+	 * their deck, whenever they attempt to draw another card.
+	 * <p>
+	 * This attribute tracks how much damage a {@link net.demilich.metastone.game.entities.heroes.Hero} should take when
+	 * the player draws a card.
 	 *
 	 * @see GameLogic#drawCard(int, Entity) for the complete usage of Fatigue.
 	 */
@@ -182,26 +187,107 @@ public enum Attribute {
 	 */
 	BATTLECRY,
 	/**
-	 * An {@link Entity} with {@link #DOUBLE_BATTLECRIES} causes other battlecries to occur twice.
-	 *
+	 * An {@link Entity} with {@link #DOUBLE_BATTLECRIES} causes other friendly battlecries to occur twice.
+	 * <p>
 	 * This implements Brann Bronzebeard's text.
-	 * @see {@link GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction)} for the complete rules on
+	 * @see GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) for the complete rules on
 	 * double battlecries.
 	 */
 	DOUBLE_BATTLECRIES,
+	/**
+	 * An {@link Entity} with {@link #DEATHRATTLES} casts a spell when it is destroyed.
+	 * <p>
+	 * This attribute does not store the spell itself. It marks an entity that has a deathrattle.
+	 */
 	DEATHRATTLES,
+	/**
+	 * An {@link Entity} with {@link #DOUBLE_DEATHRATTLES} causes other friendly deathrattles to occur twice.
+	 * <p>
+	 * This implements Baron Rivendare's text.
+	 * @see GameLogic#resolveDeathrattles(Player, Actor, int) to see the complete rules for deathrattles.
+	 */
 	DOUBLE_DEATHRATTLES,
+	/**
+	 * An immune {@link Actor} does not take any damage.
+	 */
 	IMMUNE,
+	/**
+	 * An {@link Actor} with this attribute does not take damage from the targets of its physical attacks.
+	 */
 	IMMUNE_WHILE_ATTACKING,
+	/**
+	 * Marks that the {@link Actor} has a divine shield.
+	 * <p>
+	 * Divine shield causes the actor to take zero damage instead of the full damage it should receive the first time it
+	 * receives damage.
+	 * @see GameLogic#damageMinion(Actor, int) for the complete rules of damage.
+	 */
 	DIVINE_SHIELD,
+	/**
+	 * A {@link Minion} with stealth cannot be targeted by spells, hero powers or physical attacks until it attacks.
+	 * <p>
+	 * If a Stealthed minion attacks or deals any kind of damage, it will lose Stealth. This includes passive effects
+	 * such as that of Knife Juggler, and dealing combat damage in exchange, such as when being struck by a clumsy minion
+	 * such as Ogre Brute, or by a Misdirection-redirected minion.
+	 * @see GameLogic#fight(Player, Actor, Actor) for the situation where physical attacks cause a minion to lose stealth.
+	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage originating
+	 * from a minion causes it to lose stealth.
+	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
+	 * logic behind selecting valid targets.
+	 */
 	STEALTH,
+	/**
+	 * A {@link net.demilich.metastone.game.cards.SecretCard} has this attribute to help spells find secrets in the deck.
+	 * <p>
+	 * Cards marked secret should not be revealed to the opponent.
+	 */
 	SECRET,
+	/**
+	 * When a combo {@link Card} is played after another card, an effect is triggered.
+	 * @see net.demilich.metastone.game.spells.ComboSpell for the actual implementation of combo effects.
+	 * @see GameLogic#afterCardPlayed(int, CardReference) for the control of the combo attribute.
+	 */
 	COMBO,
+	/**
+	 * Overload is an {@link Integer} amount of mana that will be locked (unavailable for use) the next turn by playing
+	 * this {@link Card}.
+	 */
 	OVERLOAD,
+	/**
+	 * A {@link Card} with this attribute signals that it has two options that a player chooses from when the card is
+	 * played.
+	 */
 	CHOOSE_ONE,
+	/**
+	 * A {@link Minion} with this attribute causes both choose one options of a {@link Card} with {@link #CHOOSE_ONE} to
+	 * be played.
+	 * <p>
+	 * This implements the Fandral Staghelm card text.
+	 */
 	BOTH_CHOOSE_ONE_OPTIONS,
+	/**
+	 * Summoning sickness prevents a {@link Minion} from attacking the same turn it is played or summoned. Minions with
+	 * {@link #CHARGE} do not have summoning sickness.
+	 * <p>
+	 * Summoning sickness occurs however the minion entered the battlefield, whether through a play from the hand, a
+	 * Summon effect, a put into battlefield effect, or a transform effect.
+	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the complete summoning rules.
+	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions
+	 * enter the battlefield.
+	 * @see GameLogic#transformMinion(Minion, Minion) for an unusual situation where minions enter the battlefield.
+	 */
 	SUMMONING_SICKNESS,
+	/**
+	 * Marks an {@link Actor} to be untargetable by spells or hero powers. This includes the owner's spells and hero
+	 * powers.
+	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
+	 * complete target selection logic.
+	 */
 	UNTARGETABLE_BY_SPELLS,
+	/**
+	 * An {@link Actor} with this attribute is untargetable by spells or hero powers due to an aura.
+	 * @see #UNTARGETABLE_BY_SPELLS for more information.
+	 */
 	AURA_UNTARGETABLE_BY_SPELLS,
 	SPELL_DAMAGE_MULTIPLIER,
 	SPELL_AMPLIFY_MULTIPLIER,
