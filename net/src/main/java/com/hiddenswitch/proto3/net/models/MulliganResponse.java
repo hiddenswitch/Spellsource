@@ -6,10 +6,13 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by bberman on 12/7/16.
+ * Contains the result of a bot mulliganing.
  */
 public class MulliganResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * A list of which cards to discard.
+	 */
 	public List<Card> discardedCards;
 }

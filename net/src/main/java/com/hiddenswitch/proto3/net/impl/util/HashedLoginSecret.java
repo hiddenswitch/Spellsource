@@ -5,6 +5,9 @@ import com.lambdaworks.crypto.SCryptUtil;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Represents the hashed secret portion of the token string.
+ */
 public class HashedLoginSecret implements Serializable {
 	private String hashedLoginToken;
 	private Date expiresAt;
@@ -12,11 +15,19 @@ public class HashedLoginSecret implements Serializable {
 	public HashedLoginSecret() {
 	}
 
+	/**
+	 * Hash a LoginToken to produce a hashed login secret.
+	 * @param token A LoginToken object.
+	 */
 	public HashedLoginSecret(LoginToken token) {
 		setHashedLoginToken(SCryptUtil.scrypt(token.getSecret(), 256, 4, 1));
-		setExpiresAt(token.expiresAt);
+		setExpiresAt(token.getExpiresAt());
 	}
 
+	/**
+	 * Gets the hashed login token for comparisons using Scrypt.
+	 * @return The hash of the secret part of the login token corresponding to this user.
+	 */
 	public String getHashedLoginToken() {
 		return hashedLoginToken;
 	}
@@ -25,6 +36,10 @@ public class HashedLoginSecret implements Serializable {
 		this.hashedLoginToken = hashedLoginToken;
 	}
 
+	/**
+	 * Get the expiration of those token.
+	 * @return The expiration date.
+	 */
 	public Date getExpiresAt() {
 		return expiresAt;
 	}

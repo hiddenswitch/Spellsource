@@ -188,7 +188,7 @@ public class GameLogic implements Cloneable, Serializable {
 				return true;
 			}
 			for (Entity minion : player.getMinions()) {
-				if (minion.hasAttribute(attr) && !minion.hasAttribute(Attribute.PENDING_DESTROY)) {
+				if (minion.hasAttribute(attr)) {
 					return true;
 				}
 			}
@@ -979,7 +979,7 @@ public class GameLogic implements Cloneable, Serializable {
 			return true;
 		}
 		for (Entity minion : player.getMinions()) {
-			if (minion.hasAttribute(attr) && !minion.hasAttribute(Attribute.PENDING_DESTROY)) {
+			if (minion.hasAttribute(attr)) {
 				return true;
 			}
 		}

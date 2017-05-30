@@ -1,38 +1,193 @@
 package net.demilich.metastone.game;
 
+import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.targeting.Zones;
+
 public enum Attribute {
 	DEBUG,
+	/**
+	 * The base mana cost of the {@link Card}.
+	 *
+	 * @see Card#getManaCost(GameContext, Player) to get the mana cost of a card
+	 * considering all possible effects.
+	 */
 	BASE_MANA_COST,
+	/**
+	 * The number of hit points the {@link Actor} currently has.
+	 */
 	HP,
+	/**
+	 * The attack value written on the {@link MinionCard}. This is distinct from {@link #BASE_ATTACK},
+	 * which is the base attack value of the {@link Minion} this card would summon.
+	 */
 	ATTACK,
+	/**
+	 * An attack bonus that should be applied to the {@link Minion} attack.
+	 */
 	ATTACK_BONUS,
+	/**
+	 * The maximum number of hitpoints the {@link Actor} can have.
+	 */
 	MAX_HP,
+	/**
+	 * The current armor belonging to the {@link Actor}.
+	 */
 	ARMOR,
+	/**
+	 * A one-turn long attack bonus given to the {@link Actor}.
+	 */
 	TEMPORARY_ATTACK_BONUS,
+	/**
+	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.BuffSpell} effects on the entity.
+	 */
 	HP_BONUS,
+	/**
+	 * The amount of attack added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that target
+	 * the entity.
+	 */
 	AURA_ATTACK_BONUS,
+	/**
+	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that target
+	 * the entity.
+	 */
 	AURA_HP_BONUS,
+	/**
+	 * The base number of hitpoints for the {@link Actor}.
+	 */
 	BASE_HP,
+	/**
+	 * The base amount of attack for the {@link Actor}.
+	 */
 	BASE_ATTACK,
+	/**
+	 * A conditional attack bonus for the {@link Actor} that corresponds to bonuses
+	 * from an {@link net.demilich.metastone.game.spells.EnrageSpell}, {@link net.demilich.metastone.game.spells.ConditionalAttackBonusSpell}
+	 * or {@link net.demilich.metastone.game.spells.SetAttributeSpell}. This bonus is typically controlled by a {@link net.demilich.metastone.game.spells.desc.condition.Condition}.
+	 */
 	CONDITIONAL_ATTACK_BONUS,
+	/**
+	 * The race of the entity.
+	 *
+	 * @see net.demilich.metastone.game.entities.minions.Race
+	 */
 	RACE,
+	/**
+	 * When the entity has this attribute, it is destroyed. However, entities are also considered destroyed if their
+	 * {@link Actor#getHp()} is below zero or if they are in the {@link Zones#GRAVEYARD}
+	 * or {@link Zones#REMOVED_FROM_PLAY} zones.
+	 * <p>
+	 * At the end of {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)} in {@link GameLogic#checkForDeadEntities()},
+	 * all entities with {@link #DESTROYED} will be sent to the {@link Zones#GRAVEYARD}.
+	 *
+	 * @see Actor#isDestroyed() for a complete list of situations where an {@link Actor} is destroyed.
+	 */
 	DESTROYED,
-	PENDING_DESTROY,
+	/**
+	 * Fatigue tracks how much damage a {@link net.demilich.metastone.game.entities.heroes.Hero} should take when the
+	 * player's deck is empty.
+	 *
+	 * @see GameLogic#drawCard(int, Entity) for the complete usage of Fatigue.
+	 */
 	FATIGUE,
+	/**
+	 * A frozen {@link Actor} cannot attack. Freezing is cleared by a
+	 * {@link net.demilich.metastone.game.spells.SilenceSpell} (when the minion is {@link #SILENCED}) or
+	 * the owning player ends his turn on a different turn than when the minion was {@link #FROZEN}.
+	 *
+	 * @see GameLogic#silence(int, Minion) for a complete description of the silence effect.
+	 * @see GameLogic#handleFrozen(Actor) to see where freezing is handled.
+	 */
 	FROZEN,
+	/**
+	 * This {@link Minion} will typically gain an attack bonus after it is
+	 * dealt damage the first time.
+	 *
+	 * @see net.demilich.metastone.game.spells.EnrageSpell for the spell that encapsulates this effect.
+	 * @see #CONDITIONAL_ATTACK_BONUS for the attribute that typically stores the amount of attack gained by an enrage.
+	 */
 	ENRAGABLE,
+	/**
+	 * Records that an {@link Entity} was silenced. Silencing clears all attributes and effects.
+	 *
+	 * @see GameLogic#silence(int, Minion) for a complete description of the silence effect.
+	 */
 	SILENCED,
+	/**
+	 * An {@link Actor} with {@link #WINDFURY} has two attacks per turn.
+	 */
 	WINDFURY,
+	/**
+	 * An {@link Actor} with {@link #MEGA_WINDFURY} has four attacks per turn.
+	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 */
 	MEGA_WINDFURY,
+	/**
+	 * An {@link Actor} with {@link #UNLIMITED_ATTACKS} has unlimited attacks per turn.
+	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 */
 	UNLIMITED_ATTACKS,
+	/**
+	 * An {@link Actor} with {@link #TAUNT} must be targeted by opposing {@link net.demilich.metastone.game.actions.PhysicalAttackAction}
+	 * actions first. This means the {@link Minion} with {@link #TAUNT} acts like a shield for its other non-taunt minions
+	 * and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
+	 *
+	 * @see net.demilich.metastone.game.logic.TargetLogic#getValidTargets(GameContext, Player, GameAction) for the
+	 * complete targeting logic.
+	 */
 	TAUNT,
+	/**
+	 * The total amount of spell damage that an {@link Entity} contributes.
+	 */
 	SPELL_DAMAGE,
+	/**
+	 * Some cards give the opponent spell damage. This attribute stores how much.
+	 */
 	OPPONENT_SPELL_DAMAGE,
+	/**
+	 * A {@link Minion} with {@link #CHARGE} can attack the same turn it enters play.
+	 * @see #SUMMONING_SICKNESS for the attribute that a {@link Minion} otherwise has which prevents it from attacking
+	 * the same turn it is summoned.
+	 */
 	CHARGE,
+	/**
+	 * An attribute that tracks the number of attacks the {@link Actor} has this turn. Typically, actors start with 1
+	 * attack every turn.
+	 * @see #WINDFURY for the attribute that sets the number of attacks an actor has to 2 at the start of the owner's
+	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 * turn.
+	 */
 	NUMBER_OF_ATTACKS,
+	/**
+	 * An attribute used by Giant Sand Worm that refreshes the number of attacks it has.
+	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 */
 	EXTRA_ATTACKS,
+	/**
+	 * When an {@link Actor} is {@link #ENRAGED}, its {@link #CONDITIONAL_ATTACK_BONUS} is set to the amount of damage
+	 * gained by an {@link net.demilich.metastone.game.spells.EnrageSpell}.
+	 * @see net.demilich.metastone.game.spells.EnrageSpell for the complete Enrage rules.
+	 */
 	ENRAGED,
+	/**
+	 * An {@link Entity} with {@link #BATTLECRY} performs an action when it goes from the {@link Zones#HAND} to the
+	 * {@link Zones#BATTLEFIELD}. This attribute is used to look up / keep track of entities that have battlecries. It
+	 * does not define the battlecry itself.
+	 */
 	BATTLECRY,
+	/**
+	 * An {@link Entity} with {@link #DOUBLE_BATTLECRIES} causes other battlecries to occur twice.
+	 *
+	 * This implements Brann Bronzebeard's text.
+	 * @see {@link GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction)} for the complete rules on
+	 * double battlecries.
+	 */
 	DOUBLE_BATTLECRIES,
 	DEATHRATTLES,
 	DOUBLE_DEATHRATTLES,

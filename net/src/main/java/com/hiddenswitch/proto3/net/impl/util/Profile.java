@@ -2,10 +2,18 @@ package com.hiddenswitch.proto3.net.impl.util;
 
 import java.io.Serializable;
 
+/**
+ * A Profile object contains non-gameplay/cosmetic information about a user.
+ */
 public class Profile implements Serializable {
 	private String emailAddress;
 	private String name;
 
+	/**
+	 * The user's email address. Should not be shown to the public.
+	 *
+	 * @return Email address.
+	 */
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -14,6 +22,11 @@ public class Profile implements Serializable {
 		this.emailAddress = emailAddress;
 	}
 
+	/**
+	 * Gets the user's display name (typically their username.
+	 *
+	 * @return A username.
+	 */
 	public String getDisplayName() {
 		return name;
 	}

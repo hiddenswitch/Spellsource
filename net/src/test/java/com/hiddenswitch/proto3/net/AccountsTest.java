@@ -49,9 +49,9 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 			getContext().assertNotNull(userRecord.getProfile().getEmailAddress());
 			getContext().assertEquals(emailAddress, userRecord.getProfile().getEmailAddress());
 			getContext().assertNotNull(response.getLoginToken());
-			getContext().assertNotNull(response.getLoginToken().token);
+			getContext().assertNotNull(response.getLoginToken().getToken());
 
-			final String token = response.getLoginToken().token;
+			final String token = response.getLoginToken().getToken();
 			User userTokened = Sync.awaitResult(done -> {
 				tokenAuthProvider.authenticate(
 						new JsonObject()
@@ -72,8 +72,8 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 			assertFalse(response.isInvalidEmailAddress());
 			assertFalse(response.isInvalidName());
 			assertFalse(response.isInvalidPassword());
-			assertNotNull(response.getLoginToken().token);
-			assertTrue(response.getLoginToken().expiresAt.after(Date.from(Instant.now())));
+			assertNotNull(response.getLoginToken().getToken());
+			assertTrue(response.getLoginToken().getExpiresAt().after(Date.from(Instant.now())));
 		});
 	}
 
@@ -84,7 +84,7 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
 			LoginResponse loginResponse = service.login("test@test.com", "password");
 			assertNotNull(loginResponse.getToken());
-			assertNotNull(loginResponse.getToken().token);
+			assertNotNull(loginResponse.getToken().getToken());
 			assertFalse(loginResponse.isBadPassword());
 			assertFalse(loginResponse.isBadEmail());
 

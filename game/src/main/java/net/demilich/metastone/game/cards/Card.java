@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
@@ -18,6 +19,11 @@ import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomUtils;
 
+/**
+ * The Card class is an entity that contains card information. Cards are typically in the hand, deck or graveyard. They
+ * are playable from the hand or as hero powers. They may be created by other cards. Like all entities, they have
+ * attributes and are mutable.
+ */
 public abstract class Card extends Entity {
 	private static final long serialVersionUID = 1L;
 
@@ -37,6 +43,10 @@ public abstract class Card extends Entity {
 		super();
 	}
 
+	/**
+	 * Creates a card from a description of a card.
+	 * @param desc The Card description.
+	 */
 	public Card(CardDesc desc) {
 		// Save a reference to the description for later use.
 		this.desc = desc;
@@ -70,6 +80,12 @@ public abstract class Card extends Entity {
 		}
 	}
 
+	/**
+	 * Clones a card's base fields, like name and description, and its current attributes. The entity ID and location
+	 * match the source object and are not cleared. {@link #getCopy()} is typically more appropriate choice
+	 * for when copies of cards are needed.
+	 * @return An exact clone.
+	 */
 	@Override
 	public Card clone() {
 		Card clone = (Card) super.clone();
@@ -77,6 +93,13 @@ public abstract class Card extends Entity {
 		return clone;
 	}
 
+	/**
+	 * Evaluates an expression written on a rule.
+	 * @param operator An expression operator
+	 * @param value1 The left value.
+	 * @param value2 The right value.
+	 * @return The result of evaluating the expression.
+	 */
 	public static boolean evaluateExpression(String operator, int value1, int value2) {
 		switch (operator) {
 			case "=":
@@ -99,6 +122,10 @@ public abstract class Card extends Entity {
 		return getAttributeValue(Attribute.BASE_MANA_COST);
 	}
 
+	/**
+	 * Gets the card's ID as it corresponds to the card catalogue. This is the base definition of the card.
+	 * @return
+	 */
 	public String getCardId() {
 		if (cardId == null) {
 			return null;
@@ -106,26 +133,59 @@ public abstract class Card extends Entity {
 		return cardId.toLowerCase();
 	}
 
+	/**
+	 * Gets an object which refers to the card's location, owner, and ID. Used for lookups.
+	 *
+	 * Unusually, card references include the card name. Some cards, like the Rogue Quest, interact with card names
+	 * instead of their IDs.
+	 * @return A reference to the card.
+	 */
 	public CardReference getCardReference() {
 		return new CardReference(getOwner(), getZone(), getId(), getName());
 	}
 
+	/**
+	 * Gets the set that the card belongs to.
+	 * @return
+	 */
 	public CardSet getCardSet() {
 		return cardSet;
 	}
 
+	/**
+	 * Gets the card type, like Hero, Secret, Spell or Minion.
+	 * @return
+	 */
 	public CardType getCardType() {
 		return cardType;
 	}
 
+	/**
+	 * Gets the hero class that this card belongs to. Valid classes include ANY (neutral) or any of the main 9 classes.
+	 * @return
+	 */
 	public HeroClass getHeroClass() {
 		return heroClass;
 	}
 
+	/**
+	 * Some cards have multiple hero classes. This field stores those multiple classes when they are defined.
+	 * @return
+	 */
 	public HeroClass[] getHeroClasses() {
 		return heroClasses;
 	}
 
+	/**
+	 * Gets a copy of the card with some attributes like its attack or HP bonuses and mana cost modifiers removed. The
+	 * ID and owner is set to unassigned.
+	 *
+	 * Typically you should use the {@link net.demilich.metastone.game.logic.GameLogic#receiveCard(int, Card)}
+	 * method in order to put a copy into e.g. the player's hand.
+	 *
+	 * Take a look at its logic to see how to assign an ID and an owner to a card for other uses of copies.
+	 * @return A copy of the card with no ID or owner (and therefore no location).
+	 */
 	public Card getCopy() {
 		Card copy = clone();
 		copy.setId(IdFactory.UNASSIGNED);
@@ -137,26 +197,17 @@ public abstract class Card extends Entity {
 		return copy;
 	}
 
+	/**
+	 * Gets a cleaned up description of the card. In the future, this description should "fill in the blanks" for cards
+	 * that have variables, like which minion will be summoned or how much spell damage the spell will deal.
+	 * @return The description.
+	 */
 	public String getDescription() {
 		// Cleanup the html tags that appear in the description
 		if (description == null || description.isEmpty()) {
 			return description;
 		}
-		// TODO: Show effects on card behaviour like increased spell damage
-		String descriptionCleaned = description.replaceAll("(</?[bi]>)|\\[x\\]", "");
-		// Include taunt if it doesn't seem to contain anything about taunt.
-		if (hasAttribute(Attribute.CHARGE)
-				&& !descriptionCleaned.matches("[Cc]harge")
-				&& !descriptionCleaned.matches("[Ss]torm")) {
-			descriptionCleaned = "Storm. " + descriptionCleaned;
-		}
-
-		if (hasAttribute(Attribute.TAUNT)
-				&& !descriptionCleaned.matches("[Tt]aunt")
-				&& !descriptionCleaned.matches("[Gt]uard]")) {
-			descriptionCleaned = "Guard. " + descriptionCleaned;
-		}
-		return descriptionCleaned;
+		return description.replaceAll("(</?[bi]>)|\\[x\\]", "");
 	}
 
 	@Override
@@ -164,10 +215,16 @@ public abstract class Card extends Entity {
 		return EntityType.CARD;
 	}
 
-	public Zones getZone() {
-		return getEntityLocation().getZone();
-	}
-
+	/**
+	 * Gets the mana cost of this card from the point of view of the specified player and a given context.
+	 *
+	 * Costs can be modified lots of different ways, so this method ensures the cost is calculate considering all the
+	 * rules that are on the board.
+	 * @param context The {@link GameContext} to compute the cost against.
+	 * @param player The {@link Player} whose point of view should be considered for the cost. This is almost always
+	 *               the owner.
+	 * @return The cost.
+	 */
 	public int getManaCost(GameContext context, Player player) {
 		int actualManaCost = getBaseManaCost();
 		if (manaCostModifier != null) {
@@ -176,14 +233,29 @@ public abstract class Card extends Entity {
 		return actualManaCost;
 	}
 
+	/**
+	 * A rarity of the card. Rarer cards are generally more powerful; they appear in card packs less frequently; and
+	 * {@link Rarity#LEGENDARY} cards can only appear once in a deck.
+	 * @return A {@link Rarity}
+	 */
 	public Rarity getRarity() {
 		return rarity;
 	}
 
+	/**
+	 * Gets the race of a card. Typically only applies to {@link MinionCard} that summon minions when played.
+	 * @return A {@link Race}
+	 */
 	public Race getRace() {
 		return hasAttribute(Attribute.RACE) ? (Race) getAttribute(Attribute.RACE) : Race.NONE;
 	}
 
+	/**
+	 * Checks if the hero class specified is in its list of hero classes when this card belongs to multiple hero
+	 * classes.
+	 * @param heroClass The {@link HeroClass} to search.
+	 * @return <code>True</code> if this card has the specified class.
+	 */
 	public boolean hasHeroClass(HeroClass heroClass) {
 		if (getHeroClasses() != null) {
 			for (HeroClass h : getHeroClasses()) {
@@ -197,10 +269,23 @@ public abstract class Card extends Entity {
 		return false;
 	}
 
+	/**
+	 * Collectible cards can be put into decks. Non-collectible cards are typically either "tokens," or cards that
+	 * are spawned by other cards, or narrative cards.
+	 *
+	 * Even though tokens are almost always minions, effects like {@link net.demilich.metastone.game.spells.ReturnMinionToHandSpell}
+	 * can create a card that represents a minion.
+	 * @return <code>True</code> if the card is collectible.
+	 */
 	public boolean isCollectible() {
 		return collectible;
 	}
 
+	/**
+	 * A string filter for certain queries on cards.
+	 * @param filter A split filter string. See <code>matchesSplitFilter</code> for more.
+	 * @return <code>True</code> if the card matches.
+	 */
 	public boolean matchesFilter(String filter) {
 		if (filter == null || filter.isEmpty()) {
 			return true;
@@ -214,6 +299,12 @@ public abstract class Card extends Entity {
 		return true;
 	}
 
+	/**
+	 * Checks if a card matches a filter for some common queries.
+	 * @param filter A string filter that interprets common properties of cards. It supports simple comparisons of
+	 *               common card properties like <code>mana &gt; 3</code> and queries on hero classes.
+	 * @return <code>True</code> if this card matches the filter.
+	 */
 	public boolean matchesSplitFilter(String filter) {
 		filter = filter.toLowerCase();
 		String[] split = filter.split("((<|>)=?)|(!?=)");
@@ -272,6 +363,10 @@ public abstract class Card extends Entity {
 		return false;
 	}
 
+	/**
+	 * Create an action representing playing the card.
+	 * @return An action that should be evaluated by {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)}.
+	 */
 	@Suspendable
 	public abstract PlayCardAction play();
 
@@ -288,6 +383,11 @@ public abstract class Card extends Entity {
 		return String.format("[%s '%s' %s Manacost:%d]", getCardType(), getName(), getReference(), getBaseManaCost());
 	}
 
+	/**
+	 * Gets the original {@link CardDesc} that was used to create this card. Modifying this description does not modify
+	 * the card, and the {@link CardDesc} may be referenced by multiple instances of {@link Card}.
+	 * @return A {@link CardDesc}
+	 */
 	public CardDesc getDesc() {
 		return desc;
 	}

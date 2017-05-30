@@ -201,7 +201,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 		final Account account = getAccount(userId);
 		return WebResult.succeeded(new CreateAccountResponse()
-				.loginToken(internalResponse.getLoginToken().token)
+				.loginToken(internalResponse.getLoginToken().getToken())
 				.account(account));
 	}
 
@@ -217,7 +217,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 		return WebResult.succeeded(new com.hiddenswitch.proto3.net.client.models.LoginResponse()
 				.account(getAccount(internalResponse.getToken().getAccessKey()))
-				.loginToken(internalResponse.getToken().token));
+				.loginToken(internalResponse.getToken().getToken()));
 	}
 
 	@Override

@@ -5,6 +5,9 @@ import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 
 import java.io.Serializable;
 
+/**
+ * Contains the results of a login.
+ */
 public class LoginResponse implements Serializable {
 	private LoginToken token;
 	private UserRecord record;
