@@ -45,9 +45,6 @@ The Race of an Entity.
 DESTROYED
 Destroys the target, regardless of other Attributes.
 
-PENDING_DESTROY
-Internal tracker to determine death ordering.
-
 FATIGUE
 Internal tracker for the amount of Fatigue a gamePlayer has.
 
