@@ -59,7 +59,7 @@ public class Minion extends Actor {
 
 	public Minion getCopy() {
 		Minion clone = this.clone();
-		clone.setEntityLocation(EntityLocation.NONE);
+		clone.setEntityLocation(EntityLocation.UNASSIGNED);
 		clone.setId(IdFactory.UNASSIGNED);
 		clone.setOwner(IdFactory.UNASSIGNED);
 		return clone;

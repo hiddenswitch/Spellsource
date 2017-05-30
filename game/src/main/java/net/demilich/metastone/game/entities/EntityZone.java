@@ -43,7 +43,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		if (contains(element)) {
 			throw new ArrayStoreException("You cannot add the same element twice to this zone.");
 		}
-		if (!element.getEntityLocation().equals(EntityLocation.NONE)
+		if (!element.getEntityLocation().equals(EntityLocation.UNASSIGNED)
 				&& element.getEntityLocation().getZone() != getZone()) {
 			throw new ArrayStoreException("You must (1) remove an entity from its previous zone or " +
 					"(2) clone the entity in order to add it to another zone.");
@@ -75,7 +75,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	@Override
 	public E remove(int index) {
 		E result = internal.remove(index);
-		result.setEntityLocation(EntityLocation.NONE);
+		result.setEntityLocation(EntityLocation.UNASSIGNED);
 		for (int i = index; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
@@ -121,7 +121,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 
 	@SuppressWarnings("unchecked")
 	public void move(Entity source, EntityZone destination) {
-		if (source.getEntityLocation().equals(EntityLocation.NONE)) {
+		if (source.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
 			destination.uncheckedAdd(destination.size(), source);
 		} else if (source.getEntityLocation().getZone() != getZone()
 				|| source.getEntityLocation().getPlayer() != getPlayer()) {

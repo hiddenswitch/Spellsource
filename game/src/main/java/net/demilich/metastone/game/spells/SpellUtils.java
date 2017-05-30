@@ -101,7 +101,8 @@ public class SpellUtils {
 	}
 
 	public static Card getCardFromContextOrDiscover(GameContext context, String cardId) {
-		Card cardToAdd;Optional<Card> discoverCard = context.getPlayers().stream().flatMap(p -> p.getDiscoverZone().stream()).filter(c -> c.getCardId().equals(cardId)).findFirst();
+		Card cardToAdd;
+		Optional<Card> discoverCard = context.getPlayers().stream().flatMap(p -> p.getDiscoverZone().stream()).filter(c -> c.getCardId().equals(cardId)).findFirst();
 		if (discoverCard.isPresent()) {
 			cardToAdd = discoverCard.get();
 		} else {
@@ -110,6 +111,25 @@ public class SpellUtils {
 		return cardToAdd;
 	}
 
+	/**
+	 * Requests that the player chooses from a selection of cards and casts a spell (typically {@link ReceiveCardSpell}
+	 * with that card.
+	 * <p>
+	 * This method makes a network request if required.
+	 *
+	 * @param context The game context that hosts the player and state for this request.
+	 * @param player  {@link Player#getBehaviour()} will be called to get the behaviour that will choose from the cards.
+	 * @param desc    For every card the player can discover, this method will create a {@link Spell} from this
+	 *                {@link SpellDesc} and set its {@link SpellArg#CARD} argument to the discoverable card. Typically,
+	 *                this {@link SpellDesc} defines a {@link ReceiveCardSpell}, {@link ReceiveCardAndDoSomethingSpell},
+	 *                or a {@link ChangeHeroPowerSpell}. These spells all receive cards as arguments. This argument
+	 *                allows a {@link DiscoverAction} to do more sophisticated things than just put cards into hands.
+	 * @param cards   A {@link CardCollection} of cards that get copied, added to the {@link Zones#DISCOVER} zone of the
+	 *                player and shown in the discover card UI to the player.
+	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
+	 * @see DiscoverCardSpell for the spell that typically calls this method.
+	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link DiscoverCardSpell}.
+	 */
 	@Suspendable
 	public static DiscoverAction discoverCard(GameContext context, Player player, SpellDesc desc, CardCollection cards) {
 		// Discovers always work with a copy of the incoming cards

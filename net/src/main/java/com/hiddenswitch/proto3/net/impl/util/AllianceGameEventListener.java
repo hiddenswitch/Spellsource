@@ -9,14 +9,11 @@ import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.AsyncResult;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.spells.ModifyAttributeSpell;
 import net.demilich.metastone.game.spells.SetAttributeSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
@@ -73,7 +70,7 @@ public class AllianceGameEventListener implements IGameEventListener {
 				request1.setGameId(gameId);
 				request1.setUserId(event2.getAttacker().getUserId());
 
-				if (event2.getAttacker().hasAllianceEffects()) {
+				if (event2.getAttacker().hasPersistentEffects()) {
 					response = logic.uncheckedSync().afterPhysicalAttack(request1);
 				} else {
 					logic.async((AsyncResult<LogicResponse> ignored) -> {
@@ -96,7 +93,7 @@ public class AllianceGameEventListener implements IGameEventListener {
 				request.setUserId(event1.getMinion().getUserId());
 				// Check if the entity has network side effects it needs to be notified about. Otherwise, do
 				// not wait.
-				if (event1.getMinion().hasAllianceEffects()) {
+				if (event1.getMinion().hasPersistentEffects()) {
 					response = logic.uncheckedSync().beforeSummon(request);
 				} else {
 					// If we don't have effects we don't need to wait.
