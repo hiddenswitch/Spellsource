@@ -58,7 +58,6 @@ public class GameTagUtils {
 		case BASE_HP:
 		case BATTLECRY:
 		case DEATHRATTLES:
-		case DEBUG:
 		case MANA_COST_MODIFIER:
 		case RACE:
 			return TagValueType.OTHER;
