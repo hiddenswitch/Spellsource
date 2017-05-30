@@ -54,7 +54,6 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		final CreateCollectionRequest startingCollectionRequest = CreateCollectionRequest.startingCollection(userId);
 		response.setCreateCollectionResponse(inventory.sync()
 				.createCollection(startingCollectionRequest));
-
 		if (DeckCatalogue.getDecks().size() > 0) {
 			for (String deckName : STARTING_DECKS) {
 				Deck deck = DeckCatalogue.getDeckByName(deckName);
