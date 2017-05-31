@@ -7,8 +7,8 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardCollectionImpl;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -55,25 +55,25 @@ public class DiscoverRandomCardSpell extends Spell {
 			}
 
 		}
-		CardCollection cards = new CardCollectionImpl();
+		CardList cards = new CardArrayList();
 		if (heroClass == HeroClass.ANY) {
-			CardCollection classCards = CardCatalogue.query(context.getDeckFormat());
+			CardList classCards = CardCatalogue.query(context.getDeckFormat());
 			cards.addAll(classCards);
 		} else {
 			cards.addAll(CardCatalogue.query(context.getDeckFormat(), HeroClass.ANY));
-			CardCollection classCards = CardCatalogue.query(context.getDeckFormat(), heroClass);
+			CardList classCards = CardCatalogue.query(context.getDeckFormat(), heroClass);
 			for (int i = 0; i < 4; i++) {
 				cards.addAll(classCards);
 			}
 		}
 
-		CardCollection result = new CardCollectionImpl();
+		CardList result = new CardArrayList();
 		for (Card card : cards) {
 			if (cardFilter.matches(context, player, card)) {
 				result.addCard(card);
 			}
 		}
-		cards = new CardCollectionImpl();
+		cards = new CardArrayList();
 
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
 		for (int i = 0; i < count; i++) {

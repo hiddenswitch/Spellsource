@@ -1,8 +1,8 @@
 package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardCollectionImpl;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 
@@ -14,7 +14,7 @@ public class Deck implements Serializable {
 	public static final Deck EMPTY;
 	private String name = "";
 	private HeroClass heroClass;
-	protected CardCollection cards = new CardCollectionImpl();
+	protected CardList cards = new CardArrayList();
 	private String description;
 	private String filename;
 	private boolean arbitrary;
@@ -45,11 +45,11 @@ public class Deck implements Serializable {
 		return count;
 	}
 
-	public CardCollection getCards() {
+	public CardList getCards() {
 		return cards;
 	}
 
-	public CardCollection getCardsCopy() {
+	public CardList getCardsCopy() {
 		return getCards().clone();
 	}
 

@@ -5,14 +5,12 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardCollectionImpl;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-
-import java.util.Optional;
 
 public class ReceiveCardSpell extends Spell {
 
@@ -24,8 +22,8 @@ public class ReceiveCardSpell extends Spell {
 		// If a card is being received from a filter, we're creating new cards
 		if (cardFilter != null) {
 			// Cards that come from the query are always copies
-			CardCollection cards = CardCatalogue.query(context.getDeckFormat());
-			CardCollection result = new CardCollectionImpl();
+			CardList cards = CardCatalogue.query(context.getDeckFormat());
+			CardList result = new CardArrayList();
 
 			String replacementCard = (String) desc.get(SpellArg.CARD);
 			for (Card card : cards) {

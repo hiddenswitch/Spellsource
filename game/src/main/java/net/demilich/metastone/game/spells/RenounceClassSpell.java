@@ -7,8 +7,8 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardCollectionImpl;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
@@ -34,8 +34,8 @@ public class RenounceClassSpell extends Spell {
 		
 		HeroClass renouncedClass = (HeroClass) cardFilter.getArg(FilterArg.HERO_CLASS);
 		HeroClass rebornClass = SpellUtils.getRandomHeroClassExcept(renouncedClass);
-		CardCollection cards = CardCatalogue.query(context.getDeckFormat());
-		CardCollection result = new CardCollectionImpl();
+		CardList cards = CardCatalogue.query(context.getDeckFormat());
+		CardList result = new CardArrayList();
 		for (Card card : cards) {
 			if (card.getHeroClass() == rebornClass) {
 				result.addCard(card);
@@ -44,7 +44,7 @@ public class RenounceClassSpell extends Spell {
 		
 		int manaCostModifier = desc.getValue(SpellArg.MANA_MODIFIER, context, player, target, source, 0);
 		
-		CardCollection heroPowers = CardCatalogue.getHeroPowers(context.getDeckFormat());
+		CardList heroPowers = CardCatalogue.getHeroPowers(context.getDeckFormat());
 		for (Card heroPowerCard : heroPowers) {
 			if (heroPowerCard.getHeroClass() == rebornClass) {
 				HeroPowerCard heroPower = (HeroPowerCard) heroPowerCard;
@@ -55,7 +55,7 @@ public class RenounceClassSpell extends Spell {
 			}
 		}
 
-		CardCollection replacedCards = new CardCollectionImpl();
+		CardList replacedCards = new CardArrayList();
 		for (Card card : player.getDeck()) {
 			if (card.getHeroClass() == renouncedClass) {
 				replacedCards.addCard(card);
@@ -76,7 +76,7 @@ public class RenounceClassSpell extends Spell {
 		SpellDesc spellTriggerSpell = AddSpellTriggerSpell.create(triggerDesc);
 		SpellUtils.castChildSpell(context, player, spellTriggerSpell, source, player);
 		
-		replacedCards = new CardCollectionImpl();
+		replacedCards = new CardArrayList();
 		for (Card card : player.getHand()) {
 			if (card.getHeroClass() == renouncedClass) {
 				replacedCards.addCard(card);

@@ -7,6 +7,7 @@ import net.demilich.metastone.game.*;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -77,7 +78,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	public static final int MAX_SECRETS = 5;
 	/**
-	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link net.demilich.metastone.game.decks.Deck}
+	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link Deck}
 	 * with. Some effects, like Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
 	 */
 	public static final int DECK_SIZE = 30;
@@ -147,6 +148,7 @@ public class GameLogic implements Cloneable, Serializable {
 	/**
 	 * Creates a game logic instance with an ID factory. Typically you can create an ID factory and set its current ID
 	 * to whichever number you want to be the next entity ID created by this game logic.
+	 *
 	 * @param idFactory An existing ID factory.
 	 */
 	private GameLogic(IdFactory idFactory) {
@@ -156,9 +158,10 @@ public class GameLogic implements Cloneable, Serializable {
 	/**
 	 * Adds a {@link IGameEventListener} to a specified {@link Entity}. These are typically {@link SpellTrigger} instances
 	 * that react to game events.
-	 * @param player Usually the current turn player.
+	 *
+	 * @param player            Usually the current turn player.
 	 * @param gameEventListener A game event listener, like a {@link Aura}, {@link Secret} or {@link CardCostModifier}.
-	 * @param target The {@link Entity} that will be pointed to by {@link IGameEventListener#getHostReference()}.
+	 * @param target            The {@link Entity} that will be pointed to by {@link IGameEventListener#getHostReference()}.
 	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete implementation of triggers.
 	 */
 	@Suspendable
@@ -168,7 +171,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		gameEventListener.setHost(target);
-		if (!gameEventListener.hasPersistentOwner() || gameEventListener.getOwner() == -1) {
+		if (!gameEventListener.hasPersistentOwner() || gameEventListener.getOwner() == Entity.NO_OWNER) {
 			gameEventListener.setOwner(player.getId());
 		}
 
@@ -179,9 +182,10 @@ public class GameLogic implements Cloneable, Serializable {
 
 	/**
 	 * Specifically add a card cost modifier to the game, which is a special kind of {@link IGameEventListener}.
-	 * @param player Usually the current turn player.
+	 *
+	 * @param player           Usually the current turn player.
 	 * @param cardCostModifier The card cost modifier.
-	 * @param target The {@link Card} whose cost should be modified.
+	 * @param target           The {@link Card} whose cost should be modified.
 	 */
 	@Suspendable
 	public void addManaModifier(Player player, CardCostModifier cardCostModifier, Entity target) {
@@ -189,6 +193,13 @@ public class GameLogic implements Cloneable, Serializable {
 		addGameEventListener(player, cardCostModifier, target);
 	}
 
+	/**
+	 * Handles combo and mana cost modifier removal for the card played in the
+	 * {@link PlayCardAction#execute(GameContext, int)} method. Can probably be inlined.
+	 *
+	 * @param playerId      The player index
+	 * @param cardReference A reference to the card.
+	 */
 	@Suspendable
 	public void afterCardPlayed(int playerId, CardReference cardReference) {
 		Player player = context.getPlayer(playerId);
@@ -199,12 +210,34 @@ public class GameLogic implements Cloneable, Serializable {
 		card.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
 	}
 
+	/**
+	 * Calculates how much to amplify an attribute by. This is typically either a spell damage or healing effect
+	 * multiplier.
+	 * <p>
+	 * This implements Prophet Velen.
+	 *
+	 * @param player    The friendly player.
+	 * @param baseValue The value to multiply.
+	 * @param attribute The attribute to look up in all entities.
+	 * @return The newly calculate spell or healing value.
+	 * @see Attribute#HEAL_AMPLIFY_MULTIPLIER for the healing amplification attribute.
+	 * @see Attribute#SPELL_AMPLIFY_MULTIPLIER for the spell damage amplification attribute.
+	 */
 	@Suspendable
 	public int applyAmplify(Player player, int baseValue, Attribute attribute) {
 		int amplify = getTotalAttributeMultiplier(player, attribute);
 		return baseValue * amplify;
 	}
 
+	/**
+	 * Gives an {@link Entity} a boolean {@link Attribute}.
+	 * <p>
+	 * This addresses bugs with {@link Attribute#WINDFURY} and should be the place for special rules around attributes
+	 * in the future.
+	 *
+	 * @param entity An {@link Entity}
+	 * @param attr   An {@link Attribute}
+	 */
 	@Suspendable
 	public void applyAttribute(Entity entity, Attribute attr) {
 		if (attr == Attribute.MEGA_WINDFURY && entity.hasAttribute(Attribute.WINDFURY) && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
@@ -250,38 +283,48 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Assigns an ID to each Card in a given deck
+	 * Assigns an {@link Entity#id} and {@link Entity#ownerIndex} to each {@link Card} in a given {@link Deck}.
 	 *
-	 * @param cardCollection The Deck to assign IDs to
+	 * @param cardList   The {@link Deck} whose cards should have IDs and owners assigned.
+	 * @param ownerIndex The owner to assign to this {@link CardList}
 	 */
 	@Suspendable
-	protected void assignCardIds(CardCollection cardCollection, int ownerIndex) {
-		for (Card card : cardCollection) {
+	protected void assignCardIds(CardList cardList, int ownerIndex) {
+		for (Card card : cardList) {
 			card.setId(getIdFactory().generateId());
 			card.setOwner(ownerIndex);
 		}
 	}
 
+	/**
+	 * Checks if any {@link Entity} in the game has the given {@link Attribute}.
+	 *
+	 * @param attr The attribute to look up.
+	 * @return {@code true} if any {@link Entity} has the given attribute.
+	 */
 	@Suspendable
 	public boolean attributeExists(Attribute attr) {
-		for (Player player : context.getPlayers()) {
-			if (player.getHero().hasAttribute(attr)) {
-				return true;
-			}
-			for (Entity minion : player.getMinions()) {
-				if (minion.hasAttribute(attr)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return context.getEntities().anyMatch(e -> e.hasAttribute(attr));
 	}
 
+	/**
+	 * Determines whether the given player can play the given card. Useful for drawing green borders around cards to
+	 * signal to an end user that they can play a particular card. Takes into account whether or not a spell that
+	 * requires targets has possible targets in the game.
+	 *
+	 * @param playerId      The player whose point of view should be considered for this method.
+	 * @param cardReference A reference to the card.
+	 * @return {@code true} if the card can be played.
+	 */
 	@Suspendable
 	public boolean canPlayCard(int playerId, CardReference cardReference) {
 		Player player = context.getPlayer(playerId);
 		Card card = context.resolveCardReference(cardReference);
+		// A player cannot play a card the player does not own.
+		if (card.getOwner() != player.getOwner()
+				&& card.getOwner() != Entity.NO_OWNER) {
+			return false;
+		}
 		int manaCost = getModifiedManaCost(player, card);
 		if (card.getCardType().isCardType(CardType.SPELL)
 				&& player.hasAttribute(Attribute.SPELLS_COST_HEALTH)
@@ -319,14 +362,48 @@ public class GameLogic implements Cloneable, Serializable {
 		return true;
 	}
 
+	/**
+	 * Determines whether a player can play a {@link Secret}.
+	 * <p>
+	 * Players cannot have more than one copy of the same Secret active at any one time. Players are unable to play
+	 * Secret cards which match one of their active Secrets.
+	 * <p>
+	 * When played directly from the hand, players can have up to 5 different Secrets active at a time. Once this limit
+	 * is reached, the player will be unable to play further Secret cards.
+	 *
+	 * @param player The player whose {@link Zones#SECRET} zone should be inspected.
+	 * @param card   The secret card being evaluated.
+	 * @return {@code true} if the secret can be played.
+	 */
 	public boolean canPlaySecret(Player player, SecretCard card) {
 		return player.getSecrets().size() < MAX_SECRETS && !player.getSecretCardIds().contains(card.getCardId());
 	}
 
+	/**
+	 * Determines whether or not a player can summon more minions.
+	 *
+	 * @param player The player whose {@link Zones#BATTLEFIELD} zone should be inspected for minions.
+	 * @return {@code true} if the player can summon more minions.
+	 */
 	public boolean canSummonMoreMinions(Player player) {
 		return player.getMinions().size() < MAX_MINIONS;
 	}
 
+	/**
+	 * Casts one of the two options of a "Choose One" spell and handles all its sophisticated rules.
+	 * <p>
+	 * Choose One is an ability which allows a player to choose one of multiple possible effects when the card is played
+	 * from the hand. Cards with this ability are limited to the druid class.
+	 * <p>
+	 * Choose One effects are similar to Discover effects, and certain other cards such as Tracking, which also allow
+	 * you to choose between multiple options.
+	 *
+	 * @param playerId The player casting the choose one spell.
+	 * @param spellDesc The {@link SpellDesc} of the chosen card, not the parent card that contains the choices.
+	 * @param sourceReference The source of the spell, typically the original {@link ChooseOneCard}.
+	 * @param targetReference The target selected for this choice.
+	 * @param cardId The card that was chosen.
+	 */
 	@Suspendable
 	public void castChooseOneSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference, String cardId) {
 		Player player = context.getPlayer(playerId);
@@ -383,12 +460,34 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	/*
+	 * Casts a spell.
+	 * @param playerId The casting player.
+	 * @param spellDesc The {@link SpellDesc} for the spell.
+	 * @param sourceReference The source of the spell (typically the card), or {@code null} if it doesn't have one.
+	 * @param targetReference The selected target of the spell, or {@code null} if it doesn't have one.
+	 * @param childSpell When true, this spell is implementing an effect rather than what a player would think of as a
+	 * "spell"—a single card.
+	 * @see #castSpell(int, SpellDesc, EntityReference, EntityReference, TargetSelection, boolean) for complete documentation.
+	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
 	                      boolean childSpell) {
 		castSpell(playerId, spellDesc, sourceReference, targetReference, TargetSelection.NONE, childSpell);
 	}
 
+	/**
+	 * Casts a spell.
+	 *
+	 * This method uses the {@link SpellDesc} to figure out what the spell should do.
+	 *
+	 * @param playerId
+	 * @param spellDesc
+	 * @param sourceReference
+	 * @param targetReference
+	 * @param targetSelection
+	 * @param childSpell
+	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
 	                      TargetSelection targetSelection, boolean childSpell) {
@@ -689,7 +788,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public Card drawCard(int playerId, Entity source) {
 		Player player = context.getPlayer(playerId);
-		CardCollection deck = player.getDeck();
+		CardList deck = player.getDeck();
 		if (deck.isEmpty()) {
 			Hero hero = player.getHero();
 			int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
@@ -827,7 +926,7 @@ public class GameLogic implements Cloneable, Serializable {
 			return;
 		}
 
-		if (target.getOwner() == -1) {
+		if (target.getOwner() == Entity.NO_OWNER) {
 			logger.error("Target has no owner!! {}", target);
 		}
 
@@ -1656,7 +1755,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		newCard.setOwner(playerId);
-		CardCollection hand = player.getHand();
+		CardList hand = player.getHand();
 
 		if (newCard.getAttribute(Attribute.PASSIVE_TRIGGER) != null) {
 			TriggerDesc triggerDesc = (TriggerDesc) newCard.getAttribute(Attribute.PASSIVE_TRIGGER);
@@ -1681,7 +1780,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		newCard.setOwner(playerId);
-		CardCollection deck = player.getDeck();
+		CardList deck = player.getDeck();
 
 		if (newCard.getAttribute(Attribute.DECK_TRIGGER) != null) {
 			TriggerDesc triggerDesc = (TriggerDesc) newCard.getAttribute(Attribute.DECK_TRIGGER);

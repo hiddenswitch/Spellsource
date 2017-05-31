@@ -7,7 +7,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
@@ -28,7 +28,7 @@ public class GameState implements Serializable {
 	public final List<GameEvent> eventStack;
 	public final Player player1;
 	public final Player player2;
-	public final CardCollection tempCards;
+	public final CardList tempCards;
 	public final HashMap<Environment, Object> environment;
 	public final List<CardCostModifier> cardCostModifiers;
 	public final TriggerManager triggerManager;

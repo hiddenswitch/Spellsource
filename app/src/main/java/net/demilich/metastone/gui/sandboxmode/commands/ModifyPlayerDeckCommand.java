@@ -6,7 +6,7 @@ import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.gui.sandboxmode.SandboxProxy;
 
 public class ModifyPlayerDeckCommand extends SimpleCommand<GameNotification> {
@@ -16,7 +16,7 @@ public class ModifyPlayerDeckCommand extends SimpleCommand<GameNotification> {
 		SandboxProxy sandboxProxy = (SandboxProxy) getFacade().retrieveProxy(SandboxProxy.NAME);
 
 		Player player = sandboxProxy.getSelectedPlayer();
-		CardCollection modifiedDeck = (CardCollection) notification.getBody();
+		CardList modifiedDeck = (CardList) notification.getBody();
 		GameContext context = sandboxProxy.getSandbox();
 
 		for (Card card : player.getDeck().toList()) {

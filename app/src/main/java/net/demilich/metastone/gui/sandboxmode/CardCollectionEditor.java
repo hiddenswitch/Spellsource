@@ -55,7 +55,7 @@ public class CardCollectionEditor extends SandboxEditor {
 
 	private int cardLimit;
 
-	public CardCollectionEditor(String title, CardCollection cardCollection, ICardCollectionEditingListener listener, int cardLimit) {
+	public CardCollectionEditor(String title, CardList cardList, ICardCollectionEditingListener listener, int cardLimit) {
 		super("CardCollectionEditor.fxml");
 		this.listener = listener;
 		this.cardLimit = cardLimit;
@@ -63,7 +63,7 @@ public class CardCollectionEditor extends SandboxEditor {
 		setTitle(title);
 
 		editableListView.setCellFactory(TextFieldListCell.forListView(new CardStringConverter()));
-		populateEditableView(cardCollection);
+		populateEditableView(cardList);
 
 		catalogueListView.setCellFactory(TextFieldListCell.forListView(new CardStringConverter()));
 		populateCatalogueView(null);
@@ -95,7 +95,7 @@ public class CardCollectionEditor extends SandboxEditor {
 	}
 
 	private void handleOkButton(ActionEvent actionEvent) {
-		CardCollection changedCollection = new CardCollectionImpl();
+		CardList changedCollection = new CardArrayList();
 		for (Card card : editableListView.getItems()) {
 			changedCollection.addCard(card);
 		}
@@ -124,9 +124,9 @@ public class CardCollectionEditor extends SandboxEditor {
 		catalogueListView.setItems(data);
 	}
 
-	private void populateEditableView(CardCollection cardCollection) {
+	private void populateEditableView(CardList cardList) {
 		ObservableList<Card> data = FXCollections.observableArrayList();
-		for (Card card : cardCollection) {
+		for (Card card : cardList) {
 			data.add(card);
 		}
 		editableListView.setItems(data);

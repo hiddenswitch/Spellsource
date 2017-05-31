@@ -3,7 +3,7 @@ package net.demilich.metastone.game.targeting;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -14,8 +14,6 @@ import net.demilich.metastone.game.spells.SummonRandomMinionFilteredSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
-
-import java.util.List;
 
 /**
  * Zones describe the different locations for entities in the game.
@@ -97,7 +95,7 @@ public enum Zones {
 	 * <p>
 	 * The opposing player can see the count, but not the contents, of cards the player is choosing between.
 	 *
-	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, SpellDesc, CardCollection) for
+	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, SpellDesc, CardList) for
 	 * more about how discover is implemented.
 	 * @see net.demilich.metastone.game.actions.DiscoverAction for more about a discover action.
 	 */

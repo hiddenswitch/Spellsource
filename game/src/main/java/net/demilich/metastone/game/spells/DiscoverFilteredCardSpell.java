@@ -7,8 +7,8 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardCollectionImpl;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -30,17 +30,17 @@ public class DiscoverFilteredCardSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		EntityFilter[] cardFilters = (EntityFilter[]) desc.get(SpellArg.CARD_FILTERS);
-		CardCollection cards = CardCatalogue.query(context.getDeckFormat());
+		CardList cards = CardCatalogue.query(context.getDeckFormat());
 		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
 		if (cardSource != null) {
 			cards = cardSource.getCards(context, player);
 		}
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
-		CardCollection discoverCards = new CardCollectionImpl();
+		CardList discoverCards = new CardArrayList();
 
 		if (cardFilters != null) {
 			for (EntityFilter filter : cardFilters) {
-				CardCollection result = new CardCollectionImpl();
+				CardList result = new CardArrayList();
 				for (Card card : cards) {
 					if (filter == null || filter.matches(context, player, card)) {
 						result.addCard(card);
@@ -52,13 +52,13 @@ public class DiscoverFilteredCardSpell extends Spell {
 				}
 			}
 		} else {
-			CardCollection result = new CardCollectionImpl();
+			CardList result = new CardArrayList();
 			for (Card card : cards) {
 				if (cardFilter == null || cardFilter.matches(context, player, card)) {
 					result.addCard(card);
 				}
 			}
-			discoverCards = new CardCollectionImpl();
+			discoverCards = new CardArrayList();
 
 			for (int i = 0; i < count; i++) {
 				if (!result.isEmpty()) {

@@ -6,7 +6,7 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -38,12 +38,26 @@ import net.demilich.metastone.game.utils.AttributeMap;
  */
 public abstract class Entity extends CustomCloneable implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final int NO_OWNER = -1;
+	/**
+	 * The value for the {@link #ownerIndex} when no owner has been assigned.
+	 * <p>
+	 * All entities should have an owner.
+	 */
+	public static final int NO_OWNER = -1;
 
 	private String name;
 	private AttributeMap attributes = new AttributeMap();
+	/**
+	 * @see #getId()
+	 */
 	private int id = IdFactory.UNASSIGNED;
+	/**
+	 * @see #getOwner()
+	 */
 	private int ownerIndex = NO_OWNER;
+	/**
+	 * @see #getEntityLocation()
+	 */
 	protected EntityLocation entityLocation = EntityLocation.UNASSIGNED;
 
 	protected Entity() {
@@ -113,7 +127,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	 * @return The entity's ID, or {@link IdFactory#UNASSIGNED} if it is unassigned.
 	 * @see IdFactory for the class that generates IDs.
 	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the place where minion IDs are set.
-	 * @see GameLogic#assignCardIds(CardCollection, int) for the place where IDs are set for all the cards that start
+	 * @see GameLogic#assignCardIds(CardList, int) for the place where IDs are set for all the cards that start
 	 * in the game.
 	 * @see EntityReference for a class used to store the notion of a "target."
 	 */
@@ -326,7 +340,7 @@ public abstract class Entity extends CustomCloneable implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void moveOrAddTo(GameContext context, Zones destination) throws ArrayStoreException {
-		if (getOwner() == -1) {
+		if (getOwner() == Entity.NO_OWNER) {
 			throw new ArrayStoreException("No owner for entity.");
 		}
 

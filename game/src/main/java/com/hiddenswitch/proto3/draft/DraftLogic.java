@@ -162,7 +162,7 @@ public class DraftLogic {
 				}
 
 				// Get neutral and hero cards
-				CardCollection classCards = CardCatalogue.query(format, c -> {
+				CardList classCards = CardCatalogue.query(format, c -> {
 					return c.hasHeroClass(hero)
 							&& !bannedCards.contains(c.getCardId())
 							&& c.getRarity() == rarity
@@ -170,7 +170,7 @@ public class DraftLogic {
 							&& c.isCollectible();
 				});
 
-				CardCollection neutralCards = CardCatalogue.query(format, c -> {
+				CardList neutralCards = CardCatalogue.query(format, c -> {
 					return (c.hasHeroClass(HeroClass.ANY) || c.hasHeroClass(HeroClass.NEUTRAL))
 							&& !bannedCards.contains(c.getCardId())
 							&& c.getRarity() == rarity
@@ -179,7 +179,7 @@ public class DraftLogic {
 				});
 
 				// Add two copies of the class cards and then the neutrals
-				CardCollection cards = classCards.clone().addAll(classCards).addAll(neutralCards);
+				CardList cards = classCards.clone().addAll(classCards).addAll(neutralCards);
 
 				if (cards.getCount() == 0) {
 					logger.info("Draft pulled no cards given parameters: draft={}, rarity={}, sets={}", draft, rarity, format.getCardSets());

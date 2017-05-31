@@ -13,8 +13,8 @@ public class SummonRandomMinionFromSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card fromCard = SpellUtils.getCard(context, desc);
-		CardCollection allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
-		CardCollection relevantMinions = new CardCollectionImpl();
+		CardList allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
+		CardList relevantMinions = new CardArrayList();
 		for (Card card : allMinions) {
 			if (context.getLogic().getModifiedManaCost(player, fromCard) == card.getBaseManaCost()) {
 				relevantMinions.addCard(card);

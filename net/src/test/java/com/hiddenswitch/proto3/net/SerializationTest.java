@@ -84,7 +84,7 @@ public class SerializationTest extends TestBase {
 		HeroPowerCard heroPowerFireblast = (HeroPowerCard) CardCatalogue.getCardById("hero_power_fireblast");
 		WeaponCard assassinsBlade = (WeaponCard) CardCatalogue.getCardById("weapon_assassins_blade");
 		SpellCard journeyBelow = (SpellCard) CardCatalogue.getCardById("spell_journey_below");
-		CardCollection discoverCards = new CardCollectionImpl();
+		CardList discoverCards = new CardArrayList();
 		discoverCards.addCard(fireball.getCopy());
 		DiscoverAction discoverAction = DiscoverAction.createDiscover(journeyBelow.getSpell());
 

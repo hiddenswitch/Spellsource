@@ -52,7 +52,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private int turn;
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
-	private CardCollection tempCards = new CardCollectionImpl();
+	private CardList tempCards = new CardArrayList();
 	private Stack<GameAction> actionStack = new Stack<>();
 	private Stack<GameEvent> eventStack = new Stack<>();
 
@@ -782,11 +782,11 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		this.triggerManager = triggerManager;
 	}
 
-	public CardCollection getTempCards() {
+	public CardList getTempCards() {
 		return tempCards;
 	}
 
-	public void setTempCards(CardCollection tempCards) {
+	public void setTempCards(CardList tempCards) {
 		this.tempCards = tempCards;
 	}
 

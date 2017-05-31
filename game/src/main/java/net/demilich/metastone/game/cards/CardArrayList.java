@@ -1,33 +1,45 @@
 package net.demilich.metastone.game.cards;
 
-import org.apache.commons.lang3.RandomUtils;
+import net.demilich.metastone.game.decks.DeckFormat;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
-public class CardCollectionImpl implements Cloneable, Serializable, CardCollection {
+/**
+ * An implementation of {@link CardList} for easy shuffling, choosing and uniqueness testing of lists of cards.
+ *
+ * @see CardCatalogue#query(DeckFormat, Predicate) for an example of using this class to return a list of cards from a
+ * function. By using this class instead of a plain {@link List}, the calling code can e.g. easily {@link #shuffle()}
+ * the results.
+ * @see net.demilich.metastone.game.spells.DiscoverFilteredCardSpell for a more advanced example of this class.
+ */
+public class CardArrayList extends AbstractList<Card> implements Cloneable, Serializable, CardList {
 	private static final long serialVersionUID = 1L;
-
 	private List<Card> cards = new ArrayList<Card>();
 
-	public CardCollectionImpl() {
+	public CardArrayList() {
 	}
 
-	public CardCollectionImpl(List<Card> cards) {
+	/**
+	 * Creates this instance from an existing list of cards.
+	 *
+	 * @param cards The list of cards.
+	 */
+	public CardArrayList(List<Card> cards) {
 		this.cards = new ArrayList<>(cards);
 	}
 
 	@Override
-	public CardCollection addCard(Card card) {
+	public CardList addCard(Card card) {
 		cards.add(card);
 		return this;
 	}
 
 	@Override
-	public CardCollection addAll(CardCollection cardCollection) {
-		for (Card card : cardCollection) {
+	public CardList addAll(CardList cardList) {
+		for (Card card : cardList) {
 			cards.add(card.clone());
 		}
 		return this;
@@ -40,8 +52,8 @@ public class CardCollectionImpl implements Cloneable, Serializable, CardCollecti
 	}
 
 	@Override
-	public CardCollection clone() {
-		CardCollection clone = new CardCollectionImpl();
+	public CardList clone() {
+		CardList clone = new CardArrayList();
 		for (Card card : cards) {
 			clone.addCard(card.clone());
 		}
@@ -75,6 +87,11 @@ public class CardCollectionImpl implements Cloneable, Serializable, CardCollecti
 	}
 
 	@Override
+	public int size() {
+		return cards.size();
+	}
+
+	@Override
 	public Card peekFirst() {
 		return cards.get(0);
 	}
@@ -87,11 +104,6 @@ public class CardCollectionImpl implements Cloneable, Serializable, CardCollecti
 	@Override
 	public void removeAll() {
 		cards.clear();
-	}
-
-	@Override
-	public void removeAll(Predicate<Card> filter) {
-		cards.removeIf(filter);
 	}
 
 	@Override

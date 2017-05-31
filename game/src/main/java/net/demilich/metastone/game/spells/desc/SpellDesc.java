@@ -10,6 +10,11 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
+ * A definition for a spell.
+ *
+ * A spell description has a variety of arguments of type {@link SpellArg}.
+ */
 public class SpellDesc extends Desc<SpellArg> {
 
 	public SpellDesc(Map<SpellArg, Object> arguments) {

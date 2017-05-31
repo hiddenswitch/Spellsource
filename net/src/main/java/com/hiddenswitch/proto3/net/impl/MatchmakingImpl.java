@@ -13,7 +13,7 @@ import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
@@ -127,7 +127,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 			if (incomingDeck != null) {
 				deck = new Deck(HeroClass.valueOf(incomingDeck.getHeroClass()));
-				final CardCollection cards = deck.getCards();
+				final CardList cards = deck.getCards();
 				incomingDeck.getCards().forEach(cardId -> {
 					cards.addCard(CardCatalogue.getCardById(cardId));
 				});
