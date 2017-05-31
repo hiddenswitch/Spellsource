@@ -13,6 +13,18 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 public abstract class Spell implements Serializable {
+	/**
+	 * Casts a spell for the given arguments.
+	 *
+	 * This spell casting code is responsible for interpreting the {@link SpellArg#FILTER} and {@link SpellArg#RANDOM_TARGET}
+	 * attributes of a {@link SpellDesc}.
+	 * @param context
+	 * @param player
+	 * @param desc
+	 * @param source
+	 * @param targets
+	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter) for the logic which filters the targets argument.
+	 */
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		// no target specified, cast the spell once with target NULL

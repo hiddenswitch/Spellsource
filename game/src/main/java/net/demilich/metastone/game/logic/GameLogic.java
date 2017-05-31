@@ -16,14 +16,22 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
+import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.DestroySpell;
+import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.SpellFactory;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.filter.FilterArg;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.trigger.DamageCausedTrigger;
+import net.demilich.metastone.game.spells.trigger.DamageReceivedTrigger;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.SpellCastedTrigger;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -41,14 +49,15 @@ import java.util.stream.Collectors;
  * The game logic class implements the basic primitives of gameplay.
  * <p>
  * This class processes all the changes to a game state (a variety of fields in a {@link GameContext} between requests
- * for player actions. It does not make player action requests itself (the {@link GameContext} is responsible for that).
+ * for player actions. It does not make player action requests itself (the {@link GameContext} is responsible for
+ * that).
  * <p>
- * Most functions will accept a {@link GameContext} as an argument and mutate it. You can use {@link GameContext#clone()}
- * to create an "immutable" equivalent behaviour.
+ * Most functions will accept a {@link GameContext} as an argument and mutate it. You can use {@link
+ * GameContext#clone()} to create an "immutable" equivalent behaviour.
  * <p>
  * Most effects are encoded in {@link Spell} classes, which subsequently call functions in this class. However, a few
- * key functions are called by {@link GameAction#execute(GameContext, int)} calls directly, like {@link #summon(int, Minion, Card, int, boolean)}
- * and {@link #fight(Player, Actor, Actor)}.
+ * key functions are called by {@link GameAction#execute(GameContext, int)} calls directly, like {@link #summon(int,
+ * Minion, Card, int, boolean)} and {@link #fight(Player, Actor, Actor)}.
  */
 public class GameLogic implements Cloneable, Serializable {
 	protected static Logger logger = LoggerFactory.getLogger(GameLogic.class);
@@ -78,8 +87,8 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	public static final int MAX_SECRETS = 5;
 	/**
-	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link Deck}
-	 * with. Some effects, like Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
+	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link Deck} with. Some effects,
+	 * like Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
 	 */
 	public static final int DECK_SIZE = 30;
 	/**
@@ -156,8 +165,8 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Adds a {@link IGameEventListener} to a specified {@link Entity}. These are typically {@link SpellTrigger} instances
-	 * that react to game events.
+	 * Adds a {@link IGameEventListener} to a specified {@link Entity}. These are typically {@link SpellTrigger}
+	 * instances that react to game events.
 	 *
 	 * @param player            Usually the current turn player.
 	 * @param gameEventListener A game event listener, like a {@link Aura}, {@link Secret} or {@link CardCostModifier}.
@@ -398,11 +407,11 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Choose One effects are similar to Discover effects, and certain other cards such as Tracking, which also allow
 	 * you to choose between multiple options.
 	 *
-	 * @param playerId The player casting the choose one spell.
-	 * @param spellDesc The {@link SpellDesc} of the chosen card, not the parent card that contains the choices.
+	 * @param playerId        The player casting the choose one spell.
+	 * @param spellDesc       The {@link SpellDesc} of the chosen card, not the parent card that contains the choices.
 	 * @param sourceReference The source of the spell, typically the original {@link ChooseOneCard}.
 	 * @param targetReference The target selected for this choice.
-	 * @param cardId The card that was chosen.
+	 * @param cardId          The card that was chosen.
 	 */
 	@Suspendable
 	public void castChooseOneSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference, String cardId) {
@@ -478,15 +487,49 @@ public class GameLogic implements Cloneable, Serializable {
 
 	/**
 	 * Casts a spell.
+	 * <p>
+	 * This method uses the {@link SpellDesc} (a {@link Map} of {@link SpellArg}, {@link Object}) to figure out what the
+	 * spell should do. The {@link SpellFactory#getSpell(SpellDesc)} method creates an instance of the {@link Spell}
+	 * class returned by {@code spellDesc.getSpellClass()}, then calls its {@link Spell#onCast(GameContext, Player,
+	 * SpellDesc, Entity, Entity)} method to actually execute the code of the spell.
+	 * <p>
+	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose
+	 * {@link SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of
+	 * {@link EntityFilter} with {@link FilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would
+	 * be {@code 2} to deal 2 damage, and whose (4) {@link SpellArg#TARGET} would be {@link
+	 * EntityReference#ALL_MINIONS}.
+	 * <p>
+	 * Effects can modify spells or create new ones. {@link SpellDesc} allows the code to modify the "code" of a spell.
+	 * <p>
+	 * This method is responsible for turning the {@link SpellArg#CLASS} argument into a spell instance. The particular
+	 * spell class is then responsible for interpreting the rest of its arguments. This code also handles the player's
+	 * chosen target whenever a spell had a target selection.
 	 *
-	 * This method uses the {@link SpellDesc} to figure out what the spell should do.
-	 *
-	 * @param playerId
-	 * @param spellDesc
-	 * @param sourceReference
-	 * @param targetReference
-	 * @param targetSelection
-	 * @param childSpell
+	 * @param playerId        The players from whose point of view this spell is cast (typically the owning player).
+	 * @param spellDesc       A description of the spell.
+	 * @param sourceReference The origin of the spell. This is typically the {@link Minion} if the spell is a battlecry
+	 *                        or deathrattle; or, the {@link SpellCard} if this spell is coming from a card.
+	 * @param targetReference A reference to the target the user selected, if the spell was supposed to have a target.
+	 * @param targetSelection If not {@code null}, the spell must have at least one {@link Entity} satisfying this
+	 *                        target selection requirement in order for it to be cast.
+	 * @param childSpell      When {@code true}, this spell is part an effect, like one of the {@link SpellArg#SPELLS}
+	 *                        of a {@link MetaSpell}, and so it shouldn't trigger the firing of events like {@link
+	 *                        SpellCastedTrigger}. When {@code false}, this spell is what a player would interpret as a
+	 *                        spell coming from a card (a "spell" in the sense of what is written on cards). Battlecries
+	 *                        and deathrattles are, unusually, {@code false} (not) child spells.
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the code that interprets the {@link
+	 * SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
+	 * @see Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for the function that typically has the
+	 * spell-specific code (e.g., {@link DamageSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} actually
+	 * implements the logic of a damage spell and interprets the {@link SpellArg#VALUE} attribute of the {@link
+	 * SpellDesc} as damage.
+	 * @see MetaSpell for the mechanism that multiple spells as children are chained together to create an effect.
+	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) for the code that turns a target selection
+	 * into actions the player can take.
+	 * @see PlaySpellCardAction#play(GameContext, int) for the call to this function that a player actually does when
+	 * they play a {@link SpellCard} (as opposed to a battlecry or deathrattle).
+	 * @see BattlecryAction#execute(GameContext, int) for the call to this function that demonstrates a battlecry
+	 * effect. Battlecries are spells in the sense that they are effects, though they're not {@link SpellCard} objects.
 	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
@@ -544,6 +587,14 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	/**
+	 * Changes the player's hero.
+	 * <p>
+	 * Implements Lord Jaraxxus.
+	 *
+	 * @param player The player whose hero to change.
+	 * @param hero   The new hero the player will have.
+	 */
 	public void changeHero(Player player, Hero hero) {
 		hero.setId(player.getHero().getId());
 		if (hero.getHeroClass() == null || hero.getHeroClass() == HeroClass.ANY) {
@@ -559,17 +610,25 @@ public class GameLogic implements Cloneable, Serializable {
 		refreshAttacksPerRound(hero);
 	}
 
+	/**
+	 * Removes entities for whom {@link Entity#isDestroyed()} is true, moving them to the {@link Zones#GRAVEYARD} and
+	 * triggering their deathrattles with {@link #resolveDeathrattles(Player, Actor)}.
+	 * <p>
+	 * Since deathrattles may destroy other entities (e.g., a {@link DamageSpell} deathrattle), this function calls
+	 * itself recursively until there are no more dead entities on the board.
+	 */
 	@Suspendable
 	public void checkForDeadEntities() {
 		checkForDeadEntities(0);
 	}
 
 	/**
-	 * Checks all player minions and weapons for destroyed actors and proceeds
-	 * with the removal in correct order
+	 * Checks all player minions and weapons for destroyed actors and proceeds with the removal in correct order.
+	 *
+	 * @param i The number of times this method has been called to avoid infinite death checking.
 	 */
 	@Suspendable
-	public void checkForDeadEntities(int i) {
+	private void checkForDeadEntities(int i) {
 		// sanity check, this method should never call itself that often
 		if (i > 20) {
 			panicDump();
@@ -609,6 +668,12 @@ public class GameLogic implements Cloneable, Serializable {
 		checkForDeadEntities(i + 1);
 	}
 
+	/**
+	 * Clones the game logic. The only state in this instance is its debug history and the current ID of the ID Factory.
+	 *
+	 * @return A clone of this logic.
+	 * @see IdFactory for the internal state of an {@link IdFactory}.
+	 */
 	@Override
 	public GameLogic clone() {
 		GameLogic clone = new GameLogic(getIdFactory().clone());
@@ -616,14 +681,51 @@ public class GameLogic implements Cloneable, Serializable {
 		if (isLoggingEnabled()) {
 			clone.debugHistory = this.debugHistory.clone();
 		}
+		clone.context = context;
 		return clone;
 	}
 
+	/**
+	 * Deals spell damage to a target.
+	 *
+	 * @param player     The originating player of the damage.
+	 * @param target     The target to damage.
+	 * @param baseDamage The base amount of damage to deal.
+	 * @param source     The source of the damage.
+	 * @return The amount of damage ultimately dealt, considering all on board effects.
+	 * @see #damage(Player, Actor, int, Entity, boolean) for a complete description of the damage effect.
+	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source) {
 		return damage(player, target, baseDamage, source, false);
 	}
 
+	/**
+	 * Deals damage to a target.
+	 * <p>
+	 * Damage is measured by a number which is deducted from the armor first, followed by hitpoints, of an {@link
+	 * Actor}. If the {@link Actor#getHp()} is reduced to zero (or below), it will be killed. Note that other types of
+	 * harm that can be inflicted to characters (such as a {@link DestroySpell}, freeze effects and the card Equality)
+	 * are not considered damage for game purposes and, although most damage is dealt through {@link #fight(Player,
+	 * Actor, Actor)}, dealing damage is not considered an "fight" for game purposes.
+	 * <p>
+	 * Damage can activate a number of triggered effects, both from receiving it (such as Acolyte of Pain's {@link
+	 * DamageReceivedTrigger}) and from dealing it (such as Water Elemental's {@link DamageCausedTrigger}). However,
+	 * damage negated by an {@link Actor} with {@link Attribute#DIVINE_SHIELD} or {@link Attribute#IMMUNE} effects is
+	 * not considered to have been successfully dealt, and thus will not trigger any on-damage triggered effects.
+	 * <p>
+	 * A {@link Hero} with nonzero {@link Hero#getArmor()} will have any damage deducted from their armor before their
+	 * hitpoints: any damage beyond the {@link Actor}'s current Armor will be deducted from their hitpoints. Armor will
+	 * not prevent damage from being dealt: damage dealt only to Armor still counts as damage for the purpose of effects
+	 * such as Water Elemental and Floating Watcher.
+	 *
+	 * @param player            The originating player of the damage.
+	 * @param target            The target to damage.
+	 * @param baseDamage        The base amount of damage to deal.
+	 * @param source            The source of the damage.
+	 * @param ignoreSpellDamage When {@code true}, spell damage bonuses are not added to the damage dealt.
+	 * @return
+	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage) {
 		// sanity check to prevent StackOverFlowError with Mistress of Pain +
@@ -708,6 +810,13 @@ public class GameLogic implements Cloneable, Serializable {
 		return damage;
 	}
 
+	/**
+	 * Destroys the given targets, triggering their deathrattles if necessary.
+	 *
+	 * @param targets A list of {@link Actor} targets that should be destroyed.
+	 * @see #checkForDeadEntities() for the code that actually finds dead entities as a result of effects and eventually
+	 * destroys them.
+	 */
 	@Suspendable
 	public void destroy(Actor... targets) {
 		// Reverse the targets
@@ -770,10 +879,34 @@ public class GameLogic implements Cloneable, Serializable {
 		context.fireGameEvent(new WeaponDestroyedEvent(context, weapon));
 	}
 
+	/**
+	 * Determines who is the first player of a list of player IDs.
+	 *
+	 * @param playerIds The possible options for first player.
+	 * @return The ID of the player that should go first.
+	 */
 	public int determineBeginner(int... playerIds) {
 		return getRandom().nextBoolean() ? playerIds[0] : playerIds[1];
 	}
 
+	/**
+	 * Discards a card from your hand, either through discard card effects or "overdraw" (forced
+	 * destruction of cards due to too many cards in your hand).
+	 * <p>
+	 * Discarded cards are removed from the game, without activating Deathrattles. Discard effects are most commonly
+	 * found on warlock cards. Discard effects are distinguished from overdraw, and Fel Reaver's remove from deck
+	 * effect, both of which remove cards directly from the deck without entering the hand; and from Tracking's
+	 * "discard" effect, which in fact removes cards directly from a special display zone without entering the hand.
+	 * While similar to discard effects, neither is considered a discard for game purposes, and will not activate
+	 * related effects.
+	 * <p>
+	 * This method handles all situations and correctly triggers a {@link DiscardEvent} only when a card is discarded
+	 * from the hand.
+	 *
+	 * @param player The player that owns the card getting discarded.
+	 * @param card   The card to discard.
+	 * @see #receiveCard(int, Card) for more on receiving and drawing cards.
+	 */
 	@Suspendable
 	public void discardCard(Player player, Card card) {
 		logger.debug("{} discards {}", player.getName(), card);
@@ -785,6 +918,16 @@ public class GameLogic implements Cloneable, Serializable {
 		removeCard(player.getId(), card);
 	}
 
+	/**
+	 * Draws a card for a player from the deck to the hand.
+	 *
+	 * When a {@link Deck} is empty, 
+	 *
+	 * @param playerId The player who should draw a card.
+	 * @param source   The card that is the origin of the drawing effect, or {@code null} if this is the draw from the
+	 *                 beginning of a turn
+	 * @return The card that was drawn.
+	 */
 	@Suspendable
 	public Card drawCard(int playerId, Entity source) {
 		Player player = context.getPlayer(playerId);
@@ -808,7 +951,6 @@ public class GameLogic implements Cloneable, Serializable {
 	public Card drawCard(int playerId, Card card, Entity source) {
 		Player player = context.getPlayer(playerId);
 		player.getStatistics().cardDrawn();
-//		player.getDeck().remove(card);
 		receiveCard(playerId, card, source, true);
 		return card;
 	}
@@ -1915,9 +2057,9 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Silence is an ability which removes all current card text, enchantments, and abilities from the targeted minion.
 	 * It does not remove damage or minion type.
 	 *
-	 * @param playerId The ID of the player (typically the owner of the target). This is used by {@link net.demilich.metastone.game.spells.custom.ShadowMadnessSpell}
-	 *                 to reverse the mind control of a minion that somehow gets silenced during the turn that spell
-	 *                 is cast.
+	 * @param playerId The ID of the player (typically the owner of the target). This is used by {@link
+	 *                 net.demilich.metastone.game.spells.custom.ShadowMadnessSpell} to reverse the mind control of a
+	 *                 minion that somehow gets silenced during the turn that spell is cast.
 	 * @param target   A {@link Minion} to silence.
 	 * @see <a href="http://hearthstone.gamepedia.com/Silence">Silence</a> for a complete description of the silencing
 	 * game rules.
