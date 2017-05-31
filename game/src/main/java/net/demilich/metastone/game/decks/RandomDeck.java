@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
@@ -16,13 +16,13 @@ public class RandomDeck extends Deck {
 	public RandomDeck(HeroClass heroClass, DeckFormat deckFormat) {
 		super(heroClass);
 		IDeckValidator deckValidator = new DefaultDeckValidator();
-		CardCollection classCards = CardCatalogue.query(deckFormat, card -> {
+		CardList classCards = CardCatalogue.query(deckFormat, card -> {
 			return card.isCollectible()
 					&& !card.getCardType().isCardType(CardType.HERO)
 					&& !card.getCardType().isCardType(CardType.HERO_POWER)
 					&& card.hasHeroClass(getHeroClass());
 		});
-		CardCollection neutralCards = CardCatalogue.query(deckFormat, card -> {
+		CardList neutralCards = CardCatalogue.query(deckFormat, card -> {
 			return card.isCollectible()
 					&& !card.getCardType().isCardType(CardType.HERO)
 					&& !card.getCardType().isCardType(CardType.HERO_POWER)

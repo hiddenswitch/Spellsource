@@ -28,18 +28,18 @@ public class SummonOneOneCopySpell extends Spell {
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		MinionCard minionCard = null;
 		if (cardSource != null || cardFilter != null) {
-			CardCollection relevantMinions = null;
+			CardList relevantMinions = null;
 			if (cardSource != null) {
-				CardCollection allCards = cardSource.getCards(context, player);
-				relevantMinions = new CardCollectionImpl();
+				CardList allCards = cardSource.getCards(context, player);
+				relevantMinions = new CardArrayList();
 				for (Card card : allCards) {
 					if (card.getCardType().isCardType(CardType.MINION) && (cardFilter == null || cardFilter.matches(context, player, card))) {
 						relevantMinions.addCard(card);
 					}
 				}
 			} else {
-				CardCollection allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
-				relevantMinions = new CardCollectionImpl();
+				CardList allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
+				relevantMinions = new CardArrayList();
 				for (Card card : allMinions) {
 					if (cardFilter.matches(context, player, card)) {
 						relevantMinions.addCard(card);

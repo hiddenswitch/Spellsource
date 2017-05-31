@@ -25,7 +25,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 
 public class SpellUtils {
@@ -58,8 +57,8 @@ public class SpellUtils {
 		return false;
 	}
 
-	public static CardCollection getCards(CardCollection source, Predicate<Card> filter) {
-		CardCollection result = new CardCollectionImpl();
+	public static CardList getCards(CardList source, Predicate<Card> filter) {
+		CardList result = new CardArrayList();
 		for (Card card : source) {
 			if (filter == null || filter.test(card)) {
 				result.addCard(card);
@@ -124,14 +123,14 @@ public class SpellUtils {
 	 *                this {@link SpellDesc} defines a {@link ReceiveCardSpell}, {@link ReceiveCardAndDoSomethingSpell},
 	 *                or a {@link ChangeHeroPowerSpell}. These spells all receive cards as arguments. This argument
 	 *                allows a {@link DiscoverAction} to do more sophisticated things than just put cards into hands.
-	 * @param cards   A {@link CardCollection} of cards that get copied, added to the {@link Zones#DISCOVER} zone of the
+	 * @param cards   A {@link CardList} of cards that get copied, added to the {@link Zones#DISCOVER} zone of the
 	 *                player and shown in the discover card UI to the player.
 	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
 	 * @see DiscoverCardSpell for the spell that typically calls this method.
 	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link DiscoverCardSpell}.
 	 */
 	@Suspendable
-	public static DiscoverAction discoverCard(GameContext context, Player player, SpellDesc desc, CardCollection cards) {
+	public static DiscoverAction discoverCard(GameContext context, Player player, SpellDesc desc, CardList cards) {
 		// Discovers always work with a copy of the incoming cards
 		cards = cards.getCopy();
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
@@ -193,8 +192,8 @@ public class SpellUtils {
 	}
 
 	@Suspendable
-	public static Card getRandomCard(CardCollection source, Predicate<Card> filter) {
-		CardCollection result = getCards(source, filter);
+	public static Card getRandomCard(CardList source, Predicate<Card> filter) {
+		CardList result = getCards(source, filter);
 		if (result.isEmpty()) {
 			return null;
 		}

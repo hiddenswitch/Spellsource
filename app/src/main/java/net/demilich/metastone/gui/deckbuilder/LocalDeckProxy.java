@@ -19,7 +19,7 @@ import com.google.gson.GsonBuilder;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
@@ -65,17 +65,17 @@ public class LocalDeckProxy extends Proxy<GameNotification> implements DeckEdito
 		for (CardSet cardSet : CardSet.values()) {
 			deckFormat.addSet(cardSet);
 		}
-		CardCollection cardCollection;
+		CardList cardList;
 		if (activeDeck.isArbitrary()) {
-			cardCollection = CardCatalogue.query(deckFormat);
+			cardList = CardCatalogue.query(deckFormat);
 		} else {
-			cardCollection = CardCatalogue.query(deckFormat, heroClass);
+			cardList = CardCatalogue.query(deckFormat, heroClass);
 			// add neutral cards
-			cardCollection.addAll(CardCatalogue.query(deckFormat, HeroClass.ANY));
+			cardList.addAll(CardCatalogue.query(deckFormat, HeroClass.ANY));
 		}
-		cardCollection.sortByName();
-		cardCollection.sortByManaCost();
-		return cardCollection.toList();
+		cardList.sortByName();
+		cardList.sortByManaCost();
+		return cardList.toList();
 	}
 
 	@Override

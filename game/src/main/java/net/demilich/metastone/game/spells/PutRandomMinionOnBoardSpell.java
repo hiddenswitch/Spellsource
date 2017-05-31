@@ -3,7 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
@@ -31,7 +31,7 @@ public class PutRandomMinionOnBoardSpell extends Spell {
 	@Suspendable
 	private void putRandomMinionFromDeckOnBoard(GameContext context, Player player, EntityFilter cardFilter, Zones cardLocation) {
 		MinionCard minionCard = null;
-		CardCollection collection = cardLocation == Zones.HAND ? player.getHand() : player.getDeck();
+		CardList collection = cardLocation == Zones.HAND ? player.getHand() : player.getDeck();
 		if (cardFilter == null) {
 			minionCard = (MinionCard) collection.getRandomOfType(CardType.MINION);
 		} else {

@@ -43,12 +43,12 @@ public class CastRandomSpellSpell extends Spell {
 	private void internalYogg(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// This spell is crazy.
 		CardFilter filter = (CardFilter) desc.get(SpellArg.CARD_FILTER);
-		CardCollection spells = CardCatalogue.query(context.getDeckFormat(), CardType.SPELL);
+		CardList spells = CardCatalogue.query(context.getDeckFormat(), CardType.SPELL);
 		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
 		if (cardSource != null) {
 			spells = cardSource.getCards(context, player);
 		}
-		CardCollection filteredSpells = new CardCollectionImpl();
+		CardList filteredSpells = new CardArrayList();
 		for (Card spell : spells) {
 			if (filter == null || filter.matches(context, player, spell)) {
 				filteredSpells.addCard(spell);

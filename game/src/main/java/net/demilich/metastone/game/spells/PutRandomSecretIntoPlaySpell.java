@@ -5,8 +5,8 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCollection;
-import net.demilich.metastone.game.cards.CardCollectionImpl;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.SecretCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -15,9 +15,9 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 
 public class PutRandomSecretIntoPlaySpell extends Spell {
 
-	private CardCollection findSecretCards(CardCollection cardCollection) {
-		CardCollection secretCards = new CardCollectionImpl();
-		for (Card card : cardCollection) {
+	private CardList findSecretCards(CardList cardList) {
+		CardList secretCards = new CardArrayList();
+		for (Card card : cardList) {
 			if (card.hasAttribute(Attribute.SECRET)) {
 				secretCards.addCard(card);
 			}
@@ -30,7 +30,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		for (int i = 0; i < howMany; i++) {
-			CardCollection secretCards = findSecretCards(player.getDeck());
+			CardList secretCards = findSecretCards(player.getDeck());
 
 			if (secretCards.isEmpty()) {
 				return;

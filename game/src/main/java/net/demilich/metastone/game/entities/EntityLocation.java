@@ -39,8 +39,17 @@ public final class EntityLocation implements Serializable {
 	 * An unassigned location.
 	 */
 	public static final EntityLocation UNASSIGNED = new EntityLocation(Zones.NONE, -1, -1);
+	/**
+	 * @see #getZone()
+	 */
 	private final Zones zone;
+	/**
+	 * @see #getPlayer()
+	 */
 	private final int player;
+	/**
+	 * @see #getIndex()
+	 */
 	private final int index;
 
 	/**
@@ -84,8 +93,8 @@ public final class EntityLocation implements Serializable {
 	}
 
 	/**
-	 * Gets the index of the player for this location, or {@code -1} if it has not yet been assigned. (With the exception
-	 * of {@link #UNASSIGNED}, a {@link #player} fields with a value of {@code -1} is an invalid location.
+	 * Gets the index of the player for this location, or {@link Entity#NO_OWNER} if it has not yet been assigned. (With the exception
+	 * of {@link #UNASSIGNED}, a {@link #player} fields with a value of {@link Entity#NO_OWNER} is an invalid location.
 	 * @return The player index, or {@link -1} if it has not yet been assigned.
 	 * @see GameContext#getPlayer(int) to get the player pointed to by this index.
 	 */

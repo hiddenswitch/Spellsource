@@ -6,30 +6,33 @@ import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
- * Created by bberman on 4/16/17.
+ * This class is a {@link CardList} that represents the {@link Zones#HAND} and {@link Zones#DECK}. It is implemented
+ * as an {@link EntityZone} because it represents an in-game zone; i.e., an entity can only be in one zone at once.
+ *
+ * @see CardArrayList for a {@link List} that implements {@link CardList} that does not represent a zone in the game
+ * and can be used for all sorts of game logic that needs to deal with lists of cards.
  */
-public class CardZone extends EntityZone<Card> implements CardCollection {
+public class CardZone extends EntityZone<Card> implements CardList {
 	public CardZone(int player, Zones zone) {
 		super(player, zone);
 	}
 
-	public CardZone(int player, Zones zone, CardCollection cardsCopy) {
+	public CardZone(int player, Zones zone, CardList cardsCopy) {
 		super(player, zone);
 		addAll(cardsCopy);
 	}
 
 	@Override
-	public CardCollection addCard(Card card) {
+	public CardList addCard(Card card) {
 		super.add(card);
 		return this;
 	}
 
 	@Override
-	public CardCollection addAll(CardCollection cardCollection) {
-		for (Card card : cardCollection) {
+	public CardList addAll(CardList cardList) {
+		for (Card card : cardList) {
 			super.add(card.clone());
 		}
 		return this;
@@ -41,6 +44,11 @@ public class CardZone extends EntityZone<Card> implements CardCollection {
 		add(index, card);
 	}
 
+	/**
+	 * Creates a new zone and adds a clone of all the cards to it. Skips checks on the zone to prevent entities from
+	 * being in two places at once.
+	 * @return The cloned {@link CardZone}.
+	 */
 	@Override
 	public CardZone clone() {
 		// Clone all the cards too
@@ -76,16 +84,24 @@ public class CardZone extends EntityZone<Card> implements CardCollection {
 		super.clear();
 	}
 
-	@Override
-	public void removeAll(Predicate<Card> filter) {
-		super.removeIf(filter);
-	}
-
+	/**
+	 * Removes the first card in this instance and sets its location to {@link EntityLocation#UNASSIGNED}, so that
+	 * it can be added to another zone.
+	 * @return The card that was removed.
+	 */
 	@Override
 	public Card removeFirst() {
 		return super.remove(0);
 	}
 
+	/**
+	 * Replaces a card in this zone, setting the old card's {@link net.demilich.metastone.game.entities.Entity#entityLocation}
+	 * to {@link EntityLocation#UNASSIGNED} so that it can be added to another zone.
+	 * @param oldCard The card to find and replace.
+	 * @param newCard The new card to replace it with.
+	 * @return {@code true} if the old card was found and replaced. {@code false} if the old card was not found and
+	 * not replaced. (You'll never find the old card and not replace it).
+	 */
 	@Override
 	public boolean replace(Card oldCard, Card newCard) {
 		int index = indexOf(oldCard);

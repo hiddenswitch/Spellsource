@@ -36,6 +36,9 @@ public abstract class Card extends Entity {
 	private HeroClass[] heroClasses;
 	private boolean collectible = true;
 	private ValueProvider manaCostModifier;
+	/**
+	 * @see #getCardId()
+	 */
 	private String cardId;
 	private CardDesc desc;
 
@@ -45,6 +48,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Creates a card from a description of a card.
+	 *
 	 * @param desc The Card description.
 	 */
 	public Card(CardDesc desc) {
@@ -84,6 +88,7 @@ public abstract class Card extends Entity {
 	 * Clones a card's base fields, like name and description, and its current attributes. The entity ID and location
 	 * match the source object and are not cleared. {@link #getCopy()} is typically more appropriate choice
 	 * for when copies of cards are needed.
+	 *
 	 * @return An exact clone.
 	 */
 	@Override
@@ -95,9 +100,10 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Evaluates an expression written on a rule.
+	 *
 	 * @param operator An expression operator
-	 * @param value1 The left value.
-	 * @param value2 The right value.
+	 * @param value1   The left value.
+	 * @param value2   The right value.
 	 * @return The result of evaluating the expression.
 	 */
 	public static boolean evaluateExpression(String operator, int value1, int value2) {
@@ -124,6 +130,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Gets the card's ID as it corresponds to the card catalogue. This is the base definition of the card.
+	 *
 	 * @return
 	 */
 	public String getCardId() {
@@ -135,9 +142,10 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Gets an object which refers to the card's location, owner, and ID. Used for lookups.
-	 *
+	 * <p>
 	 * Unusually, card references include the card name. Some cards, like the Rogue Quest, interact with card names
 	 * instead of their IDs.
+	 *
 	 * @return A reference to the card.
 	 */
 	public CardReference getCardReference() {
@@ -146,6 +154,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Gets the set that the card belongs to.
+	 *
 	 * @return
 	 */
 	public CardSet getCardSet() {
@@ -154,6 +163,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Gets the card type, like Hero, Secret, Spell or Minion.
+	 *
 	 * @return
 	 */
 	public CardType getCardType() {
@@ -162,6 +172,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Gets the hero class that this card belongs to. Valid classes include ANY (neutral) or any of the main 9 classes.
+	 *
 	 * @return
 	 */
 	public HeroClass getHeroClass() {
@@ -170,6 +181,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Some cards have multiple hero classes. This field stores those multiple classes when they are defined.
+	 *
 	 * @return
 	 */
 	public HeroClass[] getHeroClasses() {
@@ -179,11 +191,22 @@ public abstract class Card extends Entity {
 	/**
 	 * Gets a copy of the card with some attributes like its attack or HP bonuses and mana cost modifiers removed. The
 	 * ID and owner is set to unassigned.
-	 *
+	 * <p>
 	 * Typically you should use the {@link net.demilich.metastone.game.logic.GameLogic#receiveCard(int, Card)}
 	 * method in order to put a copy into e.g. the player's hand.
+	 * <p>
+	 * Take a look at its logic to see how to assign an ID and an owner to a card for other uses of copies. A copy can
+	 * become valid for play like this:
+	 * {@code
+	 * Card copiedCard = card.getCopy();
+	 * int owningPlayer = player.getId();
+	 * copiedCard.setId(getGameLogic().getIdFactory().generateId();
+	 * copiedCard.setOwner(owningPlayer);
+	 * <p>
+	 * // Add to an appropriate zone. For example, to add the card to the end of the owning player's deck...
+	 * context.getPlayer(owningPlayer).getDeck().add(copiedCard);
+	 * }
 	 *
-	 * Take a look at its logic to see how to assign an ID and an owner to a card for other uses of copies.
 	 * @return A copy of the card with no ID or owner (and therefore no location).
 	 */
 	public Card getCopy() {
@@ -200,6 +223,7 @@ public abstract class Card extends Entity {
 	/**
 	 * Gets a cleaned up description of the card. In the future, this description should "fill in the blanks" for cards
 	 * that have variables, like which minion will be summoned or how much spell damage the spell will deal.
+	 *
 	 * @return The description.
 	 */
 	public String getDescription() {
@@ -217,12 +241,13 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Gets the mana cost of this card from the point of view of the specified player and a given context.
-	 *
+	 * <p>
 	 * Costs can be modified lots of different ways, so this method ensures the cost is calculate considering all the
 	 * rules that are on the board.
+	 *
 	 * @param context The {@link GameContext} to compute the cost against.
-	 * @param player The {@link Player} whose point of view should be considered for the cost. This is almost always
-	 *               the owner.
+	 * @param player  The {@link Player} whose point of view should be considered for the cost. This is almost always
+	 *                the owner.
 	 * @return The cost.
 	 */
 	public int getManaCost(GameContext context, Player player) {
@@ -236,6 +261,7 @@ public abstract class Card extends Entity {
 	/**
 	 * A rarity of the card. Rarer cards are generally more powerful; they appear in card packs less frequently; and
 	 * {@link Rarity#LEGENDARY} cards can only appear once in a deck.
+	 *
 	 * @return A {@link Rarity}
 	 */
 	public Rarity getRarity() {
@@ -244,6 +270,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Gets the race of a card. Typically only applies to {@link MinionCard} that summon minions when played.
+	 *
 	 * @return A {@link Race}
 	 */
 	public Race getRace() {
@@ -253,6 +280,7 @@ public abstract class Card extends Entity {
 	/**
 	 * Checks if the hero class specified is in its list of hero classes when this card belongs to multiple hero
 	 * classes.
+	 *
 	 * @param heroClass The {@link HeroClass} to search.
 	 * @return <code>True</code> if this card has the specified class.
 	 */
@@ -272,9 +300,10 @@ public abstract class Card extends Entity {
 	/**
 	 * Collectible cards can be put into decks. Non-collectible cards are typically either "tokens," or cards that
 	 * are spawned by other cards, or narrative cards.
-	 *
+	 * <p>
 	 * Even though tokens are almost always minions, effects like {@link net.demilich.metastone.game.spells.ReturnMinionToHandSpell}
 	 * can create a card that represents a minion.
+	 *
 	 * @return <code>True</code> if the card is collectible.
 	 */
 	public boolean isCollectible() {
@@ -283,6 +312,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * A string filter for certain queries on cards.
+	 *
 	 * @param filter A split filter string. See <code>matchesSplitFilter</code> for more.
 	 * @return <code>True</code> if the card matches.
 	 */
@@ -301,6 +331,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Checks if a card matches a filter for some common queries.
+	 *
 	 * @param filter A string filter that interprets common properties of cards. It supports simple comparisons of
 	 *               common card properties like <code>mana &gt; 3</code> and queries on hero classes.
 	 * @return <code>True</code> if this card matches the filter.
@@ -365,6 +396,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Create an action representing playing the card.
+	 *
 	 * @return An action that should be evaluated by {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)}.
 	 */
 	@Suspendable
@@ -386,6 +418,7 @@ public abstract class Card extends Entity {
 	/**
 	 * Gets the original {@link CardDesc} that was used to create this card. Modifying this description does not modify
 	 * the card, and the {@link CardDesc} may be referenced by multiple instances of {@link Card}.
+	 *
 	 * @return A {@link CardDesc}
 	 */
 	public CardDesc getDesc() {

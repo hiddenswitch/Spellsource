@@ -257,7 +257,7 @@ public enum Attribute {
 	 * When a combo {@link Card} is played after another card, an effect is triggered.
 	 *
 	 * @see net.demilich.metastone.game.spells.ComboSpell for the actual implementation of combo effects.
-	 * @see GameLogic#afterCardPlayed(int, CardReference) for the control of the combo attribute.
+	 * @see GameLogic#playCard(int, CardReference) for the control of the combo attribute.
 	 */
 	COMBO,
 	/**
@@ -305,21 +305,26 @@ public enum Attribute {
 	 */
 	AURA_UNTARGETABLE_BY_SPELLS,
 	/**
-	 * Multiplies the {@link #SPELL_DAMAGE} of this {@link Entity} by this attribute's value.
+	 * When a {@link net.demilich.metastone.game.cards.SpellCard} that casts a
+	 * {@link net.demilich.metastone.game.spells.DamageSpell} has this attribute, its bonus from spell damage is doubled.
 	 *
 	 * @see GameLogic#applySpellpower(Player, Entity, int) for an entity's spellpower contribution.
 	 */
 	SPELL_DAMAGE_MULTIPLIER,
 	/**
-	 * Multiplies all friendly spell damage by this attribute's value.
+	 * When any friendly {@link Entity} has this attribute, all friendly spell damage effects (typically cast by
+	 * {@link net.demilich.metastone.game.spells.DamageSpell} deal damage multiplied by this attribute's value.
+	 * <p>
+	 * This implements Prophet Velen.
 	 *
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the full spell damage calculation.
 	 */
 	SPELL_AMPLIFY_MULTIPLIER,
 	/**
-	 * Multiplies all friendly healing effects by this attribute's value.
-	 *
-	 * @see GameLogic#heal(Player, Actor, int, Entity) for the complete implementation of healing.
+	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use
+	 * {@link GameLogic#heal(Player, Actor, int, Entity)} are multiplied by this attribute's value.
+	 * <p>
+	 * This implements Prophet Velen.
 	 */
 	HEAL_AMPLIFY_MULTIPLIER,
 	/**
@@ -329,7 +334,7 @@ public enum Attribute {
 	 * The value accumulated in this attribute is permanent, in the sense that the effect that changed it did not
 	 * intend the changes to be reversible.
 	 *
-	 * @see GameLogic#getModifiedManaCost(Player, Card) for a complete
+	 * @see GameLogic#getModifiedManaCost(Player, Card) for a complete calculation of spell damage.
 	 */
 	MANA_COST_MODIFIER,
 	/**

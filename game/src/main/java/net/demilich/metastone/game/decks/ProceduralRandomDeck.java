@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
@@ -12,7 +12,7 @@ import net.demilich.metastone.game.decks.validation.IDeckValidator;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 public class ProceduralRandomDeck extends Deck {
-	protected CardCollection randomCards;
+	protected CardList randomCards;
 
 	public ProceduralRandomDeck(HeroClass heroClass) {
 		super(heroClass);
@@ -21,11 +21,11 @@ public class ProceduralRandomDeck extends Deck {
 	}
 
 	@Override
-	public CardCollection getCards() {
+	public CardList getCards() {
 		return randomCards;
 	}
 
-	private CardCollection createRandomCards() {
+	private CardList createRandomCards() {
 		DeckFormat classDecks = new DeckFormat();
 		classDecks.addSet(CardSet.BASIC);
 		classDecks.addSet(CardSet.CLASSIC);
@@ -36,10 +36,10 @@ public class ProceduralRandomDeck extends Deck {
 
 		Deck copyDeck = new Deck(getHeroClass());
 		IDeckValidator deckValidator = new DefaultDeckValidator();
-		CardCollection classCards = CardCatalogue.query(classDecks, card -> {
+		CardList classCards = CardCatalogue.query(classDecks, card -> {
 			return card.isCollectible() && !card.getCardType().isCardType(CardType.HERO) && !card.getCardType().isCardType(CardType.HERO_POWER) && card.hasHeroClass(getHeroClass());
 		});
-		CardCollection neutralCards = CardCatalogue.query(proceduralDeck, card -> {
+		CardList neutralCards = CardCatalogue.query(proceduralDeck, card -> {
 			return card.isCollectible() && !card.getCardType().isCardType(CardType.HERO) && !card.getCardType().isCardType(CardType.HERO_POWER) && card.hasHeroClass(HeroClass.ANY);
 		});
 

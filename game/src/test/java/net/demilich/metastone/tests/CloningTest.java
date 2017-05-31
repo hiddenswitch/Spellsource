@@ -10,7 +10,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.decks.DeckFactory;
@@ -24,7 +24,7 @@ public class CloningTest extends TestBase {
 
 	private static Logger logger = LoggerFactory.getLogger(CloningTest.class);
 
-	private void compareCardCollections(CardCollection collection1, CardCollection collection2) {
+	private void compareCardCollections(CardList collection1, CardList collection2) {
 		Assert.assertEquals(collection1.getCount(), collection2.getCount());
 		Assert.assertNotSame(collection1, collection2);
 		for (int j = 0; j < collection1.getCount(); j++) {

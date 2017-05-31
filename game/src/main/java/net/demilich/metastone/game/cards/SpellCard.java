@@ -14,6 +14,9 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 public class SpellCard extends Card {
 
 	private SpellDesc spell;
+	/**
+	 * @see #getTargetRequirement()
+	 */
 	private TargetSelection targetRequirement;
 	private Condition condition;
 
@@ -67,6 +70,12 @@ public class SpellCard extends Card {
 		return spell;
 	}
 
+	/**
+	 * Determines which targets this spell requires in order to be cast. If {@code null}, the spell doesn't need to
+	 * have any valid targets in order to be cast; otherwise, the {@link TargetSelection} filters all the possible {@link Entity}
+	 * objects and allows the spell to be cast if there is at least one entity in that filtered listt.
+	 * @return A {@link TargetSelection}, or {@code null} if no target is required.
+	 */
 	public TargetSelection getTargetRequirement() {
 		return targetRequirement;
 	}

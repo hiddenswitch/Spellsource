@@ -23,8 +23,8 @@ public class TransformToRandomMinionSpell extends TransformMinionSpell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 
-		CardCollection allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
-		CardCollection filteredMinions = new CardCollectionImpl();
+		CardList allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
+		CardList filteredMinions = new CardArrayList();
 		for (Card card : allMinions) {
 			MinionCard minionCard = (MinionCard) card;
 			if (filter == null || filter.matches(context, player, card)) {

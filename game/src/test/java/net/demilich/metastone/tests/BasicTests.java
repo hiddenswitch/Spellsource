@@ -9,7 +9,7 @@ import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCollection;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -20,7 +20,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 public class BasicTests extends TestBase {
 
-	private Card getTheCoin(CardCollection cards) {
+	private Card getTheCoin(CardList cards) {
 		for (Card card : cards) {
 			if (card.getCardId().equalsIgnoreCase("spell_the_coin")) {
 				return card;
