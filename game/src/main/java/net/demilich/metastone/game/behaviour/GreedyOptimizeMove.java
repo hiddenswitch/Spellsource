@@ -65,11 +65,7 @@ public class GreedyOptimizeMove extends Behaviour {
 	}
 
 	private GameContext simulateAction(GameContext simulation, Player player, GameAction action) {
-		GameLogic.logger.debug("");
-		GameLogic.logger.debug("********SIMULATION starts********** " + simulation.getLogic().hashCode());
 		simulation.getLogic().performGameAction(player.getId(), action);
-		GameLogic.logger.debug("********SIMULATION ends**********");
-		GameLogic.logger.debug("");
 		return simulation;
 	}
 
