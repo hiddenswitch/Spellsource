@@ -4,6 +4,9 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
+/**
+ * A joust event describes which cards were drawn and who won a joust from a point of view of a particular player.
+ */
 public class JoustEvent extends GameEvent {
 
 	private final boolean won;

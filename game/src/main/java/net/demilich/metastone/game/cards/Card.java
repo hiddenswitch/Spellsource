@@ -124,6 +124,10 @@ public abstract class Card extends Entity {
 		return false;
 	}
 
+	/**
+	 * The base mana cost of a card. This is the cost that's written on the card.
+	 * @return The base mana cost of a card.
+	 */
 	public int getBaseManaCost() {
 		return getAttributeValue(Attribute.BASE_MANA_COST);
 	}

@@ -18,7 +18,9 @@ import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.DestroySpell;
+import net.demilich.metastone.game.spells.HealSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
+import net.demilich.metastone.game.spells.SilenceSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.Aura;
@@ -30,6 +32,7 @@ import net.demilich.metastone.game.spells.desc.filter.FilterArg;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.trigger.DamageCausedTrigger;
 import net.demilich.metastone.game.spells.trigger.DamageReceivedTrigger;
+import net.demilich.metastone.game.spells.trigger.HealingTrigger;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
 import net.demilich.metastone.game.spells.trigger.SpellCastedTrigger;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
@@ -44,6 +47,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The game logic class implements the basic primitives of gameplay.
@@ -920,13 +924,15 @@ public class GameLogic implements Cloneable, Serializable {
 
 	/**
 	 * Draws a card for a player from the deck to the hand.
-	 *
-	 * When a {@link Deck} is empty, 
+	 * <p>
+	 * When a {@link Deck} is empty, the player's {@link Hero} takes "fatigue" damage, which increases by 1 every time
+	 * a card should have been drawn but is not.
 	 *
 	 * @param playerId The player who should draw a card.
 	 * @param source   The card that is the origin of the drawing effect, or {@code null} if this is the draw from the
 	 *                 beginning of a turn
 	 * @return The card that was drawn.
+	 * @see #receiveCard(int, Card) for the full rules on receiving cards into the hand.
 	 */
 	@Suspendable
 	public Card drawCard(int playerId, Entity source) {
@@ -947,6 +953,15 @@ public class GameLogic implements Cloneable, Serializable {
 		return drawCard(playerId, card, source);
 	}
 
+	/**
+	 * Draws a specific card into the hand.
+	 *
+	 * @param playerId The player who should draw the card.
+	 * @param card     The specific card to draw.
+	 * @param source   The {@link Entity} that is responsible for this effect.
+	 * @return
+	 * @see #drawCard(int, Entity) for the more general card draw as you would imagine from a deck to the hand.
+	 */
 	@Suspendable
 	public Card drawCard(int playerId, Card card, Entity source) {
 		Player player = context.getPlayer(playerId);
@@ -955,6 +970,14 @@ public class GameLogic implements Cloneable, Serializable {
 		return card;
 	}
 
+	/**
+	 * Draws a virtual card into {@link Zones#SET_ASIDE_ZONE}.
+	 * <p>
+	 * Implements Yogg Sauron, Hope's End "spell drawing" mechanism.
+	 *
+	 * @param playerId The player who should draw this set aside card.
+	 * @param card     The card to draw.
+	 */
 	public void drawSetAsideCard(int playerId, Card card) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(getIdFactory().generateId());
@@ -964,6 +987,12 @@ public class GameLogic implements Cloneable, Serializable {
 		player.getSetAsideZone().add(card);
 	}
 
+	/**
+	 * Ends the player's turn, triggering {@link net.demilich.metastone.game.spells.trigger.TurnEndTrigger} triggers,
+	 * clearing one-turn attributes and effects, and removing dead entities.
+	 *
+	 * @param playerId The player whose turn should be ended.
+	 */
 	@Suspendable
 	public void endTurn(int playerId) {
 		Player player = context.getPlayer(playerId);
@@ -989,6 +1018,16 @@ public class GameLogic implements Cloneable, Serializable {
 		checkForDeadEntities();
 	}
 
+	/**
+	 * Equips a {@link Weapon} for a {@link Hero}. Destroys the previous weapon if one was equipped and triggers its
+	 * deathrattle effect.
+	 *
+	 * @param playerId         The player whose hero should equip the weapon.
+	 * @param weapon           The weapon to equip.
+	 * @param resolveBattlecry If {@link true}, the weapon's battlecry {@link Spell} should be cast. This is {@link
+	 *                         false} if the weapon was equipped due to some other effect (typically a random weapon
+	 *                         that coincidentally has a battlecry).
+	 */
 	@Suspendable
 	public void equipWeapon(int playerId, Weapon weapon, boolean resolveBattlecry) {
 		PreEquipWeapon preEquipWeapon = new PreEquipWeapon(playerId, weapon).invoke();
@@ -1028,6 +1067,39 @@ public class GameLogic implements Cloneable, Serializable {
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
+	/**
+	 * Causes two actors to fight.
+	 * <p>
+	 * A fight, or an "attack," is what occurs when a player commands one character to attack another, causing them to
+	 * simultaneously deal damage to each other. Combat is the source of the majority of the damage dealt in many
+	 * Hearthstone matches, especially those involving a large number of minions. The core combat mechanics are quite
+	 * simple, but the mathematics of multiple minions and heroes attacking each other can require deep strategic
+	 * analysis. Attacking can also activate a variety of triggered effects, making even a single attack a potentially
+	 * complex process. Some players use "attack" to describe any damage or negative action directed toward the enemy,
+	 * but in game terminology only the standard combat action described here counts as an attack and triggers related
+	 * effects. Attacking in Hearthstone is usually understood to represent physical combat, particularly melee combat,
+	 * in contrast to combat via spells. "Hit" and "swing" are other informal terms for attacking, as in "hit the face"
+	 * or "swing into a minion".
+	 * <p>
+	 * Each character involved in an attack deals {@link #damage(Player, Actor, int, Entity, boolean)} equal to its
+	 * {@link Actor#getAttack()} stat to the other. Combat is the primary way for most minions to affect the game, by
+	 * attacking either the enemy {@link Hero} or their {@link Minion}s. Minions deal their attack damage both
+	 * offensively and defensively, making them potentially dangerous on both sides of combat. Heroes can be involved in
+	 * combat as either an attacker or defender too, but all sources of hero attack power only apply on their own turn.
+	 * Therefore, enemy minions can hit the hero without harm during the opponent's turn.
+	 *
+	 * @param player   The player who is initiating the fight.
+	 * @param attacker The attacking {@link Actor}
+	 * @param defender The defending {@link Actor}
+	 * @see <a href="http://hearthstone.gamepedia.com/Attack">Attack</a> for more on this method and its rules.
+	 * @see PhysicalAttackAction#execute(GameContext, int) for the main caller of this function.
+	 * @see net.demilich.metastone.game.spells.MisdirectSpell for an example of a spell that causes actors to fight each
+	 * other without a player initiatied action.
+	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) to see how to enumerate all the possible
+	 * {@link PhysicalAttackAction} that determine what can fight what.
+	 * @see TargetLogic#getValidTargets(GameContext, Player, GameAction) to see how minions with {@link Attribute#TAUNT}
+	 * affect what can and cannot be fought by a player.
+	 */
 	@Suspendable
 	public void fight(Player player, Actor attacker, Actor defender) {
 		log("{} attacks {}", attacker, defender);
@@ -1042,12 +1114,6 @@ public class GameLogic implements Cloneable, Serializable {
 			target = (Actor) context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE));
 		}
 		context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
-
-		// if (attacker.hasTag(GameTag.FUMBLE) && randomBool()) {
-		// log("{} fumbled and hits another target", attacker);
-		// target = getAnotherRandomTarget(player, attacker, defender,
-		// EntityReference.ENEMY_CHARACTERS);
-		// }
 
 		if (target != defender) {
 			log("Target of attack was changed! New Target: {}", target);
@@ -1095,6 +1161,14 @@ public class GameLogic implements Cloneable, Serializable {
 		context.getEnvironment().remove(Environment.ATTACKER_REFERENCE);
 	}
 
+	/**
+	 * Gains armor and triggers an {@link ArmorGainedEvent}.
+	 *
+	 * @param player The player whose {@link Hero} should gain armor.
+	 * @param armor  The amount of armor to gain.
+	 * @see #damage(Player, Actor, int, Entity, boolean) for a description of how armor protects an {@link Actor} like a
+	 * {@link Hero}.
+	 */
 	@Suspendable
 	public void gainArmor(Player player, int armor) {
 		logger.debug("{} gains {} armor", player.getHero(), armor);
@@ -1105,10 +1179,26 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	/**
+	 * Generates a card ID for creating cards on the fly inside the game.
+	 *
+	 * @return A new {@link String} that describes a new card ID.
+	 */
 	public String generateCardId() {
 		return TEMP_CARD_LABEL + idFactory.generateId();
 	}
 
+	/**
+	 * Gets a random target from a list of potential targets.
+	 * <p>
+	 * Implements Misdirect and cards that have a 50% chance to hit the wrong target, like Ogre Brute.
+	 *
+	 * @param player           The player whose actor is initiating a target acquisition.
+	 * @param attacker         The attacker that may missed its intended target.
+	 * @param originalTarget   The intended target.
+	 * @param potentialTargets The other targets the attacker could hit.
+	 * @return The new target.
+	 */
 	public Actor getAnotherRandomTarget(Player player, Actor attacker, Actor originalTarget, EntityReference potentialTargets) {
 		List<Entity> validTargets = context.resolveTarget(player, null, potentialTargets);
 		// cannot redirect to attacker
@@ -1123,11 +1213,10 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Returns the first value of the attribute encountered. This method should
-	 * be used with caution, as the result is random if there are different
-	 * values of the same attribute in play.
+	 * Returns the first value of the attribute encountered. This method should be used with caution, as the result is
+	 * random if there are different values of the same attribute in play.
 	 *
-	 * @param player
+	 * @param player       The player whose actors should be queries.
 	 * @param attr         Which attribute to find
 	 * @param defaultValue The value returned if no occurrence of the attribute is found
 	 * @return the first occurrence of the value of attribute or defaultValue
@@ -1142,21 +1231,28 @@ public class GameLogic implements Cloneable, Serializable {
 		return defaultValue;
 	}
 
+	/**
+	 * For heroes that have a {@link HeroPowerCard} that has automatic target selection, returns the hero power. It is
+	 * not clear if this is used by any hero power cards in the game.
+	 *
+	 * @param playerId The player equipped with an auto hero power.
+	 * @return The action to play the hero power.
+	 */
 	@Suspendable
 	public GameAction getAutoHeroPowerAction(int playerId) {
 		return actionLogic.getAutoHeroPower(context, context.getPlayer(playerId));
 	}
 
 	/**
-	 * Return the greatest value of the attribute from all Actors of a Player.
-	 * This method will return infinite if an Attribute value is negative, so
-	 * use this method with caution.
+	 * Return the greatest value of an attribute from all {@link Actor}s of a player.
+	 * <p>
+	 * This method will return infinite if an Attribute value is negative, so use this method with caution.
 	 *
-	 * @param player Which Player to check
+	 * @param player Which player to check
 	 * @param attr   Which attribute to find
 	 * @return The highest value from all sources. -1 is considered infinite.
 	 */
-	public int getGreatestAttributeValue(Player player, Attribute attr) {
+	private int getGreatestAttributeValue(Player player, Attribute attr) {
 		int greatest = Math.max(INFINITE, player.getHero().getAttributeValue(attr));
 		if (greatest == INFINITE) {
 			return greatest;
@@ -1174,6 +1270,13 @@ public class GameLogic implements Cloneable, Serializable {
 		return greatest;
 	}
 
+	/**
+	 * Gets the current status of a match.
+	 *
+	 * @param player   The player whose point of view to use for the {@link MatchResult}
+	 * @param opponent The player's opponent.
+	 * @return A {@link MatchResult} from the point of view of the given player.
+	 */
 	public MatchResult getMatchResult(Player player, Player opponent) {
 		boolean playerLost = hasPlayerLost(player);
 		boolean opponentLost = hasPlayerLost(opponent);
@@ -1185,6 +1288,13 @@ public class GameLogic implements Cloneable, Serializable {
 		return MatchResult.RUNNING;
 	}
 
+	/**
+	 * Gets the mana cost of a card considering any {@link CardCostModifier} objects that may apply to it.
+	 *
+	 * @param player The player whose point of view to consider for the card cost.
+	 * @param card   The card to cost.
+	 * @return The modified mana cost of the card.
+	 */
 	public int getModifiedManaCost(Player player, Card card) {
 		int manaCost = card.getManaCost(context, player);
 		int minValue = 0;
@@ -1204,7 +1314,15 @@ public class GameLogic implements Cloneable, Serializable {
 		return manaCost;
 	}
 
-	public List<IGameEventListener> getSecrets(Player player) {
+	/**
+	 * Gets a list of secrets for a player.
+	 *
+	 * @param player The player whose point of view to query for secrets.
+	 * @return The secrets as {@link IGameEventListener}
+	 * @see Player#getSecrets() for a more reliable way to get the {@link Secret} entities that are in play for a
+	 * player.
+	 */
+	private List<IGameEventListener> getSecrets(Player player) {
 		List<IGameEventListener> secrets = context.getTriggersAssociatedWith(player.getHero().getReference());
 		for (Iterator<IGameEventListener> iterator = secrets.iterator(); iterator.hasNext(); ) {
 			IGameEventListener trigger = iterator.next();
@@ -1215,7 +1333,7 @@ public class GameLogic implements Cloneable, Serializable {
 		return secrets;
 	}
 
-	public int getTotalAttributeValue(Player player, Attribute attr) {
+	private int getTotalAttributeValue(Player player, Attribute attr) {
 		int total = player.getHero().getAttributeValue(attr);
 		for (Entity minion : player.getMinions()) {
 			if (!minion.hasAttribute(attr)) {
@@ -1227,7 +1345,7 @@ public class GameLogic implements Cloneable, Serializable {
 		return total;
 	}
 
-	public int getTotalAttributeMultiplier(Player player, Attribute attribute) {
+	private int getTotalAttributeMultiplier(Player player, Attribute attribute) {
 		int total = 1;
 		if (player.getHero().hasAttribute(attribute)) {
 			player.getHero().getAttributeValue(attribute);
@@ -1240,17 +1358,47 @@ public class GameLogic implements Cloneable, Serializable {
 		return total;
 	}
 
+	/**
+	 * Computes all the valid actions a player can currently take.
+	 *
+	 * @param playerId The player whose point of view should be considered.
+	 * @return A list of valid actions the player can take. If it is not the player's turn, no actions are returned.
+	 * @see ActionLogic#getValidActions(GameContext, Player) for the logic behind determining what actions a player can
+	 * take.
+	 */
 	@Suspendable
 	public List<GameAction> getValidActions(int playerId) {
 		Player player = context.getPlayer(playerId);
+		if (context.getActivePlayerId() != playerId) {
+			return Collections.emptyList();
+		}
 		return actionLogic.getValidActions(context, player);
 	}
 
+	/**
+	 * Gets the list of valid targets for an action.
+	 * <p>
+	 * This method is primarily used for cards that change regular actions into "random" actions, like {@link
+	 * net.demilich.metastone.game.spells.CastRandomSpellSpell}
+	 *
+	 * @param playerId The player that would take the action.
+	 * @param action   The action to get valid targets for.
+	 * @return A list of valid targets
+	 * @see TargetLogic#getValidTargets(GameContext, Player, GameAction) for the logic behind determining valid targets
+	 * given an action.
+	 */
 	public List<Entity> getValidTargets(int playerId, GameAction action) {
 		Player player = context.getPlayer(playerId);
 		return targetLogic.getValidTargets(context, player, action);
 	}
 
+	/**
+	 * Determines which player is the winner from the point of view of the given player.
+	 *
+	 * @param player   The local player.
+	 * @param opponent The player's opponent.
+	 * @return The player that is the winner, or {@code null} if there is no winner.
+	 */
 	public Player getWinner(Player player, Player opponent) {
 		boolean playerLost = hasPlayerLost(player);
 		boolean opponentLost = hasPlayerLost(opponent);
@@ -1296,6 +1444,13 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	/**
+	 * Determines whether a {@link Player} or their {@link Minion} entities have a given attribute.
+	 *
+	 * @param player The player whose player entity and minions will be queries for the attribute.
+	 * @param attr   The attribute to query.
+	 * @return {@code true} if the player entity or its minions have the given attribute.
+	 */
 	public boolean hasAttribute(Player player, Attribute attr) {
 		if (player.getHero().hasAttribute(attr)) {
 			return true;
@@ -1309,23 +1464,57 @@ public class GameLogic implements Cloneable, Serializable {
 		return false;
 	}
 
+	/**
+	 * Returns {@code true} if the given player has an "auto" (auto-targeting) hero power.
+	 *
+	 * @param player The player whose point of view should be considered.
+	 * @return {@code true} if the hero power is "auto" targeting.
+	 */
 	@Suspendable
 	public boolean hasAutoHeroPower(int player) {
 		return actionLogic.hasAutoHeroPower(context, context.getPlayer(player));
 	}
 
+	/**
+	 * Checks whether a player has a card with the given card ID.
+	 *
+	 * @param player The player whose hand or hero power should be queries.
+	 * @param card   The card whose ID should be used for comparisons.
+	 * @return {@code true} if the card is contained in the {@link Zones#HAND} or {@link Zones#HERO_POWER} zones.
+	 */
 	public boolean hasCard(Player player, Card card) {
-		for (Card heldCard : player.getHand()) {
-			if (card.getCardId().equals(heldCard.getCardId())) {
-				return true;
-			}
-		}
-		if (player.getHero().getHeroPower().getCardId().equals(card.getCardId())) {
-			return true;
-		}
-		return false;
+		return Stream.concat(player.getHand().stream(), player.getHeroPowerZone().stream()).anyMatch(c -> c.getCardId().equals(card.getCardId()));
 	}
 
+	/**
+	 * Heals (restores hitpoints to) a target.
+	 * <p>
+	 * Healing an {@link Actor} will increase their {@link Actor#getHp()} by the stated amount, up to but not beyond
+	 * their current {@link Actor#getMaxHp()}.
+	 * <p>
+	 * Healing comes from battlecries, deathrattles, spell triggers, hero powers and spell cards that cast a {@link
+	 * HealSpell}. Most healing effects affect a single {@link Actor} (these effects can be targetable or select the
+	 * target automatically or at random), while some others have an area of effect.
+	 * <p>
+	 * Healing is distinct from granting a minion increased hitpoints, which increases both the current and maximum
+	 * Health for the target. Increasing a minion's hitpoints is usually achieved through enchantments (or removing them
+	 * through {@link SilenceSpell}), while healing is usually achieved through effects.
+	 * <p>
+	 * Although healing effects (including targetable ones) can target undamaged characters, attempting to restore
+	 * hitpoints to an {@link Actor} already at their current maximum Health will have no effect and will not count as
+	 * healing for game purposes (for example, on-heal triggers such as Lightwarden's {@link HealingTrigger} will not
+	 * trigger).
+	 * <p>
+	 * Healing a character to full hitpoints will remove its damaged status and thus any {@link Attribute#ENRAGED}
+	 * effect currently active, which can be very useful for denying enemy minions' Enrage effects.
+	 *
+	 * @param player  The player who chose the target of the healing.
+	 * @param target  The target of the healing.
+	 * @param healing The amount of healing.
+	 * @param source  The {@link Entity}, typically a {@link SpellCard} or {@link Minion} with battlecry, that is the
+	 *                source of the healing.
+	 * @see Attribute#ENRAGED for more about enrage.
+	 */
 	@Suspendable
 	public void heal(Player player, Actor target, int healing, Entity source) {
 		if (hasAttribute(player, Attribute.INVERT_HEALING)) {
@@ -1381,6 +1570,15 @@ public class GameLogic implements Cloneable, Serializable {
 		return newHp != oldHp;
 	}
 
+	/**
+	 * Starts a game for the given player by requesting a mulligan and setting up all the {@link
+	 * net.demilich.metastone.game.spells.trigger.GameStartTrigger} and {@link Attribute#DECK_TRIGGER} cards.
+	 *
+	 * @param playerId The player to start the game for.
+	 * @param begins   {@code true} if this player is starting the game and should start with {@link #STARTER_CARDS}
+	 *                 cards. {@code false} if this player is not starting the game and should get {@link
+	 *                 #STARTER_CARDS} + 1 cards.
+	 */
 	@Suspendable
 	public void init(int playerId, boolean begins) {
 		mulligan(context.getPlayer(playerId), begins);
@@ -1407,6 +1605,13 @@ public class GameLogic implements Cloneable, Serializable {
 		context.fireGameEvent(gameStartEvent);
 	}
 
+	/**
+	 * Configures the player {@link Player}, {@link Hero}, and deck & hand {@link Card} entities with the correct IDs,
+	 * {@link EntityZone} locations and owners. Shuffles the deck.
+	 *
+	 * @param playerId The player that should be initialized.
+	 * @return The initialized {@link Player} object.
+	 */
 	@Suspendable
 	public Player initializePlayer(int playerId) {
 		Player player = context.getPlayer(playerId);
@@ -1425,10 +1630,23 @@ public class GameLogic implements Cloneable, Serializable {
 		return player;
 	}
 
+	/**
+	 * Should event logging be enabled? This logging lets you debug what has happened in the game, but comes with
+	 * a high performance cost—lots of memory used on big strings.
+	 *
+	 * @return {@code true} if logging should be enabled.
+	 */
 	public boolean isLoggingEnabled() {
 		return loggingEnabled;
 	}
 
+	/**
+	 * A joust describes when cards are revealed from each player's deck, and the "winner" of a joust is determined by
+	 * whoever draws a card with a higher {@link Card#getBaseManaCost()}.
+	 *
+	 * @param player The player who initiated the joust.
+	 * @return The joust event that was fired.
+	 */
 	public JoustEvent joust(Player player) {
 		Card ownCard = player.getDeck().getRandomOfType(CardType.MINION);
 		Card opponentCard = null;
@@ -1501,12 +1719,55 @@ public class GameLogic implements Cloneable, Serializable {
 		debugHistory.add(message);
 	}
 
+	/**
+	 * Marks an {@link Actor} as destroyed. Used for "Destroy" effects.
+	 * <p>
+	 * An actor marked this way gets moved to the {@link Zones#GRAVEYARD} by a {@link #checkForDeadEntities()} call.
+	 *
+	 * @param target The {@link Actor} to mark as destroyed.
+	 */
 	public void markAsDestroyed(Actor target) {
 		if (target != null) {
 			target.setAttribute(Attribute.DESTROYED);
 		}
 	}
 
+	/**
+	 * Mind control moves a {@link Minion} from the opponent's {@link Zones#BATTLEFIELD} to their own battlefield and
+	 * puts it under control of the given {@link Player}.
+	 * <p>
+	 * Mind control effects or control effects are effects which allow a player to seize control of an enemy minion.
+	 * Controlled minions are treated as belonging to the controlling player for all purposes, can be directed to attack
+	 * its former allies and owner, and will immediately be transferred to the controlling player's side of the
+	 * battlefield, to the far right of the board.
+	 * <p>
+	 * Control is generally a permanent state change, and as such cannot be changed through Silences, Return effects or
+	 * other means. The exceptions to this are Shadow Madness and Potion of Madness, which grant temporary control of a
+	 * minion through a one-turn enchantment.
+	 * <p>
+	 * If a player activates a mind control effect when their side of the battlefield is already full (i.e. they have
+	 * the maximum 7 minions), the mind controlled minion will be instantly destroyed. Any Deathrattle that activates as
+	 * a result of this will trigger as if their opponent still controlled the minion. It is often a good idea for a
+	 * player to choose to intentionally destroy one of their own minions in order to be able to seize control of one of
+	 * their opponent's, especially by sacrificing a weak minion in order to gain control of a very powerful one.
+	 * <p>
+	 * As with summoning effects such as Mirror Image and Feral Spirit, mind controlled minions will always join the
+	 * board on the far right. Anticipating this can allow for superior placement of minions, important for positional
+	 * effects. When planning to summon other minions that turn, the player can use the timing of the mind control
+	 * effect to allow them to determine the final placement of the mind controlled minion. For example, a player with a
+	 * Shieldbearer already on the board may take control of a Flametongue Totem, before then summoning a Sludge Belcher
+	 * to the right of it, thereby ensuring the Totem's is placed between the two minions, making the most of its buff.
+	 * <p>
+	 * Minions that have just been mind controlled are normally {@link Attribute#SUMMONING_SICKNESS} for one turn and
+	 * cannot attack, just as with minions that were summoned that turn. However, Shadow Madness and Potion of Madness
+	 * do not cause its target to be {@link Attribute#SUMMONING_SICKNESS}, allowing it to attack - the effect only lasts
+	 * until end of turn, and would otherwise be nearly useless. Charge affects mind control exhaustion just as it
+	 * affects {@link Attribute#SUMMONING_SICKNESS} - minions with that ability can attack on the same turn they are
+	 * mind controlled.
+	 *
+	 * @param player The new owner of a minion.
+	 * @param minion The minion to mind control.
+	 */
 	@Suspendable
 	public void mindControl(Player player, Minion minion) {
 		log("{} mind controls {}", player.getName(), minion);
@@ -1533,6 +1794,11 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	/**
+	 * Modifies the current mana that the player has.
+	 * @param playerId The player whose mana should be modified.
+	 * @param mana The amount to increment or decrement the mana by.
+	 */
 	public void modifyCurrentMana(int playerId, int mana) {
 		Player player = context.getPlayer(playerId);
 		int newMana = Math.min(player.getMana() + mana, MAX_MANA);
