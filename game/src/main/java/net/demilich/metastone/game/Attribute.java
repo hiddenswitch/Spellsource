@@ -184,7 +184,8 @@ public enum Attribute {
 	 * When an {@link Actor} is {@link #ENRAGED}, its {@link #CONDITIONAL_ATTACK_BONUS} is set to the amount of damage
 	 * gained by an {@link net.demilich.metastone.game.spells.EnrageSpell}.
 	 *
-	 * @see net.demilich.metastone.game.spells.EnrageSpell for the complete Enrage rules.
+	 * @see net.demilich.metastone.game.spells.EnrageSpell for the spell that implements Enrage.
+	 * @see GameLogic#handleEnrage(Actor) for the logic that controls this attribute.
 	 */
 	ENRAGED,
 	/**

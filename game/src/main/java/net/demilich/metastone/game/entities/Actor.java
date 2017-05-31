@@ -14,6 +14,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.utils.AttributeMap;
 
+/**
+ * A
+ */
 public abstract class Actor extends Entity {
 
 	private Card sourceCard;
@@ -112,10 +115,21 @@ public abstract class Actor extends Entity {
 		return (List<SpellDesc>) getAttribute(Attribute.DEATHRATTLES);
 	}
 
+	/**
+	 * The current number of hitpoints this actor has.
+	 *
+	 * @return The hitpoints.
+	 */
 	public int getHp() {
 		return getAttributeValue(Attribute.HP);
 	}
 
+	/**
+	 * Returns the maximum amount of hitpoints this actor can have, considering all of its bonuses from effects and
+	 * {@link net.demilich.metastone.game.spells.aura.Aura}s.
+	 *
+	 * @return The maximum hitpoints.
+	 */
 	public int getMaxHp() {
 		return getAttributeValue(Attribute.MAX_HP) + getAttributeValue(Attribute.HP_BONUS)
 				+ getAttributeValue(Attribute.AURA_HP_BONUS);
