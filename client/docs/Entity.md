@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Integer** |  |  [optional]
+**id** | **Integer** |  | 
 **cardId** | **String** |  |  [optional]
 **entityType** | [**EntityTypeEnum**](#EntityTypeEnum) |  |  [optional]
 **name** | **String** |  |  [optional]
