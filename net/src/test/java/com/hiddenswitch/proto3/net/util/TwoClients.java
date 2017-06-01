@@ -250,7 +250,7 @@ public class TwoClients {
 		} else {
 			logger.error(serverGameContext.toLongString());
 			logger.error("Panic Dump:");
-			serverGameContext.getLogic().panicDump();
+			serverGameContext.getLogic().logDebugHistory();
 		}
 	}
 

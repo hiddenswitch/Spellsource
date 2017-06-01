@@ -57,7 +57,7 @@ public class PutRandomMinionOnBoardSpell extends Spell {
 		
 		if (summonSuccess) {
 			if (cardLocation == Zones.HAND) {
-				context.getLogic().removeCard(player.getId(), minionCard);
+				context.getLogic().removeCard(minionCard);
 			} else {
 				context.getLogic().removeCardFromDeck(player.getId(), minionCard);
 			}

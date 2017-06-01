@@ -435,7 +435,7 @@ public class SpecialCardTests extends TestBase {
 		MinionCard emperorThaurissanCard = (MinionCard) CardCatalogue.getCardById("minion_emperor_thaurissan");
 		Minion emperorThaurissan = playMinionCard(context, player, emperorThaurissanCard);
 		for (Card card : player.getHand().toList()) {
-			context.getLogic().removeCard(player.getId(), card);
+			context.getLogic().removeCard(card);
 
 		}
 		Assert.assertTrue(player.getHand().isEmpty());

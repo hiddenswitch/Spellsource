@@ -14,7 +14,7 @@ public class PutMinionOnBoardSpell extends Spell {
 		MinionCard minionCard = (MinionCard) target;
 
 		if (context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false)) {
-			context.getLogic().removeCard(player.getId(), minionCard);
+			context.getLogic().removeCard(minionCard);
 		}
 	}
 }

@@ -53,7 +53,7 @@ public class ReplaceCardLocationSpell extends Spell {
 		case HAND:
 			count = player.getHand().getCount();
 			for (Card card : player.getHand().toList()) {
-				context.getLogic().removeCard(player.getId(), card);
+				context.getLogic().removeCard(card);
 			}
 			
 			int manaCostModifier = desc.getValue(SpellArg.MANA_MODIFIER, context, player, target, source, 0);

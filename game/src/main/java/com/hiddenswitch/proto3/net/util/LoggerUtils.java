@@ -15,7 +15,7 @@ public class LoggerUtils {
 		logger.error("Could not request action. GameContext:");
 		logger.error("{}", context.toLongString());
 		logger.error("Debug Log:");
-		context.getLogic().panicDump();
+		context.getLogic().logDebugHistory();
 		logger.error("Exception:");
 		logger.error(e.getMessage());
 		logger.error(fullStackTrace);

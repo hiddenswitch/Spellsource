@@ -22,7 +22,7 @@ public class AlarmOBotSpell extends ReturnMinionToHandSpell {
 		// Summon a random minion and remove the corresponding card
 		// before adding Alarm-o-bot to your hand!
 		MinionCard randomMinionCard = (MinionCard) player.getHand().getRandomOfType(CardType.MINION);
-		context.getLogic().removeCard(player.getId(), randomMinionCard);
+		context.getLogic().removeCard(randomMinionCard);
 		// return Alarm-o-bot to hand (Now it's safe and won't destroy itself!)
 		super.onCast(context, player, desc, source, target);
 		// Summon the minion, which ALSO won't destroy itself...
