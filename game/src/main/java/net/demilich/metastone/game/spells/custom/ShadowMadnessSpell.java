@@ -6,6 +6,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.MindControlSpell;
 import net.demilich.metastone.game.spells.TargetPlayer;
@@ -42,7 +43,7 @@ public class ShadowMadnessSpell extends MindControlSpell {
 
 		// minion should be able to attack this turn
 		target.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
-		context.getLogic().refreshAttacksPerRound(target);
+		context.getLogic().refreshAttacksPerRound((Actor) target);
 
 		// mind control is terminated either when silenced or turn ends
 		SpellDesc reverseMindcontrolSpell = MindControlSpell.create(EntityReference.SELF, TargetPlayer.OPPONENT, false);

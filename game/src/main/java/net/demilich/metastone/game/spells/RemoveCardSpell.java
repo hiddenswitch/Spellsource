@@ -16,7 +16,7 @@ public class RemoveCardSpell extends Spell {
 			return;
 		}
 		Card card = (Card) target;
-		context.getLogic().removeCard(player.getId(), card);
+		context.getLogic().removeCard(card);
 	}
 
 }

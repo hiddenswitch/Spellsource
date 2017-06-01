@@ -84,7 +84,7 @@ public class RenounceClassSpell extends Spell {
 		}
 		for (Card card : replacedCards) {
 			Card replacement = result.getRandom().getCopy();
-			context.getLogic().replaceCard(player.getId(), card, replacement);
+			context.getLogic().replaceCardInHand(player.getId(), card, replacement);
 			SpellUtils.castChildSpell(context, player, CardCostModifierSpell.create(replacement.getReference(), AlgebraicOperation.ADD, manaCostModifier), source, null);
 		}
 	}

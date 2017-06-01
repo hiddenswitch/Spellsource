@@ -121,7 +121,7 @@ public class BasicTests extends TestBase {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
 		Player mage = context.getPlayer1();
 		for (Card card : mage.getHand().toList()) {
-			context.getLogic().removeCard(mage.getId(), card);
+			context.getLogic().removeCard(card);
 		}
 		MinionCard devMonster = new TestMinionCard(1, 1);
 		context.getLogic().receiveCard(mage.getId(), devMonster);

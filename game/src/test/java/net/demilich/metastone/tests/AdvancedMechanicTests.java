@@ -40,7 +40,7 @@ public class AdvancedMechanicTests extends BasicTests {
 
 		player.getHero().getHeroPower().markUsed();
 		for (Card card : player.getHand().toList()) {
-			context.getLogic().removeCard(player.getId(), card);
+			context.getLogic().removeCard(card);
 		}
 		Card wrath = CardCatalogue.getCardById("spell_wrath");
 		IChooseOneCard wrathChooseOne = (IChooseOneCard) wrath;

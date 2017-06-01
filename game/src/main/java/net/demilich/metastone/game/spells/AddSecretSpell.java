@@ -14,7 +14,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class AddSecretSpell extends Spell {
 
 	public static SpellDesc create(Secret secret) {
-		return create (EntityReference.FRIENDLY_PLAYER, secret);
+		return create(EntityReference.FRIENDLY_PLAYER, secret);
 	}
 
 	public static SpellDesc create(EntityReference target, Secret secret) {
@@ -27,7 +27,7 @@ public class AddSecretSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Secret secret = (Secret) desc.get(SpellArg.SECRET);
+		Secret secret = ((Secret) desc.get(SpellArg.SECRET)).clone();
 		context.getLogic().playSecret(player, secret);
 	}
 }

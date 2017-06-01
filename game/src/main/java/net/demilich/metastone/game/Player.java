@@ -54,7 +54,13 @@ public class Player extends Entity implements Serializable {
 
 	private final GameStatistics statistics = new GameStatistics();
 
+	/**
+	 * @see #getMana()
+	 */
 	private int mana;
+	/**
+	 * @see #getMaxMana()
+	 */
 	private int maxMana;
 	private int lockedMana;
 
@@ -164,6 +170,12 @@ public class Player extends Entity implements Serializable {
 		return mana;
 	}
 
+	/**
+	 * The maximum amount of mana the player can currently have. At the start of the turn, the player's {@link #mana} is
+	 * set to this value.
+	 *
+	 * @return The maximum amount of mana this player can have.
+	 */
 	public int getMaxMana() {
 		return maxMana;
 	}

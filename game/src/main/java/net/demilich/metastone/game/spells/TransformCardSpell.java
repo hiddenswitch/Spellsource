@@ -21,7 +21,7 @@ public class TransformCardSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = (Card) target;
 		if (card.getZone() == Zones.HAND) {
-			context.getLogic().removeCard(player.getId(), card);
+			context.getLogic().removeCard(card);
 		} else {
 			// logger.warn("Trying to transform card {} in invalid location {}",
 			// card, card.getZone());

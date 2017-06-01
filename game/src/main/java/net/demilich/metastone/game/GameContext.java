@@ -214,7 +214,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 			getTriggerManager().fireGameEvent(gameEvent, otherTriggers);
 		} catch (Exception e) {
 			logger.error("Error while processing gameEvent {}", gameEvent);
-			getLogic().panicDump();
+			getLogic().logDebugHistory();
 			throw e;
 		}
 	}
