@@ -98,7 +98,7 @@ public class Entity  implements Serializable {
    * Get id
    * @return id
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", required = true, value = "")
   public Integer getId() {
     return id;
   }
