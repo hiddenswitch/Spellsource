@@ -327,7 +327,7 @@ public class SpellUtils {
 			return UNDEFINED;
 		}
 
-		int sourcePosition = context.getBoardPosition((Minion) source);
+		int sourcePosition = ((Minion) source).getEntityLocation().getIndex();
 		if (sourcePosition == UNDEFINED) {
 			return UNDEFINED;
 		}

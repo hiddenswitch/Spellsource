@@ -385,13 +385,13 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 			return;
 		}
 		this.lastUpdatedAt = state.timestamp;
-		loadState(state);
+		setGameState(state);
 		hideCards();
 	}
 
 	@Override
-	public void loadState(GameState state) {
-		super.loadState(state);
+	public void setGameState(GameState state) {
+		super.setGameState(state);
 		setRemoteTurnState(state.turnState);
 	}
 

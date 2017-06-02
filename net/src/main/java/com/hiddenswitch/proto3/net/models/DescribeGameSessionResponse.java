@@ -51,7 +51,7 @@ public class DescribeGameSessionResponse implements Serializable {
 		for (Map.Entry<Statistic, Object> entry : statistics.getStats().entrySet()) {
 			response.getStatistics().put(entry.getKey().toString(), entry.getValue());
 		}
-		response.setState(new GameState(context));
+		response.setState(context.getGameStateCopy());
 		return response;
 	}
 }

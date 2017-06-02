@@ -370,7 +370,7 @@ public interface Games {
 		DescribeGameSessionResponse gameSession = describeGameSession(new DescribeGameSessionRequest(gameId));
 		final com.hiddenswitch.proto3.net.common.GameState state = gameSession.getState();
 		GameContext workingContext = new GameContext();
-		workingContext.loadState(state);
+		workingContext.setGameState(state);
 		final Player local;
 		final Player opponent;
 		if (state.player1.getUserId().equals(userId)) {

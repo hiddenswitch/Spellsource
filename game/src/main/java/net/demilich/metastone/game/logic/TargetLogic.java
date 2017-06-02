@@ -232,11 +232,11 @@ public class TargetLogic implements Serializable {
 			targets.remove(source);
 			return targets;
 		} else if (targetKey.equals(EntityReference.ADJACENT_MINIONS)) {
-			return new ArrayList<>(context.getAdjacentMinions(player, source.getReference()));
+			return new ArrayList<>(context.getAdjacentMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.OPPOSITE_MINIONS)) {
 			return new ArrayList<>(context.getOppositeMinions(player, source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_LEFT)) {
-			return new ArrayList<>(context.getLeftMinions(player, source.getReference()));
+			return new ArrayList<>(context.getLeftMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_RIGHT)) {
 			return new ArrayList<>(context.getRightMinions(player, source.getReference()));
 		} else if (targetKey.equals(EntityReference.SELF)) {
