@@ -71,7 +71,7 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 		while (gameAction == null
 				|| gameAction.getActionType() != ActionType.END_TURN) {
 			RequestActionRequest requestActionRequest = new RequestActionRequest(
-					new GameState(context),
+					context.getGameStateCopy(),
 					context.getActivePlayerId(),
 					context.getValidActions(),
 					context.getDeckFormat());

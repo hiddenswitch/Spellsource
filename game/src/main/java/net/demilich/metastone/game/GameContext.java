@@ -5,6 +5,7 @@ import com.hiddenswitch.proto3.net.common.GameState;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -30,6 +31,92 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * A game context helps execute a match of Minionate, providing a place to store state, deliver requests for actions to
+ * players, apply those player actions through a {@link GameLogic}, and then save the updated state as a result of those
+ * actions.
+ * <p>
+ * For example, this code starts a game between two opponents that perform random actions:
+ * <pre>
+ * {@code
+ * // Adds every card set to the card format available in this game.
+ * DeckFormat deckFormat = new DeckFormat();
+ * for (CardSet set : CardSet.values()) {
+ *      deckFormat.addSet(set);
+ * }
+ * // Chooses a random class and creates a player for it.
+ * HeroClass heroClass1 = getRandomClass();
+ * // Note "PlayRandomBehaviour"—
+ * PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass1, deckFormat), new
+ * PlayRandomBehaviour());
+ * player1Config.setName("Player 1");
+ * player1Config.setHeroCard(getHeroCardForClass(heroClass1));
+ * Player player1 = new Player(player1Config);
+ * // Chooses another random class and creates another player for it
+ * HeroClass heroClass2 = getRandomClass();
+ * PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass2, deckFormat), new
+ * PlayRandomBehaviour());
+ * player2Config.setName("Player 2");
+ * player2Config.setHeroCard(getHeroCardForClass(heroClass2));
+ * Player player2 = new Player(player2Config);
+ * // Creates a game context with the given players, a new game logic, and the specified deck format.
+ * GameContext context = new GameContext(player1, player2, new GameLogic(), deckFormat);
+ * // Plays the game to completion.
+ * context.play();
+ * // Disposes the context.
+ * context.dispose();
+ * }
+ * </pre>
+ * <p>
+ * Based on the code above, you'll see the minimum requirements to execute a {@link #play()} command: <ul> <li>2 {@link
+ * Player} objects, each configured with a {@link Behaviour}. These objects represent (1) the most important part of the
+ * game state (encoded inside the fields of the {@link Player} object, like {@link Player#getMinions()}; and (2) the
+ * {@link net.demilich.metastone.game.behaviour.IBehaviour} delegate for player actions and mulligans. </li>. <li>A
+ * {@link GameLogic} instance. It handles everything in between receiving a player action to the request for the next
+ * player action..</li> <li>A {@link DeckFormat}, which is a collection of {@link CardSet} values that correspond to the
+ * (1) legal cards that may be played and put into decks and (2) legal cards that may appear in randomly drawn or
+ * created card effects.</li></ul><p>
+ * <p>
+ * Game state is composed of a variety of fields that live inside the context. To get a copy of the state, use {@link
+ * #getGameStateCopy()}; while you can access a modifiable copy of the {@link GameState} with {@link #getGameState()},
+ * you're encouraged only use the {@link GameLogic} methods (which mutate the state stored inside this game context) in
+ * order to always have valid data.
+ * <p>
+ * Game actions are chosen by {@link Behaviour} objects living inside the {@link Player} object. Typically, the {@link
+ * GameLogic} instance will call {@link #getActivePlayer()} for the currently active player, call {@link
+ * Player#getBehaviour()} to get the behaviour, and then call {@link Behaviour#requestAction(GameContext, Player, List)}
+ * to request which action of a list of actions the player takes. Note that this is just called as a plain function, so
+ * the end user of the {@link GameContext} is responsible for the blocking that would occur if e.g. the {@link
+ * Behaviour} waits on user input to answer the action request. Ordinarily, as long as the thread running {@link
+ * GameContext} doesn't do anything but process the game, blocking on user input isn't an issue; only one player may
+ * take an action at a time.
+ * <p>
+ * State is mutated by the {@link GameLogic} instance. It will process a player's selected {@link GameAction} with
+ * {@link #performAction(int, GameAction)}, mutating the state fields in the {@link GameContext} appropriately until it
+ * encounters the next request for actions (e.g., once an action has been processed, when a battlecry is resolved, or
+ * when the player must choose which card to discover). It is not necessarily dangerous to modify the game state without
+ * using {@link GameLogic}, though doing so many break what players would expect to happen based on the text of cards.
+ * <p>
+ * Generally, this instance does not provide a way to "choose" actions in game. The end user of a {@link GameContext} is
+ * expected to provide a {@link Player} instance with a {@link Behaviour} that suits the end user's needs.
+ *
+ * @see #play() for more about how a game is "played."
+ * @see net.demilich.metastone.game.behaviour.IBehaviour for the interface that the {@link GameContext} delegates player
+ * actions and notifications to. This is both the "event handler" specification for which events a player may be
+ * interested in; and also a "delegate" in the sense that the object implementing this interface makes decisions about
+ * what actions in the game to take (with e.g. {@link net.demilich.metastone.game.behaviour.IBehaviour#requestAction(GameContext,
+ * Player, List)}.
+ * @see net.demilich.metastone.game.behaviour.PlayRandomBehaviour for an example behaviour that just makes random
+ * decisions when requested.
+ * @see com.hiddenswitch.proto3.net.common.NetworkBehaviour for the class that turns requests to the {@link
+ * net.demilich.metastone.game.behaviour.IBehaviour} into calls over the network.
+ * @see GameLogic for the class that actually implements the Minionate game rules. This class requires a {@link
+ * GameContext} because it manipulates the state stored in it.
+ * @see GameState for a class that encapsulates all of the state of a game of Minionate.
+ * @see #getGameState() to access and modify the game state.
+ * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
+ * @see #getEntities() for a way to enumerate through all of the entities in the game.
+ */
 public class GameContext implements Cloneable, IDisposable, Serializable {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
@@ -43,7 +130,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private TriggerManager triggerManager = new TriggerManager();
 	private HashMap<Environment, Object> environment = new HashMap<>();
 	private List<CardCostModifier> cardCostModifiers = new ArrayList<>();
-	private final List<Throwable> exceptions = new ArrayList<>();
 	private int activePlayerId = -1;
 	private Player winner;
 	private MatchResult result;
@@ -56,14 +142,31 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private Stack<GameAction> actionStack = new Stack<>();
 	private Stack<GameEvent> eventStack = new Stack<>();
 
+	/**
+	 * Creates a game context with no valid start state.
+	 */
 	public GameContext() {
 	}
 
+	/**
+	 * Creates a game context from the given state.
+	 *
+	 * @param state A {@link GameState} object.
+	 */
 	public GameContext(GameState state) {
 		this();
-		loadState(state);
+		setGameState(state);
 	}
 
+	/**
+	 * Creates a game context from the given players, logic and deck format.
+	 *
+	 * @param player1    The first {@link Player} with a valid {@link Behaviour}. This is not necessarily the player who
+	 *                   will go first, which is determined by a coin flip.
+	 * @param player2    The second {@link Player} with a valid {@link Behaviour}.
+	 * @param logic      The game logic instance to use as the rules of the game.
+	 * @param deckFormat The cards that are legal to play in terms of a set of {@link CardSet} values.
+	 */
 	public GameContext(Player player1, Player player2, GameLogic logic, DeckFormat deckFormat) {
 		if (player1.getId() == IdFactory.UNASSIGNED) {
 			player1.setId(PLAYER_1);
@@ -84,19 +187,38 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		getTempCards().removeAll();
 	}
 
-
 	protected boolean acceptAction(GameAction nextAction) {
 		return true;
 	}
 
+	/**
+	 * Adds a temporary card. A temporary card is a card that exists only in this instance and not in the {@link
+	 * CardCatalogue}.
+	 *
+	 * @param card The card to add, typically made with code.
+	 */
 	public void addTempCard(Card card) {
 		getTempCards().addCard(card);
 	}
 
+	/**
+	 * Adds a trigger to the game.
+	 *
+	 * @param trigger An {@link IGameEventListener} that is used as a delegate whenever an event is fired in the game.
+	 * @see #fireGameEvent(GameEvent, List) for more about firing game events.
+	 */
 	public void addTrigger(IGameEventListener trigger) {
 		getTriggerManager().addTrigger(trigger);
 	}
 
+	/**
+	 * Clones the game context, recursively cloning the game state and logic.
+	 * <p>
+	 * Internally, this is used by AI functions to evaluate a game state until a win condition (or just the end of the
+	 * turn) is reached.
+	 *
+	 * @return A cloned instance of the game context.
+	 */
 	@Override
 	public synchronized GameContext clone() {
 		GameLogic logicClone = getLogic().clone();
@@ -135,6 +257,9 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return clone;
 	}
 
+	/**
+	 * Clears state to ensure this context isn't referencing it anymore.
+	 */
 	@Override
 	public synchronized void dispose() {
 		this.disposed = true;
@@ -144,6 +269,9 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		getEnvironment().clear();
 	}
 
+	/**
+	 * Ends the game immediately.
+	 */
 	@Suspendable
 	protected void endGame() {
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
@@ -153,13 +281,36 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		calculateStatistics();
 	}
 
+	/**
+	 * Makes a request over the network for a game action. Unsupported in this game context.
+	 *
+	 * @param state    The game state to send.
+	 * @param playerId The player ID to request from.
+	 * @param actions  The valid actions to choose from.
+	 * @param callback A handler for the response.
+	 */
 	@Suspendable
 	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
+		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * If possible, makes a request over the network for which cards to mulligan. Unsupported in this game context.
+	 *
+	 * @param player       The player to request from.
+	 * @param starterCards The cards the player started with.
+	 * @param callback     A handler for the response.
+	 */
 	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
+		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * Notifies the recipient player that the {@code winner} player won the game.
+	 *
+	 * @param recipient The player to notify.
+	 * @param winner    The winner.
+	 */
 	public void sendGameOver(Player recipient, Player winner) {
 	}
 
@@ -183,6 +334,9 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		}
 	}
 
+	/**
+	 * Ends the current player's turn immediately, setting the active player to their opponent.
+	 */
 	@Suspendable
 	public void endTurn() {
 		getLogic().endTurn(getActivePlayerId());
@@ -200,11 +354,39 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return null;
 	}
 
+	/**
+	 * Fires a game event.
+	 *
+	 * @param gameEvent The event to fire.
+	 * @see #fireGameEvent(GameEvent, List) for a complete description of this function.
+	 */
 	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent) {
 		fireGameEvent(gameEvent, null);
 	}
 
+	/**
+	 * Fires a {@link GameEvent}.
+	 * <p>
+	 * Game events two purposes:
+	 * <p>
+	 * <ol><li>They implement trigger-based gameplay like card text that reads, "Whenever a minion is healed, draw a
+	 * card." </li><li>They are changes in game state that are notable for a player to see. They can be interpreted as
+	 * checkpoints that need to be rendered to the client</li><li></ol>
+	 * <p>
+	 * Typically a {@link GameEvent} is instantiated inside a function in {@link GameLogic}, like {@link
+	 * net.demilich.metastone.game.events.SummonEvent} inside {@link GameLogic#summon(int, Minion, Card, int, boolean)},
+	 * and then fired by the {@link GameLogic} using this function.
+	 *
+	 * @param gameEvent     The {@link GameEvent} to fire.
+	 * @param otherTriggers Other triggers to consider besides the ones inside this game context's {@link
+	 *                      TriggerManager}. This may be synthetic triggers that implement analytics, networked game
+	 *                      logic, newsfeed reports, spectating features, etc.
+	 * @see net.demilich.metastone.game.spells.trigger.HealingTrigger for an example of a trigger that listens to a
+	 * specific event.
+	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete game logic for firing game events.
+	 * @see #addTrigger(IGameEventListener) for the place to add triggers that react to game events.
+	 */
 	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent, List<IGameEventListener> otherTriggers) {
 		if (ignoreEvents()) {
@@ -219,21 +401,43 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		}
 	}
 
+	/**
+	 * Determines whether the game is over (decided).
+	 *
+	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been
+	 * destroyed.
+	 */
 	public boolean gameDecided() {
 		setResult(getLogic().getMatchResult(getActivePlayer(), getOpponent(getActivePlayer())));
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
 		return getResult() != MatchResult.RUNNING;
 	}
 
+	/**
+	 * Gets a reference to the currently active player (the player whose turn it is).
+	 *
+	 * @return The player whose turn it is.
+	 */
 	public Player getActivePlayer() {
 		return getPlayer(getActivePlayerId());
 	}
 
+	/**
+	 * Gets the integer ID of the player whose current turn it is.
+	 *
+	 * @return The integer ID.
+	 */
 	public int getActivePlayerId() {
 		return activePlayerId;
 	}
 
-	public List<Actor> getAdjacentMinions(Player player, EntityReference minionReference) {
+	/**
+	 * Gets the minions adjacent to the given minion.
+	 *
+	 * @param minionReference The minion whose adjacent minions we should get.
+	 * @return The adjacent minions.
+	 */
+	public List<Actor> getAdjacentMinions(EntityReference minionReference) {
 		List<Actor> adjacentMinions = new ArrayList<>();
 		Actor minion = (Actor) resolveSingleTarget(minionReference);
 		List<Minion> minions = getPlayer(minion.getOwner()).getMinions();
@@ -257,10 +461,12 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return getLogic().getAutoHeroPowerAction(getActivePlayerId());
 	}
 
-	public int getBoardPosition(Minion minion) {
-		return minion.getEntityLocation().getIndex();
-	}
-
+	/**
+	 * Gets a card by ID, checking both the catalogue and the cards in {@link #getTempCards()}.
+	 *
+	 * @param cardId The string card ID.
+	 * @return A clone of the {@link Card}.
+	 */
 	public Card getCardById(String cardId) {
 		Card card = CardCatalogue.getCardById(cardId);
 		if (card == null) {
@@ -273,6 +479,11 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return card;
 	}
 
+	/**
+	 * Gets the current card cost modifiers in play.
+	 *
+	 * @return A list of {@link CardCostModifier} objects.
+	 */
 	public List<CardCostModifier> getCardCostModifiers() {
 		return cardCostModifiers;
 	}
@@ -285,18 +496,42 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return (Stack<Integer>) getEnvironment().get(Environment.DAMAGE_STACK);
 	}
 
+	/**
+	 * Gets the {@link DeckFormat} of this context, or the currently legal cards in terms of {@link CardSet} objects.
+	 *
+	 * @return A {@link DeckFormat} object.
+	 */
 	public DeckFormat getDeckFormat() {
 		return deckFormat;
 	}
 
-	public HashMap<Environment, Object> getEnvironment() {
+	/**
+	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions
+	 * are currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
+	 * <p>
+	 * This helps implement a variety of complex rules in the game.
+	 *
+	 * @return A mutable map of environment variables.
+	 * @see Environment for a description of the environment variables.
+	 */
+	public Map<Environment, Object> getEnvironment() {
 		return environment;
 	}
 
+	/**
+	 * Gets the current event card.
+	 * @return The event card.
+	 * @see Environment#EVENT_CARD for more.
+	 */
 	public Card getEventCard() {
 		return (Card) resolveSingleTarget((EntityReference) getEnvironment().get(Environment.EVENT_CARD));
 	}
 
+	/**
+	 * Gets the current event target stack.
+	 * @return A stack of targets.
+	 * @see Environment#EVENT_TARGET_REFERENCE_STACK for more.
+	 */
 	@SuppressWarnings("unchecked")
 	public Stack<EntityReference> getEventTargetStack() {
 		if (!getEnvironment().containsKey(Environment.EVENT_TARGET_REFERENCE_STACK)) {
@@ -305,7 +540,12 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return (Stack<EntityReference>) getEnvironment().get(Environment.EVENT_TARGET_REFERENCE_STACK);
 	}
 
-	public List<Actor> getLeftMinions(Player player, EntityReference minionReference) {
+	/**
+	 * Gets the minions to the left on the battlefield of the given minion.
+	 * @param minionReference An {@link EntityReference} pointing to the minion.
+	 * @return A list of entities to the left of the provided minion.
+	 */
+	public List<Actor> getLeftMinions(EntityReference minionReference) {
 		List<Actor> leftMinions = new ArrayList<>();
 		Actor minion = (Actor) resolveSingleTarget(minionReference);
 		List<Minion> minions = getPlayer(minion.getOwner()).getMinions();
@@ -381,6 +621,12 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return getPlayer(PLAYER_2);
 	}
 
+	/**
+	 * Each player holds the player's {@link Behaviour} and all of the {@link
+	 * Entity} objects in the game.
+	 *
+	 * @return An {@link java.util.Collections.UnmodifiableList} of {@link Player} objects.
+	 */
 	public synchronized List<Player> getPlayers() {
 		if (players == null) {
 			return Collections.unmodifiableList(new ArrayList<>());
@@ -737,7 +983,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		setPlayer(PLAYER_2, player2);
 	}
 
-	public void loadState(GameState state) {
+	public void setGameState(GameState state) {
 		this.setPlayer(GameContext.PLAYER_1, state.player1);
 		this.setPlayer(GameContext.PLAYER_2, state.player2);
 		this.setTempCards(state.tempCards);
@@ -843,5 +1089,13 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		}
 
 		return actionStack.peek();
+	}
+
+	public GameState getGameState() {
+		return new GameState(this, this.getTurnState(), true);
+	}
+
+	public GameState getGameStateCopy() {
+		return new GameState(this);
 	}
 }

@@ -76,7 +76,7 @@ public class WebSocketClient implements Client {
 	@Override
 	public void onGameEvent(net.demilich.metastone.game.events.GameEvent event) {
 		final GameEvent clientEvent = Games.getClientEvent(event, playerId);
-		final GameState state = new GameState(event.getGameContext());
+		final GameState state = event.getGameContext().getGameStateCopy();
 		final ServerToClientMessage message = new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
@@ -121,7 +121,7 @@ public class WebSocketClient implements Client {
 
 	private com.hiddenswitch.proto3.net.client.models.GameState getClientGameState(GameState state) {
 		GameContext simulatedContext = new GameContext(state.player1, state.player2, new GameLogic(), new DeckFormat());
-		simulatedContext.loadState(state);
+		simulatedContext.setGameState(state);
 
 		// Compute the local player
 		Player local;
@@ -157,7 +157,7 @@ public class WebSocketClient implements Client {
 	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
 		flushEvents();
 		final GameContext simulatedContext = new GameContext();
-		simulatedContext.loadState(state);
+		simulatedContext.setGameState(state);
 		sendMessage(new ServerToClientMessage()
 				.id(id)
 				.messageType(MessageType.ON_MULLIGAN)

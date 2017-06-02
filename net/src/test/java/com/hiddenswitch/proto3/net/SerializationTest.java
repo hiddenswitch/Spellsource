@@ -190,7 +190,7 @@ public class SerializationTest extends TestBase {
 		}
 
 		// Get the game state now
-		GameState state = new GameState(context);
+		GameState state = context.getGameStateCopy();
 		String json = Serialization.serialize(state);
 		GameState state1 = Serialization.deserialize(json, GameState.class);
 		assertReflectionEquals(state, state1);

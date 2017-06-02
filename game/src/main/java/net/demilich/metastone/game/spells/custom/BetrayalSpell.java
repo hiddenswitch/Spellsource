@@ -22,7 +22,7 @@ public class BetrayalSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Actor attacker = (Actor) target;
-		for (Actor adjacentMinion : context.getAdjacentMinions(player, target.getReference())) {
+		for (Actor adjacentMinion : context.getAdjacentMinions(target.getReference())) {
 			context.getLogic().damage(player, adjacentMinion, attacker.getAttack(), attacker);
 		}
 	}

@@ -231,7 +231,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	public void updateClientsWithGameState() {
-		GameState state = new GameState(this);
+		GameState state = getGameStateCopy();
 		getListenerMap().get(getPlayer1()).onUpdate(state);
 		getListenerMap().get(getPlayer2()).onUpdate(state);
 	}
@@ -250,6 +250,13 @@ public class ServerGameContext extends GameContext {
 		}
 	}
 
+	/**
+	 * Request an action from a {@link Client} that corresponds to the given {@code playerId}.
+	 * @param state    The game state to send.
+	 * @param playerId The player ID to request from.
+	 * @param actions  The valid actions to choose from.
+	 * @param callback A handler for the response.
+	 */
 	@Suspendable
 	@Override
 	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
@@ -259,14 +266,25 @@ public class ServerGameContext extends GameContext {
 		getListenerMap().get(getPlayer(playerId)).onRequestAction(id, state, actions);
 	}
 
+	/**
+	 * Request an action from the {@link Client} that corresponds to the given {@code player}.
+	 * @param player       The player to request from.
+	 * @param starterCards The cards the player started with.
+	 * @param callback     A handler for the response.
+	 */
 	@Override
 	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
 		logger.debug("Requesting mulligan for playerId {} hashCode {}", player.getId(), player.hashCode());
 		String id = RandomStringUtils.randomAscii(8);
 		requestCallbacks.put(new CallbackId(id, player.getId()), new GameplayRequest(GameplayRequestType.MULLIGAN, starterCards, callback));
-		getListenerMap().get(player).onMulligan(id, new GameState(this), starterCards, player.getId());
+		getListenerMap().get(player).onMulligan(id, getGameStateCopy(), starterCards, player.getId());
 	}
 
+	/**
+	 * Handles the chosen game action from a client.
+	 * @param messageId The ID of the message used to request the action.
+	 * @param action The action chosen.
+	 */
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public void onActionReceived(String messageId, GameAction action) {
@@ -277,6 +295,12 @@ public class ServerGameContext extends GameContext {
 		logger.debug("Action executed for callback {}", messageId);
 	}
 
+	/**
+	 * Handles the cards that the player chose to discard.
+	 * @param messageId The ID of the message used to request the mulligan.
+	 * @param player The player that requested the mulligan.
+	 * @param discardedCards The cards the player discarded.
+	 */
 	@SuppressWarnings("unchecked")
 	public void onMulliganReceived(String messageId, Player player, List<Card> discardedCards) {
 		logger.debug("Mulligan received from {}", player.getName());

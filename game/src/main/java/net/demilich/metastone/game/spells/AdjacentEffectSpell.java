@@ -37,7 +37,7 @@ public class AdjacentEffectSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
-		List<Actor> adjacentMinions = context.getAdjacentMinions(player, target.getReference());
+		List<Actor> adjacentMinions = context.getAdjacentMinions(target.getReference());
 
 		SpellDesc primary = (SpellDesc) desc.get(SpellArg.SPELL_1);
 		if (primary != null) {

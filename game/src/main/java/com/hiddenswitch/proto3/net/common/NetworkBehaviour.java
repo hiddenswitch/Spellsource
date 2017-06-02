@@ -67,6 +67,12 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 		}
 	}
 
+	/**
+	 * TODO: We're not necessarily in the server if we're running in a fiber, but this is only really relevant in the
+	 * strange world that is the Java legacy client.
+	 *
+	 * @return {@code true} if this is running in the server context.
+	 */
 	private boolean isServer() {
 		return Fiber.isCurrentFiber();
 	}
@@ -76,7 +82,7 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 	public void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler) {
 		if (isServer()) {
 			logger.debug("Requesting action from network. Player: {}, validActions: {}", player, validActions);
-			context.networkRequestAction(new GameState(context), player.getId(), validActions, handler);
+			context.networkRequestAction(context.getGameStateCopy(), player.getId(), validActions, handler);
 		} else {
 			super.requestActionAsync(context, player, validActions, handler);
 		}

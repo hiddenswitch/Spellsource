@@ -38,11 +38,19 @@ public class GameState implements Serializable {
 	public final long timestamp;
 
 	public GameState(GameContext fromContext) {
-		this(fromContext, fromContext.getTurnState());
+		this(fromContext, fromContext.getTurnState(), false);
 	}
 
 	public GameState(GameContext fromContext, TurnState turnState) {
-		GameContext clone = fromContext.clone();
+		this(fromContext, turnState, false);
+	}
+
+	public GameState(GameContext fromContext, TurnState turnState, boolean byReference) {
+		GameContext clone = fromContext;
+		if (!byReference) {
+			clone = fromContext.clone();
+		}
+
 		this.timestamp = System.nanoTime();
 		player1 = clone.getPlayer1();
 		player2 = clone.getPlayer2();
