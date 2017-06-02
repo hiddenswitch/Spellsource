@@ -93,6 +93,8 @@ definitions:
       - userId
       - password
     properties:
+      userId:
+        type: 'string'
       email:
         type: 'string'
       password:
@@ -300,7 +302,7 @@ definitions:
         type: 'integer'
       zone:
         type: 'string'
-        enum: 
+        enum:
           - 'NONE'
           - 'HAND'
           - 'DECK'
@@ -784,10 +786,11 @@ definitions:
       - 'DISCOVER'
   Entity:
     type: 'object'
+    required:
+      - 'id'
     properties:
       id:
         type: 'integer'
-        required: true
         default: -1
       cardId:
         type: 'string'
@@ -796,7 +799,7 @@ definitions:
         enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON', 'SECRET']
       name:
         type: 'string'
-      description: 
+      description:
         type: 'string'
       state:
         $ref: '#/definitions/EntityState'
@@ -1002,6 +1005,7 @@ paths:
       parameters:
         - name: deckId
           in: path
+          required: true
           description: The Deck ID to get.
           type: 'string'
       responses:
