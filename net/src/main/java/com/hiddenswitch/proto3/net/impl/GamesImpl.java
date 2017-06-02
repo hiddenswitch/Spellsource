@@ -14,10 +14,10 @@ import com.hiddenswitch.proto3.net.impl.server.WebSocketClient;
 import com.hiddenswitch.proto3.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Broker;
+import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.IncomingMessage;
 import com.hiddenswitch.proto3.net.util.Serialization;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.netty.channel.DefaultChannelId;
 import io.vertx.core.Future;
 import io.vertx.core.VertxException;
@@ -60,7 +60,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	private final int legacyPort;
 	private final int websocketPort;
 
-	private ServiceProxy<Matchmaking> matchmaking;
+	private RpcClient<Matchmaking> matchmaking;
 
 	public GamesImpl() {
 		this.legacyPort = RandomUtils.nextInt(6200, 8080);
@@ -81,7 +81,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		matchmaking = Broker.proxy(Matchmaking.class, vertx.eventBus());
+		matchmaking = RPC.connect(Matchmaking.class, vertx.eventBus());
 
 		Void ignored = awaitResult(h -> vertx.executeBlocking(blocking -> {
 			try {
@@ -141,7 +141,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 		logger.debug("GamesImpl::start Created websocket server.");
 
-		Broker.of(this, Games.class, vertx.eventBus());
+		RPC.register(this, Games.class, vertx.eventBus());
 
 		logger.debug("GamesImpl::start Registered on event bus.");
 	}

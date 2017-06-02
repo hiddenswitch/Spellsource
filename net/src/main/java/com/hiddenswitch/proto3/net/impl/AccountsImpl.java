@@ -5,7 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.*;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Broker;
+import com.hiddenswitch.proto3.net.util.RPC;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
@@ -29,7 +29,7 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		Broker.of(this, Accounts.class, vertx.eventBus());
+		RPC.register(this, Accounts.class, vertx.eventBus());
 		List<String> collections = awaitResult(h -> getMongo().getCollections(h));
 		if (!collections.contains(USERS)) {
 			Void r1 = awaitResult(h -> getMongo().createCollection(USERS, h));

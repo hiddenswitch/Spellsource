@@ -7,8 +7,6 @@ import com.hiddenswitch.proto3.net.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.models.LoginRequest;
 import com.hiddenswitch.proto3.net.models.LoginResponse;
-import com.hiddenswitch.proto3.net.util.Broker;
-import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;

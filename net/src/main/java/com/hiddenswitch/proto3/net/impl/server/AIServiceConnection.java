@@ -6,8 +6,8 @@ import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.eventbus.EventBus;
 import net.demilich.metastone.game.Player;
@@ -24,11 +24,11 @@ import java.util.List;
  */
 public class AIServiceConnection implements Client {
 	final int playerId;
-	final ServiceProxy<Bots> bots;
+	final RpcClient<Bots> bots;
 	final WeakReference<ServerGameContext> context;
 
 	public AIServiceConnection(ServerGameContext context, EventBus eventBus, int playerId) {
-		this.bots = Broker.proxy(Bots.class, eventBus);
+		this.bots = RPC.connect(Bots.class, eventBus);
 
 		this.context = new WeakReference<>(context);
 		this.playerId = playerId;

@@ -7,8 +7,8 @@ import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.Card;
@@ -33,15 +33,15 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * Created by bberman on 1/30/17.
  */
 public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
-	private ServiceProxy<Inventory> inventory;
-	private ServiceProxy<Decks> decks;
+	private RpcClient<Inventory> inventory;
+	private RpcClient<Decks> decks;
 
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
-		Broker.of(this, Logic.class, vertx.eventBus());
-		inventory = Broker.proxy(Inventory.class, vertx.eventBus());
-		decks = Broker.proxy(Decks.class, vertx.eventBus());
+		RPC.register(this, Logic.class, vertx.eventBus());
+		inventory = RPC.connect(Inventory.class, vertx.eventBus());
+		decks = RPC.connect(Decks.class, vertx.eventBus());
 	}
 
 	@Override

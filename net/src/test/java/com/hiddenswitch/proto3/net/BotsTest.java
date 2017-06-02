@@ -88,7 +88,7 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 	public void testBroker(TestContext context) throws CardParseException, IOException, URISyntaxException {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
-			final ServiceProxy<Bots> bots = Broker.proxy(Bots.class, vertx.eventBus());
+			final RpcClient<Bots> bots = RPC.connect(Bots.class, vertx.eventBus());
 			final MulliganRequest request = new MulliganRequest(
 					Arrays.asList(
 							CardCatalogue.getCardById("spell_fireball"),

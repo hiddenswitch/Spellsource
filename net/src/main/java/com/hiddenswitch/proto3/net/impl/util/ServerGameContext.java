@@ -3,8 +3,8 @@ package com.hiddenswitch.proto3.net.impl.util;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.common.*;
-import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -34,7 +34,7 @@ public class ServerGameContext extends GameContext {
 	private boolean isRunning = true;
 	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
 	private final List<IGameEventListener> gameTriggers = new ArrayList<>();
-	private final transient ServiceProxy<Logic> logic;
+	private final transient RpcClient<Logic> logic;
 
 	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, EventBus bus) {
 		// The player's IDs are set here
@@ -47,7 +47,7 @@ public class ServerGameContext extends GameContext {
 		}
 		NotificationProxy.init(new NullNotifier());
 		this.gameId = gameId;
-		this.logic = Broker.proxy(Logic.class, bus);
+		this.logic = RPC.connect(Logic.class, bus);
 
 		// Set up the alliance tracker
 		addAllianceListener();

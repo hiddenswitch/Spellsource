@@ -5,8 +5,8 @@ import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.models.LoginRequest;
 import com.hiddenswitch.proto3.net.models.LoginResponse;
 import com.hiddenswitch.proto3.net.impl.util.AuthenticationException;
-import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -20,7 +20,7 @@ import io.vertx.ext.auth.User;
  */
 public class UsernamePasswordAuthProvider implements AuthProvider {
 	protected Vertx vertx;
-	protected ServiceProxy<Accounts> accounts;
+	protected RpcClient<Accounts> accounts;
 
 	public UsernamePasswordAuthProvider(Vertx vertx) {
 		if (vertx == null) {
@@ -28,7 +28,7 @@ public class UsernamePasswordAuthProvider implements AuthProvider {
 		}
 
 		this.vertx = vertx;
-		accounts = Broker.proxy(Accounts.class, vertx.eventBus());
+		accounts = RPC.connect(Accounts.class, vertx.eventBus());
 	}
 
 	@Override
