@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Sets;
 import com.hiddenswitch.proto3.net.Server;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
@@ -27,6 +28,7 @@ import io.vertx.ext.sync.Sync;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.LoggerHandler;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.http.NameValuePair;
@@ -83,6 +85,18 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 			// All routes need logging.
 			router.route().handler(LoggerHandler.create());
+
+			//CORS
+			router.route().handler(CorsHandler.create("*")
+					.allowedHeader("Content-Type")
+					.allowedHeader("x-auth-token")
+					.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)));
+
+			//add "content-type=application/json" to all responses
+			router.route().handler(context -> {
+				context.response().putHeader("content-type", "application/json");
+				context.next();
+			});
 
 			router.route("/v1/accounts/:targetUserId")
 					.handler(authHandler);
