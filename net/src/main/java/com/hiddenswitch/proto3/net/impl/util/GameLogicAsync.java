@@ -1,15 +1,11 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.common.NetworkBehaviour;
 import com.hiddenswitch.proto3.net.common.NullResult;
-import com.hiddenswitch.proto3.net.util.Broker;
 import com.hiddenswitch.proto3.net.util.LoggerUtils;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;

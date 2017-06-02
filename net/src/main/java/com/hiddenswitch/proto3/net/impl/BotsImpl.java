@@ -5,8 +5,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import net.demilich.metastone.game.GameContext;
@@ -28,9 +28,9 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * Created by bberman on 12/7/16.
  */
 public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
-	private ServiceProxy<Accounts> accounts;
-	private ServiceProxy<Logic> logic;
-	private ServiceProxy<Matchmaking> matchmaking;
+	private RpcClient<Accounts> accounts;
+	private RpcClient<Logic> logic;
+	private RpcClient<Matchmaking> matchmaking;
 	private List<UserRecord> bots = new ArrayList<>();
 	private Queue<UserRecord> unusedBots = new ConcurrentLinkedQueue<>();
 	private Map<String, UserRecord> botToGame = new HashMap<>();
@@ -39,10 +39,10 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		accounts = Broker.proxy(Accounts.class, vertx.eventBus());
-		logic = Broker.proxy(Logic.class, vertx.eventBus());
-		matchmaking = Broker.proxy(Matchmaking.class, vertx.eventBus());
-		Broker.of(this, Bots.class, vertx.eventBus());
+		accounts = RPC.connect(Accounts.class, vertx.eventBus());
+		logic = RPC.connect(Logic.class, vertx.eventBus());
+		matchmaking = RPC.connect(Matchmaking.class, vertx.eventBus());
+		RPC.register(this, Bots.class, vertx.eventBus());
 	}
 
 	@Override

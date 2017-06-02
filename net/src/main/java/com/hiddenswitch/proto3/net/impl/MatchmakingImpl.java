@@ -10,8 +10,8 @@ import net.demilich.metastone.game.decks.DeckWithId;
 import com.hiddenswitch.proto3.net.impl.util.Matchmaker;
 import com.hiddenswitch.proto3.net.impl.util.QueueEntry;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.Deck;
@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements Matchmaking {
-	private ServiceProxy<Games> gameSessions;
-	private ServiceProxy<Logic> logic;
-	private ServiceProxy<Bots> bots;
+	private RpcClient<Games> gameSessions;
+	private RpcClient<Logic> logic;
+	private RpcClient<Bots> bots;
 
 	private Matchmaker matchmaker = new Matchmaker();
 	private Map<String, ClientConnectionConfiguration> connections = new HashMap<>();
@@ -31,10 +31,10 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
-		Broker.of(this, Matchmaking.class, vertx.eventBus());
-		gameSessions = Broker.proxy(Games.class, vertx.eventBus());
-		logic = Broker.proxy(Logic.class, vertx.eventBus());
-		bots = Broker.proxy(Bots.class, vertx.eventBus());
+		RPC.register(this, Matchmaking.class, vertx.eventBus());
+		gameSessions = RPC.connect(Games.class, vertx.eventBus());
+		logic = RPC.connect(Logic.class, vertx.eventBus());
+		bots = RPC.connect(Bots.class, vertx.eventBus());
 	}
 
 	@Override

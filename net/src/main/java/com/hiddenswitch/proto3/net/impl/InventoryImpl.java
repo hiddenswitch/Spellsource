@@ -8,8 +8,8 @@ import com.hiddenswitch.proto3.net.models.SetCollectionResponse;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.impl.util.CollectionRecord;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
@@ -29,14 +29,14 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * Created by bberman on 1/19/17.
  */
 public class InventoryImpl extends AbstractService<InventoryImpl> implements Inventory {
-	private ServiceProxy<Cards> cards;
+	private RpcClient<Cards> cards;
 
 	@Override
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		Broker.of(this, Inventory.class, vertx.eventBus());
-		cards = Broker.proxy(Cards.class, vertx.eventBus());
+		RPC.register(this, Inventory.class, vertx.eventBus());
+		cards = RPC.connect(Cards.class, vertx.eventBus());
 		List<String> collections = awaitResult(h -> getMongo().getCollections(h));
 		if (!collections.contains(INVENTORY) || !collections.contains(COLLECTIONS)) {
 			Void ignore = awaitResult(h -> getMongo().createCollection(INVENTORY, h));

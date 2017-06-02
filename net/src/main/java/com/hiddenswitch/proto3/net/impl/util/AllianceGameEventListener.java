@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.models.EventLogicRequest;
 import com.hiddenswitch.proto3.net.models.LogicResponse;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.AsyncResult;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
@@ -28,12 +28,12 @@ import java.util.Set;
  */
 public class AllianceGameEventListener implements IGameEventListener {
 	@Expose(serialize = false, deserialize = false)
-	private transient final ServiceProxy<Logic> logic;
+	private transient final RpcClient<Logic> logic;
 	private final String gameId;
 	@Expose(serialize = false, deserialize = false)
 	private transient final GameContext context;
 
-	public AllianceGameEventListener(ServiceProxy<Logic> logicProxy, GameContext context, String gameId) {
+	public AllianceGameEventListener(RpcClient<Logic> logicProxy, GameContext context, String gameId) {
 		this.logic = logicProxy;
 		this.gameId = gameId;
 		this.context = context;

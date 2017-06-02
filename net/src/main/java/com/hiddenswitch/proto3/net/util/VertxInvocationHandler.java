@@ -20,7 +20,7 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  * Created by bberman on 2/1/17.
  */
 public class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
-	ServiceProxy<T> serviceProxy;
+	RpcClient<T> ApiClient;
 	protected String name;
 	EventBus eb;
 
@@ -28,13 +28,19 @@ public class VertxInvocationHandler<T> implements InvocationHandler, Serializabl
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		final boolean sync = serviceProxy.sync;
-		final Handler<AsyncResult<Object>> next = serviceProxy.next;
+		// Call default methods normally
+		if (method.isDefault()) {
+			// Invoked with the proxy instance, which shouldn't matter for anything that is a default method on an interface
+			return method.invoke(proxy, args);
+		}
+
+		final boolean sync = ApiClient.sync;
+		final Handler<AsyncResult<Object>> next = ApiClient.next;
 
 		final String methodName = method.getName();
 
-		serviceProxy.next = null;
-		serviceProxy.sync = false;
+		ApiClient.next = null;
+		ApiClient.sync = false;
 
 		if (next == null
 				&& !sync) {

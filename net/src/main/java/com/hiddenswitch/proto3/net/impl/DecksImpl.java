@@ -7,8 +7,8 @@ import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Broker;
-import com.hiddenswitch.proto3.net.util.ServiceProxy;
+import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
@@ -31,14 +31,14 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * Created by bberman on 2/4/17.
  */
 public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
-	private ServiceProxy<Inventory> inventory;
-	private ServiceProxy<Accounts> accounts;
+	private RpcClient<Inventory> inventory;
+	private RpcClient<Accounts> accounts;
 
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
-		inventory = Broker.proxy(Inventory.class, vertx.eventBus());
-		accounts = Broker.proxy(Accounts.class, vertx.eventBus());
+		inventory = RPC.connect(Inventory.class, vertx.eventBus());
+		accounts = RPC.connect(Accounts.class, vertx.eventBus());
 		// Create the starting decks
 		try {
 			DeckCatalogue.loadDecksFromPackage();
@@ -46,7 +46,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 			throw new RuntimeException();
 		}
 
-		Broker.of(this, Decks.class, vertx.eventBus());
+		RPC.register(this, Decks.class, vertx.eventBus());
 	}
 
 	@Override
