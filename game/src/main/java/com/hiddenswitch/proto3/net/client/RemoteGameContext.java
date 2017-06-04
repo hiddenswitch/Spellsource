@@ -12,14 +12,14 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.IBehaviour;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.visuals.GameContextVisuals;
 
@@ -67,7 +67,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	@Override
-	public void addTrigger(IGameEventListener trigger) {
+	public void addTrigger(Trigger trigger) {
 		throw new RuntimeException("should not be called");
 	}
 
@@ -116,7 +116,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	@Override
-	public List<IGameEventListener> getTriggersAssociatedWith(EntityReference entityReference) {
+	public List<Trigger> getTriggersAssociatedWith(EntityReference entityReference) {
 		throw new RuntimeException("should not be called");
 	}
 
@@ -194,7 +194,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 		if (localPlayer == null) {
 			return true;
 		}
-		final IBehaviour behaviour = localPlayer.getBehaviour();
+		final Behaviour behaviour = localPlayer.getBehaviour();
 		if (behaviour == null) {
 			return true;
 		}
@@ -268,7 +268,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	@Override
-	public boolean playTurn() {
+	public boolean takeActionInTurn() {
 		throw new RuntimeException("should not be called");
 	}
 
@@ -373,9 +373,6 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	protected synchronized void updateWithState(GameState state) {
-		if (!state.isValid()) {
-			throw new RuntimeException("Invalid state received from wire!");
-		}
 		if (lastUpdatedAt == Long.MIN_VALUE) {
 			// Update the time diff with the server
 			serverTimeDiff = System.nanoTime() - state.timestamp;
@@ -431,7 +428,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	public void setPlayer(int index, Player player) {
 		// Don't override the existing behaviour
 		if (hasPlayer(index)) {
-			IBehaviour existingBehaviour = getPlayer(index).getBehaviour();
+			Behaviour existingBehaviour = getPlayer(index).getBehaviour();
 			player.setBehaviour(existingBehaviour);
 		}
 		super.setPlayer(index, player);

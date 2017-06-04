@@ -7,10 +7,10 @@ import java.util.List;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.Card;
 
-public class MonteCarloTreeSearch extends Behaviour {
+public class MonteCarloTreeSearch extends AbstractBehaviour {
 
 	//private final static Logger logger = LoggerFactory.getLogger(MonteCarloTreeSearch.class);
 

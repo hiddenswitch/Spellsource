@@ -10,12 +10,12 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.IActionSelectionListener;
-import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HumanBehaviour extends Behaviour implements IActionSelectionListener {
+public class HumanBehaviour extends AbstractBehaviour implements IActionSelectionListener {
 	Logger logger = LoggerFactory.getLogger(HumanBehaviour.class);
 	private GameAction selectedAction;
 	private boolean waitingForInput;

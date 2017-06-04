@@ -17,7 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import net.demilich.metastone.game.behaviour.GreedyOptimizeMove;
-import net.demilich.metastone.game.behaviour.IBehaviour;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.NoAggressionBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.behaviour.heuristic.WeightedHeuristic;
@@ -47,7 +47,7 @@ public class PlayerConfigView extends VBox {
 	protected ImageView heroIcon;
 
 	@FXML
-	protected ComboBox<IBehaviour> behaviourBox;
+	protected ComboBox<Behaviour> behaviourBox;
 
 	@FXML
 	protected ComboBox<HeroCard> heroBox;
@@ -132,7 +132,7 @@ public class PlayerConfigView extends VBox {
 		behaviourBox.getSelectionModel().selectFirst();
 	}
 
-	private void onBehaviourChanged(ObservableValue<? extends IBehaviour> ov, IBehaviour oldBehaviour, IBehaviour newBehaviour) {
+	private void onBehaviourChanged(ObservableValue<? extends Behaviour> ov, Behaviour oldBehaviour, Behaviour newBehaviour) {
 		getPlayerConfig().setBehaviour(newBehaviour);
 		boolean humanBehaviourSelected = newBehaviour instanceof HumanBehaviour;
 		hideCardsCheckBox.setDisable(humanBehaviourSelected);
@@ -154,7 +154,7 @@ public class PlayerConfigView extends VBox {
 	}
 
 	public void setupBehaviours() {
-		ObservableList<IBehaviour> behaviourList = FXCollections.observableArrayList();
+		ObservableList<Behaviour> behaviourList = FXCollections.observableArrayList();
 		if (selectionHint == PlayerConfigType.HUMAN || selectionHint == PlayerConfigType.SANDBOX) {
 			behaviourList.add(new HumanBehaviour());
 		}

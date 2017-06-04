@@ -14,7 +14,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.heuristic.IGameStateHeuristic;
 import net.demilich.metastone.game.cards.Card;
 
-public class GreedyOptimizeTurn extends Behaviour {
+public class GreedyOptimizeTurn extends AbstractBehaviour {
 
 	private final Logger logger = LoggerFactory.getLogger(GreedyOptimizeTurn.class);
 
@@ -59,7 +59,7 @@ public class GreedyOptimizeTurn extends Behaviour {
 	}
 
 	@Override
-	public IBehaviour clone() {
+	public Behaviour clone() {
 		try {
 			return new GreedyOptimizeTurn(heuristic.getClass().newInstance());
 		} catch (InstantiationException e) {

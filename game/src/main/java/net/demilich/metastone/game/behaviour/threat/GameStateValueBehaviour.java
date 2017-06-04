@@ -14,12 +14,12 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.IBehaviour;
 import net.demilich.metastone.game.behaviour.heuristic.IGameStateHeuristic;
 import net.demilich.metastone.game.cards.Card;
 
-public class GameStateValueBehaviour extends Behaviour {
+public class GameStateValueBehaviour extends AbstractBehaviour {
 
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);
 
@@ -76,7 +76,7 @@ public class GameStateValueBehaviour extends Behaviour {
 	}
 
 	@Override
-	public IBehaviour clone() {
+	public Behaviour clone() {
 		if (featureVector != null) {
 			return new GameStateValueBehaviour(featureVector.clone(), nameSuffix);
 		}

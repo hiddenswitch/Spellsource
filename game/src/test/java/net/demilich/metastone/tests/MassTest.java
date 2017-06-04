@@ -8,7 +8,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -98,7 +98,7 @@ public class MassTest extends TestBase {
 
 			@Override
 			@Suspendable
-			public void fireGameEvent(GameEvent gameEvent, List<IGameEventListener> otherTriggers) {
+			public void fireGameEvent(GameEvent gameEvent, List<Trigger> otherTriggers) {
 				super.fireGameEvent(gameEvent, otherTriggers);
 				assertValidEntities();
 			}

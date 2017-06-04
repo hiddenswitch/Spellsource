@@ -20,7 +20,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.IdFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -33,7 +33,7 @@ public class ServerGameContext extends GameContext {
 	private final Map<CallbackId, GameplayRequest> requestCallbacks = new HashMap<>();
 	private boolean isRunning = true;
 	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
-	private final List<IGameEventListener> gameTriggers = new ArrayList<>();
+	private final List<Trigger> gameTriggers = new ArrayList<>();
 	private final transient RpcClient<Logic> logic;
 
 	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, EventBus bus) {
@@ -176,7 +176,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	@Override
-	public boolean playTurn() throws UnsupportedOperationException {
+	public boolean takeActionInTurn() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("ServerGameContext::playTurn should not be called.");
 	}
 
@@ -412,7 +412,7 @@ public class ServerGameContext extends GameContext {
 		onGameEndHandlers.clear();
 	}
 
-	public List<IGameEventListener> getGameTriggers() {
+	public List<Trigger> getGameTriggers() {
 		return gameTriggers;
 	}
 

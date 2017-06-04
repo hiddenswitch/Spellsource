@@ -16,7 +16,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.SetAttributeSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.EnumSet;
@@ -26,7 +26,7 @@ import java.util.Set;
 /**
  * Created by bberman on 2/21/17.
  */
-public class AllianceGameEventListener implements IGameEventListener {
+public class AllianceGameEventListener implements Trigger {
 	@Expose(serialize = false, deserialize = false)
 	private transient final RpcClient<Logic> logic;
 	private final String gameId;
@@ -130,7 +130,7 @@ public class AllianceGameEventListener implements IGameEventListener {
 	}
 
 	@Override
-	public IGameEventListener clone() {
+	public Trigger clone() {
 		return new AllianceGameEventListener(logic, context, gameId);
 	}
 

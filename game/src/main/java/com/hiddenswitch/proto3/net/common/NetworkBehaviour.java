@@ -2,16 +2,14 @@ package com.hiddenswitch.proto3.net.common;
 
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.net.util.LoggerUtils;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.IBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +17,13 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.List;
 
-public class NetworkBehaviour extends Behaviour implements Serializable {
+public class NetworkBehaviour extends AbstractBehaviour implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Logger logger = LoggerFactory.getLogger(NetworkBehaviour.class);
-	private IBehaviour wrapBehaviour;
+	private Behaviour wrapBehaviour;
 
-	public NetworkBehaviour(IBehaviour wrapBehaviour) {
+	public NetworkBehaviour(Behaviour wrapBehaviour) {
 		this.wrapBehaviour = wrapBehaviour;
 	}
 
@@ -104,7 +102,7 @@ public class NetworkBehaviour extends Behaviour implements Serializable {
 		}
 	}
 
-	public IBehaviour getWrapBehaviour() {
+	public Behaviour getWrapBehaviour() {
 		return wrapBehaviour;
 	}
 }

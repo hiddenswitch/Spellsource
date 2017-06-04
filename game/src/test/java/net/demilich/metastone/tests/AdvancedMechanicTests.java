@@ -11,7 +11,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.IChooseOneCard;
@@ -227,7 +227,7 @@ public class AdvancedMechanicTests extends BasicTests {
 		warrior.setMana(10);
 
 		int baseAttack = 1;
-		mage.setBehaviour(new Behaviour() {
+		mage.setBehaviour(new AbstractBehaviour() {
 
 			@Override
 			public String getName() {

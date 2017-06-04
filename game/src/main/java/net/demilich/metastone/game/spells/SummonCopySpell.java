@@ -9,7 +9,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class SummonCopySpell extends Spell {
@@ -33,8 +33,8 @@ public class SummonCopySpell extends Spell {
 			if (!summoned) {
 				return;
 			}
-			for (IGameEventListener trigger : context.getTriggersAssociatedWith(template.getReference())) {
-				IGameEventListener triggerClone = trigger.clone();
+			for (Trigger trigger : context.getTriggersAssociatedWith(template.getReference())) {
+				Trigger triggerClone = trigger.clone();
 				context.getLogic().addGameEventListener(player, triggerClone, clone);
 			}
 		}

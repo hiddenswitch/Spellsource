@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.gameconfig;
 
-import net.demilich.metastone.game.behaviour.IBehaviour;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.MetaDeck;
@@ -13,7 +13,7 @@ public class PlayerConfig implements Cloneable, Serializable {
 	private String name;
 	private HeroCard heroCard;
 	private Deck deck;
-	private IBehaviour behaviour;
+	private Behaviour behaviour;
 	private boolean hideCards;
 
 	private Deck deckForPlay;
@@ -22,7 +22,7 @@ public class PlayerConfig implements Cloneable, Serializable {
 	public PlayerConfig() {
 	}
 
-	public PlayerConfig(Deck deck, IBehaviour behaviour) {
+	public PlayerConfig(Deck deck, Behaviour behaviour) {
 		this.deck = deck;
 		this.behaviour = behaviour;
 	}
@@ -42,7 +42,7 @@ public class PlayerConfig implements Cloneable, Serializable {
 		}
 	}
 
-	public IBehaviour getBehaviour() {
+	public Behaviour getBehaviour() {
 		return behaviour;
 	}
 
@@ -70,7 +70,7 @@ public class PlayerConfig implements Cloneable, Serializable {
 		return hideCards;
 	}
 
-	public void setBehaviour(IBehaviour behaviour) {
+	public void setBehaviour(Behaviour behaviour) {
 		this.behaviour = behaviour;
 	}
 

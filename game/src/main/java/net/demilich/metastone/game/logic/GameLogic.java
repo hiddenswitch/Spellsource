@@ -34,7 +34,7 @@ import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.trigger.DamageCausedTrigger;
 import net.demilich.metastone.game.spells.trigger.DamageReceivedTrigger;
 import net.demilich.metastone.game.spells.trigger.HealingTrigger;
-import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.MinionSummonedTrigger;
 import net.demilich.metastone.game.spells.trigger.SpellCastedTrigger;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
@@ -171,16 +171,16 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Adds a {@link IGameEventListener} to a specified {@link Entity}. These are typically {@link SpellTrigger}
+	 * Adds a {@link Trigger} to a specified {@link Entity}. These are typically {@link SpellTrigger}
 	 * instances that react to game events.
 	 *
 	 * @param player            Usually the current turn player.
 	 * @param gameEventListener A game event listener, like a {@link Aura}, {@link Secret} or {@link CardCostModifier}.
-	 * @param target            The {@link Entity} that will be pointed to by {@link IGameEventListener#getHostReference()}.
+	 * @param target            The {@link Entity} that will be pointed to by {@link Trigger#getHostReference()}.
 	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete implementation of triggers.
 	 */
 	@Suspendable
-	public void addGameEventListener(Player player, IGameEventListener gameEventListener, Entity target) {
+	public void addGameEventListener(Player player, Trigger gameEventListener, Entity target) {
 		if (isLoggingEnabled()) {
 			debugHistory.add("Player " + player.getId() + " has set event listener " + gameEventListener.getClass().getName() + " from entity " + target.getName() + "[Reference ID: " + target.getId() + "]");
 		}
@@ -196,7 +196,7 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Specifically add a card cost modifier to the game, which is a special kind of {@link IGameEventListener}.
+	 * Specifically add a card cost modifier to the game, which is a special kind of {@link Trigger}.
 	 *
 	 * @param player           Usually the current turn player.
 	 * @param cardCostModifier The card cost modifier.
@@ -1320,14 +1320,14 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Gets a list of secrets for a player.
 	 *
 	 * @param player The player whose point of view to query for secrets.
-	 * @return The secrets as {@link IGameEventListener}
+	 * @return The secrets as {@link Trigger}
 	 * @see Player#getSecrets() for a more reliable way to get the {@link Secret} entities that are in play for a
 	 * player.
 	 */
-	private List<IGameEventListener> getSecrets(Player player) {
-		List<IGameEventListener> secrets = context.getTriggersAssociatedWith(player.getHero().getReference());
-		for (Iterator<IGameEventListener> iterator = secrets.iterator(); iterator.hasNext(); ) {
-			IGameEventListener trigger = iterator.next();
+	private List<Trigger> getSecrets(Player player) {
+		List<Trigger> secrets = context.getTriggersAssociatedWith(player.getHero().getReference());
+		for (Iterator<Trigger> iterator = secrets.iterator(); iterator.hasNext(); ) {
+			Trigger trigger = iterator.next();
 			if (!(trigger instanceof Secret)) {
 				iterator.remove();
 			}
@@ -1785,9 +1785,9 @@ public class GameLogic implements Cloneable, Serializable {
 			minion.setOwner(player.getId());
 			applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
 			refreshAttacksPerRound(minion);
-			List<IGameEventListener> triggers = context.getTriggersAssociatedWith(minion.getReference());
+			List<Trigger> triggers = context.getTriggersAssociatedWith(minion.getReference());
 			removeSpellTriggers(minion);
-			for (IGameEventListener trigger : triggers) {
+			for (Trigger trigger : triggers) {
 				addGameEventListener(player, trigger, minion);
 			}
 			context.fireGameEvent(new BoardChangedEvent(context));
@@ -2318,7 +2318,7 @@ public class GameLogic implements Cloneable, Serializable {
 	public void removeSecrets(Player player) {
 		log("All secrets for {} have been destroyed", player.getName());
 		// this only works while Secrets are the only SpellTrigger on the heroes
-		for (IGameEventListener secret : getSecrets(player)) {
+		for (Trigger secret : getSecrets(player)) {
 			secret.onRemove(context);
 			context.removeTrigger(secret);
 		}
@@ -2333,7 +2333,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	private void removeSpellTriggers(Entity entity, boolean removeAuras) {
 		EntityReference entityReference = entity.getReference();
-		for (IGameEventListener trigger : context.getTriggersAssociatedWith(entityReference)) {
+		for (Trigger trigger : context.getTriggersAssociatedWith(entityReference)) {
 			if (!removeAuras && trigger instanceof Aura) {
 				continue;
 			}

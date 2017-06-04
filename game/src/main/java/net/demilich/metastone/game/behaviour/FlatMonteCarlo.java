@@ -12,7 +12,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 
-public class FlatMonteCarlo extends Behaviour {
+public class FlatMonteCarlo extends AbstractBehaviour {
 
 	private final static Logger logger = LoggerFactory.getLogger(FlatMonteCarlo.class);
 
@@ -56,7 +56,7 @@ public class FlatMonteCarlo extends Behaviour {
 		for (Player player : simulation.getPlayers()) {
 			player.setBehaviour(new PlayRandomBehaviour());
 		}
-		simulation.playTurn();
+		simulation.takeActionInTurn();
 		return simulation.getWinningPlayerId() == playerId ? 1 : 0;
 	}
 

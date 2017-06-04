@@ -11,9 +11,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.heuristic.IGameStateHeuristic;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.logic.GameLogic;
 
-public class GreedyOptimizeMove extends Behaviour {
+public class GreedyOptimizeMove extends AbstractBehaviour {
 
 	private final static Logger logger = LoggerFactory.getLogger(GreedyOptimizeMove.class);
 

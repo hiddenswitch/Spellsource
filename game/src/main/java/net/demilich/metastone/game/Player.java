@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
-import net.demilich.metastone.game.behaviour.IBehaviour;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
@@ -67,7 +67,7 @@ public class Player extends Entity implements Serializable {
 	private boolean hideCards;
 
 	@Expose(serialize = false, deserialize = false)
-	private IBehaviour behaviour;
+	private Behaviour behaviour;
 
 	private Player(Player otherPlayer) {
 		this.setName(otherPlayer.getName());
@@ -121,7 +121,7 @@ public class Player extends Entity implements Serializable {
 		return new Player(this);
 	}
 
-	public IBehaviour getBehaviour() {
+	public Behaviour getBehaviour() {
 		return behaviour;
 	}
 
@@ -204,7 +204,7 @@ public class Player extends Entity implements Serializable {
 		return hideCards;
 	}
 
-	public void setBehaviour(IBehaviour behaviour) {
+	public void setBehaviour(Behaviour behaviour) {
 		this.behaviour = behaviour;
 	}
 
