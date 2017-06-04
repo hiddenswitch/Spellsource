@@ -8,6 +8,9 @@ import net.demilich.metastone.game.cards.Card;
 
 import java.util.List;
 
+/**
+ * An interface that specifies a server instance that's capable of processing {@link Client} actions.
+ */
 public interface Server extends ClientConnectionHandler {
 	@Suspendable
 	void onActionReceived(String id, int actionIndex);

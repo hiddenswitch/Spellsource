@@ -8,6 +8,10 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.events.GameEvent;
 
+/**
+ * An interface that specifies the boundary between a {@link net.demilich.metastone.game.GameContext} and a networking
+ * channel like a websocket or a plain TCP socket.
+ */
 public interface Client {
 	void onGameEvent(GameEvent event);
 
@@ -22,12 +26,24 @@ public interface Client {
 	void onUpdate(GameState state);
 
 	void onRequestAction(String messageId, GameState state, List<GameAction> actions);
-	
+
 	void onMulligan(String messageId, GameState state, List<Card> cards, int playerId);
 
 	void close();
 
+	/**
+	 * Gets an object that represents the underlying networking socket that powers this client. This is helpful for
+	 * keeping track of reconnecting users, who may be the same {@link Client} but connected with different sockets.
+	 *
+	 * @return An object whose {@link Object#hashCode()} is valid for {@link java.util.Map} keys, to help the server
+	 * infrastructure keep track of which sockets correspond to which {@link Client} objects.
+	 */
 	Object getPrivateSocket();
 
+	/**
+	 * Called when the last event in a stack of {@link GameEvent} has been evaluated. Typically, a client should be
+	 * notified of an entire sequence of events, so that it has valid data at the end of each event, rather than
+	 * as the events are processed.
+	 */
 	void lastEvent();
 }

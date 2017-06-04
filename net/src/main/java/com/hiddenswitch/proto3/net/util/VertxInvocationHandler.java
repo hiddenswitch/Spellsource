@@ -20,7 +20,7 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  * Created by bberman on 2/1/17.
  */
 public class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
-	RpcClient<T> ApiClient;
+	RpcClientImpl<T> ApiClient;
 	protected String name;
 	EventBus eb;
 

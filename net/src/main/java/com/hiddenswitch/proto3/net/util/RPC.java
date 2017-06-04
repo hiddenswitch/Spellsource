@@ -93,7 +93,7 @@ public class RPC {
 	}
 
 	/**
-	 * Connects to the given {@code serviceInterface} on the {@link EventBus} and gives you an {@link RpcClient} you can
+	 * Connects to the given {@code serviceInterface} on the {@link EventBus} and gives you an {@link RpcClientImpl} you can
 	 * call methods on. Does not require the service to be running in order to be connected to.
 	 * <p>
 	 * Internally, this method creates a {@link Proxy} instance that implements {@link T}. When you call one of {@link
@@ -119,14 +119,14 @@ public class RPC {
 	 * @param serviceInterface The Java interface that corresponds to the API you're connecting to.
 	 * @param bus              An {@link EventBus}, typically accessed with {@code vertx.eventBus()}.
 	 * @param <T>              The type of the Java interface.
-	 * @return An {@link RpcClient}.
+	 * @return An {@link RpcClientImpl }.
 	 */
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public static <T> RpcClient<T> connect(Class<? extends T> serviceInterface, final EventBus bus) {
 		final VertxInvocationHandler<T> invocationHandler = new VertxInvocationHandler<>();
 
-		RpcClient<T> result = new RpcClient<>((T) Proxy.newProxyInstance(
+		RpcClientImpl<T> result = new RpcClientImpl<>((T) Proxy.newProxyInstance(
 				serviceInterface.getClassLoader(),
 				new Class[]{serviceInterface},
 				invocationHandler

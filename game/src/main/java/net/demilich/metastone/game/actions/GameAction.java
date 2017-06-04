@@ -12,6 +12,15 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * An action a player can take in the game.
+ * <p>
+ * This class both represents the piece of data that a player should consider from a list from {@link
+ * net.demilich.metastone.game.logic.GameLogic#getValidActions(int)}. It also has the code that executes the action in
+ * the {@link net.demilich.metastone.game.logic.GameLogic}.
+ *
+ * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about game actions.
+ */
 public abstract class GameAction implements Cloneable, Serializable {
 	private int id;
 	private TargetSelection targetRequirement = TargetSelection.NONE;

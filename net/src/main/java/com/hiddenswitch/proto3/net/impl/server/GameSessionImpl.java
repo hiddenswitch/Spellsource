@@ -2,8 +2,10 @@ package com.hiddenswitch.proto3.net.impl.server;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Games;
+import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.common.*;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
+import com.hiddenswitch.proto3.net.util.RPC;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -30,7 +32,7 @@ import java.util.Map;
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_1;
 import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_2;
 
-public class GameSessionImpl implements Server, GameSession {
+public class GameSessionImpl implements GameSession {
 	private String host;
 	private int port;
 	private int websocketPort;
@@ -177,7 +179,7 @@ public class GameSessionImpl implements Server, GameSession {
 
 		getPlayer1().setBehaviour(new NetworkBehaviour(getPlayer1().getBehaviour()));
 		getPlayer2().setBehaviour(new NetworkBehaviour(getPlayer2().getBehaviour()));
-		this.gameContext = new ServerGameContext(getPlayer1(), getPlayer2(), simpleFormat, getGameId(), vertx.eventBus());
+		this.gameContext = new ServerGameContext(getPlayer1(), getPlayer2(), simpleFormat, getGameId(), RPC.connect(Logic.class, vertx.eventBus()));
 		final Client listener1;
 		final Client listener2;
 

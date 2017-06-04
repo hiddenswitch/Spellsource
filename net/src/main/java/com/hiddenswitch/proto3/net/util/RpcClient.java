@@ -15,15 +15,7 @@ import io.vertx.core.Handler;
  *
  * @param <T> The service class proxied.
  */
-public class RpcClient<T> {
-	private final T proxy;
-	Handler next;
-	boolean sync;
-
-	RpcClient(T proxy) {
-		this.proxy = proxy;
-	}
-
+public interface RpcClient<T> {
 	/**
 	 * Make an RPC call with an idiomatically asynchronous coding convention, like what you would expect in Node. As an
 	 * example:
@@ -60,11 +52,7 @@ public class RpcClient<T> {
 	 * @param <R>     The return type of the method you will call on the proxy. This is typically a Response object.
 	 * @return A proxy whose methods will return null.
 	 */
-	public <R> T async(Handler<AsyncResult<R>> handler) {
-		next = handler;
-		sync = false;
-		return proxy;
-	}
+	<R> T async(Handler<AsyncResult<R>> handler);
 
 	/**
 	 * Gets ready to make an idiomatically synchronous (in the sense of {@link co.paralleluniverse.fibers.Fiber}) call
@@ -80,11 +68,7 @@ public class RpcClient<T> {
 	 * @return {T} A proxy whose methods will return the actual values.
 	 */
 	@Suspendable
-	public T sync() throws SuspendExecution, InterruptedException {
-		next = null;
-		sync = true;
-		return proxy;
-	}
+	T sync() throws SuspendExecution, InterruptedException;
 
 	/**
 	 * Gets ready to make an idiomatically synchronous (in the sense of {@link co.paralleluniverse.fibers.Fiber}) call
@@ -102,9 +86,5 @@ public class RpcClient<T> {
 	 * @return {T} A proxy whose methods will return the actual values.
 	 */
 	@Suspendable
-	public T uncheckedSync() {
-		next = null;
-		sync = true;
-		return proxy;
-	}
+	T uncheckedSync();
 }

@@ -5,7 +5,7 @@ import com.hiddenswitch.proto3.net.common.Client;
 import net.demilich.metastone.game.Player;
 
 /**
- * Created by bberman on 3/25/17.
+ * A delegate that needs to know when players have connected, and with which {@link Client}.
  */
 public interface ClientConnectionHandler {
 	@Suspendable
