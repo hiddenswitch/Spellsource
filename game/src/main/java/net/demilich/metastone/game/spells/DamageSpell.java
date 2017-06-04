@@ -61,7 +61,7 @@ public class DamageSpell extends Spell {
 	public static int getDamage(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int damage = 0;
 		// TODO Rewrite to more accurate way to grab Damage Stack damage.
-		if (!desc.contains(SpellArg.VALUE) && !context.getDamageStack().isEmpty()) {
+		if (!desc.containsKey(SpellArg.VALUE) && !context.getDamageStack().isEmpty()) {
 			damage = context.getDamageStack().peek();
 		} else {
 			damage = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);

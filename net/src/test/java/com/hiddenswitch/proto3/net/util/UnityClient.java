@@ -210,7 +210,7 @@ public class UnityClient {
 		final List<Integer> changeIds = message.getChanges().stream().map(EntityChangeSetInner::getId).collect(Collectors.toList());
 		final boolean contains = entityIds.containsAll(changeIds);
 		if (!contains) {
-			System.err.println(message.toString());
+			context.fail(message.toString());
 		}
 		context.assertTrue(contains);
 	}

@@ -63,7 +63,7 @@ public class ConditionDescSerializer implements JsonDeserializer<ConditionDesc>,
 			if (attribute == ConditionArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(attribute)) {
+			if (!src.containsKey(attribute)) {
 				continue;
 			}
 			String argName = ParseUtils.toCamelCase(attribute.toString());

@@ -61,7 +61,7 @@ public class EventTriggerDescSerializer implements JsonDeserializer<EventTrigger
 			if (attribute == EventTriggerArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(attribute)) {
+			if (!src.containsKey(attribute)) {
 				continue;
 			}
 			String argName = ParseUtils.toCamelCase(attribute.toString());

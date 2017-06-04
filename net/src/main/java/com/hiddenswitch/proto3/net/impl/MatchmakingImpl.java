@@ -31,10 +31,10 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
-		RPC.register(this, Matchmaking.class, vertx.eventBus());
 		gameSessions = RPC.connect(Games.class, vertx.eventBus());
 		logic = RPC.connect(Logic.class, vertx.eventBus());
 		bots = RPC.connect(Bots.class, vertx.eventBus());
+		RPC.register(this, Matchmaking.class, vertx.eventBus());
 	}
 
 	@Override

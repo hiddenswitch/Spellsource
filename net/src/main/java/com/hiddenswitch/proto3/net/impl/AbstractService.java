@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.impl;
 
+import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.util.LocalMongo;
@@ -77,7 +78,7 @@ abstract class AbstractService<T extends AbstractService<T>> extends SyncVerticl
 		}
 		ch.qos.logback.classic.Logger mongoLogger = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
 				.getLogger("org.mongodb.driver");
-		mongoLogger.setLevel(ch.qos.logback.classic.Level.ERROR);
+		mongoLogger.setLevel(Level.ERROR);
 	}
 
 	/**

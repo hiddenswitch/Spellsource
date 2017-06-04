@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 import com.google.gson.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
@@ -28,8 +27,8 @@ public abstract class ValueProvider implements Serializable {
 				providingPlayer = context.getActivePlayer();
 				break;
 			case BOTH:
-				int multiplier = desc.contains(ValueProviderArg.MULTIPLIER) ? desc.getInt(ValueProviderArg.MULTIPLIER) : 1;
-				int offset = desc.contains(ValueProviderArg.OFFSET) ? desc.getInt(ValueProviderArg.OFFSET) : 0;
+				int multiplier = desc.containsKey(ValueProviderArg.MULTIPLIER) ? desc.getInt(ValueProviderArg.MULTIPLIER) : 1;
+				int offset = desc.containsKey(ValueProviderArg.OFFSET) ? desc.getInt(ValueProviderArg.OFFSET) : 0;
 				int value = 0;
 				for (Player selectedPlayer : context.getPlayers()) {
 					value += provideValue(context, selectedPlayer, target, host);
@@ -50,8 +49,8 @@ public abstract class ValueProvider implements Serializable {
 				providingPlayer = player;
 				break;
 		}
-		int multiplier = desc.contains(ValueProviderArg.MULTIPLIER) ? desc.getInt(ValueProviderArg.MULTIPLIER) : 1;
-		int offset = desc.contains(ValueProviderArg.OFFSET) ? desc.getInt(ValueProviderArg.OFFSET) : 0;
+		int multiplier = desc.containsKey(ValueProviderArg.MULTIPLIER) ? desc.getInt(ValueProviderArg.MULTIPLIER) : 1;
+		int offset = desc.containsKey(ValueProviderArg.OFFSET) ? desc.getInt(ValueProviderArg.OFFSET) : 0;
 		int value = provideValue(context, providingPlayer, target, host) * multiplier + offset;
 		return value;
 	}

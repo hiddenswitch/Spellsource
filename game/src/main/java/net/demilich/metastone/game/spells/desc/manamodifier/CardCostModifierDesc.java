@@ -22,26 +22,26 @@ public class CardCostModifierDesc extends Desc<CardCostModifierArg> {
 	
 	public CardCostModifierDesc addArg(CardCostModifierArg cardCostModififerArg, Object value) {
 		CardCostModifierDesc clone = clone();
-		clone.arguments.put(cardCostModififerArg, value);
+		clone.put(cardCostModififerArg, value);
 		return clone;
 	}
 	
 	public CardCostModifierDesc removeArg(CardCostModifierArg cardCostModififerArg) {
 		CardCostModifierDesc clone = clone();
-		clone.arguments.remove(cardCostModififerArg);
+		clone.remove(cardCostModififerArg);
 		return clone;
 	}
 	
 	@Override
 	public CardCostModifierDesc clone() {
 		CardCostModifierDesc clone = new CardCostModifierDesc(build(getManaModifierClass()));
-		for (CardCostModifierArg cardCostModififerArg : arguments.keySet()) {
-			Object value = arguments.get(cardCostModififerArg);
+		for (CardCostModifierArg cardCostModifierArg : keySet()) {
+			Object value = get(cardCostModifierArg);
 			if (value instanceof CustomCloneable) {
 				CustomCloneable cloneable = (CustomCloneable) value;
-				clone.arguments.put(cardCostModififerArg, cloneable.clone());
+				clone.put(cardCostModifierArg, cloneable.clone());
 			} else {
-				clone.arguments.put(cardCostModififerArg, value);
+				clone.put(cardCostModifierArg, value);
 			}
 		}
 		return clone;
@@ -66,8 +66,8 @@ public class CardCostModifierDesc extends Desc<CardCostModifierArg> {
 	@Override
 	public String toString() {
 		String result = "[CardCostModifierDesc arguments= {\n";
-		for (CardCostModifierArg cardCostModififerArg : arguments.keySet()) {
-			result += "\t" + cardCostModififerArg + ": " + arguments.get(cardCostModififerArg) + "\n";
+		for (CardCostModifierArg cardCostModififerArg : keySet()) {
+			result += "\t" + cardCostModififerArg + ": " + get(cardCostModififerArg) + "\n";
 		}
 		result += "}";
 		return result;

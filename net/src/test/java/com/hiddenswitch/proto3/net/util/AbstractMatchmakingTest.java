@@ -106,6 +106,9 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 		bots = new BotsImpl();
 		MatchmakingImpl instance = new MatchmakingImpl();
 		vertx.deployVerticle(gameSessions, then -> {
+			if (then.failed()) {
+				throw new AssertionError("failed to deploy game sessions: " + then.cause().getMessage());
+			}
 			vertx.deployVerticle(bots, then2 -> {
 				vertx.deployVerticle(instance, then3 -> {
 					logger.info("Services deployed.");

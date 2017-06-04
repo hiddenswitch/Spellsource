@@ -6,7 +6,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
-import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -70,7 +69,7 @@ public class CardFilter extends EntityFilter {
 			return false;
 		}
 
-		if (desc.contains(FilterArg.MANA_COST)) {
+		if (desc.containsKey(FilterArg.MANA_COST)) {
 			int manaCost = desc.getValue(FilterArg.MANA_COST, context, player, null, null, 0);
 			if (manaCost != card.getBaseManaCost()) {
 				return false;
@@ -81,7 +80,7 @@ public class CardFilter extends EntityFilter {
 			return false;
 		}
 
-		if (desc.contains(FilterArg.ATTRIBUTE) && desc.contains(FilterArg.OPERATION)) {
+		if (desc.containsKey(FilterArg.ATTRIBUTE) && desc.containsKey(FilterArg.OPERATION)) {
 			Attribute attribute = (Attribute) desc.get(FilterArg.ATTRIBUTE);
 			Operation operation = (Operation) desc.get(FilterArg.OPERATION);
 			if (operation == Operation.HAS || operation == null) {

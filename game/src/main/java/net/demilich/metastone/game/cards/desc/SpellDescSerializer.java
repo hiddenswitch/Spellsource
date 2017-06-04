@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.cards.desc;
 
 import java.lang.reflect.Type;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -108,7 +107,7 @@ public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSer
 			if (attribute == SpellArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(attribute)) {
+			if (!src.containsKey(attribute)) {
 				continue;
 			}
 			String argName = ParseUtils.toCamelCase(attribute.toString());

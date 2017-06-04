@@ -111,8 +111,8 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 
 		if (unusedBots.size() == 0) {
 			List<String> newBotIds = new ArrayList<>();
-			// At least 10 bots
-			final int maxBots = Math.max(bots.size() + 1, 10);
+			// At least 2 bots
+			final int maxBots = Math.max(bots.size() + 1, 2);
 			for (int i = bots.size(); i < maxBots; i++) {
 				CreateAccountResponse response = accounts.sync().createAccount(new CreateAccountRequest()
 						.withName("Botcharles")

@@ -15,7 +15,7 @@ public class MinionOnBoardCondition extends Condition {
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(ConditionArg.CARD_FILTER);
-		int value = desc.contains(ConditionArg.VALUE) ? desc.getInt(ConditionArg.VALUE) : 1;
+		int value = desc.containsKey(ConditionArg.VALUE) ? desc.getInt(ConditionArg.VALUE) : 1;
 
 		int count = 0;
 		for (Minion minion : player.getMinions()) {
