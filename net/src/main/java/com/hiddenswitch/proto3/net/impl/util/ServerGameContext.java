@@ -27,6 +27,17 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * A networked game context from the server's point of view.
+ * <p>
+ * In addition to storing game state, this class also stores references to {@link Client} objects that (1) get notified
+ * when game state changes and how, and (2) allow this class to {@link net.demilich.metastone.game.behaviour.Behaviour#requestAction(GameContext,
+ * Player, List)} and {@link net.demilich.metastone.game.behaviour.Behaviour#mulligan(GameContext, Player, List)} over a
+ * network.
+ * <p>
+ * This class also automatically adds support for persistence effects written on cards using a {@link
+ * PersistenceTrigger}.
+ */
 public class ServerGameContext extends GameContext {
 	private final String gameId;
 	private Map<Player, Client> listenerMap = new HashMap<>();
@@ -36,7 +47,18 @@ public class ServerGameContext extends GameContext {
 	private final List<Trigger> gameTriggers = new ArrayList<>();
 	private final transient RpcClient<Logic> logic;
 
-	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, EventBus bus) {
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * Additionally, this class uses the provided {@link RpcClient} to implement persistence effects.
+	 *
+	 * @param player1    The first player.
+	 * @param player2    The second player.
+	 * @param deckFormat The legal cards that can be played.
+	 * @param gameId     The game ID that corresponds to this game context.
+	 * @param logic      The {@link RpcClient} on which this trigger will make {@link Logic} requests.
+	 */
+	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, RpcClient<Logic> logic) {
 		// The player's IDs are set here
 		super(player1, player2, new GameLogicAsync(), deckFormat);
 		if (player1.getId() == player2.getId()
@@ -47,14 +69,18 @@ public class ServerGameContext extends GameContext {
 		}
 		NotificationProxy.init(new NullNotifier());
 		this.gameId = gameId;
-		this.logic = RPC.connect(Logic.class, bus);
+		this.logic = logic;
 
-		// Set up the alliance tracker
-		addAllianceListener();
+		enablePersistenceEffects();
 	}
 
-	protected void addAllianceListener() {
-		this.getGameTriggers().add(new AllianceGameEventListener(logic, this, this.gameId));
+	/**
+	 * Enables this match to track persistence effects.
+	 *
+	 * @see com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger for more about how this method is used.
+	 */
+	private void enablePersistenceEffects() {
+		this.getGameTriggers().add(new PersistenceTrigger(logic, this, this.gameId));
 	}
 
 	public GameLogicAsync getNetworkGameLogic() {
@@ -252,6 +278,7 @@ public class ServerGameContext extends GameContext {
 
 	/**
 	 * Request an action from a {@link Client} that corresponds to the given {@code playerId}.
+	 *
 	 * @param state    The game state to send.
 	 * @param playerId The player ID to request from.
 	 * @param actions  The valid actions to choose from.
@@ -268,6 +295,7 @@ public class ServerGameContext extends GameContext {
 
 	/**
 	 * Request an action from the {@link Client} that corresponds to the given {@code player}.
+	 *
 	 * @param player       The player to request from.
 	 * @param starterCards The cards the player started with.
 	 * @param callback     A handler for the response.
@@ -282,8 +310,9 @@ public class ServerGameContext extends GameContext {
 
 	/**
 	 * Handles the chosen game action from a client.
+	 *
 	 * @param messageId The ID of the message used to request the action.
-	 * @param action The action chosen.
+	 * @param action    The action chosen.
 	 */
 	@Suspendable
 	@SuppressWarnings("unchecked")
@@ -297,8 +326,9 @@ public class ServerGameContext extends GameContext {
 
 	/**
 	 * Handles the cards that the player chose to discard.
-	 * @param messageId The ID of the message used to request the mulligan.
-	 * @param player The player that requested the mulligan.
+	 *
+	 * @param messageId      The ID of the message used to request the mulligan.
+	 * @param player         The player that requested the mulligan.
 	 * @param discardedCards The cards the player discarded.
 	 */
 	@SuppressWarnings("unchecked")

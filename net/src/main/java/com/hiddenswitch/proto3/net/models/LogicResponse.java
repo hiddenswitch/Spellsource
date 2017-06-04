@@ -4,10 +4,7 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by bberman on 2/19/17.
@@ -54,5 +51,12 @@ public class LogicResponse implements Serializable {
 	public LogicResponse withModifiedAttributes(final Map<EntityReference, Map<Attribute, Object>> modifiedAttributes) {
 		this.modifiedAttributes = modifiedAttributes;
 		return this;
+	}
+
+	public static LogicResponse empty() {
+		return new LogicResponse()
+				.withGameIdsAffected(Collections.emptyList())
+				.withEntityIdsAffected(Collections.emptyList())
+				.withModifiedAttributes(Collections.emptyMap());
 	}
 }

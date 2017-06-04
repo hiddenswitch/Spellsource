@@ -7,6 +7,7 @@ import com.hiddenswitch.proto3.net.models.EventLogicRequest;
 import com.hiddenswitch.proto3.net.models.LogicResponse;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
@@ -24,17 +25,49 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by bberman on 2/21/17.
+ * A trigger that records persistent {@link Attribute} to a database. Think of it as analytics for {@link Entity}
+ * objects where some analytics events have side effects on gameplay.
+ * <p>
+ * To implement a new persistence effect: <ul><li>Add an attribute to {@link Attribute} that describes the value you
+ * want added to an {@link Entity} for looking up later.</li><li>Add the {@link GameEvent} that changes the {@link
+ * Attribute} in {@link #types}.</li><li>Add a corresponding method to {@link Logic} for handling when that event
+ * occurs, computing whatever you need to know and save to the database.</li><li>Make sure the attribute is included in
+ * the {@link Logic#getDescriptionFromRecord(InventoryRecord, String, String)} method so that an {@link Entity},
+ * typically cards in the player's deck, actually starts with the persisted values of the {@link
+ * Attribute}.</li><li>Handle the event in {@link #onGameEvent(GameEvent)} and actually make the call to the {@link
+ * #logic} to persist the new attribute value.</li></ul>
+ * <p>
+ * It's recommended to transfer as little data as possible to the
+ * Unfortunately, this process is complicated. It could be simplified at a later date, but for this particular pipeline,
+ * all aspects are unit and integration tested.
+ * <p>
+ * In games with persistence effects enabled, the {@link PersistenceTrigger} is added to a list of "other triggers" that
+ * are just always running throughout a game. In Minionate, this trigger is added by a {@link
+ * ServerGameContext#enablePersistenceEffects()} when it is created. This trigger should not be added to non-networked
+ * game contexts, like a regular {@link GameContext}, because other code (like the AI) may use a game context for a
+ * purpose other than hosting a two-player multiplayer networked match.
+ * <p>
+ * There are performance impacts of using a database for saving pieces of game state. In order to improve performance of
+ * responding to game events, this implementation relies on an {@link Entity#hasPersistentEffects()} function to decide
+ * whether it must wait for the consequences of persistent effects or not. When it does not have to wait for the
+ * consequences of a persistence effect, this implementation makes a non-blocking call to the database, much like an
+ * ordinary analytics method call would.
+ * <p>
+ * This class requires a reference to an {@link RpcClient} for {@link Logic}. It relies on the different ways RPC calls
+ * can be made, like {@link RpcClient#sync()} versus {@link RpcClient#async(Handler)}.
  */
-public class AllianceGameEventListener implements Trigger {
+public class PersistenceTrigger implements Trigger {
+	/**
+	 * The {@link RpcClient} for the {@link Logic} service.
+	 */
 	@Expose(serialize = false, deserialize = false)
 	private transient final RpcClient<Logic> logic;
 	private final String gameId;
 	@Expose(serialize = false, deserialize = false)
 	private transient final GameContext context;
 
-	public AllianceGameEventListener(RpcClient<Logic> logicProxy, GameContext context, String gameId) {
-		this.logic = logicProxy;
+	public PersistenceTrigger(RpcClient<Logic> logic, GameContext context, String gameId) {
+		this.logic = logic;
 		this.gameId = gameId;
 		this.context = context;
 	}
@@ -131,7 +164,7 @@ public class AllianceGameEventListener implements Trigger {
 
 	@Override
 	public Trigger clone() {
-		return new AllianceGameEventListener(logic, context, gameId);
+		return new PersistenceTrigger(logic, context, gameId);
 	}
 
 	@Override
@@ -202,5 +235,14 @@ public class AllianceGameEventListener implements Trigger {
 	@Override
 	public boolean canFireCondition(GameEvent event) {
 		return true;
+	}
+
+
+	public Set<GameEventType> getTypes() {
+		return types;
+	}
+
+	public void setTypes(Set<GameEventType> types) {
+		this.types = types;
 	}
 }

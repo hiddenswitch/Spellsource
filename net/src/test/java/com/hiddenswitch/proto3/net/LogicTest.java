@@ -243,7 +243,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		elr.setEntityId(1);
 		GetCollectionResponse gcr = inventory.getCollection(new GetCollectionRequest().withUserId("1"));
 		InventoryRecord record = gcr.getInventoryRecords().stream().filter(p -> Objects.equals(p.getId(), foreverPostdocInventoryId)).findFirst().get();
-		MinionCard foreverPostdocCard = (MinionCard) LogicImpl.getDescriptionFromRecord(record, "1", "d1").createInstance();
+		MinionCard foreverPostdocCard = (MinionCard) Logic.getDescriptionFromRecord(record, "1", "d1").createInstance();
 		Minion foreverPostdoc = foreverPostdocCard.summon();
 		foreverPostdoc.setId(1);
 		elr.setEvent(new BeforeSummonEvent(null, foreverPostdoc.clone(), null));
@@ -270,7 +270,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		gcr = inventory.getCollection(new GetCollectionRequest().withUserId("1"));
 		record = gcr.getInventoryRecords().stream().filter(p -> Objects.equals(p.getId(), foreverPostdocInventoryId)).findFirst().get();
 		// Different player
-		foreverPostdocCard = (MinionCard) LogicImpl.getDescriptionFromRecord(record, "2", "d1").createInstance();
+		foreverPostdocCard = (MinionCard) Logic.getDescriptionFromRecord(record, "2", "d1").createInstance();
 		foreverPostdoc = foreverPostdocCard.summon();
 		foreverPostdoc.setId(42);
 		getContext().assertEquals(1, foreverPostdoc.getAttribute(Attribute.FIRST_TIME_PLAYS));
@@ -361,7 +361,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 	private Minion createMinionFromId(String inventoryId, int entityId, String userId, String deckId) throws InterruptedException, SuspendExecution {
 		GetCollectionResponse gcr = inventory.getCollection(new GetCollectionRequest().withUserId(userId));
 		InventoryRecord record = gcr.getInventoryRecords().stream().filter(p -> Objects.equals(p.getId(), inventoryId)).findFirst().get();
-		MinionCard minionCard = (MinionCard) LogicImpl.getDescriptionFromRecord(record, userId, deckId).createInstance();
+		MinionCard minionCard = (MinionCard) Logic.getDescriptionFromRecord(record, userId, deckId).createInstance();
 		Minion minion = minionCard.summon();
 		minion.setId(entityId);
 		return minion;

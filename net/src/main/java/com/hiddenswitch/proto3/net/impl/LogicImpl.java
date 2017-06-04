@@ -5,7 +5,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Logic;
-import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.RpcClient;
@@ -21,7 +20,6 @@ import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -99,25 +97,23 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 
 
 			// TODO: Get more attributes from database
-			AttributeMap attributes = new AttributeMap();
-			attributes.put(Attribute.USER_ID, player.getUserId());
-			attributes.put(Attribute.DECK_ID, player.getDeckId());
-
-			// TODO: Check that we're not using an already borrowed deck!
+			AttributeMap playerAttributes = new AttributeMap();
+			playerAttributes.put(Attribute.USER_ID, player.getUserId());
+			playerAttributes.put(Attribute.DECK_ID, player.getDeckId());
 
 			// Create the deck and assign all the appropriate IDs to the cards
 			Deck deck = new DeckWithId(player.getDeckId());
 			deck.setHeroClass(deckCollection.getHeroClass());
 			deck.setName(deckCollection.getName());
 			deckCollection.getInventoryRecords().stream()
-					.map(cardRecord -> getDescriptionFromRecord(cardRecord, player.getUserId(), player.getDeckId()))
+					.map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord, player.getUserId(), player.getDeckId()))
 					.map(CardDesc::createInstance)
 					.forEach(deck.getCards()::addCard);
 
-			// TODO: Add player information as attached to the hero card
+			// TODO: Add player information as attached to the hero entity
 			response.getPlayers().set(player.getId(), new StartGameResponse.Player()
 					.withDeck(deck)
-					.withAttributes(attributes));
+					.withAttributes(playerAttributes));
 
 		}
 
@@ -153,42 +149,19 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		// Notify that a fact has changed
 		final boolean updated = update1.getDocModified() > 0L;
 
-		if (updated) {
-			response.withGameIdsAffected(Collections.singletonList(gameId))
-					.withEntityIdsAffected(Collections.singletonList(entityId));
-			AttributeMap map = new AttributeMap();
-			map.put(Attribute.FIRST_TIME_PLAYS, beforeSummonEvent.getMinion().getAttributeValue(Attribute.FIRST_TIME_PLAYS) + 1);
-			response.getModifiedAttributes().put(new EntityReference(entityId), map);
-		} else {
-			response.withGameIdsAffected(Collections.emptyList());
-			response.withEntityIdsAffected(Collections.emptyList());
-			response.withModifiedAttributes(Collections.emptyMap());
+		if (!updated) {
+			return LogicResponse.empty();
 		}
+
+		response.withGameIdsAffected(Collections.singletonList(gameId))
+				.withEntityIdsAffected(Collections.singletonList(entityId));
+		AttributeMap map = new AttributeMap();
+		map.put(Attribute.FIRST_TIME_PLAYS, beforeSummonEvent.getMinion().getAttributeValue(Attribute.FIRST_TIME_PLAYS) + 1);
+		response.getModifiedAttributes().put(new EntityReference(entityId), map);
+
 
 		return response;
 	}
-
-	public static CardDesc getDescriptionFromRecord(InventoryRecord cardRecord, String userId, String deckId) {
-		// Set up the attributes
-		CardDesc desc = cardRecord.getCardDesc();
-		if (desc.attributes == null) {
-			desc.attributes = new AttributeMap();
-		}
-		desc.attributes.put(Attribute.USER_ID, userId);
-		desc.attributes.put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
-		desc.attributes.put(Attribute.DECK_ID, deckId);
-		desc.attributes.put(Attribute.DONOR_ID, cardRecord.getDonorUserId());
-		desc.attributes.put(Attribute.CHAMPION_ID, userId);
-		desc.attributes.put(Attribute.COLLECTION_IDS, cardRecord.getCollectionIds());
-		desc.attributes.put(Attribute.ALLIANCE_ID, cardRecord.getAllianceId());
-		// Collect the facts
-		desc.attributes.put(Attribute.FIRST_TIME_PLAYS, cardRecord.getFirstTimePlays());
-		desc.attributes.put(Attribute.ENTITY_INSTANCE_ID, RandomStringUtils.randomAlphanumeric(20).toLowerCase());
-		desc.attributes.put(Attribute.LAST_MINION_DESTROYED_CARD_ID, cardRecord.getLastMinionDestroyedCardId());
-		desc.attributes.put(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID, cardRecord.getLastMinionDestroyedInventoryId());
-		return desc;
-	}
-
 
 	@Override
 	@Suspendable
@@ -205,29 +178,27 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		final int entityId = event.getAttacker().getId();
 
 		// If the defender got destroyed, we need to update the last minion destroyed for the attacker
-		if (event.getDefender().isDestroyed()) {
-			final String attackerInventoryId = event.getAttacker().getCardInventoryId();
-			final String defenderCardInventoryId = event.getDefender().getCardInventoryId();
-			final String defenderCardId = event.getDefender().getSourceCard().getCardId();
-
-			MongoClientUpdateResult update = awaitResult(h -> getMongo()
-					.updateCollection(Inventory.INVENTORY,
-							json("_id", attackerInventoryId),
-							json("$set", json("facts.lastMinionDestroyedCardId", defenderCardId,
-									"facts.lastMinionDestroyedInventoryId", defenderCardInventoryId)), h));
-
-			response.withGameIdsAffected(Collections.singletonList(gameId))
-					.withEntityIdsAffected(Collections.singletonList(entityId));
-
-			AttributeMap map = new AttributeMap();
-			map.put(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID, defenderCardInventoryId);
-			map.put(Attribute.LAST_MINION_DESTROYED_CARD_ID, defenderCardId);
-			response.getModifiedAttributes().put(new EntityReference(entityId), map);
-		} else {
-			response.withGameIdsAffected(Collections.emptyList());
-			response.withEntityIdsAffected(Collections.emptyList());
-			response.withModifiedAttributes(Collections.emptyMap());
+		if (!event.getDefender().isDestroyed()) {
+			return LogicResponse.empty();
 		}
+
+		final String attackerInventoryId = event.getAttacker().getCardInventoryId();
+		final String defenderCardInventoryId = event.getDefender().getCardInventoryId();
+		final String defenderCardId = event.getDefender().getSourceCard().getCardId();
+
+		MongoClientUpdateResult update = awaitResult(h -> getMongo()
+				.updateCollection(Inventory.INVENTORY,
+						json("_id", attackerInventoryId),
+						json("$set", json("facts.lastMinionDestroyedCardId", defenderCardId,
+								"facts.lastMinionDestroyedInventoryId", defenderCardInventoryId)), h));
+
+		response.withGameIdsAffected(Collections.singletonList(gameId))
+				.withEntityIdsAffected(Collections.singletonList(entityId));
+
+		AttributeMap map = new AttributeMap();
+		map.put(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID, defenderCardInventoryId);
+		map.put(Attribute.LAST_MINION_DESTROYED_CARD_ID, defenderCardId);
+		response.getModifiedAttributes().put(new EntityReference(entityId), map);
 
 		return response;
 	}
