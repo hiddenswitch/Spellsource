@@ -29,26 +29,26 @@ public class SpellDesc extends Desc<SpellArg> {
 
 	public SpellDesc addArg(SpellArg spellArg, Object value) {
 		SpellDesc clone = clone();
-		clone.arguments.put(spellArg, value);
+		clone.put(spellArg, value);
 		return clone;
 	}
 
 	public SpellDesc removeArg(SpellArg spellArg) {
 		SpellDesc clone = clone();
-		clone.arguments.remove(spellArg);
+		clone.remove(spellArg);
 		return clone;
 	}
 
 	@Override
 	public SpellDesc clone() {
 		SpellDesc clone = new SpellDesc(build(getSpellClass()));
-		for (SpellArg spellArg : arguments.keySet()) {
-			Object value = arguments.get(spellArg);
+		for (SpellArg spellArg : keySet()) {
+			Object value = get(spellArg);
 			if (value instanceof CustomCloneable) {
 				CustomCloneable cloneable = (CustomCloneable) value;
-				clone.arguments.put(spellArg, cloneable.clone());
+				clone.put(spellArg, cloneable.clone());
 			} else {
-				clone.arguments.put(spellArg, value);
+				clone.put(spellArg, value);
 			}
 		}
 		return clone;
@@ -59,16 +59,16 @@ public class SpellDesc extends Desc<SpellArg> {
 	}
 
 	public int getInt(SpellArg spellArg, int defaultValue) {
-		return arguments.containsKey(spellArg) ? (int) get(spellArg) : defaultValue;
+		return containsKey(spellArg) ? (int) get(spellArg) : defaultValue;
 	}
 
 	@SuppressWarnings("unchecked")
 	public Class<? extends Spell> getSpellClass() {
-		return (Class<? extends Spell>) arguments.get(SpellArg.CLASS);
+		return (Class<? extends Spell>) get(SpellArg.CLASS);
 	}
 
 	public EntityReference getTarget() {
-		return (EntityReference) arguments.get(SpellArg.TARGET);
+		return (EntityReference) get(SpellArg.TARGET);
 	}
 
 	public TargetPlayer getTargetPlayer() {
@@ -76,14 +76,14 @@ public class SpellDesc extends Desc<SpellArg> {
 	}
 
 	public boolean hasPredefinedTarget() {
-		return arguments.get(SpellArg.TARGET) != null;
+		return get(SpellArg.TARGET) != null;
 	}
 
 	@Override
 	public String toString() {
 		String result = "[SpellDesc arguments= {\n";
-		for (SpellArg spellArg : arguments.keySet()) {
-			result += "\t" + spellArg + ": " + arguments.get(spellArg) + "\n";
+		for (SpellArg spellArg : keySet()) {
+			result += "\t" + spellArg + ": " + get(spellArg) + "\n";
 		}
 		result += "}";
 		return result;

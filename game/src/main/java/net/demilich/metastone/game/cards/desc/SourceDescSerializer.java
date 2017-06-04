@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.google.gson.*;
 
-import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.SourceArg;
 import net.demilich.metastone.game.spells.desc.source.SourceDesc;
@@ -63,7 +62,7 @@ public class SourceDescSerializer implements JsonDeserializer<SourceDesc>, JsonS
 			if (attribute == SourceArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(attribute)) {
+			if (!src.containsKey(attribute)) {
 				continue;
 			}
 			String argName = ParseUtils.toCamelCase(attribute.toString());

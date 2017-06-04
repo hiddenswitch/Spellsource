@@ -67,7 +67,7 @@ public class ValueProviderDescSerializer implements JsonDeserializer<ValueProvid
 			if (attribute == ValueProviderArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(attribute)) {
+			if (!src.containsKey(attribute)) {
 				continue;
 			}
 			String argName = ParseUtils.toCamelCase(attribute.toString());

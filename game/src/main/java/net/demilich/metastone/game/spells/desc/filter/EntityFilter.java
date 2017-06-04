@@ -2,10 +2,8 @@ package net.demilich.metastone.game.spells.desc.filter;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
 
@@ -22,7 +20,7 @@ public abstract class EntityFilter implements Serializable {
 	}
 
 	public boolean hasArg(FilterArg arg) {
-		return desc.contains(arg);
+		return desc.containsKey(arg);
 	}
 
 	public boolean matches(GameContext context, Player player, Entity entity) {

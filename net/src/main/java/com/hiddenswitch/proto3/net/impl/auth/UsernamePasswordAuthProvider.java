@@ -19,15 +19,12 @@ import io.vertx.ext.auth.User;
  * Created by bberman on 1/26/17.
  */
 public class UsernamePasswordAuthProvider implements AuthProvider {
-	protected Vertx vertx;
 	protected RpcClient<Accounts> accounts;
 
 	public UsernamePasswordAuthProvider(Vertx vertx) {
 		if (vertx == null) {
 			throw new NullPointerException("vertx must not be null.");
 		}
-
-		this.vertx = vertx;
 		accounts = RPC.connect(Accounts.class, vertx.eventBus());
 	}
 

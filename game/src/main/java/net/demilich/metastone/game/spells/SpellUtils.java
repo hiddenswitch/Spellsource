@@ -84,7 +84,7 @@ public class SpellUtils {
 
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
 		String[] cardIds = null;
-		if (spell.contains(SpellArg.CARDS)) {
+		if (spell.containsKey(SpellArg.CARDS)) {
 			cardIds = (String[]) spell.get(SpellArg.CARDS);
 		} else {
 			cardIds = new String[1];

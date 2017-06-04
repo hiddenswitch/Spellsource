@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells.desc;
 
 public enum SpellArg {
-
 	CLASS,
 
 	ARMOR_BONUS,

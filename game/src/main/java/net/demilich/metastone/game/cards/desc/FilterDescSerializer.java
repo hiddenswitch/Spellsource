@@ -62,7 +62,7 @@ public class FilterDescSerializer implements JsonDeserializer<FilterDesc>, JsonS
 			if (attribute == FilterArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(attribute)) {
+			if (!src.containsKey(attribute)) {
 				continue;
 			}
 			String argName = ParseUtils.toCamelCase(attribute.toString());

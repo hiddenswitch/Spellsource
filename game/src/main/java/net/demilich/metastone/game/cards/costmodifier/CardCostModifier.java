@@ -88,7 +88,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	@Override
 	public CardCostModifier clone() {
 		CardCostModifier clone = (CardCostModifier) super.clone();
-		clone.expirationTrigger = expirationTrigger != null ? (GameEventTrigger) expirationTrigger.clone() : null;
+		clone.expirationTrigger = expirationTrigger != null ? expirationTrigger.clone() : null;
 		return clone;
 	}
 
@@ -124,7 +124,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 	@SuppressWarnings("unchecked")
 	protected List<Integer> getRequiredCardIds() {
-		if (!desc.contains(CardCostModifierArg.CARD_IDS)) {
+		if (!desc.containsKey(CardCostModifierArg.CARD_IDS)) {
 			return new ArrayList<Integer>();
 		}
 		return (List<Integer>) desc.get(CardCostModifierArg.CARD_IDS);
@@ -135,7 +135,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	protected TargetPlayer getTargetPlayer() {
-		if (!desc.contains(CardCostModifierArg.TARGET_PLAYER)) {
+		if (!desc.containsKey(CardCostModifierArg.TARGET_PLAYER)) {
 			return TargetPlayer.SELF;
 		}
 		return (TargetPlayer) desc.get(CardCostModifierArg.TARGET_PLAYER);
@@ -177,8 +177,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		if (operation != null) {
 			return operation.performOperation(currentManaCost, value);
 		}
-		int modifiedManaCost = currentManaCost + desc.getInt(CardCostModifierArg.VALUE);
-		return modifiedManaCost;
+		return currentManaCost + desc.getInt(CardCostModifierArg.VALUE);
 	}
 
 	@Override

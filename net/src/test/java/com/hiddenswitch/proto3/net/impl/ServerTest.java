@@ -43,28 +43,49 @@ import java.util.stream.Collectors;
 public class ServerTest extends ServiceTest<ServerImpl> {
 	private String deploymentId;
 
-	@Test
-	@Ignore
-	public void testShutdownAndRestartServer(TestContext context) {
+	@Test(timeout = 120000L)
+	public void testShutdownAndRestartServer(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
-		wrapSync(context, () -> {
-			// Play a match
+		wrap(context);
+		final Async async = context.async();
+
+		getContext().assertNotNull(service.server);
+		getContext().assertNotNull(service.logic.deploymentID());
+		getContext().assertNotNull(service.games.deploymentID());
+
+		vertx.executeBlocking(done -> {
 			UnityClient client = new UnityClient(getContext());
 			client.createUserAccount("testaccount23");
 			client.matchmakeAndPlayAgainstAI(null);
 			client.waitUntilDone();
 			getContext().assertTrue(client.isGameOver());
-			Void r = Sync.awaitResult(h -> vertx.undeploy(deploymentId, h));
-			ServerImpl r2 = Sync.awaitResult(h -> deployServices(vertx, h));
-			UnityClient client2 = new UnityClient(getContext());
-			client2.loginWithUserAccount("testaccount23");
-			client2.matchmakeAndPlayAgainstAI(null);
-			client2.waitUntilDone();
-			getContext().assertTrue(client2.isGameOver());
+			done.complete(true);
+		}, true, then -> {
+			vertx.undeploy(deploymentId, then2 -> {
+				service = null;
+				deployServices(vertx, then3 -> {
+					service = then3.result();
+					getContext().assertNotNull(service.logic.deploymentID());
+					getContext().assertNotNull(service.accounts.deploymentID());
+					vertx.executeBlocking(done2 -> {
+						UnityClient client2 = new UnityClient(getContext());
+						client2.loginWithUserAccount("testaccount23");
+						client2.matchmakeAndPlayAgainstAI(null);
+						client2.waitUntilDone();
+						getContext().assertTrue(client2.isGameOver());
+						done2.complete(true);
+					}, true, then4 -> {
+						getContext().assertTrue(then4.succeeded());
+						async.complete();
+						unwrap();
+					});
+				});
+			});
 		});
+
 	}
 
-	@Test
+	@Test(timeout = 60000L)
 	public void testAccountFlow(TestContext context) throws InterruptedException {
 		wrap(context);
 		Set<String> decks = new HashSet<>(Arrays.asList(Logic.STARTING_DECKS));
@@ -125,7 +146,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		unwrap();
 	}
 
-	@Test
+	@Test(timeout = 60000L)
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
@@ -148,7 +169,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		unwrap();
 	}
 
-	@Test
+	@Test(timeout = 60000L)
 	public void testDisconnectingUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
 		wrap(context);
 		setLoggingLevel(Level.ERROR);
@@ -170,13 +191,12 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		unwrap();
 	}
 
-	@Test
+	@Test(timeout = 60000L)
 	@SuppressWarnings("unchecked")
 	public void testDistinctDecks(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
 
-//		final Async async = context.async(2);
 
 		final Handler<SendContext> interceptor = h -> {
 			if (h.message().address().equals("com.hiddenswitch.proto3.net.Games::createGameSession")) {
@@ -196,7 +216,6 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 					getContext().fail("Request was null.");
 				}
 
-//				async.complete();
 			}
 			h.next();
 		};
@@ -206,9 +225,9 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		UnityClient client1 = new UnityClient(getContext());
 		Thread clientThread1 = new Thread(() -> {
 			client1.createUserAccount("user1");
-			final String basicCyborgId = client1.getAccount().getDecks().stream().filter(p -> p.getName().equals("Basic Cyborg")).findFirst().get().getId();
+			final String startDeckId1 = client1.getAccount().getDecks().stream().filter(p -> p.getName().equals(Logic.STARTING_DECKS[0])).findFirst().get().getId();
 			try {
-				client1.matchmakeAndPlay(basicCyborgId);
+				client1.matchmakeAndPlay(startDeckId1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -216,9 +235,9 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		UnityClient client2 = new UnityClient(getContext());
 		Thread clientThread2 = new Thread(() -> {
 			client2.createUserAccount("user2");
-			String basicResurrectorId = client2.getAccount().getDecks().stream().filter(p -> p.getName().equals("Basic Resurrector")).findFirst().get().getId();
+			String startDeckId2 = client2.getAccount().getDecks().stream().filter(p -> p.getName().equals(Logic.STARTING_DECKS[1])).findFirst().get().getId();
 			try {
-				client2.matchmakeAndPlay(basicResurrectorId);
+				client2.matchmakeAndPlay(startDeckId2);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -232,7 +251,6 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		}
 		getContext().assertTrue(client1.isGameOver(), "The client ended the game");
 		getContext().assertTrue(client2.isGameOver(), "The client ended the game");
-//		async.complete();
 		vertx.eventBus().removeInterceptor(interceptor);
 		unwrap();
 	}

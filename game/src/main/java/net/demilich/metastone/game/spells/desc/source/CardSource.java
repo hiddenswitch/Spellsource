@@ -21,7 +21,7 @@ public abstract class CardSource implements Serializable {
 	}
 	
 	public boolean hasArg(SourceArg arg) {
-		return desc.contains(arg);
+		return desc.containsKey(arg);
 	}
 
 	public CardList getCards(GameContext context, Player player) {

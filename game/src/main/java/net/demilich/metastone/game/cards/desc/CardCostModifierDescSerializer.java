@@ -61,7 +61,7 @@ public class CardCostModifierDescSerializer implements JsonDeserializer<CardCost
 			if (attribute == CardCostModifierArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(attribute)) {
+			if (!src.containsKey(attribute)) {
 				continue;
 			}
 			String argName = ParseUtils.toCamelCase(attribute.toString());

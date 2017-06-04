@@ -9,40 +9,36 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Desc<T> extends AbstractMap<T, Object> implements Serializable {
-
-	protected final Map<T, Object> arguments;
-
+/**
+ * A card or card component description base class.
+ * <p>
+ * This {@link Map} type has typed {@link Enum} keys and
+ *
+ * @param <T>
+ */
+public class Desc<T extends Enum> extends HashMap<T, Object> implements Serializable {
 	public Desc(Map<T, Object> arguments) {
-		this.arguments = arguments;
-	}
-
-	public boolean contains(T arg) {
-		return arguments.containsKey(arg);
-	}
-
-	@Override
-	public Object get(Object arg) {
-		return arguments.get(arg);
+		super(arguments);
 	}
 
 	public boolean getBool(T arg) {
-		return arguments.containsKey(arg) && (boolean) get(arg);
+		return containsKey(arg) && (boolean) get(arg);
 	}
 
 	public int getInt(T arg) {
-		return arguments.containsKey(arg) ? (int) get(arg) : 0;
+		return containsKey(arg) ? (int) get(arg) : 0;
 	}
 
 	public String getString(T arg) {
-		return arguments.containsKey(arg) ? (String) get(arg) : "";
+		return containsKey(arg) ? (String) get(arg) : "";
 	}
 
 	public int getValue(T arg, GameContext context, Player player, Entity target, Entity host, int defaultValue) {
-		Object storedValue = arguments.get(arg);
+		Object storedValue = this.get(arg);
 		if (storedValue == null) {
 			return defaultValue;
 		}
@@ -51,16 +47,6 @@ public class Desc<T> extends AbstractMap<T, Object> implements Serializable {
 			return valueProvider.getValue(context, player, target, host);
 		}
 		return (int) storedValue;
-	}
-
-	public String getClassName() {
-		final String simpleName = ((Class) arguments.get("class")).getSimpleName();
-		return simpleName;
-	}
-
-	@Override
-	public Set<Entry<T, Object>> entrySet() {
-		return arguments.entrySet();
 	}
 
 	@Override
@@ -72,16 +58,13 @@ public class Desc<T> extends AbstractMap<T, Object> implements Serializable {
 			return false;
 		}
 		Desc rhs = (Desc) other;
-		if (arguments == null && rhs.arguments != null) {
-			return false;
-		}
-		if (rhs.arguments == null || rhs.arguments.size() != arguments.size()) {
+		if (rhs.size() != this.size()) {
 			return false;
 		}
 		EqualsBuilder eq = new EqualsBuilder();
-		for (Map.Entry entry : arguments.entrySet()) {
+		for (Map.Entry entry : this.entrySet()) {
 			final Object left = entry.getValue();
-			final Object right = rhs.arguments.get(entry.getKey());
+			final Object right = this.get(entry.getKey());
 			eq.append(left, right);
 		}
 		return eq.isEquals();
@@ -90,7 +73,7 @@ public class Desc<T> extends AbstractMap<T, Object> implements Serializable {
 	@Override
 	public int hashCode() {
 		HashCodeBuilder builder = new HashCodeBuilder(113, 71);
-		for (Map.Entry entry : arguments.entrySet()) {
+		for (Map.Entry entry : this.entrySet()) {
 			builder.append(entry.hashCode());
 		}
 		return builder.toHashCode();

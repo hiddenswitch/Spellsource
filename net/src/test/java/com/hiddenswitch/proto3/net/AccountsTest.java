@@ -28,12 +28,12 @@ import static org.junit.Assert.*;
 public class AccountsTest extends ServiceTest<AccountsImpl> {
 	@Test
 	public void testAuthProvider(TestContext context) throws Exception {
-		final AuthProvider tokenAuthProvider = new TokenAuthProvider(vertx);
 		final String username = "doctorpangloss";
 		final String password = "destructoid";
 		final String emailAddress = "benjamin.s.berman@gmail.com";
 
 		wrapSync(context, () -> {
+			final AuthProvider tokenAuthProvider = new TokenAuthProvider(vertx);
 			final CreateAccountResponse response = service.createAccount(emailAddress, password, username);
 			getContext().assertNotNull(response);
 

@@ -198,7 +198,7 @@ public class SerializationTest extends TestBase {
 
 	private void assertSpellsEqual(SpellDesc actual, SpellDesc expected) {
 		for (SpellArg arg : SpellArg.values()) {
-			if (expected.contains(arg)) {
+			if (expected.containsKey(arg)) {
 				assertEquals(actual.get(arg), expected.get(arg));
 			}
 		}

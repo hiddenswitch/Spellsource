@@ -29,12 +29,12 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		RPC.register(this, Accounts.class, vertx.eventBus());
 		List<String> collections = awaitResult(h -> getMongo().getCollections(h));
 		if (!collections.contains(USERS)) {
 			Void r1 = awaitResult(h -> getMongo().createCollection(USERS, h));
 			Void r2 = awaitResult(h -> getMongo().createIndex(USERS, json("profile.emailAddress", 1), h));
 		}
+		RPC.register(this, Accounts.class, vertx.eventBus());
 	}
 
 	public CreateAccountResponse createAccount(String emailAddress, String password, String username) throws SuspendExecution, InterruptedException {

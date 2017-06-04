@@ -55,7 +55,7 @@ public class AuraDescSerializer implements JsonDeserializer<AuraDesc>, JsonSeria
 			if (attribute == AuraArg.CLASS) {
 				continue;
 			}
-			if (!src.contains(attribute)) {
+			if (!src.containsKey(attribute)) {
 				continue;
 			}
 			String argName = ParseUtils.toCamelCase(attribute.toString());

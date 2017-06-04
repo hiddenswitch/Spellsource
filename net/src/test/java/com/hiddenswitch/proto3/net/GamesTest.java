@@ -69,7 +69,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test(timeout = 20000L)
+	@Test()
 	public void testTerminatingSession(TestContext context) throws CardParseException, IOException, URISyntaxException {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
@@ -96,7 +96,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test(timeout = 40000L)
+	@Test()
 	public void testTimeoutSession(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
@@ -116,7 +116,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test(timeout = 40000L)
+	@Test()
 	public void testRemoveSessionAfterNormalGameOver(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
@@ -128,8 +128,10 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test(timeout = 33 * 1000L)
+	@Test()
 	public void testTwoSimultaneousSessions(TestContext context) throws Exception {
+		setLoggingLevel(Level.ERROR);
+
 		wrapSync(context, () -> {
 			simultaneousSessions(2);
 		});
@@ -146,7 +148,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test(timeout = 80000L)
+	@Test()
 	public void testReconnects(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {

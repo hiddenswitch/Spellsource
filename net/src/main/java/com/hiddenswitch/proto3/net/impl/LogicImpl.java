@@ -37,9 +37,9 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
-		RPC.register(this, Logic.class, vertx.eventBus());
 		inventory = RPC.connect(Inventory.class, vertx.eventBus());
 		decks = RPC.connect(Decks.class, vertx.eventBus());
+		RPC.register(this, Logic.class, vertx.eventBus());
 	}
 
 	@Override

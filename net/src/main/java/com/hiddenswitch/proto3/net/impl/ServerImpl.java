@@ -60,7 +60,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	@Suspendable
-	public void start() throws RuntimeException {
+	public void start() throws RuntimeException, SuspendExecution {
 		server = vertx.createHttpServer(new HttpServerOptions()
 				.setHost("0.0.0.0")
 				.setPort(8080));
@@ -86,15 +86,17 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 			// All routes need logging.
 			router.route().handler(LoggerHandler.create());
 
-			//CORS
+			// CORS
 			router.route().handler(CorsHandler.create("*")
 					.allowedHeader("Content-Type")
-					.allowedHeader("x-auth-token")
-					.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)));
+					.allowedHeader("X-Auth-Token")
+					.exposedHeader("Content-Type")
+					.allowCredentials(true)
+					.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS)));
 
 			//add "content-type=application/json" to all responses
 			router.route().handler(context -> {
-				context.response().putHeader("content-type", "application/json");
+				context.response().putHeader("Content-Type", "application/json");
 				context.next();
 			});
 
@@ -176,6 +178,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 			logger.info("Listening on port " + Integer.toString(server.actualPort()));
 		} catch (Exception e) {
 			logger.error(e);
+			throw e;
 		}
 	}
 
@@ -430,15 +433,6 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 			inventory.withEmbeddedConfiguration();
 			decks.withEmbeddedConfiguration();
 			bots.withEmbeddedConfiguration();
-		}
-	}
-
-	@Suspendable
-	@Override
-	public void stop() throws SuspendExecution, InterruptedException {
-		Void r = awaitResult(h -> server.close(h));
-		for (String deploymentId : deployments) {
-			r = awaitResult(h -> vertx.undeploy(deploymentId, h));
 		}
 	}
 }

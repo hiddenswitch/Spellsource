@@ -5,6 +5,13 @@ import java.io.Serializable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
+/**
+ * The base class for game events, or things that happen during the execution of a {@link
+ * net.demilich.metastone.game.actions.GameAction} that other game rules may react to.
+ *
+ * @see net.demilich.metastone.game.spells.trigger.Trigger for how to use game events to implement card text.
+ * @see GameContext#fireGameEvent(GameEvent) for how game events are fired.
+ */
 public abstract class GameEvent implements Serializable {
 	private transient final GameContext context;
 	private final int targetPlayerId;

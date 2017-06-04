@@ -29,8 +29,8 @@ public class RPC {
 	 * network. This method instead provides a way to register a plain Java interface as the specification for the
 	 * protocol a verticle would respond to over the {@link EventBus}.
 	 * <p>
-	 * The registration function will register every public non-default method with a single argument specified in the
-	 * interface with {@link EventBus#consumer(String)}, specifying the address as:
+	 * The registration function will register every non-static method specified in the interface with {@link
+	 * EventBus#consumer(String)}, specifying the address as:
 	 * <p>
 	 * {@code serviceInterface.getName() + "::" + method.getName(); }
 	 * <p>
@@ -68,10 +68,6 @@ public class RPC {
 		final String name = serviceInterface.getName();
 
 		for (Method method : serviceInterface.getDeclaredMethods()) {
-			if (method.isDefault()
-					|| method.getParameterCount() > 1) {
-				return;
-			}
 			String methodName = name + "::" + method.getName();
 
 			eb.consumer(methodName, Sync.fiberHandler(Consumer.of(arg -> {
@@ -93,8 +89,8 @@ public class RPC {
 	}
 
 	/**
-	 * Connects to the given {@code serviceInterface} on the {@link EventBus} and gives you an {@link RpcClientImpl} you can
-	 * call methods on. Does not require the service to be running in order to be connected to.
+	 * Connects to the given {@code serviceInterface} on the {@link EventBus} and gives you an {@link RpcClientImpl} you
+	 * can call methods on. Does not require the service to be running in order to be connected to.
 	 * <p>
 	 * Internally, this method creates a {@link Proxy} instance that implements {@link T}. When you call one of {@link
 	 * T}'s methods, this proxy will {@link EventBus#send(String, Object)} a {@link java.io.Serializable}-serialized

@@ -21,7 +21,7 @@ public class ShuffleToDeckSpell extends Spell {
 		Card card = null;
 		if (target != null) {
 			card = ((Actor) target).getSourceCard().getCopy();
-		} else if (desc.contains(SpellArg.CARD_FILTER)){
+		} else if (desc.containsKey(SpellArg.CARD_FILTER)){
 			EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 			CardList cards = CardCatalogue.query(context.getDeckFormat());
 			CardList result = new CardArrayList();

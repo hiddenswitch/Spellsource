@@ -1917,7 +1917,7 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Performs a game action.
+	 * Performs a game action, or a selection of what to do by a player from a list of {@link #getValidActions(int)}.
 	 * <p>
 	 * This method is the primary entry point to turn a player's selected {@link GameAction} into modified game state.
 	 * Typically this method will call the action's {@link GameAction#execute(GameContext, int)} overrider, and the

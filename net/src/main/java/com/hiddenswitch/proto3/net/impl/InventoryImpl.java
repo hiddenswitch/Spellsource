@@ -35,7 +35,6 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		RPC.register(this, Inventory.class, vertx.eventBus());
 		cards = RPC.connect(Cards.class, vertx.eventBus());
 		List<String> collections = awaitResult(h -> getMongo().getCollections(h));
 		if (!collections.contains(INVENTORY) || !collections.contains(COLLECTIONS)) {
@@ -44,6 +43,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 			ignore = awaitResult(h -> getMongo().createIndex(INVENTORY, json("userId", 1), h));
 			ignore = awaitResult(h -> getMongo().createIndex(INVENTORY, json("collectionIds", 1), h));
 		}
+		RPC.register(this, Inventory.class, vertx.eventBus());
 	}
 
 	@Override
