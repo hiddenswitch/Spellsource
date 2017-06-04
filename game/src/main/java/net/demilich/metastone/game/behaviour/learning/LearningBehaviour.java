@@ -9,10 +9,10 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.Card;
 
-public class LearningBehaviour extends Behaviour {
+public class LearningBehaviour extends AbstractBehaviour {
 
 	//private static Logger logger = LoggerFactory.getLogger(LearningBehaviour.class);
 

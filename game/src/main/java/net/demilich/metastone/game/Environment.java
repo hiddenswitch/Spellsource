@@ -1,5 +1,11 @@
 package net.demilich.metastone.game;
 
+/**
+ * A collection of environment variables.
+ * <p>
+ * This enum contains the keys to the {@link com.hiddenswitch.proto3.net.common.GameState#environment} field, and they
+ * help implement various card texts that modify other card texts.
+ */
 public enum Environment {
 	/**
 	 * This variable stores the minions that are pending a summon.

@@ -17,7 +17,7 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.BorderPane;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.NotificationProxy;
-import net.demilich.metastone.game.behaviour.IBehaviour;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.behaviour.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.decks.Deck;
@@ -31,7 +31,7 @@ public class BattleOfDecksConfigView extends BorderPane {
 	@FXML
 	private ComboBox<Integer> numberOfGamesBox;
 	@FXML
-	private ComboBox<IBehaviour> behaviourBox;
+	private ComboBox<Behaviour> behaviourBox;
 
 	@FXML
 	private ListView<Deck> selectedDecksListView;
@@ -87,7 +87,7 @@ public class BattleOfDecksConfigView extends BorderPane {
 
 	private void handleStartButton(ActionEvent event) {
 		int numberOfGames = numberOfGamesBox.getSelectionModel().getSelectedItem();
-		IBehaviour behaviour = behaviourBox.getSelectionModel().getSelectedItem();
+		Behaviour behaviour = behaviourBox.getSelectionModel().getSelectedItem();
 		Collection<Deck> decks = selectedDecksListView.getItems();
 		BattleConfig battleConfig = new BattleConfig(numberOfGames, behaviour, decks);
 		NotificationProxy.sendNotification(GameNotification.COMMIT_BATTLE_OF_DECKS_CONFIG, battleConfig);

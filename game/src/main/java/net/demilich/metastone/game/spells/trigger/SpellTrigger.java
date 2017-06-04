@@ -10,13 +10,10 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.lang.ref.WeakReference;
-
-public class SpellTrigger extends Entity implements IGameEventListener {
+public class SpellTrigger extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(SpellTrigger.class);
 
 	private GameEventTrigger primaryTrigger;

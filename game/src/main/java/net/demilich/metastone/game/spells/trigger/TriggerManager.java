@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.trigger;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 import co.paralleluniverse.fibers.Suspendable;
 import org.slf4j.Logger;
@@ -18,18 +17,18 @@ import net.demilich.metastone.utils.IDisposable;
 public class TriggerManager implements Cloneable, IDisposable, Serializable {
 	public static Logger logger = LoggerFactory.getLogger(TriggerManager.class);
 
-	private final List<IGameEventListener> triggers = new ArrayList<IGameEventListener>();
+	private final List<Trigger> triggers = new ArrayList<Trigger>();
 
 	public TriggerManager() {
 	}
 
 	private TriggerManager(TriggerManager otherTriggerManager) {
-		for (IGameEventListener gameEventListener : otherTriggerManager.triggers) {
+		for (Trigger gameEventListener : otherTriggerManager.triggers) {
 			triggers.add(gameEventListener.clone());
 		}
 	}
 
-	public void addTrigger(IGameEventListener trigger) {
+	public void addTrigger(Trigger trigger) {
 		triggers.add(trigger);
 		if (triggers.size() > 100) {
 			logger.warn("Warning, many triggers: " + triggers.size() + " adding one of type: " + trigger);
@@ -47,17 +46,17 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 	}
 
 	@Suspendable
-	public void fireGameEvent(GameEvent event, List<IGameEventListener> gameTriggers) {
-		List<IGameEventListener> triggers = new ArrayList<>(this.triggers);
+	public void fireGameEvent(GameEvent event, List<Trigger> gameTriggers) {
+		List<Trigger> triggers = new ArrayList<>(this.triggers);
 		if (gameTriggers != null
 				&& gameTriggers.size() > 0) {
 			// Game triggers execute first and do not serialize
 			triggers.addAll(0, gameTriggers);
 		}
-		List<IGameEventListener> eventTriggers = new ArrayList<IGameEventListener>();
-		List<IGameEventListener> removeTriggers = new ArrayList<IGameEventListener>();
+		List<Trigger> eventTriggers = new ArrayList<Trigger>();
+		List<Trigger> removeTriggers = new ArrayList<Trigger>();
 
-		for (IGameEventListener trigger : triggers) {
+		for (Trigger trigger : triggers) {
 			// In order to stop premature expiration, check
 			// for a oneTurnOnly tag and that it isn't delayed.
 			if (event.getEventType() == GameEventType.TURN_END) {
@@ -80,7 +79,7 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 			}
 		}
 
-		for (IGameEventListener trigger : eventTriggers) {
+		for (Trigger trigger : eventTriggers) {
 			if (trigger.canFireCondition(event) && triggers.contains(trigger)) {
 				trigger.onGameEvent(event);
 			}
@@ -93,7 +92,7 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 			}
 		}
 
-		for (IGameEventListener trigger : removeTriggers) {
+		for (Trigger trigger : removeTriggers) {
 			triggers.remove(trigger);
 		}
 	}
@@ -103,13 +102,13 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 		fireGameEvent(event, null);
 	}
 
-	private List<IGameEventListener> getListSnapshot(List<IGameEventListener> triggerList) {
-		return new ArrayList<IGameEventListener>(triggerList);
+	private List<Trigger> getListSnapshot(List<Trigger> triggerList) {
+		return new ArrayList<>(triggerList);
 	}
 
-	public List<IGameEventListener> getTriggersAssociatedWith(EntityReference entityReference) {
-		List<IGameEventListener> relevantTriggers = new ArrayList<>();
-		for (IGameEventListener trigger : triggers) {
+	public List<Trigger> getTriggersAssociatedWith(EntityReference entityReference) {
+		List<Trigger> relevantTriggers = new ArrayList<>();
+		for (Trigger trigger : triggers) {
 			if (trigger.getHostReference().equals(entityReference)) {
 				relevantTriggers.add(trigger);
 			}
@@ -118,21 +117,21 @@ public class TriggerManager implements Cloneable, IDisposable, Serializable {
 	}
 
 	public void printCurrentTriggers() {
-		for (IGameEventListener trigger : triggers) {
+		for (Trigger trigger : triggers) {
 			System.out.println();
 			System.out.println(trigger.toString());
 			System.out.println();
 		}
 	}
 
-	public void removeTrigger(IGameEventListener trigger) {
+	public void removeTrigger(Trigger trigger) {
 		if (!triggers.remove(trigger)) {
 			System.out.println("Failed to remove trigger " + trigger);
 		}
 	}
 
 	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras) {
-		for (IGameEventListener trigger : getListSnapshot(triggers)) {
+		for (Trigger trigger : getListSnapshot(triggers)) {
 			if (trigger.getHostReference().equals(entityReference)) {
 				if (!removeAuras && trigger instanceof Aura) {
 					continue;

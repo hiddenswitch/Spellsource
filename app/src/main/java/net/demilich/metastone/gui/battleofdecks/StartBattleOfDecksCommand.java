@@ -3,7 +3,7 @@ package net.demilich.metastone.gui.battleofdecks;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.behaviour.IBehaviour;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -30,7 +30,7 @@ public class StartBattleOfDecksCommand extends SimpleCommand<GameNotification> {
 		private final BattleBatchResult batchResult;
 
 
-		public PlayGameTask(Deck deck1, Deck deck2, IBehaviour behaviour, BattleBatchResult batchResult) {
+		public PlayGameTask(Deck deck1, Deck deck2, Behaviour behaviour, BattleBatchResult batchResult) {
 			this.player1Config = new PlayerConfig(deck1, behaviour);
 			player1Config.setName("Player 1");
 			this.player2Config = new PlayerConfig(deck2, behaviour);

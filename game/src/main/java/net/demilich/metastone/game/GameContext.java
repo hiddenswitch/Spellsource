@@ -5,6 +5,7 @@ import com.hiddenswitch.proto3.net.common.GameState;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
@@ -17,7 +18,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.MatchResult;
 import net.demilich.metastone.game.logic.TargetLogic;
-import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -71,7 +72,7 @@ import java.util.stream.Stream;
  * Based on the code above, you'll see the minimum requirements to execute a {@link #play()} command: <ul> <li>2 {@link
  * Player} objects, each configured with a {@link Behaviour}. These objects represent (1) the most important part of the
  * game state (encoded inside the fields of the {@link Player} object, like {@link Player#getMinions()}; and (2) the
- * {@link net.demilich.metastone.game.behaviour.IBehaviour} delegate for player actions and mulligans. </li>. <li>A
+ * {@link Behaviour} delegate for player actions and mulligans. </li>. <li>A
  * {@link GameLogic} instance. It handles everything in between receiving a player action to the request for the next
  * player action..</li> <li>A {@link DeckFormat}, which is a collection of {@link CardSet} values that correspond to the
  * (1) legal cards that may be played and put into decks and (2) legal cards that may appear in randomly drawn or
@@ -101,15 +102,14 @@ import java.util.stream.Stream;
  * expected to provide a {@link Player} instance with a {@link Behaviour} that suits the end user's needs.
  *
  * @see #play() for more about how a game is "played."
- * @see net.demilich.metastone.game.behaviour.IBehaviour for the interface that the {@link GameContext} delegates player
- * actions and notifications to. This is both the "event handler" specification for which events a player may be
- * interested in; and also a "delegate" in the sense that the object implementing this interface makes decisions about
- * what actions in the game to take (with e.g. {@link net.demilich.metastone.game.behaviour.IBehaviour#requestAction(GameContext,
- * Player, List)}.
+ * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is
+ * both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
+ * sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
+ * {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see net.demilich.metastone.game.behaviour.PlayRandomBehaviour for an example behaviour that just makes random
  * decisions when requested.
- * @see com.hiddenswitch.proto3.net.common.NetworkBehaviour for the class that turns requests to the {@link
- * net.demilich.metastone.game.behaviour.IBehaviour} into calls over the network.
+ * @see com.hiddenswitch.proto3.net.common.NetworkBehaviour for the class that turns requests to the {@link Behaviour}
+ * into calls over the network.
  * @see GameLogic for the class that actually implements the Minionate game rules. This class requires a {@link
  * GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Minionate.
@@ -128,7 +128,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private DeckFormat deckFormat;
 	private TargetLogic targetLogic = new TargetLogic();
 	private TriggerManager triggerManager = new TriggerManager();
-	private HashMap<Environment, Object> environment = new HashMap<>();
+	private Map<Environment, Object> environment = new HashMap<>();
 	private List<CardCostModifier> cardCostModifiers = new ArrayList<>();
 	private int activePlayerId = -1;
 	private Player winner;
@@ -204,10 +204,10 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	/**
 	 * Adds a trigger to the game.
 	 *
-	 * @param trigger An {@link IGameEventListener} that is used as a delegate whenever an event is fired in the game.
+	 * @param trigger An {@link Trigger} that is used as a delegate whenever an event is fired in the game.
 	 * @see #fireGameEvent(GameEvent, List) for more about firing game events.
 	 */
-	public void addTrigger(IGameEventListener trigger) {
+	public void addTrigger(Trigger trigger) {
 		getTriggerManager().addTrigger(trigger);
 	}
 
@@ -385,10 +385,10 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	 * @see net.demilich.metastone.game.spells.trigger.HealingTrigger for an example of a trigger that listens to a
 	 * specific event.
 	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete game logic for firing game events.
-	 * @see #addTrigger(IGameEventListener) for the place to add triggers that react to game events.
+	 * @see #addTrigger(Trigger) for the place to add triggers that react to game events.
 	 */
 	@Suspendable
-	public void fireGameEvent(GameEvent gameEvent, List<IGameEventListener> otherTriggers) {
+	public void fireGameEvent(GameEvent gameEvent, List<Trigger> otherTriggers) {
 		if (ignoreEvents()) {
 			return;
 		}
@@ -520,6 +520,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	/**
 	 * Gets the current event card.
+	 *
 	 * @return The event card.
 	 * @see Environment#EVENT_CARD for more.
 	 */
@@ -529,6 +530,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	/**
 	 * Gets the current event target stack.
+	 *
 	 * @return A stack of targets.
 	 * @see Environment#EVENT_TARGET_REFERENCE_STACK for more.
 	 */
@@ -542,6 +544,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	/**
 	 * Gets the minions to the left on the battlefield of the given minion.
+	 *
 	 * @param minionReference An {@link EntityReference} pointing to the minion.
 	 * @return A list of entities to the left of the provided minion.
 	 */
@@ -559,19 +562,45 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return leftMinions;
 	}
 
+	/**
+	 * Gets a reference to the game logic associated with this context.
+	 *
+	 * @return A {@link GameLogic} instance.
+	 * @see GameLogic for more.
+	 */
 	public GameLogic getLogic() {
 		return logic;
 	}
 
+	/**
+	 * Gets the number of minions a player has.
+	 *
+	 * @param player The player to query.
+	 * @return The count of minions.
+	 */
 	public int getMinionCount(Player player) {
 		return player.getMinions().size();
 	}
 
+	/**
+	 * Gets the opponent from the point of view of the given player.
+	 *
+	 * @param player The friendly player.
+	 * @return The opposing player from the point of view of the {@code player} argument.
+	 */
 	public Player getOpponent(Player player) {
 		return player.getId() == PLAYER_1 ? getPlayer2() : getPlayer1();
 	}
 
-	public List<Actor> getOppositeMinions(Player player, EntityReference minionReference) {
+	/**
+	 * Gets the {@link Actor} entities geometrically opposite of the given {@code minionReference} on the {@link
+	 * Zones#BATTLEFIELD}.
+	 *
+	 * @param minionReference The minion from whose perspective we will consider "opposite."
+	 * @return The list of {@link Actor} (typically one or two) that are geometrically opposite from the minion
+	 * referenced by {@code minionReference}.
+	 */
+	public List<Actor> getOppositeMinions(EntityReference minionReference) {
 		List<Actor> oppositeMinions = new ArrayList<>();
 		Actor minion = (Actor) resolveSingleTarget(minionReference);
 		Player owner = getPlayer(minion.getOwner());
@@ -601,28 +630,53 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return oppositeMinions;
 	}
 
+	/**
+	 * Gets the card that is currently being played, or {@code null} if no card is currently being played.
+	 *
+	 * @return A {@link Card} that was the result of a {@link net.demilich.metastone.game.actions.PlayCardAction}.
+	 */
 	public Card getPendingCard() {
 		return (Card) resolveSingleTarget((EntityReference) getEnvironment().get(Environment.PENDING_CARD));
 	}
 
+	/**
+	 * Gets the player at the given index.
+	 *
+	 * @param index {@link GameContext#PLAYER_1} or {@link GameContext#PLAYER_2}
+	 * @return A reference to the player with that ID / at that {@code index}.
+	 */
 	public synchronized Player getPlayer(int index) {
 		return getPlayers().get(index);
 	}
 
+	/**
+	 * @param id {@link GameContext#PLAYER_1} or {@link GameContext#PLAYER_2}
+	 * @return {@code true} if the game context has a valid {@link Player} object at that index.
+	 */
 	public synchronized boolean hasPlayer(int id) {
 		return id >= 0 && players != null && players.length > id && players[id] != null;
 	}
 
+	/**
+	 * Gets the first player.
+	 *
+	 * @return A player object.
+	 */
 	public Player getPlayer1() {
 		return getPlayer(PLAYER_1);
 	}
 
+	/**
+	 * Gets the second player.
+	 *
+	 * @return A player object.
+	 */
 	public Player getPlayer2() {
 		return getPlayer(PLAYER_2);
 	}
 
 	/**
-	 * Each player holds the player's {@link Behaviour} and all of the {@link
+	 * Each player holds the player's {@link AbstractBehaviour} and all of the {@link
 	 * Entity} objects in the game.
 	 *
 	 * @return An {@link java.util.Collections.UnmodifiableList} of {@link Player} objects.
@@ -634,6 +688,15 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return Collections.unmodifiableList(Arrays.asList(players));
 	}
 
+	/**
+	 * Gets minions geometrically right of the given {@code minionReference} on the {@link Zones#BATTLEFIELD} that
+	 * belongs to the specified player.
+	 *
+	 * @param player          The player to query.
+	 * @param minionReference The minion reference.
+	 * @return A list of {@link Actor} (sometimes empty) of minions to the geometric right of the {@code
+	 * minionReference}.
+	 */
 	public List<Actor> getRightMinions(Player player, EntityReference minionReference) {
 		List<Actor> rightMinions = new ArrayList<>();
 		Actor minion = (Actor) resolveSingleTarget(minionReference);
@@ -648,6 +711,14 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return rightMinions;
 	}
 
+	/**
+	 * Gets the minions whose summoning is currently being processed.
+	 * <p>
+	 * This stack can have multiple entries because battlecries or secrets can trigger summoning of other minions
+	 * in the middle of evaluating a {@link GameLogic#summon(int, Minion, Card, int, boolean)}.
+	 *
+	 * @return A stack of summons.
+	 */
 	@SuppressWarnings("unchecked")
 	public Stack<EntityReference> getSummonReferenceStack() {
 		if (!getEnvironment().containsKey(Environment.SUMMON_REFERENCE_STACK)) {
@@ -656,6 +727,11 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return (Stack<EntityReference>) getEnvironment().get(Environment.SUMMON_REFERENCE_STACK);
 	}
 
+	/**
+	 * Gets the total number of minions on both player's {@link Zones#BATTLEFIELD}.
+	 *
+	 * @return A total.
+	 */
 	public int getTotalMinionCount() {
 		int totalMinionCount = 0;
 		for (Player player : getPlayers()) {
@@ -664,14 +740,32 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return totalMinionCount;
 	}
 
-	public List<IGameEventListener> getTriggersAssociatedWith(EntityReference entityReference) {
+	/**
+	 * Gets the {@link Trigger} objects for which {@link Trigger#getHostReference()}  matches the specified {@link
+	 * EntityReference}.
+	 *
+	 * @param entityReference An {@link EntityReference}/
+	 * @return A list of triggers, possibly empty.
+	 * @see Trigger#getHostReference() for an explanation of what an "associated" trigger would mean.
+	 */
+	public List<Trigger> getTriggersAssociatedWith(EntityReference entityReference) {
 		return getTriggerManager().getTriggersAssociatedWith(entityReference);
 	}
 
+	/**
+	 * Gets the current turn.
+	 *
+	 * @return The turn. 0 is the first turn.
+	 */
 	public int getTurn() {
 		return turn;
 	}
 
+	/**
+	 * Gets the current {@link TurnState}
+	 *
+	 * @return The turn state of this context.
+	 */
 	public TurnState getTurnState() {
 		return turnState;
 	}
@@ -684,16 +778,33 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return getLogic().getValidActions(getActivePlayerId());
 	}
 
+	/**
+	 * Gets the winning player's ID or {@code -1} if no player is the winner.
+	 *
+	 * @return The winning player's ID or {@code -1} if no player is the winner.
+	 */
 	public int getWinningPlayerId() {
 		return getWinner() == null ? -1 : getWinner().getId();
 	}
 
+	/**
+	 * When true, the {@link TriggerManager} doesn't handle an events being raised.
+	 *
+	 * @return {@code true} if the game context should ignore incoming events.
+	 */
 	public boolean ignoreEvents() {
 		return ignoreEvents;
 	}
 
+	/**
+	 * Initializes a game.
+	 * <p>
+	 * Typically, this determines the beginner with {@link GameLogic#determineBeginner(int...)}; then it sets the
+	 * active player; then it calls {@link GameLogic#initializePlayer(int)} for both players, and then it asks both
+	 * players for their mulligans using {@link GameLogic#init(int, boolean)}.
+	 */
 	@Suspendable
-	public void init() {
+	protected void init() {
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
 		logger.debug(getActivePlayer().getName() + " begins");
@@ -706,19 +817,39 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	protected void onGameStateChanged() {
 	}
 
+
+	/**
+	 * Executes the specified game action, typically by calling {@link GameLogic#performGameAction(int, GameAction)}.
+	 *
+	 * @param playerId   The player who's performing the action.
+	 * @param gameAction The action to perform.
+	 * @see GameLogic#performGameAction(int, GameAction) for more about game actions.
+	 */
 	@Suspendable
 	protected void performAction(int playerId, GameAction gameAction) {
 		getLogic().performGameAction(playerId, gameAction);
 		onGameStateChanged();
 	}
 
+	/**
+	 * Plays the game.
+	 * <p>
+	 * When a game is played, mulligans are requested from both players, and then each player is asked for actions until
+	 * the player can't take any.
+	 * <p>
+	 * Play relies on the {@link Behaviour} delegates to determine what a player's chosen action is. It takes the chosen
+	 * action and feeds it to the {@link GameLogic}, which executes the effects of that action until the next action
+	 * needs to be requested.
+	 *
+	 * @see #takeActionInTurn() for a breakdown of a specific turn.
+	 */
 	@Suspendable
 	public void play() {
 		logger.debug("Game starts: " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
 		init();
 		while (!gameDecided()) {
 			startTurn(getActivePlayerId());
-			while (playTurn()) {
+			while (takeActionInTurn()) {
 			}
 			if (getTurn() > GameLogic.TURN_LIMIT) {
 				break;
@@ -727,8 +858,18 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		endGame();
 	}
 
+	/**
+	 * Requests an action from a player and takes it in the turn.
+	 * <p>
+	 * This method will call {@link Behaviour#requestAction(GameContext, Player, List)} to get an action from the
+	 * currently active player. It then calls {@link #performAction(int, GameAction)} with the returned {@link
+	 * GameAction}.
+	 *
+	 * @return {@code false} if the player selected an {@link net.demilich.metastone.game.actions.EndTurnAction},
+	 * indicating the player would like to end their turn.
+	 */
 	@Suspendable
-	public boolean playTurn() {
+	public boolean takeActionInTurn() {
 		setActionsThisTurn(getActionsThisTurn() + 1);
 		if (getActionsThisTurn() > 99) {
 			logger.warn("Turn has been forcefully ended after {} actions", getActionsThisTurn());
@@ -759,21 +900,47 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return nextAction.getActionType() != ActionType.END_TURN;
 	}
 
+	/**
+	 * Prints to the {@link #logger} the currently active triggers.
+	 */
 	public void printCurrentTriggers() {
 		logger.info("Active spelltriggers:");
 		getTriggerManager().printCurrentTriggers();
 	}
 
-	public void removeTrigger(IGameEventListener trigger) {
+	/**
+	 * Removes a trigger from the game context.
+	 *
+	 * @param trigger The trigger to remove.
+	 */
+	public void removeTrigger(Trigger trigger) {
 		getTriggerManager().removeTrigger(trigger);
 	}
 
+	/**
+	 * Removes all the triggers associated with a particular {@link Entity}, typically because the entity has been
+	 * destroyed,
+	 *
+	 * @param entityReference The entity whose triggers should be removed.
+	 * @param removeAuras     {@code true} if the entity has {@link net.demilich.metastone.game.spells.aura.Aura}
+	 *                        triggers that should be removed.
+	 */
 	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras) {
 		triggerManager.removeTriggersAssociatedWith(entityReference, removeAuras);
 	}
 
+	/**
+	 * Interprets a card reference and returns the appropriate card.
+	 * <p>
+	 * This method allows lookups by entity ID or card ID.
+	 *
+	 * @param cardReference The {@link CardReference} with which to search the entities in this game context.
+	 * @return A {@link Card} that was references.
+	 * @throws NullPointerException when the card reference could not be resolved. Game rules should generally never
+	 *                              search for a card that doesn't exist.
+	 */
 	@SuppressWarnings("unchecked")
-	public Card resolveCardReference(CardReference cardReference) {
+	public Card resolveCardReference(CardReference cardReference) throws NullPointerException {
 		Player player = getPlayer(cardReference.getPlayerId());
 		Card card = null;
 		if (getPendingCard() != null && getPendingCard().getCardReference().equals(cardReference)) {
@@ -807,17 +974,39 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		}
 	}
 
-	public Entity resolveSingleTarget(EntityReference targetKey) {
+	/**
+	 * Tries to find the entity references by the {@link EntityReference}.
+	 *
+	 * @param targetKey The reference to find.
+	 * @return The {@link Entity} pointed to by the {@link EntityReference}.
+	 * @throws NullPointerException if the reference could not be found. Game rules shouldn't be looking for references
+	 *                              that cannot be found.
+	 */
+	public Entity resolveSingleTarget(EntityReference targetKey) throws NullPointerException {
 		if (targetKey == null) {
 			return null;
 		}
 		return targetLogic.findEntity(this, targetKey);
 	}
 
+	/**
+	 * Interprets {@link EntityReference} that specifies a group of {@link Entity} objects, like {@link
+	 * EntityReference#ALL_MINIONS}.
+	 *
+	 * @param player    The player from whose point of view this method interprets the {@link EntityReference}.
+	 * @param source    The entity from whose point of view this method interprets the {@link EntityReference}.
+	 * @param targetKey The {@link EntityReference}.
+	 * @return A potentially empty list of entities.
+	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
 		return targetLogic.resolveTargetKey(this, player, source, targetKey);
 	}
 
+	/**
+	 * Sets the environment variable {@link Environment#EVENT_CARD}.
+	 *
+	 * @param eventCard The card to set.
+	 */
 	public void setEventCard(Card eventCard) {
 		if (eventCard != null) {
 			getEnvironment().put(Environment.EVENT_CARD, eventCard.getReference());
@@ -838,6 +1027,11 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		}
 	}
 
+	/**
+	 * Starts the turn for a player.
+	 *
+	 * @param playerId The player whose turn should be started.
+	 */
 	@Suspendable
 	protected void startTurn(int playerId) {
 		setTurn(getTurn() + 1);
@@ -852,6 +1046,12 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return String.format("[GameContext turn=%d turnState=%s]", getTurn(), getTurnState().toString());
 	}
 
+	/**
+	 * Tries to find an entity given the reference.
+	 *
+	 * @param targetKey The reference to the entity.
+	 * @return The found {@link Entity}, or {@code null} if no entity was found.
+	 */
 	public Entity tryFind(EntityReference targetKey) {
 		try {
 			return resolveSingleTarget(targetKey);
@@ -869,7 +1069,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		this.deckFormat = deckFormat;
 	}
 
-	public void setEnvironment(HashMap<Environment, Object> environment) {
+	public void setEnvironment(Map<Environment, Object> environment) {
 		this.environment = environment;
 	}
 
@@ -1044,6 +1244,11 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		return "local";
 	}
 
+	/**
+	 * Gets all the entities in the game, aside from hidden ones, as a {@link Stream}.
+	 *
+	 * @return The {@link Stream} of game entities.
+	 */
 	@SuppressWarnings("unchecked")
 	public Stream<Entity> getEntities() {
 		return getPlayers().stream().flatMap(p -> Stream.of(new Zones[]{

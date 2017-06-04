@@ -10,7 +10,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.IGameEventListener;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -33,7 +33,7 @@ public class StealRandomSecretSpell extends Spell {
 
 		// try to steal a secret which we do not own yet
 		List<Secret> validSecrets = new ArrayList<>();
-		for (IGameEventListener trigger : secrets) {
+		for (Trigger trigger : secrets) {
 			Secret secret = (Secret) trigger;
 			if (!player.getSecretCardIds().contains(secret.getSource().getCardId()) && player.getSecrets().size() < GameLogic.MAX_SECRETS) {
 				validSecrets.add(secret);

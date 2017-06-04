@@ -6,7 +6,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class TestBase {
 
-	protected static class TestBehaviour extends Behaviour {
+	protected static class TestBehaviour extends AbstractBehaviour {
 
 		private EntityReference targetPreference;
 

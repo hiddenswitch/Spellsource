@@ -1,7 +1,5 @@
 package net.demilich.metastone.tests;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,10 +12,9 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.cards.MinionCard;
@@ -34,7 +31,7 @@ import org.testng.annotations.BeforeMethod;
 
 public class TestBase {
 
-	protected static class TestBehaviour extends Behaviour {
+	protected static class TestBehaviour extends AbstractBehaviour {
 
 		private EntityReference targetPreference;
 

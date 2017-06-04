@@ -133,7 +133,7 @@ class Node {
 			player.setBehaviour(new PlayRandomBehaviour());
 		}
 
-		simulation.playTurn();
+		simulation.takeActionInTurn();
 
 		return simulation.getWinningPlayerId() == getPlayer() ? 1 : 0;
 	}

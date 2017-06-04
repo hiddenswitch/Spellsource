@@ -8,7 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 
-public class DoNothingBehaviour extends Behaviour {
+public class DoNothingBehaviour extends AbstractBehaviour {
 
 	@Override
 	public String getName() {

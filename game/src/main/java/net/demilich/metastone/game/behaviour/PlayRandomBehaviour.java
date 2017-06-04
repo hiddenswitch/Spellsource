@@ -8,7 +8,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import org.apache.commons.lang3.RandomUtils;
 
-public class PlayRandomBehaviour extends Behaviour {
+public class PlayRandomBehaviour extends AbstractBehaviour {
 
 	private Random random = new Random();
 

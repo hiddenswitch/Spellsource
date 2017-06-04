@@ -68,7 +68,7 @@ public class TargetLogic implements Serializable {
 		return validTargets;
 	}
 
-	public Entity findEntity(GameContext context, EntityReference targetKey) {
+	public Entity findEntity(GameContext context, EntityReference targetKey) throws NullPointerException {
 		int targetId = targetKey.getId();
 		Entity environmentResult = findInEnvironment(context, targetKey);
 		if (environmentResult != null) {
@@ -111,9 +111,9 @@ public class TargetLogic implements Serializable {
 		}
 
 
-		System.err.println("Id " + targetId + " not found!");
-		System.err.println(context.toLongString());
-		System.err.println(context.getEnvironment().toString());
+		logger.error("Id " + targetId + " not found!");
+		logger.error(context.toLongString());
+		logger.error(context.getEnvironment().toString());
 		throw new NullPointerException("Target not found exception: " + targetKey);
 	}
 
@@ -234,7 +234,7 @@ public class TargetLogic implements Serializable {
 		} else if (targetKey.equals(EntityReference.ADJACENT_MINIONS)) {
 			return new ArrayList<>(context.getAdjacentMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.OPPOSITE_MINIONS)) {
-			return new ArrayList<>(context.getOppositeMinions(player, source.getReference()));
+			return new ArrayList<>(context.getOppositeMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_LEFT)) {
 			return new ArrayList<>(context.getLeftMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_RIGHT)) {

@@ -13,6 +13,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.Zones;
 
@@ -21,20 +22,79 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The fields that correspond to a complete state of the game.
+ * <p>
+ * Notably, this class contains {@link Player} objects, whose {@link net.demilich.metastone.game.behaviour.Behaviour}
+ * fields are not strictly state. These can be safely serialized since behaviours generally do not contain any state.
+ */
 public class GameState implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * The current stack of actions being processed.
+	 *
+	 * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about actions.
+	 */
 	public final List<GameAction> actionStack;
+	/**
+	 * The current stack of events being processed.
+	 *
+	 * @see GameContext#fireGameEvent(GameEvent, List) for more about events.
+	 */
 	public final List<GameEvent> eventStack;
+	/**
+	 * A player object corresponding to the arbitrarily-decided first player of the game.
+	 *
+	 * @see Player for more about players.
+	 */
 	public final Player player1;
+	/**
+	 * A player object corresponding to the arbitrarily-decided second player of the game.
+	 *
+	 * @see Player for more about players.
+	 */
 	public final Player player2;
+	/**
+	 * A {@link CardList} of cards that are temporarily created in this game.
+	 */
 	public final CardList tempCards;
-	public final HashMap<Environment, Object> environment;
+	/**
+	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions
+	 * are currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
+	 * <p>
+	 * This helps implement a variety of complex rules in the game.
+	 *
+	 * @see Environment for more about the environment variables.
+	 */
+	public final Map<Environment, Object> environment;
+	/**
+	 * A list of {@link CardCostModifier} objects that change the costs of cards in the game.
+	 */
 	public final List<CardCostModifier> cardCostModifiers;
+	/**
+	 * An instance of the class that manages and stores the state for {@link Trigger}
+	 * objects.
+	 *
+	 * @see Trigger for more about triggers.
+	 * @see GameContext#fireGameEvent(GameEvent) for more about firing triggers and raising events.
+	 */
 	public final TriggerManager triggerManager;
+	/**
+	 * The next ID to generate in an {@link net.demilich.metastone.game.targeting.IdFactory}/
+	 */
 	public final int currentId;
+	/**
+	 * The currently active player.
+	 */
 	public final int activePlayerId;
+	/**
+	 * The current {@link TurnState} of the game.
+	 */
 	public final TurnState turnState;
+	/**
+	 * The timestamp of when this {@link GameState} was accessed.
+	 */
 	public final long timestamp;
 
 	public GameState(GameContext fromContext) {
@@ -65,14 +125,6 @@ public class GameState implements Serializable {
 		this.turnState = turnState;
 	}
 
-	public boolean isValid() {
-		return player1 != null
-				&& player2 != null
-				&& environment != null
-				&& triggerManager != null
-				&& turnState != null;
-	}
-
 	@SuppressWarnings("unchecked")
 	protected Stream<Entity> getEntities() {
 		return Stream.of(player1, player2).flatMap(p -> Stream.of(new Zones[]{
@@ -91,14 +143,31 @@ public class GameState implements Serializable {
 		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 
+	/**
+	 * Gets a map containing all the {@link EntityLocation} objects in this game state.
+	 *
+	 * @return A map.
+	 */
 	protected Map<Integer, EntityLocation> getMap() {
 		return getEntities().collect(Collectors.toMap(Entity::getId, Entity::getEntityLocation));
 	}
 
+	/**
+	 * Gets a difference between this game state and the {@code nextState} in terms of entity locations.
+	 *
+	 * @param nextState A state in the future.
+	 * @return The difference.
+	 */
 	public MapDifference<Integer, EntityLocation> to(GameState nextState) {
 		return Maps.difference(getMap(), nextState.getMap());
 	}
 
+	/**
+	 * Gets a {@link MapDifference} that corresponds to this state being the first state.
+	 *
+	 * @return A {@link Maps#difference(Map, Map)} call where an empty map is the left argument and this game state is
+	 * the right argument.
+	 */
 	public MapDifference<Integer, EntityLocation> start() {
 		return Maps.difference(Collections.emptyMap(), getMap());
 	}

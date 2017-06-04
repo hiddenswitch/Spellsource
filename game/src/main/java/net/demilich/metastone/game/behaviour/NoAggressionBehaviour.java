@@ -9,7 +9,7 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 
-public class NoAggressionBehaviour extends Behaviour {
+public class NoAggressionBehaviour extends AbstractBehaviour {
 
 	@Override
 	public String getName() {
