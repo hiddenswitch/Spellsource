@@ -347,4 +347,9 @@ public class Player extends Entity implements Serializable {
 	public EntityZone<Entity> getRemovedFromPlay() {
 		return removedFromPlay;
 	}
+
+	@Override
+	public int getOwner() {
+		return getId();
+	}
 }

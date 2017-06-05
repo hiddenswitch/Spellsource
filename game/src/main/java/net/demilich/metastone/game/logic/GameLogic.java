@@ -336,7 +336,7 @@ public class GameLogic implements Cloneable, Serializable {
 		Player player = context.getPlayer(playerId);
 		Card card = context.resolveCardReference(cardReference);
 		// A player cannot play a card the player does not own.
-		if (card.getOwner() != player.getOwner()
+		if (card.getOwner() != player.getId()
 				&& card.getOwner() != Entity.NO_OWNER) {
 			return false;
 		}
