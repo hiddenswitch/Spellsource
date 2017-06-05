@@ -619,7 +619,7 @@ public interface Games {
 	}
 
 	/**
-	 * A view of a card. This does not censor information from opposing player's—the calling method should handle
+	 * A view of a card. This does not censor information from opposing player's--the calling method should handle
 	 * the censoring.
 	 * @param workingContext The context to generate the client view for.
 	 * @param card The card entity.

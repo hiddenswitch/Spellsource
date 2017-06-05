@@ -52,6 +52,7 @@ public class RPC {
 	 *     // Register this instance as a host serving the Inventory API.
 	 *     RPC.register(this, Inventory.class, vertx.eventBus());
 	 * }
+	 * }
 	 * </pre>
 	 *
 	 * @param instance         An instance of a concrete implementation of {@code serviceInterface}. This is a host for
@@ -109,6 +110,7 @@ public class RPC {
 	 *     // Use the cards service. Note that we use "sync()" to idiomatically call this API "synchronously", in the
 	 *     // sense that continuations in Fibers are synchronous.
 	 *     GetCardResponse response = cards.sync().getCard(new GetCardRequest().withCardId("minion_boulderfist_ogre"));
+	 * }
 	 * }
 	 * </pre>
 	 *

@@ -43,7 +43,10 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Created by bberman on 11/27/16.
+ * An implementation of an <a href="https://www.linkedin.com/pulse/api-gateway-pattern-subhash-chandran">API gateway</a>
+ * for user-accessible services in Minionate.
+ *
+ * @see Server for a detailed description on how to add methods to the API gateway.
  */
 public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 	static Logger logger = LoggerFactory.getLogger(ServerImpl.class);

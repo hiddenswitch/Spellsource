@@ -12,6 +12,7 @@ import io.vertx.ext.mongo.FindOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.behaviour.threat.FeatureVector;
 import net.demilich.metastone.game.behaviour.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -35,6 +36,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	private List<UserRecord> bots = new ArrayList<>();
 	private Queue<UserRecord> unusedBots = new ConcurrentLinkedQueue<>();
 	private Map<String, UserRecord> botToGame = new HashMap<>();
+	private Class<? extends Behaviour> botBehaviour = GameStateValueBehaviour.class;
 
 	@Override
 	@Suspendable
@@ -59,7 +61,13 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	@Suspendable
 	public RequestActionResponse requestAction(RequestActionRequest request) {
 		RequestActionResponse response = new RequestActionResponse();
-		GameStateValueBehaviour behaviour = new GameStateValueBehaviour(FeatureVector.getFittest(), "Botty McBotface");
+		final Behaviour behaviour;
+		if (botBehaviour.equals(GameStateValueBehaviour.class)) {
+			behaviour = new GameStateValueBehaviour(FeatureVector.getFittest(), "Botty McBotface");
+		} else {
+			behaviour = new PlayRandomBehaviour();
+		}
+
 		GameContext context = new GameContext();
 		context.setLogic(new GameLogic());
 		context.setDeckFormat(request.format);
@@ -133,5 +141,13 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 		}
 
 		return unusedBots.poll();
+	}
+
+	public Class<? extends Behaviour> getBotBehaviour() {
+		return botBehaviour;
+	}
+
+	public void setBotBehaviour(Class<? extends Behaviour> botBehaviour) {
+		this.botBehaviour = botBehaviour;
 	}
 }

@@ -24,7 +24,7 @@ public class SecretCard extends SpellCard {
 	 *
 	 * @param context The context to use.
 	 * @param player  The player.
-	 * @return {@link true} if the secret can be cast.
+	 * @return {@code true} if the secret can be cast.
 	 * @see net.demilich.metastone.game.logic.GameLogic#canPlaySecret(Player, SecretCard) for complete rules on playing
 	 * secrets.
 	 */
