@@ -47,7 +47,7 @@ import java.util.stream.Stream;
  * }
  * // Chooses a random class and creates a player for it.
  * HeroClass heroClass1 = getRandomClass();
- * // Note "PlayRandomBehaviour"—
+ * // Note "PlayRandomBehaviour"--this is the delegate for player actions.
  * PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass1, deckFormat), new
  * PlayRandomBehaviour());
  * player1Config.setName("Player 1");

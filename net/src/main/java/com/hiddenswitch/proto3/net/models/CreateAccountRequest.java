@@ -59,7 +59,7 @@ public class CreateAccountRequest implements Serializable {
 
 	/**
 	 * The username. Visible to opponents. Not used for logging in.
-	 * @param name
+	 * @param name The name to set.
 	 * @return
 	 */
 	public CreateAccountRequest withName(final String name) {
@@ -69,7 +69,7 @@ public class CreateAccountRequest implements Serializable {
 
 	/**
 	 * The user's email address. Not visible to the public. Used for logging in.
-	 * @param emailAddress
+	 * @param emailAddress The email address.
 	 * @return
 	 */
 	public CreateAccountRequest withEmailAddress(final String emailAddress) {
@@ -79,7 +79,7 @@ public class CreateAccountRequest implements Serializable {
 
 	/**
 	 * A plaintext password. Must be at least 6 characters long.
-	 * @param password
+	 * @param password The password to set.
 	 * @return
 	 */
 	public CreateAccountRequest withPassword(final String password) {
@@ -89,7 +89,7 @@ public class CreateAccountRequest implements Serializable {
 
 	/**
 	 * Set to true if the account should be a special bot account, managed by the server to play bot games.
-	 * @param bot
+	 * @param bot Whether or not this is a bot
 	 * @return
 	 */
 	public CreateAccountRequest withBot(final boolean bot) {

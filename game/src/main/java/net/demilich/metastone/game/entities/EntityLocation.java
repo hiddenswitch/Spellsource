@@ -16,7 +16,7 @@ import java.io.Serializable;
  * should add it to an {@link EntityZone}, which sets that entity's {@link Entity#entityLocation}.
  * <p>
  * A location has a {@link Player}, {@link Zones} and {@link Integer} {@link #index} tuple that are comparable and
- * exclusive—only one entity can be in a given location at a given time. These locations are used to find entities like
+ * exclusive--only one entity can be in a given location at a given time. These locations are used to find entities like
  * {@link GameContext#tryFind(EntityReference)}, to support effects like {@link net.demilich.metastone.game.spells.AdjacentEffectSpell},
  * and to support networking effects and diffing for game state.
  * @see Entity#getEntityLocation() to look up an entity's current location.

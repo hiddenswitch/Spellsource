@@ -21,7 +21,7 @@ import java.util.function.Predicate;
  * objects can only be in one {@link net.demilich.metastone.game.entities.EntityZone} at a time, versus a plain {@link CardArrayList},
  * which is just an array of cards that various pieces of logic might want to {@link #shuffle()} or {@link #addRandomly(Card)} into.
  * <p>
- * Use {@link CardZone} for the {@link Zones#HAND}, {@link Zones#DECK} and {@link Zones#DISCOVER} zones—when a card should
+ * Use {@link CardZone} for the {@link Zones#HAND}, {@link Zones#DECK} and {@link Zones#DISCOVER} zones--when a card should
  * only be in one place at a time. Use a {@link CardArrayList} for situations where you need to e.g., get a list of cards from
  * an {@link EntityFilter}, shuffle them, and choose one from the top.
  *
@@ -181,7 +181,7 @@ public interface CardList extends Iterable<Card> {
 	/**
 	 * Removes the specified card instance by reference.
 	 * @param card The card to remove.
-	 * @return {@link true} if the card was removed.
+	 * @return {@code true} if the card was removed.
 	 */
 	boolean remove(Card card);
 

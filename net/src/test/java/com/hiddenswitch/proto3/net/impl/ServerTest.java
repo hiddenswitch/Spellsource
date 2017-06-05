@@ -24,6 +24,7 @@ import io.vertx.core.eventbus.SendContext;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
+import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Ignore;
@@ -259,6 +260,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 	public void deployServices(Vertx vertx, Handler<AsyncResult<ServerImpl>> done) {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
 		ServerImpl instance = new ServerImpl();
+		instance.bots.setBotBehaviour(PlayRandomBehaviour.class);
 		vertx.deployVerticle(instance, then -> {
 			deploymentId = then.result();
 			done.handle(Future.succeededFuture(instance));

@@ -482,7 +482,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param sourceReference The source of the spell (typically the card), or {@code null} if it doesn't have one.
 	 * @param targetReference The selected target of the spell, or {@code null} if it doesn't have one.
 	 * @param childSpell When true, this spell is implementing an effect rather than what a player would think of as a
-	 * "spell"—a single card.
+	 * "spell"--a single card.
 	 * @see #castSpell(int, SpellDesc, EntityReference, EntityReference, TargetSelection, boolean) for complete documentation.
 	 */
 	@Suspendable
@@ -1026,7 +1026,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 *
 	 * @param playerId         The player whose hero should equip the weapon.
 	 * @param weapon           The weapon to equip.
-	 * @param resolveBattlecry If {@link true}, the weapon's battlecry {@link Spell} should be cast. This is {@link
+	 * @param resolveBattlecry If {@code true}, the weapon's battlecry {@link Spell} should be cast. This is {@code
 	 *                         false} if the weapon was equipped due to some other effect (typically a random weapon
 	 *                         that coincidentally has a battlecry).
 	 */
@@ -1634,7 +1634,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 	/**
 	 * Should event logging be enabled? This logging lets you debug what has happened in the game, but comes with
-	 * a high performance cost—lots of memory used on big strings.
+	 * a high performance cost--lots of memory used on big strings.
 	 *
 	 * @return {@code true} if logging should be enabled.
 	 */
@@ -2292,7 +2292,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Deathrattles are not triggered if the minion moves directly to the graveyard ({@code peacefully == false}).
 	 *
 	 * @param minion     The minion to remove.
-	 * @param peacefully If {@code true}, remove the card typically due to a {@link ReturnMinionToHandSpell}—that is,
+	 * @param peacefully If {@code true}, remove the card typically due to a {@link ReturnMinionToHandSpell}--that is,
 	 *                   not due to a destruction of the minion. Otherwise, move the {@link Minion} to the {@link
 	 *                   Zones#SET_ASIDE_ZONE} where it will be found by {@link #checkForDeadEntities()}.
 	 * @see ReturnMinionToHandSpell for usage of {@link #removeMinion(Minion, boolean)}. Note, this and {@link
@@ -2654,7 +2654,6 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Playing a minion card places that minion onto the battlefield. This process is known as 'summoning'. Each minion
 	 * has a mana cost indicated by {@link MinionCard#getManaCost(GameContext, Player)}, which shows the amount of mana
 	 * you must pay to summon the minion.
-	 * <p>
 	 * <p>
 	 * Successfully playing a minion card will transform the card into the minion itself, which will then appear upon
 	 * the battleground represented by a portrait. Once summoned the minion will stay on the battlefield until it is
