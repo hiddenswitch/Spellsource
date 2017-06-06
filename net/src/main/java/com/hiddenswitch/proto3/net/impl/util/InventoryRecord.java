@@ -2,15 +2,21 @@ package com.hiddenswitch.proto3.net.impl.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.CaseFormat;
+import com.google.common.collect.Maps;
 import io.vertx.core.json.JsonObject;
+import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardParser;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.cards.desc.ParseUtils;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.toJson;
 
@@ -153,23 +159,26 @@ public class InventoryRecord extends MongoRecord {
 	}
 
 	@JsonIgnore
-	public int getFirstTimePlays() {
-		return (int) facts.getOrDefault("uniqueChampionIdsSize", 0);
-	}
-
-	@JsonIgnore
-	public String getLastMinionDestroyedCardId() {
-		return (String) facts.getOrDefault("lastMinionDestroyedCardId", null);
-	}
-
-	@JsonIgnore
-	public String getLastMinionDestroyedInventoryId() {
-		return (String) facts.getOrDefault("lastMinionDestroyedInventoryId", null);
-	}
-
-	@JsonIgnore
 	public String getCardId() {
 		return (String) cardDesc.get("id");
+	}
+
+	public Object getPersistentAttribute(Attribute attribute) {
+		return getFacts().getOrDefault(ParseUtils.toCamelCase(attribute.toString()), null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T getPersistentAttribute(Attribute attribute, T defaultValue) {
+		return (T) getFacts().getOrDefault(attribute.toKeyCase(), defaultValue);
+	}
+
+	public void putPersistentAttribute(Attribute attribute, Object value) {
+		getFacts().put(CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, attribute.toString()), value);
+	}
+
+	public AttributeMap getPersistentAttributes() {
+		return new AttributeMap(getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
+				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue)));
 	}
 }
 

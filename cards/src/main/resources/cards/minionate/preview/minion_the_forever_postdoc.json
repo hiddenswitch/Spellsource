@@ -13,7 +13,7 @@
   "manaCostModifier": {
     "class": "AttributeValueProvider",
     "target": "SELF",
-    "attribute": "FIRST_TIME_PLAYS"
+    "attribute": "UNIQUE_CHAMPION_IDS_SIZE"
   },
   "fileFormatVersion": 1
 }

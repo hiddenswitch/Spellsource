@@ -2,6 +2,8 @@ package com.hiddenswitch.proto3.net.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.annotations.Expose;
+import com.hiddenswitch.minionate.Minionate;
+import com.hiddenswitch.minionate.PersistAttributeHandler2;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.models.EventLogicRequest;
 import com.hiddenswitch.proto3.net.models.LogicResponse;
@@ -28,18 +30,7 @@ import java.util.Set;
  * A trigger that records persistent {@link Attribute} to a database. Think of it as analytics for {@link Entity}
  * objects where some analytics events have side effects on gameplay.
  * <p>
- * To implement a new persistence effect: <ul><li>Add an attribute to {@link Attribute} that describes the value you
- * want added to an {@link Entity} for looking up later.</li><li>Add the {@link GameEvent} that changes the {@link
- * Attribute} in {@link #types}.</li><li>Add a corresponding method to {@link Logic} for handling when that event
- * occurs, computing whatever you need to know and save to the database.</li><li>Make sure the attribute is included in
- * the {@link Logic#getDescriptionFromRecord(InventoryRecord, String, String)} method so that an {@link Entity},
- * typically cards in the player's deck, actually starts with the persisted values of the {@link
- * Attribute}.</li><li>Handle the event in {@link #onGameEvent(GameEvent)} and actually make the call to the {@link
- * #logic} to persist the new attribute value.</li></ul>
- * <p>
- * It's recommended to transfer as little data as possible to the
- * Unfortunately, this process is complicated. It could be simplified at a later date, but for this particular pipeline,
- * all aspects are unit and integration tested.
+ * To implement a new persistence effect, see {@link Minionate#persistAttribute(PersistAttributeHandler2)}.
  * <p>
  * In games with persistence effects enabled, the {@link PersistenceTrigger} is added to a list of "other triggers" that
  * are just always running throughout a game. In Minionate, this trigger is added by a {@link
@@ -84,68 +75,14 @@ public class PersistenceTrigger implements Trigger {
 			return;
 		}
 
-		LogicResponse response = null;
-
-		switch (event.getEventType()) {
-			case AFTER_PHYSICAL_ATTACK:
-				final AfterPhysicalAttackEvent event2 = (AfterPhysicalAttackEvent) event;
-				final String attackerInstanceId = event2.getAttacker().getCardInventoryId();
-				final String defenderInstanceId = event2.getDefender().getCardInventoryId();
-				if (attackerInstanceId == null
-						|| defenderInstanceId == null) {
-					// Can't process a non-alliance card.
-					return;
-				}
-
-				final EventLogicRequest<AfterPhysicalAttackEvent> request1 = new EventLogicRequest<>();
-				request1.setEvent(event2);
-				request1.setCardInventoryId(attackerInstanceId);
-				request1.setGameId(gameId);
-				request1.setUserId(event2.getAttacker().getUserId());
-
-				if (event2.getAttacker().hasPersistentEffects()) {
-					response = logic.uncheckedSync().afterPhysicalAttack(request1);
-				} else {
-					logic.async((AsyncResult<LogicResponse> ignored) -> {
-						// TODO: Do nothing really
-					}).afterPhysicalAttack(request1);
-				}
-				break;
-			case BEFORE_SUMMON:
-				final BeforeSummonEvent event1 = (BeforeSummonEvent) event;
-				final String cardInstanceId = event1.getMinion().getCardInventoryId();
-				if (cardInstanceId == null) {
-					// Can't process a non-alliance card.
-					return;
-				}
-
-				final EventLogicRequest<BeforeSummonEvent> request = new EventLogicRequest<>();
-				request.setEvent(event1);
-				request.setCardInventoryId(cardInstanceId);
-				request.setGameId(gameId);
-				request.setUserId(event1.getMinion().getUserId());
-				// Check if the entity has network side effects it needs to be notified about. Otherwise, do
-				// not wait.
-				if (event1.getMinion().hasPersistentEffects()) {
-					response = logic.uncheckedSync().beforeSummon(request);
-				} else {
-					// If we don't have effects we don't need to wait.
-					logic.async((AsyncResult<LogicResponse> ignored) -> {
-						// TODO: Do nothing really
-					}).beforeSummon(request);
-				}
-				break;
-			default:
-				break;
-		}
-
-		// Process the effects
-		if (response != null) {
-			if (!response.getGameIdsAffected().contains(event.getGameContext().getGameId())) {
+		for (LogicResponse logicResponse : Minionate.minionate().persistence().persistenceTrigger(logic, event)) {
+			// Process the effects
+			if (!logicResponse.getGameIdsAffected().contains(event.getGameContext().getGameId())) {
 				return;
 			}
 
-			for (Map.Entry<EntityReference, Map<Attribute, Object>> entry : response.getModifiedAttributes().entrySet()) {
+			for (Map.Entry<EntityReference, Map<Attribute, Object>> entry : logicResponse.getModifiedAttributes()
+					.entrySet()) {
 				Entity entity = event.getGameContext().tryFind(entry.getKey());
 
 				if (entity == null) {
@@ -156,7 +93,8 @@ public class PersistenceTrigger implements Trigger {
 					SpellDesc spell = SetAttributeSpell.create(entry.getKey(), kv.getKey(), kv.getValue());
 					// By setting childSpell to true, additional spell casting triggers don't get called
 					// But target overriding effects apply, as they should.
-					event.getGameContext().getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), null, true);
+					event.getGameContext().getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), null,
+							true);
 				}
 			}
 		}
@@ -238,11 +176,37 @@ public class PersistenceTrigger implements Trigger {
 	}
 
 
-	public Set<GameEventType> getTypes() {
-		return types;
+	public static EventLogicRequest<BeforeSummonEvent> beforeSummon(BeforeSummonEvent event) {
+		String gameId = event.getGameContext().getGameId();
+		final String cardInstanceId = event.getMinion().getCardInventoryId();
+		if (cardInstanceId == null) {
+			// Can't process a non-alliance card.
+			return null;
+		}
+
+		final EventLogicRequest<BeforeSummonEvent> request = new EventLogicRequest<>();
+		request.setEvent(event);
+		request.setCardInventoryId(cardInstanceId);
+		request.setGameId(gameId);
+		request.setUserId(event.getMinion().getUserId());
+		return request;
 	}
 
-	public void setTypes(Set<GameEventType> types) {
-		this.types = types;
+	public static EventLogicRequest<AfterPhysicalAttackEvent> afterPhysicalAttack(AfterPhysicalAttackEvent event) {
+		String gameId = event.getGameContext().getGameId();
+		final String attackerInstanceId = event.getAttacker().getCardInventoryId();
+		final String defenderInstanceId = event.getDefender().getCardInventoryId();
+		if (attackerInstanceId == null || defenderInstanceId == null) {
+			// Can't process a non-alliance card.
+			return null;
+		}
+
+		final EventLogicRequest<AfterPhysicalAttackEvent> request1 = new EventLogicRequest<>();
+		request1.setEvent(event);
+		request1.setCardInventoryId(attackerInstanceId);
+		request1.setGameId(gameId);
+		request1.setUserId(event.getAttacker().getUserId());
+		return request1;
+
 	}
 }
