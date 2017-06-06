@@ -4,6 +4,7 @@ import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -18,8 +19,7 @@ public enum Attribute {
 	/**
 	 * The base mana cost of the {@link Card}.
 	 *
-	 * @see Card#getManaCost(GameContext, Player) to get the mana cost of a card
-	 * considering all possible effects.
+	 * @see Card#getManaCost(GameContext, Player) to get the mana cost of a card considering all possible effects.
 	 */
 	BASE_MANA_COST,
 	/**
@@ -48,7 +48,8 @@ public enum Attribute {
 	 */
 	TEMPORARY_ATTACK_BONUS,
 	/**
-	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.BuffSpell} effects on the entity.
+	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.BuffSpell} effects on the
+	 * entity.
 	 */
 	HP_BONUS,
 	/**
@@ -57,7 +58,8 @@ public enum Attribute {
 	 */
 	AURA_ATTACK_BONUS,
 	/**
-	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that target
+	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that
+	 * target
 	 * the entity.
 	 */
 	AURA_HP_BONUS,
@@ -70,9 +72,11 @@ public enum Attribute {
 	 */
 	BASE_ATTACK,
 	/**
-	 * A conditional attack bonus for the {@link Actor} that corresponds to bonuses
-	 * from an {@link net.demilich.metastone.game.spells.EnrageSpell}, {@link net.demilich.metastone.game.spells.ConditionalAttackBonusSpell}
-	 * or {@link net.demilich.metastone.game.spells.SetAttributeSpell}. This bonus is typically controlled by a {@link net.demilich.metastone.game.spells.desc.condition.Condition}.
+	 * A conditional attack bonus for the {@link Actor} that corresponds to bonuses from an {@link
+	 * net.demilich.metastone.game.spells.EnrageSpell},
+	 * {@link net.demilich.metastone.game.spells.ConditionalAttackBonusSpell}
+	 * or {@link net.demilich.metastone.game.spells.SetAttributeSpell}. This bonus is typically controlled by a {@link
+	 * net.demilich.metastone.game.spells.desc.condition.Condition}.
 	 */
 	CONDITIONAL_ATTACK_BONUS,
 	/**
@@ -83,11 +87,12 @@ public enum Attribute {
 	RACE,
 	/**
 	 * When the entity has this attribute, it is destroyed. However, entities are also considered destroyed if their
-	 * {@link Actor#getHp()} is below zero or if they are in the {@link Zones#GRAVEYARD}
-	 * or {@link Zones#REMOVED_FROM_PLAY} zones.
+	 * {@link Actor#getHp()} is below zero or if they are in the {@link Zones#GRAVEYARD} or {@link
+	 * Zones#REMOVED_FROM_PLAY} zones.
 	 * <p>
-	 * At the end of {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)} in {@link GameLogic#checkForDeadEntities()},
-	 * all entities with {@link #DESTROYED} will be sent to the {@link Zones#GRAVEYARD}.
+	 * At the end of {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)} in {@link
+	 * GameLogic#checkForDeadEntities()}, all entities with {@link #DESTROYED} will be sent to the {@link
+	 * Zones#GRAVEYARD}.
 	 *
 	 * @see Actor#isDestroyed() for a complete list of situations where an {@link Actor} is destroyed.
 	 */
@@ -96,7 +101,8 @@ public enum Attribute {
 	 * Fatigue is a game mechanic that deals increasing damage to players who have already drawn all of the cards in
 	 * their deck, whenever they attempt to draw another card.
 	 * <p>
-	 * This attribute tracks how much damage a {@link net.demilich.metastone.game.entities.heroes.Hero} should take when
+	 * This attribute tracks how much damage a {@link net.demilich.metastone.game.entities.heroes.Hero} should take
+	 * when
 	 * the player draws a card.
 	 *
 	 * @see GameLogic#drawCard(int, Entity) for the complete usage of Fatigue.
@@ -142,9 +148,10 @@ public enum Attribute {
 	 */
 	UNLIMITED_ATTACKS,
 	/**
-	 * An {@link Actor} with {@link #TAUNT} must be targeted by opposing {@link net.demilich.metastone.game.actions.PhysicalAttackAction}
-	 * actions first. This means the {@link Minion} with {@link #TAUNT} acts like a shield for its other non-taunt minions
-	 * and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
+	 * An {@link Actor} with {@link #TAUNT} must be targeted by opposing
+	 * {@link net.demilich.metastone.game.actions.PhysicalAttackAction}
+	 * actions first. This means the {@link Minion} with {@link #TAUNT} acts like a shield for its other non-taunt
+	 * minions and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#getValidTargets(GameContext, Player, GameAction) for the
 	 * complete targeting logic.
@@ -170,8 +177,7 @@ public enum Attribute {
 	 * attack every turn.
 	 *
 	 * @see #WINDFURY for the attribute that sets the number of attacks an actor has to 2 at the start of the owner's
-	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
-	 * turn.
+	 * @see Actor#canAttackThisTurn() for the complete rules of attacking. turn.
 	 */
 	NUMBER_OF_ATTACKS,
 	/**
@@ -199,8 +205,8 @@ public enum Attribute {
 	 * <p>
 	 * This implements Brann Bronzebeard's text.
 	 *
-	 * @see GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) for the complete rules on
-	 * double battlecries.
+	 * @see GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) for the complete rules on double
+	 * battlecries.
 	 */
 	DOUBLE_BATTLECRIES,
 	/**
@@ -228,7 +234,8 @@ public enum Attribute {
 	/**
 	 * Marks that the {@link Actor} has a divine shield.
 	 * <p>
-	 * Divine shield causes the actor to take zero damage instead of the full damage it should receive the first time it
+	 * Divine shield causes the actor to take zero damage instead of the full damage it should receive the first
+	 * time it
 	 * receives damage.
 	 *
 	 * @see GameLogic#damageMinion(Actor, int) for the complete rules of damage.
@@ -238,18 +245,21 @@ public enum Attribute {
 	 * A {@link Minion} with stealth cannot be targeted by spells, hero powers or physical attacks until it attacks.
 	 * <p>
 	 * If a Stealthed minion attacks or deals any kind of damage, it will lose Stealth. This includes passive effects
-	 * such as that of Knife Juggler, and dealing combat damage in exchange, such as when being struck by a clumsy minion
-	 * such as Ogre Brute, or by a Misdirection-redirected minion.
+	 * such as that of Knife Juggler, and dealing combat damage in exchange, such as when being struck by a clumsy
+	 * minion such as Ogre Brute, or by a Misdirection-redirected minion.
 	 *
-	 * @see GameLogic#fight(Player, Actor, Actor) for the situation where physical attacks cause a minion to lose stealth.
-	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage originating
+	 * @see GameLogic#fight(Player, Actor, Actor) for the situation where physical attacks cause a minion to lose
+	 * stealth.
+	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage
+	 * originating
 	 * from a minion causes it to lose stealth.
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
 	 * logic behind selecting valid targets.
 	 */
 	STEALTH,
 	/**
-	 * A {@link net.demilich.metastone.game.cards.SecretCard} has this attribute to help spells find secrets in the deck.
+	 * A {@link net.demilich.metastone.game.cards.SecretCard} has this attribute to help spells find secrets in the
+	 * deck.
 	 * <p>
 	 * Cards marked secret should not be revealed to the opponent.
 	 */
@@ -272,7 +282,8 @@ public enum Attribute {
 	 */
 	CHOOSE_ONE,
 	/**
-	 * A {@link Minion} with this attribute causes both choose one options of a {@link Card} with {@link #CHOOSE_ONE} to
+	 * A {@link Minion} with this attribute causes both choose one options of a {@link Card} with
+	 * {@link #CHOOSE_ONE} to
 	 * be played.
 	 * <p>
 	 * This implements the Fandral Staghelm card text.
@@ -306,8 +317,8 @@ public enum Attribute {
 	 */
 	AURA_UNTARGETABLE_BY_SPELLS,
 	/**
-	 * When a {@link net.demilich.metastone.game.cards.SpellCard} that casts a
-	 * {@link net.demilich.metastone.game.spells.DamageSpell} has this attribute, its bonus from spell damage is doubled.
+	 * When a {@link net.demilich.metastone.game.cards.SpellCard} that casts a {@link
+	 * net.demilich.metastone.game.spells.DamageSpell} has this attribute, its bonus from spell damage is doubled.
 	 *
 	 * @see GameLogic#applySpellpower(Player, Entity, int) for an entity's spellpower contribution.
 	 */
@@ -349,8 +360,11 @@ public enum Attribute {
 	/**
 	 * When set, this {@link Minion} cannot target heroes with physical attacks.
 	 * <p>
-	 * Unusually, this attribute affects the {@link net.demilich.metastone.game.actions.PhysicalAttackAction#canBeExecutedOn(GameContext, Player, Entity)}
-	 * method instead of {@link net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List)}.
+	 * Unusually, this attribute affects the {@link net.demilich.metastone.game.actions
+	 * .PhysicalAttackAction#canBeExecutedOn(GameContext,
+	 * Player, Entity)} method instead of {@link net.demilich.metastone.game.logic.TargetLogic#filterTargets
+	 * (GameContext,
+	 * Player, GameAction, List)}.
 	 */
 	CANNOT_ATTACK_HEROES,
 	/**
@@ -379,16 +393,19 @@ public enum Attribute {
 	 */
 	HERO_POWER_CAN_TARGET_MINIONS,
 	/**
-	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an {@link net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider}
-	 * to feed a value into a spell (e.g., a healing spell may heal the owning player by the amount of damage last dealt
-	 * to an entity).
+	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an {@link
+	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e
+	 * .g.,
+	 * a healing spell may heal the owning player by the amount of damage last dealt to an entity).
 	 */
 	LAST_HIT,
 	/**
-	 * Marks that this {@link Entity} has a passive trigger that activates to a {@link net.demilich.metastone.game.events.GameEvent}.
+	 * Marks that this {@link Entity} has a passive trigger that activates to a {@link
+	 * net.demilich.metastone.game.events.GameEvent}.
 	 *
 	 * @see net.demilich.metastone.game.spells.trigger.TriggerManager for the complete rules on event triggering.
-	 * @see net.demilich.metastone.game.spells.trigger.SpellTrigger for the entity that corresponds to a passive trigger.
+	 * @see net.demilich.metastone.game.spells.trigger.SpellTrigger for the entity that corresponds to a passive
+	 * trigger.
 	 */
 	PASSIVE_TRIGGER,
 	/**
@@ -402,7 +419,8 @@ public enum Attribute {
 	 * This attribute keeps track of how many times the hero power was used this turn.
 	 *
 	 * @see GameLogic#canPlayCard(int, CardReference) for the implementation that determines whether or not a card,
-	 * like a hero power card, can be played.
+	 * like
+	 * a hero power card, can be played.
 	 */
 	HERO_POWER_USAGES,
 	/**
@@ -450,8 +468,8 @@ public enum Attribute {
 	 */
 	SPELLS_COST_HEALTH,
 	/**
-	 * When any {@link Entity} has this attribute in play, a {@link MinionCard} with the {@link net.demilich.metastone.game.entities.minions.Race#MURLOC}
-	 * costs health instead of mana.
+	 * When any {@link Entity} has this attribute in play, a {@link MinionCard} with the {@link
+	 * net.demilich.metastone.game.entities.minions.Race#MURLOC} costs health instead of mana.
 	 * <p>
 	 * This attribute implements Seadevil Stinger.
 	 */
@@ -469,10 +487,12 @@ public enum Attribute {
 	 */
 	TAKE_DOUBLE_DAMAGE,
 	/**
-	 * A {@link Minion} with this attribute cannot target a {@link Hero} the same turn it is summoned. This is typically
+	 * A {@link Minion} with this attribute cannot target a {@link Hero} the same turn it is summoned. This is
+	 * typically
 	 * given to a {@link #CHARGE} minion that would be too powerful it it could target a hero.
 	 *
-	 * @see net.demilich.metastone.game.actions.PhysicalAttackAction for a complete implementation of what a minion can attack.
+	 * @see net.demilich.metastone.game.actions.PhysicalAttackAction for a complete implementation of what a minion can
+	 * attack.
 	 */
 	CANNOT_ATTACK_HERO_ON_SUMMON,
 	/**
@@ -493,7 +513,8 @@ public enum Attribute {
 	 */
 	ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION,
 	/**
-	 * This attribute is a {@link String} that describes the inventory owner (as opposed to in-match owner) of the card.
+	 * This attribute is a {@link String} that describes the inventory owner (as opposed to in-match owner) of the
+	 * card.
 	 */
 	USER_ID,
 	/**
@@ -527,10 +548,14 @@ public enum Attribute {
 	 */
 	ALLIANCE_ID,
 	/**
-	 * Every time a player summons this {@link Minion} for the first time in their lifetime of the game, the {@link MinionCard}
-	 * is incremented. This attribute persists between matches.
+	 * Every time a player summons this {@link Minion} for the first time in their lifetime of the game, the {@link
+	 * MinionCard} is incremented. This attribute persists between matches.
 	 */
-	FIRST_TIME_PLAYS,
+	UNIQUE_CHAMPION_IDS_SIZE,
+	/**
+	 * Every unique user ID that has summoned this minion is stored in this attribute's array of {@link String}.
+	 */
+	UNIQUE_CHAMPION_IDS,
 	/**
 	 * Every time an {@link Actor} destroys a {@link Minion}, the {@link String} card ID is stored in this attribute.
 	 * This attribute persists between matches.
@@ -540,5 +565,9 @@ public enum Attribute {
 	 * Every time an {@link Actor} destroys a {@link Minion}, the {@link String} card inventory ID is stored in this
 	 * attribute. This attribute persists between matches.
 	 */
-	LAST_MINION_DESTROYED_INVENTORY_ID
+	LAST_MINION_DESTROYED_INVENTORY_ID;
+
+	public String toKeyCase() {
+		return ParseUtils.toCamelCase(this.toString());
+	}
 }

@@ -2,9 +2,10 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.net.Decks;
-import com.hiddenswitch.proto3.net.Inventory;
-import com.hiddenswitch.proto3.net.Logic;
+import com.hiddenswitch.minionate.Minionate;
+import com.hiddenswitch.minionate.PersistAttributeHandler2;
+import com.hiddenswitch.proto3.net.*;
+import com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.RpcClient;
@@ -40,18 +41,32 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		inventory = RPC.connect(Inventory.class, vertx.eventBus());
 		decks = RPC.connect(Decks.class, vertx.eventBus());
 		RPC.register(this, Logic.class, vertx.eventBus());
+
+		// Register new persistence effects
+		Minionate.minionate().persistAttribute(PersistAttributeHandler2.create(
+				"unique-champion-ids-1",
+				GameEventType.BEFORE_SUMMON,
+				this::beforeSummon,
+				PersistenceTrigger::beforeSummon));
+
+		Minionate.minionate().persistAttribute(PersistAttributeHandler2.create(
+				"last-minion-destroyed-1",
+				GameEventType.AFTER_PHYSICAL_ATTACK,
+				this::afterPhysicalAttack,
+				PersistenceTrigger::afterPhysicalAttack));
 	}
 
 	@Override
 	@Suspendable
-	public InitializeUserResponse initializeUser(InitializeUserRequest request) throws SuspendExecution, InterruptedException {
+	public InitializeUserResponse initializeUser(InitializeUserRequest request) throws SuspendExecution,
+			InterruptedException {
 		final InitializeUserResponse response = new InitializeUserResponse();
 		response.setDeckCreateResponses(new ArrayList<>());
 		final String userId = request.getUserId();
-		// At the moment, the player gets two copies of every card in Minionate (that's what a "starting collection" is)
+		// At the moment, the player gets two copies of every card in Minionate (that's what a "starting collection"
+		// is)
 		final CreateCollectionRequest startingCollectionRequest = CreateCollectionRequest.startingCollection(userId);
-		response.setCreateCollectionResponse(inventory.sync()
-				.createCollection(startingCollectionRequest));
+		response.setCreateCollectionResponse(inventory.sync().createCollection(startingCollectionRequest));
 		if (DeckCatalogue.getDecks().size() > 0) {
 			for (String deckName : STARTING_DECKS) {
 				Deck deck = DeckCatalogue.getDeckByName(deckName);
@@ -78,7 +93,8 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	@Override
 	public EndGameResponse endGame(EndGameRequest request) throws SuspendExecution, InterruptedException {
 		// Return all currently borrowed decks
-		final List<String> deckIds = request.getPlayers().stream().map(EndGameRequest.Player::getDeckId).collect(Collectors.toList());
+		final List<String> deckIds = request.getPlayers().stream().map(EndGameRequest.Player::getDeckId).collect
+				(Collectors.toList());
 		inventory.sync().returnToCollection(new ReturnToCollectionRequest().withDeckIds(deckIds));
 
 		return new EndGameResponse();
@@ -92,8 +108,7 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		// Create the decks
 		for (StartGameRequest.Player player : request.getPlayers()) {
 			GetCollectionResponse deckCollection = inventory.sync().getCollection(new GetCollectionRequest()
-					.withUserId(player.getUserId())
-					.withDeckId(player.getDeckId()));
+					.withUserId(player.getUserId()).withDeckId(player.getDeckId()));
 
 
 			// TODO: Get more attributes from database
@@ -105,27 +120,40 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 			Deck deck = new DeckWithId(player.getDeckId());
 			deck.setHeroClass(deckCollection.getHeroClass());
 			deck.setName(deckCollection.getName());
-			deckCollection.getInventoryRecords().stream()
-					.map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord, player.getUserId(), player.getDeckId()))
-					.map(CardDesc::createInstance)
-					.forEach(deck.getCards()::addCard);
+			deckCollection.getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord,
+					player.getUserId(), player.getDeckId())).map(CardDesc::createInstance).forEach(deck.getCards()
+					::addCard);
 
 			// TODO: Add player information as attached to the hero entity
-			response.getPlayers().set(player.getId(), new StartGameResponse.Player()
-					.withDeck(deck)
-					.withAttributes(playerAttributes));
+			response.getPlayers().set(player.getId(), new StartGameResponse.Player().withDeck(deck).withAttributes
+					(playerAttributes));
 
 		}
 
 		// Borrow the decks
-		final List<String> deckIds = request.getPlayers().stream().map(StartGameRequest.Player::getDeckId).collect(Collectors.toList());
+		final List<String> deckIds = request.getPlayers().stream().map(StartGameRequest.Player::getDeckId).collect
+				(Collectors.toList());
 		inventory.sync().borrowFromCollection(new BorrowFromCollectionRequest().withCollectionIds(deckIds));
 
 		return response;
 	}
 
+	/**
+	 * Handles the networked effects when a minion is summoned.
+	 * <p>
+	 * For example, The Forever Post-Doc is a minion whose text reads:
+	 * <p>
+	 * <code>Call to Arms: If this is the first time you've played this minion, permanently cost (1) less.</code>
+	 * <p>
+	 * Every time Forever Post-Doc is summoned, the Games service knows it must call beforeSummon to process the
+	 * minion's persistent side effects. It will return the correct change in its cost for the Games service to apply
+	 * to the live running game.
+	 *
+	 * @param request Information about the summoned minion.
+	 * @return The side effects of summoning the minion which affect the game.
+	 * @see com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger for more about how this method is used.
+	 */
 	@Suspendable
-	@Override
 	public LogicResponse beforeSummon(EventLogicRequest<BeforeSummonEvent> request) {
 		LogicResponse response = new LogicResponse();
 		final String userId = request.getUserId();
@@ -134,8 +162,7 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		final int entityId = request.getEntityId();
 		final BeforeSummonEvent beforeSummonEvent = request.getEvent();
 
-		if (beforeSummonEvent == null
-				|| beforeSummonEvent.getEventType() != GameEventType.BEFORE_SUMMON) {
+		if (beforeSummonEvent == null || beforeSummonEvent.getEventType() != GameEventType.BEFORE_SUMMON) {
 			throw new RuntimeException();
 		}
 
@@ -156,22 +183,37 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		response.withGameIdsAffected(Collections.singletonList(gameId))
 				.withEntityIdsAffected(Collections.singletonList(entityId));
 		AttributeMap map = new AttributeMap();
-		map.put(Attribute.FIRST_TIME_PLAYS, beforeSummonEvent.getMinion().getAttributeValue(Attribute.FIRST_TIME_PLAYS) + 1);
+		map.put(Attribute.UNIQUE_CHAMPION_IDS_SIZE, beforeSummonEvent.getMinion().getAttributeValue(Attribute
+				.UNIQUE_CHAMPION_IDS_SIZE) + 1);
 		response.getModifiedAttributes().put(new EntityReference(entityId), map);
 
 
 		return response;
 	}
 
-	@Override
+	/**
+	 * Handles the networked effects when an actor attacks another actor.
+	 * <p>
+	 * For example, Sourcing Specialist is a minion whose text reads:
+	 * <p>
+	 * <code>Call to Arms: Summon the last minion Sourcing Specialist destroyed.</code>
+	 * <p>
+	 * Whenever Sourcing Specialist attacks and destroys its target, this method will correctly record the last minion
+	 * it destroyed. Other code inside Sourcing Specialist looks up the attribute "LAST_MINION_DESTROYED_ID" to
+	 * summon the actual minion. The purpose of this method is to record the last minion destroyed, but not to actually
+	 * perform in-game summoning.
+	 *
+	 * @param request Information about the physical attack.
+	 * @return The side effects of the physical attack which affect the game.
+	 * @see com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger for more about how this method is used.
+	 */
 	@Suspendable
 	public LogicResponse afterPhysicalAttack(EventLogicRequest<AfterPhysicalAttackEvent> request) {
 		LogicResponse response = new LogicResponse();
 		final String gameId = request.getGameId();
 		final AfterPhysicalAttackEvent event = request.getEvent();
 
-		if (event == null
-				|| event.getEventType() != GameEventType.AFTER_PHYSICAL_ATTACK) {
+		if (event == null || event.getEventType() != GameEventType.AFTER_PHYSICAL_ATTACK) {
 			throw new RuntimeException();
 		}
 
@@ -201,5 +243,12 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		response.getModifiedAttributes().put(new EntityReference(entityId), map);
 
 		return response;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public PersistAttributeResponse persistAttribute(PersistAttributeRequest request) {
+		return new PersistAttributeResponse().withResponse(Minionate.minionate().persistence().getHandler2(request
+				.getId()).onLogicRequest(request.getRequest()));
 	}
 }
