@@ -24,9 +24,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
 import java.util.stream.Collectors;
 
-/**
- * Created by bberman on 4/10/17.
- */
 public class UnityClient {
 	private ApiClient apiClient;
 	private DefaultApi api;

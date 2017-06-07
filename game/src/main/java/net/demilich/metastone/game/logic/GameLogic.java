@@ -692,7 +692,7 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Deals spell damage to a target.
+	 * Deals damage to a target.
 	 *
 	 * @param player     The originating player of the damage.
 	 * @param target     The target to damage.

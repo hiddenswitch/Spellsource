@@ -297,6 +297,10 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 						context.assertTrue(count > 0L, "There is at least one inventory item that has the attribute that we configured to listen for.");
 					}));
 		}));
+	}
+
+	@Test
+	public void testTotalDamageDealt(TestContext context) {
 
 	}
 

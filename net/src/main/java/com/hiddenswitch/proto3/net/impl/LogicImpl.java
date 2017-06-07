@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.base.CaseFormat;
 import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.minionate.LegacyPersistenceHandler;
+import com.hiddenswitch.minionate.PersistenceContext;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger;
 import com.hiddenswitch.proto3.net.models.*;
@@ -55,6 +56,16 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 				GameEventType.AFTER_PHYSICAL_ATTACK,
 				this::afterPhysicalAttack,
 				PersistenceTrigger::afterPhysicalAttack));
+
+		Minionate.minionate().persistAttribute(
+				"total-damage-dealt-1",
+				GameEventType.AFTER_PHYSICAL_ATTACK,
+				Attribute.TOTAL_DAMAGE_DEALT,
+				(PersistenceContext<AfterPhysicalAttackEvent> context) -> {
+					int attackerDamage = context.event().getDamageDealt();
+					context.update(context.event().getAttacker().getReference(), attackerDamage);
+				}
+		);
 	}
 
 	@Override

@@ -5,12 +5,12 @@ import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 
-class RpcClientImpl<T> implements RpcClient<T> {
+class NetworkedRpcClient<T> implements RpcClient<T> {
 	private final T proxy;
 	Handler next;
 	boolean sync;
 
-	RpcClientImpl(T proxy) {
+	NetworkedRpcClient(T proxy) {
 		this.proxy = proxy;
 	}
 

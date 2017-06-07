@@ -49,14 +49,42 @@ public class Minionate {
 		return instance;
 	}
 
+	/**
+	 * Persist an attribute when the given game event occurs, using the provided handler to compute the new value and
+	 * to persist it with a {@link PersistenceContext#update(EntityReference, Object)} call inside the handler.
+	 * <p>
+	 * For example, let's say we want to persist the total amount of damage a minion has dealt:
+	 * <pre>
+	 *     {@code
+	 *     		Minionate.minionate().persistAttribute(
+	 *              "total-damage-dealt-1",
+	 *              GameEventType.AFTER_PHYSICAL_ATTACK,
+	 *              Attribute.TOTAL_DAMAGE_DEALT,
+	 *              (PersistenceContext<AfterPhysicalAttackEvent> context) -> {
+	 *                  int attackerDamage = context.event().getDamageDealt();
+	 *                  context.update(context.event().getAttacker().getReference(), attackerDamage);
+	 *              }
+	 *          );
+	 *     }
+	 * </pre>
+	 *
+	 * @param id        A name of your choosing to uniquely identify this persistence handler.
+	 * @param event     The type of event that this handler should be triggered for.
+	 * @param attribute The attribute this handler will be persisting.
+	 * @param handler   A handler that is passed a {@link PersistenceContext}, whose methods provide the event and a
+	 *                  mechanism to update the entity with a new attribute value (both in the {@link GameContext} where
+	 *                  this event is currently taking place and in the entity's corresponding {@link
+	 *                  com.hiddenswitch.proto3.net.impl.util.InventoryRecord} where the value will be persisted in a
+	 *                  database.
+	 * @param <T>       The type of the event that corresponds to the provided {@link GameEventType}.
+	 */
 	public <T extends GameEvent> void persistAttribute(String id, GameEventType event, Attribute attribute, Handler<PersistenceContext<T>> handler) {
 		persistAttributeHandlers.put(id, new PersistenceHandler<>(Sync.fiberHandler(handler), id, event, attribute));
 	}
 
 	/**
-	 * @param legacyHandler A handler for game events and logic requests.
-	 *                      See {@link LegacyPersistenceHandler#create(String, GameEventType, Function, Function)}
-	 *                      for an easy way to create this handler.
+	 * @param legacyHandler A handler for game events and logic requests. See {@link LegacyPersistenceHandler#create(String,
+	 *                      GameEventType, Function, Function)} for an easy way to create this handler.
 	 * @param <T>           The event type.
 	 */
 	public <T extends GameEvent> void persistAttribute(LegacyPersistenceHandler<T> legacyHandler) {

@@ -200,6 +200,20 @@ public class TargetLogic implements Serializable {
 		return filterTargets(context, player, action, potentialTargets);
 	}
 
+	/**
+	 * Resolves an {@link EntityReference} from the point of view of the specified player, context and entity.
+	 *
+	 * @param context   The game context
+	 * @param player    The player from whose point of view this resolution is being interpreted. For example, {@link
+	 *                  EntityReference#FRIENDLY_MINIONS} will interpret this argument as friendly.
+	 * @param source    The entity from whose point of view this resolution is being interpreted. For example, {@link
+	 *                  EntityReference#SELF} will return the source entity; {@link EntityReference#MINIONS_TO_RIGHT}
+	 *                  will refer to the right of this argument.
+	 * @param targetKey The {@link EntityReference} to interpet.
+	 * @return {@code null} if no target key is specified or an {@link EntityReference#NONE} was passed; otherwise, a
+	 * possibly empty list of entities.
+	 * @see EntityReference for more about the meaning of the specified entitiy references that are groups of entities.
+	 */
 	public List<Entity> resolveTargetKey(GameContext context, Player player, Entity source, EntityReference targetKey) {
 		if (targetKey == null || targetKey.equals(EntityReference.NONE)) {
 			return null;
