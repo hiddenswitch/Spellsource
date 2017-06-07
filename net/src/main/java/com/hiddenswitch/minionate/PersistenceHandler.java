@@ -5,9 +5,6 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 
-/**
- * Created by bberman on 6/7/17.
- */
 class PersistenceHandler<T extends GameEvent> {
 	private Handler<PersistenceContext<T>> handler;
 	private String id;

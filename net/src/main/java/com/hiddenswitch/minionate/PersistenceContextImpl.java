@@ -25,6 +25,7 @@ class PersistenceContextImpl<T extends GameEvent> implements PersistenceContext<
 	private Attribute attribute;
 
 	@Override
+	@Suspendable
 	public T event() {
 		return event;
 	}
@@ -53,6 +54,8 @@ class PersistenceContextImpl<T extends GameEvent> implements PersistenceContext<
 			return 0L;
 		}
 
+		// TODO: We should probably queue these calls until the end of the match, and then execute only the latest
+		// value when the match is over. We don't have to save this stuff in real time. Maybe a new queued Rpc primitive?
 		PersistAttributeResponse response = logic.uncheckedSync().persistAttribute(new PersistAttributeRequest()
 				.withInventoryIds(inventoryIds)
 				.withAttribute(attribute)
@@ -68,5 +71,16 @@ class PersistenceContextImpl<T extends GameEvent> implements PersistenceContext<
 		}
 
 		return response.getUpdated();
+	}
+
+	@Override
+	public Attribute attribute() {
+		return attribute;
+	}
+
+	@Override
+	@Suspendable
+	public Logic logic() {
+		return logic.uncheckedSync();
 	}
 }

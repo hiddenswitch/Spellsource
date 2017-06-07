@@ -997,6 +997,8 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	 * @param source    The entity from whose point of view this method interprets the {@link EntityReference}.
 	 * @param targetKey The {@link EntityReference}.
 	 * @return A potentially empty list of entities.
+	 * @see TargetLogic#resolveTargetKey(GameContext, Player, Entity, EntityReference) for more about how target
+	 * resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
 		return targetLogic.resolveTargetKey(this, player, source, targetKey);

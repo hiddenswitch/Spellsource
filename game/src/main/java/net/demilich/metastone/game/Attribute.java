@@ -250,8 +250,7 @@ public enum Attribute {
 	 *
 	 * @see GameLogic#fight(Player, Actor, Actor) for the situation where physical attacks cause a minion to lose
 	 * stealth.
-	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage
-	 * originating
+	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage originating
 	 * from a minion causes it to lose stealth.
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
 	 * logic behind selecting valid targets.
@@ -418,8 +417,7 @@ public enum Attribute {
 	/**
 	 * This attribute keeps track of how many times the hero power was used this turn.
 	 *
-	 * @see GameLogic#canPlayCard(int, CardReference) for the implementation that determines whether or not a card,
-	 * like
+	 * @see GameLogic#canPlayCard(int, CardReference) for the implementation that determines whether or not a card, like
 	 * a hero power card, can be played.
 	 */
 	HERO_POWER_USAGES,
@@ -565,7 +563,11 @@ public enum Attribute {
 	 * Every time an {@link Actor} destroys a {@link Minion}, the {@link String} card inventory ID is stored in this
 	 * attribute. This attribute persists between matches.
 	 */
-	LAST_MINION_DESTROYED_INVENTORY_ID;
+	LAST_MINION_DESTROYED_INVENTORY_ID,
+	/**
+	 * Every time an {@link Actor} damages a target, increment this attribute with the total amount of damage dealt.
+	 */
+	TOTAL_DAMAGE_DEALT;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
