@@ -109,7 +109,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	private UserRecord pollBot() throws SuspendExecution, InterruptedException {
 		if (bots.size() == 0) {
 			// Retrieve existing bot accounts
-			List<JsonObject> botIdRecords = Accounts.findAccounts(getMongo(), json("bot", true), new FindOptions().setFields(json("_id", 1)));
+			List<JsonObject> botIdRecords = Accounts.find(getMongo(), json("bot", true), new FindOptions().setFields(json("_id", 1)));
 
 			List<String> botIds = botIdRecords.stream().map(o -> o.getString("_id")).collect(Collectors.toList());
 

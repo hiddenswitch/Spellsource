@@ -2,8 +2,11 @@ package com.hiddenswitch.proto3.net.impl;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.proto3.net.Games;
+import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.client.ApiClient;
 import com.hiddenswitch.proto3.net.client.ApiException;
@@ -24,7 +27,10 @@ import io.vertx.core.eventbus.SendContext;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
+import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
+import net.demilich.metastone.game.events.GameEventType;
+import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Ignore;
@@ -34,9 +40,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 
 /**
  * Created by bberman on 2/18/17.
@@ -256,10 +265,45 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		unwrap();
 	}
 
+	@Test
+	public void testMinionatePersistenceApi(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		wrap(context);
+		ConcurrentLinkedQueue<Long> queue = new ConcurrentLinkedQueue<Long>();
+
+		// Use all random yogg as a test attribute
+		vertx.runOnContext(ignored -> {
+			Minionate.minionate().persistAttribute("yogg-only-1", GameEventType.TURN_END, Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION, persistenceContext -> {
+				// Save the turn number to this yogg attribute
+				long updated = persistenceContext.update(EntityReference.ALL_MINIONS, persistenceContext.event().getGameContext().getTurn());
+				queue.add(updated);
+			});
+		});
+
+
+		// Start a game and assert that there are entities with all random yogg
+		vertx.executeBlocking(done -> {
+			UnityClient client = new UnityClient(context);
+			client.createUserAccount();
+			client.matchmakeAndPlayAgainstAI();
+			client.waitUntilDone();
+			getContext().assertTrue(client.isGameOver());
+			done.complete();
+		}, context.asyncAssertSuccess(also -> {
+			context.assertTrue(queue.stream().anyMatch(l -> l > 0L), "Any number of the entities updated was greater than zero.");
+			service.inventory.getMongo().count(Inventory.INVENTORY,
+					json("facts." + Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION.toKeyCase(), json("$exists", true)),
+					context.asyncAssertSuccess(count -> {
+						context.assertTrue(count > 0L, "There is at least one inventory item that has the attribute that we configured to listen for.");
+					}));
+		}));
+
+	}
+
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<ServerImpl>> done) {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
-		ServerImpl instance = new ServerImpl();
+		ServerImpl instance = new ServerImpl().withEmbeddedConfiguration();
 		instance.bots.setBotBehaviour(PlayRandomBehaviour.class);
 		vertx.deployVerticle(instance, then -> {
 			deploymentId = then.result();

@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 public class PersistAttributeResponse implements Serializable {
 	private LogicResponse logicResponse;
+	private Long updated;
 
 	public LogicResponse getLogicResponse() {
 		return logicResponse;
@@ -20,6 +21,19 @@ public class PersistAttributeResponse implements Serializable {
 
 	public PersistAttributeResponse withResponse(LogicResponse logicResponse) {
 		this.logicResponse = logicResponse;
+		return this;
+	}
+
+	public Long getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Long updated) {
+		this.updated = updated;
+	}
+
+	public PersistAttributeResponse withUpdated(final Long updated) {
+		this.updated = updated;
 		return this;
 	}
 }

@@ -28,7 +28,7 @@ import java.lang.reflect.Proxy;
  * @param <T>
  */
 abstract class AbstractService<T extends AbstractService<T>> extends SyncVerticle {
-	private static Logger logger = LoggerFactory.getLogger(AbstractService.class);
+	protected static Logger logger = LoggerFactory.getLogger(AbstractService.class);
 	private MongoClient mongo;
 	private static boolean embeddedConfigured;
 	private static LocalMongo localMongoServer;

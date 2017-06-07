@@ -12,7 +12,7 @@ import java.util.function.Function;
  * A more powerful persistent attribute handler.
  * @param <T>
  */
-public interface PersistAttributeHandler2<T extends GameEvent> {
+public interface LegacyPersistenceHandler<T extends GameEvent> {
 	/**
 	 * Returns the game event that triggers a change in the attribute value.
 	 *
@@ -58,11 +58,11 @@ public interface PersistAttributeHandler2<T extends GameEvent> {
 	 * @param onGameEvent    A converter from a game event to a logic response that runs locally to the {@link
 	 *                       com.hiddenswitch.proto3.net.Games} service.
 	 * @param <R>            The type of the event.
-	 * @return A handler to pass to {@link Minionate#persistAttribute(PersistAttributeHandler2)}.
+	 * @return A handler to pass to {@link Minionate#persistAttribute(LegacyPersistenceHandler)}.
 	 */
-	static <R extends GameEvent> PersistAttributeHandler2<R> create(String id, GameEventType type,
-			Function<EventLogicRequest<R>, LogicResponse> onLogicRequest, Function<R, EventLogicRequest<R>>
+	static <R extends GameEvent> LegacyPersistenceHandler<R> create(String id, GameEventType type,
+	                                                                Function<EventLogicRequest<R>, LogicResponse> onLogicRequest, Function<R, EventLogicRequest<R>>
 			onGameEvent) {
-		return new PersistAttributeHandlerImpl<R>(type, id, onLogicRequest, onGameEvent);
+		return new LegacyPersistenceHandlerImpl<R>(type, id, onLogicRequest, onGameEvent);
 	}
 }

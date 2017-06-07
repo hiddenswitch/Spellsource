@@ -20,7 +20,9 @@ import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomUtils;
 
 /**
- * The Card class is an entity that contains card information. Cards are typically in the hand, deck or graveyard. They
+ * The Card class is an entity that contains card information.
+ * <p>
+ * Cards are typically in the hand, deck or graveyard. They
  * are playable from the hand or as hero powers. They may be created by other cards. Like all entities, they have
  * attributes and are mutable.
  */
@@ -126,6 +128,7 @@ public abstract class Card extends Entity {
 
 	/**
 	 * The base mana cost of a card. This is the cost that's written on the card.
+	 *
 	 * @return The base mana cost of a card.
 	 */
 	public int getBaseManaCost() {

@@ -2,6 +2,7 @@ package net.demilich.metastone.game.logic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -82,7 +83,7 @@ public class TargetLogic implements Serializable {
 				return player.getHero();
 			} else if (player.getHero().getWeapon() != null && player.getHero().getWeapon().getId() == targetId) {
 				return player.getHero().getWeapon();
-			} 
+			}
 
 			for (Actor minion : player.getMinions()) {
 				if (minion.getId() == targetId) {

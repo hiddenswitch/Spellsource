@@ -2,13 +2,11 @@ package com.hiddenswitch.proto3.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.minionate.PersistAttributeHandler2;
+import com.hiddenswitch.minionate.LegacyPersistenceHandler;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
-import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -16,7 +14,7 @@ import org.apache.commons.lang3.RandomStringUtils;
  * A Logic service that handles complex game logic.
  * <p>
  * To implement a new persistence effect, see
- * {@link com.hiddenswitch.minionate.Minionate#persistAttribute(PersistAttributeHandler2)}.
+ * {@link com.hiddenswitch.minionate.Minionate#persistAttribute(LegacyPersistenceHandler)}.
  */
 public interface Logic {
 	/**

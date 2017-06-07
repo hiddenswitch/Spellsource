@@ -2,8 +2,9 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.base.CaseFormat;
 import com.hiddenswitch.minionate.Minionate;
-import com.hiddenswitch.minionate.PersistAttributeHandler2;
+import com.hiddenswitch.minionate.LegacyPersistenceHandler;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger;
 import com.hiddenswitch.proto3.net.models.*;
@@ -43,13 +44,13 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		RPC.register(this, Logic.class, vertx.eventBus());
 
 		// Register new persistence effects
-		Minionate.minionate().persistAttribute(PersistAttributeHandler2.create(
+		Minionate.minionate().persistAttribute(LegacyPersistenceHandler.create(
 				"unique-champion-ids-1",
 				GameEventType.BEFORE_SUMMON,
 				this::beforeSummon,
 				PersistenceTrigger::beforeSummon));
 
-		Minionate.minionate().persistAttribute(PersistAttributeHandler2.create(
+		Minionate.minionate().persistAttribute(LegacyPersistenceHandler.create(
 				"last-minion-destroyed-1",
 				GameEventType.AFTER_PHYSICAL_ATTACK,
 				this::afterPhysicalAttack,
@@ -248,7 +249,17 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	@Override
 	@SuppressWarnings("unchecked")
 	public PersistAttributeResponse persistAttribute(PersistAttributeRequest request) {
-		return new PersistAttributeResponse().withResponse(Minionate.minionate().persistence().getHandler2(request
-				.getId()).onLogicRequest(request.getRequest()));
+		if (request.getRequest() != null) {
+			return new PersistAttributeResponse().withResponse(Minionate.minionate().persistence().getLogicHandler(request
+					.getId()).onLogicRequest(request.getRequest()));
+		} else {
+			final String attributeName = request.getAttribute().toKeyCase();
+			MongoClientUpdateResult update = Inventory.update(getMongo(), request.getInventoryIds(), json(
+					"$set", json("facts." + attributeName, request.getNewValue()))
+			);
+			return new PersistAttributeResponse().withUpdated(update.getDocModified());
+		}
+
+
 	}
 }

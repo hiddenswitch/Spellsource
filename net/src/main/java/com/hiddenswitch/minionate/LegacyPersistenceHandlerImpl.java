@@ -10,13 +10,13 @@ import java.util.function.Function;
 /**
  * Created by bberman on 6/6/17.
  */
-class PersistAttributeHandlerImpl<T extends GameEvent> implements PersistAttributeHandler2<T> {
+class LegacyPersistenceHandlerImpl<T extends GameEvent> implements LegacyPersistenceHandler<T> {
 	private GameEventType gameEventType;
 	private String id;
 	private Function<EventLogicRequest<T>, LogicResponse> onLogicRequest;
 	private Function<T, EventLogicRequest<T>> onGameEvent;
 
-	public PersistAttributeHandlerImpl(GameEventType gameEventType, String id, Function<EventLogicRequest<T>,
+	public LegacyPersistenceHandlerImpl(GameEventType gameEventType, String id, Function<EventLogicRequest<T>,
 			LogicResponse> onLogicRequest, Function<T, EventLogicRequest<T>> onGameEvent) {
 		this.gameEventType = gameEventType;
 		this.id = id;
