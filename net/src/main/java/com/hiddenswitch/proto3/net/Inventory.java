@@ -3,6 +3,15 @@ package com.hiddenswitch.proto3.net;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.models.*;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.MongoClient;
+import io.vertx.ext.mongo.MongoClientUpdateResult;
+import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.sync.Sync;
+
+import java.util.List;
+
+import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 
 /**
  * Provides methods to manage a player's persistent inventory.
@@ -106,4 +115,19 @@ public interface Inventory {
 	 * @throws InterruptedException
 	 */
 	SetCollectionResponse setCollection(SetCollectionRequest setCollectionRequest) throws SuspendExecution, InterruptedException;
+
+	@Suspendable
+	static MongoClientUpdateResult update(MongoClient client, JsonObject query, JsonObject update) {
+		return Sync.awaitResult(h -> client.updateCollectionWithOptions(INVENTORY, query, update, new UpdateOptions().setMulti(true), h));
+	}
+
+	@Suspendable
+	static MongoClientUpdateResult update(MongoClient client, String inventoryId, JsonObject update) {
+		return Sync.awaitResult(h -> client.updateCollectionWithOptions(INVENTORY, json("_id", inventoryId), update, new UpdateOptions().setMulti(true), h));
+	}
+
+	@Suspendable
+	static MongoClientUpdateResult update(MongoClient client, List<String> inventoryIds, JsonObject update) {
+		return Sync.awaitResult(h -> client.updateCollectionWithOptions(INVENTORY, json("_id", json("$in", inventoryIds)), update, new UpdateOptions().setMulti(true), h));
+	}
 }

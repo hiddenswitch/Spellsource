@@ -3,12 +3,9 @@ package com.hiddenswitch.proto3.net.impl.util;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.annotations.Expose;
 import com.hiddenswitch.minionate.Minionate;
-import com.hiddenswitch.minionate.PersistAttributeHandler2;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.models.EventLogicRequest;
-import com.hiddenswitch.proto3.net.models.LogicResponse;
 import com.hiddenswitch.proto3.net.util.RpcClient;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
@@ -17,20 +14,14 @@ import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.spells.SetAttributeSpell;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
-
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * A trigger that records persistent {@link Attribute} to a database. Think of it as analytics for {@link Entity}
  * objects where some analytics events have side effects on gameplay.
  * <p>
- * To implement a new persistence effect, see {@link Minionate#persistAttribute(PersistAttributeHandler2)}.
+ * To implement a new persistence effect, see {@link Minionate#persistAttribute(String, GameEventType, Attribute, Handler)}.
  * <p>
  * In games with persistence effects enabled, the {@link PersistenceTrigger} is added to a list of "other triggers" that
  * are just always running throughout a game. In Minionate, this trigger is added by a {@link
@@ -63,11 +54,6 @@ public class PersistenceTrigger implements Trigger {
 		this.context = context;
 	}
 
-	/**
-	 * These are the current events we are listening to.
-	 */
-	private Set<GameEventType> types = EnumSet.of(GameEventType.BEFORE_SUMMON, GameEventType.AFTER_PHYSICAL_ATTACK);
-
 	@Override
 	@Suspendable
 	public void onGameEvent(GameEvent event) {
@@ -75,29 +61,7 @@ public class PersistenceTrigger implements Trigger {
 			return;
 		}
 
-		for (LogicResponse logicResponse : Minionate.minionate().persistence().persistenceTrigger(logic, event)) {
-			// Process the effects
-			if (!logicResponse.getGameIdsAffected().contains(event.getGameContext().getGameId())) {
-				return;
-			}
-
-			for (Map.Entry<EntityReference, Map<Attribute, Object>> entry : logicResponse.getModifiedAttributes()
-					.entrySet()) {
-				Entity entity = event.getGameContext().tryFind(entry.getKey());
-
-				if (entity == null) {
-					continue;
-				}
-
-				for (Map.Entry<Attribute, Object> kv : entry.getValue().entrySet()) {
-					SpellDesc spell = SetAttributeSpell.create(entry.getKey(), kv.getKey(), kv.getValue());
-					// By setting childSpell to true, additional spell casting triggers don't get called
-					// But target overriding effects apply, as they should.
-					event.getGameContext().getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), null,
-							true);
-				}
-			}
-		}
+		Minionate.minionate().persistence().persistenceTrigger(logic, event);
 	}
 
 	@Override
@@ -107,7 +71,7 @@ public class PersistenceTrigger implements Trigger {
 
 	@Override
 	public boolean canFire(GameEvent event) {
-		return types.contains(event.getEventType());
+		return true;
 	}
 
 	@Override
@@ -123,7 +87,7 @@ public class PersistenceTrigger implements Trigger {
 
 	@Override
 	public boolean interestedIn(GameEventType eventType) {
-		return types.contains(eventType);
+		return true;
 	}
 
 	@Override

@@ -51,6 +51,10 @@ public class UnityClient {
 		this.turnsToPlay = new AtomicInteger(turnsToPlay);
 	}
 
+	public void createUserAccount() {
+		createUserAccount(null);
+	}
+
 	public void createUserAccount(String username) {
 		if (username == null) {
 			username = RandomStringUtils.randomAlphanumeric(10);
@@ -80,6 +84,10 @@ public class UnityClient {
 
 	public void gameOver(Handler<UnityClient> handler) {
 		onGameOver = io.vertx.ext.sync.Sync.fiberHandler(handler);
+	}
+
+	public void matchmakeAndPlayAgainstAI() {
+		matchmakeAndPlayAgainstAI(null);
 	}
 
 	public void matchmakeAndPlayAgainstAI(String deckId) {
@@ -267,6 +275,7 @@ public class UnityClient {
 				Strand.sleep(1000);
 			} catch (SuspendExecution | InterruptedException suspendExecution) {
 				suspendExecution.printStackTrace();
+				return;
 			}
 
 			time += 1f;

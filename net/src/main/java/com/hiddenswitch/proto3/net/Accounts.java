@@ -38,7 +38,7 @@ public interface Accounts {
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
-	static MongoClientUpdateResult updateAccount(MongoClient client, String userId, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
+	static MongoClientUpdateResult update(MongoClient client, String userId, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
 		return awaitResult(h -> client.updateCollection(Accounts.USERS, json("_id", userId), updateCommand, h));
 	}
 
@@ -52,7 +52,7 @@ public interface Accounts {
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
-	static List<JsonObject> findAccounts(MongoClient client, JsonObject query, FindOptions options) throws SuspendExecution, InterruptedException {
+	static List<JsonObject> find(MongoClient client, JsonObject query, FindOptions options) throws SuspendExecution, InterruptedException {
 		return awaitResult(h -> client.findWithOptions(Accounts.USERS, query, options, h));
 	}
 
@@ -65,7 +65,7 @@ public interface Accounts {
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
-	static List<UserRecord> findAccounts(MongoClient client, JsonObject query) throws SuspendExecution, InterruptedException {
+	static List<UserRecord> find(MongoClient client, JsonObject query) throws SuspendExecution, InterruptedException {
 		List<JsonObject> records = awaitResult(h -> client.find(Accounts.USERS, query, h));
 		return fromJson(records, UserRecord.class);
 	}

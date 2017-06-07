@@ -7,9 +7,16 @@ import com.hiddenswitch.proto3.net.PersistAttributeResponse;
 import com.hiddenswitch.proto3.net.models.EventLogicRequest;
 import com.hiddenswitch.proto3.net.models.LogicResponse;
 import com.hiddenswitch.proto3.net.util.RpcClient;
+import io.vertx.core.Handler;
+import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
+import net.demilich.metastone.game.spells.SetAttributeSpell;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.*;
 import java.util.function.Function;
@@ -17,13 +24,14 @@ import java.util.function.Function;
 /**
  * The Minionate Server API. Access it with {@link Minionate#minionate()}.
  * <p>
- * This class provides an easy way to provide a new persist attribute with {@link #persistAttribute(PersistAttributeHandler2)}.
+ * This class provides an easy way to provide a new persist attribute with {@link #persistAttribute(LegacyPersistenceHandler)}.
  * <p>
  * It will provide more APIs for features in the future.
  */
 public class Minionate {
 	private static Minionate instance;
-	private Map<String, PersistAttributeHandler2> persistAttributeHandlers2 = new HashMap<>();
+	private Map<String, LegacyPersistenceHandler> legacyPersistenceHandlers = new HashMap<>();
+	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
 
 	private Minionate() {
 	}
@@ -41,19 +49,18 @@ public class Minionate {
 		return instance;
 	}
 
-	public <T extends GameEvent> void persistAttribute(Attribute attribute, GameEventType eventType,
-	                                                   PersistAttributeHandler<T> handler) {
-		throw new UnsupportedOperationException("Persisting an attribute with the easy API is not ready yet.");
+	public <T extends GameEvent> void persistAttribute(String id, GameEventType event, Attribute attribute, Handler<PersistenceContext<T>> handler) {
+		persistAttributeHandlers.put(id, new PersistenceHandler<>(Sync.fiberHandler(handler), id, event, attribute));
 	}
 
 	/**
 	 * @param legacyHandler A handler for game events and logic requests.
-	 *                      See {@link PersistAttributeHandler2#create(String, GameEventType, Function, Function)}
+	 *                      See {@link LegacyPersistenceHandler#create(String, GameEventType, Function, Function)}
 	 *                      for an easy way to create this handler.
 	 * @param <T>           The event type.
 	 */
-	public <T extends GameEvent> void persistAttribute(PersistAttributeHandler2<T> legacyHandler) {
-		persistAttributeHandlers2.put(legacyHandler.getId(), legacyHandler);
+	public <T extends GameEvent> void persistAttribute(LegacyPersistenceHandler<T> legacyHandler) {
+		legacyPersistenceHandlers.put(legacyHandler.getId(), legacyHandler);
 	}
 
 	/**
@@ -65,21 +72,25 @@ public class Minionate {
 		return new Persistence();
 	}
 
-	@FunctionalInterface
-	public interface PersistAttributeHandler<T extends GameEvent> {
-		@Suspendable
-		void onGameEvent(T gameEvent);
-	}
-
 	/**
 	 * An internal utility class for implementing persistence features.
 	 */
 	public class Persistence {
 		@SuppressWarnings("unchecked")
 		@Suspendable
-		public List<LogicResponse> persistenceTrigger(RpcClient<Logic> logic, GameEvent event) {
+		public void persistenceTrigger(RpcClient<Logic> logic, GameEvent event) {
+			// First, execute the regular handlers. They will persist normally.
+			for (PersistenceHandler handler1 : persistAttributeHandlers.values()) {
+				if (handler1.getType() != event.getEventType()) {
+					continue;
+				}
+
+				handler1.getHandler().handle(new PersistenceContextImpl(event, logic, handler1.getId(), handler1.getAttribute()));
+			}
+
+			// Now, execute the legacy handlers.
 			List<LogicResponse> responses = new ArrayList<>();
-			for (PersistAttributeHandler2 handler2 : persistAttributeHandlers2.values()) {
+			for (LegacyPersistenceHandler handler2 : legacyPersistenceHandlers.values()) {
 				if (!handler2.getGameEvent().equals(event.getEventType())) {
 					continue;
 				}
@@ -98,11 +109,30 @@ public class Minionate {
 					responses.add(response.getLogicResponse());
 				}
 			}
-			return responses;
+
+			for (LogicResponse response : responses) {
+				GameContext context = event.getGameContext();
+				for (Map.Entry<EntityReference, Map<Attribute, Object>> entry : response.getModifiedAttributes()
+						.entrySet()) {
+
+					Entity entity = context.tryFind(entry.getKey());
+
+					if (entity == null) {
+						continue;
+					}
+
+					for (Map.Entry<Attribute, Object> kv : entry.getValue().entrySet()) {
+						SpellDesc spell = SetAttributeSpell.create(entry.getKey(), kv.getKey(), kv.getValue());
+						// By setting childSpell to true, additional spell casting triggers don't get called
+						// But target overriding effects apply, as they should.
+						context.getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), null, true);
+					}
+				}
+			}
 		}
 
-		public PersistAttributeHandler2 getHandler2(String id) {
-			return persistAttributeHandlers2.get(id);
+		public LegacyPersistenceHandler getLogicHandler(String id) {
+			return legacyPersistenceHandlers.get(id);
 		}
 	}
 }
