@@ -14,6 +14,7 @@ import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.models.CreateGameSessionRequest;
 import com.hiddenswitch.proto3.net.models.CurrentMatchRequest;
+import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.UnityClient;
 import com.hiddenswitch.proto3.net.util.VertxBufferInputStream;
@@ -209,7 +210,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 
 
 		final Handler<SendContext> interceptor = h -> {
-			if (h.message().address().equals("com.hiddenswitch.proto3.net.Games::createGameSession")) {
+			if (h.message().address().equals(RPC.getAddress(Games.class, games -> games.createGameSession(null)))) {
 				Message<Buffer> message = h.message();
 				VertxBufferInputStream inputStream = new VertxBufferInputStream(message.body());
 

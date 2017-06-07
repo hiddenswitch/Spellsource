@@ -6,7 +6,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.Message;
 import io.vertx.ext.sync.Sync;
 
 import java.io.IOException;
@@ -17,10 +16,15 @@ import java.lang.reflect.Method;
 import static io.vertx.ext.sync.Sync.awaitFiber;
 
 /**
- * Created by bberman on 2/1/17.
+ * This invocation handler provides the infrastructure for calling a service method in a synchronous or asynchronous
+ * way.
+ *
+ * @param <T> The service to which this invocation handler makes calls.
+ * @see InvocationHandler for more about proxies.
+ * @see java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler) for more about proxies.
  */
-public class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
-	NetworkedRpcClient<T> ApiClient;
+class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
+	NetworkedRpcClient<T> rpcClient;
 	protected String name;
 	EventBus eb;
 
@@ -34,13 +38,13 @@ public class VertxInvocationHandler<T> implements InvocationHandler, Serializabl
 			return method.invoke(proxy, args);
 		}
 
-		final boolean sync = ApiClient.sync;
-		final Handler<AsyncResult<Object>> next = ApiClient.next;
+		final boolean sync = rpcClient.sync;
+		final Handler<AsyncResult<Object>> next = rpcClient.next;
 
 		final String methodName = method.getName();
 
-		ApiClient.next = null;
-		ApiClient.sync = false;
+		rpcClient.next = null;
+		rpcClient.sync = false;
 
 		if (next == null
 				&& !sync) {
@@ -73,21 +77,7 @@ public class VertxInvocationHandler<T> implements InvocationHandler, Serializabl
 			return;
 		}
 
-		eb.send(name + "::" + methodName, result, Sync.fiberHandler(new Handler<AsyncResult<Message<Object>>>() {
-			@Override
-			@Suspendable
-			public void handle(AsyncResult<Message<Object>> reply) {
-				if (reply.succeeded()) {
-					try {
-						Object body = Serialization.deserialize(new VertxBufferInputStream((Buffer) reply.result().body()));
-						next.handle(Future.succeededFuture(body));
-					} catch (IOException | ClassNotFoundException e) {
-						next.handle(Future.failedFuture(e));
-					}
-				} else {
-					next.handle(Future.failedFuture(reply.cause()));
-				}
-			}
-		}));
+		eb.send(name + "::" + methodName, result, Sync.fiberHandler(new ReplyHandler(next)));
 	}
+
 }

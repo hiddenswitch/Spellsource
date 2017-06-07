@@ -5,6 +5,7 @@ import com.hiddenswitch.proto3.net.common.NetworkBehaviour;
 import com.hiddenswitch.proto3.net.common.NullResult;
 import com.hiddenswitch.proto3.net.util.LoggerUtils;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.Player;
@@ -26,11 +27,13 @@ import java.util.function.Consumer;
  */
 public class GameLogicAsync extends GameLogic {
 	@Override
+	@Suspendable
 	protected void mulligan(Player player, boolean begins) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("GameLogicAsync::mulligan is unsupported. Use GameLogicAsync::mulliganAsync instead.");
+		Object ignored = Sync.awaitFiber(r -> mulliganAsync(player, begins, r1 -> r.handle(Future.succeededFuture(r1))));
 	}
 
 	@Override
+	@Suspendable
 	protected void mulliganAsync(Player player, boolean begins, Handler<Object> callback) {
 		FirstHand firstHand = new FirstHand(player, begins).invoke();
 
@@ -44,11 +47,13 @@ public class GameLogicAsync extends GameLogic {
 	}
 
 	@Override
+	@Suspendable
 	public void init(int playerId, boolean begins) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("GameLogicAsync::init is unsupported. Use GameLogicAsync::initAsync instead.");
+		Player ignored = Sync.awaitFiber(r -> initAsync(playerId, begins, r1 -> r.handle(Future.succeededFuture(r1))));
 	}
 
 	@Override
+	@Suspendable
 	public void initAsync(int playerId, boolean begins, Handler<Player> callback) {
 		Player player = context.getPlayer(playerId);
 

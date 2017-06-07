@@ -1,0 +1,28 @@
+{
+  "id": "minion_one_upper",
+  "name": "One Upper",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Guard. Revenge: If this minion has less attack than another on the battlefield, permanently gain +1 Attack.",
+  "collectible": true,
+  "set": "MINIONATE",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "fileFormatVersion": 1
+}
