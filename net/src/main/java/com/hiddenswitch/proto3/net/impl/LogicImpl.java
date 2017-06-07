@@ -13,15 +13,21 @@ import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.decks.DeckWithId;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEventType;
+import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.util.*;
@@ -63,7 +69,29 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 				Attribute.TOTAL_DAMAGE_DEALT,
 				(PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 					int attackerDamage = context.event().getDamageDealt();
-					context.update(context.event().getAttacker().getReference(), attackerDamage);
+					context.update(context.event().getAttacker().getReference(),
+							context.event().getAttacker().getAttributeValue(Attribute.TOTAL_DAMAGE_DEALT) + attackerDamage);
+				}
+		);
+
+		Minionate.minionate().persistAttribute(
+				"one-upper-1",
+				GameEventType.KILL,
+				Attribute.WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
+				(PersistenceContext<KillEvent> context) -> {
+					Actor victim = (Actor) context.event().getVictim();
+
+					final GameContext gameContext = context.event().getGameContext();
+					Optional<Minion> lowestAttackMinionStillOnBattlefield = gameContext.getEntities()
+							.filter(e -> e.getEntityType() == EntityType.MINION)
+							.filter(e -> e.getZone() == Zones.BATTLEFIELD)
+							.map(e -> (Minion) e)
+							.min(Comparator.comparingInt(Minion::getAttack));
+
+					if (lowestAttackMinionStillOnBattlefield.isPresent()
+							&& victim.getAttack() < lowestAttackMinionStillOnBattlefield.get().getAttack()) {
+						context.update(victim.getReference(), victim.getAttributeValue(Attribute.WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT) + 1);
+					}
 				}
 		);
 	}

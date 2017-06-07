@@ -14,14 +14,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Assert;
 
-import javax.websocket.CloseReason;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.*;
 import java.util.stream.Collectors;
 
 public class UnityClient {
@@ -123,6 +120,10 @@ public class UnityClient {
 		} catch (ApiException | URISyntaxException e) {
 			context.fail(e.getMessage());
 		}
+	}
+
+	public UnityClient contextPlay(IntegrationTestContext unityContext) {
+		return this;
 	}
 
 	private void play(MatchmakingQueuePutResponseUnityConnection unityConnection) throws URISyntaxException {

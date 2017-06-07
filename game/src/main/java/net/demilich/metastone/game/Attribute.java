@@ -567,7 +567,12 @@ public enum Attribute {
 	/**
 	 * Every time an {@link Actor} damages a target, increment this attribute with the total amount of damage dealt.
 	 */
-	TOTAL_DAMAGE_DEALT;
+	TOTAL_DAMAGE_DEALT,
+	/**
+	 * Whenever an {@link Actor} dies, increment this attribute by 1 if the actor had the lowest attack on the
+	 * battlefield.
+	 */
+	WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

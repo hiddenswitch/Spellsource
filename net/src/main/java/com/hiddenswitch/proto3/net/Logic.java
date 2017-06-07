@@ -20,7 +20,7 @@ public interface Logic {
 	/**
 	 * A constant specifying the default starting decks for every new player.
 	 */
-	String[] STARTING_DECKS = {"Basic Resurrector", "Basic Octopod Demo", "Basic Cyborg", "Basic Biologist", "Basic Gamer",/* "Test Discoveries",  "Test Battlecries"*/};
+	String[] STARTING_DECKS = {"Basic Resurrector", "Basic Octopod Demo", "Basic Cyborg", "Basic Biologist", "Basic Gamer"};
 
 	/**
 	 * Performs account creation action side effects, like adding the first cards to the player's collection,
@@ -29,8 +29,7 @@ public interface Logic {
 	 * Some users, like test users or some kinds of bots, will not need starting decks or starting inventory.
 	 *
 	 * @param request The user to "initialize" for.
-	 * @return Information about what this method did, like which decks it created and which cards the user was
-	 * awarded.
+	 * @return Information about what this method did, like which decks it created and which cards the user was awarded.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
