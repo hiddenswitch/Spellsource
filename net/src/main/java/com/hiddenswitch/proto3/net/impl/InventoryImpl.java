@@ -156,7 +156,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 			collectionId = request.getCollectionId();
 		} else if (request.getCardIds() != null
 				&& request.getUserId() != null) {
-			inventoryIds = createCardsForUser(request.getCardIds(), request.getUserId());
+			inventoryIds = createCardsForUser(request.getCardIds(), request.getUserId(), request.getCopies());
 			collectionId = request.getUserId();
 		} else {
 			throw new RuntimeException();
