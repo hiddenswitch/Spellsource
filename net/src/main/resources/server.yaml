@@ -90,11 +90,9 @@ definitions:
   LoginRequest:
     type: 'object'
     required:
-      - userId
+      - email
       - password
     properties:
-      userId:
-        type: 'string'
       email:
         type: 'string'
       password:

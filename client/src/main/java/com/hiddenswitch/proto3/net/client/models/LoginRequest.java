@@ -36,32 +36,11 @@ import java.io.Serializable;
  */
 
 public class LoginRequest  implements Serializable {
-  @SerializedName("userId")
-  private String userId = null;
-
   @SerializedName("email")
   private String email = null;
 
   @SerializedName("password")
   private String password = null;
-
-  public LoginRequest userId(String userId) {
-    this.userId = userId;
-    return this;
-  }
-
-   /**
-   * Get userId
-   * @return userId
-  **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getUserId() {
-    return userId;
-  }
-
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
 
   public LoginRequest email(String email) {
     this.email = email;
@@ -72,7 +51,7 @@ public class LoginRequest  implements Serializable {
    * Get email
    * @return email
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", required = true, value = "")
   public String getEmail() {
     return email;
   }
@@ -109,14 +88,13 @@ public class LoginRequest  implements Serializable {
       return false;
     }
     LoginRequest loginRequest = (LoginRequest) o;
-    return Objects.equals(this.userId, loginRequest.userId) &&
-        Objects.equals(this.email, loginRequest.email) &&
+    return Objects.equals(this.email, loginRequest.email) &&
         Objects.equals(this.password, loginRequest.password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, email, password);
+    return Objects.hash(email, password);
   }
 
   @Override
@@ -124,7 +102,6 @@ public class LoginRequest  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class LoginRequest {\n");
     
-    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");
