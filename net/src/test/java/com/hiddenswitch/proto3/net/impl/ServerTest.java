@@ -1,16 +1,20 @@
 package com.hiddenswitch.proto3.net.impl;
 
 import ch.qos.logback.classic.Level;
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.client.ApiClient;
 import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 import com.hiddenswitch.proto3.net.client.models.*;
-import com.hiddenswitch.proto3.net.models.CreateGameSessionRequest;
-import com.hiddenswitch.proto3.net.models.CurrentMatchRequest;
+import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
+import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
+import com.hiddenswitch.proto3.net.models.*;
+import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.UnityClient;
 import com.hiddenswitch.proto3.net.util.VertxBufferInputStream;
@@ -25,6 +29,11 @@ import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.DeckCatalogue;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Ignore;
@@ -32,11 +41,14 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by bberman on 2/18/17.
@@ -256,10 +268,64 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		unwrap();
 	}
 
+	@Test
+	public void testWeaponActionReceived(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		wrap(context);
+		Async async = context.async();
+		vertx.runOnContext(ignored -> {
+			AtomicBoolean didGetPlayWeaponAction = new AtomicBoolean(false);
+			UnityClient client = new UnityClient(context) {
+				@Override
+				protected void assertValidActions(ServerToClientMessage message) {
+					super.assertValidActions(message);
+
+					if (message.getMessageType() == MessageType.ON_REQUEST_ACTION
+							&& message.getActions().getWeapons() != null
+							&& message.getActions().getWeapons().size() > 0) {
+						didGetPlayWeaponAction.set(true);
+					}
+				}
+			};
+			final String[] deckId = new String[1];
+			vertx.executeBlocking(done -> {
+				client.createUserAccount(null);
+				Fiber<Void> fiber = new Fiber<Void>(Sync.getContextScheduler(), () -> {
+					DeckCreateResponse res = service.decks.createDeck(new DeckCreateRequest()
+							.withUserId(client.getAccount().getId())
+							.withHeroClass(HeroClass.ROGUE)
+							.withName("Test Weapon Deck")
+							.withCardIds(Collections.nCopies(30, "weapon_clandestine_laser")));
+					deckId[0] = res.getDeckId();
+				}).start();
+				while (deckId[0] == null) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				done.handle(Future.succeededFuture());
+			}, true, context.asyncAssertSuccess(then -> {
+				vertx.executeBlocking(done2 -> {
+					client.matchmakeAndPlayAgainstAI(deckId[0]);
+					client.waitUntilDone();
+					getContext().assertTrue(client.isGameOver());
+					getContext().assertTrue(didGetPlayWeaponAction.get());
+					done2.handle(Future.succeededFuture());
+				}, true, context.asyncAssertSuccess(finallyy -> {
+					async.complete();
+				}));
+			}));
+		});
+
+
+	}
+
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<ServerImpl>> done) {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
-		ServerImpl instance = new ServerImpl();
+		ServerImpl instance = new ServerImpl().withEmbeddedConfiguration();
 		instance.bots.setBotBehaviour(PlayRandomBehaviour.class);
 		vertx.deployVerticle(instance, then -> {
 			deploymentId = then.result();

@@ -425,17 +425,23 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 			MongoClient client = MongoClient.createShared(vertx, config);
 
+			matchmaking.withMongo(client);
+			cards.withMongo(client);
 			logic.withMongo(client);
 			accounts.withMongo(client);
 			inventory.withMongo(client);
 			decks.withMongo(client);
 			bots.withMongo(client);
+			this.withMongo(client);
 		} else {
+			matchmaking.withEmbeddedConfiguration();
+			cards.withEmbeddedConfiguration();
 			logic.withEmbeddedConfiguration();
 			accounts.withEmbeddedConfiguration();
 			inventory.withEmbeddedConfiguration();
 			decks.withEmbeddedConfiguration();
 			bots.withEmbeddedConfiguration();
+			this.withEmbeddedConfiguration();
 		}
 	}
 }
