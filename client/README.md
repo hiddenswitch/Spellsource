@@ -96,6 +96,9 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**decksGetAll**](docs/DefaultApi.md#decksGetAll) | **GET** /decks | 
 *DefaultApi* | [**decksPut**](docs/DefaultApi.md#decksPut) | **PUT** /decks | 
 *DefaultApi* | [**decksUpdate**](docs/DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
+*DefaultApi* | [**draftsChooseCard**](docs/DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards/{draftIndex} | 
+*DefaultApi* | [**draftsChooseHero**](docs/DefaultApi.md#draftsChooseHero) | **PUT** /drafts/hero | 
+*DefaultApi* | [**draftsGet**](docs/DefaultApi.md#draftsGet) | **GET** /drafts | 
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
@@ -120,6 +123,9 @@ Class | Method | HTTP request | Description
  - [DecksPutResponse](docs/DecksPutResponse.md)
  - [DecksUpdateCommand](docs/DecksUpdateCommand.md)
  - [DecksUpdateCommandPushInventoryIds](docs/DecksUpdateCommandPushInventoryIds.md)
+ - [DraftState](docs/DraftState.md)
+ - [DraftsChooseCardRequest](docs/DraftsChooseCardRequest.md)
+ - [DraftsChooseHeroRequest](docs/DraftsChooseHeroRequest.md)
  - [Entity](docs/Entity.md)
  - [EntityChangeSet](docs/EntityChangeSet.md)
  - [EntityChangeSetInner](docs/EntityChangeSetInner.md)

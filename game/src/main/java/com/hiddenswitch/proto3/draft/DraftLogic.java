@@ -45,9 +45,9 @@ public class DraftLogic {
 		// Determine the cards available to this player for the draft.
 		// For now, do not make later parts of the draft dependent on earlier parts.
 		getContext().getPublicState().setHeroClass(heroClass);
-		getContext().getPrivateState().cards = createDraftCards(heroClass);
+		getContext().getPrivateState().setCards(createDraftCards(heroClass));
 		// Initialize the first card choices
-		getContext().getPublicState().setCurrentCardChoices(getContext().getPrivateState().cards.get(0));
+		getContext().getPublicState().setCurrentCardChoices(getContext().getPrivateState().getCards().get(0));
 		getContext().getPublicState().setStatus(DraftStatus.IN_PROGRESS);
 		notifyPublicStateChanged();
 	}
@@ -209,13 +209,13 @@ public class DraftLogic {
 	}
 
 	private Random getRandom() {
-		return getContext().getPrivateState().random;
+		return getContext().getPrivateState().getRandom();
 	}
 
 	public void selectCard(int choiceIndex) {
 		final PublicDraftState publicState = getContext().getPublicState();
 		final List<String> selectedCards = publicState.getSelectedCards();
-		final List<List<String>> choices = getContext().getPrivateState().cards;
+		final List<List<String>> choices = getContext().getPrivateState().getCards();
 
 		// Are we making an invalid choice?
 		int draftIndex = getContext().getPublicState().getDraftIndex();
@@ -235,7 +235,7 @@ public class DraftLogic {
 			publicState.setCurrentCardChoices(Collections.emptyList());
 			publicState.setStatus(DraftStatus.COMPLETE);
 		} else {
-			publicState.setCurrentCardChoices(getContext().getPrivateState().cards.get(publicState.getDraftIndex()));
+			publicState.setCurrentCardChoices(getContext().getPrivateState().getCards().get(publicState.getDraftIndex()));
 		}
 
 		notifyPublicStateChanged();

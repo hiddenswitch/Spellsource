@@ -5,12 +5,9 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.MatchmakingTest;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
-import com.hiddenswitch.proto3.net.impl.ServiceTest;
+import com.hiddenswitch.proto3.net.impl.*;
 import com.hiddenswitch.proto3.net.models.MatchmakingRequest;
 import com.hiddenswitch.proto3.net.models.MatchmakingResponse;
-import com.hiddenswitch.proto3.net.impl.BotsImpl;
-import com.hiddenswitch.proto3.net.impl.GamesImpl;
-import com.hiddenswitch.proto3.net.impl.MatchmakingImpl;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -34,6 +31,7 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 	protected GamesImpl gameSessions;
 	private Logger logger = LoggerFactory.getLogger(MatchmakingTest.class);
 	private BotsImpl bots;
+	protected DraftImpl draft;
 
 	@Suspendable
 	protected String createTwoPlayersAndMatchmake() throws SuspendExecution, InterruptedException {
@@ -105,17 +103,22 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 		logger.info("Deploying services...");
 		gameSessions = new GamesImpl();
 		bots = new BotsImpl();
+		draft = new DraftImpl();
+
 		MatchmakingImpl instance = new MatchmakingImpl();
 		vertx.deployVerticle(gameSessions, then -> {
 			if (then.failed()) {
 				throw new AssertionError("failed to deploy game sessions: " + then.cause().getMessage());
 			}
-			vertx.deployVerticle(bots, then2 -> {
-				vertx.deployVerticle(instance, then3 -> {
-					logger.info("Services deployed.");
-					done.handle(Future.succeededFuture(instance));
+			vertx.deployVerticle(draft, then4 -> {
+				vertx.deployVerticle(bots, then2 -> {
+					vertx.deployVerticle(instance, then3 -> {
+						logger.info("Services deployed.");
+						done.handle(Future.succeededFuture(instance));
+					});
 				});
 			});
+
 		});
 	}
 }
