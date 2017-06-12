@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.draft;
 
 import com.hiddenswitch.proto3.net.util.Result;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
@@ -32,7 +33,15 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 				getLogic().initializeDraft();
 				selectHero();
 				break;
-			// TODO: Handle other cases for proper resuming
+			case SELECT_HERO:
+				selectHero();
+				break;
+			case IN_PROGRESS:
+				selectCard();
+				break;
+			case COMPLETE:
+				done.handle(Future.succeededFuture(this));
+				break;
 		}
 	}
 
@@ -40,7 +49,7 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 		getBehaviour().chooseHeroAsync(getPublicState().getHeroClassChoices(), this::onHeroSelected);
 	}
 
-	protected void onHeroSelected(AsyncResult<HeroClass> choice) {
+	public void onHeroSelected(AsyncResult<HeroClass> choice) {
 		if (choice.failed()) {
 			// TODO: Retry
 			return;
@@ -54,12 +63,15 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 		getBehaviour().chooseCardAsync(getLogic().getCardChoices(), this::onCardSelected);
 	}
 
-	protected void onCardSelected(AsyncResult<Integer> selectedCardResult) {
+	public void onCardSelected(AsyncResult<Integer> selectedCardResult) {
 		getLogic().selectCard(selectedCardResult.result());
 
 		if (getLogic().isDraftOver()) {
 			// TODO: What do we do when we're done? We should create a deck and populate it
-			handleDone.handle(new Result<>(this));
+			if (handleDone != null) {
+				handleDone.handle(new Result<>(this));
+			}
+
 		} else {
 			selectCard();
 		}

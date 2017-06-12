@@ -95,7 +95,7 @@ public class Player extends Entity implements Serializable {
 	/**
 	 * Use build from config to actually build the class.
 	 */
-	protected Player() {
+	public Player() {
 		this.playerZone.add(this);
 	}
 

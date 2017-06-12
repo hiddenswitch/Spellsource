@@ -66,14 +66,14 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 			Map<String, List<String>> cards = userCollection.getInventoryRecords().stream().collect(groupingBy(InventoryRecord::getCardId, mapping(InventoryRecord::getId, toList())));
 
 			for (String cardId : request.getCardIds()) {
-				List<String> entry = cards.getOrDefault(cardId, /* TODO: Create the card on the fly? */ Collections.emptyList());
+				List<String> entry = cards.getOrDefault(cardId, Collections.emptyList());
 				if (entry.size() == 0) {
 					// TODO: Create a copy of the card on the fly for now.
 					cards.put(cardId, inventory.sync().addToCollection(new AddToCollectionRequest()
 							.withCardIds(Collections.singletonList(cardId))
 							.withUserId(request.getUserId())
-							// Add 30 additional copies right away, because we're probably doing this for testing purposes right now
-							.withCopies(30)).getInventoryIds());
+							// Add just one copy for now (add cards on demand)
+							.withCopies(1)).getInventoryIds());
 
 					entry = cards.get(cardId);
 				}

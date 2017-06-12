@@ -13,12 +13,10 @@ import java.util.List;
 public class NullDraftBehaviour implements DraftBehaviour {
 	@Override
 	public void chooseHeroAsync(List<HeroClass> classes, Handler<AsyncResult<HeroClass>> result) {
-		result.handle(new Result<>(classes.get(0)));
 	}
 
 	@Override
 	public void chooseCardAsync(List<String> cards, Handler<AsyncResult<Integer>> selectedCardIndex) {
-		selectedCardIndex.handle(new Result<>(0));
 	}
 
 	@Override

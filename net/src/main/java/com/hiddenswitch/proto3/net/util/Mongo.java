@@ -2,7 +2,9 @@ package com.hiddenswitch.proto3.net.util;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.net.impl.util.MongoRecord;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -10,6 +12,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.*;
 
+import static com.hiddenswitch.proto3.net.util.QuickJson.fromJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 import java.util.List;
@@ -101,12 +104,30 @@ public class Mongo {
 
 	@Suspendable
 	public List<JsonObject> findWithOptions(String collection, JsonObject query, FindOptions options) {
-		return awaitResult(h -> client.findWithOptions(collection, query, options, h));
+		return awaitResult(h -> client.findWithOptions(collection, query, options, then -> h.handle(then.otherwiseEmpty())));
+	}
+
+	/**
+	 * @param collection
+	 * @param query
+	 * @param fields
+	 * @return
+	 */
+	@Suspendable
+	public JsonObject findOne(String collection, JsonObject query, JsonObject fields) {
+		return awaitResult(h -> client.findOne(collection, query, fields, then -> h.handle(then.otherwiseEmpty())));
 	}
 
 	@Suspendable
-	public JsonObject findOne(String collection, JsonObject query, JsonObject fields) {
-		return awaitResult(h -> client.findOne(collection, query, fields, h));
+	public <T extends MongoRecord> T findOne(String collection, JsonObject query, JsonObject fields, Class<? extends T> returnClass) {
+		final JsonObject obj = awaitResult(h -> client.findOne(collection, query, fields, then -> h.handle(then.otherwiseEmpty())));
+		return fromJson(obj, returnClass);
+	}
+
+	@Suspendable
+	public <T extends MongoRecord> T findOne(String collection, JsonObject query, Class<? extends T> returnClass) {
+		final JsonObject obj = awaitResult(h -> client.findOne(collection, query, null, then -> h.handle(then.otherwiseEmpty())));
+		return fromJson(obj, returnClass);
 	}
 
 	@Suspendable

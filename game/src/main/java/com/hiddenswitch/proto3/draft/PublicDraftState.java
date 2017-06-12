@@ -6,14 +6,12 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by bberman on 12/14/16.
- */
-public class PublicDraftState {
+public class PublicDraftState implements Serializable {
 	private List<HeroClass> heroClassChoices;
 	private List<String> currentCardChoices;
 	private HeroClass heroClass;
@@ -21,6 +19,9 @@ public class PublicDraftState {
 	private List<String> selectedCards;
 	private int cardsRemaining;
 	private int draftIndex;
+	private int wins;
+	private int losses;
+	private String deckId;
 
 	public PublicDraftState() {
 		this.setCurrentCardChoices(Collections.emptyList());
@@ -91,5 +92,29 @@ public class PublicDraftState {
 
 	public void setDraftIndex(int draftIndex) {
 		this.draftIndex = draftIndex;
+	}
+
+	public int getWins() {
+		return wins;
+	}
+
+	public void setWins(int wins) {
+		this.wins = wins;
+	}
+
+	public int getLosses() {
+		return losses;
+	}
+
+	public void setLosses(int losses) {
+		this.losses = losses;
+	}
+
+	public String getDeckId() {
+		return deckId;
+	}
+
+	public void setDeckId(String deckId) {
+		this.deckId = deckId;
 	}
 }

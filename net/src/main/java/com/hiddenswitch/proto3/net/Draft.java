@@ -1,7 +1,20 @@
 package com.hiddenswitch.proto3.net;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.draft.PublicDraftState;
+import com.hiddenswitch.proto3.net.client.models.DraftState;
+import com.hiddenswitch.proto3.net.impl.util.DraftRecord;
 import com.hiddenswitch.proto3.net.models.*;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.logic.GameLogic;
+
+import java.util.stream.Collectors;
 
 /**
  * The drafts service.
@@ -9,6 +22,11 @@ import com.hiddenswitch.proto3.net.models.*;
  * Provides a way to start and resume drafts.
  */
 public interface Draft {
+	/**
+	 * The collection name that contains a player's corresponding public and private draft state.
+	 */
+	String DRAFTS = "drafts";
+
 	/**
 	 * Gets the public and private state of the draft.
 	 * <p>
@@ -20,7 +38,7 @@ public interface Draft {
 	 * @return The public and private state of the draft. Includes the choices the player has for draft actions.
 	 */
 	@Suspendable
-	GetDraftResponse get(GetDraftRequest request);
+	DraftRecord get(GetDraftRequest request);
 
 	/**
 	 * Choose a hero (power) or select one of three cards during a draft.
@@ -29,7 +47,7 @@ public interface Draft {
 	 * @return The new choices.
 	 */
 	@Suspendable
-	DraftActionResponse doDraftAction(DraftActionRequest request);
+	DraftRecord doDraftAction(DraftActionRequest request) throws SuspendExecution, InterruptedException;
 
 	/**
 	 * Enters matchmaking with the deck built with a draft.
@@ -54,4 +72,30 @@ public interface Draft {
 	 */
 	@Suspendable
 	RetireDraftResponse retireDraftEarly(RetireDraftRequest request);
+
+	/**
+	 * Gets the client's draft state based on the given public draft state.
+	 *
+	 * @param inState The public draft state.
+	 * @return A client-ready draft state view.
+	 */
+	static DraftState toDraftState(PublicDraftState inState) {
+		GameContext workingContext = new GameContext(new Player(), new Player(), new GameLogic(), new DeckFormat().withCardSets(CardSet.MINIONATE));
+		return new DraftState()
+				.cardsRemaining(inState.getCardsRemaining())
+				.currentCardChoices(inState.getCurrentCardChoices().stream()
+						.map(CardCatalogue::getCardById)
+						.map(c -> Games.getEntity(workingContext, c, 0))
+						.collect(Collectors.toList()))
+				.deckId(inState.getDeckId())
+				.draftIndex(inState.getDraftIndex())
+				.heroClass(inState.getHeroClass().toString())
+				.heroClassChoices(inState.getHeroClassChoices().stream().map(HeroClass::toString).collect(Collectors.toList()))
+				.losses(inState.getLosses())
+				.selectedCards(inState.getSelectedCards().stream().map(CardCatalogue::getCardById)
+						.map(c -> Games.getEntity(workingContext, c, 0))
+						.collect(Collectors.toList()))
+				.status(DraftState.StatusEnum.valueOf(inState.getStatus().toString()))
+				.wins(inState.getWins());
+	}
 }

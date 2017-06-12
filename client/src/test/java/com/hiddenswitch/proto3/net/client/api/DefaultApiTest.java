@@ -33,6 +33,9 @@ import com.hiddenswitch.proto3.net.client.models.DecksGetAllResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksPutRequest;
 import com.hiddenswitch.proto3.net.client.models.DecksPutResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
+import com.hiddenswitch.proto3.net.client.models.DraftsChooseCardRequest;
+import com.hiddenswitch.proto3.net.client.models.DraftsChooseHeroRequest;
+import com.hiddenswitch.proto3.net.client.models.DraftState;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsResponse;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsRequest;
 import com.hiddenswitch.proto3.net.client.models.LoginResponse;
@@ -149,6 +152,53 @@ public class DefaultApiTest {
         String deckId = null;
         DecksUpdateCommand updateCommand = null;
         // DecksGetResponse response = api.decksUpdate(deckId, updateCommand);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Make a selection for the given draft index. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void draftsChooseCardTest() throws ApiException {
+        DraftsChooseCardRequest request = null;
+        // api.draftsChooseCard(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Choose a hero from your hero selection. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void draftsChooseHeroTest() throws ApiException {
+        DraftsChooseHeroRequest request = null;
+        // api.draftsChooseHero(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Gets your latest state of the draft. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void draftsGetTest() throws ApiException {
+        // DraftState response = api.draftsGet();
 
         // TODO: test validations
     }

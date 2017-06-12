@@ -1,17 +1,27 @@
 package com.hiddenswitch.proto3.draft;
 
-import net.demilich.metastone.game.cards.Card;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by bberman on 12/14/16.
- */
-public class PrivateDraftState {
-	public List<List<String>> cards;
-	public Random random = new Random();
+public class PrivateDraftState implements Serializable {
+	private List<List<String>> cards;
 
 	public PrivateDraftState() {
+	}
+
+	public List<List<String>> getCards() {
+		return cards;
+	}
+
+	public void setCards(List<List<String>> cards) {
+		this.cards = cards;
+	}
+
+	@JsonIgnore
+	public Random getRandom() {
+		return new Random();
 	}
 }
