@@ -20,7 +20,7 @@ public class DraftContextTest {
 		DraftContext context = new DraftContext();
 		context.accept(then -> {
 		});
-		assertEquals(context.getPublicState().selectedCards.size(), DraftLogic.DRAFTS);
-		assertEquals(context.getPublicState().status, DraftStatus.COMPLETE);
+		assertEquals(context.getPublicState().getSelectedCards().size(), DraftLogic.DRAFTS);
+		assertEquals(context.getPublicState().getStatus(), DraftStatus.COMPLETE);
 	}
 }

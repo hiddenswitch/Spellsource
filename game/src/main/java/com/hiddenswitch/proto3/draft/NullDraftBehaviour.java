@@ -3,7 +3,6 @@ package com.hiddenswitch.proto3.draft;
 import com.hiddenswitch.proto3.net.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class NullDraftBehaviour implements DraftBehaviour {
 	}
 
 	@Override
-	public void chooseCardAsync(List<Card> cards, Handler<AsyncResult<Integer>> selectedCardIndex) {
+	public void chooseCardAsync(List<String> cards, Handler<AsyncResult<Integer>> selectedCardIndex) {
 		selectedCardIndex.handle(new Result<>(0));
 	}
 

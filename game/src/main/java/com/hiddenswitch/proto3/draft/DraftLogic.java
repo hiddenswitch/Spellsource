@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by bberman on 12/14/16.
@@ -35,19 +36,19 @@ public class DraftLogic {
 			getContext().setPublicState(new PublicDraftState());
 		}
 
-		getContext().getPublicState().heroClassChoices = createHeroChoices();
-		getContext().getPublicState().status = DraftStatus.SELECT_HERO;
+		getContext().getPublicState().setHeroClassChoices(createHeroChoices());
+		getContext().getPublicState().setStatus(DraftStatus.SELECT_HERO);
 		notifyPublicStateChanged();
 	}
 
 	public void startDraft(HeroClass heroClass) {
 		// Determine the cards available to this player for the draft.
 		// For now, do not make later parts of the draft dependent on earlier parts.
-		getContext().getPublicState().heroClass = heroClass;
+		getContext().getPublicState().setHeroClass(heroClass);
 		getContext().getPrivateState().cards = createDraftCards(heroClass);
 		// Initialize the first card choices
-		getContext().getPublicState().currentCardChoices = getContext().getPrivateState().cards.get(0);
-		getContext().getPublicState().status = DraftStatus.IN_PROGRESS;
+		getContext().getPublicState().setCurrentCardChoices(getContext().getPrivateState().cards.get(0));
+		getContext().getPublicState().setStatus(DraftStatus.IN_PROGRESS);
 		notifyPublicStateChanged();
 	}
 
@@ -68,7 +69,7 @@ public class DraftLogic {
 		return Arrays.asList(classes.get(0), classes.get(1), classes.get(2));
 	}
 
-	private List<List<Card>> createDraftCards(HeroClass hero) {
+	private List<List<String>> createDraftCards(HeroClass hero) {
 		ArrayList<List<Card>> draftCards = new ArrayList<>(DRAFTS);
 
 		List<CardSet> equals = Arrays.asList(CardSet.BASIC,
@@ -189,21 +190,18 @@ public class DraftLogic {
 				// Shuffle then choose until we're done
 				cards.shuffle(getRandom());
 
-//				while (cards.getCount() > 0
-//						&& draftChoices.stream().map(Card::getCardId).distinct().count() < CARDS_PER_DRAFT) {
-					final Card nextCard = cards.removeFirst();
+				final Card nextCard = cards.removeFirst();
 
-					if (draftChoices.stream().anyMatch(c -> Objects.equals(c.getCardId(), nextCard.getCardId()))) {
-						continue;
-					}
+				if (draftChoices.stream().anyMatch(c -> Objects.equals(c.getCardId(), nextCard.getCardId()))) {
+					continue;
+				}
 
-					draftChoices.add(nextCard);
-//				}
+				draftChoices.add(nextCard);
 			}
 
 			draftCards.add(draftChoices);
 		}
-		return draftCards;
+		return draftCards.stream().map(d -> d.stream().map(Card::getCardId).collect(Collectors.toList())).collect(Collectors.toList());
 	}
 
 	private float roll() {
@@ -216,28 +214,28 @@ public class DraftLogic {
 
 	public void selectCard(int choiceIndex) {
 		final PublicDraftState publicState = getContext().getPublicState();
-		final List<Card> selectedCards = publicState.selectedCards;
-		final List<List<Card>> choices = getContext().getPrivateState().cards;
+		final List<String> selectedCards = publicState.getSelectedCards();
+		final List<List<String>> choices = getContext().getPrivateState().cards;
 
 		// Are we making an invalid choice?
-		int draftIndex = getContext().getPublicState().draftIndex;
+		int draftIndex = getContext().getPublicState().getDraftIndex();
 		if (choiceIndex >= choices.get(draftIndex).size()
 				|| choiceIndex < 0) {
 			throw new DraftError();
 		}
 
-		Card chosenCard = choices.get(draftIndex).get(choiceIndex);
+		String chosenCard = choices.get(draftIndex).get(choiceIndex);
 		selectedCards.add(chosenCard);
 
 
-		publicState.cardsRemaining--;
-		publicState.draftIndex++;
+		publicState.setCardsRemaining(publicState.getCardsRemaining() - 1);
+		publicState.setDraftIndex(publicState.getDraftIndex() + 1);
 
 		if (isDraftOver()) {
-			publicState.currentCardChoices = Collections.emptyList();
-			publicState.status = DraftStatus.COMPLETE;
+			publicState.setCurrentCardChoices(Collections.emptyList());
+			publicState.setStatus(DraftStatus.COMPLETE);
 		} else {
-			publicState.currentCardChoices = getContext().getPrivateState().cards.get(publicState.draftIndex);
+			publicState.setCurrentCardChoices(getContext().getPrivateState().cards.get(publicState.getDraftIndex()));
 		}
 
 		notifyPublicStateChanged();
@@ -248,14 +246,14 @@ public class DraftLogic {
 	}
 
 	public boolean isDraftOver() {
-		return getContext().getPublicState().cardsRemaining == 0;
+		return getContext().getPublicState().getCardsRemaining() == 0;
 	}
 
 	public DraftContext getContext() {
 		return context.get();
 	}
 
-	public List<Card> getCardChoices() {
-		return getContext().getPublicState().currentCardChoices;
+	public List<String> getCardChoices() {
+		return getContext().getPublicState().getCurrentCardChoices();
 	}
 }
