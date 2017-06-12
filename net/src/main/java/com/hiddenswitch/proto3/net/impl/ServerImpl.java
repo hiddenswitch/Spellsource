@@ -14,6 +14,7 @@ import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.models.MatchCancelResponse;
 import com.hiddenswitch.proto3.net.util.ApiKeyAuthHandler;
+import com.hiddenswitch.proto3.net.util.Mongo;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.WebResult;
 import io.vertx.core.Verticle;
@@ -31,12 +32,8 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.LoggerHandler;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -384,64 +381,11 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 		// Get the Mongo URL
 		if (System.getProperties().containsKey("mongo.url")
 				|| System.getenv().containsKey("MONGO_URL")) {
-
 			String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017/local"));
-			URI url;
-			try {
-				url = new URI(mongoUrl);
-			} catch (URISyntaxException e) {
-				logger.error("The Mongo URL is malformed. We got " + mongoUrl);
-				throw new RuntimeException(e);
-			}
 
-			final JsonObject config = new JsonObject().put("host", url.getHost())
-					.put("port", url.getPort());
-
-			if (url.getUserInfo() != null && !url.getUserInfo().isEmpty()) {
-				String username = url.getUserInfo().split(":")[0];
-				String password = url.getUserInfo().split(":")[1];
-
-				config.put("username", username)
-						.put("password", password);
-			}
-
-			String db_name = MongoClient.DEFAULT_DB_NAME;
-			if (url.getPath() != null && !url.getPath().isEmpty()) {
-				db_name = url.getPath().startsWith("/") ? url.getPath().substring(1) : url.getPath();
-			}
-			config.put("db_name", db_name);
-
-			String query = url.getQuery();
-			if (query != null
-					&& !query.isEmpty()
-					&& query.contains("authSource")) {
-
-				List<NameValuePair> params = URLEncodedUtils.parse(url, "UTF-8");
-				Optional<NameValuePair> authSource = params.stream().filter(p -> Objects.equals(p.getName(), "authSource")).findFirst();
-				if (authSource.isPresent()) {
-					config.put("authSource", authSource.get().getValue());
-				}
-			}
-
-			MongoClient client = MongoClient.createShared(vertx, config);
-
-			matchmaking.withMongo(client);
-			cards.withMongo(client);
-			logic.withMongo(client);
-			accounts.withMongo(client);
-			inventory.withMongo(client);
-			decks.withMongo(client);
-			bots.withMongo(client);
-			this.withMongo(client);
+			Mongo.mongo().connect(vertx, mongoUrl);
 		} else {
-			matchmaking.withEmbeddedConfiguration();
-			cards.withEmbeddedConfiguration();
-			logic.withEmbeddedConfiguration();
-			accounts.withEmbeddedConfiguration();
-			inventory.withEmbeddedConfiguration();
-			decks.withEmbeddedConfiguration();
-			bots.withEmbeddedConfiguration();
-			this.withEmbeddedConfiguration();
+			Mongo.mongo().startEmbedded().connect(vertx);
 		}
 	}
 }

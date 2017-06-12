@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
-import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.client.ApiClient;
@@ -14,7 +13,6 @@ import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.UnityClient;
 import com.hiddenswitch.proto3.net.util.VertxBufferInputStream;
@@ -29,14 +27,9 @@ import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -48,7 +41,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Created by bberman on 2/18/17.
@@ -325,7 +317,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<ServerImpl>> done) {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
-		ServerImpl instance = new ServerImpl().withEmbeddedConfiguration();
+		ServerImpl instance = new ServerImpl();
 		instance.bots.setBotBehaviour(PlayRandomBehaviour.class);
 		vertx.deployVerticle(instance, then -> {
 			deploymentId = then.result();

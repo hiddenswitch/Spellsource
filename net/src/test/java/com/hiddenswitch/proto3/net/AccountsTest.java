@@ -180,13 +180,9 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<AccountsImpl>> done) {
 		AccountsImpl instance = new AccountsImpl();
-		vertx.executeBlocking(fut -> {
-			instance.withEmbeddedConfiguration();
-			fut.complete();
-		}, then -> {
-			vertx.deployVerticle(instance, andThen -> {
-				done.handle(Future.succeededFuture(instance));
-			});
+
+		vertx.deployVerticle(instance, andThen -> {
+			done.handle(Future.succeededFuture(instance));
 		});
 	}
 
