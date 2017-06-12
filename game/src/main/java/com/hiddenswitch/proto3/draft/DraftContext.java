@@ -1,6 +1,5 @@
 package com.hiddenswitch.proto3.draft;
 
-import com.hiddenswitch.proto3.net.common.Recursive;
 import com.hiddenswitch.proto3.net.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
@@ -28,7 +27,7 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 
 		handleDone = done;
 		// Resume from the correct spot
-		switch (getPublicState().status) {
+		switch (getPublicState().getStatus()) {
 			case NOT_STARTED:
 				getLogic().initializeDraft();
 				selectHero();
@@ -38,7 +37,7 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 	}
 
 	protected void selectHero() {
-		getBehaviour().chooseHeroAsync(getPublicState().heroClassChoices, this::onHeroSelected);
+		getBehaviour().chooseHeroAsync(getPublicState().getHeroClassChoices(), this::onHeroSelected);
 	}
 
 	protected void onHeroSelected(AsyncResult<HeroClass> choice) {

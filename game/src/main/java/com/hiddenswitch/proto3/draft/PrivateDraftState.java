@@ -9,7 +9,7 @@ import java.util.Random;
  * Created by bberman on 12/14/16.
  */
 public class PrivateDraftState {
-	public List<List<Card>> cards;
+	public List<List<String>> cards;
 	public Random random = new Random();
 
 	public PrivateDraftState() {

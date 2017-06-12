@@ -2,7 +2,6 @@ package com.hiddenswitch.proto3.draft;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 public interface DraftBehaviour {
 	void chooseHeroAsync(List<HeroClass> classes, Handler<AsyncResult<HeroClass>> result);
 
-	void chooseCardAsync(List<Card> cards, Handler<AsyncResult<Integer>> selectedCardIndex);
+	void chooseCardAsync(List<String> cards, Handler<AsyncResult<Integer>> selectedCardIndex);
 
 	void notifyDraftState(PublicDraftState state);
 

@@ -3,11 +3,11 @@ package com.hiddenswitch.proto3.draft;
 import com.hiddenswitch.proto3.net.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import javafx.application.Platform;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.NotificationProxy;
 import net.demilich.metastone.game.behaviour.human.DraftSelectionOptions;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.heroes.MetaHero;
@@ -34,8 +34,8 @@ public class HumanDraftBehaviour implements DraftBehaviour {
 	}
 
 	@Override
-	public void chooseCardAsync(List<Card> cards, Handler<AsyncResult<Integer>> selectedCardIndex) {
-		this.cards = cards;
+	public void chooseCardAsync(List<String> cards, Handler<AsyncResult<Integer>> selectedCardIndex) {
+		this.cards = cards.stream().map(CardCatalogue::getCardById).collect(Collectors.toList());
 		this.chooseCardHandler = selectedCardIndex;
 		DraftSelectionOptions options = new DraftSelectionOptions(this, this.cards);
 		NotificationProxy.sendNotification(GameNotification.HUMAN_PROMPT_FOR_DRAFT, options);
