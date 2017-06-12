@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.models.QueryCardsRequest;
 import com.hiddenswitch.proto3.net.util.Result;
 import com.hiddenswitch.proto3.net.impl.ServiceTest;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
@@ -40,6 +41,6 @@ public class CardsTest extends ServiceTest<CardsImpl> {
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<CardsImpl>> done) {
 		CardsImpl cards = new CardsImpl();
-		vertx.deployVerticle(cards, then -> done.handle(new Result<>(cards)));
+		vertx.deployVerticle(cards, then -> done.handle(Future.succeededFuture(cards)));
 	}
 }

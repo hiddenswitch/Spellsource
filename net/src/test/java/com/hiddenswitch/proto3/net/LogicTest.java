@@ -384,10 +384,10 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<LogicImpl>> done) {
-		accounts = new AccountsImpl().withEmbeddedConfiguration();
-		cards = new CardsImpl().withEmbeddedConfiguration();
-		inventory = new InventoryImpl().withEmbeddedConfiguration();
-		decks = new DecksImpl().withEmbeddedConfiguration();
+		accounts = new AccountsImpl();
+		cards = new CardsImpl();
+		inventory = new InventoryImpl();
+		decks = new DecksImpl();
 		games = new GamesImpl();
 		LogicImpl instance = new LogicImpl();
 

@@ -10,6 +10,7 @@ import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Result;
 import com.hiddenswitch.proto3.net.impl.ServiceTest;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
@@ -123,17 +124,17 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<DecksImpl>> done) {
-		accounts = new AccountsImpl().withEmbeddedConfiguration();
+		accounts = new AccountsImpl();
 		cards = new CardsImpl();
-		inventory = new InventoryImpl().withEmbeddedConfiguration();
-		logic = new LogicImpl().withEmbeddedConfiguration();
-		DecksImpl instance = new DecksImpl().withEmbeddedConfiguration();
+		inventory = new InventoryImpl();
+		logic = new LogicImpl();
+		DecksImpl instance = new DecksImpl();
 
 		vertx.deployVerticle(accounts, then -> {
 			vertx.deployVerticle(cards, then2 -> {
 				vertx.deployVerticle(inventory, then3 -> {
 					vertx.deployVerticle(logic, then4 -> {
-						vertx.deployVerticle(instance, then5 -> done.handle(new Result<>(instance)));
+						vertx.deployVerticle(instance, then5 -> done.handle(Future.succeededFuture(instance)));
 					});
 				});
 			});
