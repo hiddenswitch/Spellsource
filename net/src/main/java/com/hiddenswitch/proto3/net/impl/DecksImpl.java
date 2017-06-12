@@ -1,6 +1,7 @@
 package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Inventory;
@@ -71,8 +72,8 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 					cards.put(cardId, inventory.sync().addToCollection(new AddToCollectionRequest()
 							.withCardIds(Collections.singletonList(cardId))
 							.withUserId(request.getUserId())
-							// Add 28 additional copies right away, because we're probably doing this for testing purposes right now
-							.withCopies(28)).getInventoryIds());
+							// Add 30 additional copies right away, because we're probably doing this for testing purposes right now
+							.withCopies(30)).getInventoryIds());
 
 					entry = cards.get(cardId);
 				}

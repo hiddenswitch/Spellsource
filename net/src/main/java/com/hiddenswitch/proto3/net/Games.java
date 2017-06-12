@@ -178,6 +178,36 @@ public interface Games {
 					return spellAction;
 				}).findFirst();
 
+		// Weapons
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.EQUIP_WEAPON)
+				.map(ga -> (PlayWeaponCardAction) ga)
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getCardId()))
+				.entrySet()
+				.stream()
+				.map(kv -> {
+					SummonAction summonAction = new SummonAction()
+							.sourceId(kv.getKey())
+							.indexToActions(kv.getValue().stream()
+									.filter(a -> a.getTargetKey() != null)
+									.map(a -> new SummonActionIndexToActions()
+											.action(a.getId())
+											.index(minions.get(a.getTargetKey().getId()))).collect(Collectors.toList()));
+
+					// Add the null targeted action, if it exists
+					Optional<PlayWeaponCardAction> nullPlay = kv.getValue().stream()
+							.filter(a -> a.getTargetKey() == null).findFirst();
+					if (nullPlay.isPresent()) {
+						GameAction a = nullPlay.get();
+						summonAction.addIndexToActionsItem(
+								new SummonActionIndexToActions()
+										.action(a.getId())
+										.index(workingContext.getPlayer(playerId).getMinions().size()));
+					}
+
+					return summonAction;
+				}).forEach(clientActions::addWeaponsItem);
+
 		// discovers
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.DISCOVER)
@@ -341,6 +371,7 @@ public interface Games {
 	 * Updates an entity specified inside the game with specific attributes. Currently unsupported. This allows
 	 * real-time manipulation of a game in progress. This call should punt the request to the next instance in the
 	 * cluster if it does not have the specified game.
+	 *
 	 * @param request Information about the game and the updates to the entity this service should do.
 	 * @return Information about the entity update.
 	 * @throws UnsupportedOperationException
@@ -351,6 +382,7 @@ public interface Games {
 	/**
 	 * Concedes the specified game session. Unlike ending a game session prematurely, a concession may trigger some
 	 * additional notifications and scoring consequences.
+	 *
 	 * @param request The player and game conceding.
 	 * @return Any consequences of the concession.
 	 * @throws InterruptedException
@@ -362,6 +394,7 @@ public interface Games {
 	/**
 	 * Gets a complete view of the game for the specified user, respecting security (i.e., information about the
 	 * user's opponent's deck, hand and secrets is not leaked).
+	 *
 	 * @param gameId The game to get client state for.
 	 * @param userId The user ID whose point of view this state should be generated for.
 	 * @return A client view game state.
@@ -387,9 +420,10 @@ public interface Games {
 	/**
 	 * Given a context and a specification of who the local and opposing players are, generate a client game state view.
 	 * This view does not leak secure information.
+	 *
 	 * @param workingContext A context containing the complete game state.
-	 * @param local The local player.
-	 * @param opponent The opposing player.
+	 * @param local          The local player.
+	 * @param opponent       The opposing player.
 	 * @return A client view game state.
 	 */
 	static GameState getGameState(GameContext workingContext, final Player local, final Player opponent) {
@@ -499,10 +533,12 @@ public interface Games {
 	}
 
 	/**
-	 * Gets a client view of the specified game engine entity. Tries its best to not leak information given the specified user.
+	 * Gets a client view of the specified game engine entity. Tries its best to not leak information given the
+	 * specified user.
+	 *
 	 * @param workingContext A context to generate the entity view for.
-	 * @param entity The entity.
-	 * @param localPlayerId The point of view this method should use o determine which information to show the client.
+	 * @param entity         The entity.
+	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
 	static Entity getEntity(final GameContext workingContext, final net.demilich.metastone.game.entities.Entity entity, int localPlayerId) {
@@ -524,9 +560,10 @@ public interface Games {
 
 	/**
 	 * Gets the client's view of an actor in the game engine.
+	 *
 	 * @param workingContext A context to generate the entity view for.
-	 * @param actor The specified actor.
-	 * @param localPlayerId The point of view this method should use o determine which information to show the client.
+	 * @param actor          The specified actor.
+	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
 	static Entity getEntity(final GameContext workingContext, final Actor actor, int localPlayerId) {
@@ -593,9 +630,10 @@ public interface Games {
 
 	/**
 	 * A view of a secret. Censors information from opposing players.
+	 *
 	 * @param workingContext The context to generate the client view for.
-	 * @param secret The secret entity.
-	 * @param localPlayerId The point of view this method should use o determine which information to show the client.
+	 * @param secret         The secret entity.
+	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
 	static Entity getEntity(final GameContext workingContext, final Secret secret, int localPlayerId) {
@@ -621,9 +659,10 @@ public interface Games {
 	/**
 	 * A view of a card. This does not censor information from opposing player's--the calling method should handle
 	 * the censoring.
+	 *
 	 * @param workingContext The context to generate the client view for.
-	 * @param card The card entity.
-	 * @param localPlayerId The point of view this method should use o determine which information to show the client.
+	 * @param card           The card entity.
+	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
 	static Entity getEntity(final GameContext workingContext, final Card card, int localPlayerId) {
@@ -714,6 +753,7 @@ public interface Games {
 
 	/**
 	 * Converts an in-game entity location to a client view location.
+	 *
 	 * @param location A game engine entity location.
 	 * @return A client view entity location.
 	 */
@@ -727,8 +767,9 @@ public interface Games {
 	/**
 	 * Gets the default no activity timeout as configured across the cluster. This timeout is used to determine when
 	 * to end games that have received no actions from either client connected to them.
-	 * @return A value in milliseconds of how long to wait for an action from a client before marking a game as over
-	 * due to disconnection.
+	 *
+	 * @return A value in milliseconds of how long to wait for an action from a client before marking a game as over due
+	 * to disconnection.
 	 */
 	static long getDefaultNoActivityTimeout() {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
