@@ -76,6 +76,7 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 		String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
 		UserRecord record = new UserRecord(userId);
 		record.setDecks(new ArrayList<>());
+		record.setFriends(new ArrayList<>());
 		Profile profile = new Profile();
 		profile.setEmailAddress(request.getEmailAddress());
 		profile.setDisplayName(request.getName());
@@ -130,8 +131,14 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 		final int sliceLastFiveElements = -5;
 
 		// Update the record with the new token.
-		MongoClientUpdateResult updateResult = awaitResult(h -> getMongo().updateCollection(USERS, json("_id", userRecord.getId()),
-				json("$push", json("auth.tokens", json("$each", Collections.singletonList(toJson(hashedLoginSecret)), "$slice", sliceLastFiveElements))), h));
+		MongoClientUpdateResult updateResult = awaitResult(h -> getMongo().updateCollection(USERS,
+				json("_id", userRecord.getId()),
+				json("$push",
+						json("auth.tokens",
+								json("$each",
+										Collections.singletonList(toJson(hashedLoginSecret)),
+										"$slice",
+										sliceLastFiveElements))), h));
 
 		if (updateResult.getDocModified() == 0) {
 			throw new RuntimeException();
@@ -158,18 +165,14 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 	@Suspendable
 	public UserRecord get(String userId) {
 		List<JsonObject> records = awaitResult(h -> getMongo().find(USERS, json("_id", userId), h));
-		return fromJson(records.get(0), UserRecord.class);
+		return records.size() == 0 ? null : fromJson(records.get(0), UserRecord.class);
 	}
 
 	@Suspendable
 	public UserRecord getWithEmail(String email) {
-		List<JsonObject> records = awaitResult(h -> getMongo().find(USERS, json("profile.emailAddress", email), h));
-
-		if (records.size() == 0) {
-			return null;
-		}
-
-		return fromJson(records.get(0), UserRecord.class);
+		List<JsonObject> records = awaitResult(h -> getMongo().find(USERS,
+                json("profile.emailAddress", email), h));
+        return records.size() == 0 ? null : fromJson(records.get(0), UserRecord.class);
 	}
 
 	@SuppressWarnings("unchecked")

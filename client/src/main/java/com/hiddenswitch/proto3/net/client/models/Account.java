@@ -27,6 +27,7 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.Friend;
 import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -47,6 +48,9 @@ public class Account  implements Serializable {
 
   @SerializedName("email")
   private String email = null;
+
+  @SerializedName("friends")
+  private List<Friend> friends = new ArrayList<Friend>();
 
   @SerializedName("decks")
   private List<InventoryCollection> decks = new ArrayList<InventoryCollection>();
@@ -108,6 +112,29 @@ public class Account  implements Serializable {
     this.email = email;
   }
 
+  public Account friends(List<Friend> friends) {
+    this.friends = friends;
+    return this;
+  }
+
+  public Account addFriendsItem(Friend friendsItem) {
+    this.friends.add(friendsItem);
+    return this;
+  }
+
+   /**
+   * Get friends
+   * @return friends
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public List<Friend> getFriends() {
+    return friends;
+  }
+
+  public void setFriends(List<Friend> friends) {
+    this.friends = friends;
+  }
+
   public Account decks(List<InventoryCollection> decks) {
     this.decks = decks;
     return this;
@@ -162,13 +189,14 @@ public class Account  implements Serializable {
     return Objects.equals(this.id, account.id) &&
         Objects.equals(this.name, account.name) &&
         Objects.equals(this.email, account.email) &&
+        Objects.equals(this.friends, account.friends) &&
         Objects.equals(this.decks, account.decks) &&
         Objects.equals(this.personalCollection, account.personalCollection);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, email, decks, personalCollection);
+    return Objects.hash(id, name, email, friends, decks, personalCollection);
   }
 
   @Override
@@ -179,6 +207,7 @@ public class Account  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    friends: ").append(toIndentedString(friends)).append("\n");
     sb.append("    decks: ").append(toIndentedString(decks)).append("\n");
     sb.append("    personalCollection: ").append(toIndentedString(personalCollection)).append("\n");
     sb.append("}");

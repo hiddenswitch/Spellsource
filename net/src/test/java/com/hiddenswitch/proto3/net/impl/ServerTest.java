@@ -324,4 +324,110 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 			done.handle(Future.succeededFuture(instance));
 		});
 	}
+
+	private static int currentTomer = 0;
+	public CreateAccountResponse createRandomAccount(TestContext testContext, DefaultApi defaultApi) {
+		String username = "tomer" + currentTomer;
+		String email = "tomer" + (currentTomer++) + "@gmail.com";
+
+		CreateAccountResponse createAccountResponse = null;
+		try {
+			createAccountResponse = defaultApi.createAccount(
+					new CreateAccountRequest().email(email).name(username).password("1357913579"));
+		} catch (ApiException e) {
+			testContext.fail("failed creating random account " + username+ " with error: " + e.getMessage());
+		}
+		testContext.assertNotNull(createAccountResponse, "first account is null");
+		return createAccountResponse;
+	}
+
+	@Test
+	public void testFriendsApi(TestContext testContext) {
+		DefaultApi defaultApi = new DefaultApi();
+		defaultApi.getApiClient().setBasePath("http://localhost:8080/v1"); //TODO: read from configuration
+
+		// create first account
+		CreateAccountResponse createAccount1Response = createRandomAccount(testContext, defaultApi);
+
+		// authenticate with first account
+		String token = createAccount1Response.getLoginToken();
+		testContext.assertNotNull(token, "auth token is null");
+		defaultApi.getApiClient().setApiKey(token);
+
+		// test putting friend that does not exist
+		FriendPutResponse friendPutResponseDoesNotExist = null;
+		try {
+			friendPutResponseDoesNotExist = defaultApi.friendPut(new FriendPutRequest().friendId("idontexist"));
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(), "Friend doesn't exist. Should return 404");
+		}
+		testContext.assertNull(friendPutResponseDoesNotExist);
+
+		// create second account
+		CreateAccountResponse createAccount2Response = createRandomAccount(testContext, defaultApi);
+
+		// add second account as friend
+		FriendPutResponse friendPutResponse = null;
+		try {
+			friendPutResponse = defaultApi.friendPut(
+					new FriendPutRequest().friendId(createAccount2Response.getAccount().getId()));
+		} catch (ApiException e) {
+			testContext.assertEquals(200, e.getCode(), "Adding new friend. Should return 200");
+		}
+		testContext.assertEquals(
+				friendPutResponse.getFriend().getFriendid(), createAccount2Response.getAccount().getId());
+
+		// test putting friend that already exists
+		try {
+			defaultApi.friendPut(new FriendPutRequest().friendId(createAccount2Response.getAccount().getId()));
+		} catch (ApiException e) {
+			testContext.assertEquals(409, e.getCode(), "Adding existing friend. Should return 409");
+		}
+
+		// test putting friend that already exists - second direction
+		defaultApi.getApiClient().setApiKey(createAccount2Response.getLoginToken()); //reauth as friend
+		try {
+			defaultApi.friendPut(new FriendPutRequest().friendId(createAccount1Response.getAccount().getId()));
+		} catch (ApiException e) {
+			testContext.assertEquals(409, e.getCode(),
+					"Adding existing friend (second direction). Should return 409");
+		}
+
+		// unfriend a user that doesn't exist
+		try {
+			defaultApi.friendDelete("idontexist");
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(),
+					"Friend account doesn't exist. Should return 404");
+		}
+
+		// unfriend the first user
+		UnfriendResponse unfriendResponse = null;
+		try {
+			unfriendResponse = defaultApi.friendDelete(createAccount1Response.getAccount().getId());
+		} catch (ApiException e) {
+			testContext.assertEquals(200, e.getCode(),
+					"Unfriending an existing friend. expecting 200");
+		}
+		testContext.assertNotNull(unfriendResponse.getDeletedFriend(),
+				"unfriend response should include the friend details");
+		testContext.assertEquals(unfriendResponse.getDeletedFriend().getFriendid(),
+				createAccount1Response.getAccount().getId());
+
+		// try to unfriend the first user again
+		try {
+			defaultApi.friendDelete(createAccount1Response.getAccount().getId());
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(),"Not friends. should return 404");
+		}
+
+		// try to unfriend from the other direction
+		defaultApi.getApiClient().setApiKey(createAccount1Response.getLoginToken());
+		try {
+			defaultApi.friendDelete(createAccount2Response.getAccount().getId());
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(),
+					"Not friends (2nd direction). should return 404");
+		}
+	}
 }
