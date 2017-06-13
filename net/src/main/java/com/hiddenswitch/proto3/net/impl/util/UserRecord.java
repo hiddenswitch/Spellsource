@@ -1,6 +1,7 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hiddenswitch.proto3.net.client.models.Friend;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -11,6 +12,7 @@ import io.vertx.ext.auth.User;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Optional;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 
@@ -24,6 +26,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	private Profile profile;
 	private AuthorizationRecord auth;
 	private List<String> decks;
+	private List<FriendRecord> friends;
 	private boolean bot;
 
 	/**
@@ -113,6 +116,15 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 		return decks;
 	}
 
+
+	/**
+	 * get freinds list
+	 * @return list of friend records
+	 */
+	public List<FriendRecord> getFriends() {
+		return friends;
+	}
+
 	/**
 	 * Sets the UserRecord's deck IDs. Does not have side effects.
 	 * @param decks A list of deck IDs.
@@ -136,4 +148,31 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	public void setBot(boolean bot) {
 		this.bot = bot;
 	}
+
+	/**
+	 * Set user's friends list
+	 * @return
+	 */
+	public void setFriends(List<FriendRecord> friends) {
+		this.friends = friends;
+	}
+
+	/**
+	 * Check if given friendId belongs to a friend
+	 * @param friendId
+	 * @return true if friend with friendId exists
+	 */
+	public boolean isFriend(String friendId) {
+		return this.friends.stream().anyMatch(friend -> friend.getFriendId().equals(friendId));
+	}
+
+	/**
+	 * Get friend by friend Id
+	 * @param friendId
+	 * @return friend object if friends, null otherwise
+	 */
+	public FriendRecord getFriendById(String friendId) {
+		return this.friends.stream().filter(friend -> friend.getFriendId().equals(friendId)).findFirst().orElse(null);
+	}
+
 }

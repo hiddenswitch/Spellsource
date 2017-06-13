@@ -48,6 +48,9 @@ import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
 import com.hiddenswitch.proto3.net.client.models.DraftsChooseCardRequest;
 import com.hiddenswitch.proto3.net.client.models.DraftsChooseHeroRequest;
 import com.hiddenswitch.proto3.net.client.models.DraftState;
+import com.hiddenswitch.proto3.net.client.models.UnfriendResponse;
+import com.hiddenswitch.proto3.net.client.models.FriendPutResponse;
+import com.hiddenswitch.proto3.net.client.models.FriendPutRequest;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsResponse;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsRequest;
 import com.hiddenswitch.proto3.net.client.models.LoginResponse;
@@ -1017,6 +1020,219 @@ public class DefaultApi {
 
         com.squareup.okhttp.Call call = draftsGetCall(progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<DraftState>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /* Build call for friendDelete */
+    private com.squareup.okhttp.Call friendDeleteCall(String friendId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // verify the required parameter 'friendId' is set
+        if (friendId == null) {
+            throw new ApiException("Missing the required parameter 'friendId' when calling friendDelete(Async)");
+        }
+        
+
+        // create path and map variables
+        String localVarPath = "/friends/{friendId}".replaceAll("\\{format\\}","json")
+        .replaceAll("\\{" + "friendId" + "\\}", apiClient.escapeString(friendId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "TokenSecurity" };
+        return apiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+
+    /**
+     * 
+     * unfriend a user 
+     * @param friendId id of friend to unfriend. (required)
+     * @return UnfriendResponse
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public UnfriendResponse friendDelete(String friendId) throws ApiException {
+        ApiResponse<UnfriendResponse> resp = friendDeleteWithHttpInfo(friendId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * unfriend a user 
+     * @param friendId id of friend to unfriend. (required)
+     * @return ApiResponse&lt;UnfriendResponse&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<UnfriendResponse> friendDeleteWithHttpInfo(String friendId) throws ApiException {
+        com.squareup.okhttp.Call call = friendDeleteCall(friendId, null, null);
+        Type localVarReturnType = new TypeToken<UnfriendResponse>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * unfriend a user 
+     * @param friendId id of friend to unfriend. (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call friendDeleteAsync(String friendId, final ApiCallback<UnfriendResponse> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = friendDeleteCall(friendId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<UnfriendResponse>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /* Build call for friendPut */
+    private com.squareup.okhttp.Call friendPutCall(FriendPutRequest request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = request;
+        
+        // verify the required parameter 'request' is set
+        if (request == null) {
+            throw new ApiException("Missing the required parameter 'request' when calling friendPut(Async)");
+        }
+        
+
+        // create path and map variables
+        String localVarPath = "/friends".replaceAll("\\{format\\}","json");
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "TokenSecurity" };
+        return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+
+    /**
+     * 
+     * connect with a friend 
+     * @param request Friend put request  (required)
+     * @return FriendPutResponse
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public FriendPutResponse friendPut(FriendPutRequest request) throws ApiException {
+        ApiResponse<FriendPutResponse> resp = friendPutWithHttpInfo(request);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * connect with a friend 
+     * @param request Friend put request  (required)
+     * @return ApiResponse&lt;FriendPutResponse&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<FriendPutResponse> friendPutWithHttpInfo(FriendPutRequest request) throws ApiException {
+        com.squareup.okhttp.Call call = friendPutCall(request, null, null);
+        Type localVarReturnType = new TypeToken<FriendPutResponse>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * connect with a friend 
+     * @param request Friend put request  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call friendPutAsync(FriendPutRequest request, final ApiCallback<FriendPutResponse> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = friendPutCall(request, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<FriendPutResponse>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

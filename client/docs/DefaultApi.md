@@ -13,6 +13,8 @@ Method | HTTP request | Description
 [**draftsChooseCard**](DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards/{draftIndex} | 
 [**draftsChooseHero**](DefaultApi.md#draftsChooseHero) | **PUT** /drafts/hero | 
 [**draftsGet**](DefaultApi.md#draftsGet) | **GET** /drafts | 
+[**friendDelete**](DefaultApi.md#friendDelete) | **DELETE** /friends/{friendId} | 
+[**friendPut**](DefaultApi.md#friendPut) | **PUT** /friends | 
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
@@ -488,6 +490,116 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**DraftState**](DraftState.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="friendDelete"></a>
+# **friendDelete**
+> UnfriendResponse friendDelete(friendId)
+
+
+
+unfriend a user 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+String friendId = "friendId_example"; // String | id of friend to unfriend.
+try {
+    UnfriendResponse result = apiInstance.friendDelete(friendId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#friendDelete");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **friendId** | **String**| id of friend to unfriend. |
+
+### Return type
+
+[**UnfriendResponse**](UnfriendResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="friendPut"></a>
+# **friendPut**
+> FriendPutResponse friendPut(request)
+
+
+
+connect with a friend 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+FriendPutRequest request = new FriendPutRequest(); // FriendPutRequest | Friend put request 
+try {
+    FriendPutResponse result = apiInstance.friendPut(request);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#friendPut");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**FriendPutRequest**](FriendPutRequest.md)| Friend put request  |
+
+### Return type
+
+[**FriendPutResponse**](FriendPutResponse.md)
 
 ### Authorization
 

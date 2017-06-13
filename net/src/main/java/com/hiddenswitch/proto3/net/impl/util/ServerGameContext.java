@@ -97,6 +97,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	@Override
+	@Suspendable
 	protected void startTurn(int playerId) {
 		super.startTurn(playerId);
 		GameState state = new GameState(this, TurnState.TURN_IN_PROGRESS);
@@ -104,6 +105,7 @@ public class ServerGameContext extends GameContext {
 		getListenerMap().get(getPlayer2()).onUpdate(state);
 	}
 
+	@Suspendable
 	public void endTurn() {
 		logger.debug("Ending turn: " + getActivePlayer().getId());
 		super.endTurn();
@@ -252,6 +254,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	@Override
+	@Suspendable
 	protected void onGameStateChanged() {
 		updateClientsWithGameState();
 	}

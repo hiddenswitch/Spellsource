@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.util;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
@@ -150,38 +151,46 @@ public class Serialization {
 		return gson;
 	}
 
+	@Suspendable
 	public static String serialize(Object object) {
 		return gson.toJson(object);
 	}
 
+	@Suspendable
 	public static byte[] serializeBytes(Object object) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		serialize(object, bos);
 		return bos.toByteArray();
 	}
 
+	@Suspendable
 	public static String serializeBase64(Object object) throws IOException {
 		return ObjectSerializer.serializeBase64(object);
 	}
 
+	@Suspendable
 	public static <T> T deserialize(String base64String) {
 		return ObjectSerializer.deserializeBase64(base64String);
 	}
 
+	@Suspendable
 	public static <T> T deserialize(String json, Class<T> classOfT) throws JsonSyntaxException {
 		return gson.fromJson(json, classOfT);
 	}
 
+	@Suspendable
 	public static <T> T deserialize(String json, Type typeOfT) throws JsonSyntaxException {
 		return gson.fromJson(json, typeOfT);
 	}
 
 	@SuppressWarnings("unchecked")
+	@Suspendable
 	public static <T> T deserialize(byte[] buffer) throws IOException, ClassNotFoundException {
 		return deserialize(new ByteArrayInputStream(buffer));
 	}
 
 	@SuppressWarnings("unchecked")
+	@Suspendable
 	public static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(stream);
 		T result = (T) ois.readObject();
@@ -189,6 +198,7 @@ public class Serialization {
 		return result;
 	}
 
+	@Suspendable
 	public static <T> T deserialize(InputStream stream, Class<? extends T> returnClass) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(stream);
 		T result = returnClass.cast(ois.readObject());
@@ -196,7 +206,7 @@ public class Serialization {
 		return result;
 	}
 
-
+	@Suspendable
 	public static void serialize(Object obj, OutputStream output) throws IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(output);
 		oos.writeObject(obj);

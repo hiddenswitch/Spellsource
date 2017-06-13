@@ -93,7 +93,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 
 		// Update the user document with this deck ID
 		final String deckId = createCollectionResponse.getCollectionId();
-		Accounts.updateAccount(getMongo(), userId, json("$addToSet", json("decks", deckId)));
+		Accounts.update(getMongo(), userId, json("$addToSet", json("decks", deckId)));
 
 		return new DeckCreateResponse(deckId, inventoryIds);
 	}
@@ -154,7 +154,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		TrashCollectionResponse response = inventory.sync().trashCollection(new TrashCollectionRequest(deckId));
 
 		// Remove the deckId from the user's decks
-		Accounts.updateAccount(getMongo(), userId, json("$pull", json("decks", deckId)));
+		Accounts.update(getMongo(), userId, json("$pull", json("decks", deckId)));
 
 		return new DeckDeleteResponse(response);
 	}
