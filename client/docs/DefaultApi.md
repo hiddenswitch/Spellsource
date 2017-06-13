@@ -10,9 +10,10 @@ Method | HTTP request | Description
 [**decksGetAll**](DefaultApi.md#decksGetAll) | **GET** /decks | 
 [**decksPut**](DefaultApi.md#decksPut) | **PUT** /decks | 
 [**decksUpdate**](DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
-[**draftsChooseCard**](DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards/{draftIndex} | 
+[**draftsChooseCard**](DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards | 
 [**draftsChooseHero**](DefaultApi.md#draftsChooseHero) | **PUT** /drafts/hero | 
 [**draftsGet**](DefaultApi.md#draftsGet) | **GET** /drafts | 
+[**draftsPost**](DefaultApi.md#draftsPost) | **POST** /drafts | 
 [**friendDelete**](DefaultApi.md#friendDelete) | **DELETE** /friends/{friendId} | 
 [**friendPut**](DefaultApi.md#friendPut) | **PUT** /friends | 
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
@@ -343,7 +344,7 @@ Name | Type | Description  | Notes
 
 <a name="draftsChooseCard"></a>
 # **draftsChooseCard**
-> draftsChooseCard(request)
+> DraftState draftsChooseCard(request)
 
 
 
@@ -369,7 +370,8 @@ TokenSecurity.setApiKey("YOUR API KEY");
 DefaultApi apiInstance = new DefaultApi();
 DraftsChooseCardRequest request = new DraftsChooseCardRequest(); // DraftsChooseCardRequest | 
 try {
-    apiInstance.draftsChooseCard(request);
+    DraftState result = apiInstance.draftsChooseCard(request);
+    System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#draftsChooseCard");
     e.printStackTrace();
@@ -384,7 +386,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-null (empty response body)
+[**DraftState**](DraftState.md)
 
 ### Authorization
 
@@ -397,7 +399,7 @@ null (empty response body)
 
 <a name="draftsChooseHero"></a>
 # **draftsChooseHero**
-> draftsChooseHero(request)
+> DraftState draftsChooseHero(request)
 
 
 
@@ -423,7 +425,8 @@ TokenSecurity.setApiKey("YOUR API KEY");
 DefaultApi apiInstance = new DefaultApi();
 DraftsChooseHeroRequest request = new DraftsChooseHeroRequest(); // DraftsChooseHeroRequest | 
 try {
-    apiInstance.draftsChooseHero(request);
+    DraftState result = apiInstance.draftsChooseHero(request);
+    System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#draftsChooseHero");
     e.printStackTrace();
@@ -438,7 +441,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-null (empty response body)
+[**DraftState**](DraftState.md)
 
 ### Authorization
 
@@ -486,6 +489,61 @@ try {
 
 ### Parameters
 This endpoint does not need any parameter.
+
+### Return type
+
+[**DraftState**](DraftState.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="draftsPost"></a>
+# **draftsPost**
+> DraftState draftsPost(request)
+
+
+
+Starts a draft, or make a change to your draft, like retiring early. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+DraftsPostRequest request = new DraftsPostRequest(); // DraftsPostRequest | 
+try {
+    DraftState result = apiInstance.draftsPost(request);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#draftsPost");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**DraftsPostRequest**](DraftsPostRequest.md)|  |
 
 ### Return type
 

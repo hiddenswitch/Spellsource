@@ -131,8 +131,16 @@ public interface Server {
 
 	WebResult<GameState> matchmakingConstructedGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
 
-	WebResult<FriendPutResponse> putFriend(RoutingContext context, String userId,  FriendPutRequest req)  throws SuspendExecution, InterruptedException;
+	WebResult<FriendPutResponse> putFriend(RoutingContext context, String userId, FriendPutRequest req) throws SuspendExecution, InterruptedException;
 
-	WebResult<UnfriendResponse> unFriend(RoutingContext context, String userId, String friendId)  throws SuspendExecution, InterruptedException;
+	WebResult<UnfriendResponse> unFriend(RoutingContext context, String userId, String friendId) throws SuspendExecution, InterruptedException;
+
+	WebResult<DraftState> draftsGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
+
+	WebResult<DraftState> draftsPost(RoutingContext context, String userId, DraftsPostRequest request) throws SuspendExecution, InterruptedException;
+
+	WebResult<DraftState> draftsChooseHero(RoutingContext context, String userId, DraftsChooseHeroRequest request) throws SuspendExecution, InterruptedException;
+
+	WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException;
 }
 

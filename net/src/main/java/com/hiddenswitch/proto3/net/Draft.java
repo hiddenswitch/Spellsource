@@ -41,13 +41,13 @@ public interface Draft {
 	DraftRecord get(GetDraftRequest request);
 
 	/**
-	 * Choose a hero (power) or select one of three cards during a draft.
-	 *
-	 * @param request The action to perform.
-	 * @return The new choices.
+	 * Choose a hero power or a card action during the draft.
+	 * @param request The appropriate choice given the state of the draft.
+	 * @return The new state of this draft.
+	 * @throws NullPointerException when an invalid hero or card choice was made despite one being expected.
 	 */
 	@Suspendable
-	DraftRecord doDraftAction(DraftActionRequest request) throws SuspendExecution, InterruptedException;
+	DraftRecord doDraftAction(DraftActionRequest request) throws SuspendExecution, InterruptedException, NullPointerException;
 
 	/**
 	 * Enters matchmaking with the deck built with a draft.
