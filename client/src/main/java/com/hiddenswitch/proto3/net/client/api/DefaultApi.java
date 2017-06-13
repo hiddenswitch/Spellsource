@@ -45,9 +45,10 @@ import com.hiddenswitch.proto3.net.client.models.DecksGetAllResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksPutRequest;
 import com.hiddenswitch.proto3.net.client.models.DecksPutResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
+import com.hiddenswitch.proto3.net.client.models.DraftState;
 import com.hiddenswitch.proto3.net.client.models.DraftsChooseCardRequest;
 import com.hiddenswitch.proto3.net.client.models.DraftsChooseHeroRequest;
-import com.hiddenswitch.proto3.net.client.models.DraftState;
+import com.hiddenswitch.proto3.net.client.models.DraftsPostRequest;
 import com.hiddenswitch.proto3.net.client.models.UnfriendResponse;
 import com.hiddenswitch.proto3.net.client.models.FriendPutResponse;
 import com.hiddenswitch.proto3.net.client.models.FriendPutRequest;
@@ -732,7 +733,7 @@ public class DefaultApi {
         
 
         // create path and map variables
-        String localVarPath = "/drafts/cards/{draftIndex}".replaceAll("\\{format\\}","json");
+        String localVarPath = "/drafts/cards".replaceAll("\\{format\\}","json");
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
@@ -772,22 +773,25 @@ public class DefaultApi {
      * 
      * Make a selection for the given draft index. 
      * @param request  (required)
+     * @return DraftState
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void draftsChooseCard(DraftsChooseCardRequest request) throws ApiException {
-        draftsChooseCardWithHttpInfo(request);
+    public DraftState draftsChooseCard(DraftsChooseCardRequest request) throws ApiException {
+        ApiResponse<DraftState> resp = draftsChooseCardWithHttpInfo(request);
+        return resp.getData();
     }
 
     /**
      * 
      * Make a selection for the given draft index. 
      * @param request  (required)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;DraftState&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> draftsChooseCardWithHttpInfo(DraftsChooseCardRequest request) throws ApiException {
+    public ApiResponse<DraftState> draftsChooseCardWithHttpInfo(DraftsChooseCardRequest request) throws ApiException {
         com.squareup.okhttp.Call call = draftsChooseCardCall(request, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<DraftState>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -798,7 +802,7 @@ public class DefaultApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsChooseCardAsync(DraftsChooseCardRequest request, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftsChooseCardAsync(DraftsChooseCardRequest request, final ApiCallback<DraftState> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -820,7 +824,8 @@ public class DefaultApi {
         }
 
         com.squareup.okhttp.Call call = draftsChooseCardCall(request, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<DraftState>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /* Build call for draftsChooseHero */
@@ -874,22 +879,25 @@ public class DefaultApi {
      * 
      * Choose a hero from your hero selection. 
      * @param request  (required)
+     * @return DraftState
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void draftsChooseHero(DraftsChooseHeroRequest request) throws ApiException {
-        draftsChooseHeroWithHttpInfo(request);
+    public DraftState draftsChooseHero(DraftsChooseHeroRequest request) throws ApiException {
+        ApiResponse<DraftState> resp = draftsChooseHeroWithHttpInfo(request);
+        return resp.getData();
     }
 
     /**
      * 
      * Choose a hero from your hero selection. 
      * @param request  (required)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;DraftState&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> draftsChooseHeroWithHttpInfo(DraftsChooseHeroRequest request) throws ApiException {
+    public ApiResponse<DraftState> draftsChooseHeroWithHttpInfo(DraftsChooseHeroRequest request) throws ApiException {
         com.squareup.okhttp.Call call = draftsChooseHeroCall(request, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<DraftState>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -900,7 +908,7 @@ public class DefaultApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsChooseHeroAsync(DraftsChooseHeroRequest request, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftsChooseHeroAsync(DraftsChooseHeroRequest request, final ApiCallback<DraftState> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -922,7 +930,8 @@ public class DefaultApi {
         }
 
         com.squareup.okhttp.Call call = draftsChooseHeroCall(request, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<DraftState>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /* Build call for draftsGet */
@@ -1019,6 +1028,112 @@ public class DefaultApi {
         }
 
         com.squareup.okhttp.Call call = draftsGetCall(progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DraftState>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /* Build call for draftsPost */
+    private com.squareup.okhttp.Call draftsPostCall(DraftsPostRequest request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = request;
+        
+        // verify the required parameter 'request' is set
+        if (request == null) {
+            throw new ApiException("Missing the required parameter 'request' when calling draftsPost(Async)");
+        }
+        
+
+        // create path and map variables
+        String localVarPath = "/drafts".replaceAll("\\{format\\}","json");
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "TokenSecurity" };
+        return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+
+    /**
+     * 
+     * Starts a draft, or make a change to your draft, like retiring early. 
+     * @param request  (required)
+     * @return DraftState
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public DraftState draftsPost(DraftsPostRequest request) throws ApiException {
+        ApiResponse<DraftState> resp = draftsPostWithHttpInfo(request);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * Starts a draft, or make a change to your draft, like retiring early. 
+     * @param request  (required)
+     * @return ApiResponse&lt;DraftState&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<DraftState> draftsPostWithHttpInfo(DraftsPostRequest request) throws ApiException {
+        com.squareup.okhttp.Call call = draftsPostCall(request, null, null);
+        Type localVarReturnType = new TypeToken<DraftState>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * Starts a draft, or make a change to your draft, like retiring early. 
+     * @param request  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftsPostAsync(DraftsPostRequest request, final ApiCallback<DraftState> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftsPostCall(request, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<DraftState>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

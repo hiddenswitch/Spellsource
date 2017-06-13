@@ -22,8 +22,8 @@ import static com.hiddenswitch.proto3.net.util.Mongo.mongo;
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 
 public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
-	RpcClient<Decks> decks;
-	RpcClient<Accounts> accounts;
+	private RpcClient<Decks> decks;
+	private RpcClient<Accounts> accounts;
 
 	@Override
 	@Suspendable
@@ -31,6 +31,10 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 		super.start();
 		decks = RPC.connect(Decks.class, vertx.eventBus());
 		accounts = RPC.connect(Accounts.class, vertx.eventBus());
+		// Create the collection if necessary
+		if (!mongo().getCollections().contains(DRAFTS)) {
+			mongo().createCollection(DRAFTS);
+		}
 		RPC.register(this, Draft.class, vertx.eventBus());
 	}
 
@@ -47,7 +51,7 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 
 	@Override
 	@Suspendable
-	public DraftRecord doDraftAction(DraftActionRequest request) throws SuspendExecution, InterruptedException {
+	public DraftRecord doDraftAction(DraftActionRequest request) throws SuspendExecution, InterruptedException, NullPointerException {
 		DraftRecord record = getRecord(request.getUserId());
 
 		if (record == null) {
@@ -115,6 +119,8 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 	@Override
 	@Suspendable
 	public RetireDraftResponse retireDraftEarly(RetireDraftRequest request) {
-		return null;
+		// TODO: Don't just delete the record, but this is acceptable for now since we don't really care about this history.
+		mongo().removeDocument(DRAFTS, json("_id", request.getUserId()));
+		return new RetireDraftResponse();
 	}
 }

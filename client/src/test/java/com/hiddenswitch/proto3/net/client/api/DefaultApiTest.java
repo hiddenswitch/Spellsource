@@ -33,9 +33,10 @@ import com.hiddenswitch.proto3.net.client.models.DecksGetAllResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksPutRequest;
 import com.hiddenswitch.proto3.net.client.models.DecksPutResponse;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
+import com.hiddenswitch.proto3.net.client.models.DraftState;
 import com.hiddenswitch.proto3.net.client.models.DraftsChooseCardRequest;
 import com.hiddenswitch.proto3.net.client.models.DraftsChooseHeroRequest;
-import com.hiddenswitch.proto3.net.client.models.DraftState;
+import com.hiddenswitch.proto3.net.client.models.DraftsPostRequest;
 import com.hiddenswitch.proto3.net.client.models.UnfriendResponse;
 import com.hiddenswitch.proto3.net.client.models.FriendPutResponse;
 import com.hiddenswitch.proto3.net.client.models.FriendPutRequest;
@@ -170,7 +171,7 @@ public class DefaultApiTest {
     @Test
     public void draftsChooseCardTest() throws ApiException {
         DraftsChooseCardRequest request = null;
-        // api.draftsChooseCard(request);
+        // DraftState response = api.draftsChooseCard(request);
 
         // TODO: test validations
     }
@@ -186,7 +187,7 @@ public class DefaultApiTest {
     @Test
     public void draftsChooseHeroTest() throws ApiException {
         DraftsChooseHeroRequest request = null;
-        // api.draftsChooseHero(request);
+        // DraftState response = api.draftsChooseHero(request);
 
         // TODO: test validations
     }
@@ -202,6 +203,22 @@ public class DefaultApiTest {
     @Test
     public void draftsGetTest() throws ApiException {
         // DraftState response = api.draftsGet();
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Starts a draft, or make a change to your draft, like retiring early. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void draftsPostTest() throws ApiException {
+        DraftsPostRequest request = null;
+        // DraftState response = api.draftsPost(request);
 
         // TODO: test validations
     }

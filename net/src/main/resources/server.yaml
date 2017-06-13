@@ -988,6 +988,17 @@ definitions:
     properties:
       heroIndex:
         type: 'integer'
+  DraftsPostRequest:
+    type: 'object'
+    properties:
+      startDraft:
+        description: |
+          Starts a new draft.
+        type: 'boolean'
+      retireEarly:
+        description: |
+          Retires a draft early. Typically this costs some number of lives.
+        type: 'boolean'
 paths:
   /accounts/{targetUserId}:
     get:
@@ -1282,6 +1293,31 @@ paths:
         "404":
           description: |
             You have not started a draft. Start one first.
+    post:
+      description: |
+        Starts a draft, or make a change to your draft, like retiring early.
+      operationId: draftsPost
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DraftsPostRequest'
+      responses:
+        "200":
+          description: |
+            You successfully started a draft and it now has the following state:
+          schema:
+            $ref: '#/definitions/DraftState'
+        "204":
+          description: |
+            You successfully retired your draft early and the content is empty.
+        "400":
+          description: |
+            You sent an invalid draft request, like starting a draft when you already have
+            a draft started.
   /drafts/hero:
     put:
       description: |
@@ -1295,7 +1331,16 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/DraftsChooseHeroRequest'
-  /drafts/cards/{draftIndex}:
+      responses:
+        "200":
+          description: |
+            The new draft state, containing the new card choices.
+          schema:
+            $ref: '#/definitions/DraftState'
+        "400":
+          description: |
+            An invalid option was chosen, or it's not time to choose a hero.
+  /drafts/cards:
     put:
       description: |
         Make a selection for the given draft index.
@@ -1308,3 +1353,12 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/DraftsChooseCardRequest'
+      responses:
+        "200":
+          description: |
+            The new draft state. When deckId in draft state is not null, you are ready to enter matchmaking.
+          schema:
+            $ref: '#/definitions/DraftState'
+        "400":
+          description: |
+            An invalid option was chosen, or it's not time to choose a card (usually your draft is finished).

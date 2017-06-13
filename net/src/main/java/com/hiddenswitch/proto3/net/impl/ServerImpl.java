@@ -4,12 +4,14 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.proto3.net.Accounts;
+import com.hiddenswitch.proto3.net.Draft;
 import com.hiddenswitch.proto3.net.Server;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.client.models.LoginRequest;
 import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
+import com.hiddenswitch.proto3.net.impl.util.DraftRecord;
 import com.hiddenswitch.proto3.net.impl.util.FriendRecord;
 import com.hiddenswitch.proto3.net.impl.util.HandlerFactory;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
@@ -59,6 +61,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 	LogicImpl logic = new LogicImpl();
 	DecksImpl decks = new DecksImpl();
 	InventoryImpl inventory = new InventoryImpl();
+	DraftImpl drafts = new DraftImpl();
 	List<String> deployments = new ArrayList<>();
 	HttpServer server;
 
@@ -74,7 +77,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 		configureMongo();
 
 		try {
-			for (Verticle verticle : Arrays.asList(cards, accounts, games, matchmaking, bots, logic, decks, inventory)) {
+			for (Verticle verticle : Arrays.asList(cards, accounts, games, matchmaking, bots, logic, decks, inventory, drafts)) {
 				final String name = verticle.getClass().getName();
 				logger.info("Deploying " + name + "...");
 				String deploymentId = Sync.awaitResult(done -> vertx.deployVerticle(verticle, done));
@@ -452,6 +455,65 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 		UnfriendResponse response = new UnfriendResponse().deletedFriend(friendRecord.toFriendDto());
 		return WebResult.succeeded(response);
+	}
+
+	@Override
+	public WebResult<DraftState> draftsGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
+		DraftRecord record = drafts.get(new GetDraftRequest().withUserId(userId));
+		if (record == null) {
+			return WebResult.failed(404, new NullPointerException("You have not started a draft. Start one first."));
+		}
+
+		return WebResult.succeeded(Draft.toDraftState(record.getPublicDraftState()));
+	}
+
+	@Override
+	public WebResult<DraftState> draftsPost(RoutingContext context, String userId, DraftsPostRequest request) throws SuspendExecution, InterruptedException {
+		if (request.getStartDraft()) {
+			try {
+				return WebResult.succeeded(
+						Draft.toDraftState(
+								drafts.doDraftAction(new DraftActionRequest().withUserId(userId))
+										.getPublicDraftState()));
+			} catch (NullPointerException unexpectedRequest) {
+				return WebResult.failed(400, unexpectedRequest);
+			}
+		} else if (request.getRetireEarly()) {
+			drafts.retireDraftEarly(new RetireDraftRequest().withUserId(userId));
+			return WebResult.succeeded(204, null);
+		} else {
+			return WebResult.failed(400, new UnsupportedOperationException("You must choose a valid action."));
+		}
+	}
+
+	@Override
+	public WebResult<DraftState> draftsChooseHero(RoutingContext context, String userId, DraftsChooseHeroRequest request) throws SuspendExecution, InterruptedException {
+		try {
+			DraftRecord record = drafts.doDraftAction(new DraftActionRequest()
+					.withUserId(userId)
+					.withHeroIndex(request.getHeroIndex()));
+
+			return WebResult.succeeded(Draft.toDraftState(record.getPublicDraftState()));
+		} catch (NullPointerException unexpectedRequest) {
+			return WebResult.failed(400, unexpectedRequest);
+		} catch (Exception ignored) {
+			return WebResult.failed(400, new UnsupportedOperationException("You must choose a hero index."));
+		}
+	}
+
+	@Override
+	public WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException {
+		try {
+			DraftRecord record = drafts.doDraftAction(new DraftActionRequest()
+					.withUserId(userId)
+					.withCardIndex(request.getCardIndex()));
+
+			return WebResult.succeeded(Draft.toDraftState(record.getPublicDraftState()));
+		} catch (NullPointerException unexpectedRequest) {
+			return WebResult.failed(400, unexpectedRequest);
+		} catch (Exception ignored) {
+			return WebResult.failed(400, new UnsupportedOperationException("You must choose a card index, or the draft has been completed."));
+		}
 	}
 
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {

@@ -154,4 +154,62 @@ public class Mongo {
 	public Void dropIndex(String collection, String indexName) {
 		return awaitResult(h -> client.dropIndex(collection, indexName, h));
 	}
+
+	/**
+	 * Remove matching documents from a collection and return the handler with MongoClientDeleteResult result
+	 *
+	 * @param collection the collection
+	 * @param query      query used to match documents
+	 */
+	@Suspendable
+	public MongoClientDeleteResult removeDocuments(String collection, JsonObject query) {
+		return awaitResult(h -> client.removeDocuments(collection, query, h));
+	}
+
+	/**
+	 * Remove matching documents from a collection with the specified write option and return the handler with
+	 * MongoClientDeleteResult result
+	 *
+	 * @param collection  the collection
+	 * @param query       query used to match documents
+	 * @param writeOption the write option to use
+	 */
+	@Suspendable
+	public MongoClientDeleteResult removeDocumentsWithOptions(String collection, JsonObject query, WriteOption writeOption) {
+		return awaitResult(h -> client.removeDocumentsWithOptions(collection, query, writeOption, h));
+	}
+
+	/**
+	 * Remove a single matching document from a collection and return the handler with MongoClientDeleteResult result
+	 *
+	 * @param collection the collection
+	 * @param query      query used to match document
+	 */
+	@Suspendable
+	public MongoClientDeleteResult removeDocument(String collection, JsonObject query) {
+		return awaitResult(h -> client.removeDocument(collection, query, h));
+	}
+
+	/**
+	 * Remove a single matching document from a collection with the specified write option and return the handler with
+	 * MongoClientDeleteResult result
+	 *
+	 * @param collection  the collection
+	 * @param query       query used to match document
+	 * @param writeOption the write option to use
+	 */
+	@Suspendable
+	public MongoClientDeleteResult removeDocumentWithOptions(String collection, JsonObject query, WriteOption writeOption) {
+		return awaitResult(h -> client.removeDocumentWithOptions(collection, query, writeOption, h));
+	}
+
+	/**
+	 * Create a new collection
+	 *
+	 * @param collectionName the name of the collection
+	 */
+	@Suspendable
+	public Void createCollection(String collectionName) {
+		return awaitResult(h -> client.createCollection(collectionName, h));
+	}
 }

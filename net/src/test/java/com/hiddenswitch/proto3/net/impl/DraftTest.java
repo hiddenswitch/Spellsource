@@ -50,7 +50,7 @@ public class DraftTest extends ServiceTest<DraftImpl> {
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<DraftImpl>> done) {
 		server = new ServerImpl();
-		final DraftImpl instance = new DraftImpl();
-		vertx.deployVerticle(server, then -> vertx.deployVerticle(instance, then2 -> done.handle(Future.succeededFuture(instance))));
+		DraftImpl instance = server.drafts;
+		vertx.deployVerticle(server, then -> done.handle(Future.succeededFuture(instance)));
 	}
 }

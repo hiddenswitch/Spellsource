@@ -96,9 +96,10 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**decksGetAll**](docs/DefaultApi.md#decksGetAll) | **GET** /decks | 
 *DefaultApi* | [**decksPut**](docs/DefaultApi.md#decksPut) | **PUT** /decks | 
 *DefaultApi* | [**decksUpdate**](docs/DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
-*DefaultApi* | [**draftsChooseCard**](docs/DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards/{draftIndex} | 
+*DefaultApi* | [**draftsChooseCard**](docs/DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards | 
 *DefaultApi* | [**draftsChooseHero**](docs/DefaultApi.md#draftsChooseHero) | **PUT** /drafts/hero | 
 *DefaultApi* | [**draftsGet**](docs/DefaultApi.md#draftsGet) | **GET** /drafts | 
+*DefaultApi* | [**draftsPost**](docs/DefaultApi.md#draftsPost) | **POST** /drafts | 
 *DefaultApi* | [**friendDelete**](docs/DefaultApi.md#friendDelete) | **DELETE** /friends/{friendId} | 
 *DefaultApi* | [**friendPut**](docs/DefaultApi.md#friendPut) | **PUT** /friends | 
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
@@ -128,6 +129,7 @@ Class | Method | HTTP request | Description
  - [DraftState](docs/DraftState.md)
  - [DraftsChooseCardRequest](docs/DraftsChooseCardRequest.md)
  - [DraftsChooseHeroRequest](docs/DraftsChooseHeroRequest.md)
+ - [DraftsPostRequest](docs/DraftsPostRequest.md)
  - [Entity](docs/Entity.md)
  - [EntityChangeSet](docs/EntityChangeSet.md)
  - [EntityChangeSetInner](docs/EntityChangeSetInner.md)

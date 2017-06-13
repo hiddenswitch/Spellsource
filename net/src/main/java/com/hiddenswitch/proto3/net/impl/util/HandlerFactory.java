@@ -16,6 +16,7 @@ import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
  */
 public class HandlerFactory {
 	static Logger logger = LoggerFactory.getLogger(HandlerFactory.class);
+
 	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, AuthorizedRequestHandler<T, R> internalHandler) {
 		return suspendableHandler((context) -> {
 			String userId = context.user().principal().getString("_id");
@@ -63,7 +64,13 @@ public class HandlerFactory {
 	private static <R> void respond(RoutingContext context, WebResult<R> result) {
 		if (result.succeeded()) {
 			context.response().setStatusCode(result.responseCode());
-			context.response().end(Serialization.serialize(result.result()));
+			if (result.result() == null) {
+				// Allow empty response bodies
+				context.response().end();
+			} else {
+				context.response().end(Serialization.serialize(result.result()));
+			}
+
 		} else {
 			context.fail(result.responseCode());
 		}
