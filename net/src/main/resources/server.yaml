@@ -24,6 +24,16 @@ securityDefinitions:
     in: header
     name: X-Auth-Token
 definitions:
+  Friend:
+    type: 'object'
+    properties:
+      friendid:
+        type: 'string'
+      since:
+        type: 'integer'
+        format: 'int64'
+      friendName:
+        type: 'string'
   Account:
     type: 'object'
     properties:
@@ -33,6 +43,10 @@ definitions:
         type: 'string'
       email:
         type: 'string'
+      friends:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Friend'
       decks:
         type: 'array'
         items:
@@ -90,11 +104,9 @@ definitions:
   LoginRequest:
     type: 'object'
     required:
-      - userId
+      - email
       - password
     properties:
-      userId:
-        type: 'string'
       email:
         type: 'string'
       password:
@@ -596,6 +608,23 @@ definitions:
     properties:
       isConceded:
         type: 'boolean'
+  FriendPutRequest:
+    type: 'object'
+    properties:
+      friendId:
+        type: 'string'
+    required:
+      - friendId
+  FriendPutResponse:
+    type: 'object'
+    properties:
+      friend:
+        $ref: '#/definitions/Friend'
+  UnfriendResponse:
+    type: 'object'
+    properties:
+      deletedFriend:
+        $ref: '#/definitions/Friend'
   GameState:
     type: 'object'
     properties:
@@ -892,6 +921,7 @@ definitions:
         type: 'integer'
       lockedMana:
         type: 'integer'
+
 paths:
   /accounts/{targetUserId}:
     get:
@@ -1120,3 +1150,53 @@ paths:
             The client's cancel request has been processed. The result can be found in the body's MatchCancelResponse.
           schema:
             $ref: '#/definitions/MatchCancelResponse'
+  /friends:
+    put:
+      description: |
+        connect with a friend
+      operationId: friendPut
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: request
+          in: body
+          description: |
+            Friend put request
+          required: true
+          schema:
+            $ref: '#/definitions/FriendPutRequest'
+      responses:
+        "200":
+          description: |
+            Connection has been made
+          schema:
+            $ref: '#/definitions/FriendPutResponse'
+        "404":
+          description: |
+            friendId does not belong to a user
+        "409":
+          description: |
+            already friends
+
+  /friends/{friendId}:
+    delete:
+      description: |
+        unfriend a user
+      operationId: friendDelete
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: friendId
+          in: path
+          required: true
+          description: id of friend to unfriend.
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            Succefully unfriended
+          schema:
+            $ref: '#/definitions/UnfriendResponse'
+        "404":
+          description: |
+            Not a friend

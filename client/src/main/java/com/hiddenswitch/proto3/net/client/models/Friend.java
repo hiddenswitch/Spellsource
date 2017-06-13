@@ -32,50 +32,71 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * LoginRequest
+ * Friend
  */
 
-public class LoginRequest  implements Serializable {
-  @SerializedName("email")
-  private String email = null;
+public class Friend  implements Serializable {
+  @SerializedName("friendid")
+  private String friendid = null;
 
-  @SerializedName("password")
-  private String password = null;
+  @SerializedName("since")
+  private Long since = null;
 
-  public LoginRequest email(String email) {
-    this.email = email;
+  @SerializedName("friendName")
+  private String friendName = null;
+
+  public Friend friendid(String friendid) {
+    this.friendid = friendid;
     return this;
   }
 
    /**
-   * Get email
-   * @return email
+   * Get friendid
+   * @return friendid
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getEmail() {
-    return email;
+  @ApiModelProperty(example = "null", value = "")
+  public String getFriendid() {
+    return friendid;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setFriendid(String friendid) {
+    this.friendid = friendid;
   }
 
-  public LoginRequest password(String password) {
-    this.password = password;
+  public Friend since(Long since) {
+    this.since = since;
     return this;
   }
 
    /**
-   * Get password
-   * @return password
+   * Get since
+   * @return since
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getPassword() {
-    return password;
+  @ApiModelProperty(example = "null", value = "")
+  public Long getSince() {
+    return since;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setSince(Long since) {
+    this.since = since;
+  }
+
+  public Friend friendName(String friendName) {
+    this.friendName = friendName;
+    return this;
+  }
+
+   /**
+   * Get friendName
+   * @return friendName
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getFriendName() {
+    return friendName;
+  }
+
+  public void setFriendName(String friendName) {
+    this.friendName = friendName;
   }
 
 
@@ -87,23 +108,25 @@ public class LoginRequest  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LoginRequest loginRequest = (LoginRequest) o;
-    return Objects.equals(this.email, loginRequest.email) &&
-        Objects.equals(this.password, loginRequest.password);
+    Friend friend = (Friend) o;
+    return Objects.equals(this.friendid, friend.friendid) &&
+        Objects.equals(this.since, friend.since) &&
+        Objects.equals(this.friendName, friend.friendName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, password);
+    return Objects.hash(friendid, since, friendName);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class LoginRequest {\n");
+    sb.append("class Friend {\n");
     
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    friendid: ").append(toIndentedString(friendid)).append("\n");
+    sb.append("    since: ").append(toIndentedString(since)).append("\n");
+    sb.append("    friendName: ").append(toIndentedString(friendName)).append("\n");
     sb.append("}");
     return sb.toString();
   }

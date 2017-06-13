@@ -27,55 +27,35 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.Friend;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * LoginRequest
+ * UnfriendResponse
  */
 
-public class LoginRequest  implements Serializable {
-  @SerializedName("email")
-  private String email = null;
+public class UnfriendResponse  implements Serializable {
+  @SerializedName("deletedFriend")
+  private Friend deletedFriend = null;
 
-  @SerializedName("password")
-  private String password = null;
-
-  public LoginRequest email(String email) {
-    this.email = email;
+  public UnfriendResponse deletedFriend(Friend deletedFriend) {
+    this.deletedFriend = deletedFriend;
     return this;
   }
 
    /**
-   * Get email
-   * @return email
+   * Get deletedFriend
+   * @return deletedFriend
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getEmail() {
-    return email;
+  @ApiModelProperty(example = "null", value = "")
+  public Friend getDeletedFriend() {
+    return deletedFriend;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public LoginRequest password(String password) {
-    this.password = password;
-    return this;
-  }
-
-   /**
-   * Get password
-   * @return password
-  **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
+  public void setDeletedFriend(Friend deletedFriend) {
+    this.deletedFriend = deletedFriend;
   }
 
 
@@ -87,23 +67,21 @@ public class LoginRequest  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LoginRequest loginRequest = (LoginRequest) o;
-    return Objects.equals(this.email, loginRequest.email) &&
-        Objects.equals(this.password, loginRequest.password);
+    UnfriendResponse unfriendResponse = (UnfriendResponse) o;
+    return Objects.equals(this.deletedFriend, unfriendResponse.deletedFriend);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, password);
+    return Objects.hash(deletedFriend);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class LoginRequest {\n");
+    sb.append("class UnfriendResponse {\n");
     
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    deletedFriend: ").append(toIndentedString(deletedFriend)).append("\n");
     sb.append("}");
     return sb.toString();
   }

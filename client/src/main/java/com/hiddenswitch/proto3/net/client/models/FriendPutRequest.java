@@ -32,50 +32,29 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * LoginRequest
+ * FriendPutRequest
  */
 
-public class LoginRequest  implements Serializable {
-  @SerializedName("email")
-  private String email = null;
+public class FriendPutRequest  implements Serializable {
+  @SerializedName("friendId")
+  private String friendId = null;
 
-  @SerializedName("password")
-  private String password = null;
-
-  public LoginRequest email(String email) {
-    this.email = email;
+  public FriendPutRequest friendId(String friendId) {
+    this.friendId = friendId;
     return this;
   }
 
    /**
-   * Get email
-   * @return email
+   * Get friendId
+   * @return friendId
   **/
   @ApiModelProperty(example = "null", required = true, value = "")
-  public String getEmail() {
-    return email;
+  public String getFriendId() {
+    return friendId;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public LoginRequest password(String password) {
-    this.password = password;
-    return this;
-  }
-
-   /**
-   * Get password
-   * @return password
-  **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
+  public void setFriendId(String friendId) {
+    this.friendId = friendId;
   }
 
 
@@ -87,23 +66,21 @@ public class LoginRequest  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LoginRequest loginRequest = (LoginRequest) o;
-    return Objects.equals(this.email, loginRequest.email) &&
-        Objects.equals(this.password, loginRequest.password);
+    FriendPutRequest friendPutRequest = (FriendPutRequest) o;
+    return Objects.equals(this.friendId, friendPutRequest.friendId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, password);
+    return Objects.hash(friendId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class LoginRequest {\n");
+    sb.append("class FriendPutRequest {\n");
     
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    friendId: ").append(toIndentedString(friendId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

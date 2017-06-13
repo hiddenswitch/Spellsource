@@ -12,6 +12,7 @@ import com.hiddenswitch.proto3.net.impl.BotsImpl;
 import com.hiddenswitch.proto3.net.impl.GamesImpl;
 import com.hiddenswitch.proto3.net.impl.MatchmakingImpl;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
@@ -112,7 +113,7 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 			vertx.deployVerticle(bots, then2 -> {
 				vertx.deployVerticle(instance, then3 -> {
 					logger.info("Services deployed.");
-					done.handle(new Result<>(instance));
+					done.handle(Future.succeededFuture(instance));
 				});
 			});
 		});
