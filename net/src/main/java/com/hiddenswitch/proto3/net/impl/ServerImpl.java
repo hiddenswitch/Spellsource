@@ -3,12 +3,14 @@ package com.hiddenswitch.proto3.net.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
+import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.Server;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.client.models.LoginRequest;
 import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
+import com.hiddenswitch.proto3.net.impl.util.FriendRecord;
 import com.hiddenswitch.proto3.net.impl.util.HandlerFactory;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
@@ -25,6 +27,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.MongoClient;
+import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -36,6 +39,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import java.io.IOException;
 import java.util.*;
 
+import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -61,6 +65,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
+		super.start();
 		server = vertx.createHttpServer(new HttpServerOptions()
 				.setHost("0.0.0.0")
 				.setPort(8080));
@@ -172,6 +177,22 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 			router.route("/v1/matchmaking/constructed/queue")
 					.method(HttpMethod.DELETE)
 					.handler(HandlerFactory.handler(this::matchmakingConstructedQueueDelete));
+
+			router.route("/v1/friends")
+					.handler(bodyHandler);
+			router.route("/v1/friends")
+					.handler(authHandler);
+			router.route("/v1/friends")
+					.method(HttpMethod.PUT)
+					.handler(HandlerFactory.handler(FriendPutRequest.class, this::putFriend));
+
+			router.route("/v1/friends/:friendId")
+					.handler(bodyHandler);
+			router.route("/v1/friends/:friendId")
+					.handler(authHandler);
+			router.route("/v1/friends/:friendId")
+					.method(HttpMethod.DELETE)
+					.handler(HandlerFactory.handler("friendId", this::unFriend));
 
 			logger.info("Router configured.");
 			HttpServer listening = awaitResult(done -> server.requestHandler(router::accept).listen(done));
@@ -359,6 +380,80 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 		return WebResult.succeeded(games.getClientGameState(response.getGameId(), userId));
 	}
 
+	@Override
+	public WebResult<FriendPutResponse> putFriend(RoutingContext context, String userId, FriendPutRequest req)
+			throws SuspendExecution, InterruptedException {
+		String friendId = req.getFriendId();
+
+		//lookup friend user record
+		UserRecord friendAccount = accounts.get(req.getFriendId());
+
+		//if no friend, return 404
+		if (friendAccount == null) {
+			return WebResult.failed(404, new Exception("Friend account not found"));
+		}
+
+		//lookup own user account
+		UserRecord myAccount = (UserRecord) context.user();
+
+
+		//check if already friends
+		if (myAccount.isFriend(friendId)) {
+			return WebResult.failed(409, new Exception("Friend already friend"));
+		}
+
+		long startOfFriendship = System.currentTimeMillis();
+
+		FriendRecord friendRecord = new FriendRecord().setFriendId(friendId).setSince(startOfFriendship)
+				.setDisplayName(friendAccount.getProfile().getDisplayName());
+		FriendRecord friendOfFriendRecord = new FriendRecord().setFriendId(userId).setSince(startOfFriendship)
+				.setDisplayName(friendAccount.getProfile().getDisplayName());
+
+		//update both sides
+		Accounts.updateAccount(getMongo(), userId, json("$push", json("friends", json(friendRecord))));
+		Accounts.updateAccount(getMongo(), friendId, json("$push", json("friends",
+				json(friendOfFriendRecord))));
+
+
+		FriendPutResponse response = new FriendPutResponse().friend(friendRecord.toFriendDto());
+		return WebResult.succeeded(response);
+	}
+
+	@Override
+	public WebResult<UnfriendResponse> unFriend(RoutingContext context, String userId, String friendId)
+			throws SuspendExecution, InterruptedException {
+		UserRecord myAccount = (UserRecord) context.user();
+
+		//lookup friend user record
+		UserRecord friendAccount = accounts.get(friendId);
+
+		//doesn't exist?
+		if (friendAccount == null) {
+			return WebResult.failed(404, new Exception("Friend account not found"));
+		}
+
+		//friends?
+		FriendRecord friendRecord = myAccount.getFriendById(friendId);
+		if (friendRecord == null) {
+			return WebResult.failed(404, new Exception("Not friends"));
+		}
+
+		//Oops
+		FriendRecord friendOfFriendRecord = friendAccount.getFriendById(userId);
+		if (friendOfFriendRecord == null) {
+			return WebResult.failed(418, new Exception("Friends not balanced. OOPS"));
+		}
+
+		//delete from both sides
+		Accounts.updateAccount(getMongo(), userId, json("$pull",
+				json("friends", json("friendId", friendId))));
+		Accounts.updateAccount(getMongo(), friendId, json("$pull",
+				json("friends", json("friendId", userId))));
+
+		UnfriendResponse response = new UnfriendResponse().deletedFriend(friendRecord.toFriendDto());
+		return WebResult.succeeded(response);
+	}
+
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {
 		// Get the personal collection
 		UserRecord record = accounts.get(userId);
@@ -382,10 +477,10 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 		if (System.getProperties().containsKey("mongo.url")
 				|| System.getenv().containsKey("MONGO_URL")) {
 			String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017/local"));
-
 			Mongo.mongo().connect(vertx, mongoUrl);
 		} else {
 			Mongo.mongo().startEmbedded().connect(vertx);
 		}
+
 	}
 }
