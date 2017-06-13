@@ -7,5 +7,6 @@ public enum DraftStatus {
 	IN_PROGRESS,
 	SELECT_HERO,
 	NOT_STARTED,
-	COMPLETE
+	COMPLETE,
+	RETIRED
 }

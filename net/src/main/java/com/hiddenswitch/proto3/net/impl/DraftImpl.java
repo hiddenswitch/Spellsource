@@ -119,8 +119,9 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 	@Override
 	@Suspendable
 	public RetireDraftResponse retireDraftEarly(RetireDraftRequest request) {
-		// TODO: Don't just delete the record, but this is acceptable for now since we don't really care about this history.
-		mongo().removeDocument(DRAFTS, json("_id", request.getUserId()));
-		return new RetireDraftResponse();
+		final DraftRecord record = mongo().findOneAndUpdate(DRAFTS, json("_id", request.getUserId()), json("$set", json("publicDraftState.status", DraftStatus.RETIRED.toString())), DraftRecord.class);
+		record.getPublicDraftState().setStatus(DraftStatus.RETIRED);
+		return new RetireDraftResponse()
+				.withRecord(record);
 	}
 }

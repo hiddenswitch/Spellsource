@@ -70,7 +70,6 @@ public class HandlerFactory {
 			} else {
 				context.response().end(Serialization.serialize(result.result()));
 			}
-
 		} else {
 			context.fail(result.responseCode());
 		}

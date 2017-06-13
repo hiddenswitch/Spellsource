@@ -635,8 +635,8 @@ definitions:
         enum:
           - 'IN_PROGRESS'
           - 'SELECT_HERO'
-          - 'NOT_STARTED'
           - 'COMPLETE'
+          - 'RETIRED'
       selectedCards:
         type: 'array'
         items:
@@ -1308,12 +1308,9 @@ paths:
       responses:
         "200":
           description: |
-            You successfully started a draft and it now has the following state:
+            You successfully started a draft and it now has the following state. Or, the
           schema:
             $ref: '#/definitions/DraftState'
-        "204":
-          description: |
-            You successfully retired your draft early and the content is empty.
         "400":
           description: |
             You sent an invalid draft request, like starting a draft when you already have

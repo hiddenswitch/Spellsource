@@ -212,4 +212,10 @@ public class Mongo {
 	public Void createCollection(String collectionName) {
 		return awaitResult(h -> client.createCollection(collectionName, h));
 	}
+
+	@Suspendable
+	public <T extends MongoRecord> T findOneAndUpdate(String collection, JsonObject query, JsonObject update, Class<? extends T> returnClass) {
+		final JsonObject obj = awaitResult(h -> client.findOneAndUpdate(collection, query, update, then -> h.handle(then.otherwiseEmpty())));
+		return fromJson(obj, returnClass);
+	}
 }

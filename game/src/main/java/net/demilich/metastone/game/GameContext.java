@@ -13,6 +13,8 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.heroes.MetaHero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -146,6 +148,14 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	 * Creates a game context with no valid start state.
 	 */
 	public GameContext() {
+	}
+
+	public static GameContext uninitialized(HeroClass playerHero1, HeroClass playerHero2) {
+		final Player player1 = new Player();
+		final Player player2 = new Player();
+		player1.setHero(MetaHero.getHeroCard(playerHero1).createHero());
+		player2.setHero(MetaHero.getHeroCard(playerHero2).createHero());
+		return new GameContext(player1, player2, new GameLogic(), new DeckFormat().withCardSets(CardSet.values()));
 	}
 
 	/**
