@@ -1,21 +1,13 @@
 package com.hiddenswitch.proto3.net.impl;
 
-import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.net.util.LocalMongo;
 import com.hiddenswitch.proto3.net.util.Mongo;
 import com.hiddenswitch.proto3.net.util.RpcClient;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.sync.SyncVerticle;
-
-import java.io.File;
-import java.lang.reflect.Proxy;
 
 /**
  * An abstract class providing common backend features for microservices in Minionate.
@@ -29,7 +21,7 @@ import java.lang.reflect.Proxy;
  * @param <T>
  */
 abstract class AbstractService<T extends AbstractService<T>> extends SyncVerticle {
-	private static Logger logger = LoggerFactory.getLogger(AbstractService.class);
+	protected static Logger logger = LoggerFactory.getLogger(AbstractService.class);
 
 	/**
 	 * The entry point for the service. Should be overridden.
@@ -60,32 +52,6 @@ abstract class AbstractService<T extends AbstractService<T>> extends SyncVerticl
 	public RpcClient<T> getLocalClient() {
 		T service = (T) this;
 		Class<?> thisClass = ((T) this).getClass();
-		return new RpcClient<T>() {
-			@Override
-			@Suspendable
-			public <R> T async(Handler<AsyncResult<R>> handler) {
-				return (T) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), new Class<?>[]{thisClass}, (proxy, method, args) -> {
-					try {
-						Object result = method.invoke(service, args);
-						handler.handle(Future.succeededFuture((R) result));
-					} catch (Throwable e) {
-						handler.handle(Future.failedFuture(e));
-					}
-					return null;
-				});
-			}
-
-			@Override
-			@Suspendable
-			public T sync() throws SuspendExecution, InterruptedException {
-				return service;
-			}
-
-			@Override
-			@Suspendable
-			public T uncheckedSync() {
-				return service;
-			}
-		};
+		return new LocalRpcClient<>(thisClass, service);
 	}
 }

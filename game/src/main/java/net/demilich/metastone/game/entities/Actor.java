@@ -261,4 +261,17 @@ public abstract class Actor extends Entity {
 		result += "]";
 		return result;
 	}
+
+	@Override
+	public String getCardInventoryId() {
+		if (super.getCardInventoryId() != null) {
+			return super.getCardInventoryId();
+		}
+
+		if (getSourceCard() != null) {
+			return getSourceCard().getCardInventoryId();
+		}
+
+		return null;
+	}
 }

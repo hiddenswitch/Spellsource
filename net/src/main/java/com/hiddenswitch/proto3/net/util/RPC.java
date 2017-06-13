@@ -1,6 +1,9 @@
 package com.hiddenswitch.proto3.net.util;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
+import com.hiddenswitch.proto3.net.models.CreateAccountRequest;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.ext.sync.Sync;
@@ -63,6 +66,7 @@ public class RPC {
 	 *                         vertx.eventBus()}.
 	 * @param <T>              The service interface type.
 	 * @param <R>              A concrete implementation of the service interface type.
+	 * @see #getAddress(Class, SuspendableAction1) for a way to get the address of a given method on the event bus.
 	 */
 	@Suspendable
 	public static <T, R extends T> void register(R instance, Class<T> serviceInterface, final EventBus eb) {
@@ -71,7 +75,7 @@ public class RPC {
 		for (Method method : serviceInterface.getDeclaredMethods()) {
 			String methodName = name + "::" + method.getName();
 
-			eb.consumer(methodName, Sync.fiberHandler(Consumer.of(arg -> {
+			SuspendableFunction<Object, Object> method1 = arg -> {
 				try {
 					return method.invoke(instance, arg);
 				} catch (InvocationTargetException e) {
@@ -85,13 +89,16 @@ public class RPC {
 				} catch (Throwable e) {
 					throw e;
 				}
-			})));
+			};
+			// Get the context at the time of calling this function
+			eb.consumer(methodName, Sync.fiberHandler(new SyncMethodEventBusHandler<>(method1)));
 		}
 	}
 
 	/**
-	 * Connects to the given {@code serviceInterface} on the {@link EventBus} and gives you an {@link RpcClientImpl} you
-	 * can call methods on. Does not require the service to be running in order to be connected to.
+	 * Connects to the given {@code serviceInterface} on the {@link EventBus} and gives you an {@link
+	 * NetworkedRpcClient} you can call methods on. Does not require the service to be running in order to be connected
+	 * to.
 	 * <p>
 	 * Internally, this method creates a {@link Proxy} instance that implements {@link T}. When you call one of {@link
 	 * T}'s methods, this proxy will {@link EventBus#send(String, Object)} a {@link java.io.Serializable}-serialized
@@ -117,14 +124,14 @@ public class RPC {
 	 * @param serviceInterface The Java interface that corresponds to the API you're connecting to.
 	 * @param bus              An {@link EventBus}, typically accessed with {@code vertx.eventBus()}.
 	 * @param <T>              The type of the Java interface.
-	 * @return An {@link RpcClientImpl }.
+	 * @return An {@link NetworkedRpcClient }.
 	 */
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public static <T> RpcClient<T> connect(Class<? extends T> serviceInterface, final EventBus bus) {
 		final VertxInvocationHandler<T> invocationHandler = new VertxInvocationHandler<>();
 
-		RpcClientImpl<T> result = new RpcClientImpl<>((T) Proxy.newProxyInstance(
+		NetworkedRpcClient<T> rpcClient = new NetworkedRpcClient<>((T) Proxy.newProxyInstance(
 				serviceInterface.getClassLoader(),
 				new Class[]{serviceInterface},
 				invocationHandler
@@ -132,9 +139,44 @@ public class RPC {
 
 		invocationHandler.eb = bus;
 		invocationHandler.name = serviceInterface.getName();
-		invocationHandler.ApiClient = result;
+		invocationHandler.rpcClient = rpcClient;
 
-		return result;
+		return rpcClient;
 	}
 
+	/**
+	 * Gets an address from a named method call.
+	 * <p>
+	 * For example, to get the address of an {@link com.hiddenswitch.proto3.net.Accounts#createAccount(CreateAccountRequest)}
+	 * call, do:
+	 * <p>
+	 * <pre>
+	 *     {@code
+	 *     RPC.getAddress(Accounts.class, accounts -> accounts.createAccount(null));
+	 *     }
+	 * </pre>
+	 * Note you can enter anything for the argument, and you don't need to do anything with the return value.
+	 * <p>
+	 * Internally, this creates a proxy that implements the interface and sees which method you called.
+	 *
+	 * @param serviceInterface The service / interface
+	 * @param methodCall       A lambda where you call the method on a fake instance of the service.
+	 * @param <T>              The interface type.
+	 * @return A string corresponding to an {@link EventBus} address for this service method.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> String getAddress(Class<? extends T> serviceInterface, SuspendableAction1<T> methodCall) {
+		final String[] outName = {null};
+		final T proxy = (T) Proxy.newProxyInstance(serviceInterface.getClassLoader(), new Class[]{serviceInterface}, (proxy1, method, args) -> {
+			outName[0] = method.getName();
+			return null;
+		});
+
+		try {
+			methodCall.call(proxy);
+		} catch (SuspendExecution | InterruptedException ignored) {
+		}
+
+		return serviceInterface.getName() + "::" + outName[0];
+	}
 }

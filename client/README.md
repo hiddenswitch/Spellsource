@@ -99,6 +99,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**draftsChooseCard**](docs/DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards/{draftIndex} | 
 *DefaultApi* | [**draftsChooseHero**](docs/DefaultApi.md#draftsChooseHero) | **PUT** /drafts/hero | 
 *DefaultApi* | [**draftsGet**](docs/DefaultApi.md#draftsGet) | **GET** /drafts | 
+*DefaultApi* | [**friendDelete**](docs/DefaultApi.md#friendDelete) | **DELETE** /friends/{friendId} | 
+*DefaultApi* | [**friendPut**](docs/DefaultApi.md#friendPut) | **PUT** /friends | 
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
@@ -131,6 +133,9 @@ Class | Method | HTTP request | Description
  - [EntityChangeSetInner](docs/EntityChangeSetInner.md)
  - [EntityLocation](docs/EntityLocation.md)
  - [EntityState](docs/EntityState.md)
+ - [Friend](docs/Friend.md)
+ - [FriendPutRequest](docs/FriendPutRequest.md)
+ - [FriendPutResponse](docs/FriendPutResponse.md)
  - [GameActions](docs/GameActions.md)
  - [GameActionsChooseOnes](docs/GameActionsChooseOnes.md)
  - [GameActionsChooseOnesSpells](docs/GameActionsChooseOnesSpells.md)
@@ -176,6 +181,7 @@ Class | Method | HTTP request | Description
  - [SummonAction](docs/SummonAction.md)
  - [SummonActionIndexToActions](docs/SummonActionIndexToActions.md)
  - [TargetActionPair](docs/TargetActionPair.md)
+ - [UnfriendResponse](docs/UnfriendResponse.md)
 
 
 ## Documentation for Authorization

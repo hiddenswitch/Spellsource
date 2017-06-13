@@ -130,5 +130,9 @@ public interface Server {
 	WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
 
 	WebResult<GameState> matchmakingConstructedGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
+
+	WebResult<FriendPutResponse> putFriend(RoutingContext context, String userId,  FriendPutRequest req)  throws SuspendExecution, InterruptedException;
+
+	WebResult<UnfriendResponse> unFriend(RoutingContext context, String userId, String friendId)  throws SuspendExecution, InterruptedException;
 }
 

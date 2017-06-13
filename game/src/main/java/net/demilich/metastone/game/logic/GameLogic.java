@@ -692,7 +692,7 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Deals spell damage to a target.
+	 * Deals damage to a target.
 	 *
 	 * @param player     The originating player of the damage.
 	 * @param target     The target to damage.
@@ -2867,13 +2867,14 @@ public class GameLogic implements Cloneable, Serializable {
 		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
 	}
 
+	@Suspendable
 	protected void mulliganAsync(Player player, boolean begins, Handler<Object> callback) {
 		throw new RecoverableGameException("Cannot call GameLogic::mulliganAsync from a non-async GameLogic instance.", context);
 	}
 
+	@Suspendable
 	public void initAsync(int playerId, boolean begins, Handler<Player> callback) {
 		throw new RecoverableGameException("Cannot call GameLogic::initAsync from a non-async GameLogic instance.", context);
-
 	}
 
 	@Suspendable

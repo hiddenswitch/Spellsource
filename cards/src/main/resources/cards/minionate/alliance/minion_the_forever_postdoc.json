@@ -1,0 +1,19 @@
+{
+  "id": "minion_the_forever_postdoc",
+  "name": "The Forever Post-Doc",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Call to Arms: If this is the first time you've played this minion, permanently cost (1) less.",
+  "collectible": true,
+  "set": "MINIONATE",
+  "manaCostModifier": {
+    "class": "AttributeValueProvider",
+    "target": "SELF",
+    "attribute": "UNIQUE_CHAMPION_IDS_SIZE"
+  },
+  "fileFormatVersion": 1
+}

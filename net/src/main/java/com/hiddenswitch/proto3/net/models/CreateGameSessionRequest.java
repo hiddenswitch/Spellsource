@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.models;
 
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ public class CreateGameSessionRequest implements Serializable {
 	private String gameId;
 	private PregamePlayerConfiguration pregame1;
 	private PregamePlayerConfiguration pregame2;
+	private Trigger customTriggers;
 	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
 
 	public PregamePlayerConfiguration getPregame1() {
@@ -78,6 +80,19 @@ public class CreateGameSessionRequest implements Serializable {
 
 	public CreateGameSessionRequest withGameId(String gameId) {
 		setGameId(gameId);
+		return this;
+	}
+
+	public Trigger getCustomTriggers() {
+		return customTriggers;
+	}
+
+	public void setCustomTriggers(Trigger customTriggers) {
+		this.customTriggers = customTriggers;
+	}
+
+	public CreateGameSessionRequest withCustomTriggers(final Trigger customTriggers) {
+		this.customTriggers = customTriggers;
 		return this;
 	}
 }

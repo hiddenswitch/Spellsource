@@ -36,6 +36,9 @@ import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
 import com.hiddenswitch.proto3.net.client.models.DraftsChooseCardRequest;
 import com.hiddenswitch.proto3.net.client.models.DraftsChooseHeroRequest;
 import com.hiddenswitch.proto3.net.client.models.DraftState;
+import com.hiddenswitch.proto3.net.client.models.UnfriendResponse;
+import com.hiddenswitch.proto3.net.client.models.FriendPutResponse;
+import com.hiddenswitch.proto3.net.client.models.FriendPutRequest;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsResponse;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsRequest;
 import com.hiddenswitch.proto3.net.client.models.LoginResponse;
@@ -199,6 +202,38 @@ public class DefaultApiTest {
     @Test
     public void draftsGetTest() throws ApiException {
         // DraftState response = api.draftsGet();
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * unfriend a user 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void friendDeleteTest() throws ApiException {
+        String friendId = null;
+        // UnfriendResponse response = api.friendDelete(friendId);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * connect with a friend 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void friendPutTest() throws ApiException {
+        FriendPutRequest request = null;
+        // FriendPutResponse response = api.friendPut(request);
 
         // TODO: test validations
     }

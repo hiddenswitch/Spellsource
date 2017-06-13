@@ -14,19 +14,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Assert;
 
-import javax.websocket.CloseReason;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.*;
 import java.util.stream.Collectors;
 
-/**
- * Created by bberman on 4/10/17.
- */
 public class UnityClient {
 	private ApiClient apiClient;
 	private DefaultApi api;
@@ -51,6 +45,10 @@ public class UnityClient {
 		this.turnsToPlay = new AtomicInteger(turnsToPlay);
 	}
 
+	public void createUserAccount() {
+		createUserAccount(null);
+	}
+
 	public void createUserAccount(String username) {
 		if (username == null) {
 			username = RandomStringUtils.randomAlphanumeric(10);
@@ -73,6 +71,10 @@ public class UnityClient {
 
 	public void gameOver(Handler<UnityClient> handler) {
 		onGameOver = io.vertx.ext.sync.Sync.fiberHandler(handler);
+	}
+
+	public void matchmakeAndPlayAgainstAI() {
+		matchmakeAndPlayAgainstAI(null);
 	}
 
 	public void matchmakeAndPlayAgainstAI(String deckId) {
@@ -111,6 +113,10 @@ public class UnityClient {
 		} catch (ApiException | URISyntaxException e) {
 			context.fail(e.getMessage());
 		}
+	}
+
+	public UnityClient contextPlay(IntegrationTestContext unityContext) {
+		return this;
 	}
 
 	private void play(MatchmakingQueuePutResponseUnityConnection unityConnection) throws URISyntaxException {
@@ -265,6 +271,7 @@ public class UnityClient {
 				Strand.sleep(1000);
 			} catch (SuspendExecution | InterruptedException suspendExecution) {
 				suspendExecution.printStackTrace();
+				return;
 			}
 
 			time += 1f;
