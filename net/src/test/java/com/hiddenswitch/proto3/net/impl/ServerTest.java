@@ -1,8 +1,8 @@
 package com.hiddenswitch.proto3.net.impl;
 
 import ch.qos.logback.classic.Level;
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.proto3.net.Games;
@@ -14,6 +14,8 @@ import com.hiddenswitch.proto3.net.client.api.DefaultApi;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.models.CreateGameSessionRequest;
 import com.hiddenswitch.proto3.net.models.CurrentMatchRequest;
+import com.hiddenswitch.proto3.net.models.DeckCreateRequest;
+import com.hiddenswitch.proto3.net.models.DeckCreateResponse;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.UnityClient;
@@ -30,19 +32,21 @@ import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -301,19 +305,172 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 	}
 
 	@Test
-	@Ignore
-	public void testTotalDamageDealt(TestContext context) {
+	public void testWeaponActionReceived(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		wrap(context);
+		Async async = context.async();
+		vertx.runOnContext(ignored -> {
+			AtomicBoolean didGetPlayWeaponAction = new AtomicBoolean(false);
+			UnityClient client = new UnityClient(context) {
+				@Override
+				protected void assertValidActions(ServerToClientMessage message) {
+					super.assertValidActions(message);
 
+					if (message.getMessageType() == MessageType.ON_REQUEST_ACTION
+							&& message.getActions().getWeapons() != null
+							&& message.getActions().getWeapons().size() > 0) {
+						didGetPlayWeaponAction.set(true);
+					}
+				}
+			};
+			final String[] deckId = new String[1];
+			vertx.executeBlocking(done -> {
+				client.createUserAccount(null);
+				Fiber<Void> fiber = new Fiber<Void>(Sync.getContextScheduler(), () -> {
+					DeckCreateResponse res = service.decks.createDeck(new DeckCreateRequest()
+							.withUserId(client.getAccount().getId())
+							.withHeroClass(HeroClass.ROGUE)
+							.withName("Test Weapon Deck")
+							.withCardIds(Collections.nCopies(30, "weapon_clandestine_laser")));
+					deckId[0] = res.getDeckId();
+				}).start();
+				while (deckId[0] == null) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				done.handle(Future.succeededFuture());
+			}, true, context.asyncAssertSuccess(then -> {
+				vertx.executeBlocking(done2 -> {
+					client.matchmakeAndPlayAgainstAI(deckId[0]);
+					client.waitUntilDone();
+					getContext().assertTrue(client.isGameOver());
+					getContext().assertTrue(didGetPlayWeaponAction.get());
+					done2.handle(Future.succeededFuture());
+				}, true, context.asyncAssertSuccess(finallyy -> {
+					async.complete();
+				}));
+			}));
+		});
 	}
 
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<ServerImpl>> done) {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
-		ServerImpl instance = new ServerImpl().withEmbeddedConfiguration();
+		ServerImpl instance = new ServerImpl();
 		instance.bots.setBotBehaviour(PlayRandomBehaviour.class);
 		vertx.deployVerticle(instance, then -> {
 			deploymentId = then.result();
 			done.handle(Future.succeededFuture(instance));
 		});
+	}
+
+	private static int currentTomer = 0;
+
+	public CreateAccountResponse createRandomAccount(TestContext testContext, DefaultApi defaultApi) {
+		String username = "tomer" + currentTomer;
+		String email = "tomer" + (currentTomer++) + "@gmail.com";
+
+		CreateAccountResponse createAccountResponse = null;
+		try {
+			createAccountResponse = defaultApi.createAccount(
+					new CreateAccountRequest().email(email).name(username).password("1357913579"));
+		} catch (ApiException e) {
+			testContext.fail("failed creating random account " + username + " with error: " + e.getMessage());
+		}
+		testContext.assertNotNull(createAccountResponse, "first account is null");
+		return createAccountResponse;
+	}
+
+	@Test
+	public void testFriendsApi(TestContext testContext) {
+		DefaultApi defaultApi = new DefaultApi();
+		defaultApi.getApiClient().setBasePath("http://localhost:8080/v1"); //TODO: read from configuration
+
+		// create first account
+		CreateAccountResponse createAccount1Response = createRandomAccount(testContext, defaultApi);
+
+		// authenticate with first account
+		String token = createAccount1Response.getLoginToken();
+		testContext.assertNotNull(token, "auth token is null");
+		defaultApi.getApiClient().setApiKey(token);
+
+		// test putting friend that does not exist
+		FriendPutResponse friendPutResponseDoesNotExist = null;
+		try {
+			friendPutResponseDoesNotExist = defaultApi.friendPut(new FriendPutRequest().friendId("idontexist"));
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(), "Friend doesn't exist. Should return 404");
+		}
+		testContext.assertNull(friendPutResponseDoesNotExist);
+
+		// create second account
+		CreateAccountResponse createAccount2Response = createRandomAccount(testContext, defaultApi);
+
+		// add second account as friend
+		FriendPutResponse friendPutResponse = null;
+		try {
+			friendPutResponse = defaultApi.friendPut(
+					new FriendPutRequest().friendId(createAccount2Response.getAccount().getId()));
+		} catch (ApiException e) {
+			testContext.assertEquals(200, e.getCode(), "Adding new friend. Should return 200");
+		}
+		testContext.assertEquals(
+				friendPutResponse.getFriend().getFriendid(), createAccount2Response.getAccount().getId());
+
+		// test putting friend that already exists
+		try {
+			defaultApi.friendPut(new FriendPutRequest().friendId(createAccount2Response.getAccount().getId()));
+		} catch (ApiException e) {
+			testContext.assertEquals(409, e.getCode(), "Adding existing friend. Should return 409");
+		}
+
+		// test putting friend that already exists - second direction
+		defaultApi.getApiClient().setApiKey(createAccount2Response.getLoginToken()); //reauth as friend
+		try {
+			defaultApi.friendPut(new FriendPutRequest().friendId(createAccount1Response.getAccount().getId()));
+		} catch (ApiException e) {
+			testContext.assertEquals(409, e.getCode(),
+					"Adding existing friend (second direction). Should return 409");
+		}
+
+		// unfriend a user that doesn't exist
+		try {
+			defaultApi.friendDelete("idontexist");
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(),
+					"Friend account doesn't exist. Should return 404");
+		}
+
+		// unfriend the first user
+		UnfriendResponse unfriendResponse = null;
+		try {
+			unfriendResponse = defaultApi.friendDelete(createAccount1Response.getAccount().getId());
+		} catch (ApiException e) {
+			testContext.assertEquals(200, e.getCode(),
+					"Unfriending an existing friend. expecting 200");
+		}
+		testContext.assertNotNull(unfriendResponse.getDeletedFriend(),
+				"unfriend response should include the friend details");
+		testContext.assertEquals(unfriendResponse.getDeletedFriend().getFriendid(),
+				createAccount1Response.getAccount().getId());
+
+		// try to unfriend the first user again
+		try {
+			defaultApi.friendDelete(createAccount1Response.getAccount().getId());
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(), "Not friends. should return 404");
+		}
+
+		// try to unfriend from the other direction
+		defaultApi.getApiClient().setApiKey(createAccount1Response.getLoginToken());
+		try {
+			defaultApi.friendDelete(createAccount2Response.getAccount().getId());
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(),
+					"Not friends (2nd direction). should return 404");
+		}
 	}
 }

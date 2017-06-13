@@ -9,6 +9,7 @@ import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Result;
 import com.hiddenswitch.proto3.net.impl.ServiceTest;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
@@ -42,11 +43,11 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<InventoryImpl>> done) {
-		final InventoryImpl inventory = new InventoryImpl().withEmbeddedConfiguration();
+		final InventoryImpl inventory = new InventoryImpl();
 		final CardsImpl cards = new CardsImpl();
 		vertx.deployVerticle(cards, then -> {
 			vertx.deployVerticle(inventory, then2 -> {
-				done.handle(new Result<>(inventory));
+				done.handle(Future.succeededFuture(inventory));
 			});
 		});
 

@@ -1,6 +1,7 @@
 package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Inventory;
@@ -26,6 +27,9 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 import static com.hiddenswitch.proto3.net.util.QuickJson.jsonPut;
 import static io.vertx.ext.sync.Sync.awaitResult;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by bberman on 2/4/17.
@@ -59,16 +63,22 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		if (request.getCardIds() != null) {
 			// Find the card IDs in the user's collection, using copies wherever available, to put into the deck
 			GetCollectionResponse userCollection = inventory.sync().getCollection(GetCollectionRequest.user(request.getUserId()));
-			Map<String, List<InventoryRecord>> cards = userCollection.getInventoryRecords().stream().collect(Collectors.groupingBy(InventoryRecord::getCardId));
+			Map<String, List<String>> cards = userCollection.getInventoryRecords().stream().collect(groupingBy(InventoryRecord::getCardId, mapping(InventoryRecord::getId, toList())));
 
 			for (String cardId : request.getCardIds()) {
-				final List<InventoryRecord> entry = cards.getOrDefault(cardId, /* TODO: Create the card on the fly? */ Collections.emptyList());
-				if (entry.size() > 0) {
-					InventoryRecord record = entry.remove(0);
-					inventoryIds.add(record.getId());
-				} else {
-					throw new RuntimeException();
+				List<String> entry = cards.getOrDefault(cardId, /* TODO: Create the card on the fly? */ Collections.emptyList());
+				if (entry.size() == 0) {
+					// TODO: Create a copy of the card on the fly for now.
+					cards.put(cardId, inventory.sync().addToCollection(new AddToCollectionRequest()
+							.withCardIds(Collections.singletonList(cardId))
+							.withUserId(request.getUserId())
+							// Add 30 additional copies right away, because we're probably doing this for testing purposes right now
+							.withCopies(30)).getInventoryIds());
+
+					entry = cards.get(cardId);
 				}
+				String record = entry.remove(0);
+				inventoryIds.add(record);
 			}
 		}
 

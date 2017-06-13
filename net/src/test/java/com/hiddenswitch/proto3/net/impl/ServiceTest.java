@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hiddenswitch.proto3.net.common.Recursive;
+import com.hiddenswitch.proto3.net.util.Mongo;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
@@ -60,6 +61,8 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 
 	@Before
 	public void setUp(TestContext context) {
+		Mongo.mongo().startEmbedded().connect(vertx);
+
 		deployServices(vertx, context.asyncAssertSuccess(i -> {
 			service = i;
 		}));

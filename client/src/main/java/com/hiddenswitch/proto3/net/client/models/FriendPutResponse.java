@@ -27,55 +27,35 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.Friend;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * LoginRequest
+ * FriendPutResponse
  */
 
-public class LoginRequest  implements Serializable {
-  @SerializedName("email")
-  private String email = null;
+public class FriendPutResponse  implements Serializable {
+  @SerializedName("friend")
+  private Friend friend = null;
 
-  @SerializedName("password")
-  private String password = null;
-
-  public LoginRequest email(String email) {
-    this.email = email;
+  public FriendPutResponse friend(Friend friend) {
+    this.friend = friend;
     return this;
   }
 
    /**
-   * Get email
-   * @return email
+   * Get friend
+   * @return friend
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getEmail() {
-    return email;
+  @ApiModelProperty(example = "null", value = "")
+  public Friend getFriend() {
+    return friend;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public LoginRequest password(String password) {
-    this.password = password;
-    return this;
-  }
-
-   /**
-   * Get password
-   * @return password
-  **/
-  @ApiModelProperty(example = "null", required = true, value = "")
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
+  public void setFriend(Friend friend) {
+    this.friend = friend;
   }
 
 
@@ -87,23 +67,21 @@ public class LoginRequest  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LoginRequest loginRequest = (LoginRequest) o;
-    return Objects.equals(this.email, loginRequest.email) &&
-        Objects.equals(this.password, loginRequest.password);
+    FriendPutResponse friendPutResponse = (FriendPutResponse) o;
+    return Objects.equals(this.friend, friendPutResponse.friend);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, password);
+    return Objects.hash(friend);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class LoginRequest {\n");
+    sb.append("class FriendPutResponse {\n");
     
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    friend: ").append(toIndentedString(friend)).append("\n");
     sb.append("}");
     return sb.toString();
   }

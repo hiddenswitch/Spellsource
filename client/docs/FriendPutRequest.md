@@ -1,11 +1,10 @@
 
-# LoginRequest
+# FriendPutRequest
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **String** |  | 
-**password** | **String** |  | 
+**friendId** | **String** |  | 
 
 
 

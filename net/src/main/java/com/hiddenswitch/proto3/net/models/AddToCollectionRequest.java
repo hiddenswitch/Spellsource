@@ -11,6 +11,7 @@ public class AddToCollectionRequest implements Serializable {
 	private List<String> inventoryIds;
 	private List<String> cardIds;
 	private String userId;
+	private int copies = 1;
 
 	public String getCollectionId() {
 		return collectionId;
@@ -70,5 +71,18 @@ public class AddToCollectionRequest implements Serializable {
 	public AddToCollectionRequest withUserId(final String userId) {
 		this.userId = userId;
 		return this;
+	}
+
+	public AddToCollectionRequest withCopies(int copies) {
+		this.copies = copies;
+		return this;
+	}
+
+	public int getCopies() {
+		return copies;
+	}
+
+	public void setCopies(int copies) {
+		this.copies = copies;
 	}
 }

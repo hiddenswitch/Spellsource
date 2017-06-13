@@ -66,14 +66,7 @@ public class UnityClient {
 	}
 
 	public void loginWithUserAccount(String username) {
-		try {
-			LoginResponse lr = api.login(new LoginRequest().email(username + "@hiddenswitch.com").password("testpass"));
-			api.getApiClient().setApiKey(lr.getLoginToken());
-			account = lr.getAccount();
-			context.assertNotNull(account);
-		} catch (ApiException e) {
-			context.fail(e.getMessage());
-		}
+		loginWithUserAccount(username, "testpass");
 	}
 
 	public void gameOver(Handler<UnityClient> handler) {
@@ -169,6 +162,7 @@ public class UnityClient {
 							.discardedCardIndices(Collections.singletonList(0))));
 					break;
 				case ON_REQUEST_ACTION:
+					assertValidActions(message);
 					context.assertNotNull(message.getGameState());
 					context.assertNotNull(message.getChanges());
 					context.assertNotNull(message.getActions());
@@ -199,6 +193,10 @@ public class UnityClient {
 		endpoint.sendMessage(serialize(unityConnection.getFirstMessage()));
 	}
 
+	protected void assertValidActions(ServerToClientMessage message) {
+
+	}
+
 	public void disconnect() {
 		try {
 			endpoint.getUserSession().close();
@@ -207,7 +205,7 @@ public class UnityClient {
 		}
 	}
 
-	private void assertValidStateAndChanges(ServerToClientMessage message) {
+	protected void assertValidStateAndChanges(ServerToClientMessage message) {
 		context.assertNotNull(message.getGameState());
 		context.assertNotNull(message.getChanges());
 		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
@@ -277,6 +275,17 @@ public class UnityClient {
 			}
 
 			time += 1f;
+		}
+	}
+
+	public void loginWithUserAccount(String username, String password) {
+		try {
+			LoginResponse lr = api.login(new LoginRequest().email(username + "@hiddenswitch.com").password(password));
+			api.getApiClient().setApiKey(lr.getLoginToken());
+			account = lr.getAccount();
+			context.assertNotNull(account);
+		} catch (ApiException e) {
+			context.fail(e.getMessage());
 		}
 	}
 }

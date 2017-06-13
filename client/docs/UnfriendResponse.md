@@ -1,11 +1,10 @@
 
-# LoginRequest
+# UnfriendResponse
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **String** |  | 
-**password** | **String** |  | 
+**deletedFriend** | [**Friend**](Friend.md) |  |  [optional]
 
 
 
