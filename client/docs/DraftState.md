@@ -22,8 +22,8 @@ Name | Value
 ---- | -----
 IN_PROGRESS | &quot;IN_PROGRESS&quot;
 SELECT_HERO | &quot;SELECT_HERO&quot;
-NOT_STARTED | &quot;NOT_STARTED&quot;
 COMPLETE | &quot;COMPLETE&quot;
+RETIRED | &quot;RETIRED&quot;
 
 
 

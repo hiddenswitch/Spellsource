@@ -7,12 +7,8 @@ import com.hiddenswitch.proto3.net.client.models.DraftState;
 import com.hiddenswitch.proto3.net.impl.util.DraftRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.logic.GameLogic;
 
 import java.util.stream.Collectors;
 
@@ -42,6 +38,7 @@ public interface Draft {
 
 	/**
 	 * Choose a hero power or a card action during the draft.
+	 *
 	 * @param request The appropriate choice given the state of the draft.
 	 * @return The new state of this draft.
 	 * @throws NullPointerException when an invalid hero or card choice was made despite one being expected.
@@ -80,19 +77,19 @@ public interface Draft {
 	 * @return A client-ready draft state view.
 	 */
 	static DraftState toDraftState(PublicDraftState inState) {
-		GameContext workingContext = new GameContext(new Player(), new Player(), new GameLogic(), new DeckFormat().withCardSets(CardSet.MINIONATE));
+		GameContext workingContext = GameContext.uninitialized(inState.getHeroClass() == null ? HeroClass.WARRIOR : inState.getHeroClass(), HeroClass.WARRIOR);
 		return new DraftState()
 				.cardsRemaining(inState.getCardsRemaining())
-				.currentCardChoices(inState.getCurrentCardChoices().stream()
+				.currentCardChoices(inState.getCurrentCardChoices() == null ? null : inState.getCurrentCardChoices().stream()
 						.map(CardCatalogue::getCardById)
 						.map(c -> Games.getEntity(workingContext, c, 0))
 						.collect(Collectors.toList()))
 				.deckId(inState.getDeckId())
 				.draftIndex(inState.getDraftIndex())
-				.heroClass(inState.getHeroClass().toString())
-				.heroClassChoices(inState.getHeroClassChoices().stream().map(HeroClass::toString).collect(Collectors.toList()))
+				.heroClass(inState.getHeroClass() == null ? null : inState.getHeroClass().toString())
+				.heroClassChoices(inState.getHeroClassChoices() == null ? null : inState.getHeroClassChoices().stream().map(HeroClass::toString).collect(Collectors.toList()))
 				.losses(inState.getLosses())
-				.selectedCards(inState.getSelectedCards().stream().map(CardCatalogue::getCardById)
+				.selectedCards(inState.getSelectedCards() == null ? null : inState.getSelectedCards().stream().map(CardCatalogue::getCardById)
 						.map(c -> Games.getEntity(workingContext, c, 0))
 						.collect(Collectors.toList()))
 				.status(DraftState.StatusEnum.valueOf(inState.getStatus().toString()))

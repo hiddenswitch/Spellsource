@@ -59,11 +59,11 @@ public class DraftState  implements Serializable {
     @SerializedName("SELECT_HERO")
     SELECT_HERO("SELECT_HERO"),
     
-    @SerializedName("NOT_STARTED")
-    NOT_STARTED("NOT_STARTED"),
-    
     @SerializedName("COMPLETE")
-    COMPLETE("COMPLETE");
+    COMPLETE("COMPLETE"),
+    
+    @SerializedName("RETIRED")
+    RETIRED("RETIRED");
 
     private String value;
 

@@ -197,6 +197,35 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 					.method(HttpMethod.DELETE)
 					.handler(HandlerFactory.handler("friendId", this::unFriend));
 
+			router.route("/v1/drafts")
+					.handler(bodyHandler);
+			router.route("/v1/drafts")
+					.handler(authHandler);
+			router.route("/v1/drafts")
+					.method(HttpMethod.GET)
+					.handler(HandlerFactory.handler(this::draftsGet));
+
+			router.route("/v1/drafts")
+					.method(HttpMethod.POST)
+					.handler(HandlerFactory.handler(DraftsPostRequest.class, this::draftsPost));
+
+			router.route("/v1/drafts/hero")
+					.handler(bodyHandler);
+			router.route("/v1/drafts/hero")
+					.handler(authHandler);
+			router.route("/v1/drafts/hero")
+					.method(HttpMethod.PUT)
+					.handler(HandlerFactory.handler(DraftsChooseHeroRequest.class, this::draftsChooseHero));
+
+			router.route("/v1/drafts/cards")
+					.handler(bodyHandler);
+			router.route("/v1/drafts/cards")
+					.handler(authHandler);
+			router.route("/v1/drafts/cards")
+					.method(HttpMethod.PUT)
+					.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
+
+
 			logger.info("Router configured.");
 			HttpServer listening = awaitResult(done -> server.requestHandler(router::accept).listen(done));
 			logger.info("Listening on port " + Integer.toString(server.actualPort()));
@@ -469,7 +498,8 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<DraftState> draftsPost(RoutingContext context, String userId, DraftsPostRequest request) throws SuspendExecution, InterruptedException {
-		if (request.getStartDraft()) {
+		if (null != request.getStartDraft()
+				&& request.getStartDraft()) {
 			try {
 				return WebResult.succeeded(
 						Draft.toDraftState(
@@ -478,12 +508,17 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 			} catch (NullPointerException unexpectedRequest) {
 				return WebResult.failed(400, unexpectedRequest);
 			}
-		} else if (request.getRetireEarly()) {
-			drafts.retireDraftEarly(new RetireDraftRequest().withUserId(userId));
-			return WebResult.succeeded(204, null);
-		} else {
-			return WebResult.failed(400, new UnsupportedOperationException("You must choose a valid action."));
+		} else if (null != request.getRetireEarly()
+				&& request.getRetireEarly()) {
+			return WebResult.succeeded(
+					Draft.toDraftState(
+							drafts.retireDraftEarly(new RetireDraftRequest().withUserId(userId))
+									.getRecord()
+									.getPublicDraftState()));
+
 		}
+
+		return WebResult.failed(400, new UnsupportedOperationException("You must choose a valid action."));
 	}
 
 	@Override
