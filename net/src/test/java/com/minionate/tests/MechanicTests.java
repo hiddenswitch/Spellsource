@@ -6,14 +6,13 @@ import io.vertx.ext.unit.junit.VertxUnitRunner;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/**
- * Created by bberman on 6/7/17.
- */
-@RunWith(VertxUnitRunner.class)
 public class MechanicTests extends IntegrationTestBase {
+	@Test
+	@Ignore
 	public void testOneUpper(TestContext testContext) {
 		IntegrationTestContext context = new IntegrationTestContext(testContext, vertx);
 

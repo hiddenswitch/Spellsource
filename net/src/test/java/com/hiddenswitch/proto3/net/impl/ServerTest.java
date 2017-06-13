@@ -301,6 +301,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 	}
 
 	@Test
+	@Ignore
 	public void testTotalDamageDealt(TestContext context) {
 
 	}
