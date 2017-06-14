@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **firstMessage** | [**ClientToServerMessageFirstMessage**](ClientToServerMessageFirstMessage.md) |  |  [optional]
 **actionIndex** | **Integer** | The index of the available actions to use.  |  [optional]
 **discardedCardIndices** | **List&lt;Integer&gt;** | The indices of cards to discard in a mulligan. |  [optional]
+**emote** | [**Emote**](Emote.md) |  |  [optional]
 
 
 

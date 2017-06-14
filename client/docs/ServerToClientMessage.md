@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **changes** | [**EntityChangeSet**](EntityChangeSet.md) |  |  [optional]
 **gameState** | [**GameState**](GameState.md) |  |  [optional]
 **actions** | [**GameActions**](GameActions.md) |  |  [optional]
+**emote** | [**Emote**](Emote.md) |  |  [optional]
 **startingCards** | [**List&lt;Entity&gt;**](Entity.md) | Used for a mulligan request. An array of entities representing the cards you may mulligan.  |  [optional]
 **event** | [**GameEvent**](GameEvent.md) |  |  [optional]
 

@@ -3,6 +3,7 @@ package com.hiddenswitch.proto3.net.impl.server;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Logic;
+import com.hiddenswitch.proto3.net.client.models.Emote;
 import com.hiddenswitch.proto3.net.common.*;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.util.RPC;
@@ -349,6 +350,17 @@ public class GameSessionImpl implements GameSession {
 	@Override
 	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
 		getGameContext().onMulliganReceived(messageId, discardedCardIndices);
+	}
+
+	@Override
+	public void onEmote(int entityId, Emote.MessageEnum message) {
+		if (getClient1() != null) {
+			getClient1().onEmote(entityId, message);
+		}
+
+		if (getClient2() != null) {
+			getClient2().onEmote(entityId, message);
+		}
 	}
 
 	private Player getPlayer1() {

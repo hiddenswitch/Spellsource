@@ -164,6 +164,15 @@ public class WebSocketClient implements Client {
 				.startingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c, playerId)).collect(Collectors.toList())));
 	}
 
+	@Override
+	public void onEmote(int entityId, Emote.MessageEnum emote) {
+		sendMessage(new ServerToClientMessage()
+				.messageType(MessageType.EMOTE)
+				.emote(new Emote()
+						.entityId(entityId)
+						.message(emote)));
+	}
+
 	public ServerWebSocket getPrivateSocket() {
 		return privateSocket;
 	}

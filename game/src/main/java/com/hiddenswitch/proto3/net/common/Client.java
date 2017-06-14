@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.common;
 
 import java.util.List;
 
+import com.hiddenswitch.proto3.net.client.models.Emote;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
@@ -28,6 +29,14 @@ public interface Client {
 	void onRequestAction(String messageId, GameState state, List<GameAction> actions);
 
 	void onMulligan(String messageId, GameState state, List<Card> cards, int playerId);
+
+	/**
+	 * Send an emote to a client. By default, there's no implementation except for Unity clients.
+	 * @param entityId The entity from which the emote should originate. Typically a hero entity.
+	 * @param emote The emote to send
+	 */
+	default void onEmote(int entityId, Emote.MessageEnum emote) {
+	};
 
 	void close();
 
