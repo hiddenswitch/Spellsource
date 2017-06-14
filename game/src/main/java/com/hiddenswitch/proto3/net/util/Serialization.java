@@ -1,11 +1,12 @@
 package com.hiddenswitch.proto3.net.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
-import com.hiddenswitch.proto3.net.messages.*;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -36,8 +37,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerialize
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
-import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -64,13 +65,6 @@ public class Serialization {
 		gameActions.registerSubtype(BattlecryAction.class, ActionType.BATTLECRY.toString());
 		gameActions.registerSubtype(PlayWeaponCardAction.class, ActionType.EQUIP_WEAPON.toString());
 		gameActions.registerSubtype(DiscoverAction.class, ActionType.DISCOVER.toString());
-
-		RuntimeTypeAdapterFactory<NetworkMessage> networkMessages = RuntimeTypeAdapterFactory.of(NetworkMessage.class, "messageType");
-		networkMessages.registerSubtype(GameActionMessage.class, MessageType.GAME_ACTION.toString());
-		networkMessages.registerSubtype(ConfigureGameMessage.class, MessageType.CONFIGURE_GAME.toString());
-		networkMessages.registerSubtype(EndGameMessage.class, MessageType.END_GAME.toString());
-		networkMessages.registerSubtype(PregameMessage.class, MessageType.PREGAME.toString());
-		networkMessages.registerSubtype(GameContextMessage.class, MessageType.GAME_CONTEXT.toString());
 
 		RuntimeTypeAdapterFactory<CardDesc> descs = RuntimeTypeAdapterFactory.of(CardDesc.class, "descType");
 		descs.registerSubtype(ChooseOneCardDesc.class, CardType.CHOOSE_ONE.toString());
@@ -115,7 +109,6 @@ public class Serialization {
 		listeners.registerSubtype(OneTurnCostModifier.class, "ONE_TURN_COST_MODIFIER");
 
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapterFactory(networkMessages);
 		gsonBuilder.registerTypeAdapterFactory(gameActions);
 		gsonBuilder.registerTypeAdapterFactory(descs);
 		gsonBuilder.registerTypeAdapterFactory(entities);

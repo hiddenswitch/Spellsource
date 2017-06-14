@@ -230,6 +230,23 @@ definitions:
       - 'FIRST_MESSAGE'
       - 'ON_MULLIGAN'
       - 'UPDATE_MULLIGAN'
+      - 'EMOTE'
+  Emote:
+    description: |
+      An emote that should play from the specified entity.
+    type: 'object'
+    properties:
+      entityId:
+        type: 'integer'
+      message:
+        type: 'string'
+        enum:
+          - 'HELLO'
+          - 'AMAZING'
+          - 'WHOOPS'
+          - 'GOOD_GAME'
+          - 'FACE_MY_WRATH'
+          - 'WELL_PLAYED'
   ServerToClientMessage:
     type: 'object'
     properties:
@@ -250,6 +267,8 @@ definitions:
         $ref: '#/definitions/GameState'
       actions:
         $ref: '#/definitions/GameActions'
+      emote:
+        $ref: '#/definitions/Emote'
       startingCards:
         description: |
           Used for a mulligan request. An array of entities representing the cards you may mulligan.
@@ -288,6 +307,8 @@ definitions:
           type: 'integer'
         description:
           The indices of cards to discard in a mulligan.
+      emote:
+        $ref: '#/definitions/Emote'
   PhysicalAttackEvent:
     type: 'object'
     properties:

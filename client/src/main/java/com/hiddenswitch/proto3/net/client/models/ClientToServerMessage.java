@@ -28,6 +28,7 @@ package com.hiddenswitch.proto3.net.client.models;
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.hiddenswitch.proto3.net.client.models.ClientToServerMessageFirstMessage;
+import com.hiddenswitch.proto3.net.client.models.Emote;
 import com.hiddenswitch.proto3.net.client.models.MessageType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -54,6 +55,9 @@ public class ClientToServerMessage  implements Serializable {
 
   @SerializedName("discardedCardIndices")
   private List<Integer> discardedCardIndices = new ArrayList<Integer>();
+
+  @SerializedName("emote")
+  private Emote emote = null;
 
   public ClientToServerMessage messageType(MessageType messageType) {
     this.messageType = messageType;
@@ -150,6 +154,24 @@ public class ClientToServerMessage  implements Serializable {
     this.discardedCardIndices = discardedCardIndices;
   }
 
+  public ClientToServerMessage emote(Emote emote) {
+    this.emote = emote;
+    return this;
+  }
+
+   /**
+   * Get emote
+   * @return emote
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Emote getEmote() {
+    return emote;
+  }
+
+  public void setEmote(Emote emote) {
+    this.emote = emote;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -164,12 +186,13 @@ public class ClientToServerMessage  implements Serializable {
         Objects.equals(this.repliesTo, clientToServerMessage.repliesTo) &&
         Objects.equals(this.firstMessage, clientToServerMessage.firstMessage) &&
         Objects.equals(this.actionIndex, clientToServerMessage.actionIndex) &&
-        Objects.equals(this.discardedCardIndices, clientToServerMessage.discardedCardIndices);
+        Objects.equals(this.discardedCardIndices, clientToServerMessage.discardedCardIndices) &&
+        Objects.equals(this.emote, clientToServerMessage.emote);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(messageType, repliesTo, firstMessage, actionIndex, discardedCardIndices);
+    return Objects.hash(messageType, repliesTo, firstMessage, actionIndex, discardedCardIndices, emote);
   }
 
   @Override
@@ -182,6 +205,7 @@ public class ClientToServerMessage  implements Serializable {
     sb.append("    firstMessage: ").append(toIndentedString(firstMessage)).append("\n");
     sb.append("    actionIndex: ").append(toIndentedString(actionIndex)).append("\n");
     sb.append("    discardedCardIndices: ").append(toIndentedString(discardedCardIndices)).append("\n");
+    sb.append("    emote: ").append(toIndentedString(emote)).append("\n");
     sb.append("}");
     return sb.toString();
   }
