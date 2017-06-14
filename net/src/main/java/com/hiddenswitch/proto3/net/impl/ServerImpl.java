@@ -2,9 +2,11 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.amazonaws.services.cloudhsm.model.GetConfigRequest;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.Draft;
+import com.hiddenswitch.proto3.net.Conversations;
 import com.hiddenswitch.proto3.net.Server;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
@@ -14,6 +16,7 @@ import com.hiddenswitch.proto3.net.impl.auth.TokenAuthProvider;
 import com.hiddenswitch.proto3.net.impl.util.DraftRecord;
 import com.hiddenswitch.proto3.net.impl.util.FriendRecord;
 import com.hiddenswitch.proto3.net.impl.util.HandlerFactory;
+import com.hiddenswitch.proto3.net.impl.util.MessageRecord;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.models.MatchCancelResponse;
@@ -145,7 +148,6 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 					.handler(bodyHandler);
 			router.route("/v1/decks/:deckId")
 					.handler(authHandler);
-
 			router.route("/v1/decks/:deckId")
 					.method(HttpMethod.GET)
 					.handler(HandlerFactory.handler("deckId", this::decksGet));
@@ -175,7 +177,8 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 					.handler(authHandler);
 			router.route("/v1/matchmaking/constructed/queue")
 					.method(HttpMethod.PUT)
-					.handler(HandlerFactory.handler(MatchmakingQueuePutRequest.class, this::matchmakingConstructedQueuePut));
+					.handler(HandlerFactory.handler(MatchmakingQueuePutRequest.class,
+							this::matchmakingConstructedQueuePut));
 
 			router.route("/v1/matchmaking/constructed/queue")
 					.method(HttpMethod.DELETE)
@@ -225,6 +228,17 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 					.method(HttpMethod.PUT)
 					.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
 
+			router.route("/v1/friends/:friendId/conversation")
+					.handler(bodyHandler);
+			router.route("/v1/friends/:friendId/conversation")
+					.handler(authHandler);
+			router.route("/v1/friends/:friendId/conversation")
+					.method(HttpMethod.PUT)
+					.handler(HandlerFactory.handler(SendMessageRequest.class, "friendId",
+							this::sendFriendMessage));
+			router.route("/v1/friends/:friendId/conversation")
+					.method(HttpMethod.GET)
+					.handler(HandlerFactory.handler("friendId", this::getFriendConversation));
 
 			logger.info("Router configured.");
 			HttpServer listening = awaitResult(done -> server.requestHandler(router::accept).listen(done));
@@ -549,6 +563,33 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 		} catch (Exception ignored) {
 			return WebResult.failed(400, new UnsupportedOperationException("You must choose a card index, or the draft has been completed."));
 		}
+	}
+
+	public WebResult<GetConversationResponse> getFriendConversation(
+			RoutingContext context, String userId, String friendId) throws SuspendExecution, InterruptedException {
+		UserRecord userAccount = (UserRecord) context.user();
+		if (!userAccount.isFriend(friendId)) {
+			return WebResult.failed(404, new Exception("Friend account not found"));
+		}
+
+		GetConversationResponse getConversationResponse = new GetConversationResponse().conversation(
+				Conversations.getCreateConversation(getMongo(), userId, friendId).toConversationDto());
+
+		return WebResult.succeeded(getConversationResponse);
+	}
+
+	public WebResult<SendMessageResponse> sendFriendMessage(
+			RoutingContext context, String userId, String friendId, SendMessageRequest request)
+			throws SuspendExecution, InterruptedException {
+		UserRecord myAccount = (UserRecord) context.user();
+		if (!myAccount.isFriend(friendId)) {
+			return WebResult.failed(404, new Exception("Not friends"));
+		}
+
+		MessageRecord messageSent = Conversations.insertMessage(Mongo.mongo().client(), userId,
+				myAccount.getProfile().getDisplayName(), friendId, request.getText());
+		SendMessageResponse response = new SendMessageResponse().message(messageSent.toMessageDto());
+		return WebResult.succeeded(response);
 	}
 
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {

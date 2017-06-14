@@ -24,6 +24,27 @@ securityDefinitions:
     in: header
     name: X-Auth-Token
 definitions:
+  Message:
+    type: 'object'
+    properties:
+      authorId:
+        type: 'string'
+      authorDisplayName:
+        type: 'string'
+      text:
+        type: 'string'
+      timestamp:
+        type: 'integer'
+        format: 'int64'
+  Conversation:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+      messages:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Message'
   Friend:
     type: 'object'
     properties:
@@ -53,6 +74,23 @@ definitions:
           $ref: '#/definitions/InventoryCollection'
       personalCollection:
         $ref: '#/definitions/InventoryCollection'
+  SendMessageRequest:
+    type: 'object'
+    required:
+      - text
+    properties:
+      text:
+        type: 'string'
+  SendMessageResponse:
+    type: 'object'
+    properties:
+      message:
+        $ref: '#/definitions/Message'
+  GetConversationResponse:
+    type: 'object'
+    properties:
+      conversation:
+        $ref: '#/definitions/Conversation'
   GetAccountsRequest:
     type: 'object'
     required:
@@ -1359,3 +1397,53 @@ paths:
         "400":
           description: |
             An invalid option was chosen, or it's not time to choose a card (usually your draft is finished).
+
+  /friends/{friendId}/conversation:
+    get:
+      description: |
+        get conversation with friend
+      operationId: getFriendConversation
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: friendId
+          in: path
+          required: true
+          description: id of friend
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            Succefully fetched conversation
+          schema:
+            $ref: '#/definitions/GetConversationResponse'
+        "404":
+          description: |
+            Friend not found
+    put:
+      description: |
+        send message to friend
+      operationId: sendFriendMessage
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: friendId
+          in: path
+          required: true
+          description: id of friend
+          type: 'string'
+        - name: request
+          in: body
+          description: Send message request
+          required: true
+          schema:
+            $ref: '#/definitions/SendMessageRequest'
+      responses:
+        "200":
+          description: |
+            Message sent
+          schema:
+            $ref: '#/definitions/SendMessageResponse'
+        "404":
+          description: |
+            Friend not found

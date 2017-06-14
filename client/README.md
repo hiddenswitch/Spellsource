@@ -104,11 +104,13 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**friendPut**](docs/DefaultApi.md#friendPut) | **PUT** /friends | 
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
+*DefaultApi* | [**getFriendConversation**](docs/DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
 *DefaultApi* | [**matchmakingConstructedDelete**](docs/DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/constructed | 
 *DefaultApi* | [**matchmakingConstructedGet**](docs/DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/constructed | 
 *DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
 *DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/constructed/queue | 
+*DefaultApi* | [**sendFriendMessage**](docs/DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
 
 
 ## Documentation for Models
@@ -118,6 +120,7 @@ Class | Method | HTTP request | Description
  - [CardRecord](docs/CardRecord.md)
  - [ClientToServerMessage](docs/ClientToServerMessage.md)
  - [ClientToServerMessageFirstMessage](docs/ClientToServerMessageFirstMessage.md)
+ - [Conversation](docs/Conversation.md)
  - [CreateAccountRequest](docs/CreateAccountRequest.md)
  - [CreateAccountResponse](docs/CreateAccountResponse.md)
  - [DecksGetAllResponse](docs/DecksGetAllResponse.md)
@@ -166,6 +169,7 @@ Class | Method | HTTP request | Description
  - [GameState](docs/GameState.md)
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)
+ - [GetConversationResponse](docs/GetConversationResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
  - [JavaSerializationObject](docs/JavaSerializationObject.md)
  - [LoginRequest](docs/LoginRequest.md)
@@ -176,9 +180,13 @@ Class | Method | HTTP request | Description
  - [MatchmakingQueuePutRequest](docs/MatchmakingQueuePutRequest.md)
  - [MatchmakingQueuePutResponse](docs/MatchmakingQueuePutResponse.md)
  - [MatchmakingQueuePutResponseUnityConnection](docs/MatchmakingQueuePutResponseUnityConnection.md)
+ - [Message](docs/Message.md)
  - [MessageType](docs/MessageType.md)
  - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)
+ - [SendMessageRequest](docs/SendMessageRequest.md)
+ - [SendMessageResponse](docs/SendMessageResponse.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
+ - [Signal](docs/Signal.md)
  - [SpellAction](docs/SpellAction.md)
  - [SummonAction](docs/SummonAction.md)
  - [SummonActionIndexToActions](docs/SummonActionIndexToActions.md)

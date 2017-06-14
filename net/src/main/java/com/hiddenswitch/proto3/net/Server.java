@@ -142,5 +142,8 @@ public interface Server {
 	WebResult<DraftState> draftsChooseHero(RoutingContext context, String userId, DraftsChooseHeroRequest request) throws SuspendExecution, InterruptedException;
 
 	WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException;
-}
 
+	WebResult getFriendConversation(RoutingContext context, String userId, String friendId) throws SuspendExecution, InterruptedException;
+
+	WebResult<SendMessageResponse> sendFriendMessage(RoutingContext context, String userId, String friendId, SendMessageRequest request) throws SuspendExecution, InterruptedException;
+}
