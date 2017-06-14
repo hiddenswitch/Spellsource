@@ -380,6 +380,12 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 				final String messageId2 = message.getRepliesTo();
 				session.onMulliganReceived(messageId2, message.getDiscardedCardIndices());
 				break;
+			case EMOTE:
+				if (session == null) {
+					break;
+				}
+				session.onEmote(message.getEmote().getEntityId(), message.getEmote().getMessage());
+				break;
 		}
 	}
 

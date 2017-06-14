@@ -28,5 +28,7 @@
 
 * `UPDATE_MULLIGAN` (value: `"UPDATE_MULLIGAN"`)
 
+* `EMOTE` (value: `"EMOTE"`)
+
 
 

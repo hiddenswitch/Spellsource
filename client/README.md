@@ -133,6 +133,7 @@ Class | Method | HTTP request | Description
  - [DraftsChooseCardRequest](docs/DraftsChooseCardRequest.md)
  - [DraftsChooseHeroRequest](docs/DraftsChooseHeroRequest.md)
  - [DraftsPostRequest](docs/DraftsPostRequest.md)
+ - [Emote](docs/Emote.md)
  - [Entity](docs/Entity.md)
  - [EntityChangeSet](docs/EntityChangeSet.md)
  - [EntityChangeSetInner](docs/EntityChangeSetInner.md)
