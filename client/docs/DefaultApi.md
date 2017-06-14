@@ -18,11 +18,13 @@ Method | HTTP request | Description
 [**friendPut**](DefaultApi.md#friendPut) | **PUT** /friends | 
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
+[**getFriendConversation**](DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
 [**matchmakingConstructedDelete**](DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/constructed | 
 [**matchmakingConstructedGet**](DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/constructed | 
 [**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
 [**matchmakingConstructedQueuePut**](DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/constructed/queue | 
+[**sendFriendMessage**](DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
 
 
 <a name="createAccount"></a>
@@ -778,6 +780,61 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/json
  - **Accept**: application/json
 
+<a name="getFriendConversation"></a>
+# **getFriendConversation**
+> GetConversationResponse getFriendConversation(friendId)
+
+
+
+get conversation with friend 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+String friendId = "friendId_example"; // String | id of friend
+try {
+    GetConversationResponse result = apiInstance.getFriendConversation(friendId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getFriendConversation");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **friendId** | **String**| id of friend |
+
+### Return type
+
+[**GetConversationResponse**](GetConversationResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
 <a name="login"></a>
 # **login**
 > LoginResponse login(request)
@@ -1021,6 +1078,63 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**MatchmakingQueuePutResponse**](MatchmakingQueuePutResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="sendFriendMessage"></a>
+# **sendFriendMessage**
+> SendMessageResponse sendFriendMessage(friendId, request)
+
+
+
+send message to friend 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.proto3.net.client.ApiClient;
+//import com.hiddenswitch.proto3.net.client.ApiException;
+//import com.hiddenswitch.proto3.net.client.Configuration;
+//import com.hiddenswitch.proto3.net.client.auth.*;
+//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+String friendId = "friendId_example"; // String | id of friend
+SendMessageRequest request = new SendMessageRequest(); // SendMessageRequest | Send message request
+try {
+    SendMessageResponse result = apiInstance.sendFriendMessage(friendId, request);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#sendFriendMessage");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **friendId** | **String**| id of friend |
+ **request** | [**SendMessageRequest**](SendMessageRequest.md)| Send message request |
+
+### Return type
+
+[**SendMessageResponse**](SendMessageResponse.md)
 
 ### Authorization
 

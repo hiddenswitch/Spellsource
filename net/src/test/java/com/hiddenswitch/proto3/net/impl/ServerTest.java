@@ -17,6 +17,10 @@ import com.hiddenswitch.proto3.net.models.CurrentMatchRequest;
 import com.hiddenswitch.proto3.net.models.DeckCreateRequest;
 import com.hiddenswitch.proto3.net.models.DeckCreateResponse;
 import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
+import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
+import com.hiddenswitch.proto3.net.impl.util.MessageRecord;
+import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.Serialization;
 import com.hiddenswitch.proto3.net.util.UnityClient;
 import com.hiddenswitch.proto3.net.util.VertxBufferInputStream;
@@ -57,6 +61,11 @@ import static com.hiddenswitch.proto3.net.util.QuickJson.json;
  */
 public class ServerTest extends ServiceTest<ServerImpl> {
 	private String deploymentId;
+	private static DefaultApi defaultApi = new DefaultApi();
+
+	static {
+		defaultApi.getApiClient().setBasePath("http://localhost:8080/v1"); //TODO: read from configuration
+	}
 
 	@Test(timeout = 120000L)
 	public void testShutdownAndRestartServer(TestContext context) throws InterruptedException, SuspendExecution {
@@ -386,9 +395,6 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 
 	@Test
 	public void testFriendsApi(TestContext testContext) {
-		DefaultApi defaultApi = new DefaultApi();
-		defaultApi.getApiClient().setBasePath("http://localhost:8080/v1"); //TODO: read from configuration
-
 		// create first account
 		CreateAccountResponse createAccount1Response = createRandomAccount(testContext, defaultApi);
 
@@ -472,5 +478,118 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 			testContext.assertEquals(404, e.getCode(),
 					"Not friends (2nd direction). should return 404");
 		}
+	}
+
+
+	@Test
+	public void testConversation(TestContext testContext) {
+
+		String MSG1 = "TEST1";
+		String MSG2 = "TEST2";
+
+		//bootstrap three accounts
+		DefaultApi defaultApi = new DefaultApi();
+		defaultApi.getApiClient().setBasePath("http://localhost:8080/v1"); //TODO: read from configuration
+		CreateAccountResponse createAccount1Response = createRandomAccount(testContext, defaultApi);
+		defaultApi.getApiClient().setApiKey(createAccount1Response.getLoginToken());
+		CreateAccountResponse createAccount2Response = createRandomAccount(testContext, defaultApi);
+		CreateAccountResponse createAccount3Response = createRandomAccount(testContext, defaultApi);
+
+		//simple message
+		SendMessageRequest msg1Request = new SendMessageRequest().text(MSG1);
+		SendMessageRequest msg2Request = new SendMessageRequest().text(MSG2);
+
+		//send a message to a friend that doesn't exist
+		try {
+			defaultApi.sendFriendMessage("notafriend", msg1Request);
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(), "User shouldn't exist. expecting 404");
+		}
+
+		//send a message to a user that's not a friend
+		try {
+			defaultApi.sendFriendMessage(createAccount2Response.getAccount().getId(), msg1Request);
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(), "Send friend a message. User not a friend expecting 404");
+		}
+
+		//get conversation with a friend that doesn't exist
+		try {
+			defaultApi.getFriendConversation(createAccount2Response.getAccount().getId());
+		} catch (ApiException e) {
+			testContext.assertEquals(404, e.getCode(), "Get User conversation. not a friend expecting 404");
+		}
+
+		//add friend
+		try {
+			defaultApi.friendPut(new FriendPutRequest().friendId(createAccount2Response.getAccount().getId()));
+		} catch (ApiException e) {
+			testContext.assertTrue(false, "Adding new friend. Got : " + e.getMessage());
+
+		}
+
+		//send message 1
+		SendMessageResponse sendMsg1Response = null;
+		try {
+			sendMsg1Response = defaultApi.sendFriendMessage(createAccount2Response.getAccount().getId(), msg1Request);
+		} catch (ApiException e) {
+			testContext.assertTrue(false, "Sending message (1) to a friend. Got : " + e.getMessage());
+		}
+		testContext.assertNotNull(sendMsg1Response);
+		testContext.assertEquals(createAccount1Response.getAccount().getId(), sendMsg1Response.getMessage().getAuthorId());
+		testContext.assertEquals(createAccount1Response.getAccount().getName(), sendMsg1Response.getMessage().getAuthorDisplayName());
+		testContext.assertEquals(MSG1, sendMsg1Response.getMessage().getText());
+
+		GetConversationResponse getConversationResponse1 = null;
+		try {
+			getConversationResponse1 = defaultApi.getFriendConversation(createAccount2Response.getAccount().getId());
+		} catch (ApiException e) {
+			testContext.assertTrue(false, "Get valid conversation didn't work: " + e.getMessage());
+		}
+
+		testContext.assertEquals(1, getConversationResponse1.getConversation().getMessages().size(),
+				"Conversation should have exactly one message");
+
+		testContext.assertEquals(
+				sendMsg1Response.getMessage(),
+				getConversationResponse1.getConversation().getMessages().get(0),
+				"Posted message and conversation message should match");
+
+		//switch directions
+		defaultApi.getApiClient().setApiKey(createAccount2Response.getLoginToken());
+
+		//send message 2
+		SendMessageResponse sendMsg2Response = null;
+		try {
+			sendMsg2Response = defaultApi.sendFriendMessage(createAccount1Response.getAccount().getId(), msg2Request);
+		} catch (ApiException e) {
+			testContext.assertTrue(false, "Sending message (2) to a friend. Got : " + e.getMessage());
+		}
+
+		testContext.assertNotNull(sendMsg2Response);
+		testContext.assertEquals(createAccount2Response.getAccount().getId(), sendMsg2Response.getMessage().getAuthorId());
+		testContext.assertEquals(createAccount2Response.getAccount().getName(), sendMsg2Response.getMessage().getAuthorDisplayName());
+		testContext.assertEquals(MSG2, sendMsg2Response.getMessage().getText());
+
+		GetConversationResponse getConversationResponse2 = null;
+		try {
+			getConversationResponse2 = defaultApi.getFriendConversation(createAccount1Response.getAccount().getId());
+		} catch (ApiException e) {
+			testContext.assertTrue(false, "Get valid conversation didn't work: " + e.getMessage());
+		}
+
+		testContext.assertEquals(2, getConversationResponse2.getConversation().getMessages().size(),
+				"Conversation should have 2 messages");
+
+		testContext.assertEquals(
+				sendMsg1Response.getMessage(),
+				getConversationResponse1.getConversation().getMessages().get(0),
+				"Posted message and conversation message (1) should match");
+
+		testContext.assertEquals(
+				sendMsg2Response.getMessage(),
+				getConversationResponse2.getConversation().getMessages().get(1),
+				"Posted message and conversation message (2) should match");
+
 	}
 }

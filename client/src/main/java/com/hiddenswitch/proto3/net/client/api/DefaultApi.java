@@ -54,6 +54,7 @@ import com.hiddenswitch.proto3.net.client.models.FriendPutResponse;
 import com.hiddenswitch.proto3.net.client.models.FriendPutRequest;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsResponse;
 import com.hiddenswitch.proto3.net.client.models.GetAccountsRequest;
+import com.hiddenswitch.proto3.net.client.models.GetConversationResponse;
 import com.hiddenswitch.proto3.net.client.models.LoginResponse;
 import com.hiddenswitch.proto3.net.client.models.LoginRequest;
 import com.hiddenswitch.proto3.net.client.models.MatchConcedeResponse;
@@ -61,6 +62,8 @@ import com.hiddenswitch.proto3.net.client.models.GameState;
 import com.hiddenswitch.proto3.net.client.models.MatchCancelResponse;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutRequest;
+import com.hiddenswitch.proto3.net.client.models.SendMessageResponse;
+import com.hiddenswitch.proto3.net.client.models.SendMessageRequest;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -1564,6 +1567,113 @@ public class DefaultApi {
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
+    /* Build call for getFriendConversation */
+    private com.squareup.okhttp.Call getFriendConversationCall(String friendId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // verify the required parameter 'friendId' is set
+        if (friendId == null) {
+            throw new ApiException("Missing the required parameter 'friendId' when calling getFriendConversation(Async)");
+        }
+        
+
+        // create path and map variables
+        String localVarPath = "/friends/{friendId}/conversation".replaceAll("\\{format\\}","json")
+        .replaceAll("\\{" + "friendId" + "\\}", apiClient.escapeString(friendId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "TokenSecurity" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+
+    /**
+     * 
+     * get conversation with friend 
+     * @param friendId id of friend (required)
+     * @return GetConversationResponse
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public GetConversationResponse getFriendConversation(String friendId) throws ApiException {
+        ApiResponse<GetConversationResponse> resp = getFriendConversationWithHttpInfo(friendId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * get conversation with friend 
+     * @param friendId id of friend (required)
+     * @return ApiResponse&lt;GetConversationResponse&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<GetConversationResponse> getFriendConversationWithHttpInfo(String friendId) throws ApiException {
+        com.squareup.okhttp.Call call = getFriendConversationCall(friendId, null, null);
+        Type localVarReturnType = new TypeToken<GetConversationResponse>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * get conversation with friend 
+     * @param friendId id of friend (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call getFriendConversationAsync(String friendId, final ApiCallback<GetConversationResponse> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = getFriendConversationCall(friendId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<GetConversationResponse>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
     /* Build call for login */
     private com.squareup.okhttp.Call loginCall(LoginRequest request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = request;
@@ -2067,6 +2177,121 @@ public class DefaultApi {
 
         com.squareup.okhttp.Call call = matchmakingConstructedQueuePutCall(request, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<MatchmakingQueuePutResponse>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /* Build call for sendFriendMessage */
+    private com.squareup.okhttp.Call sendFriendMessageCall(String friendId, SendMessageRequest request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = request;
+        
+        // verify the required parameter 'friendId' is set
+        if (friendId == null) {
+            throw new ApiException("Missing the required parameter 'friendId' when calling sendFriendMessage(Async)");
+        }
+        
+        // verify the required parameter 'request' is set
+        if (request == null) {
+            throw new ApiException("Missing the required parameter 'request' when calling sendFriendMessage(Async)");
+        }
+        
+
+        // create path and map variables
+        String localVarPath = "/friends/{friendId}/conversation".replaceAll("\\{format\\}","json")
+        .replaceAll("\\{" + "friendId" + "\\}", apiClient.escapeString(friendId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "TokenSecurity" };
+        return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+
+    /**
+     * 
+     * send message to friend 
+     * @param friendId id of friend (required)
+     * @param request Send message request (required)
+     * @return SendMessageResponse
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public SendMessageResponse sendFriendMessage(String friendId, SendMessageRequest request) throws ApiException {
+        ApiResponse<SendMessageResponse> resp = sendFriendMessageWithHttpInfo(friendId, request);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * send message to friend 
+     * @param friendId id of friend (required)
+     * @param request Send message request (required)
+     * @return ApiResponse&lt;SendMessageResponse&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<SendMessageResponse> sendFriendMessageWithHttpInfo(String friendId, SendMessageRequest request) throws ApiException {
+        com.squareup.okhttp.Call call = sendFriendMessageCall(friendId, request, null, null);
+        Type localVarReturnType = new TypeToken<SendMessageResponse>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * send message to friend 
+     * @param friendId id of friend (required)
+     * @param request Send message request (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call sendFriendMessageAsync(String friendId, SendMessageRequest request, final ApiCallback<SendMessageResponse> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = sendFriendMessageCall(friendId, request, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<SendMessageResponse>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
