@@ -1,0 +1,1 @@
+export const Versions = new Mongo.Collection('versions');

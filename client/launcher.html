@@ -1,0 +1,42 @@
+<template name="launcher">
+    <div class="container">
+        <footer>
+            <div class="o-container align-right">
+
+                <h2>Hidden Switch Presents:</h2>
+                <h1>The Spellsource Alpha</h1>
+                <br/>
+                <a href="">Report a Bug</a>
+                <br/>
+                <br/>
+                <a href="">Customer Support</a>
+            </div>
+            <br/>
+            <br/>
+            <div class="o-container">
+                <div class="o-grid">
+                    <div class="progress-bar-cell o-grid__cell u-center-block">
+                        {{#if state.ready}}
+                            <h2 class="u-center-block__content u-center-block__content--vertical">You have the latest
+                                version.</h2>
+                        {{else}}
+                            {{#if state.downloading}}
+                                <div class="progress-bar c-progress u-center-block__content u-center-block__content--vertical">
+                                    <div class="c-progress__bar c-progress__bar--brand "
+                                         style="width:{{progress}}%;"></div>
+                                </div>
+                            {{else}}
+                                <h2 class="u-center-block__content u-center-block__content--vertical">A new version of
+                                    Spellsource is available. Download it now!</h2>
+                            {{/if}}
+                        {{/if}}
+                    </div>
+                    <div class="launch-button-cell o-grid__cell o-grid__cell--width-fixed">
+                        <button id="launch-button" class="c-button c-button--success"
+                                disabled="{{state.disabled}}">{{state.text}}</button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</template>

@@ -1,5 +1,9 @@
 {
   "public": {
+    "buildName": {
+      "exe": "Minionate.exe",
+      "mac": "Minionate.app"
+    }
   },
   "electron": {
     "autoPackage": true,
@@ -8,8 +12,8 @@
     "version": "1.0.0",
     "name": "Hidden Switch Launcher",
     "description": "Join Hidden Switch's Alpha program and download Spellsource today!",
-    "width": 480,
-    "height": 800,
+    "width": 400,
+    "height": 600,
     "frame": false,
     "titleBarStyle": "hidden",
     "icon": {
