@@ -1,0 +1,23 @@
+{
+  "public": {
+  },
+  "electron": {
+    "autoPackage": true,
+    "bundleClient": false,
+    "rootUrl": "http://localhost:3000",
+    "version": "1.0.0",
+    "name": "Hidden Switch Launcher",
+    "description": "Join Hidden Switch's Alpha program and download Spellsource today!",
+    "width": 480,
+    "height": 800,
+    "frame": false,
+    "titleBarStyle": "hidden",
+    "icon": {
+      "mas": "private/icon.icns",
+      "darwin": "private/icon.icns",
+      "win32": "private/icon.ico"
+    },
+    "bundleId": "com.hiddenswitch.launcher",
+    "category": "public.app-category.games"
+  }
+}
