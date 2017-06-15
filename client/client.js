@@ -4,6 +4,13 @@ let LocalVersions = new Ground.Collection('localVersions');
 Meteor.startup(() => {
     // On startup, clear all the local versions' that we might be downloading.
     LocalVersions.update({}, {$set: {downloading: false}}, {multi: true});
+    // Delete all older versions
+    let paths = LocalVersions.find({}, {sort: {createdAt: -1}, skip: 1}).fetch();
+
+    if (paths.length > 0) {
+        Electron.remove(paths);
+    }
+
     // Get the latest version information.
     Meteor.subscribe('versions');
 });

@@ -39,7 +39,7 @@ ElectronImplementation = {
         return remote.getCurrentWindow().isFullScreen();
     },
 
-    app: function() {
+    app: function () {
         return remote.app;
     },
 
@@ -117,6 +117,10 @@ ElectronImplementation = {
 
         ipc.on('file-callback', thisHandler);
         ipc.send('download-file-to', JSON.stringify(options));
+    },
+
+    remove: function (paths) {
+        ipc.send('remove-paths', JSON.stringify(paths));
     },
 
     _eventListeners: {}
