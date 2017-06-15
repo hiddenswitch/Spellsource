@@ -1,0 +1,12 @@
+{
+  "name": "electron",
+  "productName": "Electron",
+  "main": "main.js",
+  "dependencies": {
+    "electron-debug": "^0.5.1",
+    "underscore": "^1.8.3",
+    "request": "2.81.0",
+    "request-progress": "3.0.0",
+    "unzipper": "0.8.8"
+  }
+}

@@ -7,7 +7,7 @@
 meteor-base@1.1.0             # Packages every Meteor app needs to have
 mobile-experience@1.0.4       # Packages for a great mobile UX
 mongo@1.1.18                   # The database Meteor supports right now
-reactive-var@1.0.11            # Reactive variable for tracker
+reactive-var            # Reactive variable for tracker
 tracker@1.1.3                 # Meteor's client-side reactive programming library
 
 standard-minifier-css@1.3.4   # CSS minifier run for production mode
@@ -15,6 +15,12 @@ standard-minifier-js@2.1.0    # JS minifier run for production mode
 es5-shim@4.6.15                # ECMAScript 5 compatibility for older browsers
 ecmascript@0.8.0              # Enable ECMAScript2015+ syntax in app code
 shell-server@0.2.3            # Server-side component of the `meteor shell` command
-jarnoleconte:electron
 blaze-html-templates
 fourseven:scss
+kadira:flow-router
+kadira:blaze-layout
+accounts-password
+accounts-ui
+cfs:standard-packages
+ground:db@2.0.0-rc.7
+doctorpangloss:electron
