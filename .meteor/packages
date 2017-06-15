@@ -24,3 +24,4 @@ accounts-ui
 cfs:standard-packages
 ground:db@2.0.0-rc.7
 doctorpangloss:electron
+simple:rest

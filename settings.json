@@ -5,6 +5,7 @@
       "mac": "Minionate.app"
     }
   },
+  "apiKey": "3Zd5wQlEhwCMlZEBZcdCa95jCSXZwGzozPjoCC0ubFI=",
   "electron": {
     "autoPackage": true,
     "bundleClient": false,
