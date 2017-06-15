@@ -1,10 +1,11 @@
 var {ipcMain, app, protocol} = require('electron');
 var childProcess = require("child_process");
 var path = require("path");
-var fs = require("fs");
+var fs = require("fs-extra");
 var request = require('request');
 var progress = require('request-progress');
 var unzip = require('unzipper');
+var _ = require('underscore');
 
 // var log = function(msg){
 //   fs.appendFile("C:\\Users\\Michael\\electron.log", msg + "\n", function(err){
@@ -214,6 +215,15 @@ app.on("ready", function () {
             event.sender.send('file-callback', JSON.stringify({type: 'extracted', extracted: true}));
         }).pipe(unzip.Extract({path: destination}));
     });
+
+    // Enable removing files
+    ipcMain.on('remove-paths', (event, paths) => {
+        paths = JSON.parse(paths);
+
+        _.each(paths, (path) => {
+            fs.remove(path);
+        });
+    })
 });
 
 var hideInsteadofClose = function (e) {
