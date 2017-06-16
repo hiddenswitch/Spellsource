@@ -20,3 +20,9 @@ Meteor.methods({
         Versions.insert({url: url, createdAt: new Date()});
     }
 });
+//
+// Meteor.startup(() => {
+//     if (!Versions.findOne("test11")) {
+//         Versions.insert({_id: "test11", url: "https://s3.us-east-2.amazonaws.com/minionate/builds/latest_mac.zip", createdAt: new Date()});
+//     }
+// });
