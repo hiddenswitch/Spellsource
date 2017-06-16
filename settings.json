@@ -15,8 +15,11 @@
   "electron": {
     "autoPackage": true,
     "bundleClient": false,
-    "rootUrl": "http://localhost:3000",
+    "rootUrl": "http://launcher.hiddenswitch.com",
     "version": "1.0.0",
+    "downloadUrls": {
+      "darwin": "https://s3.us-east-2.amazonaws.com/minionate/builds/launcher/osx/{{version}}/launcher.zip"
+    },
     "name": "Hidden Switch Launcher",
     "description": "Join Hidden Switch's Alpha program and download Spellsource today!",
     "width": 400,
@@ -29,6 +32,7 @@
       "win32": "private/icon.ico"
     },
     "bundleId": "com.hiddenswitch.launcher",
+    "sign": "Developer ID Application: Benjamin Berman (K4T4R33YU4)",
     "category": "public.app-category.games"
   }
 }
