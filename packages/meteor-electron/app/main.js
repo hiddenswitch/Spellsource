@@ -84,7 +84,6 @@ if (handleStartupEvent()) {
 var {BrowserWindow} = require('electron'); // Module to create native browser window.
 var autoUpdater = require('./autoUpdater');
 var path = require("path");
-var fs = require("fs");
 var createDefaultMenu = require('./menu.js');
 var proxyWindowEvents = require('./proxyWindowEvents');
 
@@ -223,7 +222,16 @@ app.on("ready", function () {
         _.each(paths, (path) => {
             fs.remove(path);
         });
-    })
+    });
+
+    // Enable checking existence of files
+    ipcMain.on('file-exists', (event, path) => {
+        path = JSON.parse(path);
+
+        fs.pathExists(path, (err, exists) => {
+            event.sender.send('on-file-exists', JSON.stringify(exists));
+        });
+    });
 });
 
 var hideInsteadofClose = function (e) {

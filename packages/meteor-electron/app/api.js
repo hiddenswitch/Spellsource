@@ -123,5 +123,16 @@ ElectronImplementation = {
         ipc.send('remove-paths', JSON.stringify(paths));
     },
 
+    exists: function (path, callback) {
+        let thisHandler = (event, result) => {
+            let parsed = JSON.parse(result);
+            ipc.removeListener('on-file-exists', thisHandler);
+            callback(parsed);
+        };
+
+        ipc.on('on-file-exists', thisHandler);
+        ipc.send('file-exists', JSON.stringify(path));
+    },
+
     _eventListeners: {}
 };

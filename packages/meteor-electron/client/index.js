@@ -86,7 +86,14 @@ Electron = {
      * Removes the array of given paths
      * @param paths {String[]} An array of string paths.
      */
-    remove: function (paths) {}
+    remove: function (paths) {},
+
+    /**
+     * Calls the callback with true if the file or directory exists at the given path
+     * @param path The path to check
+     * @param callback A callback
+     */
+    exists: function (path, callback) {}
 };
 
 // Read `ElectronImplementation` from the window vs. doing `typeof ElectronImplementation` because
