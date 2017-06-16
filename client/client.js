@@ -5,7 +5,9 @@ Meteor.startup(() => {
     // On startup, clear all the local versions' that we might be downloading.
     LocalVersions.update({}, {$set: {downloading: false}}, {multi: true});
     // Delete all older versions
-    let paths = LocalVersions.find({}, {sort: {createdAt: -1}, skip: 1}).fetch();
+    let paths = _.map(LocalVersions.find({}, {sort: {createdAt: -1}, skip: 1}).fetch(), (version) => {
+        return path;
+    });
 
     if (paths.length > 0) {
         Electron.remove(paths);
@@ -53,6 +55,9 @@ Template.launcher.helpers({
     },
     progress() {
         return downloadProgress.get() * 100;
+    },
+    connected() {
+        return Meteor.status().connected;
     }
 });
 
