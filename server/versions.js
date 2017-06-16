@@ -8,7 +8,7 @@ SimpleRest.configure({
 });
 
 Meteor.publish('versions', function () {
-    return Versions.find({});
+    return Versions.find({}, {sort: {createdAt: -1}}, {limit: 2});
 });
 
 Meteor.methods({

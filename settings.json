@@ -5,6 +5,12 @@
       "mac": "Minionate.app"
     }
   },
+  "galaxy.meteor.com": {
+    "env": {
+      "MONGO_URL": "mongodb://launcheradmin:9AD3uubaeIf71a4M11lPVAV2mJcbPzV1EC38Y4WF26M@aws-us-east-1-portal.9.dblayer.com:20276,aws-us-east-1-portal.26.dblayer.com:20276/launcher?ssl=true",
+      "MONGO_OPLOG_URL": "mongodb://oploguser:B145SbAVxIJ9drxT5u5hDXuKkPkzTbhzx5xABPues2U@aws-us-east-1-portal.25.dblayer.com:20278/local?authSource=admin&ssl=true"
+    }
+  },
   "apiKey": "3Zd5wQlEhwCMlZEBZcdCa95jCSXZwGzozPjoCC0ubFI=",
   "electron": {
     "autoPackage": true,
