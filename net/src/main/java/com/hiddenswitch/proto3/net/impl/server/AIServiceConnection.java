@@ -8,6 +8,7 @@ import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.RpcClient;
+import com.hiddenswitch.proto3.net.util.Sync;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.eventbus.EventBus;
 import net.demilich.metastone.game.Player;
@@ -66,28 +67,27 @@ public class AIServiceConnection implements Client {
 	@Suspendable
 	public void onRequestAction(final String messageId, final GameState state, final List<GameAction> actions) {
 		final ServerGameContext gc = context.get();
-		bots.async((AsyncResult<RequestActionResponse> result) -> {
-			if (gc == null) {
-				return;
+		bots.async(Sync.suspendableHandler((AsyncResult<RequestActionResponse> result) -> {
+			if (result.failed()) {
+				throw (RuntimeException) result.cause();
 			}
-			if (result.result() == null) {
-				throw new NullPointerException("A bot did not reply with an action. GameContext: \n" + gc.toLongString() + "\nActions:\n" + actions.toString());
-			} else {
-				gc.onActionReceived(messageId, result.result().gameAction);
-			}
-		}).requestAction(new RequestActionRequest(state, playerId, actions, gc.getDeckFormat()));
+
+			gc.onActionReceived(messageId, result.result().gameAction);
+		})).requestAction(new RequestActionRequest(state, playerId, actions, gc.getDeckFormat()));
 	}
 
 	@Override
 	@Suspendable
 	public void onMulligan(String messageId, GameState state, List<Card> cards, int playerId) {
 		final ServerGameContext gc = context.get();
-		bots.async((AsyncResult<MulliganResponse> result) -> {
-			if (gc == null) {
-				return;
+		bots.async(Sync.suspendableHandler((AsyncResult<MulliganResponse> result) -> {
+			if (result.failed()) {
+				throw (RuntimeException) result.cause();
 			}
+
+
 			gc.onMulliganReceived(messageId, gc.getPlayer(playerId), result.result().discardedCards);
-		}).mulligan(new MulliganRequest(cards));
+		})).mulligan(new MulliganRequest(cards));
 	}
 
 	@Override

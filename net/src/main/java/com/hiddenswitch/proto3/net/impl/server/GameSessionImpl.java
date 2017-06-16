@@ -329,13 +329,13 @@ public class GameSessionImpl implements GameSession {
 				if (pregamePlayerConfiguration1.getPlayer() != null) {
 					return pregamePlayerConfiguration1.getPlayer();
 				} else {
-					return Player.forUser(userId, IdFactory.PLAYER_1).withDeck(pregamePlayerConfiguration1.getDeck());
+					return Player.forUser(userId, IdFactory.PLAYER_1, pregamePlayerConfiguration1.getDeck());
 				}
 			} else if (pregamePlayerConfiguration2.getUserId().equals(userId)) {
 				if (pregamePlayerConfiguration2.getPlayer() != null) {
 					return pregamePlayerConfiguration2.getPlayer();
 				} else {
-					return Player.forUser(userId, IdFactory.PLAYER_2).withDeck(pregamePlayerConfiguration2.getDeck());
+					return Player.forUser(userId, IdFactory.PLAYER_2, pregamePlayerConfiguration2.getDeck());
 				}
 			}
 		}

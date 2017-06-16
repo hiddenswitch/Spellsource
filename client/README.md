@@ -187,7 +187,6 @@ Class | Method | HTTP request | Description
  - [SendMessageRequest](docs/SendMessageRequest.md)
  - [SendMessageResponse](docs/SendMessageResponse.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
- - [Signal](docs/Signal.md)
  - [SpellAction](docs/SpellAction.md)
  - [SummonAction](docs/SummonAction.md)
  - [SummonActionIndexToActions](docs/SummonActionIndexToActions.md)

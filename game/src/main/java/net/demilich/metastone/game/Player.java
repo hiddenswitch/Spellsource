@@ -32,10 +32,11 @@ public class Player extends Entity implements Serializable {
 		return player;
 	}
 
-	public static Player forUser(String userId, int id) {
-		Player player = empty();
-		player.setBehaviour(new HumanBehaviour());
+	public static Player forUser(String userId, int id, Deck deck) {
+		Player player = new Player();
+		PlayerConfig config = new PlayerConfig(deck, new HumanBehaviour());
 		player.setId(id);
+		player.buildFromConfig(config);
 		player.setUserId(userId);
 		return player;
 	}
@@ -256,21 +257,6 @@ public class Player extends Entity implements Serializable {
 				.append(getId(), rhd.getId())
 				.append(getName(), rhd.getName())
 				.isEquals();
-	}
-
-	public Player withDeck(Deck deck) {
-		if (deck == null) {
-			return this;
-		}
-
-		if (getDeck() == null
-				|| getDeck().getCount() > 0) {
-			this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy());
-		} else if (getDeck().getCount() == 0) {
-			this.deck.addAll(deck.getCards());
-		}
-
-		return this;
 	}
 
 	@Override

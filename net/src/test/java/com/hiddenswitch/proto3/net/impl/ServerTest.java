@@ -44,14 +44,12 @@ import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
@@ -221,30 +219,9 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
 
-
-		final Handler<SendContext> interceptor = h -> {
-			if (h.message().address().equals(RPC.getAddress(Games.class, games -> games.createGameSession(null)))) {
-				Message<Buffer> message = h.message();
-				VertxBufferInputStream inputStream = new VertxBufferInputStream(message.body());
-
-				CreateGameSessionRequest request = null;
-				try {
-					request = Serialization.deserialize(inputStream);
-				} catch (IOException | ClassNotFoundException e) {
-					getContext().fail(e.getMessage());
-				}
-
-				if (request != null) {
-					getContext().assertNotEquals(request.getPregame1().getDeck().getName(), request.getPregame2().getDeck().getName(), "The decks are distinct between the two users.");
-				} else {
-					getContext().fail("Request was null.");
-				}
-
-			}
-			h.next();
-		};
-		vertx.eventBus().addInterceptor(interceptor);
-
+		Handler<SendContext> interceptor = interceptGameCreate(request -> {
+			getContext().assertNotEquals(request.getPregame1().getDeck().getName(), request.getPregame2().getDeck().getName(), "The decks are distinct between the two users.");
+		});
 
 		UnityClient client1 = new UnityClient(getContext());
 		Thread clientThread1 = new Thread(() -> {
@@ -277,6 +254,32 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		getContext().assertTrue(client2.isGameOver(), "The client ended the game");
 		vertx.eventBus().removeInterceptor(interceptor);
 		unwrap();
+	}
+
+	private Handler<SendContext> interceptGameCreate(Consumer<CreateGameSessionRequest> assertInHere) {
+		final Handler<SendContext> interceptor = h -> {
+			if (h.message().address().equals(RPC.getAddress(Games.class, games -> games.createGameSession(null)))) {
+				Message<Buffer> message = h.message();
+				VertxBufferInputStream inputStream = new VertxBufferInputStream(message.body());
+
+				CreateGameSessionRequest request = null;
+				try {
+					request = Serialization.deserialize(inputStream);
+				} catch (IOException | ClassNotFoundException e) {
+					getContext().fail(e.getMessage());
+				}
+
+				if (request != null) {
+					assertInHere.accept(request);
+				} else {
+					getContext().fail("Request was null.");
+				}
+
+			}
+			h.next();
+		};
+		vertx.eventBus().addInterceptor(interceptor);
+		return interceptor;
 	}
 
 	@Test

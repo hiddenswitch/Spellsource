@@ -79,174 +79,169 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 		configureMongo();
 
-		try {
-			for (Verticle verticle : Arrays.asList(cards, accounts, games, matchmaking, bots, logic, decks, inventory, drafts)) {
-				final String name = verticle.getClass().getName();
-				logger.info("Deploying " + name + "...");
-				String deploymentId = Sync.awaitResult(done -> vertx.deployVerticle(verticle, done));
-				deployments.add(deploymentId);
-				logger.info("Deployed " + name + " with ID " + deploymentId);
-			}
-
-			logger.info("Configuring router...");
-
-			final TokenAuthProvider authProvider = new TokenAuthProvider(vertx);
-			final ApiKeyAuthHandler authHandler = ApiKeyAuthHandler.create(authProvider, "X-Auth-Token");
-			final BodyHandler bodyHandler = BodyHandler.create();
-
-			// All routes need logging.
-			router.route().handler(LoggerHandler.create());
-
-			// CORS
-			router.route().handler(CorsHandler.create("*")
-					.allowedHeader("Content-Type")
-					.allowedHeader("X-Auth-Token")
-					.exposedHeader("Content-Type")
-					.allowCredentials(true)
-					.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS)));
-
-			//add "content-type=application/json" to all responses
-			router.route().handler(context -> {
-				context.response().putHeader("Content-Type", "application/json");
-				context.next();
-			});
-
-			router.route("/v1/accounts/:targetUserId")
-					.handler(authHandler);
-			router.route("/v1/accounts/:targetUserId")
-					.method(HttpMethod.GET)
-					.handler(HandlerFactory.handler("targetUserId", this::getAccount));
-
-			router.route("/v1/accounts")
-					.handler(bodyHandler);
-			router.route("/v1/accounts")
-					.method(HttpMethod.POST)
-					.handler(HandlerFactory.handler(LoginRequest.class, this::login));
-			router.route("/v1/accounts")
-					.method(HttpMethod.PUT)
-					.handler(HandlerFactory.handler(CreateAccountRequest.class, this::createAccount));
-			router.route("/v1/accounts")
-					.method(HttpMethod.GET)
-					.handler(authHandler);
-			router.route("/v1/accounts")
-					.method(HttpMethod.GET)
-					.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
-
-
-			router.route("/v1/decks")
-					.handler(bodyHandler);
-			router.route("/v1/decks")
-					.handler(authHandler);
-			router.route("/v1/decks")
-					.method(HttpMethod.PUT)
-					.handler(HandlerFactory.handler(DecksPutRequest.class, this::decksPut));
-			router.route("/v1/decks")
-					.method(HttpMethod.GET)
-					.handler(HandlerFactory.handler(this::decksGetAll));
-
-			router.route("/v1/decks/:deckId")
-					.handler(bodyHandler);
-			router.route("/v1/decks/:deckId")
-					.handler(authHandler);
-			router.route("/v1/decks/:deckId")
-					.method(HttpMethod.GET)
-					.handler(HandlerFactory.handler("deckId", this::decksGet));
-
-			router.route("/v1/decks/:deckId")
-					.method(HttpMethod.POST)
-					.handler(HandlerFactory.handler(DecksUpdateCommand.class, "deckId", this::decksUpdate));
-
-			router.route("/v1/decks/:deckId")
-					.method(HttpMethod.DELETE)
-					.handler(HandlerFactory.handler("deckId", this::decksDelete));
-
-			router.route("/v1/matchmaking/constructed")
-					.handler(bodyHandler);
-			router.route("/v1/matchmaking/constructed")
-					.handler(authHandler);
-			router.route("/v1/matchmaking/constructed")
-					.method(HttpMethod.GET)
-					.handler(HandlerFactory.handler(this::matchmakingConstructedGet));
-			router.route("/v1/matchmaking/constructed")
-					.method(HttpMethod.DELETE)
-					.handler(HandlerFactory.handler(this::matchmakingConstructedDelete));
-
-			router.route("/v1/matchmaking/constructed/queue")
-					.handler(bodyHandler);
-			router.route("/v1/matchmaking/constructed/queue")
-					.handler(authHandler);
-			router.route("/v1/matchmaking/constructed/queue")
-					.method(HttpMethod.PUT)
-					.handler(HandlerFactory.handler(MatchmakingQueuePutRequest.class,
-							this::matchmakingConstructedQueuePut));
-
-			router.route("/v1/matchmaking/constructed/queue")
-					.method(HttpMethod.DELETE)
-					.handler(HandlerFactory.handler(this::matchmakingConstructedQueueDelete));
-
-			router.route("/v1/friends")
-					.handler(bodyHandler);
-			router.route("/v1/friends")
-					.handler(authHandler);
-			router.route("/v1/friends")
-					.method(HttpMethod.PUT)
-					.handler(HandlerFactory.handler(FriendPutRequest.class, this::putFriend));
-
-			router.route("/v1/friends/:friendId")
-					.handler(bodyHandler);
-			router.route("/v1/friends/:friendId")
-					.handler(authHandler);
-			router.route("/v1/friends/:friendId")
-					.method(HttpMethod.DELETE)
-					.handler(HandlerFactory.handler("friendId", this::unFriend));
-
-			router.route("/v1/drafts")
-					.handler(bodyHandler);
-			router.route("/v1/drafts")
-					.handler(authHandler);
-			router.route("/v1/drafts")
-					.method(HttpMethod.GET)
-					.handler(HandlerFactory.handler(this::draftsGet));
-
-			router.route("/v1/drafts")
-					.method(HttpMethod.POST)
-					.handler(HandlerFactory.handler(DraftsPostRequest.class, this::draftsPost));
-
-			router.route("/v1/drafts/hero")
-					.handler(bodyHandler);
-			router.route("/v1/drafts/hero")
-					.handler(authHandler);
-			router.route("/v1/drafts/hero")
-					.method(HttpMethod.PUT)
-					.handler(HandlerFactory.handler(DraftsChooseHeroRequest.class, this::draftsChooseHero));
-
-			router.route("/v1/drafts/cards")
-					.handler(bodyHandler);
-			router.route("/v1/drafts/cards")
-					.handler(authHandler);
-			router.route("/v1/drafts/cards")
-					.method(HttpMethod.PUT)
-					.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
-
-			router.route("/v1/friends/:friendId/conversation")
-					.handler(bodyHandler);
-			router.route("/v1/friends/:friendId/conversation")
-					.handler(authHandler);
-			router.route("/v1/friends/:friendId/conversation")
-					.method(HttpMethod.PUT)
-					.handler(HandlerFactory.handler(SendMessageRequest.class, "friendId",
-							this::sendFriendMessage));
-			router.route("/v1/friends/:friendId/conversation")
-					.method(HttpMethod.GET)
-					.handler(HandlerFactory.handler("friendId", this::getFriendConversation));
-
-			logger.info("Router configured.");
-			HttpServer listening = awaitResult(done -> server.requestHandler(router::accept).listen(done));
-			logger.info("Listening on port " + Integer.toString(server.actualPort()));
-		} catch (Exception e) {
-			logger.error(e);
-			throw e;
+		for (Verticle verticle : Arrays.asList(cards, accounts, games, matchmaking, bots, logic, decks, inventory, drafts)) {
+			final String name = verticle.getClass().getName();
+			logger.info("Deploying " + name + "...");
+			String deploymentId = Sync.awaitResult(done -> vertx.deployVerticle(verticle, done));
+			deployments.add(deploymentId);
+			logger.info("Deployed " + name + " with ID " + deploymentId);
 		}
+
+		logger.info("Configuring router...");
+
+		final TokenAuthProvider authProvider = new TokenAuthProvider(vertx);
+		final ApiKeyAuthHandler authHandler = ApiKeyAuthHandler.create(authProvider, "X-Auth-Token");
+		final BodyHandler bodyHandler = BodyHandler.create();
+
+		// All routes need logging.
+		router.route().handler(LoggerHandler.create());
+
+		// CORS
+		router.route().handler(CorsHandler.create("*")
+				.allowedHeader("Content-Type")
+				.allowedHeader("X-Auth-Token")
+				.exposedHeader("Content-Type")
+				.allowCredentials(true)
+				.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS)));
+
+		//add "content-type=application/json" to all responses
+		router.route().handler(context -> {
+			context.response().putHeader("Content-Type", "application/json");
+			context.next();
+		});
+
+		router.route("/v1/accounts/:targetUserId")
+				.handler(authHandler);
+		router.route("/v1/accounts/:targetUserId")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler("targetUserId", this::getAccount));
+
+		router.route("/v1/accounts")
+				.handler(bodyHandler);
+		router.route("/v1/accounts")
+				.method(HttpMethod.POST)
+				.handler(HandlerFactory.handler(LoginRequest.class, this::login));
+		router.route("/v1/accounts")
+				.method(HttpMethod.PUT)
+				.handler(HandlerFactory.handler(CreateAccountRequest.class, this::createAccount));
+		router.route("/v1/accounts")
+				.method(HttpMethod.GET)
+				.handler(authHandler);
+		router.route("/v1/accounts")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
+
+
+		router.route("/v1/decks")
+				.handler(bodyHandler);
+		router.route("/v1/decks")
+				.handler(authHandler);
+		router.route("/v1/decks")
+				.method(HttpMethod.PUT)
+				.handler(HandlerFactory.handler(DecksPutRequest.class, this::decksPut));
+		router.route("/v1/decks")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler(this::decksGetAll));
+
+		router.route("/v1/decks/:deckId")
+				.handler(bodyHandler);
+		router.route("/v1/decks/:deckId")
+				.handler(authHandler);
+		router.route("/v1/decks/:deckId")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler("deckId", this::decksGet));
+
+		router.route("/v1/decks/:deckId")
+				.method(HttpMethod.POST)
+				.handler(HandlerFactory.handler(DecksUpdateCommand.class, "deckId", this::decksUpdate));
+
+		router.route("/v1/decks/:deckId")
+				.method(HttpMethod.DELETE)
+				.handler(HandlerFactory.handler("deckId", this::decksDelete));
+
+		router.route("/v1/matchmaking/constructed")
+				.handler(bodyHandler);
+		router.route("/v1/matchmaking/constructed")
+				.handler(authHandler);
+		router.route("/v1/matchmaking/constructed")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler(this::matchmakingConstructedGet));
+		router.route("/v1/matchmaking/constructed")
+				.method(HttpMethod.DELETE)
+				.handler(HandlerFactory.handler(this::matchmakingConstructedDelete));
+
+		router.route("/v1/matchmaking/constructed/queue")
+				.handler(bodyHandler);
+		router.route("/v1/matchmaking/constructed/queue")
+				.handler(authHandler);
+		router.route("/v1/matchmaking/constructed/queue")
+				.method(HttpMethod.PUT)
+				.handler(HandlerFactory.handler(MatchmakingQueuePutRequest.class,
+						this::matchmakingConstructedQueuePut));
+
+		router.route("/v1/matchmaking/constructed/queue")
+				.method(HttpMethod.DELETE)
+				.handler(HandlerFactory.handler(this::matchmakingConstructedQueueDelete));
+
+		router.route("/v1/friends")
+				.handler(bodyHandler);
+		router.route("/v1/friends")
+				.handler(authHandler);
+		router.route("/v1/friends")
+				.method(HttpMethod.PUT)
+				.handler(HandlerFactory.handler(FriendPutRequest.class, this::putFriend));
+
+		router.route("/v1/friends/:friendId")
+				.handler(bodyHandler);
+		router.route("/v1/friends/:friendId")
+				.handler(authHandler);
+		router.route("/v1/friends/:friendId")
+				.method(HttpMethod.DELETE)
+				.handler(HandlerFactory.handler("friendId", this::unFriend));
+
+		router.route("/v1/drafts")
+				.handler(bodyHandler);
+		router.route("/v1/drafts")
+				.handler(authHandler);
+		router.route("/v1/drafts")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler(this::draftsGet));
+
+		router.route("/v1/drafts")
+				.method(HttpMethod.POST)
+				.handler(HandlerFactory.handler(DraftsPostRequest.class, this::draftsPost));
+
+		router.route("/v1/drafts/hero")
+				.handler(bodyHandler);
+		router.route("/v1/drafts/hero")
+				.handler(authHandler);
+		router.route("/v1/drafts/hero")
+				.method(HttpMethod.PUT)
+				.handler(HandlerFactory.handler(DraftsChooseHeroRequest.class, this::draftsChooseHero));
+
+		router.route("/v1/drafts/cards")
+				.handler(bodyHandler);
+		router.route("/v1/drafts/cards")
+				.handler(authHandler);
+		router.route("/v1/drafts/cards")
+				.method(HttpMethod.PUT)
+				.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
+
+		router.route("/v1/friends/:friendId/conversation")
+				.handler(bodyHandler);
+		router.route("/v1/friends/:friendId/conversation")
+				.handler(authHandler);
+		router.route("/v1/friends/:friendId/conversation")
+				.method(HttpMethod.PUT)
+				.handler(HandlerFactory.handler(SendMessageRequest.class, "friendId",
+						this::sendFriendMessage));
+		router.route("/v1/friends/:friendId/conversation")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler("friendId", this::getFriendConversation));
+
+		logger.info("Router configured.");
+		HttpServer listening = awaitResult(done -> server.requestHandler(router::accept).listen(done));
+		logger.info("Listening on port " + Integer.toString(server.actualPort()));
 	}
 
 	@Override
