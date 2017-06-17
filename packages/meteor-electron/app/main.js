@@ -207,8 +207,10 @@ app.on("ready", function () {
             event.sender.send('file-callback', JSON.stringify({type: 'error', error: err}));
         }).on('end', () => {
             try {
-                // Make the target executable
-                fs.chmodSync(chmodTarget, '755');
+                if (!!chmodTarget) {
+                    // Make the target executable
+                    fs.chmodSync(chmodTarget, '755');
+                }
             } catch (e) {
             }
             event.sender.send('file-callback', JSON.stringify({type: 'extracted', extracted: true}));

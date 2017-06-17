@@ -33,6 +33,16 @@
     },
     "bundleId": "com.hiddenswitch.launcher",
     "sign": "Developer ID Application: Benjamin Berman (K4T4R33YU4)",
-    "category": "public.app-category.games"
+    "category": "public.app-category.games",
+    "builds": [
+      {
+        "platform": "win32",
+        "arch": "ia32"
+      },
+      {
+        "platform": "darwin",
+        "arch": "x64"
+      }
+    ]
   }
 }

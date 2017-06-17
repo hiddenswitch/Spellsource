@@ -18,11 +18,19 @@ Meteor.methods({
         }
 
         Versions.insert({url: url, createdAt: new Date()});
+    },
+
+    latestWindows(url, apiKey) {
+        if (apiKey !== Meteor.settings.apiKey) {
+            return;
+        }
+
+        Versions.insert({url: url, createdAt: new Date(), windows: true});
     }
 });
 //
 // Meteor.startup(() => {
 //     if (!Versions.findOne("test11")) {
-//         Versions.insert({_id: "test11", url: "https://s3.us-east-2.amazonaws.com/minionate/builds/latest_mac.zip", createdAt: new Date()});
+//         Versions.insert({_id: "test11", url: "https://s3.us-east-2.amazonaws.com/minionate/builds/latest_win.zip", createdAt: new Date()});
 //     }
 // });
