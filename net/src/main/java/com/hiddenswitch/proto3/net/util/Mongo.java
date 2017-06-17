@@ -73,6 +73,23 @@ public class Mongo {
 		return connect(vertx, "mongodb://localhost:27017");
 	}
 
+	/**
+	 * Connect by interpreting the MONGO_URL environment variable or the mongo.url system property. Otherwise, start
+	 * an embedded server if it doens't already exist and connect to it.
+	 *
+	 * @param vertx The vertx instance to build the mongo client with.
+	 * @return This {@link Mongo} instance.
+	 */
+	public Mongo connectWithEnvironment(Vertx vertx) {
+		if (System.getProperties().containsKey("mongo.url")
+				|| System.getenv().containsKey("MONGO_URL")) {
+			String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017/local"));
+			return connect(vertx, mongoUrl);
+		} else {
+			return startEmbedded().connect(vertx);
+		}
+	}
+
 	public MongoClient client() {
 		return client;
 	}
