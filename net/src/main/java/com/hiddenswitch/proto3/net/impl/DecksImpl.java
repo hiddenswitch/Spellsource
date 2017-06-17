@@ -14,6 +14,8 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.decks.DeckCatalogue;
 
 import java.io.IOException;
@@ -46,9 +48,13 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		accounts = RPC.connect(Accounts.class, vertx.eventBus());
 		// Create the starting decks
 		try {
+			CardCatalogue.loadCardsFromPackage();
 			DeckCatalogue.loadDecksFromPackage();
+
 		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException();
+		} catch (CardParseException e) {
+			e.printStackTrace();
 		}
 
 		registration = RPC.register(this, Decks.class, vertx.eventBus());

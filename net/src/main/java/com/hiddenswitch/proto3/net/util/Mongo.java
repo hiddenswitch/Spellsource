@@ -59,6 +59,17 @@ public class Mongo {
 		return this;
 	}
 
+	public Mongo stopEmbedded() {
+		if (localMongoServer != null) {
+			try {
+				localMongoServer.stop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return this;
+	}
+
 	public Mongo connect(Vertx vertx, String connectionString) {
 		if (client != null) {
 			return this;

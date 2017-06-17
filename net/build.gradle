@@ -62,6 +62,7 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.4.1'
     compile group: 'io.vertx', name: 'vertx-web', version: '3.4.1'
     compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.4.1'
+    compile group: 'io.vertx', name: 'vertx-zookeeper', version: '3.4.1'
     compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.1-SNAPSHOT'
 
     compile project(':game')
@@ -75,6 +76,7 @@ dependencies {
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
     testCompile group: 'javax.websocket', name: 'javax.websocket-client-api', version: '1.1'
     testCompile group: 'org.glassfish.tyrus', name: 'tyrus-container-grizzly-client', version: '1.13.1'
+    testCompile group: 'org.apache.curator', name: 'curator-test', version: '3.3.0'
 }
 
 tasks.withType(JavaExec) {

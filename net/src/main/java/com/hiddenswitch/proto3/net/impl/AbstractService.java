@@ -20,7 +20,7 @@ import io.vertx.ext.sync.SyncVerticle;
  *
  * @param <T>
  */
-abstract class AbstractService<T extends AbstractService<T>> extends SyncVerticle {
+public abstract class AbstractService<T extends AbstractService<T>> extends SyncVerticle {
 	protected static Logger logger = LoggerFactory.getLogger(AbstractService.class);
 
 	/**
