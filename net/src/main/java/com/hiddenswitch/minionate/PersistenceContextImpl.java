@@ -2,8 +2,8 @@ package com.hiddenswitch.minionate;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Logic;
-import com.hiddenswitch.proto3.net.PersistAttributeRequest;
-import com.hiddenswitch.proto3.net.PersistAttributeResponse;
+import com.hiddenswitch.proto3.net.models.PersistAttributeRequest;
+import com.hiddenswitch.proto3.net.models.PersistAttributeResponse;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;

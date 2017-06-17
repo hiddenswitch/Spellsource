@@ -1,6 +1,4 @@
-package com.hiddenswitch.proto3.net;
-
-import com.hiddenswitch.proto3.net.models.LogicResponse;
+package com.hiddenswitch.proto3.net.models;
 
 import java.io.Serializable;
 

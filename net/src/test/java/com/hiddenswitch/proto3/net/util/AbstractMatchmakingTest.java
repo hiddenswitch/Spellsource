@@ -19,6 +19,7 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.utils.Tuple;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
@@ -32,6 +33,7 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 	private Logger logger = LoggerFactory.getLogger(MatchmakingTest.class);
 	private BotsImpl bots;
 	protected DraftImpl draft;
+	private AccountsImpl accounts;
 
 	@Suspendable
 	protected String createTwoPlayersAndMatchmake() throws SuspendExecution, InterruptedException {
@@ -104,21 +106,8 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 		gameSessions = new GamesImpl();
 		bots = new BotsImpl();
 		draft = new DraftImpl();
+		accounts = new AccountsImpl();
 
-		MatchmakingImpl instance = new MatchmakingImpl();
-		vertx.deployVerticle(gameSessions, then -> {
-			if (then.failed()) {
-				throw new AssertionError("failed to deploy game sessions: " + then.cause().getMessage());
-			}
-			vertx.deployVerticle(draft, then4 -> {
-				vertx.deployVerticle(bots, then2 -> {
-					vertx.deployVerticle(instance, then3 -> {
-						logger.info("Services deployed.");
-						done.handle(Future.succeededFuture(instance));
-					});
-				});
-			});
-
-		});
+		deploy(Arrays.asList(gameSessions, bots, draft, accounts), new MatchmakingImpl(), done);
 	}
 }

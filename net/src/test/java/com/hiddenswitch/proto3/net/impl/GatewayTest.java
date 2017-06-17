@@ -8,6 +8,7 @@ import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Logic;
+import com.hiddenswitch.proto3.net.Matchmaking;
 import com.hiddenswitch.proto3.net.client.ApiClient;
 import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
@@ -16,14 +17,9 @@ import com.hiddenswitch.proto3.net.models.CreateGameSessionRequest;
 import com.hiddenswitch.proto3.net.models.CurrentMatchRequest;
 import com.hiddenswitch.proto3.net.models.DeckCreateRequest;
 import com.hiddenswitch.proto3.net.models.DeckCreateResponse;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.*;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
-import com.hiddenswitch.proto3.net.impl.util.MessageRecord;
-import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Serialization;
-import com.hiddenswitch.proto3.net.util.UnityClient;
-import com.hiddenswitch.proto3.net.util.VertxBufferInputStream;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -31,7 +27,6 @@ import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.SendContext;
-import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.Attribute;
@@ -52,18 +47,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.hiddenswitch.proto3.net.client.models.DraftState.StatusEnum.COMPLETE;
+import static com.hiddenswitch.proto3.net.client.models.DraftState.StatusEnum.RETIRED;
+import static com.hiddenswitch.proto3.net.client.models.DraftState.StatusEnum.SELECT_HERO;
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 
 /**
  * Created by bberman on 2/18/17.
  */
-public class ServerTest extends ServiceTest<ServerImpl> {
+public class GatewayTest extends ServiceTest<GatewayImpl> {
 	private String deploymentId;
+	private LogicImpl logic;
+	private GamesImpl games;
+	private BotsImpl bots;
 	private static DefaultApi defaultApi = new DefaultApi();
 
 	static {
 		defaultApi.getApiClient().setBasePath("http://localhost:8080/v1"); //TODO: read from configuration
 	}
+
+	private MatchmakingImpl matchmaking;
+
 
 	@Test(timeout = 120000L)
 	public void testShutdownAndRestartServer(TestContext context) throws InterruptedException, SuspendExecution {
@@ -72,8 +76,8 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		final Async async = context.async();
 
 		getContext().assertNotNull(service.server);
-		getContext().assertNotNull(service.logic.deploymentID());
-		getContext().assertNotNull(service.games.deploymentID());
+		getContext().assertNotNull(logic.deploymentID());
+		getContext().assertNotNull(games.deploymentID());
 
 		vertx.executeBlocking(done -> {
 			UnityClient client = new UnityClient(getContext());
@@ -87,8 +91,8 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 				service = null;
 				deployServices(vertx, then3 -> {
 					service = then3.result();
-					getContext().assertNotNull(service.logic.deploymentID());
-					getContext().assertNotNull(service.accounts.deploymentID());
+					getContext().assertNotNull(logic.deploymentID());
+					getContext().assertNotNull(games.deploymentID());
 					vertx.executeBlocking(done2 -> {
 						UnityClient client2 = new UnityClient(getContext());
 						client2.loginWithUserAccount("testaccount23");
@@ -118,9 +122,11 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 			final int j = i;
 			Thread t = new Thread(() -> {
 				try {
-					Thread.sleep(RandomUtils.nextInt(10, 100));
+					Strand.sleep(RandomUtils.nextInt(10, 100));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+				} catch (SuspendExecution suspendExecution) {
+					suspendExecution.printStackTrace();
 				}
 				ApiClient client = new ApiClient().setBasePath("http://localhost:8080/v1");
 				client.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
@@ -161,14 +167,18 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 
 		float timeout = 50f;
 		while (count.get() > 0 && timeout > 0) {
-			Thread.sleep(100);
+			try {
+				Strand.sleep(100);
+			} catch (SuspendExecution suspendExecution) {
+				suspendExecution.printStackTrace();
+			}
 			timeout -= 0.1f;
 		}
 		async.complete();
 		unwrap();
 	}
 
-	@Test(timeout = 60000L)
+	@Test
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
@@ -191,29 +201,35 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		unwrap();
 	}
 
-	@Test(timeout = 60000L)
-	public void testDisconnectingUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
+	private String userIdDisconnecting;
+
+	@Test
+	public void testDisconnectingUnityClient(TestContext context) {
 		wrap(context);
 		setLoggingLevel(Level.ERROR);
 		getContext().assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
-		final Async async = context.async();
 
 		UnityClient client = new UnityClient(getContext(), 5);
+		client.createUserAccount(null);
 		Thread clientThread = new Thread(() -> {
-			client.createUserAccount(null);
 			client.matchmakeAndPlayAgainstAI(null);
 		});
+		userIdDisconnecting = client.getAccount().getId();
 		clientThread.start();
 
-		// wait 16 seconds
-		Strand.sleep(16000);
 		// Assert that session was closed
-		getContext().assertEquals(service.matchmaking.getCurrentMatch(new CurrentMatchRequest(client.getAccount().getId())).getGameId(), null);
-		async.complete();
-		unwrap();
+		wrapSync(context, this::disconnectingUnityClientAssert);
 	}
 
-	@Test(timeout = 60000L)
+	private void disconnectingUnityClientAssert() throws SuspendExecution, InterruptedException {
+		// wait 18 seconds
+		Strand.sleep(18000);
+		final Matchmaking matchmaking = RPC.connect(Matchmaking.class, vertx.eventBus()).sync();
+
+		getContext().assertEquals(null, matchmaking.getCurrentMatch(new CurrentMatchRequest(userIdDisconnecting)).getGameId());
+	}
+
+	@Test
 	@SuppressWarnings("unchecked")
 	public void testDistinctDecks(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
@@ -308,7 +324,7 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 			done.complete();
 		}, context.asyncAssertSuccess(also -> {
 			context.assertTrue(queue.stream().anyMatch(l -> l > 0L), "Any number of the entities updated was greater than zero.");
-			service.inventory.getMongo().count(Inventory.INVENTORY,
+			Mongo.mongo().client().count(Inventory.INVENTORY,
 					json("facts." + Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION.toKeyCase(), json("$exists", true)),
 					context.asyncAssertSuccess(count -> {
 						context.assertTrue(count > 0L, "There is at least one inventory item that has the attribute that we configured to listen for.");
@@ -338,8 +354,8 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 			final String[] deckId = new String[1];
 			vertx.executeBlocking(done -> {
 				client.createUserAccount(null);
-				Fiber<Void> fiber = new Fiber<Void>(Sync.getContextScheduler(), () -> {
-					DeckCreateResponse res = service.decks.createDeck(new DeckCreateRequest()
+				Fiber<Void> fiber = new Fiber<Void>(io.vertx.ext.sync.Sync.getContextScheduler(), () -> {
+					DeckCreateResponse res = service.getDecks().createDeck(new DeckCreateRequest()
 							.withUserId(client.getAccount().getId())
 							.withHeroClass(HeroClass.ROGUE)
 							.withName("Test Weapon Deck")
@@ -348,9 +364,11 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 				}).start();
 				while (deckId[0] == null) {
 					try {
-						Thread.sleep(1000);
+						Strand.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
+					} catch (SuspendExecution suspendExecution) {
+						suspendExecution.printStackTrace();
 					}
 				}
 				done.handle(Future.succeededFuture());
@@ -368,16 +386,6 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 		});
 	}
 
-	@Override
-	public void deployServices(Vertx vertx, Handler<AsyncResult<ServerImpl>> done) {
-		System.setProperty("games.defaultNoActivityTimeout", "8000");
-		ServerImpl instance = new ServerImpl();
-		instance.bots.setBotBehaviour(PlayRandomBehaviour.class);
-		vertx.deployVerticle(instance, then -> {
-			deploymentId = then.result();
-			done.handle(Future.succeededFuture(instance));
-		});
-	}
 
 	private static int currentTomer = 0;
 
@@ -595,4 +603,84 @@ public class ServerTest extends ServiceTest<ServerImpl> {
 				"Posted message and conversation message (2) should match");
 
 	}
+
+
+	@Test
+	public void testDraftAPI(TestContext context) throws ApiException {
+		DefaultApi api = new DefaultApi(new ApiClient().setBasePath("http://localhost:8080/v1"));
+
+		com.hiddenswitch.proto3.net.client.models.CreateAccountResponse car = api.createAccount(new com.hiddenswitch.proto3.net.client.models.CreateAccountRequest()
+				.name("testuser")
+				.email("testemail@email.com")
+				.password("testpassword"));
+
+		api.getApiClient().setApiKey(car.getLoginToken());
+
+		try {
+			api.draftsGet();
+		} catch (ApiException e) {
+			context.assertEquals(404, e.getCode(), "The exception codes for drafts get do not match.");
+		}
+
+
+		DraftState state = api.draftsPost(new DraftsPostRequest().startDraft(true));
+		context.assertEquals(SELECT_HERO, state.getStatus(), "The result of starting a draft is unexpectedly not select hero.");
+		try {
+			api.draftsChooseCard(new DraftsChooseCardRequest().cardIndex(1));
+		} catch (ApiException e) {
+			context.assertEquals(400, e.getCode(), "Unexpectedly the client successfully chose a card instead of a hero.");
+		}
+
+
+		state = api.draftsChooseHero(new DraftsChooseHeroRequest().heroIndex(1));
+		context.assertNotNull(state.getHeroClass());
+
+		while (state.getCurrentCardChoices() != null
+				&& state.getStatus() == DraftState.StatusEnum.IN_PROGRESS) {
+			context.assertEquals(3, state.getCurrentCardChoices().size(), "The number of card choices should always be three");
+			Entity card = state.getCurrentCardChoices().get(1);
+			context.assertNotNull(card, "The draft service should provide a full card definition.");
+			context.assertNotNull(card.getCardId(), "The draft service should at least provide a card ID.");
+			state = api.draftsChooseCard(new DraftsChooseCardRequest().cardIndex(1));
+			context.assertEquals(card.getCardId(), state.getSelectedCards().get(state.getSelectedCards().size() - 1).getCardId(), "The card didn't appear to be selected correctly");
+		}
+
+		context.assertEquals(COMPLETE, state.getStatus(), "The status of the draft should be complete.");
+		context.assertNotNull(state.getDeckId(), "The draft state should contain a deck ID when it is complete.");
+
+		state = api.draftsPost(new DraftsPostRequest().retireEarly(true));
+		context.assertEquals(RETIRED, state.getStatus(), "Expected a status of retired.");
+
+		try {
+			api.draftsGet();
+		} catch (ApiException e) {
+			context.assertEquals(404, e.getCode(), "There should be no draft if we retired the draft early.");
+		}
+	}
+
+	@Override
+	public void deployServices(Vertx vertx, Handler<AsyncResult<GatewayImpl>> done) {
+		System.setProperty("games.defaultNoActivityTimeout", "8000");
+		GatewayImpl instance = new GatewayImpl();
+		logic = new LogicImpl();
+		games = new GamesImpl();
+		bots = new BotsImpl();
+		bots.setBotBehaviour(PlayRandomBehaviour.class);
+		matchmaking = new MatchmakingImpl();
+		deploy(Arrays.asList(
+				games,
+				logic,
+				bots,
+				new AccountsImpl(),
+				matchmaking,
+				new DecksImpl(),
+				new InventoryImpl(),
+				new CardsImpl(),
+				new DraftImpl()
+		), instance, then -> {
+			deploymentId = then.result().deploymentID();
+			done.handle(then);
+		});
+	}
+
 }

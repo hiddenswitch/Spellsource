@@ -41,11 +41,6 @@ class SyncMethodEventBusHandler<T, R> implements Handler<Message<Buffer>> {
 			message.fail(-1, getMessage(e));
 		}
 
-		if (response == null) {
-			message.fail(1, new NullPointerException().getMessage());
-			return;
-		}
-
 		Buffer reply = Buffer.buffer(512);
 
 		try {
