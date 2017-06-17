@@ -31,6 +31,8 @@ abstract class AbstractService<T extends AbstractService<T>> extends SyncVerticl
 	@Override
 	@Suspendable
 	public void start() throws SuspendExecution {
+		// Sets up a mongo connection from the environment if it doesn't already exist
+		Mongo.mongo().connectWithEnvironment(vertx);
 	}
 
 

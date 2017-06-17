@@ -77,8 +77,6 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 				.setPort(8080));
 		Router router = Router.router(vertx);
 
-		configureMongo();
-
 		for (Verticle verticle : Arrays.asList(cards, accounts, games, matchmaking, bots, logic, decks, inventory, drafts)) {
 			final String name = verticle.getClass().getName();
 			logger.info("Deploying " + name + "...");
@@ -602,18 +600,5 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getProfile().getEmailAddress())
 				.name(displayName);
-	}
-
-
-	private void configureMongo() {
-		// Get the Mongo URL
-		if (System.getProperties().containsKey("mongo.url")
-				|| System.getenv().containsKey("MONGO_URL")) {
-			String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017/local"));
-			Mongo.mongo().connect(vertx, mongoUrl);
-		} else {
-			Mongo.mongo().startEmbedded().connect(vertx);
-		}
-
 	}
 }
