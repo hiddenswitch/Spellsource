@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Registration;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
@@ -37,6 +38,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	private Queue<UserRecord> unusedBots = new ConcurrentLinkedQueue<>();
 	private Map<String, UserRecord> botToGame = new HashMap<>();
 	private Class<? extends Behaviour> botBehaviour = GameStateValueBehaviour.class;
+	private Registration registration;
 
 	@Override
 	@Suspendable
@@ -45,7 +47,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 		accounts = RPC.connect(Accounts.class, vertx.eventBus());
 		logic = RPC.connect(Logic.class, vertx.eventBus());
 		matchmaking = RPC.connect(Matchmaking.class, vertx.eventBus());
-		RPC.register(this, Bots.class, vertx.eventBus());
+		registration = RPC.register(this, Bots.class, vertx.eventBus());
 	}
 
 	@Override
@@ -149,5 +151,12 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 
 	public void setBotBehaviour(Class<? extends Behaviour> botBehaviour) {
 		this.botBehaviour = botBehaviour;
+	}
+
+	@Override
+	@Suspendable
+	public void stop() throws Exception {
+		super.stop();
+		RPC.unregister(registration);
 	}
 }

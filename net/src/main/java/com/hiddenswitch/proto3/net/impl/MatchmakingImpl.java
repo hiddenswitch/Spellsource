@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
+import com.hiddenswitch.proto3.net.util.Registration;
 import net.demilich.metastone.game.decks.DeckWithId;
 import com.hiddenswitch.proto3.net.impl.util.Matchmaker;
 import com.hiddenswitch.proto3.net.impl.util.QueueEntry;
@@ -27,6 +28,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 	private Matchmaker matchmaker = new Matchmaker();
 	private Map<String, ClientConnectionConfiguration> connections = new HashMap<>();
+	private Registration registration;
 
 	@Override
 	public void start() throws SuspendExecution {
@@ -34,12 +36,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		gameSessions = RPC.connect(Games.class, vertx.eventBus());
 		logic = RPC.connect(Logic.class, vertx.eventBus());
 		bots = RPC.connect(Bots.class, vertx.eventBus());
-		RPC.register(this, Matchmaking.class, vertx.eventBus());
-	}
-
-	@Override
-	public void stop() throws Exception {
-		super.stop();
+		registration = RPC.register(this, Matchmaking.class, vertx.eventBus());
 	}
 
 	@Override
@@ -207,5 +204,12 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		}
 
 		return response;
+	}
+
+	@Override
+	@Suspendable
+	public void stop() throws Exception {
+		super.stop();
+		RPC.unregister(registration);
 	}
 }

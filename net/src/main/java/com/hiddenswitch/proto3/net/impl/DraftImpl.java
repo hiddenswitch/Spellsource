@@ -13,6 +13,7 @@ import com.hiddenswitch.proto3.net.impl.util.DraftRecord;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Registration;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.Future;
 import io.vertx.core.json.Json;
@@ -24,6 +25,7 @@ import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 	private RpcClient<Decks> decks;
 	private RpcClient<Accounts> accounts;
+	private Registration registration;
 
 	@Override
 	@Suspendable
@@ -35,7 +37,7 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 		if (!mongo().getCollections().contains(DRAFTS)) {
 			mongo().createCollection(DRAFTS);
 		}
-		RPC.register(this, Draft.class, vertx.eventBus());
+		registration = RPC.register(this, Draft.class, vertx.eventBus());
 	}
 
 	@Override
@@ -123,5 +125,12 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 		record.getPublicDraftState().setStatus(DraftStatus.RETIRED);
 		return new RetireDraftResponse()
 				.withRecord(record);
+	}
+
+	@Override
+	@Suspendable
+	public void stop() throws Exception {
+		super.stop();
+		RPC.unregister(registration);
 	}
 }

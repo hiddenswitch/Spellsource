@@ -8,7 +8,9 @@ import com.hiddenswitch.proto3.net.models.SetCollectionResponse;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.impl.util.CollectionRecord;
 import com.hiddenswitch.proto3.net.models.*;
+import com.hiddenswitch.proto3.net.util.Mongo;
 import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Registration;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
@@ -22,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.hiddenswitch.proto3.net.util.Mongo.mongo;
 import static com.hiddenswitch.proto3.net.util.QuickJson.*;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
@@ -30,20 +33,21 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  */
 public class InventoryImpl extends AbstractService<InventoryImpl> implements Inventory {
 	private RpcClient<Cards> cards;
+	private Registration registration;
 
 	@Override
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
 		cards = RPC.connect(Cards.class, vertx.eventBus());
-		List<String> collections = awaitResult(h -> getMongo().getCollections(h));
+		List<String> collections = mongo().getCollections();
 		if (!collections.contains(INVENTORY) || !collections.contains(COLLECTIONS)) {
-			Void ignore = awaitResult(h -> getMongo().createCollection(INVENTORY, h));
-			ignore = awaitResult(h -> getMongo().createCollection(COLLECTIONS, h));
-			ignore = awaitResult(h -> getMongo().createIndex(INVENTORY, json("userId", 1), h));
-			ignore = awaitResult(h -> getMongo().createIndex(INVENTORY, json("collectionIds", 1), h));
+			mongo().createCollection(INVENTORY);
+			mongo().createCollection(COLLECTIONS);
+			mongo().createIndex(INVENTORY, json("userId", 1));
+			mongo().createIndex(INVENTORY, json("collectionIds", 1));
 		}
-		RPC.register(this, Inventory.class, vertx.eventBus());
+		registration = RPC.register(this, Inventory.class, vertx.eventBus());
 	}
 
 	@Override
@@ -310,5 +314,12 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 						new UpdateOptions().setMulti(true), h));
 
 		return new SetCollectionResponse(r2, r);
+	}
+
+	@Override
+	@Suspendable
+	public void stop() throws Exception {
+		super.stop();
+		RPC.unregister(registration);
 	}
 }
