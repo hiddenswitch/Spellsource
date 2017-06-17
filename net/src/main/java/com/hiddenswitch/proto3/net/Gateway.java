@@ -2,7 +2,7 @@ package com.hiddenswitch.proto3.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.proto3.net.client.models.*;
-import com.hiddenswitch.proto3.net.impl.ServerImpl;
+import com.hiddenswitch.proto3.net.impl.GatewayImpl;
 import com.hiddenswitch.proto3.net.impl.util.HandlerFactory;
 import com.hiddenswitch.proto3.net.models.DeckDeleteResponse;
 import com.hiddenswitch.proto3.net.util.WebResult;
@@ -54,9 +54,9 @@ import io.vertx.ext.web.RoutingContext;
  *     // by accessing fields in the routingContext and adapting one of the HandlerFactor methods.
  *     }
  * </pre></li><li>Implement this
- * interface in {@link com.hiddenswitch.proto3.net.impl.ServerImpl}, or whatever {@link io.vertx.core.Verticle} or class
+ * interface in {@link GatewayImpl}, or whatever {@link io.vertx.core.Verticle} or class
  * will serve as an <a href="https://www.linkedin.com/pulse/api-gateway-pattern-subhash-chandran">API gateway</a>. This
- * method should return a {@link WebResult}.</li><li>In the body of {@link ServerImpl#start()}, add a {@link
+ * method should return a {@link WebResult}.</li><li>In the body of {@link GatewayImpl#start()}, add a {@link
  * Router#route()} call actually handle the request. Idiosyncratically, you cannot chain route handlers, so adding the
  * route typically looks like this:
  * <pre>
@@ -100,11 +100,11 @@ import io.vertx.ext.web.RoutingContext;
  *     }
  * </pre></li></ul>
  *
- * Some new methods may require references to other services. In {@link ServerImpl}, our default API gateway, services
- * are hosted locally as package-private fields (e.g., {@link ServerImpl#bots}), and then actually deployed in the
- * {@link ServerImpl#start()} method.
+ * Some new methods may require references to other services. In {@link GatewayImpl}, our default API gateway, services
+ * are hosted locally as package-private fields (e.g., {@link GatewayImpl#bots}), and then actually deployed in the
+ * {@link GatewayImpl#start()} method.
  */
-public interface Server {
+public interface Gateway {
 	WebResult<GetAccountsResponse> getAccount(RoutingContext context, String userId, String targetUserId) throws SuspendExecution, InterruptedException;
 
 	WebResult<GetAccountsResponse> getAccounts(RoutingContext context, String userId, GetAccountsRequest request) throws SuspendExecution, InterruptedException;

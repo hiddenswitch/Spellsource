@@ -2,12 +2,8 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.amazonaws.services.cloudhsm.model.GetConfigRequest;
 import com.google.common.collect.Sets;
-import com.hiddenswitch.proto3.net.Accounts;
-import com.hiddenswitch.proto3.net.Draft;
-import com.hiddenswitch.proto3.net.Conversations;
-import com.hiddenswitch.proto3.net.Server;
+import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.client.models.*;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.client.models.CreateAccountResponse;
@@ -20,17 +16,12 @@ import com.hiddenswitch.proto3.net.impl.util.MessageRecord;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.models.MatchCancelResponse;
-import com.hiddenswitch.proto3.net.util.ApiKeyAuthHandler;
-import com.hiddenswitch.proto3.net.util.Mongo;
-import com.hiddenswitch.proto3.net.util.Serialization;
-import com.hiddenswitch.proto3.net.util.WebResult;
-import io.vertx.core.Verticle;
+import com.hiddenswitch.proto3.net.util.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.ext.sync.Sync;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -40,7 +31,6 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,20 +42,10 @@ import static java.util.stream.Collectors.toList;
  * An implementation of an <a href="https://www.linkedin.com/pulse/api-gateway-pattern-subhash-chandran">API gateway</a>
  * for user-accessible services in Minionate.
  *
- * @see Server for a detailed description on how to add methods to the API gateway.
+ * @see Gateway for a detailed description on how to add methods to the API gateway.
  */
-public class ServerImpl extends AbstractService<ServerImpl> implements Server {
-	static Logger logger = LoggerFactory.getLogger(ServerImpl.class);
-	CardsImpl cards = new CardsImpl();
-	AccountsImpl accounts = new AccountsImpl();
-	GamesImpl games = new GamesImpl();
-	MatchmakingImpl matchmaking = new MatchmakingImpl();
-	BotsImpl bots = new BotsImpl();
-	LogicImpl logic = new LogicImpl();
-	DecksImpl decks = new DecksImpl();
-	InventoryImpl inventory = new InventoryImpl();
-	DraftImpl drafts = new DraftImpl();
-	List<String> deployments = new ArrayList<>();
+public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway {
+	static Logger logger = LoggerFactory.getLogger(GatewayImpl.class);
 	HttpServer server;
 
 	@Override
@@ -76,14 +56,6 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 				.setHost("0.0.0.0")
 				.setPort(8080));
 		Router router = Router.router(vertx);
-
-		for (Verticle verticle : Arrays.asList(cards, accounts, games, matchmaking, bots, logic, decks, inventory, drafts)) {
-			final String name = verticle.getClass().getName();
-			logger.info("Deploying " + name + "...");
-			String deploymentId = Sync.awaitResult(done -> vertx.deployVerticle(verticle, done));
-			deployments.add(deploymentId);
-			logger.info("Deployed " + name + " with ID " + deploymentId);
-		}
 
 		logger.info("Configuring router...");
 
@@ -249,7 +221,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 			final Account account = getAccount(userId);
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(account)));
 		} else {
-			UserRecord record = accounts.get(userId);
+			UserRecord record = getAccounts().get(userId);
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(new Account()
 					.name(record.getProfile().getDisplayName())
 					.id(targetUserId))));
@@ -264,7 +236,11 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<CreateAccountResponse> createAccount(RoutingContext context, CreateAccountRequest request) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.proto3.net.models.CreateAccountResponse internalResponse = accounts.createAccount(request.getEmail(), request.getPassword(), request.getName());
+		com.hiddenswitch.proto3.net.models.CreateAccountResponse internalResponse = getAccounts()
+				.createAccount(new com.hiddenswitch.proto3.net.models.CreateAccountRequest()
+						.withEmailAddress(request.getEmail())
+						.withPassword(request.getPassword())
+						.withName(request.getName()));
 
 		if (internalResponse.isInvalidEmailAddress()) {
 			return WebResult.failed(new RuntimeException("Invalid email address."));
@@ -274,7 +250,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 		// Initialize the collection
 		final String userId = internalResponse.getUserId();
-		logic.initializeUser(new InitializeUserRequest().withUserId(userId));
+		getLogic().initializeUser(new InitializeUserRequest().withUserId(userId));
 
 		final Account account = getAccount(userId);
 		return WebResult.succeeded(new CreateAccountResponse()
@@ -284,7 +260,9 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<com.hiddenswitch.proto3.net.client.models.LoginResponse> login(RoutingContext context, com.hiddenswitch.proto3.net.client.models.LoginRequest request) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.proto3.net.models.LoginResponse internalResponse = accounts.login(request.getEmail(), request.getPassword());
+		com.hiddenswitch.proto3.net.models.LoginResponse internalResponse = getAccounts().login(
+				new com.hiddenswitch.proto3.net.models.LoginRequest().withEmail(request.getEmail())
+						.withPassword(request.getPassword()));
 
 		if (internalResponse.isBadPassword()) {
 			return WebResult.failed(new RuntimeException("Invalid password."));
@@ -301,7 +279,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 	public WebResult<DecksPutResponse> decksPut(RoutingContext context, String userId, DecksPutRequest request) throws SuspendExecution, InterruptedException {
 		final HeroClass heroClass = HeroClass.valueOf(request.getHeroClass());
 
-		DeckCreateResponse internalResponse = decks.createDeck(new DeckCreateRequest()
+		DeckCreateResponse internalResponse = getDecks().createDeck(new DeckCreateRequest()
 				.withName(request.getName())
 				.withInventoryIds(request.getInventoryIds())
 				.withHeroClass(heroClass)
@@ -311,7 +289,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 	}
 
 	private WebResult<DecksGetResponse> getDeck(String userId, String deckId) throws SuspendExecution, InterruptedException {
-		GetCollectionResponse updatedCollection = inventory.getCollection(new GetCollectionRequest()
+		GetCollectionResponse updatedCollection = getInventory().getCollection(new GetCollectionRequest()
 				.withUserId(userId)
 				.withDeckId(deckId));
 
@@ -322,7 +300,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<DecksGetResponse> decksUpdate(RoutingContext context, String userId, String deckId, DecksUpdateCommand updateCommand) throws SuspendExecution, InterruptedException {
-		decks.updateDeck(new DeckUpdateRequest(userId, deckId, updateCommand));
+		getDecks().updateDeck(new DeckUpdateRequest(userId, deckId, updateCommand));
 
 		// Get the updated collection
 		return getDeck(userId, deckId);
@@ -335,7 +313,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<DecksGetAllResponse> decksGetAll(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		List<String> decks = accounts.get(userId).getDecks();
+		List<String> decks = getAccounts().get(userId).getDecks();
 
 		List<DecksGetResponse> responses = new ArrayList<>();
 		for (String deck : decks) {
@@ -347,13 +325,13 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException {
-		return WebResult.succeeded(decks.deleteDeck(new DeckDeleteRequest(deckId)));
+		return WebResult.succeeded(getDecks().deleteDeck(new DeckDeleteRequest(deckId)));
 	}
 
 	@Override
 	public WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext routingContext, String userId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException {
 		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.getCasual());
-		MatchmakingResponse internalResponse = matchmaking.matchmakeAndJoin(internalRequest);
+		MatchmakingResponse internalResponse = getMatchmaking().matchmakeAndJoin(internalRequest);
 
 		// Compute the appropriate response
 		MatchmakingQueuePutResponse userResponse = new MatchmakingQueuePutResponse();
@@ -390,7 +368,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<com.hiddenswitch.proto3.net.client.models.MatchCancelResponse> matchmakingConstructedQueueDelete(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		MatchCancelResponse internalResponse = matchmaking.cancel(new MatchCancelRequest(userId));
+		MatchCancelResponse internalResponse = getMatchmaking().cancel(new MatchCancelRequest(userId));
 
 		com.hiddenswitch.proto3.net.client.models.MatchCancelResponse response =
 				new com.hiddenswitch.proto3.net.client.models.MatchCancelResponse()
@@ -401,22 +379,22 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		MatchCancelResponse response = matchmaking.cancel(new MatchCancelRequest(userId));
+		MatchCancelResponse response = getMatchmaking().cancel(new MatchCancelRequest(userId));
 		if (response == null) {
 			return WebResult.failed(new RuntimeException());
 		}
-		games.concedeGameSession(new ConcedeGameSessionRequest(response.getGameId(), response.getPlayerId()));
+		getGames().concedeGameSession(new ConcedeGameSessionRequest(response.getGameId(), response.getPlayerId()));
 		return WebResult.succeeded(new MatchConcedeResponse().isConceded(true));
 	}
 
 	@Override
 	public WebResult<GameState> matchmakingConstructedGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		CurrentMatchResponse response = matchmaking.getCurrentMatch(new CurrentMatchRequest(userId));
+		CurrentMatchResponse response = getMatchmaking().getCurrentMatch(new CurrentMatchRequest(userId));
 		if (response.getGameId() == null) {
 			return WebResult.failed(404, new NullPointerException("Game not found."));
 		}
 
-		return WebResult.succeeded(games.getClientGameState(response.getGameId(), userId));
+		return WebResult.succeeded(getGames().getClientGameState(response.getGameId(), userId));
 	}
 
 	@Override
@@ -425,7 +403,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 		String friendId = req.getFriendId();
 
 		//lookup friend user record
-		UserRecord friendAccount = accounts.get(req.getFriendId());
+		UserRecord friendAccount = getAccounts().get(req.getFriendId());
 
 		//if no friend, return 404
 		if (friendAccount == null) {
@@ -464,7 +442,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 		UserRecord myAccount = (UserRecord) context.user();
 
 		//lookup friend user record
-		UserRecord friendAccount = accounts.get(friendId);
+		UserRecord friendAccount = getAccounts().get(friendId);
 
 		//doesn't exist?
 		if (friendAccount == null) {
@@ -495,7 +473,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	@Override
 	public WebResult<DraftState> draftsGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		DraftRecord record = drafts.get(new GetDraftRequest().withUserId(userId));
+		DraftRecord record = getDrafts().get(new GetDraftRequest().withUserId(userId));
 		if (record == null) {
 			return WebResult.failed(404, new NullPointerException("You have not started a draft. Start one first."));
 		}
@@ -510,7 +488,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 			try {
 				return WebResult.succeeded(
 						Draft.toDraftState(
-								drafts.doDraftAction(new DraftActionRequest().withUserId(userId))
+								getDrafts().doDraftAction(new DraftActionRequest().withUserId(userId))
 										.getPublicDraftState()));
 			} catch (NullPointerException unexpectedRequest) {
 				return WebResult.failed(400, unexpectedRequest);
@@ -519,7 +497,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 				&& request.getRetireEarly()) {
 			return WebResult.succeeded(
 					Draft.toDraftState(
-							drafts.retireDraftEarly(new RetireDraftRequest().withUserId(userId))
+							getDrafts().retireDraftEarly(new RetireDraftRequest().withUserId(userId))
 									.getRecord()
 									.getPublicDraftState()));
 
@@ -531,7 +509,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 	@Override
 	public WebResult<DraftState> draftsChooseHero(RoutingContext context, String userId, DraftsChooseHeroRequest request) throws SuspendExecution, InterruptedException {
 		try {
-			DraftRecord record = drafts.doDraftAction(new DraftActionRequest()
+			DraftRecord record = getDrafts().doDraftAction(new DraftActionRequest()
 					.withUserId(userId)
 					.withHeroIndex(request.getHeroIndex()));
 
@@ -546,7 +524,7 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 	@Override
 	public WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException {
 		try {
-			DraftRecord record = drafts.doDraftAction(new DraftActionRequest()
+			DraftRecord record = getDrafts().doDraftAction(new DraftActionRequest()
 					.withUserId(userId)
 					.withCardIndex(request.getCardIndex()));
 
@@ -587,11 +565,11 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {
 		// Get the personal collection
-		UserRecord record = accounts.get(userId);
-		GetCollectionResponse personalCollection = inventory.getCollection(GetCollectionRequest.user(record.getId()));
+		UserRecord record = getAccounts().get(userId);
+		GetCollectionResponse personalCollection = getInventory().getCollection(GetCollectionRequest.user(record.getId()));
 
 		// Get the decks
-		GetCollectionResponse deckCollections = inventory.getCollection(GetCollectionRequest.decks(record.getDecks()));
+		GetCollectionResponse deckCollections = getInventory().getCollection(GetCollectionRequest.decks(record.getDecks()));
 
 		final String displayName = record.getProfile().getDisplayName();
 		return new Account()
@@ -600,5 +578,41 @@ public class ServerImpl extends AbstractService<ServerImpl> implements Server {
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getProfile().getEmailAddress())
 				.name(displayName);
+	}
+
+	public Cards getCards() throws InterruptedException, SuspendExecution {
+		return RPC.connect(Cards.class, vertx.eventBus()).sync();
+	}
+
+	public Accounts getAccounts() throws InterruptedException, SuspendExecution {
+		return RPC.connect(Accounts.class, vertx.eventBus()).sync();
+	}
+
+	public Games getGames() throws InterruptedException, SuspendExecution {
+		return RPC.connect(Games.class, vertx.eventBus()).sync();
+	}
+
+	public Matchmaking getMatchmaking() throws InterruptedException, SuspendExecution {
+		return RPC.connect(Matchmaking.class, vertx.eventBus()).sync();
+	}
+
+	public Bots getBots() throws InterruptedException, SuspendExecution {
+		return RPC.connect(Bots.class, vertx.eventBus()).sync();
+	}
+
+	public Logic getLogic() throws InterruptedException, SuspendExecution {
+		return RPC.connect(Logic.class, vertx.eventBus()).sync();
+	}
+
+	public Decks getDecks() throws InterruptedException, SuspendExecution {
+		return RPC.connect(Decks.class, vertx.eventBus()).sync();
+	}
+
+	public Inventory getInventory() throws InterruptedException, SuspendExecution {
+		return RPC.connect(Inventory.class, vertx.eventBus()).sync();
+	}
+
+	public Draft getDrafts() throws InterruptedException, SuspendExecution {
+		return RPC.connect(Draft.class, vertx.eventBus()).sync();
 	}
 }

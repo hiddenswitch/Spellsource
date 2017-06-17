@@ -1,9 +1,10 @@
 package com.hiddenswitch.proto3.net.applications;
 
 import ch.qos.logback.classic.Level;
-import com.hiddenswitch.proto3.net.impl.ServerImpl;
+import com.hiddenswitch.minionate.Minionate;
+import com.hiddenswitch.proto3.net.impl.GatewayImpl;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.logging.LoggerFactory;
 
 /**
  * Created by bberman on 11/29/16.
@@ -16,6 +17,6 @@ public class Embedded {
 		root.setLevel(Level.ERROR);
 
 		Vertx vertx = Vertx.vertx();
-		vertx.deployVerticle(new ServerImpl());
+		Minionate.minionate().deployAll(vertx, Future.future());
 	}
 }

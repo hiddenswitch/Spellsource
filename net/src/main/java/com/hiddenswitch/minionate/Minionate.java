@@ -1,14 +1,17 @@
 package com.hiddenswitch.minionate;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Logic;
-import com.hiddenswitch.proto3.net.PersistAttributeRequest;
-import com.hiddenswitch.proto3.net.PersistAttributeResponse;
+import com.hiddenswitch.proto3.net.models.PersistAttributeRequest;
+import com.hiddenswitch.proto3.net.models.PersistAttributeResponse;
+import com.hiddenswitch.proto3.net.impl.*;
 import com.hiddenswitch.proto3.net.models.EventLogicRequest;
 import com.hiddenswitch.proto3.net.models.LogicResponse;
 import com.hiddenswitch.proto3.net.util.RpcClient;
-import io.vertx.core.Handler;
+import io.vertx.core.*;
 import io.vertx.ext.sync.Sync;
+import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
@@ -20,6 +23,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * The Minionate Server API. Access it with {@link Minionate#minionate()}.
@@ -89,6 +93,44 @@ public class Minionate {
 	 */
 	public <T extends GameEvent> void persistAttribute(LegacyPersistenceHandler<T> legacyHandler) {
 		legacyPersistenceHandlers.put(legacyHandler.getId(), legacyHandler);
+	}
+
+	/**
+	 * Deploys all the services needed to run an embedded server.
+	 *
+	 * @param vertx       A vertx instance.
+	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
+	 */
+	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
+		final List<SyncVerticle> verticles = Arrays.asList(new SyncVerticle[]{
+				new CardsImpl(),
+				new AccountsImpl(),
+				new GamesImpl(),
+				new MatchmakingImpl(),
+				new BotsImpl(),
+				new LogicImpl(),
+				new DecksImpl(),
+				new InventoryImpl(),
+				new DraftImpl(),
+				new GatewayImpl()});
+
+		CompositeFuture.all(verticles.stream().map(verticle -> {
+			final Future<String> future = Future.future();
+			vertx.deployVerticle(verticle, future);
+			return future;
+		}).collect(Collectors.toList())).setHandler(deployments);
+	}
+
+	/**
+	 * A sync version of {@link #deployAll(Vertx, Handler)}.
+	 *
+	 * @param vertx A vertx instance.
+	 * @return The result. Failed if any deployment failed.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
+	public CompositeFuture deployAll(Vertx vertx) throws SuspendExecution, InterruptedException {
+		return Sync.awaitResult(h -> deployAll(vertx, h));
 	}
 
 	/**

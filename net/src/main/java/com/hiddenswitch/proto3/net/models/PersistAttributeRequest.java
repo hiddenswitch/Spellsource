@@ -1,6 +1,5 @@
-package com.hiddenswitch.proto3.net;
+package com.hiddenswitch.proto3.net.models;
 
-import com.hiddenswitch.proto3.net.models.EventLogicRequest;
 import net.demilich.metastone.game.Attribute;
 
 import java.io.Serializable;

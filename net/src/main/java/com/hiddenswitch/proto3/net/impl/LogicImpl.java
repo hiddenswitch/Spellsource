@@ -2,7 +2,6 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.base.CaseFormat;
 import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.minionate.LegacyPersistenceHandler;
 import com.hiddenswitch.minionate.PersistenceContext;

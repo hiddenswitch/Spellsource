@@ -141,6 +141,20 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 		}
 	}
 
+	protected void deploy(List<Verticle> dependencies, T thisService, Handler<AsyncResult<T>> handler) {
+		final List<Future> verticles = dependencies.stream().map(verticle -> {
+			Future<String> future = Future.future();
+			vertx.deployVerticle(verticle, future.completer());
+			return (Future)future;
+		}).collect(Collectors.toList());
+
+		CompositeFuture.all(verticles).setHandler(then -> {
+			vertx.deployVerticle(thisService, then2 -> {
+				handler.handle(Future.succeededFuture(thisService));
+			});
+		});
+	}
+
 	protected void wrap(TestContext context) {
 		ServiceTest.wrappedContext = context;
 	}
