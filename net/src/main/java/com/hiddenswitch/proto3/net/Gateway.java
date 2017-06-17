@@ -101,7 +101,7 @@ import io.vertx.ext.web.RoutingContext;
  * </pre></li></ul>
  *
  * Some new methods may require references to other services. In {@link GatewayImpl}, our default API gateway, services
- * are hosted locally as package-private fields (e.g., {@link GatewayImpl#bots}), and then actually deployed in the
+ * are hosted locally as package-private fields (e.g., {@link GatewayImpl#getBots()}), and then actually deployed in the
  * {@link GatewayImpl#start()} method.
  */
 public interface Gateway {

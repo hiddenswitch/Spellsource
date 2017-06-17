@@ -14,10 +14,7 @@ import com.hiddenswitch.proto3.net.impl.server.WebSocketClient;
 import com.hiddenswitch.proto3.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.RPC;
-import com.hiddenswitch.proto3.net.util.IncomingMessage;
-import com.hiddenswitch.proto3.net.util.Serialization;
-import com.hiddenswitch.proto3.net.util.RpcClient;
+import com.hiddenswitch.proto3.net.util.*;
 import io.netty.channel.DefaultChannelId;
 import io.vertx.core.Future;
 import io.vertx.core.VertxException;
@@ -61,6 +58,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	private final int websocketPort;
 
 	private RpcClient<Matchmaking> matchmaking;
+	private Registration registration;
 
 	public GamesImpl() {
 		this.legacyPort = RandomUtils.nextInt(6200, 8080);
@@ -141,7 +139,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 		logger.debug("GamesImpl::start Created websocket server.");
 
-		RPC.register(this, Games.class, vertx.eventBus());
+		registration = RPC.register(this, Games.class, vertx.eventBus());
 
 		logger.debug("GamesImpl::start Registered on event bus.");
 	}
@@ -412,6 +410,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 		getGames().values().forEach(GameSession::kill);
 		Void r = awaitResult(h -> server.close(h));
 		r = awaitResult(h -> websocketServer.close(h));
+		RPC.unregister(registration);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Cards;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Registration;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 
@@ -18,11 +19,12 @@ import java.util.stream.Collectors;
  */
 public class CardsImpl extends AbstractService<CardsImpl> implements Cards {
 	private Random random = new Random();
+	private Registration registration;
 
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
-		RPC.register(this, Cards.class, vertx.eventBus());
+		registration = RPC.register(this, Cards.class, vertx.eventBus());
 	}
 
 	@Override
@@ -101,5 +103,12 @@ public class CardsImpl extends AbstractService<CardsImpl> implements Cards {
 	public UpdateCardResponse updateCard(UpdateCardRequest request) {
 		insertCard(new InsertCardRequest().withCard(request.getCard()));
 		return new UpdateCardResponse();
+	}
+
+	@Override
+	@Suspendable
+	public void stop() throws Exception {
+		super.stop();
+		RPC.unregister(registration);
 	}
 }

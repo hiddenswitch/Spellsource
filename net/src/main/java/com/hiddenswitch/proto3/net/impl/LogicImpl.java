@@ -9,6 +9,7 @@ import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Registration;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.Attribute;
@@ -41,13 +42,14 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	private RpcClient<Inventory> inventory;
 	private RpcClient<Decks> decks;
+	private Registration registration;
 
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
 		inventory = RPC.connect(Inventory.class, vertx.eventBus());
 		decks = RPC.connect(Decks.class, vertx.eventBus());
-		RPC.register(this, Logic.class, vertx.eventBus());
+		registration = RPC.register(this, Logic.class, vertx.eventBus());
 
 		// Register new persistence effects
 		Minionate.minionate().persistAttribute(LegacyPersistenceHandler.create(
@@ -297,7 +299,12 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 			);
 			return new PersistAttributeResponse().withUpdated(update.getDocModified());
 		}
+	}
 
-
+	@Override
+	@Suspendable
+	public void stop() throws Exception {
+		super.stop();
+		RPC.unregister(registration);
 	}
 }

@@ -3,14 +3,24 @@ package com.hiddenswitch.proto3.net.util;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.hiddenswitch.proto3.net.Accounts;
+import com.hiddenswitch.proto3.net.impl.AccountsImpl;
 import com.hiddenswitch.proto3.net.models.CreateAccountRequest;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.ext.sync.Sync;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class provides a way to register and connect to verticles advertised on the Vert.x {@link EventBus}. Its
@@ -21,10 +31,13 @@ import java.lang.reflect.Proxy;
  */
 public class RPC {
 	/**
-	 * Registers a class to make its methods available to be called on the {@link EventBus}. Conceptually, this is like
-	 * registering an instance of a microservice; you can have multiple {@code instance} of the same {@code
-	 * serviceInterface}, and the {@link #connect(Class, EventBus)} will send a request to one of the {@code instance}
-	 * serving that {@code serviceInterface}.
+	 * Registers a class to make its methods available to be called on the {@link EventBus}. This method will wait until
+	 * the class is ready to be contacted on the {@link EventBus}; i.e., once all its {@link EventBus#consumer(String)}
+	 * have been registered.
+	 * <p>
+	 * Conceptually, this is like registering an instance of a microservice; you can have multiple {@code instance} of
+	 * the same {@code serviceInterface}, and the {@link #connect(Class, EventBus)} will send a request to one of the
+	 * {@code instance} serving that {@code serviceInterface}.
 	 * <p>
 	 * Vert.x provides the {@link EventBus} to enable communication between verticles (think Java beans) as a form of
 	 * lightweight RPC. <a href="http://vertx.io/docs/vertx-service-proxy/java/">Vert.x's documented tools</a> are
@@ -66,13 +79,33 @@ public class RPC {
 	 *                         vertx.eventBus()}.
 	 * @param <T>              The service interface type.
 	 * @param <R>              A concrete implementation of the service interface type.
+	 * @return A registration that can be later unregistered with {@link #unregister(Registration)}
 	 * @see #getAddress(Class, SuspendableAction1) for a way to get the address of a given method on the event bus.
 	 */
-	@Suspendable
-	public static <T, R extends T> void register(R instance, Class<T> serviceInterface, final EventBus eb) {
+	public static <T, R extends T> Registration register(R instance, Class<T> serviceInterface, final EventBus eb) throws SuspendExecution {
+		return Sync.awaitResult(h -> register(instance, serviceInterface, eb, h));
+	}
+
+	/**
+	 * An asynchronous version of {@link #register(Object, Class, EventBus)}
+	 *
+	 * @param instance         An instance of a concrete implementation of {@code serviceInterface}. This is a host for
+	 *                         the service specified by {@code serviceInterface} on your cluster.
+	 * @param serviceInterface An interface with one argument non-default methods whose argument and return value are
+	 *                         both implementing {@link java.io.Serializable}. This is your API.
+	 * @param eb               A reference to a Vert.x {@link EventBus}, typically accessed via {@code
+	 *                         vertx.eventBus()}.
+	 * @param handler          A handler that receives a registration that can be later unregistered with {@link
+	 *                         #unregister(Registration)}
+	 * @param <T>              The service interface type.
+	 * @param <R>              A concrete implementation of the service interface type.
+	 */
+	public static <T, R extends T> void register(R instance, Class<T> serviceInterface, final EventBus eb, Handler<AsyncResult<Registration>> handler) {
 		final String name = serviceInterface.getName();
 
-		for (Method method : serviceInterface.getDeclaredMethods()) {
+		Registration registration = new Registration();
+
+		registration.setMessageConsumers(Stream.of(serviceInterface.getDeclaredMethods()).map(method -> {
 			String methodName = name + "::" + method.getName();
 
 			SuspendableFunction<Object, Object> method1 = arg -> {
@@ -90,9 +123,23 @@ public class RPC {
 					throw e;
 				}
 			};
+
 			// Get the context at the time of calling this function
-			eb.consumer(methodName, Sync.fiberHandler(new SyncMethodEventBusHandler<>(method1)));
-		}
+			return eb.consumer(methodName, Sync.fiberHandler(new SyncMethodEventBusHandler<>(method1)));
+		}).collect(Collectors.toList()));
+
+		CompositeFuture.all(registration.getMessageConsumers()
+				.stream().map(consumer -> {
+					Future<Void> future = Future.future();
+					consumer.completionHandler(future);
+					return future;
+				}).collect(Collectors.toList())).setHandler(then -> {
+			if (then.succeeded()) {
+				handler.handle(Future.succeededFuture(registration));
+			} else {
+				handler.handle(Future.failedFuture(then.cause()));
+			}
+		});
 	}
 
 	/**
@@ -178,5 +225,32 @@ public class RPC {
 		}
 
 		return serviceInterface.getName() + "::" + outName[0];
+	}
+
+	/**
+	 * Unregister this service from the event bus.
+	 *
+	 * @param registration A registration entry returned by {@link #register(Object, Class, EventBus)}
+	 * @param handler      A handler that returns when all the consumers have been unregistered.
+	 */
+	public static void unregister(Registration registration, Handler<AsyncResult<CompositeFuture>> handler) {
+		List<MessageConsumer> consumers = registration.getMessageConsumers();
+		CompositeFuture.all(consumers.stream().map(consumer -> {
+			Future<Void> future = Future.future();
+			consumer.unregister(future.completer());
+			return (Future) future;
+		}).collect(Collectors.toList())).setHandler(handler);
+	}
+
+	/**
+	 * Unregister this service from the event bus.
+	 *
+	 * @param registration A registration entry return by {@link #register(Object, Class, EventBus)}
+	 * @return A succeeded future when all of the registration entries have been removed.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
+	public static CompositeFuture unregister(Registration registration) throws SuspendExecution {
+		return Sync.awaitResult(h -> unregister(registration, h));
 	}
 }

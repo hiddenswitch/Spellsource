@@ -37,6 +37,7 @@ import static java.util.stream.Collectors.toList;
 public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 	private RpcClient<Inventory> inventory;
 	private RpcClient<Accounts> accounts;
+	private com.hiddenswitch.proto3.net.util.Registration registration;
 
 	@Override
 	public void start() throws SuspendExecution {
@@ -50,7 +51,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 			throw new RuntimeException();
 		}
 
-		RPC.register(this, Decks.class, vertx.eventBus());
+		registration = RPC.register(this, Decks.class, vertx.eventBus());
 	}
 
 	@Override
@@ -157,6 +158,13 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		Accounts.update(getMongo(), userId, json("$pull", json("decks", deckId)));
 
 		return new DeckDeleteResponse(response);
+	}
+
+	@Override
+	@Suspendable
+	public void stop() throws Exception {
+		super.stop();
+		RPC.unregister(registration);
 	}
 
 }

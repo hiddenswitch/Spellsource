@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.*;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Registration;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
@@ -24,6 +25,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class AccountsImpl extends AbstractService<AccountsImpl> implements Accounts {
 	private Pattern usernamePattern = Pattern.compile("[A-Za-z0-9_]+");
+	private Registration registration;
 
 	@Override
 	@Suspendable
@@ -34,7 +36,7 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 			Void r1 = awaitResult(h -> getMongo().createCollection(USERS, h));
 			Void r2 = awaitResult(h -> getMongo().createIndex(USERS, json("profile.emailAddress", 1), h));
 		}
-		RPC.register(this, Accounts.class, vertx.eventBus());
+		registration = RPC.register(this, Accounts.class, vertx.eventBus());
 	}
 
 	public CreateAccountResponse createAccount(String emailAddress, String password, String username) throws SuspendExecution, InterruptedException {
@@ -232,5 +234,12 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 
 	private Pattern getUsernamePattern() {
 		return usernamePattern;
+	}
+
+	@Override
+	@Suspendable
+	public void stop() throws Exception {
+		super.stop();
+		RPC.unregister(registration);
 	}
 }
