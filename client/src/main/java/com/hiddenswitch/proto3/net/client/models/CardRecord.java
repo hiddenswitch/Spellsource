@@ -27,12 +27,11 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import java.io.Serializable;
 /**
@@ -43,8 +42,8 @@ public class CardRecord  implements Serializable {
   @SerializedName("_id")
   private String id = null;
 
-  @SerializedName("cardDesc")
-  private Map<String, Object> cardDesc = new HashMap<String, Object>();
+  @SerializedName("entity")
+  private Entity entity = null;
 
   @SerializedName("userId")
   private String userId = null;
@@ -79,27 +78,22 @@ public class CardRecord  implements Serializable {
     this.id = id;
   }
 
-  public CardRecord cardDesc(Map<String, Object> cardDesc) {
-    this.cardDesc = cardDesc;
-    return this;
-  }
-
-  public CardRecord putCardDescItem(String key, Object cardDescItem) {
-    this.cardDesc.put(key, cardDescItem);
+  public CardRecord entity(Entity entity) {
+    this.entity = entity;
     return this;
   }
 
    /**
-   * A CardDesc object that represents the definition of the card, including any legacy (permanence) properties. 
-   * @return cardDesc
+   * Get entity
+   * @return entity
   **/
-  @ApiModelProperty(example = "null", value = "A CardDesc object that represents the definition of the card, including any legacy (permanence) properties. ")
-  public Map<String, Object> getCardDesc() {
-    return cardDesc;
+  @ApiModelProperty(example = "null", value = "")
+  public Entity getEntity() {
+    return entity;
   }
 
-  public void setCardDesc(Map<String, Object> cardDesc) {
-    this.cardDesc = cardDesc;
+  public void setEntity(Entity entity) {
+    this.entity = entity;
   }
 
   public CardRecord userId(String userId) {
@@ -208,7 +202,7 @@ public class CardRecord  implements Serializable {
     }
     CardRecord cardRecord = (CardRecord) o;
     return Objects.equals(this.id, cardRecord.id) &&
-        Objects.equals(this.cardDesc, cardRecord.cardDesc) &&
+        Objects.equals(this.entity, cardRecord.entity) &&
         Objects.equals(this.userId, cardRecord.userId) &&
         Objects.equals(this.collectionIds, cardRecord.collectionIds) &&
         Objects.equals(this.borrowedByUserId, cardRecord.borrowedByUserId) &&
@@ -218,7 +212,7 @@ public class CardRecord  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardDesc, userId, collectionIds, borrowedByUserId, allianceId, donorUserId);
+    return Objects.hash(id, entity, userId, collectionIds, borrowedByUserId, allianceId, donorUserId);
   }
 
   @Override
@@ -227,7 +221,7 @@ public class CardRecord  implements Serializable {
     sb.append("class CardRecord {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    cardDesc: ").append(toIndentedString(cardDesc)).append("\n");
+    sb.append("    entity: ").append(toIndentedString(entity)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    collectionIds: ").append(toIndentedString(collectionIds)).append("\n");
     sb.append("    borrowedByUserId: ").append(toIndentedString(borrowedByUserId)).append("\n");

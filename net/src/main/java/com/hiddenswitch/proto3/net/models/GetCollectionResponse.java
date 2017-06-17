@@ -1,8 +1,13 @@
 package com.hiddenswitch.proto3.net.models;
 
+import com.hiddenswitch.proto3.net.Games;
+import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.client.models.CardRecord;
 import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
@@ -148,6 +153,9 @@ public class GetCollectionResponse implements Serializable {
 			displayName = getName();
 		}
 
+		final HeroClass fakeHeroClass = getHeroClass() == null ? HeroClass.WARRIOR : getHeroClass();
+		GameContext emptyContext = GameContext.uninitialized(fakeHeroClass, fakeHeroClass);
+
 		InventoryCollection collection = new InventoryCollection()
 				.name(displayName)
 				.id(getCollectionId())
@@ -156,7 +164,7 @@ public class GetCollectionResponse implements Serializable {
 						new CardRecord()
 								.userId(cr.getUserId())
 								.collectionIds(cr.getCollectionIds())
-								.cardDesc(cr.getCardDescMap())
+								.entity(Games.getEntity(emptyContext, Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionId()).createInstance(), 0))
 								.id(cr.getId())
 								.allianceId(cr.getAllianceId())
 								.donorUserId(cr.getDonorUserId()))

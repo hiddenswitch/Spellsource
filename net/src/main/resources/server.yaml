@@ -235,12 +235,8 @@ definitions:
     properties:
       _id:
         type: 'string'
-      cardDesc:
-        description: |
-          A CardDesc object that represents the definition of the card, including any legacy (permanence) properties.
-        type: 'object'
-        additionalProperties:
-          type: 'object'
+      entity:
+        $ref: '#/definitions/Entity'
       userId:
         type: 'string'
       collectionIds:
