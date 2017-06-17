@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
+import io.vertx.core.Vertx;
 import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.decks.Deck;
 import org.apache.commons.collections.list.TreeList;
@@ -17,7 +18,7 @@ public class Matchmaker extends AbstractMap<String, QueueEntry> {
 	private Map<String, QueueEntry> entries = new HashMap<>();
 	private Map<String, Match> usersToMatches = new HashMap<>();
 	private Map<String, Match> gamesToMatches = new HashMap<>();
-	private TreeList queue = new TreeList();
+	private List queue = new TreeList();
 
 	public class Match {
 		public final String gameId;
@@ -61,6 +62,12 @@ public class Matchmaker extends AbstractMap<String, QueueEntry> {
 		}
 	}
 
+	protected Matchmaker() {
+	}
+
+	public static Matchmaker local() {
+		return new Matchmaker();
+	}
 	public synchronized boolean expire(String gameId) {
 		if (!gamesToMatches.containsKey(gameId)) {
 			return false;

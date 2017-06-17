@@ -26,7 +26,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	private RpcClient<Logic> logic;
 	private RpcClient<Bots> bots;
 
-	private Matchmaker matchmaker = new Matchmaker();
+	private Matchmaker matchmaker = Matchmaker.local();
 	private Map<String, ClientConnectionConfiguration> connections = new HashMap<>();
 	private Registration registration;
 
