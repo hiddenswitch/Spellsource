@@ -1,5 +1,7 @@
 import {Versions} from '../collections';
 let LocalVersions = new Ground.Collection('localVersions');
+let downloadProgress = new ReactiveVar(0);
+let ready = new ReactiveVar(!Electron.isWindows());
 
 Tracker.autorun(() => {
     // For every local version that claims it is ready, check if we have the actual file directory
@@ -8,7 +10,7 @@ Tracker.autorun(() => {
         let destination = Electron.app().getPath('userData') + '/' + versionId;
         // Construct a name for the build.
         let buildName = Meteor.settings.public.buildName[Electron.isWindows() ? 'exe' : 'mac'];
-        let executablePath = destination + "/" + buildName;
+        let executablePath = destination;
         Electron.exists(executablePath, function (doesExist) {
             if (!doesExist) {
                 LocalVersions.update({_id: versionId}, {$set: {ready: false, downloading: false}});
@@ -23,15 +25,24 @@ Meteor.startup(() => {
 
     // Get the latest version information.
     Meteor.subscribe('versions');
+
+    // Set a load delay for windows
+    Meteor.setTimeout(() => {
+        ready.set(true);
+    }, 4500);
 });
 
-let downloadProgress = new ReactiveVar(0);
 
 let state = () => {
-    let localVersion = LocalVersions.find({}, {sort: {createdAt: -1}}).fetch()[0];
+    let query = _.extend({}, Electron.isWindows() ? {windows: true} : {windows: {$ne: true}});
+    let localVersion = LocalVersions.find(query, {sort: {createdAt: -1}}).fetch()[0];
 
     // Get the latest version
-    let serverVersion = Versions.find({}, {sort: {createdAt: -1}}).fetch()[0];
+    let serverVersion = Versions.find(query, {sort: {createdAt: -1}}).fetch()[0];
+
+    if (!ready.get()) {
+        return {updating: true, text: 'Updating', disabled: true};
+    }
 
     if (serverVersion) {
         // We need to download
@@ -64,6 +75,9 @@ let state = () => {
 
 
 Template.launcher.helpers({
+    windows() {
+        return Electron.isWindows();
+    },
     state() {
         return state();
     },
@@ -84,7 +98,12 @@ let deleteOldVersions = () => {
         if (_.isUndefined(version.path)) {
             LocalVersions.remove(version._id);
         } else {
-            return version.path.replace('file://', '');
+            if (Electron.isWindows()) {
+                return version.directory;
+            } else {
+                return version.directory || version.path.replace('file://', '');
+            }
+
         }
     }));
 
@@ -94,6 +113,9 @@ let deleteOldVersions = () => {
 };
 
 Template.launcher.events({
+    'click #close-launcher': () => {
+        window.close();
+    },
     'click #launch-button': () => {
         let currentState = state();
 
@@ -103,9 +125,9 @@ Template.launcher.events({
             let versionId = currentState.serverVersion._id;
             let destination = Electron.app().getPath('userData') + '/' + versionId;
             // Construct a name for the build.
-            let buildName = Meteor.settings.public.buildName[Electron.isWindows() ? 'exe' : 'mac'];
-            let executablePath = destination + "/" + buildName;
-            let urlPath = "file://" + executablePath;
+            let executableName = Meteor.settings.public.buildName[Electron.isWindows() ? 'exe' : 'mac'];
+            let executablePath = destination + "/" + executableName;
+            let urlPath = Electron.isWindows() ? executablePath : "file://" + executablePath;
 
             if (LocalVersions.findOne(versionId)) {
                 LocalVersions.update(versionId, {
@@ -123,14 +145,21 @@ Template.launcher.events({
             Electron.download({
                 url: currentState.serverVersion.url,
                 destination: destination,
-                chmodTarget: destination + '/' + buildName + '/Contents/MacOS/Minionate'
+                chmodTarget: executablePath + '/Contents/MacOS/Minionate'
             }, (response) => {
                 if (response.state) {
                     downloadProgress.set(response.state.percent);
                 } else if (response.extracted) {
                     downloadProgress.set(1);
                     // Once it's extracted, set the urlPath and mark the document as ready
-                    LocalVersions.update(versionId, {$set: {ready: true, downloading: false, path: urlPath}});
+                    LocalVersions.update(versionId, {
+                        $set: {
+                            ready: true,
+                            downloading: false,
+                            path: urlPath,
+                            directory: destination
+                        }
+                    });
 
                     deleteOldVersions();
                 }

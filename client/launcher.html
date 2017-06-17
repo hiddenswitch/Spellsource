@@ -1,5 +1,14 @@
 <template name="launcher">
     <div class="container">
+        <header>
+            <div class="o-container align-right">
+                {{#if windows}}
+                    <button id="close-launcher" class="c-button c-button--rounded c-button--ghost u-xsmall">Close
+                        Launcher
+                    </button>
+                {{/if}}
+            </div>
+        </header>
         <footer>
             <div class="o-container align-right">
 
@@ -27,8 +36,14 @@
                                              style="width:{{progress}}%;"></div>
                                     </div>
                                 {{else}}
-                                    <h2 class="u-center-block__content u-center-block__content--vertical">
-                                        A new version of Spellsource is available. Download it now!</h2>
+                                    {{#if state.updating}}
+                                        <h2 class="u-center-block__content u-center-block__content--vertical">
+                                            Getting information from the server...</h2>
+                                    {{else}}
+                                        <h2 class="u-center-block__content u-center-block__content--vertical">
+                                            A new version of Spellsource is available. Download it now!</h2>
+                                    {{/if}}
+
                                 {{/if}}
                             {{/if}}
                         </div>
