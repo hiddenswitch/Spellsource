@@ -139,7 +139,10 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 		logger.debug("GamesImpl::start Created websocket server.");
 
-		registration = RPC.register(this, Games.class, vertx.eventBus());
+		// TODO: Until expire game session is registered correctly, limit this service to a singleton.
+		if (noInstancesYet()) {
+			registration = RPC.register(this, Games.class, vertx.eventBus());
+		}
 
 		logger.debug("GamesImpl::start Registered on event bus.");
 	}
@@ -411,6 +414,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 		Void r = awaitResult(h -> server.close(h));
 		r = awaitResult(h -> websocketServer.close(h));
 		RPC.unregister(registration);
+		freeSingleton();
 	}
 
 	@Override

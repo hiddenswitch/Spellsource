@@ -4,15 +4,11 @@ import ch.qos.logback.classic.Level;
 import com.hiddenswitch.proto3.net.impl.*;
 import com.hiddenswitch.proto3.net.util.Mongo;
 import com.hiddenswitch.proto3.net.util.UnityClient;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
+import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import org.apache.curator.test.TestingServer;
 import org.junit.After;
 import org.junit.Before;
@@ -22,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,6 +27,7 @@ import java.util.stream.Stream;
 public class ClusterTest {
 	private TestingServer zkTestServer;
 	private Logger logger = LoggerFactory.getLogger(ClusterTest.class);
+	private List<Vertx> verticies = new ArrayList<>();
 
 	public void setLoggingLevel(Level level) {
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
@@ -41,6 +38,7 @@ public class ClusterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testClusteredDeploy(TestContext context) {
+
 		setLoggingLevel(Level.ERROR);
 
 		ZookeeperClusterManager clusterManager = new ZookeeperClusterManager(new JsonObject()
@@ -51,9 +49,11 @@ public class ClusterTest {
 
 		// Test instance. nothing special here
 		Vertx vertxTest = Vertx.vertx();
+		verticies.add(vertxTest);
 
 		// Instance 1, deploy games, AI and logic
 		Vertx.clusteredVertx(options, context.asyncAssertSuccess(vertx1 -> {
+			verticies.add(vertx1);
 			final List<Future> services = (List<Future>) Stream.of(new GamesImpl(), new BotsImpl(), new LogicImpl())
 					.map(service -> {
 						Future<String> future = Future.future();
@@ -73,6 +73,7 @@ public class ClusterTest {
 
 		// Instance 2, deploy all the supporting services
 		Vertx.clusteredVertx(options, context.asyncAssertSuccess(vertx2 -> {
+			verticies.add(vertx2);
 			final List<Future> gameServices = (List<Future>) Stream.of(new AccountsImpl(), new CardsImpl(), new DecksImpl(), new DraftImpl(), new InventoryImpl(), new MatchmakingImpl(), new GatewayImpl())
 					.map(service -> {
 						Future<String> future = Future.future();
@@ -98,6 +99,7 @@ public class ClusterTest {
 
 	@Before
 	public void startServices() throws Exception {
+		verticies.clear();
 		zkTestServer = new TestingServer(2181);
 		Mongo.mongo().startEmbedded();
 		System.getProperties().put("mongo.url", "mongodb://localhost:27017");
@@ -105,6 +107,9 @@ public class ClusterTest {
 
 	@After
 	public void stopServices() throws IOException {
+		for (Vertx vertx : verticies) {
+			vertx.close();
+		}
 		zkTestServer.stop();
 		Mongo.mongo().stopEmbedded();
 		System.getProperties().remove("mongo.url");

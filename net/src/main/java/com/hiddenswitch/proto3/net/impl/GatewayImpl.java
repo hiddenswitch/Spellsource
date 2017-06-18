@@ -389,6 +389,10 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<GameState> matchmakingConstructedGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
+		if (vertx.isClustered()) {
+			return WebResult.failed(400, new RuntimeException("Cannot retrieve a JSON game state this way in a clustered environment."));
+		}
+
 		CurrentMatchResponse response = getMatchmaking().getCurrentMatch(new CurrentMatchRequest(userId));
 		if (response.getGameId() == null) {
 			return WebResult.failed(404, new NullPointerException("Game not found."));

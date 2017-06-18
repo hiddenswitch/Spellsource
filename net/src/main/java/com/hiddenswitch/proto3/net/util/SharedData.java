@@ -33,8 +33,8 @@ public class SharedData {
 	}
 
 	@Suspendable
-	public <K, V> SuspendableMap<K, V> getClusterWideMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> resultHandler) {
-		return awaitResult(done -> sharedData().<K, V>getClusterWideMap(name, then -> {
+	public <K, V> SuspendableMap<K, V> getClusterWideMap(String name) {
+		return awaitResult(done -> client.<K, V>getClusterWideMap(name, then -> {
 			if (then.failed()) {
 				done.handle(Future.failedFuture(then.cause()));
 				return;
