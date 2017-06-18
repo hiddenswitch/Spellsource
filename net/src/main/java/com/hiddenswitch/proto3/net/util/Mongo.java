@@ -62,7 +62,10 @@ public class Mongo {
 	public Mongo stopEmbedded() {
 		if (localMongoServer != null) {
 			try {
+				client.close();
 				localMongoServer.stop();
+				client = null;
+				localMongoServer = null;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

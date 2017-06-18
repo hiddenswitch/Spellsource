@@ -6,13 +6,11 @@ import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
-import com.hiddenswitch.proto3.net.util.Registration;
+import com.hiddenswitch.proto3.net.util.*;
 import net.demilich.metastone.game.decks.DeckWithId;
 import com.hiddenswitch.proto3.net.impl.util.Matchmaker;
 import com.hiddenswitch.proto3.net.impl.util.QueueEntry;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.RPC;
-import com.hiddenswitch.proto3.net.util.RpcClient;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.Deck;
@@ -33,10 +31,16 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
+
 		gameSessions = RPC.connect(Games.class, vertx.eventBus());
 		logic = RPC.connect(Logic.class, vertx.eventBus());
 		bots = RPC.connect(Bots.class, vertx.eventBus());
-		registration = RPC.register(this, Matchmaking.class, vertx.eventBus());
+
+		// Check if we already have a matchmaking service online. If so, we shouldn't start.
+		if (noInstancesYet()) {
+			registration = RPC.register(this, Matchmaking.class, vertx.eventBus());
+		}
+
 	}
 
 	@Override
@@ -211,5 +215,6 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	public void stop() throws Exception {
 		super.stop();
 		RPC.unregister(registration);
+		freeSingleton();
 	}
 }

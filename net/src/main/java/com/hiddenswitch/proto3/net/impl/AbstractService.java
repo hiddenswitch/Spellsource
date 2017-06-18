@@ -2,12 +2,18 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.net.Matchmaking;
 import com.hiddenswitch.proto3.net.util.Mongo;
 import com.hiddenswitch.proto3.net.util.RpcClient;
+import com.hiddenswitch.proto3.net.util.SharedData;
+import com.hiddenswitch.proto3.net.util.SuspendableMap;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.shareddata.Counter;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.sync.SyncVerticle;
+
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * An abstract class providing common backend features for microservices in Minionate.
@@ -55,5 +61,37 @@ public abstract class AbstractService<T extends AbstractService<T>> extends Sync
 		T service = (T) this;
 		Class<?> thisClass = ((T) this).getClass();
 		return new LocalRpcClient<>(thisClass, service);
+	}
+
+	@Suspendable
+	@SuppressWarnings("unchecked")
+	public boolean noInstancesYet() {
+		// Check if we already have a matchmaking service online. If so, we shouldn't start.
+		Class<?> thisClass = ((T) this).getClass();
+		if (vertx.isClustered()) {
+			SuspendableMap<String, Boolean> matchmakingMap = SharedData.sharedData()
+					.connect(vertx)
+					.getClusterWideMap(thisClass.getCanonicalName());
+
+			if (null != matchmakingMap.putIfAbsent("singleton", true)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	@Suspendable
+	@SuppressWarnings("unchecked")
+	public void freeSingleton() {
+		if (vertx.isClustered()) {
+			Class<?> thisClass = ((T) this).getClass();
+
+			SuspendableMap<String, Boolean> matchmakingMap = SharedData.sharedData()
+					.connect(vertx)
+					.getClusterWideMap(thisClass.getCanonicalName());
+
+			matchmakingMap.remove("singleton");
+		}
 	}
 }

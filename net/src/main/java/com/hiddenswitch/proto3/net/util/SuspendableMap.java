@@ -63,6 +63,12 @@ public class SuspendableMap<K, V> implements Map<K, V> {
 
 	@Override
 	@Suspendable
+	public V putIfAbsent(K key, V value) {
+		return awaitResult(h -> map.putIfAbsent(key, value, then -> h.handle(Future.succeededFuture(then.result()))));
+	}
+
+	@Override
+	@Suspendable
 	@SuppressWarnings("unchecked")
 	public V remove(Object key) {
 		return awaitResult(h -> map.remove((K)key, h));
