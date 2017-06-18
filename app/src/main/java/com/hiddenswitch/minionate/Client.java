@@ -11,6 +11,7 @@ import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParser;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckWithId;
@@ -88,17 +89,15 @@ public class Client {
 	}
 
 	private void cacheCard(CardRecord cardRecord) {
-		try {
-			final CardDesc desc = CardParser.parseCard(new JsonObject(cardRecord.getCardDesc())).getDesc();
-			// TODO: Make sure that the new card attributes are parsed correctly in general
-			if (desc.attributes == null) {
-				desc.attributes = new AttributeMap();
-			}
-			desc.attributes.put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
-			cardParseCache.put(cardRecord.getId(), desc.createInstance());
-		} catch (IOException e) {
-			cardParseCache.put(cardRecord.getId(), null);
+		final String cardId = cardRecord.getEntity().getCardId();
+		Card card = CardCatalogue.getCardById(cardId);
+		final CardDesc desc = card.getDesc();
+		// TODO: Make sure that the new card attributes are parsed correctly in general
+		if (desc.attributes == null) {
+			desc.attributes = new AttributeMap();
 		}
+		desc.attributes.put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
+		cardParseCache.put(cardRecord.getId(), desc.createInstance());
 	}
 
 	public void loadAccount() {
