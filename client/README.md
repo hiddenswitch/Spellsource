@@ -167,6 +167,7 @@ Class | Method | HTTP request | Description
  - [GameEventSpellCasted](docs/GameEventSpellCasted.md)
  - [GameEventTargetAcquisition](docs/GameEventTargetAcquisition.md)
  - [GameEventWeaponDestroyed](docs/GameEventWeaponDestroyed.md)
+ - [GameOver](docs/GameOver.md)
  - [GameState](docs/GameState.md)
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)

@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **gameState** | [**GameState**](GameState.md) |  |  [optional]
 **actions** | [**GameActions**](GameActions.md) |  |  [optional]
 **emote** | [**Emote**](Emote.md) |  |  [optional]
+**gameOver** | [**GameOver**](GameOver.md) |  |  [optional]
 **startingCards** | [**List&lt;Entity&gt;**](Entity.md) | Used for a mulligan request. An array of entities representing the cards you may mulligan.  |  [optional]
 **event** | [**GameEvent**](GameEvent.md) |  |  [optional]
 

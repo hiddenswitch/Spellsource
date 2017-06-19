@@ -282,6 +282,19 @@ definitions:
           - 'GOOD_GAME'
           - 'FACE_MY_WRATH'
           - 'WELL_PLAYED'
+  GameOver:
+    description: |
+      An object that describes the winner and loser of a game
+    type: 'object'
+    properties:
+      localPlayerWon:
+        type: 'boolean'
+        description: |
+          True when the local player has won.
+      winningPlayerId:
+        type: 'integer'
+        description: |
+          The ID of the player who has won. Null if no player has won.
   ServerToClientMessage:
     type: 'object'
     properties:
@@ -304,6 +317,8 @@ definitions:
         $ref: '#/definitions/GameActions'
       emote:
         $ref: '#/definitions/Emote'
+      gameOver:
+        $ref: '#/definitions/GameOver'
       startingCards:
         description: |
           Used for a mulligan request. An array of entities representing the cards you may mulligan.
