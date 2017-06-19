@@ -14,6 +14,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
@@ -348,6 +349,19 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	@Override
+	public int getPlayerIdForSocket(Object socket) {
+		if (getClient1() != null
+				&& getClient1().getPrivateSocket().equals(socket)) {
+			return GameContext.PLAYER_1;
+		} else if (getClient2() != null
+				&& getClient2().getPrivateSocket().equals(socket)) {
+			return GameContext.PLAYER_2;
+		}
+		// TODO: We probably should be able to concede a player that hasn't connected
+		throw new RuntimeException("Cannot get a player that hasn't connected.");
+	}
+
+	@Override
 	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
 		getGameContext().onMulliganReceived(messageId, discardedCardIndices);
 	}
@@ -361,6 +375,11 @@ public class GameSessionImpl implements GameSession {
 		if (getClient2() != null) {
 			getClient2().onEmote(entityId, message);
 		}
+	}
+
+	@Override
+	public void onConcede(int playerId) {
+		getGameContext().concede(playerId);
 	}
 
 	private Player getPlayer1() {

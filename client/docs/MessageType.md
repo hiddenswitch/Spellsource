@@ -30,5 +30,7 @@
 
 * `EMOTE` (value: `"EMOTE"`)
 
+* `CONCEDE` (value: `"CONCEDE"`)
+
 
 

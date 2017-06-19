@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.common.Server;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
+import io.vertx.core.http.ServerWebSocket;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -76,4 +77,6 @@ public interface GameSession extends Server {
 	 * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about game actions.
 	 */
 	GameAction getActionForMessage(String messageId, int actionIndex);
+
+	int getPlayerIdForSocket(Object socket);
 }
