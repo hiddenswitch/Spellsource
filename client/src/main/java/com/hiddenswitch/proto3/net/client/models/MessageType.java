@@ -72,7 +72,10 @@ public enum MessageType {
   UPDATE_MULLIGAN("UPDATE_MULLIGAN"),
   
   @SerializedName("EMOTE")
-  EMOTE("EMOTE");
+  EMOTE("EMOTE"),
+  
+  @SerializedName("CONCEDE")
+  CONCEDE("CONCEDE");
 
   private String value;
 
