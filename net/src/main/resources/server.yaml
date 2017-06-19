@@ -265,6 +265,7 @@ definitions:
       - 'ON_MULLIGAN'
       - 'UPDATE_MULLIGAN'
       - 'EMOTE'
+      - 'CONCEDE'
   Emote:
     description: |
       An emote that should play from the specified entity.
