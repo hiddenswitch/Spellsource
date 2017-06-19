@@ -88,8 +88,17 @@ public class WebSocketClient implements Client {
 	@Override
 	public void onGameEnd(Player winner) {
 		flushEvents();
+		GameOver gameOver = new GameOver();
+		if (winner == null) {
+			gameOver.localPlayerWon(false)
+					.winningPlayerId(null);
+		} else {
+			gameOver.localPlayerWon(winner.getId() == playerId)
+					.winningPlayerId(winner.getId());
+		}
 		sendMessage(new ServerToClientMessage()
-				.messageType(MessageType.ON_GAME_END));
+				.messageType(MessageType.ON_GAME_END)
+				.gameOver(gameOver));
 	}
 
 	@Override

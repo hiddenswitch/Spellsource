@@ -32,6 +32,7 @@ import com.hiddenswitch.proto3.net.client.models.Entity;
 import com.hiddenswitch.proto3.net.client.models.EntityChangeSet;
 import com.hiddenswitch.proto3.net.client.models.GameActions;
 import com.hiddenswitch.proto3.net.client.models.GameEvent;
+import com.hiddenswitch.proto3.net.client.models.GameOver;
 import com.hiddenswitch.proto3.net.client.models.GameState;
 import com.hiddenswitch.proto3.net.client.models.MessageType;
 import io.swagger.annotations.ApiModel;
@@ -65,6 +66,9 @@ public class ServerToClientMessage  implements Serializable {
 
   @SerializedName("emote")
   private Emote emote = null;
+
+  @SerializedName("gameOver")
+  private GameOver gameOver = null;
 
   @SerializedName("startingCards")
   private List<Entity> startingCards = new ArrayList<Entity>();
@@ -198,6 +202,24 @@ public class ServerToClientMessage  implements Serializable {
     this.emote = emote;
   }
 
+  public ServerToClientMessage gameOver(GameOver gameOver) {
+    this.gameOver = gameOver;
+    return this;
+  }
+
+   /**
+   * Get gameOver
+   * @return gameOver
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public GameOver getGameOver() {
+    return gameOver;
+  }
+
+  public void setGameOver(GameOver gameOver) {
+    this.gameOver = gameOver;
+  }
+
   public ServerToClientMessage startingCards(List<Entity> startingCards) {
     this.startingCards = startingCards;
     return this;
@@ -256,13 +278,14 @@ public class ServerToClientMessage  implements Serializable {
         Objects.equals(this.gameState, serverToClientMessage.gameState) &&
         Objects.equals(this.actions, serverToClientMessage.actions) &&
         Objects.equals(this.emote, serverToClientMessage.emote) &&
+        Objects.equals(this.gameOver, serverToClientMessage.gameOver) &&
         Objects.equals(this.startingCards, serverToClientMessage.startingCards) &&
         Objects.equals(this.event, serverToClientMessage.event);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, localPlayerId, messageType, changes, gameState, actions, emote, startingCards, event);
+    return Objects.hash(id, localPlayerId, messageType, changes, gameState, actions, emote, gameOver, startingCards, event);
   }
 
   @Override
@@ -277,6 +300,7 @@ public class ServerToClientMessage  implements Serializable {
     sb.append("    gameState: ").append(toIndentedString(gameState)).append("\n");
     sb.append("    actions: ").append(toIndentedString(actions)).append("\n");
     sb.append("    emote: ").append(toIndentedString(emote)).append("\n");
+    sb.append("    gameOver: ").append(toIndentedString(gameOver)).append("\n");
     sb.append("    startingCards: ").append(toIndentedString(startingCards)).append("\n");
     sb.append("    event: ").append(toIndentedString(event)).append("\n");
     sb.append("}");
