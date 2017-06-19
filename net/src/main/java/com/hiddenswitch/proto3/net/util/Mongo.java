@@ -95,6 +95,10 @@ public class Mongo {
 	 * @return This {@link Mongo} instance.
 	 */
 	public Mongo connectWithEnvironment(Vertx vertx) {
+		if (client != null) {
+			return this;
+		}
+
 		if (System.getProperties().containsKey("mongo.url")
 				|| System.getenv().containsKey("MONGO_URL")) {
 			String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017/local"));
