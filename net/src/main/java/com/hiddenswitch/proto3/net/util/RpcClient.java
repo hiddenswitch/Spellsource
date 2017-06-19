@@ -17,8 +17,12 @@ import io.vertx.core.Handler;
  */
 public interface RpcClient<T> {
 	/**
-	 * Make an RPC call with an idiomatically asynchronous coding convention, like what you would expect in Node. As an
-	 * example:
+	 * Make an RPC call with an idiomatically asynchronous coding convention, like what you would expect in Node.
+	 * <p>
+	 * You <b>CANNOT</b> reuse this proxy for more than one method call. You must always call {@link #async(Handler)}
+	 * for subsequent usage of the proxy.
+	 * <p>
+	 * As an example:
 	 * <p>
 	 * <pre>
 	 *     {@code
@@ -43,9 +47,6 @@ public interface RpcClient<T> {
 	 * Internally, this retrieves a proxy of the service configured for async calls. Pass the handler for the result
 	 * first. The methods called on the proxy will <b>not</b> return their values, they will return null. The call will
 	 * go across the {@link io.vertx.core.eventbus.EventBus} and arrive to your handler.
-	 * <p>
-	 * You cannot reuse this proxy for more than one method call. You must always call {@link #sync()} or {@link
-	 * #async(Handler)} for the subsequent usage of the proxy.
 	 *
 	 * @param handler The handler of the async call. Fully specify the handler to get the right type for the method you
 	 *                subsequently call on the proxy.
@@ -62,8 +63,7 @@ public interface RpcClient<T> {
 	 * (e.g., a handler wrapped in {@link Sync#suspendableHandler(SuspendableAction1)}) to use this proxy. The methods
 	 * called on the proxy will return their values, even though the call with go across the event bus.
 	 * <p>
-	 * You cannot reuse this proxy for more than one method call. You must always call {@link #sync()} or {@link
-	 * #async(Handler)} for the subsequent usage of the proxy.
+	 * You <b>can</b> reuse this proxy for more than one sync method call.
 	 *
 	 * @return {T} A proxy whose methods will return the actual values.
 	 */
@@ -80,8 +80,7 @@ public interface RpcClient<T> {
 	 * called on the proxy will return their values, even though the call with go across {@link
 	 * io.vertx.core.eventbus.EventBus}.
 	 * <p>
-	 * You cannot reuse this proxy for more than one method call. You must always call {@link #sync()} or {@link
-	 * #async(Handler)} for the subsequent usage of the proxy.
+	 * You can reuse this proxy for more than one sync method call.
 	 *
 	 * @return {T} A proxy whose methods will return the actual values.
 	 */

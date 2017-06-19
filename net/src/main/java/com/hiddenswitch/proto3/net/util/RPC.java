@@ -176,19 +176,7 @@ public class RPC {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public static <T> RpcClient<T> connect(Class<? extends T> serviceInterface, final EventBus bus) {
-		final VertxInvocationHandler<T> invocationHandler = new VertxInvocationHandler<>();
-
-		NetworkedRpcClient<T> rpcClient = new NetworkedRpcClient<>((T) Proxy.newProxyInstance(
-				serviceInterface.getClassLoader(),
-				new Class[]{serviceInterface},
-				invocationHandler
-		));
-
-		invocationHandler.eb = bus;
-		invocationHandler.name = serviceInterface.getName();
-		invocationHandler.rpcClient = rpcClient;
-
-		return rpcClient;
+		return new NetworkedRpcClient<T>(bus, serviceInterface);
 	}
 
 	/**
