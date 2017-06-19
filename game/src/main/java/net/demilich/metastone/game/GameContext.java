@@ -1315,4 +1315,13 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	public GameState getGameStateCopy() {
 		return new GameState(this);
 	}
+
+	/**
+	 * Concedes a game by destroying the specified player's hero and calling end game.
+	 * @param playerId The player that should concede/lose
+	 */
+	public void concede(int playerId) {
+		getLogic().destroy(getPlayer(playerId).getHero());
+		endGame();
+	}
 }

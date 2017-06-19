@@ -25,6 +25,8 @@ public interface Server extends ClientConnectionHandler {
 
 	void onEmote(int entityId, Emote.MessageEnum message);
 
+	void onConcede(int playerId);
+
 	Client getClient1();
 
 	Client getClient2();
