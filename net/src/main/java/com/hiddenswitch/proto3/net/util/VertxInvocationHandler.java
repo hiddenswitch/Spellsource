@@ -24,9 +24,17 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  * @see java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler) for more about proxies.
  */
 class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
-	NetworkedRpcClient<T> rpcClient;
-	protected String name;
-	EventBus eb;
+	final String name;
+	final EventBus eb;
+	final boolean sync;
+	final Handler<AsyncResult<Object>> next;
+
+	VertxInvocationHandler(String name, EventBus eb, boolean sync, Handler<AsyncResult<Object>> next) {
+		this.name = name;
+		this.eb = eb;
+		this.sync = sync;
+		this.next = next;
+	}
 
 	@Override
 	@Suspendable
@@ -38,14 +46,10 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			return method.invoke(proxy, args);
 		}
 
-		final boolean sync = rpcClient.sync;
-		final Handler<AsyncResult<Object>> next = rpcClient.next;
+		final boolean sync = this.sync;
+		final Handler<AsyncResult<Object>> next = this.next;
 
 		final String methodName = method.getName();
-
-		rpcClient.next = null;
-		rpcClient.sync = false;
-
 		if (next == null
 				&& !sync) {
 			throw new RuntimeException();
