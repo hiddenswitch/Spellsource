@@ -1324,7 +1324,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	 * @param playerId The player that should concede/lose
 	 */
 	public void concede(int playerId) {
-		getLogic().destroy(getPlayer(playerId).getHero());
+		getLogic().concede(playerId);
 		endGame();
 	}
 
