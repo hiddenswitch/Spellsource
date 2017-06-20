@@ -46,6 +46,9 @@ public class GameState  implements Serializable {
   @SerializedName("entities")
   private List<Entity> entities = new ArrayList<Entity>();
 
+  @SerializedName("isLocalPlayerTurn")
+  private Boolean isLocalPlayerTurn = null;
+
   @SerializedName("turnState")
   private String turnState = null;
 
@@ -99,6 +102,24 @@ public class GameState  implements Serializable {
 
   public void setEntities(List<Entity> entities) {
     this.entities = entities;
+  }
+
+  public GameState isLocalPlayerTurn(Boolean isLocalPlayerTurn) {
+    this.isLocalPlayerTurn = isLocalPlayerTurn;
+    return this;
+  }
+
+   /**
+   * When true, it is the local player's turn.
+   * @return isLocalPlayerTurn
+  **/
+  @ApiModelProperty(example = "null", value = "When true, it is the local player's turn.")
+  public Boolean getIsLocalPlayerTurn() {
+    return isLocalPlayerTurn;
+  }
+
+  public void setIsLocalPlayerTurn(Boolean isLocalPlayerTurn) {
+    this.isLocalPlayerTurn = isLocalPlayerTurn;
   }
 
   public GameState turnState(String turnState) {
@@ -167,6 +188,7 @@ public class GameState  implements Serializable {
     GameState gameState = (GameState) o;
     return Objects.equals(this.eventStack, gameState.eventStack) &&
         Objects.equals(this.entities, gameState.entities) &&
+        Objects.equals(this.isLocalPlayerTurn, gameState.isLocalPlayerTurn) &&
         Objects.equals(this.turnState, gameState.turnState) &&
         Objects.equals(this.turnNumber, gameState.turnNumber) &&
         Objects.equals(this.timestamp, gameState.timestamp);
@@ -174,7 +196,7 @@ public class GameState  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(eventStack, entities, turnState, turnNumber, timestamp);
+    return Objects.hash(eventStack, entities, isLocalPlayerTurn, turnState, turnNumber, timestamp);
   }
 
   @Override
@@ -184,6 +206,7 @@ public class GameState  implements Serializable {
     
     sb.append("    eventStack: ").append(toIndentedString(eventStack)).append("\n");
     sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
+    sb.append("    isLocalPlayerTurn: ").append(toIndentedString(isLocalPlayerTurn)).append("\n");
     sb.append("    turnState: ").append(toIndentedString(turnState)).append("\n");
     sb.append("    turnNumber: ").append(toIndentedString(turnNumber)).append("\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");

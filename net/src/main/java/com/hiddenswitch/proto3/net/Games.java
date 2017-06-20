@@ -528,6 +528,7 @@ public interface Games {
 		final List<GameEvent> eventStack = workingContext.getEventStack().stream()
 				.map(e -> Games.getClientEvent(e, localPlayerId)).collect(Collectors.toList());
 		return new GameState()
+				.isLocalPlayerTurn(localPlayerId == workingContext.getActivePlayerId())
 				.eventStack(eventStack)
 				.entities(entities)
 				.timestamp(System.nanoTime())
