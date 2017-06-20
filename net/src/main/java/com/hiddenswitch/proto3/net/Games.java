@@ -604,7 +604,6 @@ public interface Games {
 		entityState.playable(playable);
 		entityState.attack(actor.getAttack());
 		entityState.baseAttack(actor.getBaseAttack());
-		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.baseHp(actor.getBaseHp());
 		entityState.hp(actor.getHp());
 		entityState.maxHp(actor.getMaxHp());
