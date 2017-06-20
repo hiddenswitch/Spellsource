@@ -768,6 +768,9 @@ definitions:
         type: 'array'
         items:
           $ref: '#/definitions/Entity'
+      isLocalPlayerTurn:
+        type: 'boolean'
+        description: When true, it is the local player's turn.
       turnState:
         type: 'string'
       turnNumber:
