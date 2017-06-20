@@ -2909,6 +2909,14 @@ public class GameLogic implements Cloneable, Serializable {
 		return context.getActionStack();
 	}
 
+	public void concede(int playerId) {
+		final Hero hero = context.getPlayer(playerId).getHero();
+		if (!hero.isDestroyed()
+				&& (hero.getZone() != Zones.GRAVEYARD)) {
+			destroy(hero);
+		}
+	}
+
 	protected class FirstHand {
 		private Player player;
 		private boolean begins;
