@@ -20,12 +20,14 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.MatchResult;
 import net.demilich.metastone.game.logic.TargetLogic;
+import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.visuals.TriggerFired;
 import net.demilich.metastone.utils.IDisposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1318,10 +1320,20 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	/**
 	 * Concedes a game by destroying the specified player's hero and calling end game.
+	 *
 	 * @param playerId The player that should concede/lose
 	 */
 	public void concede(int playerId) {
 		getLogic().destroy(getPlayer(playerId).getHero());
 		endGame();
+	}
+
+	/**
+	 * Raised when a {@link SpellTrigger} is fired (i.e., a secret is about to be played or a special effect hosted
+	 * by a minion/weapon is about to happen).
+	 *
+	 * @param spellTrigger The spell trigger that fired.
+	 */
+	public void onSpellTriggerFired(SpellTrigger spellTrigger) {
 	}
 }

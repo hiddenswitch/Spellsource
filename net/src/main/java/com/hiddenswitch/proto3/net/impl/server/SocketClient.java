@@ -13,6 +13,7 @@ import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.Notification;
 
 import java.io.IOException;
 import java.util.List;
@@ -65,8 +66,10 @@ public class SocketClient implements Client {
 	}
 
 	@Override
-	public void onGameEvent(GameEvent event) {
-		messageBuffer.offer(getBuffer(new ServerToClientMessage(event)));
+	public void onNotification(Notification event) {
+		if (event instanceof GameEvent) {
+			messageBuffer.offer(getBuffer(new ServerToClientMessage((GameEvent) event)));
+		}
 	}
 
 	@Override

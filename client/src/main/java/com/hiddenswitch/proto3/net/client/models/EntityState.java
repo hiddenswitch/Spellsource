@@ -58,6 +58,9 @@ public class EntityState  implements Serializable {
   @SerializedName("heroClass")
   private String heroClass = null;
 
+  @SerializedName("baseHp")
+  private Integer baseHp = null;
+
   @SerializedName("hp")
   private Integer hp = null;
 
@@ -165,6 +168,9 @@ public class EntityState  implements Serializable {
 
   @SerializedName("lockedMana")
   private Integer lockedMana = null;
+
+  @SerializedName("hostsTrigger")
+  private Boolean hostsTrigger = null;
 
   public EntityState location(EntityLocation location) {
     this.location = location;
@@ -290,6 +296,24 @@ public class EntityState  implements Serializable {
 
   public void setHeroClass(String heroClass) {
     this.heroClass = heroClass;
+  }
+
+  public EntityState baseHp(Integer baseHp) {
+    this.baseHp = baseHp;
+    return this;
+  }
+
+   /**
+   * Get baseHp
+   * @return baseHp
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getBaseHp() {
+    return baseHp;
+  }
+
+  public void setBaseHp(Integer baseHp) {
+    this.baseHp = baseHp;
   }
 
   public EntityState hp(Integer hp) {
@@ -802,10 +826,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get cannotAttack
+   * When true, indicates this minion cannot attack, even though it normally can.
    * @return cannotAttack
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, indicates this minion cannot attack, even though it normally can.")
   public Boolean getCannotAttack() {
     return cannotAttack;
   }
@@ -820,10 +844,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get underAura
+   * When true, indicates this minion is benefiting from the aura of another effect.
    * @return underAura
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, indicates this minion is benefiting from the aura of another effect.")
   public Boolean getUnderAura() {
     return underAura;
   }
@@ -874,10 +898,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get playable
+   * When true, indicates the card can be played, or the hero / minion can initiate a physical attack.
    * @return playable
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, indicates the card can be played, or the hero / minion can initiate a physical attack.")
   public Boolean getPlayable() {
     return playable;
   }
@@ -892,10 +916,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get mana
+   * The player's current mana.
    * @return mana
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The player's current mana.")
   public Integer getMana() {
     return mana;
   }
@@ -910,10 +934,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get maxMana
+   * The player's maximum amount of mana.
    * @return maxMana
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The player's maximum amount of mana.")
   public Integer getMaxMana() {
     return maxMana;
   }
@@ -928,16 +952,34 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get lockedMana
+   * The amount of mana that was locked due to overload.
    * @return lockedMana
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The amount of mana that was locked due to overload.")
   public Integer getLockedMana() {
     return lockedMana;
   }
 
   public void setLockedMana(Integer lockedMana) {
     this.lockedMana = lockedMana;
+  }
+
+  public EntityState hostsTrigger(Boolean hostsTrigger) {
+    this.hostsTrigger = hostsTrigger;
+    return this;
+  }
+
+   /**
+   * When true, indicates this entity has an effect that triggers on game events.
+   * @return hostsTrigger
+  **/
+  @ApiModelProperty(example = "null", value = "When true, indicates this entity has an effect that triggers on game events.")
+  public Boolean getHostsTrigger() {
+    return hostsTrigger;
+  }
+
+  public void setHostsTrigger(Boolean hostsTrigger) {
+    this.hostsTrigger = hostsTrigger;
   }
 
 
@@ -957,6 +999,7 @@ public class EntityState  implements Serializable {
         Objects.equals(this.boardPosition, entityState.boardPosition) &&
         Objects.equals(this.owner, entityState.owner) &&
         Objects.equals(this.heroClass, entityState.heroClass) &&
+        Objects.equals(this.baseHp, entityState.baseHp) &&
         Objects.equals(this.hp, entityState.hp) &&
         Objects.equals(this.durability, entityState.durability) &&
         Objects.equals(this.maxHp, entityState.maxHp) &&
@@ -992,12 +1035,13 @@ public class EntityState  implements Serializable {
         Objects.equals(this.playable, entityState.playable) &&
         Objects.equals(this.mana, entityState.mana) &&
         Objects.equals(this.maxMana, entityState.maxMana) &&
-        Objects.equals(this.lockedMana, entityState.lockedMana);
+        Objects.equals(this.lockedMana, entityState.lockedMana) &&
+        Objects.equals(this.hostsTrigger, entityState.hostsTrigger);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, pendingDestroy, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, secret, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, pendingDestroy, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, secret, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger);
   }
 
   @Override
@@ -1012,6 +1056,7 @@ public class EntityState  implements Serializable {
     sb.append("    boardPosition: ").append(toIndentedString(boardPosition)).append("\n");
     sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
+    sb.append("    baseHp: ").append(toIndentedString(baseHp)).append("\n");
     sb.append("    hp: ").append(toIndentedString(hp)).append("\n");
     sb.append("    durability: ").append(toIndentedString(durability)).append("\n");
     sb.append("    maxHp: ").append(toIndentedString(maxHp)).append("\n");
@@ -1048,6 +1093,7 @@ public class EntityState  implements Serializable {
     sb.append("    mana: ").append(toIndentedString(mana)).append("\n");
     sb.append("    maxMana: ").append(toIndentedString(maxMana)).append("\n");
     sb.append("    lockedMana: ").append(toIndentedString(lockedMana)).append("\n");
+    sb.append("    hostsTrigger: ").append(toIndentedString(hostsTrigger)).append("\n");
     sb.append("}");
     return sb.toString();
   }

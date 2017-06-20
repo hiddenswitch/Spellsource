@@ -36,6 +36,7 @@ Name | Type | Description | Notes
 **afterSpellCasted** | [**GameEventAfterSpellCasted**](GameEventAfterSpellCasted.md) |  |  [optional]
 **discard** | [**GameEventCardPlayed**](GameEventCardPlayed.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
+**triggerFired** | [**GameEventTriggerFired**](GameEventTriggerFired.md) |  |  [optional]
 
 
 <a name="EventTypeEnum"></a>
@@ -67,6 +68,7 @@ SECRET_REVEALED | &quot;SECRET_REVEALED&quot;
 SPELL_CASTED | &quot;SPELL_CASTED&quot;
 SUMMON | &quot;SUMMON&quot;
 TARGET_ACQUISITION | &quot;TARGET_ACQUISITION&quot;
+TRIGGER_FIRED | &quot;TRIGGER_FIRED&quot;
 TURN_END | &quot;TURN_END&quot;
 TURN_START | &quot;TURN_START&quot;
 SILENCE | &quot;SILENCE&quot;

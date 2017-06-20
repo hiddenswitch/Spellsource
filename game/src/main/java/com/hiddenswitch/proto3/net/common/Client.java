@@ -8,13 +8,14 @@ import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.Notification;
 
 /**
  * An interface that specifies the boundary between a {@link net.demilich.metastone.game.GameContext} and a networking
  * channel like a websocket or a plain TCP socket.
  */
 public interface Client {
-	void onGameEvent(GameEvent event);
+	void onNotification(Notification event);
 
 	void onGameEnd(Player winner);
 

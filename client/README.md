@@ -166,6 +166,7 @@ Class | Method | HTTP request | Description
  - [GameEventSilence](docs/GameEventSilence.md)
  - [GameEventSpellCasted](docs/GameEventSpellCasted.md)
  - [GameEventTargetAcquisition](docs/GameEventTargetAcquisition.md)
+ - [GameEventTriggerFired](docs/GameEventTriggerFired.md)
  - [GameEventWeaponDestroyed](docs/GameEventWeaponDestroyed.md)
  - [GameOver](docs/GameOver.md)
  - [GameState](docs/GameState.md)

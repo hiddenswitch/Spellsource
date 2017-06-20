@@ -3,12 +3,10 @@ package com.hiddenswitch.proto3.net.impl.util;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.common.*;
-import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.eventbus.EventBus;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
@@ -20,8 +18,10 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.visuals.TriggerFired;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
@@ -269,14 +269,22 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent) {
 		getEventStack().push(gameEvent);
-		getListenerMap().get(getPlayer1()).onGameEvent(gameEvent);
-		getListenerMap().get(getPlayer2()).onGameEvent(gameEvent);
+		getListenerMap().get(getPlayer1()).onNotification(gameEvent);
+		getListenerMap().get(getPlayer2()).onNotification(gameEvent);
 		super.fireGameEvent(gameEvent, gameTriggers);
 		getEventStack().pop();
 		if (getEventStack().isEmpty()) {
 			getListenerMap().get(getPlayer1()).lastEvent();
 			getListenerMap().get(getPlayer2()).lastEvent();
 		}
+	}
+
+	@Override
+	@Suspendable
+	public void onSpellTriggerFired(SpellTrigger trigger) {
+		TriggerFired triggerFired = new TriggerFired(this, trigger);
+		getListenerMap().get(getPlayer1()).onNotification(triggerFired);
+		getListenerMap().get(getPlayer2()).onNotification(triggerFired);
 	}
 
 	/**

@@ -468,6 +468,7 @@ definitions:
           - 'SPELL_CASTED'
           - 'SUMMON'
           - 'TARGET_ACQUISITION'
+          - 'TRIGGER_FIRED'
           - 'TURN_END'
           - 'TURN_START'
           - 'SILENCE'
@@ -626,6 +627,13 @@ definitions:
         properties:
           victim:
             $ref: '#/definitions/Entity'
+      triggerFired:
+        type: 'object'
+        properties:
+          triggerSourceId:
+            description: |
+              The entity ID corresponding to the source of the trigger that got fired.
+            type: 'integer'
   JavaSerializationObject:
     type: 'object'
     required:
@@ -973,6 +981,8 @@ definitions:
         type: 'integer'
       heroClass:
         type: 'string'
+      baseHp:
+        type: 'integer'
       hp:
         type: 'integer'
       durability:
@@ -1030,21 +1040,30 @@ definitions:
       untargetableBySpells:
         type: 'boolean'
       cannotAttack:
+        description: When true, indicates this minion cannot attack, even though it normally can.
         type: 'boolean'
       underAura:
+        description: When true, indicates this minion is benefiting from the aura of another effect.
         type: 'boolean'
       customRenderer:
         type: 'string'
       customData:
         type: 'string'
       playable:
+        description: When true, indicates the card can be played, or the hero / minion can initiate a physical attack.
         type: 'boolean'
       mana:
+        description: The player's current mana.
         type: 'integer'
       maxMana:
+        description: The player's maximum amount of mana.
         type: 'integer'
       lockedMana:
+        description: The amount of mana that was locked due to overload.
         type: 'integer'
+      hostsTrigger:
+        description: When true, indicates this entity has an effect that triggers on game events.
+        type: 'boolean'
   DraftsChooseCardRequest:
     type: 'object'
     required:
