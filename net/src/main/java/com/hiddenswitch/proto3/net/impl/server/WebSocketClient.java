@@ -16,7 +16,9 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.EntityLocation;
+import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.visuals.TriggerFired;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
 public class WebSocketClient implements Client {
 	private final String userId;
 	private final int playerId;
-	private final Queue<ServerToClientMessage> messageEventBuffer;
+	private final Queue<ServerToClientMessage> messageBuffer;
 	private ServerWebSocket privateSocket;
 	private GameState lastStateSent;
 	private boolean open = true;
@@ -38,7 +40,7 @@ public class WebSocketClient implements Client {
 		this.playerId = playerId;
 		this.setPrivateSocket(socket);
 		this.userId = userId;
-		this.messageEventBuffer = new ConcurrentLinkedQueue<>();
+		this.messageBuffer = new ConcurrentLinkedQueue<>();
 	}
 
 	private void onSocketClosed(Void ignored) {
@@ -74,20 +76,31 @@ public class WebSocketClient implements Client {
 	}
 
 	@Override
-	public void onGameEvent(net.demilich.metastone.game.events.GameEvent event) {
-		final GameEvent clientEvent = Games.getClientEvent(event, playerId);
+	public void onNotification(Notification event) {
 		final GameState state = event.getGameContext().getGameStateCopy();
-		final ServerToClientMessage message = new ServerToClientMessage()
+		ServerToClientMessage message = new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
-				.gameState(getClientGameState(state))
-				.event(clientEvent);
-		messageEventBuffer.offer(message);
+				.gameState(getClientGameState(state));
+
+		if (event instanceof net.demilich.metastone.game.events.GameEvent) {
+			message.event(Games.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId));
+		} else if (event instanceof TriggerFired) {
+			TriggerFired triggerEvent = (TriggerFired) event;
+			message.event(new GameEvent()
+					.eventType(GameEvent.EventTypeEnum.TRIGGER_FIRED)
+					.triggerFired(new GameEventTriggerFired()
+							.triggerSourceId(triggerEvent.getSpellTrigger().getHostReference().getId())));
+		} else {
+			throw new RuntimeException("Unsupported notification.");
+		}
+
+		messageBuffer.offer(message);
 	}
 
 	@Override
 	public void onGameEnd(Player winner) {
-		flushEvents();
+		flush();
 		GameOver gameOver = new GameOver();
 		if (winner == null) {
 			gameOver.localPlayerWon(false)
@@ -148,7 +161,7 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
-		flushEvents();
+		flush();
 		// Set the ids on the available actions
 		for (int i = 0; i < availableActions.size(); i++) {
 			availableActions.get(i).setId(i);
@@ -164,7 +177,7 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
-		flushEvents();
+		flush();
 		final GameContext simulatedContext = new GameContext();
 		simulatedContext.setGameState(state);
 		sendMessage(new ServerToClientMessage()
@@ -188,12 +201,12 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void lastEvent() {
-		flushEvents();
+		flush();
 	}
 
-	private void flushEvents() {
-		while (!messageEventBuffer.isEmpty()) {
-			sendMessage(messageEventBuffer.poll());
+	private void flush() {
+		while (!messageBuffer.isEmpty()) {
+			sendMessage(messageBuffer.poll());
 		}
 	}
 

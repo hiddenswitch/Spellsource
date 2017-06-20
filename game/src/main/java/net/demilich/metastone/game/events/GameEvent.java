@@ -12,7 +12,7 @@ import net.demilich.metastone.game.entities.Entity;
  * @see net.demilich.metastone.game.spells.trigger.Trigger for how to use game events to implement card text.
  * @see GameContext#fireGameEvent(GameEvent) for how game events are fired.
  */
-public abstract class GameEvent implements Serializable {
+public abstract class GameEvent implements Notification {
 	private transient final GameContext context;
 	private final int targetPlayerId;
 	private final int sourcePlayerId;
@@ -38,6 +38,7 @@ public abstract class GameEvent implements Serializable {
 
 	public abstract GameEventType getEventType();
 
+	@Override
 	public GameContext getGameContext() {
 		return context;
 	}

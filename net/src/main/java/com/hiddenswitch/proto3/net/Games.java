@@ -25,6 +25,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 
 import java.util.*;
@@ -602,6 +603,9 @@ public interface Games {
 				&& actor.canAttackThisTurn();
 		entityState.playable(playable);
 		entityState.attack(actor.getAttack());
+		entityState.baseAttack(actor.getBaseAttack());
+		entityState.baseManaCost(card.getBaseManaCost());
+		entityState.baseHp(actor.getBaseHp());
 		entityState.hp(actor.getHp());
 		entityState.maxHp(actor.getMaxHp());
 		entityState.heroClass(actor.getHeroClass().toString());
@@ -625,6 +629,8 @@ public interface Games {
 		entityState.windfury(actor.hasAttribute(Attribute.WINDFURY));
 		entityState.summoningSickness(actor.hasAttribute(Attribute.SUMMONING_SICKNESS));
 		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+		final List<Trigger> triggers = workingContext.getTriggerManager().getTriggersAssociatedWith(actor.getReference());
+		entityState.hostsTrigger(triggers.size() > 0);
 		entity.state(entityState);
 		return entity;
 	}

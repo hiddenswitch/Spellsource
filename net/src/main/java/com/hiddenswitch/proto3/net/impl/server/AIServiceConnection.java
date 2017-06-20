@@ -15,7 +15,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.Notification;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -36,7 +36,7 @@ public class AIServiceConnection implements Client {
 	}
 
 	@Override
-	public void onGameEvent(GameEvent event) {
+	public void onNotification(Notification event) {
 	}
 
 	@Override

@@ -45,6 +45,7 @@ import com.hiddenswitch.proto3.net.client.models.GameEventSecretRevealed;
 import com.hiddenswitch.proto3.net.client.models.GameEventSilence;
 import com.hiddenswitch.proto3.net.client.models.GameEventSpellCasted;
 import com.hiddenswitch.proto3.net.client.models.GameEventTargetAcquisition;
+import com.hiddenswitch.proto3.net.client.models.GameEventTriggerFired;
 import com.hiddenswitch.proto3.net.client.models.GameEventWeaponDestroyed;
 import com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent;
 import io.swagger.annotations.ApiModel;
@@ -149,6 +150,9 @@ public class GameEvent  implements Serializable {
     
     @SerializedName("TARGET_ACQUISITION")
     TARGET_ACQUISITION("TARGET_ACQUISITION"),
+    
+    @SerializedName("TRIGGER_FIRED")
+    TRIGGER_FIRED("TRIGGER_FIRED"),
     
     @SerializedName("TURN_END")
     TURN_END("TURN_END"),
@@ -257,6 +261,9 @@ public class GameEvent  implements Serializable {
 
   @SerializedName("kill")
   private GameEventKill kill = null;
+
+  @SerializedName("triggerFired")
+  private GameEventTriggerFired triggerFired = null;
 
   public GameEvent eventTarget(Entity eventTarget) {
     this.eventTarget = eventTarget;
@@ -834,6 +841,24 @@ public class GameEvent  implements Serializable {
     this.kill = kill;
   }
 
+  public GameEvent triggerFired(GameEventTriggerFired triggerFired) {
+    this.triggerFired = triggerFired;
+    return this;
+  }
+
+   /**
+   * Get triggerFired
+   * @return triggerFired
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public GameEventTriggerFired getTriggerFired() {
+    return triggerFired;
+  }
+
+  public void setTriggerFired(GameEventTriggerFired triggerFired) {
+    this.triggerFired = triggerFired;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -875,12 +900,13 @@ public class GameEvent  implements Serializable {
         Objects.equals(this.summon, gameEvent.summon) &&
         Objects.equals(this.afterSpellCasted, gameEvent.afterSpellCasted) &&
         Objects.equals(this.discard, gameEvent.discard) &&
-        Objects.equals(this.kill, gameEvent.kill);
+        Objects.equals(this.kill, gameEvent.kill) &&
+        Objects.equals(this.triggerFired, gameEvent.triggerFired);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(eventTarget, eventSource, targetPlayerId, sourcePlayerId, description, eventType, afterPhysicalAttack, drawCard, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, physicalAttack, overload, heal, secretRevealed, summon, afterSpellCasted, discard, kill);
+    return Objects.hash(eventTarget, eventSource, targetPlayerId, sourcePlayerId, description, eventType, afterPhysicalAttack, drawCard, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, physicalAttack, overload, heal, secretRevealed, summon, afterSpellCasted, discard, kill, triggerFired);
   }
 
   @Override
@@ -920,6 +946,7 @@ public class GameEvent  implements Serializable {
     sb.append("    afterSpellCasted: ").append(toIndentedString(afterSpellCasted)).append("\n");
     sb.append("    discard: ").append(toIndentedString(discard)).append("\n");
     sb.append("    kill: ").append(toIndentedString(kill)).append("\n");
+    sb.append("    triggerFired: ").append(toIndentedString(triggerFired)).append("\n");
     sb.append("}");
     return sb.toString();
   }

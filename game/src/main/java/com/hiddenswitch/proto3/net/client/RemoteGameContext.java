@@ -18,6 +18,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -317,8 +318,11 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	@Override
-	public void onGameEvent(GameEvent event) {
-		this.addGameEvent(event);
+	public void onNotification(Notification event) {
+		if (event instanceof GameEvent) {
+			this.addGameEvent((GameEvent) event);
+		}
+
 		this.onGameStateChanged();
 	}
 

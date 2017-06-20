@@ -127,6 +127,8 @@ public class SpellTrigger extends Entity implements Trigger {
 			} else {
 				event.getGameContext().getEventTargetStack().push(null);
 			}
+			// Notify the game context that a spell trigger was successfully fired.
+			event.getGameContext().onSpellTriggerFired(this);
 			onFire(ownerId, getSpell(), event);
 			event.getGameContext().getEventTargetStack().pop();
 		} catch (Exception e) {

@@ -216,6 +216,11 @@ public class UnityClient {
 		if (!contains) {
 			context.fail(message.toString());
 		}
+		if (message.getMessageType() == MessageType.ON_GAME_EVENT
+				&& message.getEvent() != null
+				&& message.getEvent().getEventType() == GameEvent.EventTypeEnum.TRIGGER_FIRED) {
+			context.assertTrue(entityIds.contains(message.getEvent().getTriggerFired().getTriggerSourceId()));
+		}
 		context.assertTrue(contains);
 	}
 
