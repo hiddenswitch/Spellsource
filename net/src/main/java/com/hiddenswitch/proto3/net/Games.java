@@ -307,6 +307,10 @@ public interface Games {
 			clientEvent.afterSpellCasted(new GameEventAfterSpellCasted()
 					.sourceCard(getEntity(workingContext, afterSpellCastedEvent.getSourceCard(), playerId))
 					.spellTarget(getEntity(workingContext, afterSpellCastedEvent.getEventTarget(), playerId)));
+		} else if (event instanceof SecretRevealedEvent) {
+			final SecretRevealedEvent secretRevealedEvent = (SecretRevealedEvent) event;
+			clientEvent.secretRevealed(new GameEventSecretRevealed()
+					.secret(getEntity(workingContext, secretRevealedEvent.getSecret(), playerId)));
 		}
 
 		clientEvent.eventSource(getEntity(workingContext, event.getEventSource(), playerId));
