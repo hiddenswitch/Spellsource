@@ -702,7 +702,7 @@ definitions:
           When not null, contains three choices you should reply with to choose the hero of your draft.
         type: 'array'
         items:
-          type: 'string'
+          $ref: '#/definitions/Entity'
       currentCardChoices:
         description: |
           When not null, contains the cards that correspond to your choices for the next draft selection.

@@ -9,6 +9,7 @@ import com.hiddenswitch.proto3.net.models.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.heroes.MetaHero;
 
 import java.util.stream.Collectors;
 
@@ -87,7 +88,7 @@ public interface Draft {
 				.deckId(inState.getDeckId())
 				.draftIndex(inState.getDraftIndex())
 				.heroClass(inState.getHeroClass() == null ? null : inState.getHeroClass().toString())
-				.heroClassChoices(inState.getHeroClassChoices() == null ? null : inState.getHeroClassChoices().stream().map(HeroClass::toString).collect(Collectors.toList()))
+				.heroClassChoices(inState.getHeroClassChoices() == null ? null : inState.getHeroClassChoices().stream().map(MetaHero::getHeroCard).map(c -> Games.getEntity(workingContext, c, 0)).collect(Collectors.toList()))
 				.losses(inState.getLosses())
 				.selectedCards(inState.getSelectedCards() == null ? null : inState.getSelectedCards().stream().map(CardCatalogue::getCardById)
 						.map(c -> Games.getEntity(workingContext, c, 0))
