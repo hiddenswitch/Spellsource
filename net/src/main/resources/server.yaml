@@ -710,7 +710,7 @@ definitions:
         items:
           $ref: '#/definitions/Entity'
       heroClass:
-        type: 'string'
+        $ref: '#/definitions/Entity'
       status:
         description: |
           Gets the status of the draft.
