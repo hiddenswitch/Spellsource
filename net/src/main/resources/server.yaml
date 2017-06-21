@@ -72,6 +72,8 @@ definitions:
         type: 'array'
         items:
           $ref: '#/definitions/InventoryCollection'
+      connection:
+        $ref: '#/definitions/MatchmakingQueuePutResponseUnityConnection'
       personalCollection:
         $ref: '#/definitions/InventoryCollection'
   SendMessageRequest:
@@ -661,20 +663,22 @@ definitions:
         type: 'string'
       deck:
         $ref: '#/definitions/MatchmakingDeck'
+  MatchmakingQueuePutResponseUnityConnection:
+    type: 'object'
+    properties:
+      url:
+        type: 'string'
+        description: |
+          The websocket URL to connect to.
+      firstMessage:
+        $ref: '#/definitions/ClientToServerMessage'
   MatchmakingQueuePutResponse:
     type: 'object'
     properties:
       connection:
         $ref: '#/definitions/JavaSerializationObject'
       unityConnection:
-        type: 'object'
-        properties:
-          url:
-            type: 'string'
-            description: |
-              The websocket URL to connect to.
-          firstMessage:
-            $ref: '#/definitions/ClientToServerMessage'
+        $ref: '#/definitions/MatchmakingQueuePutResponseUnityConnection'
       retry:
         $ref: '#/definitions/MatchmakingQueuePutRequest'
   MatchCancelResponse:

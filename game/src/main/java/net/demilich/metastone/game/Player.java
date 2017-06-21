@@ -186,7 +186,7 @@ public class Player extends Entity implements Serializable {
 	}
 
 	public Set<String> getSecretCardIds() {
-		return secretZone.stream().map(Secret::getSource).map(Card::getCardId).collect(Collectors.toSet());
+		return secretZone.stream().map(Secret::getSecretCard).map(Card::getCardId).collect(Collectors.toSet());
 	}
 
 	public EntityZone<Secret> getSecrets() {

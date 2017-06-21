@@ -19,16 +19,16 @@ public class Secret extends SpellTrigger {
 		setAttributes((AttributeMap) source.getAttributes().clone());
 	}
 
-	public Card getSource() {
+	public Card getSecretCard() {
 		return source;
 	}
 
 	@Override
 	@Suspendable
 	protected void onFire(int ownerId, SpellDesc spell, GameEvent event) {
-		super.onFire(ownerId, spell, event);
 		Player owner = event.getGameContext().getPlayer(ownerId);
 		event.getGameContext().getLogic().secretTriggered(owner, this);
+		super.onFire(ownerId, spell, event);
 		expire();
 	}
 
@@ -43,11 +43,13 @@ public class Secret extends SpellTrigger {
 
 	@Override
 	public String getName() {
-		return getSource().getName();
+		return getSecretCard().getName();
 	}
 
 	@Override
 	public Secret clone() {
-		return (Secret) super.clone();
+		Secret clone = (Secret) super.clone();
+		clone.source = source;
+		return clone;
 	}
 }

@@ -346,13 +346,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				return WebResult.failed(e);
 			}
 			userResponse.connection(connection);
-			userResponse.unityConnection(new MatchmakingQueuePutResponseUnityConnection()
-					.url(internalResponse.getConnection().getUrl())
-					.firstMessage(new ClientToServerMessage()
-							.messageType(MessageType.FIRST_MESSAGE)
-							.firstMessage(new ClientToServerMessageFirstMessage()
-									.playerKey(internalResponse.getConnection().getPlayerKey())
-									.playerSecret(internalResponse.getConnection().getPlayerSecret()))));
+			userResponse.unityConnection(internalResponse.getUnityConnection());
 		}
 
 		// Determine status code
@@ -581,6 +575,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				.decks(deckCollections.getResponses().stream().map(GetCollectionResponse::asInventoryCollection).collect(toList()))
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getProfile().getEmailAddress())
+				.connection(record.getConnection())
 				.name(displayName);
 	}
 

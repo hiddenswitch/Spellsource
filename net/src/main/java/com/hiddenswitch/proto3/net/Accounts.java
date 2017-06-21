@@ -7,10 +7,12 @@ import com.hiddenswitch.proto3.net.models.CreateAccountRequest;
 import com.hiddenswitch.proto3.net.models.CreateAccountResponse;
 import com.hiddenswitch.proto3.net.models.LoginRequest;
 import com.hiddenswitch.proto3.net.models.LoginResponse;
+import com.hiddenswitch.proto3.net.util.Mongo;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import io.vertx.ext.mongo.UpdateOptions;
 
 import java.util.List;
 
@@ -43,6 +45,32 @@ public interface Accounts {
 	}
 
 	/**
+	 * Updates an account. Useful for joining data into the account object, like deck or statistics information.
+	 *
+	 * @param userId        The user's ID
+	 * @param updateCommand A JSON object that corresponds to a Mongo update command.
+	 * @return The mongo client update result
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
+	static MongoClientUpdateResult update(String userId, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
+		return Mongo.mongo().updateCollection(Accounts.USERS, json("_id", userId), updateCommand);
+	}
+
+	/**
+	 * Update multiple accounts. Useful for joining data into the account object, like deck or statistics information.
+	 *
+	 * @param query         A JSON object corresponding to a query on the user's collection.
+	 * @param updateCommand A JSON object that corresponds to a Mongo update command.
+	 * @return The mongo client update result
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
+	static MongoClientUpdateResult update(JsonObject query, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
+		return Mongo.mongo().updateCollectionWithOptions(Accounts.USERS, query, updateCommand, new UpdateOptions().setMulti(true));
+	}
+
+	/**
 	 * Finds a user account with the given options.
 	 *
 	 * @param client  A database client
@@ -54,6 +82,18 @@ public interface Accounts {
 	 */
 	static List<JsonObject> find(MongoClient client, JsonObject query, FindOptions options) throws SuspendExecution, InterruptedException {
 		return awaitResult(h -> client.findWithOptions(Accounts.USERS, query, options, h));
+	}
+
+	/**
+	 * Finds a user account with the given user ID.
+	 *
+	 * @param userId The ID of the user to find.
+	 * @return The {@link UserRecord}, or {@code null} if no user record exists.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
+	static UserRecord findOne(String userId) throws SuspendExecution, InterruptedException {
+		return Mongo.mongo().findOne(Accounts.USERS, json("_id", userId), UserRecord.class);
 	}
 
 	/**
@@ -75,9 +115,9 @@ public interface Accounts {
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
-	 * set to true, the account creation failed with the specified handled reason.
-	 * On subsequent requests from a client that's using the HTTP API, the Login Token should be put into the
-	 * X-Auth-Token header for subsequent requests. The token and user ID should be saved.
+	 * set to true, the account creation failed with the specified handled reason. On subsequent requests from a client
+	 * that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests.
+	 * The token and user ID should be saved.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */

@@ -26,4 +26,8 @@ public class MatchmakingResponse implements Serializable {
 	public void setRetry(MatchmakingRequest retry) {
 		this.retry = retry;
 	}
+
+	public MatchmakingQueuePutResponseUnityConnection getUnityConnection() {
+		return getConnection().toUnityConnection();
+	}
 }

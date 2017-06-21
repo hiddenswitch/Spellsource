@@ -5,17 +5,16 @@ import net.demilich.metastone.game.cards.SecretCard;
 import net.demilich.metastone.game.entities.Entity;
 
 public class SecretRevealedEvent extends GameEvent {
-
-	private final SecretCard secret;
+	private final SecretCard secretCard;
 
 	public SecretRevealedEvent(GameContext context, SecretCard secret, int playerId) {
-		super(context, playerId, -1);
-		this.secret = secret;
+		super(context, playerId, secret.getOwner());
+		this.secretCard = secret;
 	}
 	
 	@Override
 	public Entity getEventTarget() {
-		return getSecret();
+		return getSecretCard();
 	}
 
 	@Override
@@ -23,8 +22,8 @@ public class SecretRevealedEvent extends GameEvent {
 		return GameEventType.SECRET_REVEALED;
 	}
 
-	public SecretCard getSecret() {
-		return secret;
+	public SecretCard getSecretCard() {
+		return secretCard;
 	}
 
 }

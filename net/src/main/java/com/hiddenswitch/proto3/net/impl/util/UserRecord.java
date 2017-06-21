@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net.impl.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hiddenswitch.proto3.net.client.models.Friend;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponseUnityConnection;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -27,6 +28,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	private AuthorizationRecord auth;
 	private List<String> decks;
 	private List<FriendRecord> friends;
+	private MatchmakingQueuePutResponseUnityConnection connection;
 	private boolean bot;
 
 	/**
@@ -175,4 +177,11 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 		return this.friends.stream().filter(friend -> friend.getFriendId().equals(friendId)).findFirst().orElse(null);
 	}
 
+	public MatchmakingQueuePutResponseUnityConnection getConnection() {
+		return connection;
+	}
+
+	public void setConnection(MatchmakingQueuePutResponseUnityConnection connection) {
+		this.connection = connection;
+	}
 }
