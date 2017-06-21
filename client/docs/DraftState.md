@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**heroClassChoices** | **List&lt;String&gt;** | When not null, contains three choices you should reply with to choose the hero of your draft.  |  [optional]
+**heroClassChoices** | [**List&lt;Entity&gt;**](Entity.md) | When not null, contains three choices you should reply with to choose the hero of your draft.  |  [optional]
 **currentCardChoices** | [**List&lt;Entity&gt;**](Entity.md) | When not null, contains the cards that correspond to your choices for the next draft selection.  |  [optional]
 **heroClass** | **String** |  |  [optional]
 **status** | [**StatusEnum**](#StatusEnum) | Gets the status of the draft.  |  [optional]
