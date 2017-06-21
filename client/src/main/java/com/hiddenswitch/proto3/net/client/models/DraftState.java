@@ -47,7 +47,7 @@ public class DraftState  implements Serializable {
   private List<Entity> currentCardChoices = new ArrayList<Entity>();
 
   @SerializedName("heroClass")
-  private String heroClass = null;
+  private Entity heroClass = null;
 
   /**
    * Gets the status of the draft. 
@@ -144,7 +144,7 @@ public class DraftState  implements Serializable {
     this.currentCardChoices = currentCardChoices;
   }
 
-  public DraftState heroClass(String heroClass) {
+  public DraftState heroClass(Entity heroClass) {
     this.heroClass = heroClass;
     return this;
   }
@@ -154,11 +154,11 @@ public class DraftState  implements Serializable {
    * @return heroClass
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getHeroClass() {
+  public Entity getHeroClass() {
     return heroClass;
   }
 
-  public void setHeroClass(String heroClass) {
+  public void setHeroClass(Entity heroClass) {
     this.heroClass = heroClass;
   }
 

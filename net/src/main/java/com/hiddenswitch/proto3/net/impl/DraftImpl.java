@@ -56,8 +56,12 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 	public DraftRecord doDraftAction(DraftActionRequest request) throws SuspendExecution, InterruptedException, NullPointerException {
 		DraftRecord record = getRecord(request.getUserId());
 
-		if (record == null) {
-			// Assume that the player is starting a draft for the first time
+		if (record == null
+				|| (record.getPublicDraftState().getStatus() == DraftStatus.RETIRED
+				|| record.getPublicDraftState().getStatus() == DraftStatus.COMPLETE)
+				&& (request.getCardIndex() == -1
+				&& request.getHeroIndex() == -1)) {
+			// Start a new draft
 
 			// TODO: Deduct lives.
 			record = new DraftRecord();

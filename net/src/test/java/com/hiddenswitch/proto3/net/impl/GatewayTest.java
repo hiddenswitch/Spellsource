@@ -656,6 +656,9 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		} catch (ApiException e) {
 			context.assertEquals(404, e.getCode(), "There should be no draft if we retired the draft early.");
 		}
+
+		state = api.draftsPost(new DraftsPostRequest().startDraft(true));
+		context.assertEquals(SELECT_HERO, state.getStatus(), "A draft was not correctly started anew.");
 	}
 
 	@Override
