@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **email** | **String** |  |  [optional]
 **friends** | [**List&lt;Friend&gt;**](Friend.md) |  |  [optional]
 **decks** | [**List&lt;InventoryCollection&gt;**](InventoryCollection.md) |  |  [optional]
+**connection** | [**MatchmakingQueuePutResponseUnityConnection**](MatchmakingQueuePutResponseUnityConnection.md) |  |  [optional]
 **personalCollection** | [**InventoryCollection**](InventoryCollection.md) |  |  [optional]
 
 

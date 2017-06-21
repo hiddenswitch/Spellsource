@@ -16,8 +16,11 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 
 public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements Matchmaking {
 	private RpcClient<Games> gameSessions;
@@ -86,6 +89,9 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		CreateGameSessionResponse createGameSessionResponse = gameSessions.sync().createGameSession(request2);
 		connections.put(userId1, createGameSessionResponse.getConfigurationForPlayer1());
 		connections.put(userId2, createGameSessionResponse.getConfigurationForPlayer2());
+		// Save the connections to the user documents
+		Accounts.update(userId1, json("$set", json("connection", json(createGameSessionResponse.getConfigurationForPlayer1().toUnityConnection()))));
+		Accounts.update(userId2, json("$set", json("connection", json(createGameSessionResponse.getConfigurationForPlayer2().toUnityConnection()))));
 		return new MatchCreateResponse(createGameSessionResponse);
 	}
 
@@ -118,6 +124,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			matchmaker.match(response1.getGameId(), matchmakingRequest.getUserId(), response1.getBotUserId(), matchmakingRequest.getDeckId(), response1.getBotDeckId());
 			final ClientConnectionConfiguration connection = response1.getPlayerConnection();
 			connections.put(userId, connection);
+			Accounts.update(userId, json("$set", json("connection", json(connection.toUnityConnection()))));
 			response.setConnection(connection);
 			return response;
 		}
@@ -164,13 +171,15 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	}
 
 	private void legacyCreateGame(Matchmaker.Match match, Deck deck1, Deck deck2) throws SuspendExecution, InterruptedException {
+		final String userId1 = match.entry1.userId;
+		final String userId2 = match.entry2.userId;
 		final CreateGameSessionRequest request = new CreateGameSessionRequest()
-				.withPregame1(new PregamePlayerConfiguration(deck1, match.entry1.userId))
-				.withPregame2(new PregamePlayerConfiguration(deck2, match.entry2.userId))
+				.withPregame1(new PregamePlayerConfiguration(deck1, userId1))
+				.withPregame2(new PregamePlayerConfiguration(deck2, userId2))
 				.withGameId(match.gameId);
 		CreateGameSessionResponse createGameSessionResponse = gameSessions.sync().createGameSession(request);
-		connections.put(match.entry1.userId, createGameSessionResponse.getConfigurationForPlayer1());
-		connections.put(match.entry2.userId, createGameSessionResponse.getConfigurationForPlayer2());
+		connections.put(userId1, createGameSessionResponse.getConfigurationForPlayer1());
+		connections.put(userId2, createGameSessionResponse.getConfigurationForPlayer2());
 	}
 
 	@Override
@@ -193,8 +202,11 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			return response;
 		}
 
-		connections.remove(match.entry1.userId);
-		connections.remove(match.entry2.userId);
+		final String userId1 = match.entry1.userId;
+		final String userId2 = match.entry2.userId;
+		connections.remove(userId1);
+		connections.remove(userId2);
+		Accounts.update(json("_id", json("$in", Arrays.asList(userId1, userId2))), json("$unset", json("connection", true)));
 
 		response.expired = matchmaker.expire(request.gameId);
 

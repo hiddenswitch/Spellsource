@@ -2059,14 +2059,14 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void playSecret(Player player, Secret secret, boolean fromHand) {
-		log("{} has a new secret activated: {}", player.getName(), secret.getSource());
+		log("{} has a new secret activated: {}", player.getName(), secret.getSecretCard());
 		Secret newSecret = secret.clone();
 		newSecret.setId(getIdFactory().generateId());
 		newSecret.setOwner(player.getId());
 		addGameEventListener(player, newSecret, player.getHero());
 		player.getSecrets().add(newSecret);
 		if (fromHand) {
-			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), (SecretCard) newSecret.getSource()));
+			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), (SecretCard) newSecret.getSecretCard()));
 		}
 	}
 
@@ -2523,10 +2523,10 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void secretTriggered(Player player, Secret secret) {
-		log("Secret was trigged: {}", secret.getSource());
+		log("Secret was trigged: {}", secret.getSecretCard());
 		// Move the secret to removed from play.
 		secret.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		context.fireGameEvent(new SecretRevealedEvent(context, (SecretCard) secret.getSource(), player.getId()));
+		context.fireGameEvent(new SecretRevealedEvent(context, (SecretCard) secret.getSecretCard(), player.getId()));
 	}
 
 	// TODO: circular dependency. Very ugly, refactor!

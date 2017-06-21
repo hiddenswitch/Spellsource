@@ -29,6 +29,7 @@ import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.hiddenswitch.proto3.net.client.models.Friend;
 import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
+import com.hiddenswitch.proto3.net.client.models.MatchmakingQueuePutResponseUnityConnection;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -54,6 +55,9 @@ public class Account  implements Serializable {
 
   @SerializedName("decks")
   private List<InventoryCollection> decks = new ArrayList<InventoryCollection>();
+
+  @SerializedName("connection")
+  private MatchmakingQueuePutResponseUnityConnection connection = null;
 
   @SerializedName("personalCollection")
   private InventoryCollection personalCollection = null;
@@ -158,6 +162,24 @@ public class Account  implements Serializable {
     this.decks = decks;
   }
 
+  public Account connection(MatchmakingQueuePutResponseUnityConnection connection) {
+    this.connection = connection;
+    return this;
+  }
+
+   /**
+   * Get connection
+   * @return connection
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public MatchmakingQueuePutResponseUnityConnection getConnection() {
+    return connection;
+  }
+
+  public void setConnection(MatchmakingQueuePutResponseUnityConnection connection) {
+    this.connection = connection;
+  }
+
   public Account personalCollection(InventoryCollection personalCollection) {
     this.personalCollection = personalCollection;
     return this;
@@ -191,12 +213,13 @@ public class Account  implements Serializable {
         Objects.equals(this.email, account.email) &&
         Objects.equals(this.friends, account.friends) &&
         Objects.equals(this.decks, account.decks) &&
+        Objects.equals(this.connection, account.connection) &&
         Objects.equals(this.personalCollection, account.personalCollection);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, email, friends, decks, personalCollection);
+    return Objects.hash(id, name, email, friends, decks, connection, personalCollection);
   }
 
   @Override
@@ -209,6 +232,7 @@ public class Account  implements Serializable {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    friends: ").append(toIndentedString(friends)).append("\n");
     sb.append("    decks: ").append(toIndentedString(decks)).append("\n");
+    sb.append("    connection: ").append(toIndentedString(connection)).append("\n");
     sb.append("    personalCollection: ").append(toIndentedString(personalCollection)).append("\n");
     sb.append("}");
     return sb.toString();
