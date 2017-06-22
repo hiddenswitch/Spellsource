@@ -81,9 +81,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 							.withUserId(request.getUserId())
 							// Add just one copy for now (add cards on demand)
 							.withCopies(1)).getInventoryIds());
-					entry = new ArrayList<>(entry);
-					entry.add(cardId);
-					cards.put(cardId, entry);
+					entry = cards.get(cardId);
 				}
 				String record = entry.remove(0);
 				inventoryIds.add(record);
