@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.actions;
 
 import java.util.Collection;
-import java.util.function.Predicate;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
@@ -16,16 +15,19 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * A DiscoverAction is a card and spell tuple that corresponds to a particular card selected by the player and the
- * spell that will take that card as an argument.
+ * A DiscoverAction is a card and spell tuple that corresponds to a particular card selected by the player and the spell
+ * that will take that card as an argument.
  * <p>
- * Typically, discover actions have a {@link net.demilich.metastone.game.spells.ReceiveCardSpell} that puts the
- * card in {@link #getCard()} into the player's hand. But any kind of spell that takes a {@link net.demilich.metastone.game.spells.desc.SpellArg#CARD}
- * argument will work with a DiscoverAction.
+ * Typically, discover actions have a {@link net.demilich.metastone.game.spells.ReceiveCardSpell} that puts the card in
+ * {@link #getCard()} into the player's hand. But any kind of spell that takes a {@link
+ * net.demilich.metastone.game.spells.desc.SpellArg#CARD} argument will work with a DiscoverAction.
  */
 public class DiscoverAction extends GameAction {
+	private static final String DISCOVERED_NAME = "discovered";
+
 	/**
 	 * Creates a discover action from the given spell description.
+	 *
 	 * @param spell A spell that takes {@link net.demilich.metastone.game.spells.desc.SpellArg#CARD} as an argument.
 	 * @return A DiscoverAction.
 	 */
@@ -52,10 +54,12 @@ public class DiscoverAction extends GameAction {
 
 	/**
 	 * Some discover actions cannot be called on certain kinds of cards. This is not currently used because
-	 * DiscoverActions are not unrolled in {@link net.demilich.metastone.game.logic.ActionLogic#rollout(GameAction, GameContext, Player, Collection)}.
+	 * DiscoverActions are not unrolled in {@link net.demilich.metastone.game.logic.ActionLogic#rollout(GameAction,
+	 * GameContext, Player, Collection)}.
+	 *
 	 * @param context The context
-	 * @param player The player
-	 * @param entity The entity to test
+	 * @param player  The player
+	 * @param entity  The entity to test
 	 * @return {@code true} if the discover action can be called on a particular entity.
 	 */
 	@Override
@@ -63,7 +67,7 @@ public class DiscoverAction extends GameAction {
 		if (!super.canBeExecutedOn(context, player, entity)) {
 			return false;
 		}
-		if (getSource().getId() == entity.getId()) {
+		if (getSourceReference().getId() == entity.getId()) {
 			return false;
 		}
 		if (getEntityFilter() == null) {
@@ -76,19 +80,20 @@ public class DiscoverAction extends GameAction {
 	public DiscoverAction clone() {
 		DiscoverAction clone = DiscoverAction.createDiscover(getSpell().clone());
 		clone.setActionSuffix(getActionSuffix());
-		clone.setSource(getSource());
+		clone.setSource(getSourceReference());
 		return clone;
 	}
 
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		EntityReference target = getSpell().hasPredefinedTarget() ? getSpell().getTarget() : getTargetKey();
-		context.getLogic().castSpell(playerId, getSpell(), getSource(), target, false);
+		EntityReference target = getSpell().hasPredefinedTarget() ? getSpell().getTarget() : getTargetReference();
+		context.getLogic().castSpell(playerId, getSpell(), getSourceReference(), target, false);
 	}
 
 	/**
 	 * Gets a reference to the card this discover action corresponds to.
+	 *
 	 * @return The card.
 	 */
 	public Card getCard() {
@@ -97,15 +102,22 @@ public class DiscoverAction extends GameAction {
 
 	/**
 	 * Gets a plain English description of this discover action for UI purposes, if required.
+	 *
+	 * @param context  The game context.
+	 * @param playerId
 	 * @return A description of the card being discovered.
 	 */
-	@Deprecated
-	public String getDescription() {
-		return description;
+	public String getDescription(GameContext context, int playerId) {
+		if (playerId == context.getActivePlayerId()) {
+			return String.format("%s %s %s.", context.getPlayer(playerId).getName(), DISCOVERED_NAME, getCard().getName());
+		} else {
+			return String.format("%s %s a card.", context.getPlayer(context.getActivePlayerId()).getName(), DISCOVERED_NAME, getCard().getName());
+		}
 	}
 
 	/**
 	 * Unused.
+	 *
 	 * @return An entity filter.
 	 */
 	public EntityFilter getEntityFilter() {
@@ -140,10 +152,6 @@ public class DiscoverAction extends GameAction {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public void setEntityFilter(Predicate<Entity> entityFilter) {
-		// this.entityFilter = entityFilter;
 	}
 
 	public void setName(String name) {

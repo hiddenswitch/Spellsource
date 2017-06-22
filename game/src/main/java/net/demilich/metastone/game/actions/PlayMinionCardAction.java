@@ -39,7 +39,7 @@ public class PlayMinionCardAction extends PlayCardAction {
 	@Suspendable
 	protected void play(GameContext context, int playerId) {
 		MinionCard minionCard = (MinionCard) context.getPendingCard();
-		Actor nextTo = (Actor) (getTargetKey() != null ? context.resolveSingleTarget(getTargetKey()) : null);
+		Actor nextTo = (Actor) (getTargetReference() != null ? context.resolveSingleTarget(getTargetReference()) : null);
 		Minion minion = minionCard.summon();
 		if (battlecry != null) {
 			minion.setBattlecry(battlecry);

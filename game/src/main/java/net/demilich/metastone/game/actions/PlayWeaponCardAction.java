@@ -8,7 +8,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 public class PlayWeaponCardAction extends PlayCardAction {
 	private PlayWeaponCardAction() {
-		setTargetKey(EntityReference.NONE);
+		setTargetReference(EntityReference.NONE);
 		setActionType(ActionType.EQUIP_WEAPON);
 	}
 

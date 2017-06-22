@@ -2,12 +2,11 @@ package net.demilich.metastone.game.actions;
 
 import java.io.Serializable;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.gson.annotations.SerializedName;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -21,7 +20,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about game actions.
  */
-public abstract class GameAction implements Cloneable, Serializable {
+public abstract class GameAction implements Cloneable, Serializable, Notification {
 	private int id;
 	private TargetSelection targetRequirement = TargetSelection.NONE;
 	private ActionType actionType = ActionType.SYSTEM;
@@ -58,11 +57,11 @@ public abstract class GameAction implements Cloneable, Serializable {
 
 	public abstract String getPromptText();
 
-	public EntityReference getSource() {
+	public EntityReference getSourceReference() {
 		return source;
 	}
 
-	public EntityReference getTargetKey() {
+	public EntityReference getTargetReference() {
 		return targetKey;
 	}
 
@@ -88,7 +87,7 @@ public abstract class GameAction implements Cloneable, Serializable {
 		this.targetKey = EntityReference.pointTo(target);
 	}
 
-	public void setTargetKey(EntityReference targetKey) {
+	public void setTargetReference(EntityReference targetKey) {
 		this.targetKey = targetKey;
 	}
 
@@ -102,8 +101,8 @@ public abstract class GameAction implements Cloneable, Serializable {
 			GameAction otherAction = (GameAction) other;
 			return (this.actionType == otherAction.actionType)
 					&& (this.targetRequirement == otherAction.targetRequirement)
-					&& (this.getSource().equals(otherAction.getSource()))
-					&& (this.getTargetKey().equals(otherAction.getTargetKey()))
+					&& (this.getSourceReference().equals(otherAction.getSourceReference()))
+					&& (this.getTargetReference().equals(otherAction.getTargetReference()))
 					&& (this.getId() == otherAction.getId());
 		} else {
 			return false;
@@ -128,5 +127,20 @@ public abstract class GameAction implements Cloneable, Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	@Override
+	public boolean isPowerHistory() {
+		return true;
+	}
+
+	/**
+	 * A user-renderable description of what occurred in this notification.
+	 * @return
+	 * @param context
+	 * @param playerId
+	 */
+	public String getDescription(GameContext context, int playerId) {
+		return getClass().getSimpleName();
 	}
 }

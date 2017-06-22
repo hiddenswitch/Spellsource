@@ -1938,7 +1938,6 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void performGameAction(int playerId, GameAction action) {
-		getActionStack().push(action);
 		context.onWillPerformGameAction(playerId, action);
 		if (isLoggingEnabled()) {
 			debugHistory.add(action.toString());
@@ -1948,7 +1947,7 @@ public class GameLogic implements Cloneable, Serializable {
 			logger.warn("Player {} tries to perform an action, but it is not his turn!", context.getPlayer(playerId).getName());
 		}
 		if (action.getTargetRequirement() != TargetSelection.NONE) {
-			Entity target = context.resolveSingleTarget(action.getTargetKey());
+			Entity target = context.resolveSingleTarget(action.getTargetReference());
 			if (target != null) {
 				context.getEnvironment().put(Environment.TARGET, target.getReference());
 			} else {
@@ -1966,7 +1965,6 @@ public class GameLogic implements Cloneable, Serializable {
 		// Calculate how all the entities changed.
 
 		context.onDidPerformGameAction(playerId, action);
-		getActionStack().pop();
 	}
 
 	/**
@@ -2903,10 +2901,6 @@ public class GameLogic implements Cloneable, Serializable {
 
 	public void setIdFactory(IdFactory idFactory) {
 		this.idFactory = idFactory;
-	}
-
-	public Stack<GameAction> getActionStack() {
-		return context.getActionStack();
 	}
 
 	public void concede(int playerId) {

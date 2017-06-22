@@ -58,7 +58,7 @@ public interface Games {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.BATTLECRY)
 				.map(ga -> (BattlecryAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSource().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> {
@@ -69,7 +69,7 @@ public interface Games {
 					kv.getValue().stream()
 							.map(t -> new TargetActionPair()
 									.action(t.getId())
-									.target(t.getTargetKey().getId()))
+									.target(t.getTargetReference().getId()))
 							.forEach(spellAction::addTargetKeyToActionsItem);
 
 					return spellAction;
@@ -90,15 +90,15 @@ public interface Games {
 
 					// Targetable spell
 					if (kv.getValue().size() == 1
-							&& (kv.getValue().get(0).getTargetKey() == null
-							|| kv.getValue().get(0).getTargetKey().isTargetGroup())) {
+							&& (kv.getValue().get(0).getTargetReference() == null
+							|| kv.getValue().get(0).getTargetReference().isTargetGroup())) {
 						spellAction.action(kv.getValue().get(0).getId());
 					} else {
 						// Add all the valid targets
 						kv.getValue().stream()
 								.map(t -> new TargetActionPair()
 										.action(t.getId())
-										.target(t.getTargetKey().getId()))
+										.target(t.getTargetReference().getId()))
 								.forEach(spellAction::addTargetKeyToActionsItem);
 					}
 
@@ -117,14 +117,14 @@ public interface Games {
 					SummonAction summonAction = new SummonAction()
 							.sourceId(kv.getKey())
 							.indexToActions(kv.getValue().stream()
-									.filter(a -> a.getTargetKey() != null)
+									.filter(a -> a.getTargetReference() != null)
 									.map(a -> new SummonActionIndexToActions()
 											.action(a.getId())
-											.index(minions.get(a.getTargetKey().getId()))).collect(Collectors.toList()));
+											.index(minions.get(a.getTargetReference().getId()))).collect(Collectors.toList()));
 
 					// Add the null targeted action, if it exists
 					Optional<PlayMinionCardAction> nullPlay = kv.getValue().stream()
-							.filter(a -> a.getTargetKey() == null).findFirst();
+							.filter(a -> a.getTargetReference() == null).findFirst();
 					if (nullPlay.isPresent()) {
 						GameAction a = nullPlay.get();
 						summonAction.addIndexToActionsItem(
@@ -146,7 +146,7 @@ public interface Games {
 				.map(kv -> new GameActionsPhysicalAttacks()
 						.sourceId(kv.getKey())
 						.defenders(kv.getValue().stream().map(ga ->
-								new TargetActionPair().target(ga.getTargetKey().getId())
+								new TargetActionPair().target(ga.getTargetReference().getId())
 										.action(ga.getId())
 						).collect(Collectors.toList())))
 				.forEach(clientActions::addPhysicalAttacksItem);
@@ -164,15 +164,15 @@ public interface Games {
 
 					// Targetable spell
 					if (kv.getValue().size() == 1
-							&& (kv.getValue().get(0).getTargetKey() == null
-							|| kv.getValue().get(0).getTargetKey().isTargetGroup())) {
+							&& (kv.getValue().get(0).getTargetReference() == null
+							|| kv.getValue().get(0).getTargetReference().isTargetGroup())) {
 						spellAction.action(kv.getValue().get(0).getId());
 					} else {
 						// Add all the valid targets
 						kv.getValue().stream()
 								.map(t -> new TargetActionPair()
 										.action(t.getId())
-										.target(t.getTargetKey().getId()))
+										.target(t.getTargetReference().getId()))
 								.forEach(spellAction::addTargetKeyToActionsItem);
 					}
 
@@ -190,14 +190,14 @@ public interface Games {
 					SummonAction summonAction = new SummonAction()
 							.sourceId(kv.getKey())
 							.indexToActions(kv.getValue().stream()
-									.filter(a -> a.getTargetKey() != null)
+									.filter(a -> a.getTargetReference() != null)
 									.map(a -> new SummonActionIndexToActions()
 											.action(a.getId())
-											.index(minions.get(a.getTargetKey().getId()))).collect(Collectors.toList()));
+											.index(minions.get(a.getTargetReference().getId()))).collect(Collectors.toList()));
 
 					// Add the null targeted action, if it exists
 					Optional<PlayWeaponCardAction> nullPlay = kv.getValue().stream()
-							.filter(a -> a.getTargetKey() == null).findFirst();
+							.filter(a -> a.getTargetReference() == null).findFirst();
 					if (nullPlay.isPresent()) {
 						GameAction a = nullPlay.get();
 						summonAction.addIndexToActionsItem(
@@ -312,10 +312,6 @@ public interface Games {
 					.secret(getEntity(workingContext, secretRevealedEvent.getSecretCard(), playerId)));
 		}
 
-		clientEvent.eventSource(getEntity(workingContext, event.getEventSource(), playerId));
-		clientEvent.eventTarget(getEntity(workingContext, event.getEventTarget(), playerId));
-		clientEvent.targetPlayerId(event.getTargetPlayerId());
-		clientEvent.sourcePlayerId(event.getSourcePlayerId());
 		return clientEvent;
 	}
 
@@ -528,11 +524,8 @@ public interface Games {
 						.location(toClientLocation(e.getEntityLocation())))
 				.entityType(Entity.EntityTypeEnum.valueOf(e.getEntityType().toString()))).collect(Collectors.toList()));
 
-		final List<GameEvent> eventStack = workingContext.getEventStack().stream()
-				.map(e -> Games.getClientEvent(e, localPlayerId)).collect(Collectors.toList());
 		return new GameState()
 				.isLocalPlayerTurn(localPlayerId == workingContext.getActivePlayerId())
-				.eventStack(eventStack)
 				.entities(entities)
 				.timestamp(System.nanoTime())
 				.turnState(workingContext.getTurnState().toString());

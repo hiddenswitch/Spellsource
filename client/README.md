@@ -160,6 +160,7 @@ Class | Method | HTTP request | Description
  - [GameEventHeroPowerUsed](docs/GameEventHeroPowerUsed.md)
  - [GameEventJoust](docs/GameEventJoust.md)
  - [GameEventKill](docs/GameEventKill.md)
+ - [GameEventPerformedGameAction](docs/GameEventPerformedGameAction.md)
  - [GameEventPreDamage](docs/GameEventPreDamage.md)
  - [GameEventSecretPlayed](docs/GameEventSecretPlayed.md)
  - [GameEventSecretRevealed](docs/GameEventSecretRevealed.md)

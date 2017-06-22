@@ -92,9 +92,9 @@ public class SerializationTest extends TestBase {
 
 		EndTurnAction endTurnAction = new EndTurnAction();
 		PhysicalAttackAction physicalAttackAction = new PhysicalAttackAction(new EntityReference(1));
-		physicalAttackAction.setTargetKey(new EntityReference(2));
+		physicalAttackAction.setTargetReference(new EntityReference(2));
 		PlaySpellCardAction playSpellCardAction = new PlaySpellCardAction(fireball.getSpell(), fireball, TargetSelection.ENEMY_CHARACTERS);
-		playSpellCardAction.setTargetKey(new EntityReference(3));
+		playSpellCardAction.setTargetReference(new EntityReference(3));
 		BattlecryAction elvenArcherAction = elven_archer.summon().getBattlecry();
 		PlayMinionCardAction playMinionCardAction = new PlayMinionCardAction(elven_archer.getCardReference(), elvenArcherAction);
 		HeroPowerAction heroPowerAction = new HeroPowerAction(heroPowerFireblast.getSpell(), heroPowerFireblast.getCopy(), TargetSelection.ENEMY_CHARACTERS);
@@ -130,13 +130,13 @@ public class SerializationTest extends TestBase {
 		assertNotNull(physicalAttackAction1);
 		assertEquals(physicalAttackAction1.getActionType(), ActionType.PHYSICAL_ATTACK);
 		assertEquals(physicalAttackAction1.getAttackerReference(), physicalAttackAction.getAttackerReference());
-		assertEquals(physicalAttackAction1.getTargetKey(), physicalAttackAction.getTargetKey());
+		assertEquals(physicalAttackAction1.getTargetReference(), physicalAttackAction.getTargetReference());
 
 		PlaySpellCardAction playSpellCardAction1 = (PlaySpellCardAction) deserializedGameActions.get(2);
 		assertNotNull(playSpellCardAction1);
 		assertEquals(playSpellCardAction1.getActionType(), ActionType.SPELL);
 		assertSpellsEqual(playSpellCardAction1.getSpell(), playSpellCardAction.getSpell());
-		assertEquals(playSpellCardAction1.getTargetKey(), playSpellCardAction.getTargetKey());
+		assertEquals(playSpellCardAction1.getTargetReference(), playSpellCardAction.getTargetReference());
 
 		PlayMinionCardAction playMinionCardAction1 = (PlayMinionCardAction) deserializedGameActions.get(3);
 		assertNotNull(playMinionCardAction1);

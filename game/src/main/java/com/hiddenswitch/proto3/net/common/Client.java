@@ -15,7 +15,7 @@ import net.demilich.metastone.game.events.Notification;
  * channel like a websocket or a plain TCP socket.
  */
 public interface Client {
-	void onNotification(Notification event);
+	void onNotification(Notification event, GameState gameState);
 
 	void onGameEnd(Player winner);
 

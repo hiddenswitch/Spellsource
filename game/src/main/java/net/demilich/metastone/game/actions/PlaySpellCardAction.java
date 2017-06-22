@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.annotations.SerializedName;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -30,7 +31,7 @@ public class PlaySpellCardAction extends PlayCardAction {
 	@Override
 	@Suspendable
 	public void play(GameContext context, int playerId) {
-		context.getLogic().castSpell(playerId, spell, cardReference, getTargetKey(), getTargetRequirement(), false);
+		context.getLogic().castSpell(playerId, spell, cardReference, getTargetReference(), getTargetRequirement(), false);
 	}
 
 	public SpellDesc getSpell() {
@@ -43,5 +44,17 @@ public class PlaySpellCardAction extends PlayCardAction {
 
 	public EntityReference getSourceCardEntityId() {
 		return cardReference;
+	}
+
+	@Override
+	public String getDescription(GameContext context, int playerId) {
+		if (getTargetReference() == null
+				|| getTargetReference().isTargetGroup()) {
+			return super.getDescription(context, playerId);
+		}
+
+		final Card source = context.resolveCardReference(getCardReference());
+		final Entity target = context.resolveSingleTarget(getTargetReference());
+		return String.format("%s played %s on %s", context.getActivePlayer().getName(), source.getName(), target.getName());
 	}
 }

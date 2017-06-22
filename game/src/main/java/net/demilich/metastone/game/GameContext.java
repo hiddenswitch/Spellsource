@@ -143,9 +143,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
 	private CardList tempCards = new CardArrayList();
-	private Stack<GameAction> actionStack = new Stack<>();
-	private Stack<GameEvent> eventStack = new Stack<>();
-
 	/**
 	 * Creates a game context with no valid start state.
 	 */
@@ -264,8 +261,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 				clone.getEnvironment().put(key, getEnvironment().get(key));
 			}
 		}
-		clone.actionStack.addAll(actionStack);
-		clone.getEventStack().addAll(getEventStack());
 		return clone;
 	}
 
@@ -1125,18 +1120,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	public String toLongString() {
 		StringBuilder builder = new StringBuilder("GameContext hashCode: " + hashCode() + "\n");
-		if (getCurrentEvent() != null) {
-			builder.append("\nCurrent event:\n");
-			builder.append('\t');
-			builder.append(getCurrentEvent());
-			builder.append('\n');
-		}
-		if (getCurrentAction() != null) {
-			builder.append("\nCurrent action:\n");
-			builder.append('\t');
-			builder.append(getCurrentAction());
-			builder.append('\n');
-		}
+
 		for (Player player : getPlayers()) {
 			if (player == null) {
 				builder.append("(null player)\n");
@@ -1212,8 +1196,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		}
 		this.getLogic().setIdFactory(new IdFactory(state.currentId));
 		this.getLogic().setContext(this);
-		this.getActionStack().addAll(state.actionStack);
-		this.getEventStack().addAll(state.eventStack);
 		this.setTurnState(state.turnState);
 		this.setActivePlayerId(state.activePlayerId);
 	}
@@ -1284,30 +1266,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	}
 
 	public void onDidPerformGameAction(int playerId, GameAction action) {
-	}
-
-	public Stack<GameAction> getActionStack() {
-		return actionStack;
-	}
-
-	public Stack<GameEvent> getEventStack() {
-		return eventStack;
-	}
-
-	public GameEvent getCurrentEvent() {
-		if (eventStack.isEmpty()) {
-			return null;
-		}
-
-		return eventStack.get(eventStack.size());
-	}
-
-	public GameAction getCurrentAction() {
-		if (actionStack.isEmpty()) {
-			return null;
-		}
-
-		return actionStack.peek();
 	}
 
 	public GameState getGameState() {

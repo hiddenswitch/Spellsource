@@ -430,16 +430,18 @@ definitions:
   GameEvent:
     type: 'object'
     properties:
-      eventTarget:
-        $ref: '#/definitions/Entity'
-      eventSource:
-        $ref: '#/definitions/Entity'
-      targetPlayerId:
-        type: 'integer'
-      sourcePlayerId:
+      id:
+        description: |
+          An integer ID corresponding to the order of this event from the client's point of view.
         type: 'integer'
       description:
+        description: |
+          A plaintext description of this event.
         type: 'string'
+      isPowerHistory:
+        description: |
+          Should this event be rendered in the power history?
+        type: 'boolean'
       eventType:
         type: 'string'
         description: |
@@ -461,6 +463,7 @@ definitions:
           - 'JOUST'
           - 'KILL'
           - 'OVERLOAD'
+          - 'PERFORMED_GAME_ACTION'
           - 'PHYSICAL_ATTACK'
           - 'PLAY_CARD'
           - 'PRE_DAMAGE'
@@ -586,6 +589,17 @@ definitions:
         properties:
           weapon:
             $ref: '#/definitions/Entity'
+      performedGameAction:
+        type: 'object'
+        properties:
+          source:
+            $ref: '#/definitions/Entity'
+          target:
+            $ref: '#/definitions/Entity'
+          description:
+            description: |
+              A plain-text description of the game action that should be rendered on the client.
+            type: 'string'
       physicalAttack:
         $ref: '#/definitions/PhysicalAttackEvent'
       overload:
@@ -632,6 +646,10 @@ definitions:
       triggerFired:
         type: 'object'
         properties:
+          description:
+            description: |
+              A plain text description of an explanation of this trigger firing.
+            type: 'string'
           triggerSourceId:
             description: |
               The entity ID corresponding to the source of the trigger that got fired.
@@ -764,7 +782,9 @@ definitions:
   GameState:
     type: 'object'
     properties:
-      eventStack:
+      powerHistory:
+        description: |
+          The last ten game event objects with isPowerHistory == true.
         type: 'array'
         items:
           $ref: '#/definitions/GameEvent'
@@ -958,93 +978,164 @@ definitions:
       - 'id'
     properties:
       id:
+        description: The entity's ID in the game.
         type: 'integer'
         default: -1
       cardId:
+        description: The entity's Card ID. When null, it typically should not be rendered.
         type: 'string'
       entityType:
+        description: |
+          Broad categories describing this entity and how it should be rendered.
         type: 'string'
         enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON', 'SECRET']
       name:
+        description: |
+          The text that would go into the entity's name field.
         type: 'string'
       description:
+        description: |
+          The text that would go into the entity's description field.
         type: 'string'
       state:
         $ref: '#/definitions/EntityState'
   EntityState:
     type: 'object'
+    description: |
+      The entity state contains all the mutable values of an entity. In the future, the server will provide a list of
+      exact changes to this state.
     properties:
       location:
         $ref: '#/definitions/EntityLocation'
       background:
+        description: |
+          When not null, override the default background for this entity's card ID with this key corresponding to
+          backgrounds from the server.
         type: 'string'
       portrait:
+        description: |
+          When not null, override the default portrait for this entity's card ID with this key corresponding to
+          portraits from the server.
         type: 'string'
       gold:
+        description: Render this entity with a "gold" effect.
         type: 'boolean'
       boardPosition:
+        description: The index of the entity in its zone.
         type: 'integer'
       owner:
+        description: An integer corresponding to the entity's owner.
         type: 'integer'
       heroClass:
+        description: The string enum value that corresponds to this entity's hero class.
         type: 'string'
       baseHp:
+        description: The base hitpoints of the entity.
         type: 'integer'
       hp:
+        description: |
+          The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token.
         type: 'integer'
       durability:
+        description: The durability (number of uses) that the weapon still has.
         type: 'integer'
       maxHp:
+        description: The maximum number of hitpoints this entity can have.
         type: 'integer'
       baseAttack:
+        description: The entity's base attack value.
         type: 'integer'
       attack:
+        description: |
+          The entity's current attack value. Conventionally, this value should be rendered on the attack token.
         type: 'integer'
       baseManaCost:
+        description: |
+          The entity's base mana cost.
         type: 'integer'
       manaCost:
+        description: |
+          The entity's current mana cost. Conventionally, this value should be rendered on the mana token.
         type: 'integer'
       armor:
+        description: |
+          The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token.
         type: 'integer'
       destroyed:
-        type: 'boolean'
-      pendingDestroy:
+        description: |
+          When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but
+          still in a zone other than the graveyard; render a death icon over the entity when it is so marked.
         type: 'boolean'
       summoningSickness:
+        description: |
+          When true, the entity cannot attack this turn because it has "summoning sickness," or a disability related
+          to the first turn the entity came into play. Typically rendered with snooze icons.
         type: 'boolean'
       frozen:
+        description: |
+          When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when
+          it would normally be able to attack.
         type: 'boolean'
       silenced:
+        description: |
+          Indicates that the entity was silenced.
         type: 'boolean'
       windfury:
+        description: |
+          Indicates the entity can attack twice a turn.
         type: 'boolean'
       taunt:
+        description: |
+          Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's
+          physical attack action targeting.
         type: 'boolean'
       spellDamage:
+        description: |
+          Indicates the amount of additional spell damage this entity gives its owning player.
         type: 'integer'
       charge:
+        description: |
+          When true, the entity can attack the same turn it is summoned.
         type: 'boolean'
       enraged:
+        description: |
+          When true, this entity is under the influence of "enrage," or a bonus when it takes damage the first time.
         type: 'boolean'
       battlecry:
+        description: |
+          When true, this entity has an effect that gets triggered when it is played from the hand.
         type: 'boolean'
       deathrattles:
+        description: |
+          When true, this entity has an effect that gets triggered when it is destroyed.
         type: 'boolean'
       immune:
+        description: |
+          Indicates the entity does not take damage.
         type: 'boolean'
       divineShield:
+        description: |
+          When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage.
         type: 'boolean'
       stealth:
-        type: 'boolean'
-      secret:
+        description: |
+          When true, the minion cannot be targeted by the opponent until the entity attacks for the first time.
         type: 'boolean'
       combo:
+        description: |
+          Indicates this minion has a combo effect.
         type: 'boolean'
       overload:
+        description: |
+          Indicates the amount of mana that would be locked if this card were played.
         type: 'integer'
       chooseOne:
+        description: |
+          Indicates this card has a choose-one effect.
         type: 'boolean'
       untargetableBySpells:
+        description: |
+          Indicates this entity cannot be targeted by spells.
         type: 'boolean'
       cannotAttack:
         description: When true, indicates this minion cannot attack, even though it normally can.
@@ -1071,6 +1162,9 @@ definitions:
       hostsTrigger:
         description: When true, indicates this entity has an effect that triggers on game events.
         type: 'boolean'
+      note:
+        description: A renderable note attached to this entity.
+        type: 'string'
   DraftsChooseCardRequest:
     type: 'object'
     required:

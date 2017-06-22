@@ -40,8 +40,8 @@ import java.io.Serializable;
  */
 
 public class GameState  implements Serializable {
-  @SerializedName("eventStack")
-  private List<GameEvent> eventStack = new ArrayList<GameEvent>();
+  @SerializedName("powerHistory")
+  private List<GameEvent> powerHistory = new ArrayList<GameEvent>();
 
   @SerializedName("entities")
   private List<Entity> entities = new ArrayList<Entity>();
@@ -58,27 +58,27 @@ public class GameState  implements Serializable {
   @SerializedName("timestamp")
   private Long timestamp = null;
 
-  public GameState eventStack(List<GameEvent> eventStack) {
-    this.eventStack = eventStack;
+  public GameState powerHistory(List<GameEvent> powerHistory) {
+    this.powerHistory = powerHistory;
     return this;
   }
 
-  public GameState addEventStackItem(GameEvent eventStackItem) {
-    this.eventStack.add(eventStackItem);
+  public GameState addPowerHistoryItem(GameEvent powerHistoryItem) {
+    this.powerHistory.add(powerHistoryItem);
     return this;
   }
 
    /**
-   * Get eventStack
-   * @return eventStack
+   * The last ten game event objects with isPowerHistory == true. 
+   * @return powerHistory
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public List<GameEvent> getEventStack() {
-    return eventStack;
+  @ApiModelProperty(example = "null", value = "The last ten game event objects with isPowerHistory == true. ")
+  public List<GameEvent> getPowerHistory() {
+    return powerHistory;
   }
 
-  public void setEventStack(List<GameEvent> eventStack) {
-    this.eventStack = eventStack;
+  public void setPowerHistory(List<GameEvent> powerHistory) {
+    this.powerHistory = powerHistory;
   }
 
   public GameState entities(List<Entity> entities) {
@@ -186,7 +186,7 @@ public class GameState  implements Serializable {
       return false;
     }
     GameState gameState = (GameState) o;
-    return Objects.equals(this.eventStack, gameState.eventStack) &&
+    return Objects.equals(this.powerHistory, gameState.powerHistory) &&
         Objects.equals(this.entities, gameState.entities) &&
         Objects.equals(this.isLocalPlayerTurn, gameState.isLocalPlayerTurn) &&
         Objects.equals(this.turnState, gameState.turnState) &&
@@ -196,7 +196,7 @@ public class GameState  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(eventStack, entities, isLocalPlayerTurn, turnState, turnNumber, timestamp);
+    return Objects.hash(powerHistory, entities, isLocalPlayerTurn, turnState, turnNumber, timestamp);
   }
 
   @Override
@@ -204,7 +204,7 @@ public class GameState  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameState {\n");
     
-    sb.append("    eventStack: ").append(toIndentedString(eventStack)).append("\n");
+    sb.append("    powerHistory: ").append(toIndentedString(powerHistory)).append("\n");
     sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
     sb.append("    isLocalPlayerTurn: ").append(toIndentedString(isLocalPlayerTurn)).append("\n");
     sb.append("    turnState: ").append(toIndentedString(turnState)).append("\n");

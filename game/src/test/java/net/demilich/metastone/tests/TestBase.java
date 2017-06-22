@@ -53,7 +53,7 @@ public class TestBase {
 		public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 			if (targetPreference != null) {
 				for (GameAction action : validActions) {
-					if (action.getTargetKey().equals(targetPreference)) {
+					if (action.getTargetReference().equals(targetPreference)) {
 						return action;
 					}
 				}

@@ -27,7 +27,6 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.proto3.net.client.models.Entity;
 import com.hiddenswitch.proto3.net.client.models.GameEventAfterSpellCasted;
 import com.hiddenswitch.proto3.net.client.models.GameEventArmorGained;
 import com.hiddenswitch.proto3.net.client.models.GameEventBeforeSummon;
@@ -39,6 +38,7 @@ import com.hiddenswitch.proto3.net.client.models.GameEventHeal;
 import com.hiddenswitch.proto3.net.client.models.GameEventHeroPowerUsed;
 import com.hiddenswitch.proto3.net.client.models.GameEventJoust;
 import com.hiddenswitch.proto3.net.client.models.GameEventKill;
+import com.hiddenswitch.proto3.net.client.models.GameEventPerformedGameAction;
 import com.hiddenswitch.proto3.net.client.models.GameEventPreDamage;
 import com.hiddenswitch.proto3.net.client.models.GameEventSecretPlayed;
 import com.hiddenswitch.proto3.net.client.models.GameEventSecretRevealed;
@@ -57,20 +57,14 @@ import java.io.Serializable;
  */
 
 public class GameEvent  implements Serializable {
-  @SerializedName("eventTarget")
-  private Entity eventTarget = null;
-
-  @SerializedName("eventSource")
-  private Entity eventSource = null;
-
-  @SerializedName("targetPlayerId")
-  private Integer targetPlayerId = null;
-
-  @SerializedName("sourcePlayerId")
-  private Integer sourcePlayerId = null;
+  @SerializedName("id")
+  private Integer id = null;
 
   @SerializedName("description")
   private String description = null;
+
+  @SerializedName("isPowerHistory")
+  private Boolean isPowerHistory = null;
 
   /**
    * The game event type corresponding to this game event. 
@@ -123,6 +117,9 @@ public class GameEvent  implements Serializable {
     
     @SerializedName("OVERLOAD")
     OVERLOAD("OVERLOAD"),
+    
+    @SerializedName("PERFORMED_GAME_ACTION")
+    PERFORMED_GAME_ACTION("PERFORMED_GAME_ACTION"),
     
     @SerializedName("PHYSICAL_ATTACK")
     PHYSICAL_ATTACK("PHYSICAL_ATTACK"),
@@ -238,6 +235,9 @@ public class GameEvent  implements Serializable {
   @SerializedName("weaponEquipped")
   private GameEventWeaponDestroyed weaponEquipped = null;
 
+  @SerializedName("performedGameAction")
+  private GameEventPerformedGameAction performedGameAction = null;
+
   @SerializedName("physicalAttack")
   private PhysicalAttackEvent physicalAttack = null;
 
@@ -265,76 +265,22 @@ public class GameEvent  implements Serializable {
   @SerializedName("triggerFired")
   private GameEventTriggerFired triggerFired = null;
 
-  public GameEvent eventTarget(Entity eventTarget) {
-    this.eventTarget = eventTarget;
+  public GameEvent id(Integer id) {
+    this.id = id;
     return this;
   }
 
    /**
-   * Get eventTarget
-   * @return eventTarget
+   * An integer ID corresponding to the order of this event from the client's point of view. 
+   * @return id
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public Entity getEventTarget() {
-    return eventTarget;
+  @ApiModelProperty(example = "null", value = "An integer ID corresponding to the order of this event from the client's point of view. ")
+  public Integer getId() {
+    return id;
   }
 
-  public void setEventTarget(Entity eventTarget) {
-    this.eventTarget = eventTarget;
-  }
-
-  public GameEvent eventSource(Entity eventSource) {
-    this.eventSource = eventSource;
-    return this;
-  }
-
-   /**
-   * Get eventSource
-   * @return eventSource
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Entity getEventSource() {
-    return eventSource;
-  }
-
-  public void setEventSource(Entity eventSource) {
-    this.eventSource = eventSource;
-  }
-
-  public GameEvent targetPlayerId(Integer targetPlayerId) {
-    this.targetPlayerId = targetPlayerId;
-    return this;
-  }
-
-   /**
-   * Get targetPlayerId
-   * @return targetPlayerId
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Integer getTargetPlayerId() {
-    return targetPlayerId;
-  }
-
-  public void setTargetPlayerId(Integer targetPlayerId) {
-    this.targetPlayerId = targetPlayerId;
-  }
-
-  public GameEvent sourcePlayerId(Integer sourcePlayerId) {
-    this.sourcePlayerId = sourcePlayerId;
-    return this;
-  }
-
-   /**
-   * Get sourcePlayerId
-   * @return sourcePlayerId
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Integer getSourcePlayerId() {
-    return sourcePlayerId;
-  }
-
-  public void setSourcePlayerId(Integer sourcePlayerId) {
-    this.sourcePlayerId = sourcePlayerId;
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public GameEvent description(String description) {
@@ -343,16 +289,34 @@ public class GameEvent  implements Serializable {
   }
 
    /**
-   * Get description
+   * A plaintext description of this event. 
    * @return description
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "A plaintext description of this event. ")
   public String getDescription() {
     return description;
   }
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public GameEvent isPowerHistory(Boolean isPowerHistory) {
+    this.isPowerHistory = isPowerHistory;
+    return this;
+  }
+
+   /**
+   * Should this event be rendered in the power history? 
+   * @return isPowerHistory
+  **/
+  @ApiModelProperty(example = "null", value = "Should this event be rendered in the power history? ")
+  public Boolean getIsPowerHistory() {
+    return isPowerHistory;
+  }
+
+  public void setIsPowerHistory(Boolean isPowerHistory) {
+    this.isPowerHistory = isPowerHistory;
   }
 
   public GameEvent eventType(EventTypeEnum eventType) {
@@ -697,6 +661,24 @@ public class GameEvent  implements Serializable {
     this.weaponEquipped = weaponEquipped;
   }
 
+  public GameEvent performedGameAction(GameEventPerformedGameAction performedGameAction) {
+    this.performedGameAction = performedGameAction;
+    return this;
+  }
+
+   /**
+   * Get performedGameAction
+   * @return performedGameAction
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public GameEventPerformedGameAction getPerformedGameAction() {
+    return performedGameAction;
+  }
+
+  public void setPerformedGameAction(GameEventPerformedGameAction performedGameAction) {
+    this.performedGameAction = performedGameAction;
+  }
+
   public GameEvent physicalAttack(PhysicalAttackEvent physicalAttack) {
     this.physicalAttack = physicalAttack;
     return this;
@@ -869,11 +851,9 @@ public class GameEvent  implements Serializable {
       return false;
     }
     GameEvent gameEvent = (GameEvent) o;
-    return Objects.equals(this.eventTarget, gameEvent.eventTarget) &&
-        Objects.equals(this.eventSource, gameEvent.eventSource) &&
-        Objects.equals(this.targetPlayerId, gameEvent.targetPlayerId) &&
-        Objects.equals(this.sourcePlayerId, gameEvent.sourcePlayerId) &&
+    return Objects.equals(this.id, gameEvent.id) &&
         Objects.equals(this.description, gameEvent.description) &&
+        Objects.equals(this.isPowerHistory, gameEvent.isPowerHistory) &&
         Objects.equals(this.eventType, gameEvent.eventType) &&
         Objects.equals(this.afterPhysicalAttack, gameEvent.afterPhysicalAttack) &&
         Objects.equals(this.drawCard, gameEvent.drawCard) &&
@@ -893,6 +873,7 @@ public class GameEvent  implements Serializable {
         Objects.equals(this.targetAcquisition, gameEvent.targetAcquisition) &&
         Objects.equals(this.damage, gameEvent.damage) &&
         Objects.equals(this.weaponEquipped, gameEvent.weaponEquipped) &&
+        Objects.equals(this.performedGameAction, gameEvent.performedGameAction) &&
         Objects.equals(this.physicalAttack, gameEvent.physicalAttack) &&
         Objects.equals(this.overload, gameEvent.overload) &&
         Objects.equals(this.heal, gameEvent.heal) &&
@@ -906,7 +887,7 @@ public class GameEvent  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(eventTarget, eventSource, targetPlayerId, sourcePlayerId, description, eventType, afterPhysicalAttack, drawCard, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, physicalAttack, overload, heal, secretRevealed, summon, afterSpellCasted, discard, kill, triggerFired);
+    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, summon, afterSpellCasted, discard, kill, triggerFired);
   }
 
   @Override
@@ -914,11 +895,9 @@ public class GameEvent  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameEvent {\n");
     
-    sb.append("    eventTarget: ").append(toIndentedString(eventTarget)).append("\n");
-    sb.append("    eventSource: ").append(toIndentedString(eventSource)).append("\n");
-    sb.append("    targetPlayerId: ").append(toIndentedString(targetPlayerId)).append("\n");
-    sb.append("    sourcePlayerId: ").append(toIndentedString(sourcePlayerId)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    isPowerHistory: ").append(toIndentedString(isPowerHistory)).append("\n");
     sb.append("    eventType: ").append(toIndentedString(eventType)).append("\n");
     sb.append("    afterPhysicalAttack: ").append(toIndentedString(afterPhysicalAttack)).append("\n");
     sb.append("    drawCard: ").append(toIndentedString(drawCard)).append("\n");
@@ -938,6 +917,7 @@ public class GameEvent  implements Serializable {
     sb.append("    targetAcquisition: ").append(toIndentedString(targetAcquisition)).append("\n");
     sb.append("    damage: ").append(toIndentedString(damage)).append("\n");
     sb.append("    weaponEquipped: ").append(toIndentedString(weaponEquipped)).append("\n");
+    sb.append("    performedGameAction: ").append(toIndentedString(performedGameAction)).append("\n");
     sb.append("    physicalAttack: ").append(toIndentedString(physicalAttack)).append("\n");
     sb.append("    overload: ").append(toIndentedString(overload)).append("\n");
     sb.append("    heal: ").append(toIndentedString(heal)).append("\n");
