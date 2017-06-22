@@ -114,7 +114,7 @@ let deleteOldVersions = () => {
 
 Template.launcher.events({
     'click #close-launcher': () => {
-        window.close();
+        Electron.app().exit(0);
     },
     'click #launch-button': () => {
         let currentState = state();
