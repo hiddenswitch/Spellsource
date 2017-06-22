@@ -33,8 +33,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * EntityState
+ * The entity state contains all the mutable values of an entity. In the future, the server will provide a list of exact changes to this state. 
  */
+@ApiModel(description = "The entity state contains all the mutable values of an entity. In the future, the server will provide a list of exact changes to this state. ")
 
 public class EntityState  implements Serializable {
   @SerializedName("location")
@@ -88,9 +89,6 @@ public class EntityState  implements Serializable {
   @SerializedName("destroyed")
   private Boolean destroyed = null;
 
-  @SerializedName("pendingDestroy")
-  private Boolean pendingDestroy = null;
-
   @SerializedName("summoningSickness")
   private Boolean summoningSickness = null;
 
@@ -129,9 +127,6 @@ public class EntityState  implements Serializable {
 
   @SerializedName("stealth")
   private Boolean stealth = null;
-
-  @SerializedName("secret")
-  private Boolean secret = null;
 
   @SerializedName("combo")
   private Boolean combo = null;
@@ -172,6 +167,9 @@ public class EntityState  implements Serializable {
   @SerializedName("hostsTrigger")
   private Boolean hostsTrigger = null;
 
+  @SerializedName("note")
+  private String note = null;
+
   public EntityState location(EntityLocation location) {
     this.location = location;
     return this;
@@ -196,10 +194,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get background
+   * When not null, override the default background for this entity's card ID with this key corresponding to backgrounds from the server. 
    * @return background
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When not null, override the default background for this entity's card ID with this key corresponding to backgrounds from the server. ")
   public String getBackground() {
     return background;
   }
@@ -214,10 +212,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get portrait
+   * When not null, override the default portrait for this entity's card ID with this key corresponding to portraits from the server. 
    * @return portrait
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When not null, override the default portrait for this entity's card ID with this key corresponding to portraits from the server. ")
   public String getPortrait() {
     return portrait;
   }
@@ -232,10 +230,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get gold
+   * Render this entity with a \"gold\" effect.
    * @return gold
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Render this entity with a \"gold\" effect.")
   public Boolean getGold() {
     return gold;
   }
@@ -250,10 +248,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get boardPosition
+   * The index of the entity in its zone.
    * @return boardPosition
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The index of the entity in its zone.")
   public Integer getBoardPosition() {
     return boardPosition;
   }
@@ -268,10 +266,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get owner
+   * An integer corresponding to the entity's owner.
    * @return owner
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "An integer corresponding to the entity's owner.")
   public Integer getOwner() {
     return owner;
   }
@@ -286,10 +284,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get heroClass
+   * The string enum value that corresponds to this entity's hero class.
    * @return heroClass
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The string enum value that corresponds to this entity's hero class.")
   public String getHeroClass() {
     return heroClass;
   }
@@ -304,10 +302,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get baseHp
+   * The base hitpoints of the entity.
    * @return baseHp
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The base hitpoints of the entity.")
   public Integer getBaseHp() {
     return baseHp;
   }
@@ -322,10 +320,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get hp
+   * The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token. 
    * @return hp
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token. ")
   public Integer getHp() {
     return hp;
   }
@@ -340,10 +338,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get durability
+   * The durability (number of uses) that the weapon still has.
    * @return durability
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The durability (number of uses) that the weapon still has.")
   public Integer getDurability() {
     return durability;
   }
@@ -358,10 +356,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get maxHp
+   * The maximum number of hitpoints this entity can have.
    * @return maxHp
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The maximum number of hitpoints this entity can have.")
   public Integer getMaxHp() {
     return maxHp;
   }
@@ -376,10 +374,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get baseAttack
+   * The entity's base attack value.
    * @return baseAttack
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The entity's base attack value.")
   public Integer getBaseAttack() {
     return baseAttack;
   }
@@ -394,10 +392,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get attack
+   * The entity's current attack value. Conventionally, this value should be rendered on the attack token. 
    * @return attack
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The entity's current attack value. Conventionally, this value should be rendered on the attack token. ")
   public Integer getAttack() {
     return attack;
   }
@@ -412,10 +410,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get baseManaCost
+   * The entity's base mana cost. 
    * @return baseManaCost
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The entity's base mana cost. ")
   public Integer getBaseManaCost() {
     return baseManaCost;
   }
@@ -430,10 +428,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get manaCost
+   * The entity's current mana cost. Conventionally, this value should be rendered on the mana token. 
    * @return manaCost
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The entity's current mana cost. Conventionally, this value should be rendered on the mana token. ")
   public Integer getManaCost() {
     return manaCost;
   }
@@ -448,10 +446,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get armor
+   * The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token. 
    * @return armor
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token. ")
   public Integer getArmor() {
     return armor;
   }
@@ -466,10 +464,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get destroyed
+   * When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but still in a zone other than the graveyard; render a death icon over the entity when it is so marked. 
    * @return destroyed
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but still in a zone other than the graveyard; render a death icon over the entity when it is so marked. ")
   public Boolean getDestroyed() {
     return destroyed;
   }
@@ -478,34 +476,16 @@ public class EntityState  implements Serializable {
     this.destroyed = destroyed;
   }
 
-  public EntityState pendingDestroy(Boolean pendingDestroy) {
-    this.pendingDestroy = pendingDestroy;
-    return this;
-  }
-
-   /**
-   * Get pendingDestroy
-   * @return pendingDestroy
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Boolean getPendingDestroy() {
-    return pendingDestroy;
-  }
-
-  public void setPendingDestroy(Boolean pendingDestroy) {
-    this.pendingDestroy = pendingDestroy;
-  }
-
   public EntityState summoningSickness(Boolean summoningSickness) {
     this.summoningSickness = summoningSickness;
     return this;
   }
 
    /**
-   * Get summoningSickness
+   * When true, the entity cannot attack this turn because it has \"summoning sickness,\" or a disability related to the first turn the entity came into play. Typically rendered with snooze icons. 
    * @return summoningSickness
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, the entity cannot attack this turn because it has \"summoning sickness,\" or a disability related to the first turn the entity came into play. Typically rendered with snooze icons. ")
   public Boolean getSummoningSickness() {
     return summoningSickness;
   }
@@ -520,10 +500,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get frozen
+   * When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when it would normally be able to attack. 
    * @return frozen
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when it would normally be able to attack. ")
   public Boolean getFrozen() {
     return frozen;
   }
@@ -538,10 +518,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get silenced
+   * Indicates that the entity was silenced. 
    * @return silenced
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Indicates that the entity was silenced. ")
   public Boolean getSilenced() {
     return silenced;
   }
@@ -556,10 +536,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get windfury
+   * Indicates the entity can attack twice a turn. 
    * @return windfury
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Indicates the entity can attack twice a turn. ")
   public Boolean getWindfury() {
     return windfury;
   }
@@ -574,10 +554,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get taunt
+   * Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's physical attack action targeting. 
    * @return taunt
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's physical attack action targeting. ")
   public Boolean getTaunt() {
     return taunt;
   }
@@ -592,10 +572,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get spellDamage
+   * Indicates the amount of additional spell damage this entity gives its owning player. 
    * @return spellDamage
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Indicates the amount of additional spell damage this entity gives its owning player. ")
   public Integer getSpellDamage() {
     return spellDamage;
   }
@@ -610,10 +590,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get charge
+   * When true, the entity can attack the same turn it is summoned. 
    * @return charge
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, the entity can attack the same turn it is summoned. ")
   public Boolean getCharge() {
     return charge;
   }
@@ -628,10 +608,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get enraged
+   * When true, this entity is under the influence of \"enrage,\" or a bonus when it takes damage the first time. 
    * @return enraged
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, this entity is under the influence of \"enrage,\" or a bonus when it takes damage the first time. ")
   public Boolean getEnraged() {
     return enraged;
   }
@@ -646,10 +626,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get battlecry
+   * When true, this entity has an effect that gets triggered when it is played from the hand. 
    * @return battlecry
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, this entity has an effect that gets triggered when it is played from the hand. ")
   public Boolean getBattlecry() {
     return battlecry;
   }
@@ -664,10 +644,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get deathrattles
+   * When true, this entity has an effect that gets triggered when it is destroyed. 
    * @return deathrattles
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, this entity has an effect that gets triggered when it is destroyed. ")
   public Boolean getDeathrattles() {
     return deathrattles;
   }
@@ -682,10 +662,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get immune
+   * Indicates the entity does not take damage. 
    * @return immune
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Indicates the entity does not take damage. ")
   public Boolean getImmune() {
     return immune;
   }
@@ -700,10 +680,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get divineShield
+   * When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage. 
    * @return divineShield
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage. ")
   public Boolean getDivineShield() {
     return divineShield;
   }
@@ -718,10 +698,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get stealth
+   * When true, the minion cannot be targeted by the opponent until the entity attacks for the first time. 
    * @return stealth
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "When true, the minion cannot be targeted by the opponent until the entity attacks for the first time. ")
   public Boolean getStealth() {
     return stealth;
   }
@@ -730,34 +710,16 @@ public class EntityState  implements Serializable {
     this.stealth = stealth;
   }
 
-  public EntityState secret(Boolean secret) {
-    this.secret = secret;
-    return this;
-  }
-
-   /**
-   * Get secret
-   * @return secret
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Boolean getSecret() {
-    return secret;
-  }
-
-  public void setSecret(Boolean secret) {
-    this.secret = secret;
-  }
-
   public EntityState combo(Boolean combo) {
     this.combo = combo;
     return this;
   }
 
    /**
-   * Get combo
+   * Indicates this minion has a combo effect. 
    * @return combo
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Indicates this minion has a combo effect. ")
   public Boolean getCombo() {
     return combo;
   }
@@ -772,10 +734,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get overload
+   * Indicates the amount of mana that would be locked if this card were played. 
    * @return overload
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Indicates the amount of mana that would be locked if this card were played. ")
   public Integer getOverload() {
     return overload;
   }
@@ -790,10 +752,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get chooseOne
+   * Indicates this card has a choose-one effect. 
    * @return chooseOne
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Indicates this card has a choose-one effect. ")
   public Boolean getChooseOne() {
     return chooseOne;
   }
@@ -808,10 +770,10 @@ public class EntityState  implements Serializable {
   }
 
    /**
-   * Get untargetableBySpells
+   * Indicates this entity cannot be targeted by spells. 
    * @return untargetableBySpells
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Indicates this entity cannot be targeted by spells. ")
   public Boolean getUntargetableBySpells() {
     return untargetableBySpells;
   }
@@ -982,6 +944,24 @@ public class EntityState  implements Serializable {
     this.hostsTrigger = hostsTrigger;
   }
 
+  public EntityState note(String note) {
+    this.note = note;
+    return this;
+  }
+
+   /**
+   * A renderable note attached to this entity.
+   * @return note
+  **/
+  @ApiModelProperty(example = "null", value = "A renderable note attached to this entity.")
+  public String getNote() {
+    return note;
+  }
+
+  public void setNote(String note) {
+    this.note = note;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1009,7 +989,6 @@ public class EntityState  implements Serializable {
         Objects.equals(this.manaCost, entityState.manaCost) &&
         Objects.equals(this.armor, entityState.armor) &&
         Objects.equals(this.destroyed, entityState.destroyed) &&
-        Objects.equals(this.pendingDestroy, entityState.pendingDestroy) &&
         Objects.equals(this.summoningSickness, entityState.summoningSickness) &&
         Objects.equals(this.frozen, entityState.frozen) &&
         Objects.equals(this.silenced, entityState.silenced) &&
@@ -1023,7 +1002,6 @@ public class EntityState  implements Serializable {
         Objects.equals(this.immune, entityState.immune) &&
         Objects.equals(this.divineShield, entityState.divineShield) &&
         Objects.equals(this.stealth, entityState.stealth) &&
-        Objects.equals(this.secret, entityState.secret) &&
         Objects.equals(this.combo, entityState.combo) &&
         Objects.equals(this.overload, entityState.overload) &&
         Objects.equals(this.chooseOne, entityState.chooseOne) &&
@@ -1036,12 +1014,13 @@ public class EntityState  implements Serializable {
         Objects.equals(this.mana, entityState.mana) &&
         Objects.equals(this.maxMana, entityState.maxMana) &&
         Objects.equals(this.lockedMana, entityState.lockedMana) &&
-        Objects.equals(this.hostsTrigger, entityState.hostsTrigger);
+        Objects.equals(this.hostsTrigger, entityState.hostsTrigger) &&
+        Objects.equals(this.note, entityState.note);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, pendingDestroy, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, secret, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note);
   }
 
   @Override
@@ -1066,7 +1045,6 @@ public class EntityState  implements Serializable {
     sb.append("    manaCost: ").append(toIndentedString(manaCost)).append("\n");
     sb.append("    armor: ").append(toIndentedString(armor)).append("\n");
     sb.append("    destroyed: ").append(toIndentedString(destroyed)).append("\n");
-    sb.append("    pendingDestroy: ").append(toIndentedString(pendingDestroy)).append("\n");
     sb.append("    summoningSickness: ").append(toIndentedString(summoningSickness)).append("\n");
     sb.append("    frozen: ").append(toIndentedString(frozen)).append("\n");
     sb.append("    silenced: ").append(toIndentedString(silenced)).append("\n");
@@ -1080,7 +1058,6 @@ public class EntityState  implements Serializable {
     sb.append("    immune: ").append(toIndentedString(immune)).append("\n");
     sb.append("    divineShield: ").append(toIndentedString(divineShield)).append("\n");
     sb.append("    stealth: ").append(toIndentedString(stealth)).append("\n");
-    sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
     sb.append("    combo: ").append(toIndentedString(combo)).append("\n");
     sb.append("    overload: ").append(toIndentedString(overload)).append("\n");
     sb.append("    chooseOne: ").append(toIndentedString(chooseOne)).append("\n");
@@ -1094,6 +1071,7 @@ public class EntityState  implements Serializable {
     sb.append("    maxMana: ").append(toIndentedString(maxMana)).append("\n");
     sb.append("    lockedMana: ").append(toIndentedString(lockedMana)).append("\n");
     sb.append("    hostsTrigger: ").append(toIndentedString(hostsTrigger)).append("\n");
+    sb.append("    note: ").append(toIndentedString(note)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -30,19 +30,6 @@ import java.util.stream.Stream;
  */
 public class GameState implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * The current stack of actions being processed.
-	 *
-	 * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about actions.
-	 */
-	public final List<GameAction> actionStack;
-	/**
-	 * The current stack of events being processed.
-	 *
-	 * @see GameContext#fireGameEvent(GameEvent, List) for more about events.
-	 */
-	public final List<GameEvent> eventStack;
 	/**
 	 * A player object corresponding to the arbitrarily-decided first player of the game.
 	 *
@@ -119,8 +106,6 @@ public class GameState implements Serializable {
 		currentId = clone.getLogic().getIdFactory().getInternalId();
 		triggerManager = clone.getTriggerManager();
 		cardCostModifiers = clone.getCardCostModifiers();
-		actionStack = clone.getActionStack();
-		eventStack = clone.getEventStack();
 		activePlayerId = clone.getActivePlayerId();
 		this.turnState = turnState;
 	}

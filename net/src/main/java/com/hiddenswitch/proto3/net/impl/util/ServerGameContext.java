@@ -25,6 +25,7 @@ import net.demilich.metastone.game.visuals.TriggerFired;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -46,6 +47,7 @@ public class ServerGameContext extends GameContext {
 	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
 	private final List<Trigger> gameTriggers = new ArrayList<>();
 	private final transient RpcClient<Logic> logic;
+	private AtomicInteger eventCounter = new AtomicInteger(0);
 
 	/**
 	 * {@inheritDoc}
@@ -268,12 +270,12 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent) {
-		getEventStack().push(gameEvent);
-		getListenerMap().get(getPlayer1()).onNotification(gameEvent);
-		getListenerMap().get(getPlayer2()).onNotification(gameEvent);
+		eventCounter.incrementAndGet();
+		final GameState gameStateCopy = getGameStateCopy();
+		getListenerMap().get(getPlayer1()).onNotification(gameEvent, gameStateCopy);
+		getListenerMap().get(getPlayer2()).onNotification(gameEvent, gameStateCopy);
 		super.fireGameEvent(gameEvent, gameTriggers);
-		getEventStack().pop();
-		if (getEventStack().isEmpty()) {
+		if (eventCounter.decrementAndGet() == 0) {
 			getListenerMap().get(getPlayer1()).lastEvent();
 			getListenerMap().get(getPlayer2()).lastEvent();
 		}
@@ -282,9 +284,21 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void onSpellTriggerFired(SpellTrigger trigger) {
+		super.onSpellTriggerFired(trigger);
+
 		TriggerFired triggerFired = new TriggerFired(this, trigger);
-		getListenerMap().get(getPlayer1()).onNotification(triggerFired);
-		getListenerMap().get(getPlayer2()).onNotification(triggerFired);
+		final GameState gameStateCopy = getGameStateCopy();
+		getListenerMap().get(getPlayer1()).onNotification(triggerFired, gameStateCopy);
+		getListenerMap().get(getPlayer2()).onNotification(triggerFired, gameStateCopy);
+	}
+
+	@Override
+	public void onWillPerformGameAction(int playerId, GameAction action) {
+		super.onWillPerformGameAction(playerId, action);
+
+		final GameState gameStateCopy = getGameStateCopy();
+		getListenerMap().get(getPlayer1()).onNotification(action, gameStateCopy);
+		getListenerMap().get(getPlayer2()).onNotification(action, gameStateCopy);
 	}
 
 	/**

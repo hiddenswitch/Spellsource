@@ -66,7 +66,7 @@ public class SocketClient implements Client {
 	}
 
 	@Override
-	public void onNotification(Notification event) {
+	public void onNotification(Notification event, GameState gameState) {
 		if (event instanceof GameEvent) {
 			messageBuffer.offer(getBuffer(new ServerToClientMessage((GameEvent) event)));
 		}

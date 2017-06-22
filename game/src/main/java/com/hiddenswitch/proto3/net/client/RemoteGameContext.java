@@ -318,7 +318,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	@Override
-	public void onNotification(Notification event) {
+	public void onNotification(Notification event, GameState gameState) {
 		if (event instanceof GameEvent) {
 			this.addGameEvent((GameEvent) event);
 		}

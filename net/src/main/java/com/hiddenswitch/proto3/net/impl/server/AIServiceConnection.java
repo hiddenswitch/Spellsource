@@ -36,7 +36,7 @@ public class AIServiceConnection implements Client {
 	}
 
 	@Override
-	public void onNotification(Notification event) {
+	public void onNotification(Notification event, GameState gameState) {
 	}
 
 	@Override

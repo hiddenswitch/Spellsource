@@ -21,9 +21,9 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.visuals.TriggerFired;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class WebSocketClient implements Client {
@@ -33,6 +33,8 @@ public class WebSocketClient implements Client {
 	private ServerWebSocket privateSocket;
 	private GameState lastStateSent;
 	private boolean open = true;
+	private AtomicInteger eventCounter = new AtomicInteger();
+	private Deque<GameEvent> powerHistory = new ArrayDeque<>();
 
 	public WebSocketClient(ServerWebSocket socket, String userId, int playerId) {
 		// Be notified when the socket is closed
@@ -76,8 +78,9 @@ public class WebSocketClient implements Client {
 	}
 
 	@Override
-	public void onNotification(Notification event) {
-		final GameState state = event.getGameContext().getGameStateCopy();
+	public void onNotification(Notification event, GameState gameState) {
+		final GameState state = gameState;
+		GameContext workingContext = new GameContext(state);
 		ServerToClientMessage message = new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
@@ -91,11 +94,32 @@ public class WebSocketClient implements Client {
 					.eventType(GameEvent.EventTypeEnum.TRIGGER_FIRED)
 					.triggerFired(new GameEventTriggerFired()
 							.triggerSourceId(triggerEvent.getSpellTrigger().getHostReference().getId())));
+		} else if (event instanceof GameAction) {
+			final Entity source = event.getSourceReference() != null && !event.getSourceReference().isTargetGroup() ?
+					Games.getEntity(workingContext, workingContext.resolveSingleTarget(event.getSourceReference()), playerId) : null;
+			final Entity target = event.getTargetReference() != null && !event.getTargetReference().isTargetGroup() ?
+					Games.getEntity(workingContext, workingContext.resolveSingleTarget(event.getTargetReference()), playerId) : null;
+			message.event(new GameEvent()
+					.eventType(GameEvent.EventTypeEnum.PERFORMED_GAME_ACTION)
+					.performedGameAction(new GameEventPerformedGameAction()
+							.source(source)
+							.target(target)));
 		} else {
 			throw new RuntimeException("Unsupported notification.");
 		}
 
+		// Set the description on this event.
+		message.getEvent()
+				.isPowerHistory(event.isPowerHistory())
+				.id(event.isPowerHistory() ? eventCounter.getAndIncrement() : null)
+				.description((event.getDescription(workingContext, playerId)));
+
+		if (powerHistory.size() > 10) {
+			powerHistory.pop();
+		}
+		powerHistory.add(message.getEvent());
 		messageBuffer.offer(message);
+
 	}
 
 	@Override
@@ -156,7 +180,8 @@ public class WebSocketClient implements Client {
 			opponent = state.player1;
 		}
 		simulatedContext.setIgnoreEvents(true);
-		return Games.getGameState(simulatedContext, local, opponent);
+		return Games.getGameState(simulatedContext, local, opponent)
+				.powerHistory(powerHistory.stream().collect(Collectors.toList()));
 	}
 
 	@Override

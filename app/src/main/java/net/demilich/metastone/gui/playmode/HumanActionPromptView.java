@@ -118,7 +118,7 @@ public class HumanActionPromptView extends VBox {
 				tooltip.setGraphic(tooltipContent);
 				Tooltip.install(button, tooltip);
 			} else {
-				tooltipContent.setNonCard(discover.getName(), discover.getDescription());
+				tooltipContent.setNonCard(discover.getName(), discover.getDescription(context, context.getActivePlayerId()));
 				Tooltip tooltip = new Tooltip();
 				tooltip.setGraphic(tooltipContent);
 				Tooltip.install(button, tooltip);
@@ -140,7 +140,7 @@ public class HumanActionPromptView extends VBox {
 			break;
 		default:
 			break;
-		
+
 		}
 		// only one action with no target selection or summon with no other
 		// minion on board

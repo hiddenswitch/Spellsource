@@ -27,55 +27,77 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * GameEventTriggerFired
+ * GameEventPerformedGameAction
  */
 
-public class GameEventTriggerFired  implements Serializable {
+public class GameEventPerformedGameAction  implements Serializable {
+  @SerializedName("source")
+  private Entity source = null;
+
+  @SerializedName("target")
+  private Entity target = null;
+
   @SerializedName("description")
   private String description = null;
 
-  @SerializedName("triggerSourceId")
-  private Integer triggerSourceId = null;
+  public GameEventPerformedGameAction source(Entity source) {
+    this.source = source;
+    return this;
+  }
 
-  public GameEventTriggerFired description(String description) {
+   /**
+   * Get source
+   * @return source
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Entity getSource() {
+    return source;
+  }
+
+  public void setSource(Entity source) {
+    this.source = source;
+  }
+
+  public GameEventPerformedGameAction target(Entity target) {
+    this.target = target;
+    return this;
+  }
+
+   /**
+   * Get target
+   * @return target
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Entity getTarget() {
+    return target;
+  }
+
+  public void setTarget(Entity target) {
+    this.target = target;
+  }
+
+  public GameEventPerformedGameAction description(String description) {
     this.description = description;
     return this;
   }
 
    /**
-   * A plain text description of an explanation of this trigger firing. 
+   * A plain-text description of the game action that should be rendered on the client. 
    * @return description
   **/
-  @ApiModelProperty(example = "null", value = "A plain text description of an explanation of this trigger firing. ")
+  @ApiModelProperty(example = "null", value = "A plain-text description of the game action that should be rendered on the client. ")
   public String getDescription() {
     return description;
   }
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public GameEventTriggerFired triggerSourceId(Integer triggerSourceId) {
-    this.triggerSourceId = triggerSourceId;
-    return this;
-  }
-
-   /**
-   * The entity ID corresponding to the source of the trigger that got fired. 
-   * @return triggerSourceId
-  **/
-  @ApiModelProperty(example = "null", value = "The entity ID corresponding to the source of the trigger that got fired. ")
-  public Integer getTriggerSourceId() {
-    return triggerSourceId;
-  }
-
-  public void setTriggerSourceId(Integer triggerSourceId) {
-    this.triggerSourceId = triggerSourceId;
   }
 
 
@@ -87,23 +109,25 @@ public class GameEventTriggerFired  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GameEventTriggerFired gameEventTriggerFired = (GameEventTriggerFired) o;
-    return Objects.equals(this.description, gameEventTriggerFired.description) &&
-        Objects.equals(this.triggerSourceId, gameEventTriggerFired.triggerSourceId);
+    GameEventPerformedGameAction gameEventPerformedGameAction = (GameEventPerformedGameAction) o;
+    return Objects.equals(this.source, gameEventPerformedGameAction.source) &&
+        Objects.equals(this.target, gameEventPerformedGameAction.target) &&
+        Objects.equals(this.description, gameEventPerformedGameAction.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, triggerSourceId);
+    return Objects.hash(source, target, description);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GameEventTriggerFired {\n");
+    sb.append("class GameEventPerformedGameAction {\n");
     
+    sb.append("    source: ").append(toIndentedString(source)).append("\n");
+    sb.append("    target: ").append(toIndentedString(target)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    triggerSourceId: ").append(toIndentedString(triggerSourceId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

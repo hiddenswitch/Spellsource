@@ -49,7 +49,7 @@ public class SpawnMinionCommand extends SimpleCommand<GameNotification> {
 		Player selectedPlayer = sandboxProxy.getSelectedPlayer();
 
 		Minion minion = minionCard.summon();
-		Actor nextTo = (Actor) context.resolveSingleTarget(action.getTargetKey());
+		Actor nextTo = (Actor) context.resolveSingleTarget(action.getTargetReference());
 		int index = selectedPlayer.getMinions().indexOf(nextTo);
 		context.getLogic().summon(selectedPlayer.getId(), minion, minionCard, index, false);
 		

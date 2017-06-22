@@ -4,11 +4,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**eventTarget** | [**Entity**](Entity.md) |  |  [optional]
-**eventSource** | [**Entity**](Entity.md) |  |  [optional]
-**targetPlayerId** | **Integer** |  |  [optional]
-**sourcePlayerId** | **Integer** |  |  [optional]
-**description** | **String** |  |  [optional]
+**id** | **Integer** | An integer ID corresponding to the order of this event from the client&#39;s point of view.  |  [optional]
+**description** | **String** | A plaintext description of this event.  |  [optional]
+**isPowerHistory** | **Boolean** | Should this event be rendered in the power history?  |  [optional]
 **eventType** | [**EventTypeEnum**](#EventTypeEnum) | The game event type corresponding to this game event.  |  [optional]
 **afterPhysicalAttack** | [**PhysicalAttackEvent**](PhysicalAttackEvent.md) |  |  [optional]
 **drawCard** | [**GameEventDrawCard**](GameEventDrawCard.md) |  |  [optional]
@@ -28,6 +26,7 @@ Name | Type | Description | Notes
 **targetAcquisition** | [**GameEventTargetAcquisition**](GameEventTargetAcquisition.md) |  |  [optional]
 **damage** | [**GameEventDamage**](GameEventDamage.md) |  |  [optional]
 **weaponEquipped** | [**GameEventWeaponDestroyed**](GameEventWeaponDestroyed.md) |  |  [optional]
+**performedGameAction** | [**GameEventPerformedGameAction**](GameEventPerformedGameAction.md) |  |  [optional]
 **physicalAttack** | [**PhysicalAttackEvent**](PhysicalAttackEvent.md) |  |  [optional]
 **overload** | [**GameEventCardPlayed**](GameEventCardPlayed.md) |  |  [optional]
 **heal** | [**GameEventHeal**](GameEventHeal.md) |  |  [optional]
@@ -59,6 +58,7 @@ HERO_POWER_USED | &quot;HERO_POWER_USED&quot;
 JOUST | &quot;JOUST&quot;
 KILL | &quot;KILL&quot;
 OVERLOAD | &quot;OVERLOAD&quot;
+PERFORMED_GAME_ACTION | &quot;PERFORMED_GAME_ACTION&quot;
 PHYSICAL_ATTACK | &quot;PHYSICAL_ATTACK&quot;
 PLAY_CARD | &quot;PLAY_CARD&quot;
 PRE_DAMAGE | &quot;PRE_DAMAGE&quot;

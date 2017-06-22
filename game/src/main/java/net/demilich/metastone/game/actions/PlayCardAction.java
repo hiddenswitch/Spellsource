@@ -1,7 +1,8 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.BuildConfig;
+import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.SecretCard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,6 +86,18 @@ public abstract class PlayCardAction extends GameAction {
 
 	@Override
 	public String toString() {
-		return String.format("%s Card: %s Target: %s", getActionType(), cardReference, getTargetKey());
+		return String.format("%s Card: %s Target: %s", getActionType(), cardReference, getTargetReference());
+	}
+
+
+	@Override
+	public String getDescription(GameContext context, int playerId) {
+		Card playedCard = context.resolveCardReference(getCardReference());
+		String cardName = playedCard != null ? playedCard.getName() : "an unknown card";
+		if (playedCard.getCardType() == CardType.SPELL
+				&& playedCard.hasAttribute(Attribute.SECRET)) {
+			cardName = "a secret";
+		}
+		return String.format("%s played %s.", context.getActivePlayer().getName(), cardName);
 	}
 }

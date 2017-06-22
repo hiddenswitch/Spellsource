@@ -44,7 +44,7 @@ public class Entity  implements Serializable {
   private String cardId = null;
 
   /**
-   * Gets or Sets entityType
+   * Broad categories describing this entity and how it should be rendered. 
    */
   public enum EntityTypeEnum {
     @SerializedName("PLAYER")
@@ -95,10 +95,10 @@ public class Entity  implements Serializable {
   }
 
    /**
-   * Get id
+   * The entity's ID in the game.
    * @return id
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(example = "null", required = true, value = "The entity's ID in the game.")
   public Integer getId() {
     return id;
   }
@@ -113,10 +113,10 @@ public class Entity  implements Serializable {
   }
 
    /**
-   * Get cardId
+   * The entity's Card ID. When null, it typically should not be rendered.
    * @return cardId
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The entity's Card ID. When null, it typically should not be rendered.")
   public String getCardId() {
     return cardId;
   }
@@ -131,10 +131,10 @@ public class Entity  implements Serializable {
   }
 
    /**
-   * Get entityType
+   * Broad categories describing this entity and how it should be rendered. 
    * @return entityType
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Broad categories describing this entity and how it should be rendered. ")
   public EntityTypeEnum getEntityType() {
     return entityType;
   }
@@ -149,10 +149,10 @@ public class Entity  implements Serializable {
   }
 
    /**
-   * Get name
+   * The text that would go into the entity's name field. 
    * @return name
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The text that would go into the entity's name field. ")
   public String getName() {
     return name;
   }
@@ -167,10 +167,10 @@ public class Entity  implements Serializable {
   }
 
    /**
-   * Get description
+   * The text that would go into the entity's description field. 
    * @return description
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The text that would go into the entity's description field. ")
   public String getDescription() {
     return description;
   }

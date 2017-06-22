@@ -1,9 +1,8 @@
 package net.demilich.metastone.game.events;
 
-import java.io.Serializable;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * The base class for game events, or things that happen during the execution of a {@link
@@ -23,6 +22,30 @@ public abstract class GameEvent implements Notification {
 		this.sourcePlayerId = sourcePlayerId;
 	}
 
+	public Entity getSource() {
+		return getEventSource();
+	}
+
+	public Entity getTarget() {
+		return getEventTarget();
+	}
+
+	@Override
+	public EntityReference getSourceReference() {
+		if (getEventSource() != null) {
+			return getEventSource().getReference();
+		}
+		return null;
+	}
+
+	@Override
+	public EntityReference getTargetReference() {
+		if (getEventTarget() != null) {
+			return getEventTarget().getReference();
+		}
+		return null;
+	}
+
 	/**
 	 * Spells may specify to be cast on the event target; this is dependent on
 	 * the actual event. For example, a SummonEvent may return the summoned
@@ -38,7 +61,6 @@ public abstract class GameEvent implements Notification {
 
 	public abstract GameEventType getEventType();
 
-	@Override
 	public GameContext getGameContext() {
 		return context;
 	}
@@ -54,5 +76,15 @@ public abstract class GameEvent implements Notification {
 	@Override
 	public String toString() {
 		return "[EVENT " + getClass().getSimpleName() + "]";
+	}
+
+	@Override
+	public boolean isPowerHistory() {
+		return false;
+	}
+
+	@Override
+	public String getDescription(GameContext context, int playerId) {
+		return toString();
 	}
 }

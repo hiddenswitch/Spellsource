@@ -84,7 +84,7 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 						logger.debug("Client received message from server: {}", message);
 						switch (message.mt) {
 							case ON_GAME_EVENT:
-								updateListener.onNotification(message.event);
+								updateListener.onNotification(message.event, message.gameState);
 								break;
 							case ON_GAME_END:
 								isGameEnded = true;

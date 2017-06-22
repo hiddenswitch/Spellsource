@@ -15,7 +15,7 @@ public class KillAction extends GameAction {
 
 	@Override
 	public void execute(GameContext context, int playerId) {
-		Actor target = (Actor) context.resolveSingleTarget(getTargetKey());
+		Actor target = (Actor) context.resolveSingleTarget(getTargetReference());
 		context.getLogic().markAsDestroyed(target);
 	}
 

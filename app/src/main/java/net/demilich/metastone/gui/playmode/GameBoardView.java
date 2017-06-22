@@ -163,7 +163,7 @@ public class GameBoardView extends BorderPane {
 		GameContext context = targetOptions.getContext();
 
 		for (final GameAction action : targetOptions.getActionGroup().getActionsInGroup()) {
-			Entity target = context.resolveSingleTarget(action.getTargetKey());
+			Entity target = context.resolveSingleTarget(action.getTargetReference());
 			GameToken token = getToken(target);
 
 			EventHandler<MouseEvent> clickedHander = event -> {
@@ -179,7 +179,7 @@ public class GameBoardView extends BorderPane {
 		int playerId = targetOptions.getPlayerId();
 		GameContext context = targetOptions.getContext();
 		for (final GameAction action : targetOptions.getActionGroup().getActionsInGroup()) {
-			Entity target = context.resolveSingleTarget(action.getTargetKey());
+			Entity target = context.resolveSingleTarget(action.getTargetReference());
 			GameToken token = getToken(target);
 			Button summonHelper = playerId == localPlayerId ? summonHelperMap1.get(token) : summonHelperMap2.get(token);
 			if (summonHelper == null) {

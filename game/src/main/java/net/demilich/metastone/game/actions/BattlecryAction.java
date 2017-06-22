@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.actions;
 
-import java.util.function.Predicate;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -13,6 +11,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class BattlecryAction extends GameAction {
+	private static final String BATTLECRY_NAME = "Call to Power";
 
 	public static BattlecryAction createBattlecry(SpellDesc spell) {
 		return createBattlecry(spell, TargetSelection.NONE);
@@ -44,7 +43,7 @@ public class BattlecryAction extends GameAction {
 		if (!super.canBeExecutedOn(context, player, entity)) {
 			return false;
 		}
-		if (getSource().getId() == entity.getId()) {
+		if (getSourceReference().getId() == entity.getId()) {
 			return false;
 		}
 		if (getEntityFilter() == null) {
@@ -57,7 +56,7 @@ public class BattlecryAction extends GameAction {
 	public BattlecryAction clone() {
 		BattlecryAction clone = BattlecryAction.createBattlecry(getSpell(), getTargetRequirement());
 		clone.setActionSuffix(getActionSuffix());
-		clone.setSource(getSource());
+		clone.setSource(getSourceReference());
 		return clone;
 	}
 
@@ -65,11 +64,11 @@ public class BattlecryAction extends GameAction {
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		EntityReference target = getPredefinedSpellTargetOrUserTarget();
-		context.getLogic().castSpell(playerId, getSpell(), getSource(), target, getTargetRequirement(), false);
+		context.getLogic().castSpell(playerId, getSpell(), getSourceReference(), target, getTargetRequirement(), false);
 	}
 
 	public EntityReference getPredefinedSpellTargetOrUserTarget() {
-		return getSpell().hasPredefinedTarget() ? getSpell().getTarget() : getTargetKey();
+		return getSpell().hasPredefinedTarget() ? getSpell().getTarget() : getTargetReference();
 	}
 
 	private Condition getCondition() {
@@ -101,5 +100,27 @@ public class BattlecryAction extends GameAction {
 	@Override
 	public String toString() {
 		return String.format("[%s '%s']", getActionType(), getSpell().getSpellClass().getSimpleName());
+	}
+
+	@Override
+	public String getDescription(GameContext context, int playerId) {
+		Entity source = context.resolveSingleTarget(getSourceReference());
+		final EntityReference targetReference = getPredefinedSpellTargetOrUserTarget();
+
+		if (targetReference == null || targetReference.isTargetGroup()) {
+			return String.format("%s's %s occurred.", BATTLECRY_NAME, source.getName());
+		}
+		Entity target = context.resolveSingleTarget(targetReference);
+
+		if (source != null && target != null
+				&& source.getName() != null && target.getName() != null) {
+			return String.format("%s's %s targeted %s.", source.getName(), BATTLECRY_NAME, target.getName());
+		}
+		if (source != null && target == null
+				&& source.getName() != null) {
+			return String.format("%s's %s occurred.", BATTLECRY_NAME, source.getName());
+		} else {
+			return String.format("A %s occurred.", BATTLECRY_NAME);
+		}
 	}
 }

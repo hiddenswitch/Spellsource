@@ -32,4 +32,8 @@ public class EndTurnAction extends GameAction {
 		return String.format("[%s]", getActionType());
 	}
 
+	@Override
+	public String getDescription(GameContext context, int playerId) {
+		return String.format("%s ended their turn.", context.getActivePlayer().getName());
+	}
 }

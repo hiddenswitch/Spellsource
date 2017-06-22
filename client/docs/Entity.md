@@ -4,11 +4,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Integer** |  | 
-**cardId** | **String** |  |  [optional]
-**entityType** | [**EntityTypeEnum**](#EntityTypeEnum) |  |  [optional]
-**name** | **String** |  |  [optional]
-**description** | **String** |  |  [optional]
+**id** | **Integer** | The entity&#39;s ID in the game. | 
+**cardId** | **String** | The entity&#39;s Card ID. When null, it typically should not be rendered. |  [optional]
+**entityType** | [**EntityTypeEnum**](#EntityTypeEnum) | Broad categories describing this entity and how it should be rendered.  |  [optional]
+**name** | **String** | The text that would go into the entity&#39;s name field.  |  [optional]
+**description** | **String** | The text that would go into the entity&#39;s description field.  |  [optional]
 **state** | [**EntityState**](EntityState.md) |  |  [optional]
 
 
