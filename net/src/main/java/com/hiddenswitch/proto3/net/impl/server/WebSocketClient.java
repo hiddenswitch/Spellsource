@@ -86,15 +86,17 @@ public class WebSocketClient implements Client {
 				.changes(getChangeSet(state))
 				.gameState(getClientGameState(state));
 
-		if (event instanceof net.demilich.metastone.game.events.GameEvent) {
+		final Class<? extends Notification> eventClass = event.getClass();
+
+		if (net.demilich.metastone.game.events.GameEvent.class.isAssignableFrom(eventClass)) {
 			message.event(Games.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId));
-		} else if (event instanceof TriggerFired) {
+		} else if (TriggerFired.class.isAssignableFrom(eventClass)) {
 			TriggerFired triggerEvent = (TriggerFired) event;
 			message.event(new GameEvent()
 					.eventType(GameEvent.EventTypeEnum.TRIGGER_FIRED)
 					.triggerFired(new GameEventTriggerFired()
 							.triggerSourceId(triggerEvent.getSpellTrigger().getHostReference().getId())));
-		} else if (event instanceof GameAction) {
+		} else if (GameAction.class.isAssignableFrom(eventClass)) {
 			final Entity source = event.getSourceReference() != null && !event.getSourceReference().isTargetGroup() ?
 					Games.getEntity(workingContext, workingContext.resolveSingleTarget(event.getSourceReference()), playerId) : null;
 			final Entity target = event.getTargetReference() != null && !event.getTargetReference().isTargetGroup() ?
@@ -109,15 +111,19 @@ public class WebSocketClient implements Client {
 		}
 
 		// Set the description on this event.
-		message.getEvent()
-				.isPowerHistory(event.isPowerHistory())
-				.id(event.isPowerHistory() ? eventCounter.getAndIncrement() : null)
-				.description((event.getDescription(workingContext, playerId)));
+		final GameEvent toClient = message.getEvent()
+				.isPowerHistory(event.isPowerHistory());
 
-		if (powerHistory.size() > 10) {
-			powerHistory.pop();
+		if (event.isPowerHistory()) {
+			toClient.id(eventCounter.getAndIncrement())
+					.description((event.getDescription(workingContext, playerId)));
+
+			if (powerHistory.size() > 10) {
+				powerHistory.pop();
+			}
+			powerHistory.add(toClient);
 		}
-		powerHistory.add(message.getEvent());
+
 		messageBuffer.offer(message);
 
 	}
