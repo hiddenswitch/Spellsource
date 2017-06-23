@@ -7,6 +7,7 @@ import com.hiddenswitch.minionate.LegacyPersistenceHandler;
 import com.hiddenswitch.minionate.PersistenceContext;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger;
+import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.Registration;
@@ -151,9 +152,11 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 			GetCollectionResponse deckCollection = inventory.sync().getCollection(new GetCollectionRequest()
 					.withUserId(player.getUserId()).withDeckId(player.getDeckId()));
 
+			String name = Accounts.findOne(player.getUserId()).getProfile().getDisplayName();
 
 			// TODO: Get more attributes from database
 			AttributeMap playerAttributes = new AttributeMap();
+			playerAttributes.put(Attribute.NAME, name);
 			playerAttributes.put(Attribute.USER_ID, player.getUserId());
 			playerAttributes.put(Attribute.DECK_ID, player.getDeckId());
 
