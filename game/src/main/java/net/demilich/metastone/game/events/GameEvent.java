@@ -2,7 +2,9 @@ package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The base class for game events, or things that happen during the execution of a {@link
@@ -31,19 +33,14 @@ public abstract class GameEvent implements Notification {
 	}
 
 	@Override
-	public EntityReference getSourceReference() {
-		if (getEventSource() != null) {
-			return getEventSource().getReference();
-		}
-		return null;
+	public Entity getSource(GameContext context) {
+		return getSource();
 	}
 
 	@Override
-	public EntityReference getTargetReference() {
-		if (getEventTarget() != null) {
-			return getEventTarget().getReference();
-		}
-		return null;
+	public List<Entity> getTargets(GameContext context, int player) {
+		final Entity target = getTarget();
+		return target == null ? Collections.emptyList() : Collections.singletonList(target);
 	}
 
 	/**

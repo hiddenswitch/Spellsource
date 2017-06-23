@@ -1,9 +1,10 @@
 package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a general notification from inside the {@link net.demilich.metastone.game.logic.GameLogic} that the
@@ -17,14 +18,14 @@ public interface Notification extends Serializable {
 	 *
 	 * @return A reference to the entity that is the visualizable source of this notification.
 	 */
-	EntityReference getSourceReference();
+	Entity getSource(GameContext context);
 
 	/**
-	 * For visualization purposes, what is the target of this notification?
+	 * For visualization purposes, what are the targets of this notification?
 	 *
 	 * @return A reference to the entity that is the visualizable target of this notification.
 	 */
-	EntityReference getTargetReference();
+	List<Entity> getTargets(GameContext context, int player);
 
 	/**
 	 * When true, indicates to processors of this notification that it belongs in the power history.

@@ -10,6 +10,9 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+import java.util.Collections;
+import java.util.List;
+
 public class BattlecryAction extends GameAction {
 	private static final String BATTLECRY_NAME = "Call to Power";
 
@@ -100,6 +103,20 @@ public class BattlecryAction extends GameAction {
 	@Override
 	public String toString() {
 		return String.format("[%s '%s']", getActionType(), getSpell().getSpellClass().getSimpleName());
+	}
+
+	@Override
+	public Entity getSource(GameContext context) {
+		return context.resolveSingleTarget(getSourceReference());
+	}
+
+	@Override
+	public List<Entity> getTargets(GameContext context, int player) {
+		final List<Entity> entities = context.resolveTarget(context.getPlayer(getSource(context).getOwner()), getSource(context), getTargetReference());
+		if (entities == null) {
+			return Collections.emptyList();
+		}
+		return entities;
 	}
 
 	@Override

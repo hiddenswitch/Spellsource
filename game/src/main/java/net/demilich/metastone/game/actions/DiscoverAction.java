@@ -1,6 +1,8 @@
 package net.demilich.metastone.game.actions;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
@@ -98,6 +100,16 @@ public class DiscoverAction extends GameAction {
 	 */
 	public Card getCard() {
 		return card;
+	}
+
+	@Override
+	public Entity getSource(GameContext context) {
+		return context.resolveSingleTarget(getSourceReference());
+	}
+
+	@Override
+	public List<Entity> getTargets(GameContext context, int player) {
+		return Collections.singletonList(context.resolveSingleTarget(getTargetReference()));
 	}
 
 	/**

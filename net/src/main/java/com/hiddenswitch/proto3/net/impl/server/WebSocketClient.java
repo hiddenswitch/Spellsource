@@ -4,6 +4,7 @@ import com.google.common.collect.MapDifference;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.client.Configuration;
 import com.hiddenswitch.proto3.net.client.models.*;
+import com.hiddenswitch.proto3.net.client.models.Entity;
 import com.hiddenswitch.proto3.net.client.models.GameEvent;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.common.GameState;
@@ -15,6 +16,7 @@ import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -97,10 +99,11 @@ public class WebSocketClient implements Client {
 					.triggerFired(new GameEventTriggerFired()
 							.triggerSourceId(triggerEvent.getSpellTrigger().getHostReference().getId())));
 		} else if (GameAction.class.isAssignableFrom(eventClass)) {
-			final Entity source = event.getSourceReference() != null && !event.getSourceReference().isTargetGroup() ?
-					Games.getEntity(workingContext, workingContext.resolveSingleTarget(event.getSourceReference()), playerId) : null;
-			final Entity target = event.getTargetReference() != null && !event.getTargetReference().isTargetGroup() ?
-					Games.getEntity(workingContext, workingContext.resolveSingleTarget(event.getTargetReference()), playerId) : null;
+			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource(workingContext);
+			final Entity source = Games.getEntity(workingContext, sourceEntity, playerId);
+			List<Entity> targets = event.getTargets(workingContext, sourceEntity == null ? playerId : sourceEntity.getOwner())
+					.stream().map(e -> Games.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
+			final Entity target = targets.size() > 0 ? targets.get(0) : null;
 			message.event(new GameEvent()
 					.eventType(GameEvent.EventTypeEnum.PERFORMED_GAME_ACTION)
 					.performedGameAction(new GameEventPerformedGameAction()

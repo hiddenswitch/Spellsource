@@ -114,7 +114,9 @@ public class ActionLogic implements Serializable {
 		validActions.addAll(getPhysicalAttackActions(context, player));
 		validActions.addAll(getPlayCardActions(context, player));
 		if (context.getTurnState() != TurnState.TURN_ENDED) {
-			validActions.add(new EndTurnAction());
+			final EndTurnAction endTurnAction = new EndTurnAction();
+			endTurnAction.setSource(player.getReference());
+			validActions.add(endTurnAction);
 		}
 
 		// Assign the ids
