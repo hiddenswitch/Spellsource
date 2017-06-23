@@ -121,21 +121,16 @@ public class SpellTrigger extends Entity implements Trigger {
 		if (oneTurn && (event.getEventType() == GameEventType.TURN_END || event.getEventType() == GameEventType.TURN_START)) {
 			expire();
 		}
-		try {
-			if (event.getEventTarget() != null) {
-				event.getGameContext().getEventTargetStack().push(event.getEventTarget().getReference());
-			} else {
-				event.getGameContext().getEventTargetStack().push(null);
-			}
-			// Notify the game context that a spell trigger was successfully fired.
-			event.getGameContext().onSpellTriggerFired(this);
-			onFire(ownerId, getSpell(), event);
-			event.getGameContext().getEventTargetStack().pop();
-		} catch (Exception e) {
-			event.getGameContext().printCurrentTriggers();
-			logger.error("SpellTrigger cannot be executed; GameEventTrigger: {} Spell: {}", primaryTrigger, spell);
-			throw e;
+
+		if (event.getEventTarget() != null) {
+			event.getGameContext().getEventTargetStack().push(event.getEventTarget().getReference());
+		} else {
+			event.getGameContext().getEventTargetStack().push(null);
 		}
+		// Notify the game context that a spell trigger was successfully fired.
+		event.getGameContext().onSpellTriggerFired(this);
+		onFire(ownerId, getSpell(), event);
+		event.getGameContext().getEventTargetStack().pop();
 	}
 
 	@Override

@@ -143,6 +143,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
 	private CardList tempCards = new CardArrayList();
+
 	/**
 	 * Creates a game context with no valid start state.
 	 */
@@ -399,13 +400,8 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		if (ignoreEvents()) {
 			return;
 		}
-		try {
-			getTriggerManager().fireGameEvent(gameEvent, otherTriggers);
-		} catch (Exception e) {
-			logger.error("Error while processing gameEvent {}", gameEvent);
-			getLogic().logDebugHistory();
-			throw e;
-		}
+
+		getTriggerManager().fireGameEvent(gameEvent, otherTriggers);
 	}
 
 	/**

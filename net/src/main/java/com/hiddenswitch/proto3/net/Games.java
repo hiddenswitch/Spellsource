@@ -471,7 +471,8 @@ public interface Games {
 					.entityType(Entity.EntityTypeEnum.SECRET)
 					.state(new EntityState()
 							.owner(secret.getOwner())
-							.heroClass(secret.getSecretCard().getHeroClass().toString()));
+							.heroClass(secret.getSecretCard().getHeroClass().toString())
+							.location(Games.toClientLocation(secret.getEntityLocation())));
 			opposingSecrets.add(entity);
 		}
 

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 import static io.vertx.ext.sync.Sync.awaitFiber;
 
@@ -41,6 +42,10 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 	@SuppressWarnings("unchecked")
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		// Call default methods normally
+		if (Objects.equals(method.getName(), "toString")) {
+			return "Proxy Object for " + name;
+		}
+
 		if (method.isDefault()) {
 			// Invoked with the proxy instance, which shouldn't matter for anything that is a default method on an interface
 			return method.invoke(proxy, args);
