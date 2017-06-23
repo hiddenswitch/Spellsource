@@ -183,7 +183,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
 		final String property = System.getProperty("minionate.unityTests");
-		final int tests = Integer.parseInt(property != null ? property : "1000");
+		final int tests = Integer.parseInt(property != null ? property : "10");
 		final Async async = context.async();
 
 		for (int i = 0; i < tests; i++) {
