@@ -1,6 +1,8 @@
 package net.demilich.metastone.game.actions;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
@@ -142,5 +144,16 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	 */
 	public String getDescription(GameContext context, int playerId) {
 		return getClass().getSimpleName();
+	}
+
+	@Override
+	public Entity getSource(GameContext context) {
+		return context.resolveSingleTarget(getSourceReference());
+	}
+
+	@Override
+	public List<Entity> getTargets(GameContext context, int player) {
+		final Entity target = context.resolveSingleTarget(getTargetReference());
+		return target == null ? Collections.emptyList() : Collections.singletonList(target);
 	}
 }

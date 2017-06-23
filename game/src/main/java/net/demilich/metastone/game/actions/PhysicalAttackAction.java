@@ -10,6 +10,9 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+import java.util.Collections;
+import java.util.List;
+
 public class PhysicalAttackAction extends GameAction {
 	private EntityReference attackerReference;
 
@@ -72,6 +75,11 @@ public class PhysicalAttackAction extends GameAction {
 	@Override
 	public String toString() {
 		return String.format("%s Attacker: %s Defender: %s", getActionType(), attackerReference, getTargetReference());
+	}
+
+	@Override
+	public Entity getSource(GameContext context) {
+		return context.resolveSingleTarget(attackerReference);
 	}
 
 	@Override

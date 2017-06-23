@@ -3,6 +3,7 @@ package net.demilich.metastone.game.actions;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.SecretCard;
+import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +14,9 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.CardReference;
+
+import java.util.Collections;
+import java.util.List;
 
 public abstract class PlayCardAction extends GameAction {
 
@@ -89,6 +93,16 @@ public abstract class PlayCardAction extends GameAction {
 		return String.format("%s Card: %s Target: %s", getActionType(), cardReference, getTargetReference());
 	}
 
+	@Override
+	public Entity getSource(GameContext context) {
+		return context.resolveCardReference(getCardReference());
+	}
+
+	@Override
+	public List<Entity> getTargets(GameContext context, int player) {
+		final List<Entity> entities = context.resolveTarget(context.getPlayer(player), getSource(context), getTargetReference());
+		return entities == null ? Collections.emptyList() : entities;
+	}
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {

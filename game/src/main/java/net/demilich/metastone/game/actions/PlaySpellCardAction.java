@@ -9,6 +9,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+import java.util.List;
+
 public class PlaySpellCardAction extends PlayCardAction {
 
 	private SpellDesc spell;
