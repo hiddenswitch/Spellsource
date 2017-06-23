@@ -45,11 +45,11 @@ public class UnityClient {
 		this.turnsToPlay = new AtomicInteger(turnsToPlay);
 	}
 
-	public void createUserAccount() {
-		createUserAccount(null);
+	public UnityClient createUserAccount() {
+		return createUserAccount(null);
 	}
 
-	public void createUserAccount(String username) {
+	public UnityClient createUserAccount(String username) {
 		if (username == null) {
 			username = RandomStringUtils.randomAlphanumeric(10);
 		}
@@ -63,21 +63,22 @@ public class UnityClient {
 		} catch (ApiException e) {
 			context.fail(e.getMessage());
 		}
+		return this;
 	}
 
-	public void loginWithUserAccount(String username) {
-		loginWithUserAccount(username, "testpass");
+	public UnityClient loginWithUserAccount(String username) {
+		return loginWithUserAccount(username, "testpass");
 	}
 
 	public void gameOver(Handler<UnityClient> handler) {
 		onGameOver = io.vertx.ext.sync.Sync.fiberHandler(handler);
 	}
 
-	public void matchmakeAndPlayAgainstAI() {
-		matchmakeAndPlayAgainstAI(null);
+	public UnityClient matchmakeAndPlayAgainstAI() {
+		return matchmakeAndPlayAgainstAI(null);
 	}
 
-	public void matchmakeAndPlayAgainstAI(String deckId) {
+	public UnityClient matchmakeAndPlayAgainstAI(String deckId) {
 		if (deckId == null) {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
@@ -92,9 +93,10 @@ public class UnityClient {
 		} catch (ApiException | URISyntaxException e) {
 			context.fail(e.getMessage());
 		}
+		return this;
 	}
 
-	public void matchmakeAndPlay(String deckId) throws InterruptedException {
+	public UnityClient matchmakeAndPlay(String deckId) throws InterruptedException {
 		if (deckId == null) {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
@@ -113,6 +115,7 @@ public class UnityClient {
 		} catch (ApiException | URISyntaxException e) {
 			context.fail(e.getMessage());
 		}
+		return this;
 	}
 
 	public UnityClient contextPlay(IntegrationTestContext unityContext) {
@@ -269,21 +272,22 @@ public class UnityClient {
 	}
 
 	@Suspendable
-	public void waitUntilDone() {
+	public UnityClient waitUntilDone() {
 		float time = 0f;
 		while (!(time > 36f || this.isGameOver())) {
 			try {
 				Strand.sleep(1000);
 			} catch (SuspendExecution | InterruptedException suspendExecution) {
 				suspendExecution.printStackTrace();
-				return;
+				return this;
 			}
 
 			time += 1f;
 		}
+		return this;
 	}
 
-	public void loginWithUserAccount(String username, String password) {
+	public UnityClient loginWithUserAccount(String username, String password) {
 		try {
 			LoginResponse lr = api.login(new LoginRequest().email(username + "@hiddenswitch.com").password(password));
 			api.getApiClient().setApiKey(lr.getLoginToken());
@@ -292,5 +296,6 @@ public class UnityClient {
 		} catch (ApiException e) {
 			context.fail(e.getMessage());
 		}
+		return this;
 	}
 }
