@@ -154,16 +154,7 @@ public class GameLogicAsync extends GameLogic {
 			return super.summon(playerId, minion, source, index, false);
 		}
 
-
-		Boolean summonResult = false;
-		try {
-			summonResult = Sync.awaitFiber(done -> summonAsync(playerId, minion, source, index, true, done));
-		} catch (Throwable e) {
-			LoggerUtils.log(this, context, e);
-		}
-
-		logger.debug("AsyncDebug {} successfully called async summon.", this.context.toString());
-		return summonResult;
+		return Sync.awaitFiber(done -> summonAsync(playerId, minion, source, index, true, done));
 	}
 
 	@Override
@@ -189,9 +180,9 @@ public class GameLogicAsync extends GameLogic {
 		};
 
 		if (resolveBattlecry && minion.getBattlecry() != null) {
-			resolveBattlecryAsync(player.getId(), minion, (o) -> {
+			resolveBattlecryAsync(player.getId(), minion, Sync.fiberHandler((o) -> {
 				postSummonHandler.handle(SummonResult.SUMMONED);
-			});
+			}));
 		} else {
 			postSummonHandler.handle(SummonResult.SUMMONED);
 		}

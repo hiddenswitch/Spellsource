@@ -1,5 +1,6 @@
 package com.hiddenswitch.minionate;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.models.EventLogicRequest;
 import com.hiddenswitch.proto3.net.models.LogicResponse;
 import net.demilich.metastone.game.events.GameEvent;
@@ -35,6 +36,7 @@ class LegacyPersistenceHandlerImpl<T extends GameEvent> implements LegacyPersist
 	}
 
 	@Override
+	@Suspendable
 	public LogicResponse onLogicRequest(EventLogicRequest<T> request) {
 		return this.onLogicRequest.apply(request);
 	}

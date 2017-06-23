@@ -7,6 +7,9 @@ import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.models.EventLogicRequest;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.Handler;
+import io.vertx.core.VertxException;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
@@ -39,6 +42,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * can be made, like {@link RpcClient#sync()} versus {@link RpcClient#async(Handler)}.
  */
 public class PersistenceTrigger implements Trigger {
+	static Logger logger = LoggerFactory.getLogger(PersistenceTrigger.class);
 	/**
 	 * The {@link RpcClient} for the {@link Logic} service.
 	 */
@@ -61,7 +65,12 @@ public class PersistenceTrigger implements Trigger {
 			return;
 		}
 
-		Minionate.minionate().persistence().persistenceTrigger(logic, event);
+		try {
+			Minionate.minionate().persistence().persistenceTrigger(logic, event);
+		} catch (VertxException e) {
+			logger.error("Failed a persistence call and silently continuing. Details:\n" + context.toLongString());
+		}
+
 	}
 
 	@Override
@@ -140,6 +149,7 @@ public class PersistenceTrigger implements Trigger {
 	}
 
 
+	@Suspendable
 	public static EventLogicRequest<BeforeSummonEvent> beforeSummon(BeforeSummonEvent event) {
 		String gameId = event.getGameContext().getGameId();
 		final String cardInstanceId = event.getMinion().getCardInventoryId();
@@ -156,6 +166,7 @@ public class PersistenceTrigger implements Trigger {
 		return request;
 	}
 
+	@Suspendable
 	public static EventLogicRequest<AfterPhysicalAttackEvent> afterPhysicalAttack(AfterPhysicalAttackEvent event) {
 		String gameId = event.getGameContext().getGameId();
 		final String attackerInstanceId = event.getAttacker().getCardInventoryId();

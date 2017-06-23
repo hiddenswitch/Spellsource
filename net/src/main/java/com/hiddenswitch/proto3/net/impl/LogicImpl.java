@@ -202,11 +202,17 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		LogicResponse response = new LogicResponse();
 		final String userId = request.getUserId();
 		final String gameId = request.getGameId();
-		final String id = request.getCardInventoryId();
-		final int entityId = request.getEntityId();
 		final BeforeSummonEvent beforeSummonEvent = request.getEvent();
 
-		if (beforeSummonEvent == null || beforeSummonEvent.getEventType() != GameEventType.BEFORE_SUMMON) {
+		if (beforeSummonEvent == null || beforeSummonEvent.getEventType() != GameEventType.BEFORE_SUMMON
+				|| beforeSummonEvent.getMinion() == null) {
+			throw new RuntimeException();
+		}
+
+		final String id = beforeSummonEvent.getMinion().getCardInventoryId();
+		final int entityId = beforeSummonEvent.getMinion().getId();
+
+		if (id == null) {
 			throw new RuntimeException();
 		}
 
@@ -290,6 +296,7 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	}
 
 	@Override
+	@Suspendable
 	@SuppressWarnings("unchecked")
 	public PersistAttributeResponse persistAttribute(PersistAttributeRequest request) {
 		if (request.getRequest() != null) {
