@@ -41,13 +41,13 @@ import java.io.Serializable;
 
 public class DraftState  implements Serializable {
   @SerializedName("heroClassChoices")
-  private List<String> heroClassChoices = new ArrayList<String>();
+  private List<Entity> heroClassChoices = new ArrayList<Entity>();
 
   @SerializedName("currentCardChoices")
   private List<Entity> currentCardChoices = new ArrayList<Entity>();
 
   @SerializedName("heroClass")
-  private String heroClass = null;
+  private Entity heroClass = null;
 
   /**
    * Gets the status of the draft. 
@@ -98,12 +98,12 @@ public class DraftState  implements Serializable {
   @SerializedName("deckId")
   private String deckId = null;
 
-  public DraftState heroClassChoices(List<String> heroClassChoices) {
+  public DraftState heroClassChoices(List<Entity> heroClassChoices) {
     this.heroClassChoices = heroClassChoices;
     return this;
   }
 
-  public DraftState addHeroClassChoicesItem(String heroClassChoicesItem) {
+  public DraftState addHeroClassChoicesItem(Entity heroClassChoicesItem) {
     this.heroClassChoices.add(heroClassChoicesItem);
     return this;
   }
@@ -113,11 +113,11 @@ public class DraftState  implements Serializable {
    * @return heroClassChoices
   **/
   @ApiModelProperty(example = "null", value = "When not null, contains three choices you should reply with to choose the hero of your draft. ")
-  public List<String> getHeroClassChoices() {
+  public List<Entity> getHeroClassChoices() {
     return heroClassChoices;
   }
 
-  public void setHeroClassChoices(List<String> heroClassChoices) {
+  public void setHeroClassChoices(List<Entity> heroClassChoices) {
     this.heroClassChoices = heroClassChoices;
   }
 
@@ -144,7 +144,7 @@ public class DraftState  implements Serializable {
     this.currentCardChoices = currentCardChoices;
   }
 
-  public DraftState heroClass(String heroClass) {
+  public DraftState heroClass(Entity heroClass) {
     this.heroClass = heroClass;
     return this;
   }
@@ -154,11 +154,11 @@ public class DraftState  implements Serializable {
    * @return heroClass
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getHeroClass() {
+  public Entity getHeroClass() {
     return heroClass;
   }
 
-  public void setHeroClass(String heroClass) {
+  public void setHeroClass(Entity heroClass) {
     this.heroClass = heroClass;
   }
 

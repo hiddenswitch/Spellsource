@@ -611,8 +611,8 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 		com.hiddenswitch.proto3.net.client.models.CreateAccountResponse car = api.createAccount(new com.hiddenswitch.proto3.net.client.models.CreateAccountRequest()
 				.name("testuser")
-				.email("testemail@email.com")
-				.password("testpassword"));
+				.email("testuser@hiddenswitch.com")
+				.password("testpass"));
 
 		api.getApiClient().setApiKey(car.getLoginToken());
 
@@ -648,14 +648,33 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		context.assertEquals(COMPLETE, state.getStatus(), "The status of the draft should be complete.");
 		context.assertNotNull(state.getDeckId(), "The draft state should contain a deck ID when it is complete.");
 
-		state = api.draftsPost(new DraftsPostRequest().retireEarly(true));
-		context.assertEquals(RETIRED, state.getStatus(), "Expected a status of retired.");
+		final String deckId = state.getDeckId();
+		vertx.executeBlocking(done -> {
+			new UnityClient(context).loginWithUserAccount("testuser", "testpass").matchmakeAndPlayAgainstAI(deckId).waitUntilDone();
+			done.handle(Future.succeededFuture());
+		}, context.asyncAssertSuccess(then -> {
+			DraftState newState  = null;
+			try {
+				newState = api.draftsPost(new DraftsPostRequest().retireEarly(true));
+			} catch (ApiException e) {
+				context.fail();
+			}
+			context.assertEquals(RETIRED, newState.getStatus(), "Expected a status of retired.");
 
-		try {
-			api.draftsGet();
-		} catch (ApiException e) {
-			context.assertEquals(404, e.getCode(), "There should be no draft if we retired the draft early.");
-		}
+			try {
+				api.draftsGet();
+			} catch (ApiException e) {
+				context.assertEquals(404, e.getCode(), "There should be no draft if we retired the draft early.");
+			}
+
+
+			try {
+				newState = api.draftsPost(new DraftsPostRequest().startDraft(true));
+			} catch (ApiException e) {
+				context.fail();
+			}
+			context.assertEquals(SELECT_HERO, newState.getStatus(), "A draft was not correctly started anew.");
+		}));
 	}
 
 	@Override
