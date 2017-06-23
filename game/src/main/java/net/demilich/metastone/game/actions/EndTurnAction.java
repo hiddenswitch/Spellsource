@@ -38,7 +38,7 @@ public class EndTurnAction extends GameAction {
 
 	@Override
 	public Entity getSource(GameContext context) {
-		return context.getActivePlayer();
+		return context.getActivePlayer().getHero();
 	}
 
 	@Override
