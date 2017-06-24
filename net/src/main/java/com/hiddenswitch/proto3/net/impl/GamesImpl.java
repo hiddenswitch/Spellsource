@@ -419,8 +419,10 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 		getGames().values().forEach(GameSession::kill);
 		Void r = awaitResult(h -> server.close(h));
 		r = awaitResult(h -> websocketServer.close(h));
-		RPC.unregister(registration);
-		freeSingleton();
+		if (registration != null) {
+			RPC.unregister(registration);
+			freeSingleton();
+		}
 	}
 
 	@Override
