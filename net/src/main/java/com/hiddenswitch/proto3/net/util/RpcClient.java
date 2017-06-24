@@ -4,7 +4,11 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * A remote procedure call client. Its methods, {@link #sync()}, {@link #uncheckedSync()} and {@link #async(Handler)}
@@ -54,6 +58,23 @@ public interface RpcClient<T> {
 	 * @return A proxy whose methods will return null.
 	 */
 	<R> T async(Handler<AsyncResult<R>> handler);
+
+	/**
+	 * Calls the {@link #async(Handler)} idiom to return a promise.
+	 *
+	 * @param callHere A place to actually call the service. Should return the response type you desire.
+	 * @param <Res>    The response type of the method to call.
+	 * @return A {@link Future} whose completer is passed to {@link #async(Handler)}
+	 */
+	default <Res> Future<Res> promise(SuspendableFunction<T, Res> callHere) {
+		Future<Res> future = Future.future();
+		try {
+			callHere.apply(async(future.completer()));
+		} catch (SuspendExecution | InterruptedException ignore) {
+			// Ignored, since this is just around to ensure fiber stuff gets fiber'ed
+		}
+		return future;
+	}
 
 	/**
 	 * Gets ready to make an idiomatically synchronous (in the sense of {@link co.paralleluniverse.fibers.Fiber}) call

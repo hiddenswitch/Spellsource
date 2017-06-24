@@ -226,7 +226,10 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-		RPC.unregister(registration);
-		freeSingleton();
+		if (registration != null) {
+			RPC.unregister(registration);
+			freeSingleton();
+		}
+
 	}
 }

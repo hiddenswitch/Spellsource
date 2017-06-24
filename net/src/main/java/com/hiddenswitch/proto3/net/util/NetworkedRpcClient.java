@@ -3,10 +3,13 @@ package com.hiddenswitch.proto3.net.util;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;
 
 import java.lang.reflect.Proxy;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 class NetworkedRpcClient<T> implements RpcClient<T> {
 	private final EventBus bus;

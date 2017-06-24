@@ -1,8 +1,12 @@
 package com.hiddenswitch.minionate;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.proto3.net.impl.*;
+import com.hiddenswitch.proto3.net.models.MigrateToRequest;
+import com.hiddenswitch.proto3.net.models.MigrationToResponse;
 import io.vertx.core.*;
+import io.vertx.ext.sync.SuspendableRunnable;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.Attribute;
@@ -14,6 +18,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
 
 /**
  * The Minionate Server API. Access it with {@link Minionate#minionate()}.
@@ -92,23 +98,35 @@ public class Minionate {
 	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
 	 */
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
-		final List<SyncVerticle> verticles = Arrays.asList(new SyncVerticle[]{
-				new CardsImpl(),
-				new AccountsImpl(),
-				new GamesImpl(),
-				new MatchmakingImpl(),
-				new BotsImpl(),
-				new LogicImpl(),
-				new DecksImpl(),
-				new InventoryImpl(),
-				new DraftImpl(),
-				new GatewayImpl()});
+		// First deploy the migrations service
+		MigrationsImpl migrations = new MigrationsImpl();
 
-		CompositeFuture.all(verticles.stream().map(verticle -> {
-			final Future<String> future = Future.future();
-			vertx.deployVerticle(verticle, future);
-			return future;
-		}).collect(Collectors.toList())).setHandler(deployments);
+		vertx.deployVerticle(migrations, suspendableHandler((then -> {
+			MigrationToResponse response = migrations.migrateTo(new MigrateToRequest().withLatest(true));
+
+			if (response.failed()) {
+				deployments.handle(Future.failedFuture(response.cause()));
+				return;
+			}
+
+			final List<SyncVerticle> verticles = Arrays.asList(new SyncVerticle[]{
+					new CardsImpl(),
+					new AccountsImpl(),
+					new GamesImpl(),
+					new MatchmakingImpl(),
+					new BotsImpl(),
+					new LogicImpl(),
+					new DecksImpl(),
+					new InventoryImpl(),
+					new DraftImpl(),
+					new GatewayImpl()});
+
+			CompositeFuture.all(verticles.stream().map(verticle -> {
+				final Future<String> future = Future.future();
+				vertx.deployVerticle(verticle, future);
+				return future;
+			}).collect(Collectors.toList())).setHandler(deployments);
+		})));
 	}
 
 	/**
