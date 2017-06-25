@@ -105,6 +105,7 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 							.withName(String.format("%s's Draft Deck", user.getProfile().getDisplayName()))
 							.withHeroClass(record.getPublicDraftState().getHeroClass())
 							.withUserId(request.getUserId())
+							.withDraft(true)
 							.withCardIds(record.getPublicDraftState().getSelectedCards()));
 
 			record.getPublicDraftState().setDeckId(deck.getDeckId());

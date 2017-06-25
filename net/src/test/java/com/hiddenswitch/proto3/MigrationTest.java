@@ -1,12 +1,20 @@
 package com.hiddenswitch.proto3;
 
+import com.hiddenswitch.minionate.Minionate;
+import com.hiddenswitch.proto3.net.Accounts;
+import com.hiddenswitch.proto3.net.ClusterTest;
+import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Migrations;
+import com.hiddenswitch.proto3.net.client.models.Account;
+import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
 import com.hiddenswitch.proto3.net.impl.MigrationsImpl;
+import com.hiddenswitch.proto3.net.models.DeckDeleteRequest;
 import com.hiddenswitch.proto3.net.models.MigrateToRequest;
 import com.hiddenswitch.proto3.net.models.MigrationRequest;
 import com.hiddenswitch.proto3.net.util.Mongo;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.RpcClient;
+import com.hiddenswitch.proto3.net.util.UnityClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -17,6 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.validation.constraints.Min;
+import java.io.IOException;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
@@ -95,8 +105,6 @@ public class MigrationTest {
 
 	@Test
 	public void testInOrder(final TestContext context) {
-		final Vertx vertx = Vertx.vertx();
-
 		Migrations.migrate(vertx)
 				.add(new MigrationRequest()
 						.withVersion(3)
@@ -124,5 +132,40 @@ public class MigrationTest {
 						context.assertEquals(then2.getInteger("value"), 4);
 					}));
 				}));
+	}
+
+	@Test
+	public void testAllMigrations(final TestContext context) {
+		// Download production database. Requires a working mongodump url
+		vertx.executeBlocking(done -> {
+			Process mongodump = null;
+			try {
+				mongodump = new ProcessBuilder("mongodump", "--username=spellsource1", "--password=9AD3uubaeIf71a4M11lPVAV2mJcbPzV1EC38Y4WF26M", "--host=aws-us-east-1-portal.9.dblayer.com", "--port=20276", "--db=production", "--ssl", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames").start();
+				mongodump.waitFor();
+				Process mongorestore = new ProcessBuilder("mongorestore", "--host=locahost", "dump").start();
+				mongorestore.waitFor();
+				done.handle(Future.succeededFuture());
+				return;
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+			done.handle(Future.failedFuture("MongoDump failed."));
+		}, context.asyncAssertSuccess(then -> {
+			// Then deploy locally with production
+			Minionate.minionate().migrate(vertx, context.asyncAssertSuccess(then2 -> {
+				// Assert a game still works
+				Minionate.minionate().deployAll(vertx, context.asyncAssertSuccess(then3 -> {
+					vertx.executeBlocking(done -> {
+						new UnityClient(context).createUserAccount(null).matchmakeAndPlayAgainstAI(null).waitUntilDone();
+						done.handle(Future.succeededFuture());
+					}, context.asyncAssertSuccess());
+				}));
+			}));
+		}));
+
+
 	}
 }

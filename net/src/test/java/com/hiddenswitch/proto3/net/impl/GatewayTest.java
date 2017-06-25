@@ -5,10 +5,7 @@ import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.minionate.Minionate;
-import com.hiddenswitch.proto3.net.Games;
-import com.hiddenswitch.proto3.net.Inventory;
-import com.hiddenswitch.proto3.net.Logic;
-import com.hiddenswitch.proto3.net.Matchmaking;
+import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.client.ApiClient;
 import com.hiddenswitch.proto3.net.client.ApiException;
 import com.hiddenswitch.proto3.net.client.api.DefaultApi;
@@ -114,7 +111,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	@Test(timeout = 60000L)
 	public void testAccountFlow(TestContext context) throws InterruptedException {
 		wrap(context);
-		Set<String> decks = new HashSet<>(Arrays.asList(Logic.STARTING_DECKS));
+		Set<String> decks = Minionate.minionate().getStandardDecks().stream().map(DeckCreateRequest::getName).collect(Collectors.toSet());
 		final Async async = context.async();
 		final AtomicInteger count = new AtomicInteger(20);
 		// Interleave these calls
@@ -152,7 +149,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 						getContext().assertNotNull(account.getName());
 						getContext().assertNotNull(account.getPersonalCollection());
 						getContext().assertNotNull(account.getDecks());
-						getContext().assertTrue(account.getDecks().size() == Logic.STARTING_DECKS.length);
+						getContext().assertTrue(account.getDecks().size() == Minionate.minionate().getStandardDecks().size());
 						getContext().assertTrue(account.getDecks().stream().map(InventoryCollection::getName).collect(Collectors.toSet()).containsAll(decks));
 						getContext().assertTrue(account.getPersonalCollection().getInventory().size() > 0);
 					}
@@ -242,7 +239,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		UnityClient client1 = new UnityClient(getContext());
 		Thread clientThread1 = new Thread(() -> {
 			client1.createUserAccount("user1");
-			final String startDeckId1 = client1.getAccount().getDecks().stream().filter(p -> p.getName().equals(Logic.STARTING_DECKS[0])).findFirst().get().getId();
+			final String startDeckId1 = client1.getAccount().getDecks().stream().filter(p -> p.getName().equals(Minionate.minionate().getStandardDecks().get(0).getName())).findFirst().get().getId();
 			try {
 				client1.matchmakeAndPlay(startDeckId1);
 			} catch (InterruptedException e) {
@@ -252,7 +249,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		UnityClient client2 = new UnityClient(getContext());
 		Thread clientThread2 = new Thread(() -> {
 			client2.createUserAccount("user2");
-			String startDeckId2 = client2.getAccount().getDecks().stream().filter(p -> p.getName().equals(Logic.STARTING_DECKS[1])).findFirst().get().getId();
+			String startDeckId2 = client2.getAccount().getDecks().stream().filter(p -> p.getName().equals(Minionate.minionate().getStandardDecks().get(1).getName())).findFirst().get().getId();
 			try {
 				client2.matchmakeAndPlay(startDeckId2);
 			} catch (InterruptedException e) {
@@ -653,7 +650,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 			new UnityClient(context).loginWithUserAccount("testuser", "testpass").matchmakeAndPlayAgainstAI(deckId).waitUntilDone();
 			done.handle(Future.succeededFuture());
 		}, context.asyncAssertSuccess(then -> {
-			DraftState newState  = null;
+			DraftState newState = null;
 			try {
 				newState = api.draftsPost(new DraftsPostRequest().retireEarly(true));
 			} catch (ApiException e) {

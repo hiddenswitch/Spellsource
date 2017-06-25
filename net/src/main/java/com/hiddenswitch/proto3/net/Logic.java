@@ -17,10 +17,6 @@ import org.apache.commons.lang3.RandomStringUtils;
  * {@link com.hiddenswitch.minionate.Minionate#persistAttribute(LegacyPersistenceHandler)}.
  */
 public interface Logic {
-	/**
-	 * A constant specifying the default starting decks for every new player.
-	 */
-	String[] STARTING_DECKS = {"Basic Resurrector", "Basic Octopod Demo", "Basic Cyborg", "Basic Biologist", "Basic Gamer"};
 
 	/**
 	 * Performs account creation action side effects, like adding the first cards to the player's collection,
@@ -90,6 +86,11 @@ public interface Logic {
 		return desc;
 	}
 
+	/**
+	 * Persists the requested attribute for an inventory ID.
+	 * @param request The information abotu the attribute, inventory item and game necessary to save it to the database.
+	 * @return The results to apply to the entity.
+	 */
 	@Suspendable
 	PersistAttributeResponse persistAttribute(PersistAttributeRequest request);
 }

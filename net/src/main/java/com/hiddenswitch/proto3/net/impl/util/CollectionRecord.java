@@ -1,5 +1,7 @@
 package com.hiddenswitch.proto3.net.impl.util;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.models.CollectionTypes;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
@@ -13,6 +15,7 @@ public class CollectionRecord extends MongoRecord {
 	private String userId;
 	private CollectionTypes type;
 	private boolean trashed;
+	private Decks.DeckType deckType;
 	private List<String> friendUserIds;
 
 	/**
@@ -111,8 +114,28 @@ public class CollectionRecord extends MongoRecord {
 		return this;
 	}
 
-	public static CollectionRecord deck(final String userId, final String name, final HeroClass heroClass) {
+	@JsonIgnore
+	public boolean isDraft() {
+		return deckType == Decks.DeckType.DRAFT;
+	}
+
+	@JsonIgnore
+	public void setDraft(boolean draft) {
+		deckType = Decks.DeckType.DRAFT;
+	}
+
+	public CollectionRecord withDraft(final boolean draft) {
+		if (draft) {
+			deckType = Decks.DeckType.DRAFT;
+		} else {
+			deckType = Decks.DeckType.CONSTRUCTED;
+		}
+		return this;
+	}
+
+	public static CollectionRecord deck(final String userId, final String name, final HeroClass heroClass, final boolean draft) {
 		return new CollectionRecord()
+				.withDraft(draft)
 				.withUserId(userId)
 				.withName(name)
 				.withHeroClass(heroClass)
@@ -132,6 +155,14 @@ public class CollectionRecord extends MongoRecord {
 				.withType(CollectionTypes.ALLIANCE)
 				.withUserId(ownerUserId)
 				.withFriendUserIds(Arrays.asList(ownerUserId));
+	}
+
+	public Decks.DeckType getDeckType() {
+		return deckType;
+	}
+
+	public void setDeckType(Decks.DeckType deckType) {
+		this.deckType = deckType;
 	}
 }
 

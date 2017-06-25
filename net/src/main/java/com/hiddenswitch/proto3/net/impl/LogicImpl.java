@@ -7,7 +7,6 @@ import com.hiddenswitch.minionate.LegacyPersistenceHandler;
 import com.hiddenswitch.minionate.PersistenceContext;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger;
-import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.Registration;
@@ -15,10 +14,8 @@ import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
@@ -109,25 +106,13 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		// is)
 		final CreateCollectionRequest startingCollectionRequest = CreateCollectionRequest.startingCollection(userId);
 		response.setCreateCollectionResponse(inventory.sync().createCollection(startingCollectionRequest));
-		if (DeckCatalogue.getDecks().size() > 0) {
-			for (String deckName : STARTING_DECKS) {
-				Deck deck = DeckCatalogue.getDeckByName(deckName);
-				if (deck == null) {
-					throw new RuntimeException("Deck not found.");
-				}
-				// Figure out which cards go into which decks.
-				List<String> cardIds = deck.getCards().toList().stream().map(Card::getCardId).collect(Collectors.toList());
 
-				final DeckCreateResponse deckCreate = decks.sync().createDeck(new DeckCreateRequest()
-						.withUserId(userId)
-						.withHeroClass(deck.getHeroClass())
-						.withName(deck.getName())
-						.withCardIds(cardIds));
-				response.getDeckCreateResponses().add(deckCreate);
-				response.getCreateCollectionResponse().getCreatedInventoryIds().addAll(deckCreate.getInventoryIds());
-			}
+		// Load in the starting deck lists
+		for (DeckCreateRequest deckCreateRequest : Minionate.minionate().getStandardDecks()) {
+			final DeckCreateResponse deckCreate = decks.sync().createDeck(deckCreateRequest.clone().withUserId(userId));
+			response.getDeckCreateResponses().add(deckCreate);
+			response.getCreateCollectionResponse().getCreatedInventoryIds().addAll(deckCreate.getInventoryIds());
 		}
-
 
 		return response;
 	}

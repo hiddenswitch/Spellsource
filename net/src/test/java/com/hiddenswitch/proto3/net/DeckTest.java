@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.net;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
+import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommandPushInventoryIds;
 import com.hiddenswitch.proto3.net.impl.*;
@@ -120,6 +121,12 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 			DeckDeleteResponse response = service.deleteDeck(new DeckDeleteRequest(deckId));
 			getContext().assertFalse(accounts.get(userId1).getDecks().contains(deckId));
 		});
+	}
+
+	@Test
+	public void testGetStandardDecks(TestContext context) {
+		context.assertTrue(Minionate.minionate().getStandardDecks().size() > 0);
+		Minionate.minionate().getStandardDecks().forEach(d -> context.assertTrue(d.getCardIds().size() > 0));
 	}
 
 	@Override

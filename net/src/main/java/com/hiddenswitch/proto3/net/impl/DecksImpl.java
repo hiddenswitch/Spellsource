@@ -17,6 +17,7 @@ import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.decks.DeckCatalogue;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -24,28 +25,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static com.hiddenswitch.proto3.net.util.Mongo.mongo;
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 import static com.hiddenswitch.proto3.net.util.QuickJson.jsonPut;
 import static io.vertx.ext.sync.Sync.awaitResult;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  * Created by bberman on 2/4/17.
  */
 public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 	private RpcClient<Inventory> inventory;
-	private RpcClient<Accounts> accounts;
 	private com.hiddenswitch.proto3.net.util.Registration registration;
 
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
 		inventory = RPC.connect(Inventory.class, vertx.eventBus());
-		accounts = RPC.connect(Accounts.class, vertx.eventBus());
 		// Create the starting decks
 		try {
 			CardCatalogue.loadCardsFromPackage();
@@ -101,7 +101,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		// Creates a new collection representing this deck
 		final String userId = request.getUserId();
 		CreateCollectionResponse createCollectionResponse = inventory.sync()
-				.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds));
+				.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft()));
 
 		// Update the user document with this deck ID
 		final String deckId = createCollectionResponse.getCollectionId();
@@ -169,6 +169,35 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		Accounts.update(getMongo(), userId, json("$pull", json("decks", deckId)));
 
 		return new DeckDeleteResponse(response);
+	}
+
+	@Suspendable
+	@Override
+	public DeckListUpdateResponse updateAllDecks(DeckListUpdateRequest request) throws SuspendExecution, InterruptedException {
+		// Get all the non-draft decks
+		List<String> deckIds = mongo().findWithOptions(Inventory.COLLECTIONS, json("draft", false), new FindOptions().setFields(json("_id", 1)))
+				.stream().map(o -> o.getString("_id")).collect(toList());
+
+		// Trash them all
+		for (String deckId : deckIds) {
+			deleteDeck(new DeckDeleteRequest(deckId));
+		}
+
+		// Get all the users
+		List<String> userIds = mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1))).stream().map(o -> o.getString("_id")).collect(toList());
+
+		AtomicLong updated = new AtomicLong();
+
+		// Add all the new decks
+		// TODO: For now, with so few users, we're not going to overoptimize this. We'll just call the API methods.
+		for (String userId : userIds) {
+			for (DeckCreateRequest deckCreate : request.getDeckCreateRequests()) {
+				createDeck(deckCreate.clone().withUserId(userId));
+				updated.incrementAndGet();
+			}
+		}
+
+		return new DeckListUpdateResponse(updated.get());
 	}
 
 	@Override

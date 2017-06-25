@@ -53,7 +53,7 @@ public class Conversations {
             conversation = fromJson(result, ConversationRecord.class);
         } else {
             final ConversationRecord newConversation = new ConversationRecord(conversationId);
-            String _ = awaitResult(h-> mongo.insert(CONVERSATIONS, toJson(newConversation), h));
+            String ignored = awaitResult(h-> mongo.insert(CONVERSATIONS, toJson(newConversation), h));
             conversation = newConversation;
         }
         return conversation;

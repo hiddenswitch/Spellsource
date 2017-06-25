@@ -41,12 +41,18 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 		super.start();
 		cards = RPC.connect(Cards.class, vertx.eventBus());
 		List<String> collections = mongo().getCollections();
-		if (!collections.contains(INVENTORY) || !collections.contains(COLLECTIONS)) {
+
+		if (!collections.contains(INVENTORY)) {
 			mongo().createCollection(INVENTORY);
-			mongo().createCollection(COLLECTIONS);
-			mongo().createIndex(INVENTORY, json("userId", 1));
-			mongo().createIndex(INVENTORY, json("collectionIds", 1));
 		}
+
+		if (!collections.contains(COLLECTIONS)) {
+			mongo().createCollection(COLLECTIONS);
+		}
+
+		mongo().createIndex(INVENTORY, json("userId", 1));
+		mongo().createIndex(INVENTORY, json("collectionIds", 1));
+
 		registration = RPC.register(this, Inventory.class, vertx.eventBus());
 	}
 
@@ -97,16 +103,16 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 				return CreateCollectionResponse.user(request.getUserId(), newInventoryIds);
 			case DECK:
-				CollectionRecord record1 = CollectionRecord.deck(request.getUserId(), request.getName(), request.getHeroClass());
-				final String deckId = awaitResult(h -> getMongo().insert(COLLECTIONS, toJson(record1), h));
+				CollectionRecord record1 = CollectionRecord.deck(request.getUserId(), request.getName(), request.getHeroClass(), request.isDraft());
+				final String deckId = mongo().insert(COLLECTIONS, toJson(record1));
 
 				if (request.getInventoryIds() != null
 						&& request.getInventoryIds().size() > 0) {
-					final MongoClientUpdateResult update = awaitResult(h -> getMongo().updateCollectionWithOptions(INVENTORY,
-							json("_id", json("$in", request.getInventoryIds())),
-							json("$addToSet", json("collectionIds", deckId)),
-							new UpdateOptions().setMulti(true),
-							h));
+					MongoClientUpdateResult update = mongo()
+							.updateCollectionWithOptions(INVENTORY,
+									json("_id", json("$in", request.getInventoryIds())),
+									json("$addToSet", json("collectionIds", deckId)),
+									new UpdateOptions().setMulti(true));
 				}
 
 				return CreateCollectionResponse.deck(deckId);
