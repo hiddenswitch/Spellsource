@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3;
 
+import ch.qos.logback.classic.Level;
 import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.ClusterTest;
@@ -134,8 +135,15 @@ public class MigrationTest {
 				}));
 	}
 
+	public void setLoggingLevel(Level level) {
+		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
+				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+		root.setLevel(level);
+	}
+
 	@Test
 	public void testAllMigrations(final TestContext context) {
+		setLoggingLevel(Level.ERROR);
 		// Download production database. Requires a working mongodump url
 		vertx.executeBlocking(done -> {
 			Process mongodump = null;
