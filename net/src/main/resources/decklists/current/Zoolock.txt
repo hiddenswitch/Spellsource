@@ -1,0 +1,21 @@
+### Zoolock
+# - Standard Meta Snapshot - March 12, 2017
+# Class: Warlock
+# Format: Wild
+#
+# 1x (1) Abusive Sergeant
+# 2x (1) Flame Imp
+# 2x (1) Malchezaar's Imp
+# 2x (1) Possessed Villager
+# 2x (1) Soulfire
+# 2x (1) Voidwalker
+# 2x (2) Dark Peddler
+# 2x (2) Darkshire Librarian
+# 1x (2) Demonfire
+# 2x (2) Dire Wolf Alpha
+# 2x (2) Knife Juggler
+# 2x (3) Darkshire Councilman
+# 2x (3) Imp Gang Boss
+# 2x (3) Silverware Golem
+# 2x (4) Defender of Argus
+# 2x (5) Doomguard

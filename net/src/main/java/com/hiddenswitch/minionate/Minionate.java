@@ -2,10 +2,15 @@ package com.hiddenswitch.minionate;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.google.common.io.Resources;
+import com.hiddenswitch.proto3.net.Decks;
+import com.hiddenswitch.proto3.net.Inventory;
+import com.hiddenswitch.proto3.net.Migrations;
 import com.hiddenswitch.proto3.net.impl.*;
-import com.hiddenswitch.proto3.net.models.MigrateToRequest;
-import com.hiddenswitch.proto3.net.models.MigrationToResponse;
+import com.hiddenswitch.proto3.net.models.*;
+import com.sun.xml.internal.ws.util.CompletedFuture;
 import io.vertx.core.*;
+import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.sync.SuspendableRunnable;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
@@ -14,12 +19,22 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.hiddenswitch.proto3.net.util.Mongo.mongo;
+import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
+import static io.vertx.ext.sync.Sync.awaitResult;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * The Minionate Server API. Access it with {@link Minionate#minionate()}.
@@ -30,6 +45,7 @@ import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
  */
 public class Minionate {
 	private static Minionate instance;
+	List<DeckCreateRequest> cachedStandardDecks;
 	Map<String, LegacyPersistenceHandler> legacyPersistenceHandlers = new HashMap<>();
 	Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
 
@@ -47,6 +63,72 @@ public class Minionate {
 		}
 
 		return instance;
+	}
+
+	/**
+	 * The common migration for a given Minionate cluster.
+	 *
+	 * @param vertx The vertx instance.
+	 * @param then  A handler when the migration that tells you if it was or was not successful.
+	 * @return
+	 */
+	public Minionate migrate(Vertx vertx, Handler<AsyncResult<Void>> then) {
+		mongo().connectWithEnvironment(vertx);
+		Migrations.migrate(vertx)
+				.add(new MigrationRequest()
+						.withVersion(1)
+						.withUp(thisVertx -> {
+							mongo().createIndex(Inventory.COLLECTIONS, json("deckType", 1));
+
+							// All draft decks should have the draft flag set
+							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+									json("name", json("$regex", "'s Draft Deck")),
+									json("$set", json("deckType", Decks.DeckType.DRAFT)),
+									new UpdateOptions().setMulti(true));
+
+							// All other decks should have the constructed flag
+							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+									json("deckType", json("$ne", Decks.DeckType.DRAFT)),
+									json("$set", json("deckType", Decks.DeckType.CONSTRUCTED)),
+									new UpdateOptions().setMulti(true));
+
+							// Update to the latest decklist
+							DecksImpl decksImpl = new DecksImpl();
+							String deploymentId = awaitResult(h -> thisVertx.deployVerticle(decksImpl, h));
+							decksImpl.updateAllDecks(new DeckListUpdateRequest()
+									.withDeckCreateRequests(Minionate.minionate().getStandardDecks()));
+							Void ignored = awaitResult(h -> thisVertx.undeploy(deploymentId, h));
+						})).migrateTo(1, then2 -> then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
+		return this;
+	}
+
+	/**
+	 * Gets the current deck lists specified in the decklists.current resources directory.
+	 *
+	 * @return A list of deck create requests without a {@link DeckCreateRequest#userId} specified.
+	 */
+	public List<DeckCreateRequest> getStandardDecks() {
+		if (cachedStandardDecks == null) {
+			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
+			Set<URL> resourceList = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(toSet());
+			cachedStandardDecks = resourceList.stream().map(c -> {
+				try {
+					return Resources.toString(c, Charset.defaultCharset());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}).map((deckList) -> {
+				try {
+					return DeckCreateRequest.fromDeckList(deckList);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+			}).filter(c -> null != c).collect(toList());
+		}
+
+		return cachedStandardDecks;
 	}
 
 	/**
@@ -114,7 +196,7 @@ public class Minionate {
 			final Future<String> future = Future.future();
 			vertx.deployVerticle(verticle, future);
 			return future;
-		}).collect(Collectors.toList())).setHandler(deployments);
+		}).collect(toList())).setHandler(deployments);
 	}
 
 	/**

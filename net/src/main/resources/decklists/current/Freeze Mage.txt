@@ -1,0 +1,22 @@
+### Freeze Mage
+# - Standard Meta Snapshot - March 19, 2017
+# Class: Mage
+# Format: Wild
+#
+# 2x (1) Ice Lance
+# 1x (2) Bloodmage Thalnos
+# 2x (2) Doomsayer
+# 2x (2) Frostbolt
+# 2x (2) Loot Hoarder
+# 2x (2) Novice Engineer
+# 2x (3) Acolyte of Pain
+# 2x (3) Arcane Intellect
+# 2x (3) Forgotten Torch
+# 2x (3) Frost Nova
+# 2x (3) Ice Barrier
+# 2x (3) Ice Block
+# 1x (4) Evolved Kobold
+# 2x (4) Fireball
+# 2x (6) Blizzard
+# 1x (6) Emperor Thaurissan
+# 1x (9) Alexstrasza

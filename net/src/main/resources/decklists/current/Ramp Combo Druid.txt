@@ -1,0 +1,24 @@
+### Ramp Combo Druid
+# - Standard Meta Snapshot - March 19, 2017
+# Class: Druid
+# Format: Wild
+#
+# 2x (0) Innervate
+# 2x (0) Moonfire
+# 2x (1) Living Roots
+# 2x (1) Raven Idol
+# 2x (2) Wild Growth
+# 2x (2) Wrath
+# 2x (3) Feral Rage
+# 1x (4) Fandral Staghelm
+# 1x (4) Mire Keeper
+# 2x (4) Swipe
+# 2x (5) Azure Drake
+# 1x (5) Faceless Manipulator
+# 2x (5) Nourish
+# 1x (6) Emperor Thaurissan
+# 1x (6) Gadgetzan Auctioneer
+# 2x (7) Ancient of War
+# 1x (9) Aviana
+# 1x (9) Malygos
+# 1x (10) Kun the Forgotten King

@@ -1,0 +1,23 @@
+### Anyfin Paladin
+# - Standard Meta Snapshot - March 19, 2017
+# Class: Paladin
+# Format: Wild
+#
+# 1x (0) Forbidden Healing
+# 2x (1) Mistress of Mixtures
+# 2x (2) Bluegill Warrior
+# 2x (2) Doomsayer
+# 2x (2) Equality
+# 2x (2) Wild Pyromancer
+# 2x (3) Acolyte of Pain
+# 1x (3) Aldor Peacekeeper
+# 2x (3) Murloc Warleader
+# 1x (4) Barnes
+# 2x (4) Consecration
+# 2x (4) Truesilver Champion
+# 1x (5) Finja, the Flying Star
+# 2x (5) Solemn Vigil
+# 2x (6) Ivory Knight
+# 1x (8) Ragnaros, Lightlord
+# 1x (8) Tirion Fordring
+# 2x (10) Anyfin Can Happen

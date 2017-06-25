@@ -1,0 +1,35 @@
+### Renolock
+# - Standard Meta Snapshot - March 12, 2017
+# Class: Warlock
+# Format: Wild
+#
+# 1x (1) Bloodsail Corsair
+# 1x (1) Mistress of Mixtures
+# 1x (1) Mortal Coil
+# 1x (1) Patches the Pirate
+# 1x (1) Power Overwhelming
+# 1x (1) Soulfire
+# 1x (2) Acidic Swamp Ooze
+# 1x (2) Dark Peddler
+# 1x (2) Dirty Rat
+# 1x (2) Doomsayer
+# 1x (2) Sunfury Protector
+# 1x (3) Brann Bronzebeard
+# 1x (3) Demonwrath
+# 1x (3) Earthen Ring Farseer
+# 1x (3) Imp Gang Boss
+# 1x (3) Mind Control Tech
+# 1x (3) Shadow Bolt
+# 1x (4) Defender of Argus
+# 1x (4) Hellfire
+# 1x (4) Kazakus
+# 1x (4) Refreshment Vendor
+# 1x (4) Twilight Drake
+# 1x (5) Faceless Manipulator
+# 1x (5) Leeroy Jenkins
+# 1x (5) Second-Rate Bruiser
+# 1x (6) Emperor Thaurissan
+# 1x (6) Reno Jackson
+# 1x (6) Siphon Soul
+# 1x (7) Abyssal Enforcer
+# 1x (12) Mountain Giant

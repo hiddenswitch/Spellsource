@@ -19,18 +19,20 @@ public class CreateCollectionRequest implements Serializable {
 	private String name;
 	private QueryCardsRequest queryCardsRequest;
 	private HeroClass heroClass;
+	private boolean draft;
 	private int copies = 1;
 
 	protected CreateCollectionRequest() {
 	}
 
-	public static CreateCollectionRequest deck(String userId, String name, HeroClass heroClass, List<String> inventoryIds) {
+	public static CreateCollectionRequest deck(String userId, String name, HeroClass heroClass, List<String> inventoryIds, boolean draft) {
 		return new CreateCollectionRequest()
 				.withType(CollectionTypes.DECK)
 				.withName(name)
 				.withUserId(userId)
 				.withHeroClass(heroClass)
-				.withInventoryIds(inventoryIds);
+				.withInventoryIds(inventoryIds)
+				.withDraft(draft);
 	}
 
 	public static CreateCollectionRequest startingCollection(String userId) {
@@ -196,6 +198,19 @@ public class CreateCollectionRequest implements Serializable {
 
 	public CreateCollectionRequest withCopies(final int copies) {
 		this.copies = copies;
+		return this;
+	}
+
+	public boolean isDraft() {
+		return draft;
+	}
+
+	public void setDraft(boolean draft) {
+		this.draft = draft;
+	}
+
+	public CreateCollectionRequest withDraft(final boolean draft) {
+		this.draft = draft;
 		return this;
 	}
 }
