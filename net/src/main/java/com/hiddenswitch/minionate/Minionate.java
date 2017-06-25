@@ -1,17 +1,16 @@
 package com.hiddenswitch.minionate;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.SuspendableAction1;
 import com.google.common.io.Resources;
 import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Migrations;
 import com.hiddenswitch.proto3.net.impl.*;
-import com.hiddenswitch.proto3.net.models.*;
-import com.sun.xml.internal.ws.util.CompletedFuture;
+import com.hiddenswitch.proto3.net.models.DeckCreateRequest;
+import com.hiddenswitch.proto3.net.models.DeckListUpdateRequest;
+import com.hiddenswitch.proto3.net.models.MigrationRequest;
 import io.vertx.core.*;
 import io.vertx.ext.mongo.UpdateOptions;
-import io.vertx.ext.sync.SuspendableRunnable;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.Attribute;
@@ -27,11 +26,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static com.hiddenswitch.proto3.net.util.Mongo.mongo;
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
-import static com.hiddenswitch.proto3.net.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
