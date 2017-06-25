@@ -98,6 +98,9 @@ public class MigrationTest {
 							Mongo.mongo().insert("testcollection", json("_id", "test2"));
 						}))
 				.migrateTo(2, context.asyncAssertSuccess(then -> {
+					if (then.failed()) {
+						context.fail(then.cause());
+					}
 					Mongo.mongo().client().count("testcollection", json(), context.asyncAssertSuccess(then3 -> {
 						context.assertEquals(then3, 2L);
 					}));
@@ -144,15 +147,16 @@ public class MigrationTest {
 	@Test
 	public void testAllMigrations(final TestContext context) {
 		setLoggingLevel(Level.ERROR);
+		Mongo.mongo().connectWithEnvironment(vertx);
 		// Download production database. Requires a working mongodump url
 		vertx.executeBlocking(done -> {
 			Process mongodump = null;
 			try {
 				mongodump = new ProcessBuilder("mongodump", "--username=spellsource1", "--password=9AD3uubaeIf71a4M11lPVAV2mJcbPzV1EC38Y4WF26M", "--host=aws-us-east-1-portal.9.dblayer.com", "--port=20276", "--db=production", "--ssl", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames").start();
-				mongodump.waitFor();
-				Process mongorestore = new ProcessBuilder("mongorestore", "--host=locahost", "dump").start();
-				mongorestore.waitFor();
-				done.handle(Future.succeededFuture());
+				int waitFor1 = mongodump.waitFor();
+				Process mongorestore = new ProcessBuilder("mongorestore", "--host=localhost", "dump").start();
+				int waitFor2 = mongorestore.waitFor();
+				done.handle((waitFor1 == 0 && waitFor2 == 0) ? Future.succeededFuture() : Future.failedFuture("Didn't restore or dump correctly."));
 				return;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -166,6 +170,9 @@ public class MigrationTest {
 			Minionate.minionate().migrate(vertx, context.asyncAssertSuccess(then2 -> {
 				// Assert a game still works
 				Minionate.minionate().deployAll(vertx, context.asyncAssertSuccess(then3 -> {
+					// Query for existing decks and assert
+
+
 					vertx.executeBlocking(done -> {
 						new UnityClient(context).createUserAccount(null).matchmakeAndPlayAgainstAI(null).waitUntilDone();
 						done.handle(Future.succeededFuture());

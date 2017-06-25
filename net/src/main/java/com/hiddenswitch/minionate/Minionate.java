@@ -2,7 +2,7 @@ package com.hiddenswitch.minionate;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.google.common.io.Resources;
-import com.hiddenswitch.proto3.net.Decks;
+import com.hiddenswitch.proto3.net.DeckType;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Migrations;
 import com.hiddenswitch.proto3.net.impl.*;
@@ -80,13 +80,13 @@ public class Minionate {
 							// All draft decks should have the draft flag set
 							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
 									json("name", json("$regex", "'s Draft Deck")),
-									json("$set", json("deckType", Decks.DeckType.DRAFT)),
+									json("$set", json("deckType", DeckType.DRAFT.toString())),
 									new UpdateOptions().setMulti(true));
 
 							// All other decks should have the constructed flag
 							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
-									json("deckType", json("$ne", Decks.DeckType.DRAFT)),
-									json("$set", json("deckType", Decks.DeckType.CONSTRUCTED)),
+									json("deckType", json("$ne", DeckType.DRAFT.toString())),
+									json("$set", json("deckType", DeckType.CONSTRUCTED.toString())),
 									new UpdateOptions().setMulti(true));
 
 							// Update to the latest decklist
@@ -95,7 +95,9 @@ public class Minionate {
 							decksImpl.updateAllDecks(new DeckListUpdateRequest()
 									.withDeckCreateRequests(Minionate.minionate().getStandardDecks()));
 							Void ignored = awaitResult(h -> thisVertx.undeploy(deploymentId, h));
-						})).migrateTo(1, then2 -> then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
+						}))
+				.migrateTo(1, then2 ->
+						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
 
