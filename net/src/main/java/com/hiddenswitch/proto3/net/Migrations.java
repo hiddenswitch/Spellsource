@@ -2,10 +2,13 @@ package com.hiddenswitch.proto3.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.proto3.net.impl.MigratorImpl;
 import com.hiddenswitch.proto3.net.models.MigrateToRequest;
 import com.hiddenswitch.proto3.net.models.MigrationRequest;
 import com.hiddenswitch.proto3.net.models.MigrationResponse;
 import com.hiddenswitch.proto3.net.models.MigrationToResponse;
+import com.hiddenswitch.proto3.net.util.Migrator;
+import io.vertx.core.Vertx;
 
 import java.io.Serializable;
 
@@ -33,5 +36,23 @@ public interface Migrations {
 	@Suspendable
 	MigrationToResponse migrateTo(MigrateToRequest request) throws SuspendExecution, InterruptedException;
 
+	/**
+	 * Force the database to be unlocked. Very dangerous.
+	 *
+	 * @param ignoredRequest Ignored parameter.
+	 * @return A void parameter.
+	 * @throws InterruptedException
+	 * @throws SuspendExecution
+	 */
 	Serializable forceUnlock(Serializable ignoredRequest) throws InterruptedException, SuspendExecution;
+
+	/**
+	 * Gets a {@link Migrator} that can be used to easily run a migration
+	 *
+	 * @param vertx
+	 * @return
+	 */
+	static Migrator migrate(Vertx vertx) {
+		return new MigratorImpl(vertx);
+	}
 }
