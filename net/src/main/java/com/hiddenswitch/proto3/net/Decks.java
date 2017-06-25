@@ -19,10 +19,6 @@ import java.util.stream.Stream;
  * The deck management service.
  */
 public interface Decks {
-	enum DeckType {
-		CONSTRUCTED,
-		DRAFT
-	}
 
 	/**
 	 * Creates a deck with convenient arguments.

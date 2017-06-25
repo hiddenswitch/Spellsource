@@ -3,6 +3,7 @@ package com.hiddenswitch.proto3.net.impl;
 import com.hiddenswitch.proto3.net.Migrations;
 import com.hiddenswitch.proto3.net.models.MigrateToRequest;
 import com.hiddenswitch.proto3.net.models.MigrationRequest;
+import com.hiddenswitch.proto3.net.models.MigrationToResponse;
 import com.hiddenswitch.proto3.net.util.Migrator;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.RpcClient;
@@ -32,15 +33,15 @@ public class MigratorImpl implements com.hiddenswitch.proto3.net.util.Migrator {
 	}
 
 	@Override
-	public void migrateTo(final int version, final Handler<AsyncResult<CompositeFuture>> response) {
+	public void migrateTo(final int version, final Handler<AsyncResult<MigrationToResponse>> response) {
 		vertx.deployVerticle(new MigrationsImpl(), then -> {
 			RpcClient<Migrations> migrations = RPC.connect(Migrations.class, vertx.eventBus());
-			CompositeFuture.join(
-					Stream.concat(
-							requests.stream().map(x -> migrations.promise(service -> service.add(x))),
-							Stream.of(migrations.promise(service -> service.migrateTo(new MigrateToRequest().withVersion(version)))))
-							.collect(Collectors.toList())).setHandler(cf -> {
-				vertx.undeploy(then.result(), finallyThen -> response.handle(cf));
+			CompositeFuture.join(requests.stream().map(x -> migrations.promise(service -> service.add(x))).collect(Collectors.toList()))
+					.setHandler(cf -> {
+						migrations.promise(service -> service.migrateTo(new MigrateToRequest().withVersion(version))).setHandler(migrationResult -> {
+							vertx.undeploy(then.result(), finallyThen -> response.handle(migrationResult));
+						});
+
 			});
 		});
 

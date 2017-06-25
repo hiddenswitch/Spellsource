@@ -7,7 +7,7 @@ import io.vertx.core.impl.NoStackTraceThrowable;
 
 import java.io.Serializable;
 
-public class MigrationToResponse implements Serializable, AsyncResult<Void> {
+public class MigrationToResponse implements Serializable {
 	private boolean failed;
 	private boolean succeeded;
 	private Handler<AsyncResult<Void>> handler;
