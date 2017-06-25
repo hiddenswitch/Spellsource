@@ -98,35 +98,23 @@ public class Minionate {
 	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
 	 */
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
-		// First deploy the migrations service
-		MigrationsImpl migrations = new MigrationsImpl();
+		final List<SyncVerticle> verticles = Arrays.asList(new SyncVerticle[]{
+				new CardsImpl(),
+				new AccountsImpl(),
+				new GamesImpl(),
+				new MatchmakingImpl(),
+				new BotsImpl(),
+				new LogicImpl(),
+				new DecksImpl(),
+				new InventoryImpl(),
+				new DraftImpl(),
+				new GatewayImpl()});
 
-		vertx.deployVerticle(migrations, suspendableHandler((then -> {
-			MigrationToResponse response = migrations.migrateTo(new MigrateToRequest().withLatest(true));
-
-			if (response.failed()) {
-				deployments.handle(Future.failedFuture(response.cause()));
-				return;
-			}
-
-			final List<SyncVerticle> verticles = Arrays.asList(new SyncVerticle[]{
-					new CardsImpl(),
-					new AccountsImpl(),
-					new GamesImpl(),
-					new MatchmakingImpl(),
-					new BotsImpl(),
-					new LogicImpl(),
-					new DecksImpl(),
-					new InventoryImpl(),
-					new DraftImpl(),
-					new GatewayImpl()});
-
-			CompositeFuture.all(verticles.stream().map(verticle -> {
-				final Future<String> future = Future.future();
-				vertx.deployVerticle(verticle, future);
-				return future;
-			}).collect(Collectors.toList())).setHandler(deployments);
-		})));
+		CompositeFuture.all(verticles.stream().map(verticle -> {
+			final Future<String> future = Future.future();
+			vertx.deployVerticle(verticle, future);
+			return future;
+		}).collect(Collectors.toList())).setHandler(deployments);
 	}
 
 	/**
