@@ -72,11 +72,15 @@ public class Minionate {
 	 */
 	public Minionate migrate(Vertx vertx, Handler<AsyncResult<Void>> then) {
 		mongo().connectWithEnvironment(vertx);
+
 		Migrations.migrate(vertx)
 				.add(new MigrationRequest()
 						.withVersion(1)
 						.withUp(thisVertx -> {
-							mongo().createIndex(Inventory.COLLECTIONS, json("deckType", 1));
+							try {
+								mongo().createIndex(Inventory.COLLECTIONS, json("deckType", 1));
+							} catch (Throwable ignored) {
+							}
 
 							// All draft decks should have the draft flag set
 							MongoClientUpdateResult u1 = mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
