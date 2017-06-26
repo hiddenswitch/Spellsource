@@ -572,7 +572,8 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		final String displayName = record.getProfile().getDisplayName();
 		return new Account()
 				.id(record.getId())
-				.decks(deckCollections.getResponses().stream().map(GetCollectionResponse::asInventoryCollection).collect(toList()))
+				.decks(deckCollections.getResponses().stream()
+						.filter(response -> response.getTrashed() == false).map(GetCollectionResponse::asInventoryCollection).collect(toList()))
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getProfile().getEmailAddress())
 				.connection(record.getConnection())

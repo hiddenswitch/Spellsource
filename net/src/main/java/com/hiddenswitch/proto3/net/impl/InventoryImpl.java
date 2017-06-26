@@ -271,13 +271,8 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 		final List<InventoryRecord> inventoryRecords = results.stream().map(r -> fromJson(r, InventoryRecord.class)).collect(Collectors.toList());
 
 		if (type == CollectionTypes.DECK) {
-			List<JsonObject> deckCollection = awaitResult(h -> getMongo().find(COLLECTIONS, json("_id", collectionId), h));
-			if (deckCollection.size() == 0) {
-				throw new RuntimeException();
-			}
-
-			CollectionRecord deck = fromJson(deckCollection.get(0), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), inventoryRecords);
+			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), inventoryRecords, deck.isTrashed());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(request.getUserId(), inventoryRecords);
 		} /*  else {
