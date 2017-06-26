@@ -54,13 +54,6 @@ public class LocalMongo {
 		starter = MongodStarter.getInstance(runtimeConfig);
 	}
 
-	public JsonObject getConfig() {
-		return new JsonObject()
-				.put("host", "localhost")
-				.put("port", 27017)
-				.put("db_name", "minionate");
-	}
-
 	public void start() throws Exception {
 		mongodExecutable = starter.prepare(new MongodConfigBuilder()
 				.version(Version.Main.PRODUCTION)
