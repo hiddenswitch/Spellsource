@@ -1243,19 +1243,9 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public Stream<Entity> getEntities() {
-		return getPlayers().stream().flatMap(p -> Stream.of(new Zones[]{
-				Zones.PLAYER,
-				Zones.BATTLEFIELD,
-				Zones.DECK,
-				Zones.GRAVEYARD,
-				Zones.HAND,
-				Zones.HERO,
-				Zones.HERO_POWER,
-				Zones.SET_ASIDE_ZONE,
-				Zones.WEAPON,
-				Zones.SECRET,
-				Zones.REMOVED_FROM_PLAY
-		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
+		return getPlayers().stream()
+				.flatMap(p -> Stream.of(Zones.values())
+						.flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 
 	public void onWillPerformGameAction(int playerId, GameAction action) {

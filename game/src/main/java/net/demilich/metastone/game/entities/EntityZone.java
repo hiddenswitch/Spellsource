@@ -155,5 +155,9 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public int getPlayer() {
 		return player;
 	}
+
+	public static EntityZone empty(int player) {
+		return new EntityZone(player, Zones.NONE);
+	}
 }
 

@@ -120,12 +120,6 @@ public enum Zones {
 	 */
 	SET_ASIDE_ZONE,
 	/**
-	 * Some entities may be marked as hidden, like special rules-implementing entities that may be used for Tavern
-	 * Brawl-like custom games. Currently unused by any existing gameplay.
-	 */
-	@Deprecated
-	HIDDEN,
-	/**
 	 * Metastone originally used the same object for what is now the {@link Player} and {@link Hero} entity. Since the
 	 * {@link Player} is still targetable (primarily by special buffing spells), it needs a {@link Zones} zone to belong
 	 * to. This zone is the zone a {@link Player} entity belongs to.
