@@ -26,6 +26,7 @@ public class GetCollectionResponse implements Serializable {
 	private String name;
 	private String collectionId;
 	private String userId;
+	private boolean trashed;
 
 	public static GetCollectionResponse batch(List<GetCollectionResponse> responses) {
 		return new GetCollectionResponse()
@@ -40,8 +41,9 @@ public class GetCollectionResponse implements Serializable {
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<InventoryRecord> inventoryRecords) {
+	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<InventoryRecord> inventoryRecords, boolean trashed) {
 		return new GetCollectionResponse()
+				.withTrashed(trashed)
 				.withCollectionType(CollectionTypes.DECK)
 				.withCollectionId(deckId)
 				.withCardRecords(inventoryRecords)
@@ -175,6 +177,23 @@ public class GetCollectionResponse implements Serializable {
 		}
 
 		return collection;
+	}
+
+	public boolean getTrashed() {
+		return trashed;
+	}
+
+	public boolean isTrashed() {
+		return trashed;
+	}
+
+	public void setTrashed(boolean trashed) {
+		this.trashed = trashed;
+	}
+
+	public GetCollectionResponse withTrashed(final boolean trashed) {
+		this.trashed = trashed;
+		return this;
 	}
 }
 

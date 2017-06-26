@@ -178,12 +178,13 @@ public class MigrationTest {
 				// Assert a game still works
 				Minionate.minionate().deployAll(vertx, context.asyncAssertSuccess(then3 -> {
 					// Query for existing decks and assert
-
-
-					vertx.executeBlocking(done -> {
-						new UnityClient(context).createUserAccount(null).matchmakeAndPlayAgainstAI(null).waitUntilDone();
-						done.handle(Future.succeededFuture());
-					}, context.asyncAssertSuccess());
+					Mongo.mongo().client().count(Accounts.USERS, json(), context.asyncAssertSuccess(count -> {
+						context.assertTrue(count > 10L);
+						vertx.executeBlocking(done -> {
+							new UnityClient(context).createUserAccount(null).matchmakeAndPlayAgainstAI(null).waitUntilDone();
+							done.handle(Future.succeededFuture());
+						}, context.asyncAssertSuccess());
+					}));
 				}));
 			}));
 		}));
