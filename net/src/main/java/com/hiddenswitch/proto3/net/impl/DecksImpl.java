@@ -18,7 +18,6 @@ import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.decks.DeckCatalogue;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -27,8 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.hiddenswitch.proto3.net.util.Mongo.mongo;
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
@@ -108,7 +105,11 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		final String deckId = createCollectionResponse.getCollectionId();
 		Accounts.update(getMongo(), userId, json("$addToSet", json("decks", deckId)));
 
-		return new DeckCreateResponse(deckId, inventoryIds);
+		// Get the collection
+		GetCollectionResponse getCollectionResponse = inventory.sync()
+				.getCollection(new GetCollectionRequest().withUserId(userId).withDeckId(createCollectionResponse.getCollectionId()));
+
+		return new DeckCreateResponse(deckId, getCollectionResponse);
 	}
 
 	private int getMaxDeckSize() {

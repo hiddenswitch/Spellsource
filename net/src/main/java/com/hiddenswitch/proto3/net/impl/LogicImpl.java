@@ -2,10 +2,13 @@ package com.hiddenswitch.proto3.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.minionate.LegacyPersistenceHandler;
+import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.minionate.PersistenceContext;
-import com.hiddenswitch.proto3.net.*;
+import com.hiddenswitch.proto3.net.Accounts;
+import com.hiddenswitch.proto3.net.Decks;
+import com.hiddenswitch.proto3.net.Inventory;
+import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.impl.util.PersistenceTrigger;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
@@ -34,9 +37,6 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
-/**
- * Created by bberman on 1/30/17.
- */
 public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	private RpcClient<Inventory> inventory;
 	private RpcClient<Decks> decks;

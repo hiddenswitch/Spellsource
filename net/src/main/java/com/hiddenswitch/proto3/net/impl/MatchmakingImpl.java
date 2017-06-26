@@ -7,6 +7,7 @@ import com.hiddenswitch.proto3.net.client.models.MatchmakingDeck;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
 import com.hiddenswitch.proto3.net.util.*;
+import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.decks.DeckWithId;
 import com.hiddenswitch.proto3.net.impl.util.Matchmaker;
 import com.hiddenswitch.proto3.net.impl.util.QueueEntry;
@@ -226,6 +227,14 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
+
+		// Wipe all connections this matchmaking was managing
+		Mongo.mongo()
+				.updateCollectionWithOptions(Accounts.USERS,
+						json("_id", json("$in", Arrays.asList(connections.keySet().toArray()))),
+						json("$unset", json("connection", true)),
+						new UpdateOptions().setMulti(true));
+
 		if (registration != null) {
 			RPC.unregister(registration);
 			freeSingleton();
