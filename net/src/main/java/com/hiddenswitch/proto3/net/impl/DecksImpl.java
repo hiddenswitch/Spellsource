@@ -3,6 +3,7 @@ package com.hiddenswitch.proto3.net.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Accounts;
+import com.hiddenswitch.proto3.net.DeckType;
 import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
@@ -175,7 +176,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 	@Override
 	public DeckListUpdateResponse updateAllDecks(DeckListUpdateRequest request) throws SuspendExecution, InterruptedException {
 		// Get all the non-draft decks
-		List<String> deckIds = mongo().findWithOptions(Inventory.COLLECTIONS, json("draft", false), new FindOptions().setFields(json("_id", 1)))
+		List<String> deckIds = mongo().findWithOptions(Inventory.COLLECTIONS, json("deckType", DeckType.CONSTRUCTED.toString()), new FindOptions().setFields(json("_id", true)))
 				.stream().map(o -> o.getString("_id")).collect(toList());
 
 		// Trash them all
@@ -184,7 +185,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		}
 
 		// Get all the users
-		List<String> userIds = mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1))).stream().map(o -> o.getString("_id")).collect(toList());
+		List<String> userIds = mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", true))).stream().map(o -> o.getString("_id")).collect(toList());
 
 		AtomicLong updated = new AtomicLong();
 
