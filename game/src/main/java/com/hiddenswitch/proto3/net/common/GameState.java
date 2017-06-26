@@ -112,20 +112,7 @@ public class GameState implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	protected Stream<Entity> getEntities() {
-		return Stream.of(player1, player2).flatMap(p -> Stream.of(new Zones[]{
-				Zones.PLAYER,
-				Zones.BATTLEFIELD,
-				Zones.DECK,
-				Zones.GRAVEYARD,
-				Zones.HAND,
-				Zones.HERO,
-				Zones.HERO_POWER,
-				Zones.SET_ASIDE_ZONE,
-				Zones.DISCOVER,
-				Zones.WEAPON,
-				Zones.SECRET,
-				Zones.REMOVED_FROM_PLAY
-		}).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
+		return Stream.of(player1, player2).flatMap(p -> Stream.of(Zones.values()).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 
 	/**

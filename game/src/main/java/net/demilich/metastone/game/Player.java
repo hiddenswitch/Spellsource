@@ -303,9 +303,7 @@ public class Player extends Entity implements Serializable {
 			case REMOVED_FROM_PLAY:
 				return getRemovedFromPlay();
 			case NONE:
-			case HIDDEN:
-				// TODO: Deal with secret zones
-				return null;
+				return EntityZone.empty(getId());
 		}
 		return null;
 	}

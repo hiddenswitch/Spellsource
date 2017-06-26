@@ -315,6 +315,8 @@ public class ServerGameContext extends GameContext {
 		String id = RandomStringUtils.randomAscii(8);
 		logger.debug("Requesting action with callback {} for playerId {}", id, playerId);
 		requestCallbacks.put(new CallbackId(id, playerId), new GameplayRequest(GameplayRequestType.ACTION, state, actions, callback));
+		// Send a state update for the other player too
+		getListenerMap().get(getOpponent(getPlayer(playerId))).onUpdate(state);
 		getListenerMap().get(getPlayer(playerId)).onRequestAction(id, state, actions);
 	}
 
