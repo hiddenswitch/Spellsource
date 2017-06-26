@@ -102,7 +102,7 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 		int currentVersion = control.getInteger("version");
 		if (!lock()) {
 			logger.fatal("Not migrating, control is locked.");
-			return MigrationToResponse.failedMigration();
+			throw new RuntimeException();
 		}
 
 		if (null != request.getRerun()
@@ -132,7 +132,7 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 					currentVersion = migrations.get(i + 1).getVersion();
 				}
 			} catch (Throwable e) {
-				return MigrationToResponse.failedMigration(e);
+				throw new RuntimeException(e);
 			}
 		} else {
 			try {
@@ -141,7 +141,7 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 					currentVersion = migrations.get(i - 1).getVersion();
 				}
 			} catch (Throwable e) {
-				return MigrationToResponse.failedMigration(e);
+				throw new RuntimeException(e);
 			}
 		}
 

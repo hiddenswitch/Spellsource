@@ -22,7 +22,9 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.mongo.MongoClientDeleteResult;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -37,9 +39,14 @@ import static com.hiddenswitch.proto3.net.util.QuickJson.json;
  */
 @RunWith(VertxUnitRunner.class)
 public class MigrationTest {
-	private Vertx vertx = Vertx.vertx();
+	private static Vertx vertx = Vertx.vertx();
 
-	@Before
+	@BeforeClass
+	public static void startEmbeddedMongo() {
+		Mongo.mongo().startEmbedded().connect(vertx, "mongodb://localhost:27017/production");
+	}
+
+	@After
 	public void cleanup(TestContext context) {
 		Mongo.mongo().connectWithEnvironment(vertx).client().getCollections(context.asyncAssertSuccess(then -> {
 			CompositeFuture cf = CompositeFuture.all(then.stream().map(collection -> {
@@ -147,14 +154,14 @@ public class MigrationTest {
 	@Test
 	public void testAllMigrations(final TestContext context) {
 		setLoggingLevel(Level.ERROR);
-		Mongo.mongo().connectWithEnvironment(vertx);
+
 		// Download production database. Requires a working mongodump url
 		vertx.executeBlocking(done -> {
 			Process mongodump = null;
 			try {
 				mongodump = new ProcessBuilder("mongodump", "--username=spellsource1", "--password=9AD3uubaeIf71a4M11lPVAV2mJcbPzV1EC38Y4WF26M", "--host=aws-us-east-1-portal.9.dblayer.com", "--port=20276", "--db=production", "--ssl", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames").start();
 				int waitFor1 = mongodump.waitFor();
-				Process mongorestore = new ProcessBuilder("mongorestore", "--host=localhost", "dump").start();
+				Process mongorestore = new ProcessBuilder("mongorestore", "--host=localhost", "--port=27017", "dump").start();
 				int waitFor2 = mongorestore.waitFor();
 				done.handle((waitFor1 == 0 && waitFor2 == 0) ? Future.succeededFuture() : Future.failedFuture("Didn't restore or dump correctly."));
 				return;

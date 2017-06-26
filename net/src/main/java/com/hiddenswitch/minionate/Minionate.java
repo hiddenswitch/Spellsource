@@ -90,11 +90,17 @@ public class Minionate {
 									new UpdateOptions().setMulti(true));
 
 							// Update to the latest decklist
+							InventoryImpl inventory = new InventoryImpl();
+							CardsImpl cards = new CardsImpl();
 							DecksImpl decksImpl = new DecksImpl();
 							String deploymentId = awaitResult(h -> thisVertx.deployVerticle(decksImpl, h));
+							String deploymentId2 = awaitResult(h -> thisVertx.deployVerticle(inventory, h));
+							String deploymentId3 = awaitResult(h -> thisVertx.deployVerticle(cards, h));
 							decksImpl.updateAllDecks(new DeckListUpdateRequest()
 									.withDeckCreateRequests(Minionate.minionate().getStandardDecks()));
 							Void ignored = awaitResult(h -> thisVertx.undeploy(deploymentId, h));
+							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId2, h));
+							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId3, h));
 						}))
 				.migrateTo(1, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
