@@ -10,6 +10,7 @@ import com.hiddenswitch.proto3.net.models.DeckCreateRequest;
 import com.hiddenswitch.proto3.net.models.DeckListUpdateRequest;
 import com.hiddenswitch.proto3.net.models.MigrationRequest;
 import io.vertx.core.*;
+import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
@@ -78,13 +79,13 @@ public class Minionate {
 							mongo().createIndex(Inventory.COLLECTIONS, json("deckType", 1));
 
 							// All draft decks should have the draft flag set
-							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
-									json("name", json("$regex", "'s Draft Deck")),
+							MongoClientUpdateResult u1 = mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+									json("name", json("$regex", "Draft Deck")),
 									json("$set", json("deckType", DeckType.DRAFT.toString())),
 									new UpdateOptions().setMulti(true));
 
 							// All other decks should have the constructed flag
-							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+							MongoClientUpdateResult u2 = mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
 									json("deckType", json("$ne", DeckType.DRAFT.toString())),
 									json("$set", json("deckType", DeckType.CONSTRUCTED.toString())),
 									new UpdateOptions().setMulti(true));

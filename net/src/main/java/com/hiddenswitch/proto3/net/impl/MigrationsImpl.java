@@ -28,7 +28,7 @@ import java.util.stream.IntStream;
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
 
 public class MigrationsImpl extends AbstractService<MigrationsImpl> implements Migrations {
-	private static final String MIGRATIONS = "migrations";
+	public static final String MIGRATIONS = "migrations";
 	private List<MigrationRequest> migrations = new ArrayList<>();
 	private static Logger logger = LoggerFactory.getLogger(Migrations.class);
 	private Registration registration;
