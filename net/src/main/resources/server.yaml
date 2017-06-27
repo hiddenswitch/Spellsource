@@ -267,6 +267,7 @@ definitions:
       - 'ON_MULLIGAN'
       - 'UPDATE_MULLIGAN'
       - 'EMOTE'
+      - 'TOUCH'
       - 'CONCEDE'
   Emote:
     description: |
@@ -361,6 +362,14 @@ definitions:
           The indices of cards to discard in a mulligan.
       emote:
         $ref: '#/definitions/Emote'
+      entityTouch:
+        description: |
+          When specified with an entity ID, indicates the client is "touching" this entity.
+        type: 'integer'
+      entityUntouch:
+        description: |
+          When specified with an entity ID, indicates the client is no longer touching the specified entity.
+        type: 'integer'
   PhysicalAttackEvent:
     type: 'object'
     properties:
@@ -457,6 +466,8 @@ definitions:
           - 'DISCARD'
           - 'DRAW_CARD'
           - 'ENRAGE_CHANGED'
+          - 'ENTITY_TOUCHED'
+          - 'ENTITY_UNTOUCHED'
           - 'GAME_START'
           - 'HEAL'
           - 'HERO_POWER_USED'
@@ -488,6 +499,10 @@ definitions:
             $ref: '#/definitions/Entity'
           drawn:
             type: 'boolean'
+      entityTouched:
+        type: 'integer'
+      entityUntouched:
+        type: 'integer'
       preDamage:
         type: 'object'
         properties:
