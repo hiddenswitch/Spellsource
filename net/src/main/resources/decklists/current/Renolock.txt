@@ -22,7 +22,7 @@
 # 1x (3) Shadow Bolt
 # 1x (4) Defender of Argus
 # 1x (4) Hellfire
-# 1x (4) Kazakus
+# 1x (4) Chillwind Yeti
 # 1x (4) Refreshment Vendor
 # 1x (4) Twilight Drake
 # 1x (5) Faceless Manipulator
