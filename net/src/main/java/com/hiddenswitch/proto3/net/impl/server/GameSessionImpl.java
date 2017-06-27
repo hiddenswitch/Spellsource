@@ -21,6 +21,7 @@ import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -382,6 +383,16 @@ public class GameSessionImpl implements GameSession {
 		getGameContext().concede(playerId);
 	}
 
+	@Override
+	public void onTouch(int playerId, int entityId) {
+		getPlayerListener(getOpponent(playerId)).onNotification(new TouchingNotification(playerId, entityId, true), getGameContext().getGameState());
+	}
+
+	@Override
+	public void onUntouch(int playerId, int entityId) {
+		getPlayerListener(getOpponent(playerId)).onNotification(new TouchingNotification(playerId, entityId, false), getGameContext().getGameState());
+	}
+
 	private Player getPlayer1() {
 		return player1;
 	}
@@ -413,5 +424,9 @@ public class GameSessionImpl implements GameSession {
 
 	public String getUrl() {
 		return "ws://" + getHost() + ":" + Integer.toString(websocketPort) + "/" + Games.WEBSOCKET_PATH;
+	}
+
+	private int getOpponent(int playerId) {
+		return playerId == PLAYER_1 ? PLAYER_2 : PLAYER_1;
 	}
 }

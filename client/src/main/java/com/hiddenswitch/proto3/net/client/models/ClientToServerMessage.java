@@ -59,6 +59,12 @@ public class ClientToServerMessage  implements Serializable {
   @SerializedName("emote")
   private Emote emote = null;
 
+  @SerializedName("entityTouch")
+  private Integer entityTouch = null;
+
+  @SerializedName("entityUntouch")
+  private Integer entityUntouch = null;
+
   public ClientToServerMessage messageType(MessageType messageType) {
     this.messageType = messageType;
     return this;
@@ -172,6 +178,42 @@ public class ClientToServerMessage  implements Serializable {
     this.emote = emote;
   }
 
+  public ClientToServerMessage entityTouch(Integer entityTouch) {
+    this.entityTouch = entityTouch;
+    return this;
+  }
+
+   /**
+   * When specified with an entity ID, indicates the client is \"touching\" this entity. 
+   * @return entityTouch
+  **/
+  @ApiModelProperty(example = "null", value = "When specified with an entity ID, indicates the client is \"touching\" this entity. ")
+  public Integer getEntityTouch() {
+    return entityTouch;
+  }
+
+  public void setEntityTouch(Integer entityTouch) {
+    this.entityTouch = entityTouch;
+  }
+
+  public ClientToServerMessage entityUntouch(Integer entityUntouch) {
+    this.entityUntouch = entityUntouch;
+    return this;
+  }
+
+   /**
+   * When specified with an entity ID, indicates the client is no longer touching the specified entity. 
+   * @return entityUntouch
+  **/
+  @ApiModelProperty(example = "null", value = "When specified with an entity ID, indicates the client is no longer touching the specified entity. ")
+  public Integer getEntityUntouch() {
+    return entityUntouch;
+  }
+
+  public void setEntityUntouch(Integer entityUntouch) {
+    this.entityUntouch = entityUntouch;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -187,12 +229,14 @@ public class ClientToServerMessage  implements Serializable {
         Objects.equals(this.firstMessage, clientToServerMessage.firstMessage) &&
         Objects.equals(this.actionIndex, clientToServerMessage.actionIndex) &&
         Objects.equals(this.discardedCardIndices, clientToServerMessage.discardedCardIndices) &&
-        Objects.equals(this.emote, clientToServerMessage.emote);
+        Objects.equals(this.emote, clientToServerMessage.emote) &&
+        Objects.equals(this.entityTouch, clientToServerMessage.entityTouch) &&
+        Objects.equals(this.entityUntouch, clientToServerMessage.entityUntouch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(messageType, repliesTo, firstMessage, actionIndex, discardedCardIndices, emote);
+    return Objects.hash(messageType, repliesTo, firstMessage, actionIndex, discardedCardIndices, emote, entityTouch, entityUntouch);
   }
 
   @Override
@@ -206,6 +250,8 @@ public class ClientToServerMessage  implements Serializable {
     sb.append("    actionIndex: ").append(toIndentedString(actionIndex)).append("\n");
     sb.append("    discardedCardIndices: ").append(toIndentedString(discardedCardIndices)).append("\n");
     sb.append("    emote: ").append(toIndentedString(emote)).append("\n");
+    sb.append("    entityTouch: ").append(toIndentedString(entityTouch)).append("\n");
+    sb.append("    entityUntouch: ").append(toIndentedString(entityUntouch)).append("\n");
     sb.append("}");
     return sb.toString();
   }

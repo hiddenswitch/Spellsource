@@ -74,6 +74,9 @@ public enum MessageType {
   @SerializedName("EMOTE")
   EMOTE("EMOTE"),
   
+  @SerializedName("TOUCH")
+  TOUCH("TOUCH"),
+  
   @SerializedName("CONCEDE")
   CONCEDE("CONCEDE");
 

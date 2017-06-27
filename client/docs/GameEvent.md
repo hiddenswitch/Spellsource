@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **eventType** | [**EventTypeEnum**](#EventTypeEnum) | The game event type corresponding to this game event.  |  [optional]
 **afterPhysicalAttack** | [**PhysicalAttackEvent**](PhysicalAttackEvent.md) |  |  [optional]
 **drawCard** | [**GameEventDrawCard**](GameEventDrawCard.md) |  |  [optional]
+**entityTouched** | **Integer** |  |  [optional]
+**entityUntouched** | **Integer** |  |  [optional]
 **preDamage** | [**GameEventPreDamage**](GameEventPreDamage.md) |  |  [optional]
 **silence** | [**GameEventSilence**](GameEventSilence.md) |  |  [optional]
 **secretPlayed** | [**GameEventSecretPlayed**](GameEventSecretPlayed.md) |  |  [optional]
@@ -52,6 +54,8 @@ DAMAGE | &quot;DAMAGE&quot;
 DISCARD | &quot;DISCARD&quot;
 DRAW_CARD | &quot;DRAW_CARD&quot;
 ENRAGE_CHANGED | &quot;ENRAGE_CHANGED&quot;
+ENTITY_TOUCHED | &quot;ENTITY_TOUCHED&quot;
+ENTITY_UNTOUCHED | &quot;ENTITY_UNTOUCHED&quot;
 GAME_START | &quot;GAME_START&quot;
 HEAL | &quot;HEAL&quot;
 HERO_POWER_USED | &quot;HERO_POWER_USED&quot;
