@@ -19,6 +19,7 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.events.Notification;
+import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.visuals.TriggerFired;
 
@@ -81,6 +82,33 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void onNotification(Notification event, GameState gameState) {
+		// Quickly send touch notifications
+		if (TouchingNotification.class.isAssignableFrom(event.getClass())) {
+			TouchingNotification touchingNotification = (TouchingNotification) event;
+			// Only send touch notifications to the opponent
+			if (touchingNotification.getPlayerId() == playerId) {
+				return;
+			}
+
+			// Build a touch event
+			final int id = touchingNotification.getEntityReference().getId();
+			final ServerToClientMessage message = new ServerToClientMessage()
+					.messageType(MessageType.TOUCH)
+					// Pack touch data into a game event object
+					.event(new GameEvent()
+							.eventType(touchingNotification.isTouched() ? GameEvent.EventTypeEnum.ENTITY_TOUCHED : GameEvent.EventTypeEnum.ENTITY_UNTOUCHED));
+
+			// Set the appropriate entity ID field.
+			if (touchingNotification.isTouched()) {
+				message.getEvent().entityTouched(id);
+			} else {
+				message.getEvent().entityUntouched(id);
+			}
+			// Immediately send the message
+			sendMessage(message);
+			return;
+		}
+
 		final GameState state = gameState;
 		GameContext workingContext = new GameContext(state);
 		ServerToClientMessage message = new ServerToClientMessage()
@@ -128,7 +156,6 @@ public class WebSocketClient implements Client {
 		}
 
 		messageBuffer.offer(message);
-
 	}
 
 	@Override

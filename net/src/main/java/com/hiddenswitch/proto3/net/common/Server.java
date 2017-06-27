@@ -27,6 +27,10 @@ public interface Server extends ClientConnectionHandler {
 
 	void onConcede(int playerId);
 
+	void onTouch(int playerId, int entityId);
+
+	void onUntouch(int playerId, int entityId);
+
 	Client getClient1();
 
 	Client getClient2();

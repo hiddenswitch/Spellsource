@@ -387,6 +387,16 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 				}
 				session.onEmote(message.getEmote().getEntityId(), message.getEmote().getMessage());
 				break;
+			case TOUCH:
+				if (session == null) {
+					break;
+				}
+				if (null != message.getEntityTouch()) {
+					session.onTouch(session.getPlayerIdForSocket(socket), message.getEntityTouch());
+				} else if (null != message.getEntityUntouch()) {
+					session.onUntouch(session.getPlayerIdForSocket(socket), message.getEntityUntouch());
+				}
+				break;
 			case CONCEDE:
 				if (session == null) {
 					break;

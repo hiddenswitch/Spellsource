@@ -42,3 +42,4 @@ public interface Notification extends Serializable {
 	 */
 	String getDescription(GameContext context, int playerId);
 }
+

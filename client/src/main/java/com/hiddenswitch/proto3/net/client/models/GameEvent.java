@@ -100,6 +100,12 @@ public class GameEvent  implements Serializable {
     @SerializedName("ENRAGE_CHANGED")
     ENRAGE_CHANGED("ENRAGE_CHANGED"),
     
+    @SerializedName("ENTITY_TOUCHED")
+    ENTITY_TOUCHED("ENTITY_TOUCHED"),
+    
+    @SerializedName("ENTITY_UNTOUCHED")
+    ENTITY_UNTOUCHED("ENTITY_UNTOUCHED"),
+    
     @SerializedName("GAME_START")
     GAME_START("GAME_START"),
     
@@ -186,6 +192,12 @@ public class GameEvent  implements Serializable {
 
   @SerializedName("drawCard")
   private GameEventDrawCard drawCard = null;
+
+  @SerializedName("entityTouched")
+  private Integer entityTouched = null;
+
+  @SerializedName("entityUntouched")
+  private Integer entityUntouched = null;
 
   @SerializedName("preDamage")
   private GameEventPreDamage preDamage = null;
@@ -371,6 +383,42 @@ public class GameEvent  implements Serializable {
 
   public void setDrawCard(GameEventDrawCard drawCard) {
     this.drawCard = drawCard;
+  }
+
+  public GameEvent entityTouched(Integer entityTouched) {
+    this.entityTouched = entityTouched;
+    return this;
+  }
+
+   /**
+   * Get entityTouched
+   * @return entityTouched
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getEntityTouched() {
+    return entityTouched;
+  }
+
+  public void setEntityTouched(Integer entityTouched) {
+    this.entityTouched = entityTouched;
+  }
+
+  public GameEvent entityUntouched(Integer entityUntouched) {
+    this.entityUntouched = entityUntouched;
+    return this;
+  }
+
+   /**
+   * Get entityUntouched
+   * @return entityUntouched
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getEntityUntouched() {
+    return entityUntouched;
+  }
+
+  public void setEntityUntouched(Integer entityUntouched) {
+    this.entityUntouched = entityUntouched;
   }
 
   public GameEvent preDamage(GameEventPreDamage preDamage) {
@@ -857,6 +905,8 @@ public class GameEvent  implements Serializable {
         Objects.equals(this.eventType, gameEvent.eventType) &&
         Objects.equals(this.afterPhysicalAttack, gameEvent.afterPhysicalAttack) &&
         Objects.equals(this.drawCard, gameEvent.drawCard) &&
+        Objects.equals(this.entityTouched, gameEvent.entityTouched) &&
+        Objects.equals(this.entityUntouched, gameEvent.entityUntouched) &&
         Objects.equals(this.preDamage, gameEvent.preDamage) &&
         Objects.equals(this.silence, gameEvent.silence) &&
         Objects.equals(this.secretPlayed, gameEvent.secretPlayed) &&
@@ -887,7 +937,7 @@ public class GameEvent  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, summon, afterSpellCasted, discard, kill, triggerFired);
+    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, entityTouched, entityUntouched, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, summon, afterSpellCasted, discard, kill, triggerFired);
   }
 
   @Override
@@ -901,6 +951,8 @@ public class GameEvent  implements Serializable {
     sb.append("    eventType: ").append(toIndentedString(eventType)).append("\n");
     sb.append("    afterPhysicalAttack: ").append(toIndentedString(afterPhysicalAttack)).append("\n");
     sb.append("    drawCard: ").append(toIndentedString(drawCard)).append("\n");
+    sb.append("    entityTouched: ").append(toIndentedString(entityTouched)).append("\n");
+    sb.append("    entityUntouched: ").append(toIndentedString(entityUntouched)).append("\n");
     sb.append("    preDamage: ").append(toIndentedString(preDamage)).append("\n");
     sb.append("    silence: ").append(toIndentedString(silence)).append("\n");
     sb.append("    secretPlayed: ").append(toIndentedString(secretPlayed)).append("\n");

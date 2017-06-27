@@ -30,6 +30,8 @@
 
 * `EMOTE` (value: `"EMOTE"`)
 
+* `TOUCH` (value: `"TOUCH"`)
+
 * `CONCEDE` (value: `"CONCEDE"`)
 
 
