@@ -26,6 +26,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	private IGameStateHeuristic heuristic;
 	private FeatureVector featureVector;
 	private String nameSuffix = "";
+	private long timeout = 2000;
 
 	public GameStateValueBehaviour() {
 	}
@@ -37,8 +38,14 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	}
 
 	@Suspendable
-	private double alphaBeta(GameContext context, int playerId, GameAction action, int depth) {
+	private double alphaBeta(GameContext context, int playerId, GameAction action, int depth, long startMillis) {
 		GameContext simulation = getClone(context);
+		double score = Float.NEGATIVE_INFINITY;
+
+		if (System.currentTimeMillis() - startMillis > timeout) {
+			return score;
+		}
+
 		if (simulation.isDisposed()) {
 			return Float.NEGATIVE_INFINITY;
 		}
@@ -49,10 +56,9 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 
 		List<GameAction> validActions = simulation.getValidActions();
 
-		double score = Float.NEGATIVE_INFINITY;
 
 		for (GameAction gameAction : validActions) {
-			score = Math.max(score, alphaBeta(simulation, playerId, gameAction, depth - 1));
+			score = Math.max(score, alphaBeta(simulation, playerId, gameAction, depth - 1, startMillis));
 			if (score >= 100000) {
 				break;
 			}
@@ -103,6 +109,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	@Override
 	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
+		long startMillis = System.currentTimeMillis();
 		if (validActions.size() == 1) {
 			return validActions.get(0);
 		}
@@ -119,7 +126,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 		double bestScore = Double.NEGATIVE_INFINITY;
 
 		for (GameAction gameAction : validActions) {
-			double score = alphaBeta(context, player.getId(), gameAction, depth);
+			double score = alphaBeta(context, player.getId(), gameAction, depth, startMillis);
 			if (score > bestScore) {
 				bestAction = gameAction;
 				bestScore = score;
