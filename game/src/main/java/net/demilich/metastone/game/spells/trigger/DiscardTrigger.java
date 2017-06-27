@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.DiscardEvent;
 import net.demilich.metastone.game.events.GameEvent;
@@ -7,6 +8,8 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.List;
 
 public class DiscardTrigger extends GameEventTrigger {
 
@@ -18,11 +21,19 @@ public class DiscardTrigger extends GameEventTrigger {
 	protected boolean fire(GameEvent event, Entity host) {
 		DiscardEvent discardEvent = (DiscardEvent) event;
 		EntityReference target = (EntityReference) desc.get(EventTriggerArg.TARGET);
-		if (target == EntityReference.SELF && discardEvent.getCard() != host) {
+
+		final int owner = host.getOwner();
+		if (owner == Player.NO_OWNER) {
 			return false;
 		}
-		
-		return true;
+
+		List<Entity> resolvedTargets = event.getGameContext().resolveTarget(event.getGameContext().getPlayer(owner), host, target);
+
+		if (resolvedTargets == null) {
+			return false;
+		}
+
+		return resolvedTargets.stream().anyMatch(e -> e.getId() == discardEvent.getCard().getId());
 	}
 
 	@Override
