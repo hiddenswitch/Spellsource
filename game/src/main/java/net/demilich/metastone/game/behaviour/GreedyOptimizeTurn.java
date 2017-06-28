@@ -35,7 +35,7 @@ public class GreedyOptimizeTurn extends AbstractBehaviour {
 			evaluatedActions.put(action.getActionType(), 0);
 		}
 		evaluatedActions.put(action.getActionType(), evaluatedActions.get(action.getActionType()) + 1);
-		if (depth == 0 || simulation.getActivePlayerId() != playerId || simulation.gameDecided()) {
+		if (depth == 0 || simulation.getActivePlayerId() != playerId || simulation.updateAndGetGameOver()) {
 			return heuristic.getScore(simulation, playerId);
 		}
 

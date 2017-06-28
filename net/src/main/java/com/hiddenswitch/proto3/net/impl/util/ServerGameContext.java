@@ -159,7 +159,7 @@ public class ServerGameContext extends GameContext {
 				}
 
 				// Check if the game has been decided right at the end of the player's turn
-				if (gameDecided()) {
+				if (updateAndGetGameOver()) {
 					endGame();
 					return;
 				}
@@ -176,7 +176,7 @@ public class ServerGameContext extends GameContext {
 						networkedPlayTurn(actionLoop.func);
 					} else {
 						if (getTurn() > GameLogic.TURN_LIMIT
-								|| gameDecided()) {
+								|| updateAndGetGameOver()) {
 							endGame();
 						} else {
 							playTurnLoop.func.run();
@@ -451,7 +451,7 @@ public class ServerGameContext extends GameContext {
 
 	@Suspendable
 	public void kill() {
-		if (!gameDecided()) {
+		if (!updateAndGetGameOver()) {
 			endGame();
 		}
 		isRunning = false;

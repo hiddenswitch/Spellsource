@@ -220,8 +220,8 @@ public class TwoClients {
 	}
 
 	public boolean gameDecided() {
-		return getPlayerContext1().gameDecided()
-				&& (getPlayerContext2() == null || getPlayerContext2().gameDecided());
+		return getPlayerContext1().updateAndGetGameOver()
+				&& (getPlayerContext2() == null || getPlayerContext2().updateAndGetGameOver());
 	}
 
 	public void assertGameOver() {

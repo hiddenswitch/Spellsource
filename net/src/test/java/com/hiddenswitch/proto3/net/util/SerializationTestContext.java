@@ -19,7 +19,7 @@ public class SerializationTestContext extends GameContext {
 	@Override
 	public void play() {
 		init();
-		while (!gameDecided()) {
+		while (!updateAndGetGameOver()) {
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
 				// Serialize and deserialize the game, testing that the game contexts are still equal (!)

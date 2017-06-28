@@ -135,7 +135,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 
 
 	@Override
-	public boolean gameDecided() {
+	public boolean updateAndGetGameOver() {
 		//TODO: return localGameDecided;
 		return gameDecided;
 	}
@@ -178,7 +178,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 			}
 		}
 		logger.debug("Players connected, waiting for action.");
-		while (!gameDecided()) {
+		while (!updateAndGetGameOver()) {
 			requestLocalAction();
 			if (isHumanPlayer()) {
 				try {
@@ -452,7 +452,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	public boolean isTimedOut(long toleranceNanoseconds) {
-		return !gameDecided()
+		return !updateAndGetGameOver()
 				&& lastUpdatedAt != Long.MIN_VALUE
 				&& ((System.nanoTime() - serverTimeDiff) > (lastUpdatedAt + toleranceNanoseconds));
 	}

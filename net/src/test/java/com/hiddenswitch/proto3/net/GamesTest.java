@@ -88,8 +88,8 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 			service.endGameSession(new EndGameSessionRequest(gameId));
 			getContext().assertNull(service.getGameSession(gameId));
 			logger.info("testTerminatingSession: Waiting for players to receive game end message...");
-			while (!clients1.getPlayerContext1().gameDecided()
-					&& !clients1.getPlayerContext2().gameDecided()) {
+			while (!clients1.getPlayerContext1().updateAndGetGameOver()
+					&& !clients1.getPlayerContext2().updateAndGetGameOver()) {
 				Strand.sleep(100);
 			}
 			clients1.assertGameOver();
@@ -112,7 +112,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 			Strand.sleep(14000L);
 			// From player 2's point of view, the game should be decided because it's over
 			getContext().assertNull(service.getGameSession(gameId));
-			getContext().assertTrue(clients1.getPlayerContext2().gameDecided());
+			getContext().assertTrue(clients1.getPlayerContext2().updateAndGetGameOver());
 		});
 	}
 
@@ -203,8 +203,8 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 			clients.forEach(c -> {
 				final long c1 = c.getPlayerContext1().clientDelay();
 				final long c2 = c.getPlayerContext2().clientDelay();
-				final boolean gd1 = c.getPlayerContext1().gameDecided();
-				final boolean gd2 = c.getPlayerContext2().gameDecided();
+				final boolean gd1 = c.getPlayerContext1().updateAndGetGameOver();
+				final boolean gd2 = c.getPlayerContext2().updateAndGetGameOver();
 				if ((!gd1 && c1 > 20e9) || (!gd2 && c2 > 20e9)) {
 					logger.info(String.format("Delayed game %s thread: %s", c.getGameId(), c.getPlayerContext1().isActivePlayer() ? c.getThread1().getName() : c.getThread2().getName()));
 				}

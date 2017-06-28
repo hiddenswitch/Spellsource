@@ -667,7 +667,7 @@ public class GameLogic implements Cloneable, Serializable {
 		Collections.sort(destroyList, (a1, a2) -> Integer.compare(a1.getId(), a2.getId()));
 		// this method performs the actual removal
 		destroy(destroyList.toArray(new Actor[0]));
-		if (context.gameDecided()) {
+		if (context.updateAndGetGameOver()) {
 			return;
 		}
 		// deathrattles have been resolved, which may lead to other actors being destroyed now, so we need to check again
@@ -1275,19 +1275,19 @@ public class GameLogic implements Cloneable, Serializable {
 	/**
 	 * Gets the current status of a match.
 	 *
-	 * @param player   The player whose point of view to use for the {@link MatchResult}
+	 * @param player   The player whose point of view to use for the {@link GameStatus}
 	 * @param opponent The player's opponent.
-	 * @return A {@link MatchResult} from the point of view of the given player.
+	 * @return A {@link GameStatus} from the point of view of the given player.
 	 */
-	public MatchResult getMatchResult(Player player, Player opponent) {
+	public GameStatus getMatchResult(Player player, Player opponent) {
 		boolean playerLost = hasPlayerLost(player);
 		boolean opponentLost = hasPlayerLost(opponent);
 		if (playerLost && opponentLost) {
-			return MatchResult.DOUBLE_LOSS;
+			return GameStatus.DOUBLE_LOSS;
 		} else if (playerLost || opponentLost) {
-			return MatchResult.WON;
+			return GameStatus.WON;
 		}
-		return MatchResult.RUNNING;
+		return GameStatus.RUNNING;
 	}
 
 	/**
