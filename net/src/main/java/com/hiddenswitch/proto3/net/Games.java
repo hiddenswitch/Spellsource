@@ -290,6 +290,11 @@ public interface Games {
 			final Card card = cardPlayedEvent.getCard();
 			clientEvent.cardPlayed(new GameEventCardPlayed()
 					.card(getEntity(workingContext, card, playerId)));
+		} else if (event instanceof HeroPowerUsedEvent) {
+			final HeroPowerUsedEvent heroPowerUsedEvent = (HeroPowerUsedEvent) event;
+			final Card card = heroPowerUsedEvent.getHeroPower();
+			clientEvent.heroPowerUsed(new GameEventHeroPowerUsed()
+					.heroPower(getEntity(workingContext, card, playerId)));
 		} else if (event instanceof SummonEvent) {
 			final SummonEvent summonEvent = (SummonEvent) event;
 
