@@ -528,6 +528,7 @@ public interface Games {
 		return new GameState()
 				.isLocalPlayerTurn(localPlayerId == workingContext.getActivePlayerId())
 				.entities(entities)
+				.turnNumber(workingContext.getTurn())
 				.timestamp(System.nanoTime())
 				.turnState(workingContext.getTurnState().toString());
 	}
