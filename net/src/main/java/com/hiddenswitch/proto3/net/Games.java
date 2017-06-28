@@ -725,6 +725,7 @@ public interface Games {
 				entityState.baseAttack(minionCard.getBaseAttack());
 				entityState.baseManaCost(minionCard.getBaseManaCost());
 				entityState.hp(minionCard.getHp());
+				entityState.baseHp(minionCard.getBaseHp());
 				entityState.maxHp(minionCard.getBaseHp() + minionCard.getBonusHp());
 				entityState.underAura(minionCard.getBonusAttack() > 0
 						|| minionCard.getBonusAttack() > 0
