@@ -18,7 +18,7 @@ import net.demilich.metastone.game.entities.heroes.MetaHero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.logic.MatchResult;
+import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
@@ -27,7 +27,6 @@ import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.visuals.TriggerFired;
 import net.demilich.metastone.utils.IDisposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,7 +135,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	private List<CardCostModifier> cardCostModifiers = new ArrayList<>();
 	private int activePlayerId = -1;
 	private Player winner;
-	private MatchResult result;
+	private GameStatus result;
 	private TurnState turnState = TurnState.TURN_ENDED;
 	private boolean disposed = false;
 	private int turn;
@@ -240,7 +239,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		clone.setActivePlayerId(activePlayerId);
 		clone.setTurn(getTurn());
 		clone.setActionsThisTurn(getActionsThisTurn());
-		clone.setResult(getResult());
+		clone.setResult(getStatus());
 		clone.setTurnState(getTurnState());
 		clone.setWinner(logicClone.getWinner(player1Clone, player2Clone));
 		clone.getCardCostModifiers().clear();
@@ -405,15 +404,20 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	}
 
 	/**
-	 * Determines whether the game is over (decided).
+	 * Determines whether the game is over (decided). As a side effect, records the current result of the game.
 	 *
 	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been
 	 * destroyed.
 	 */
-	public boolean gameDecided() {
+	public boolean updateAndGetGameOver() {
+		if (getPlayer1() == null
+				|| getPlayer2() == null) {
+			setResult(GameStatus.RUNNING);
+			return false;
+		}
 		setResult(getLogic().getMatchResult(getActivePlayer(), getOpponent(getActivePlayer())));
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
-		return getResult() != MatchResult.RUNNING;
+		return getStatus() != GameStatus.RUNNING;
 	}
 
 	/**
@@ -775,7 +779,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 	@Suspendable
 	public List<GameAction> getValidActions() {
-		if (gameDecided()) {
+		if (updateAndGetGameOver()) {
 			return new ArrayList<>();
 		}
 		return getLogic().getValidActions(getActivePlayerId());
@@ -850,7 +854,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	public void play() {
 		logger.debug("Game starts: " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
 		init();
-		while (!gameDecided()) {
+		while (!updateAndGetGameOver()) {
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
 			}
@@ -1090,11 +1094,11 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		this.winner = winner;
 	}
 
-	public MatchResult getResult() {
+	public GameStatus getStatus() {
 		return result;
 	}
 
-	public void setResult(MatchResult result) {
+	public void setResult(GameStatus result) {
 		this.result = result;
 	}
 
@@ -1163,7 +1167,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 			}
 		}
 		builder.append("Turn: " + getTurn() + "\n");
-		builder.append("Result: " + getResult() + "\n");
+		builder.append("Result: " + getStatus() + "\n");
 		builder.append("Winner: " + (getWinner() == null ? "tbd" : getWinner().getName()));
 
 		return builder.toString();

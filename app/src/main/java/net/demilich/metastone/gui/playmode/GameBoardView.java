@@ -120,7 +120,7 @@ public class GameBoardView extends BorderPane {
 	}
 
 	private void checkForWinner(GameContext context) {
-		if (context.gameDecided()) {
+		if (context.updateAndGetGameOver()) {
 			if (context.getWinningPlayerId() == -1) {
 				centerMessageLabel.setStyle("-fx-text-fill: red;");
 				setCenterMessage("Game has ended in a draw.");

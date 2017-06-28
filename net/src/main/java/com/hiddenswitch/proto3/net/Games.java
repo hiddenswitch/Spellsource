@@ -23,6 +23,7 @@ import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
+import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -572,6 +573,11 @@ public interface Games {
 			return null;
 		}
 
+		// For the purposes of determining whether or not the game is over, we will calculate the match result once
+		if (workingContext.getStatus() == null) {
+			workingContext.updateAndGetGameOver();
+		}
+
 		final Card card = actor.getSourceCard();
 		final EntityState entityState = new EntityState();
 		final Entity entity = new Entity()
@@ -599,6 +605,7 @@ public interface Games {
 		entityState.deathrattles(actor.getDeathrattles() != null);
 		final boolean playable = actor.getOwner() == workingContext.getActivePlayerId()
 				&& actor.getOwner() == localPlayerId
+				&& workingContext.getStatus() == GameStatus.RUNNING
 				&& actor.canAttackThisTurn();
 		entityState.playable(playable);
 		entityState.attack(actor.getAttack());

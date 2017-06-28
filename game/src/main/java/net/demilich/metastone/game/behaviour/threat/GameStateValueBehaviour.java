@@ -50,7 +50,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			return Float.NEGATIVE_INFINITY;
 		}
 		simulation.getLogic().performGameAction(playerId, action);
-		if (depth == 0 || simulation.getActivePlayerId() != playerId || simulation.gameDecided()) {
+		if (depth == 0 || simulation.getActivePlayerId() != playerId || simulation.updateAndGetGameOver()) {
 			return heuristic.getScore(simulation, playerId);
 		}
 

@@ -2,7 +2,6 @@ package net.demilich.metastone.gui.playmode;
 
 import java.io.IOException;
 
-import com.hiddenswitch.minionate.Client;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -82,7 +81,7 @@ public class PlayModeView extends BorderPane {
 			firstUpdate = false;
 		}
 		boardView.updateGameState(context);
-		if (context.gameDecided()) {
+		if (context.updateAndGetGameOver()) {
 			sidePane.getChildren().clear();
 			sidePane.getChildren().add(backButton);
 		}

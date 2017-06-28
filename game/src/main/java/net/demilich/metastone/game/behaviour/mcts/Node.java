@@ -35,7 +35,7 @@ class Node {
 		try {
 			newState.getLogic().performGameAction(newState.getActivePlayerId(), action);
 		} catch (Exception e) {
-			System.err.println("Exception on action: " + action + " state decided: " + state.gameDecided());
+			System.err.println("Exception on action: " + action + " state decided: " + state.updateAndGetGameOver());
 			e.printStackTrace();
 			throw e;
 		}
@@ -87,7 +87,7 @@ class Node {
 		if (validTransitions.isEmpty()) {
 			return false;
 		}
-		if (state.gameDecided()) {
+		if (state.updateAndGetGameOver()) {
 			return false;
 		}
 		return getChildren().size() < validTransitions.size();
@@ -98,7 +98,7 @@ class Node {
 	}
 
 	private boolean isTerminal() {
-		return state.gameDecided();
+		return state.updateAndGetGameOver();
 	}
 
 	public void process(ITreePolicy treePolicy) {
@@ -123,7 +123,7 @@ class Node {
 	}
 
 	public int rollOut(Node node) {
-		if (node.getState().gameDecided()) {
+		if (node.getState().updateAndGetGameOver()) {
 			GameContext state = node.getState();
 			return state.getWinningPlayerId() == getPlayer() ? 1 : 0;
 		}
