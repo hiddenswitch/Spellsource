@@ -51,8 +51,58 @@ public class InventoryCollection  implements Serializable {
   @SerializedName("heroClass")
   private String heroClass = null;
 
+  /**
+   * Gets or Sets type
+   */
+  public enum TypeEnum {
+    @SerializedName("USER")
+    USER("USER"),
+    
+    @SerializedName("ALLIANCE")
+    ALLIANCE("ALLIANCE"),
+    
+    @SerializedName("DECK")
+    DECK("DECK");
+
+    private String value;
+
+    TypeEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+  }
+
   @SerializedName("type")
-  private String type = null;
+  private TypeEnum type = null;
+
+  /**
+   * Gets or Sets deckType
+   */
+  public enum DeckTypeEnum {
+    @SerializedName("DRAFT")
+    DRAFT("DRAFT"),
+    
+    @SerializedName("CONSTRUCTED")
+    CONSTRUCTED("CONSTRUCTED");
+
+    private String value;
+
+    DeckTypeEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+  }
+
+  @SerializedName("deckType")
+  private DeckTypeEnum deckType = null;
 
   @SerializedName("inventory")
   private List<CardRecord> inventory = new ArrayList<CardRecord>();
@@ -129,7 +179,7 @@ public class InventoryCollection  implements Serializable {
     this.heroClass = heroClass;
   }
 
-  public InventoryCollection type(String type) {
+  public InventoryCollection type(TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -139,12 +189,30 @@ public class InventoryCollection  implements Serializable {
    * @return type
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getType() {
+  public TypeEnum getType() {
     return type;
   }
 
-  public void setType(String type) {
+  public void setType(TypeEnum type) {
     this.type = type;
+  }
+
+  public InventoryCollection deckType(DeckTypeEnum deckType) {
+    this.deckType = deckType;
+    return this;
+  }
+
+   /**
+   * Get deckType
+   * @return deckType
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public DeckTypeEnum getDeckType() {
+    return deckType;
+  }
+
+  public void setDeckType(DeckTypeEnum deckType) {
+    this.deckType = deckType;
   }
 
   public InventoryCollection inventory(List<CardRecord> inventory) {
@@ -185,12 +253,13 @@ public class InventoryCollection  implements Serializable {
         Objects.equals(this.name, inventoryCollection.name) &&
         Objects.equals(this.heroClass, inventoryCollection.heroClass) &&
         Objects.equals(this.type, inventoryCollection.type) &&
+        Objects.equals(this.deckType, inventoryCollection.deckType) &&
         Objects.equals(this.inventory, inventoryCollection.inventory);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userId, name, heroClass, type, inventory);
+    return Objects.hash(id, userId, name, heroClass, type, deckType, inventory);
   }
 
   @Override
@@ -203,6 +272,7 @@ public class InventoryCollection  implements Serializable {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    deckType: ").append(toIndentedString(deckType)).append("\n");
     sb.append("    inventory: ").append(toIndentedString(inventory)).append("\n");
     sb.append("}");
     return sb.toString();

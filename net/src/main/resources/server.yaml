@@ -228,6 +228,15 @@ definitions:
         type: 'string'
       type:
         type: 'string'
+        enum:
+          - 'USER'
+          - 'ALLIANCE'
+          - 'DECK'
+      deckType:
+        type: 'string'
+        enum:
+          - 'DRAFT'
+          - 'CONSTRUCTED'
       inventory:
         type: 'array'
         items:

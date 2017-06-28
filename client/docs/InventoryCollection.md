@@ -8,8 +8,26 @@ Name | Type | Description | Notes
 **userId** | **String** |  |  [optional]
 **name** | **String** |  |  [optional]
 **heroClass** | **String** |  |  [optional]
-**type** | **String** |  |  [optional]
+**type** | [**TypeEnum**](#TypeEnum) |  |  [optional]
+**deckType** | [**DeckTypeEnum**](#DeckTypeEnum) |  |  [optional]
 **inventory** | [**List&lt;CardRecord&gt;**](CardRecord.md) |  |  [optional]
+
+
+<a name="TypeEnum"></a>
+## Enum: TypeEnum
+Name | Value
+---- | -----
+USER | &quot;USER&quot;
+ALLIANCE | &quot;ALLIANCE&quot;
+DECK | &quot;DECK&quot;
+
+
+<a name="DeckTypeEnum"></a>
+## Enum: DeckTypeEnum
+Name | Value
+---- | -----
+DRAFT | &quot;DRAFT&quot;
+CONSTRUCTED | &quot;CONSTRUCTED&quot;
 
 
 

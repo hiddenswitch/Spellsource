@@ -272,7 +272,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 		if (type == CollectionTypes.DECK) {
 			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), inventoryRecords, deck.isTrashed());
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), inventoryRecords, deck.isTrashed(), deck.getDeckType());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(request.getUserId(), inventoryRecords);
 		} /*  else {

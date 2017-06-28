@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.net.models;
 
+import com.hiddenswitch.proto3.net.DeckType;
 import com.hiddenswitch.proto3.net.Games;
 import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.client.models.CardRecord;
@@ -27,6 +28,7 @@ public class GetCollectionResponse implements Serializable {
 	private String collectionId;
 	private String userId;
 	private boolean trashed;
+	private DeckType deckType;
 
 	public static GetCollectionResponse batch(List<GetCollectionResponse> responses) {
 		return new GetCollectionResponse()
@@ -41,7 +43,7 @@ public class GetCollectionResponse implements Serializable {
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<InventoryRecord> inventoryRecords, boolean trashed) {
+	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<InventoryRecord> inventoryRecords, boolean trashed, DeckType deckType) {
 		return new GetCollectionResponse()
 				.withTrashed(trashed)
 				.withCollectionType(CollectionTypes.DECK)
@@ -49,6 +51,7 @@ public class GetCollectionResponse implements Serializable {
 				.withCardRecords(inventoryRecords)
 				.withHeroClass(heroClass)
 				.withUserId(userId)
+				.withDeckType(deckType)
 				.withName(name);
 	}
 
@@ -161,7 +164,8 @@ public class GetCollectionResponse implements Serializable {
 		InventoryCollection collection = new InventoryCollection()
 				.name(displayName)
 				.id(getCollectionId())
-				.type(getCollectionType().toString())
+				.type(InventoryCollection.TypeEnum.valueOf(getCollectionType().toString()))
+				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
 				.inventory(getInventoryRecords().stream().map(cr ->
 						new CardRecord()
 								.userId(cr.getUserId())
@@ -193,6 +197,19 @@ public class GetCollectionResponse implements Serializable {
 
 	public GetCollectionResponse withTrashed(final boolean trashed) {
 		this.trashed = trashed;
+		return this;
+	}
+
+	public DeckType getDeckType() {
+		return deckType;
+	}
+
+	public void setDeckType(DeckType deckType) {
+		this.deckType = deckType;
+	}
+
+	public GetCollectionResponse withDeckType(final DeckType deckType) {
+		this.deckType = deckType;
 		return this;
 	}
 }
