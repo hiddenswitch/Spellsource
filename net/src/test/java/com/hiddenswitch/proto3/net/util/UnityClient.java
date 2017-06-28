@@ -211,6 +211,7 @@ public class UnityClient {
 	protected void assertValidStateAndChanges(ServerToClientMessage message) {
 		context.assertNotNull(message.getGameState());
 		context.assertNotNull(message.getChanges());
+		context.assertNotNull(message.getGameState().getTurnNumber());
 		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
 		context.assertTrue(message.getChanges().stream().allMatch(e -> e.getId() >= 0));
 		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
