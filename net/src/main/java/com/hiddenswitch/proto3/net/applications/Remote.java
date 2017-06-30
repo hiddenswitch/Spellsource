@@ -6,6 +6,7 @@ import com.hiddenswitch.proto3.net.util.Mongo;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.eventbus.EventBusOptions;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
