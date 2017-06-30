@@ -170,6 +170,43 @@ public class EntityState  implements Serializable {
   @SerializedName("note")
   private String note = null;
 
+  /**
+   * When not null, indicates this card entity has a specified type.
+   */
+  public enum CardTypeEnum {
+    @SerializedName("HERO")
+    HERO("HERO"),
+    
+    @SerializedName("MINION")
+    MINION("MINION"),
+    
+    @SerializedName("SPELL")
+    SPELL("SPELL"),
+    
+    @SerializedName("WEAPON")
+    WEAPON("WEAPON"),
+    
+    @SerializedName("HERO_POWER")
+    HERO_POWER("HERO_POWER"),
+    
+    @SerializedName("CHOOSE_ONE")
+    CHOOSE_ONE("CHOOSE_ONE");
+
+    private String value;
+
+    CardTypeEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+  }
+
+  @SerializedName("cardType")
+  private CardTypeEnum cardType = null;
+
   public EntityState location(EntityLocation location) {
     this.location = location;
     return this;
@@ -962,6 +999,24 @@ public class EntityState  implements Serializable {
     this.note = note;
   }
 
+  public EntityState cardType(CardTypeEnum cardType) {
+    this.cardType = cardType;
+    return this;
+  }
+
+   /**
+   * When not null, indicates this card entity has a specified type.
+   * @return cardType
+  **/
+  @ApiModelProperty(example = "null", value = "When not null, indicates this card entity has a specified type.")
+  public CardTypeEnum getCardType() {
+    return cardType;
+  }
+
+  public void setCardType(CardTypeEnum cardType) {
+    this.cardType = cardType;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1015,12 +1070,13 @@ public class EntityState  implements Serializable {
         Objects.equals(this.maxMana, entityState.maxMana) &&
         Objects.equals(this.lockedMana, entityState.lockedMana) &&
         Objects.equals(this.hostsTrigger, entityState.hostsTrigger) &&
-        Objects.equals(this.note, entityState.note);
+        Objects.equals(this.note, entityState.note) &&
+        Objects.equals(this.cardType, entityState.cardType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType);
   }
 
   @Override
@@ -1072,6 +1128,7 @@ public class EntityState  implements Serializable {
     sb.append("    lockedMana: ").append(toIndentedString(lockedMana)).append("\n");
     sb.append("    hostsTrigger: ").append(toIndentedString(hostsTrigger)).append("\n");
     sb.append("    note: ").append(toIndentedString(note)).append("\n");
+    sb.append("    cardType: ").append(toIndentedString(cardType)).append("\n");
     sb.append("}");
     return sb.toString();
   }
