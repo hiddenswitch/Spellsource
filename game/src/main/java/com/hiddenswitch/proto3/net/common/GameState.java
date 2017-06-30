@@ -83,6 +83,10 @@ public class GameState implements Serializable {
 	 * The timestamp of when this {@link GameState} was accessed.
 	 */
 	public final long timestamp;
+	/**
+	 * The current turn number.
+	 */
+	public final int turnNumber;
 
 	public GameState(GameContext fromContext) {
 		this(fromContext, fromContext.getTurnState(), false);
@@ -107,6 +111,7 @@ public class GameState implements Serializable {
 		triggerManager = clone.getTriggerManager();
 		cardCostModifiers = clone.getCardCostModifiers();
 		activePlayerId = clone.getActivePlayerId();
+		turnNumber = clone.getTurn();
 		this.turnState = turnState;
 	}
 
