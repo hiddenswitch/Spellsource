@@ -31,6 +31,9 @@ public class Remote {
 
 		Mongo.mongo().connect(vertx, "mongodb://spellsource1:9AD3uubaeIf71a4M11lPVAV2mJcbPzV1EC38Y4WF26M@aws-us-east-1-portal.9.dblayer.com:20276/production?ssl=true");
 		Minionate.minionate().migrate(vertx, then -> {
+			if (then.failed()) {
+				root.error("Migration failed: " + then.cause().getMessage());
+			}
 			Minionate.minionate().deployAll(vertx, Future.future());
 		});
 	}
