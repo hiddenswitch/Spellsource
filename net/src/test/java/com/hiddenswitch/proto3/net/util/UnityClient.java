@@ -166,6 +166,7 @@ public class UnityClient {
 					break;
 				case ON_REQUEST_ACTION:
 					assertValidActions(message);
+					assertValidStateAndChanges(message);
 					context.assertNotNull(message.getGameState());
 					context.assertNotNull(message.getChanges());
 					context.assertNotNull(message.getActions());
@@ -214,6 +215,15 @@ public class UnityClient {
 		context.assertNotNull(message.getGameState().getTurnNumber());
 		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
 		context.assertTrue(message.getChanges().stream().allMatch(e -> e.getId() >= 0));
+		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.PLAYER).count() == 2);
+		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).count() == 2);
+		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).allMatch(h ->
+				null != h.getState().getMaxMana()));
+		context.assertNotNull(message.getGameState().getTurnNumber());
+		if (message.getGameState().getTurnNumber() > 0) {
+			context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).anyMatch(h ->
+					h.getState().getMaxMana() >= 1));
+		}
 		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
 		final List<Integer> changeIds = message.getChanges().stream().map(EntityChangeSetInner::getId).collect(Collectors.toList());
 		final boolean contains = entityIds.containsAll(changeIds);
