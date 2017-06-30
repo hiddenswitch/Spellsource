@@ -5,6 +5,10 @@ import com.hiddenswitch.minionate.Minionate;
 import com.hiddenswitch.proto3.net.util.Mongo;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 public class Remote {
 	public static void main(String args[]) {
@@ -17,7 +21,13 @@ public class Remote {
 				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
 		root.setLevel(Level.ERROR);
 
-		Vertx vertx = Vertx.vertx();
+		// Set significantly longer timeouts
+		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();
+		Vertx vertx = Vertx.vertx(new VertxOptions()
+				.setBlockedThreadCheckInterval(Duration.of(8, ChronoUnit.SECONDS).toMillis())
+				.setWarningExceptionTime(nanos)
+				.setMaxEventLoopExecuteTime(nanos)
+				.setMaxWorkerExecuteTime(nanos));
 
 		Mongo.mongo().connect(vertx, "mongodb://spellsource1:9AD3uubaeIf71a4M11lPVAV2mJcbPzV1EC38Y4WF26M@aws-us-east-1-portal.9.dblayer.com:20276/production?ssl=true");
 		Minionate.minionate().migrate(vertx, then -> {
