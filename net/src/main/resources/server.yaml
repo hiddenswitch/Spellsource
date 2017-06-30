@@ -1189,6 +1189,16 @@ definitions:
       note:
         description: A renderable note attached to this entity.
         type: 'string'
+      cardType:
+        description: When not null, indicates this card entity has a specified type.
+        type: 'string'
+        enum:
+          - 'HERO'
+          - 'MINION'
+          - 'SPELL'
+          - 'WEAPON'
+          - 'HERO_POWER'
+          - 'CHOOSE_ONE'
   DraftsChooseCardRequest:
     type: 'object'
     required:

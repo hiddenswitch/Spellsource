@@ -48,6 +48,19 @@ Name | Type | Description | Notes
 **lockedMana** | **Integer** | The amount of mana that was locked due to overload. |  [optional]
 **hostsTrigger** | **Boolean** | When true, indicates this entity has an effect that triggers on game events. |  [optional]
 **note** | **String** | A renderable note attached to this entity. |  [optional]
+**cardType** | [**CardTypeEnum**](#CardTypeEnum) | When not null, indicates this card entity has a specified type. |  [optional]
+
+
+<a name="CardTypeEnum"></a>
+## Enum: CardTypeEnum
+Name | Value
+---- | -----
+HERO | &quot;HERO&quot;
+MINION | &quot;MINION&quot;
+SPELL | &quot;SPELL&quot;
+WEAPON | &quot;WEAPON&quot;
+HERO_POWER | &quot;HERO_POWER&quot;
+CHOOSE_ONE | &quot;CHOOSE_ONE&quot;
 
 
 

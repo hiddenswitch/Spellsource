@@ -716,6 +716,7 @@ public interface Games {
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
 		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
 		entityState.heroClass(card.getHeroClass().toString());
+		entityState.cardType(EntityState.CardTypeEnum.valueOf(card.getCardType().toString()));
 		final boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		switch (card.getCardType()) {
