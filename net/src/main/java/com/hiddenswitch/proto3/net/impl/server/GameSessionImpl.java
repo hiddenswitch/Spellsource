@@ -190,10 +190,12 @@ public class GameSessionImpl implements GameSession {
 		if (isAgainstAI()) {
 			if (pregamePlayerConfiguration1.isAI()) {
 				listener1 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_1);
+				setClient1(listener1);
 				listener2 = getPlayerListener(PLAYER_2);
 			} else {
 				listener1 = getPlayerListener(PLAYER_1);
 				listener2 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_2);
+				setClient2(listener2);
 			}
 		} else {
 			listener1 = getPlayerListener(PLAYER_1);
@@ -385,12 +387,18 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public void onTouch(int playerId, int entityId) {
-		getPlayerListener(getOpponent(playerId)).onNotification(new TouchingNotification(playerId, entityId, true), getGameContext().getGameState());
+		getPlayerListener(getOpponent(playerId))
+				.onNotification(
+						new TouchingNotification(playerId, entityId, true),
+						getGameContext().getGameState());
 	}
 
 	@Override
 	public void onUntouch(int playerId, int entityId) {
-		getPlayerListener(getOpponent(playerId)).onNotification(new TouchingNotification(playerId, entityId, false), getGameContext().getGameState());
+		getPlayerListener(getOpponent(playerId))
+				.onNotification(
+						new TouchingNotification(playerId, entityId, false),
+						getGameContext().getGameState());
 	}
 
 	private Player getPlayer1() {
