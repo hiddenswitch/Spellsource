@@ -1197,6 +1197,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		this.getLogic().setIdFactory(new IdFactory(state.currentId));
 		this.getLogic().setContext(this);
 		this.setTurnState(state.turnState);
+		this.setTurn(state.turnNumber);
 		this.setActivePlayerId(state.activePlayerId);
 	}
 
