@@ -5,6 +5,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.ext.sync.Sync;
 
@@ -12,6 +13,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import static io.vertx.ext.sync.Sync.awaitFiber;
@@ -86,7 +89,7 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			return;
 		}
 
-		eb.send(name + "::" + methodName, result, Sync.fiberHandler(new ReplyHandler(next)));
+		eb.send(name + "::" + methodName, result, new DeliveryOptions().setSendTimeout(Duration.of(4, ChronoUnit.MINUTES).toMillis()), Sync.fiberHandler(new ReplyHandler(next)));
 	}
 
 }
