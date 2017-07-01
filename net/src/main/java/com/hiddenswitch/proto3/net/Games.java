@@ -3,6 +3,8 @@ package com.hiddenswitch.proto3.net;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.client.models.*;
+import com.hiddenswitch.proto3.net.client.models.Entity;
+import com.hiddenswitch.proto3.net.client.models.EntityLocation;
 import com.hiddenswitch.proto3.net.client.models.GameEvent;
 import com.hiddenswitch.proto3.net.client.models.PhysicalAttackEvent;
 import com.hiddenswitch.proto3.net.models.*;
@@ -11,15 +13,11 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.*;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.cards.SpellCard;
-import net.demilich.metastone.game.cards.WeaponCard;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
@@ -38,6 +36,20 @@ import java.util.stream.Collectors;
 public interface Games {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 180000L;
 	String WEBSOCKET_PATH = "games";
+
+	static Entity getSecretCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, HeroClass heroClass) {
+		return new Entity()
+				.cardId("hidden")
+				.entityType(Entity.EntityTypeEnum.CARD)
+				.description("A secret! This card will be revealed when a certain action occurs.")
+				.name("Secret")
+				.id(id)
+				.state(new EntityState()
+						.owner(owner)
+						.cardType(EntityState.CardTypeEnum.SPELL)
+						.heroClass(heroClass.toString())
+						.location(toClientLocation(location)));
+	}
 
 	/**
 	 * Get a client's view of the current game actions.
@@ -275,8 +287,13 @@ public interface Games {
 			clientEvent.afterPhysicalAttack(physicalAttack);
 		} else if (event instanceof DrawCardEvent) {
 			final DrawCardEvent drawCardEvent = (DrawCardEvent) event;
+			final Card card = drawCardEvent.getCard();
+			Entity entity = getEntity(workingContext, card, playerId);
+			if (card.getOwner() != playerId) {
+				entity = getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+			}
 			clientEvent.drawCard(new GameEventDrawCard()
-					.card(getEntity(workingContext, drawCardEvent.getCard(), playerId))
+					.card(entity)
 					.drawn(drawCardEvent.isDrawn()));
 		} else if (event instanceof KillEvent) {
 			final KillEvent killEvent = (KillEvent) event;
@@ -288,8 +305,15 @@ public interface Games {
 		} else if (event instanceof CardPlayedEvent) {
 			final CardPlayedEvent cardPlayedEvent = (CardPlayedEvent) event;
 			final Card card = cardPlayedEvent.getCard();
+			Entity entity = getEntity(workingContext, card, playerId);
+			if (card.getCardType() == CardType.SPELL
+					&& card instanceof SecretCard
+					&& card.getOwner() != playerId) {
+				entity = getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+			}
+
 			clientEvent.cardPlayed(new GameEventCardPlayed()
-					.card(getEntity(workingContext, card, playerId)));
+					.card(entity));
 		} else if (event instanceof HeroPowerUsedEvent) {
 			final HeroPowerUsedEvent heroPowerUsedEvent = (HeroPowerUsedEvent) event;
 			final Card card = heroPowerUsedEvent.getHeroPower();
@@ -309,8 +333,16 @@ public interface Games {
 					.victim(getEntity(workingContext, damageEvent.getVictim(), playerId)));
 		} else if (event instanceof AfterSpellCastedEvent) {
 			final AfterSpellCastedEvent afterSpellCastedEvent = (AfterSpellCastedEvent) event;
+			final Card card = afterSpellCastedEvent.getSourceCard();
+			Entity entity = getEntity(workingContext, card, playerId);
+			if (card.getCardType() == CardType.SPELL
+					&& card instanceof SecretCard
+					&& card.getOwner() != playerId) {
+				entity = getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+			}
+
 			clientEvent.afterSpellCasted(new GameEventAfterSpellCasted()
-					.sourceCard(getEntity(workingContext, afterSpellCastedEvent.getSourceCard(), playerId))
+					.sourceCard(entity)
 					.spellTarget(getEntity(workingContext, afterSpellCastedEvent.getEventTarget(), playerId)));
 		} else if (event instanceof SecretRevealedEvent) {
 			final SecretRevealedEvent secretRevealedEvent = (SecretRevealedEvent) event;
@@ -661,8 +693,10 @@ public interface Games {
 		Entity cardEntity = getEntity(workingContext, secret.getSecretCard(), localPlayerId);
 		if (localPlayerId != secret.getOwner()) {
 			// Censor information about the secret if it does not belong to the player.
-			cardEntity.description("Secret")
-					.cardId("unknown");
+			cardEntity
+					.name("Secret")
+					.description("Secret")
+					.cardId("hidden");
 		}
 		cardEntity.id(secret.getId())
 				.entityType(Entity.EntityTypeEnum.SECRET)
