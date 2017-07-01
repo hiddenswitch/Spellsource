@@ -140,7 +140,7 @@ public class WebSocketClient implements Client {
 					source = Games.getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 				}
 			}
-			
+
 			List<Entity> targets = event.getTargets(workingContext, sourceEntity.getOwner())
 					.stream().map(e -> Games.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
 			final Entity target = targets.size() > 0 ? targets.get(0) : null;
