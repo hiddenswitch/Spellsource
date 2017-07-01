@@ -15,6 +15,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.SecretCard;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.EntityLocation;
@@ -128,8 +130,18 @@ public class WebSocketClient implements Client {
 							.triggerSourceId(triggerEvent.getSpellTrigger().getHostReference().getId())));
 		} else if (GameAction.class.isAssignableFrom(eventClass)) {
 			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource(workingContext);
-			final Entity source = Games.getEntity(workingContext, sourceEntity, playerId);
-			List<Entity> targets = event.getTargets(workingContext, sourceEntity == null ? playerId : sourceEntity.getOwner())
+			Entity source = Games.getEntity(workingContext, sourceEntity, playerId);
+
+			if (sourceEntity.getEntityType() == EntityType.CARD) {
+				Card card = (Card) sourceEntity;
+				if (card.getCardType() == CardType.SPELL
+						&& card instanceof SecretCard
+						&& card.getOwner() != playerId) {
+					source = Games.getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+				}
+			}
+			
+			List<Entity> targets = event.getTargets(workingContext, sourceEntity.getOwner())
 					.stream().map(e -> Games.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
 			final Entity target = targets.size() > 0 ? targets.get(0) : null;
 			message.event(new GameEvent()
