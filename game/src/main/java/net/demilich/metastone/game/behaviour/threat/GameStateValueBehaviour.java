@@ -26,7 +26,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	private IGameStateHeuristic heuristic;
 	private FeatureVector featureVector;
 	private String nameSuffix = "";
-	private long timeout = 2000;
+	private long timeout = 2800;
 
 	public GameStateValueBehaviour() {
 	}
@@ -41,16 +41,13 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	private double alphaBeta(GameContext context, int playerId, GameAction action, int depth, long startMillis) {
 		GameContext simulation = getClone(context);
 		double score = Float.NEGATIVE_INFINITY;
-
-		if (System.currentTimeMillis() - startMillis > timeout) {
-			return score;
-		}
+		final boolean timedOut = System.currentTimeMillis() - startMillis > timeout;
 
 		if (simulation.isDisposed()) {
 			return Float.NEGATIVE_INFINITY;
 		}
 		simulation.getLogic().performGameAction(playerId, action);
-		if (depth == 0 || simulation.getActivePlayerId() != playerId || simulation.updateAndGetGameOver()) {
+		if (timedOut || depth == 0 || simulation.getActivePlayerId() != playerId || simulation.updateAndGetGameOver()) {
 			return heuristic.getScore(simulation, playerId);
 		}
 
