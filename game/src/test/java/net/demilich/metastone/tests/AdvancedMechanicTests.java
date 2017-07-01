@@ -3,6 +3,8 @@ package net.demilich.metastone.tests;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.demilich.metastone.game.actions.PlayCardAction;
+import net.demilich.metastone.game.targeting.Zones;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -24,6 +26,8 @@ import net.demilich.metastone.game.spells.SetHpSpell;
 import net.demilich.metastone.game.spells.SilenceSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
+
+import static net.demilich.metastone.game.GameContext.PLAYER_1;
 
 public class AdvancedMechanicTests extends BasicTests {
 
@@ -146,12 +150,12 @@ public class AdvancedMechanicTests extends BasicTests {
 		context.getLogic().performGameAction(priest.getId(), healAction);
 		Assert.assertEquals(defender.getAttack(), BASE_ATTACK);
 		Assert.assertEquals(defender.hasAttribute(Attribute.ENRAGED), false);
-		
+
 		// attack once more - should enrage again
 		context.getLogic().performGameAction(mage.getId(), attackAction);
 		Assert.assertEquals(defender.getAttack(), BASE_ATTACK + ENRAGE_ATTACK_BONUS);
 		Assert.assertEquals(defender.hasAttribute(Attribute.ENRAGED), true);
-		
+
 		// attack should be set to 1
 		playCardWithTarget(context, mage, CardCatalogue.getCardById("spell_humility"), defender);
 		Assert.assertEquals(defender.getAttack(), 1);
@@ -280,16 +284,16 @@ public class AdvancedMechanicTests extends BasicTests {
 		context.getLogic().performGameAction(mage.getId(), damageSpell.play());
 		int spellPower = getSingleMinion(mage.getMinions()).getAttributeValue(Attribute.SPELL_DAMAGE);
 		Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - 2 * mindBlastDamage - spellPower);
-		
+
 		int opponentHp = warrior.getHero().getHp();
 		GameAction useHeroPower = mage.getHero().getHeroPower().play();
 		useHeroPower.setTarget(warrior.getHero());
 		context.getLogic().performGameAction(mage.getId(), useHeroPower);
-		
+
 		// mage hero power should not be affected by SPELL_DAMAGE, and thus deal 1 damage
 		Assert.assertEquals(warrior.getHero().getHp(), opponentHp - 1);
 	}
-	
+
 	@Test
 	public void testBuffWithBoardWipe() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.PRIEST);
@@ -297,22 +301,44 @@ public class AdvancedMechanicTests extends BasicTests {
 		mage.setMana(10);
 		Player priest = context.getPlayer2();
 		priest.setMana(10);
-		
+
 		Card darkCultist = CardCatalogue.getCardById("minion_dark_cultist");
 		playCard(context, priest, darkCultist);
 		Card darkIronDwarf = CardCatalogue.getCardById("minion_dark_iron_dwarf");
 		playCard(context, priest, darkIronDwarf);
-		
+
 		Assert.assertEquals(priest.getMinions().size(), 2);
-		
+
 		Card flamestrike = CardCatalogue.getCardById("spell_flamestrike");
 		playCard(context, mage, flamestrike);
-		
+
 		// there should be no minions left after the Flamestrike
 		// the Dark Cultist Deathrattle shouldn't have any effect, as both minions are removed simultaneously
 		Assert.assertEquals(priest.getMinions().size(), 0);
 
 	}
-	
-	
+
+	@Test
+	public void testDiscardAndDraw() {
+		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.PRIEST);
+		Player warlock = context.getPlayer1();
+		warlock.getHand().clear();
+		warlock.getDeck().clear();
+		final Card acidicSwampOoze = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
+		acidicSwampOoze.setOwner(warlock.getId());
+		acidicSwampOoze.setId(context.getLogic().getIdFactory().generateId());
+		warlock.getDeck().addCard(acidicSwampOoze);
+		final Card minionNoviceEngineer = CardCatalogue.getCardById("minion_novice_engineer");
+		context.getLogic().receiveCard(PLAYER_1, minionNoviceEngineer);
+		final Card malchezaarsImpl = CardCatalogue.getCardById("minion_malchezaars_imp");
+		final Card soulfire = CardCatalogue.getCardById("spell_soulfire");
+		playCard(context, warlock, malchezaarsImpl);
+		context.getLogic().receiveCard(PLAYER_1, soulfire);
+		PlayCardAction action = soulfire.play();
+		action.setTarget(context.getPlayer2().getHero());
+		context.getLogic().performGameAction(PLAYER_1, action);
+		Assert.assertEquals(warlock.getHand().get(0).getCardId(), "minion_acidic_swamp_ooze", "The player should have Acidic Swamp Ooze in their hand after playing soulfire.");
+		Assert.assertEquals(minionNoviceEngineer.getZone(), Zones.GRAVEYARD, "Novice engineer should be in the graveyard.");
+	}
+
 }
