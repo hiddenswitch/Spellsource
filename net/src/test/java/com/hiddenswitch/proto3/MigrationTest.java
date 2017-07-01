@@ -177,11 +177,10 @@ public class MigrationTest {
 			Minionate.minionate().migrate(vertx, context.asyncAssertSuccess(then2 -> {
 				// Assert a game still works
 				Minionate.minionate().deployAll(vertx, context.asyncAssertSuccess(then3 -> {
-					// Query for existing decks and assert
 					Mongo.mongo().client().findOne(MigrationsImpl.MIGRATIONS, json(), json(), context.asyncAssertSuccess(doc -> {
 						context.assertNotNull(doc.getBoolean("locked"));
 						context.assertFalse(doc.getBoolean("locked"));
-						context.assertEquals(doc.getInteger("version"), 1);
+						context.assertEquals(doc.getInteger("version"), 2);
 						vertx.executeBlocking(done -> {
 							new UnityClient(context).createUserAccount(null).matchmakeAndPlayAgainstAI(null).waitUntilDone();
 							done.handle(Future.succeededFuture());
