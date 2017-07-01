@@ -7,9 +7,11 @@ import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Migrations;
 import com.hiddenswitch.proto3.net.impl.*;
 import com.hiddenswitch.proto3.net.models.DeckCreateRequest;
+import com.hiddenswitch.proto3.net.models.DeckDeleteRequest;
 import com.hiddenswitch.proto3.net.models.DeckListUpdateRequest;
 import com.hiddenswitch.proto3.net.models.MigrationRequest;
 import io.vertx.core.*;
+import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.sync.Sync;
@@ -107,7 +109,28 @@ public class Minionate {
 							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId2, h));
 							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId3, h));
 						}))
-				.migrateTo(1, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(2)
+						.withUp(thisVertx -> {
+							InventoryImpl inventory = new InventoryImpl();
+							CardsImpl cards = new CardsImpl();
+							DecksImpl decksImpl = new DecksImpl();
+							String deploymentId = awaitResult(h -> thisVertx.deployVerticle(decksImpl, h));
+							String deploymentId2 = awaitResult(h -> thisVertx.deployVerticle(inventory, h));
+							String deploymentId3 = awaitResult(h -> thisVertx.deployVerticle(cards, h));
+							// Trash the druid deck
+							List<String> deckIds = mongo().findWithOptions(Inventory.COLLECTIONS,
+									json("name", json("$regex", "Ramp Combo Druid")),
+									new FindOptions().setFields(json("_id", true))).stream()
+									.map(o -> o.getString("_id")).collect(toList());
+							for (String deckId : deckIds) {
+								decksImpl.deleteDeck(new DeckDeleteRequest(deckId));
+							}
+							Void ignored = awaitResult(h -> thisVertx.undeploy(deploymentId, h));
+							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId2, h));
+							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId3, h));
+						}))
+				.migrateTo(2, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
