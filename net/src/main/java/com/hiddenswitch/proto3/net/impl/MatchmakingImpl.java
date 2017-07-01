@@ -48,7 +48,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	}
 
 	@Override
-	public MatchCancelResponse cancel(MatchCancelRequest matchCancelRequest) {
+	public MatchCancelResponse cancel(MatchCancelRequest matchCancelRequest) throws SuspendExecution, InterruptedException {
 		final String userId = matchCancelRequest.getUserId();
 		final Matchmaker.Match match = matchmaker.remove(userId);
 		if (match != null) {

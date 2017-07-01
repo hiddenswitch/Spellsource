@@ -53,7 +53,7 @@ public interface Matchmaking {
 	 * @param matchCancelRequest The user's ID.
 	 * @return Information about the cancellation.
 	 */
-	MatchCancelResponse cancel(MatchCancelRequest matchCancelRequest);
+	MatchCancelResponse cancel(MatchCancelRequest matchCancelRequest) throws SuspendExecution, InterruptedException;
 
 	/**
 	 * Creates a match without entering a queue entry between two users.
