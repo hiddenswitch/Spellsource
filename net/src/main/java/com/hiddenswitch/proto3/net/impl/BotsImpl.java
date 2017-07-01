@@ -38,7 +38,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	private List<UserRecord> bots = new ArrayList<>();
 	private Queue<UserRecord> unusedBots = new ConcurrentLinkedQueue<>();
 	private Map<String, UserRecord> botToGame = new HashMap<>();
-	private Class<? extends Behaviour> botBehaviour = PlayRandomBehaviour.class;
+	private Class<? extends Behaviour> botBehaviour = GameStateValueBehaviour.class;
 	private Registration registration;
 
 	@Override
