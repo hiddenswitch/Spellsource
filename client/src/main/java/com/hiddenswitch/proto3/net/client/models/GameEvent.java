@@ -27,23 +27,22 @@ package com.hiddenswitch.proto3.net.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.proto3.net.client.models.CardEvent;
 import com.hiddenswitch.proto3.net.client.models.GameEventAfterSpellCasted;
 import com.hiddenswitch.proto3.net.client.models.GameEventArmorGained;
 import com.hiddenswitch.proto3.net.client.models.GameEventBeforeSummon;
-import com.hiddenswitch.proto3.net.client.models.GameEventCardPlayed;
 import com.hiddenswitch.proto3.net.client.models.GameEventCardRevealed;
 import com.hiddenswitch.proto3.net.client.models.GameEventDamage;
-import com.hiddenswitch.proto3.net.client.models.GameEventDrawCard;
 import com.hiddenswitch.proto3.net.client.models.GameEventHeal;
 import com.hiddenswitch.proto3.net.client.models.GameEventHeroPowerUsed;
 import com.hiddenswitch.proto3.net.client.models.GameEventJoust;
 import com.hiddenswitch.proto3.net.client.models.GameEventKill;
+import com.hiddenswitch.proto3.net.client.models.GameEventOverload;
 import com.hiddenswitch.proto3.net.client.models.GameEventPerformedGameAction;
 import com.hiddenswitch.proto3.net.client.models.GameEventPreDamage;
 import com.hiddenswitch.proto3.net.client.models.GameEventSecretPlayed;
 import com.hiddenswitch.proto3.net.client.models.GameEventSecretRevealed;
 import com.hiddenswitch.proto3.net.client.models.GameEventSilence;
-import com.hiddenswitch.proto3.net.client.models.GameEventSpellCasted;
 import com.hiddenswitch.proto3.net.client.models.GameEventTargetAcquisition;
 import com.hiddenswitch.proto3.net.client.models.GameEventTriggerFired;
 import com.hiddenswitch.proto3.net.client.models.GameEventWeaponDestroyed;
@@ -121,6 +120,9 @@ public class GameEvent  implements Serializable {
     @SerializedName("KILL")
     KILL("KILL"),
     
+    @SerializedName("MILL")
+    MILL("MILL"),
+    
     @SerializedName("OVERLOAD")
     OVERLOAD("OVERLOAD"),
     
@@ -191,7 +193,7 @@ public class GameEvent  implements Serializable {
   private PhysicalAttackEvent afterPhysicalAttack = null;
 
   @SerializedName("drawCard")
-  private GameEventDrawCard drawCard = null;
+  private CardEvent drawCard = null;
 
   @SerializedName("entityTouched")
   private Integer entityTouched = null;
@@ -212,7 +214,7 @@ public class GameEvent  implements Serializable {
   private GameEventBeforeSummon beforeSummon = null;
 
   @SerializedName("cardPlayed")
-  private GameEventCardPlayed cardPlayed = null;
+  private CardEvent cardPlayed = null;
 
   @SerializedName("armorGained")
   private GameEventArmorGained armorGained = null;
@@ -221,7 +223,7 @@ public class GameEvent  implements Serializable {
   private GameEventBeforeSummon afterSummon = null;
 
   @SerializedName("spellCasted")
-  private GameEventSpellCasted spellCasted = null;
+  private CardEvent spellCasted = null;
 
   @SerializedName("joust")
   private GameEventJoust joust = null;
@@ -254,7 +256,7 @@ public class GameEvent  implements Serializable {
   private PhysicalAttackEvent physicalAttack = null;
 
   @SerializedName("overload")
-  private GameEventCardPlayed overload = null;
+  private GameEventOverload overload = null;
 
   @SerializedName("heal")
   private GameEventHeal heal = null;
@@ -269,7 +271,10 @@ public class GameEvent  implements Serializable {
   private GameEventAfterSpellCasted afterSpellCasted = null;
 
   @SerializedName("discard")
-  private GameEventCardPlayed discard = null;
+  private CardEvent discard = null;
+
+  @SerializedName("mill")
+  private CardEvent mill = null;
 
   @SerializedName("kill")
   private GameEventKill kill = null;
@@ -367,7 +372,7 @@ public class GameEvent  implements Serializable {
     this.afterPhysicalAttack = afterPhysicalAttack;
   }
 
-  public GameEvent drawCard(GameEventDrawCard drawCard) {
+  public GameEvent drawCard(CardEvent drawCard) {
     this.drawCard = drawCard;
     return this;
   }
@@ -377,11 +382,11 @@ public class GameEvent  implements Serializable {
    * @return drawCard
   **/
   @ApiModelProperty(example = "null", value = "")
-  public GameEventDrawCard getDrawCard() {
+  public CardEvent getDrawCard() {
     return drawCard;
   }
 
-  public void setDrawCard(GameEventDrawCard drawCard) {
+  public void setDrawCard(CardEvent drawCard) {
     this.drawCard = drawCard;
   }
 
@@ -493,7 +498,7 @@ public class GameEvent  implements Serializable {
     this.beforeSummon = beforeSummon;
   }
 
-  public GameEvent cardPlayed(GameEventCardPlayed cardPlayed) {
+  public GameEvent cardPlayed(CardEvent cardPlayed) {
     this.cardPlayed = cardPlayed;
     return this;
   }
@@ -503,11 +508,11 @@ public class GameEvent  implements Serializable {
    * @return cardPlayed
   **/
   @ApiModelProperty(example = "null", value = "")
-  public GameEventCardPlayed getCardPlayed() {
+  public CardEvent getCardPlayed() {
     return cardPlayed;
   }
 
-  public void setCardPlayed(GameEventCardPlayed cardPlayed) {
+  public void setCardPlayed(CardEvent cardPlayed) {
     this.cardPlayed = cardPlayed;
   }
 
@@ -547,7 +552,7 @@ public class GameEvent  implements Serializable {
     this.afterSummon = afterSummon;
   }
 
-  public GameEvent spellCasted(GameEventSpellCasted spellCasted) {
+  public GameEvent spellCasted(CardEvent spellCasted) {
     this.spellCasted = spellCasted;
     return this;
   }
@@ -557,11 +562,11 @@ public class GameEvent  implements Serializable {
    * @return spellCasted
   **/
   @ApiModelProperty(example = "null", value = "")
-  public GameEventSpellCasted getSpellCasted() {
+  public CardEvent getSpellCasted() {
     return spellCasted;
   }
 
-  public void setSpellCasted(GameEventSpellCasted spellCasted) {
+  public void setSpellCasted(CardEvent spellCasted) {
     this.spellCasted = spellCasted;
   }
 
@@ -745,7 +750,7 @@ public class GameEvent  implements Serializable {
     this.physicalAttack = physicalAttack;
   }
 
-  public GameEvent overload(GameEventCardPlayed overload) {
+  public GameEvent overload(GameEventOverload overload) {
     this.overload = overload;
     return this;
   }
@@ -755,11 +760,11 @@ public class GameEvent  implements Serializable {
    * @return overload
   **/
   @ApiModelProperty(example = "null", value = "")
-  public GameEventCardPlayed getOverload() {
+  public GameEventOverload getOverload() {
     return overload;
   }
 
-  public void setOverload(GameEventCardPlayed overload) {
+  public void setOverload(GameEventOverload overload) {
     this.overload = overload;
   }
 
@@ -835,7 +840,7 @@ public class GameEvent  implements Serializable {
     this.afterSpellCasted = afterSpellCasted;
   }
 
-  public GameEvent discard(GameEventCardPlayed discard) {
+  public GameEvent discard(CardEvent discard) {
     this.discard = discard;
     return this;
   }
@@ -845,12 +850,30 @@ public class GameEvent  implements Serializable {
    * @return discard
   **/
   @ApiModelProperty(example = "null", value = "")
-  public GameEventCardPlayed getDiscard() {
+  public CardEvent getDiscard() {
     return discard;
   }
 
-  public void setDiscard(GameEventCardPlayed discard) {
+  public void setDiscard(CardEvent discard) {
     this.discard = discard;
+  }
+
+  public GameEvent mill(CardEvent mill) {
+    this.mill = mill;
+    return this;
+  }
+
+   /**
+   * Get mill
+   * @return mill
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public CardEvent getMill() {
+    return mill;
+  }
+
+  public void setMill(CardEvent mill) {
+    this.mill = mill;
   }
 
   public GameEvent kill(GameEventKill kill) {
@@ -931,13 +954,14 @@ public class GameEvent  implements Serializable {
         Objects.equals(this.summon, gameEvent.summon) &&
         Objects.equals(this.afterSpellCasted, gameEvent.afterSpellCasted) &&
         Objects.equals(this.discard, gameEvent.discard) &&
+        Objects.equals(this.mill, gameEvent.mill) &&
         Objects.equals(this.kill, gameEvent.kill) &&
         Objects.equals(this.triggerFired, gameEvent.triggerFired);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, entityTouched, entityUntouched, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, summon, afterSpellCasted, discard, kill, triggerFired);
+    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, entityTouched, entityUntouched, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, summon, afterSpellCasted, discard, mill, kill, triggerFired);
   }
 
   @Override
@@ -977,6 +1001,7 @@ public class GameEvent  implements Serializable {
     sb.append("    summon: ").append(toIndentedString(summon)).append("\n");
     sb.append("    afterSpellCasted: ").append(toIndentedString(afterSpellCasted)).append("\n");
     sb.append("    discard: ").append(toIndentedString(discard)).append("\n");
+    sb.append("    mill: ").append(toIndentedString(mill)).append("\n");
     sb.append("    kill: ").append(toIndentedString(kill)).append("\n");
     sb.append("    triggerFired: ").append(toIndentedString(triggerFired)).append("\n");
     sb.append("}");

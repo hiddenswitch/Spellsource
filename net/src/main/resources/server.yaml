@@ -445,6 +445,11 @@ definitions:
           $ref: '#/definitions/EntityState'
         p1:
           $ref: '#/definitions/EntityState'
+  CardEvent:
+    type: 'object'
+    properties:
+      card:
+        $ref: '#/definitions/Entity'
   GameEvent:
     type: 'object'
     properties:
@@ -482,6 +487,7 @@ definitions:
           - 'HERO_POWER_USED'
           - 'JOUST'
           - 'KILL'
+          - 'MILL'
           - 'OVERLOAD'
           - 'PERFORMED_GAME_ACTION'
           - 'PHYSICAL_ATTACK'
@@ -502,12 +508,7 @@ definitions:
       afterPhysicalAttack:
         $ref: '#/definitions/PhysicalAttackEvent'
       drawCard:
-        type: 'object'
-        properties:
-          card:
-            $ref: '#/definitions/Entity'
-          drawn:
-            type: 'boolean'
+        $ref: '#/definitions/CardEvent'
       entityTouched:
         type: 'integer'
       entityUntouched:
@@ -537,10 +538,7 @@ definitions:
           source:
             $ref: '#/definitions/Entity'
       cardPlayed:
-        type: 'object'
-        properties:
-          card:
-            $ref: '#/definitions/Entity'
+        $ref: '#/definitions/CardEvent'
       armorGained:
         type: 'object'
         properties:
@@ -554,10 +552,7 @@ definitions:
           source:
             $ref: '#/definitions/Entity'
       spellCasted:
-        type: 'object'
-        properties:
-          sourceCard:
-            $ref: '#/definitions/Entity'
+        $ref: '#/definitions/CardEvent'
       joust:
         type: 'object'
         properties:
@@ -658,10 +653,9 @@ definitions:
           spellTarget:
             $ref: '#/definitions/Entity'
       discard:
-        type: 'object'
-        properties:
-          card:
-            $ref: '#/definitions/Entity'
+        $ref: '#/definitions/CardEvent'
+      mill:
+        $ref: '#/definitions/CardEvent'
       kill:
         type: 'object'
         properties:
