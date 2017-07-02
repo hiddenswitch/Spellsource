@@ -278,6 +278,17 @@ public interface Games {
 			final int damageDealt = physicalAttackEvent.getDamageDealt();
 			final PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
 			clientEvent.physicalAttack(physicalAttack);
+		} else if (DiscardEvent.class.isAssignableFrom(event.getClass())) {
+			// Handles both discard and mill events
+			final DiscardEvent discardEvent = (DiscardEvent) event;
+			// You always see which cards get discarded
+			final CardEvent cardEvent = new CardEvent()
+					.card(getEntity(workingContext, discardEvent.getCard(), playerId));
+			if (discardEvent.getEventType() == GameEventType.DISCARD) {
+				clientEvent.discard(cardEvent);
+			} else if (discardEvent.getEventType() == GameEventType.MILL) {
+				clientEvent.mill(cardEvent);
+			}
 		} else if (event instanceof AfterPhysicalAttackEvent) {
 			final AfterPhysicalAttackEvent physicalAttackEvent = (AfterPhysicalAttackEvent) event;
 			final Actor attacker = physicalAttackEvent.getAttacker();
@@ -289,12 +300,12 @@ public interface Games {
 			final DrawCardEvent drawCardEvent = (DrawCardEvent) event;
 			final Card card = drawCardEvent.getCard();
 			Entity entity = getEntity(workingContext, card, playerId);
+			// You never see which cards are drawn by your opponent when they go
 			if (card.getOwner() != playerId) {
 				entity = getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 			}
-			clientEvent.drawCard(new GameEventDrawCard()
-					.card(entity)
-					.drawn(drawCardEvent.isDrawn()));
+			clientEvent.drawCard(new CardEvent()
+					.card(entity));
 		} else if (event instanceof KillEvent) {
 			final KillEvent killEvent = (KillEvent) event;
 			final net.demilich.metastone.game.entities.Entity victim = killEvent.getVictim();
@@ -312,7 +323,7 @@ public interface Games {
 				entity = getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 			}
 
-			clientEvent.cardPlayed(new GameEventCardPlayed()
+			clientEvent.cardPlayed(new CardEvent()
 					.card(entity));
 		} else if (event instanceof HeroPowerUsedEvent) {
 			final HeroPowerUsedEvent heroPowerUsedEvent = (HeroPowerUsedEvent) event;

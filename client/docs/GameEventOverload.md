@@ -1,10 +1,10 @@
 
-# GameEventSpellCasted
+# GameEventOverload
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**sourceCard** | [**Entity**](Entity.md) |  |  [optional]
+**card** | [**Entity**](Entity.md) |  |  [optional]
 
 
 

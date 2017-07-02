@@ -33,14 +33,14 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * GameEventCardPlayed
+ * CardEvent
  */
 
-public class GameEventCardPlayed  implements Serializable {
+public class CardEvent  implements Serializable {
   @SerializedName("card")
   private Entity card = null;
 
-  public GameEventCardPlayed card(Entity card) {
+  public CardEvent card(Entity card) {
     this.card = card;
     return this;
   }
@@ -67,8 +67,8 @@ public class GameEventCardPlayed  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GameEventCardPlayed gameEventCardPlayed = (GameEventCardPlayed) o;
-    return Objects.equals(this.card, gameEventCardPlayed.card);
+    CardEvent cardEvent = (CardEvent) o;
+    return Objects.equals(this.card, cardEvent.card);
   }
 
   @Override
@@ -79,7 +79,7 @@ public class GameEventCardPlayed  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GameEventCardPlayed {\n");
+    sb.append("class CardEvent {\n");
     
     sb.append("    card: ").append(toIndentedString(card)).append("\n");
     sb.append("}");

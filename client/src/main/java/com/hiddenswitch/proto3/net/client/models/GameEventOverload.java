@@ -33,17 +33,14 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * GameEventDrawCard
+ * GameEventOverload
  */
 
-public class GameEventDrawCard  implements Serializable {
+public class GameEventOverload  implements Serializable {
   @SerializedName("card")
   private Entity card = null;
 
-  @SerializedName("drawn")
-  private Boolean drawn = null;
-
-  public GameEventDrawCard card(Entity card) {
+  public GameEventOverload card(Entity card) {
     this.card = card;
     return this;
   }
@@ -61,24 +58,6 @@ public class GameEventDrawCard  implements Serializable {
     this.card = card;
   }
 
-  public GameEventDrawCard drawn(Boolean drawn) {
-    this.drawn = drawn;
-    return this;
-  }
-
-   /**
-   * Get drawn
-   * @return drawn
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Boolean getDrawn() {
-    return drawn;
-  }
-
-  public void setDrawn(Boolean drawn) {
-    this.drawn = drawn;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -88,23 +67,21 @@ public class GameEventDrawCard  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GameEventDrawCard gameEventDrawCard = (GameEventDrawCard) o;
-    return Objects.equals(this.card, gameEventDrawCard.card) &&
-        Objects.equals(this.drawn, gameEventDrawCard.drawn);
+    GameEventOverload gameEventOverload = (GameEventOverload) o;
+    return Objects.equals(this.card, gameEventOverload.card);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(card, drawn);
+    return Objects.hash(card);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GameEventDrawCard {\n");
+    sb.append("class GameEventOverload {\n");
     
     sb.append("    card: ").append(toIndentedString(card)).append("\n");
-    sb.append("    drawn: ").append(toIndentedString(drawn)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -9,17 +9,17 @@ Name | Type | Description | Notes
 **isPowerHistory** | **Boolean** | Should this event be rendered in the power history?  |  [optional]
 **eventType** | [**EventTypeEnum**](#EventTypeEnum) | The game event type corresponding to this game event.  |  [optional]
 **afterPhysicalAttack** | [**PhysicalAttackEvent**](PhysicalAttackEvent.md) |  |  [optional]
-**drawCard** | [**GameEventDrawCard**](GameEventDrawCard.md) |  |  [optional]
+**drawCard** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **entityTouched** | **Integer** |  |  [optional]
 **entityUntouched** | **Integer** |  |  [optional]
 **preDamage** | [**GameEventPreDamage**](GameEventPreDamage.md) |  |  [optional]
 **silence** | [**GameEventSilence**](GameEventSilence.md) |  |  [optional]
 **secretPlayed** | [**GameEventSecretPlayed**](GameEventSecretPlayed.md) |  |  [optional]
 **beforeSummon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
-**cardPlayed** | [**GameEventCardPlayed**](GameEventCardPlayed.md) |  |  [optional]
+**cardPlayed** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **armorGained** | [**GameEventArmorGained**](GameEventArmorGained.md) |  |  [optional]
 **afterSummon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
-**spellCasted** | [**GameEventSpellCasted**](GameEventSpellCasted.md) |  |  [optional]
+**spellCasted** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **joust** | [**GameEventJoust**](GameEventJoust.md) |  |  [optional]
 **weaponDestroyed** | [**GameEventWeaponDestroyed**](GameEventWeaponDestroyed.md) |  |  [optional]
 **heroPowerUsed** | [**GameEventHeroPowerUsed**](GameEventHeroPowerUsed.md) |  |  [optional]
@@ -30,12 +30,13 @@ Name | Type | Description | Notes
 **weaponEquipped** | [**GameEventWeaponDestroyed**](GameEventWeaponDestroyed.md) |  |  [optional]
 **performedGameAction** | [**GameEventPerformedGameAction**](GameEventPerformedGameAction.md) |  |  [optional]
 **physicalAttack** | [**PhysicalAttackEvent**](PhysicalAttackEvent.md) |  |  [optional]
-**overload** | [**GameEventCardPlayed**](GameEventCardPlayed.md) |  |  [optional]
+**overload** | [**GameEventOverload**](GameEventOverload.md) |  |  [optional]
 **heal** | [**GameEventHeal**](GameEventHeal.md) |  |  [optional]
 **secretRevealed** | [**GameEventSecretRevealed**](GameEventSecretRevealed.md) |  |  [optional]
 **summon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
 **afterSpellCasted** | [**GameEventAfterSpellCasted**](GameEventAfterSpellCasted.md) |  |  [optional]
-**discard** | [**GameEventCardPlayed**](GameEventCardPlayed.md) |  |  [optional]
+**discard** | [**CardEvent**](CardEvent.md) |  |  [optional]
+**mill** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
 **triggerFired** | [**GameEventTriggerFired**](GameEventTriggerFired.md) |  |  [optional]
 
@@ -61,6 +62,7 @@ HEAL | &quot;HEAL&quot;
 HERO_POWER_USED | &quot;HERO_POWER_USED&quot;
 JOUST | &quot;JOUST&quot;
 KILL | &quot;KILL&quot;
+MILL | &quot;MILL&quot;
 OVERLOAD | &quot;OVERLOAD&quot;
 PERFORMED_GAME_ACTION | &quot;PERFORMED_GAME_ACTION&quot;
 PHYSICAL_ATTACK | &quot;PHYSICAL_ATTACK&quot;
