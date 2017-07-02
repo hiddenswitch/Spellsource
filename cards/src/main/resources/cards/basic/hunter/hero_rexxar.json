@@ -1,8 +1,8 @@
 {
 	"id": "hero_rexxar",
-	"name": "Ronda Carraway",
+	"name": "Inora Ithkal",
 	"baseManaCost": 0,
-	"description": "Cyborg",
+	"description": "Hero Power: Deal 2 damage to the enemy hero",
 	"heroPower": "hero_power_steady_shot",
 	"type": "HERO",
 	"heroClass": "HUNTER",

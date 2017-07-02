@@ -1,8 +1,8 @@
 {
 	"id": "hero_valeera",
-	"name": "Martin Lander",
+	"name": "Faloran",
 	"baseManaCost": 0,
-	"description": "Biologist",
+	"description": "Hero Power: Equip a 1/2 weapon",
 	"heroPower": "hero_power_dagger_mastery",
 	"type": "HERO",
 	"heroClass": "ROGUE",

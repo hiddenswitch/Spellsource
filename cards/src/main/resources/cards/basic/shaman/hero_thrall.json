@@ -1,8 +1,8 @@
 {
 	"id": "hero_thrall",
-	"name": "Dinh Oh",
+	"name": "Lir",
 	"baseManaCost": 0,
-	"description": "Paleontologist",
+	"description": "Hero Power: Summon a random supporting creature",
 	"heroPower": "hero_power_totemic_call",
 	"type": "HERO",
 	"heroClass": "SHAMAN",

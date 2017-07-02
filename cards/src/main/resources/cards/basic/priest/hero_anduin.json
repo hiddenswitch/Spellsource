@@ -1,8 +1,8 @@
 {
 	"id": "hero_anduin",
-	"name": "Lazurius",
+	"name": "Princess Briila",
 	"baseManaCost": 0,
-	"description": "Resurrector",
+	"description": "Hero Power: Restore 2 health to a target",
 	"heroPower": "hero_power_lesser_heal",
 	"type": "HERO",
 	"heroClass": "PRIEST",

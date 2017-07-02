@@ -1,8 +1,8 @@
 {
 	"id": "hero_garrosh",
-	"name": "Jeff",
+	"name": "Agfen",
 	"baseManaCost": 0,
-	"description": "Gamer",
+	"description": "Hero Power: Gain 2 armor",
 	"heroPower": "hero_power_armor_up",
 	"type": "HERO",
 	"heroClass": "WARRIOR",
