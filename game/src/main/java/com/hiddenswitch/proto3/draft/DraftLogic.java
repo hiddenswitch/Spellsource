@@ -1,5 +1,6 @@
 package com.hiddenswitch.proto3.draft;
 
+import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -9,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by bberman on 12/14/16.
@@ -54,7 +57,6 @@ public class DraftLogic {
 
 	private List<HeroClass> createHeroChoices() {
 		List<HeroClass> classes = Arrays.asList(
-				HeroClass.DRUID,
 				HeroClass.HUNTER,
 				HeroClass.MAGE,
 				HeroClass.PALADIN,
@@ -141,6 +143,13 @@ public class DraftLogic {
 				"spell_convert",
 				"spell_inner_fire"
 		));
+		// Ban choose ones for now
+		bannedCards.addAll(
+				CardCatalogue.getAll().toList().stream()
+						.filter(c -> c.getCardType() == CardType.CHOOSE_ONE)
+						.map(Card::getCardId)
+						.collect(toList())
+		);
 
 		for (int draft = 0; draft < DRAFTS; draft++) {
 			// Select a rarity at the appropriate frequency
@@ -209,7 +218,7 @@ public class DraftLogic {
 
 			draftCards.add(draftChoices);
 		}
-		return draftCards.stream().map(d -> d.stream().map(Card::getCardId).collect(Collectors.toList())).collect(Collectors.toList());
+		return draftCards.stream().map(d -> d.stream().map(Card::getCardId).collect(toList())).collect(toList());
 	}
 
 	private float roll() {
