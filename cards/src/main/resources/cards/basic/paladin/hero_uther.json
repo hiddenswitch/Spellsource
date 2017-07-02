@@ -1,8 +1,8 @@
 {
 	"id": "hero_uther",
-	"name": "Yuri Grigorovich",
+	"name": "Yunkai",
 	"baseManaCost": 0,
-	"description": "Astronaut",
+	"description": "Hero Power: Summon a 1/1 creature",
 	"heroPower": "hero_power_reinforce",
 	"type": "HERO",
 	"heroClass": "PALADIN",

@@ -1,8 +1,8 @@
 {
 	"id": "hero_guldan",
-	"name": "Dr. Q",
+	"name": "Paucha",
 	"baseManaCost": 0,
-	"description": "Octopod",
+	"description": "Hero Power: Take 2 damage and draw a card",
 	"heroPower": "hero_power_life_tap",
 	"type": "HERO",
 	"heroClass": "WARLOCK",

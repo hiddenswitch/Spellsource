@@ -1,8 +1,8 @@
 {
 	"id": "hero_jaina",
-	"name": "Virginia Khan",
+	"name": "Shun He",
 	"baseManaCost": 0,
-	"description": "CPU",
+	"description": "Hero Power: Deal 1 damage to a target",
 	"heroPower": "hero_power_fireblast",
 	"type": "HERO",
 	"heroClass": "MAGE",

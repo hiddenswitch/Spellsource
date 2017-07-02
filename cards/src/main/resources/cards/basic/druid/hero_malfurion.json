@@ -1,8 +1,8 @@
 {
 	"id": "hero_malfurion",
-	"name": "François Brulée",
+	"name": "Shiramba",
 	"baseManaCost": 0,
-	"description": "Chef",
+	"description": "Hero Power: Gain 1 armor and +1 Attack this turn",
 	"heroPower": "hero_power_shapeshift",
 	"type": "HERO",
 	"heroClass": "DRUID",
