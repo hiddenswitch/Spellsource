@@ -26,7 +26,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	private IGameStateHeuristic heuristic;
 	private FeatureVector featureVector;
 	private String nameSuffix = "";
-	private long timeout = 2800;
+	private long timeout = 3500;
 
 	public GameStateValueBehaviour() {
 	}
