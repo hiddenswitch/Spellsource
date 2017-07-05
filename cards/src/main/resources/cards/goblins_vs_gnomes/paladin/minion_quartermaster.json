@@ -6,7 +6,7 @@
 	"baseHp": 5,
 	"heroClass": "PALADIN",
 	"rarity": "EPIC",
-	"description": "Battlecry: Give your Silver Hand Recruits +2/+2.",
+	"description": "Battlecry: Give your Recruits +2/+2.",
 	"battlecry": {
 		"spell": {
 			"class": "BuffSpell",

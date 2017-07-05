@@ -1,10 +1,10 @@
 {
-	"name": "The Tidal Hand",
+	"name": "To Battle!",
 	"baseManaCost": 2,
 	"type": "HERO_POWER",
 	"heroClass": "PALADIN",
 	"rarity": "FREE",
-	"description": "Summon a 1/1 Silver Hand Murloc.",
+	"description": "Summon a 1/1 Soldier.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonSpell",

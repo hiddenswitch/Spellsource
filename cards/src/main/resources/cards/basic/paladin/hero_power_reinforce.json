@@ -1,10 +1,10 @@
 {
-	"name": "Reinforce",
+	"name": "Conscript",
 	"baseManaCost": 2,
 	"type": "HERO_POWER",
 	"heroClass": "PALADIN",
 	"rarity": "FREE",
-	"description": "Summon a 1/1 Silver Hand Recruit.",
+	"description": "Summon a 1/1 Conscript.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonSpell",

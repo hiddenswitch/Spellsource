@@ -1,10 +1,10 @@
 {
-	"name": "Syringe",
+	"name": "The Blade",
 	"baseManaCost": 2,
 	"type": "HERO_POWER",
 	"heroClass": "ROGUE",
 	"rarity": "FREE",
-	"description": "Equip a 1/2 Syringe.",
+	"description": "Equip a 1/2 Blade.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "ConditionalSpell",

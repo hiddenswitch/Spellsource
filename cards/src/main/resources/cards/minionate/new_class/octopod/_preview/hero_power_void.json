@@ -1,10 +1,10 @@
 {
-	"name": "The Void",
+	"name": "Necromancy",
 	"baseManaCost": 2,
 	"type": "HERO_POWER",
 	"heroClass": "WARLOCK",
 	"rarity": "FREE",
-	"description": "Hire a 6/6 Kraken.",
+	"description": "Summon a 6/6 Kraken.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonSpell",
