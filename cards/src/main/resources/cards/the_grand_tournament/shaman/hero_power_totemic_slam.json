@@ -1,10 +1,10 @@
 {
-	"name": "Totemic Slam",
+	"name": "Greater Conjuring",
 	"baseManaCost": 2,
 	"type": "HERO_POWER",
 	"heroClass": "SHAMAN",
 	"rarity": "FREE",
-	"description": "Summon a Totem of your choice.",
+	"description": "Summon a Minor Creature of your choice.",
 	"targetSelection": "NONE",
 	"options": [
 		"spell_summon_searing_totem",

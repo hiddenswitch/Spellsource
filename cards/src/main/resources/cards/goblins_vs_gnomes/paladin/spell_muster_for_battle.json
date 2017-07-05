@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "PALADIN",
 	"rarity": "RARE",
-	"description": "Summon three 1/1 Silver Hand Recruits. Equip a 1/4 Weapon.",
+	"description": "Summon three 1/1 Recruits. Equip a 1/4 Weapon.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",

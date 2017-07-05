@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "PALADIN",
 	"rarity": "COMMON",
-	"description": "Summon five 1/1 Silver Hand Recruits.",
+	"description": "Summon five 1/1 Recruits.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonSpell",

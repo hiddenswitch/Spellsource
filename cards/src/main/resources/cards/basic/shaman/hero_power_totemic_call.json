@@ -1,10 +1,10 @@
 {
-	"name": "Baby Dino",
+	"name": "Conjure",
 	"baseManaCost": 2,
 	"type": "HERO_POWER",
 	"heroClass": "SHAMAN",
 	"rarity": "FREE",
-	"description": "Hire a Baby Dino.",
+	"description": "Summon a Minor Creature.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonRandomNotOnBoardSpell",
