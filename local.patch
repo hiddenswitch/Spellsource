@@ -1,0 +1,26 @@
+diff --git a/metastone/net/src/main/resources/server.yaml b/metastone/net/src/main/resources/server.yaml
+index 19d8f0078..8d6e32310 100644
+--- a/metastone/net/src/main/resources/server.yaml
++++ b/metastone/net/src/main/resources/server.yaml
+@@ -10,7 +10,7 @@ info:
+   license:
+     name: MIT
+     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+-host: api-us-east-2.hiddenswitch.com:8080
++host: localhost:8080
+ basePath: /v1
+ schemes:
+   - http
+diff --git a/metastone/shared/build.gradle b/metastone/shared/build.gradle
+index f1ecf555a..73d346142 100644
+--- a/metastone/shared/build.gradle
++++ b/metastone/shared/build.gradle
+@@ -19,7 +19,7 @@ buildConfig {
+ 	buildConfigField 'int', 'CARD_REVISION', '15'
+ 	buildConfigField 'boolean', 'DEV_BUILD', project.hasProperty('DEV_BUILD').toString()
+ 	buildConfigField 'int', 'DEFAULT_SLEEP_DELAY', '100'
+-	buildConfigField 'String', 'GAMESESSIONS_HOST', 'api-us-east-2.hiddenswitch.com'
++	buildConfigField 'String', 'GAMESESSIONS_HOST', 'localhost'
+ 	buildConfigField 'boolean', 'DECK_BUILDER_ENABLED', 'true'
+ 	buildConfigField 'boolean', 'PACKAGE_ONLY', 'true'
+ }
