@@ -8,8 +8,11 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import java.io.Serializable;
 
 public abstract class EntityFilter implements Serializable {
-
 	protected final FilterDesc desc;
+
+	public FilterDesc getDesc() {
+		return desc;
+	}
 
 	public EntityFilter(FilterDesc desc) {
 		this.desc = desc;

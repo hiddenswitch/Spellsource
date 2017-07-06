@@ -6,6 +6,7 @@
 	"baseHp": 6,
 	"heroClass": "SHAMAN",
 	"rarity": "COMMON",
+	"race": "ELEMENTAL",
 	"description": "After you play a Battlecry minion, deal 2 damage to a random enemy.",
 	"trigger": {
 		"eventTrigger": {

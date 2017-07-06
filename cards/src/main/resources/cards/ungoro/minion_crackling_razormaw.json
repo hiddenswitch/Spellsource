@@ -1,0 +1,139 @@
+{
+	"name": "Crackling Razormaw",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 2,
+	"heroClass": "HUNTER",	
+	"rarity": "COMMON",
+	"description": "Battlecry: Adapt a friendly Beast.",
+	"battlecry": {
+		"targetSelection": "FRIENDLY_MINIONS",
+		"spell": {
+			"class": "DiscoverOptionSpell",
+			"filter": {
+				"class": "RaceFilter",
+				"race": "BEAST"
+			},
+			"spells": [
+				{
+					"class": "AddAttributeSpell",
+					"name": "Lightning Speed (Windfury)",
+					"attribute": "WINDFURY",
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					}
+				},
+				{	
+					"class": "AddAttributeSpell",
+					"name": "Liquid Membrane (Cannot be targeted by spells or hero powers)",
+					"attribute": "UNTARGETABLE_BY_SPELLS",
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					}
+				},
+				{
+					"class": "AddAttributeSpell",
+					"name": "Crackling Shield (Divine Shield)",
+					"attribute": "DIVINE_SHIELD",
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					}
+				},
+				{
+					"class": "AddAttributeSpell",
+					"name": "Shrouding Mist (Stealth until your next turn)",
+					"attribute": "STEALTH",
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					},
+					"revertTrigger": {
+			"class": "TurnStartTrigger",
+			"targetPlayer": "SELF"
+		}
+				},
+				{
+					"class": "AddAttributeSpell",
+					"name": "Massive (Taunt)",
+					"attribute": "TAUNT",
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					}
+				},
+				{
+					"class": "BuffSpell",
+					"name": "Flaming Claws (+3 Attack)",
+					"attackBonus": 3,
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					}
+				},
+				{
+					"class": "BuffSpell",
+					"name": "Rocky Carapace (+3 Health)",
+					"hpBonus": 3,
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					}
+				},
+				{
+					"class": "AddDeathrattleSpell",
+					"name": "Living Spores (Deathrattle: Summon two 1/1 Plants)",
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					},
+					"spell": {
+						"class": "SummonSpell",
+						"cards": [
+						"token_plant",
+						"token_plant"
+						]
+					}	
+				},
+				{
+					"class": "AddSpellTriggerSpell",
+					"name": "Poison Spit (Poisonous)",
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					},
+					"trigger": {
+						"eventTrigger": {
+						"class": "DamageCausedTrigger",
+						"targetEntityType": "MINION",
+						"hostTargetType": "IGNORE_OTHER_SOURCES"
+					},
+					"spell": {
+						"class": "DestroySpell",
+						"target": "EVENT_TARGET"
+					}
+					}
+				},
+				{
+					"class": "BuffSpell",
+					"name": "Volcanic Might (+1/+1)",
+					"value": 1,
+					"filter": {
+					"class": "RaceFilter",
+					"race": "BEAST"
+					}
+				}	
+			],
+			"exclusive": true
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

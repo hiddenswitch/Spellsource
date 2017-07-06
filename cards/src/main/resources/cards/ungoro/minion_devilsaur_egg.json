@@ -1,0 +1,20 @@
+{
+	"name": "Devilsaur Egg",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 0,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"description": "Deathrattle: Summon a 5/5 Devilsaur.",
+	"deathrattle": {
+		"class": "SummonSpell",
+		"card": "token_Devilsaur"
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

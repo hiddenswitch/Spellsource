@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.actions.DiscoverAction;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,16 +21,16 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class DiscoverOptionSpell extends Spell {
-	
+
 	Logger logger = LoggerFactory.getLogger(DiscoverOptionSpell.class);
-	
+
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(DiscoverOptionSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.SPELL, spell);
 		return new SpellDesc(arguments);
 	}
-	
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -36,19 +39,19 @@ public class DiscoverOptionSpell extends Spell {
 		for (SpellDesc spell : spellArray) {
 			spells.add(spell);
 		}
-		
+
 		Map<SpellDesc, Integer> spellOrder = new HashMap<SpellDesc, Integer>();
-		for (int i = 0; i < spells.size(); i++)
-		{
-		    SpellDesc spell = spells.get(i);
-		    spellOrder.put(spell, i);
+		for (int i = 0; i < spells.size(); i++) {
+			SpellDesc spell = spells.get(i);
+			spellOrder.put(spell, i);
 		}
-		
+
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
 		List<Integer> chosenSpellInts = new ArrayList<Integer>();
 		List<SpellDesc> spellsCopy = new ArrayList<SpellDesc>(spells);
+		List<DiscoverAction> discoveries = new ArrayList<>();
 		for (int i = 0; i < value; i++) {
 			List<SpellDesc> spellChoices = new ArrayList<SpellDesc>();
 			for (int j = 0; j < count; j++) {
@@ -59,7 +62,9 @@ public class DiscoverOptionSpell extends Spell {
 				}
 			}
 			if (!spellChoices.isEmpty()) {
-				SpellDesc chosenSpell = SpellUtils.getSpellDiscover(context, player, desc, spellChoices).getSpell();
+				final DiscoverAction spellDiscover = SpellUtils.getSpellDiscover(context, player, desc, spellChoices, source);
+				discoveries.add(spellDiscover);
+				SpellDesc chosenSpell = spellDiscover.getSpell();
 				chosenSpellInts.add(spellOrder.get(chosenSpell));
 				if (exclusive) {
 					spellChoices.remove(chosenSpell);
@@ -75,6 +80,9 @@ public class DiscoverOptionSpell extends Spell {
 		if (chosenSpellInts.size() > 0) {
 			SpellDesc metaSpell = MetaSpell.create(target != null ? target.getReference() : null, false, chosenSpells);
 			SpellUtils.castChildSpell(context, player, metaSpell, source, target);
+		}
+		for (DiscoverAction discovery : discoveries) {
+			discovery.getCard().moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		}
 	}
 

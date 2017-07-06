@@ -1,0 +1,23 @@
+{
+	"name": "Mirage Caller",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "PRIEST",
+	"rarity": "RARE",
+	"description": "Battlecry: Summon a 1/1 copy of a friendly minion.",
+	"battlecry": {
+	"targetSelection": "FRIENDLY_MINIONS",
+		"spell": {
+			"class": "SummonOneOneCopySpell",
+			"boardPositionRelative": "RIGHT"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

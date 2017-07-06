@@ -6,6 +6,7 @@
 	"baseHp": 5,
 	"heroClass": "PRIEST",
 	"rarity": "COMMON",
+	"race": "ELEMENTAL",
 	"description": "This minion's Attack is always equal to its Health.",
 	"attributes": {
 		"ATTACK_EQUALS_HP": true

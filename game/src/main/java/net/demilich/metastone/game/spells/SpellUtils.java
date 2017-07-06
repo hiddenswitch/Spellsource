@@ -13,6 +13,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.SpellCardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -25,6 +26,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 
 public class SpellUtils {
@@ -117,17 +119,19 @@ public class SpellUtils {
 	 * This method makes a network request if required.
 	 *
 	 * @param context The game context that hosts the player and state for this request.
-	 * @param player  {@link Player#getBehaviour()} will be called to get the behaviour that will choose from the cards.
-	 * @param desc    For every card the player can discover, this method will create a {@link Spell} from this
-	 *                {@link SpellDesc} and set its {@link SpellArg#CARD} argument to the discoverable card. Typically,
-	 *                this {@link SpellDesc} defines a {@link ReceiveCardSpell}, {@link ReceiveCardAndDoSomethingSpell},
-	 *                or a {@link ChangeHeroPowerSpell}. These spells all receive cards as arguments. This argument
-	 *                allows a {@link DiscoverAction} to do more sophisticated things than just put cards into hands.
+	 * @param player  {@link Player#getBehaviour()} will be called to get the behaviour that will choose from the
+	 *                cards.
+	 * @param desc    For every card the player can discover, this method will create a {@link Spell} from this {@link
+	 *                SpellDesc} and set its {@link SpellArg#CARD} argument to the discoverable card. Typically, this
+	 *                {@link SpellDesc} defines a {@link ReceiveCardSpell}, {@link ReceiveCardAndDoSomethingSpell}, or a
+	 *                {@link ChangeHeroPowerSpell}. These spells all receive cards as arguments. This argument allows a
+	 *                {@link DiscoverAction} to do more sophisticated things than just put cards into hands.
 	 * @param cards   A {@link CardList} of cards that get copied, added to the {@link Zones#DISCOVER} zone of the
 	 *                player and shown in the discover card UI to the player.
 	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
 	 * @see DiscoverCardSpell for the spell that typically calls this method.
-	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link DiscoverCardSpell}.
+	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link
+	 * DiscoverCardSpell}.
 	 */
 	@Suspendable
 	public static DiscoverAction discoverCard(GameContext context, Player player, SpellDesc desc, CardList cards) {
@@ -174,21 +178,58 @@ public class SpellUtils {
 	}
 
 	@Suspendable
-	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells) {
+	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
 		List<GameAction> discoverActions = new ArrayList<>();
-		for (SpellDesc spell : spells) {
+		List<Card> cards = new ArrayList<>();
+		for (int i = 0; i < spells.size(); i++) {
+			final SpellDesc spell = spells.get(i);
+			final SpellCardDesc spellCardDesc = new SpellCardDesc();
+			final String name = spell.getString(SpellArg.NAME);
+			final String description = spell.getString(SpellArg.DESCRIPTION);
+			// TODO: Parse the parenthesized part of a name in a spell as a description
+			spellCardDesc.id = context.getLogic().generateCardId();
+			spellCardDesc.name = name;
+			spellCardDesc.baseManaCost = desc.getValue(SpellArg.MANA, context, player, context.resolveSingleTarget(desc.getTarget()), source, 0);
+			spellCardDesc.description = description;
+			spellCardDesc.heroClass = HeroClass.ANY;
+			spellCardDesc.type = CardType.SPELL;
+			spellCardDesc.rarity = Rarity.FREE;
+			spellCardDesc.targetSelection = (TargetSelection) spell.getOrDefault(SpellArg.TARGET_SELECTION, desc.getOrDefault(SpellArg.TARGET_SELECTION, TargetSelection.NONE));
+			spellCardDesc.spell = spell;
+			spellCardDesc.collectible = false;
+
+			Card card = spellCardDesc.createInstance();
+			card.setId(context.getLogic().getIdFactory().generateId());
+			card.setOwner(player.getId());
+			card.moveOrAddTo(context, Zones.DISCOVER);
+			cards.add(card);
+
 			DiscoverAction discover = DiscoverAction.createDiscover(spell);
-			discover.setName(spell.getString(SpellArg.NAME));
-			discover.setDescription(spell.getString(SpellArg.DESCRIPTION));
+			discover.setId(i);
+			discover.setCard(card);
+			discover.setName(name);
+			discover.setDescription(description);
 			discover.setActionSuffix((String) spell.get(SpellArg.NAME));
 			discoverActions.add(discover);
 		}
 
-		if (context.getLogic().attributeExists(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION)) {
-			return (DiscoverAction) discoverActions.get(context.getLogic().random(discoverActions.size()));
-		} else {
-			return (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
+		if (discoverActions.size() == 0) {
+			return null;
 		}
+
+		final DiscoverAction discoverAction;
+		if (context.getLogic().attributeExists(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION)) {
+			discoverAction = (DiscoverAction) discoverActions.get(context.getLogic().random(discoverActions.size()));
+		} else {
+			discoverAction = (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
+		}
+		int discoveredCard = discoverAction.getCard().getId();
+		for (Card card : cards) {
+			if (card.getId() != discoveredCard) {
+				card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			}
+		}
+		return discoverAction;
 	}
 
 	@Suspendable

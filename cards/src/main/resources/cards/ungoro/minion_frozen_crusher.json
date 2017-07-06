@@ -1,0 +1,25 @@
+{
+	"name": "Frozen Crusher",
+	"baseManaCost": 6,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 8,
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"description": "After this minion attacks, freeze it.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "AfterPhysicalAttackTrigger",
+			"targetPlayer": "BOTH",
+			"hostTargetType": "IGNORE_OTHER_SOURCES"
+		},
+		"spell": {
+		"class": "AddAttributeSpell",
+		"target": "SELF",
+		"attribute": "FROZEN"
+	}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

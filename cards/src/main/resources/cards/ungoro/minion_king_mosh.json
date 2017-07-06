@@ -1,0 +1,27 @@
+{
+	"name": "King Mosh",
+	"baseManaCost": 9,
+	"baseAttack": 9,
+	"baseHp": 7,
+	"type": "MINION",
+	"heroClass": "WARRIOR",
+	"rarity": "LEGENDARY",
+	"race": "BEAST",
+	"description": "Destroy all damaged minions.",
+	"battlecry": {
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DestroySpell",
+		"target": "ALL_MINIONS",
+		"filter": {
+			"class": "DamagedFilter"
+			}
+		}
+	},
+	"attributes": {
+	"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

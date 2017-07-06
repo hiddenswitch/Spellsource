@@ -1,0 +1,17 @@
+{
+	"name": "Tyrantus",
+	"baseManaCost": 10,
+	"type": "MINION",
+	"baseAttack": 12,
+	"baseHp": 12,
+	"heroClass": "DRUID",
+	"rarity": "LEGENDARY",
+	"race": "BEAST",
+	"description": "Can't be targeted by Spells or Hero Powers.",
+	"attributes": {
+		"UNTARGETABLE_BY_SPELLS": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -6,6 +6,7 @@
 	"baseHp": 5,
 	"heroClass": "ANY",
 	"rarity": "LEGENDARY",
+	"race": "ELEMENTAL",
 	"description": "At the end of your turn, deal 2 damage to ALL other characters.",
 	"trigger": {
 		"eventTrigger": {

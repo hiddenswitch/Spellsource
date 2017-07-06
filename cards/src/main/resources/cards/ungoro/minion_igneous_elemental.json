@@ -1,0 +1,25 @@
+{
+	"name": "Igneous Elemental",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "ELEMENTAL",
+	"description": "Deathrattle: Add two 1/2 Flame Elementals to your hand.",
+	"deathrattle": {
+		"class": "ReceiveCardSpell",
+		"cards": [
+			"token_flame_elemental",
+			"token_flame_elemental",
+			"token_flame_elemental"
+		]
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

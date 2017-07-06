@@ -6,6 +6,7 @@
 	"baseHp": 7,
 	"heroClass": "SHAMAN",
 	"rarity": "LEGENDARY",
+	"race": "ELEMENTAL",
 	"description": "Battlecry: Add 4 random Murlocs to your hand. Overload: (3)",
 	"battlecry": {
 		"targetSelection": "NONE",

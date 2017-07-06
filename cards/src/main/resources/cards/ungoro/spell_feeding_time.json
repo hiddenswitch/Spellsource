@@ -1,0 +1,29 @@
+{
+	"name": "Feeding Time",
+	"baseManaCost": 5,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "RARE",
+	"description": "Deal 3 damage. Summon three 1/1 Pterrordaxes.",
+	"targetSelection": "ANY",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"value": 3
+			},
+			{
+				"class": "SummonSpell",
+				"cards": [
+					"token_pterrordax",
+					"token_pterrordax",
+					"token_pterrordax"
+				]
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

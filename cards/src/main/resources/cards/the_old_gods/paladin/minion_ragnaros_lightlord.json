@@ -6,6 +6,7 @@
 	"baseHp": 8,
 	"heroClass": "PALADIN",
 	"rarity": "LEGENDARY",
+	"race": "ELEMENTAL",
 	"description": "At the end of your turn, restore 8 Health to a damaged friendly character.",
 	"trigger": {
 		"eventTrigger": {

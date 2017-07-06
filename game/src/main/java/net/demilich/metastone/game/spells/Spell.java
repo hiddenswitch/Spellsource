@@ -15,15 +15,17 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 public abstract class Spell implements Serializable {
 	/**
 	 * Casts a spell for the given arguments.
+	 * <p>
+	 * This spell casting code is responsible for interpreting the {@link SpellArg#FILTER} and {@link
+	 * SpellArg#RANDOM_TARGET} attributes of a {@link SpellDesc}.
 	 *
-	 * This spell casting code is responsible for interpreting the {@link SpellArg#FILTER} and {@link SpellArg#RANDOM_TARGET}
-	 * attributes of a {@link SpellDesc}.
 	 * @param context
 	 * @param player
 	 * @param desc
 	 * @param source
 	 * @param targets
-	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter) for the logic which filters the targets argument.
+	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter) for the logic which filters the targets
+	 * argument.
 	 */
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
@@ -60,27 +62,27 @@ public abstract class Spell implements Serializable {
 		}
 		Player opponent = context.getOpponent(player);
 		switch (targetPlayer) {
-		case BOTH:
-			onCast(context, player, desc, source, target);
-			onCast(context, opponent, desc, source, target);
-			break;
-		case OPPONENT:
-			onCast(context, opponent, desc, source, target);
-			break;
-		case SELF:
-			onCast(context, player, desc, source, target);
-			break;
-		case OWNER:
-			onCast(context, context.getPlayer(target.getOwner()), desc, source, target);
-			break;
-		case ACTIVE:
-			onCast(context, context.getActivePlayer(), desc, source, target);
-			break;
-		case INACTIVE:
-			onCast(context, context.getOpponent(context.getActivePlayer()), desc, source, target);
-			break;
-		default:
-			break;
+			case BOTH:
+				onCast(context, player, desc, source, target);
+				onCast(context, opponent, desc, source, target);
+				break;
+			case OPPONENT:
+				onCast(context, opponent, desc, source, target);
+				break;
+			case SELF:
+				onCast(context, player, desc, source, target);
+				break;
+			case OWNER:
+				onCast(context, context.getPlayer(target.getOwner()), desc, source, target);
+				break;
+			case ACTIVE:
+				onCast(context, context.getActivePlayer(), desc, source, target);
+				break;
+			case INACTIVE:
+				onCast(context, context.getOpponent(context.getActivePlayer()), desc, source, target);
+				break;
+			default:
+				break;
 		}
 	}
 

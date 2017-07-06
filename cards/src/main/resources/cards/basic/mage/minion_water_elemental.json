@@ -6,6 +6,7 @@
 	"baseHp": 6,
 	"heroClass": "MAGE",
 	"rarity": "FREE",
+	"race": "ELEMENTAL",
 	"description": "Freeze any character damaged by this minion.",
 	"trigger": {
 		"eventTrigger": {

@@ -1,0 +1,13 @@
+{
+	"name": "Plant",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "",
+	"collectible": false,
+	"set": "JOURNEY_TO_UN_GORO",
+	"fileFormatVersion": 1
+}

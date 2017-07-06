@@ -2370,15 +2370,14 @@ public class GameLogic implements Cloneable, Serializable {
 
 		newCard.setOwner(playerId);
 		CardList hand = player.getHand();
-
+		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
+		removeSpellTriggers(oldCard);
+		hand.replace(oldCard, newCard);
+		oldCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		if (newCard.getAttribute(Attribute.PASSIVE_TRIGGER) != null) {
 			TriggerDesc triggerDesc = (TriggerDesc) newCard.getAttribute(Attribute.PASSIVE_TRIGGER);
 			addGameEventListener(player, triggerDesc.create(), newCard);
 		}
-
-		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
-		hand.replace(oldCard, newCard);
-		removeCard(oldCard);
 		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, null, false));
 	}
 

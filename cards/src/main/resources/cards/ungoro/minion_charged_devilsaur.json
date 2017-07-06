@@ -1,0 +1,28 @@
+{
+	"name": "Charged Devilsaur",
+	"baseManaCost": 8,
+	"type": "MINION",
+	"baseAttack": 7,
+	"baseHp": 7,
+	"heroClass": "ANY",
+	"rarity": "EPIC",
+	"description": "Charge. Battlecry: Can't attack heroes this turn.",
+	"battlecry": {
+	"spell": {
+	"class": "AddAttributeSpell",
+	"target": "SELF",
+	"attribute": "CANNOT_ATTACK_HEROES",
+	"expirationTrigger": {
+					"class": "TurnStartTrigger",
+					"targetPlayer": "OPPONENT"
+				}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true,
+		"CHARGE": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

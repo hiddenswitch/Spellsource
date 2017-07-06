@@ -1,0 +1,22 @@
+{
+	"name": "Razorpetal Lasher",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "ROGUE",
+	"rarity": "COMMON",
+	"description": "Battlecry: Add a Razorpetal that deals 1 damage to your hand.",
+	"battlecry": {
+	"spell": {
+		"class": "ReceiveCardSpell",
+		"card": "spell_razorpetal"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

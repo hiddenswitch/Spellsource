@@ -1,0 +1,28 @@
+{
+	"name": "Shadow Visions",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "PRIEST",
+	"rarity": "EPIC",
+	"description": "Discover a copy of a spell from your deck.",
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "DiscoverFilteredCardSpell",
+			"cardSource": {
+				"class": "DeckSource",
+				"targetPlayer": "SELF"
+
+			},
+			"spell": {
+				"class": "ReceiveCardSpell",
+				"targetPlayer": "SELF"
+		},
+		"cardFilter": {
+				"class": "CardFilter",
+				"cardType": "SPELL"
+			}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

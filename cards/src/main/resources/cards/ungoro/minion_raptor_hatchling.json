@@ -1,0 +1,20 @@
+{
+	"name": "Raptor Hatchling",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 1,
+	"heroClass": "HUNTER",
+	"rarity": "RARE",
+	"description": "Deathrattle: Shuffle a 4/3 Raptor into your deck.",
+	"deathrattle": {
+			"class": "ShuffleToDeckSpell",
+			"card": "token_raptor_patriarch"
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

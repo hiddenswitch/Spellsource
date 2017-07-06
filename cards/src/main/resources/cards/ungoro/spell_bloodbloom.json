@@ -1,0 +1,23 @@
+{
+	"name": "Bloodbloom",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "EPIC",
+	"description": "The next spell you cast this turn costs Health instead of Mana.",
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "AddAttributeSpell",
+			"target": "FRIENDLY_PLAYER",
+			"attribute": "SPELLS_COST_HEALTH",
+			"revertTrigger": {
+				"class": "TurnEndTrigger"
+			},
+			"secondRevertTrigger": {
+				"class": "SpellCastedTrigger"
+			}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

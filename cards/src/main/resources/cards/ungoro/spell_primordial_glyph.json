@@ -1,0 +1,36 @@
+{
+	"name": "Primordial Glyph",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "EPIC",
+	"description": "Discover a spell. Reduce its cost by (2).",
+	"targetSelection": "NONE",
+	"spell": {
+			"class": "DiscoverRandomCardSpell",
+			"spell": {
+				"class": "ReceiveCardAndDoSomethingSpell",
+				"targetPlayer": "SELF",
+				"spell": {
+					"class": "CardCostModifierSpell",
+					"target": "FRIENDLY_PLAYER",
+					"cardCostModifier": {
+				"class": "CardCostModifier",
+				"target": "EVENT_CARD",
+				"operation": "SUBTRACT",
+				"value": 2
+			}
+				}
+			},
+			"cardFilter": {
+				"class": "CardFilter",
+				"cardType": "SPELL"
+			}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

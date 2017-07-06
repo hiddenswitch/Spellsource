@@ -1,0 +1,14 @@
+{
+	"name": "Ultrasaur",
+	"baseManaCost": 10,
+	"type": "MINION",
+	"baseAttack": 7,
+	"baseHp": 14,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"race": "BEAST",
+	"description": "",
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}
