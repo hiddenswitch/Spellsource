@@ -28,7 +28,8 @@ public class Remote {
 				.setBlockedThreadCheckInterval(Duration.of(8, ChronoUnit.SECONDS).toMillis())
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
-				.setMaxWorkerExecuteTime(nanos));
+				.setMaxWorkerExecuteTime(nanos)
+				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 10));
 
 		Mongo.mongo().connect(vertx, "mongodb://spellsource1:9AD3uubaeIf71a4M11lPVAV2mJcbPzV1EC38Y4WF26M@aws-us-east-1-portal.9.dblayer.com:20276/production?ssl=true");
 		Minionate.minionate().migrate(vertx, then -> {

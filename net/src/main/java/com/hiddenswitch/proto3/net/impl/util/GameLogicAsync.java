@@ -19,6 +19,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.SummonResult;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -26,6 +27,8 @@ import java.util.function.Consumer;
  * Created by bberman on 11/23/16.
  */
 public class GameLogicAsync extends GameLogic {
+	private boolean mulliganEnabled;
+
 	@Override
 	@Suspendable
 	protected void mulligan(Player player, boolean begins) throws UnsupportedOperationException {
@@ -39,11 +42,16 @@ public class GameLogicAsync extends GameLogic {
 
 		NetworkBehaviour networkBehaviour = (NetworkBehaviour) player.getBehaviour();
 
-		networkBehaviour.mulliganAsync(context, player, firstHand.getStarterCards(), (List<Card> discardedCards) -> {
-			logger.debug("Discarded cards from {}: {}", player.getName(), discardedCards.stream().map(Card::toString).reduce((a, b) -> a + ", " + b));
-			handleMulligan(player, begins, firstHand, discardedCards);
-			callback.handle(discardedCards);
-		});
+		if (mulliganEnabled) {
+			networkBehaviour.mulliganAsync(context, player, firstHand.getStarterCards(), (List<Card> discardedCards) -> {
+				logger.debug("Discarded cards from {}: {}", player.getName(), discardedCards.stream().map(Card::toString).reduce((a, b) -> a + ", " + b));
+				handleMulligan(player, begins, firstHand, discardedCards);
+				callback.handle(discardedCards);
+			});
+		} else {
+			handleMulligan(player, begins, firstHand, Collections.emptyList());
+			callback.handle(Collections.emptyList());
+		}
 	}
 
 	@Override
@@ -228,4 +236,11 @@ public class GameLogicAsync extends GameLogic {
 		}
 	}
 
+	public boolean isMulliganEnabled() {
+		return mulliganEnabled;
+	}
+
+	public void setMulliganEnabled(boolean mulliganEnabled) {
+		this.mulliganEnabled = mulliganEnabled;
+	}
 }
