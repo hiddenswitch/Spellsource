@@ -1,0 +1,17 @@
+{
+	"name": "Air Elemental",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 1,
+	"heroClass": "SHAMAN",
+	"rarity": "COMMON",
+	"race": "ELEMENTAL",
+	"description": "Can't be targeted by Spells or Hero Powers.",
+	"attributes": {
+		"UNTARGETABLE_BY_SPELLS": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

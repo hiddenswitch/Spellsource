@@ -83,7 +83,8 @@ public class DraftLogic {
 				CardSet.NAXXRAMAS,
 				CardSet.ONE_NIGHT_IN_KARAZHAN,
 				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.THE_OLD_GODS);
+				CardSet.THE_OLD_GODS,
+				CardSet.CUSTOM);
 
 		// Until we have enough mean streets cards, don't use it
 		CardSet latestExpansion = CardSet.MINIONATE;

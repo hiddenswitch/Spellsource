@@ -1,0 +1,26 @@
+{
+	"name": "Corrupting Mist",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "RARE",
+	"description": "Corrupt all enemy minions. At the start of your turn, destroy them.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "AddSpellTriggerSpell",
+		"target": "ALL_MINIONS",
+		"trigger": {
+			"eventTrigger": {
+				"class": "TurnStartTrigger",
+				"targetPlayer": "SELF"
+			},
+			"spell": {
+				"class": "DestroySpell",
+				"target": "SELF"
+			}
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

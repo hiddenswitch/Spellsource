@@ -1,0 +1,28 @@
+{
+	"name": "Stubborn Gastropod",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "BEAST",
+	"description": "Taunt. Poisonous.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "DamageCausedTrigger",
+			"targetEntityType": "MINION",
+			"hostTargetType": "IGNORE_OTHER_SOURCES"
+		},
+		"spell": {
+			"class": "DestroySpell",
+			"target": "EVENT_TARGET"
+		}
+		},
+		"attributes": {
+		"TAUNT": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -6,6 +6,7 @@
 	"baseHp": 6,
 	"heroClass": "MAGE",
 	"rarity": "LEGENDARY",
+	"race": "ELEMENTAL",
 	"description": "Deathrattle: Deal 8 damage to all minions.",
 	"deathrattle": {
 		"class": "DamageSpell",

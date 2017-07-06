@@ -1,0 +1,33 @@
+{
+	"name": "Stonehill Defender",
+	"baseManaCost": 3,
+	"baseAttack": 1,
+	"baseHp": 4,
+	"type": "MINION",
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"description": "Taunt. Battlecry: Discover a Taunt minion.",
+	"battlecry": {
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DiscoverRandomCardSpell",
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"targetPlayer": "SELF"
+		},
+		"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "MINION",
+			"attribute": "TAUNT",
+			"operation": "HAS"
+			}
+		}
+	},
+	"attributes": {
+	"BATTLECRY": true,
+	"TAUNT": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

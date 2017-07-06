@@ -6,6 +6,7 @@
 	"baseHp": 8,
 	"heroClass": "SHAMAN",
 	"rarity": "EPIC",
+	"race": "ELEMENTAL",
 	"description": "Taunt. Overload: (3)",
 	"attributes": {
 		"OVERLOAD": 3,

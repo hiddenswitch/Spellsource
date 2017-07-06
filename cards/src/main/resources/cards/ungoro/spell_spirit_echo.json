@@ -1,0 +1,20 @@
+{
+	"name": "Spirit Echo",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "SHAMAN",
+	"rarity": "EPIC",
+	"description": "Give your minions \"Deathrattle: Return this to your hand.\"",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "AddDeathrattleSpell",
+		"target": "FRIENDLY_MINIONS",
+		"spell": {
+			"class": "ReturnMinionToHandSpell",
+			"target": "SELF"
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

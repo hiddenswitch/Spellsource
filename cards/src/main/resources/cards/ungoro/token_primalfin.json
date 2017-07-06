@@ -1,0 +1,14 @@
+{
+	"name": "Primalfin",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"race": "MURLOC",
+	"description": "",
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

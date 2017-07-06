@@ -1,0 +1,145 @@
+{
+	"name": "Lightfused Stegodon",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 4,
+	"heroClass": "PALADIN",	
+	"rarity": "RARE",
+	"description": "Battlecry: Adapt your Silver Hand Recruits.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "DiscoverOptionSpell",
+			"spells": [
+				{
+					"class": "AddAttributeSpell",
+					"name": "Lightning Speed (Windfury)",
+					"attribute": "WINDFURY",
+					"target": "FRIENDLY_MINIONS",
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					}
+				},
+				{	
+					"class": "AddAttributeSpell",
+					"name": "Liquid Membrane (Cannot be targeted by spells or hero powers)",
+					"attribute": "UNTARGETABLE_BY_SPELLS",
+					"target": "FRIENDLY_MINIONS",
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					}
+				},
+				{
+					"class": "AddAttributeSpell",
+					"name": "Crackling Shield (Divine Shield)",
+					"attribute": "DIVINE_SHIELD",
+					"target": "FRIENDLY_MINIONS",
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					}
+				},
+				{
+					"class": "AddAttributeSpell",
+					"name": "Shrouding Mist (Stealth until your next turn)",
+					"attribute": "STEALTH",
+					"target": "FRIENDLY_MINIONS",
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					},
+					"revertTrigger": {
+			"class": "TurnStartTrigger",
+			"targetPlayer": "SELF"
+		}
+				},
+				{
+					"class": "AddAttributeSpell",
+					"name": "Massive (Taunt)",
+					"attribute": "TAUNT",
+					"target": "FRIENDLY_MINIONS",
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					}
+				},
+				{
+					"class": "BuffSpell",
+					"name": "Flaming Claws (+3 Attack)",
+					"target": "FRIENDLY_MINIONS",
+					"attackBonus": 3,
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					}
+				},
+				{
+					"class": "BuffSpell",
+					"name": "Rocky Carapace (+3 Health)",
+					"target": "FRIENDLY_MINIONS",
+					"hpBonus": 3,
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					}
+				},
+				{
+					"class": "AddDeathrattleSpell",
+					"name": "Living Spores (Deathrattle: Summon two 1/1 Plants)",
+					"target": "FRIENDLY_MINIONS",
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					},
+					"spell": {
+						"class": "SummonSpell",
+						"cards": [
+						"token_plant",
+						"token_plant"
+						]
+					}	
+				},
+				{
+					"class": "AddSpellTriggerSpell",
+					"name": "Poison Spit (Poisonous)",
+					"target": "FRIENDLY_MINIONS",
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					},
+					"trigger": {
+						"eventTrigger": {
+						"class": "DamageCausedTrigger",
+						"targetEntityType": "MINION",
+						"hostTargetType": "IGNORE_OTHER_SOURCES"
+					},
+					"spell": {
+						"class": "DestroySpell",
+						"target": "EVENT_TARGET"
+					}
+					}
+				},
+				{
+					"class": "BuffSpell",
+					"name": "Volcanic Might (+1/+1)",
+					"target": "FRIENDLY_MINIONS",
+					"value": 1,
+					"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_silver_hand_recruit"
+					}
+				}	
+			],
+			"exclusive": true
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

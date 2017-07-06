@@ -1,0 +1,22 @@
+{
+	"name": "Crystalline Oracle",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "PRIEST",
+	"rarity": "RARE",
+	"race": "ELEMENTAL",
+	"description": "Deathrattle: Copy a card from your opponent's deck and add it to your hand.",
+	"deathrattle": {
+		"class": "CopyCardSpell",
+		"cardLocation": "DECK",
+		"value": 1
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

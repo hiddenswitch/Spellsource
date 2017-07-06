@@ -6,6 +6,7 @@
 	"baseHp": 5,
 	"heroClass": "SHAMAN",
 	"rarity": "FREE",
+	"race": "ELEMENTAL",
 	"description": "Battlecry: Deal 3 damage.",
 	"battlecry": {
 		"targetSelection": "ANY",

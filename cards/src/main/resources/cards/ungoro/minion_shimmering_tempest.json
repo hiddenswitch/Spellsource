@@ -1,0 +1,25 @@
+{
+	"name": "Shimmering Tempest",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 1,
+	"heroClass": "MAGE",
+	"rarity": "COMMON",
+	"race": "ELEMENTAL",
+	"description": "Deathrattle: Add a random Mage spell to your hand.",
+	"deathrattle": {
+			"class": "ReceiveCardSpell",
+			"cardFilter": {
+				"class": "CardFilter",
+				"cardType": "SPELL",
+				"heroClass": "MAGE"
+			}
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

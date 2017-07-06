@@ -1,0 +1,16 @@
+{
+	"name": "Humongous Razorleaf",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 8,
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"description": "Can't Attack.",
+	"attributes": {
+		"CANNOT_ATTACK": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

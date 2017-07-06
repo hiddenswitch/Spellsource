@@ -1,0 +1,25 @@
+{
+	"name": "Hot Spring Guardian",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 4,
+	"heroClass": "SHAMAN",
+	"rarity": "COMMON",
+	"race": "ELEMENTAL",
+	"description": "Taunt. Battlecry: Restore 3 Health.",
+	"battlecry": {
+		"targetSelection": "ANY",
+		"spell": {
+			"class": "HealSpell",
+			"value": 3
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true,
+		"TAUNT": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

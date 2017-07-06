@@ -1,0 +1,24 @@
+{
+	"name": "Glacial Shard",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 1,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "ELEMENTAL",
+	"description": "Battlecry: Freeze an enemy .",
+	"battlecry": {
+		"targetSelection": "ENEMY_CHARACTERS",
+		"spell": {
+			"class": "AddAttributeSpell",
+			"attribute": "FROZEN"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

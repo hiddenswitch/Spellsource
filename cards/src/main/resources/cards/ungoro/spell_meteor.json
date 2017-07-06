@@ -1,0 +1,23 @@
+{
+	"name": "Meteor",
+	"baseManaCost": 6,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "EPIC",
+	"description": "Deal 15 damage to a minion and 3 damage to adjacent ones.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "AdjacentEffectSpell",
+		"spell1": {
+			"class": "DamageSpell",
+			"value": 15
+		},
+		"spell2": {
+			"class": "DamageSpell",
+			"value": 3
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

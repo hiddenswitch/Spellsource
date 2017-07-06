@@ -1,0 +1,19 @@
+{
+	"name": "Razorpetal Volley",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "COMMON",
+	"description": "Add two Razorpetals that deal 1 damage to your hand.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "ReceiveCardSpell",
+		"cards": [ 
+		"spell_razorpetal",
+		"spell_razorpetal"
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

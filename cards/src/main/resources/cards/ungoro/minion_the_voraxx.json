@@ -1,0 +1,36 @@
+{
+	"name": "The Voraxx",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "LEGENDARY",
+	"description": "After you target this minion with a spell, summon a 1/1 Plant and cast another copy on it.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TargetAcquisitionTrigger",
+			"actionType": "SPELL",
+			"sourcePlayer": "SELF",
+			"hostTargetType": "IGNORE_OTHER_TARGETS"
+		},
+		"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+		"class": "SummonNewAttackTargetSpell",
+		"card": "token_plant",
+		"boardPositionRelative": "RIGHT"
+			},
+			{
+			"class": "RecastSpell",
+			"target": "SELF",
+			"card": "PENDING_CARD"
+		}
+		]
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

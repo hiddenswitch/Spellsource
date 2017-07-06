@@ -1,0 +1,27 @@
+{
+	"name": "Tol'Vir Warden",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 5,
+	"heroClass": "HUNTER",
+	"rarity": "RARE",
+	"description": "Draw two 1-Cost minions from your deck.",
+	"battlecry": {
+	"spell": {
+		"class": "FromDeckToHandSpell",
+		"value": 2,
+		"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "MINION",
+			"manaCost": 1
+			}
+		}
+	},
+	"attributes": {
+	"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

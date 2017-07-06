@@ -1,0 +1,14 @@
+{
+	"name": "Devilsaur",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 5,
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"race": "BEAST",
+	"description": "",
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

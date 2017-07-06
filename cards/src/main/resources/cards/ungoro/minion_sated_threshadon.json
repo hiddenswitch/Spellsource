@@ -1,0 +1,25 @@
+{
+	"name": "Sated Threshadon",
+	"baseManaCost": 7,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 7,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "BEAST",
+	"description": "Deathrattle: Summon three 1/1 Murlocs.",
+	"deathrattle": {
+		"class": "SummonSpell",
+		"cards": [
+		"token_primalfin",
+		"token_primalfin",
+		"token_primalfin"
+		]
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

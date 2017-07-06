@@ -1,0 +1,14 @@
+{
+	"name": "Pyros",
+	"baseManaCost": 10,
+	"type": "MINION",
+	"baseAttack": 10,
+	"baseHp": 10,
+	"heroClass": "MAGE",
+	"rarity": "LEGENDARY",
+	"race": "ELEMENTAL",
+	"description": "",
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

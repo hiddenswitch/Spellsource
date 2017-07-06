@@ -1,0 +1,29 @@
+{
+	"name": "Vinecleaver",
+	"baseManaCost": 7,
+	"type": "WEAPON",
+	"damage": 4,
+	"durability": 3,
+	"heroClass": "PALADIN",
+	"rarity": "RARE",
+	"description": "Whenever your hero attacks, summon two 1/1 Silver Hand Recruits.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TargetAcquisitionTrigger",
+			"actionType": "PHYSICAL_ATTACK",
+			"sourcePlayer": "SELF",
+			"targetPlayer": "BOTH",
+			"sourceEntityType": "HERO"
+		},
+		"spell": {
+			"class": "SummonSpell",
+			"cards": [
+					"token_silver_hand_recruit",
+					"token_silver_hand_recruit"
+					]
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

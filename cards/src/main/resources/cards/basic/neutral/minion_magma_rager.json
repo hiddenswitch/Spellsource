@@ -6,6 +6,7 @@
 	"baseHp": 1,
 	"heroClass": "ANY",
 	"rarity": "COMMON",
+	"race": "ELEMENTAL",
 	"description": "",
 	"collectible": true,
 	"set": "BASIC",

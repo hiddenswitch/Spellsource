@@ -6,6 +6,7 @@
 	"baseHp": 6,
 	"heroClass": "SHAMAN",
 	"rarity": "COMMON",
+	"race": "ELEMENTAL",
 	"description": "Battlecry: Gain 1-4 Attack. Overload: (1)",
 	"battlecry": {
 		"spell": {

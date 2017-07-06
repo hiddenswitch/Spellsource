@@ -6,6 +6,7 @@
 	"baseHp": 8,
 	"heroClass": "ANY",
 	"rarity": "LEGENDARY",
+	"race": "ELEMENTAL",
 	"description": "Can't Attack.  At the end of your turn, deal 8 damage to a random enemy.",
 	"trigger": {
 		"eventTrigger": {

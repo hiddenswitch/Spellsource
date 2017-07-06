@@ -6,6 +6,7 @@
 	"baseHp": 5,
 	"heroClass": "ANY",
 	"rarity": "COMMON",
+	"race": "ELEMENTAL",
 	"description": "Battlecry: Freeze a character.",
 	"battlecry": {
 		"targetSelection": "ANY",

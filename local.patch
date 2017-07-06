@@ -16,7 +16,7 @@ index 667710da..97f12cf4 100644
 --- a/metastone/shared/build.gradle
 +++ b/metastone/shared/build.gradle
 @@ -19,7 +19,7 @@ buildConfig {
- 	buildConfigField 'int', 'CARD_REVISION', '14'
+ 	buildConfigField 'int', 'CARD_REVISION', '15'
  	buildConfigField 'boolean', 'DEV_BUILD', project.hasProperty('DEV_BUILD').toString()
  	buildConfigField 'int', 'DEFAULT_SLEEP_DELAY', '100'
 -	buildConfigField 'String', 'GAMESESSIONS_HOST', 'api-us-east-2.hiddenswitch.com'
