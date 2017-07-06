@@ -8,6 +8,7 @@ import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.Registration;
 import com.hiddenswitch.proto3.net.util.RpcClient;
+import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import net.demilich.metastone.game.GameContext;
@@ -64,21 +65,28 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	@Suspendable
 	public RequestActionResponse requestAction(RequestActionRequest request) {
 		RequestActionResponse response = new RequestActionResponse();
-		final Behaviour behaviour;
-		if (botBehaviour.equals(GameStateValueBehaviour.class)) {
-			behaviour = new GameStateValueBehaviour(FeatureVector.getFittest(), "Botty McBotface");
-		} else {
-			behaviour = new PlayRandomBehaviour();
-		}
 
-		GameContext context = new GameContext();
-		context.setLogic(new GameLogic());
-		context.setDeckFormat(request.format);
-		context.setGameState(request.gameState);
-		context.setActivePlayerId(request.playerId);
-		context.getLogic().setLoggingEnabled(false);
-		GameAction action = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
-		response.gameAction = action;
+		// Use execute blocking to improve throughput
+		response.gameAction = awaitResult(callback -> vertx.executeBlocking(done -> {
+			final Behaviour behaviour;
+			if (botBehaviour.equals(GameStateValueBehaviour.class)) {
+				behaviour = new GameStateValueBehaviour(FeatureVector.getFittest(), "Botty McBotface");
+			} else {
+				behaviour = new PlayRandomBehaviour();
+			}
+
+			final GameContext context = new GameContext();
+			context.setLogic(new GameLogic());
+			context.setDeckFormat(request.format);
+			context.setGameState(request.gameState);
+			context.setActivePlayerId(request.playerId);
+			context.getLogic().setLoggingEnabled(false);
+
+			done.handle(Future.succeededFuture(
+					behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions)));
+		}, false, callback));
+
+
 		return response;
 	}
 
