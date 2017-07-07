@@ -17,9 +17,7 @@ import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
@@ -145,7 +143,7 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 		final List<Future> verticles = dependencies.stream().map(verticle -> {
 			Future<String> future = Future.future();
 			vertx.deployVerticle(verticle, future.completer());
-			return (Future)future;
+			return (Future) future;
 		}).collect(Collectors.toList());
 
 		CompositeFuture.all(verticles).setHandler(then -> {

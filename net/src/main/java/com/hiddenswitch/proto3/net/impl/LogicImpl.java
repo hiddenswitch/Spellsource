@@ -102,10 +102,8 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		final InitializeUserResponse response = new InitializeUserResponse();
 		response.setDeckCreateResponses(new ArrayList<>());
 		final String userId = request.getUserId();
-		// At the moment, the player gets two copies of every card in Minionate (that's what a "starting collection"
-		// is)
-		final CreateCollectionRequest startingCollectionRequest = CreateCollectionRequest.startingCollection(userId);
-		response.setCreateCollectionResponse(inventory.sync().createCollection(startingCollectionRequest));
+		// Do not create any cards with a starting collection request. Allow deck creation to create the card IDs on demand.
+		response.setCreateCollectionResponse(CreateCollectionResponse.user(userId, new ArrayList<>()));
 
 		// Load in the starting deck lists
 		for (DeckCreateRequest deckCreateRequest : Minionate.minionate().getStandardDecks()) {

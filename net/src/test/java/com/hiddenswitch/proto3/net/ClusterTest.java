@@ -54,7 +54,10 @@ public class ClusterTest {
 		// Instance 1, deploy games, AI and logic
 		Vertx.clusteredVertx(options, context.asyncAssertSuccess(vertx1 -> {
 			verticies.add(vertx1);
-			final List<Future> services = (List<Future>) Stream.of(new GamesImpl(), new BotsImpl(), new LogicImpl())
+			final List<Future> services = (List<Future>) Stream.of(
+					new GamesImpl(),
+					new BotsImpl(),
+					new LogicImpl())
 					.map(service -> {
 						Future<String> future = Future.future();
 						vertx1.deployVerticle(service, context.asyncAssertSuccess(result -> {
@@ -74,7 +77,14 @@ public class ClusterTest {
 		// Instance 2, deploy all the supporting services
 		Vertx.clusteredVertx(options, context.asyncAssertSuccess(vertx2 -> {
 			verticies.add(vertx2);
-			final List<Future> gameServices = (List<Future>) Stream.of(new AccountsImpl(), new CardsImpl(), new DecksImpl(), new DraftImpl(), new InventoryImpl(), new MatchmakingImpl(), new GatewayImpl())
+			final List<Future> gameServices = (List<Future>) Stream.of(
+					new AccountsImpl(),
+					new CardsImpl(),
+					new DecksImpl(),
+					new DraftImpl(),
+					new InventoryImpl(),
+					new MatchmakingImpl(),
+					new GatewayImpl())
 					.map(service -> {
 						Future<String> future = Future.future();
 						vertx2.deployVerticle(service, context.asyncAssertSuccess(result -> {
