@@ -179,7 +179,7 @@ public class MigrationTest {
 					Mongo.mongo().client().findOne(MigrationsImpl.MIGRATIONS, json(), json(), context.asyncAssertSuccess(doc -> {
 						context.assertNotNull(doc.getBoolean("locked"));
 						context.assertFalse(doc.getBoolean("locked"));
-						context.assertEquals(doc.getInteger("version"), 2);
+						context.assertEquals(doc.getInteger("version"), 3);
 						vertx.executeBlocking(done -> {
 							new UnityClient(context).createUserAccount(null).matchmakeAndPlayAgainstAI(null).waitUntilDone();
 							done.handle(Future.succeededFuture());
