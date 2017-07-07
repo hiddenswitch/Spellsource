@@ -2,15 +2,15 @@ package com.hiddenswitch.minionate;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.google.common.io.Resources;
+import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.DeckType;
 import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.Migrations;
 import com.hiddenswitch.proto3.net.impl.*;
-import com.hiddenswitch.proto3.net.models.DeckCreateRequest;
-import com.hiddenswitch.proto3.net.models.DeckDeleteRequest;
-import com.hiddenswitch.proto3.net.models.DeckListUpdateRequest;
-import com.hiddenswitch.proto3.net.models.MigrationRequest;
+import com.hiddenswitch.proto3.net.models.*;
+import com.hiddenswitch.proto3.net.util.Mongo;
 import io.vertx.core.*;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
@@ -92,7 +92,8 @@ public class Minionate {
 
 							// All other decks should have the constructed flag
 							MongoClientUpdateResult u2 = mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
-									json("deckType", json("$ne", DeckType.DRAFT.toString())),
+									json("deckType", json("$ne", DeckType.DRAFT.toString()),
+											"type", CollectionTypes.DECK.toString()),
 									json("$set", json("deckType", DeckType.CONSTRUCTED.toString())),
 									new UpdateOptions().setMulti(true));
 
@@ -130,7 +131,22 @@ public class Minionate {
 							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId2, h));
 							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId3, h));
 						}))
-				.migrateTo(2, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(3)
+						.withUp(thisVertx -> {
+							// Repair user collections
+							Mongo.mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json("heroClass", json("$eq", null)),
+									json("$unset", json("deckType", 1), "$set", json("trashed", false)), new UpdateOptions().setMulti(true));
+
+							for (JsonObject record : Mongo.mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1)))) {
+								final String userId = record.getString("_id");
+								Mongo.mongo().updateCollectionWithOptions(Inventory.INVENTORY, json("userId", userId), json("$addToSet", json("collectionIds", userId)), new UpdateOptions().setMulti(true));
+							}
+
+							// Remove all inventory records that are in just one collection, the user collection
+							Mongo.mongo().removeDocuments(Inventory.INVENTORY, json("collectionIds", json("$size", 1)));
+						}))
+				.migrateTo(3, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
