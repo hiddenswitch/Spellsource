@@ -38,6 +38,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toSet;
+
 /**
  * Created by bberman on 1/31/17.
  */
@@ -124,14 +126,13 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 		GetCollectionResponse response = inventory.getCollection(GetCollectionRequest.user(userId));
 
-		Set<String> cardIds = response.getInventoryRecords().stream().map(r -> r.getCardDesc().id).collect(Collectors
-				.toSet());
+		Set<String> cardIds = response.getInventoryRecords().stream().map(r -> r.getCardDesc().id).collect(
+				toSet());
 
-		// Should contain two copies of all the minionate cards
-		final DeckFormat deckFormat = new DeckFormat().withCardSets(CardSet.MINIONATE);
-		final List<String> minionateCards = CardCatalogue.query(deckFormat).toList().stream().map(Card::getCardId)
-				.collect(Collectors.toList());
-		getContext().assertTrue(cardIds.containsAll(minionateCards));
+		// Get the starting decks distinct card IDs
+		Set<String> actualCardIds = Minionate.minionate().getStandardDecks().stream().flatMap(d -> d.getCardIds().stream()).collect(toSet());
+
+		getContext().assertTrue(cardIds.equals(actualCardIds), "The user's initial collection should contain all the cards they need in the starter decks.");
 	}
 
 	@Test
@@ -182,8 +183,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 		// Create a 30 card deck
 		DeckCreateResponse dcr2 = decks.createDeck(new DeckCreateRequest().withName("d2").withHeroClass(HeroClass
-				.WARLOCK).withUserId(userId2).withInventoryIds(userResponse2.getCreateCollectionResponse()
-				.getCreatedInventoryIds().stream().limit(30).collect(Collectors.toList())));
+				.WARLOCK).withUserId(userId2).withCardIds(Collections.nCopies(30, "minion_novice_engineer")));
 
 		StartGameResponse sgr = service.startGame(new StartGameRequest().withGameId(gameId).withPlayers(new
 				StartGameRequest.Player().withId(0).withUserId(userId1).withDeckId(dcr1.getDeckId()), new

@@ -8,6 +8,7 @@ import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Migrations;
 import com.hiddenswitch.proto3.net.client.models.Account;
 import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
+import com.hiddenswitch.proto3.net.common.Recursive;
 import com.hiddenswitch.proto3.net.impl.MigrationsImpl;
 import com.hiddenswitch.proto3.net.models.DeckDeleteRequest;
 import com.hiddenswitch.proto3.net.models.MigrateToRequest;
@@ -22,14 +23,13 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.mongo.MongoClientDeleteResult;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import javax.validation.constraints.Min;
 import java.io.IOException;
+import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
@@ -59,7 +59,6 @@ public class MigrationTest {
 
 	@Test
 	public void testDeployAndMigrate(final TestContext context) {
-
 		MigrationsImpl migrations = new MigrationsImpl();
 
 		vertx.deployVerticle(migrations, context.asyncAssertSuccess(then -> {
@@ -184,12 +183,32 @@ public class MigrationTest {
 						vertx.executeBlocking(done -> {
 							new UnityClient(context).createUserAccount(null).matchmakeAndPlayAgainstAI(null).waitUntilDone();
 							done.handle(Future.succeededFuture());
-						}, context.asyncAssertSuccess());
+						}, context.asyncAssertSuccess(andThen -> {
+							undeploy(context);
+						}));
 					}));
 				}));
 			}));
 		}));
+	}
 
+	public void undeploy(TestContext context) {
+		// Recursively undeploy the currently deployed verticles.
+		Recursive<Consumer<String>> r = new Recursive<>();
+		r.func = (String deploymentId) -> {
+			vertx.undeploy(deploymentId, context.asyncAssertSuccess(then -> {
+				Set<String> moreDeployments = vertx.deploymentIDs();
+				if (moreDeployments.size() != 0) {
+					r.func.accept(moreDeployments.iterator().next());
+				}
+			}));
+		};
 
+		if (vertx.deploymentIDs().size() == 0) {
+			return;
+		} else {
+			final String next = vertx.deploymentIDs().iterator().next();
+			r.func.accept(next);
+		}
 	}
 }

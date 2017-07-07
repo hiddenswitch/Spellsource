@@ -210,7 +210,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				.handler(HandlerFactory.handler("friendId", this::getFriendConversation));
 
 		logger.info("Router configured.");
-		HttpServer listening = awaitResult(done -> server.requestHandler(router::accept).listen(done));
+		server = awaitResult(done -> server.requestHandler(router::accept).listen(done));
 		logger.info("Listening on port " + Integer.toString(server.actualPort()));
 	}
 
@@ -614,5 +614,11 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	public Draft getDrafts() throws InterruptedException, SuspendExecution {
 		return RPC.connect(Draft.class, vertx.eventBus()).sync();
+	}
+
+	@Override
+	@Suspendable
+	public void stop() throws Exception {
+		Void t = awaitResult(h -> server.close(h));
 	}
 }
