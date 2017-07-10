@@ -12,20 +12,22 @@ Meteor.publish('versions', function () {
 });
 
 Meteor.methods({
-    latest(url, apiKey) {
+    latest(url, buildName, platform, apiKey) {
         if (apiKey !== Meteor.settings.apiKey) {
             return;
         }
+        let windows = platform === 'windows';
 
-        Versions.insert({url: url, createdAt: new Date()});
-    },
+        let buildNameObject = {
+            "exe": buildName + ".exe",
+            "mac": buildName + ".app"
+        };
 
-    latestWindows(url, apiKey) {
-        if (apiKey !== Meteor.settings.apiKey) {
-            return;
-        }
+        Versions.insert({
+            url: url, createdAt: new Date(), windows: windows,
+            buildName: buildNameObject
+        });
 
-        Versions.insert({url: url, createdAt: new Date(), windows: true});
     }
 });
 //

@@ -3,13 +3,17 @@ let LocalVersions = new Ground.Collection('localVersions');
 let downloadProgress = new ReactiveVar(0);
 let ready = new ReactiveVar(!Electron.isWindows());
 
+let getExecutableFileName = function (version) {
+    return (version && version.buildName && version.buildName[Electron.isWindows() ? 'exe' : 'mac'])
+        || Meteor.settings.public.buildName[Electron.isWindows() ? 'exe' : 'mac'];
+};
+
 Tracker.autorun(() => {
     // For every local version that claims it is ready, check if we have the actual file directory
     LocalVersions.find({ready: true}).forEach(function (version) {
         let versionId = version._id;
         let destination = Electron.app().getPath('userData') + '/' + versionId;
         // Construct a name for the build.
-        let buildName = Meteor.settings.public.buildName[Electron.isWindows() ? 'exe' : 'mac'];
         let executablePath = destination;
         Electron.exists(executablePath, function (doesExist) {
             if (!doesExist) {
@@ -125,7 +129,7 @@ Template.launcher.events({
             let versionId = currentState.serverVersion._id;
             let destination = Electron.app().getPath('userData') + '/' + versionId;
             // Construct a name for the build.
-            let executableName = Meteor.settings.public.buildName[Electron.isWindows() ? 'exe' : 'mac'];
+            let executableName = getExecutableFileName(currentState.serverVersion);
             let executablePath = destination + "/" + executableName;
             let urlPath = Electron.isWindows() ? executablePath : "file://" + executablePath;
 
@@ -145,7 +149,8 @@ Template.launcher.events({
             Electron.download({
                 url: currentState.serverVersion.url,
                 destination: destination,
-                chmodTarget: executablePath + '/Contents/MacOS/Minionate'
+                chmodTarget: executablePath + '/Contents/MacOS/' + getExecutableFileName(currentState.serverVersion)
+                    .replace(/\.\w\w\w$/, '')
             }, (response) => {
                 if (response.state) {
                     downloadProgress.set(response.state.percent);
