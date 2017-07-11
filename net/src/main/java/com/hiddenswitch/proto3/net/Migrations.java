@@ -8,6 +8,7 @@ import com.hiddenswitch.proto3.net.models.MigrationRequest;
 import com.hiddenswitch.proto3.net.models.MigrationResponse;
 import com.hiddenswitch.proto3.net.models.MigrationToResponse;
 import com.hiddenswitch.proto3.net.util.Migrator;
+import com.hiddenswitch.proto3.net.util.RpcOptions;
 import io.vertx.core.Vertx;
 
 import java.io.Serializable;
@@ -34,6 +35,7 @@ public interface Migrations {
 	 * @throws InterruptedException
 	 */
 	@Suspendable
+	@RpcOptions(sendTimeoutMS = 4 * 60 * 1000L)
 	MigrationToResponse migrateTo(MigrateToRequest request) throws SuspendExecution, InterruptedException;
 
 	/**

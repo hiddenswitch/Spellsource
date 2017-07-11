@@ -67,19 +67,26 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			throw new RuntimeException();
 		}
 		Object result = null;
+		final DeliveryOptions deliveryOptions = new DeliveryOptions().setSendTimeout(Duration.of(8, ChronoUnit.SECONDS).toMillis());
+		RpcOptions options = method.getAnnotation(RpcOptions.class);
+
+		if (options != null) {
+			deliveryOptions.setSendTimeout(options.sendTimeoutMS());
+		}
+
 		if (sync) {
 			result = awaitFiber(done -> {
-				call(methodName, args, done);
+				call(methodName, args, deliveryOptions, done);
 			});
 		} else {
-			call(methodName, args, next);
+			call(methodName, args, deliveryOptions, next);
 		}
 
 		return result;
 	}
 
 	@Suspendable
-	private void call(String methodName, Object[] args, Handler<AsyncResult<Object>> next) {
+	private void call(String methodName, Object[] args, final DeliveryOptions deliveryOptions, Handler<AsyncResult<Object>> next) {
 		Buffer result = Buffer.buffer(512);
 
 		try {
@@ -89,7 +96,6 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			return;
 		}
 
-		eb.send(name + "::" + methodName, result, new DeliveryOptions().setSendTimeout(Duration.of(4, ChronoUnit.MINUTES).toMillis()), Sync.fiberHandler(new ReplyHandler(next)));
+		eb.send(name + "::" + methodName, result, deliveryOptions, Sync.fiberHandler(new ReplyHandler(next)));
 	}
-
 }

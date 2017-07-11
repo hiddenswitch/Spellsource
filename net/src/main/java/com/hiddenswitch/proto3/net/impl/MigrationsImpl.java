@@ -10,6 +10,7 @@ import com.hiddenswitch.proto3.net.models.MigrationToResponse;
 import com.hiddenswitch.proto3.net.util.Mongo;
 import com.hiddenswitch.proto3.net.util.RPC;
 import com.hiddenswitch.proto3.net.util.Registration;
+import com.hiddenswitch.proto3.net.util.RpcOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -18,6 +19,7 @@ import io.vertx.ext.mongo.WriteOption;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;

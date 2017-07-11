@@ -11,14 +11,18 @@ import com.hiddenswitch.proto3.net.util.RpcClient;
 import com.hiddenswitch.proto3.net.util.Sync;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
+import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.events.Notification;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by bberman on 12/9/16.
@@ -27,6 +31,7 @@ public class AIServiceConnection implements Client {
 	final int playerId;
 	final RpcClient<Bots> bots;
 	final WeakReference<ServerGameContext> context;
+	static final Logger logger = LoggerFactory.getLogger(AIServiceConnection.class);
 
 	public AIServiceConnection(ServerGameContext context, EventBus eventBus, int playerId) {
 		this.bots = RPC.connect(Bots.class, eventBus);
@@ -69,7 +74,14 @@ public class AIServiceConnection implements Client {
 		final ServerGameContext gc = context.get();
 		bots.async(Sync.suspendableHandler((AsyncResult<RequestActionResponse> result) -> {
 			if (result.failed()) {
-				throw (RuntimeException) result.cause();
+				// End the turn, if possible, or pick the first action, if the AI glitched out.
+				GameAction action = actions.stream()
+						.filter(ga -> ga.getActionType() == ActionType.END_TURN)
+						.findFirst()
+						.orElse(actions.get(0));
+				gc.onActionReceived(messageId, action);
+				logger.error("The AI threw an exception while trying to get an action: ", result.cause());
+				return;
 			}
 
 			gc.onActionReceived(messageId, result.result().gameAction);
