@@ -20,6 +20,8 @@ import com.hiddenswitch.proto3.net.util.UnityClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
+import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.ext.mongo.MongoClientDeleteResult;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -28,11 +30,15 @@ import org.junit.runner.RunWith;
 
 import javax.validation.constraints.Min;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
+import static io.vertx.ext.sync.Sync.awaitEvent;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * Note that the collection names should all be different because I'm lazy with the collection removal.
@@ -140,6 +146,23 @@ public class MigrationTest {
 				.migrateTo(4, context.asyncAssertSuccess(then -> {
 					Mongo.mongo().client().findOne("testCollection1", json("_id", "test"), json(), context.asyncAssertSuccess(then2 -> {
 						context.assertEquals(then2.getInteger("value"), 4);
+					}));
+				}));
+	}
+
+	@Test
+	public void testLongMigration(final TestContext context) {
+		Migrations.migrate(vertx)
+				.add(new MigrationRequest()
+						.withVersion(1)
+						.withUp(thisVertx -> {
+							Mongo.mongo().createCollection("testCollection88");
+							Mongo.mongo().insert("testCollection88", json("_id", "test", "value", 1));
+							Long r = awaitEvent(h -> thisVertx.setTimer(Duration.of(32, ChronoUnit.SECONDS).toMillis(), h));
+						}))
+				.migrateTo(1, context.asyncAssertSuccess(then -> {
+					Mongo.mongo().client().findOne("testCollection88", json("_id", "test"), json(), context.asyncAssertSuccess(then2 -> {
+						context.assertEquals(then2.getInteger("value"), 1);
 					}));
 				}));
 	}
