@@ -453,6 +453,22 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	}
 
 	@Override
+	@Suspendable
+	public PerformGameActionResponse performGameAction(PerformGameActionRequest request) throws InterruptedException, SuspendExecution {
+		if (request.getGameId() == null) {
+			throw new RuntimeException("Game ID cannot be null in a perform game action request.");
+		}
+
+		final ServerGameContext gameContext = getGameContext(request.getGameId());
+		gameContext.getLogic().performGameAction(request.getPlayerId(), request.getAction());
+
+		PerformGameActionResponse response = new PerformGameActionResponse();
+
+		response.setState(gameContext.getGameStateCopy());
+		return response;
+	}
+
+	@Override
 	public ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution {
 		// TODO: Actually do something special when the player concedes
 		kill(request.getGameId());

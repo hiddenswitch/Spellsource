@@ -6,7 +6,9 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.proto3.net.impl.GamesImpl;
 import com.hiddenswitch.proto3.net.impl.MatchmakingImpl;
-import com.hiddenswitch.proto3.net.models.EndGameSessionRequest;
+import com.hiddenswitch.proto3.net.impl.server.GameSession;
+import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
+import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.impl.ServiceTest;
 import com.hiddenswitch.proto3.net.util.TwoClients;
 import io.vertx.core.AsyncResult;
@@ -17,7 +19,14 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import net.demilich.metastone.game.actions.PlaySpellCardAction;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
+import net.demilich.metastone.game.cards.SpellCard;
+import net.demilich.metastone.game.decks.DeckFactory;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.targeting.Zones;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -186,6 +195,34 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
+
+	@Test
+	public void testPerformGameActionRemotelyInGame(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		wrapSync(context, () -> {
+			CreateGameSessionResponse response = service.createGameSession(new CreateGameSessionRequest()
+					.withGameId("gameId1")
+					.withPregame1(new PregamePlayerConfiguration(DeckFactory.getRandomDeck(), "testDeck1"))
+					.withPregame2(new PregamePlayerConfiguration(DeckFactory.getRandomDeck(), "testDeck2")));
+
+			final GameSession gameSession = service.getGameSession(response.getGameId());
+			gameSession.onPlayerConnected(response.getConfigurationForPlayer1().getFirstMessage().getPlayer1(), new TestClient());
+			gameSession.onPlayerConnected(response.getConfigurationForPlayer2().getFirstMessage().getPlayer1(), new TestClient());
+			final PerformGameActionRequest request = new PerformGameActionRequest();
+			SpellCard fireball = (SpellCard) CardCatalogue.getCardById("spell_fireball");
+			fireball.setOwner(0);
+			fireball.setId(99);
+			fireball.moveOrAddTo(gameSession.getGameContext(), Zones.HAND);
+
+			final SpellDesc spell = fireball.getSpell();
+			spell.setTarget(gameSession.getGameContext().getPlayer(0).getHero().getReference());
+			request.setAction(new PlaySpellCardAction(spell, fireball, TargetSelection.AUTO));
+			request.setPlayerId(0);
+			request.setGameId(gameSession.getGameId());
+			PerformGameActionResponse response1 = service.performGameAction(request);
+			getContext().assertEquals(24, response1.getState().player1.getHero().getHp());
+		});
+	}
 
 	@Suspendable
 	private void simultaneousSessions(int sessions) throws SuspendExecution, InterruptedException {

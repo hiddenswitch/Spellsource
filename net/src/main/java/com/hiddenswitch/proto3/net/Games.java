@@ -430,6 +430,17 @@ public interface Games {
 	UpdateEntityResponse updateEntity(UpdateEntityRequest request) throws UnsupportedOperationException;
 
 	/**
+	 * Performs a game action in the specified game.
+	 *
+	 * @param request A request containing the ID of the game and action to perform.
+	 * @return A response indicating the new game state.
+	 * @throws InterruptedException
+	 * @throws SuspendExecution
+	 */
+	@Suspendable
+	PerformGameActionResponse performGameAction(PerformGameActionRequest request) throws InterruptedException, SuspendExecution;
+
+	/**
 	 * Concedes the specified game session. Unlike ending a game session prematurely, a concession may trigger some
 	 * additional notifications and scoring consequences.
 	 *
