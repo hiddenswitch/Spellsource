@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * A definition for a spell.
- *
+ * <p>
  * A spell description has a variety of arguments of type {@link SpellArg}.
  */
 public class SpellDesc extends Desc<SpellArg> {
@@ -97,5 +97,9 @@ public class SpellDesc extends Desc<SpellArg> {
 	@Override
 	public boolean equals(Object other) {
 		return super.equals(other);
+	}
+
+	public void setTarget(EntityReference target) {
+		put(SpellArg.TARGET, target);
 	}
 }
