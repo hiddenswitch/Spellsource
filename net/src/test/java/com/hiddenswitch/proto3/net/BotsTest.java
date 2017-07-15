@@ -3,7 +3,6 @@ package com.hiddenswitch.proto3.net;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
-import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.impl.BotsImpl;
 import com.hiddenswitch.proto3.net.impl.GamesImpl;
 import com.hiddenswitch.proto3.net.impl.ServiceTest;
@@ -88,7 +87,7 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 	public void testBroker(TestContext context) throws CardParseException, IOException, URISyntaxException {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
-			final RpcClient<Bots> bots = RPC.connect(Bots.class, vertx.eventBus());
+			final RpcClient<Bots> bots = Rpc.connect(Bots.class, vertx.eventBus());
 			final MulliganRequest request = new MulliganRequest(
 					Arrays.asList(
 							CardCatalogue.getCardById("spell_fireball"),

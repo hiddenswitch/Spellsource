@@ -6,13 +6,11 @@ import com.hiddenswitch.proto3.net.Logic;
 import com.hiddenswitch.proto3.net.client.models.Emote;
 import com.hiddenswitch.proto3.net.common.*;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
-import com.hiddenswitch.proto3.net.util.RPC;
-import com.lambdaworks.crypto.SCryptUtil;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -182,7 +180,7 @@ public class GameSessionImpl implements GameSession {
 
 		getPlayer1().setBehaviour(new NetworkBehaviour(getPlayer1().getBehaviour()));
 		getPlayer2().setBehaviour(new NetworkBehaviour(getPlayer2().getBehaviour()));
-		this.gameContext = new ServerGameContext(getPlayer1(), getPlayer2(), simpleFormat, getGameId(), RPC.connect(Logic.class, vertx.eventBus()));
+		this.gameContext = new ServerGameContext(getPlayer1(), getPlayer2(), simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()));
 		final Client listener1;
 		final Client listener2;
 

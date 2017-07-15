@@ -12,11 +12,10 @@ import com.hiddenswitch.proto3.net.Draft;
 import com.hiddenswitch.proto3.net.impl.util.DraftRecord;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.Registration;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.Future;
-import io.vertx.core.json.Json;
 import io.vertx.ext.mongo.UpdateOptions;
 
 import static com.hiddenswitch.proto3.net.util.Mongo.mongo;
@@ -31,13 +30,13 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		decks = RPC.connect(Decks.class, vertx.eventBus());
-		accounts = RPC.connect(Accounts.class, vertx.eventBus());
+		decks = Rpc.connect(Decks.class, vertx.eventBus());
+		accounts = Rpc.connect(Accounts.class, vertx.eventBus());
 		// Create the collection if necessary
 		if (!mongo().getCollections().contains(DRAFTS)) {
 			mongo().createCollection(DRAFTS);
 		}
-		registration = RPC.register(this, Draft.class, vertx.eventBus());
+		registration = Rpc.register(this, Draft.class, vertx.eventBus());
 	}
 
 	@Override
@@ -136,6 +135,6 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-		RPC.unregister(registration);
+		Rpc.unregister(registration);
 	}
 }

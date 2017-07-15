@@ -81,7 +81,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		matchmaking = RPC.connect(Matchmaking.class, vertx.eventBus());
+		matchmaking = Rpc.connect(Matchmaking.class, vertx.eventBus());
 
 		Void ignored = awaitResult(h -> vertx.executeBlocking(blocking -> {
 			try {
@@ -143,7 +143,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 		// TODO: Until expire game session is registered correctly, limit this service to a singleton.
 		if (noInstancesYet()) {
-			registration = RPC.register(this, Games.class, vertx.eventBus());
+			registration = Rpc.register(this, Games.class, vertx.eventBus());
 		}
 
 		logger.debug("GamesImpl::start Registered on event bus.");
@@ -432,7 +432,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 		Void r = awaitResult(h -> server.close(h));
 		r = awaitResult(h -> websocketServer.close(h));
 		if (registration != null) {
-			RPC.unregister(registration);
+			Rpc.unregister(registration);
 			freeSingleton();
 		}
 	}

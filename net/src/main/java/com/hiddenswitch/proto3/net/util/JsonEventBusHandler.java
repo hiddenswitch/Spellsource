@@ -4,21 +4,20 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.Handler;
 import io.vertx.core.eventbus.Message;
-import io.vertx.core.json.JsonObject;
 
-class JsonEventBusHandler<T, R> implements Handler<Message<JsonObject>> {
+class JsonEventBusHandler<T, R> implements Handler<Message<String>> {
 	private final SuspendableFunction<T, R> method;
-	private final Class<? extends T> returnClass;
+	private final Class<? extends T> requestClass;
 
-	JsonEventBusHandler(SuspendableFunction<T, R> method, Class<? extends T> returnClass) {
+	JsonEventBusHandler(SuspendableFunction<T, R> method, Class<? extends T> requestClass) {
 		this.method = method;
-		this.returnClass = returnClass;
+		this.requestClass = requestClass;
 	}
 
 	@Override
 	@Suspendable
-	public void handle(Message<JsonObject> message) {
-		T request = Serialization.deserialize(message.body(), returnClass);
+	public void handle(Message<String> message) {
+		T request = Serialization.deserialize(message.body(), requestClass);
 		R response = null;
 
 		try {
@@ -29,7 +28,7 @@ class JsonEventBusHandler<T, R> implements Handler<Message<JsonObject>> {
 			message.fail(-1, BufferEventBusHandler.getMessage(e));
 		}
 
-		message.reply(new JsonObject(Serialization.serialize(response)));
+		message.reply(Serialization.serialize(response));
 	}
 
 }

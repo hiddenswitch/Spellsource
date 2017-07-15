@@ -581,39 +581,39 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	}
 
 	public Cards getCards() throws InterruptedException, SuspendExecution {
-		return RPC.connect(Cards.class, vertx.eventBus()).sync();
+		return Rpc.connect(Cards.class, vertx.eventBus()).sync();
 	}
 
 	public Accounts getAccounts() throws InterruptedException, SuspendExecution {
-		return RPC.connect(Accounts.class, vertx.eventBus()).sync();
+		return Rpc.connect(Accounts.class, vertx.eventBus()).sync();
 	}
 
 	public Games getGames() throws InterruptedException, SuspendExecution {
-		return RPC.connect(Games.class, vertx.eventBus()).sync();
+		return Rpc.connect(Games.class, vertx.eventBus()).sync();
 	}
 
 	public Matchmaking getMatchmaking() throws InterruptedException, SuspendExecution {
-		return RPC.connect(Matchmaking.class, vertx.eventBus()).sync();
+		return Rpc.connect(Matchmaking.class, vertx.eventBus()).sync();
 	}
 
 	public Bots getBots() throws InterruptedException, SuspendExecution {
-		return RPC.connect(Bots.class, vertx.eventBus()).sync();
+		return Rpc.connect(Bots.class, vertx.eventBus()).sync();
 	}
 
 	public Logic getLogic() throws InterruptedException, SuspendExecution {
-		return RPC.connect(Logic.class, vertx.eventBus()).sync();
+		return Rpc.connect(Logic.class, vertx.eventBus()).sync();
 	}
 
 	public Decks getDecks() throws InterruptedException, SuspendExecution {
-		return RPC.connect(Decks.class, vertx.eventBus()).sync();
+		return Rpc.connect(Decks.class, vertx.eventBus()).sync();
 	}
 
 	public Inventory getInventory() throws InterruptedException, SuspendExecution {
-		return RPC.connect(Inventory.class, vertx.eventBus()).sync();
+		return Rpc.connect(Inventory.class, vertx.eventBus()).sync();
 	}
 
 	public Draft getDrafts() throws InterruptedException, SuspendExecution {
-		return RPC.connect(Draft.class, vertx.eventBus()).sync();
+		return Rpc.connect(Draft.class, vertx.eventBus()).sync();
 	}
 
 	@Override

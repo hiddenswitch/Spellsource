@@ -5,7 +5,7 @@ import com.hiddenswitch.proto3.net.Accounts;
 import com.hiddenswitch.proto3.net.models.LoginRequest;
 import com.hiddenswitch.proto3.net.models.LoginResponse;
 import com.hiddenswitch.proto3.net.impl.util.AuthenticationException;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -25,7 +25,7 @@ public class UsernamePasswordAuthProvider implements AuthProvider {
 		if (vertx == null) {
 			throw new NullPointerException("vertx must not be null.");
 		}
-		accounts = RPC.connect(Accounts.class, vertx.eventBus());
+		accounts = Rpc.connect(Accounts.class, vertx.eventBus());
 	}
 
 	@Override

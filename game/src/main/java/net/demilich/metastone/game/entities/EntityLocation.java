@@ -42,15 +42,15 @@ public final class EntityLocation implements Serializable {
 	/**
 	 * @see #getZone()
 	 */
-	private final Zones zone;
+	private Zones zone;
 	/**
 	 * @see #getPlayer()
 	 */
-	private final int player;
+	private int player;
 	/**
 	 * @see #getIndex()
 	 */
-	private final int index;
+	private int index;
 
 	/**
 	 * Create the location with the specified zone, player and index.

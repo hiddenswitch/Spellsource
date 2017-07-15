@@ -8,8 +8,7 @@ import com.hiddenswitch.proto3.net.models.SetCollectionResponse;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.impl.util.CollectionRecord;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.Mongo;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.Registration;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.json.JsonObject;
@@ -39,7 +38,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		cards = RPC.connect(Cards.class, vertx.eventBus());
+		cards = Rpc.connect(Cards.class, vertx.eventBus());
 		List<String> collections = mongo().getCollections();
 
 		if (!collections.contains(INVENTORY)) {
@@ -53,7 +52,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 		mongo().createIndex(INVENTORY, json("userId", 1));
 		mongo().createIndex(INVENTORY, json("collectionIds", 1));
 
-		registration = RPC.register(this, Inventory.class, vertx.eventBus());
+		registration = Rpc.register(this, Inventory.class, vertx.eventBus());
 	}
 
 	@Override
@@ -321,6 +320,6 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-		RPC.unregister(registration);
+		Rpc.unregister(registration);
 	}
 }

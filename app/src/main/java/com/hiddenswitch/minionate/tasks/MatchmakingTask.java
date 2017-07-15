@@ -96,7 +96,7 @@ public class MatchmakingTask extends Task<Void> {
 				api.matchmakingConstructedQueueDelete();
 			} else {
 				logger.debug("Matchmaking successful!");
-				connection = Serialization.deserialize(response.getConnection().getJavaSerialized());
+				connection = Serialization.deserializeBase64(response.getConnection().getJavaSerialized());
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
