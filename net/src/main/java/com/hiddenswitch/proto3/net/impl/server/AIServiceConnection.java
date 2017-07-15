@@ -6,7 +6,7 @@ import com.hiddenswitch.proto3.net.common.GameState;
 import com.hiddenswitch.proto3.net.common.Client;
 import com.hiddenswitch.proto3.net.impl.util.ServerGameContext;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import com.hiddenswitch.proto3.net.util.Sync;
 import io.vertx.core.AsyncResult;
@@ -22,7 +22,6 @@ import net.demilich.metastone.game.events.Notification;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by bberman on 12/9/16.
@@ -34,7 +33,7 @@ public class AIServiceConnection implements Client {
 	static final Logger logger = LoggerFactory.getLogger(AIServiceConnection.class);
 
 	public AIServiceConnection(ServerGameContext context, EventBus eventBus, int playerId) {
-		this.bots = RPC.connect(Bots.class, eventBus);
+		this.bots = Rpc.connect(Bots.class, eventBus);
 
 		this.context = new WeakReference<>(context);
 		this.playerId = playerId;

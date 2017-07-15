@@ -9,7 +9,7 @@ import com.hiddenswitch.proto3.net.Inventory;
 import com.hiddenswitch.proto3.net.client.models.DecksUpdateCommand;
 import com.hiddenswitch.proto3.net.impl.util.InventoryRecord;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
@@ -43,7 +43,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
-		inventory = RPC.connect(Inventory.class, vertx.eventBus());
+		inventory = Rpc.connect(Inventory.class, vertx.eventBus());
 		// Create the starting decks
 		try {
 			CardCatalogue.loadCardsFromPackage();
@@ -55,7 +55,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 			e.printStackTrace();
 		}
 
-		registration = RPC.register(this, Decks.class, vertx.eventBus());
+		registration = Rpc.register(this, Decks.class, vertx.eventBus());
 	}
 
 	@Override
@@ -206,7 +206,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-		RPC.unregister(registration);
+		Rpc.unregister(registration);
 	}
 
 }

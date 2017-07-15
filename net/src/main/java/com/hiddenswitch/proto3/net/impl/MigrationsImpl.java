@@ -8,9 +8,8 @@ import com.hiddenswitch.proto3.net.models.MigrationRequest;
 import com.hiddenswitch.proto3.net.models.MigrationResponse;
 import com.hiddenswitch.proto3.net.models.MigrationToResponse;
 import com.hiddenswitch.proto3.net.util.Mongo;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.Registration;
-import com.hiddenswitch.proto3.net.util.RpcOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -18,13 +17,10 @@ import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.mongo.WriteOption;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.hiddenswitch.proto3.net.util.QuickJson.json;
@@ -67,7 +63,7 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 		}
 
 		if (noInstancesYet()) {
-			registration = RPC.register(this, Migrations.class, vertx.eventBus());
+			registration = Rpc.register(this, Migrations.class, vertx.eventBus());
 		}
 	}
 
@@ -76,7 +72,7 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 		super.stop();
 
 		if (registration != null) {
-			RPC.unregister(registration);
+			Rpc.unregister(registration);
 			freeSingleton();
 		}
 	}

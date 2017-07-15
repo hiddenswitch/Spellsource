@@ -36,13 +36,13 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	public void start() throws SuspendExecution {
 		super.start();
 
-		gameSessions = RPC.connect(Games.class, vertx.eventBus());
-		logic = RPC.connect(Logic.class, vertx.eventBus());
-		bots = RPC.connect(Bots.class, vertx.eventBus());
+		gameSessions = Rpc.connect(Games.class, vertx.eventBus());
+		logic = Rpc.connect(Logic.class, vertx.eventBus());
+		bots = Rpc.connect(Bots.class, vertx.eventBus());
 
 		// Check if we already have a matchmaking service online. If so, we shouldn't start.
 		if (noInstancesYet()) {
-			registration = RPC.register(this, Matchmaking.class, vertx.eventBus());
+			registration = Rpc.register(this, Matchmaking.class, vertx.eventBus());
 		}
 
 	}
@@ -236,7 +236,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 						new UpdateOptions().setMulti(true));
 
 		if (registration != null) {
-			RPC.unregister(registration);
+			Rpc.unregister(registration);
 			freeSingleton();
 		}
 

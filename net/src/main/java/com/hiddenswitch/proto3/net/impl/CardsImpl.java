@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.Cards;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.Registration;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -24,7 +24,7 @@ public class CardsImpl extends AbstractService<CardsImpl> implements Cards {
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
-		registration = RPC.register(this, Cards.class, vertx.eventBus());
+		registration = Rpc.register(this, Cards.class, vertx.eventBus());
 	}
 
 	@Override
@@ -109,6 +109,6 @@ public class CardsImpl extends AbstractService<CardsImpl> implements Cards {
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-		RPC.unregister(registration);
+		Rpc.unregister(registration);
 	}
 }

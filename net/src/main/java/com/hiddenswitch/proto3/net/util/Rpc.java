@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  * @see #register(Object, Class, EventBus) for the method to register your service on the {@link EventBus}.
  * @see #connect(Class, EventBus) to connect to a service available on the {@link EventBus}.
  */
-public class RPC {
+public class Rpc {
 	/**
 	 * Registers a class to make its methods available to be called on the {@link EventBus}. This method will wait until
 	 * the class is ready to be contacted on the {@link EventBus}; i.e., once all its {@link EventBus#consumer(String)}
@@ -129,7 +129,7 @@ public class RPC {
 			if (serialization == RpcOptions.Serialization.JAVA) {
 				return eb.consumer(methodName, Sync.fiberHandler(new BufferEventBusHandler<>(method1)));
 			} else if (serialization == RpcOptions.Serialization.JSON) {
-				return eb.consumer(methodName, Sync.fiberHandler(new JsonEventBusHandler<>(method1, method.getReturnType())));
+				return eb.consumer(methodName, Sync.fiberHandler(new JsonEventBusHandler<>(method1, method.getParameterTypes()[0])));
 			}
 
 			throw new RuntimeException("Not reachable.");

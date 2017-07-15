@@ -106,7 +106,7 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 
 			message = result;
 		} else if (serialization == RpcOptions.Serialization.JSON) {
-			message = new JsonObject(Serialization.serialize(args[0]));
+			message = Serialization.serialize(args[0]);
 		}
 
 

@@ -5,19 +5,17 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.UserRecord;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.Registration;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.behaviour.threat.FeatureVector;
 import net.demilich.metastone.game.behaviour.threat.GameStateValueBehaviour;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -46,10 +44,10 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		accounts = RPC.connect(Accounts.class, vertx.eventBus());
-		logic = RPC.connect(Logic.class, vertx.eventBus());
-		matchmaking = RPC.connect(Matchmaking.class, vertx.eventBus());
-		registration = RPC.register(this, Bots.class, vertx.eventBus());
+		accounts = Rpc.connect(Accounts.class, vertx.eventBus());
+		logic = Rpc.connect(Logic.class, vertx.eventBus());
+		matchmaking = Rpc.connect(Matchmaking.class, vertx.eventBus());
+		registration = Rpc.register(this, Bots.class, vertx.eventBus());
 	}
 
 	@Override
@@ -166,6 +164,6 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-		RPC.unregister(registration);
+		Rpc.unregister(registration);
 	}
 }

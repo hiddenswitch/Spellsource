@@ -163,7 +163,7 @@ public class Serialization {
 	}
 
 	@Suspendable
-	public static <T> T deserialize(String base64String) {
+	public static <T> T deserializeBase64(String base64String) {
 		return ObjectSerializer.deserializeBase64(base64String);
 	}
 

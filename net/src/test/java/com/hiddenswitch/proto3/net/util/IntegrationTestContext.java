@@ -33,11 +33,11 @@ public class IntegrationTestContext {
 	}
 
 	public IntegrationTestContext startGame() throws SuspendExecution, InterruptedException {
-		RpcClient<Accounts> accounts = RPC.connect(Accounts.class, vertx.eventBus());
+		RpcClient<Accounts> accounts = Rpc.connect(Accounts.class, vertx.eventBus());
 		CreateAccountResponse car1 = accounts.sync().createAccount(new CreateAccountRequest().withName("player1").withEmailAddress("test1@test.com").withPassword("testpassword"));
 		CreateAccountResponse car2 = accounts.sync().createAccount(new CreateAccountRequest().withName("player2").withEmailAddress("test2@test.com").withPassword("testpassword"));
 
-		RpcClient<Logic> logic = RPC.connect(Logic.class, vertx.eventBus());
+		RpcClient<Logic> logic = Rpc.connect(Logic.class, vertx.eventBus());
 		logic.uncheckedSync().initializeUser(new InitializeUserRequest().withUserId(car1.getUserId()));
 		logic.uncheckedSync().initializeUser(new InitializeUserRequest().withUserId(car2.getUserId()));
 
@@ -46,7 +46,7 @@ public class IntegrationTestContext {
 				.withPlayers(new StartGameRequest.Player()
 						.withId(0)
 						.withUserId(car1.getUserId())));
-		RpcClient<Games> games = RPC.connect(Games.class, vertx.eventBus());
+		RpcClient<Games> games = Rpc.connect(Games.class, vertx.eventBus());
 		games.sync().createGameSession(new CreateGameSessionRequest()
 				.withPregame1(new PregamePlayerConfiguration(new DeckWithId("deckId1"), "Player 1"))
 				.withPregame2(new PregamePlayerConfiguration(new DeckWithId("deckId2"), "Player 2")));

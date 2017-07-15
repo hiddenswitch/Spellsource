@@ -221,7 +221,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	private void disconnectingUnityClientAssert() throws SuspendExecution, InterruptedException {
 		// wait 18 seconds
 		Strand.sleep(18000);
-		final Matchmaking matchmaking = RPC.connect(Matchmaking.class, vertx.eventBus()).sync();
+		final Matchmaking matchmaking = Rpc.connect(Matchmaking.class, vertx.eventBus()).sync();
 
 		getContext().assertEquals(null, matchmaking.getCurrentMatch(new CurrentMatchRequest(userIdDisconnecting)).getGameId());
 	}
@@ -271,7 +271,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 	private Handler<SendContext> interceptGameCreate(Consumer<CreateGameSessionRequest> assertInHere) {
 		final Handler<SendContext> interceptor = h -> {
-			if (h.message().address().equals(RPC.getAddress(Games.class, games -> games.createGameSession(null)))) {
+			if (h.message().address().equals(Rpc.getAddress(Games.class, games -> games.createGameSession(null)))) {
 				Message<Buffer> message = h.message();
 				VertxBufferInputStream inputStream = new VertxBufferInputStream(message.body());
 

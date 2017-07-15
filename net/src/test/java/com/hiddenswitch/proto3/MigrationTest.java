@@ -2,33 +2,24 @@ package com.hiddenswitch.proto3;
 
 import ch.qos.logback.classic.Level;
 import com.hiddenswitch.minionate.Minionate;
-import com.hiddenswitch.proto3.net.Accounts;
-import com.hiddenswitch.proto3.net.ClusterTest;
-import com.hiddenswitch.proto3.net.Decks;
 import com.hiddenswitch.proto3.net.Migrations;
-import com.hiddenswitch.proto3.net.client.models.Account;
-import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
 import com.hiddenswitch.proto3.net.common.Recursive;
 import com.hiddenswitch.proto3.net.impl.MigrationsImpl;
-import com.hiddenswitch.proto3.net.models.DeckDeleteRequest;
 import com.hiddenswitch.proto3.net.models.MigrateToRequest;
 import com.hiddenswitch.proto3.net.models.MigrationRequest;
 import com.hiddenswitch.proto3.net.util.Mongo;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.RpcClient;
 import com.hiddenswitch.proto3.net.util.UnityClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
-import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.ext.mongo.MongoClientDeleteResult;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.*;
 import org.junit.runner.RunWith;
 
-import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -68,7 +59,7 @@ public class MigrationTest {
 		MigrationsImpl migrations = new MigrationsImpl();
 
 		vertx.deployVerticle(migrations, context.asyncAssertSuccess(then -> {
-			RpcClient<Migrations> migrator = RPC.connect(Migrations.class, vertx.eventBus());
+			RpcClient<Migrations> migrator = Rpc.connect(Migrations.class, vertx.eventBus());
 
 			CompositeFuture waterfall = CompositeFuture.join(
 					migrator.promise(service ->

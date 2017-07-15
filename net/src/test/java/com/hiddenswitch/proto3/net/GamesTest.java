@@ -10,15 +10,20 @@ import com.hiddenswitch.proto3.net.impl.server.GameSession;
 import com.hiddenswitch.proto3.net.impl.server.PregamePlayerConfiguration;
 import com.hiddenswitch.proto3.net.models.*;
 import com.hiddenswitch.proto3.net.impl.ServiceTest;
+import com.hiddenswitch.proto3.net.util.Serialization;
+import com.hiddenswitch.proto3.net.util.Sync;
 import com.hiddenswitch.proto3.net.util.TwoClients;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.*;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
@@ -37,6 +42,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static io.vertx.ext.sync.Sync.awaitEvent;
+import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.fiberHandler;
 import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
 @RunWith(VertxUnitRunner.class)
@@ -219,6 +227,95 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 			request.setGameId(gameSession.getGameId());
 			PerformGameActionResponse response1 = service.performGameAction(request);
 			getContext().assertEquals(24, response1.getState().player1.getHero().getHp());
+		});
+	}
+
+	@Test
+	public void testPerformJsonGameAction(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		wrapSync(context, () -> {
+			// The objective is to put the json for a new card into an existing game
+
+			// Create a game session
+			CreateGameSessionResponse response = service.createGameSession(new CreateGameSessionRequest()
+					.withGameId("gameId1")
+					.withPregame1(new PregamePlayerConfiguration(DeckFactory.getRandomDeck(), "testDeck1"))
+					.withPregame2(new PregamePlayerConfiguration(DeckFactory.getRandomDeck(), "testDeck2")));
+
+			final GameSession gameSession = service.getGameSession(response.getGameId());
+			gameSession.onPlayerConnected(response.getConfigurationForPlayer1().getFirstMessage().getPlayer1(), new TestClient());
+			gameSession.onPlayerConnected(response.getConfigurationForPlayer2().getFirstMessage().getPlayer1(), new TestClient());
+
+			// Deploy an http router that will accept the JSON to put into the game
+			final HttpServer server = vertx.createHttpServer();
+			Router router = Router.router(vertx);
+			router.post("/*")
+					.handler(BodyHandler.create());
+			router.post("/*")
+					.handler(Sync.suspendableHandler(routingContext -> {
+						PerformGameActionRequest request = Serialization.deserialize(routingContext.getBodyAsString(), PerformGameActionRequest.class);
+						PerformGameActionResponse response1 = service.performGameAction(request);
+						routingContext.response().end();
+					}));
+			HttpServer ignored = awaitResult(h -> server.requestHandler(router::accept).listen(8081, h));
+
+			// Post a perform game action to the router
+			HttpClient client = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(8081).setDefaultHost("127.0.0.1"));
+			HttpClientResponse ignored2 = awaitEvent(h -> client.post("/test").handler(h).end(
+					"{\n" +
+							"  \"gameId\": \"" + gameSession.getGameId() + "\",\n" +
+							"  \"playerId\": 0,\n" +
+							"  \"entities\": [\n" +
+							"    {\n" +
+							"      \"entityType\": \"SPELL_CARD\",\n" +
+							"      \"name\": \"Fireball\",\n" +
+							"      \"attributes\": {},\n" +
+							"      \"id\": 99,\n" +
+							"      \"ownerIndex\": 0,\n" +
+							"      \"entityLocation\": {\n" +
+							"        \"zone\": \"HAND\",\n" +
+							"        \"player\": 0,\n" +
+							"        \"index\": 0\n" +
+							"      },\n" +
+							"      \"description\": \"Fireball spell.\",\n" +
+							"      \"cardType2\": \"SPELL\",\n" +
+							"      \"cardSet\": \"MINIONATE\",\n" +
+							"      \"rarity\": \"LEGENDARY\",\n" +
+							"      \"heroClass\": \"ANY\",\n" +
+							"      \"collectible\": true,\n" +
+							"      \"cardId\": \"spell_fireball2\",\n" +
+							"      \"desc\": {\n" +
+							"        \"descType\": \"SPELL\",\n" +
+							"        \"baseManaCost\": 4,\n" +
+							"        \"type\": \"SPELL\"\n" +
+							"      },\n" +
+							"      \"spell\": {\n" +
+							"        \"class\": \"DamageSpell\",\n" +
+							"        \"value\": 6\n" +
+							"      },\n" +
+							"      \"targetRequirement\": \"ANY\"\n" +
+							"    }\n" +
+							"  ],\n" +
+							"  \"action\": {\n" +
+							"    \"spell\": {\n" +
+							"      \"class\": \"DamageSpell\",\n" +
+							"      \"target\": " + Integer.toString(gameSession.getGameContext().getPlayer(0).getHero().getReference().getId()) + ",\n" +
+							"      \"value\": 6\n" +
+							"    },\n" +
+							"    \"cardReference2\": 99,\n" +
+							"    \"cardReference\": {\n" +
+							"      \"playerId\": 0,\n" +
+							"      \"zone\": \"HAND\",\n" +
+							"      \"cardId\": 99,\n" +
+							"      \"cardName\": \"spell_fireball2\"\n" +
+							"    },\n" +
+							"    \"actionType\": \"SPELL\"\n" +
+							"  }\n" +
+							"}"
+			));
+			// Assert
+			getContext().assertEquals(24, gameSession.getGameContext().getPlayer(0).getHero().getHp());
+			server.close();
 		});
 	}
 

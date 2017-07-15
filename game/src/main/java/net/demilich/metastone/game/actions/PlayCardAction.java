@@ -22,7 +22,7 @@ public abstract class PlayCardAction extends GameAction {
 
 	public static Logger logger = LoggerFactory.getLogger(PlayCardAction.class);
 
-	private CardReference cardReference;
+	protected CardReference cardReference;
 	private int groupIndex;
 
 	protected PlayCardAction() {

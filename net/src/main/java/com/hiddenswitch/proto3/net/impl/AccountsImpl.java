@@ -5,7 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.proto3.net.*;
 import com.hiddenswitch.proto3.net.impl.util.*;
 import com.hiddenswitch.proto3.net.models.*;
-import com.hiddenswitch.proto3.net.util.RPC;
+import com.hiddenswitch.proto3.net.util.Rpc;
 import com.hiddenswitch.proto3.net.util.Registration;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.json.JsonObject;
@@ -36,7 +36,7 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 			Void r1 = awaitResult(h -> getMongo().createCollection(USERS, h));
 			Void r2 = awaitResult(h -> getMongo().createIndex(USERS, json("profile.emailAddress", 1), h));
 		}
-		registration = RPC.register(this, Accounts.class, vertx.eventBus());
+		registration = Rpc.register(this, Accounts.class, vertx.eventBus());
 	}
 
 	public CreateAccountResponse createAccount(String emailAddress, String password, String username) throws SuspendExecution, InterruptedException {
@@ -240,6 +240,6 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-		RPC.unregister(registration);
+		Rpc.unregister(registration);
 	}
 }
