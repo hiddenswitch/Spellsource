@@ -7,6 +7,8 @@ import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.Sync;
 
 import java.io.IOException;
@@ -69,33 +71,45 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 		Object result = null;
 		final DeliveryOptions deliveryOptions = new DeliveryOptions().setSendTimeout(Duration.of(8, ChronoUnit.SECONDS).toMillis());
 		RpcOptions options = method.getAnnotation(RpcOptions.class);
+		RpcOptions.Serialization serialization = RpcOptions.Serialization.JAVA;
 
 		if (options != null) {
 			deliveryOptions.setSendTimeout(options.sendTimeoutMS());
+			serialization = options.serialization();
 		}
 
 		if (sync) {
+			RpcOptions.Serialization finalSerialization = serialization;
 			result = awaitFiber(done -> {
-				call(methodName, args, deliveryOptions, done);
+				call(methodName, args, deliveryOptions, finalSerialization, done);
 			});
 		} else {
-			call(methodName, args, deliveryOptions, next);
+			call(methodName, args, deliveryOptions, serialization, next);
 		}
 
 		return result;
 	}
 
 	@Suspendable
-	private void call(String methodName, Object[] args, final DeliveryOptions deliveryOptions, Handler<AsyncResult<Object>> next) {
-		Buffer result = Buffer.buffer(512);
+	private void call(String methodName, Object[] args, final DeliveryOptions deliveryOptions, RpcOptions.Serialization serialization, Handler<AsyncResult<Object>> next) {
+		Object message = null;
 
-		try {
-			Serialization.serialize(args[0], new VertxBufferOutputStream(result));
-		} catch (IOException e) {
-			next.handle(Future.failedFuture(e));
-			return;
+		if (serialization == RpcOptions.Serialization.JAVA) {
+			final Buffer result = Buffer.buffer(512);
+
+			try {
+				Serialization.serialize(args[0], new VertxBufferOutputStream(result));
+			} catch (IOException e) {
+				next.handle(Future.failedFuture(e));
+				return;
+			}
+
+			message = result;
+		} else if (serialization == RpcOptions.Serialization.JSON) {
+			message = new JsonObject(Serialization.serialize(args[0]));
 		}
 
-		eb.send(name + "::" + methodName, result, deliveryOptions, Sync.fiberHandler(new ReplyHandler(next)));
+
+		eb.send(name + "::" + methodName, message, deliveryOptions, Sync.fiberHandler(new ReplyHandler(next)));
 	}
 }

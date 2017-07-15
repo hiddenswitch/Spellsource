@@ -30,6 +30,8 @@ import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetSocket;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.io.IOException;
@@ -454,12 +456,23 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 	@Override
 	@Suspendable
+	@SuppressWarnings("unchecked")
 	public PerformGameActionResponse performGameAction(PerformGameActionRequest request) throws InterruptedException, SuspendExecution {
 		if (request.getGameId() == null) {
 			throw new RuntimeException("Game ID cannot be null in a perform game action request.");
 		}
 
 		final ServerGameContext gameContext = getGameContext(request.getGameId());
+
+		// Merge entities if they're defined
+		if (request.getEntities() != null) {
+			for (Entity entity : request.getEntities()) {
+				final EntityLocation location = entity.getEntityLocation();
+				entity.setEntityLocation(EntityLocation.UNASSIGNED);
+				entity.moveOrAddTo(gameContext, location.getZone());
+			}
+		}
+
 		gameContext.getLogic().performGameAction(request.getPlayerId(), request.getAction());
 
 		PerformGameActionResponse response = new PerformGameActionResponse();

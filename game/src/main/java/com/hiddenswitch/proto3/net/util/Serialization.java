@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
+import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -205,5 +206,9 @@ public class Serialization {
 		oos.writeObject(obj);
 		oos.flush();
 		oos.close();
+	}
+
+	public static <T> T deserialize(JsonObject body, Class<? extends T> returnClass) {
+		return gson.fromJson(body.encode(), returnClass);
 	}
 }

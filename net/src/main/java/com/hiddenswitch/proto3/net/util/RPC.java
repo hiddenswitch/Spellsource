@@ -3,8 +3,6 @@ package com.hiddenswitch.proto3.net.util;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
-import com.hiddenswitch.proto3.net.Accounts;
-import com.hiddenswitch.proto3.net.impl.AccountsImpl;
 import com.hiddenswitch.proto3.net.models.CreateAccountRequest;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.CompositeFuture;
@@ -15,9 +13,7 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.ext.sync.Sync;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -125,7 +121,18 @@ public class RPC {
 			};
 
 			// Get the context at the time of calling this function
-			return eb.consumer(methodName, Sync.fiberHandler(new SyncMethodEventBusHandler<>(method1)));
+			RpcOptions.Serialization serialization = RpcOptions.Serialization.JAVA;
+			RpcOptions rpcOptions = method.getAnnotation(RpcOptions.class);
+			if (rpcOptions != null) {
+				serialization = rpcOptions.serialization();
+			}
+			if (serialization == RpcOptions.Serialization.JAVA) {
+				return eb.consumer(methodName, Sync.fiberHandler(new BufferEventBusHandler<>(method1)));
+			} else if (serialization == RpcOptions.Serialization.JSON) {
+				return eb.consumer(methodName, Sync.fiberHandler(new JsonEventBusHandler<>(method1, method.getReturnType())));
+			}
+
+			throw new RuntimeException("Not reachable.");
 		}).collect(Collectors.toList()));
 
 		CompositeFuture.all(registration.getMessageConsumers()
