@@ -24,6 +24,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.decks.DeckFactory;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
@@ -33,6 +34,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static net.demilich.metastone.game.GameContext.PLAYER_2;
@@ -49,11 +51,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 	}
 
 	private TwoClients getAndTestTwoClients() throws SuspendExecution, InterruptedException {
-		TwoClients twoClients = null;
-
-		twoClients = new TwoClients().invoke(this.service);
-
-
+		TwoClients twoClients = new TwoClients().invoke(this.service);
 		twoClients.play();
 		float seconds = 0.0f;
 		while (seconds <= 40.0f && !twoClients.gameDecided()) {
@@ -212,10 +210,10 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 			SpellCard fireball = (SpellCard) CardCatalogue.getCardById("spell_fireball");
 			fireball.setOwner(0);
 			fireball.setId(99);
-			fireball.moveOrAddTo(gameSession.getGameContext(), Zones.HAND);
-
+			fireball.setEntityLocation(new EntityLocation(Zones.HAND, 0, 0));
 			final SpellDesc spell = fireball.getSpell();
 			spell.setTarget(gameSession.getGameContext().getPlayer(0).getHero().getReference());
+			request.setEntities(Collections.singletonList(fireball));
 			request.setAction(new PlaySpellCardAction(spell, fireball, TargetSelection.AUTO));
 			request.setPlayerId(0);
 			request.setGameId(gameSession.getGameId());

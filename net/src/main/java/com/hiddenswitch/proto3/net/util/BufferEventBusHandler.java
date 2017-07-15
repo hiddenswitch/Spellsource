@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
@@ -12,10 +13,10 @@ import java.io.IOException;
 /**
  * Created by bberman on 6/7/17.
  */
-class SyncMethodEventBusHandler<T, R> implements Handler<Message<Buffer>> {
+class BufferEventBusHandler<T, R> implements Handler<Message<Buffer>> {
 	private final SuspendableFunction<T, R> method;
 
-	public SyncMethodEventBusHandler(SuspendableFunction<T, R> method) {
+	BufferEventBusHandler(SuspendableFunction<T, R> method) {
 		this.method = method;
 	}
 
@@ -53,7 +54,7 @@ class SyncMethodEventBusHandler<T, R> implements Handler<Message<Buffer>> {
 		message.reply(reply);
 	}
 
-	private static String getMessage(Throwable e) {
+	static String getMessage(Throwable e) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\nMessage Reply Error\n");
 		sb.append(ExceptionUtils.getMessage(e));

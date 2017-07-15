@@ -14,4 +14,11 @@ public @interface RpcOptions {
 	 * @return The delay in milliseconds.
 	 */
 	long sendTimeoutMS() default 8000L;
+
+	Serialization serialization() default Serialization.JAVA;
+
+	enum Serialization {
+		JAVA,
+		JSON
+	}
 }
