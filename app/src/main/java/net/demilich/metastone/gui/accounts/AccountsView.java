@@ -1,8 +1,10 @@
 package net.demilich.metastone.gui.accounts;
 
-import com.hiddenswitch.minionate.Client;
-import com.hiddenswitch.minionate.tasks.ApiTask;
-import com.hiddenswitch.proto3.net.client.models.*;
+import com.hiddenswitch.spellsource.Client;
+import com.hiddenswitch.spellsource.client.models.Account;
+import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
+import com.hiddenswitch.spellsource.client.models.LoginResponse;
+import com.hiddenswitch.spellsource.tasks.ApiTask;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

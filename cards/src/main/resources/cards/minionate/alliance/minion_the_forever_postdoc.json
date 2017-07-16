@@ -9,7 +9,7 @@
   "rarity": "FREE",
   "description": "Call to Arms: If this is the first time you've played this minion, permanently cost (1) less.",
   "collectible": true,
-  "set": "MINIONATE",
+  "set": "Spellsource",
   "manaCostModifier": {
     "class": "AttributeValueProvider",
     "target": "SELF",

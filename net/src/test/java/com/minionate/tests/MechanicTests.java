@@ -1,14 +1,4 @@
-package com.minionate.tests;
-
-import com.hiddenswitch.proto3.net.util.IntegrationTestContext;
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.EntityType;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+package com.Spellsource.tests;
 
 /*
 public class MechanicTests extends IntegrationTestBase {

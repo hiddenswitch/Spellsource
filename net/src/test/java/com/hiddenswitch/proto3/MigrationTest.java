@@ -1,16 +1,16 @@
 package com.hiddenswitch.proto3;
 
 import ch.qos.logback.classic.Level;
-import com.hiddenswitch.minionate.Minionate;
-import com.hiddenswitch.proto3.net.Migrations;
-import com.hiddenswitch.proto3.net.common.Recursive;
-import com.hiddenswitch.proto3.net.impl.MigrationsImpl;
-import com.hiddenswitch.proto3.net.models.MigrateToRequest;
-import com.hiddenswitch.proto3.net.models.MigrationRequest;
-import com.hiddenswitch.proto3.net.util.Mongo;
-import com.hiddenswitch.proto3.net.util.Rpc;
-import com.hiddenswitch.proto3.net.util.RpcClient;
-import com.hiddenswitch.proto3.net.util.UnityClient;
+import com.hiddenswitch.spellsource.Spellsource;
+import com.hiddenswitch.spellsource.Migrations;
+import com.hiddenswitch.spellsource.common.Recursive;
+import com.hiddenswitch.spellsource.impl.MigrationsImpl;
+import com.hiddenswitch.spellsource.models.MigrateToRequest;
+import com.hiddenswitch.spellsource.models.MigrationRequest;
+import com.hiddenswitch.spellsource.util.Mongo;
+import com.hiddenswitch.spellsource.util.Rpc;
+import com.hiddenswitch.spellsource.util.RpcClient;
+import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.hiddenswitch.proto3.net.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
@@ -187,9 +187,9 @@ public class MigrationTest {
 			done.handle(Future.failedFuture("MongoDump failed."));
 		}, context.asyncAssertSuccess(then -> {
 			// Then deploy locally with production
-			Minionate.minionate().migrate(vertx, context.asyncAssertSuccess(then2 -> {
+			Spellsource.Spellsource().migrate(vertx, context.asyncAssertSuccess(then2 -> {
 				// Assert a game still works
-				Minionate.minionate().deployAll(vertx, context.asyncAssertSuccess(then3 -> {
+				Spellsource.Spellsource().deployAll(vertx, context.asyncAssertSuccess(then3 -> {
 					Mongo.mongo().client().findOne(MigrationsImpl.MIGRATIONS, json(), json(), context.asyncAssertSuccess(doc -> {
 						context.assertNotNull(doc.getBoolean("locked"));
 						context.assertFalse(doc.getBoolean("locked"));

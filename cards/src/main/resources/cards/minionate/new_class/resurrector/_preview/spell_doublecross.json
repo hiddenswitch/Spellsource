@@ -10,6 +10,6 @@
 		"class": "MindControlSpell"
 	},
 	"collectible": true,
-	"set": "MINIONATE",
+	"set": "Spellsource",
 	"fileFormatVersion": 1
 }

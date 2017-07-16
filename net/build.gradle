@@ -19,7 +19,7 @@ shadowJar {
     zip64 true
 }
 
-mainClassName = 'com.hiddenswitch.proto3.net.applications.Embedded'
+mainClassName = 'com.hiddenswitch.spellsource.applications.Embedded'
 
 
 aws {
@@ -93,7 +93,7 @@ test {
 }
 
 task(runDebug, dependsOn: 'classes', type: JavaExec) {
-    main = 'com.hiddenswitch.proto3.net.applications.Embedded'
+    main = 'com.hiddenswitch.spellsource.applications.Embedded'
     classpath = sourceSets.main.runtimeClasspath
     jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005", "-javaagent:${configurations.quasar.iterator().next()}"]
 }

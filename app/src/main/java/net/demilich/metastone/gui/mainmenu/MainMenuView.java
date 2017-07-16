@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import com.hiddenswitch.minionate.Client;
-import com.hiddenswitch.proto3.net.client.models.Account;
+import com.hiddenswitch.spellsource.Client;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.GameNotification;
-import net.demilich.metastone.MetaStone;
 import net.demilich.metastone.NotificationProxy;
 
 public class MainMenuView extends BorderPane implements ChangeListener<String> {

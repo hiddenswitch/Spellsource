@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.entities;
 
-import com.hiddenswitch.proto3.net.common.GameState;
+import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.targeting.EntityReference;

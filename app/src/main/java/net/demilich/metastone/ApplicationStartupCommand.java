@@ -1,6 +1,6 @@
 package net.demilich.metastone;
 
-import com.hiddenswitch.minionate.Client;
+import com.hiddenswitch.spellsource.Client;
 import net.demilich.metastone.gui.autoupdate.AutoUpdateMediator;
 import net.demilich.metastone.gui.cards.CardProxy;
 import net.demilich.metastone.gui.deckbuilder.DeckFormatProxy;

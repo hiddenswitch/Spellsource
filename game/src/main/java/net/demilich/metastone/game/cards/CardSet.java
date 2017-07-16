@@ -16,5 +16,5 @@ public enum CardSet {
 	MEAN_STREETS_OF_GADGETZHAN,
 	PROCEDURAL_PREVIEW,
 	CUSTOM,
-	MINIONATE
+	Spellsource
 }

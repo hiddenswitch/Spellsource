@@ -1,14 +1,13 @@
 package net.demilich.metastone.gui.deckbuilder;
 
-import com.hiddenswitch.minionate.Client;
-import com.hiddenswitch.minionate.tasks.ApiTask;
-import com.hiddenswitch.proto3.net.client.models.DecksPutResponse;
-import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
+import com.hiddenswitch.spellsource.Client;
+import com.hiddenswitch.spellsource.tasks.ApiTask;
+import com.hiddenswitch.spellsource.client.models.DecksPutResponse;
+import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import javafx.collections.ListChangeListener;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.decks.validation.IDeckValidator;
 import net.demilich.metastone.game.entities.heroes.HeroClass;

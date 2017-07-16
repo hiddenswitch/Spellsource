@@ -1,7 +1,7 @@
 package net.demilich.metastone.gui.playmode.config;
 
-import com.hiddenswitch.minionate.tasks.MatchmakingTask;
-import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
+import com.hiddenswitch.spellsource.tasks.MatchmakingTask;
+import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

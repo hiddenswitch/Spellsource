@@ -58,10 +58,10 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 ```java
 
-import com.hiddenswitch.proto3.net.client.*;
-import com.hiddenswitch.proto3.net.client.auth.*;
-import com.hiddenswitch.proto3.net.client.model.*;
-import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+import com.hiddenswitch.spellsource.client.*;
+import com.hiddenswitch.spellsource.client.auth.*;
+import com.hiddenswitch.spellsource.client.model.*;
+import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 import java.io.File;
 import java.util.*;

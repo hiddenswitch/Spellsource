@@ -35,7 +35,7 @@ public class MetaStone extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Minionate");
+		primaryStage.setTitle("Spellsource");
 		primaryStage.initStyle(StageStyle.UNIFIED);
 		primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image(IconFactory.getImageUrl("ui/app_icon.png")));

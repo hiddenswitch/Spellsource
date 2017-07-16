@@ -44,7 +44,7 @@ dependencies {
 }
 
 javafx {
-    appName 'Minionate'
+    appName 'Spellsource'
     mainClass = mainClassName
 }
 

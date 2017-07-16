@@ -1,7 +1,5 @@
 package net.demilich.metastone.gui.accounts;
 
-import com.hiddenswitch.proto3.net.client.Configuration;
-import com.hiddenswitch.proto3.net.client.auth.ApiKeyAuth;
 import net.demilich.metastone.GameNotification;
 import net.demilich.nittygrittymvc.Mediator;
 import net.demilich.nittygrittymvc.interfaces.INotification;
