@@ -3,7 +3,7 @@ package net.demilich.metastone.game.cards;
 import java.io.IOException;
 import java.util.Map;
 
-import com.hiddenswitch.proto3.net.util.Serialization;
+import com.hiddenswitch.spellsource.util.Serialization;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.utils.ResourceInputStream;

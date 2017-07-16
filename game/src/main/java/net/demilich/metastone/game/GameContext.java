@@ -1,7 +1,8 @@
 package net.demilich.metastone.game;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.net.common.GameState;
+import com.hiddenswitch.spellsource.common.GameState;
+import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
@@ -36,7 +37,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * A game context helps execute a match of Minionate, providing a place to store state, deliver requests for actions to
+ * A game context helps execute a match of Spellsource, providing a place to store state, deliver requests for actions to
  * players, apply those player actions through a {@link GameLogic}, and then save the updated state as a result of those
  * actions.
  * <p>
@@ -111,11 +112,11 @@ import java.util.stream.Stream;
  * {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see net.demilich.metastone.game.behaviour.PlayRandomBehaviour for an example behaviour that just makes random
  * decisions when requested.
- * @see com.hiddenswitch.proto3.net.common.NetworkBehaviour for the class that turns requests to the {@link Behaviour}
+ * @see NetworkBehaviour for the class that turns requests to the {@link Behaviour}
  * into calls over the network.
- * @see GameLogic for the class that actually implements the Minionate game rules. This class requires a {@link
+ * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
  * GameContext} because it manipulates the state stored in it.
- * @see GameState for a class that encapsulates all of the state of a game of Minionate.
+ * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
  * @see #getEntities() for a way to enumerate through all of the entities in the game.

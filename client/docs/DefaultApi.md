@@ -33,13 +33,13 @@ Method | HTTP request | Description
 
 
 
-Create an account with Minionate. 
+Create an account with Spellsource.
 
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 
 DefaultApi apiInstance = new DefaultApi();
@@ -83,11 +83,11 @@ Deletes the specified deck by ID.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -137,11 +137,11 @@ Gets a deck. Only viewable for the owner of the deck or players in the alliance.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -192,11 +192,11 @@ Gets all the user&#39;s decks.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -243,11 +243,11 @@ Creates a new deck with optionally specified inventory IDs, a name and a hero cl
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -298,11 +298,11 @@ Updates the deck by adding or removing cards, changing the hero class, or renami
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -355,11 +355,11 @@ Make a selection for the given draft index.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -410,11 +410,11 @@ Choose a hero from your hero selection.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -465,11 +465,11 @@ Gets your latest state of the draft.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -516,11 +516,11 @@ Starts a draft, or make a change to your draft, like retiring early.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -571,11 +571,11 @@ unfriend a user
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -626,11 +626,11 @@ connect with a friend
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -681,11 +681,11 @@ Get a specific account. Contains more information if the userId matches the requ
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -736,11 +736,11 @@ Get a list of accounts including user profile information.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -791,11 +791,11 @@ get conversation with friend
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -846,8 +846,8 @@ Login with a username and password, receiving an authentication token to use for
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 
 DefaultApi apiInstance = new DefaultApi();
@@ -891,11 +891,11 @@ Concedes the player&#39;s current constructed game.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -942,11 +942,11 @@ Gets a renderable gamestate representing this player&#39;s current game.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -993,11 +993,11 @@ Removes your client from the matchmaking queue.
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -1044,11 +1044,11 @@ Enters your client into a matchmaking queue for constructed deck matchmaking. Cl
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -1099,11 +1099,11 @@ send message to friend
 ### Example
 ```java
 // Import classes:
-//import com.hiddenswitch.proto3.net.client.ApiClient;
-//import com.hiddenswitch.proto3.net.client.ApiException;
-//import com.hiddenswitch.proto3.net.client.Configuration;
-//import com.hiddenswitch.proto3.net.client.auth.*;
-//import com.hiddenswitch.proto3.net.client.api.DefaultApi;
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 

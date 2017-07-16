@@ -1,5 +1,5 @@
 {
-  "packageName": "Minionate.Client",
+  "packageName": "Spellsource.Client",
   "targetFramework": "v3.5",
   "sourceFolder": "Scripts",
   "hideGenerationTimestamp": true,

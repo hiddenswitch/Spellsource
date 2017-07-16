@@ -1,6 +1,6 @@
 package com.hiddenswitch.proto3.draft;
 
-import com.hiddenswitch.proto3.net.util.Result;
+import com.hiddenswitch.spellsource.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;

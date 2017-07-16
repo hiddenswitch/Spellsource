@@ -2,7 +2,7 @@ package net.demilich.metastone.gui.draftmode;
 
 import com.hiddenswitch.proto3.draft.DraftContext;
 import com.hiddenswitch.proto3.draft.HumanDraftBehaviour;
-import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
+import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import net.demilich.metastone.BuildConfig;
@@ -12,7 +12,7 @@ import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.gameconfig.GameConfig;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
-import com.hiddenswitch.minionate.tasks.MatchmakingTask;
+import com.hiddenswitch.spellsource.tasks.MatchmakingTask;
 import net.demilich.nittygrittymvc.SimpleCommand;
 import net.demilich.nittygrittymvc.interfaces.INotification;
 

@@ -1,4 +1,4 @@
-package com.minionate.tests;
+package com.Spellsource.tests;
 
 
 /*

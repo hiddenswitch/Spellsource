@@ -87,7 +87,7 @@ public class DraftLogic {
 				CardSet.CUSTOM);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.MINIONATE;
+		CardSet latestExpansion = CardSet.Spellsource;
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(
 				CardType.CHOOSE_ONE,

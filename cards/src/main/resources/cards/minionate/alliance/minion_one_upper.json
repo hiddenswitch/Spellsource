@@ -9,7 +9,7 @@
   "rarity": "FREE",
   "description": "Guard. Revenge: If this minion has less attack than another on the battlefield, permanently gain +1 Attack.",
   "collectible": true,
-  "set": "MINIONATE",
+  "set": "Spellsource",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

@@ -3,9 +3,6 @@ package net.demilich.metastone.gui.deckbuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hiddenswitch.minionate.Client;
-import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
-import javafx.collections.ListChangeListener;
 import net.demilich.nittygrittymvc.Mediator;
 import net.demilich.nittygrittymvc.interfaces.INotification;
 import net.demilich.metastone.GameNotification;

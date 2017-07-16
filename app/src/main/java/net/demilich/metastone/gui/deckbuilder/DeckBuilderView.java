@@ -1,7 +1,6 @@
 package net.demilich.metastone.gui.deckbuilder;
 
-import com.hiddenswitch.minionate.Client;
-import com.hiddenswitch.proto3.net.client.models.InventoryCollection;
+import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

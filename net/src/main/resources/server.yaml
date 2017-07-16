@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
   version: 1.0.1
-  title: Hidden Switch Minionate API
-  description: The Minionate API for matchmaking, user accounts, collections management and more
+  title: Hidden Switch Spellsource API
+  description: The Spellsource API for matchmaking, user accounts, collections management and more
   contact:
     name: Benjamin Berman
     email: benjamin.s.berman@gmail.com
@@ -129,7 +129,7 @@ definitions:
         format: 'email'
       password:
         description: |
-          A password used to login to Minionate.
+          A password used to login to Spellsource.
         type: 'string'
         format: 'password'
   CreateAccountResponse:
@@ -137,7 +137,7 @@ definitions:
     properties:
       loginToken:
         description: |
-          A string containing the token to login with via the standard Minionate authentication method.
+          A string containing the token to login with via the standard Spellsource authentication method.
         type: 'string'
       account:
         $ref: '#/definitions/Account'
@@ -1258,7 +1258,7 @@ paths:
             $ref: '#/definitions/GetAccountsResponse'
     put:
       description: |
-        Create an account with Minionate.
+        Create an account with Spellsource.
       operationId: createAccount
       parameters:
         - name: request

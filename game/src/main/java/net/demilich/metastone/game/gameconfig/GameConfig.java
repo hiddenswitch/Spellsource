@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.gameconfig;
 
-import com.hiddenswitch.proto3.net.common.ClientConnectionConfiguration;
+import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import net.demilich.metastone.game.decks.DeckFormat;
 
 import java.io.Serializable;

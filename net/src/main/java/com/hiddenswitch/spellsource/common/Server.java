@@ -1,0 +1,37 @@
+package com.hiddenswitch.spellsource.common;
+
+import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.Emote;
+import com.hiddenswitch.spellsource.impl.server.ClientConnectionHandler;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Card;
+
+import java.util.List;
+
+/**
+ * An interface that specifies a server instance that's capable of processing {@link Client} actions.
+ */
+public interface Server extends ClientConnectionHandler {
+	@Suspendable
+	void onActionReceived(String id, int actionIndex);
+
+	@Suspendable
+	void onActionReceived(String id, GameAction action);
+
+	void onMulliganReceived(String id, Player player, List<Card> discardedCards);
+
+	void onMulliganReceived(String messageId2, List<Integer> discardedCardIndices);
+
+	void onEmote(int entityId, Emote.MessageEnum message);
+
+	void onConcede(int playerId);
+
+	void onTouch(int playerId, int entityId);
+
+	void onUntouch(int playerId, int entityId);
+
+	Client getClient1();
+
+	Client getClient2();
+}
