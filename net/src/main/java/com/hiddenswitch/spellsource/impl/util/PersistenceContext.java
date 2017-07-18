@@ -1,6 +1,8 @@
-package com.hiddenswitch.spellsource;
+package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.Spellsource;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;

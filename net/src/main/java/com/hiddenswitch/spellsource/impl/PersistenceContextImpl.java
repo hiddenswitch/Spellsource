@@ -1,6 +1,8 @@
-package com.hiddenswitch.spellsource;
+package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.impl.util.PersistenceContext;
 import com.hiddenswitch.spellsource.models.PersistAttributeRequest;
 import com.hiddenswitch.spellsource.models.PersistAttributeResponse;
 import com.hiddenswitch.spellsource.util.RpcClient;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Created by bberman on 6/7/17.
  */
-class PersistenceContextImpl<T extends GameEvent> implements PersistenceContext<T> {
+public class PersistenceContextImpl<T extends GameEvent> implements PersistenceContext<T> {
 	private T event;
 	private RpcClient<Logic> logic;
 	private Attribute attribute;
@@ -29,7 +31,7 @@ class PersistenceContextImpl<T extends GameEvent> implements PersistenceContext<
 		return event;
 	}
 
-	PersistenceContextImpl(T event, RpcClient<Logic> logic, String id, Attribute attribute) {
+	public PersistenceContextImpl(T event, RpcClient<Logic> logic, String id, Attribute attribute) {
 		this.event = event;
 		this.logic = logic;
 		this.attribute = attribute;

@@ -1,9 +1,11 @@
-package com.hiddenswitch.spellsource;
+package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.Games;
+import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.models.EventLogicRequest;
 import com.hiddenswitch.spellsource.models.LogicResponse;
-import com.hiddenswitch.spellsource.impl.util.PersistenceTrigger;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 

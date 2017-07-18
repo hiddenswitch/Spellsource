@@ -3,9 +3,9 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.impl.*;
+import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Mongo;
-import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
+import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
@@ -42,9 +42,9 @@ import static java.util.stream.Collectors.toSet;
  */
 public class Spellsource {
 	private static Spellsource instance;
-	List<DeckCreateRequest> cachedStandardDecks;
-	Map<String, LegacyPersistenceHandler> legacyPersistenceHandlers = new HashMap<>();
-	Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
+	private List<DeckCreateRequest> cachedStandardDecks;
+	private Map<String, LegacyPersistenceHandler> legacyPersistenceHandlers = new HashMap<>();
+	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
 
 	private Spellsource() {
 	}
@@ -207,7 +207,7 @@ public class Spellsource {
 	 * @param <T>       The type of the event that corresponds to the provided {@link GameEventType}.
 	 */
 	public <T extends GameEvent> void persistAttribute(String id, GameEventType event, Attribute attribute, Handler<PersistenceContext<T>> handler) {
-		persistAttributeHandlers.put(id, new PersistenceHandler<>(Sync.fiberHandler(handler), id, event, attribute));
+		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(Sync.fiberHandler(handler), id, event, attribute));
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class Spellsource {
 	 * @param <T>           The event type.
 	 */
 	public <T extends GameEvent> void persistAttribute(LegacyPersistenceHandler<T> legacyHandler) {
-		legacyPersistenceHandlers.put(legacyHandler.getId(), legacyHandler);
+		getLegacyPersistenceHandlers().put(legacyHandler.getId(), legacyHandler);
 	}
 
 	/**
@@ -266,4 +266,11 @@ public class Spellsource {
 		return new Persistence(this);
 	}
 
+	public Map<String, LegacyPersistenceHandler> getLegacyPersistenceHandlers() {
+		return legacyPersistenceHandlers;
+	}
+
+	public Map<String, PersistenceHandler> getPersistAttributeHandlers() {
+		return persistAttributeHandlers;
+	}
 }
