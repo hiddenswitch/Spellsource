@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.impl.util.PersistenceTrigger;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.impl.util.LegacyPersistenceHandler;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.utils.AttributeMap;

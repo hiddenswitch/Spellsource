@@ -1,17 +1,17 @@
-package com.hiddenswitch.spellsource;
+package com.hiddenswitch.spellsource.impl.util;
 
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 
-class PersistenceHandler<T extends GameEvent> {
+public class PersistenceHandler<T extends GameEvent> {
 	private Handler<PersistenceContext<T>> handler;
 	private String id;
 	private GameEventType type;
 	private Attribute attribute;
 
-	PersistenceHandler(Handler<PersistenceContext<T>> handler, String id, GameEventType type, Attribute attribute) {
+	public PersistenceHandler(Handler<PersistenceContext<T>> handler, String id, GameEventType type, Attribute attribute) {
 		this.setHandler(handler);
 		this.setId(id);
 		this.setType(type);

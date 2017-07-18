@@ -1,4 +1,4 @@
-package com.hiddenswitch.spellsource;
+package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.models.EventLogicRequest;

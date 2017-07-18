@@ -1,10 +1,13 @@
-package com.hiddenswitch.spellsource;
+package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.models.EventLogicRequest;
 import com.hiddenswitch.spellsource.models.LogicResponse;
 import com.hiddenswitch.spellsource.models.PersistAttributeRequest;
 import com.hiddenswitch.spellsource.models.PersistAttributeResponse;
+import com.hiddenswitch.spellsource.impl.PersistenceContextImpl;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
@@ -24,7 +27,7 @@ import java.util.Map;
 public class Persistence {
 	private Spellsource spellsource;
 
-	Persistence(Spellsource spellsource) {
+	public Persistence(Spellsource spellsource) {
 		this.spellsource = spellsource;
 	}
 
@@ -32,7 +35,7 @@ public class Persistence {
 	@Suspendable
 	public void persistenceTrigger(RpcClient<Logic> logic, GameEvent event) {
 		// First, execute the regular handlers. They will persist normally.
-		for (PersistenceHandler handler1 : spellsource.persistAttributeHandlers.values()) {
+		for (PersistenceHandler handler1 : spellsource.getPersistAttributeHandlers().values()) {
 			if (handler1.getType() != event.getEventType()) {
 				continue;
 			}
@@ -42,7 +45,7 @@ public class Persistence {
 
 		// Now, execute the legacy handlers.
 		List<LogicResponse> responses = new ArrayList<>();
-		for (LegacyPersistenceHandler handler2 : spellsource.legacyPersistenceHandlers.values()) {
+		for (LegacyPersistenceHandler handler2 : spellsource.getLegacyPersistenceHandlers().values()) {
 			if (!handler2.getGameEvent().equals(event.getEventType())) {
 				continue;
 			}
@@ -84,6 +87,6 @@ public class Persistence {
 	}
 
 	public LegacyPersistenceHandler getLogicHandler(String id) {
-		return spellsource.legacyPersistenceHandlers.get(id);
+		return spellsource.getLegacyPersistenceHandlers().get(id);
 	}
 }
