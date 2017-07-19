@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.models;
 
-import com.hiddenswitch.spellsource.DeckType;
+import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.CardRecord;

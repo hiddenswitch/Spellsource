@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource.impl.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hiddenswitch.spellsource.DeckType;
 import com.hiddenswitch.spellsource.models.CollectionTypes;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
