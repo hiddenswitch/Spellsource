@@ -16,7 +16,6 @@ import net.demilich.metastone.game.targeting.TargetType;
 import java.lang.reflect.Type;
 
 public abstract class GameEventTrigger extends CustomCloneable {
-
 	private int owner = -1;
 	protected final EventTriggerDesc desc;
 

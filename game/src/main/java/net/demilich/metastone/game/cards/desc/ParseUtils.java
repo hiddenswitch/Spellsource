@@ -277,8 +277,6 @@ public class ParseUtils {
 				return EntityReference.MINIONS_TO_LEFT;
 			case "minions_to_right":
 				return EntityReference.MINIONS_TO_RIGHT;
-			case "networked_card_instance":
-				return EntityReference.NETWORKED_CARD_INSTANCE;
 			default:
 				return null;
 		}

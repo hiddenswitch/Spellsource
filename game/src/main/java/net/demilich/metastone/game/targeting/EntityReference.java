@@ -29,19 +29,14 @@ public class EntityReference implements Serializable {
 	public static final EntityReference ENEMY_PLAYER = new EntityReference(-22);
 	public static final EntityReference MINIONS_TO_LEFT = new EntityReference(-23);
 	public static final EntityReference MINIONS_TO_RIGHT = new EntityReference(-24);
-
-	public static final EntityReference TARGET = new EntityReference(-30);
-	public static final EntityReference SPELL_TARGET = new EntityReference(-31);
-
-	public static final EntityReference EVENT_TARGET = new EntityReference(-40);
-	public static final EntityReference SELF = new EntityReference(-41);
-	public static final EntityReference KILLED_MINION = new EntityReference(-42);
-	public static final EntityReference ATTACKER_REFERENCE = new EntityReference(-43);
-	public static final EntityReference PENDING_CARD = new EntityReference(-44);
-	public static final EntityReference EVENT_CARD = new EntityReference(-45);
-
-	// Networked entity references
-	public static final EntityReference NETWORKED_CARD_INSTANCE = new EntityReference(-1000);
+	public static final EntityReference TARGET = new EntityReference(-25);
+	public static final EntityReference SPELL_TARGET = new EntityReference(-26);
+	public static final EntityReference EVENT_TARGET = new EntityReference(-27);
+	public static final EntityReference SELF = new EntityReference(-28);
+	public static final EntityReference KILLED_MINION = new EntityReference(-29);
+	public static final EntityReference ATTACKER_REFERENCE = new EntityReference(-30);
+	public static final EntityReference PENDING_CARD = new EntityReference(-31);
+	public static final EntityReference EVENT_CARD = new EntityReference(-32);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
