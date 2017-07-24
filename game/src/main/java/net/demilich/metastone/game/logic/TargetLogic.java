@@ -291,9 +291,6 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(player);
 		} else if (targetKey.equals(EntityReference.ENEMY_PLAYER)) {
 			return singleTargetAsList(context.getOpponent(player));
-		} else if (targetKey.equals(EntityReference.NETWORKED_CARD_INSTANCE)) {
-			// TODO: Configure a networked card instance target.
-			return new ArrayList<>();
 		}
 
 		return singleTargetAsList(findEntity(context, targetKey));
