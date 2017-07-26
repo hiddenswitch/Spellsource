@@ -88,6 +88,8 @@ public class GeneratorTest {
 										.orElse(new JsonObject().put(column, -1)).getInteger(column) + 1));
 
 
+		nCategories.put("VALUE_SIGN", 2);
+
 		// Output CSV
 		String csv =
 				(columns.stream()
@@ -104,17 +106,21 @@ public class GeneratorTest {
 		Files.write(csv, new File("data.csv"), Charset.defaultCharset());
 
 		// Output CGPM population
-		Files.write("CREATE POPULATION spells for hearthstone_spells WITH SCHEMA(" + Stream.concat(columns.stream().sorted().map(column -> {
+		Files.write("CREATE POPULATION spells for hearthstone_spells WITH SCHEMA(\n    " + Stream.concat(columns.stream().sorted().map(column -> {
 			if (column.endsWith("LABEL") || column.equals("SUMMON_TRIGGERS")) {
 				return String.format("IGNORE %s", column);
-			} else if (nCategories.containsKey(column)) {
+			} else if (nCategories.containsKey(column)
+					|| jsonObjectStream.stream().anyMatch(j -> j.containsKey(column)
+					&& j.getMap().get(column) instanceof Integer
+					&& j.getInteger(column, 0) < 0)) {
 				return String.format("MODEL %s AS CATEGORICAL", column);
-			} else if (column.endsWith("RANK") || column.endsWith("COUNT") || column.equals("HOW_MANY")) {
-				return String.format("MODEL %s AS COUNTS", column);
 			} else {
-				return String.format("MODEL %s AS NUMERICAL", column);
+//			} else if (column.endsWith("RANK") || column.endsWith("COUNT") || column.equals("HOW_MANY")) {
+//				return String.format("MODEL %s AS COUNTS", column);
+//			} else {
+				return String.format("MODEL %s AS COUNTS", column);
 			}
-		}), Stream.of("IGNORE index")).reduce((a1, a2) -> a1 + ";\n" + a2).orElse("") + ");", new File("population.bql"), Charset.defaultCharset());
+		}), Stream.of("IGNORE index")).reduce((a1, a2) -> a1 + ";\n    " + a2).orElse("") + "\n);", new File("population.bql"), Charset.defaultCharset());
 	}
 
 	@Test

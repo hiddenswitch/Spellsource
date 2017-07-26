@@ -144,7 +144,6 @@ public class Generator {
 		}
 
 		record.args.put("SUB_TRIGGER_COUNT", triggerDescs.size());
-		record.args.put("SUB_TRIGGER_PROBABILTY", triggerDescs.size() == 0 ? 0f : 1f);
 		record.args.put("SUB_TRIGGER_RANK", rank + 1);
 
 		if (triggerDescs.size() == 0) {
@@ -182,6 +181,18 @@ public class Generator {
 
 		// Handle the spell class specially
 		spellRecord.args.put("CLASS", spellDesc.getSpellClass().getSimpleName());
+
+		// Handle the target class specially
+		if (spellDesc.getTarget() != null) {
+			spellRecord.args.put("TARGET", spellDesc.getTarget().getId());
+		}
+
+		// Tweak the VALUE
+		if (spellRecord.args.containsKey("VALUE")) {
+			int value = (int) spellRecord.args.getOrDefault("VALUE", 0);
+			spellRecord.args.put("VALUE", Math.abs(value));
+			spellRecord.args.put("VALUE_SIGN", value >= 0 ? 1 : 0);
+		}
 
 
 		// Get all the subspells
@@ -243,7 +254,6 @@ public class Generator {
 		int subSpellCount = subSpellList.size();
 		// Populate the subSpell field
 		spellRecord.args.put("SUB_SPELL_COUNT", subSpellCount);
-		spellRecord.args.put("SUB_SPELL_PROBABILITY", subSpellCount == 0 ? 0f : 1f);
 		spellRecord.args.put("SUB_SPELL_RANK", lowestRankOfSubs);
 		if (subSpellCount == 0) {
 			return Stream.of(spellRecord);
