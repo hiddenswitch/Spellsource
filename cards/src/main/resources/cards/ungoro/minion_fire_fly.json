@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "COMMON",
 	"race": "ELEMENTAL",
-	"description": "Battlecry: Add a 1/2 Flame Elemental card to your hand.",
+	"description": "Battlecry: Add a 1/2 Owl Monkey card to your hand.",
 	"battlecry": {
 		"targetSelection": "NONE",
 	"spell": {
@@ -16,6 +16,7 @@
 		}
 	},
 	"attributes": {
+		"NAME": "Moon Spirit",
 		"BATTLECRY": true
 	},
 	"collectible": true,
