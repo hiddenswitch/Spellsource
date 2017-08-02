@@ -8,7 +8,8 @@
 	"rarity": "COMMON",
 	"description": "Taunt",
 	"attributes": {
-		"TAUNT": true
+		"TAUNT": true,
+		"NAME": "Moromah Baboon"
 	},
 	"collectible": true,
 	"set": "THE_OLD_GODS",

@@ -25,6 +25,7 @@
 		}
 	},
 	"attributes": {
+		"NAME": "The Flying Lotus",
 		"BATTLECRY": true
 	},
 	"collectible": true,

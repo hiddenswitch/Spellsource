@@ -9,6 +9,7 @@
 	"race": "MECH",
 	"description": "Divine Shield",
 	"attributes": {
+		"NAME": "Tree Pangolin",
 		"DIVINE_SHIELD": true
 	},
 	"collectible": true,
