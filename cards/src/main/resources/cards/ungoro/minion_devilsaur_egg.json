@@ -9,7 +9,7 @@
 	"description": "Deathrattle: Summon a 5/5 Devilsaur.",
 	"deathrattle": {
 		"class": "SummonSpell",
-		"card": "token_Devilsaur"
+		"card": "token_devilsaur"
 	},
 	"attributes": {
 		"DEATHRATTLES": true
