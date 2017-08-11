@@ -43,7 +43,6 @@ public class GeneratorTest {
 		jsonObjectStream.stream().filter(json -> json.containsKey("TARGET")).forEach(json -> {
 			json.put("TARGET", -json.getInteger("TARGET") - 1);
 		});
-
 		// Fix the CLASS argument
 		// Create an "enum"
 		Reflections reflections = new Reflections("net.demilich.metastone.game.spells");
