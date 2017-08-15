@@ -19,7 +19,8 @@
 			"target": "EVENT_TARGET"
 		}
 		},
-		"attributes": {
+	"attributes": {
+        "NAME": "Blowgunner",
 		"TAUNT": true
 	},
 	"collectible": true,

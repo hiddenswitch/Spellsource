@@ -15,7 +15,8 @@
 		}
 	},
 	"attributes": {
-		"BATTLECRY": true
+		"BATTLECRY": true,
+		"NAME": "Tanuki Blacksmith"
 	},
 	"collectible": true,
 	"set": "CLASSIC",
