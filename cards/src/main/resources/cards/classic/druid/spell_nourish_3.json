@@ -1,10 +1,10 @@
 {
-	"name": "+2 Mana Crystals and draw 3 cards",
+	"name": "+2 Energy and draw 3 cards",
 	"baseManaCost": 5,
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "RARE",
-	"description": "Gain 2 Mana Crystals and Draw 3 cards",
+	"description": "Gain 2 Energy and Draw 3 cards",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",

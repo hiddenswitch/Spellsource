@@ -1,12 +1,12 @@
 {
-	"name": "Truesilver Champion",
+	"name": "Challenger of Ancients",
 	"baseManaCost": 4,
 	"type": "WEAPON",
 	"damage": 4,
 	"durability": 2,
 	"heroClass": "PALADIN",
 	"rarity": "FREE",
-	"description": "Whenever your hero attacks, restore 2 Health to it.",
+	"description": "Restore 3 Health to your hero whenever it attacks.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "TargetAcquisitionTrigger",
@@ -18,7 +18,7 @@
 		"spell": {
 			"class": "HealSpell",
 			"target": "FRIENDLY_HERO",
-			"value": 2
+			"value": 3
 		}
 	},
 	"collectible": true,

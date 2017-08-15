@@ -1,5 +1,5 @@
 {
-	"name": "Murloc Warleader",
+	"name": "Tanooki Equipment",
 	"baseManaCost": 3,
 	"type": "MINION",
 	"baseAttack": 3,
@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "EPIC",
 	"race": "MURLOC",
-	"description": "Your other Murlocs have +2/+1.",
+	"description": "Your other Tanooki have +2/+1.",
 	"aura": {
 		"class": "BuffAura",
 		"target": "OTHER_FRIENDLY_MINIONS",

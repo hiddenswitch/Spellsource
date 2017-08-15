@@ -1,5 +1,5 @@
 {
-	"name": "Abyssal Enforcer",
+	"name": "Mad Handmaiden",
 	"baseManaCost": 7,
 	"type": "MINION",
 	"baseAttack": 6,
@@ -17,6 +17,7 @@
 		}
 	},
 	"attributes": {
+		"NAME": "Mad Handmaiden",
 		"BATTLECRY": true
 	},
 	"collectible": true,

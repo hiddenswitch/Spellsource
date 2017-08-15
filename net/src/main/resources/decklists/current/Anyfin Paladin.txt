@@ -3,21 +3,21 @@
 # Class: Paladin
 # Format: Wild
 #
-# 1x (0) Forbidden Healing
-# 2x (1) Mistress of Mixtures
-# 2x (2) Bluegill Warrior
-# 2x (2) Doomsayer
+# 1x (0) Reclaiming the Flesh
+# 2x (1) Sanctuary Nurse
+# 2x (2) Fanatic
+# 2x (2) Board Clear
 # 2x (2) Equality
-# 2x (2) Wild Pyromancer
-# 2x (3) Acolyte of Pain
-# 1x (3) Aldor Peacekeeper
-# 2x (3) Murloc Warleader
+# 2x (2) Necromancer
+# 2x (3) Card Draw
+# 1x (3) Butcher
+# 2x (3) Tanooki Equipment
 # 1x (4) Barnes
-# 2x (4) Consecration
-# 2x (4) Truesilver Champion
-# 1x (5) Finja, the Flying Star
-# 2x (5) Solemn Vigil
+# 2x (4) Everfire
+# 2x (4) Challenger of Ancients
+# 1x (5) Xiaolian, Blademaster
+# 2x (5) Card Draw Enhanced
 # 2x (6) Ivory Knight
 # 1x (8) Ragnaros, Lightlord
-# 1x (8) Tirion Fordring
+# 1x (8) Hanjian Wu
 # 2x (10) Anyfin Can Happen

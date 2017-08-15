@@ -6,7 +6,7 @@
 	"baseHp": 3,
 	"heroClass": "ANY",
 	"rarity": "COMMON",
-	"description": "Inspire: Summon a 1/1 Recruit.",
+	"description": "Inspire: Summon a 1/1 Kodama.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "InspireTrigger",

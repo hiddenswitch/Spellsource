@@ -6,7 +6,7 @@
 	"baseHp": 3,
 	"heroClass": "PALADIN",
 	"rarity": "COMMON",
-	"description": "Battlecry: If you're holding a Dragon, summon two 1/1 Whelps.",
+	"description": "Battlecry: If you're holding a Dragon, summon two 1/1 Terracota Warriors.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {

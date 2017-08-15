@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "ANY",
 	"rarity": "FREE",
-	"description": "Gain 1 Mana Crystal this turn only. (Won't trigger Gallywix.)",
+	"description": "Gain 1 Energy this turn only. (Won't trigger Gallywix.)",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "GainManaSpell",

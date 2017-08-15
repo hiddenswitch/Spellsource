@@ -11,5 +11,5 @@ rm -f $OUTPUT_DIR/git_push.sh
 rm -f $OUTPUT_DIR/Spellsource.Client.sln
 rm -f $OUTPUT_DIR/mono_nunit_test.sh
 rm -f $OUTPUT_DIR/README.md
-rm -rf $OUTPUT_DIR/Scripts/Minionate.Client/Properties
-rm -f $OUTPUT_DIR/Scripts/Minionate.Client/packages.config
+rm -rf $OUTPUT_DIR/Scripts/Spellsource.Client/Properties
+rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/packages.config

@@ -1,10 +1,10 @@
 {
-	"name": "Animal Companion",
+	"name": "Aid of Shiramba",
 	"baseManaCost": 3,
 	"type": "SPELL",
 	"heroClass": "HUNTER",
 	"rarity": "FREE",
-	"description": "Summon a random Beast Companion.",
+	"description": "Summon a random Animal Spirit.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonRandomSpell",

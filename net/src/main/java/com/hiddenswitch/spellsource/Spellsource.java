@@ -15,6 +15,7 @@ import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -26,6 +27,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
@@ -155,6 +158,9 @@ public class Spellsource {
 	 */
 	public List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
+			cachedStandardDecks = Stream.of("Basic Biologist", "Basic Cyborg", "Basic Gamer", "Basic Octopod Demo", "Basic Resurrector")
+					.map(DeckCreateRequest::fromDeckCatalogue).collect(Collectors.toList());
+			/*
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
 			Set<URL> resourceList = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(toSet());
 			cachedStandardDecks = resourceList.stream().map(c -> {
@@ -172,6 +178,7 @@ public class Spellsource {
 					return null;
 				}
 			}).filter(c -> null != c).collect(toList());
+			*/
 		}
 
 		return cachedStandardDecks;
@@ -201,9 +208,8 @@ public class Spellsource {
 	 * @param attribute The attribute this handler will be persisting.
 	 * @param handler   A handler that is passed a {@link PersistenceContext}, whose methods provide the event and a
 	 *                  mechanism to update the entity with a new attribute value (both in the {@link GameContext} where
-	 *                  this event is currently taking place and in the entity's corresponding {@link
-	 *                  InventoryRecord} where the value will be persisted in a
-	 *                  database.
+	 *                  this event is currently taking place and in the entity's corresponding {@link InventoryRecord}
+	 *                  where the value will be persisted in a database.
 	 * @param <T>       The type of the event that corresponds to the provided {@link GameEventType}.
 	 */
 	public <T extends GameEvent> void persistAttribute(String id, GameEventType event, Attribute attribute, Handler<PersistenceContext<T>> handler) {

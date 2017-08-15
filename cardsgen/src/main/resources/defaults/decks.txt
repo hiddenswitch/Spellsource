@@ -16,8 +16,8 @@ Malygos Rogue
 Midrange Darwin Shaman
 Midrange Hunter
 Mill Rogue
-Murloc Apocadin
-Murloc Shaman
+Tanooki Apocadin
+Tanooki Shaman
 N'Zoth Control Priest
 N'Zoth Dragon Priest
 N'Zoth Dragon Shaman

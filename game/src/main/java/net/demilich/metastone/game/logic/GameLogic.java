@@ -716,14 +716,14 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Actor, Actor)}, dealing damage is not considered an "fight" for game purposes.
 	 * <p>
 	 * Damage can activate a number of triggered effects, both from receiving it (such as Acolyte of Pain's {@link
-	 * DamageReceivedTrigger}) and from dealing it (such as Water Elemental's {@link DamageCausedTrigger}). However,
+	 * DamageReceivedTrigger}) and from dealing it (such as Lightning Automaton's {@link DamageCausedTrigger}). However,
 	 * damage negated by an {@link Actor} with {@link Attribute#DIVINE_SHIELD} or {@link Attribute#IMMUNE} effects is
 	 * not considered to have been successfully dealt, and thus will not trigger any on-damage triggered effects.
 	 * <p>
 	 * A {@link Hero} with nonzero {@link Hero#getArmor()} will have any damage deducted from their armor before their
 	 * hitpoints: any damage beyond the {@link Actor}'s current Armor will be deducted from their hitpoints. Armor will
 	 * not prevent damage from being dealt: damage dealt only to Armor still counts as damage for the purpose of effects
-	 * such as Water Elemental and Floating Watcher.
+	 * such as Lightning Automaton and Floating Watcher.
 	 *
 	 * @param player            The originating player of the damage.
 	 * @param target            The target to damage.

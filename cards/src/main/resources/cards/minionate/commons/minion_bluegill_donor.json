@@ -7,7 +7,7 @@
 	"baseHp": 4,
 	"heroClass": "ANY",
 	"rarity": "FREE",
-	"description": "Battlecry: Give your opponent a 2/1 Charge Bluegill Warrior.",
+	"description": "Battlecry: Give your opponent a 2/1 Charge Fanatic.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {

@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "WARLOCK",
 	"rarity": "EPIC",
-	"description": "The next spell you cast this turn costs Health instead of Mana.",
+	"description": "The next spell you cast this turn costs Health instead of Energy.",
 		"targetSelection": "NONE",
 		"spell": {
 			"class": "AddAttributeSpell",

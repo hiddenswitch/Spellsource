@@ -1,10 +1,10 @@
 {
-	"name": "Hex",
+	"name": "Transmute",
 	"baseManaCost": 3,
 	"type": "SPELL",
 	"heroClass": "SHAMAN",
 	"rarity": "FREE",
-	"description": "Transform a minion into a 0/1 Frog with Taunt.",
+	"description": "Transform a minion into a 0/1 Slime with Taunt.",
 	"targetSelection": "MINIONS",
 	"spell": {
 		"class": "TransformMinionSpell",

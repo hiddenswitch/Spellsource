@@ -1,5 +1,5 @@
 {
-	"name": "Stonehill Defender",
+	"name": "Rabid Tanuki",
 	"baseManaCost": 3,
 	"baseAttack": 1,
 	"baseHp": 4,
@@ -24,8 +24,9 @@
 		}
 	},
 	"attributes": {
-	"BATTLECRY": true,
-	"TAUNT": true
+		"NAME": "Rabid Tanuki",
+        "BATTLECRY": true,
+        "TAUNT": true
 	},
 	"collectible": true,
 	"set": "CUSTOM",

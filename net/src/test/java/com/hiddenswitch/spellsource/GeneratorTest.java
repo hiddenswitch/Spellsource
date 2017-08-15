@@ -12,6 +12,7 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.reflections.Reflections;
 
@@ -32,6 +33,7 @@ import static org.junit.Assert.*;
 
 public class GeneratorTest {
 	@Test
+	@Ignore
 	public void testSpellRecords() throws Exception {
 		Generator generator = new Generator();
 		List<Generator.Record> spells = generator.getSpellRecords();
@@ -123,6 +125,7 @@ public class GeneratorTest {
 	}
 
 	@Test
+	@Ignore
 	public void testNewSummonSpell() throws CardParseException, IOException, URISyntaxException {
 		GameContext gc = GameContext.uninitialized(HeroClass.MAGE, HeroClass.HUNTER);
 		Player player1 = gc.getPlayer1();

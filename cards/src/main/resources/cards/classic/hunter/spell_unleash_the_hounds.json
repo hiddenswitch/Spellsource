@@ -1,10 +1,10 @@
 {
-	"name": "Unleash the Hounds",
+	"name": "Amate's Howl",
 	"baseManaCost": 3,
 	"type": "SPELL",
 	"heroClass": "HUNTER",
 	"rarity": "COMMON",
-	"description": "For each enemy minion, summon a 1/1 Hound with Charge.",
+	"description": "For each enemy minion, summon a 1/1 Wolf with Charge.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonSpell",

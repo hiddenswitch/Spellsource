@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "COMMON",
 	"race": "MECH",
-	"description": "Battlecry: Give a random friendly Beast, Dragon, and Murloc +1/+1.",
+	"description": "Battlecry: Give a random friendly Beast, Dragon, and Tanooki +1/+1.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {

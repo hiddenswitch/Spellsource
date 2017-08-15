@@ -7,7 +7,7 @@
 	"baseHp": 5,
 	"heroClass": "ANY",
 	"rarity": "COMMON",
-	"description": "Battlecry: Give your opponent (1) mana crystal next turn only.",
+	"description": "Battlecry: Give your opponent (1) energy crystal next turn only.",
 	"battlecry": {
 		"spell": {
 			"class": "GainManaSpell",		

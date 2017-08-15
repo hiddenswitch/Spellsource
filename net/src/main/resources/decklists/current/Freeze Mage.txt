@@ -5,11 +5,11 @@
 #
 # 2x (1) Ice Lance
 # 1x (2) Bloodmage Thalnos
-# 2x (2) Doomsayer
+# 2x (2) Board Clear
 # 2x (2) Frostbolt
 # 2x (2) Loot Hoarder
 # 2x (2) Novice Engineer
-# 2x (3) Acolyte of Pain
+# 2x (3) Card Draw
 # 2x (3) Arcane Intellect
 # 2x (3) Forgotten Torch
 # 2x (3) Frost Nova

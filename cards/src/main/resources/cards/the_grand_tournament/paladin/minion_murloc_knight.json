@@ -1,5 +1,5 @@
 {
-	"name": "Murloc Knight",
+	"name": "Tanooki Knight",
 	"baseManaCost": 4,
 	"type": "MINION",
 	"baseAttack": 3,
@@ -7,7 +7,7 @@
 	"heroClass": "PALADIN",
 	"rarity": "COMMON",
 	"race": "MURLOC",
-	"description": "Inspire: Summon a random Murloc.",
+	"description": "Inspire: Summon a random Tanooki.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "InspireTrigger",

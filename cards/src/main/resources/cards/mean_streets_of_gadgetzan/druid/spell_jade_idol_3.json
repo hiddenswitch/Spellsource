@@ -1,10 +1,10 @@
 {
-	"name": "Summon Jade Golem and Add 3",
+	"name": "Summon Animated Shuriken and Add 3",
 	"baseManaCost": 1,
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "RARE",
-	"description": "Summon a Jade Golem. Shuffle 3 copies of this card into your deck.",
+	"description": "Summon a Animated Shuriken. Shuffle 3 copies of this card into your deck.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",
@@ -17,7 +17,7 @@
 			},
 			{
 				"class": "CreateSummonSpell",
-				"name": "Jade Golem",
+				"name": "Animated Shuriken",
 				"attackBonus": {
 					"class": "AttributeValueProvider",
 					"target": "FRIENDLY_PLAYER",

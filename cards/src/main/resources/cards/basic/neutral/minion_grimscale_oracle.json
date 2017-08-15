@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"race": "MURLOC",
-	"description": "Your other Murlocs have +1 Attack.",
+	"description": "Your other Tanooki have +1 Attack.",
 	"aura": {
 		"class": "BuffAura",
 		"target": "OTHER_FRIENDLY_MINIONS",

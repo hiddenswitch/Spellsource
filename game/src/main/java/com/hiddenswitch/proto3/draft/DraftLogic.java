@@ -74,23 +74,12 @@ public class DraftLogic {
 	private List<List<String>> createDraftCards(HeroClass hero) {
 		ArrayList<List<Card>> draftCards = new ArrayList<>(DRAFTS);
 
-		List<CardSet> equals = Arrays.asList(CardSet.BASIC,
-				CardSet.CLASSIC,
-				CardSet.BLACKROCK_MOUNTAIN,
-				CardSet.GOBLINS_VS_GNOMES,
-				CardSet.LEAGUE_OF_EXPLORERS,
-				CardSet.MEAN_STREETS_OF_GADGETZHAN,
-				CardSet.NAXXRAMAS,
-				CardSet.ONE_NIGHT_IN_KARAZHAN,
-				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.THE_OLD_GODS,
-				CardSet.CUSTOM);
+		List<CardSet> equals = Arrays.asList(CardSet.Spellsource);
 
 		// Until we have enough mean streets cards, don't use it
 		CardSet latestExpansion = CardSet.Spellsource;
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(
-				CardType.CHOOSE_ONE,
 				CardType.MINION,
 				CardType.SPELL,
 				CardType.WEAPON

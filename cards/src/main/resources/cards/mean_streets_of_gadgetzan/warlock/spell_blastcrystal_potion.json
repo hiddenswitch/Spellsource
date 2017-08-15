@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "WARLOCK",
 	"rarity": "COMMON",
-	"description": "Destroy a minion and one of your Mana Crystals.",
+	"description": "Destroy a minion and one of your Energy.",
 	"targetSelection": "MINIONS",
 	"spell": {
 		"class": "MetaSpell",

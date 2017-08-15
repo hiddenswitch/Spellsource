@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "SHAMAN",
 	"rarity": "COMMON",
-	"description": "Summon 4 1/1 Murlocs.",
+	"description": "Summon 4 1/1 Tanooki.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonSpell",

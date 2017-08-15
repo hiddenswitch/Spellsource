@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "FREE",
-	"description": "Gain an empty Mana Crystal.",
+	"description": "Gain an empty Energy.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "EitherOrSpell",

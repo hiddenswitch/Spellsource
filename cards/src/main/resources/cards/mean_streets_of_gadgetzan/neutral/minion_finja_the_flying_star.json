@@ -1,5 +1,5 @@
 {
-	"name": "Finja, the Flying Star",
+	"name": "Xiaolian, Blademaster",
 	"baseManaCost": 5,
 	"type": "MINION",
 	"baseAttack": 2,
@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "LEGENDARY",
 	"race": "MURLOC",
-	"description": "Stealth. Whenever this attacks and kills a minion, summon 2 Murlocs from your deck.",
+	"description": "Stealth. Whenever this attacks and kills a minion, summon 2 Tanooki from your deck.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "AfterPhysicalAttackTrigger",

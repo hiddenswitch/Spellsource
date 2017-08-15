@@ -4,14 +4,14 @@
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "COMMON",
-	"description": "Summon a Jade Golem. Gain an empty Mana Crystal.",
+	"description": "Summon a Animated Shuriken. Gain an empty Energy.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",
 		"spells": [
 			{
 				"class": "CreateSummonSpell",
-				"name": "Jade Golem",
+				"name": "Animated Shuriken",
 				"attackBonus": {
 					"class": "AttributeValueProvider",
 					"target": "FRIENDLY_PLAYER",

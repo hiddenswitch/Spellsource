@@ -8,14 +8,14 @@
 # 2x (1) Northshire Cleric
 # 2x (1) Pint-Size Potion
 # 2x (1) Potion of Madness
-# 2x (1) Power Word: Shield
+# 2x (1) Vestal Blessing
 # 1x (2) Confuse
 # 2x (2) Divine Spirit
-# 2x (2) Doomsayer
+# 2x (2) Board Clear
 # 2x (2) Loot Hoarder
-# 2x (2) Wild Pyromancer
-# 2x (3) Acolyte of Pain
-# 2x (3) Kabal Talonpriest
+# 2x (2) Necromancer
+# 2x (3) Card Draw
+# 2x (3) Vahlok Vestal
 # 2x (4) Auchenai Soulpriest
 # 2x (5) Djinni of Zephyrs
 # 1x (6) Emperor Thaurissan
