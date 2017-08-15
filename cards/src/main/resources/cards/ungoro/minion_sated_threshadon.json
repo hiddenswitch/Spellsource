@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "COMMON",
 	"race": "BEAST",
-	"description": "Deathrattle: Summon three 1/1 Murlocs.",
+	"description": "Deathrattle: Summon three 1/1 Tanooki.",
 	"deathrattle": {
 		"class": "SummonSpell",
 		"cards": [

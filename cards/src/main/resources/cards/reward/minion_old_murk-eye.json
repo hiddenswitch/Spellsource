@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "LEGENDARY",
 	"race": "MURLOC",
-	"description": "Charge. Has +1 Attack for each other Murloc on the battlefield.",
+	"description": "Charge. Has +1 Attack for each other Tanooki on the battlefield.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "BoardChangedTrigger"

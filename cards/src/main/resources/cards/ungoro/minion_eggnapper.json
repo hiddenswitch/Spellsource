@@ -1,20 +1,21 @@
 {
-	"name": "Eggnapper",
+	"name": "Forest Witch",
 	"baseManaCost": 3,
 	"type": "MINION",
 	"baseAttack": 3,
 	"baseHp": 1,
 	"heroClass": "ANY",
 	"rarity": "COMMON",
-	"description": "Deathrattle: Summon two 1/1 Raptors.",
+	"description": "Deathrattle: Summon two 1/1 Wild Cats.",
 	"deathrattle": {
 		"class": "SummonSpell",
 		"cards": [
-		"token_raptor",
-		"token_raptor"
+			"token_raptor",
+			"token_raptor"
 		]
 	},
 	"attributes": {
+		"NAME": "Forest Witch",
 		"DEATHRATTLES": true
 	},
 	"collectible": true,

@@ -6,7 +6,7 @@ This information is used on all card types.
 	cards can be distinguished from another card.
 "name": String. The name of the card. This is the displayed name on the card,
 	and does not have to be unique.
-"baseManaCost": Integer. This is the base mana cost for the card before any mana
+"baseManaCost": Integer. This is the base energy cost for the card before any energy
 	modification.
 "type": CardType Enum. The type of card the card is. There are several different
 	types of cards:
@@ -38,7 +38,7 @@ This information is used on all card types.
 		"EPIC"
 		"LEGENDARY"
 "description": String. The card text that is displayed on the card.
-"manaCostModifier": Integer. The mana cost modifier that changes how much the
+"manaCostModifier": Integer. The energy cost modifier that changes how much the
 	card costs to play.
 "collectible": Boolean. Whether the card is collectible or not.
 "set": CardSet Enum. Which card set the card belongs to. Currently, these are:

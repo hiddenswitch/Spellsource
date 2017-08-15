@@ -6,10 +6,10 @@
 	"baseHp": 1,
 	"heroClass": "ROGUE",
 	"rarity": "COMMON",
-	"description": "Stealth. Deathrattle: Summon a Jade Golem.",
+	"description": "Stealth. Deathrattle: Summon a Animated Shuriken.",
 	"deathrattle": {
 		"class": "CreateSummonSpell",
-		"name": "Jade Golem",
+		"name": "Animated Shuriken",
 		"attackBonus": {
 			"class": "AttributeValueProvider",
 			"target": "FRIENDLY_PLAYER",

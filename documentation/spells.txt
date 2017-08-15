@@ -49,7 +49,7 @@ Examples: Captain Greenskin, Deadly Poison, Upgrade!
 “hpBonus”: Optional Integer. The amount of Durability to give the target Weapon.
 
 CardCostModifierSpell
-Gives a mana cost modifier to the target card. This should target card types or specific cards.
+Gives a energy cost modifier to the target card. This should target card types or specific cards.
 Examples: Loatheb, Millhouse Manastorm, Dragon Consort, Wilfred Fizzlebang
 "cardCostModifier": CardCostModifier. The CardCostModifier to add to the target.
 
@@ -75,7 +75,7 @@ CheckDeadSpell
 []
 
 ClearOverloadSpell
-Removes the Overloaded Mana Crystals of the target Player.
+Removes the Overloaded Energy of the target Player.
 Examples: Lava Shock
 
 CloneMinionSpell
@@ -83,7 +83,7 @@ CloneMinionSpell
 
 ComboSpell
 Used for spells with a combo effect. The first effect is the normal action, and the second activates only as a combo.
-Examples: Sabotage, Eviscerate, SI:7 Agent
+Examples: Sabotage, Eviscerate, Bakeneko Assassin
 "spell1": Normal spell.
 "spell2": Combo effect.
 
@@ -96,7 +96,7 @@ Examples: Old Murk-Eye, Cogmaster, Goblin Sapper.
 
 ConditionalEffectSpell
 Has an effect only when a condition is met, similar to a ComboSpell.
-Examples: Mortal Coil, Quick Shot, Southsea Deckhand
+Examples: Stroke of Insanity, Quick Shot, Southsea Deckhand
 "spell1": Normal spell.
 "spell2": Spell to cast if condition is met.
 "condition": Condition to check for.
@@ -112,7 +112,7 @@ Examples: Mind Vision, Convert, Chromaggus
 
 CopyDeathrattleSpell
 Copies the target’s Deathrattles.
-Examples: Unearthed Raptor
+Examples: Unearthed Cat
 
 CopyHeroPower
 Copies the target Player’s Hero Power.
@@ -125,7 +125,7 @@ Examples: Fireball, Frostbolt, Hellfire, Lightning Storm, Steady Shot (Hero Powe
 
 DestroyAllExceptOneSpell
 Destroys all minions except one. 
-Examples: Enter the Coliseum(leaves one minion for each gamePlayer), Brawl
+Examples: Enter the Coliseum(leaves one minion for each gamePlayer), Bender
 "target": The pool of minions to destroy.
 "filter": The condition to choose which minion survives.
 
@@ -146,7 +146,7 @@ Examples: Fel Reaver
 
 DiscardSpell
 Discards a number of target Player’s cards.
-Examples: Doomguard, Soulfire, Deathwing, Astral Communion
+Examples: Bogovey Samurai, Soulfire, Deathwing, Astral Communion
 “value”: Integer. The number of cards to discard.
 “targetPlayer”: Optional Player. Default is SELF. The gamePlayer to discard cards.
 
@@ -185,7 +185,7 @@ Examples: Coldlight Oracle, Gnomish Inventor, Cult Master
 
 EitherOrSpell
 Similar to ConditionalEffectSpell, has 1 effect if the spell meets a condition and another if it does not.
-Examples: Wild Growth(Excess Mana),Ice Lance, Upgrade!
+Examples: Wild Growth(Excess Energy),Ice Lance, Upgrade!
 "spell1": Spell to cast if condition is met.
 "spell2": Spell to cast if condition is not met.
 "condition": Condition to check for.
@@ -215,9 +215,9 @@ Target attacks the wrong enemy.
 Examples: Ogre Ninja, Mogor the Ogre, Ogre Brute, Ogre Warmaul
 
 GainManaSpell
-Gives target Player additional Mana this turn.
-Examples: Innervate, The Coin
-“value”: Integer. The amount of Mana to gain.
+Gives target Player additional Energy this turn.
+Examples: Focus, The Coin
+“value”: Integer. The amount of Energy to gain.
 
 HealSpell
 Heals the target.
@@ -265,10 +265,10 @@ ModifyDurabilitySpell {}: Combine with Attribute Spell? (Only applies to Weapons
 []
 
 ModifyMaxManaSpell {}: Is this possible to combine with GainManaSpell?
-Target hero gains or loses mana crystals.
+Target hero gains or loses energy crystals.
 Examples: Wild Growth, Darnassus Aspirant, Felguard
 "value": Number of crystals to gain. Negative values destroy crystals instead.
-"targetPlayer": Player whose mana will be modified. Default is "SELF".
+"targetPlayer": Player whose energy will be modified. Default is "SELF".
 
 MultiTargetSpell
 A Spell that targets multiple random Entities with the given Spell.
@@ -353,7 +353,7 @@ Examples: Resurrect
 
 ReturnMinionToHandSpell {}: Combine with ShuffleMinionToDeck (DeckLocation)
 Returns a minion to its owners hand.
-Examples: Dream(Ysera), Sap, Anub'Arak
+Examples: Dream(Ysera), Paralyzing Touch, Anub'Arak
 "target": The target of the spell.
 
 RevertableSpell
@@ -367,7 +367,7 @@ Examples: Redemption, Ancestral Spirit, Reincarnate
 
 SetAttackSpell
 Sets the attack of a minion to a specified value.
-Examples: Humility, Aldor Peacekeeper, Inner Fire
+Examples: Humility, Butcher, Inner Fire
 "value": New attack value of the target.
 
 
@@ -407,7 +407,7 @@ Examples: Spellbender, Noble Sacrifice
 
 SummonRandomMinionFilteredSpell
 Summons a random minion from a filtered set.
-Examples: Piloted Shredder, Sneed's Old Shredder, Murloc Knight, Bane of Doom
+Examples: Piloted Shredder, Sneed's Old Shredder, Tanooki Knight, Bane of Doom
 "cardFilter": The set of minions to summon from.
 
 SummonRandomMinionFromSpell {}: Rename to SummonRandomMinionFromSourceSpell
@@ -420,7 +420,7 @@ Examples: Totemic Call(hero power)
 
 SummonRandomSpell
 Summons a random minion from an array.
-Examples: Animal Companion, Gelbin Mekkatorque, Elite Tauren Chieftain
+Examples: Aid of Shiramba, Gelbin Mekkatorque, Elite Tauren Chieftain
 "cards": Array of cards to summon from.
 
 SummonSpell
@@ -452,7 +452,7 @@ Examples: Gnomish Experimenter
 
 TransformMinionSpell
 Transforms a minion into another minion.
-Examples: Druid of the Claw, Faceless Manipulator, Recombobulator, Tinkmaster Overspark
+Examples: Fassnu Ronin, Faceless Manipulator, Recombobulator, Tinkmaster Overspark
 “card”: Optional Card ID. The Card ID to transform into.
 []
 

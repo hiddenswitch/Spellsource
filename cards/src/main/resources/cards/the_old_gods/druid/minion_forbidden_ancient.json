@@ -6,7 +6,7 @@
 	"baseHp": 1,
 	"heroClass": "DRUID",
 	"rarity": "EPIC",
-	"description": "Battlecry: Spend all your Mana. Gain +1/+1 for each Mana spent.",
+	"description": "Battlecry: Spend all your Energy. Gain +1/+1 for each Energy spent.",
 	"battlecry": {
 		"spell": {
 			"class": "MetaSpell",

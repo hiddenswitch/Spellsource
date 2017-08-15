@@ -1,5 +1,5 @@
 {
-	"name": "Defias Bandit",
+	"name": "Fox Cub",
 	"baseManaCost": 2,
 	"type": "MINION",
 	"baseAttack": 2,
@@ -7,6 +7,9 @@
 	"heroClass": "ROGUE",
 	"rarity": "FREE",
 	"description": "",
+	"attributes": {
+		"NAME": "Fox Cub"
+	},
 	"collectible": false,
 	"set": "CLASSIC",
 	"fileFormatVersion": 1

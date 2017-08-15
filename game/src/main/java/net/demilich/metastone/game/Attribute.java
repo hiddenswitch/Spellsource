@@ -494,7 +494,7 @@ public enum Attribute {
 	 */
 	CANNOT_ATTACK_HERO_ON_SUMMON,
 	/**
-	 * An attribute that keeps track of how much attack and hitpoints to add to the next Jade Golem that gets summoned.
+	 * An attribute that keeps track of how much attack and hitpoints to add to the next Animated Shuriken that gets summoned.
 	 */
 	JADE_BUFF,
 	/**

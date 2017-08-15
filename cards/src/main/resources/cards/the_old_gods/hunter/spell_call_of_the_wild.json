@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "HUNTER",
 	"rarity": "EPIC",
-	"description": "Summon all 3 Animal Companions.",
+	"description": "Summon all 3 Aid of Shirambas.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonSpell",

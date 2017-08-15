@@ -7,7 +7,7 @@
 	"heroClass": "SHAMAN",
 	"rarity": "RARE",
 	"race": "TOTEM",
-	"description": "At the end of your turn, summon a 1/1 Murloc.",
+	"description": "At the end of your turn, summon a 1/1 Tanooki.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "TurnEndTrigger",

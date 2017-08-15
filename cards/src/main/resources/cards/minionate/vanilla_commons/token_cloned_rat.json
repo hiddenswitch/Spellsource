@@ -7,6 +7,9 @@
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"description": "",
+	"attributes": {
+		"NAME": "Lovebird"
+	},
 	"collectible": false,
 	"set": "Spellsource",
 	"fileFormatVersion": 1

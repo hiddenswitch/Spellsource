@@ -6,7 +6,7 @@
 	"baseHp": 4,
 	"heroClass": "ANY",	
 	"rarity": "EPIC",
-	"description": "Battlecry: Adapt your Murlocs",
+	"description": "Battlecry: Adapt your Tanooki",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {

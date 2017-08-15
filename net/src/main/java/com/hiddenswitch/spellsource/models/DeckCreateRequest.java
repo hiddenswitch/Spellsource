@@ -1,9 +1,14 @@
 package com.hiddenswitch.spellsource.models;
 
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,6 +21,28 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	private boolean draft;
 	private List<String> inventoryIds;
 	private List<String> cardIds;
+
+	public static DeckCreateRequest fromDeckCatalogue(String name) {
+		try {
+			DeckCatalogue.loadDecksFromPackage();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+		DeckCreateRequest request = new DeckCreateRequest()
+				.withCardIds(new ArrayList<>());
+		final Deck deck = DeckCatalogue.getDeckByName(name);
+		for (Card card : deck.getCards()) {
+			request.getCardIds().add(card.getCardId());
+		}
+
+		request.setName(deck.getName());
+		request.setHeroClass(deck.getHeroClass());
+
+		return request;
+	}
 
 	public static DeckCreateRequest fromDeckList(String deckList) throws Exception {
 		DeckCreateRequest request = new DeckCreateRequest()

@@ -1,5 +1,5 @@
 {
-	"name": "Fire Elemental",
+	"name": "Sulphur Golem",
 	"baseManaCost": 6,
 	"type": "MINION",
 	"baseAttack": 6,
@@ -16,6 +16,7 @@
 		}
 	},
 	"attributes": {
+		"NAME": "Sulphur Golem",
 		"BATTLECRY": true
 	},
 	"collectible": true,

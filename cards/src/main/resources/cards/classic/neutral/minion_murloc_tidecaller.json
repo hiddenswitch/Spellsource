@@ -1,5 +1,5 @@
 {
-	"name": "Murloc Tidecaller",
+	"name": "Tanooki Tidecaller",
 	"baseManaCost": 1,
 	"type": "MINION",
 	"baseAttack": 1,
@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "RARE",
 	"race": "MURLOC",
-	"description": "Whenever you summon a Murloc, gain +1 Attack.",
+	"description": "Whenever you summon a Tanooki, gain +1 Attack.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "MinionSummonedTrigger",

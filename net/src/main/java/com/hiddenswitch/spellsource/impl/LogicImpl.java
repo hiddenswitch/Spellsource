@@ -33,6 +33,7 @@ import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -106,7 +107,8 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		response.setCreateCollectionResponse(CreateCollectionResponse.user(userId, new ArrayList<>()));
 
 		// Load in the starting deck lists
-		for (DeckCreateRequest deckCreateRequest : Spellsource.Spellsource().getStandardDecks()) {
+		List<DeckCreateRequest> standardDecks = Spellsource.Spellsource().getStandardDecks();
+		for (DeckCreateRequest deckCreateRequest : standardDecks) {
 			final DeckCreateResponse deckCreate = decks.sync().createDeck(deckCreateRequest.clone().withUserId(userId));
 			response.getDeckCreateResponses().add(deckCreate);
 			response.getCreateCollectionResponse().getCreatedInventoryIds().addAll(deckCreate.getInventoryIds());

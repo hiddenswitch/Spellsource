@@ -1,6 +1,6 @@
 {
 	"id": "spell_mc_brawl",
-	"name": "MC Brawl",
+	"name": "MC Bender",
 	"baseManaCost": 10,
 	"type": "SPELL",
 	"heroClass": "ANY",

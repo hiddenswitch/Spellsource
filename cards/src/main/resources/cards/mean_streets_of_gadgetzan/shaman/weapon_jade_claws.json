@@ -6,12 +6,12 @@
 	"durability": 2,
 	"heroClass": "SHAMAN",
 	"rarity": "RARE",
-	"description": "Battlecry: Summon a Jade Golem. Overload: (1)",
+	"description": "Battlecry: Summon a Animated Shuriken. Overload: (1)",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {
 			"class": "CreateSummonSpell",
-			"name": "Jade Golem",
+			"name": "Animated Shuriken",
 			"attackBonus": {
 				"class": "AttributeValueProvider",
 				"target": "FRIENDLY_PLAYER",

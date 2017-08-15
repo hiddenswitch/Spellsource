@@ -1,5 +1,5 @@
 {
-	"name": "Primordial Drake",
+	"name": "Frenzied Panda",
 	"baseManaCost": 8,
 	"type": "MINION",
 	"baseAttack": 4,
@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "EPIC",
 	"race": "DRAGON",
-	"description": "Battlecry: Deal 2 damage to all other minions.",
+	"description": "Taunt. Battlecry: Deal 2 damage to all other minions.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {
@@ -17,6 +17,7 @@
 	}
 	},
 	"attributes": {
+		"NAME": "Frenzied Panda",
 		"BATTLECRY": true,
 		"TAUNT": true
 	},

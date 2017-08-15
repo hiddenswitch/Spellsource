@@ -6,7 +6,7 @@
 	"baseHp": 4,
 	"heroClass": "PALADIN",	
 	"rarity": "RARE",
-	"description": "Battlecry: Adapt your Silver Hand Recruits.",
+	"description": "Battlecry: Adapt your Kodamas.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {

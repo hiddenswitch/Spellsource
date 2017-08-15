@@ -6,12 +6,12 @@
 	"baseHp": 6,
 	"heroClass": "DRUID",
 	"rarity": "COMMON",
-	"description": "Taunt. Battlecry: Summon a Jade Golem.",
+	"description": "Taunt. Battlecry: Summon a Animated Shuriken.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {
 			"class": "CreateSummonSpell",
-			"name": "Jade Golem",
+			"name": "Animated Shuriken",
 			"attackBonus": {
 				"class": "AttributeValueProvider",
 				"target": "FRIENDLY_PLAYER",

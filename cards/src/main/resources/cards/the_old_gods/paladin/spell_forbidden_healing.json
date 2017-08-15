@@ -1,10 +1,10 @@
 {
-	"name": "Forbidden Healing",
+	"name": "Reclaiming the Flesh",
 	"baseManaCost": 0,
 	"type": "SPELL",
 	"heroClass": "PALADIN",
 	"rarity": "EPIC",
-	"description": "Spend all your mana. Heal for double the mana spent.",
+	"description": "Spend all your energy. Heal for double the energy spent.",
 	"targetSelection": "ANY",
 	"spell": {
 		"class": "MetaSpell",

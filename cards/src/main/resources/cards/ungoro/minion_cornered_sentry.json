@@ -6,7 +6,7 @@
 	"baseHp": 6,
 	"heroClass": "WARRIOR",
 	"rarity": "RARE",
-	"description": "Battlecry: Summon three a 1/1 Raptors for your opponent.",
+	"description": "Battlecry: Summon three a 1/1 Cats for your opponent.",
 	"battlecry": {
 	"spell": {
 		"class": "SummonSpell",

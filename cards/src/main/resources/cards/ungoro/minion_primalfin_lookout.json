@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "COMMON",
 	"race": "MURLOC",
-	"description": "Battlecry: If you control another Murloc, Discover a Murloc.",
+	"description": "Battlecry: If you control another Tanooki, Discover a Tanooki.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {

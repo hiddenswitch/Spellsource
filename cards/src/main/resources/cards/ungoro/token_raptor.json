@@ -1,5 +1,5 @@
 {
-	"name": "Raptor",
+	"name": "Cat",
 	"baseManaCost": 1,
 	"type": "MINION",
 	"baseAttack": 1,
@@ -7,6 +7,9 @@
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"race": "BEAST",
+	"attributes": {
+		"NAME": "Wild Cat"
+	},
 	"description": "",
 	"collectible": false,
 	"set": "CUSTOM",

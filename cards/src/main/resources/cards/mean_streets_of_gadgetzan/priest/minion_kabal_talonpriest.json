@@ -1,5 +1,5 @@
 {
-	"name": "Kabal Talonpriest",
+	"name": "Vahlok Vestal",
 	"baseManaCost": 3,
 	"type": "MINION",
 	"baseAttack": 3,
@@ -15,6 +15,7 @@
 		}
 	},
 	"attributes": {
+		"NAME": "Vahlok Vestal",
 		"BATTLECRY": true
 	},
 	"collectible": true,

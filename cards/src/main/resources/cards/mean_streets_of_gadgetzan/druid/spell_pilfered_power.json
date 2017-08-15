@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "EPIC",
-	"description": "Gain an empty Mana Crystal for each friendly minion.",
+	"description": "Gain an empty Energy for each friendly minion.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "EitherOrSpell",

@@ -6,7 +6,7 @@
 	"baseHp": 1,
 	"heroClass": "ANY",
 	"rarity": "COMMON",
-	"description": "Call to Arms: Hire a 1/1 Rat.",
+	"description": "Call to Arms: Hire a 1/1 Lovebird.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {
@@ -15,6 +15,7 @@
 		}
 	},
 	"attributes": {
+		"NAME": "Lovebirds",
 		"BATTLECRY": true
 	},
 	"collectible": true,
