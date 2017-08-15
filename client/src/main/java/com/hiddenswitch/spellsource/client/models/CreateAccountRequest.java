@@ -87,7 +87,7 @@ public class CreateAccountRequest  implements Serializable {
   }
 
    /**
-   * A password used to login to Spellsource.
+   * A password used to login to Spellsource. 
    * @return password
   **/
   @ApiModelProperty(example = "null", required = true, value = "A password used to login to Spellsource. ")

@@ -139,7 +139,7 @@ public class DefaultApi {
 
     /**
      * 
-     * Create an account with Spellsource.
+     * Create an account with Spellsource. 
      * @param request  (required)
      * @return CreateAccountResponse
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -151,7 +151,7 @@ public class DefaultApi {
 
     /**
      * 
-     * Create an account with Spellsource.
+     * Create an account with Spellsource. 
      * @param request  (required)
      * @return ApiResponse&lt;CreateAccountResponse&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -164,7 +164,7 @@ public class DefaultApi {
 
     /**
      *  (asynchronously)
-     * Create an account with Spellsource.
+     * Create an account with Spellsource. 
      * @param request  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
