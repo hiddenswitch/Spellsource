@@ -33,7 +33,7 @@ Method | HTTP request | Description
 
 
 
-Create an account with Spellsource.
+Create an account with Spellsource. 
 
 ### Example
 ```java

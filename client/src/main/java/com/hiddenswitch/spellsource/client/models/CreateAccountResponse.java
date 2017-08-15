@@ -49,7 +49,7 @@ public class CreateAccountResponse  implements Serializable {
   }
 
    /**
-   * A string containing the token to login with via the standard Spellsource authentication method.
+   * A string containing the token to login with via the standard Spellsource authentication method. 
    * @return loginToken
   **/
   @ApiModelProperty(example = "null", value = "A string containing the token to login with via the standard Spellsource authentication method. ")

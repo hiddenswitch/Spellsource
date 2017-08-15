@@ -70,7 +70,7 @@ public class DefaultApiTest {
     /**
      * 
      *
-     * Create an account with Spellsource.
+     * Create an account with Spellsource. 
      *
      * @throws ApiException
      *          if the Api call fails
