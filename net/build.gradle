@@ -4,14 +4,10 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE'
-        classpath 'jp.classmethod.aws:gradle-aws-plugin:0.21'
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
 }
 
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'jp.classmethod.aws'
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 
@@ -20,12 +16,6 @@ shadowJar {
 }
 
 mainClassName = 'com.hiddenswitch.spellsource.applications.Embedded'
-
-
-aws {
-    profileName = 'metastone_net'
-    region = 'us-east-2'
-}
 
 configurations {
     quasar
@@ -42,16 +32,10 @@ repositories {
     jcenter()
 }
 
-dependencyManagement {
-    imports {
-        mavenBom 'com.amazonaws:aws-java-sdk-bom:1.11.52'
-    }
-}
-
 dependencies {
     quasar files("lib/quasar-core-0.7.5-jdk8.jar")
 
-    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.52'
+    compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.4.1'
