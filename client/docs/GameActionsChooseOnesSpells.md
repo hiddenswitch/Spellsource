@@ -4,8 +4,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**entity** | [**Entity**](Entity.md) |  |  [optional]
-**spell** | [**SpellAction**](SpellAction.md) |  |  [optional]
+**cardInHandId** | **Integer** | The card in the hand that corresponds to these two options.  |  [optional]
+**entities** | [**List&lt;Entity&gt;**](Entity.md) | The virtual cards used to render the options.  |  [optional]
+**spells** | [**List&lt;SpellAction&gt;**](SpellAction.md) | The spells that correspond to the virtual entities. Their sourceId is set to the corresponding virtual entity.  |  [optional]
 
 
 

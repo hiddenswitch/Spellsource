@@ -8,17 +8,17 @@ import java.io.Serializable;
 public class CardReference implements Serializable {
 	private int playerId;
 	private Zones zone;
-	private int cardId;
+	private int entityId;
 	private String cardName;
 
 	protected CardReference() {
 		zone = Zones.NONE;
 	}
 
-	public CardReference(int playerId, Zones zone, int cardId, String cardName) {
+	public CardReference(int playerId, Zones zone, int entityId, String cardName) {
 		this.playerId = playerId;
 		this.zone = zone;
-		this.cardId = cardId;
+		this.entityId = entityId;
 		this.cardName = cardName;
 	}
 
@@ -29,19 +29,19 @@ public class CardReference implements Serializable {
 		}
 		CardReference rhs = (CardReference) obj;
 		return new EqualsBuilder()
-				.append(getCardId(), rhs.getCardId())
+				.append(getEntityId(), rhs.getEntityId())
 				.isEquals();
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-				.append(getCardId())
+				.append(getEntityId())
 				.toHashCode();
 	}
 
-	public int getCardId() {
-		return cardId;
+	public int getEntityId() {
+		return entityId;
 	}
 
 	public String getCardName() {
@@ -58,8 +58,8 @@ public class CardReference implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("[CardReference playerId:%d cardName:%s cardLocation:%s cardId:%d]", playerId, cardName, zone.toString(),
-				cardId);
+		return String.format("[CardReference playerId:%d cardName:%s cardLocation:%s entityId:%d]", playerId, cardName, zone.toString(),
+				entityId);
 	}
 
 }

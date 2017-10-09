@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.Entity;
 import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.models.*;
@@ -13,6 +14,7 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.*;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -59,7 +61,7 @@ public interface Games {
 	static GameActions getClientActions(GameContext workingContext, List<GameAction> actions, int playerId) {
 		final GameActions clientActions = new GameActions();
 
-		// Get the minions targeted
+		// Get the minions' indices
 		Map<Integer, Integer> minions = workingContext.getEntities()
 				.filter(e -> e.getEntityType() == EntityType.MINION)
 				.collect(Collectors.toMap(net.demilich.metastone.game.entities.Entity::getId, e -> e.getEntityLocation().getIndex()));
@@ -95,32 +97,57 @@ public interface Games {
 				.entrySet()
 				.stream()
 				.map(kv -> {
-					SpellAction spellAction = new SpellAction()
-							.sourceId(kv.getKey());
-
-					// Targetable spell
-					if (kv.getValue().size() == 1
-							&& (kv.getValue().get(0).getTargetReference() == null
-							|| kv.getValue().get(0).getTargetReference().isTargetGroup())) {
-						spellAction.action(kv.getValue().get(0).getId());
-					} else {
-						// Add all the valid targets
-						kv.getValue().stream()
-								.map(t -> new TargetActionPair()
-										.action(t.getId())
-										.target(t.getTargetReference().getId()))
-								.forEach(spellAction::addTargetKeyToActionsItem);
-					}
-
-					return spellAction;
+					final Integer sourceCardId = kv.getKey();
+					final List<PlaySpellCardAction> spellCardActions = kv.getValue();
+					return getSpellAction(sourceCardId, spellCardActions);
 				})
 				.forEach(clientActions::addSpellsItem);
+
+		clientActions.chooseOnes(new GameActionsChooseOnes());
+
+
+		// Choose one spells
+		final int[] chooseOneVirtualEntitiesId = {8000};
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.SPELL
+						&& ga instanceof PlayChooseOneCardAction)
+				.map(ga -> (PlayChooseOneCardAction) ga)
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.entrySet()
+				.stream()
+				.map(kv -> {
+					GameActionsChooseOnesSpells spell = new GameActionsChooseOnesSpells();
+					EntityLocation sourceCardLocation = workingContext.resolveCardReference(kv.getValue().get(0).getCardReference()).getEntityLocation();
+					kv.getValue().stream()
+							.collect(Collectors.groupingBy(PlayChooseOneCardAction::getChoiceCardId))
+							.entrySet().forEach(choiceGroup -> {
+
+						String cardId = choiceGroup.getKey();
+						Entity entity = Games.getEntity(workingContext, CardCatalogue.getCardById(cardId), playerId);
+						int id = chooseOneVirtualEntitiesId[0];
+						// Use the source card location
+
+						entity.id(id)
+								.getState().playable(true)
+								.location(Games.toClientLocation(sourceCardLocation));
+						List<PlayChooseOneCardAction> choiceActions = choiceGroup.getValue();
+						SpellAction choiceSpell = getSpellAction(id, choiceActions);
+
+						spell.addEntitiesItem(entity);
+						spell.addSpellsItem(choiceSpell);
+						spell.cardInHandId(kv.getKey());
+						chooseOneVirtualEntitiesId[0]++;
+					});
+
+					return spell;
+				})
+				.forEach(clientActions.getChooseOnes()::addSpellsItem);
 
 		// Choose one summons are actually play one cards with the same action
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
 				.map(ga -> (PlayMinionCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getCardId()))
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
 				.entrySet()
 				.stream()
 				.map(kv -> {
@@ -165,7 +192,7 @@ public interface Games {
 		Optional<SpellAction> heroPowerSpell = actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
 				.map(ga -> (HeroPowerAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getCardId()))
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
 				.entrySet()
 				.stream()
 				.map(kv -> {
@@ -193,7 +220,7 @@ public interface Games {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.EQUIP_WEAPON)
 				.map(ga -> (PlayWeaponCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getCardId()))
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
 				.entrySet()
 				.stream()
 				.map(kv -> {
@@ -248,6 +275,27 @@ public interface Games {
 				.collect(Collectors.toList()));
 
 		return clientActions;
+	}
+
+	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> spellCardActions) {
+		SpellAction spellAction = new SpellAction()
+				.sourceId(sourceCardId);
+
+		// Targetable spell
+		if (spellCardActions.size() == 1
+				&& (spellCardActions.get(0).getTargetReference() == null
+				|| spellCardActions.get(0).getTargetReference().isTargetGroup())) {
+			spellAction.action(spellCardActions.get(0).getId());
+		} else {
+			// Add all the valid targets
+			spellCardActions.stream()
+					.map(t -> new TargetActionPair()
+							.action(t.getId())
+							.target(t.getTargetReference().getId()))
+					.forEach(spellAction::addTargetKeyToActionsItem);
+		}
+
+		return spellAction;
 	}
 
 	/**

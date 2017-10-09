@@ -31,6 +31,8 @@ import com.hiddenswitch.spellsource.client.models.Entity;
 import com.hiddenswitch.spellsource.client.models.SpellAction;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.Serializable;
 /**
@@ -38,46 +40,77 @@ import java.io.Serializable;
  */
 
 public class GameActionsChooseOnesSpells  implements Serializable {
-  @SerializedName("entity")
-  private Entity entity = null;
+  @SerializedName("cardInHandId")
+  private Integer cardInHandId = null;
 
-  @SerializedName("spell")
-  private SpellAction spell = null;
+  @SerializedName("entities")
+  private List<Entity> entities = new ArrayList<Entity>();
 
-  public GameActionsChooseOnesSpells entity(Entity entity) {
-    this.entity = entity;
+  @SerializedName("spells")
+  private List<SpellAction> spells = new ArrayList<SpellAction>();
+
+  public GameActionsChooseOnesSpells cardInHandId(Integer cardInHandId) {
+    this.cardInHandId = cardInHandId;
     return this;
   }
 
    /**
-   * Get entity
-   * @return entity
+   * The card in the hand that corresponds to these two options. 
+   * @return cardInHandId
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public Entity getEntity() {
-    return entity;
+  @ApiModelProperty(example = "null", value = "The card in the hand that corresponds to these two options. ")
+  public Integer getCardInHandId() {
+    return cardInHandId;
   }
 
-  public void setEntity(Entity entity) {
-    this.entity = entity;
+  public void setCardInHandId(Integer cardInHandId) {
+    this.cardInHandId = cardInHandId;
   }
 
-  public GameActionsChooseOnesSpells spell(SpellAction spell) {
-    this.spell = spell;
+  public GameActionsChooseOnesSpells entities(List<Entity> entities) {
+    this.entities = entities;
+    return this;
+  }
+
+  public GameActionsChooseOnesSpells addEntitiesItem(Entity entitiesItem) {
+    this.entities.add(entitiesItem);
     return this;
   }
 
    /**
-   * Get spell
-   * @return spell
+   * The virtual cards used to render the options. 
+   * @return entities
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public SpellAction getSpell() {
-    return spell;
+  @ApiModelProperty(example = "null", value = "The virtual cards used to render the options. ")
+  public List<Entity> getEntities() {
+    return entities;
   }
 
-  public void setSpell(SpellAction spell) {
-    this.spell = spell;
+  public void setEntities(List<Entity> entities) {
+    this.entities = entities;
+  }
+
+  public GameActionsChooseOnesSpells spells(List<SpellAction> spells) {
+    this.spells = spells;
+    return this;
+  }
+
+  public GameActionsChooseOnesSpells addSpellsItem(SpellAction spellsItem) {
+    this.spells.add(spellsItem);
+    return this;
+  }
+
+   /**
+   * The spells that correspond to the virtual entities. Their sourceId is set to the corresponding virtual entity. 
+   * @return spells
+  **/
+  @ApiModelProperty(example = "null", value = "The spells that correspond to the virtual entities. Their sourceId is set to the corresponding virtual entity. ")
+  public List<SpellAction> getSpells() {
+    return spells;
+  }
+
+  public void setSpells(List<SpellAction> spells) {
+    this.spells = spells;
   }
 
 
@@ -90,13 +123,14 @@ public class GameActionsChooseOnesSpells  implements Serializable {
       return false;
     }
     GameActionsChooseOnesSpells gameActionsChooseOnesSpells = (GameActionsChooseOnesSpells) o;
-    return Objects.equals(this.entity, gameActionsChooseOnesSpells.entity) &&
-        Objects.equals(this.spell, gameActionsChooseOnesSpells.spell);
+    return Objects.equals(this.cardInHandId, gameActionsChooseOnesSpells.cardInHandId) &&
+        Objects.equals(this.entities, gameActionsChooseOnesSpells.entities) &&
+        Objects.equals(this.spells, gameActionsChooseOnesSpells.spells);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entity, spell);
+    return Objects.hash(cardInHandId, entities, spells);
   }
 
   @Override
@@ -104,8 +138,9 @@ public class GameActionsChooseOnesSpells  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameActionsChooseOnesSpells {\n");
     
-    sb.append("    entity: ").append(toIndentedString(entity)).append("\n");
-    sb.append("    spell: ").append(toIndentedString(spell)).append("\n");
+    sb.append("    cardInHandId: ").append(toIndentedString(cardInHandId)).append("\n");
+    sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
+    sb.append("    spells: ").append(toIndentedString(spells)).append("\n");
     sb.append("}");
     return sb.toString();
   }
