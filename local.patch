@@ -1,5 +1,5 @@
 diff --git a/metastone/net/src/main/resources/server.yaml b/metastone/net/src/main/resources/server.yaml
-index 19d8f0078..8d6e32310 100644
+index d0a54cf5f..7d5618aed 100644
 --- a/metastone/net/src/main/resources/server.yaml
 +++ b/metastone/net/src/main/resources/server.yaml
 @@ -10,7 +10,7 @@ info:
@@ -11,4 +11,3 @@ index 19d8f0078..8d6e32310 100644
  basePath: /v1
  schemes:
    - http
-
