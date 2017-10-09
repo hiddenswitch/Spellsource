@@ -160,10 +160,10 @@ public class Spellsource {
 		if (cachedStandardDecks == null) {
 			cachedStandardDecks = Stream.of("Basic Biologist", "Basic Cyborg", "Basic Gamer", "Basic Octopod Demo", "Basic Resurrector")
 					.map(DeckCreateRequest::fromDeckCatalogue).collect(Collectors.toList());
-			/*
+
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
 			Set<URL> resourceList = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(toSet());
-			cachedStandardDecks = resourceList.stream().map(c -> {
+			cachedStandardDecks.addAll(resourceList.stream().map(c -> {
 				try {
 					return Resources.toString(c, Charset.defaultCharset());
 				} catch (IOException e) {
@@ -177,8 +177,7 @@ public class Spellsource {
 					e.printStackTrace();
 					return null;
 				}
-			}).filter(c -> null != c).collect(toList());
-			*/
+			}).filter(c -> null != c).collect(toList()));
 		}
 
 		return cachedStandardDecks;

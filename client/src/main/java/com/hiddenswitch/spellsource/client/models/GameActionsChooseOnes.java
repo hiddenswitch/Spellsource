@@ -58,10 +58,10 @@ public class GameActionsChooseOnes  implements Serializable {
   }
 
    /**
-   * An array of choose one spells. Each spell is represented by a different card. The entities are provided. 
+   * An array of choose one spells. Each spell is represented by a different card. An entity that can be used to render a card for the option is provided. Use the spell action's card ID to figure out which options correspond to which cards in the hand. 
    * @return spells
   **/
-  @ApiModelProperty(example = "null", value = "An array of choose one spells. Each spell is represented by a different card. The entities are provided. ")
+  @ApiModelProperty(example = "null", value = "An array of choose one spells. Each spell is represented by a different card. An entity that can be used to render a card for the option is provided. Use the spell action's card ID to figure out which options correspond to which cards in the hand. ")
   public List<GameActionsChooseOnesSpells> getSpells() {
     return spells;
   }

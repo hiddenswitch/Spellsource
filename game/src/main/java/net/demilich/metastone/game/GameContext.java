@@ -957,17 +957,17 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 			switch (cardReference.getZone()) {
 				case SET_ASIDE_ZONE:
 				case DISCOVER:
-					final Optional<Entity> first = ((EntityZone<Entity>) player.getZone(cardReference.getZone())).stream().filter(e -> e.getId() == cardReference.getCardId()).findFirst();
+					final Optional<Entity> first = ((EntityZone<Entity>) player.getZone(cardReference.getZone())).stream().filter(e -> e.getId() == cardReference.getEntityId()).findFirst();
 					if (first.isPresent()
 							&& Card.class.isAssignableFrom(first.get().getClass())) {
 						card = (Card) first.get();
 					}
 					break;
 				case DECK:
-					card = findCardinCollection(player.getDeck(), cardReference.getCardId());
+					card = findCardinCollection(player.getDeck(), cardReference.getEntityId());
 					break;
 				case HAND:
-					card = findCardinCollection(player.getHand(), cardReference.getCardId());
+					card = findCardinCollection(player.getHand(), cardReference.getEntityId());
 					break;
 				case HERO_POWER:
 					card = player.getHero().getHeroPower();

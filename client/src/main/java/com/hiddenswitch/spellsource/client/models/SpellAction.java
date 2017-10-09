@@ -55,10 +55,10 @@ public class SpellAction  implements Serializable {
   }
 
    /**
-   * The ID of the source card in your hand or the minion that originates this battlecry. 
+   * The ID of the source card in your hand or the minion that originates this spell or battlecry. 
    * @return sourceId
   **/
-  @ApiModelProperty(example = "null", value = "The ID of the source card in your hand or the minion that originates this battlecry. ")
+  @ApiModelProperty(example = "null", value = "The ID of the source card in your hand or the minion that originates this spell or battlecry. ")
   public Integer getSourceId() {
     return sourceId;
   }

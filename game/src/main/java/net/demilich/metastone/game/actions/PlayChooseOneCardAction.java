@@ -37,4 +37,7 @@ public class PlayChooseOneCardAction extends PlayCardAction {
 	}
 
 
+	public String getChoiceCardId() {
+		return chosenCard;
+	}
 }
