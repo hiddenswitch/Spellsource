@@ -29,6 +29,7 @@ import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.hiddenswitch.spellsource.client.models.Entity;
 import com.hiddenswitch.spellsource.client.models.SpellAction;
+import com.hiddenswitch.spellsource.client.models.SummonAction;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -36,10 +37,11 @@ import java.util.List;
 
 import java.io.Serializable;
 /**
- * GameActionsChooseOnesSpells
+ * A prompt to choose from specified options. 
  */
+@ApiModel(description = "A prompt to choose from specified options. ")
 
-public class GameActionsChooseOnesSpells  implements Serializable {
+public class ChooseOneOptions  implements Serializable {
   @SerializedName("cardInHandId")
   private Integer cardInHandId = null;
 
@@ -49,7 +51,10 @@ public class GameActionsChooseOnesSpells  implements Serializable {
   @SerializedName("spells")
   private List<SpellAction> spells = new ArrayList<SpellAction>();
 
-  public GameActionsChooseOnesSpells cardInHandId(Integer cardInHandId) {
+  @SerializedName("summons")
+  private List<SummonAction> summons = new ArrayList<SummonAction>();
+
+  public ChooseOneOptions cardInHandId(Integer cardInHandId) {
     this.cardInHandId = cardInHandId;
     return this;
   }
@@ -67,12 +72,12 @@ public class GameActionsChooseOnesSpells  implements Serializable {
     this.cardInHandId = cardInHandId;
   }
 
-  public GameActionsChooseOnesSpells entities(List<Entity> entities) {
+  public ChooseOneOptions entities(List<Entity> entities) {
     this.entities = entities;
     return this;
   }
 
-  public GameActionsChooseOnesSpells addEntitiesItem(Entity entitiesItem) {
+  public ChooseOneOptions addEntitiesItem(Entity entitiesItem) {
     this.entities.add(entitiesItem);
     return this;
   }
@@ -90,12 +95,12 @@ public class GameActionsChooseOnesSpells  implements Serializable {
     this.entities = entities;
   }
 
-  public GameActionsChooseOnesSpells spells(List<SpellAction> spells) {
+  public ChooseOneOptions spells(List<SpellAction> spells) {
     this.spells = spells;
     return this;
   }
 
-  public GameActionsChooseOnesSpells addSpellsItem(SpellAction spellsItem) {
+  public ChooseOneOptions addSpellsItem(SpellAction spellsItem) {
     this.spells.add(spellsItem);
     return this;
   }
@@ -113,6 +118,29 @@ public class GameActionsChooseOnesSpells  implements Serializable {
     this.spells = spells;
   }
 
+  public ChooseOneOptions summons(List<SummonAction> summons) {
+    this.summons = summons;
+    return this;
+  }
+
+  public ChooseOneOptions addSummonsItem(SummonAction summonsItem) {
+    this.summons.add(summonsItem);
+    return this;
+  }
+
+   /**
+   * The summons that correspond to the virtual entities. Their sourceId is set to the corresponding virtual entity. 
+   * @return summons
+  **/
+  @ApiModelProperty(example = "null", value = "The summons that correspond to the virtual entities. Their sourceId is set to the corresponding virtual entity. ")
+  public List<SummonAction> getSummons() {
+    return summons;
+  }
+
+  public void setSummons(List<SummonAction> summons) {
+    this.summons = summons;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -122,25 +150,27 @@ public class GameActionsChooseOnesSpells  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GameActionsChooseOnesSpells gameActionsChooseOnesSpells = (GameActionsChooseOnesSpells) o;
-    return Objects.equals(this.cardInHandId, gameActionsChooseOnesSpells.cardInHandId) &&
-        Objects.equals(this.entities, gameActionsChooseOnesSpells.entities) &&
-        Objects.equals(this.spells, gameActionsChooseOnesSpells.spells);
+    ChooseOneOptions chooseOneOptions = (ChooseOneOptions) o;
+    return Objects.equals(this.cardInHandId, chooseOneOptions.cardInHandId) &&
+        Objects.equals(this.entities, chooseOneOptions.entities) &&
+        Objects.equals(this.spells, chooseOneOptions.spells) &&
+        Objects.equals(this.summons, chooseOneOptions.summons);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(cardInHandId, entities, spells);
+    return Objects.hash(cardInHandId, entities, spells, summons);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GameActionsChooseOnesSpells {\n");
+    sb.append("class ChooseOneOptions {\n");
     
     sb.append("    cardInHandId: ").append(toIndentedString(cardInHandId)).append("\n");
     sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
     sb.append("    spells: ").append(toIndentedString(spells)).append("\n");
+    sb.append("    summons: ").append(toIndentedString(summons)).append("\n");
     sb.append("}");
     return sb.toString();
   }

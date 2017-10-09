@@ -876,6 +876,35 @@ definitions:
               description: |
                 The action index of this particular summon index position for this card.
               type: 'integer'
+  ChooseOneOptions:
+    description: |
+      A prompt to choose from specified options.
+    type: 'object'
+    properties:
+      cardInHandId:
+        type: 'integer'
+        description: |
+          The card in the hand that corresponds to these two options.
+      entities:
+        type: 'array'
+        description: |
+          The virtual cards used to render the options.
+        items:
+          $ref: '#/definitions/Entity'
+      spells:
+        type: 'array'
+        description: |
+          The spells that correspond to the virtual entities. Their sourceId is set to the
+          corresponding virtual entity.
+        items:
+          $ref: '#/definitions/SpellAction'
+      summons:
+        type: 'array'
+        description: |
+          The summons that correspond to the virtual entities. Their sourceId is set to the
+          corresponding virtual entity.
+        items:
+          $ref: '#/definitions/SummonAction'
   GameActions:
     description: |
       An object representing all valid game actions in this action request.
@@ -952,47 +981,13 @@ definitions:
           $ref: '#/definitions/SummonAction'
       chooseOnes:
         description: |
-          Choose one actions, summons and spells.
-        type: 'object'
-        properties:
-          spells:
-            description: |
-              An array of choose one spells. Each spell is represented by a different card. An entity that can be used
-              to render a card for the option is provided. Use the spell action's card ID to figure out which options
-              correspond to which cards in the hand.
-            type: 'array'
-            items:
-              type: 'object'
-              properties:
-                cardInHandId:
-                  type: 'integer'
-                  description: |
-                    The card in the hand that corresponds to these two options.
-                entities:
-                  type: 'array'
-                  description: |
-                    The virtual cards used to render the options.
-                  items:
-                    $ref: '#/definitions/Entity'
-                spells:
-                  type: 'array'
-                  description: |
-                    The spells that correspond to the virtual entities. Their sourceId is set to the
-                    corresponding virtual entity.
-                  items:
-                    $ref: '#/definitions/SpellAction'
-          summons:
-            description: |
-              An array of choose one summonables. Use the description to help render the appropriate options.
-            type: 'array'
-            items:
-              properties:
-                description:
-                  description: |
-                    The text to show for this option.
-                  type: 'string'
-                summon:
-                  $ref: '#/definitions/SummonAction'
+          An array of choose one spells or summons. Each spell/summon is represented by a different card. An entity
+          that can be used to render a card for the option is provided. Use the spell action's card ID to figure out
+          which options correspond to which cards in the hand.
+        type: 'array'
+        items:
+          $ref: '#/definitions/ChooseOneOptions'
+
   ActionType:
     type: 'string'
     enum:

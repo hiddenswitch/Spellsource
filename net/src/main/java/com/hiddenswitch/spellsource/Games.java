@@ -24,6 +24,7 @@ import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +37,15 @@ public interface Games {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 180000L;
 	String WEBSOCKET_PATH = "games";
 
+	/**
+	 * Get an entity representing a censored secret card.
+	 *
+	 * @param id        The card's entity ID
+	 * @param owner     The secret's owner
+	 * @param location  The secret'slocation
+	 * @param heroClass The hero class of the secret
+	 * @return A censored secret card.
+	 */
 	static com.hiddenswitch.spellsource.client.models.Entity getSecretCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, HeroClass heroClass) {
 		return new com.hiddenswitch.spellsource.client.models.Entity()
 				.cardId("hidden")
@@ -62,8 +72,8 @@ public interface Games {
 		final GameActions clientActions = new GameActions();
 
 		// Get the minions' indices
-		Map<Integer, Integer> minions = workingContext.getEntities()
-				.filter(e -> e.getEntityType() == EntityType.MINION)
+		Map<Integer, Integer> minionsOrWeapons = workingContext.getEntities()
+				.filter(e -> e.getEntityType() == EntityType.MINION || e.getEntityType() == EntityType.WEAPON)
 				.collect(Collectors.toMap(net.demilich.metastone.game.entities.Entity::getId, e -> e.getEntityLocation().getIndex()));
 
 		// Battlecries
@@ -103,8 +113,6 @@ public interface Games {
 				})
 				.forEach(clientActions::addSpellsItem);
 
-		clientActions.chooseOnes(new GameActionsChooseOnes());
-
 
 		// Choose one spells
 		final int[] chooseOneVirtualEntitiesId = {8000};
@@ -116,8 +124,10 @@ public interface Games {
 				.entrySet()
 				.stream()
 				.map(kv -> {
-					GameActionsChooseOnesSpells spell = new GameActionsChooseOnesSpells();
+					ChooseOneOptions spell = new ChooseOneOptions();
 					EntityLocation sourceCardLocation = workingContext.resolveCardReference(kv.getValue().get(0).getCardReference()).getEntityLocation();
+					spell.cardInHandId(kv.getKey());
+
 					kv.getValue().stream()
 							.collect(Collectors.groupingBy(PlayChooseOneCardAction::getChoiceCardId))
 							.entrySet().forEach(choiceGroup -> {
@@ -135,43 +145,73 @@ public interface Games {
 
 						spell.addEntitiesItem(entity);
 						spell.addSpellsItem(choiceSpell);
-						spell.cardInHandId(kv.getKey());
+
 						chooseOneVirtualEntitiesId[0]++;
 					});
 
 					return spell;
 				})
-				.forEach(clientActions.getChooseOnes()::addSpellsItem);
+				.forEach(clientActions.getChooseOnes()::add);
 
-		// Choose one summons are actually play one cards with the same action
+		// Next, choose one summons
+		// Choose one summons are actually SUMMON cards with different group indices from the same card
+		// First,  non-choose-one summons
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
 				.map(ga -> (PlayMinionCardAction) ga)
 				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
 				.entrySet()
 				.stream()
+				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
 				.map(kv -> {
-					SummonAction summonAction = new SummonAction()
-							.sourceId(kv.getKey())
-							.indexToActions(kv.getValue().stream()
-									.filter(a -> a.getTargetReference() != null)
-									.map(a -> new SummonActionIndexToActions()
-											.action(a.getId())
-											.index(minions.get(a.getTargetReference().getId()))).collect(Collectors.toList()));
+					ChooseOneOptions summon = new ChooseOneOptions();
+					summon.cardInHandId(kv.getKey());
+					ChooseBattlecryCard sourceCard = (ChooseBattlecryCard) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
+					EntityLocation sourceCardLocation = sourceCard.getEntityLocation();
 
-					// Add the null targeted action, if it exists
-					Optional<PlayMinionCardAction> nullPlay = kv.getValue().stream()
-							.filter(a -> a.getTargetReference() == null).findFirst();
-					if (nullPlay.isPresent()) {
-						GameAction a = nullPlay.get();
-						summonAction.addIndexToActionsItem(
-								new SummonActionIndexToActions()
-										.action(a.getId())
-										.index(workingContext.getPlayer(playerId).getMinions().size()));
-					}
+					kv.getValue().stream()
+							.collect(Collectors.groupingBy(PlayMinionCardAction::getChooseOneOptionIndex))
+							.entrySet()
+							.forEach(chooseOneOption -> {
+								int id = chooseOneVirtualEntitiesId[0];
+								List<PlayMinionCardAction> summonActions = chooseOneOption.getValue();
+								SummonAction summonAction = getSummonAction(workingContext, id, minionsOrWeapons, summonActions, playerId);
+								// If it's a transform minion spell, use the entity representing the minion it's transforming into
+								// Otherwise, use the source card entity with the description in the option
+								Entity entity;
+								String transformCardId = sourceCard.getTransformMinionCardId(chooseOneOption.getKey());
+								boolean isTransform = transformCardId != null;
+								if (isTransform) {
+									entity = Games.getEntity(workingContext, CardCatalogue.getCardById(transformCardId), playerId);
+								} else {
+									entity = Games.getEntity(workingContext, sourceCard, playerId);
+									String battlecryDescription = sourceCard.getBattlecryDescription(chooseOneOption.getKey());
+									entity.id(id)
+											.description(battlecryDescription);
+								}
 
-					return summonAction;
-				}).forEach(clientActions::addSummonsItem);
+								entity.id(id).getState().playable(true)
+										.location(Games.toClientLocation(sourceCardLocation));
+
+								summon.addEntitiesItem(entity);
+								summon.addSummonsItem(summonAction);
+								chooseOneVirtualEntitiesId[0]++;
+							});
+
+					return summon;
+				}).forEach(clientActions.getChooseOnes()::add);
+
+		// Choose one summons are actually SUMMON cards with different group indices from the same card
+		// First, non-choose-one summons
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
+				.map(ga -> (PlayMinionCardAction) ga)
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.entrySet()
+				.stream()
+				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
+				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId)).forEach(clientActions::addSummonsItem);
+
 
 		// Physical attacks
 		actions.stream()
@@ -195,26 +235,7 @@ public interface Games {
 				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
 				.entrySet()
 				.stream()
-				.map(kv -> {
-					SpellAction spellAction = new SpellAction()
-							.sourceId(kv.getKey());
-
-					// Targetable spell
-					if (kv.getValue().size() == 1
-							&& (kv.getValue().get(0).getTargetReference() == null
-							|| kv.getValue().get(0).getTargetReference().isTargetGroup())) {
-						spellAction.action(kv.getValue().get(0).getId());
-					} else {
-						// Add all the valid targets
-						kv.getValue().stream()
-								.map(t -> new TargetActionPair()
-										.action(t.getId())
-										.target(t.getTargetReference().getId()))
-								.forEach(spellAction::addTargetKeyToActionsItem);
-					}
-
-					return spellAction;
-				}).findFirst();
+				.map(kv -> getSpellAction(kv.getKey(), kv.getValue())).findFirst();
 
 		// Weapons
 		actions.stream()
@@ -223,28 +244,7 @@ public interface Games {
 				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
 				.entrySet()
 				.stream()
-				.map(kv -> {
-					SummonAction summonAction = new SummonAction()
-							.sourceId(kv.getKey())
-							.indexToActions(kv.getValue().stream()
-									.filter(a -> a.getTargetReference() != null)
-									.map(a -> new SummonActionIndexToActions()
-											.action(a.getId())
-											.index(minions.get(a.getTargetReference().getId()))).collect(Collectors.toList()));
-
-					// Add the null targeted action, if it exists
-					Optional<PlayWeaponCardAction> nullPlay = kv.getValue().stream()
-							.filter(a -> a.getTargetReference() == null).findFirst();
-					if (nullPlay.isPresent()) {
-						GameAction a = nullPlay.get();
-						summonAction.addIndexToActionsItem(
-								new SummonActionIndexToActions()
-										.action(a.getId())
-										.index(workingContext.getPlayer(playerId).getMinions().size()));
-					}
-
-					return summonAction;
-				}).forEach(clientActions::addWeaponsItem);
+				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId)).forEach(clientActions::addWeaponsItem);
 
 		// discovers
 		actions.stream()
@@ -275,6 +275,28 @@ public interface Games {
 				.collect(Collectors.toList()));
 
 		return clientActions;
+	}
+
+	static SummonAction getSummonAction(GameContext workingContext, Integer sourceCardId, Map<Integer, Integer> minionEntityIdToLocation, List<? extends PlayCardAction> summonActions, int playerId) {
+		SummonAction summonAction = new SummonAction()
+				.sourceId(sourceCardId)
+				.indexToActions(summonActions.stream()
+						.filter(a -> a.getTargetReference() != null)
+						.map(a -> new SummonActionIndexToActions()
+								.action(a.getId())
+								.index(minionEntityIdToLocation.get(a.getTargetReference().getId()))).collect(Collectors.toList()));
+
+		// Add the null targeted action, if it exists
+		Optional<? extends PlayCardAction> nullPlay = summonActions.stream()
+				.filter(a -> a.getTargetReference() == null).findFirst();
+		if (nullPlay.isPresent()) {
+			GameAction a = nullPlay.get();
+			summonAction.addIndexToActionsItem(
+					new SummonActionIndexToActions()
+							.action(a.getId())
+							.index(workingContext.getPlayer(playerId).getMinions().size()));
+		}
+		return summonAction;
 	}
 
 	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> spellCardActions) {

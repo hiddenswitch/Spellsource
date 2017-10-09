@@ -27,7 +27,7 @@ package com.hiddenswitch.spellsource.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.spellsource.client.models.GameActionsChooseOnes;
+import com.hiddenswitch.spellsource.client.models.ChooseOneOptions;
 import com.hiddenswitch.spellsource.client.models.GameActionsDiscoveries;
 import com.hiddenswitch.spellsource.client.models.GameActionsPhysicalAttacks;
 import com.hiddenswitch.spellsource.client.models.SpellAction;
@@ -72,7 +72,7 @@ public class GameActions  implements Serializable {
   private List<SummonAction> weapons = new ArrayList<SummonAction>();
 
   @SerializedName("chooseOnes")
-  private GameActionsChooseOnes chooseOnes = null;
+  private List<ChooseOneOptions> chooseOnes = new ArrayList<ChooseOneOptions>();
 
   public GameActions compatibility(List<Integer> compatibility) {
     this.compatibility = compatibility;
@@ -271,21 +271,26 @@ public class GameActions  implements Serializable {
     this.weapons = weapons;
   }
 
-  public GameActions chooseOnes(GameActionsChooseOnes chooseOnes) {
+  public GameActions chooseOnes(List<ChooseOneOptions> chooseOnes) {
     this.chooseOnes = chooseOnes;
     return this;
   }
 
+  public GameActions addChooseOnesItem(ChooseOneOptions chooseOnesItem) {
+    this.chooseOnes.add(chooseOnesItem);
+    return this;
+  }
+
    /**
-   * Get chooseOnes
+   * An array of choose one spells or summons. Each spell/summon is represented by a different card. An entity that can be used to render a card for the option is provided. Use the spell action's card ID to figure out which options correspond to which cards in the hand. 
    * @return chooseOnes
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public GameActionsChooseOnes getChooseOnes() {
+  @ApiModelProperty(example = "null", value = "An array of choose one spells or summons. Each spell/summon is represented by a different card. An entity that can be used to render a card for the option is provided. Use the spell action's card ID to figure out which options correspond to which cards in the hand. ")
+  public List<ChooseOneOptions> getChooseOnes() {
     return chooseOnes;
   }
 
-  public void setChooseOnes(GameActionsChooseOnes chooseOnes) {
+  public void setChooseOnes(List<ChooseOneOptions> chooseOnes) {
     this.chooseOnes = chooseOnes;
   }
 

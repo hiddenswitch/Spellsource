@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **battlecries** | [**List&lt;SpellAction&gt;**](SpellAction.md) | A set of possible targetable battlecry actions.  |  [optional]
 **discoveries** | [**List&lt;GameActionsDiscoveries&gt;**](GameActionsDiscoveries.md) | Card discovers.  |  [optional]
 **weapons** | [**List&lt;SummonAction&gt;**](SummonAction.md) | The weapons in your hand that can be equipped. These are the equivalent of summons that only have a single index, but do not require targeting on the battlefield.  |  [optional]
-**chooseOnes** | [**GameActionsChooseOnes**](GameActionsChooseOnes.md) |  |  [optional]
+**chooseOnes** | [**List&lt;ChooseOneOptions&gt;**](ChooseOneOptions.md) | An array of choose one spells or summons. Each spell/summon is represented by a different card. An entity that can be used to render a card for the option is provided. Use the spell action&#39;s card ID to figure out which options correspond to which cards in the hand.  |  [optional]
 
 
 
