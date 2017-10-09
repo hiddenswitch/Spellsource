@@ -1,11 +1,9 @@
 package net.demilich.metastone.game.cards;
 
-import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.utils.MetastoneProperties;
 import net.demilich.metastone.utils.ResourceInputStream;
 import net.demilich.metastone.utils.ResourceLoader;
 import net.demilich.metastone.utils.UserHomeMetastone;
@@ -198,19 +196,4 @@ public class CardCatalogue {
 		}
 	}
 
-	public static void copyCardsFromResources() throws IOException, URISyntaxException {
-		// if we have not copied cards to the USER_HOME_METASTONE cards folder,
-		// then do so now
-		int cardRevision = MetastoneProperties.getInt(CARDS_COPIED_PROPERTY, 0);
-		logger.info("Existing card revision = " + cardRevision);
-		if (BuildConfig.CARD_REVISION > cardRevision) {
-			logger.info("Card update required: MetaStone card revision is: {}, last card update was with revision {}", BuildConfig.CARD_REVISION, cardRevision);
-			ResourceLoader.copyFromResources(CARDS_FOLDER, CARDS_FOLDER_PATH);
-
-			// set a property to indicate that we have copied the cards with current version
-			MetastoneProperties.setProperty(CARDS_COPIED_PROPERTY, String.valueOf(BuildConfig.CARD_REVISION));
-		} else {
-			logger.info("Cards in user home folder are up-to-date: rev {}", cardRevision);
-		}
-	}
 }

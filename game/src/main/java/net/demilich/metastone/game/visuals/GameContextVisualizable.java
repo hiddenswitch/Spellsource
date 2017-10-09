@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.visuals;
 
-import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
@@ -9,7 +8,6 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.visuals.GameContextVisuals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,7 @@ public class GameContextVisualizable extends GameContext implements GameContextV
 		}
 		while (ignoreEvents()) {
 			try {
-				Thread.sleep(BuildConfig.DEFAULT_SLEEP_DELAY);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 			}
 		}
@@ -46,7 +44,7 @@ public class GameContextVisualizable extends GameContext implements GameContextV
 
 		while (blockedByAnimation) {
 			try {
-				Thread.sleep(BuildConfig.DEFAULT_SLEEP_DELAY);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 			}
 		}
