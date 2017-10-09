@@ -2,8 +2,6 @@ package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.SecretCard;
-import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +21,7 @@ public abstract class PlayCardAction extends GameAction {
 	public static Logger logger = LoggerFactory.getLogger(PlayCardAction.class);
 
 	protected CardReference cardReference;
-	private int groupIndex;
+	private Integer chooseOneOptionIndex = null;
 
 	protected PlayCardAction() {
 	}
@@ -63,8 +61,8 @@ public abstract class PlayCardAction extends GameAction {
 		return cardReference;
 	}
 
-	public int getGroupIndex() {
-		return groupIndex;
+	public Integer getChooseOneOptionIndex() {
+		return chooseOneOptionIndex;
 	}
 
 	@Override
@@ -78,14 +76,14 @@ public abstract class PlayCardAction extends GameAction {
 			return false;
 		}
 		PlayCardAction playCardAction = (PlayCardAction) anotherAction;
-		return playCardAction.getGroupIndex() == getGroupIndex() && this.cardReference.equals(playCardAction.cardReference);
+		return playCardAction.getChooseOneOptionIndex() == getChooseOneOptionIndex() && this.cardReference.equals(playCardAction.cardReference);
 	}
 
 	@Suspendable
 	protected abstract void play(GameContext context, int playerId);
 
-	public void setGroupIndex(int groupIndex) {
-		this.groupIndex = groupIndex;
+	public void setChooseOneOptionIndex(Integer chooseOneOptionIndex) {
+		this.chooseOneOptionIndex = chooseOneOptionIndex;
 	}
 
 	@Override

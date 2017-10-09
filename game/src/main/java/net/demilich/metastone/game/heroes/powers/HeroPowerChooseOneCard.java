@@ -47,7 +47,7 @@ public class HeroPowerChooseOneCard extends HeroPowerCard implements IChooseOneC
 
 			PlayCardAction cardAction = new HeroPowerAction(card.getSpell(), this, getTargetRequirement());
 			cardAction.setActionSuffix(card.getName());
-			cardAction.setGroupIndex(i);
+			cardAction.setChooseOneOptionIndex(i);
 			actions[i] = cardAction;
 		}
 		return actions;

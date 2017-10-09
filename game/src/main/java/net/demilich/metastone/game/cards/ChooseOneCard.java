@@ -65,7 +65,7 @@ public class ChooseOneCard extends Card implements IChooseOneCard {
 			SpellCard card = (SpellCard) getCard(cardId);
 			PlayChooseOneCardAction cardAction = new PlayChooseOneCardAction(card.getSpell(), this, cardId, card.getTargetRequirement());
 			cardAction.setActionSuffix(card.getName());
-			cardAction.setGroupIndex(i);
+			cardAction.setChooseOneOptionIndex(i);
 			actions[i] = cardAction;
 		}
 		return actions;
