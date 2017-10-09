@@ -5,7 +5,6 @@ import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.util.LoggerUtils;
-import net.demilich.metastone.BuildConfig;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
@@ -173,7 +172,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 		logger.debug("Waiting for players to connect...");
 		while (getActivePlayerId() == -1) {
 			try {
-				Thread.sleep(BuildConfig.DEFAULT_SLEEP_DELAY);
+				Thread.sleep(100);
 			} catch (InterruptedException ignored) {
 			}
 		}
@@ -182,7 +181,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 			requestLocalAction();
 			if (isHumanPlayer()) {
 				try {
-					Thread.sleep(BuildConfig.DEFAULT_SLEEP_DELAY);
+					Thread.sleep(100);
 				} catch (InterruptedException ignored) {
 				}
 			}
@@ -261,7 +260,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 
 		while (blockedByAnimation) {
 			try {
-				Thread.sleep(BuildConfig.DEFAULT_SLEEP_DELAY);
+				Thread.sleep(100);
 			} catch (InterruptedException ignored) {
 			}
 		}
