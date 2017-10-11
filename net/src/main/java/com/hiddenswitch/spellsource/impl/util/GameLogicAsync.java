@@ -26,7 +26,7 @@ import java.util.function.Consumer;
  * Created by bberman on 11/23/16.
  */
 public class GameLogicAsync extends GameLogic {
-	private boolean mulliganEnabled;
+	private boolean mulliganEnabled = true;
 
 	@Override
 	@Suspendable

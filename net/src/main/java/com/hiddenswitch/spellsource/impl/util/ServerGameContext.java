@@ -150,7 +150,7 @@ public class ServerGameContext extends GameContext {
 		getNetworkGameLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, p -> init2.complete());
 
 		// Mulligan simultaneously now
-		CompositeFuture.join(init1, init2).setHandler(cf -> {
+		CompositeFuture.all(init1, init2).setHandler(cf -> {
 			Recursive<Runnable> playTurnLoop = new Recursive<>();
 			playTurnLoop.func = () -> {
 				if (!isRunning) {
@@ -328,6 +328,7 @@ public class ServerGameContext extends GameContext {
 	 * @param callback     A handler for the response.
 	 */
 	@Override
+	@Suspendable
 	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
 		logger.debug("Requesting mulligan for playerId {} hashCode {}", player.getId(), player.hashCode());
 		String id = RandomStringUtils.randomAscii(8);
@@ -359,6 +360,7 @@ public class ServerGameContext extends GameContext {
 	 * @param discardedCards The cards the player discarded.
 	 */
 	@SuppressWarnings("unchecked")
+	@Suspendable
 	public void onMulliganReceived(String messageId, Player player, List<Card> discardedCards) {
 		logger.debug("Mulligan received from {}", player.getName());
 		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
@@ -477,6 +479,7 @@ public class ServerGameContext extends GameContext {
 		return requestCallbacks.get(CallbackId.of(messageId)).actions.get(actionIndex);
 	}
 
+	@Suspendable
 	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
 		// Get the player reference
 		final Optional<CallbackId> reqResult = requestCallbacks.keySet().stream().filter(ci -> ci.id.equals(messageId)).findFirst();
