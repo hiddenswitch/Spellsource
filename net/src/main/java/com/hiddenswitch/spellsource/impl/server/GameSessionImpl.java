@@ -227,6 +227,7 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	@Override
+	@Suspendable
 	public void onMulliganReceived(String id, Player player, List<Card> ReceivedCards) {
 		checkContext();
 		getGameContext().onMulliganReceived(id, player, ReceivedCards);
@@ -366,6 +367,7 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	@Override
+	@Suspendable
 	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
 		getGameContext().onMulliganReceived(messageId, discardedCardIndices);
 	}
