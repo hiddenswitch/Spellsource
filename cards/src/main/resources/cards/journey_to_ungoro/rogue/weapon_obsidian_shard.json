@@ -1,0 +1,24 @@
+{
+	"name": "Obsidian Shard",
+	"baseManaCost": 4,
+	"type": "WEAPON",
+	"damage": 3,
+	"durability": 3,
+	"heroClass": "ROGUE",
+	"rarity": "RARE",
+	"description": "Costs (1) less for each card you've played from another class.",
+	"manaCostModifier": {
+		"class": "CardsPlayedValueProvider",
+		"filter": {
+			"class": "CardFilter",
+			"heroClasses": [
+				"SELF",
+				"ANY"
+			],
+			"invert": true
+		}
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

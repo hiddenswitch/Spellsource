@@ -2,8 +2,8 @@ package net.demilich.metastone.game.logic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,8 +50,14 @@ public class TargetLogic implements Serializable {
 				validTargets.add(entity);
 				continue;
 			}
+
 			if ((action.getActionType() == ActionType.SPELL || action.getActionType() == ActionType.HERO_POWER)
 					&& (entity.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS) || (entity.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)))) {
+				continue;
+			}
+
+			// You can summon next to permanents but not anything else.
+			if (action.getActionType() != ActionType.SUMMON && entity.hasAttribute(Attribute.PERMANENT)) {
 				continue;
 			}
 
@@ -69,6 +75,14 @@ public class TargetLogic implements Serializable {
 		return validTargets;
 	}
 
+	/**
+	 * Find an entity in the game context using targeting rules.
+	 *
+	 * @param context   The current game context
+	 * @param targetKey A {@link EntityReference}
+	 * @return The found entity.
+	 * @throws NullPointerException If the entity isn't found.
+	 */
 	public Entity findEntity(GameContext context, EntityReference targetKey) throws NullPointerException {
 		int targetId = targetKey.getId();
 		Entity environmentResult = findInEnvironment(context, targetKey);
@@ -143,7 +157,7 @@ public class TargetLogic implements Serializable {
 		return null;
 	}
 
-	private List<Entity> getEntities(GameContext context, Player player, TargetSelection targetRequirement) {
+	private List<Entity> getEntities(GameContext context, Player player, TargetSelection targetRequirement, boolean omitPermanents) {
 		Player opponent = context.getOpponent(player);
 		List<Entity> entities = new ArrayList<>();
 		if (targetRequirement == TargetSelection.ENEMY_HERO || targetRequirement == TargetSelection.ENEMY_CHARACTERS
@@ -162,7 +176,16 @@ public class TargetLogic implements Serializable {
 				|| targetRequirement == TargetSelection.MINIONS || targetRequirement == TargetSelection.ANY) {
 			entities.addAll(player.getMinions());
 		}
-		return entities;
+
+		if (omitPermanents) {
+			return withoutPermanents(entities);
+		} else {
+			return entities;
+		}
+	}
+
+	private List<Entity> getEntities(GameContext context, Player player, TargetSelection targetRequirement) {
+		return getEntities(context, player, targetRequirement, true);
 	}
 
 	private List<Entity> getTaunters(List<Minion> entities) {
@@ -175,6 +198,10 @@ public class TargetLogic implements Serializable {
 		return taunters;
 	}
 
+	public static <E extends Entity> List<E> withoutPermanents(List<E> in) {
+		return in.stream().filter(e -> !e.hasAttribute(Attribute.PERMANENT)).collect(Collectors.toList());
+	}
+
 	public List<Entity> getValidTargets(GameContext context, Player player, GameAction action) {
 		TargetSelection targetRequirement = action.getTargetRequirement();
 		ActionType actionType = action.getActionType();
@@ -184,7 +211,7 @@ public class TargetLogic implements Serializable {
 		// attack only allow corresponding minions as targets
 		if (actionType == ActionType.PHYSICAL_ATTACK
 				&& (targetRequirement == TargetSelection.ENEMY_CHARACTERS || targetRequirement == TargetSelection.ENEMY_MINIONS)
-				&& containsTaunters(opponent.getMinions())) {
+				&& containsTaunters(withoutPermanents(opponent.getMinions()))) {
 			return getTaunters(opponent.getMinions());
 		}
 		if (actionType == ActionType.SUMMON) {
@@ -192,11 +219,11 @@ public class TargetLogic implements Serializable {
 			// (=null)
 			// in which case the minion will appear to the very right of your
 			// board
-			List<Entity> summonTargets = getEntities(context, player, targetRequirement);
+			List<Entity> summonTargets = this.getEntities(context, player, targetRequirement, false);
 			summonTargets.add(null);
 			return summonTargets;
 		}
-		List<Entity> potentialTargets = getEntities(context, player, targetRequirement);
+		List<Entity> potentialTargets = this.getEntities(context, player, targetRequirement);
 		return filterTargets(context, player, action, potentialTargets);
 	}
 
@@ -219,31 +246,31 @@ public class TargetLogic implements Serializable {
 			return null;
 		}
 		if (targetKey.equals(EntityReference.ALL_CHARACTERS)) {
-			return getEntities(context, player, TargetSelection.ANY);
+			return this.getEntities(context, player, TargetSelection.ANY);
 		} else if (targetKey.equals(EntityReference.ALL_MINIONS)) {
-			return getEntities(context, player, TargetSelection.MINIONS);
+			return this.getEntities(context, player, TargetSelection.MINIONS);
 		} else if (targetKey.equals(EntityReference.ENEMY_CHARACTERS)) {
-			return getEntities(context, player, TargetSelection.ENEMY_CHARACTERS);
+			return this.getEntities(context, player, TargetSelection.ENEMY_CHARACTERS);
 		} else if (targetKey.equals(EntityReference.ENEMY_HERO)) {
-			return getEntities(context, player, TargetSelection.ENEMY_HERO);
+			return this.getEntities(context, player, TargetSelection.ENEMY_HERO);
 		} else if (targetKey.equals(EntityReference.ENEMY_MINIONS)) {
-			return getEntities(context, player, TargetSelection.ENEMY_MINIONS);
+			return this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
 		} else if (targetKey.equals(EntityReference.FRIENDLY_CHARACTERS)) {
-			return getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
+			return this.getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
 		} else if (targetKey.equals(EntityReference.FRIENDLY_HERO)) {
-			return getEntities(context, player, TargetSelection.FRIENDLY_HERO);
+			return this.getEntities(context, player, TargetSelection.FRIENDLY_HERO);
 		} else if (targetKey.equals(EntityReference.FRIENDLY_MINIONS)) {
-			return getEntities(context, player, TargetSelection.FRIENDLY_MINIONS);
+			return this.getEntities(context, player, TargetSelection.FRIENDLY_MINIONS);
 		} else if (targetKey.equals(EntityReference.OTHER_FRIENDLY_MINIONS)) {
-			List<Entity> targets = getEntities(context, player, TargetSelection.FRIENDLY_MINIONS);
+			List<Entity> targets = this.getEntities(context, player, TargetSelection.FRIENDLY_MINIONS);
 			targets.remove(source);
 			return targets;
 		} else if (targetKey.equals(EntityReference.ALL_OTHER_CHARACTERS)) {
-			List<Entity> targets = getEntities(context, player, TargetSelection.ANY);
+			List<Entity> targets = this.getEntities(context, player, TargetSelection.ANY);
 			targets.remove(source);
 			return targets;
 		} else if (targetKey.equals(EntityReference.ALL_OTHER_MINIONS)) {
-			List<Entity> targets = getEntities(context, player, TargetSelection.MINIONS);
+			List<Entity> targets = this.getEntities(context, player, TargetSelection.MINIONS);
 			targets.remove(source);
 			return targets;
 		} else if (targetKey.equals(EntityReference.ADJACENT_MINIONS)) {

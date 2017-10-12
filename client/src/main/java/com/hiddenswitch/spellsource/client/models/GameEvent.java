@@ -40,6 +40,7 @@ import com.hiddenswitch.spellsource.client.models.GameEventKill;
 import com.hiddenswitch.spellsource.client.models.GameEventOverload;
 import com.hiddenswitch.spellsource.client.models.GameEventPerformedGameAction;
 import com.hiddenswitch.spellsource.client.models.GameEventPreDamage;
+import com.hiddenswitch.spellsource.client.models.GameEventQuestSuccessful;
 import com.hiddenswitch.spellsource.client.models.GameEventSecretPlayed;
 import com.hiddenswitch.spellsource.client.models.GameEventSecretRevealed;
 import com.hiddenswitch.spellsource.client.models.GameEventSilence;
@@ -263,6 +264,12 @@ public class GameEvent  implements Serializable {
 
   @SerializedName("secretRevealed")
   private GameEventSecretRevealed secretRevealed = null;
+
+  @SerializedName("questSuccessful")
+  private GameEventQuestSuccessful questSuccessful = null;
+
+  @SerializedName("questPlayed")
+  private GameEventQuestSuccessful questPlayed = null;
 
   @SerializedName("summon")
   private GameEventBeforeSummon summon = null;
@@ -804,6 +811,42 @@ public class GameEvent  implements Serializable {
     this.secretRevealed = secretRevealed;
   }
 
+  public GameEvent questSuccessful(GameEventQuestSuccessful questSuccessful) {
+    this.questSuccessful = questSuccessful;
+    return this;
+  }
+
+   /**
+   * Get questSuccessful
+   * @return questSuccessful
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public GameEventQuestSuccessful getQuestSuccessful() {
+    return questSuccessful;
+  }
+
+  public void setQuestSuccessful(GameEventQuestSuccessful questSuccessful) {
+    this.questSuccessful = questSuccessful;
+  }
+
+  public GameEvent questPlayed(GameEventQuestSuccessful questPlayed) {
+    this.questPlayed = questPlayed;
+    return this;
+  }
+
+   /**
+   * Get questPlayed
+   * @return questPlayed
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public GameEventQuestSuccessful getQuestPlayed() {
+    return questPlayed;
+  }
+
+  public void setQuestPlayed(GameEventQuestSuccessful questPlayed) {
+    this.questPlayed = questPlayed;
+  }
+
   public GameEvent summon(GameEventBeforeSummon summon) {
     this.summon = summon;
     return this;
@@ -951,6 +994,8 @@ public class GameEvent  implements Serializable {
         Objects.equals(this.overload, gameEvent.overload) &&
         Objects.equals(this.heal, gameEvent.heal) &&
         Objects.equals(this.secretRevealed, gameEvent.secretRevealed) &&
+        Objects.equals(this.questSuccessful, gameEvent.questSuccessful) &&
+        Objects.equals(this.questPlayed, gameEvent.questPlayed) &&
         Objects.equals(this.summon, gameEvent.summon) &&
         Objects.equals(this.afterSpellCasted, gameEvent.afterSpellCasted) &&
         Objects.equals(this.discard, gameEvent.discard) &&
@@ -961,7 +1006,7 @@ public class GameEvent  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, entityTouched, entityUntouched, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, summon, afterSpellCasted, discard, mill, kill, triggerFired);
+    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, entityTouched, entityUntouched, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, questSuccessful, questPlayed, summon, afterSpellCasted, discard, mill, kill, triggerFired);
   }
 
   @Override
@@ -998,6 +1043,8 @@ public class GameEvent  implements Serializable {
     sb.append("    overload: ").append(toIndentedString(overload)).append("\n");
     sb.append("    heal: ").append(toIndentedString(heal)).append("\n");
     sb.append("    secretRevealed: ").append(toIndentedString(secretRevealed)).append("\n");
+    sb.append("    questSuccessful: ").append(toIndentedString(questSuccessful)).append("\n");
+    sb.append("    questPlayed: ").append(toIndentedString(questPlayed)).append("\n");
     sb.append("    summon: ").append(toIndentedString(summon)).append("\n");
     sb.append("    afterSpellCasted: ").append(toIndentedString(afterSpellCasted)).append("\n");
     sb.append("    discard: ").append(toIndentedString(discard)).append("\n");

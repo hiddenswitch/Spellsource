@@ -1,0 +1,26 @@
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "Vicious Fledgeling",
+  "heroClass": "ANY",
+  "trigger": {
+    "eventTrigger": {
+      "targetEntityType": "HERO",
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "AdaptSpell",
+      "group": "group_adapt",
+      "target": "SELF"
+    }
+  },
+  "description": "After this minion attacks a hero, Adapt.",
+  "fileFormatVersion": 1,
+  "rarity": "RARE",
+  "baseHp": 3,
+  "race": "BEAST",
+  "baseAttack": 3,
+  "type": "MINION",
+  "baseManaCost": 3
+}

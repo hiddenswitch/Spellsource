@@ -80,7 +80,8 @@ public class CardZone extends EntityZone<Card> implements CardList {
 	}
 
 	@Override
-	public void removeAll() {
+	@Deprecated
+	public void removeAll() throws Exception {
 		super.clear();
 	}
 

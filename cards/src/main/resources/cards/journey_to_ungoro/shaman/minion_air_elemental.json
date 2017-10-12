@@ -1,0 +1,1 @@
+{"collectible": true, "set": "JOURNEY_TO_UNGORO", "name": "Air Elemental", "heroClass": "SHAMAN", "description": "Can't be targeted by Spells or Hero Powers.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 1, "race": "ELEMENTAL", "baseAttack": 2, "attributes": {"UNTARGETABLE_BY_SPELLS": true}, "type": "MINION", "baseManaCost": 1}

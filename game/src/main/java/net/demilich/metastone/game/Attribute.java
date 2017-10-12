@@ -511,6 +511,20 @@ public enum Attribute {
 	 */
 	ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION,
 	/**
+	 * A {@link #QUEST} {@link Entity} is an untargetable permanent that lives in the {@link Zones#SECRET} zone but is
+	 * visible to the opponent.
+	 * <p>
+	 * Implements quest cards.
+	 */
+	QUEST,
+	/**
+	 * This attribute describes a {@link Minion} that can never be targeted by spells, abilities, auras or physical
+	 * attacks but does occupy a position on the {@link Zones#BATTLEFIELD}.
+	 * <p>
+	 * Implements permanents.
+	 */
+	PERMANENT,
+	/**
 	 * This attribute is a {@link String} that describes the inventory owner (as opposed to in-match owner) of the
 	 * card.
 	 */

@@ -35,7 +35,7 @@ public class StealRandomSecretSpell extends Spell {
 		List<Secret> validSecrets = new ArrayList<>();
 		for (Trigger trigger : secrets) {
 			Secret secret = (Secret) trigger;
-			if (!player.getSecretCardIds().contains(secret.getSecretCard().getCardId()) && player.getSecrets().size() < GameLogic.MAX_SECRETS) {
+			if (!player.getSecretCardIds().contains(secret.getSourceCard().getCardId()) && player.getSecrets().size() < GameLogic.MAX_SECRETS) {
 				validSecrets.add(secret);
 			}
 		}

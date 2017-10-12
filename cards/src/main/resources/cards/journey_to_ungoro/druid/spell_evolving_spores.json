@@ -1,0 +1,17 @@
+{
+	"name": "Evolving Spores",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "RARE",
+	"description": "Adapt your minions.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "AdaptSpell",
+		"target": "FRIENDLY_MINIONS",
+		"group": "group_adapt"
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

@@ -22,7 +22,9 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -46,7 +48,7 @@ public interface Games {
 	 * @param heroClass The hero class of the secret
 	 * @return A censored secret card.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getSecretCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, HeroClass heroClass) {
+	static com.hiddenswitch.spellsource.client.models.Entity getCensoredCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, HeroClass heroClass) {
 		return new com.hiddenswitch.spellsource.client.models.Entity()
 				.cardId("hidden")
 				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.CARD)
@@ -369,7 +371,7 @@ public interface Games {
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
 			// You never see which cards are drawn by your opponent when they go
 			if (card.getOwner() != playerId) {
-				entity = getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+				entity = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 			}
 			clientEvent.drawCard(new CardEvent()
 					.card(entity));
@@ -387,7 +389,7 @@ public interface Games {
 			if (card.getCardType() == CardType.SPELL
 					&& card instanceof SecretCard
 					&& card.getOwner() != playerId) {
-				entity = getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+				entity = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 			}
 
 			clientEvent.cardPlayed(new CardEvent()
@@ -416,7 +418,7 @@ public interface Games {
 			if (card.getCardType() == CardType.SPELL
 					&& card instanceof SecretCard
 					&& card.getOwner() != playerId) {
-				entity = getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+				entity = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 			}
 
 			clientEvent.afterSpellCasted(new GameEventAfterSpellCasted()
@@ -426,6 +428,10 @@ public interface Games {
 			final SecretRevealedEvent secretRevealedEvent = (SecretRevealedEvent) event;
 			clientEvent.secretRevealed(new GameEventSecretRevealed()
 					.secret(getEntity(workingContext, secretRevealedEvent.getSecretCard(), playerId)));
+		} else if (event instanceof QuestSuccessfulEvent) {
+			final QuestSuccessfulEvent questSuccessfulEvent = (QuestSuccessfulEvent) event;
+			clientEvent.questSuccessful(new GameEventQuestSuccessful()
+					.quest(getEntity(workingContext, questSuccessfulEvent.getQuest(), playerId)));
 		}
 
 		return clientEvent;
@@ -598,7 +604,7 @@ public interface Games {
 					.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.SECRET)
 					.state(new EntityState()
 							.owner(secret.getOwner())
-							.heroClass(secret.getSecretCard().getHeroClass().toString())
+							.heroClass(secret.getSourceCard().getHeroClass().toString())
 							.location(Games.toClientLocation(secret.getEntityLocation())));
 			opposingSecrets.add(entity);
 		}
@@ -767,31 +773,37 @@ public interface Games {
 	}
 
 	/**
-	 * A view of a secret. Censors information from opposing players.
+	 * A view of a secret or quest. Censors information from opposing players if it's a quest.
 	 *
 	 * @param workingContext The context to generate the client view for.
-	 * @param secret         The secret entity.
+	 * @param spellTrigger   The secret or quest entity. Any entity backed by a {@link SpellTrigger} is valid here.
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(final GameContext workingContext, final Secret secret, int localPlayerId) {
-		if (secret == null) {
+	static com.hiddenswitch.spellsource.client.models.Entity getEntity(final GameContext workingContext, final SpellTrigger spellTrigger, int localPlayerId) {
+		if (spellTrigger == null) {
 			return null;
 		}
 
-		com.hiddenswitch.spellsource.client.models.Entity cardEntity = getEntity(workingContext, secret.getSecretCard(), localPlayerId);
-		if (localPlayerId != secret.getOwner()) {
+		com.hiddenswitch.spellsource.client.models.Entity cardEntity = getEntity(workingContext, spellTrigger.getSourceCard(), localPlayerId);
+		if (spellTrigger instanceof Secret
+				&& localPlayerId != spellTrigger.getOwner()) {
 			// Censor information about the secret if it does not belong to the player.
 			cardEntity
 					.name("Secret")
 					.description("Secret")
 					.cardId("hidden");
 		}
-		cardEntity.id(secret.getId())
-				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.SECRET)
+		Entity.EntityTypeEnum entityType = Entity.EntityTypeEnum.SECRET;
+		if (spellTrigger instanceof Quest) {
+			entityType = Entity.EntityTypeEnum.QUEST;
+		}
+
+		cardEntity.id(spellTrigger.getId())
+				.entityType(entityType)
 				.getState()
-				.location(Games.toClientLocation(secret.getEntityLocation()))
-				.owner(secret.getOwner())
+				.location(Games.toClientLocation(spellTrigger.getEntityLocation()))
+				.owner(spellTrigger.getOwner())
 				.playable(false);
 		return cardEntity;
 	}

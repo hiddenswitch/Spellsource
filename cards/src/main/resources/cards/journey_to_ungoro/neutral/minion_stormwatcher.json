@@ -1,0 +1,1 @@
+{"collectible": true, "set": "JOURNEY_TO_UNGORO", "name": "Stormwatcher", "heroClass": "ANY", "description": "Windfury", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 8, "race": "ELEMENTAL", "baseAttack": 4, "attributes": {"WINDFURY": true}, "type": "MINION", "baseManaCost": 7}

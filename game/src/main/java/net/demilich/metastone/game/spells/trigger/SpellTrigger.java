@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.annotations.Expose;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.EntityType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -208,5 +209,9 @@ public class SpellTrigger extends Entity implements Trigger {
 			return true;
 		}
 		return false;
+	}
+
+	public Card getSourceCard() {
+		return null;
 	}
 }

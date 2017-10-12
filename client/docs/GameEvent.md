@@ -33,6 +33,8 @@ Name | Type | Description | Notes
 **overload** | [**GameEventOverload**](GameEventOverload.md) |  |  [optional]
 **heal** | [**GameEventHeal**](GameEventHeal.md) |  |  [optional]
 **secretRevealed** | [**GameEventSecretRevealed**](GameEventSecretRevealed.md) |  |  [optional]
+**questSuccessful** | [**GameEventQuestSuccessful**](GameEventQuestSuccessful.md) |  |  [optional]
+**questPlayed** | [**GameEventQuestSuccessful**](GameEventQuestSuccessful.md) |  |  [optional]
 **summon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
 **afterSpellCasted** | [**GameEventAfterSpellCasted**](GameEventAfterSpellCasted.md) |  |  [optional]
 **discard** | [**CardEvent**](CardEvent.md) |  |  [optional]

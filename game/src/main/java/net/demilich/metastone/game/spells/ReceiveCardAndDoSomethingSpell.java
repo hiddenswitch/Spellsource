@@ -17,6 +17,7 @@ public class ReceiveCardAndDoSomethingSpell extends Spell {
 
 	@Suspendable
 	private void castSomethingSpell(GameContext context, Player player, SpellDesc spell, Entity source, Card card) {
+		card = card.getCopy();
 		context.getLogic().receiveCard(player.getId(), card);
 		// card may be null (i.e. try to draw from deck, but already in
 		// fatigue)

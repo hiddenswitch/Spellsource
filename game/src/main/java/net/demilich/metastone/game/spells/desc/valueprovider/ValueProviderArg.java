@@ -17,6 +17,7 @@ public enum ValueProviderArg {
 	OPERATION,
 	VALUE_1,
 	VALUE_2,
+	GAME_VALUE,
 	MIN,
 	MAX
 

@@ -1,0 +1,35 @@
+{
+	"name": "Tar Creeper",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 5,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "ELEMENTAL",
+	"description": "Has +2 Attack during your opponent's turn.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "BoardChangedTrigger"
+		},
+		"spell": {
+			"class": "ConditionalAttackBonusSpell",
+			"target": "SELF",
+			"value": {
+				"class": "ConditionalValueProvider",
+				"ifTrue": 0,
+				"ifFalse": 2,
+				"condition": {
+					"class": "OwnedByPlayerCondition",
+					"targetPlayer": "ACTIVE"
+				}
+			}
+		}
+	},
+	"collectible": true,
+	"attributes": {
+		"TAUNT": true
+	},
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

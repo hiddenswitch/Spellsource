@@ -76,4 +76,5 @@ public abstract class EntityFilter implements Serializable {
 		}
 		return desc == null || desc.equals(rhs.desc);
 	}
+
 }

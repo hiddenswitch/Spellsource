@@ -76,7 +76,8 @@ public enum Environment {
 	 * <p>
 	 * This implements Atiesh, the weapon granted by Medivh, the Guardian
 	 */
-	LAST_MANA_COST,;
+	LAST_MANA_COST,
+	SPELL_VALUE;
 
 	public boolean customClone() {
 		return (this == SUMMON_REFERENCE_STACK ||

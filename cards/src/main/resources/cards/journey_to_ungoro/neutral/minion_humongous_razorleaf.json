@@ -1,0 +1,1 @@
+{"collectible": true, "set": "JOURNEY_TO_UNGORO", "name": "Humongous Razorleaf", "heroClass": "ANY", "description": "Can't Attack.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 8, "baseAttack": 4, "attributes": {"CANNOT_ATTACK": true}, "type": "MINION", "baseManaCost": 3}

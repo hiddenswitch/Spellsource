@@ -28,7 +28,6 @@ import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.utils.IDisposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,7 +120,7 @@ import java.util.stream.Stream;
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
  * @see #getEntities() for a way to enumerate through all of the entities in the game.
  */
-public class GameContext implements Cloneable, IDisposable, Serializable {
+public class GameContext implements Cloneable, Serializable {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
 
@@ -194,7 +193,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 
 		this.setLogic(logic);
 		this.setDeckFormat(deckFormat);
-		getTempCards().removeAll();
 	}
 
 	protected boolean acceptAction(GameAction nextAction) {
@@ -268,7 +266,6 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	/**
 	 * Clears state to ensure this context isn't referencing it anymore.
 	 */
-	@Override
 	public synchronized void dispose() {
 		this.disposed = true;
 		this.players = null;
@@ -440,7 +437,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 	}
 
 	/**
-	 * Gets the minions adjacent to the given minion.
+	 * Gets the minions adjacent to the given minion. Omits permanents.
 	 *
 	 * @param minionReference The minion whose adjacent minions we should get.
 	 * @return The adjacent minions.
@@ -451,7 +448,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		List<Minion> minions = getPlayer(minion.getOwner()).getMinions();
 		int index = minion.getEntityLocation().getIndex();
 		if (index == -1) {
-			return adjacentMinions;
+			return TargetLogic.withoutPermanents(adjacentMinions);
 		}
 		int left = index - 1;
 		int right = index + 1;
@@ -461,7 +458,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		if (right > -1 && right < minions.size()) {
 			adjacentMinions.add(minions.get(right));
 		}
-		return adjacentMinions;
+		return TargetLogic.withoutPermanents(adjacentMinions);
 	}
 
 	@Suspendable
@@ -562,12 +559,12 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		List<Minion> minions = getPlayer(minion.getOwner()).getMinions();
 		int index = minions.indexOf(minion);
 		if (index == -1) {
-			return leftMinions;
+			return TargetLogic.withoutPermanents(leftMinions);
 		}
 		for (int i = 0; i < index; i++) {
 			leftMinions.add(minions.get(i));
 		}
-		return leftMinions;
+		return TargetLogic.withoutPermanents(leftMinions);
 	}
 
 	/**
@@ -615,7 +612,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		Player opposingPlayer = getOpponent(owner);
 		int index = minion.getEntityLocation().getIndex();
 		if (opposingPlayer.getMinions().size() == 0 || owner.getMinions().size() == 0 || index == -1) {
-			return oppositeMinions;
+			return TargetLogic.withoutPermanents(oppositeMinions);
 		}
 		List<Minion> opposingMinions = opposingPlayer.getMinions();
 		int delta = opposingPlayer.getMinions().size() - owner.getMinions().size();
@@ -635,7 +632,7 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 				oppositeMinions.add(opposingMinions.get(epsilon + 1));
 			}
 		}
-		return oppositeMinions;
+		return TargetLogic.withoutPermanents(oppositeMinions);
 	}
 
 	/**
@@ -711,12 +708,12 @@ public class GameContext implements Cloneable, IDisposable, Serializable {
 		List<Minion> minions = getPlayer(minion.getOwner()).getMinions();
 		int index = minion.getEntityLocation().getIndex();
 		if (index == -1) {
-			return rightMinions;
+			return TargetLogic.withoutPermanents(rightMinions);
 		}
 		for (int i = index + 1; i < player.getMinions().size(); i++) {
 			rightMinions.add(minions.get(i));
 		}
-		return rightMinions;
+		return TargetLogic.withoutPermanents(rightMinions);
 	}
 
 	/**

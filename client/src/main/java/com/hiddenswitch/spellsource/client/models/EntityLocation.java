@@ -64,6 +64,9 @@ public class EntityLocation  implements Serializable {
     @SerializedName("SECRET")
     SECRET("SECRET"),
     
+    @SerializedName("QUEST")
+    QUEST("QUEST"),
+    
     @SerializedName("HERO_POWER")
     HERO_POWER("HERO_POWER"),
     

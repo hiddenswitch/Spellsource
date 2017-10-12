@@ -1,0 +1,25 @@
+{
+	"name": "Amara, Warden of Hope",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 8,
+	"heroClass": "PRIEST",
+	"rarity": "LEGENDARY",
+	"description": "Taunt. Battlecry: Set your hero's Health to 40'.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "SetHeroHpSpell",
+			"target": "FRIENDLY_HERO",
+			"value": 40
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true,
+		"TAUNT": true
+	},
+	"collectible": false,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

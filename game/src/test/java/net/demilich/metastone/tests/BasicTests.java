@@ -19,7 +19,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class BasicTests extends TestBase {
-
 	private Card getTheCoin(CardList cards) {
 		for (Card card : cards) {
 			if (card.getCardId().equalsIgnoreCase("spell_the_coin")) {

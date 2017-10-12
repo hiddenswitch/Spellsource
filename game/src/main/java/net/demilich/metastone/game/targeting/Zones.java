@@ -13,6 +13,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.SummonRandomMinionFilteredSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 
 /**
@@ -70,6 +71,12 @@ public enum Zones {
 	 * @see GameLogic#playSecret(Player, Secret, boolean) for more about secrets.
 	 */
 	SECRET,
+	/**
+	 * This zone is  where {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} entities go, which behave
+	 * like secrets that are visible to the opponent and do not go away the first time they  are triggered.
+	 * @see GameLogic#playQuest(Player, Quest) for more about quests.
+	 */
+	QUEST,
 	/**
 	 * The hero power zone stores the {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} for a corresponding
 	 * {@link net.demilich.metastone.game.entities.heroes.Hero}. Only one such card can be in the zone at a time.

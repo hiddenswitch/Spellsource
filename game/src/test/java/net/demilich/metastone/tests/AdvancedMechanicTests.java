@@ -70,7 +70,7 @@ public class AdvancedMechanicTests extends BasicTests {
 		GameContext context = createContext(HeroClass.PRIEST, HeroClass.WARRIOR);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
-		player.getHand().removeAll();
+		clearHand(context, player);
 
 		int cardsInHand = player.getHand().getCount();
 		int cardsInOpponentsDeck = opponent.getDeck().getCount();

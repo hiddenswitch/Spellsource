@@ -1,0 +1,26 @@
+{
+	"name": "Volcanosaur",
+	"baseManaCost": 7,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 6,
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"description": "Battlecry: Adapt, then Adapt.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "AdaptSpell",
+			"value": 2,
+			"target": "SELF",
+			"group": "group_adapt"
+		}
+	},
+	"attributes": {
+		"ADAPT": true,
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

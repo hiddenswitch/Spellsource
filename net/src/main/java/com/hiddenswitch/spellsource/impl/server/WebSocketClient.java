@@ -134,7 +134,7 @@ public class WebSocketClient implements Client {
 				if (card.getCardType() == CardType.SPELL
 						&& card instanceof SecretCard
 						&& card.getOwner() != playerId) {
-					source = Games.getSecretCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+					source = Games.getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 				}
 			}
 

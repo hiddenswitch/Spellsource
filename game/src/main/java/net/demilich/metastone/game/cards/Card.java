@@ -247,7 +247,8 @@ public abstract class Card extends Entity {
 	}
 
 	/**
-	 * Gets the mana cost of this card from the point of view of the specified player and a given context.
+	 * Gets the mana cost of this card from the point of view of the specified card, player and a given context. Does
+	 * <b>NOT</b> consider the effect of card cost modifiers.
 	 * <p>
 	 * Costs can be modified lots of different ways, so this method ensures the cost is calculate considering all the
 	 * rules that are on the board.
@@ -256,6 +257,8 @@ public abstract class Card extends Entity {
 	 * @param player  The {@link Player} whose point of view should be considered for the cost. This is almost always
 	 *                the owner.
 	 * @return The cost.
+	 * @see net.demilich.metastone.game.logic.GameLogic#getModifiedManaCost(Player, Card) for the best method to get
+	 * the cost of a card.
 	 */
 	public int getManaCost(GameContext context, Player player) {
 		int actualManaCost = getBaseManaCost();

@@ -1,0 +1,21 @@
+{
+	"name": "Pyros",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "MAGE",
+	"rarity": "LEGENDARY",
+	"race": "ELEMENTAL",
+	"description": "Deathrattle: Return this to your hand as a 6/6 that costs (6).",
+	"deathrattle": {
+		"class": "ReceiveCardSpell",
+		"card": "token_pyros_1"
+	},
+	"collectible": true,
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

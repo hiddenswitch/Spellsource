@@ -72,15 +72,18 @@ public class SpellUtils {
 	}
 
 	public static Card getCard(GameContext context, SpellDesc spell) {
-		Card card = null;
 		String cardId = (String) spell.get(SpellArg.CARD);
+		return getSingleCard(context, cardId);
+	}
+
+	private static Card getSingleCard(GameContext context, String cardId) {
 		if (cardId == null) {
 			return null;
 		}
-		card = getCardFromContextOrDiscover(context, cardId);
-		if (spell.get(SpellArg.CARD).toString().toUpperCase().equals("PENDING_CARD")) {
+		Card card = getCardFromContextOrDiscover(context, cardId);
+		if (cardId.toUpperCase().equals("PENDING_CARD")) {
 			card = context.getPendingCard();
-		} else if (spell.get(SpellArg.CARD).toString().toUpperCase().equals("EVENT_CARD")) {
+		} else if (cardId.toUpperCase().equals("EVENT_CARD")) {
 			card = context.getEventCard();
 		}
 		return card;
@@ -98,7 +101,7 @@ public class SpellUtils {
 		for (int i = 0; i < cards.length; i++) {
 			// If the discover zone contains the card, reference it instead
 			final String cardId = cardIds[i];
-			cards[i] = getCardFromContextOrDiscover(context, cardId);
+			cards[i] = getSingleCard(context, cardId);
 		}
 		return cards;
 	}
@@ -191,7 +194,13 @@ public class SpellUtils {
 			// TODO: Parse the parenthesized part of a name in a spell as a description
 			spellCardDesc.id = context.getLogic().generateCardId();
 			spellCardDesc.name = name;
-			spellCardDesc.baseManaCost = desc.getValue(SpellArg.MANA, context, player, context.resolveSingleTarget(desc.getTarget()), source, 0);
+			List<Entity> entities = context.resolveTarget(player, source, desc.getTarget());
+			int baseManaCost = 0;
+			if (entities != null
+					&& entities.size() > 0) {
+				baseManaCost = desc.getValue(SpellArg.MANA, context, player, entities.get(0), source, 0);
+			}
+			spellCardDesc.baseManaCost = baseManaCost;
 			spellCardDesc.description = description;
 			spellCardDesc.heroClass = HeroClass.ANY;
 			spellCardDesc.type = CardType.SPELL;
@@ -390,5 +399,16 @@ public class SpellUtils {
 	public static MinionCard getMinionCardFromSummonSpell(GameContext context, Player player, Entity source, SpellDesc desc) {
 		// TODO: Actually create a minion card
 		return (MinionCard) (new MinionCardDesc().createInstance());
+	}
+
+	public static SpellDesc[] getGroup(GameContext context, SpellDesc spell) {
+		Card card = null;
+		String cardName = (String) spell.get(SpellArg.GROUP);
+		card = context.getCardById(cardName);
+		if (card != null && card instanceof GroupCard) {
+			GroupCard groupCard = (GroupCard) card;
+			return groupCard.getGroup();
+		}
+		return null;
 	}
 }

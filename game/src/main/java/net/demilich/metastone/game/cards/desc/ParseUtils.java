@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.GameValue;
 import net.demilich.metastone.game.PlayerAttribute;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.CardDescType;
@@ -98,6 +99,8 @@ public class ParseUtils {
 				return Enum.valueOf(Rarity.class, entry.getAsString());
 			case HERO_CLASS:
 				return Enum.valueOf(HeroClass.class, entry.getAsString());
+			case GAME_VALUE:
+				return Enum.valueOf(GameValue.class, entry.getAsString());
 			case HERO_CLASS_ARRAY: {
 				JsonArray jsonArray = entry.getAsJsonArray();
 				HeroClass[] array = new HeroClass[jsonArray.size()];

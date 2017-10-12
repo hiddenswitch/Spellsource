@@ -15,6 +15,7 @@ import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
@@ -51,6 +52,7 @@ public class Player extends Entity implements Serializable {
 	private EntityZone<Minion> minions = new EntityZone<>(getId(), Zones.BATTLEFIELD);
 	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), Zones.HERO);
 	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), Zones.SECRET);
+	private EntityZone<Quest> quests = new EntityZone<>(getId(), Zones.QUEST);
 	private EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER);
 
 	private final GameStatistics statistics = new GameStatistics();
@@ -77,6 +79,7 @@ public class Player extends Entity implements Serializable {
 		this.playerZone.add(this);
 		this.setId(otherPlayer.getId());
 		this.secretZone = otherPlayer.getSecrets().clone();
+		this.quests = otherPlayer.getQuests().clone();
 		this.deck = otherPlayer.getDeck().clone();
 		this.hand = otherPlayer.getHand().clone();
 		this.minions = otherPlayer.getMinions().clone();
@@ -186,7 +189,7 @@ public class Player extends Entity implements Serializable {
 	}
 
 	public Set<String> getSecretCardIds() {
-		return secretZone.stream().map(Secret::getSecretCard).map(Card::getCardId).collect(Collectors.toSet());
+		return secretZone.stream().map(Secret::getSourceCard).map(Card::getCardId).collect(Collectors.toSet());
 	}
 
 	public EntityZone<Secret> getSecrets() {
@@ -272,6 +275,7 @@ public class Player extends Entity implements Serializable {
 		heroZone.setPlayer(id);
 		secretZone.setPlayer(id);
 		playerZone.setPlayer(id);
+		quests.setPlayer(id);
 	}
 
 	public EntityZone getZone(Zones zone) {
@@ -302,6 +306,8 @@ public class Player extends Entity implements Serializable {
 				return getDiscovers();
 			case REMOVED_FROM_PLAY:
 				return getRemovedFromPlay();
+			case QUEST:
+				return getQuests();
 			case NONE:
 				return EntityZone.empty(getId());
 		}
@@ -335,5 +341,9 @@ public class Player extends Entity implements Serializable {
 	@Override
 	public int getOwner() {
 		return getId();
+	}
+
+	public EntityZone<Quest> getQuests() {
+		return quests;
 	}
 }
