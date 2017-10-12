@@ -2,6 +2,7 @@ package com.hiddenswitch.proto3.draft;
 
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.slf4j.Logger;
@@ -57,6 +58,7 @@ public class DraftLogic {
 
 	private List<HeroClass> createHeroChoices() {
 		List<HeroClass> classes = Arrays.asList(
+				HeroClass.DRUID,
 				HeroClass.HUNTER,
 				HeroClass.MAGE,
 				HeroClass.PALADIN,
@@ -74,16 +76,25 @@ public class DraftLogic {
 	private List<List<String>> createDraftCards(HeroClass hero) {
 		ArrayList<List<Card>> draftCards = new ArrayList<>(DRAFTS);
 
-		List<CardSet> equals = Arrays.asList(CardSet.Spellsource);
+		List<CardSet> equals = Arrays.asList(
+				CardSet.BASIC,
+				CardSet.CLASSIC,
+				CardSet.BLACKROCK_MOUNTAIN,
+				CardSet.GOBLINS_VS_GNOMES,
+				CardSet.LEAGUE_OF_EXPLORERS,
+				CardSet.MEAN_STREETS_OF_GADGETZHAN,
+				CardSet.NAXXRAMAS,
+				CardSet.ONE_NIGHT_IN_KARAZHAN,
+				CardSet.PROMO,
+				CardSet.REWARD,
+				CardSet.THE_GRAND_TOURNAMENT,
+				CardSet.THE_OLD_GODS
+		);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.Spellsource;
+		CardSet latestExpansion = CardSet.JOURNEY_TO_UNGORO;
 
-		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(
-				CardType.MINION,
-				CardType.SPELL,
-				CardType.WEAPON
-		));
+		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(CardType.values()));
 
 		Set<String> bannedCards = new HashSet<>();
 		bannedCards.addAll(Arrays.asList(
@@ -133,13 +144,6 @@ public class DraftLogic {
 				"spell_convert",
 				"spell_inner_fire"
 		));
-		// Ban choose ones for now
-		bannedCards.addAll(
-				CardCatalogue.getAll().toList().stream()
-						.filter(c -> c.getCardType() == CardType.CHOOSE_ONE)
-						.map(Card::getCardId)
-						.collect(toList())
-		);
 
 		for (int draft = 0; draft < DRAFTS; draft++) {
 			// Select a rarity at the appropriate frequency
@@ -160,7 +164,6 @@ public class DraftLogic {
 
 			while (draftChoices.stream().map(Card::getCardId).distinct().count() < CARDS_PER_DRAFT) {
 				float cardSetRoll = roll();
-				CardSet set;
 				DeckFormat format = new DeckFormat();
 				float latestExpansionOdds = EXPANSION_ODDS_FACTOR / (equals.size() + EXPANSION_ODDS_FACTOR);
 				if (cardSetRoll < latestExpansionOdds) {

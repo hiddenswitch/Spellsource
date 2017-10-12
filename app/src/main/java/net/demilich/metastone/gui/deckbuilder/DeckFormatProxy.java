@@ -26,13 +26,9 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.nittygrittymvc.Proxy;
 
 public class DeckFormatProxy extends Proxy<GameNotification> {
-
 	private static Logger logger = LoggerFactory.getLogger(DeckFormatProxy.class);
-
 	public static final String NAME = "DeckFormatProxy";
-	
 	private static final String DECK_FORMATS_FOLDER = "formats";
-
 	private final List<DeckFormat> deckFormats = new ArrayList<DeckFormat>();
 
 	public DeckFormatProxy() {
@@ -65,7 +61,8 @@ public class DeckFormatProxy extends Proxy<GameNotification> {
 	private void loadDeckFormats(Collection<ResourceInputStream> inputStreams, Gson gson) throws FileNotFoundException {
 		for (ResourceInputStream resourceInputStream : inputStreams) {
 			Reader reader = new InputStreamReader(resourceInputStream.inputStream);
-			HashMap<String, Object> map = gson.fromJson(reader, new TypeToken<HashMap<String, Object>>() {}.getType());
+			HashMap<String, Object> map = gson.fromJson(reader, new TypeToken<HashMap<String, Object>>() {
+			}.getType());
 
 			if (!map.containsKey("sets")) {
 				logger.error("Deck {} does not specify a value for 'sets' and is therefore not valid", resourceInputStream.fileName);
@@ -95,7 +92,7 @@ public class DeckFormatProxy extends Proxy<GameNotification> {
 			}
 		}
 		return deckFormat;
-		
+
 	}
 
 }

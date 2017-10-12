@@ -140,7 +140,7 @@ public class GameStatistics implements Cloneable, Serializable {
 		add(Statistic.MANA_SPENT, mana);
 	}
 
-	public void merge(GameStatistics otherStatistics) {
+	public GameStatistics merge(GameStatistics otherStatistics) {
 		for (Statistic stat : otherStatistics.stats.keySet()) {
 			Object value = get(stat);
 			if (value != null) {
@@ -163,6 +163,7 @@ public class GameStatistics implements Cloneable, Serializable {
 			}
 		}
 		updateWinRate();
+		return this;
 	}
 	
 	public void minionSummoned(Minion minion) {
