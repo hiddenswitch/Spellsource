@@ -158,8 +158,9 @@ public class Spellsource {
 	 */
 	public List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
-			cachedStandardDecks = Stream.of("Basic Biologist", "Basic Cyborg", "Basic Gamer", "Basic Octopod Demo", "Basic Resurrector")
-					.map(DeckCreateRequest::fromDeckCatalogue).collect(Collectors.toList());
+			cachedStandardDecks = new ArrayList<>();
+//			cachedStandardDecks = Stream.of("Basic Biologist", "Basic Cyborg", "Basic Gamer", "Basic Octopod Demo", "Basic Resurrector")
+//					.map(DeckCreateRequest::fromDeckCatalogue).collect(Collectors.toList());
 
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
 			Set<URL> resourceList = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(toSet());
