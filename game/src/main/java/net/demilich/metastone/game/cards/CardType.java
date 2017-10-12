@@ -6,6 +6,7 @@ public enum CardType {
 	SPELL,
 	WEAPON,
 	HERO_POWER,
+	GROUP,
 	CHOOSE_ONE;
 	
 	public boolean isCardType(CardType cardType) {

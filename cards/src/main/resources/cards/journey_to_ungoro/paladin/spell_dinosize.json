@@ -1,0 +1,25 @@
+{
+	"name": "Dinosize",
+	"baseManaCost": 8,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "EPIC",
+	"description": "Set a minion's Attack and Health to 10",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "SetAttackSpell",
+				"value": 10
+			},
+			{
+				"class": "SetHpSpell",
+				"value": 10
+			}
+		]
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

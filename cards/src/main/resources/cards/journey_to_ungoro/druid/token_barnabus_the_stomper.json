@@ -1,0 +1,45 @@
+{
+	"name": "Barnabus the Stomper",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 8,
+	"heroClass": "DRUID",
+	"rarity": "LEGENDARY",
+	"race": "BEAST",
+	"description": "Battlecry: Reduce the Cost of minions in your deck to (0).",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "AddSpellTriggerSpell",
+			"target": "FRIENDLY_PLAYER",
+			"trigger": {
+				"eventTrigger": {
+					"class": "CardDrawnTrigger",
+					"targetPlayer": "SELF",
+					"queueCondition": {
+						"class": "CardPropertyCondition",
+						"target": "EVENT_TARGET",
+						"cardType": "MINION"
+					}
+				},
+				"spell": {
+					"class": "CardCostModifierSpell",
+					"target": "FRIENDLY_PLAYER",
+					"cardCostModifier": {
+						"class": "CardCostModifier",
+						"target": "EVENT_TARGET",
+						"operation": "SET",
+						"value": 0
+					}
+				}
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": false,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

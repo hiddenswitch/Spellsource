@@ -1,0 +1,1 @@
+{"collectible": true, "set": "JOURNEY_TO_UNGORO", "name": "Sabretooth Tiger", "heroClass": "ANY", "description": "Stealth", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 2, "race": "BEAST", "baseAttack": 8, "attributes": {"STEALTH": true}, "type": "MINION", "baseManaCost": 6}

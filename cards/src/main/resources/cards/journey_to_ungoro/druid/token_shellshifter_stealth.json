@@ -1,0 +1,17 @@
+{
+	"name": "Shellshifter",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 3,
+	"heroClass": "DRUID",
+	"rarity": "RARE",
+	"race": "BEAST",
+	"description": "Stealth",
+	"attributes": {
+		"STEALTH": true
+	},
+	"collectible": false,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

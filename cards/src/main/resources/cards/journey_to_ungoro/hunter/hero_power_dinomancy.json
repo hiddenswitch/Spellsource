@@ -1,0 +1,20 @@
+{
+	"name": "Dinomancy",
+	"baseManaCost": 2,
+	"type": "HERO_POWER",
+	"heroClass": "HUNTER",
+	"rarity": "FREE",
+	"description": "Give a Beast +2/+2",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "BuffSpell",
+		"value": 2,
+		"filter": {
+			"class": "RaceFilter",
+			"race": "BEAST"
+		}
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

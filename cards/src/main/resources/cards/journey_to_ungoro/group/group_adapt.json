@@ -1,0 +1,90 @@
+{
+	"name": "Adapt",
+	"baseManaCost": 0,
+	"type": "GROUP",
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"group": [
+		{
+			"name": "Crackling Shield",
+			"description": "Divine Shield",
+			"class": "AddAttributeSpell",
+			"attribute": "DIVINE_SHIELD"
+		},
+		{
+			"name": "Flaming Claws",
+			"description": "+3 Attack",
+			"class": "BuffSpell",
+			"attackBonus": 3
+		},
+		{
+			"name": "Lightning Speed",
+			"description": "Windfury",
+			"class": "AddAttributeSpell",
+			"attribute": "WINDFURY"
+		},
+		{
+			"name": "Liquid Membrane",
+			"description": "Can't be targeted by spells or Hero Powers.",
+			"class": "AddAttributeSpell",
+			"attribute": "UNTARGETABLE_BY_SPELLS"
+		},
+		{
+			"name": "Living Spores",
+			"description": "Deathrattle: Summon two 1/1 Plants.",
+			"class": "AddDeathrattleSpell",
+			"spell": {
+				"class": "SummonSpell",
+				"value": 2,
+				"card": "token_sapling"
+			}
+		},
+		{
+			"name": "Massive",
+			"description": "Taunt",
+			"class": "AddAttributeSpell",
+			"attribute": "TAUNT"
+		},
+		{
+			"class": "AddSpellTriggerSpell",
+			"name": "Poison Spit",
+			"description": "Poisonous",
+			"trigger": {
+				"eventTrigger": {
+					"class": "DamageCausedTrigger",
+					"targetEntityType": "MINION",
+					"hostTargetType": "IGNORE_OTHER_SOURCES"
+				},
+				"spell": {
+					"class": "DestroySpell",
+					"target": "EVENT_TARGET"
+				}
+			}
+		},
+		{
+			"name": "Rocky Carapace",
+			"description": "+3 Health",
+			"class": "BuffSpell",
+			"hpBonus": 3
+		},
+		{
+			"name": "Shrouding Mist",
+			"description": "Stealth until your next turn.",
+			"class": "AddAttributeSpell",
+			"attribute": "STEALTH",
+			"revertTrigger": {
+				"class": "TurnStartTrigger",
+				"targetPlayer": "SELF"
+			}
+		},
+		{
+			"name": "Volcanic Might",
+			"description": "+1/+1",
+			"class": "BuffSpell",
+			"value": 1
+		}
+	],
+	"collectible": false,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,24 @@
+{
+	"name": "Hallucination",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "COMMON",
+	"description": "Discover a card from your opponent's class'.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DiscoverRandomCardSpell",
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"targetPlayer": "SELF"
+		},
+		"cardFilter": {
+			"class": "CardFilter",
+			"attribute": "DEATHRATTLES",
+			"operation": "HAS"
+		}
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

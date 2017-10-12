@@ -1,0 +1,36 @@
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "The Voraxx",
+  "heroClass": "ANY",
+  "description": "After you target this minion with a spell, summon a 1/1 Plant and cast another copy on it.",
+  "fileFormatVersion": 1,
+  "rarity": "LEGENDARY",
+  "baseHp": 3,
+  "trigger": {
+    "eventTrigger": {
+      "sourcePlayer": "SELF",
+      "actionType": "SPELL",
+      "class": "TargetAcquisitionTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "boardPositionRelative": "RIGHT",
+          "class": "SummonNewAttackTargetSpell",
+          "card": "token_sapling"
+        },
+        {
+          "class": "RecastSpell",
+          "card": "PENDING_CARD",
+          "target": "SELF"
+        }
+      ]
+    }
+  },
+  "baseAttack": 3,
+  "type": "MINION",
+  "baseManaCost": 4
+}

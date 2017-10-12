@@ -412,6 +412,7 @@ definitions:
           - 'GRAVEYARD'
           - 'BATTLEFIELD'
           - 'SECRET'
+          - 'QUEST'
           - 'HERO_POWER'
           - 'HERO'
           - 'WEAPON'
@@ -637,6 +638,16 @@ definitions:
         type: 'object'
         properties:
           secret:
+            $ref: '#/definitions/Entity'
+      questSuccessful:
+        type: 'object'
+        properties:
+          quest:
+            $ref: '#/definitions/Entity'
+      questPlayed:
+        type: 'object'
+        properties:
+          quest:
             $ref: '#/definitions/Entity'
       summon:
         type: 'object'
@@ -1016,7 +1027,7 @@ definitions:
         description: |
           Broad categories describing this entity and how it should be rendered.
         type: 'string'
-        enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON', 'SECRET']
+        enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON', 'SECRET', 'QUEST']
       name:
         description: |
           The text that would go into the entity's name field.
@@ -1111,6 +1122,10 @@ definitions:
       windfury:
         description: |
           Indicates the entity can attack twice a turn.
+        type: 'boolean'
+      permanent:
+        description: |
+          Indicates the entity is an on-battlefield permanent.
         type: 'boolean'
       taunt:
         description: |

@@ -39,6 +39,7 @@ import net.demilich.metastone.game.spells.trigger.MinionSummonedTrigger;
 import net.demilich.metastone.game.spells.trigger.SpellCastedTrigger;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.utils.MathUtils;
@@ -92,6 +93,10 @@ public class GameLogic implements Cloneable, Serializable {
 	 * The maximum number of {@link Secret} entities that can be in a {@link Zones#SECRET}.
 	 */
 	public static final int MAX_SECRETS = 5;
+	/**
+	 * The maximum number of {@link Quest} entities that can be in a {@link Zones#QUEST}.
+	 */
+	public static final int MAX_QUESTS = 1;
 	/**
 	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link Deck} with. Some effects,
 	 * like Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
@@ -392,6 +397,19 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	public boolean canPlaySecret(Player player, SecretCard card) {
 		return player.getSecrets().size() < MAX_SECRETS && !player.getSecretCardIds().contains(card.getCardId());
+	}
+
+	/**
+	 * Determines whether a player can play a quest.
+	 * <p>
+	 * Quests count as secrets
+	 *
+	 * @param player
+	 * @param card
+	 * @return
+	 */
+	public boolean canPlayQuest(Player player, QuestCard card) {
+		return player.getSecrets().size() < MAX_SECRETS && player.getQuests().size() < MAX_QUESTS && !player.getQuests().contains(card.getCardId());
 	}
 
 	/**
@@ -2004,7 +2022,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 		log("{} plays {}", player.getName(), card);
 
-		player.getStatistics().cardPlayed(card);
+		player.getStatistics().cardPlayed(card, context.getTurn());
 		CardPlayedEvent cardPlayedEvent = new CardPlayedEvent(context, playerId, card);
 		context.fireGameEvent(cardPlayedEvent);
 
@@ -2059,14 +2077,14 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void playSecret(Player player, Secret secret, boolean fromHand) {
-		log("{} has a new secret activated: {}", player.getName(), secret.getSecretCard());
+		log("{} has a new secret activated: {}", player.getName(), secret.getSourceCard());
 		Secret newSecret = secret.clone();
 		newSecret.setId(getIdFactory().generateId());
 		newSecret.setOwner(player.getId());
 		addGameEventListener(player, newSecret, player.getHero());
 		player.getSecrets().add(newSecret);
 		if (fromHand) {
-			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), (SecretCard) newSecret.getSecretCard()));
+			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), (SecretCard) newSecret.getSourceCard()));
 		}
 	}
 
@@ -2522,10 +2540,10 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void secretTriggered(Player player, Secret secret) {
-		log("Secret was trigged: {}", secret.getSecretCard());
+		log("Secret was trigged: {}", secret.getSourceCard());
 		// Move the secret to removed from play.
 		secret.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		context.fireGameEvent(new SecretRevealedEvent(context, (SecretCard) secret.getSecretCard(), player.getId()));
+		context.fireGameEvent(new SecretRevealedEvent(context, (SecretCard) secret.getSourceCard(), player.getId()));
 	}
 
 	// TODO: circular dependency. Very ugly, refactor!
@@ -2548,6 +2566,10 @@ public class GameLogic implements Cloneable, Serializable {
 	public void shuffleToDeck(Player player, Card card) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(getIdFactory().generateId());
+		}
+
+		if (card.getOwner() == IdFactory.UNASSIGNED) {
+			card.setOwner(player.getId());
 		}
 
 		if (player.getDeck().getCount() < MAX_DECK_SIZE) {
@@ -2862,7 +2884,7 @@ public class GameLogic implements Cloneable, Serializable {
 		modifyCurrentMana(playerId, -modifiedManaCost);
 		log("{} uses {}", player.getName(), power);
 		power.markUsed();
-		player.getStatistics().cardPlayed(power);
+		player.getStatistics().cardPlayed(power, context.getTurn());
 		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
 	}
 
@@ -2910,6 +2932,29 @@ public class GameLogic implements Cloneable, Serializable {
 				&& (hero.getZone() != Zones.GRAVEYARD)) {
 			destroy(hero);
 		}
+	}
+
+	public void playQuest(Player player, Quest quest) {
+		playQuest(player, quest, true);
+	}
+
+	public void playQuest(Player player, Quest quest, boolean fromHand) {
+		log("{} has a new quest activated: {}", player.getName(), quest.getSourceCard());
+		quest = quest.clone();
+		addGameEventListener(player, quest, player.getHero());
+		quest.setId(getIdFactory().generateId());
+		quest.setOwner(player.getId());
+		addGameEventListener(player, quest, player.getHero());
+		player.getQuests().add(quest);
+		if (fromHand) {
+			context.fireGameEvent(new QuestPlayedEvent(context, player.getId(), (QuestCard) quest.getSourceCard()));
+		}
+	}
+
+	public void questTriggered(Player player, Quest quest) {
+		log("Quest was trigged: {}", quest.getSourceCard());
+		quest.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		context.fireGameEvent(new QuestSuccessfulEvent(context, (QuestCard) quest.getSourceCard(), player.getId()));
 	}
 
 	protected class FirstHand {

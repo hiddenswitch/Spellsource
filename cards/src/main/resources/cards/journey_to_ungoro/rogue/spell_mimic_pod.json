@@ -1,0 +1,20 @@
+{
+	"name": "Mimic Pod",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "RARE",
+	"description": "Draw a card, then add a copy of it to your hand.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DrawCardAndDoSomethingSpell",
+		"value": 1,
+		"spell": {
+			"class": "CopyCardSpell",
+			"value": 1
+		}
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

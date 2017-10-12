@@ -19,6 +19,7 @@ DECK | &quot;DECK&quot;
 GRAVEYARD | &quot;GRAVEYARD&quot;
 BATTLEFIELD | &quot;BATTLEFIELD&quot;
 SECRET | &quot;SECRET&quot;
+QUEST | &quot;QUEST&quot;
 HERO_POWER | &quot;HERO_POWER&quot;
 HERO | &quot;HERO&quot;
 WEAPON | &quot;WEAPON&quot;

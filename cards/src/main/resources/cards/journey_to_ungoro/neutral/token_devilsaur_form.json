@@ -1,0 +1,1 @@
+{"collectible": false, "set": "JOURNEY_TO_UNGORO", "name": "Shellshifter", "heroClass": "ANY", "description": "Taunt, Stealth.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 5, "race": "BEAST", "baseAttack": 5, "attributes": {"TAUNT": true, "STEALTH": true}, "type": "MINION", "baseManaCost": 4}

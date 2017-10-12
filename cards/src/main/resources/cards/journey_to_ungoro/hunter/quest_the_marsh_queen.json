@@ -1,0 +1,30 @@
+{
+	"name": "The Marsh Queen",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "HUNTER",
+	"rarity": "LEGENDARY",
+	"description": "Quest: Play seven 1-Cost minions. Reward: Queen Carnassa.",
+	"targetSelection": "NONE",
+	"quest": {
+		"class": "MinionPlayedTrigger",
+		"targetPlayer": "SELF",
+		"queueCondition": {
+			"class": "ComparisonCondition",
+			"value1": {
+				"class": "PlayerAttributeValueProvider",
+				"playerAttribute": "LAST_MANA_COST"
+			},
+			"value2": 1,
+			"operation": "EQUAL"
+		},
+		"value": 7
+	},
+	"spell": {
+		"class": "ReceiveCardSpell",
+		"card": "token_queen_carnassa"
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

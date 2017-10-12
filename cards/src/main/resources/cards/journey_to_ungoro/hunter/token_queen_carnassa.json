@@ -1,0 +1,26 @@
+{
+	"name": "Queen Carnassa",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 8,
+	"heroClass": "HUNTER",
+	"rarity": "LEGENDARY",
+	"race": "BEAST",
+	"description": "Battlecry: Shuffle 15 Raptors into your deck.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "ShuffleToDeckSpell",
+			"targetPlayer": "SELF",
+			"card": "token_carnassas_brood",
+			"howMany": 15
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": false,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

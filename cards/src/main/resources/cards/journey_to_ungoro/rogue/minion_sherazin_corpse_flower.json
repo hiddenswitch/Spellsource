@@ -1,0 +1,20 @@
+{
+	"name": "Sherazin, Corpse Flower",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 3,
+	"heroClass": "ROGUE",
+	"rarity": "LEGENDARY",
+	"description": "Deathrattle: Go dormant. Play 4 cards in a turn to revive this minion.",
+	"deathrattle": {
+		"class": "SummonSpell",
+		"card": "permanent_sherazin_seed"
+	},
+	"collectible": true,
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

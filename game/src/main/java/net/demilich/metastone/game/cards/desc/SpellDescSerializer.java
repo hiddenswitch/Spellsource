@@ -54,6 +54,7 @@ public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSer
 		parseArgument(SpellArg.EXCLUSIVE, jsonData, spellArgs, ParseValueType.BOOLEAN);
 		parseArgument(SpellArg.FILTER, jsonData, spellArgs, ParseValueType.ENTITY_FILTER);
 		parseArgument(SpellArg.FULL_MANA_CRYSTALS, jsonData, spellArgs, ParseValueType.BOOLEAN);
+		parseArgument(SpellArg.GROUP, jsonData, spellArgs, ParseValueType.STRING);
 		parseArgument(SpellArg.HOW_MANY, jsonData, spellArgs, ParseValueType.VALUE);
 		parseArgument(SpellArg.HP_BONUS, jsonData, spellArgs, ParseValueType.VALUE);
 		parseArgument(SpellArg.IGNORE_SPELL_DAMAGE, jsonData, spellArgs, ParseValueType.BOOLEAN);
@@ -65,6 +66,7 @@ public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSer
 		parseArgument(SpellArg.NAME, jsonData, spellArgs, ParseValueType.STRING);
 		parseArgument(SpellArg.OPERATION, jsonData, spellArgs, ParseValueType.ALGEBRAIC_OPERATION);
 		parseArgument(SpellArg.OPTIONS, jsonData, spellArgs, ParseValueType.BOOLEAN);
+		parseArgument(SpellArg.QUEST, jsonData, spellArgs, ParseValueType.EVENT_TRIGGER);
 		parseArgument(SpellArg.RANDOM_TARGET, jsonData, spellArgs, ParseValueType.BOOLEAN);
 		parseArgument(SpellArg.REVERT_TRIGGER, jsonData, spellArgs, ParseValueType.EVENT_TRIGGER);
 		parseArgument(SpellArg.SECOND_REVERT_TRIGGER, jsonData, spellArgs, ParseValueType.EVENT_TRIGGER);

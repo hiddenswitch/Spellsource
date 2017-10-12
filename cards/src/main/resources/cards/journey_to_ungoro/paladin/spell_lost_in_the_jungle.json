@@ -1,0 +1,1 @@
+{"collectible": true, "set": "JOURNEY_TO_UNGORO", "description": "Summon two 1/1 Kodamas.", "spell": {"cards": ["token_silver_hand_recruit", "token_silver_hand_recruit"], "class": "SummonSpell"}, "fileFormatVersion": 1, "rarity": "COMMON", "heroClass": "PALADIN", "targetSelection": "NONE", "baseManaCost": 1, "type": "SPELL", "name": "Lost in the Jungle"}

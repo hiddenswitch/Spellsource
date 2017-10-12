@@ -188,7 +188,7 @@ public interface CardList extends Iterable<Card> {
 	/**
 	 * Removes all the cards from this instance.
 	 */
-	void removeAll();
+	void removeAll() throws Exception;
 
 	/**
 	 * Removes the first card. Implements {@link net.demilich.metastone.game.spells.PutRandomSecretIntoPlaySpell}, used

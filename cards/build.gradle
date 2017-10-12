@@ -7,7 +7,6 @@ jar {
 }
 
 dependencies {
-    testCompile project(":game")
     testCompile group: 'org.testng', name: 'testng', version: '6.+'
 }
 

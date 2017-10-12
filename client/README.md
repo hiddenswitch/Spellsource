@@ -160,6 +160,7 @@ Class | Method | HTTP request | Description
  - [GameEventOverload](docs/GameEventOverload.md)
  - [GameEventPerformedGameAction](docs/GameEventPerformedGameAction.md)
  - [GameEventPreDamage](docs/GameEventPreDamage.md)
+ - [GameEventQuestSuccessful](docs/GameEventQuestSuccessful.md)
  - [GameEventSecretPlayed](docs/GameEventSecretPlayed.md)
  - [GameEventSecretRevealed](docs/GameEventSecretRevealed.md)
  - [GameEventSilence](docs/GameEventSilence.md)

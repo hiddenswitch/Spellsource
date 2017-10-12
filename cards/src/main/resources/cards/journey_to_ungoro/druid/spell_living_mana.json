@@ -1,0 +1,51 @@
+{
+	"name": "Living Mana",
+	"baseManaCost": 5,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "EPIC",
+	"description": "Transform your Mana Crystals into 2/2 minions. Recover the mana when they die.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "MetaSpell",
+		"value": { 
+			"class": "AlgebraicValueProvider",
+			"operation": "MINIMUM",
+			"value1": {
+				"class": "PlayerAttributeValueProvider",
+				"targetPlayer": "SELF",
+				"playerAttribute": "MAX_MANA"
+			},
+			"value2": {
+				"class": "AlgebraicValueProvider",
+				"operation": "SUBTRACT",
+				"value1": 7,
+				"value2": {
+					"class": "EntityCounter",
+					"target": "FRIENDLY_MINIONS"
+				}
+			}
+		},
+		"spells": [
+			{
+				"class": "SummonSpell",
+				"card": "token_mana_treant",
+				"value": {
+					"class": "GameValueProvider",
+					"gameValue": "SPELL_VALUE"
+				}
+			},
+			{
+				"class": "ModifyMaxManaSpell",
+				"value": {
+					"class": "GameValueProvider",
+					"gameValue": "SPELL_VALUE",
+					"multiplier": -1
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

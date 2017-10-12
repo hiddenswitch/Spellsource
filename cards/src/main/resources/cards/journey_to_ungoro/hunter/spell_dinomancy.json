@@ -1,0 +1,16 @@
+{
+	"name": "Dinomancy",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "HUNTER",
+	"rarity": "EPIC",
+	"description": "Your Hero Power becomes 'Give a Beast +2/+2.'",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "ChangeHeroPowerSpell",
+		"card": "hero_power_dinomancy"
+	},
+	"collectible": true,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

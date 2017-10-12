@@ -36,7 +36,7 @@ public class BlackrockMountainTests extends BasicTests {
 	public void testBlackwingCorruptor() {
 		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
 		Player player = context.getPlayer1();
-		player.getHand().removeAll();
+		clearHand(context, player);
 
 		TestBehaviour behaviour = (TestBehaviour) player.getBehaviour();
 		final EntityReference heroReference = player.getHero().getReference();
@@ -55,7 +55,7 @@ public class BlackrockMountainTests extends BasicTests {
 	public void testBlackwingTechnician() {
 		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
 		Player player = context.getPlayer1();
-		player.getHand().removeAll();
+		clearHand(context, player);
 
 		Minion blackwingTechnician = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_blackwing_technician"));
 		Assert.assertEquals(blackwingTechnician.getHp(), blackwingTechnician.getBaseHp());
@@ -71,7 +71,7 @@ public class BlackrockMountainTests extends BasicTests {
 	public void testChromaggus() {
 		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
 		Player player = context.getPlayer1();
-		player.getHand().removeAll();
+		clearHand(context, player);
 
 		Assert.assertEquals(player.getHand().getCount(), 0);
 
@@ -79,7 +79,7 @@ public class BlackrockMountainTests extends BasicTests {
 		context.getLogic().drawCard(player.getId(), player.getHero());
 		Assert.assertEquals(player.getHand().getCount(), 2);
 
-		player.getHand().removeAll();
+		clearHand(context, player);
 
 		Assert.assertEquals(player.getHand().getCount(), 0);
 
@@ -92,7 +92,7 @@ public class BlackrockMountainTests extends BasicTests {
 	public void testCoreRager() {
 		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
 		Player player = context.getPlayer1();
-		player.getHand().removeAll();
+		clearHand(context, player);
 
 		Minion coreRager = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_core_rager"));
 		Assert.assertEquals(coreRager.getAttack(), coreRager.getBaseAttack() + 3);

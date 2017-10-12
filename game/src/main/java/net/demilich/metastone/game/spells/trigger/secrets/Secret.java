@@ -19,7 +19,8 @@ public class Secret extends SpellTrigger {
 		setAttributes((AttributeMap) source.getAttributes().clone());
 	}
 
-	public Card getSecretCard() {
+	@Override
+	public Card getSourceCard() {
 		return source;
 	}
 
@@ -43,7 +44,7 @@ public class Secret extends SpellTrigger {
 
 	@Override
 	public String getName() {
-		return getSecretCard().getName();
+		return getSourceCard().getName();
 	}
 
 	@Override

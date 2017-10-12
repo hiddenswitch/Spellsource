@@ -1,0 +1,22 @@
+{
+	"name": "Raptor Hatchling",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 1,
+	"heroClass": "HUNTER",
+	"rarity": "RARE",
+	"race": "BEAST",
+	"description": "Deathrattle: Shuffle a 4/3 Raptor into your deck.",
+	"deathrattle": {
+		"class": "ShuffleToDeckSpell",
+		"targetPlayer": "SELF",
+		"card": "token_raptor_patriarch"
+	},
+	"collectible": true,
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

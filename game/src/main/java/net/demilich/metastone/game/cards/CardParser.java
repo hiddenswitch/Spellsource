@@ -6,6 +6,7 @@ import java.util.Map;
 import com.hiddenswitch.spellsource.util.Serialization;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import net.demilich.metastone.game.cards.desc.*;
 import net.demilich.metastone.utils.ResourceInputStream;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -13,16 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-
-import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.cards.desc.ChooseBattlecryCardDesc;
-import net.demilich.metastone.game.cards.desc.ChooseOneCardDesc;
-import net.demilich.metastone.game.cards.desc.HeroCardDesc;
-import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
-import net.demilich.metastone.game.cards.desc.SecretCardDesc;
-import net.demilich.metastone.game.cards.desc.SpellCardDesc;
-import net.demilich.metastone.game.cards.desc.WeaponCardDesc;
 
 public class CardParser {
 	private static Logger logger = LoggerFactory.getLogger(CardParser.class);
@@ -33,10 +24,6 @@ public class CardParser {
 		final String id = card.getString("id");
 		CardDesc desc = getCardDesc(id, Serialization.getGson().fromJson(text, JsonElement.class));
 		return new CardCatalogueRecord(id, card, desc);
-	}
-
-	private static Gson getGson() {
-		return Serialization.getGson();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -88,6 +75,8 @@ public class CardParser {
 				}
 				if (gsonObject.has("trigger")) {
 					return Serialization.getGson().fromJson(jsonData, SecretCardDesc.class);
+				} else if (gsonObject.has("quest")) {
+					return Serialization.getGson().fromJson(jsonData, QuestCardDesc.class);
 				} else {
 					if (!gsonObject.has("targetSelection")) {
 						throw new RuntimeException(id + " is missing 'targetSelection' attribute!");
@@ -151,6 +140,8 @@ public class CardParser {
 				return Serialization.getGson().fromJson(jsonData, HeroPowerCardDesc.class);
 			case HERO:
 				return Serialization.getGson().fromJson(jsonData, HeroCardDesc.class);
+			case GROUP:
+				return Serialization.getGson().fromJson(jsonData, GroupCardDesc.class);
 			default:
 				logger.error("Unknown cardType: " + type);
 				break;

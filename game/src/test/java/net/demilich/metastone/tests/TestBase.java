@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
@@ -30,6 +32,25 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.testng.annotations.BeforeMethod;
 
 public class TestBase {
+
+	public static void clearHand(GameContext context, Player player) {
+		for (int i = player.getHand().getCount() - 1; i >= 0; i--) {
+			context.getLogic().removeCard(player.getHand().get(i));
+		}
+	}
+
+	public static void clearZone(GameContext context, EntityZone zone) {
+		for (int i = zone.size() - 1; i >= 0; i--) {
+			Entity entity = zone.get(i);
+			if (Card.class.isAssignableFrom(entity.getClass())) {
+				context.getLogic().removeCard((Card) entity);
+			} else if (Actor.class.isAssignableFrom(entity.getClass())) {
+				context.getLogic().destroy((Actor) entity);
+			} else {
+				entity.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			}
+		}
+	}
 
 	protected static class TestBehaviour extends AbstractBehaviour {
 

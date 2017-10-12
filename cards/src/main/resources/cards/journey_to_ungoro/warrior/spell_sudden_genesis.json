@@ -1,0 +1,1 @@
+{"collectible": true, "set": "JOURNEY_TO_UNGORO", "description": "Summon a copy of each friendly damaged minion.", "spell": {"filter": {"class": "DamagedFilter"}, "class": "SummonCopySpell", "target": "FRIENDLY_MINIONS"}, "fileFormatVersion": 1, "rarity": "EPIC", "heroClass": "WARRIOR", "targetSelection": "NONE", "baseManaCost": 5, "type": "SPELL", "name": "Sudden Genesis"}

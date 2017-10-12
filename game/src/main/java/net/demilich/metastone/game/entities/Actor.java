@@ -163,6 +163,9 @@ public abstract class Actor extends Entity {
 
 	@Override
 	public boolean isDestroyed() {
+		if (hasAttribute(Attribute.PERMANENT)) {
+			return hasAttribute(Attribute.DESTROYED);
+		}
 		return getHp() < 1 || super.isDestroyed();
 	}
 

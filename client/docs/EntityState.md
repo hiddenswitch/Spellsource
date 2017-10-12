@@ -25,6 +25,7 @@ Name | Type | Description | Notes
 **frozen** | **Boolean** | When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when it would normally be able to attack.  |  [optional]
 **silenced** | **Boolean** | Indicates that the entity was silenced.  |  [optional]
 **windfury** | **Boolean** | Indicates the entity can attack twice a turn.  |  [optional]
+**permanent** | **Boolean** | Indicates the entity is an on-battlefield permanent.  |  [optional]
 **taunt** | **Boolean** | Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent&#39;s physical attack action targeting.  |  [optional]
 **spellDamage** | **Integer** | Indicates the amount of additional spell damage this entity gives its owning player.  |  [optional]
 **charge** | **Boolean** | When true, the entity can attack the same turn it is summoned.  |  [optional]

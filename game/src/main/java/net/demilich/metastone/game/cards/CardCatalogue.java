@@ -19,9 +19,6 @@ import java.util.function.Predicate;
 public class CardCatalogue {
 
 	public static final String CARDS_FOLDER = "cards";
-	public static final String LOCAL_CARDS_FOLDER = "../cards/src/main/resources/cards/";
-	public static final String CARDS_FOLDER_PATH = UserHomeMetastone.getPath() + File.separator + CARDS_FOLDER;
-	public static final String CARDS_COPIED_PROPERTY = "cardRevision";
 
 	private static Logger logger = LoggerFactory.getLogger(CardCatalogue.class);
 
@@ -152,12 +149,6 @@ public class CardCatalogue {
 			}
 		}
 		return result;
-	}
-
-	public static void loadCardsFromFilesystem() throws IOException, URISyntaxException, CardParseException {
-		// load cards from ~/metastone/cards on the file system
-		Collection<ResourceInputStream> inputStreams = ResourceLoader.loadJsonInputStreams(CARDS_FOLDER_PATH, true);
-		loadCards(inputStreams);
 	}
 
 

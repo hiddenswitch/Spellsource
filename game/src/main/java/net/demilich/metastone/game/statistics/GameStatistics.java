@@ -13,7 +13,7 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 
 public class GameStatistics implements Cloneable, Serializable {
 	private final Map<Statistic, Object> stats = new EnumMap<Statistic, Object>(Statistic.class);
-	private final Map<String, Integer> cardsPlayed = new HashMap<String, Integer>();
+	private final Map<String, Map<Integer, Integer>> cardsPlayed = new HashMap<>();
 	private final Map<String, Integer> minionsSummoned = new HashMap<String, Integer>();
 
 	private void add(Statistic key, long value) {
@@ -32,26 +32,28 @@ public class GameStatistics implements Cloneable, Serializable {
 		add(Statistic.CARDS_DRAWN, 1);
 	}
 
-	public void cardPlayed(Card card) {
+	public void cardPlayed(Card card, int turn) {
 		add(Statistic.CARDS_PLAYED, 1);
 
 		switch (card.getCardType()) {
-		case HERO_POWER:
-			add(Statistic.HERO_POWER_USED, 1);
-			break;
-		case MINION:
-			add(Statistic.MINIONS_PLAYED, 1);
-			break;
-		case SPELL:
-		case CHOOSE_ONE:
-			add(Statistic.SPELLS_CAST, 1);
-			break;
-		case WEAPON:
-			add(Statistic.WEAPONS_PLAYED, 1);
-		case HERO:
-			break;
+			case HERO_POWER:
+				add(Statistic.HERO_POWER_USED, 1);
+				break;
+			case MINION:
+				add(Statistic.MINIONS_PLAYED, 1);
+				break;
+			case SPELL:
+			case CHOOSE_ONE:
+				add(Statistic.SPELLS_CAST, 1);
+				break;
+			case WEAPON:
+				add(Statistic.WEAPONS_PLAYED, 1);
+			case HERO:
+				break;
+			case GROUP:
+				break;
 		}
-		increaseCardCount(card);
+		increaseCardCount(card, turn);
 	}
 
 	public GameStatistics clone() {
@@ -92,10 +94,10 @@ public class GameStatistics implements Cloneable, Serializable {
 		return stats.get(key);
 	}
 
-	public Map<String, Integer> getCardsPlayed() {
+	public Map<String, Map<Integer, Integer>> getCardsPlayed() {
 		return cardsPlayed;
 	}
-	
+
 	public Map<String, Integer> getMinionsSummoned() {
 		return minionsSummoned;
 	}
@@ -112,16 +114,18 @@ public class GameStatistics implements Cloneable, Serializable {
 		add(Statistic.HEALING_DONE, healing);
 	}
 
-	private void increaseCardCount(Card card) {
+	private void increaseCardCount(Card card, int turn) {
 		if (card.getCardType().isCardType(CardType.HERO_POWER)) {
 			return;
 		}
 		String cardId = card.getCardId();
-		;
 		if (!getCardsPlayed().containsKey(cardId)) {
-			getCardsPlayed().put(cardId, 0);
+			getCardsPlayed().put(cardId, new HashMap<Integer, Integer>());
 		}
-		getCardsPlayed().put(cardId, getCardsPlayed().get(cardId) + 1);
+		if (!getCardsPlayed().get(cardId).containsKey(turn)) {
+			getCardsPlayed().get(cardId).put(turn, 0);
+		}
+		getCardsPlayed().get(cardId).put(turn, getCardsPlayed().get(cardId).get(turn) + 1);
 	}
 	
 	private void increaseMinionCount(Minion minion) {
@@ -136,7 +140,7 @@ public class GameStatistics implements Cloneable, Serializable {
 		add(Statistic.MANA_SPENT, mana);
 	}
 
-	public GameStatistics merge(GameStatistics otherStatistics) {
+	public void merge(GameStatistics otherStatistics) {
 		for (Statistic stat : otherStatistics.stats.keySet()) {
 			Object value = get(stat);
 			if (value != null) {
@@ -149,12 +153,16 @@ public class GameStatistics implements Cloneable, Serializable {
 		}
 		for (String cardId : otherStatistics.getCardsPlayed().keySet()) {
 			if (!getCardsPlayed().containsKey(cardId)) {
-				getCardsPlayed().put(cardId, 0);
+				getCardsPlayed().put(cardId, new HashMap<Integer, Integer>());
 			}
-			getCardsPlayed().put(cardId, getCardsPlayed().get(cardId) + otherStatistics.getCardsPlayed().get(cardId));
+			for (int turn : otherStatistics.getCardsPlayed().get(cardId).keySet()) {
+				if (!getCardsPlayed().get(cardId).containsKey(turn)) {
+					getCardsPlayed().get(cardId).put(turn, 0);
+				}
+				getCardsPlayed().get(cardId).put(turn, getCardsPlayed().get(cardId).get(turn) + otherStatistics.getCardsPlayed().get(cardId).get(turn));
+			}
 		}
 		updateWinRate();
-		return this;
 	}
 	
 	public void minionSummoned(Minion minion) {

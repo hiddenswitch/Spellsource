@@ -1,0 +1,14 @@
+{
+	"name": "Imp",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 2,
+	"heroClass": "WARLOCK",
+	"rarity": "FREE",
+	"race": "DEMON",
+	"description": "",
+	"collectible": false,
+	"set": "JOURNEY_TO_UNGORO",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,28 @@
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "Gentle Megasaur",
+  "heroClass": "ANY",
+  "description": "Battlecry: Adapt your Tanooki",
+  "fileFormatVersion": 1,
+  "rarity": "EPIC",
+  "baseHp": 4,
+  "baseAttack": 5,
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "battlecry": {
+    "spell": {
+      "class": "AdaptSpell",
+      "target": "SELF",
+      "group": "group_adapt",
+      "filter": {
+        "race": "MURLOC",
+        "class": "RaceFilter"
+      }
+    },
+    "targetSelection": "NONE"
+  },
+  "type": "MINION",
+  "baseManaCost": 4
+}

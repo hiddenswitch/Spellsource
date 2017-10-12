@@ -101,6 +101,9 @@ public class EntityState  implements Serializable {
   @SerializedName("windfury")
   private Boolean windfury = null;
 
+  @SerializedName("permanent")
+  private Boolean permanent = null;
+
   @SerializedName("taunt")
   private Boolean taunt = null;
 
@@ -585,6 +588,24 @@ public class EntityState  implements Serializable {
     this.windfury = windfury;
   }
 
+  public EntityState permanent(Boolean permanent) {
+    this.permanent = permanent;
+    return this;
+  }
+
+   /**
+   * Indicates the entity is an on-battlefield permanent. 
+   * @return permanent
+  **/
+  @ApiModelProperty(example = "null", value = "Indicates the entity is an on-battlefield permanent. ")
+  public Boolean getPermanent() {
+    return permanent;
+  }
+
+  public void setPermanent(Boolean permanent) {
+    this.permanent = permanent;
+  }
+
   public EntityState taunt(Boolean taunt) {
     this.taunt = taunt;
     return this;
@@ -1048,6 +1069,7 @@ public class EntityState  implements Serializable {
         Objects.equals(this.frozen, entityState.frozen) &&
         Objects.equals(this.silenced, entityState.silenced) &&
         Objects.equals(this.windfury, entityState.windfury) &&
+        Objects.equals(this.permanent, entityState.permanent) &&
         Objects.equals(this.taunt, entityState.taunt) &&
         Objects.equals(this.spellDamage, entityState.spellDamage) &&
         Objects.equals(this.charge, entityState.charge) &&
@@ -1076,7 +1098,7 @@ public class EntityState  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType);
   }
 
   @Override
@@ -1105,6 +1127,7 @@ public class EntityState  implements Serializable {
     sb.append("    frozen: ").append(toIndentedString(frozen)).append("\n");
     sb.append("    silenced: ").append(toIndentedString(silenced)).append("\n");
     sb.append("    windfury: ").append(toIndentedString(windfury)).append("\n");
+    sb.append("    permanent: ").append(toIndentedString(permanent)).append("\n");
     sb.append("    taunt: ").append(toIndentedString(taunt)).append("\n");
     sb.append("    spellDamage: ").append(toIndentedString(spellDamage)).append("\n");
     sb.append("    charge: ").append(toIndentedString(charge)).append("\n");

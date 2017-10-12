@@ -40,6 +40,7 @@ import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -74,6 +75,8 @@ public class Serialization {
 		descs.registerSubtype(ChooseBattlecryCardDesc.class, "CHOOSE_BATTLECRY");
 		descs.registerSubtype(WeaponCardDesc.class, CardType.WEAPON.toString());
 		descs.registerSubtype(SpellCardDesc.class, CardType.SPELL.toString());
+		descs.registerSubtype(QuestCardDesc.class, "QUEST");
+		descs.registerSubtype(GroupCardDesc.class, CardType.GROUP.toString());
 		descs.registerSubtype(SecretCardDesc.class, "SECRET");
 		descs.registerSubtype(HeroPowerCardDesc.class, CardType.HERO_POWER.toString());
 		descs.registerSubtype(HeroCardDesc.class, CardType.HERO.toString());
@@ -97,11 +100,14 @@ public class Serialization {
 			factory.registerSubtype(WeaponCard.class, "WEAPON_CARD");
 			factory.registerSubtype(HeroPowerCard.class, "HERO_POWER_CARD");
 			factory.registerSubtype(SecretCard.class, "SECRET_CARD");
+			factory.registerSubtype(QuestCard.class, "QUEST_CARD");
+			factory.registerSubtype(GroupCard.class, "GROUP_CARD");
 		}
 
 		RuntimeTypeAdapterFactory<Trigger> listeners = RuntimeTypeAdapterFactory.of(Trigger.class, "type");
 		listeners.registerSubtype(SpellTrigger.class, "SPELL_TRIGGER");
 		listeners.registerSubtype(Secret.class, "SECRET");
+		listeners.registerSubtype(Quest.class, "QUEST");
 		listeners.registerSubtype(Aura.class, "AURA");
 		listeners.registerSubtype(BuffAura.class, "BUFF_AURA");
 		listeners.registerSubtype(AttributeAura.class, "ATTRIBUTE_AURA");

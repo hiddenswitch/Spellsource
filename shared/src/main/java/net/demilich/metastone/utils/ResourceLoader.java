@@ -30,10 +30,8 @@ public class ResourceLoader {
 	 * Loads all the json files from the given rootDir into a collection of
 	 * ResourceInputStreams
 	 *
-	 * @param rootDir        the root dir from where to start traversing to load the json
-	 *                       files
-	 * @param fromFileSystem True if the rootDir is on the filesystem, False if the rootDir
-	 *                       is in the Resources dir
+	 * @param rootDir        the root dir from where to start traversing to load the json files
+	 * @param fromFileSystem True if the rootDir is on the filesystem, False if the rootDir is in the Resources dir
 	 * @return Collections of ResourceInputStreams pointing to the json files
 	 * @throws URISyntaxException
 	 * @throws IOException
@@ -94,31 +92,27 @@ public class ResourceLoader {
 	 * the Resources dir or a Jar file.
 	 *
 	 * @param sourceDir the dir of interest in the Resources dir or Jar file
-	 * @return a PathReference which contains a Path and boolean indicating the
-	 * path is in a Jar fle.
+	 * @return a PathReference which contains a Path and boolean indicating the path is in a Jar fle.
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
 	private static PathReference getPathFromResources(String sourceDir) throws URISyntaxException, IOException {
 		URI uri;
 		try {
-			uri = ClassLoader.getSystemClassLoader().getResource("/" + sourceDir).toURI();
-		} catch (NullPointerException ex1) {
-			try {
-				uri = ClassLoader.getSystemClassLoader().getResource(sourceDir).toURI();
-			} catch (NullPointerException ex2) {
-				try {
-					uri = ResourceLoader.class.getClassLoader().getResource("/" + sourceDir).toURI();
-				} catch (NullPointerException ex3) {
-					try {
-						uri = ResourceLoader.class.getClassLoader().getResource(sourceDir).toURI();
-					} catch (NullPointerException ex4) {
-						logger.error(sourceDir + " directory not found in resources");
-						throw new RuntimeException(sourceDir + " directory not found in resources");
-					}
-				}
+			URL resource = ClassLoader.getSystemClassLoader().getResource("/" + sourceDir);
+			if (resource == null) {
+				resource = ClassLoader.getSystemClassLoader().getResource(sourceDir);
 			}
-
+			if (resource == null) {
+				resource = ResourceLoader.class.getClassLoader().getResource("/" + sourceDir);
+			}
+			if (resource == null) {
+				resource = ResourceLoader.class.getClassLoader().getResource(sourceDir);
+			}
+			uri = resource.toURI();
+		} catch (NullPointerException ex1) {
+			logger.error(sourceDir + " directory not found in resources");
+			throw new RuntimeException(sourceDir + " directory not found in resources");
 		}
 
 		// handle case where resources are on the filesystem instead of jar. ie:
