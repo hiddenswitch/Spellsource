@@ -1,0 +1,28 @@
+{
+  "name": "Crypt Lord",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "heroClass": "DRID",
+  "rarity": "COMMON",
+  "description": "Taunt. After you summon a minion, gain +1 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionSummonedTrigger",
+      "targetPlayer": "SELF",
+      "hostTargetType": "IGNORE_AS_TARGET"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -1,6 +1,6 @@
 {
   "collectible": true,
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Maggic C'Laggic",
   "heroClass": "PRIEST",
   "description": "Whenever a character is healed, give your\nC'Thun +1/+1 (wherever it is).",

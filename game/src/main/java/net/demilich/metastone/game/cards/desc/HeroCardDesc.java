@@ -3,9 +3,9 @@ package net.demilich.metastone.game.cards.desc;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 
-public class HeroCardDesc extends CardDesc {
-
+public class HeroCardDesc extends ActorCardDesc {
 	public String heroPower;
 	public Race race = Race.NONE;
 
@@ -15,3 +15,4 @@ public class HeroCardDesc extends CardDesc {
 	}
 
 }
+

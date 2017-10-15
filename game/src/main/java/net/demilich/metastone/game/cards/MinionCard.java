@@ -52,15 +52,7 @@ public class MinionCard extends Card {
 		minion.setHp(getHp());
 		minion.setMaxHp(getHp());
 		minion.setBaseHp(getBaseHp());
-		BattlecryDesc battlecry = desc.battlecry;
-		if (battlecry != null) {
-			BattlecryAction battlecryAction = BattlecryAction.createBattlecry(battlecry.spell, battlecry.getTargetSelection());
-			if (battlecry.condition != null) {
-				battlecryAction.setCondition(battlecry.condition.create());
-			}
-
-			minion.setBattlecry(battlecryAction);
-		}
+		minion.setBattlecry(desc.getBattlecryAction());
 
 		if (desc.deathrattle != null) {
 			minion.getAttributes().remove(Attribute.DEATHRATTLES);

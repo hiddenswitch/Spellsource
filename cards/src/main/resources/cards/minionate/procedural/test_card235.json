@@ -1,6 +1,6 @@
 {
   "collectible": true,
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Smithy of Voletts",
   "heroClass": "ANY",
   "description": "Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.",

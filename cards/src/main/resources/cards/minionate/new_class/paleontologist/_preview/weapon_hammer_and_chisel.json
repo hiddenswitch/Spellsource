@@ -21,6 +21,6 @@
 		"OVERLOAD": 2
 	},
 	"collectible": true,
-	"set": "Spellsource",
+	"set": "SPELLSOURCE",
 	"fileFormatVersion": 1
 }

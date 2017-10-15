@@ -81,7 +81,6 @@ public class DiscoverAction extends GameAction {
 	@Override
 	public DiscoverAction clone() {
 		DiscoverAction clone = DiscoverAction.createDiscover(getSpell().clone());
-		clone.setActionSuffix(getActionSuffix());
 		clone.setSource(getSourceReference());
 		return clone;
 	}
@@ -140,18 +139,8 @@ public class DiscoverAction extends GameAction {
 		return name;
 	}
 
-	@Override
-	public String getPromptText() {
-		return "[Discover]";
-	}
-
 	public SpellDesc getSpell() {
 		return spell;
-	}
-
-	@Override
-	public boolean isSameActionGroup(GameAction anotherAction) {
-		return false;
 	}
 
 	public void setCard(Card card) {

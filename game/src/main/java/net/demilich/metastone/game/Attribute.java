@@ -27,8 +27,8 @@ public enum Attribute {
 	 */
 	HP,
 	/**
-	 * The attack value written on the {@link MinionCard}. This is distinct from {@link #BASE_ATTACK},
-	 * which is the base attack value of the {@link Minion} this card would summon.
+	 * The attack value written on the {@link MinionCard}. This is distinct from {@link #BASE_ATTACK}, which is the base
+	 * attack value of the {@link Minion} this card would summon.
 	 */
 	ATTACK,
 	/**
@@ -40,7 +40,8 @@ public enum Attribute {
 	 */
 	MAX_HP,
 	/**
-	 * The current armor belonging to the {@link Actor}.
+	 * The current armor belonging to the {@link Actor}, or the additional armor gained by playing the specified {@link
+	 * net.demilich.metastone.game.cards.HeroCard}.
 	 */
 	ARMOR,
 	/**
@@ -58,8 +59,7 @@ public enum Attribute {
 	 */
 	AURA_ATTACK_BONUS,
 	/**
-	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that
-	 * target
+	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that target
 	 * the entity.
 	 */
 	AURA_HP_BONUS,
@@ -73,8 +73,7 @@ public enum Attribute {
 	BASE_ATTACK,
 	/**
 	 * A conditional attack bonus for the {@link Actor} that corresponds to bonuses from an {@link
-	 * net.demilich.metastone.game.spells.EnrageSpell},
-	 * {@link net.demilich.metastone.game.spells.ConditionalAttackBonusSpell}
+	 * net.demilich.metastone.game.spells.EnrageSpell}, {@link net.demilich.metastone.game.spells.ConditionalAttackBonusSpell}
 	 * or {@link net.demilich.metastone.game.spells.SetAttributeSpell}. This bonus is typically controlled by a {@link
 	 * net.demilich.metastone.game.spells.desc.condition.Condition}.
 	 */
@@ -101,25 +100,23 @@ public enum Attribute {
 	 * Fatigue is a game mechanic that deals increasing damage to players who have already drawn all of the cards in
 	 * their deck, whenever they attempt to draw another card.
 	 * <p>
-	 * This attribute tracks how much damage a {@link net.demilich.metastone.game.entities.heroes.Hero} should take
-	 * when
+	 * This attribute tracks how much damage a {@link net.demilich.metastone.game.entities.heroes.Hero} should take when
 	 * the player draws a card.
 	 *
 	 * @see GameLogic#drawCard(int, Entity) for the complete usage of Fatigue.
 	 */
 	FATIGUE,
 	/**
-	 * A frozen {@link Actor} cannot attack. Freezing is cleared by a
-	 * {@link net.demilich.metastone.game.spells.SilenceSpell} (when the minion is {@link #SILENCED}) or
-	 * the owning player ends his turn on a different turn than when the minion was {@link #FROZEN}.
+	 * A frozen {@link Actor} cannot attack. Freezing is cleared by a {@link net.demilich.metastone.game.spells.SilenceSpell}
+	 * (when the minion is {@link #SILENCED}) or the owning player ends his turn on a different turn than when the
+	 * minion was {@link #FROZEN}.
 	 *
 	 * @see GameLogic#silence(int, Minion) for a complete description of the silence effect.
 	 * @see GameLogic#handleFrozen(Actor) to see where freezing is handled.
 	 */
 	FROZEN,
 	/**
-	 * This {@link Minion} will typically gain an attack bonus after it is
-	 * dealt damage the first time.
+	 * This {@link Minion} will typically gain an attack bonus after it is dealt damage the first time.
 	 *
 	 * @see net.demilich.metastone.game.spells.EnrageSpell for the spell that encapsulates this effect.
 	 * @see #CONDITIONAL_ATTACK_BONUS for the attribute that typically stores the amount of attack gained by an enrage.
@@ -148,8 +145,7 @@ public enum Attribute {
 	 */
 	UNLIMITED_ATTACKS,
 	/**
-	 * An {@link Actor} with {@link #TAUNT} must be targeted by opposing
-	 * {@link net.demilich.metastone.game.actions.PhysicalAttackAction}
+	 * An {@link Actor} with {@link #TAUNT} must be targeted by opposing {@link net.demilich.metastone.game.actions.PhysicalAttackAction}
 	 * actions first. This means the {@link Minion} with {@link #TAUNT} acts like a shield for its other non-taunt
 	 * minions and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
 	 *
@@ -234,8 +230,7 @@ public enum Attribute {
 	/**
 	 * Marks that the {@link Actor} has a divine shield.
 	 * <p>
-	 * Divine shield causes the actor to take zero damage instead of the full damage it should receive the first
-	 * time it
+	 * Divine shield causes the actor to take zero damage instead of the full damage it should receive the first time it
 	 * receives damage.
 	 *
 	 * @see GameLogic#damageMinion(Actor, int) for the complete rules of damage.
@@ -281,8 +276,7 @@ public enum Attribute {
 	 */
 	CHOOSE_ONE,
 	/**
-	 * A {@link Minion} with this attribute causes both choose one options of a {@link Card} with
-	 * {@link #CHOOSE_ONE} to
+	 * A {@link Minion} with this attribute causes both choose one options of a {@link Card} with {@link #CHOOSE_ONE} to
 	 * be played.
 	 * <p>
 	 * This implements the Fandral Staghelm card text.
@@ -323,8 +317,8 @@ public enum Attribute {
 	 */
 	SPELL_DAMAGE_MULTIPLIER,
 	/**
-	 * When any friendly {@link Entity} has this attribute, all friendly spell damage effects (typically cast by
-	 * {@link net.demilich.metastone.game.spells.DamageSpell} deal damage multiplied by this attribute's value.
+	 * When any friendly {@link Entity} has this attribute, all friendly spell damage effects (typically cast by {@link
+	 * net.demilich.metastone.game.spells.DamageSpell} deal damage multiplied by this attribute's value.
 	 * <p>
 	 * This implements Prophet Velen.
 	 *
@@ -332,8 +326,8 @@ public enum Attribute {
 	 */
 	SPELL_AMPLIFY_MULTIPLIER,
 	/**
-	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use
-	 * {@link GameLogic#heal(Player, Actor, int, Entity)} are multiplied by this attribute's value.
+	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use {@link
+	 * GameLogic#heal(Player, Actor, int, Entity)} are multiplied by this attribute's value.
 	 * <p>
 	 * This implements Prophet Velen.
 	 */
@@ -342,8 +336,8 @@ public enum Attribute {
 	 * Stores an adjustment to the cost of this {@link Card}, typically due to changes to deck or hand cards from
 	 * various spells.
 	 * <p>
-	 * The value accumulated in this attribute is permanent, in the sense that the effect that changed it did not
-	 * intend the changes to be reversible.
+	 * The value accumulated in this attribute is permanent, in the sense that the effect that changed it did not intend
+	 * the changes to be reversible.
 	 *
 	 * @see GameLogic#getModifiedManaCost(Player, Card) for a complete calculation of spell damage.
 	 */
@@ -360,10 +354,8 @@ public enum Attribute {
 	 * When set, this {@link Minion} cannot target heroes with physical attacks.
 	 * <p>
 	 * Unusually, this attribute affects the {@link net.demilich.metastone.game.actions
-	 * .PhysicalAttackAction#canBeExecutedOn(GameContext,
-	 * Player, Entity)} method instead of {@link net.demilich.metastone.game.logic.TargetLogic#filterTargets
-	 * (GameContext,
-	 * Player, GameAction, List)}.
+	 * .PhysicalAttackAction#canBeExecutedOn(GameContext, Player, Entity)} method instead of {@link
+	 * net.demilich.metastone.game.logic.TargetLogic#filterTargets (GameContext, Player, GameAction, List)}.
 	 */
 	CANNOT_ATTACK_HEROES,
 	/**
@@ -375,8 +367,8 @@ public enum Attribute {
 	 */
 	CANNOT_REDUCE_HP_BELOW_1,
 	/**
-	 * When a {@link Card} is played and countered (by e.g. Counterspell), it is marked with this attribute and its
-	 * text is not executed.
+	 * When a {@link Card} is played and countered (by e.g. Counterspell), it is marked with this attribute and its text
+	 * is not executed.
 	 *
 	 * @see GameLogic#playCard(int, CardReference) for the complete card playing implementation.
 	 */
@@ -394,8 +386,7 @@ public enum Attribute {
 	/**
 	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an {@link
 	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e
-	 * .g.,
-	 * a healing spell may heal the owning player by the amount of damage last dealt to an entity).
+	 * .g., a healing spell may heal the owning player by the amount of damage last dealt to an entity).
 	 */
 	LAST_HIT,
 	/**
@@ -422,8 +413,8 @@ public enum Attribute {
 	 */
 	HERO_POWER_USAGES,
 	/**
-	 * An {@link Entity} with hero power damage contributes to the total hero power damage the player gets as a bonus
-	 * to their base hero power damage. Applies to {@link net.demilich.metastone.game.spells.DamageSpell} based hero
+	 * An {@link Entity} with hero power damage contributes to the total hero power damage the player gets as a bonus to
+	 * their base hero power damage. Applies to {@link net.demilich.metastone.game.spells.DamageSpell} based hero
 	 * powers.
 	 */
 	HERO_POWER_DAMAGE,
@@ -485,8 +476,7 @@ public enum Attribute {
 	 */
 	TAKE_DOUBLE_DAMAGE,
 	/**
-	 * A {@link Minion} with this attribute cannot target a {@link Hero} the same turn it is summoned. This is
-	 * typically
+	 * A {@link Minion} with this attribute cannot target a {@link Hero} the same turn it is summoned. This is typically
 	 * given to a {@link #CHARGE} minion that would be too powerful it it could target a hero.
 	 *
 	 * @see net.demilich.metastone.game.actions.PhysicalAttackAction for a complete implementation of what a minion can
@@ -494,7 +484,8 @@ public enum Attribute {
 	 */
 	CANNOT_ATTACK_HERO_ON_SUMMON,
 	/**
-	 * An attribute that keeps track of how much attack and hitpoints to add to the next Animated Shuriken that gets summoned.
+	 * An attribute that keeps track of how much attack and hitpoints to add to the next Animated Shuriken that gets
+	 * summoned.
 	 */
 	JADE_BUFF,
 	/**

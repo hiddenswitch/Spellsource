@@ -10,9 +10,6 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
-import java.util.Collections;
-import java.util.List;
-
 public class PhysicalAttackAction extends GameAction {
 	private EntityReference attackerReference;
 
@@ -55,21 +52,6 @@ public class PhysicalAttackAction extends GameAction {
 
 	public EntityReference getAttackerReference() {
 		return attackerReference;
-	}
-
-	@Override
-	public String getPromptText() {
-		return "[Physical Attack]";
-	}
-
-	@Override
-	public boolean isSameActionGroup(GameAction anotherAction) {
-		if (anotherAction.getActionType() != getActionType()) {
-			return false;
-		}
-		PhysicalAttackAction physicalAttackAction = (PhysicalAttackAction) anotherAction;
-
-		return this.getAttackerReference().equals(physicalAttackAction.getAttackerReference());
 	}
 
 	@Override

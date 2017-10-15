@@ -2,11 +2,11 @@ package net.demilich.metastone.game.spells.desc;
 
 import java.io.Serializable;
 
+import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class BattlecryDesc implements Serializable {
-
 	public SpellDesc spell;
 	public TargetSelection targetSelection;
 	public ConditionDesc condition;
@@ -16,4 +16,7 @@ public class BattlecryDesc implements Serializable {
 		return targetSelection != null ? targetSelection : TargetSelection.NONE;
 	}
 
+	public BattlecryAction toBattlecryAction() {
+		return BattlecryAction.createBattlecry(spell, getTargetSelection());
+	}
 }

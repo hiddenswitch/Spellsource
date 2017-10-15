@@ -60,7 +60,7 @@ public class CardCatalogue {
 	}
 
 	public static CardList getHeroes() {
-		return query(null, card -> card.isCollectible() && card.getCardType() == CardType.HERO);
+		return query(null, card -> card.getCardSet() == CardSet.BASIC && card.getCardType() == CardType.HERO);
 	}
 
 	public static CardList getHeroPowers(DeckFormat deckFormat) {
@@ -103,8 +103,8 @@ public class CardCatalogue {
 			if (cardType != null && !card.getCardType().isCardType(cardType)) {
 				continue;
 			}
-			// per default, do not include heroes or hero powers
-			if (card.getCardType().isCardType(CardType.HERO_POWER) || card.getCardType().isCardType(CardType.HERO)) {
+			// per default, do not include hero powers
+			if (card.getCardType().isCardType(CardType.HERO_POWER)) {
 				continue;
 			}
 			if (rarity != null && !card.getRarity().isRarity(rarity)) {

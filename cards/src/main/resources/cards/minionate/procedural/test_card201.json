@@ -1,6 +1,6 @@
 {
   "collectible": true,
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Cherry Mink Coat",
   "heroClass": "ANY",
   "description": "Battlecry: If you have at least 4 other minions, deal 4 damage.",

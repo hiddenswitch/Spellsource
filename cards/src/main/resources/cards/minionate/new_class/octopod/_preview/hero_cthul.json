@@ -11,6 +11,6 @@
 		"MAX_HP": 15
 	},
 	"collectible": false,
-	"set": "Spellsource",
+	"set": "SPELLSOURCE",
 	"fileFormatVersion": 1
 }

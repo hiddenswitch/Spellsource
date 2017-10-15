@@ -6,7 +6,7 @@
     "class": "CardCostModifier",
     "operation": "SET"
   },
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Nuttyalt Warden Champion",
   "heroClass": "ANY",
   "description": "Charge. Your Hero Power costs (1).",

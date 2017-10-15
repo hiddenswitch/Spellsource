@@ -10,12 +10,11 @@ import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
-public class ChooseBattlecryCard extends MinionCard implements IChooseOneCard {
-
+public class ChooseBattlecryMinionCard extends MinionCard implements IChooseOneCard {
 	private final BattlecryDesc[] battlecryOptions;
 	private final BattlecryDesc battlecryBothOptions;
 
-	public ChooseBattlecryCard(ChooseBattlecryCardDesc desc) {
+	public ChooseBattlecryMinionCard(ChooseBattlecryCardDesc desc) {
 		super(desc);
 		this.battlecryOptions = desc.options;
 		this.battlecryBothOptions = desc.bothOptions;
@@ -58,10 +57,8 @@ public class ChooseBattlecryCard extends MinionCard implements IChooseOneCard {
 	public PlayCardAction[] playOptions() {
 		PlayCardAction[] actions = new PlayCardAction[battlecryOptions.length];
 		for (int i = 0; i < battlecryOptions.length; i++) {
-			BattlecryDesc battlecryOption = battlecryOptions[i];
-			BattlecryAction battlecry = BattlecryAction.createBattlecry(battlecryOption.spell, battlecryOption.getTargetSelection());
+			BattlecryAction battlecry = battlecryOptions[i].toBattlecryAction();
 			PlayCardAction option = new PlayMinionCardAction(getCardReference(), battlecry);
-			option.setActionSuffix(battlecryOption.description);
 			option.setChooseOneOptionIndex(i);
 			actions[i] = option;
 		}
@@ -73,7 +70,6 @@ public class ChooseBattlecryCard extends MinionCard implements IChooseOneCard {
 		BattlecryDesc battlecryOption = battlecryBothOptions;
 		BattlecryAction battlecry = BattlecryAction.createBattlecry(battlecryOption.spell, battlecryOption.getTargetSelection());
 		PlayCardAction option = new PlayMinionCardAction(getCardReference(), battlecry);
-		option.setActionSuffix(battlecryOption.description);
 		return option;
 	}
 }

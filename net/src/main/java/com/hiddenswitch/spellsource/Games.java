@@ -168,7 +168,7 @@ public interface Games {
 				.map(kv -> {
 					ChooseOneOptions summon = new ChooseOneOptions();
 					summon.cardInHandId(kv.getKey());
-					ChooseBattlecryCard sourceCard = (ChooseBattlecryCard) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
+					ChooseBattlecryMinionCard sourceCard = (ChooseBattlecryMinionCard) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
 					EntityLocation sourceCardLocation = sourceCard.getEntityLocation();
 
 					kv.getValue().stream()

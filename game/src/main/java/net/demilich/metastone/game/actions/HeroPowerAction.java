@@ -24,11 +24,6 @@ public class HeroPowerAction extends PlaySpellCardAction {
 	}
 
 	@Override
-	public String getPromptText() {
-		return "[Use hero power]";
-	}
-
-	@Override
 	@Suspendable
 	public void play(GameContext context, int playerId) {
 		context.getLogic().castSpell(playerId, getSpell(), cardReference, getTargetReference(), getTargetRequirement(), false);

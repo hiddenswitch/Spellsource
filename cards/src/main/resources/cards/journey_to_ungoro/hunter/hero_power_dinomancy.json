@@ -14,7 +14,7 @@
 			"race": "BEAST"
 		}
 	},
-	"collectible": true,
+	"collectible": false,
 	"set": "JOURNEY_TO_UNGORO",
 	"fileFormatVersion": 1
 }

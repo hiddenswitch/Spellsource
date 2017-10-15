@@ -28,7 +28,6 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	private ActionType actionType = ActionType.SYSTEM;
 	private EntityReference source;
 	private EntityReference targetKey;
-	private String actionSuffix;
 
 	public boolean canBeExecutedOn(GameContext gameContext, Player player, Entity entity) {
 		return true;
@@ -49,15 +48,9 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	@Suspendable
 	public abstract void execute(GameContext context, int playerId);
 
-	public String getActionSuffix() {
-		return actionSuffix;
-	}
-
 	public ActionType getActionType() {
 		return actionType;
 	}
-
-	public abstract String getPromptText();
 
 	public EntityReference getSourceReference() {
 		return source;
@@ -69,12 +62,6 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 
 	public TargetSelection getTargetRequirement() {
 		return targetRequirement;
-	}
-
-	public abstract boolean isSameActionGroup(GameAction anotherAction);
-
-	public void setActionSuffix(String actionSuffix) {
-		this.actionSuffix = actionSuffix;
 	}
 
 	protected void setActionType(ActionType actionType) {
@@ -119,7 +106,6 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 				.append(actionType)
 				.append(source)
 				.append(targetKey)
-				.append(actionSuffix)
 				.toHashCode();
 	}
 

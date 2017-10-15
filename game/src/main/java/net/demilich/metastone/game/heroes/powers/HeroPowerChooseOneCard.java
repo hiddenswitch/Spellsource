@@ -46,7 +46,6 @@ public class HeroPowerChooseOneCard extends HeroPowerCard implements IChooseOneC
 			SpellCard card = getCard(cardId);
 
 			PlayCardAction cardAction = new HeroPowerAction(card.getSpell(), this, getTargetRequirement());
-			cardAction.setActionSuffix(card.getName());
 			cardAction.setChooseOneOptionIndex(i);
 			actions[i] = cardAction;
 		}
@@ -57,9 +56,7 @@ public class HeroPowerChooseOneCard extends HeroPowerCard implements IChooseOneC
 	public PlayCardAction playBothOptions() {
 		SpellCard card = getCard(cardId);
 
-		PlayCardAction cardAction = new HeroPowerAction(card.getSpell(), this, getTargetRequirement());
-		cardAction.setActionSuffix(card.getName());
-		return cardAction;
+		return new HeroPowerAction(card.getSpell(), this, getTargetRequirement());
 	}
 
 }

@@ -1,6 +1,6 @@
 {
   "collectible": true,
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Frokeman Hurtself",
   "heroClass": "ANY",
   "description": "Battlecry: Deal 4 damage to HIMSELF.",

@@ -17,8 +17,8 @@ import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 public class WeaponCard extends Card {
 
 	private static final Set<Attribute> ignoredAttributes = new HashSet<Attribute>(
-			Arrays.asList(new Attribute[] { Attribute.PASSIVE_TRIGGER, Attribute.DECK_TRIGGER, Attribute.MANA_COST_MODIFIER, Attribute.BASE_ATTACK,
-					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO }));
+			Arrays.asList(new Attribute[]{Attribute.PASSIVE_TRIGGER, Attribute.DECK_TRIGGER, Attribute.MANA_COST_MODIFIER, Attribute.BASE_ATTACK,
+					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO}));
 
 	@SerializedName("WeaponDesc")
 	private final WeaponCardDesc desc;
@@ -46,16 +46,8 @@ public class WeaponCard extends Card {
 		weapon.setMaxHp(getDurability());
 		weapon.setHp(weapon.getMaxDurability());
 		weapon.setBaseHp(getBaseDurability());
-		BattlecryDesc battlecry = desc.battlecry;
-		if (battlecry != null) {
-			BattlecryAction battlecryAction = BattlecryAction.createBattlecry(battlecry.spell, battlecry.getTargetSelection());
-			if (battlecry.condition != null) {
-				battlecryAction.setCondition(battlecry.condition.create());
-			}
-	
-			weapon.setBattlecry(battlecryAction);
-		}
-	
+		weapon.setBattlecry(desc.getBattlecryAction());
+
 		if (desc.deathrattle != null) {
 			weapon.getAttributes().remove(Attribute.DEATHRATTLES);
 			weapon.addDeathrattle(desc.deathrattle);
@@ -88,7 +80,7 @@ public class WeaponCard extends Card {
 	public int getDamage() {
 		return getAttributeValue(Attribute.ATTACK);
 	}
-	
+
 	public int getBonusDamage() {
 		return getAttributeValue(Attribute.ATTACK_BONUS);
 	}
@@ -96,7 +88,7 @@ public class WeaponCard extends Card {
 	public int getDurability() {
 		return getAttributeValue(Attribute.HP);
 	}
-	
+
 	public int getBonusDurability() {
 		return getAttributeValue(Attribute.HP_BONUS);
 	}

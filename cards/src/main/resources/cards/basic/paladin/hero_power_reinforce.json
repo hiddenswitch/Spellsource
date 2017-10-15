@@ -15,7 +15,7 @@
 		"operation": "LESS",
 		"value": 7
 	},
-	"collectible": true,
+	"collectible": false,
 	"set": "BASIC",
 	"fileFormatVersion": 1
 }

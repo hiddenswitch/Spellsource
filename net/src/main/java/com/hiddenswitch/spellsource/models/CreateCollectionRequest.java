@@ -42,7 +42,7 @@ public class CreateCollectionRequest implements Serializable {
 				.withName(userId + "'s Collection")
 				.withCopies(2)
 				.withCardsQuery(new QueryCardsRequest()
-						.withSets(CardSet.Spellsource));
+						.withSets(CardSet.SPELLSOURCE));
 	}
 
 	public static CreateCollectionRequest alliance(String allianceId, String ownerUserId, List<String> userIds, List<String> inventoryIds) {

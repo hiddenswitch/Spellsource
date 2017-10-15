@@ -1,1 +1,1 @@
-{"collectible": true, "set": "Spellsource", "name": "Knight Of The Pure", "heroClass": "DRUID", "description": "", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 8.0, "baseManaCost": 10.0, "attributes": {"TAUNT": true}, "type": "MINION", "id": "Knight Of The Pure", "baseAttack": 8.0}
+{"collectible": true, "set": "SPELLSOURCE", "name": "Knight Of The Pure", "heroClass": "DRUID", "description": "", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 8.0, "baseManaCost": 10.0, "attributes": {"TAUNT": true}, "type": "MINION", "id": "Knight Of The Pure", "baseAttack": 8.0}

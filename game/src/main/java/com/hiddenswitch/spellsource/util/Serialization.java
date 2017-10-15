@@ -73,6 +73,7 @@ public class Serialization {
 		descs.registerSubtype(ActorCardDesc.class, "ACTOR");
 		descs.registerSubtype(MinionCardDesc.class, CardType.MINION.toString());
 		descs.registerSubtype(ChooseBattlecryCardDesc.class, "CHOOSE_BATTLECRY");
+		descs.registerSubtype(ChooseBattlecryHeroCardDesc.class, "CHOOSE_BATTLECRY_HERO");
 		descs.registerSubtype(WeaponCardDesc.class, CardType.WEAPON.toString());
 		descs.registerSubtype(SpellCardDesc.class, CardType.SPELL.toString());
 		descs.registerSubtype(QuestCardDesc.class, "QUEST");
@@ -93,8 +94,9 @@ public class Serialization {
 		RuntimeTypeAdapterFactory<Card> cards = RuntimeTypeAdapterFactory.of(Card.class, "entityType");
 		for (RuntimeTypeAdapterFactory factory : new RuntimeTypeAdapterFactory[]{entities, cards}) {
 			factory.registerSubtype(ChooseOneCard.class, "CHOOSE_ONE_CARD");
-			factory.registerSubtype(ChooseBattlecryCard.class, "CHOOSE_BATTLECRY_CARD");
+			factory.registerSubtype(ChooseBattlecryMinionCard.class, "CHOOSE_BATTLECRY_CARD");
 			factory.registerSubtype(HeroCard.class, "HERO_CARD");
+			factory.registerSubtype(ChooseBattlecryHeroCard.class, "CHOOSE_BATTLECRY_HERO_CARD");
 			factory.registerSubtype(MinionCard.class, "MINION_CARD");
 			factory.registerSubtype(SpellCard.class, "SPELL_CARD");
 			factory.registerSubtype(WeaponCard.class, "WEAPON_CARD");
