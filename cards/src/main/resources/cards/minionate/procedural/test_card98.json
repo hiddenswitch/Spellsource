@@ -1,6 +1,6 @@
 {
   "collectible": true,
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Handerschmidt",
   "heroClass": "ANY",
   "description": "Whenever you target this minion with a spell, gain Divine Shield.",

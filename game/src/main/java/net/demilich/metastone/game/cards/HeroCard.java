@@ -6,15 +6,17 @@ import java.util.Set;
 
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.actions.PlayCardAction;
+import net.demilich.metastone.game.actions.PlayHeroCardAction;
 import net.demilich.metastone.game.cards.desc.HeroCardDesc;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 
 public class HeroCard extends Card {
 	private static final long serialVersionUID = 1L;
 
 	protected static final Set<Attribute> inheritedAttributes = new HashSet<>(
-			Arrays.asList(new Attribute[]{Attribute.HP, Attribute.MAX_HP, Attribute.BASE_HP, Attribute.ARMOR}));
+			Arrays.asList(Attribute.HP, Attribute.MAX_HP, Attribute.BASE_HP, Attribute.ARMOR));
 
 	protected HeroCard() {
 		super();
@@ -34,13 +36,14 @@ public class HeroCard extends Card {
 				hero.setAttribute(gameTag, getAttribute(gameTag));
 			}
 		}
+		hero.setBattlecry(desc.getBattlecryAction());
 		hero.setRace(desc.race);
 		return hero;
 	}
 
 	@Override
 	public PlayCardAction play() {
-		throw new UnsupportedOperationException("Hero cards cannot be played");
+		return new PlayHeroCardAction(getCardReference());
 	}
-
 }
+

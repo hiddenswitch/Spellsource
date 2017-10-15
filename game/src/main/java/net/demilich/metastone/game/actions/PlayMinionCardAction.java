@@ -31,11 +31,6 @@ public class PlayMinionCardAction extends PlayCardAction {
 	}
 
 	@Override
-	public String getPromptText() {
-		return "[Summon minion]";
-	}
-
-	@Override
 	@Suspendable
 	protected void play(GameContext context, int playerId) {
 		MinionCard minionCard = (MinionCard) context.getPendingCard();

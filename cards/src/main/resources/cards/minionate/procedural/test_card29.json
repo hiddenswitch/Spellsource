@@ -6,7 +6,7 @@
     ],
     "class": "SummonSpell"
   },
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Betterbugs",
   "heroClass": "HUNTER",
   "description": "Deathrattle: Summon two 2/2 Hyenas.",

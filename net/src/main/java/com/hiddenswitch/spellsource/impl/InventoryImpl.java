@@ -59,13 +59,13 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 	public OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws SuspendExecution, InterruptedException {
 		QueryCardsRequest commons = new QueryCardsRequest()
 				.withFields(CardFields.ALL)
-				.withSets(CardSet.Spellsource)
+				.withSets(CardSet.SPELLSOURCE)
 				.withRarity(Rarity.COMMON)
 				.withRandomCount((request.getCardsPerPack() - 1) * request.getNumberOfPacks());
 
 		QueryCardsRequest allianceRares = new QueryCardsRequest()
 				.withFields(CardFields.ALL)
-				.withSets(CardSet.Spellsource)
+				.withSets(CardSet.SPELLSOURCE)
 				.withRarity(Rarity.ALLIANCE)
 				.withRandomCount(request.getNumberOfPacks());
 

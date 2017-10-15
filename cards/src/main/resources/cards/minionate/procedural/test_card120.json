@@ -7,7 +7,7 @@
     "cardLocation": "HAND",
     "class": "PutRandomMinionOnBoardSpell"
   },
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Heathwing The Crusader",
   "heroClass": "WARLOCK",
   "description": "(3) Overload. Deathrattle: Put a random Demon from your hand into the battlefield.",

@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards.desc;
 
+import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -11,4 +12,15 @@ public abstract class ActorCardDesc extends CardDesc {
 	public TriggerDesc trigger;
 	public TriggerDesc[] triggers;
 	public AuraDesc aura;
+
+	public BattlecryAction getBattlecryAction() {
+		if (battlecry == null) {
+			return null;
+		}
+		BattlecryAction battlecryAction = BattlecryAction.createBattlecry(battlecry.spell, battlecry.getTargetSelection());
+		if (battlecry.condition != null) {
+			battlecryAction.setCondition(battlecry.condition.create());
+		}
+		return battlecryAction;
+	}
 }

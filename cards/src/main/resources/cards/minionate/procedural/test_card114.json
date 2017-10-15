@@ -1,6 +1,6 @@
 {
   "collectible": true,
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Volettile",
   "heroClass": "ANY",
   "description": "At the start of your opponent's turn, they have a 50% chance to draw an extra card.",

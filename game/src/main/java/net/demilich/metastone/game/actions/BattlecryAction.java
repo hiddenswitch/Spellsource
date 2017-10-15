@@ -58,7 +58,6 @@ public class BattlecryAction extends GameAction {
 	@Override
 	public BattlecryAction clone() {
 		BattlecryAction clone = BattlecryAction.createBattlecry(getSpell(), getTargetRequirement());
-		clone.setActionSuffix(getActionSuffix());
 		clone.setSource(getSourceReference());
 		return clone;
 	}
@@ -82,18 +81,8 @@ public class BattlecryAction extends GameAction {
 		return spell.getEntityFilter();
 	}
 
-	@Override
-	public String getPromptText() {
-		return "[Battlecry]";
-	}
-
 	public SpellDesc getSpell() {
 		return spell;
-	}
-
-	@Override
-	public boolean isSameActionGroup(GameAction anotherAction) {
-		return anotherAction.getActionType() == getActionType();
 	}
 
 	public void setCondition(Condition condition) {

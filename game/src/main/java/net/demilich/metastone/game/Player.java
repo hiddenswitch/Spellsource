@@ -214,6 +214,7 @@ public class Player extends Entity implements Serializable {
 
 	public void setHero(Hero hero) {
 		if (heroZone.size() != 0) {
+			// Move the existing hero to the graveyard
 			heroZone.remove(0);
 		}
 		heroZone.add(hero);

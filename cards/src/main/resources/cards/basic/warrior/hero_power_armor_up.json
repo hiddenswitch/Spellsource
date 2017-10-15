@@ -11,7 +11,7 @@
 		"target": "FRIENDLY_HERO",
 		"armorBonus": 2
 	},
-	"collectible": true,
+	"collectible": false,
 	"set": "BASIC",
 	"fileFormatVersion": 1
 }

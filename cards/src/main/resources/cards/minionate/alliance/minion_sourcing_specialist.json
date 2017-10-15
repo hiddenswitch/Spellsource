@@ -9,7 +9,7 @@
   "rarity": "FREE",
   "description": "Call to Arms: Summon the last minion Sourcing Specialist destroyed.",
   "collectible": true,
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "battlecry": {
     "spell": {
       "class": "SummonCardFromAttributeSpell",

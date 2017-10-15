@@ -3,7 +3,7 @@
     "class": "SummonSpell",
     "card": "minion_dreadsteed"
   },
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Odder",
   "heroClass": "WARLOCK",
   "description": "(2) Overload. Deathrattle: Summon a Dreadsteed.",

@@ -13,6 +13,6 @@
 		"armorBonus": 8
 	},
 	"collectible": false,
-	"set": "Spellsource",
+	"set": "SPELLSOURCE",
 	"fileFormatVersion": 1
 }

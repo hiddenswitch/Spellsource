@@ -107,14 +107,11 @@ public class SpellUtils {
 	}
 
 	public static Card getCardFromContextOrDiscover(GameContext context, String cardId) {
-		Card cardToAdd;
-		Optional<Card> discoverCard = context.getPlayers().stream().flatMap(p -> p.getDiscoverZone().stream()).filter(c -> c.getCardId().equals(cardId)).findFirst();
-		if (discoverCard.isPresent()) {
-			cardToAdd = discoverCard.get();
-		} else {
-			cardToAdd = context.getCardById(cardId);
-		}
-		return cardToAdd;
+		return context.getPlayers().stream()
+				.flatMap(p -> p.getDiscoverZone().stream())
+				.filter(c -> c.getCardId().equals(cardId))
+				.findFirst()
+				.orElseGet(() -> context.getCardById(cardId));
 	}
 
 	/**
@@ -153,7 +150,6 @@ public class SpellUtils {
 			SpellDesc spellClone = spell.addArg(SpellArg.CARD, card.getCardId());
 			DiscoverAction discover = DiscoverAction.createDiscover(spellClone);
 			discover.setCard(card);
-			discover.setActionSuffix(card.getName());
 			discover.setId(i);
 			discoverActions.add(discover);
 		}
@@ -220,7 +216,6 @@ public class SpellUtils {
 			discover.setCard(card);
 			discover.setName(name);
 			discover.setDescription(description);
-			discover.setActionSuffix((String) spell.get(SpellArg.NAME));
 			discoverActions.add(discover);
 		}
 

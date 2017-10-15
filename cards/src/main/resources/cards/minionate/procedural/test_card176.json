@@ -4,7 +4,7 @@
     "class": "BuffWeaponSpell",
     "target": "FRIENDLY_WEAPON"
   },
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Sad Flurry",
   "heroClass": "ROGUE",
   "description": "(2) Overload. Divine Shield. Windfury. Charge. Taunt. Deathrattle: Give your weapon +2 Attack.",

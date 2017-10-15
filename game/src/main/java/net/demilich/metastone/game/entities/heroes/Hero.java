@@ -4,12 +4,14 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.targeting.Zones;
 
 public class Hero extends Actor {

@@ -139,6 +139,9 @@ public class CardParser {
 				}
 				return Serialization.getGson().fromJson(jsonData, HeroPowerCardDesc.class);
 			case HERO:
+				if (gsonObject.has("options")) {
+					return Serialization.getGson().fromJson(jsonData, ChooseBattlecryHeroCardDesc.class);
+				}
 				return Serialization.getGson().fromJson(jsonData, HeroCardDesc.class);
 			case GROUP:
 				return Serialization.getGson().fromJson(jsonData, GroupCardDesc.class);

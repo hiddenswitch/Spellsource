@@ -159,7 +159,8 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Creates a new game logic instance whose next ID generated for an {@link Entity#setId(int)} argument will be zero.
+	 * Creates a new game logic instance whose next ID generated for an {@link Entity#setId(int)} argument will be
+	 * zero.
 	 */
 	public GameLogic() {
 		idFactory = new IdFactory();
@@ -176,8 +177,8 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Adds a {@link Trigger} to a specified {@link Entity}. These are typically {@link SpellTrigger}
-	 * instances that react to game events.
+	 * Adds a {@link Trigger} to a specified {@link Entity}. These are typically {@link SpellTrigger} instances that
+	 * react to game events.
 	 *
 	 * @param player            Usually the current turn player.
 	 * @param gameEventListener A game event listener, like a {@link Aura}, {@link Secret} or {@link CardCostModifier}.
@@ -214,8 +215,8 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Handles combo and mana cost modifier removal for the card played in the
-	 * {@link PlayCardAction#execute(GameContext, int)} method. Can probably be inlined.
+	 * Handles combo and mana cost modifier removal for the card played in the {@link
+	 * PlayCardAction#execute(GameContext, int)} method. Can probably be inlined.
 	 *
 	 * @param playerId      The player index
 	 * @param cardReference A reference to the card.
@@ -614,24 +615,59 @@ public class GameLogic implements Cloneable, Serializable {
 	/**
 	 * Changes the player's hero.
 	 * <p>
-	 * Implements Lord Jaraxxus.
+	 * Implements Lord Jaraxxus and hero cards. Resolves battlecries.
 	 *
 	 * @param player The player whose hero to change.
 	 * @param hero   The new hero the player will have.
 	 */
 	public void changeHero(Player player, Hero hero) {
-		hero.setId(player.getHero().getId());
+		changeHero(player, hero, true);
+	}
+
+
+	/**
+	 * Changes the player's hero.
+	 *
+	 * @param player           The player whose hero to change.
+	 * @param hero             The new hero the player  will  have
+	 * @param resolveBattlecry Whether or not the battlecry specified on the hero should be resolved.
+	 * @see #changeHero(Player, Hero) for more information.
+	 */
+	public void changeHero(final Player player, final Hero hero, boolean resolveBattlecry) {
+		final Hero previousHero = player.getHero();
+		hero.setId(previousHero.getId());
 		if (hero.getHeroClass() == null || hero.getHeroClass() == HeroClass.ANY) {
-			hero.setHeroClass(player.getHero().getHeroClass());
+			hero.setHeroClass(previousHero.getHeroClass());
 		}
+
+		// Get the current hitpoints and armor
+		int previousHp = previousHero.getHp();
+		// Get the additional armor from the incoming hero
+		int previousArmor = previousHero.getArmor();
 
 		log("{}'s hero has been changed to {}", player.getName(), hero);
 		hero.setOwner(player.getId());
-		hero.setWeapon(player.getHero().getWeapon());
+		hero.setWeapon(previousHero.getWeapon());
+		// Remove the old hero from play
+		removeSpellTriggers(previousHero);
+		previousHero.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		player.setHero(hero);
+		hero.modifyArmor(previousArmor);
+		hero.setHp(previousHp);
 		hero.getHeroPower().setId(getIdFactory().generateId());
 		hero.getHeroPower().setOwner(hero.getOwner());
 		refreshAttacksPerRound(hero);
+
+		if (resolveBattlecry && hero.getBattlecry() != null) {
+			resolveBattlecry(player.getId(), hero);
+			checkForDeadEntities();
+		}
+
+		if (hero.hasSpellTrigger()) {
+			for (SpellTrigger trigger : hero.getSpellTriggers()) {
+				addGameEventListener(player, trigger, hero);
+			}
+		}
 	}
 
 	/**
@@ -693,7 +729,8 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Clones the game logic. The only state in this instance is its debug history and the current ID of the ID Factory.
+	 * Clones the game logic. The only state in this instance is its debug history and the current ID of the ID
+	 * Factory.
 	 *
 	 * @return A clone of this logic.
 	 * @see IdFactory for the internal state of an {@link IdFactory}.
@@ -914,8 +951,8 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Discards a card from your hand, either through discard card effects or "overdraw" (forced
-	 * destruction of cards due to too many cards in your hand).
+	 * Discards a card from your hand, either through discard card effects or "overdraw" (forced destruction of cards
+	 * due to too many cards in your hand).
 	 * <p>
 	 * Discarded cards are removed from the game, without activating Deathrattles. Discard effects are most commonly
 	 * found on warlock cards. Discard effects are distinguished from overdraw, and Fel Reaver's remove from deck
@@ -947,8 +984,8 @@ public class GameLogic implements Cloneable, Serializable {
 	/**
 	 * Draws a card for a player from the deck to the hand.
 	 * <p>
-	 * When a {@link Deck} is empty, the player's {@link Hero} takes "fatigue" damage, which increases by 1 every time
-	 * a card should have been drawn but is not.
+	 * When a {@link Deck} is empty, the player's {@link Hero} takes "fatigue" damage, which increases by 1 every time a
+	 * card should have been drawn but is not.
 	 *
 	 * @param playerId The player who should draw a card.
 	 * @param source   The card that is the origin of the drawing effect, or {@code null} if this is the draw from the
@@ -1653,8 +1690,8 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Should event logging be enabled? This logging lets you debug what has happened in the game, but comes with
-	 * a high performance cost--lots of memory used on big strings.
+	 * Should event logging be enabled? This logging lets you debug what has happened in the game, but comes with a high
+	 * performance cost--lots of memory used on big strings.
 	 *
 	 * @return {@code true} if logging should be enabled.
 	 */
@@ -2242,8 +2279,8 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Removes an attribute from an entity. Handles removing {@link Attribute#WINDFURY} and its impact on the number
-	 * of attacks a minion can make.
+	 * Removes an attribute from an entity. Handles removing {@link Attribute#WINDFURY} and its impact on the number of
+	 * attacks a minion can make.
 	 *
 	 * @param entity The entity to remove an attribute from.
 	 * @param attr   The attribute to remove.

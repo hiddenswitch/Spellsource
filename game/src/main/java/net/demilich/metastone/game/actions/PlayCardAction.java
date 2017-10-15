@@ -65,20 +65,6 @@ public abstract class PlayCardAction extends GameAction {
 		return chooseOneOptionIndex;
 	}
 
-	@Override
-	public String getPromptText() {
-		return "[Play card]";
-	}
-
-	@Override
-	public boolean isSameActionGroup(GameAction anotherAction) {
-		if (anotherAction.getActionType() != getActionType()) {
-			return false;
-		}
-		PlayCardAction playCardAction = (PlayCardAction) anotherAction;
-		return playCardAction.getChooseOneOptionIndex() == getChooseOneOptionIndex() && this.cardReference.equals(playCardAction.cardReference);
-	}
-
 	@Suspendable
 	protected abstract void play(GameContext context, int playerId);
 

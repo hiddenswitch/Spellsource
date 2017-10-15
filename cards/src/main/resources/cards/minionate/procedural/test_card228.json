@@ -1,6 +1,6 @@
 {
   "collectible": true,
-  "set": "Spellsource",
+  "set": "SPELLSOURCE",
   "name": "Gartor Destroyer",
   "heroClass": "ANY",
   "description": "Deathrattle: Give your minions +1/+1.",

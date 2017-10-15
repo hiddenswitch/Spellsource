@@ -1,0 +1,39 @@
+{
+  "name": "Druid of the Swarm",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "heroClass": "DRUID",
+  "rarity": "RARE",
+  "description": "Choose One - Transform into a 1/2 with Poisonouus; or a 1/5 with Taunt.",
+  "options": [
+    {
+      "description": "1/2 with Poisonous",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_druid_of_the_swarm1"
+      }
+    },
+    {
+      "description": "1/5 with Taunt",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_druid_of_the_swarm2"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "1/5 with Taunt and Poisonous",
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_druid_of_the_swarm3"
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

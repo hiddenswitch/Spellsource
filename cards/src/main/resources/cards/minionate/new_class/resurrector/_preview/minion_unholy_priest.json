@@ -11,6 +11,6 @@
 		"INVERT_HEALING": true
 	},
 	"collectible": true,
-	"set": "Spellsource",
+	"set": "SPELLSOURCE",
 	"fileFormatVersion": 1
 }

@@ -1,0 +1,25 @@
+{
+  "name": "Hadronox",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "heroClass": "DRID",
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Summon youru Taunt minions that died this game.",
+  "deathrattle": {
+    "class": "ResurrectSpell",
+    "value": 7,
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "TAUNT",
+      "operation": "HAS"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLE": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
