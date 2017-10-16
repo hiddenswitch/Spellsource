@@ -78,6 +78,7 @@ public class SerializationTest extends TestBase {
 	}
 
 	@Test
+	@Ignore
 	public void testAllGameActions() {
 		SpellCard fireball = (SpellCard) CardCatalogue.getCardById("spell_fireball");
 		MinionCard elven_archer = (MinionCard) CardCatalogue.getCardById("minion_elven_archer");

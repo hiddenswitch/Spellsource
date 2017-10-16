@@ -7,8 +7,15 @@ import net.demilich.metastone.game.heroes.powers.HeroPowerChooseOneCard;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
-public class HeroPowerAction extends PlaySpellCardAction implements IChoiceCard {
+import java.io.Serializable;
+
+public class HeroPowerAction extends PlaySpellCardAction implements IChoiceCard, Serializable {
 	private final String choiceCardId;
+
+	private HeroPowerAction() {
+		choiceCardId = null;
+		setActionType(ActionType.HERO_POWER);
+	}
 
 	public HeroPowerAction(SpellDesc spell, HeroPowerChooseOneCard card, TargetSelection targetRequirement, Card chosenCard) {
 		super(spell, card, targetRequirement);
