@@ -8,6 +8,7 @@ import net.demilich.metastone.game.actions.HeroPowerAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.ChooseBattlecryHeroCard;
+import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import org.testng.Assert;
@@ -24,6 +25,24 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
+	@Test
+	public void testSpreadingPlague() {
+		Stream.of(0, 3, 7).forEach(minionCount -> {
+			GameContext context = createContext(HeroClass.DRUID, HeroClass.DRUID);
+			Player player = context.getActivePlayer();
+			Player opponent = context.getOpponent(player);
+			context.endTurn();
+			for (int i = 0; i < minionCount; i++) {
+				playCard(context, opponent, CardCatalogue.getCardById("minion_wisp"));
+			}
+			context.endTurn();
+			player.setMaxMana(6);
+			player.setMana(6);
+			playCard(context, player, CardCatalogue.getCardById("spell_spreading_plague"));
+			// Should summon at least one minion
+			Assert.assertEquals(player.getMinions().size(), Math.max(minionCount, 1));
+		});
+	}
 
 	@Test
 	public void testMalfurionThePestilent() {
