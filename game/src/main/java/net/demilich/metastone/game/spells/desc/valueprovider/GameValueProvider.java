@@ -7,7 +7,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 
 public class GameValueProvider extends ValueProvider {
-
 	public GameValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}
@@ -16,12 +15,13 @@ public class GameValueProvider extends ValueProvider {
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
 		GameValue gameValue = (GameValue) desc.get(ValueProviderArg.GAME_VALUE);
 		switch (gameValue) {
-		case LAST_MANA_COST:
-			return (int) context.getEnvironment().get(Environment.LAST_MANA_COST);
-		case SPELL_VALUE:
-			return (int) context.getEnvironment().get(Environment.SPELL_VALUE);
-		default:
-			break;
+			case LAST_MANA_COST:
+				return (int) context.getEnvironment().get(Environment.LAST_MANA_COST);
+			case SPELL_VALUE:
+				// Query the top of the stack since that's almost always what's intended.
+				return context.getSpellValueStack().peekFirst();
+			default:
+				break;
 		}
 		return 0;
 	}

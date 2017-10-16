@@ -42,7 +42,7 @@ public class Desc<T extends Enum> extends HashMap<T, Object> implements Serializ
 		if (storedValue == null) {
 			return defaultValue;
 		}
-		if (storedValue instanceof ValueProvider) {
+		if (ValueProvider.class.isAssignableFrom(storedValue.getClass())) {
 			ValueProvider valueProvider = (ValueProvider) storedValue;
 			return valueProvider.getValue(context, player, target, host);
 		}

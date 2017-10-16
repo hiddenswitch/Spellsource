@@ -178,6 +178,21 @@ public class SpellUtils {
 		return discoverAction;
 	}
 
+	/**
+	 * Requests that the player chooses from a selection of cards, then returns just the spell from the cards.
+	 * <p>
+	 * Removes all the cards from play unless otherwise specified, since these cards aren't actually used.
+	 *
+	 * @param context The {@link GameContext}
+	 * @param player  The {@link Player}
+	 * @param desc    A {@link SpellDesc} to use as the "parent" of the discovered spells. The mana cost and targets are
+	 *                inherited from this spell.
+	 * @param spells  A list of spells from which to generate virtual cards.
+	 * @param source  The source entity, typically the {@link SpellCard} or {@link Minion#getBattlecry()} that initiated
+	 *                this call.
+	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected
+	 * card. To retrieve the spell, get the card's spell with {@link SpellCard#getSpell()}.
+	 */
 	@Suspendable
 	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
 		List<GameAction> discoverActions = new ArrayList<>();
@@ -229,11 +244,8 @@ public class SpellUtils {
 		} else {
 			discoverAction = (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
 		}
-		int discoveredCard = discoverAction.getCard().getId();
 		for (Card card : cards) {
-			if (card.getId() != discoveredCard) {
-				card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-			}
+			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		}
 		return discoverAction;
 	}

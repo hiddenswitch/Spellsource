@@ -54,6 +54,12 @@ public class ChooseOneOptions  implements Serializable {
   @SerializedName("summons")
   private List<SummonAction> summons = new ArrayList<SummonAction>();
 
+  @SerializedName("heroPowers")
+  private List<SpellAction> heroPowers = new ArrayList<SpellAction>();
+
+  @SerializedName("heroes")
+  private List<SpellAction> heroes = new ArrayList<SpellAction>();
+
   public ChooseOneOptions cardInHandId(Integer cardInHandId) {
     this.cardInHandId = cardInHandId;
     return this;
@@ -141,6 +147,52 @@ public class ChooseOneOptions  implements Serializable {
     this.summons = summons;
   }
 
+  public ChooseOneOptions heroPowers(List<SpellAction> heroPowers) {
+    this.heroPowers = heroPowers;
+    return this;
+  }
+
+  public ChooseOneOptions addHeroPowersItem(SpellAction heroPowersItem) {
+    this.heroPowers.add(heroPowersItem);
+    return this;
+  }
+
+   /**
+   * The spells that correspond to virtual hero power entities. 
+   * @return heroPowers
+  **/
+  @ApiModelProperty(example = "null", value = "The spells that correspond to virtual hero power entities. ")
+  public List<SpellAction> getHeroPowers() {
+    return heroPowers;
+  }
+
+  public void setHeroPowers(List<SpellAction> heroPowers) {
+    this.heroPowers = heroPowers;
+  }
+
+  public ChooseOneOptions heroes(List<SpellAction> heroes) {
+    this.heroes = heroes;
+    return this;
+  }
+
+  public ChooseOneOptions addHeroesItem(SpellAction heroesItem) {
+    this.heroes.add(heroesItem);
+    return this;
+  }
+
+   /**
+   * Choose one hero cards corresponding to their virtual entities. 
+   * @return heroes
+  **/
+  @ApiModelProperty(example = "null", value = "Choose one hero cards corresponding to their virtual entities. ")
+  public List<SpellAction> getHeroes() {
+    return heroes;
+  }
+
+  public void setHeroes(List<SpellAction> heroes) {
+    this.heroes = heroes;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -154,12 +206,14 @@ public class ChooseOneOptions  implements Serializable {
     return Objects.equals(this.cardInHandId, chooseOneOptions.cardInHandId) &&
         Objects.equals(this.entities, chooseOneOptions.entities) &&
         Objects.equals(this.spells, chooseOneOptions.spells) &&
-        Objects.equals(this.summons, chooseOneOptions.summons);
+        Objects.equals(this.summons, chooseOneOptions.summons) &&
+        Objects.equals(this.heroPowers, chooseOneOptions.heroPowers) &&
+        Objects.equals(this.heroes, chooseOneOptions.heroes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(cardInHandId, entities, spells, summons);
+    return Objects.hash(cardInHandId, entities, spells, summons, heroPowers, heroes);
   }
 
   @Override
@@ -171,6 +225,8 @@ public class ChooseOneOptions  implements Serializable {
     sb.append("    entities: ").append(toIndentedString(entities)).append("\n");
     sb.append("    spells: ").append(toIndentedString(spells)).append("\n");
     sb.append("    summons: ").append(toIndentedString(summons)).append("\n");
+    sb.append("    heroPowers: ").append(toIndentedString(heroPowers)).append("\n");
+    sb.append("    heroes: ").append(toIndentedString(heroes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

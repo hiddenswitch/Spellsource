@@ -21,6 +21,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.SpellTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
@@ -36,9 +37,9 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * A game context helps execute a match of Spellsource, providing a place to store state, deliver requests for actions to
- * players, apply those player actions through a {@link GameLogic}, and then save the updated state as a result of those
- * actions.
+ * A game context helps execute a match of Spellsource, providing a place to store state, deliver requests for actions
+ * to players, apply those player actions through a {@link GameLogic}, and then save the updated state as a result of
+ * those actions.
  * <p>
  * For example, this code starts a game between two opponents that perform random actions:
  * <pre>
@@ -75,11 +76,11 @@ import java.util.stream.Stream;
  * Based on the code above, you'll see the minimum requirements to execute a {@link #play()} command: <ul> <li>2 {@link
  * Player} objects, each configured with a {@link Behaviour}. These objects represent (1) the most important part of the
  * game state (encoded inside the fields of the {@link Player} object, like {@link Player#getMinions()}; and (2) the
- * {@link Behaviour} delegate for player actions and mulligans. </li>. <li>A
- * {@link GameLogic} instance. It handles everything in between receiving a player action to the request for the next
- * player action..</li> <li>A {@link DeckFormat}, which is a collection of {@link CardSet} values that correspond to the
- * (1) legal cards that may be played and put into decks and (2) legal cards that may appear in randomly drawn or
- * created card effects.</li></ul><p>
+ * {@link Behaviour} delegate for player actions and mulligans. </li>. <li>A {@link GameLogic} instance. It handles
+ * everything in between receiving a player action to the request for the next player action..</li> <li>A {@link
+ * DeckFormat}, which is a collection of {@link CardSet} values that correspond to the (1) legal cards that may be
+ * played and put into decks and (2) legal cards that may appear in randomly drawn or created card
+ * effects.</li></ul><p>
  * <p>
  * Game state is composed of a variety of fields that live inside the context. To get a copy of the state, use {@link
  * #getGameStateCopy()}; while you can access a modifiable copy of the {@link GameState} with {@link #getGameState()},
@@ -111,8 +112,7 @@ import java.util.stream.Stream;
  * {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see net.demilich.metastone.game.behaviour.PlayRandomBehaviour for an example behaviour that just makes random
  * decisions when requested.
- * @see NetworkBehaviour for the class that turns requests to the {@link Behaviour}
- * into calls over the network.
+ * @see NetworkBehaviour for the class that turns requests to the {@link Behaviour} into calls over the network.
  * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
  * GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
@@ -254,6 +254,10 @@ public class GameContext implements Cloneable, Serializable {
 		Stack<EntityReference> eventTargetReferenceStack = new Stack<EntityReference>();
 		eventTargetReferenceStack.addAll(getEventTargetStack());
 		clone.getEnvironment().put(Environment.EVENT_TARGET_REFERENCE_STACK, eventTargetReferenceStack);
+		Deque<Integer> spellValueStack = new ArrayDeque<>();
+		spellValueStack.addAll(getSpellValueStack());
+		clone.getEnvironment().put(Environment.SPELL_VALUE_STACK, spellValueStack);
+
 
 		for (Environment key : getEnvironment().keySet()) {
 			if (!key.customClone()) {
@@ -511,8 +515,8 @@ public class GameContext implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions
-	 * are currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
+	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions are
+	 * currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
 	 * <p>
 	 * This helps implement a variety of complex rules in the game.
 	 *
@@ -681,8 +685,7 @@ public class GameContext implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Each player holds the player's {@link AbstractBehaviour} and all of the {@link
-	 * Entity} objects in the game.
+	 * Each player holds the player's {@link AbstractBehaviour} and all of the {@link Entity} objects in the game.
 	 *
 	 * @return An {@link java.util.Collections.UnmodifiableList} of {@link Player} objects.
 	 */
@@ -719,8 +722,8 @@ public class GameContext implements Cloneable, Serializable {
 	/**
 	 * Gets the minions whose summoning is currently being processed.
 	 * <p>
-	 * This stack can have multiple entries because battlecries or secrets can trigger summoning of other minions
-	 * in the middle of evaluating a {@link GameLogic#summon(int, Minion, Card, int, boolean)}.
+	 * This stack can have multiple entries because battlecries or secrets can trigger summoning of other minions in the
+	 * middle of evaluating a {@link GameLogic#summon(int, Minion, Card, int, boolean)}.
 	 *
 	 * @return A stack of summons.
 	 */
@@ -804,9 +807,9 @@ public class GameContext implements Cloneable, Serializable {
 	/**
 	 * Initializes a game.
 	 * <p>
-	 * Typically, this determines the beginner with {@link GameLogic#determineBeginner(int...)}; then it sets the
-	 * active player; then it calls {@link GameLogic#initializePlayer(int)} for both players, and then it asks both
-	 * players for their mulligans using {@link GameLogic#init(int, boolean)}.
+	 * Typically, this determines the beginner with {@link GameLogic#determineBeginner(int...)}; then it sets the active
+	 * player; then it calls {@link GameLogic#initializePlayer(int)} for both players, and then it asks both players for
+	 * their mulligans using {@link GameLogic#init(int, boolean)}.
 	 */
 	@Suspendable
 	protected void init() {
@@ -1276,11 +1279,28 @@ public class GameContext implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Raised when a {@link SpellTrigger} is fired (i.e., a secret is about to be played or a special effect hosted
-	 * by a minion/weapon is about to happen).
+	 * Raised when a {@link SpellTrigger} is fired (i.e., a secret is about to be played or a special effect hosted by a
+	 * minion/weapon is about to happen).
 	 *
 	 * @param spellTrigger The spell trigger that fired.
 	 */
 	public void onSpellTriggerFired(SpellTrigger spellTrigger) {
+	}
+
+	/**
+	 * Returns the spell values calculated so far by descending {@link net.demilich.metastone.game.spells.MetaSpell#onCast(GameContext,
+	 * Player, SpellDesc, Entity, Entity)} calls.
+	 * <p>
+	 * Implements Living Mana. Using a stack fixes issues where a later {@link net.demilich.metastone.game.spells.MetaSpell}
+	 * busts an earlier one.
+	 *
+	 * @return A stack of {@link Integer} spell values.
+	 */
+	@SuppressWarnings("unchecked")
+	public Deque<Integer> getSpellValueStack() {
+		if (!getEnvironment().containsKey(Environment.SPELL_VALUE_STACK)) {
+			getEnvironment().put(Environment.SPELL_VALUE_STACK, new ArrayDeque<>());
+		}
+		return (Deque<Integer>) getEnvironment().get(Environment.SPELL_VALUE_STACK);
 	}
 }
