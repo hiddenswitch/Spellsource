@@ -78,8 +78,6 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 								.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
 								.count(), 2L);
 
-						// Try the hero power specified
-
 						return context1;
 					});
 
@@ -116,6 +114,8 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 						return context12;
 					});
 
+			// Do everything: zip the contexts with the battlecry checks, which executes the battlecry
+			// then try the hero power specified hero and check that it worked
 			zip(contexts, battlecryChecks, (context, checker) -> checker.apply(context))
 					.map(context -> joinHeroPowerCardId.apply(context, heroPowerCardId))
 					.forEach(heroPowerChecker);
