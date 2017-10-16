@@ -1,11 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Predicate;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
@@ -22,7 +16,6 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.minions.RelativeToSource;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -31,8 +24,27 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 
-public class SpellUtils {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 
+/**
+ * A set of utilities to help write spells.
+ */
+public class SpellUtils {
+	/**
+	 * Sets upu the source and target references for casting a child spell, typically an "effect" of a spell defined on
+	 * a card.
+	 *
+	 * @param context The game context.
+	 * @param player  The player casting the spell.
+	 * @param spell   The child spell to cast.
+	 * @param source  The source of the spell, typically the spell card or minion whose battlecry is being called.
+	 * @param target  The target reference.
+	 * @see net.demilich.metastone.game.logic.GameLogic#castSpell(int, SpellDesc, EntityReference, EntityReference,
+	 * TargetSelection, boolean) where its parameter {@code childSpell = true}.
+	 */
 	@Suspendable
 	public static void castChildSpell(GameContext context, Player player, SpellDesc spell, Entity source, Entity target) {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
@@ -43,6 +55,14 @@ public class SpellUtils {
 		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
 	}
 
+	/**
+	 * Given a filter {@link Operation}, return a boolean representing whether that operation is satisfied.
+	 *
+	 * @param operation   The algebraic operation.
+	 * @param actualValue The left hand side.
+	 * @param targetValue The right hand side.
+	 * @return {@code true} if the evaluation is truue.
+	 */
 	public static boolean evaluateOperation(Operation operation, int actualValue, int targetValue) {
 		switch (operation) {
 			case EQUAL:
@@ -61,6 +81,14 @@ public class SpellUtils {
 		return false;
 	}
 
+	/**
+	 * Filters a card list. Does not copy source cards.
+	 *
+	 * @param source A {@link CardList} source.
+	 * @param filter A function that returns {@code true} when the card should be kept, or {@code null} to include all
+	 *               cards.
+	 * @return A {@link CardList} backed by a mutable, non-copy {@link CardArrayList}.
+	 */
 	public static CardList getCards(CardList source, Predicate<Card> filter) {
 		CardList result = new CardArrayList();
 		for (Card card : source) {
@@ -71,26 +99,42 @@ public class SpellUtils {
 		return result;
 	}
 
+	/**
+	 * Gets a card out of a {@link SpellDesc}. Typically only consults the {@link SpellArg#CARD} property.
+	 *
+	 * @param context The context.
+	 * @param spell   The {@link SpellDesc}.
+	 * @return A card.
+	 */
 	public static Card getCard(GameContext context, SpellDesc spell) {
 		String cardId = (String) spell.get(SpellArg.CARD);
 		return getSingleCard(context, cardId);
 	}
 
+	/**
+	 * Consider the {@link net.demilich.metastone.game.Environment#PENDING_CARD} and {@link net.demilich.metastone.game.Environment#EVENT_CARD},
+	 * the search the {@link Zones#DISCOVER} zone for the specified card
+	 * @param context
+	 * @param cardId
+	 * @return
+	 */
 	private static Card getSingleCard(GameContext context, String cardId) {
 		if (cardId == null) {
 			return null;
 		}
-		Card card = getCardFromContextOrDiscover(context, cardId);
+		Card card;
 		if (cardId.toUpperCase().equals("PENDING_CARD")) {
 			card = context.getPendingCard();
 		} else if (cardId.toUpperCase().equals("EVENT_CARD")) {
 			card = context.getEventCard();
+		} else {
+			card = getCardFromContextOrDiscover(context, cardId);
 		}
 		return card;
 	}
 
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
-		String[] cardIds = null;
+		String[] cardIds;
 		if (spell.containsKey(SpellArg.CARDS)) {
 			cardIds = (String[]) spell.get(SpellArg.CARDS);
 		} else {
@@ -154,6 +198,10 @@ public class SpellUtils {
 			discoverActions.add(discover);
 		}
 
+		return postDiscover(context, player, cards, discoverActions);
+	}
+
+	private static DiscoverAction postDiscover(GameContext context, Player player, Iterable<? extends Card> cards, List<GameAction> discoverActions) {
 		if (discoverActions.size() == 0) {
 			return null;
 		}
@@ -165,14 +213,10 @@ public class SpellUtils {
 			discoverAction = (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
 		}
 
-		int discoveredCard = discoverAction.getCard().getId();
-
 		// Move the cards back
 		for (Card card : cards) {
 			// Cards that are being discovered are always copies, so they are always removed from play afterwards.
-			if (card.getId() != discoveredCard) {
-				card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-			}
+			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		}
 
 		return discoverAction;
@@ -234,20 +278,7 @@ public class SpellUtils {
 			discoverActions.add(discover);
 		}
 
-		if (discoverActions.size() == 0) {
-			return null;
-		}
-
-		final DiscoverAction discoverAction;
-		if (context.getLogic().attributeExists(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION)) {
-			discoverAction = (DiscoverAction) discoverActions.get(context.getLogic().random(discoverActions.size()));
-		} else {
-			discoverAction = (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
-		}
-		for (Card card : cards) {
-			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		}
-		return discoverAction;
+		return postDiscover(context, player, cards, discoverActions);
 	}
 
 	@Suspendable
@@ -400,15 +431,12 @@ public class SpellUtils {
 		}
 	}
 
-	private SpellUtils() {
-	}
-
 	public static MinionCard getMinionCardFromSummonSpell(GameContext context, Player player, Entity source, SpellDesc desc) {
 		// TODO: Actually create a minion card
 		return (MinionCard) (new MinionCardDesc().createInstance());
 	}
 
-	public static SpellDesc[] getGroup(GameContext context, SpellDesc spell) {
+	static SpellDesc[] getGroup(GameContext context, SpellDesc spell) {
 		Card card = null;
 		String cardName = (String) spell.get(SpellArg.GROUP);
 		card = context.getCardById(cardName);

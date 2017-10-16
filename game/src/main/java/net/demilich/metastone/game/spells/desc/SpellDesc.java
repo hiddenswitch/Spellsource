@@ -10,6 +10,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * A definition for a spell.
  * <p>
@@ -105,18 +107,19 @@ public class SpellDesc extends Desc<SpellArg> {
 	public Stream<SpellDesc> subSpells() {
 		Stream<SpellDesc> spells;
 		SpellDesc[] spellsArray = (SpellDesc[]) get(SpellArg.SPELLS);
-		if (spellsArray.length > 0) {
+		if (spellsArray != null && spellsArray.length > 0) {
 			spells = Stream.concat(Stream.of(spellsArray),
 					Stream.of(spellsArray).flatMap(SpellDesc::subSpells)
 			);
 		} else {
 			spells = Stream.empty();
 		}
-		Stream<SpellDesc> unitSpells = Stream.of(SpellArg.SPELL, SpellArg.SPELL_1, SpellArg.SPELL_2)
+		List<SpellDesc> units = Stream.of(SpellArg.SPELL, SpellArg.SPELL_1, SpellArg.SPELL_2)
 				.map(this::get)
 				.filter(Objects::nonNull)
-				.map(o -> (SpellDesc) o)
-				.flatMap(SpellDesc::subSpells);
+				.map(o -> (SpellDesc) o).collect(toList());
+
+		Stream<SpellDesc> unitSpells = Stream.concat(units.stream(), units.stream().flatMap(SpellDesc::subSpells));
 
 		return Stream.concat(spells, unitSpells);
 	}

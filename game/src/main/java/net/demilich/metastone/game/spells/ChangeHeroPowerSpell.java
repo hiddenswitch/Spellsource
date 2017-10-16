@@ -21,7 +21,8 @@ public class ChangeHeroPowerSpell extends Spell {
 		heroPower.setId(context.getLogic().getIdFactory().generateId());
 		heroPower.setOwner(hero.getOwner());
 		logger.debug("{}'s hero power was changed to {}", hero.getName(), heroPower);
-		hero.getHeroPowerZone().move(hero.getHeroPower(), context.getPlayer(hero.getOwner()).getGraveyard());
+		// The old hero power should be removed from play.
+		hero.getHeroPowerZone().move(hero.getHeroPower(), context.getPlayer(hero.getOwner()).getRemovedFromPlay());
 		heroPower.moveOrAddTo(context, Zones.HERO_POWER);
 	}
 	
