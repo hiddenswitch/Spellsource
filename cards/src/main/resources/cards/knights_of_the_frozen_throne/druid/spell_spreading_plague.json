@@ -1,0 +1,31 @@
+{
+  "name": "Spreading Plague",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "RARE",
+  "description": "Summon a 1/5 Scarab with Taunt. If your opponent has more minions, cast this again.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecastWhileSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "ENEMY_MINIONS"
+      },
+      "value2": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS"
+      },
+      "operation": "GREATER"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_scarab_beetle"
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

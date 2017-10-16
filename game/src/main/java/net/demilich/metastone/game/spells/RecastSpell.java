@@ -26,3 +26,4 @@ public class RecastSpell extends Spell {
 	}
 
 }
+
