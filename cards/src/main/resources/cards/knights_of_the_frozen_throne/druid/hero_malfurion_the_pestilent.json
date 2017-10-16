@@ -1,7 +1,7 @@
 {
   "name": "Malfurion the Pestilent",
   "baseManaCost": 7,
-  "heroPower": "hero_power_shapeshift",
+  "heroPower": "hero_power_plague_lord",
   "type": "HERO",
   "heroClass": "DRUID",
   "rarity": "LEGENDARY",
@@ -9,27 +9,44 @@
     "MAX_HP": 30,
     "ARMOR": 5
   },
+  "description": "Choose One - Summon 2 Poisonous Spiders; or 2 Scarabs with Taunt.",
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
   "fileFormatVersion": 1,
   "options": [
     {
-      "description": "Option 1",
+      "description": "Summon 2 Poisonous Spiders",
       "spell": {
-        "class": "NullSpell"
+        "class": "SummonSpell",
+        "card": "token_frost_widow",
+        "value": 2
       }
     },
     {
-      "description": "Option 2",
+      "description": "Summon 2 Scarabs with Taunt.",
       "spell": {
-        "class": "NullSpell"
+        "class": "SummonSpell",
+        "card": "token_scarab_beetle",
+        "value": 2
       }
     }
   ],
   "bothOptions": {
-    "description": "Both options",
+    "description": "Summon 2 Poisonous Spiders and 2 Scarabs with Taunt.",
     "spell": {
-      "class": "NullSpell"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "card": "token_frost_widow",
+          "value": 2
+        },
+        {
+          "class": "SummonSpell",
+          "card": "token_scarab_beetle",
+          "value": 2
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,17 @@
+{
+  "name": "Plague Lord Armor",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "DRUID",
+  "rarity": "FREE",
+  "description": "Gain 3 Armor",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffHeroSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 3
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
