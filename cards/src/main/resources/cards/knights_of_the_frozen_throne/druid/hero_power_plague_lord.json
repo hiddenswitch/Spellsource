@@ -1,0 +1,17 @@
+{
+  "name": "Plague Lord",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "DRUID",
+  "rarity": "FREE",
+  "description": "Choose One - +3 Attack this turn; or Gain 3 Armor",
+  "targetSelection": "NONE",
+  "options": [
+    "hero_power_plague_lord1",
+    "hero_power_plague_lord2"
+  ],
+  "bothOptions": "hero_power_plague_lord3",
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
