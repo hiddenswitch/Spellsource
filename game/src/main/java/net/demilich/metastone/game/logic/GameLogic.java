@@ -52,6 +52,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * The game logic class implements the basic primitives of gameplay.
  * <p>
@@ -1929,7 +1931,7 @@ public class GameLogic implements Cloneable, Serializable {
 	protected void handleMulligan(Player player, boolean begins, FirstHand firstHand, List<Card> discardedCards) {
 		// Get the entity ids of the discarded cards and then replace the discarded cards with them
 		final Map<Integer, Entity> setAsideZone = player.getSetAsideZone().stream().collect(Collectors.toMap(Entity::getId, Function.identity()));
-		discardedCards = discardedCards.stream().map(Card::getId).map(setAsideZone::get).map(e -> (Card) e).collect(Collectors.toList());
+		discardedCards = discardedCards.stream().map(Card::getId).map(setAsideZone::get).map(e -> (Card) e).collect(toList());
 
 		// The starter cards have been put into the setAsideZone
 		List<Card> starterCards = firstHand.getStarterCards();
@@ -3024,7 +3026,18 @@ public class GameLogic implements Cloneable, Serializable {
 		public FirstHand invoke() {
 			numberOfStarterCards = begins ? STARTER_CARDS : STARTER_CARDS + 1;
 			starterCards = new ArrayList<>();
-			for (int j = 0; j < numberOfStarterCards; j++) {
+
+			// The player's starting hand should always contain the quest.
+			// Since our server could theoretically allow you to have a deck with multiple quests, they will
+			// all start here.
+			starterCards.addAll(player.getDeck().stream()
+					.filter(card -> card.hasAttribute(Attribute.QUEST))
+					.limit(numberOfStarterCards)
+					.collect(toList()));
+
+			starterCards.forEach(card -> player.getDeck().move(card, player.getSetAsideZone()));
+
+			for (int j = starterCards.size(); j < numberOfStarterCards; j++) {
 				Card randomCard = player.getDeck().getRandom();
 				if (randomCard != null) {
 					player.getDeck().move(randomCard, player.getSetAsideZone());

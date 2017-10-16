@@ -17,13 +17,14 @@ import java.util.function.Predicate;
 
 /**
  * An interface describing common actions for a collection of cards. This abstracts away the difference between an
- * {@link net.demilich.metastone.game.entities.EntityZone}, which enforces that its containing {@link net.demilich.metastone.game.entities.Entity}
- * objects can only be in one {@link net.demilich.metastone.game.entities.EntityZone} at a time, versus a plain {@link CardArrayList},
- * which is just an array of cards that various pieces of logic might want to {@link #shuffle()} or {@link #addRandomly(Card)} into.
+ * {@link net.demilich.metastone.game.entities.EntityZone}, which enforces that its containing {@link
+ * net.demilich.metastone.game.entities.Entity} objects can only be in one {@link net.demilich.metastone.game.entities.EntityZone}
+ * at a time, versus a plain {@link CardArrayList}, which is just an array of cards that various pieces of logic might
+ * want to {@link #shuffle()} or {@link #addRandomly(Card)} into.
  * <p>
- * Use {@link CardZone} for the {@link Zones#HAND}, {@link Zones#DECK} and {@link Zones#DISCOVER} zones--when a card should
- * only be in one place at a time. Use a {@link CardArrayList} for situations where you need to e.g., get a list of cards from
- * an {@link EntityFilter}, shuffle them, and choose one from the top.
+ * Use {@link CardZone} for the {@link Zones#HAND}, {@link Zones#DECK} and {@link Zones#DISCOVER} zones--when a card
+ * should only be in one place at a time. Use a {@link CardArrayList} for situations where you need to e.g., get a list
+ * of cards from an {@link EntityFilter}, shuffle them, and choose one from the top.
  *
  * @see CardZone for the entity zone that implements this interface.
  * @see CardArrayList for a {@link List} implementation of this interface.
@@ -46,8 +47,8 @@ public interface CardList extends Iterable<Card> {
 	CardList addAll(CardList cardList);
 
 	/**
-	 * Used for shuffling a card into this list. Problematic because it uses ThreadLocalRandom instead of a random
-	 * seed from a {@link net.demilich.metastone.game.logic.GameLogic} instance.
+	 * Used for shuffling a card into this list. Problematic because it uses ThreadLocalRandom instead of a random seed
+	 * from a {@link net.demilich.metastone.game.logic.GameLogic} instance.
 	 *
 	 * @param card The card to shuffle randomly into this list.
 	 */
@@ -63,8 +64,8 @@ public interface CardList extends Iterable<Card> {
 	CardList clone();
 
 	/**
-	 * Checks if the list has the specific reference to a card. Does not use the card's {@link net.demilich.metastone.game.entities.Entity#id}
-	 * or its {@link Card#cardId}, which may be more helpful.
+	 * Checks if the list has the specific reference to a card. Does not use the card's {@link
+	 * net.demilich.metastone.game.entities.Entity#id} or its {@link Card#cardId}, which may be more helpful.
 	 *
 	 * @param card The card instance to check.
 	 * @return {@code true} if the specific instance is inside this list.
@@ -82,8 +83,21 @@ public interface CardList extends Iterable<Card> {
 		if (card == null) {
 			return false;
 		}
+		return containsCard(card.getCardId());
+	}
+
+	/**
+	 * Checks if there is a card in this list whose {@link Card#cardId} matches the specified card ID.
+	 *
+	 * @param cardId The card ID
+	 * @return {@code true} if the there is a card with a matching {@link Card#cardId}.
+	 */
+	default boolean containsCard(String cardId) {
+		if (cardId == null) {
+			return false;
+		}
 		for (Card other : this) {
-			if (other.getCardId().equals(card.getCardId())) {
+			if (other.getCardId().equals(cardId)) {
 				return true;
 			}
 		}
@@ -109,8 +123,8 @@ public interface CardList extends Iterable<Card> {
 	 * Gets a random {@link Card} in this instance. Uses Apache's {@link RandomUtils} internally, though it should
 	 * probably use a random value provider from a {@link net.demilich.metastone.game.logic.GameLogic} instance.
 	 * <p>
-	 * If you plan to use a copy of this card, make sure to call {@link Card#getCopy()} and assign its ID to {@link IdFactory#generateId()}.
-	 * and owner to the appropriate owner.
+	 * If you plan to use a copy of this card, make sure to call {@link Card#getCopy()} and assign its ID to {@link
+	 * IdFactory#generateId()}. and owner to the appropriate owner.
 	 *
 	 * @return A randomly selected card (not cloned or copied).
 	 */
@@ -180,6 +194,7 @@ public interface CardList extends Iterable<Card> {
 
 	/**
 	 * Removes the specified card instance by reference.
+	 *
 	 * @param card The card to remove.
 	 * @return {@code true} if the card was removed.
 	 */
@@ -193,12 +208,14 @@ public interface CardList extends Iterable<Card> {
 	/**
 	 * Removes the first card. Implements {@link net.demilich.metastone.game.spells.PutRandomSecretIntoPlaySpell}, used
 	 * by 3 Hearthstone cards.
+	 *
 	 * @return The card that is now removed.
 	 */
 	Card removeFirst();
 
 	/**
 	 * Replaces a card by index.
+	 *
 	 * @param oldCard The card to find and replace.
 	 * @param newCard The new card to replace it with.
 	 * @return {@code true} if the replacement was successful.
@@ -212,6 +229,7 @@ public interface CardList extends Iterable<Card> {
 
 	/**
 	 * Shuffles the instance with the given random number generator.
+	 *
 	 * @param random A {@link Random} instance.
 	 */
 	void shuffle(Random random);
@@ -228,6 +246,7 @@ public interface CardList extends Iterable<Card> {
 
 	/**
 	 * Gets a {@link List} that references the contents of this instance.
+	 *
 	 * @return A {@link List} whose contents are the same objects as this instance.
 	 */
 	List<Card> toList();
@@ -235,6 +254,7 @@ public interface CardList extends Iterable<Card> {
 	/**
 	 * Copies all the cards in this list and returns a new {@link CardList} (possibly of a different implementation)
 	 * containing those copies.
+	 *
 	 * @return A copied list of cards.
 	 * @see Card#getCopy() for more about the difference between a copy and a clone.
 	 */
