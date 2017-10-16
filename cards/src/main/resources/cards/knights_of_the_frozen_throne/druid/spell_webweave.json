@@ -5,6 +5,7 @@
   "heroClass": "DRUID",
   "rarity": "COMMON",
   "description": "Summon two 1/2 Poisonous Spiders.",
+  "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
     "card": "token_frost_widow"
