@@ -4,6 +4,7 @@
   "type": "MINION",
   "baseAttack": 1,
   "baseHp": 2,
+  "race": "BEAST",
   "attributes": {
     "POISONOUS": true
   },
