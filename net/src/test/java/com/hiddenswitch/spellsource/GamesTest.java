@@ -278,7 +278,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 							"      },\n" +
 							"      \"description\": \"Fireball spell.\",\n" +
 							"      \"cardType2\": \"SPELL\",\n" +
-							"      \"cardSet\": \"Spellsource\",\n" +
+							"      \"cardSet\": \"SPELLSOURCE\",\n" +
 							"      \"rarity\": \"LEGENDARY\",\n" +
 							"      \"heroClass\": \"ANY\",\n" +
 							"      \"collectible\": true,\n" +
