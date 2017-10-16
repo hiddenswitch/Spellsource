@@ -27,7 +27,6 @@
 		}
 	},
 	"attributes": {
-		"ADAPT": true,
 		"BATTLECRY": true
 	},
 	"collectible": true,

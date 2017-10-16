@@ -157,7 +157,6 @@ public class UnityClient {
 					assertValidStateAndChanges(message);
 					break;
 				case ON_MULLIGAN:
-					context.fail("No mulligan expected.");
 					context.assertNotNull(message.getStartingCards());
 					context.assertTrue(message.getStartingCards().size() > 0);
 					endpoint.sendMessage(serialize(new ClientToServerMessage()
