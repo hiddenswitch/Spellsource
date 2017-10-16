@@ -304,7 +304,7 @@ public class Player extends Entity implements Serializable {
 			case SECRET:
 				return getSecrets();
 			case DISCOVER:
-				return getDiscovers();
+				return getDiscoverZone();
 			case REMOVED_FROM_PLAY:
 				return getRemovedFromPlay();
 			case QUEST:
@@ -325,10 +325,6 @@ public class Player extends Entity implements Serializable {
 
 	public EntityZone getWeaponZone() {
 		return getHero().getWeaponZone();
-	}
-
-	public CardZone getDiscovers() {
-		return discoverZone;
 	}
 
 	public CardZone getDiscoverZone() {

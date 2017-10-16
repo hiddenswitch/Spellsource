@@ -1,1 +1,30 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "description": "Discover a minion that costs (8), then summon it.", "spell": {"cardFilter": {"attribute": "BASE_MANA_COST", "cardType": "MINION", "value": 8, "class": "CardFilter", "operation": "GREATER_OR_EQUAL"}, "spell": {"targetPlayer": "SELF", "spell": {"class": "PutMinionOnBoardSpell", "card": "EVENT_CARD"}, "class": "ReceiveCardAndDoSomethingSpell"}, "class": "DiscoverRandomCardSpell"}, "fileFormatVersion": 1, "rarity": "RARE", "heroClass": "PRIEST", "targetSelection": "NONE", "baseManaCost": 8, "type": "SPELL", "name": "Free From Amber"}
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "description": "Discover a minion that costs (8), then summon it.",
+  "spell": {
+    "class": "DiscoverRandomCardSpell",
+    "cardFilter": {
+      "attribute": "BASE_MANA_COST",
+      "cardType": "MINION",
+      "value": 8,
+      "class": "CardFilter",
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell": {
+      "class": "ReceiveCardAndDoSomethingSpell",
+      "targetPlayer": "SELF",
+      "spell": {
+        "class": "PutMinionOnBoardSpell",
+        "card": "EVENT_CARD"
+      }
+    }
+  },
+  "fileFormatVersion": 1,
+  "rarity": "RARE",
+  "heroClass": "PRIEST",
+  "targetSelection": "NONE",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "name": "Free From Amber"
+}
