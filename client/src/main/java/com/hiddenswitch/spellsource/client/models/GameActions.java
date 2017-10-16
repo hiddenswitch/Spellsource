@@ -59,6 +59,9 @@ public class GameActions  implements Serializable {
   @SerializedName("heroPower")
   private SpellAction heroPower = null;
 
+  @SerializedName("heroes")
+  private List<SpellAction> heroes = new ArrayList<SpellAction>();
+
   @SerializedName("spells")
   private List<SpellAction> spells = new ArrayList<SpellAction>();
 
@@ -177,6 +180,29 @@ public class GameActions  implements Serializable {
 
   public void setHeroPower(SpellAction heroPower) {
     this.heroPower = heroPower;
+  }
+
+  public GameActions heroes(List<SpellAction> heroes) {
+    this.heroes = heroes;
+    return this;
+  }
+
+  public GameActions addHeroesItem(SpellAction heroesItem) {
+    this.heroes.add(heroesItem);
+    return this;
+  }
+
+   /**
+   * The cards in your hand that are heroes
+   * @return heroes
+  **/
+  @ApiModelProperty(example = "null", value = "The cards in your hand that are heroes")
+  public List<SpellAction> getHeroes() {
+    return heroes;
+  }
+
+  public void setHeroes(List<SpellAction> heroes) {
+    this.heroes = heroes;
   }
 
   public GameActions spells(List<SpellAction> spells) {
@@ -309,6 +335,7 @@ public class GameActions  implements Serializable {
         Objects.equals(this.physicalAttacks, gameActions.physicalAttacks) &&
         Objects.equals(this.summons, gameActions.summons) &&
         Objects.equals(this.heroPower, gameActions.heroPower) &&
+        Objects.equals(this.heroes, gameActions.heroes) &&
         Objects.equals(this.spells, gameActions.spells) &&
         Objects.equals(this.battlecries, gameActions.battlecries) &&
         Objects.equals(this.discoveries, gameActions.discoveries) &&
@@ -318,7 +345,7 @@ public class GameActions  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(compatibility, endTurn, physicalAttacks, summons, heroPower, spells, battlecries, discoveries, weapons, chooseOnes);
+    return Objects.hash(compatibility, endTurn, physicalAttacks, summons, heroPower, heroes, spells, battlecries, discoveries, weapons, chooseOnes);
   }
 
   @Override
@@ -331,6 +358,7 @@ public class GameActions  implements Serializable {
     sb.append("    physicalAttacks: ").append(toIndentedString(physicalAttacks)).append("\n");
     sb.append("    summons: ").append(toIndentedString(summons)).append("\n");
     sb.append("    heroPower: ").append(toIndentedString(heroPower)).append("\n");
+    sb.append("    heroes: ").append(toIndentedString(heroes)).append("\n");
     sb.append("    spells: ").append(toIndentedString(spells)).append("\n");
     sb.append("    battlecries: ").append(toIndentedString(battlecries)).append("\n");
     sb.append("    discoveries: ").append(toIndentedString(discoveries)).append("\n");

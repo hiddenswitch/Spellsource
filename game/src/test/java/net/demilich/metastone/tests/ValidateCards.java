@@ -18,55 +18,50 @@ import net.demilich.metastone.utils.ResourceInputStream;
 import net.demilich.metastone.utils.UserHomeMetastone;
 
 /**
- * This test will iterate through all the cards in the cards resources dir
- * and invoke the CardParser.parseCard(cardFile) method to ensure that
- * each card is well formed and can be parsed.
+ * This test will iterate through all the cards in the cards resources dir and invoke the CardParser.parseCard(cardFile)
+ * method to ensure that each card is well formed and can be parsed.
  */
 public class ValidateCards {
+	private static final String CARDS_DIR = "src/main/resources/cards/"; // relative path from module root
+	private static final CardParser CARD_PARSER = new CardParser();
+	private static List<File> ALL_CARD_FILES;
 
-    private static final String CARDS_DIR = "src/main/resources/cards/"; // relative path from module root
-    private static final CardParser CARD_PARSER = new CardParser();
-    private static final List<File> ALL_CARD_FILES;
+	@DataProvider(name = "CardProvider")
+	public static Object[][] getCardFiles() {
+		if (ALL_CARD_FILES == null) {
+			try {
+				ALL_CARD_FILES = (List<File>) FileUtils.listFiles(
+						new File(CARDS_DIR),
+						new RegexFileFilter("^(.*json)"),
+						DirectoryFileFilter.DIRECTORY);
+			} catch (IllegalArgumentException ignored) {
+				ALL_CARD_FILES = (List<File>) FileUtils.listFiles(
+						new File("../cards/" + CARDS_DIR),
+						new RegexFileFilter("^(.*json)"),
+						DirectoryFileFilter.DIRECTORY);
+			}
 
-    static {
+		}
 
-        // recursively crawl the cards dir and pull out all the files
-        ALL_CARD_FILES = (List<File>)FileUtils.listFiles(
-                new File(CARDS_DIR),
-                new RegexFileFilter("^(.*json)"),
-                DirectoryFileFilter.DIRECTORY);
-        // also pull in the user's custom cards dir
-        if (new File(UserHomeMetastone.getPath() + File.separator + "cards").exists()) {
-            ALL_CARD_FILES.addAll(
-                    FileUtils.listFiles(
-                        new File(UserHomeMetastone.getPath() + File.separator + "cards"),
-                        new RegexFileFilter("^(.*json)"),
-                        DirectoryFileFilter.DIRECTORY)
-            );
-        }
-    }
+		int size = ALL_CARD_FILES.size();
+		File file;
+		Object[][] matrix = (Object[][]) Array.newInstance(Object.class, size, 1);
+		for (int i = 0; i < size; i++) {
+			file = ALL_CARD_FILES.get(i);
+			matrix[i][0] = file;
+		}
+		;
 
-    @DataProvider(name = "CardProvider")
-    public static Object[][] getCardFiles() {
+		return matrix;
+	}
 
-        int size =  ALL_CARD_FILES.size();
-        File file;
-        Object [][] matrix = (Object[][]) Array.newInstance(Object.class, size, 1);
-        for (int i = 0; i < size; i++) {
-            file = ALL_CARD_FILES.get(i);
-            matrix[i][0] = file;
-        };
-
-        return matrix;
-    }
-
-    @Test(dataProvider = "CardProvider")
-    public void validateCard(File cardFile) throws FileNotFoundException {
-        try {
-            CARD_PARSER.parseCard(new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true));
-        } catch (Exception ex) {
-            System.err.println(ex);
-            Assert.fail(cardFile.getName(), ex);
-        }
-    }
+	@Test(dataProvider = "CardProvider")
+	public void validateCard(File cardFile) throws FileNotFoundException {
+		try {
+			CARD_PARSER.parseCard(new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true));
+		} catch (Exception ex) {
+			System.err.println(ex);
+			Assert.fail(cardFile.getName(), ex);
+		}
+	}
 }

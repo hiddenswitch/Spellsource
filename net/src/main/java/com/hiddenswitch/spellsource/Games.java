@@ -29,7 +29,9 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -125,34 +127,7 @@ public interface Games {
 				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
 				.entrySet()
 				.stream()
-				.map(kv -> {
-					ChooseOneOptions spell = new ChooseOneOptions();
-					EntityLocation sourceCardLocation = workingContext.resolveCardReference(kv.getValue().get(0).getCardReference()).getEntityLocation();
-					spell.cardInHandId(kv.getKey());
-
-					kv.getValue().stream()
-							.collect(Collectors.groupingBy(PlayChooseOneCardAction::getChoiceCardId))
-							.entrySet().forEach(choiceGroup -> {
-
-						String cardId = choiceGroup.getKey();
-						Entity entity = Games.getEntity(workingContext, CardCatalogue.getCardById(cardId), playerId);
-						int id = chooseOneVirtualEntitiesId[0];
-						// Use the source card location
-
-						entity.id(id)
-								.getState().playable(true)
-								.location(Games.toClientLocation(sourceCardLocation));
-						List<PlayChooseOneCardAction> choiceActions = choiceGroup.getValue();
-						SpellAction choiceSpell = getSpellAction(id, choiceActions);
-
-						spell.addEntitiesItem(entity);
-						spell.addSpellsItem(choiceSpell);
-
-						chooseOneVirtualEntitiesId[0]++;
-					});
-
-					return spell;
-				})
+				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addSpellsItem))
 				.forEach(clientActions.getChooseOnes()::add);
 
 		// Next, choose one summons
@@ -173,21 +148,19 @@ public interface Games {
 
 					kv.getValue().stream()
 							.collect(Collectors.groupingBy(PlayMinionCardAction::getChooseOneOptionIndex))
-							.entrySet()
-							.forEach(chooseOneOption -> {
+							.forEach((key, summonActions) -> {
 								int id = chooseOneVirtualEntitiesId[0];
-								List<PlayMinionCardAction> summonActions = chooseOneOption.getValue();
 								SummonAction summonAction = getSummonAction(workingContext, id, minionsOrWeapons, summonActions, playerId);
 								// If it's a transform minion spell, use the entity representing the minion it's transforming into
 								// Otherwise, use the source card entity with the description in the option
 								Entity entity;
-								String transformCardId = sourceCard.getTransformMinionCardId(chooseOneOption.getKey());
+								String transformCardId = sourceCard.getTransformMinionCardId(key);
 								boolean isTransform = transformCardId != null;
 								if (isTransform) {
 									entity = Games.getEntity(workingContext, CardCatalogue.getCardById(transformCardId), playerId);
 								} else {
 									entity = Games.getEntity(workingContext, sourceCard, playerId);
-									String battlecryDescription = sourceCard.getBattlecryDescription(chooseOneOption.getKey());
+									String battlecryDescription = sourceCard.getBattlecryDescription(key);
 									entity.id(id)
 											.description(battlecryDescription);
 								}
@@ -203,8 +176,7 @@ public interface Games {
 					return summon;
 				}).forEach(clientActions.getChooseOnes()::add);
 
-		// Choose one summons are actually SUMMON cards with different group indices from the same card
-		// First, non-choose-one summons
+		// Regular summons
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
 				.map(ga -> (PlayMinionCardAction) ga)
@@ -214,6 +186,52 @@ public interface Games {
 				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
 				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId)).forEach(clientActions::addSummonsItem);
 
+		// Heroes
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.HERO)
+				.map(ga -> (PlayHeroCardAction) ga)
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.entrySet()
+				.stream()
+				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
+				.map(kv -> getSpellAction(kv.getKey(), kv.getValue()))
+				.forEach(clientActions::addHeroesItem);
+
+		// Choose one heroes
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.HERO)
+				.map(ga -> (PlayHeroCardAction) ga)
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.entrySet()
+				.stream()
+				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
+				.map(kv -> {
+					ChooseOneOptions hero = new ChooseOneOptions();
+					hero.cardInHandId(kv.getKey());
+					ChooseBattlecryHeroCard sourceCard = (ChooseBattlecryHeroCard) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
+					EntityLocation sourceCardLocation = sourceCard.getEntityLocation();
+
+					kv.getValue().stream()
+							.collect(Collectors.groupingBy(PlayHeroCardAction::getChooseOneOptionIndex))
+							.forEach((key, battlecries) -> {
+								int id = chooseOneVirtualEntitiesId[0];
+								SpellAction spellAction = getSpellAction(id, battlecries);
+								// If it's a transform minion spell, use the entity representing the minion it's transforming into
+								// Otherwise, use the source card entity with the description in the option
+								Entity entity = Games.getEntity(workingContext, sourceCard, playerId);
+								String battlecryDescription = sourceCard.getBattlecryDescription(key);
+								entity.id(id)
+										.description(battlecryDescription)
+										.getState().playable(true)
+										.location(Games.toClientLocation(sourceCardLocation));
+
+								hero.addEntitiesItem(entity);
+								hero.addHeroesItem(spellAction);
+								chooseOneVirtualEntitiesId[0]++;
+							});
+
+					return hero;
+				}).forEach(clientActions.getChooseOnes()::add);
 
 		// Physical attacks
 		actions.stream()
@@ -234,10 +252,25 @@ public interface Games {
 		Optional<SpellAction> heroPowerSpell = actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
 				.map(ga -> (HeroPowerAction) ga)
+				.filter(ga -> ga.getChooseOneOptionIndex() == null)
 				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
 				.entrySet()
 				.stream()
 				.map(kv -> getSpellAction(kv.getKey(), kv.getValue())).findFirst();
+
+		heroPowerSpell.ifPresent(clientActions::heroPower);
+
+		// Choose one hero powers
+		actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
+				.map(ga -> (HeroPowerAction) ga)
+				.filter(ga -> ga.getChooseOneOptionIndex() != null)
+				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.entrySet()
+				.stream()
+				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addHeroPowersItem))
+				.forEach(clientActions.getChooseOnes()::add);
+		;
 
 		// Weapons
 		actions.stream()
@@ -246,7 +279,8 @@ public interface Games {
 				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
 				.entrySet()
 				.stream()
-				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId)).forEach(clientActions::addWeaponsItem);
+				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId))
+				.forEach(clientActions::addWeaponsItem);
 
 		// discovers
 		actions.stream()
@@ -257,19 +291,14 @@ public interface Games {
 						.cardId(da.getCard().getId()))
 				.forEach(clientActions::addDiscoveriesItem);
 
-		if (heroPowerSpell.isPresent()) {
-			clientActions.heroPower(heroPowerSpell.get());
-		}
 
-		Optional<EndTurnAction> endTurnAction = actions
+		// End Turn
+		actions
 				.stream()
 				.filter(ga -> ga.getActionType() == ActionType.END_TURN)
 				.map(ga -> (EndTurnAction) ga)
-				.findFirst();
-
-		if (endTurnAction.isPresent()) {
-			clientActions.endTurn(endTurnAction.get().getId());
-		}
+				.findFirst()
+				.ifPresent(endTurnAction1 -> clientActions.endTurn(endTurnAction1.getId()));
 
 		// Add all the action indices for compatibility purposes
 		clientActions.compatibility(actions.stream()
@@ -277,6 +306,32 @@ public interface Games {
 				.collect(Collectors.toList()));
 
 		return clientActions;
+	}
+
+	static <T extends PlayCardAction & IChoiceCard> ChooseOneOptions buildChooseOneOptions(GameContext workingContext, int playerId, int[] chooseOneVirtualEntitiesId, int sourceId, List<T> choices, BiConsumer<ChooseOneOptions, SpellAction> adder) {
+		ChooseOneOptions spell = new ChooseOneOptions();
+		EntityLocation sourceCardLocation = workingContext.resolveCardReference(choices.get(0).getCardReference()).getEntityLocation();
+		spell.cardInHandId(sourceId);
+
+		choices.stream()
+				.collect(Collectors.groupingBy(IChoiceCard::getChoiceCardId))
+				.forEach((cardId, choiceActions) -> {
+					Entity entity = Games.getEntity(workingContext, CardCatalogue.getCardById(cardId), playerId);
+					int id = chooseOneVirtualEntitiesId[0];
+
+					// Use the source card location
+					entity.id(id)
+							.getState().playable(true)
+							.location(Games.toClientLocation(sourceCardLocation));
+					SpellAction choiceSpell = getSpellAction(id, choiceActions);
+
+					spell.addEntitiesItem(entity);
+					adder.accept(spell, choiceSpell);
+
+					chooseOneVirtualEntitiesId[0]++;
+				});
+
+		return spell;
 	}
 
 	static SummonAction getSummonAction(GameContext workingContext, Integer sourceCardId, Map<Integer, Integer> minionEntityIdToLocation, List<? extends PlayCardAction> summonActions, int playerId) {
@@ -301,18 +356,18 @@ public interface Games {
 		return summonAction;
 	}
 
-	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> spellCardActions) {
+	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> playCardActions) {
 		SpellAction spellAction = new SpellAction()
 				.sourceId(sourceCardId);
 
 		// Targetable spell
-		if (spellCardActions.size() == 1
-				&& (spellCardActions.get(0).getTargetReference() == null
-				|| spellCardActions.get(0).getTargetReference().isTargetGroup())) {
-			spellAction.action(spellCardActions.get(0).getId());
+		if (playCardActions.size() == 1
+				&& (playCardActions.get(0).getTargetReference() == null
+				|| playCardActions.get(0).getTargetReference().isTargetGroup())) {
+			spellAction.action(playCardActions.get(0).getId());
 		} else {
 			// Add all the valid targets
-			spellCardActions.stream()
+			playCardActions.stream()
 					.map(t -> new TargetActionPair()
 							.action(t.getId())
 							.target(t.getTargetReference().getId()))
@@ -526,8 +581,8 @@ public interface Games {
 	ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution;
 
 	/**
-	 * Gets a complete view of the game for the specified user, respecting security (i.e., information about the
-	 * user's opponent's deck, hand and secrets is not leaked).
+	 * Gets a complete view of the game for the specified user, respecting security (i.e., information about the user's
+	 * opponent's deck, hand and secrets is not leaked).
 	 *
 	 * @param gameId The game to get client state for.
 	 * @param userId The user ID whose point of view this state should be generated for.
@@ -809,8 +864,8 @@ public interface Games {
 	}
 
 	/**
-	 * A view of a card. This does not censor information from opposing player's--the calling method should handle
-	 * the censoring.
+	 * A view of a card. This does not censor information from opposing player's--the calling method should handle the
+	 * censoring.
 	 *
 	 * @param workingContext The context to generate the client view for.
 	 * @param card           The card entity.
@@ -855,6 +910,15 @@ public interface Games {
 		final boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		switch (card.getCardType()) {
+			case HERO:
+				HeroCard heroCard = (HeroCard) card;
+				// Retrieve the weapon attack
+				WeaponCard heroWeaponCard = heroCard.getWeapon();
+				if (heroWeaponCard != null) {
+					entityState.attack(heroWeaponCard.getBaseDamage());
+				}
+				entityState.armor(heroCard.getArmor());
+				break;
 			case MINION:
 				MinionCard minionCard = (MinionCard) card;
 				entityState.attack(minionCard.getAttack() + minionCard.getBonusAttack());
@@ -919,8 +983,8 @@ public interface Games {
 	}
 
 	/**
-	 * Gets the default no activity timeout as configured across the cluster. This timeout is used to determine when
-	 * to end games that have received no actions from either client connected to them.
+	 * Gets the default no activity timeout as configured across the cluster. This timeout is used to determine when to
+	 * end games that have received no actions from either client connected to them.
 	 *
 	 * @return A value in milliseconds of how long to wait for an action from a client before marking a game as over due
 	 * to disconnection.

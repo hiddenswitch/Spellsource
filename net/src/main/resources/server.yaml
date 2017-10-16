@@ -593,8 +593,6 @@ definitions:
             $ref: '#/definitions/Entity'
           source:
             $ref: '#/definitions/Entity'
-          actionType:
-            $ref: '#/definitions/ActionType'
       damage:
         type: 'object'
         properties:
@@ -916,6 +914,18 @@ definitions:
           corresponding virtual entity.
         items:
           $ref: '#/definitions/SummonAction'
+      heroPowers:
+        type: 'array'
+        description: |
+          The spells that correspond to virtual hero power entities.
+        items:
+          $ref: '#/definitions/SpellAction'
+      heroes:
+        type: 'array'
+        description: |
+          Choose one hero cards corresponding to their virtual entities.
+        items:
+          $ref: '#/definitions/SpellAction'
   GameActions:
     description: |
       An object representing all valid game actions in this action request.
@@ -958,6 +968,12 @@ definitions:
           $ref: '#/definitions/SummonAction'
       heroPower:
         $ref: '#/definitions/SpellAction'
+      heroes:
+        description:
+          The cards in your hand that are heroes
+        type: 'array'
+        items:
+          $ref: '#/definitions/SpellAction'
       spells:
         description: |
           The cards in your hand that are spells that take targets.
@@ -998,19 +1014,6 @@ definitions:
         type: 'array'
         items:
           $ref: '#/definitions/ChooseOneOptions'
-
-  ActionType:
-    type: 'string'
-    enum:
-      - 'SYSTEM'
-      - 'END_TURN'
-      - 'PHYSICAL_ATTACK'
-      - 'SPELL'
-      - 'SUMMON'
-      - 'HERO_POWER'
-      - 'BATTLECRY'
-      - 'EQUIP_WEAPON'
-      - 'DISCOVER'
   Entity:
     type: 'object'
     required:

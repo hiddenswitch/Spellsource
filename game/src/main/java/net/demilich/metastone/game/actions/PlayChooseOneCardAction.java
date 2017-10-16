@@ -7,8 +7,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
-public class PlayChooseOneCardAction extends PlayCardAction {
-
+public class PlayChooseOneCardAction extends PlayCardAction implements IChoiceCard {
 	private SpellDesc spell;
 	protected final EntityReference cardReference;
 	protected final String chosenCard;
@@ -36,7 +35,7 @@ public class PlayChooseOneCardAction extends PlayCardAction {
 		this.spell = spell;
 	}
 
-
+	@Override
 	public String getChoiceCardId() {
 		return chosenCard;
 	}

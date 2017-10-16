@@ -116,7 +116,6 @@ Class | Method | HTTP request | Description
 ## Documentation for Models
 
  - [Account](docs/Account.md)
- - [ActionType](docs/ActionType.md)
  - [CardEvent](docs/CardEvent.md)
  - [CardRecord](docs/CardRecord.md)
  - [ChooseOneOptions](docs/ChooseOneOptions.md)

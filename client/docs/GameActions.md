@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **physicalAttacks** | [**List&lt;GameActionsPhysicalAttacks&gt;**](GameActionsPhysicalAttacks.md) | An array of entity ID - target IDs pairs that represent valid physical attacks.  |  [optional]
 **summons** | [**List&lt;SummonAction&gt;**](SummonAction.md) | The cards in your hand that can be summoned. These are typically only minions.  |  [optional]
 **heroPower** | [**SpellAction**](SpellAction.md) |  |  [optional]
+**heroes** | [**List&lt;SpellAction&gt;**](SpellAction.md) | The cards in your hand that are heroes |  [optional]
 **spells** | [**List&lt;SpellAction&gt;**](SpellAction.md) | The cards in your hand that are spells that take targets.  |  [optional]
 **battlecries** | [**List&lt;SpellAction&gt;**](SpellAction.md) | A set of possible targetable battlecry actions.  |  [optional]
 **discoveries** | [**List&lt;GameActionsDiscoveries&gt;**](GameActionsDiscoveries.md) | Card discovers.  |  [optional]

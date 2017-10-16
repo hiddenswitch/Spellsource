@@ -63,6 +63,7 @@ public class Serialization {
 		gameActions.registerSubtype(PhysicalAttackAction.class, ActionType.PHYSICAL_ATTACK.toString());
 		gameActions.registerSubtype(PlaySpellCardAction.class, ActionType.SPELL.toString());
 		gameActions.registerSubtype(PlayMinionCardAction.class, ActionType.SUMMON.toString());
+		gameActions.registerSubtype(PlayHeroCardAction.class, ActionType.HERO.toString());
 		gameActions.registerSubtype(HeroPowerAction.class, ActionType.HERO_POWER.toString());
 		gameActions.registerSubtype(BattlecryAction.class, ActionType.BATTLECRY.toString());
 		gameActions.registerSubtype(PlayWeaponCardAction.class, ActionType.EQUIP_WEAPON.toString());

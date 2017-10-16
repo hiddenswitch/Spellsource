@@ -47,7 +47,7 @@ public class MassTest extends TestBase {
 	@Test
 	public void testRandomMassPlay() {
 		loggerSetup();
-		IntStream.range(0, 10000).parallel().forEach(i -> oneGame());
+		IntStream.range(0, 1000000).parallel().forEach(i -> oneGame());
 	}
 
 	private void oneGame() {

@@ -27,7 +27,6 @@ package com.hiddenswitch.spellsource.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.spellsource.client.models.ActionType;
 import com.hiddenswitch.spellsource.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,9 +42,6 @@ public class GameEventTargetAcquisition  implements Serializable {
 
   @SerializedName("source")
   private Entity source = null;
-
-  @SerializedName("actionType")
-  private ActionType actionType = null;
 
   public GameEventTargetAcquisition target(Entity target) {
     this.target = target;
@@ -83,24 +79,6 @@ public class GameEventTargetAcquisition  implements Serializable {
     this.source = source;
   }
 
-  public GameEventTargetAcquisition actionType(ActionType actionType) {
-    this.actionType = actionType;
-    return this;
-  }
-
-   /**
-   * Get actionType
-   * @return actionType
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public ActionType getActionType() {
-    return actionType;
-  }
-
-  public void setActionType(ActionType actionType) {
-    this.actionType = actionType;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -112,13 +90,12 @@ public class GameEventTargetAcquisition  implements Serializable {
     }
     GameEventTargetAcquisition gameEventTargetAcquisition = (GameEventTargetAcquisition) o;
     return Objects.equals(this.target, gameEventTargetAcquisition.target) &&
-        Objects.equals(this.source, gameEventTargetAcquisition.source) &&
-        Objects.equals(this.actionType, gameEventTargetAcquisition.actionType);
+        Objects.equals(this.source, gameEventTargetAcquisition.source);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(target, source, actionType);
+    return Objects.hash(target, source);
   }
 
   @Override
@@ -128,7 +105,6 @@ public class GameEventTargetAcquisition  implements Serializable {
     
     sb.append("    target: ").append(toIndentedString(target)).append("\n");
     sb.append("    source: ").append(toIndentedString(source)).append("\n");
-    sb.append("    actionType: ").append(toIndentedString(actionType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -56,7 +56,6 @@ public enum Environment {
 	 * This implements cards like Magic Armor.
 	 */
 	DAMAGE_STACK,
-	DEBUG,
 	/**
 	 * This variable stores the current card being played.
 	 */
@@ -77,11 +76,15 @@ public enum Environment {
 	 * This implements Atiesh, the weapon granted by Medivh, the Guardian
 	 */
 	LAST_MANA_COST,
-	SPELL_VALUE;
+	/**
+	 * This implements Living Mana and Earthen Scales.
+	 */
+	SPELL_VALUE_STACK;
 
 	public boolean customClone() {
 		return (this == SUMMON_REFERENCE_STACK ||
 				this == EVENT_TARGET_REFERENCE_STACK ||
-				this == DAMAGE_STACK);
+				this == DAMAGE_STACK ||
+				this == SPELL_VALUE_STACK);
 	}
 }

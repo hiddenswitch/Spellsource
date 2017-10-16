@@ -653,7 +653,12 @@ public class GameLogic implements Cloneable, Serializable {
 		previousHero.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		player.setHero(hero);
 		hero.modifyArmor(previousArmor);
-		hero.setHp(previousHp);
+
+		// Only override the HP if both max and new HP is defined.
+		if (!(hero.hasAttribute(Attribute.MAX_HP) && hero.hasAttribute(Attribute.HP))) {
+			hero.setHp(previousHp);
+		}
+
 		hero.getHeroPower().setId(getIdFactory().generateId());
 		hero.getHeroPower().setOwner(hero.getOwner());
 		refreshAttacksPerRound(hero);
@@ -2239,7 +2244,10 @@ public class GameLogic implements Cloneable, Serializable {
 			card.setId(getIdFactory().generateId());
 		}
 
-		card.setOwner(playerId);
+		if (card.getOwner() == IdFactory.UNASSIGNED) {
+			card.setOwner(playerId);
+		}
+
 		CardZone hand = player.getHand();
 
 		if (hand.getCount() < MAX_HAND_CARDS) {

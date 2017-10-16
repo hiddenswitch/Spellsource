@@ -5,6 +5,7 @@ import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.actions.PlayHeroCardAction;
 import net.demilich.metastone.game.cards.desc.ChooseBattlecryHeroCardDesc;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class ChooseBattlecryHeroCard extends HeroCard implements IChooseOneCard {
 	private final BattlecryDesc[] battlecryOptions;
@@ -46,5 +47,20 @@ public class ChooseBattlecryHeroCard extends HeroCard implements IChooseOneCard 
 	@Override
 	public boolean hasBothOptions() {
 		return battlecryBothOptions != null;
+	}
+
+	@Override
+	protected WeaponCard getWeaponCard(SpellDesc battlecry) {
+		if (hasBothOptions()) {
+			return super.getWeaponCard(battlecryBothOptions.spell);
+		} else {
+			for (BattlecryDesc battlecryOption : battlecryOptions) {
+				WeaponCard card = super.getWeaponCard(battlecryOption.spell);
+				if (card != null) {
+					return card;
+				}
+			}
+		}
+		return null;
 	}
 }

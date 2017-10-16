@@ -7,8 +7,8 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * A definition for a spell.
@@ -16,7 +16,6 @@ import java.util.Map;
  * A spell description has a variety of arguments of type {@link SpellArg}.
  */
 public class SpellDesc extends Desc<SpellArg> {
-
 	public SpellDesc(Map<SpellArg, Object> arguments) {
 		super(arguments);
 	}
@@ -101,5 +100,24 @@ public class SpellDesc extends Desc<SpellArg> {
 
 	public void setTarget(EntityReference target) {
 		put(SpellArg.TARGET, target);
+	}
+
+	public Stream<SpellDesc> subSpells() {
+		Stream<SpellDesc> spells;
+		SpellDesc[] spellsArray = (SpellDesc[]) get(SpellArg.SPELLS);
+		if (spellsArray.length > 0) {
+			spells = Stream.concat(Stream.of(spellsArray),
+					Stream.of(spellsArray).flatMap(SpellDesc::subSpells)
+			);
+		} else {
+			spells = Stream.empty();
+		}
+		Stream<SpellDesc> unitSpells = Stream.of(SpellArg.SPELL, SpellArg.SPELL_1, SpellArg.SPELL_2)
+				.map(this::get)
+				.filter(Objects::nonNull)
+				.map(o -> (SpellDesc) o)
+				.flatMap(SpellDesc::subSpells);
+
+		return Stream.concat(spells, unitSpells);
 	}
 }
