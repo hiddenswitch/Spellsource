@@ -4,9 +4,10 @@
   "type": "MINION",
   "baseAttack": 3,
   "baseHp": 7,
-  "heroClass": "DRID",
+  "heroClass": "DRUID",
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Summon youru Taunt minions that died this game.",
+  "race": "BEAST",
+  "description": "Deathrattle: Summon your Taunt minions that died this game.",
   "deathrattle": {
     "class": "ResurrectSpell",
     "value": 7,

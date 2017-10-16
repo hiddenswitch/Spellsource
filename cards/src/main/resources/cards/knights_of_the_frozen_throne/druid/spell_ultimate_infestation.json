@@ -1,0 +1,36 @@
+{
+  "name": "Ultimate Infestation",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "EPIC",
+  "description": "Deal 5 damage. Draw 5 cards. Gain 5 Armor. Summon a 5/5 Ghoul.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 5
+      },
+      {
+        "class": "DrawCardSpell",
+        "targetPlayer": "SELF",
+        "value": 5
+      },
+      {
+        "class": "BuffHeroSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 5
+      },
+      {
+        "class": "SummonSpell",
+        "targetPlayer": "SELF",
+        "card": "token_ghoul_infestor"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
