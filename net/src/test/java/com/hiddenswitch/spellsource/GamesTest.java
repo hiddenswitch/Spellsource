@@ -33,6 +33,7 @@ import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -230,6 +231,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 	}
 
 	@Test
+	@Ignore
 	public void testPerformJsonGameAction(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {

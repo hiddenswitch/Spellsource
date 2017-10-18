@@ -32,7 +32,7 @@ public class FacelessSpell extends Spell {
 		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
-		clone.clearSpellTriggers();
+		clone.clearEnchantments();
 		clone.setCardCostModifier(null);
 
 		Minion sourceActor = (Minion) context.resolveSingleTarget(context.getSummonReferenceStack().peek());

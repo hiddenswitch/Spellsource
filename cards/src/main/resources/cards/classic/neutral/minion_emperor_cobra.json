@@ -7,17 +7,9 @@
 	"heroClass": "ANY",
 	"rarity": "RARE",
 	"race": "BEAST",
-	"description": "Destroy any minion damaged by this minion.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "DamageCausedTrigger",
-			"targetEntityType": "MINION",
-			"hostTargetType": "IGNORE_OTHER_SOURCES"
-		},
-		"spell": {
-			"class": "DestroySpell",
-			"target": "EVENT_TARGET"
-		}
+	"description": "Poisonous.",
+	"attributes": {
+		"POISONOUS": true
 	},
 	"collectible": true,
 	"set": "CLASSIC",

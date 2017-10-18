@@ -13,7 +13,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 public class ReceiveCardSpell extends Spell {
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

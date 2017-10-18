@@ -9,7 +9,7 @@
 	"description": "Battlecry: Summon an exact copy of this minion at the end of the turn.",
 	"battlecry": {
 		"spell": {
-			"class": "AddSpellTriggerSpell",
+			"class": "AddEnchantmentSpell",
 			"target": "SELF",
 			"trigger": {
 				"eventTrigger": {

@@ -27,7 +27,7 @@ public class SummonCopySpell extends Spell {
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < value; i++) {
 			Minion clone = template.getCopy();
-			clone.clearSpellTriggers();
+			clone.clearEnchantments();
 
 			boolean summoned = context.getLogic().summon(player.getId(), clone, null, -1, false);
 			if (!summoned) {

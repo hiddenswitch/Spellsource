@@ -73,8 +73,8 @@ public class RenounceClassSpell extends Spell {
 		TriggerDesc triggerDesc = new TriggerDesc();
 		triggerDesc.eventTrigger = new EventTriggerDesc(eventTriggerMap);
 		triggerDesc.spell = CardCostModifierSpell.create(EntityReference.EVENT_TARGET, AlgebraicOperation.ADD, manaCostModifier, newCardFilter);
-		SpellDesc spellTriggerSpell = AddSpellTriggerSpell.create(triggerDesc);
-		SpellUtils.castChildSpell(context, player, spellTriggerSpell, source, player);
+		SpellDesc enchantmentSpell = AddEnchantmentSpell.create(triggerDesc);
+		SpellUtils.castChildSpell(context, player, enchantmentSpell, source, player);
 		
 		replacedCards = new CardArrayList();
 		for (Card card : player.getHand()) {

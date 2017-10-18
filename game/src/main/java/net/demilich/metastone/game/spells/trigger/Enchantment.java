@@ -14,8 +14,8 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class SpellTrigger extends Entity implements Trigger {
-	private final static Logger logger = LoggerFactory.getLogger(SpellTrigger.class);
+public class Enchantment extends Entity implements Trigger {
+	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
 
 	private GameEventTrigger primaryTrigger;
 	private GameEventTrigger secondaryTrigger;
@@ -27,7 +27,7 @@ public class SpellTrigger extends Entity implements Trigger {
 	private boolean persistentOwner;
 	private int turnDelay;
 
-	public SpellTrigger(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
+	public Enchantment(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
 		this.primaryTrigger = primaryTrigger;
 		this.secondaryTrigger = secondaryTrigger;
 		this.spell = spell;
@@ -35,21 +35,21 @@ public class SpellTrigger extends Entity implements Trigger {
 		this.turnDelay = turnDelay;
 	}
 
-	public SpellTrigger(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
+	public Enchantment(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
 		this(primaryTrigger, secondaryTrigger, spell, oneTurn, 0);
 	}
 
-	public SpellTrigger(GameEventTrigger trigger, SpellDesc spell) {
+	public Enchantment(GameEventTrigger trigger, SpellDesc spell) {
 		this(trigger, spell, false, 0);
 	}
 
-	public SpellTrigger(GameEventTrigger trigger, SpellDesc spell, boolean oneTime, int turnDelay) {
+	public Enchantment(GameEventTrigger trigger, SpellDesc spell, boolean oneTime, int turnDelay) {
 		this(trigger, null, spell, oneTime, turnDelay);
 	}
 
 	@Override
-	public SpellTrigger clone() {
-		SpellTrigger clone = (SpellTrigger) super.clone();
+	public Enchantment clone() {
+		Enchantment clone = (Enchantment) super.clone();
 		clone.primaryTrigger = (GameEventTrigger) primaryTrigger.clone();
 		if (secondaryTrigger != null) {
 			clone.secondaryTrigger = (GameEventTrigger) secondaryTrigger.clone();
@@ -60,7 +60,7 @@ public class SpellTrigger extends Entity implements Trigger {
 
 	@Override
 	public EntityType getEntityType() {
-		return EntityType.SECRET;
+		return EntityType.ENCHANTMENT;
 	}
 
 	public void expire() {
@@ -131,7 +131,7 @@ public class SpellTrigger extends Entity implements Trigger {
 		// Notify the game context that a spell trigger was successfully fired, as long as it wasn't due to a
 		// board changed event.
 		if (event.getEventType() != GameEventType.BOARD_CHANGED) {
-			event.getGameContext().onSpellTriggerFired(this);
+			event.getGameContext().onEnchantmentFired(this);
 		}
 		onFire(ownerId, getSpell(), event);
 		event.getGameContext().getEventTargetStack().pop();
@@ -157,7 +157,7 @@ public class SpellTrigger extends Entity implements Trigger {
 
 	@Override
 	public String toString() {
-		return "[SpellTrigger primaryTrigger=" + primaryTrigger + ", secondaryTrigger=" + secondaryTrigger + ", spell=" + spell
+		return "[Enchantment primaryTrigger=" + primaryTrigger + ", secondaryTrigger=" + secondaryTrigger + ", spell=" + spell
 				+ ", hostReference=" + hostReference + ", oneTurn=" + oneTurn + ", expired=" + expired + ", persistentOwner="
 				+ persistentOwner + ", turnDelay=" + turnDelay + "]";
 	}

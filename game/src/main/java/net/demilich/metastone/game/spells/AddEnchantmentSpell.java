@@ -9,13 +9,13 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class AddSpellTriggerSpell extends Spell {
+public class AddEnchantmentSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, TriggerDesc trigger) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(AddSpellTriggerSpell.class);
+		Map<SpellArg, Object> arguments = SpellDesc.build(AddEnchantmentSpell.class);
 		arguments.put(SpellArg.TRIGGER, trigger);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
@@ -29,8 +29,8 @@ public class AddSpellTriggerSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		TriggerDesc triggerDesc = (TriggerDesc) desc.get(SpellArg.TRIGGER);
-		SpellTrigger spellTrigger = triggerDesc.create();
-		context.getLogic().addGameEventListener(player, spellTrigger, target);
+		Enchantment enchantment = triggerDesc.create();
+		context.getLogic().addGameEventListener(player, enchantment, target);
 	}
 
 }

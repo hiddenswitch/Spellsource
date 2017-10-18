@@ -11,7 +11,7 @@
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {
-			"class": "AddSpellTriggerSpell",
+			"class": "AddEnchantmentSpell",
 			"target": "FRIENDLY_PLAYER",
 			"trigger": {
 				"eventTrigger": {

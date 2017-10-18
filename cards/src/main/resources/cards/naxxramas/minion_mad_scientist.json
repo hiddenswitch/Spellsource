@@ -8,7 +8,10 @@
 	"rarity": "COMMON",
 	"description": "Deathrattle: Put a Secret from your deck into the battlefield.",
 	"deathrattle": {
-		"class": "PutRandomSecretIntoPlaySpell"
+		"class": "PutRandomSecretIntoPlaySpell",
+		"cardSource": {
+			"class": "DeckSource"
+		}
 	},
 	"attributes": {
 		"DEATHRATTLES": true

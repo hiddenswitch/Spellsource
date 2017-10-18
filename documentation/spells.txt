@@ -16,7 +16,7 @@ Examples: Explorer’s Hat, Ancestral Spirit, Soul of the Forest
 AddSecretSpell
 DO NOT USE. Internal Spell for casting Secrets.
 
-AddSpellTriggerSpell
+AddEnchantmentSpell
 Adds a Trigger to the target.
 Examples: Blessing of Wisdom, Corruption, Lock and Load
 “trigger”: Trigger. The Trigger you want to add to the target.

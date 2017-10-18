@@ -38,7 +38,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerialize
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -108,7 +108,7 @@ public class Serialization {
 		}
 
 		RuntimeTypeAdapterFactory<Trigger> listeners = RuntimeTypeAdapterFactory.of(Trigger.class, "type");
-		listeners.registerSubtype(SpellTrigger.class, "SPELL_TRIGGER");
+		listeners.registerSubtype(Enchantment.class, "SPELL_TRIGGER");
 		listeners.registerSubtype(Secret.class, "SECRET");
 		listeners.registerSubtype(Quest.class, "QUEST");
 		listeners.registerSubtype(Aura.class, "AURA");

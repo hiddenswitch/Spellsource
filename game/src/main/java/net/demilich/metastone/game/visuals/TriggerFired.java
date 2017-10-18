@@ -3,28 +3,28 @@ package net.demilich.metastone.game.visuals;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.Notification;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
 
 public class TriggerFired implements Notification {
-	private final SpellTrigger spellTrigger;
+	private final Enchantment enchantment;
 	private final EntityReference eventTarget;
 
-	public TriggerFired(GameContext context, SpellTrigger spellTrigger) {
-		this.spellTrigger = spellTrigger;
+	public TriggerFired(GameContext context, Enchantment enchantment) {
+		this.enchantment = enchantment;
 		this.eventTarget = context.getEventTargetStack().peek();
 	}
 
 
-	public SpellTrigger getSpellTrigger() {
-		return spellTrigger;
+	public Enchantment getEnchantment() {
+		return enchantment;
 	}
 
 	@Override
 	public Entity getSource(GameContext context) {
-		return context.resolveSingleTarget(spellTrigger.getHostReference());
+		return context.resolveSingleTarget(enchantment.getHostReference());
 	}
 
 	@Override

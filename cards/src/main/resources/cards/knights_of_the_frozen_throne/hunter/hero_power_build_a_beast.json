@@ -1,0 +1,15 @@
+{
+  "name": "Build-A-Beast",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "HUNTER",
+  "rarity": "FREE",
+  "description": "Craft a custom Zombeast",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.CreateZombeastSpell"
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

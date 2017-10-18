@@ -2,12 +2,13 @@ package net.demilich.metastone.game.spells.trigger.secrets;
 
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 
-public class Quest extends SpellTrigger {
+public class Quest extends Enchantment {
 
 	private Card source;
 
@@ -32,6 +33,11 @@ public class Quest extends SpellTrigger {
 	@Override
 	public void onGameEvent(GameEvent event) {
 		super.onGameEvent(event);
+	}
+
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.QUEST;
 	}
 
 	@Override

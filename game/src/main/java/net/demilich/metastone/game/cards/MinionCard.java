@@ -59,19 +59,19 @@ public class MinionCard extends Card {
 			minion.addDeathrattle(desc.deathrattle);
 		}
 		if (desc.trigger != null) {
-			minion.addSpellTrigger(desc.trigger.create());
+			minion.addEnchantment(desc.trigger.create());
 		}
 		if (desc.triggers != null) {
 			for (TriggerDesc trigger : desc.triggers) {
-				minion.addSpellTrigger(trigger.create());
+				minion.addEnchantment(trigger.create());
 			}
 		}
 		if (desc.aura != null) {
-			final Aura spellTrigger = desc.aura.create();
-			if (spellTrigger == null) {
+			final Aura enchantment = desc.aura.create();
+			if (enchantment == null) {
 				logger.error("Failed to create an aura for minion!. cardId {}", minion.getSourceCard().getCardId());
 			} else {
-				minion.addSpellTrigger(spellTrigger);
+				minion.addEnchantment(enchantment);
 			}
 		}
 		if (desc.cardCostModifier != null) {
@@ -118,4 +118,23 @@ public class MinionCard extends Card {
 		return createMinion();
 	}
 
+	public boolean hasTrigger() {
+		return desc.trigger != null || (desc.triggers != null && desc.triggers.length > 0);
+	}
+
+	public boolean hasAura() {
+		return desc.aura != null;
+	}
+
+	public boolean hasCardCostModifier() {
+		return desc.cardCostModifier != null;
+	}
+
+	public boolean hasBattlecry() {
+		return desc.battlecry != null;
+	}
+
+	public boolean hasDeathrattle() {
+		return desc.deathrattle != null;
+	}
 }

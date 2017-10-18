@@ -3,16 +3,8 @@
   "set": "SPELLSOURCE",
   "name": "Handsome Hander",
   "heroClass": "ANY",
-  "trigger": {
-    "eventTrigger": {
-      "targetEntityType": "MINION",
-      "class": "DamageCausedTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES"
-    },
-    "spell": {
-      "class": "DestroySpell",
-      "target": "EVENT_TARGET"
-    }
+  "attributes": {
+    "POISONOUS": true
   },
   "description": "Destroy any minion damaged by this minion.",
   "fileFormatVersion": 1,

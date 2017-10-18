@@ -11,7 +11,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 /**
@@ -20,7 +20,7 @@ import net.demilich.metastone.game.utils.AttributeMap;
 public abstract class Actor extends Entity {
 
 	private Card sourceCard;
-	private List<SpellTrigger> spellTriggers = new ArrayList<SpellTrigger>();
+	private List<Enchantment> enchantments = new ArrayList<Enchantment>();
 	private CardCostModifier cardCostModifier;
 
 	public Actor(Card sourceCard) {
@@ -35,9 +35,9 @@ public abstract class Actor extends Entity {
 		getDeathrattles().add(deathrattleSpell);
 	}
 
-	public void addSpellTrigger(SpellTrigger spellTrigger) {
-		spellTriggers.add(spellTrigger);
-		spellTrigger.setHost(this);
+	public void addEnchantment(Enchantment enchantment) {
+		enchantments.add(enchantment);
+		enchantment.setHost(this);
 	}
 
 	public boolean canAttackThisTurn() {
@@ -53,17 +53,17 @@ public abstract class Actor extends Entity {
 		return getAttack() > 0 && ((getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + getAttributeValue(Attribute.EXTRA_ATTACKS)) > 0 || hasAttribute(Attribute.UNLIMITED_ATTACKS));
 	}
 
-	public void clearSpellTriggers() {
-		this.spellTriggers = new ArrayList<>();
+	public void clearEnchantments() {
+		this.enchantments = new ArrayList<>();
 	}
 
 	@Override
 	public Actor clone() {
 		Actor clone = (Actor) super.clone();
 		clone.setAttributes(new AttributeMap(getAttributes()));
-		clone.clearSpellTriggers();
-		for (SpellTrigger trigger : getSpellTriggers()) {
-			clone.spellTriggers.add(trigger.clone());
+		clone.clearEnchantments();
+		for (Enchantment trigger : getEnchantments()) {
+			clone.enchantments.add(trigger.clone());
 		}
 		if (hasAttribute(Attribute.DEATHRATTLES)) {
 			clone.getAttributes().remove(Attribute.DEATHRATTLES);
@@ -143,12 +143,12 @@ public abstract class Actor extends Entity {
 		return sourceCard;
 	}
 
-	public List<SpellTrigger> getSpellTriggers() {
-		return new ArrayList<SpellTrigger>(spellTriggers);
+	public List<Enchantment> getEnchantments() {
+		return new ArrayList<Enchantment>(enchantments);
 	}
 
-	public boolean hasSpellTrigger() {
-		return spellTriggers.size() != 0;
+	public boolean hasEnchantment() {
+		return enchantments.size() != 0;
 	}
 
 	public int getMaxNumberOfAttacks() {
@@ -240,7 +240,7 @@ public abstract class Actor extends Entity {
 	}
 
 	private void updateTriggers() {
-		for (SpellTrigger trigger : spellTriggers) {
+		for (Enchantment trigger : enchantments) {
 			trigger.setHost(this);
 		}
 	}

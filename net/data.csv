@@ -416,7 +416,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,0,1,COMMON,,,,0,1,4,6,1,true,0,false,BEAST,0,false,1,true,[],0,false,,,,,,,
 ,,,,1,,,,,,,,,,,59,MetaSpell,,,,,10,WARLOCK,,,,,,,,,0,1,COMMON,,2,1,,,,,,,,,,,,,,,,,,,,7,FRIENDLY_MINIONS,,
 ,4,,,1,,,,,,,,,,,9,BuffSpell,,,,,10,WARLOCK,,4,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
-,,,,1,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,10,WARLOCK,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
+,,,,1,,,,,,,,,,,3,AddEnchantmentSpell,,,,,10,WARLOCK,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,2,,,,,,,,,,,92,ReturnMinionToHandSpell,,,,,8,ROGUE,,,,,,,,,0,0,FREE,,0,1,,,,,,,,,,,,,,,,,,,,6,ENEMY_MINIONS,,
 ,,,,0,,,,,,,,,,,69,NullSpell,,,,,8,ROGUE,,,,,,,,,0,0,FREE,,0,1,,,,,,,,,,,,,,,,,,,,0,NONE,,
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,0,FREE,,,,1,1,4,4,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
@@ -614,7 +614,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,6,,,,,,,,,,,113,SummonSpell,,,,,9,SHAMAN,,,,,,,,,0,4,LEGENDARY,,,,1,1,4,4,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
 ,,,,6,,,,,,,,,,,59,MetaSpell,,,,,9,SHAMAN,,,,,,,,,1,4,LEGENDARY,,2,2,,,,,,,,,,,,,,,,,,,,0,NONE,,
 ,1,,,6,,,,,,,,,,,9,BuffSpell,,,,,9,SHAMAN,,1,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,15,,,,,,
-,,,,6,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,9,SHAMAN,,,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,20,,,,,,
+,,,,6,,,,,,,,,,,3,AddEnchantmentSpell,,,,,9,SHAMAN,,,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,20,,,,,,
 ,,,,7,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,2,RARE,,,,1,1,9,8,0,false,0,false,MECH,0,false,0,false,,0,false,,,,,,,
 ,,,,7,,,,,,,,,,,52,HealSpell,,,,,0,ANY,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,3,,,,,8,1
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,,,1,1,3,4,0,false,0,false,MECH,0,false,0,false,,0,false,,,,,,,
@@ -735,7 +735,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,4,,,,,,,,,,,113,SummonSpell,,,,,10,WARLOCK,,,,,,,,,4,1,COMMON,,2,5,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,4,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,10,WARLOCK,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,4,,,,,,,,,,,3,AddEnchantmentSpell,,,,,10,WARLOCK,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,4,,,,,,,,,,,9,BuffSpell,,,,,10,WARLOCK,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,4,,,,,,,,,,,37,DiscoverOptionSpell,1,true,,,10,WARLOCK,,,,,,,,,2,1,COMMON,,13,3,,,,,,,,,,,,,,,,,,,,,,,
 ,,19,WINDFURY,4,,,,,,,,,,,0,AddAttributeSpell,,,,,10,WARLOCK,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
@@ -749,7 +749,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,4,,,,,,,,,,,113,SummonSpell,,,,,10,WARLOCK,,,,,,,,,4,1,COMMON,,2,5,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,4,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,10,WARLOCK,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,4,,,,,,,,,,,3,AddEnchantmentSpell,,,,,10,WARLOCK,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,4,,,,,,,,,,,9,BuffSpell,,,,,10,WARLOCK,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,7,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,4,LEGENDARY,,,,1,1,6,6,0,false,0,false,DRAGON,0,false,1,true,,0,false,,,,,,,
 ,,,,7,,,,,,,,,,,21,ConditionalSpell,,,,,0,ANY,,,,,,,,,1,4,LEGENDARY,,1,2,,,,,,,,,,,,,,,,,,,,,,,
@@ -966,7 +966,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,2,,,3,,,,,,,,,,,9,BuffSpell,,,,,4,HUNTER,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,6,,,0,NONE,,
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,11,WARRIOR,,,,,,,,,0,2,RARE,,1,1,,,,,,,,,,,,,,,,,,,,0,NONE,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,11,WARRIOR,,,,,,,,,1,2,RARE,,,,0,2,1,1,0,false,0,false,,0,false,1,true,[],0,false,,,,,,,
-,,,,1,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,1,1,,,,,,,,,,,,,,,,,20,,,3,MINIONS,,
+,,,,1,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,1,1,,,,,,,,,,,,,,,,,20,,,3,MINIONS,,
 ,,,,1,,,,,,,,,,,65,ModifyDamageSpell,,,,,0,ANY,,,,,4,SET,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,1,1
 ,,,,4,,,,,,,,,,,59,MetaSpell,,,,,10,WARLOCK,,,,,,,,,0,2,RARE,,3,1,,,,,,,,,,,,,,,,,,,,3,MINIONS,,
 ,,,,4,,,,,,,,,,,27,DamageSpell,,,,,10,WARLOCK,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,,,,,,,
@@ -1001,7 +1001,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,6,PALADIN,,,,,,,,,2,1,COMMON,,2,3,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,3,0,FREE,,,,0,4,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,3,0,FREE,,,,0,4,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,1,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,6,PALADIN,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
+,,,,1,,,,,,,,,,,3,AddEnchantmentSpell,,,,,6,PALADIN,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,9,BuffSpell,,,,,6,PALADIN,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,1,1
 ,,,,3,,,,,,,,,,,27,DamageSpell,,,,,9,SHAMAN,,,,,,,,,0,2,RARE,,0,1,,,,,,,,,,,,,,,,,,,,2,ANY,5,1
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,8,ROGUE,,,,,,,,,0,1,COMMON,,,,1,1,1,1,0,false,0,false,,1,true,0,false,,0,false,,,,,,,
@@ -1036,7 +1036,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,4,HUNTER,,,,,,,,,3,1,COMMON,,2,4,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,2,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,4,HUNTER,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,,,,,,,
+,,,,2,,,,,,,,,,,3,AddEnchantmentSpell,,,,,4,HUNTER,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,2,,,,,,,,,,,9,BuffSpell,,,,,4,HUNTER,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,,,,,,1,1
 ,,,,0,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,,,0,1,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,7,,,,,,,,,,,113,SummonSpell,,,,,5,MAGE,,,,,,,,,0,4,LEGENDARY,,,,1,1,5,7,,,,,,,,,,,,,,,,,,,
@@ -1190,7 +1190,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,6,,,,,,,,,,,52,HealSpell,,,,,0,ANY,,,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,8,,,,,,
 ,,,,1,,,,,,,,,,,59,MetaSpell,,,,,10,WARLOCK,,,,,,,,,0,1,COMMON,,2,1,,,,,,,,,,,,,,,,,,,,7,FRIENDLY_MINIONS,,
 ,4,,,1,,,,,,,,,,,9,BuffSpell,,,,,10,WARLOCK,,4,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
-,,,,1,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,10,WARLOCK,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
+,,,,1,,,,,,,,,,,3,AddEnchantmentSpell,,,,,10,WARLOCK,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,2,RARE,,,,1,1,0,6,,,,,,,,,,,,,,,,,,,
 ,,,,5,,,,,,,,,,,109,SummonRandomMinionFilteredSpell,,,,,0,ANY,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,6,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,0,1,COMMON,,,,1,1,5,7,0,false,0,false,,0,false,1,true,,0,false,,,,,,,
@@ -1199,7 +1199,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,6,,,,,,,,,,,9,BuffSpell,,,,,3,DRUID,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,15,,,,,3,1
 ,,63,CTHUN_ATTACK_BUFF,6,,,,,,,,,,,64,ModifyAttributeSpell,,,,,3,DRUID,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,20,,,,,3,1
 ,,64,CTHUN_HEALTH_BUFF,6,,,,,,,,,,,64,ModifyAttributeSpell,,,,,3,DRUID,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,20,,,,,3,1
-,,,,2,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,10,WARLOCK,,,,,,,,,0,2,RARE,,0,1,,,,,,,,,,,,,,,,,9,,,0,NONE,,
+,,,,2,,,,,,,,,,,3,AddEnchantmentSpell,,,,,10,WARLOCK,,,,,,,,,0,2,RARE,,0,1,,,,,,,,,,,,,,,,,9,,,0,NONE,,
 ,,36,STEALTH,1,,,,,,,,,,,0,AddAttributeSpell,,,,,8,ROGUE,,,,,,,,,0,1,COMMON,,0,1,,,,,,,,,,,,,,,,,5,,,0,NONE,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,0,FREE,,,,1,1,1,1,0,false,0,false,MECH,0,false,0,false,,0,false,,,,,,,
 ,,,,1,,,,,,,,,,,62,MissilesSpell,,,,,0,ANY,1,,,,,,,,1,0,FREE,,0,2,,,,,,,,,,,,,,,,,1,,,,,,
@@ -1209,7 +1209,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,71,JADE_BUFF,6,,,,,,,,,,,64,ModifyAttributeSpell,,,,,0,ANY,,,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,20,,,,,1,1
 ,,,,6,,,,,,,,,,,26,CreateSummonSpell,,,,,0,ANY,,,,,,,,,1,4,LEGENDARY,,1,2,,,,,,,,,,,,,,,,,,,,,,,
 ,,71,JADE_BUFF,6,,,,,,,,,,,64,ModifyAttributeSpell,,,,,0,ANY,,,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,20,,,,,1,1
-,,,,2,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,4,HUNTER,,,,,,,,,0,3,EPIC,,0,1,,,,,,,,,,,,,,,,,20,,,0,NONE,,
+,,,,2,,,,,,,,,,,3,AddEnchantmentSpell,,,,,4,HUNTER,,,,,,,,,0,3,EPIC,,0,1,,,,,,,,,,,,,,,,,20,,,0,NONE,,
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,,,1,1,2,3,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
 ,,,,2,,,,,,,,,,,59,MetaSpell,,,,,0,ANY,,,,,,,,,1,1,COMMON,,4,2,,,,,,,,,,,,,,,,,,,,0,NONE,,
 ,,,,2,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,5,,,,,2,1
@@ -1429,7 +1429,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,3,2,RARE,,2,4,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,3,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,3,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,3,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,4,HUNTER,,,,,,,,,0,1,COMMON,,,,0,1,2,5,,,,,BEAST,,,,,[],,,,,,,,,
 ,,,,6,,,,,,,,,,,113,SummonSpell,,,,,10,WARLOCK,,,,,,,,,0,3,EPIC,,,,1,1,6,6,,,,,,,,,,,,,,,,,,,
@@ -1817,7 +1817,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,3,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,15,,,,,2,1
 ,,63,CTHUN_ATTACK_BUFF,3,,,,,,,,,,,64,ModifyAttributeSpell,,,,,0,ANY,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,20,,,,,2,1
 ,,64,CTHUN_HEALTH_BUFF,3,,,,,,,,,,,64,ModifyAttributeSpell,,,,,0,ANY,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,20,,,,,2,1
-,,,,2,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,4,HUNTER,,,,,,,,,0,3,EPIC,,0,1,,,,,,,,,,,,,,,,,20,,,0,NONE,,
+,,,,2,,,,,,,,,,,3,AddEnchantmentSpell,,,,,4,HUNTER,,,,,,,,,0,3,EPIC,,0,1,,,,,,,,,,,,,,,,,20,,,0,NONE,,
 ,,,,4,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,0,1,COMMON,,,,0,1,4,5,0,false,0,false,MECH,0,false,1,true,[],0,false,,,,,,,
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,0,FREE,,,,1,1,4,4,,,,,,,,,,,,,,,,,,,
 ,,,,3,,,,,,,,,,,83,ReceiveCardSpell,,,,,0,ANY,,,,,,,,,1,0,FREE,,1,0,,,,,,,,,,,,,,,,,,1,OPPONENT,0,NONE,,
@@ -1912,7 +1912,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,3,,,,,,,,,,,67,ModifyMaxManaSpell,,,,,0,ANY,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,,1,OPPONENT,0,NONE,1,1
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,5,MAGE,,,,,,,,,0,1,COMMON,,,,1,1,2,1,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
 ,,,,2,,,,,,,,,,,83,ReceiveCardSpell,,,,,5,MAGE,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
-,,,,1,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,10,WARLOCK,,,,,,,,,0,0,FREE,,0,1,,,,,,,,,,,,,,,,,,,,6,ENEMY_MINIONS,,
+,,,,1,,,,,,,,,,,3,AddEnchantmentSpell,,,,,10,WARLOCK,,,,,,,,,0,0,FREE,,0,1,,,,,,,,,,,,,,,,,,,,6,ENEMY_MINIONS,,
 ,,,,5,,,,,,,,,,,119,TemporaryAttackSpell,,,,,9,SHAMAN,,,,,,,,,0,0,FREE,,0,1,,,,,,,,,,,,,,,,,5,,,0,NONE,3,1
 ,,,,8,,,,,,,,,,,113,SummonSpell,,,,,6,PALADIN,,,,,,,,,0,3,EPIC,,,,1,1,8,8,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
 ,,,,8,,,,,,,,,,,77,PutRandomSecretIntoPlaySpell,,,,,6,PALADIN,99,,,,,,,,1,3,EPIC,,0,2,,,,,,,,,,,,,,,,,,,,0,NONE,,
@@ -1972,7 +1972,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,6,,,,,,,,,,,113,SummonSpell,,,,,11,WARRIOR,,,,,,,,,3,1,COMMON,,2,4,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,6,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,11,WARRIOR,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,6,,,,,,,,,,,3,AddEnchantmentSpell,,,,,11,WARRIOR,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,6,,,,,,,,,,,9,BuffSpell,,,,,11,WARRIOR,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,3,,,,,,,,,,,59,MetaSpell,,,,,10,WARLOCK,,,,,,,,,0,0,FREE,,2,1,,,,,,,,,,,,,,,,,,,,2,ANY,,
 ,,,,3,,,,,,,,,,,27,DamageSpell,,,,,10,WARLOCK,,,,,,,,,1,0,FREE,,0,2,,,,,,,,,,,,,,,,,,,,,,2,1
@@ -2073,7 +2073,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,64,CTHUN_HEALTH_BUFF,3,,,,,,,,,,,64,ModifyAttributeSpell,,,,,0,ANY,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,20,,,,,2,1
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,,,1,1,4,4,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
 ,3,,,5,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,3,,,,,1,true,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,5,,,,,,
-,,,,1,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,6,PALADIN,,,,,,,,,0,1,COMMON,,0,1,,,,,,,,,,,,,,,,,,,,3,MINIONS,,
+,,,,1,,,,,,,,,,,3,AddEnchantmentSpell,,,,,6,PALADIN,,,,,,,,,0,1,COMMON,,0,1,,,,,,,,,,,,,,,,,,,,3,MINIONS,,
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,0,2,RARE,,,,1,1,2,2,,,,,BEAST,,,,,,,,,,,,,,
 ,,,,3,,,,,,,,,,,9,BuffSpell,,,,,3,DRUID,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,26,,,,,1,1
 ,,,,7,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,4,LEGENDARY,,,,1,1,7,7,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
@@ -2163,7 +2163,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,7,,,,,,,,,,,27,DamageSpell,,,,,4,HUNTER,,,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,6,PALADIN,,,,,,,,,0,0,FREE,,1,1,,,,,,,,,,,,,,,,,,,,0,NONE,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,6,PALADIN,,,,,,,,,1,1,COMMON,,,,0,2,1,1,,,,,MURLOC,,,,,[],,,,,,,,,
-,,,,1,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,7,PRIEST,,,,,,,,,0,1,COMMON,,0,1,,,,,,,,,,,,,,,,,,,,3,MINIONS,,
+,,,,1,,,,,,,,,,,3,AddEnchantmentSpell,,,,,7,PRIEST,,,,,,,,,0,1,COMMON,,0,1,,,,,,,,,,,,,,,,,,,,3,MINIONS,,
 ,,,,2,,,,,,,,,,,27,DamageSpell,,,,,0,ANY,,,,,,,,,0,0,FREE,,0,1,,,,,,,,,,,,,,,,,10,,,0,NONE,5,1
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,2,RARE,,,,1,1,2,3,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
 ,,,,3,,,,,,,,,,,59,MetaSpell,,,,,0,ANY,,,,,,,,,1,2,RARE,,2,2,,,,,,,,,,,,,,,,,,,,0,NONE,,
@@ -2227,7 +2227,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,2,0,FREE,,,,0,3,3,5,0,false,0,false,,0,false,0,false,[],0,false,,,,,,,
 ,,,,0,,,,,,,,,,,59,MetaSpell,,,,,0,ANY,,,,,,,,,2,0,FREE,,2,3,,,,,,,,,,,,,,,,,,,,3,MINIONS,,
 ,5,,,0,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,5,,,,,,,3,0,FREE,,0,4,,,,,,,,,,,,,,,,,,,,,,,
-,,,,0,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,3,0,FREE,,0,4,,,,,,,,,,,,,,,,,,,,,,,
+,,,,0,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,3,0,FREE,,0,4,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,2,,,,,,,,,,,27,DamageSpell,,,,,0,ANY,,,,,,,,,2,0,FREE,,0,3,,,,,,,,,,,,,,,,,10,,,0,NONE,5,1
 ,,,,0,,,,,,,,,,,92,ReturnMinionToHandSpell,,,,,0,ANY,,,,,,,,,2,0,FREE,,0,3,,,,,,,,,,,,,,,,,,,,3,MINIONS,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,2,RARE,,,,1,1,0,2,,,,,,,,,,,,,,,,,,,
@@ -2496,7 +2496,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,0,2,RARE,,,,0,1,2,4,,,,,,,,,,[],,,,,,,,,
 ,,,,0,,,,,,,,,,,59,MetaSpell,,,,,0,ANY,,,,,,,,,0,0,FREE,,2,1,,,,,,,,,,,,,,,,,,,,3,MINIONS,,
 ,5,,,0,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,5,,,,,,,1,0,FREE,,0,2,,,,,,,,,,,,,,,,,,,,,,,
-,,,,0,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,1,0,FREE,,0,2,,,,,,,,,,,,,,,,,,,,,,,
+,,,,0,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,1,0,FREE,,0,2,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,4,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,0,2,RARE,,,,1,1,5,4,,,,,BEAST,,,,,,,,,,,,,,
 ,2,,,4,,,,,,,,,,,8,BuffHeroSpell,,,,,3,DRUID,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,8,,,,,,
 ,,,,8,,,,,,,,,,,113,SummonSpell,,,,,4,HUNTER,,,,,,,,,0,2,RARE,,,,1,1,7,7,0,false,0,false,BEAST,0,false,0,false,,0,false,,,,,,,
@@ -2621,7 +2621,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,7,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,2,RARE,,2,5,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,7,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,3,2,RARE,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,7,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,3,2,RARE,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,7,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,,,3,2,RARE,,0,4,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,7,,,,,,,,,,,37,DiscoverOptionSpell,1,true,,,0,ANY,,,,,,,,,2,2,RARE,,13,3,,,,,,,,,,,,,,,,,,,,,,,
 ,,19,WINDFURY,7,,,,,,,,,,,0,AddAttributeSpell,,,,,0,ANY,,,,,,,,,3,2,RARE,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
@@ -2635,7 +2635,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,7,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,2,RARE,,2,5,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,7,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,3,2,RARE,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,7,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,3,2,RARE,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,7,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,,,3,2,RARE,,0,4,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,10,,,,,,,,,,,60,MindControlSpell,,,,,7,PRIEST,,,,,,,,,0,0,FREE,,0,1,,,,,,,,,,,,,,,,,,,,6,ENEMY_MINIONS,,
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,7,PRIEST,,,,,,,,,0,2,RARE,,,,1,1,5,5,0,false,0,false,MECH,0,false,0,false,,0,false,,,,,,,
@@ -2739,7 +2739,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,11,WARRIOR,,,,,,,,,0,4,LEGENDARY,,,,1,1,2,2,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
 ,,,,2,,,,,,,,,,,59,MetaSpell,,,,,11,WARRIOR,,,,,,,,,1,4,LEGENDARY,,2,2,,,,,,,,,,,,,,,,,,,,0,NONE,,
 ,1,,,2,,,,,,,,,,,9,BuffSpell,,,,,11,WARRIOR,,,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,15,,,,,,
-,,,,2,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,11,WARRIOR,,,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,20,,,,,,
+,,,,2,,,,,,,,,,,3,AddEnchantmentSpell,,,,,11,WARRIOR,,,,,,,,,2,4,LEGENDARY,,0,3,,,,,,,,,,,,,,,,,20,,,,,,
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,,,1,1,2,3,,,,,,,,,,,,,,,,,,,
 ,1,,,3,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,,,1,1,4,4,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
@@ -2781,7 +2781,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,3,EPIC,,,,1,1,4,6,,,,,,,,,,,,,,,,,,,
 ,,,,5,,,,,,,,,,,81,RecastSpell,,,,,0,ANY,,,,,,,,,1,3,EPIC,,0,2,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,4,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,,,0,1,2,6,,,,,,,,,,[],,,,,,,,,
-,,,,1,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,4,HUNTER,,,,,,,,,0,3,EPIC,,0,1,,,,,,,,,,,,,,,,,20,,,0,NONE,,
+,,,,1,,,,,,,,,,,3,AddEnchantmentSpell,,,,,4,HUNTER,,,,,,,,,0,3,EPIC,,0,1,,,,,,,,,,,,,,,,,20,,,0,NONE,,
 ,,,,1,,,,,,,,,,,98,SetHpSpell,,,,,4,HUNTER,,,,,,,,,0,0,FREE,,0,1,,,,,,,,,,,,,,,,,,,,3,MINIONS,1,1
 ,,,,4,,,,,,,,,,,62,MissilesSpell,,,,,10,WARLOCK,1,,,,,,,,0,2,RARE,,0,1,,,,,,,,,,,,,,,,,1,,,0,NONE,4,1
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,9,SHAMAN,,,,,,,,,0,0,FREE,,1,1,,,,,,,,,,,,,,,,,,,,0,NONE,,
@@ -2828,7 +2828,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,3,1,COMMON,,2,4,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,5,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,3,DRUID,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,5,,,,,,,,,,,3,AddEnchantmentSpell,,,,,3,DRUID,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,5,,,,,,,,,,,9,BuffSpell,,,,,3,DRUID,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,6,PALADIN,,,,,,,,,0,0,FREE,,1,1,,,,,,,,,,,,,,,,,,,,0,NONE,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,6,PALADIN,,,,,,,,,1,0,FREE,,,,0,2,1,1,,,,,,,,,,[],,,,,,,,,
@@ -3055,7 +3055,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,4,,,,,,,,,,,113,SummonSpell,,,,,6,PALADIN,,,,,,,,,3,2,RARE,,2,4,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,4,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,6,PALADIN,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,5,,,,,,
+,,,,4,,,,,,,,,,,3,AddEnchantmentSpell,,,,,6,PALADIN,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,5,,,,,,
 ,,,,4,,,,,,,,,,,9,BuffSpell,,,,,6,PALADIN,,,,,,,,,2,2,RARE,,0,3,,,,,,,,,,,,,,,,,5,,,,,1,1
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,10,WARLOCK,,,,,,,,,0,1,COMMON,,,,1,1,4,7,0,false,0,false,DEMON,0,false,1,true,,0,false,,,,,,,
 ,,,,5,,,,,,,1,HAND,,,76,PutRandomMinionOnBoardSpell,,,,,10,WARLOCK,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,,,,
@@ -3173,7 +3173,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,2,,,,,,,,,,,46,EquipWeaponSpell,,,,,8,ROGUE,,,,,,,,,1,0,FREE,,0,2,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,3,,,,,,,,,,,18,ComboSpell,,,,,8,ROGUE,,,,,,,,,0,2,RARE,,2,1,,,,,,,,,,,,,,,,,,,,0,NONE,,
 ,,,,3,,,,,,,,,,,27,DamageSpell,,,,,8,ROGUE,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,3,,,,,2,1
-,,,,3,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,8,ROGUE,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,20,,,,,,
+,,,,3,,,,,,,,,,,3,AddEnchantmentSpell,,,,,8,ROGUE,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,20,,,,,,
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,2,RARE,,,,1,1,1,3,,,,,,,,,,,,,,,,,,,
 ,1,,,2,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,1,true,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,6,,,,,,
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,,,1,1,2,3,0,false,0,false,,0,false,1,true,,0,false,,,,,,,
@@ -3191,7 +3191,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,3,1,COMMON,,2,4,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,3,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,3,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,3,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,,,2,1,COMMON,,0,3,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,10,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,0,4,LEGENDARY,,,,0,1,7,7,,,,,,,,,,[],,,,,,,,,
 ,,,,4,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,2,RARE,,,,1,1,2,5,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
@@ -3350,7 +3350,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,1,,,,,,,,,,,119,TemporaryAttackSpell,,,,,7,PRIEST,,,,,,,,,0,2,RARE,,0,1,,,,,,,,,,,,,,,,,2,,,0,NONE,3,0
 ,,,,2,,,,,,,,,,,61,MisdirectSpell,,,,,4,HUNTER,,,,,,,,,0,2,RARE,,0,1,,,,,,,,,,,,,,,,,26,,,,,,
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,3,EPIC,,,,1,1,1,2,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
-,,,,2,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,1,3,EPIC,,0,2,,,,,,,,,,,,,,,,,27,,,0,NONE,,
+,,,,2,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,1,3,EPIC,,0,2,,,,,,,,,,,,,,,,,27,,,0,NONE,,
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,3,EPIC,,,,0,1,3,3,,,,,MURLOC,,,,,[],,,,,,,,,
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,7,PRIEST,,,,,,,,,0,1,COMMON,,,,1,1,5,5,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
 ,,,,5,,,,,,,,,,,103,SilenceSpell,,,,,7,PRIEST,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,,,,3,MINIONS,,
@@ -3372,7 +3372,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,3,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,4,1,COMMON,,2,5,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,3,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,3,DRUID,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,3,,,,,,,,,,,3,AddEnchantmentSpell,,,,,3,DRUID,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,3,,,,,,,,,,,9,BuffSpell,,,,,3,DRUID,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,2,,,,,,,,,,,22,CopyCardSpell,,,,,7,PRIEST,,,,,,,,,0,2,RARE,,0,1,,,,,,,,,,,,,,,,,,,,6,ENEMY_MINIONS,,
 ,,,,3,,,,,,,,,,,1,AddDeathrattleSpell,,,,,4,HUNTER,,,,,,,,,0,2,RARE,,1,1,,,,,,,,,,,,,,,,,5,,,0,NONE,,
@@ -3420,7 +3420,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,2,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,1,COMMON,,2,5,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,5,0,FREE,,,,0,6,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,2,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
+,,,,2,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,,
 ,,,,2,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,,,3,1,COMMON,,0,4,,,,,,,,,,,,,,,,,27,,,,,1,1
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,1,COMMON,,,,1,1,2,1,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,1,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,27,,,,,,
@@ -3547,7 +3547,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,4,,,,,,,,,,,113,SummonSpell,,,,,3,DRUID,,,,,,,,,2,2,RARE,,2,3,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,3,0,FREE,,,,0,4,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,3,0,FREE,,,,0,4,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,4,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,3,DRUID,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,5,,,,,,
+,,,,4,,,,,,,,,,,3,AddEnchantmentSpell,,,,,3,DRUID,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,5,,,,,,
 ,,,,4,,,,,,,,,,,9,BuffSpell,,,,,3,DRUID,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,5,,,,,1,1
 ,,,,4,,,,,,,1,HAND,,,76,PutRandomMinionOnBoardSpell,,,,,9,SHAMAN,,,,,,,,,0,3,EPIC,,0,1,,,,,,,,,,,,,,,,,,2,BOTH,0,NONE,,
 ,,,,6,,,,,,,,,,,113,SummonSpell,,,,,8,ROGUE,,,,,,,,,0,3,EPIC,,,,1,1,5,3,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
@@ -3677,7 +3677,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,6,,,,,,,,,,,27,DamageSpell,,,,,9,SHAMAN,,,,,,,,,1,0,FREE,,0,2,,,,,,,,,,,,,,,,,,,,2,ANY,3,1
 ,,,,2,,,,,,,,,,,59,MetaSpell,,,,,11,WARRIOR,,,,,,,,,0,2,RARE,,3,1,,,,,,,,,,,,,,,,,,,,0,NONE,,
 ,,53,CANNOT_REDUCE_HP_BELOW_1,2,,,,,,,,,,,0,AddAttributeSpell,,,,,11,WARRIOR,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,5,,,,,,
-,,,,2,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,11,WARRIOR,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,20,,,,,,
+,,,,2,,,,,,,,,,,3,AddEnchantmentSpell,,,,,11,WARRIOR,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,20,,,,,,
 ,,,,2,,,,,,,,,,,41,DrawCardSpell,,,,,11,WARRIOR,,,,,,,,,1,2,RARE,,0,2,,,,,,,,,,,,,,,,,,,,,,1,1
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,8,ROGUE,,,,,,,,,0,1,COMMON,,,,1,1,2,1,,,,,BEAST,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,31,DestroySpell,,,,,8,ROGUE,,,,,,,,,1,1,COMMON,,0,2,,,,,,,,,,,,,,,,,26,,,,,,
@@ -3832,7 +3832,7 @@ ARMOR_BONUS,ATTACK_BONUS,ATTRIBUTE,ATTRIBUTE_LABEL,BASE_MANA_COST,BOARD_POSITION
 ,,,,4,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,3,3,EPIC,,2,4,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
 ,,,,1,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,4,0,FREE,,,,0,5,1,1,,,,,,,,,,[],,,,,,,,,
-,,,,4,,,,,,,,,,,3,AddSpellTriggerSpell,,,,,0,ANY,,,,,,,,,2,3,EPIC,,0,3,,,,,,,,,,,,,,,,,5,,,,,,
+,,,,4,,,,,,,,,,,3,AddEnchantmentSpell,,,,,0,ANY,,,,,,,,,2,3,EPIC,,0,3,,,,,,,,,,,,,,,,,5,,,,,,
 ,,,,4,,,,,,,,,,,9,BuffSpell,,,,,0,ANY,,,,,,,,,2,3,EPIC,,0,3,,,,,,,,,,,,,,,,,5,,,,,1,1
 ,,,,5,,,,,,,,,,,113,SummonSpell,,,,,0,ANY,,,,,,,,,0,2,RARE,,,,1,1,5,5,0,false,0,false,,0,false,0,false,,0,false,,,,,,,
 ,,,,5,,,,,,,,,,,21,ConditionalSpell,,,,,0,ANY,,,,,,,,,1,2,RARE,,1,2,,,,,,,,,,,,,,,,,,,,0,NONE,,

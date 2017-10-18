@@ -1,0 +1,24 @@
+{
+  "name": "Deathstalker Rexxar",
+  "baseManaCost": 6,
+  "heroPower": "hero_power_build_a_beast",
+  "type": "HERO",
+  "heroClass": "HUNTER",
+  "rarity": "LEGENDARY",
+  "attributes": {
+    "MAX_HP": 30,
+    "ARMOR": 5
+  },
+  "description": "Battlecry: Deal 2 damage to all enemy minions.",
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1,
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2,
+      "target": "ENEMY_MINIONS"
+    }
+  }
+}

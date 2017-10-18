@@ -3,13 +3,14 @@ package net.demilich.metastone.game.spells.trigger.secrets;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.utils.AttributeMap;
 
-public class Secret extends SpellTrigger {
+public class Secret extends Enchantment {
 
 	private Card source;
 
@@ -45,6 +46,11 @@ public class Secret extends SpellTrigger {
 	@Override
 	public String getName() {
 		return getSourceCard().getName();
+	}
+
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.SECRET;
 	}
 
 	@Override

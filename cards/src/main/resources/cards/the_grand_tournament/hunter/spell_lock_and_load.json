@@ -7,7 +7,7 @@
 	"description": "Each time you cast a spell this turn, add a random Hunter card to your hand.",
 	"targetSelection": "NONE",
 	"spell": {
-		"class": "AddSpellTriggerSpell",
+		"class": "AddEnchantmentSpell",
 		"target": "FRIENDLY_PLAYER",
 		"trigger": {
 			"eventTrigger": {

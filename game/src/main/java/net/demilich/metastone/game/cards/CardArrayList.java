@@ -122,13 +122,15 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 	}
 
 	@Override
-	public void shuffle() {
+	public CardList shuffle() {
 		Collections.shuffle(cards);
+		return this;
 	}
 
 	@Override
-	public void shuffle(Random random) {
+	public CardList shuffle(Random random) {
 		Collections.shuffle(cards, random);
+		return this;
 	}
 
 	@Override

@@ -18,7 +18,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.visuals.TriggerFired;
@@ -283,8 +283,8 @@ public class ServerGameContext extends GameContext {
 
 	@Override
 	@Suspendable
-	public void onSpellTriggerFired(SpellTrigger trigger) {
-		super.onSpellTriggerFired(trigger);
+	public void onEnchantmentFired(Enchantment trigger) {
+		super.onEnchantmentFired(trigger);
 
 		TriggerFired triggerFired = new TriggerFired(this, trigger);
 		final GameState gameStateCopy = getGameStateCopy();

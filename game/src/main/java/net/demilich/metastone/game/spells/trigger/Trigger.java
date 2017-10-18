@@ -15,7 +15,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * Triggers respond to {@link GameEvent} objects that are raised by various {@link GameLogic} methods, implementing
  * cards that do something when something else happens.
  *
- * @see SpellTrigger for an implementation that casts a spell when an event is raised. Most trigger effects behave like
+ * @see Enchantment for an implementation that casts a spell when an event is raised. Most trigger effects behave like
  * this.
  */
 public interface Trigger extends Serializable {
