@@ -13,10 +13,10 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.BoardChangedTrigger;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class Aura extends SpellTrigger {
+public class Aura extends Enchantment {
 	private EntityReference targets;
 	private SpellDesc applyAuraEffect;
 	private SpellDesc removeAuraEffect;

@@ -15,7 +15,7 @@
 				"hpBonus": 5
 			},
 			{
-				"class": "AddSpellTriggerSpell",
+				"class": "AddEnchantmentSpell",
 				"trigger": {
 					"eventTrigger": {
 						"class": "TurnStartTrigger",

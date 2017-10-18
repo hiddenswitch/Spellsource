@@ -37,7 +37,7 @@ import net.demilich.metastone.game.spells.trigger.HealingTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.MinionSummonedTrigger;
 import net.demilich.metastone.game.spells.trigger.SpellCastedTrigger;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -179,7 +179,7 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Adds a {@link Trigger} to a specified {@link Entity}. These are typically {@link SpellTrigger} instances that
+	 * Adds a {@link Trigger} to a specified {@link Entity}. These are typically {@link Enchantment} instances that
 	 * react to game events.
 	 *
 	 * @param player            Usually the current turn player.
@@ -200,7 +200,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 		gameEventListener.onAdd(context);
 		context.addTrigger(gameEventListener);
-		log("New spelltrigger was added for {} on {}: {}", player.getName(), target, gameEventListener);
+		log("New enchantment was added for {} on {}: {}", player.getName(), target, gameEventListener);
 	}
 
 	/**
@@ -651,7 +651,7 @@ public class GameLogic implements Cloneable, Serializable {
 		hero.setOwner(player.getId());
 		hero.setWeapon(previousHero.getWeapon());
 		// Remove the old hero from play
-		removeSpellTriggers(previousHero);
+		removeEnchantments(previousHero);
 		previousHero.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		player.setHero(hero);
 		hero.modifyArmor(previousArmor);
@@ -670,8 +670,8 @@ public class GameLogic implements Cloneable, Serializable {
 			checkForDeadEntities();
 		}
 
-		if (hero.hasSpellTrigger()) {
-			for (SpellTrigger trigger : hero.getSpellTriggers()) {
+		if (hero.hasEnchantment()) {
+			for (Enchantment trigger : hero.getEnchantments()) {
 				addGameEventListener(player, trigger, hero);
 			}
 		}
@@ -837,6 +837,13 @@ public class GameLogic implements Cloneable, Serializable {
 		target.setAttribute(Attribute.LAST_HIT, damageDealt);
 		if (damageDealt > 0) {
 			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt);
+			// Implement poisonous
+			if (source != null
+					&& source.hasAttribute(Attribute.POISONOUS)
+					&& target.getEntityType() == EntityType.MINION) {
+				destroy(target);
+			}
+
 			context.fireGameEvent(damageEvent);
 			player.getStatistics().damageDealt(damageDealt);
 		}
@@ -894,7 +901,7 @@ public class GameLogic implements Cloneable, Serializable {
 		reversed.sort((a, b) -> -Integer.compare(a.getEntityLocation().getIndex(), b.getEntityLocation().getIndex()));
 
 		for (Actor target : reversed) {
-			removeSpellTriggers(target, false);
+			removeEnchantments(target, false);
 			previousLocation.put(target, target.getEntityLocation());
 			log("{} is destroyed", target);
 			target.moveOrAddTo(context, Zones.GRAVEYARD);
@@ -930,7 +937,7 @@ public class GameLogic implements Cloneable, Serializable {
 			resolveDeathrattles(owner, target, previousLocation.get(target).getIndex());
 		}
 		for (Actor target : targets) {
-			removeSpellTriggers(target, true);
+			removeEnchantments(target, true);
 		}
 
 		context.fireGameEvent(new BoardChangedEvent(context));
@@ -1119,10 +1126,10 @@ public class GameLogic implements Cloneable, Serializable {
 		player.getStatistics().equipWeapon(newWeapon);
 		newWeapon.onEquip(context, player);
 		newWeapon.setActive(context.getActivePlayerId() == playerId);
-		if (newWeapon.hasSpellTrigger()) {
-			List<SpellTrigger> spellTriggers = newWeapon.getSpellTriggers();
-			for (SpellTrigger spellTrigger : spellTriggers) {
-				addGameEventListener(player, spellTrigger, newWeapon);
+		if (newWeapon.hasEnchantment()) {
+			List<Enchantment> enchantments = newWeapon.getEnchantments();
+			for (Enchantment enchantment : enchantments) {
+				addGameEventListener(player, enchantment, newWeapon);
 			}
 		}
 		if (newWeapon.getCardCostModifier() != null) {
@@ -1850,7 +1857,7 @@ public class GameLogic implements Cloneable, Serializable {
 			applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
 			refreshAttacksPerRound(minion);
 			List<Trigger> triggers = context.getTriggersAssociatedWith(minion.getReference());
-			removeSpellTriggers(minion);
+			removeEnchantments(minion);
 			for (Trigger trigger : triggers) {
 				addGameEventListener(player, trigger, minion);
 			}
@@ -2312,7 +2319,7 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Moves a card to the {@link Zones#GRAVEYARD}. Removes each {@link SpellTrigger} associated with the card, if any.
+	 * Moves a card to the {@link Zones#GRAVEYARD}. Removes each {@link Enchantment} associated with the card, if any.
 	 * <p>
 	 * No events are raised.
 	 *
@@ -2322,7 +2329,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void removeCard(Card card) {
 		log("Card {} has been moved from the {} to the GRAVEYARD", card, card.getEntityLocation().getZone().toString());
-		removeSpellTriggers(card);
+		removeEnchantments(card);
 		// If it's already in the graveyard, do nothing
 		if (card.getEntityLocation().getZone() == Zones.GRAVEYARD) {
 			return;
@@ -2333,7 +2340,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 	/**
 	 * Moves the specified card from the player's {@link Zones#DECK} to their {@link Zones#GRAVEYARD}. Removes each
-	 * {@link SpellTrigger} associated with the card, if any. Does not raise any events.
+	 * {@link Enchantment} associated with the card, if any. Does not raise any events.
 	 *
 	 * @param playerId The player whose deck to check for this card
 	 * @param card     The card to remove from this player's deck.
@@ -2343,7 +2350,7 @@ public class GameLogic implements Cloneable, Serializable {
 	public void removeCardFromDeck(int playerId, Card card) {
 		Player player = context.getPlayer(playerId);
 		log("Card {} has been moved from the DECK to the GRAVEYARD", card);
-		removeSpellTriggers(card);
+		removeEnchantments(card);
 		player.getDeck().move(card, player.getGraveyard());
 	}
 
@@ -2365,7 +2372,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void removeMinion(Minion minion, boolean peacefully) {
-		removeSpellTriggers(minion);
+		removeEnchantments(minion);
 		log("{} was removed", minion);
 		minion.setAttribute(Attribute.DESTROYED);
 		minion.moveOrAddTo(context, peacefully ? Zones.SET_ASIDE_ZONE : Zones.GRAVEYARD);
@@ -2382,7 +2389,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void removeSecrets(Player player) {
 		log("All secrets for {} have been destroyed", player.getName());
-		// this only works while Secrets are the only SpellTrigger on the heroes
+		// this only works while Secrets are the only Enchantment on the heroes
 		for (Trigger secret : getSecrets(player)) {
 			secret.onRemove(context);
 			context.removeTrigger(secret);
@@ -2391,18 +2398,18 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	@Suspendable
-	private void removeSpellTriggers(Entity entity) {
-		removeSpellTriggers(entity, true);
+	private void removeEnchantments(Entity entity) {
+		removeEnchantments(entity, true);
 	}
 
 	@Suspendable
-	private void removeSpellTriggers(Entity entity, boolean removeAuras) {
+	private void removeEnchantments(Entity entity, boolean removeAuras) {
 		EntityReference entityReference = entity.getReference();
 		for (Trigger trigger : context.getTriggersAssociatedWith(entityReference)) {
 			if (!removeAuras && trigger instanceof Aura) {
 				continue;
 			}
-			log("SpellTrigger {} was removed for {}", trigger, entity);
+			log("Enchantment {} was removed for {}", trigger, entity);
 			trigger.onRemove(context);
 		}
 		context.removeTriggersAssociatedWith(entityReference, removeAuras);
@@ -2436,7 +2443,7 @@ public class GameLogic implements Cloneable, Serializable {
 		newCard.setOwner(playerId);
 		CardList hand = player.getHand();
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
-		removeSpellTriggers(oldCard);
+		removeEnchantments(oldCard);
 		hand.replace(oldCard, newCard);
 		oldCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		if (newCard.getAttribute(Attribute.PASSIVE_TRIGGER) != null) {
@@ -2653,7 +2660,7 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 			removeAttribute(target, attr);
 		}
-		removeSpellTriggers(target);
+		removeEnchantments(target);
 		target.setAttribute(Attribute.SILENCED);
 
 		int oldMaxHp = target.getMaxHp();
@@ -2792,8 +2799,8 @@ public class GameLogic implements Cloneable, Serializable {
 		applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
 		refreshAttacksPerRound(minion);
 
-		if (minion.hasSpellTrigger()) {
-			for (SpellTrigger trigger : minion.getSpellTriggers()) {
+		if (minion.hasEnchantment()) {
+			for (Enchantment trigger : minion.getEnchantments()) {
 				addGameEventListener(player, trigger, minion);
 			}
 		}
@@ -2848,7 +2855,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void transformMinion(Minion minion, Minion newMinion) {
 		// Remove any spell triggers associated with the old minion.
-		removeSpellTriggers(minion);
+		removeEnchantments(minion);
 
 		Player owner = context.getPlayer(minion.getOwner());
 		int index = -1;
@@ -2893,9 +2900,9 @@ public class GameLogic implements Cloneable, Serializable {
 				applyAttribute(newMinion, Attribute.SUMMONING_SICKNESS);
 				refreshAttacksPerRound(newMinion);
 
-				if (newMinion.hasSpellTrigger()) {
-					for (SpellTrigger spellTrigger : newMinion.getSpellTriggers()) {
-						addGameEventListener(owner, spellTrigger, newMinion);
+				if (newMinion.hasEnchantment()) {
+					for (Enchantment enchantment : newMinion.getEnchantments()) {
+						addGameEventListener(owner, enchantment, newMinion);
 					}
 				}
 
@@ -2906,7 +2913,7 @@ public class GameLogic implements Cloneable, Serializable {
 				handleEnrage(newMinion);
 			} else {
 				owner.getSetAsideZone().add(newMinion);
-				removeSpellTriggers(newMinion);
+				removeEnchantments(newMinion);
 				return;
 			}
 

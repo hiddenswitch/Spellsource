@@ -53,11 +53,11 @@ public class WeaponCard extends Card {
 			weapon.addDeathrattle(desc.deathrattle);
 		}
 		if (desc.trigger != null) {
-			weapon.addSpellTrigger(desc.trigger.create());
+			weapon.addEnchantment(desc.trigger.create());
 		}
 		if (desc.triggers != null) {
 			for (TriggerDesc trigger : desc.triggers) {
-				weapon.addSpellTrigger(trigger.create());
+				weapon.addEnchantment(trigger.create());
 			}
 		}
 		if (desc.cardCostModifier != null) {

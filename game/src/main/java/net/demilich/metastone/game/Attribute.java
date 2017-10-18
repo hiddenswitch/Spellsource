@@ -10,6 +10,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.Zones;
 
@@ -394,8 +395,7 @@ public enum Attribute {
 	 * net.demilich.metastone.game.events.GameEvent}.
 	 *
 	 * @see net.demilich.metastone.game.spells.trigger.TriggerManager for the complete rules on event triggering.
-	 * @see net.demilich.metastone.game.spells.trigger.SpellTrigger for the entity that corresponds to a passive
-	 * trigger.
+	 * @see Enchantment for the entity that corresponds to a passive trigger.
 	 */
 	PASSIVE_TRIGGER,
 	/**
@@ -578,6 +578,11 @@ public enum Attribute {
 	 * battlefield.
 	 */
 	WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
+	/**
+	 * A shorthand implementation of the Poisonous keyword. Indicates that whenever the source minion deals more than 0
+	 * damage to the target minion, the target minion  is destroyed.
+	 */
+	POISONOUS,
 	/**
 	 * Overrides the name of the {@link Entity}
 	 */

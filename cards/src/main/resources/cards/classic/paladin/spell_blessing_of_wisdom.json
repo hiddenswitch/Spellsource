@@ -7,7 +7,7 @@
 	"description": "Choose a minion. Whenever it attacks, draw a card.",
 	"targetSelection": "MINIONS",
 	"spell": {
-		"class": "AddSpellTriggerSpell",
+		"class": "AddEnchantmentSpell",
 		"trigger": {
 			"eventTrigger": {
 				"class": "PhysicalAttackTrigger",

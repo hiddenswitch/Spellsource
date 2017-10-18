@@ -1,8 +1,5 @@
 package net.demilich.metastone.game.cards;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
@@ -12,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Predicate;
 
 
 /**
@@ -225,14 +221,14 @@ public interface CardList extends Iterable<Card> {
 	/**
 	 * Shuffles the instance.
 	 */
-	void shuffle();
+	CardList shuffle();
 
 	/**
 	 * Shuffles the instance with the given random number generator.
 	 *
 	 * @param random A {@link Random} instance.
 	 */
-	void shuffle(Random random);
+	CardList shuffle(Random random);
 
 	/**
 	 * Sorts the cards in this list by their {@link Card#getBaseManaCost()}. Typically not used in gameplay.

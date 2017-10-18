@@ -124,7 +124,7 @@ public class WebSocketClient implements Client {
 			message.event(new GameEvent()
 					.eventType(GameEvent.EventTypeEnum.TRIGGER_FIRED)
 					.triggerFired(new GameEventTriggerFired()
-							.triggerSourceId(triggerEvent.getSpellTrigger().getHostReference().getId())));
+							.triggerSourceId(triggerEvent.getEnchantment().getHostReference().getId())));
 		} else if (GameAction.class.isAssignableFrom(eventClass)) {
 			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource(workingContext);
 			com.hiddenswitch.spellsource.client.models.Entity source = Games.getEntity(workingContext, sourceEntity, playerId);

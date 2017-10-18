@@ -22,7 +22,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.CardReference;
@@ -912,7 +912,7 @@ public class GameContext implements Cloneable, Serializable {
 	 * Prints to the {@link #logger} the currently active triggers.
 	 */
 	public void printCurrentTriggers() {
-		logger.info("Active spelltriggers:");
+		logger.info("Active enchantments:");
 		getTriggerManager().printCurrentTriggers();
 	}
 
@@ -1279,12 +1279,12 @@ public class GameContext implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Raised when a {@link SpellTrigger} is fired (i.e., a secret is about to be played or a special effect hosted by a
+	 * Raised when a {@link Enchantment} is fired (i.e., a secret is about to be played or a special effect hosted by a
 	 * minion/weapon is about to happen).
 	 *
-	 * @param spellTrigger The spell trigger that fired.
+	 * @param enchantment The spell trigger that fired.
 	 */
-	public void onSpellTriggerFired(SpellTrigger spellTrigger) {
+	public void onEnchantmentFired(Enchantment enchantment) {
 	}
 
 	/**

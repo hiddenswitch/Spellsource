@@ -14,7 +14,7 @@ public class DeckSource extends CardSource implements Serializable {
 
 	@Override
 	protected CardList match(GameContext context, Player player) {
-		return player.getDeck().clone();
+		return player.getDeck();
 	}
 
 }

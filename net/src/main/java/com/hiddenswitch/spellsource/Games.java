@@ -22,7 +22,7 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.DamageSpell;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -31,7 +31,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -831,18 +830,18 @@ public interface Games {
 	 * A view of a secret or quest. Censors information from opposing players if it's a quest.
 	 *
 	 * @param workingContext The context to generate the client view for.
-	 * @param spellTrigger   The secret or quest entity. Any entity backed by a {@link SpellTrigger} is valid here.
+	 * @param enchantment   The secret or quest entity. Any entity backed by a {@link Enchantment} is valid here.
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(final GameContext workingContext, final SpellTrigger spellTrigger, int localPlayerId) {
-		if (spellTrigger == null) {
+	static com.hiddenswitch.spellsource.client.models.Entity getEntity(final GameContext workingContext, final Enchantment enchantment, int localPlayerId) {
+		if (enchantment == null) {
 			return null;
 		}
 
-		com.hiddenswitch.spellsource.client.models.Entity cardEntity = getEntity(workingContext, spellTrigger.getSourceCard(), localPlayerId);
-		if (spellTrigger instanceof Secret
-				&& localPlayerId != spellTrigger.getOwner()) {
+		com.hiddenswitch.spellsource.client.models.Entity cardEntity = getEntity(workingContext, enchantment.getSourceCard(), localPlayerId);
+		if (enchantment instanceof Secret
+				&& localPlayerId != enchantment.getOwner()) {
 			// Censor information about the secret if it does not belong to the player.
 			cardEntity
 					.name("Secret")
@@ -850,15 +849,15 @@ public interface Games {
 					.cardId("hidden");
 		}
 		Entity.EntityTypeEnum entityType = Entity.EntityTypeEnum.SECRET;
-		if (spellTrigger instanceof Quest) {
+		if (enchantment instanceof Quest) {
 			entityType = Entity.EntityTypeEnum.QUEST;
 		}
 
-		cardEntity.id(spellTrigger.getId())
+		cardEntity.id(enchantment.getId())
 				.entityType(entityType)
 				.getState()
-				.location(Games.toClientLocation(spellTrigger.getEntityLocation()))
-				.owner(spellTrigger.getOwner())
+				.location(Games.toClientLocation(enchantment.getEntityLocation()))
+				.owner(enchantment.getOwner())
 				.playable(false);
 		return cardEntity;
 	}

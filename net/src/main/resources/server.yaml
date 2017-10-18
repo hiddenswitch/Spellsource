@@ -1030,7 +1030,7 @@ definitions:
         description: |
           Broad categories describing this entity and how it should be rendered.
         type: 'string'
-        enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON', 'SECRET', 'QUEST']
+        enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON', 'SECRET', 'QUEST', 'ENCHANTMENT']
       name:
         description: |
           The text that would go into the entity's name field.

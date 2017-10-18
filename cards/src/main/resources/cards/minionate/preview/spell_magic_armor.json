@@ -8,7 +8,7 @@
 	"description": "Take only 1 damage at a time until next turn.",
 	"targetSelection": "MINIONS",
 	"spell": {
-		"class": "AddSpellTriggerSpell",
+		"class": "AddEnchantmentSpell",
 		"target": "FRIENDLY_PLAYER",
 		"eventTrigger": {
 			"class": "PreDamageTrigger",

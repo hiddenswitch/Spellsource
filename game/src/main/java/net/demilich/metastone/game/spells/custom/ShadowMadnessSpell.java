@@ -15,7 +15,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
 import net.demilich.metastone.game.spells.trigger.SilenceTrigger;
-import net.demilich.metastone.game.spells.trigger.SpellTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -50,7 +50,7 @@ public class ShadowMadnessSpell extends MindControlSpell {
 		GameEventTrigger silenceTrigger = new SilenceTrigger(EventTriggerDesc.createEmpty(SilenceTrigger.class));
 		GameEventTrigger turnEndTrigger = new TurnEndTrigger(EventTriggerDesc.createEmpty(TurnEndTrigger.class));
 		turnEndTrigger.setOwner(player.getId());
-		SpellTrigger returnOnSilence = new SpellTrigger(silenceTrigger, turnEndTrigger, reverseMindcontrolSpell, true);
+		Enchantment returnOnSilence = new Enchantment(silenceTrigger, turnEndTrigger, reverseMindcontrolSpell, true);
 		context.getLogic().addGameEventListener(player, returnOnSilence, target);
 	}
 

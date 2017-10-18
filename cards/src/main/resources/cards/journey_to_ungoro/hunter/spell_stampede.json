@@ -7,7 +7,7 @@
 	"description": "Whenever you play a Beast this turn, add a random Beast to your hand.",
 	"targetSelection": "NONE",
 	"spell": {
-		"class": "AddSpellTriggerSpell",
+		"class": "AddEnchantmentSpell",
 		"target": "FRIENDLY_PLAYER",
 		"trigger": {
 			"eventTrigger": {
