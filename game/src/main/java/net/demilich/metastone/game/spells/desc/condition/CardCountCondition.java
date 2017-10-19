@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
 
 public class CardCountCondition extends Condition {
@@ -20,23 +21,23 @@ public class CardCountCondition extends Condition {
 
 		int cardCount = 0;
 		switch (targetPlayer) {
-		case BOTH:
-			cardCount = player.getHand().getCount() + context.getOpponent(player).getHand().getCount();
-			break;
-		case OPPONENT:
-			cardCount = context.getOpponent(player).getHand().getCount();
-			break;
-		case SELF:
-			cardCount = player.getHand().getCount();
-			break;
-		case ACTIVE:
-			cardCount = context.getActivePlayer().getHand().getCount();
-			break;
-		case INACTIVE:
-			cardCount = context.getOpponent(context.getActivePlayer()).getHand().getCount();
-			break;
-		default:
-			break;
+			case BOTH:
+				cardCount = player.getHand().getCount() + context.getOpponent(player).getHand().getCount();
+				break;
+			case OPPONENT:
+				cardCount = context.getOpponent(player).getHand().getCount();
+				break;
+			case SELF:
+				cardCount = player.getHand().getCount();
+				break;
+			case ACTIVE:
+				cardCount = context.getActivePlayer().getHand().getCount();
+				break;
+			case INACTIVE:
+				cardCount = context.getOpponent(context.getActivePlayer()).getHand().getCount();
+				break;
+			default:
+				break;
 
 		}
 		int targetValue = desc.getInt(ConditionArg.VALUE);

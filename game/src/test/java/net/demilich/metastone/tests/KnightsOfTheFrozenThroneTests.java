@@ -1,6 +1,7 @@
 package net.demilich.metastone.tests;
 
 
+import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
@@ -9,8 +10,12 @@ import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.ChooseBattlecryHeroCard;
 import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -25,6 +30,109 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
+	@Test
+	public void testSimulacrum() {
+		{
+			// TODO: Should Simulacrum always copy the most recently drawn card when there are multiple cards of the same
+			// mana cost?
+			GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+			Player player = context.getPlayer1();
+			clearHand(context, player);
+			clearZone(context, player.getDeck());
+
+			Stream.of("minion_water_elemental" /*4*/,
+					"spell_the_coin"/*0*/,
+					"minion_acolyte_of_pain"/*3*/)
+					.map(CardCatalogue::getCardById)
+					.forEach(c -> context.getLogic().receiveCard(player.getId(), c));
+
+			playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_emperor_thaurissan"));
+			context.endTurn();
+			context.endTurn();
+			context.endTurn();
+			context.endTurn();
+			// Now the minions in the hand are 2, 1
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_bloodfen_raptor" /*2*/));
+			playCard(context, player, CardCatalogue.getCardById("spell_simulacrum"));
+			Assert.assertEquals(player.getHand().stream().filter(c -> c.getCardId().equals("minion_acolyte_of_pain")).count(), 2L);
+		}
+
+		// Test simulacrum with no minion cards
+		{
+			GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+			Player player = context.getPlayer1();
+			clearHand(context, player);
+			clearZone(context, player.getDeck());
+
+			playCard(context, player, CardCatalogue.getCardById("spell_simulacrum"));
+			Assert.assertEquals(player.getHand().size(), 0);
+		}
+	}
+
+	@Test
+	public void testIceWalker() {
+		// Notes on interaction from https://twitter.com/ThePlaceMatt/status/891810684551311361
+		// Any Hero Power that targets will also freeze that target. So it does work with Frost Lich Jaina. (And even
+		// works with Anduin's basic HP!)
+		checkIceWalker(true, new HeroClass[]{
+				HeroClass.MAGE,
+				HeroClass.PRIEST
+		});
+		checkIceWalker(false, new HeroClass[]{
+				HeroClass.ROGUE,
+				HeroClass.WARLOCK,
+				HeroClass.DRUID,
+				HeroClass.PALADIN,
+				HeroClass.SHAMAN,
+				HeroClass.WARRIOR,
+				HeroClass.HUNTER
+		});
+	}
+
+	private void checkIceWalker(final boolean expected, final HeroClass[] classes) {
+		for (HeroClass heroClass : classes) {
+			GameContext context = createContext(heroClass, HeroClass.ROGUE);
+			Player player = context.getPlayer1();
+			player.setMaxMana(2);
+			player.setMana(2);
+
+			Minion icyVeins = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_ice_walker"));
+			PlayCardAction play = player.getHero().getHeroPower().play();
+			Player opponent = context.getOpponent(player);
+			Entity target;
+
+			if (play.getTargetRequirement() != TargetSelection.NONE) {
+				target = opponent.getHero();
+			} else {
+				List<Entity> entities = context.resolveTarget(player, player.getHero().getHeroPower(), player.getHero().getHeroPower().getSpell().getTarget());
+				if (entities == null || entities.size() == 0) {
+					target = null;
+				} else {
+					target = entities.get(0);
+				}
+			}
+
+			play.setTarget(target);
+			context.getLogic().performGameAction(player.getId(), play);
+			if (target == null) {
+				Assert.assertFalse(expected);
+			} else {
+				Assert.assertEquals(target.hasAttribute(Attribute.FROZEN), expected);
+			}
+			context.endTurn();
+			context.endTurn();
+			context.getLogic().destroy(icyVeins);
+			play = player.getHero().getHeroPower().play();
+			play.setTarget(target);
+			context.getLogic().performGameAction(player.getId(), play);
+			if (target == null) {
+				Assert.assertFalse(expected);
+			} else {
+				Assert.assertFalse(target.hasAttribute(Attribute.FROZEN));
+			}
+		}
+	}
+
 	@Test
 	public void testSpreadingPlague() {
 		Stream.of(0, 3, 7).forEach(minionCount -> {

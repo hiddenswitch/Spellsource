@@ -10,7 +10,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class ChangeHeroSpell extends Spell {
-
 	public static SpellDesc create(String heroCardId) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(ChangeHeroSpell.class);
 		arguments.put(SpellArg.CARD, heroCardId);
@@ -23,5 +22,4 @@ public class ChangeHeroSpell extends Spell {
 		HeroCard heroCard = (HeroCard) context.getCardById(heroCardId);
 		context.getLogic().changeHero(player, heroCard.createHero());
 	}
-
 }

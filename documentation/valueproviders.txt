@@ -22,7 +22,7 @@ Provides a value equal to the number of minions that were killed this turn.
 EntityCounter
 Provides a value equal to the number of entities in play that meet the CardFilter criteria.
 
-HighestAttributeValueProvider
+ReduceValueProvider
 Provides a value based on the highest value of the attribute found among the target entities.
 
 MinionSummonValueProvider

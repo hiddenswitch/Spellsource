@@ -1,0 +1,23 @@
+{
+  "name": "Frozen Champion",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "rarity": "LEGENDARY"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "heroClass": "MAGE",
+  "rarity": "FREE",
+  "description": "Deathrattle: Add a random Legendary minion to your hand.",
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -16,14 +16,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
-import net.demilich.metastone.game.spells.DamageSpell;
-import net.demilich.metastone.game.spells.DestroySpell;
-import net.demilich.metastone.game.spells.HealSpell;
-import net.demilich.metastone.game.spells.MetaSpell;
-import net.demilich.metastone.game.spells.ReturnMinionToHandSpell;
-import net.demilich.metastone.game.spells.SilenceSpell;
-import net.demilich.metastone.game.spells.Spell;
-import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -572,7 +565,6 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 
 		}
-		//SpellCard spellCard = null;
 		EntityReference spellTarget = spellDesc.hasPredefinedTarget() ? spellDesc.getTarget() : targetReference;
 		List<Entity> targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
 		// target can only be changed when there is one target
@@ -598,6 +590,17 @@ public class GameLogic implements Cloneable, Serializable {
 				}
 			}
 
+		}
+
+		// This implements Ice Walker
+		if (sourceCard != null
+				&& sourceCard.getCardType().isCardType(CardType.HERO_POWER)
+				&& targets != null
+				&& targets.size() > 0
+				&& targetSelection != TargetSelection.NONE
+				&& hasAttribute(player, Attribute.HERO_POWER_FREEZES_TARGET)
+				&& !childSpell) {
+			spellDesc = SpellDesc.join(spellDesc, AddAttributeSpell.create(Attribute.FROZEN));
 		}
 
 		Spell spell = spellFactory.getSpell(spellDesc);
@@ -837,6 +840,10 @@ public class GameLogic implements Cloneable, Serializable {
 		target.setAttribute(Attribute.LAST_HIT, damageDealt);
 		if (damageDealt > 0) {
 			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt);
+
+			context.fireGameEvent(damageEvent);
+
+			// Keyword effects for lifesteal and poisonous will come after all other events
 			// Implement poisonous
 			if (source != null
 					&& source.hasAttribute(Attribute.POISONOUS)
@@ -844,7 +851,13 @@ public class GameLogic implements Cloneable, Serializable {
 				destroy(target);
 			}
 
-			context.fireGameEvent(damageEvent);
+			// Implement lifesteal
+			if (source != null
+					&& source.hasAttribute(Attribute.LIFESTEAL)) {
+				Player sourceOwner = context.getPlayer(source.getOwner());
+				heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
+			}
+
 			player.getStatistics().damageDealt(damageDealt);
 		}
 

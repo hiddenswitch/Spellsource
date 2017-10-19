@@ -139,6 +139,7 @@ public abstract class Actor extends Entity {
 		return (Race) getAttribute(Attribute.RACE);
 	}
 
+	@Override
 	public Card getSourceCard() {
 		return sourceCard;
 	}

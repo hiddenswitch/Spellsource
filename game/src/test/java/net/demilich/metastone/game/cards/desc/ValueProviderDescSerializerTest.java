@@ -46,7 +46,7 @@ public class ValueProviderDescSerializerTest {
 		RandomValueProvider rvp = new RandomValueProvider(valueProviderDesc);
 		String valueProvider = gson.toJson(valueProviderDesc);
 		assertNotNull(rvp);
-		RandomValueProvider rvp1 = (RandomValueProvider) (gson.fromJson(valueProvider, ValueProviderDesc.class).create());
+		RandomValueProvider rvp1 = (RandomValueProvider) (gson.fromJson(valueProvider, ValueProviderDesc.class).createInstance());
 		assertNotNull(rvp1);
 
 		Field declaredField = RandomValueProvider.class.getSuperclass().getDeclaredField("desc");

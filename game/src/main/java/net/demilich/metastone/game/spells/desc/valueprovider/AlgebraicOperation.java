@@ -10,37 +10,36 @@ public enum AlgebraicOperation {
 	NEGATE,
 	MODULO,
 	MINIMUM,
-	MAXIMUM,
-	;
+	MAXIMUM;
 
 	public int performOperation(int num1, int num2) {
 		switch (this) {
-		case ADD:
-			return num1 + num2;
-		case DIVIDE:
-			if (num2 == 0) {
-				num2 = 1;
-			}
-			return num1 / num2;
-		case MAXIMUM:
-			return num2 < num1 ? num2 : num1;
-		case MINIMUM:
-			return num2 > num1 ? num2 : num1;
-		case MODULO:
-			if (num2 == 0) {
-				num2 = 1;
-			}
-			return num1 % num2;
-		case MULTIPLY:
-			return num1 * num2;
-		case NEGATE:
-			return -num1;
-		case SET:
-			return num2;
-		case SUBTRACT:
-			return num1 - num2;
-		default:
-			return num1;
+			case ADD:
+				return num1 + num2;
+			case DIVIDE:
+				if (num2 == 0) {
+					num2 = 1;
+				}
+				return num1 / num2;
+			case MAXIMUM:
+				return Math.max(num1, num2);
+			case MINIMUM:
+				return Math.min(num1, num2);
+			case MODULO:
+				if (num2 == 0) {
+					num2 = 1;
+				}
+				return num1 % num2;
+			case MULTIPLY:
+				return num1 * num2;
+			case NEGATE:
+				return -num1;
+			case SET:
+				return num2;
+			case SUBTRACT:
+				return num1 - num2;
+			default:
+				return num1;
 		}
 	}
 }

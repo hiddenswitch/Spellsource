@@ -343,4 +343,9 @@ public class Player extends Entity implements Serializable {
 	public EntityZone<Quest> getQuests() {
 		return quests;
 	}
+
+	@Override
+	public Card getSourceCard() {
+		return getHero().getSourceCard();
+	}
 }

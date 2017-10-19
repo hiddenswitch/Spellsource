@@ -1,0 +1,26 @@
+{
+  "name": "Sindragosa",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "heroClass": "MAGE",
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Battlecry: Summon two 0/1 Frozen Champions.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_frozen_champion",
+        "token_frozen_champion"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

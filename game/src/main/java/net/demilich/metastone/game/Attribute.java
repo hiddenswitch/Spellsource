@@ -382,8 +382,16 @@ public enum Attribute {
 	 * When any {@link Entity} has this attribute, the owning player's hero power can target a {@link Minion}.
 	 * <p>
 	 * This is useful for the Hunter's hero power, which ordinarily can only target the opponent's hero.
+	 * <p>
+	 * Implements Steamwheedle Sniper
 	 */
 	HERO_POWER_CAN_TARGET_MINIONS,
+	/**
+	 * When any {@link Entity} has this attribute, the owning player's hero power freezes its target.
+	 * <p>
+	 * Implements Ice Walker
+	 */
+	HERO_POWER_FREEZES_TARGET,
 	/**
 	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an {@link
 	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e
@@ -583,6 +591,11 @@ public enum Attribute {
 	 * damage to the target minion, the target minion  is destroyed.
 	 */
 	POISONOUS,
+	/**
+	 * A shorthand implementation of the Lifesteal keyword. Indicates that the {@link Hero} of the owner of the {@link
+	 * Minion} should be healed by the amount of damage dealt by that minion.
+	 */
+	LIFESTEAL,
 	/**
 	 * Overrides the name of the {@link Entity}
 	 */

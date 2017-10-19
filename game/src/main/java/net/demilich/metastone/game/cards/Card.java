@@ -15,16 +15,13 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
-import org.apache.commons.lang3.RandomUtils;
 
 /**
  * The Card class is an entity that contains card information.
  * <p>
- * Cards are typically in the hand, deck or graveyard. They
- * are playable from the hand or as hero powers. They may be created by other cards. Like all entities, they have
- * attributes and are mutable.
+ * Cards are typically in the hand, deck or graveyard. They are playable from the hand or as hero powers. They may be
+ * created by other cards. Like all entities, they have attributes and are mutable.
  */
 public abstract class Card extends Entity {
 	private static final long serialVersionUID = 1L;
@@ -74,7 +71,7 @@ public abstract class Card extends Entity {
 		}
 
 		if (desc.manaCostModifier != null) {
-			manaCostModifier = desc.manaCostModifier.create();
+			manaCostModifier = desc.manaCostModifier.createInstance();
 		}
 
 		if (desc.passiveTrigger != null) {
@@ -88,8 +85,8 @@ public abstract class Card extends Entity {
 
 	/**
 	 * Clones a card's base fields, like name and description, and its current attributes. The entity ID and location
-	 * match the source object and are not cleared. {@link #getCopy()} is typically more appropriate choice
-	 * for when copies of cards are needed.
+	 * match the source object and are not cleared. {@link #getCopy()} is typically more appropriate choice for when
+	 * copies of cards are needed.
 	 *
 	 * @return An exact clone.
 	 */
@@ -199,20 +196,15 @@ public abstract class Card extends Entity {
 	 * Gets a copy of the card with some attributes like its attack or HP bonuses and mana cost modifiers removed. The
 	 * ID and owner is set to unassigned.
 	 * <p>
-	 * Typically you should use the {@link net.demilich.metastone.game.logic.GameLogic#receiveCard(int, Card)}
-	 * method in order to put a copy into e.g. the player's hand.
+	 * Typically you should use the {@link net.demilich.metastone.game.logic.GameLogic#receiveCard(int, Card)} method in
+	 * order to put a copy into e.g. the player's hand.
 	 * <p>
 	 * Take a look at its logic to see how to assign an ID and an owner to a card for other uses of copies. A copy can
-	 * become valid for play like this:
-	 * {@code
-	 * Card copiedCard = card.getCopy();
-	 * int owningPlayer = player.getId();
-	 * copiedCard.setId(getGameLogic().getIdFactory().generateId();
-	 * copiedCard.setOwner(owningPlayer);
+	 * become valid for play like this: {@code Card copiedCard = card.getCopy(); int owningPlayer = player.getId();
+	 * copiedCard.setId(getGameLogic().getIdFactory().generateId(); copiedCard.setOwner(owningPlayer);
 	 * <p>
 	 * // Add to an appropriate zone. For example, to add the card to the end of the owning player's deck...
-	 * context.getPlayer(owningPlayer).getDeck().add(copiedCard);
-	 * }
+	 * context.getPlayer(owningPlayer).getDeck().add(copiedCard); }
 	 *
 	 * @return A copy of the card with no ID or owner (and therefore no location).
 	 */
@@ -257,8 +249,8 @@ public abstract class Card extends Entity {
 	 * @param player  The {@link Player} whose point of view should be considered for the cost. This is almost always
 	 *                the owner.
 	 * @return The cost.
-	 * @see net.demilich.metastone.game.logic.GameLogic#getModifiedManaCost(Player, Card) for the best method to get
-	 * the cost of a card.
+	 * @see net.demilich.metastone.game.logic.GameLogic#getModifiedManaCost(Player, Card) for the best method to get the
+	 * cost of a card.
 	 */
 	public int getManaCost(GameContext context, Player player) {
 		int actualManaCost = getBaseManaCost();
@@ -308,8 +300,8 @@ public abstract class Card extends Entity {
 	}
 
 	/**
-	 * Collectible cards can be put into decks. Non-collectible cards are typically either "tokens," or cards that
-	 * are spawned by other cards, or narrative cards.
+	 * Collectible cards can be put into decks. Non-collectible cards are typically either "tokens," or cards that are
+	 * spawned by other cards, or narrative cards.
 	 * <p>
 	 * Even though tokens are almost always minions, effects like {@link net.demilich.metastone.game.spells.ReturnMinionToHandSpell}
 	 * can create a card that represents a minion.
@@ -407,7 +399,8 @@ public abstract class Card extends Entity {
 	/**
 	 * Create an action representing playing the card.
 	 *
-	 * @return An action that should be evaluated by {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)}.
+	 * @return An action that should be evaluated by {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int,
+	 * GameAction)}.
 	 */
 	@Suspendable
 	public abstract PlayCardAction play();
@@ -433,5 +426,10 @@ public abstract class Card extends Entity {
 	 */
 	public CardDesc getDesc() {
 		return desc;
+	}
+
+	@Override
+	public Card getSourceCard() {
+		return this;
 	}
 }

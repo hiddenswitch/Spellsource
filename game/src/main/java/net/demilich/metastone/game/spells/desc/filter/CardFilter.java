@@ -34,15 +34,7 @@ public class CardFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity) {
-		Card card = null;
-		if (entity instanceof Card) {
-			card = (Card) entity;
-		} else if (entity instanceof Actor) {
-			Actor actor = (Actor) entity;
-			card = actor.getSourceCard();
-		} else {
-			return false;
-		}
+		Card card = entity.getSourceCard();
 
 		CardType cardType = (CardType) desc.get(FilterArg.CARD_TYPE);
 		if (cardType != null && !card.getCardType().isCardType(cardType)) {

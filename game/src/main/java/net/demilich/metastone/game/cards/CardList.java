@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 
 /**
@@ -246,6 +248,18 @@ public interface CardList extends Iterable<Card> {
 	 * @return A {@link List} whose contents are the same objects as this instance.
 	 */
 	List<Card> toList();
+
+	/**
+	 * Gets a {@link CardList} of this instance's cards filtered by {@code filter}
+	 *
+	 * @param filter A predicate.
+	 * @return A new {@link CardList} filtered.
+	 */
+	default CardList filtered(Predicate<? super Entity> filter) {
+		CardList filteredCards = new CardArrayList();
+		toList().stream().filter(filter).forEach(filteredCards::addCard);
+		return filteredCards;
+	}
 
 	/**
 	 * Copies all the cards in this list and returns a new {@link CardList} (possibly of a different implementation)

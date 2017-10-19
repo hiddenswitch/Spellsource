@@ -138,7 +138,7 @@ public class ParseUtils {
 					entry = entry.getAsJsonObject().get("desc");
 				}
 				ValueProviderDesc valueProviderDesc = valueProviderParser.deserialize(entry, ValueProviderDesc.class, null);
-				return valueProviderDesc.create();
+				return valueProviderDesc.createInstance();
 			case ENTITY_FILTER: {
 				if (entry.getAsJsonObject().has("desc")) {
 					entry = entry.getAsJsonObject().get("desc");

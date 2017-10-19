@@ -115,8 +115,11 @@ public class TestBase {
 				CardSet.PROMO,
 				CardSet.REWARD,
 				CardSet.THE_GRAND_TOURNAMENT,
+				CardSet.JOURNEY_TO_UNGORO,
+				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
 				CardSet.THE_OLD_GODS
 		);
+
 		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(hero1, deckFormat), new TestBehaviour());
 		player1Config.setName("Player 1");
 		player1Config.setHeroCard(getHeroCardForClass(hero1));

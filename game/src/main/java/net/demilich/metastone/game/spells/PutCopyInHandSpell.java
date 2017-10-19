@@ -32,10 +32,8 @@ public class PutCopyInHandSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Minion minion = (Minion) target;
-
 		int amount = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
-		Card sourceCard = minion.getSourceCard();
+		Card sourceCard = target.getSourceCard();
 		for (int i = 0; i < amount; i++) {
 			context.getLogic().receiveCard(player.getId(), sourceCard.getCopy());
 		}
