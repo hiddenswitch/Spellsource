@@ -248,11 +248,13 @@ public class GameContext implements Cloneable, Serializable {
 		}
 
 		for (Map.Entry<Environment, Object> entry : getEnvironment().entrySet()) {
-			if (EnvironmentValue.class.isAssignableFrom(entry.getValue().getClass())) {
-				EnvironmentValue value = (EnvironmentValue) entry.getValue();
-				clone.getEnvironment().put(entry.getKey(), value.getCopy());
+			Object value1 = entry.getValue();
+			if (value1 == null
+					|| !EnvironmentValue.class.isAssignableFrom(value1.getClass())) {
+				clone.getEnvironment().put(entry.getKey(), value1);
 			} else {
-				clone.getEnvironment().put(entry.getKey(), entry.getValue());
+				EnvironmentValue value = (EnvironmentValue) value1;
+				clone.getEnvironment().put(entry.getKey(), value.getCopy());
 			}
 		}
 
