@@ -50,7 +50,7 @@ public class CastRandomSpellSpell extends Spell {
 		}
 		CardList filteredSpells = new CardArrayList();
 		for (Card spell : spells) {
-			if (filter == null || filter.matches(context, player, spell)) {
+			if (filter == null || filter.matches(context, player, spell, source)) {
 				filteredSpells.addCard(spell);
 			}
 		}

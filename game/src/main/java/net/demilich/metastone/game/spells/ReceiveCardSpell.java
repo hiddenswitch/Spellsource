@@ -26,7 +26,7 @@ public class ReceiveCardSpell extends Spell {
 
 			String replacementCard = (String) desc.get(SpellArg.CARD);
 			for (Card card : cards) {
-				if (cardFilter.matches(context, player, card)) {
+				if (cardFilter.matches(context, player, card, source)) {
 					result.addCard(card);
 				}
 			}

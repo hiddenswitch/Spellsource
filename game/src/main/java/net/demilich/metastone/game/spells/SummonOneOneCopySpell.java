@@ -33,7 +33,7 @@ public class SummonOneOneCopySpell extends Spell {
 				CardList allCards = cardSource.getCards(context, player);
 				relevantMinions = new CardArrayList();
 				for (Card card : allCards) {
-					if (card.getCardType().isCardType(CardType.MINION) && (cardFilter == null || cardFilter.matches(context, player, card))) {
+					if (card.getCardType().isCardType(CardType.MINION) && (cardFilter == null || cardFilter.matches(context, player, card, source))) {
 						relevantMinions.addCard(card);
 					}
 				}
@@ -41,7 +41,7 @@ public class SummonOneOneCopySpell extends Spell {
 				CardList allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
 				relevantMinions = new CardArrayList();
 				for (Card card : allMinions) {
-					if (cardFilter.matches(context, player, card)) {
+					if (cardFilter.matches(context, player, card, source)) {
 						relevantMinions.addCard(card);
 					}
 				}

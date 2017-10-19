@@ -75,7 +75,7 @@ public class DiscoverAction extends GameAction {
 		if (getEntityFilter() == null) {
 			return true;
 		}
-		return getEntityFilter().matches(context, player, entity);
+		return getEntityFilter().matches(context, player, entity, getSource(context));
 	}
 
 	@Override

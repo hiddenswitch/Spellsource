@@ -26,7 +26,7 @@ public class PlayedLastTurnValueProvider extends ValueProvider {
 		EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
 		for (String cardId : cardIds.keySet()) {
 			Entity entity = context.getCardById(cardId);
-			if (filter == null || filter.matches(context, player, entity)) {
+			if (filter == null || filter.matches(context, player, entity, host)) {
 				if (cardIds.get(cardId).containsKey(turn)) {
 					count += cardIds.get(cardId).get(turn);
 				}

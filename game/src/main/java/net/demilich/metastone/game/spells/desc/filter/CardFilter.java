@@ -6,11 +6,13 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
-import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.List;
 
 public class CardFilter extends EntityFilter {
 
@@ -33,7 +35,13 @@ public class CardFilter extends EntityFilter {
 	}
 
 	@Override
-	protected boolean test(GameContext context, Player player, Entity entity) {
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
+		EntityReference targetReference = (EntityReference) desc.get(FilterArg.TARGET);
+		List<Entity> entities = null;
+		if (targetReference != null) {
+			entities = context.resolveTarget(player, host, targetReference);
+		}
+
 		Card card = entity.getSourceCard();
 
 		CardType cardType = (CardType) desc.get(FilterArg.CARD_TYPE);
@@ -79,9 +87,14 @@ public class CardFilter extends EntityFilter {
 				return card.hasAttribute(attribute);
 			}
 
-			int targetValue = desc.getInt(FilterArg.VALUE);
-			int actualValue = card.getAttributeValue(attribute);
+			int targetValue;
+			if (entities == null) {
+				targetValue = desc.getInt(FilterArg.VALUE);
+			} else {
+				targetValue = desc.getValue(FilterArg.VALUE, context, player, entities.get(0), null, 0);
+			}
 
+			int actualValue = card.getAttributeValue(attribute);
 			return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
 		}
 

@@ -57,7 +57,7 @@ public class CardCostModifierSpell extends Spell {
 			List<Entity> cards = context.resolveTarget(player, source, (EntityReference) manaModifierDesc.get(CardCostModifierArg.TARGET));
 			List<Integer> cardIds = new ArrayList<Integer>();
 			for (Entity card : cards) {
-				if (cardFilter == null || cardFilter.matches(context, player, card)) {
+				if (cardFilter == null || cardFilter.matches(context, player, card, source)) {
 					cardIds.add(card.getId());
 				}
 			}

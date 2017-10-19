@@ -17,11 +17,14 @@ public class EntityCounter extends ValueProvider {
 	@Override
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
 		EntityReference source = desc.getSource();
+		if (source ==  null) {
+			source = host.getReference();
+		}
 		List<Entity> relevantEntities = context.resolveTarget(player, host, source);
 		int count = 0;
 		EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
 		for (Entity entity : relevantEntities) {
-			if (filter == null || filter.matches(context, player, entity)) {
+			if (filter == null || filter.matches(context, player, entity, context.resolveSingleTarget(source))) {
 				count++;
 			}
 		}

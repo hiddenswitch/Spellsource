@@ -13,7 +13,7 @@ public class RaceFilter extends EntityFilter {
 	}
 
 	@Override
-	protected boolean test(GameContext context, Player player, Entity entity) {
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		Race race = (Race) desc.get(FilterArg.RACE);
 		return entity.getAttribute(Attribute.RACE) == race;
 	}

@@ -26,7 +26,7 @@ public abstract class EntityFilter implements Serializable {
 		return desc.containsKey(arg);
 	}
 
-	public boolean matches(GameContext context, Player player, Entity entity) {
+	public boolean matches(GameContext context, Player player, Entity entity, Entity host) {
 		boolean invert = desc.getBool(FilterArg.INVERT);
 		TargetPlayer targetPlayer = (TargetPlayer) desc.get(FilterArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
@@ -40,7 +40,7 @@ public abstract class EntityFilter implements Serializable {
 			case BOTH:
 				boolean test = false;
 				for (Player selectedPlayer : context.getPlayers()) {
-					test |= (this.test(context, selectedPlayer, entity) != invert);
+					test |= (this.test(context, selectedPlayer, entity, host) != invert);
 				}
 				return test;
 			case INACTIVE:
@@ -57,10 +57,10 @@ public abstract class EntityFilter implements Serializable {
 				providingPlayer = player;
 				break;
 		}
-		return this.test(context, providingPlayer, entity) != invert;
+		return this.test(context, providingPlayer, entity, host) != invert;
 	}
 
-	protected abstract boolean test(GameContext context, Player player, Entity entity);
+	protected abstract boolean test(GameContext context, Player player, Entity entity, Entity host);
 
 	@Override
 	public boolean equals(Object other) {

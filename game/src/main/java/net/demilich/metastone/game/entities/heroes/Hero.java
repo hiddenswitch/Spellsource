@@ -135,7 +135,7 @@ public class Hero extends Actor {
 		return heroPowerZone;
 	}
 
-	public EntityZone getWeaponZone() {
+	public EntityZone<Weapon> getWeaponZone() {
 		return weaponZone;
 	}
 }

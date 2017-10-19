@@ -42,7 +42,7 @@ public class DiscoverFilteredCardSpell extends Spell {
 			for (EntityFilter filter : cardFilters) {
 				CardList result = new CardArrayList();
 				for (Card card : cards) {
-					if (filter == null || filter.matches(context, player, card)) {
+					if (filter == null || filter.matches(context, player, card, source)) {
 						result.addCard(card);
 					}
 				}
@@ -54,7 +54,7 @@ public class DiscoverFilteredCardSpell extends Spell {
 		} else {
 			CardList result = new CardArrayList();
 			for (Card card : cards) {
-				if (cardFilter == null || cardFilter.matches(context, player, card)) {
+				if (cardFilter == null || cardFilter.matches(context, player, card, source)) {
 					result.addCard(card);
 				}
 			}

@@ -31,7 +31,7 @@ public class FromDeckToHandSpell extends Spell {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		CardList relevantCards = null;
 		if (cardFilter != null) {
-			relevantCards = SpellUtils.getCards(player.getDeck(), card -> cardFilter.matches(context, player, card));
+			relevantCards = SpellUtils.getCards(player.getDeck(), card -> cardFilter.matches(context, player, card, source));
 		} else {
 			relevantCards = SpellUtils.getCards(player.getDeck(), null);
 		}

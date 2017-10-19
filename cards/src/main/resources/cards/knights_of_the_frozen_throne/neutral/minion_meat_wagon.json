@@ -1,0 +1,32 @@
+{
+  "name": "Meat Wagon",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "Deathrattle: Summon a minion from your deck with less Attack than this minion.",
+  "deathrattle": {
+    "class": "SummonRandomMinionFilteredSpell",
+    "targetPlayer": "SELF",
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "attribute": "ATTACK",
+      "operation": "LESS",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "ATTACK"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,56 @@
+{
+  "name": "Furnacefire Colossus",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "Battlecry: Discard all weapons from your hand and gain their stats.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_HAND",
+            "operation": "ADD",
+            "attribute": "ATTACK",
+            "filter": {
+              "class": "CardFilter",
+              "cardType": "WEAPON"
+            }
+          },
+          "hpBonus": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_HAND",
+            "operation": "ADD",
+            "attribute": "HP",
+            "filter": {
+              "class": "CardFilter",
+              "cardType": "WEAPON"
+            }
+          }
+        },
+        {
+          "class": "DiscardSpell",
+          "value": -1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "WEAPON"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

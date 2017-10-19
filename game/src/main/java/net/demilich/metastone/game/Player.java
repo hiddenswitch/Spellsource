@@ -3,6 +3,7 @@ package net.demilich.metastone.game;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
@@ -14,6 +15,7 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -323,7 +325,7 @@ public class Player extends Entity implements Serializable {
 		return getHero().getHeroPowerZone();
 	}
 
-	public EntityZone getWeaponZone() {
+	public EntityZone<Weapon> getWeaponZone() {
 		return getHero().getWeaponZone();
 	}
 
@@ -347,5 +349,9 @@ public class Player extends Entity implements Serializable {
 	@Override
 	public Card getSourceCard() {
 		return getHero().getSourceCard();
+	}
+
+	public Stream<? extends Actor> getActors() {
+		return Stream.concat(Stream.concat(getHeroZone().stream(), getMinions().stream()), getWeaponZone().stream());
 	}
 }

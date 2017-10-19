@@ -1,0 +1,16 @@
+{
+  "name": "Drakkari Enchanter",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "Your end of turn effects trigger twice.",
+  "attributes": {
+    "DOUBLE_END_TURN_TRIGGERS": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

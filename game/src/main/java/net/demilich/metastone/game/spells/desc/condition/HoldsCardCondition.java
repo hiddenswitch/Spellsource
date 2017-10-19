@@ -16,7 +16,7 @@ public class HoldsCardCondition extends Condition {
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(ConditionArg.CARD_FILTER);
 		for (Card card : player.getHand()) {
-			if (cardFilter == null || cardFilter.matches(context, player, card)) {
+			if (cardFilter == null || cardFilter.matches(context, player, card, source)) {
 				return true;
 			}
 		}

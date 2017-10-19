@@ -341,7 +341,7 @@ public class SpellUtils {
 		}
 		List<Entity> validTargets = new ArrayList<>();
 		for (Entity entity : allTargets) {
-			if (filter.matches(context, player, entity)) {
+			if (filter.matches(context, player, entity, null)) {
 				validTargets.add(entity);
 			}
 		}

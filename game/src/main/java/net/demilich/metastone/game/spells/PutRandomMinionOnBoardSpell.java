@@ -24,18 +24,18 @@ public class PutRandomMinionOnBoardSpell extends Spell {
 		}
 		int numberToSummon = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < numberToSummon; i++) {
-			putRandomMinionFromDeckOnBoard(context, player, cardFilter, cardLocation);
+			putRandomMinionFromDeckOnBoard(context, player, cardFilter, cardLocation, source);
 		}
 	}
 
 	@Suspendable
-	private void putRandomMinionFromDeckOnBoard(GameContext context, Player player, EntityFilter cardFilter, Zones cardLocation) {
+	private void putRandomMinionFromDeckOnBoard(GameContext context, Player player, EntityFilter cardFilter, Zones cardLocation, Entity source) {
 		MinionCard minionCard = null;
 		CardList collection = cardLocation == Zones.HAND ? player.getHand() : player.getDeck();
 		if (cardFilter == null) {
 			minionCard = (MinionCard) collection.getRandomOfType(CardType.MINION);
 		} else {
-			minionCard = (MinionCard) SpellUtils.getRandomCard(collection, card -> cardFilter.matches(context, player, card));
+			minionCard = (MinionCard) SpellUtils.getRandomCard(collection, card -> cardFilter.matches(context, player, card, source));
 		}
 
 		if (minionCard == null) {
@@ -45,7 +45,7 @@ public class PutRandomMinionOnBoardSpell extends Spell {
 		// we need to remove the card temporarily here, because there are card interactions like Starving Buzzard + Desert Camel
 		// which could result in the card being drawn while a minion is summoned
 		if (cardLocation == Zones.DECK) {
-			player.getDeck().move(minionCard, player.getSetAsideZone());;
+			player.getDeck().move(minionCard, player.getSetAsideZone());
 		}
 
 		boolean summonSuccess = context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false);

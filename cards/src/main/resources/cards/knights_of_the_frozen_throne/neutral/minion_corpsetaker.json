@@ -1,0 +1,92 @@
+{
+  "name": "Corpsetaker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "Battlecry: Gain Taunt if your deck has a Taunt minion. Repeat for Divine Shield, Lifesteal, Windfury.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "spell": {
+            "class": "AddAttributeSpell",
+            "attribute": "TAUNT",
+            "target": "SELF"
+          },
+          "condition": {
+            "class": "DeckContainsCondition",
+            "targetPlayer": "SELF",
+            "cardFilter": {
+              "class": "AttributeFilter",
+              "attribute": "TAUNT",
+              "operation": "HAS"
+            }
+          }
+        },
+        {
+          "class": "ConditionalSpell",
+          "spell": {
+            "class": "AddAttributeSpell",
+            "attribute": "DIVINE_SHIELD",
+            "target": "SELF"
+          },
+          "condition": {
+            "class": "DeckContainsCondition",
+            "targetPlayer": "SELF",
+            "cardFilter": {
+              "class": "AttributeFilter",
+              "attribute": "DIVINE_SHIELD",
+              "operation": "HAS"
+            }
+          }
+        },
+        {
+          "class": "ConditionalSpell",
+          "spell": {
+            "class": "AddAttributeSpell",
+            "attribute": "LIFESTEAL",
+            "target": "SELF"
+          },
+          "condition": {
+            "class": "DeckContainsCondition",
+            "targetPlayer": "SELF",
+            "cardFilter": {
+              "class": "AttributeFilter",
+              "attribute": "LIFESTEAL",
+              "operation": "HAS"
+            }
+          }
+        },
+        {
+          "class": "ConditionalSpell",
+          "spell": {
+            "class": "AddAttributeSpell",
+            "attribute": "WINDFURY",
+            "target": "SELF"
+          },
+          "condition": {
+            "class": "DeckContainsCondition",
+            "targetPlayer": "SELF",
+            "cardFilter": {
+              "class": "AttributeFilter",
+              "attribute": "WINDFURY",
+              "operation": "HAS"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
