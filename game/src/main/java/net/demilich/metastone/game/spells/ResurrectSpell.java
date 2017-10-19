@@ -30,10 +30,10 @@ public class ResurrectSpell extends Spell {
 			}
 		}
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
-		for (int i=0; i < count; i++) {
+		for (int i = 0; i < count; i++) {
 			if (deadMinions.isEmpty()) {
 				return;
-		}
+			}
 			Minion resurrectedMinion = deadMinions.get(context.getLogic().random(deadMinions.size()));
 			MinionCard minionCard = (MinionCard) resurrectedMinion.getSourceCard();
 			context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false);

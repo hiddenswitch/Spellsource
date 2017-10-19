@@ -103,8 +103,11 @@ public class GameLogic implements Cloneable, Serializable {
 	public static final int MAX_DECK_SIZE = 60;
 	/**
 	 * The maximum number of turns until a game is forced into a draw.
+	 * <p>
+	 * If both heroes take measures to survive for this long, the game ends in an unconditional draw at the start of the
+	 * 90th turn, even if both players are Immune.
 	 */
-	public static final int TURN_LIMIT = 100;
+	public static final int TURN_LIMIT = 90;
 	/**
 	 * The number of attacks gained by {@link Attribute#WINDFURY}.
 	 *
@@ -1024,6 +1027,32 @@ public class GameLogic implements Cloneable, Serializable {
 	public Card drawCard(int playerId, Entity source) {
 		Player player = context.getPlayer(playerId);
 		CardList deck = player.getDeck();
+		if (checkAndDealFatigue(player)) {
+			return null;
+		}
+
+		Card card = deck.getRandom();
+		return drawCard(playerId, card, source);
+	}
+
+	/**
+	 * Checks if the player's deck is empty. If it is, increments the fatigue amount and deals fatigue damange.
+	 * <p>
+	 * Fatigue is a game mechanic that deals increasing damage to players who have already drawn all of the cards in
+	 * their deck, whenever they attempt to draw another card.
+	 * <p>
+	 * Fatigue deals 1 damage to the hero, plus 1 damage for each time Fatigue has already dealt damage to the player.
+	 * Fatigue therefore deals damage cumulatively, steadily increasing in power each time it deals damage.
+	 * <p>
+	 * If both heroes take measures to survive for this long, the game ends in an unconditional draw at the start of the
+	 * 90th turn, even if both players are Immune.
+	 *
+	 * @param player The {@link Player}  whose fatigue should be checked and dealt to.
+	 * @return {@code true} if fatigue damage was dealt.
+	 */
+	@Suspendable
+	public boolean checkAndDealFatigue(Player player) {
+		CardList deck = player.getDeck();
 		if (deck.isEmpty()) {
 			Hero hero = player.getHero();
 			int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
@@ -1032,11 +1061,9 @@ public class GameLogic implements Cloneable, Serializable {
 			damage(player, hero, fatigue, hero);
 			log("{}'s deck is empty, taking {} fatigue damage!", player.getName(), fatigue);
 			player.getStatistics().fatigueDamage(fatigue);
-			return null;
+			return true;
 		}
-
-		Card card = deck.getRandom();
-		return drawCard(playerId, card, source);
+		return false;
 	}
 
 	/**

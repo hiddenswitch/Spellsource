@@ -79,7 +79,12 @@ public enum Environment {
 	/**
 	 * This implements Living Mana and Earthen Scales.
 	 */
-	SPELL_VALUE_STACK;
+	SPELL_VALUE_STACK,
+	/**
+	 * This implements Frostmourne, keeping track of which particular entities a particular Frostmourne has
+	 * destroyed.
+	 */
+	FROSTMOURNE_DESTROY_LIST;
 
 	public boolean customClone() {
 		return (this == SUMMON_REFERENCE_STACK ||

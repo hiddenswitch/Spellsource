@@ -1,0 +1,34 @@
+{
+  "name": "Frostmourne",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "damage": 5,
+  "durability": 3,
+  "heroClass": "DEATH_KNIGHT",
+  "rarity": "FREE",
+  "description": "Deathrattle: Summon every minion killed by this weapon.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourcePlayer": "SELF",
+      "sourceEntityType": "HERO",
+      "targetEntityType": "MINION",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      }
+    },
+    "spell": {
+      "class": "custom.FrostmourneSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "deathrattle": {
+    "class": "custom.FrostmourneResurrectSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

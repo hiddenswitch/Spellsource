@@ -6,6 +6,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.HeroPowerAction;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.ChooseBattlecryHeroCard;
@@ -15,6 +16,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -30,6 +32,35 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
+	@Test
+	public void testFrostmourne() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+
+		playCard(context, player, CardCatalogue.getCardById("weapon_frostmourne"));
+		Minion leeroyJenkins = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_leeroy_jenkins"));
+
+		Minion bloodfenRaptor = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
+		Minion waterElemental = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_water_elemental"));
+
+		PhysicalAttackAction heroAttack = new PhysicalAttackAction(player.getHero().getReference());
+		heroAttack.setTarget(bloodfenRaptor);
+
+		Weapon frostmourne = player.getHero().getWeapon();
+		frostmourne.setAttribute(Attribute.HP, 1);
+
+		PhysicalAttackAction leeroyAttack = new PhysicalAttackAction(leeroyJenkins.getReference());
+		leeroyAttack.setTarget(waterElemental);
+		context.getLogic().performGameAction(player.getId(), leeroyAttack);
+		context.getLogic().performGameAction(player.getId(), heroAttack);
+
+		Assert.assertEquals(player.getMinions().size(), 1);
+		Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");
+	}
+
 	@Test
 	public void testSimulacrum() {
 		{

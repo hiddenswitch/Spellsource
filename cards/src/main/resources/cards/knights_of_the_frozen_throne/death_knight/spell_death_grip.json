@@ -1,0 +1,23 @@
+{
+  "name": "Death Grip",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DEATH_KNIGHT",
+  "rarity": "FREE",
+  "description": "Steal a minion from your opponent's deck and add it to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "StealCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

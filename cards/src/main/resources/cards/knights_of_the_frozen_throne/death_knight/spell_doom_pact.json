@@ -1,0 +1,35 @@
+{
+  "name": "Doom Pact",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DEATH_KNIGHT",
+  "rarity": "FREE",
+  "description": "Destroy all minions. Remove the top card from your deck for each minion destroyed.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ALL_MINIONS"
+    },
+    "spells": [
+      {
+        "class": "DestroySpell",
+        "target": "ALL_MINIONS"
+      },
+      {
+        "class": "RemoveCardAndDoSomethingSpell",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        },
+        "spell": {
+          "class": "NullSpell"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

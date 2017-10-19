@@ -1,0 +1,33 @@
+{
+  "name": "Obliterate",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DEATH_KNIGHT",
+  "rarity": "FREE",
+  "description": "Destroy a minion. Your hero takes damage equal to its Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    },
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "targetPlayer": "SELF",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

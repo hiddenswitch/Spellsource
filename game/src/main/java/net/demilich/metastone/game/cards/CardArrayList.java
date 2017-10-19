@@ -22,6 +22,11 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 	public CardArrayList() {
 	}
 
+	@Override
+	public boolean add(Card card) {
+		return cards.add(card);
+	}
+
 	/**
 	 * Creates this instance from an existing list of cards.
 	 *

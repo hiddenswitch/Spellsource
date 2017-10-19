@@ -1,0 +1,37 @@
+{
+  "name": "Army of the Dead",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DEATH_KNIGHT",
+  "rarity": "FREE",
+  "description": "Remove the top 5 cards of your deck. Summon any minions removed.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RemoveCardAndDoSomethingSpell",
+    "value": 5,
+    "spell": {
+      "class": "ConditionalSpell",
+      "spell": {
+        "class": "PutMinionOnBoardSpell"
+      },
+      "condition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "cardType": "MINION"
+          },
+          {
+            "class": "MinionCountCondition",
+            "targetPlayer": "SELF",
+            "operation": "LESS",
+            "value": 7
+          }
+        ]
+      }
+    }
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
