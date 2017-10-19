@@ -17,8 +17,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
 
-import java.util.stream.Collectors;
-
 public class CopyCardSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(CopyCardSpell.class);
@@ -67,9 +65,16 @@ public class CopyCardSpell extends Spell {
 			if (sourceCollection.isEmpty()) {
 				return;
 			}
-			Card clone = sourceCollection.getRandom().getCopy();
+			Card random = sourceCollection.getRandom();
+
+			peek(random, context, player);
+
+			Card clone = random.getCopy();
 			context.getLogic().receiveCard(player.getId(), clone);
 		}
+	}
+
+	protected void peek(final Card random, GameContext context, Player player) {
 	}
 
 	@Deprecated

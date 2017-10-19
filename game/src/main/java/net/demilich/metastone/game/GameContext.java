@@ -242,28 +242,20 @@ public class GameContext implements Cloneable, Serializable {
 		clone.setTurnState(getTurnState());
 		clone.setWinner(logicClone.getWinner(player1Clone, player2Clone));
 		clone.getCardCostModifiers().clear();
+
 		for (CardCostModifier cardCostModifier : getCardCostModifiers()) {
 			clone.getCardCostModifiers().add(cardCostModifier.clone());
 		}
-		Stack<Integer> damageStack = new Stack<Integer>();
-		damageStack.addAll(getDamageStack());
-		clone.getEnvironment().put(Environment.DAMAGE_STACK, damageStack);
-		Stack<EntityReference> summonReferenceStack = new Stack<EntityReference>();
-		summonReferenceStack.addAll(getSummonReferenceStack());
-		clone.getEnvironment().put(Environment.SUMMON_REFERENCE_STACK, summonReferenceStack);
-		Stack<EntityReference> eventTargetReferenceStack = new Stack<EntityReference>();
-		eventTargetReferenceStack.addAll(getEventTargetStack());
-		clone.getEnvironment().put(Environment.EVENT_TARGET_REFERENCE_STACK, eventTargetReferenceStack);
-		Deque<Integer> spellValueStack = new ArrayDeque<>();
-		spellValueStack.addAll(getSpellValueStack());
-		clone.getEnvironment().put(Environment.SPELL_VALUE_STACK, spellValueStack);
 
-
-		for (Environment key : getEnvironment().keySet()) {
-			if (!key.customClone()) {
-				clone.getEnvironment().put(key, getEnvironment().get(key));
+		for (Map.Entry<Environment, Object> entry : getEnvironment().entrySet()) {
+			if (EnvironmentValue.class.isAssignableFrom(entry.getValue().getClass())) {
+				EnvironmentValue value = (EnvironmentValue) entry.getValue();
+				clone.getEnvironment().put(entry.getKey(), value.getCopy());
+			} else {
+				clone.getEnvironment().put(entry.getKey(), entry.getValue());
 			}
 		}
+
 		return clone;
 	}
 
@@ -500,7 +492,7 @@ public class GameContext implements Cloneable, Serializable {
 	@SuppressWarnings("unchecked")
 	public Stack<Integer> getDamageStack() {
 		if (!getEnvironment().containsKey(Environment.DAMAGE_STACK)) {
-			getEnvironment().put(Environment.DAMAGE_STACK, new Stack<Integer>());
+			getEnvironment().put(Environment.DAMAGE_STACK, new EnvironmentStack<Integer>());
 		}
 		return (Stack<Integer>) getEnvironment().get(Environment.DAMAGE_STACK);
 	}
@@ -546,7 +538,7 @@ public class GameContext implements Cloneable, Serializable {
 	@SuppressWarnings("unchecked")
 	public Stack<EntityReference> getEventTargetStack() {
 		if (!getEnvironment().containsKey(Environment.EVENT_TARGET_REFERENCE_STACK)) {
-			getEnvironment().put(Environment.EVENT_TARGET_REFERENCE_STACK, new Stack<EntityReference>());
+			getEnvironment().put(Environment.EVENT_TARGET_REFERENCE_STACK, new EnvironmentStack<EntityReference>());
 		}
 		return (Stack<EntityReference>) getEnvironment().get(Environment.EVENT_TARGET_REFERENCE_STACK);
 	}
@@ -730,7 +722,7 @@ public class GameContext implements Cloneable, Serializable {
 	@SuppressWarnings("unchecked")
 	public Stack<EntityReference> getSummonReferenceStack() {
 		if (!getEnvironment().containsKey(Environment.SUMMON_REFERENCE_STACK)) {
-			getEnvironment().put(Environment.SUMMON_REFERENCE_STACK, new Stack<EntityReference>());
+			getEnvironment().put(Environment.SUMMON_REFERENCE_STACK, new EnvironmentStack<EntityReference>());
 		}
 		return (Stack<EntityReference>) getEnvironment().get(Environment.SUMMON_REFERENCE_STACK);
 	}
