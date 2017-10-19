@@ -19,7 +19,7 @@ public class ValueProviderDesc extends Desc<ValueProviderArg> {
 		super(arguments);
 	}
 
-	public ValueProvider create() {
+	public ValueProvider createInstance() {
 		Class<? extends ValueProvider> valueProviderClass = getValueProviderClass();
 		try {
 			return valueProviderClass.getConstructor(ValueProviderDesc.class).newInstance(this);

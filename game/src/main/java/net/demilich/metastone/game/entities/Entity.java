@@ -37,7 +37,7 @@ import net.demilich.metastone.game.utils.AttributeMap;
  * net.demilich.metastone.game.spells.trigger.secrets.Secret} entities should have their description or card IDs visible
  * to their opponents.
  */
-public abstract class Entity extends CustomCloneable implements Serializable {
+public abstract class Entity extends CustomCloneable implements Serializable, ICardSource {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The value for the {@link #ownerIndex} when no owner has been assigned.

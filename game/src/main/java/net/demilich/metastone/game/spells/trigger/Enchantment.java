@@ -27,7 +27,7 @@ public class Enchantment extends Entity implements Trigger {
 	private boolean persistentOwner;
 	private int turnDelay;
 
-	public Enchantment(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
+	protected Enchantment(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
 		this.primaryTrigger = primaryTrigger;
 		this.secondaryTrigger = secondaryTrigger;
 		this.spell = spell;

@@ -1,0 +1,26 @@
+{
+  "name": "Icy Touch",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "MAGE",
+  "rarity": "FREE",
+  "description": "Deal 1 damage. If this kills a minion, summon a Water Elemental.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 1
+    },
+    "spell2": {
+      "class": "SummonSpell",
+      "card": "minion_water_elemental"
+    },
+    "condition": {
+      "class": "IsDeadCondition"
+    }
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

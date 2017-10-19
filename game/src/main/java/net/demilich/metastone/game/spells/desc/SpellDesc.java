@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc;
 
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.logic.CustomCloneable;
+import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -122,5 +123,32 @@ public class SpellDesc extends Desc<SpellArg> {
 		Stream<SpellDesc> unitSpells = Stream.concat(units.stream(), units.stream().flatMap(SpellDesc::subSpells));
 
 		return Stream.concat(spells, unitSpells);
+	}
+
+	/**
+	 * Joins a spell description with another spell using a {@link MetaSpell}.
+	 *
+	 * @param masterSpell The spell from which to inherit the {@link EntityFilter}, {@link TargetPlayer}, {@link
+	 *                    SpellArg#TARGET} and {@link SpellArg#RANDOM_TARGET} attributes to put into the {@link
+	 *                    MetaSpell}.
+	 * @param childSpells The spells that will occur after the {@code masterSpell} is casted.
+	 * @return A new {@link SpellDesc}.
+	 */
+	public static SpellDesc join(SpellDesc masterSpell, SpellDesc... childSpells) {
+		SpellDesc[] descs = new SpellDesc[childSpells.length + 1];
+		descs[0] = masterSpell;
+		System.arraycopy(childSpells, 0, descs, 1, childSpells.length);
+		SpellDesc newDesc = join(masterSpell.getTarget(), masterSpell.getBool(SpellArg.RANDOM_TARGET), descs);
+		if (masterSpell.getEntityFilter() != null) {
+			newDesc.put(SpellArg.FILTER, masterSpell.getEntityFilter());
+		}
+		if (masterSpell.getTargetPlayer() != null) {
+			newDesc.put(SpellArg.TARGET_PLAYER, masterSpell.getTargetPlayer());
+		}
+		return newDesc;
+	}
+
+	private static SpellDesc join(EntityReference target, boolean randomTarget, SpellDesc... descs) {
+		return MetaSpell.create(target, randomTarget, descs);
 	}
 }

@@ -20,12 +20,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
 
 public class CreateZombeastSpell extends Spell {
 	public static SpellDesc create() {
@@ -60,7 +56,7 @@ public class CreateZombeastSpell extends Spell {
 		};
 		for (int i = 0; i < 2; i++) {
 			List<MinionCard> minionCards = cards.get(i);
-			minionCards.stream().filter(new Selector(minionCards.size(), 3, context.getLogic().getRandom()))
+			minionCards.stream().filter(new RandomSubsetSelector(minionCards.size(), 3, context.getLogic().getRandom()))
 					.forEach(options[i]::addCard);
 		}
 
@@ -68,16 +64,16 @@ public class CreateZombeastSpell extends Spell {
 		// Eyeroll emoji.
 		nullSpell.put(SpellArg.SPELL, new SpellDesc(SpellDesc.build(NullSpell.class)));
 
-		List<DiscoverAction> chosen =
-				IntStream.range(0, 2).mapToObj(i -> SpellUtils.discoverCard(context, player, nullSpell, options[i]))
-						.collect(toList());
-
+		DiscoverAction[] chosen = new DiscoverAction[2];
+		for (int i = 0; i < 2; i++) {
+			chosen[i] = SpellUtils.discoverCard(context, player, nullSpell, options[i]);
+		}
 
 		// According to https://us.battle.net/forums/en/hearthstone/topic/20759196602
 		// Retrieve the first beast chosen, then apply the stats from the second beast as a buff
 		// Except for the attack and health, that seems to just be baked in.
-		MinionCard card = (MinionCard) chosen.get(0).getCard().getCopy();
-		MinionCard other = (MinionCard) chosen.get(1).getCard().getCopy();
+		MinionCard card = (MinionCard) chosen[0].getCard().getCopy();
+		MinionCard other = (MinionCard) chosen[1].getCard().getCopy();
 		card.setName("Zombeast");
 		card.setDescription(card.getDescription() + "\n" + other.getDescription());
 		card.getAttributes().put(Attribute.BASE_ATTACK, card.getAttack() + other.getAttack());
@@ -97,31 +93,4 @@ public class CreateZombeastSpell extends Spell {
 		context.getLogic().receiveCard(player.getId(), card);
 	}
 
-	/**
-	 * A stateful predicate that, given a total number of items and the number to choose, will return 'true' the chosen
-	 * number of times distributed randomly across the total number of calls to its test() method.
-	 */
-	static class Selector implements Predicate<Object> {
-		int total;  // total number items remaining
-		int remain; // number of items remaining to select
-		Random random;
-
-		Selector(int total, int remain, Random random) {
-
-			this.total = total;
-			this.remain = remain;
-			this.random = random;
-		}
-
-		@Override
-		public synchronized boolean test(Object o) {
-			assert total > 0;
-			if (random.nextInt(total--) < remain) {
-				remain--;
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
 }

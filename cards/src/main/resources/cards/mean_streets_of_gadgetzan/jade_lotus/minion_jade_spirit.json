@@ -31,7 +31,7 @@
 			},
 			"mana": {
 				"class": "AlgebraicValueProvider",
-				"operation": "MAXIMUM",
+				"operation": "MINIMUM",
 				"value1": {
 					"class": "AttributeValueProvider",
 					"target": "FRIENDLY_PLAYER",

@@ -19,7 +19,7 @@
 					"class": "ComparisonCondition",
 					"operation": "GREATER_OR_EQUAL",
 					"value1": {
-						"class": "HighestAttributeValueProvider",
+						"class": "ReduceValueProvider",
 						"target": "FRIENDLY_MINIONS",
 						"attribute": "ATTACK",
 						"filter": {
@@ -33,7 +33,7 @@
 					"class": "ComparisonCondition",
 					"operation": "GREATER_OR_EQUAL",
 					"value1": {
-						"class": "HighestAttributeValueProvider",
+						"class": "ReduceValueProvider",
 						"target": "FRIENDLY_HAND",
 						"attribute": "ATTACK",
 						"filter": {

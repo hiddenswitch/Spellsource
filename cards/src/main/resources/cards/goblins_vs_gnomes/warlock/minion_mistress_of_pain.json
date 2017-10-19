@@ -1,29 +1,17 @@
 {
-	"name": "Mistress of Pain",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 4,
-	"heroClass": "WARLOCK",
-	"rarity": "RARE",
-	"race": "DEMON",
-	"description": "Whenever this minion deals damage, restore that much Health to your hero.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "DamageCausedTrigger",
-			"hostTargetType": "IGNORE_OTHER_SOURCES"
-		},
-		"spell": {
-			"class": "HealSpell",
-			"target": "FRIENDLY_HERO",
-			"value": {
-				"class": "AttributeValueProvider",
-				"target": "EVENT_TARGET",
-				"attribute": "LAST_HIT"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Mistress of Pain",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "heroClass": "WARLOCK",
+  "rarity": "RARE",
+  "race": "DEMON",
+  "description": "Whenever this minion deals damage, restore that much Health to your hero.",
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

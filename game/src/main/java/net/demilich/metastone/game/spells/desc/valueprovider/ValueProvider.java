@@ -61,7 +61,7 @@ public abstract class ValueProvider implements Serializable {
 		@Override
 		public ValueProvider deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 			ValueProviderDesc desc = context.deserialize(json.getAsJsonObject().getAsJsonObject("desc"), ValueProviderDesc.class);
-			return desc == null ? null : desc.create();
+			return desc == null ? null : desc.createInstance();
 		}
 
 		@Override

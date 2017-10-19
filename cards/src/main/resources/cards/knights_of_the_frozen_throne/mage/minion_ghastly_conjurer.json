@@ -1,0 +1,24 @@
+{
+  "name": "Ghastly Conjurer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "heroClass": "MAGE",
+  "rarity": "RARE",
+  "description": "Battlecry: Add a Mirror Image to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF",
+      "card": "spell_mirror_image"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

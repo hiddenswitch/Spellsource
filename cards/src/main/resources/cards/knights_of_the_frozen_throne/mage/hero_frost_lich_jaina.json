@@ -1,0 +1,53 @@
+{
+  "name": "Frost Lich Jaina",
+  "baseManaCost": 9,
+  "heroPower": "hero_power_icy_touch",
+  "type": "HERO",
+  "heroClass": "MAGE",
+  "rarity": "LEGENDARY",
+  "attributes": {
+    "MAX_HP": 30,
+    "ARMOR": 5
+  },
+  "description": "Battlecry: Summon a 3/6 Water Elemental. Your Elementals have Lifesteal for the rest of the game.",
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1,
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "card": "minion_water_elemental"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "FRIENDLY_MINIONS",
+          "filter": {
+            "class": "RaceFilter",
+            "race": "ELEMENTAL"
+          },
+          "attribute": "LIFESTEAL"
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "AfterMinionSummonedTrigger",
+              "race": "ELEMENTAL",
+              "targetPlayer": "SELF"
+            },
+            "spell": {
+              "class": "AddAttributeSpell",
+              "target": "EVENT_TARGET",
+              "attribute": "LIFESTEAL"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

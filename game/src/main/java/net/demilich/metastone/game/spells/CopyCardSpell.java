@@ -1,6 +1,8 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +16,8 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
+
+import java.util.stream.Collectors;
 
 public class CopyCardSpell extends Spell {
 
@@ -37,20 +41,26 @@ public class CopyCardSpell extends Spell {
 			return;
 		}
 
-		Zones cardLocation = (Zones) desc.get(SpellArg.CARD_LOCATION);
-
-		Player opponent = context.getOpponent(player);
 		CardList sourceCollection = null;
-		switch (cardLocation) {
-		case DECK:
-			sourceCollection = opponent.getDeck();
-			break;
-		case HAND:
-			sourceCollection = opponent.getHand();
-			break;
-		default:
-			logger.error("Trying to copy cards from invalid cardLocation {}", cardLocation);
-			break;
+		Zones cardLocation = (Zones) desc.get(SpellArg.CARD_LOCATION);
+		if (cardLocation != null) {
+			sourceCollection = getCardsFromLocation(context, player, cardLocation);
+		}
+
+		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
+		if (cardSource != null) {
+			sourceCollection = cardSource.getCards(context, player);
+		}
+
+		if (sourceCollection == null) {
+			logger.error("Trying to access a null source collection.");
+			return;
+		}
+
+		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
+
+		if (filter != null) {
+			sourceCollection = sourceCollection.filtered(card -> filter.matches(context, player, card));
 		}
 
 		for (int i = 0; i < numberOfCardsToCopy; i++) {
@@ -59,6 +69,24 @@ public class CopyCardSpell extends Spell {
 			}
 			Card clone = sourceCollection.getRandom().getCopy();
 			context.getLogic().receiveCard(player.getId(), clone);
+		}
+	}
+
+	@Deprecated
+	private CardList getCardsFromLocation(GameContext context, Player player, Zones cardLocation) {
+		if (cardLocation == null) {
+			return null;
+		}
+		// By default, CopyCardSpell actually uses the OPPONENT'S card locations.
+		Player targetPlayer = context.getOpponent(player);
+		switch (cardLocation) {
+			case DECK:
+				return targetPlayer.getDeck();
+			case HAND:
+				return targetPlayer.getHand();
+			default:
+				logger.error("Trying to copy cards from invalid cardLocation {}", cardLocation);
+				return null;
 		}
 	}
 

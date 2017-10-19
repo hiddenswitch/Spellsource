@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
@@ -12,6 +13,12 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class AttributeValueProvider extends ValueProvider {
+	public static ValueProviderDesc create(Attribute attribute, EntityReference target) {
+		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(AttributeValueProvider.class);
+		arguments.put(ValueProviderArg.ATTRIBUTE, attribute);
+		arguments.put(ValueProviderArg.TARGET, target);
+		return new ValueProviderDesc(arguments);
+	}
 
 	public AttributeValueProvider(ValueProviderDesc desc) {
 		super(desc);
@@ -28,7 +35,7 @@ public class AttributeValueProvider extends ValueProvider {
 			entities = new ArrayList<>();
 			entities.add(target);
 		}
-		
+
 		if (entities == null) {
 			return 0;
 		}
@@ -55,5 +62,4 @@ public class AttributeValueProvider extends ValueProvider {
 
 		return value;
 	}
-
 }
