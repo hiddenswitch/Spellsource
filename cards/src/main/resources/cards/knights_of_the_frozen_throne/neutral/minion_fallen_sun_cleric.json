@@ -1,0 +1,24 @@
+{
+  "name": "Fallen Sun Cleric",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a friendly minion +1/+1",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

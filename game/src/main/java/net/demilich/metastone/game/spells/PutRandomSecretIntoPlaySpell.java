@@ -15,7 +15,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.DeckSource;
-import net.demilich.metastone.game.spells.desc.source.DefaultSource;
 import net.demilich.metastone.game.spells.desc.source.SourceDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.Zones;
@@ -54,7 +53,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 
 			while (!secretCards.isEmpty()) {
 				if (!context.getLogic().canPlaySecret(player, secretCard)
-						&& (filter == null || filter.matches(context, player, secretCard))) {
+						&& (filter == null || filter.matches(context, player, secretCard, source))) {
 					secretCard = (SecretCard) secretCards.removeFirst();
 				} else {
 					break;

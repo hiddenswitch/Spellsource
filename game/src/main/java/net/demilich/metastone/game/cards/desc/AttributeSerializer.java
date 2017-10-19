@@ -38,6 +38,7 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.CHARGE, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.COMBO, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.DIED_ON_TURN, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.DOUBLE_END_TURN_TRIGGERS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.NUMBER_OF_ATTACKS, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.SUMMONING_SICKNESS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.DESTROYED, jsonData, map, ParseValueType.BOOLEAN);
@@ -47,6 +48,7 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.DOUBLE_DEATHRATTLES, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.ENRAGABLE, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.HEAL_AMPLIFY_MULTIPLIER, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.HEALING_THIS_TURN, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.HERO_POWER_CAN_TARGET_MINIONS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.HERO_POWER_FREEZES_TARGET, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.HERO_POWER_DAMAGE, jsonData, map, ParseValueType.INTEGER);

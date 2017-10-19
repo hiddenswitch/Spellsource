@@ -46,7 +46,7 @@ public class Aura extends Enchantment {
 	}
 
 	protected boolean affects(GameContext context, Player player, Entity target, List<Entity> resolvedTargets) {
-		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, target)) {
+		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, target, context.resolveSingleTarget(getHostReference()))) {
 			return false;
 		}
 		

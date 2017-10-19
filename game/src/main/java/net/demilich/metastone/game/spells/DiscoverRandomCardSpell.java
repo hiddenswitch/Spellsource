@@ -69,7 +69,7 @@ public class DiscoverRandomCardSpell extends Spell {
 
 		CardList result = new CardArrayList();
 		for (Card card : cards) {
-			if (cardFilter.matches(context, player, card)) {
+			if (cardFilter.matches(context, player, card, source)) {
 				result.addCard(card);
 			}
 		}

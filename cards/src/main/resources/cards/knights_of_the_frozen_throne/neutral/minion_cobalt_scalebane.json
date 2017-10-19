@@ -1,0 +1,26 @@
+{
+  "name": "Cobalt Scalebane",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "At the end of your turn, give another random friendly minion +3 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 3,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

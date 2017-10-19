@@ -1,0 +1,25 @@
+{
+  "name": "Happy Ghoul",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Costs (0) if your Hero was healed this turn.",
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "ifTrue": 3,
+    "ifFalse": 0,
+    "condition": {
+      "class": "HasEntityCondition",
+      "target": "FRIENDLY_HERO",
+      "filter": {
+        "class": "HealedFilter"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

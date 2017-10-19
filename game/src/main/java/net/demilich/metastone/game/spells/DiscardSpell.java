@@ -37,7 +37,7 @@ public class DiscardSpell extends Spell {
 
 		CardList discardableCards = new CardArrayList();
 		for (Card card : player.getHand()) {
-			if (cardFilter == null || cardFilter.matches(context, player, card)) {
+			if (cardFilter == null || cardFilter.matches(context, player, card, source)) {
 				discardableCards.addCard(card);
 			}
 		}

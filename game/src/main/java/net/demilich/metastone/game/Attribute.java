@@ -582,6 +582,11 @@ public enum Attribute {
 	 */
 	TOTAL_DAMAGE_DEALT,
 	/**
+	 * Every time an {@link Actor} is healed, increment this attribute with the amount of healing and set to zero at the
+	 * end of the turn.
+	 */
+	HEALING_THIS_TURN,
+	/**
 	 * Whenever an {@link Actor} dies, increment this attribute by 1 if the actor had the lowest attack on the
 	 * battlefield.
 	 */
@@ -596,6 +601,12 @@ public enum Attribute {
 	 * Minion} should be healed by the amount of damage dealt by that minion.
 	 */
 	LIFESTEAL,
+	/**
+	 * Indicates that the {@link Player}'s end turn triggers should trigger twice.
+	 * <p>
+	 * Implements Drakkari Enchanter.
+	 */
+	DOUBLE_END_TURN_TRIGGERS,
 	/**
 	 * Overrides the name of the {@link Entity}
 	 */

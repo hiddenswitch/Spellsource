@@ -51,6 +51,8 @@ public class AttributeValueProvider extends ValueProvider {
 						value += source.getAttack();
 					} else if (attribute == Attribute.MAX_HP) {
 						value += source.getMaxHp();
+					} else if (attribute == Attribute.HP) {
+						value += source.getHp();
 					} else {
 						value += source.getAttributeValue(attribute);
 					}

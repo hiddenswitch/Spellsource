@@ -26,7 +26,7 @@ public class ShuffleToDeckSpell extends Spell {
 			CardList cards = CardCatalogue.query(context.getDeckFormat());
 			CardList result = new CardArrayList();
 			for (Card cardResult : cards) {
-				if (cardFilter.matches(context, player, cardResult)) {
+				if (cardFilter.matches(context, player, cardResult, source)) {
 					result.addCard(cardResult);
 				}
 			}

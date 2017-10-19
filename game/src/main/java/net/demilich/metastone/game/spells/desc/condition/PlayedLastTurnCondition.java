@@ -26,7 +26,7 @@ public class PlayedLastTurnCondition extends Condition {
 		EntityFilter filter = (EntityFilter) desc.get(ConditionArg.FILTER);
 		for (String cardId : cardIds.keySet()) {
 			Entity entity = context.getCardById(cardId);
-			if (filter == null || filter.matches(context, player, entity)) {
+			if (filter == null || filter.matches(context, player, entity, source)) {
 				if (cardIds.get(cardId).containsKey(turn)) {
 					count += cardIds.get(cardId).get(turn);
 				}

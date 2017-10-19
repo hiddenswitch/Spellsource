@@ -52,7 +52,7 @@ public class SpellCard extends Card {
 		if (filter == null) {
 			return true;
 		}
-		return filter.matches(context, player, target);
+		return filter.matches(context, player, target, this);
 	}
 
 	@Override

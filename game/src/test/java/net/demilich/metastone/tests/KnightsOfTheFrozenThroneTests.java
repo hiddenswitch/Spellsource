@@ -18,6 +18,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.targeting.Zones;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -32,6 +33,50 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
+	@Test
+	public void testMeatWagon() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+
+		Stream.of("minion_dragon_egg" /*0*/, "minion_voidwalker" /*1*/, "minion_bloodfen_raptor" /*3*/)
+				.map(CardCatalogue::getCardById)
+				.forEach(c -> context.getLogic().shuffleToDeck(player, c));
+
+		Minion meatWagon = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_meat_wagon"));
+		context.getLogic().destroy(meatWagon);
+		Assert.assertEquals(player.getMinions().size(), 1);
+		Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_dragon_egg");
+
+		// Remove dragon egg
+		player.getDeck().stream().filter(c -> c.getCardId().equals("minion_dragon_egg"))
+				.findFirst()
+				.orElseThrow(AssertionError::new).moveOrAddTo(context, Zones.GRAVEYARD);
+
+		meatWagon = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_meat_wagon"));
+		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_divine_strength" /*+1/+2*/), meatWagon);
+		Assert.assertEquals(meatWagon.getAttack(), 2);
+		context.getLogic().destroy(meatWagon);
+		Assert.assertEquals(player.getMinions().size(), 2);
+		Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_voidwalker");
+	}
+
+	@Test
+	public void testFurnacefireColossus() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+		Stream.of("weapon_arcanite_reaper" /*5/2*/, "weapon_coghammer" /*2/3*/, "minion_bloodfen_raptor")
+				.map(CardCatalogue::getCardById)
+				.forEach(c -> context.getLogic().receiveCard(player.getId(), c));
+		Minion furnacefireColossus = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_furnacefire_colossus"));
+		Assert.assertEquals(furnacefireColossus.getAttack(), 6 + 5 + 2);
+		Assert.assertEquals(furnacefireColossus.getHp(), 6 + 2 + 3);
+		Assert.assertEquals(player.getHand().size(), 1);
+	}
+
 	@Test
 	public void testFrostmourne() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);

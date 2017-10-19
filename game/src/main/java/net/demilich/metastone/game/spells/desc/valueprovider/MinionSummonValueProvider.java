@@ -20,7 +20,7 @@ public class MinionSummonValueProvider extends ValueProvider {
 		EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
 		for (String minionId : minionIds.keySet()) {
 			Entity entity = context.getCardById(minionId);
-			if (filter == null || filter.matches(context, player, entity)) {
+			if (filter == null || filter.matches(context, player, entity, host)) {
 				count += minionIds.get(minionId);
 			}
 		}

@@ -16,7 +16,7 @@ public class HighestAttributeFilter extends EntityFilter {
 	}
 
 	@Override
-	protected boolean test(GameContext context, Player player, Entity entity) {
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		Attribute attribute = (Attribute) desc.get(FilterArg.ATTRIBUTE);
 		EntityReference targetReference = (EntityReference) desc.get(FilterArg.TARGET);
 		List<Entity> entities = context.resolveTarget(player, entity, targetReference);

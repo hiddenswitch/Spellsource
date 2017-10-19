@@ -27,7 +27,7 @@ public class TransformToRandomMinionSpell extends TransformMinionSpell {
 		CardList filteredMinions = new CardArrayList();
 		for (Card card : allMinions) {
 			MinionCard minionCard = (MinionCard) card;
-			if (filter == null || filter.matches(context, player, card)) {
+			if (filter == null || filter.matches(context, player, card, source)) {
 				filteredMinions.addCard(minionCard);
 			}
 		}

@@ -28,7 +28,7 @@ public class ReplaceCardLocationSpell extends Spell {
 		CardList result = new CardArrayList();
 		String replacementCard = (String) desc.get(SpellArg.CARD);
 		for (Card card : cards) {
-			if (cardFilter.matches(context, player, card)) {
+			if (cardFilter.matches(context, player, card, source)) {
 				result.addCard(card);
 			}
 		}

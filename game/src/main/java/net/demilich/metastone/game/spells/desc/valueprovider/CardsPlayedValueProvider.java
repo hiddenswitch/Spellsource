@@ -20,7 +20,7 @@ public class CardsPlayedValueProvider extends ValueProvider {
 		EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
 		for (String cardId : cardIds.keySet()) {
 			Entity entity = context.getCardById(cardId);
-			if (filter == null || filter.matches(context, player, entity)) {
+			if (filter == null || filter.matches(context, player, entity, host)) {
 				for (Integer turn : cardIds.get(cardId).keySet()) {
 					count += cardIds.get(cardId).get(turn);
 				}

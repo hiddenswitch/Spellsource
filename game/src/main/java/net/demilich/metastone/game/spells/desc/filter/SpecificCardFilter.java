@@ -13,7 +13,7 @@ public class SpecificCardFilter extends EntityFilter {
 	}
 
 	@Override
-	protected boolean test(GameContext context, Player player, Entity entity) {
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		String cardId = null;
 		if (entity instanceof Card) {
 			cardId = ((Card) entity).getCardId();

@@ -58,7 +58,7 @@ public class CopyCardSpell extends Spell {
 		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 
 		if (filter != null) {
-			sourceCollection = sourceCollection.filtered(card -> filter.matches(context, player, card));
+			sourceCollection = sourceCollection.filtered(card -> filter.matches(context, player, card, source));
 		}
 
 		for (int i = 0; i < numberOfCardsToCopy; i++) {

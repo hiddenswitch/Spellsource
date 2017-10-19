@@ -962,7 +962,6 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	private void destroyWeapon(Weapon weapon) {
 		Player owner = context.getPlayer(weapon.getOwner());
-		// resolveDeathrattles(owner, weapon);
 		if (owner.getHero().getWeapon() != null && owner.getHero().getWeapon().getId() == weapon.getId()) {
 			owner.getHero().setWeapon(null);
 		}
@@ -1120,14 +1119,16 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 		player.getAttributes().remove(Attribute.COMBO);
 		hero.activateWeapon(false);
+		context.getEntities()
+				.filter(actor -> actor.hasAttribute(Attribute.HEALING_THIS_TURN))
+				.forEach(actor -> actor.getAttributes().remove(Attribute.HEALING_THIS_TURN));
 		log("{} ends his turn.", player.getName());
 		context.fireGameEvent(new TurnEndEvent(context, playerId));
-		for (Iterator<CardCostModifier> iterator = context.getCardCostModifiers().iterator(); iterator.hasNext(); ) {
-			CardCostModifier cardCostModifier = iterator.next();
-			if (cardCostModifier.isExpired()) {
-				iterator.remove();
-			}
+		if (hasAttribute(player, Attribute.DOUBLE_END_TURN_TRIGGERS)) {
+			context.fireGameEvent(new TurnEndEvent(context, playerId));
 		}
+
+		context.getCardCostModifiers().removeIf(CardCostModifier::isExpired);
 		checkForDeadEntities();
 	}
 
@@ -1654,6 +1655,8 @@ public class GameLogic implements Cloneable, Serializable {
 
 		if (success) {
 			HealEvent healEvent = new HealEvent(context, player.getId(), target, healing);
+			// Implements Happy Ghoul
+			target.modifyAttribute(Attribute.HEALING_THIS_TURN, healing);
 			context.fireGameEvent(healEvent);
 			player.getStatistics().heal(healing);
 		}

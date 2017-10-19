@@ -24,7 +24,7 @@ public class ResurrectSpell extends Spell {
 		graveyard.addAll(player.getGraveyard());
 		for (Entity deadEntity : graveyard) {
 			if (deadEntity.getEntityType() == EntityType.MINION) {
-				if (cardFilter == null || cardFilter.matches(context, player, deadEntity)) {
+				if (cardFilter == null || cardFilter.matches(context, player, deadEntity, source)) {
 					deadMinions.add((Minion) deadEntity);
 				}
 			}
