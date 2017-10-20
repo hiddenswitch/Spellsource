@@ -1,0 +1,23 @@
+{
+  "name": "Shallow Gravedigger",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Deathrattle: Add a random Deathrattle minion to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "DEATHRATTLES"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -112,8 +112,10 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Consider the {@link net.demilich.metastone.game.Environment#PENDING_CARD} and {@link net.demilich.metastone.game.Environment#EVENT_CARD},
-	 * the search the {@link Zones#DISCOVER} zone for the specified card
+	 * Consider the {@link net.demilich.metastone.game.Environment#PENDING_CARD} and {@link
+	 * net.demilich.metastone.game.Environment#EVENT_CARD}, the search the {@link Zones#DISCOVER} zone for the specified
+	 * card
+	 *
 	 * @param context
 	 * @param cardId
 	 * @return
@@ -359,14 +361,7 @@ public class SpellUtils {
 	}
 
 	public static boolean highlanderDeck(Player player) {
-		List<String> cards = new ArrayList<String>();
-		for (Card card : player.getDeck()) {
-			if (cards.contains(card.getCardId())) {
-				return false;
-			}
-			cards.add(card.getCardId());
-		}
-		return true;
+		return player.getDeck().stream().map(Card::getCardId).distinct().count() == player.getDeck().getCount();
 	}
 
 	public static boolean holdsCardOfType(Player player, CardType cardType) {

@@ -387,11 +387,17 @@ public enum Attribute {
 	 */
 	HERO_POWER_CAN_TARGET_MINIONS,
 	/**
-	 * When any {@link Entity} has this attribute, the owning player's hero power freezes its target.
+	 * When any {@link Entity} alive has this attribute, the owning player's hero power freezes its target.
 	 * <p>
 	 * Implements Ice Walker
 	 */
 	HERO_POWER_FREEZES_TARGET,
+	/**
+	 * When any {@link Entity} alive has this attribute, BOTH player's hero powers are disabled.
+	 * <p>
+	 * Implements Mindbreaker.
+	 */
+	HERO_POWERS_DISABLED,
 	/**
 	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an {@link
 	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e
