@@ -11,19 +11,22 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
 
 public class ReceiveCardSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
+		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
+		CardList cards = CardCatalogue.query(context.getDeckFormat());
+		if (cardSource != null) {
+			cards = cardSource.getCards(context, player).getCopy();
+		}
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		// If a card is being received from a filter, we're creating new cards
 		if (cardFilter != null) {
-			// Cards that come from the query are always copies
-			CardList cards = CardCatalogue.query(context.getDeckFormat());
 			CardList result = new CardArrayList();
-
 			String replacementCard = (String) desc.get(SpellArg.CARD);
 			for (Card card : cards) {
 				if (cardFilter.matches(context, player, card, source)) {

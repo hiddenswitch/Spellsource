@@ -1,19 +1,20 @@
 {
-  "name": "Ancestral Spirit",
+  "name": "Desperate Stand",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "PALADIN",
   "rarity": "RARE",
-  "description": "Give a minion \"Deathrattle: Resummon this minion.\"",
+  "description": "Give a minion \"Deathrattle: Return this to life with 1 Health.\"",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",
     "spell": {
       "class": "ReviveMinionSpell",
-      "target": "SELF"
+      "target": "SELF",
+      "hpBonus": 1
     }
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
   "fileFormatVersion": 1
 }

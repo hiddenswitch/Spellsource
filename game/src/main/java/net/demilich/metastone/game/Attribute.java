@@ -234,7 +234,7 @@ public enum Attribute {
 	 * Divine shield causes the actor to take zero damage instead of the full damage it should receive the first time it
 	 * receives damage.
 	 *
-	 * @see GameLogic#damageMinion(Actor, int) for the complete rules of damage.
+	 * @see GameLogic#damage(Player, Actor, int, Entity) for the complete rules of damage.
 	 */
 	DIVINE_SHIELD,
 	/**
@@ -404,6 +404,10 @@ public enum Attribute {
 	 * .g., a healing spell may heal the owning player by the amount of damage last dealt to an entity).
 	 */
 	LAST_HIT,
+	/**
+	 * Records the amount of healing last applied to this {@link Actor}.
+	 */
+	LAST_HEAL,
 	/**
 	 * Marks that this {@link Entity} has a passive trigger that activates to a {@link
 	 * net.demilich.metastone.game.events.GameEvent}.

@@ -1,0 +1,23 @@
+{
+  "name": "Sunborne Val'kyr",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Battlecry: Give adjacent minions +2 Health.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "hpBonus": 2,
+      "target": "ADJACENT_MINIONS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

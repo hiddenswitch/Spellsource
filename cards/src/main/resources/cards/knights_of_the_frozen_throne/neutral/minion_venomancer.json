@@ -1,0 +1,16 @@
+{
+  "name": "Venomancer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Poisonous.",
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

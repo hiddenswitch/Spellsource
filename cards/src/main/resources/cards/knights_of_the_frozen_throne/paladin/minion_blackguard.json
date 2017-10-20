@@ -1,0 +1,30 @@
+{
+  "name": "Blackguard Cleric",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 9,
+  "heroClass": "PALADIN",
+  "rarity": "EPIC",
+  "description": "Whenever your hero is healed, deal that much damage to a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "randomTarget": true,
+      "target": "ENEMY_MINIONS",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+        "attribute": "LAST_HEAL"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

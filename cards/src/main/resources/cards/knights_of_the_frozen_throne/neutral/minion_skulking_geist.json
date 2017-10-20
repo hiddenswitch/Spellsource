@@ -1,0 +1,37 @@
+{
+  "name": "Skulking Geist",
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "type": "MINION",
+  "baseManaCost": 6,
+  "baseAttack": 4,
+  "baseHp": 6,
+  "description": "Battlecry: Destroy all 1-Cost spells in both hands and decks.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveCardSpell",
+          "target": "BOTH_HANDS",
+          "filter": {
+            "class": "CardFilter",
+            "manaCost": 1
+          }
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "BOTH_DECKS",
+          "filter": {
+            "class": "CardFilter",
+            "manaCost": 1
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

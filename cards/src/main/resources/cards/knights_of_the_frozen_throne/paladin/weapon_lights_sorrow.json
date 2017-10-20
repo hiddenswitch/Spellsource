@@ -1,0 +1,25 @@
+{
+  "name": "Light's Sorrow",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "damage": 1,
+  "durability": 4,
+  "heroClass": "PALADIN",
+  "rarity": "EPIC",
+  "description": "After a friendly minion loses Divine Shield, gain +1 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "LoseDivineShieldTrigger",
+      "targetPlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Grave Vengeance",
+  "baseManaCost": 8,
+  "type": "WEAPON",
+  "damage": 5,
+  "durability": 3,
+  "heroClass": "PALADIN",
+  "rarity": "FREE",
+  "description": "Lifesteal",
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -11,6 +11,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.targeting.Zones;
 
 public class ReceiveCardAndDoSomethingSpell extends Spell {
@@ -34,9 +35,13 @@ public class ReceiveCardAndDoSomethingSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		SpellDesc cardEffectSpell = (SpellDesc) desc.get(SpellArg.SPELL);
+		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
+		CardList cards = CardCatalogue.query(context.getDeckFormat());
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+		if (cardSource != null) {
+			cards = cardSource.getCards(context, player).getCopy();
+		}
 		if (cardFilter != null) {
-			CardList cards = CardCatalogue.query(context.getDeckFormat());
 			CardList result = new CardArrayList();
 			String replacementCard = (String) desc.get(SpellArg.CARD);
 			for (Card card : cards) {
@@ -52,8 +57,7 @@ public class ReceiveCardAndDoSomethingSpell extends Spell {
 					card = CardCatalogue.getCardById(replacementCard);
 				}
 				if (card != null) {
-					Card clone = card.clone();
-					castSomethingSpell(context, player, cardEffectSpell, source, clone);
+					castSomethingSpell(context, player, cardEffectSpell, source, card);
 				}
 			}
 		} else {
