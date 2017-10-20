@@ -25,14 +25,15 @@ public class ReceiveCardSpell extends Spell {
 		}
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		// If a card is being received from a filter, we're creating new cards
-		if (cardFilter != null) {
+		if (cardFilter != null
+				|| cardSource != null) {
 			CardList result = new CardArrayList();
-			String replacementCard = (String) desc.get(SpellArg.CARD);
-			for (Card card : cards) {
-				if (cardFilter.matches(context, player, card, source)) {
-					result.addCard(card);
-				}
+
+			if (cardFilter != null) {
+				result = cards.filtered(c -> cardFilter.matches(context, player, c, source));
 			}
+
+			String replacementCard = (String) desc.get(SpellArg.CARD);
 			for (int i = 0; i < count; i++) {
 				Card card = null;
 				if (!result.isEmpty()) {

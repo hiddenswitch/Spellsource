@@ -34,6 +34,46 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testEmbraceDarkness() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		context.endTurn();
+		Minion bloodfenRaptor = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
+		context.endTurn();
+		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_embrace_darkness"), bloodfenRaptor);
+		Assert.assertEquals(bloodfenRaptor.getOwner(), opponent.getId());
+		context.endTurn();
+		Assert.assertEquals(bloodfenRaptor.getOwner(), opponent.getId());
+		for (int i = 0; i < 4; i++) {
+			context.endTurn();
+			Assert.assertEquals(bloodfenRaptor.getOwner(), player.getId());
+		}
+	}
+
+	@Test
+	public void testArchibishopBenedictus() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+		Stream.of("minion_water_elemental", "minion_bloodfen_raptor")
+				.map(CardCatalogue::getCardById)
+				.forEach(c -> context.getLogic().shuffleToDeck(opponent, c));
+		playCard(context, player, CardCatalogue.getCardById("minion_archbishop_benedictus"));
+		Assert.assertEquals(player.getDeck().size(), 2);
+		Assert.assertEquals(opponent.getDeck().size(), 2);
+		Assert.assertTrue(player.getDeck().containsCard("minion_water_elemental"));
+		Assert.assertTrue(player.getDeck().containsCard("minion_bloodfen_raptor"));
+	}
+
+	@Test
 	public void testPrinceTaldaram() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
 		Player player = context.getActivePlayer();
