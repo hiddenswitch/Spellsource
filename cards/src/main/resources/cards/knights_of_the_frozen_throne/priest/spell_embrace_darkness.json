@@ -1,0 +1,26 @@
+{
+  "name": "Embrace Darkness",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "EPIC",
+  "description": "Choose an enemy minion. At the start of your turn, gain control of it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF",
+        "maxFires": 1
+      },
+      "spell": {
+        "class": "MindControlSpell",
+        "target": "SELF"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

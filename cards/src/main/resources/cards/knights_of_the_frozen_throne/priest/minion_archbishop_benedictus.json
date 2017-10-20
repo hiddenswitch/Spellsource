@@ -1,0 +1,23 @@
+{
+  "name": "Archbishop Benedictus",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "heroClass": "PRIEST",
+  "rarity": "COMMON",
+  "description": "Battlecry: Shuffle a copy of your opponent's deck into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "ENEMY_DECK"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

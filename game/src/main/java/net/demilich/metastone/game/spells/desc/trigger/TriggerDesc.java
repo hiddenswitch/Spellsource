@@ -12,9 +12,11 @@ public class TriggerDesc implements Serializable {
 	public boolean oneTurn;
 	public boolean persistentOwner;
 	public int turnDelay;
+	public Integer maxFires;
 
 	public Enchantment create() {
 		Enchantment trigger = new Enchantment(eventTrigger.create(), spell, oneTurn, turnDelay);
+		trigger.setMaxFires(maxFires);
 		trigger.setPersistentOwner(persistentOwner);
 		return trigger;
 	}

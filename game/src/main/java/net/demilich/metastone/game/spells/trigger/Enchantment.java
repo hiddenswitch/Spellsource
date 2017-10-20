@@ -26,6 +26,8 @@ public class Enchantment extends Entity implements Trigger {
 	private boolean expired;
 	private boolean persistentOwner;
 	private int turnDelay;
+	private Integer maxFires;
+	private int fires;
 
 	protected Enchantment(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
 		this.primaryTrigger = primaryTrigger;
@@ -102,6 +104,11 @@ public class Enchantment extends Entity implements Trigger {
 	@Suspendable
 	protected void onFire(int ownerId, SpellDesc spell, GameEvent event) {
 		event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, null, true);
+		fires++;
+		if (maxFires != null
+				&& fires >= maxFires) {
+			expire();
+		}
 	}
 
 	@Override
@@ -213,5 +220,13 @@ public class Enchantment extends Entity implements Trigger {
 
 	public Card getSourceCard() {
 		return null;
+	}
+
+	public Integer getMaxFires() {
+		return maxFires;
+	}
+
+	public void setMaxFires(Integer maxFires) {
+		this.maxFires = maxFires;
 	}
 }
