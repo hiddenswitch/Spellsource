@@ -1,0 +1,26 @@
+{
+  "name": "The Lich King",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Taunt. At the end of your turn, add a random Death Knight card to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "DEATH_KNIGHT"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Spellweaver",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Spell Damage +2",
+  "attributes": {
+    "SPELL_DAMAGE": 2
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

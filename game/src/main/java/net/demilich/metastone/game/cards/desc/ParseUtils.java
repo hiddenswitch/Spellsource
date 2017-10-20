@@ -286,6 +286,8 @@ public class ParseUtils {
 				return EntityReference.ENEMY_DECK;
 			case "both_decks":
 				return EntityReference.BOTH_DECKS;
+			case "both_hands":
+				return EntityReference.BOTH_HANDS;
 			case "transform_reference":
 				return EntityReference.TRANSFORM_REFERENCE;
 			default:

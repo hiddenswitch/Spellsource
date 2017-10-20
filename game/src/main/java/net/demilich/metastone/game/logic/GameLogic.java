@@ -836,7 +836,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 		switch (target.getEntityType()) {
 			case MINION:
-				damageDealt = damageMinion((Actor) target, damage);
+				damageDealt = damageMinion(player, damage, source, (Actor) target);
 				break;
 			case HERO:
 				damageDealt = damageHero((Hero) target, damage);
@@ -886,10 +886,11 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	@Suspendable
-	private int damageMinion(Actor minion, int damage) {
+	private int damageMinion(Player player, int damage, Entity source, Actor minion) {
 		if (minion.hasAttribute(Attribute.DIVINE_SHIELD)) {
 			removeAttribute(minion, Attribute.DIVINE_SHIELD);
 			log("{}'s DIVINE SHIELD absorbs the damage", minion);
+			context.fireGameEvent(new LoseDivineShieldEvent(context, minion, player.getId(), source.getId()));
 			return 0;
 		}
 		if (minion.hasAttribute(Attribute.IMMUNE)) {
@@ -939,7 +940,7 @@ public class GameLogic implements Cloneable, Serializable {
 					break;
 				case MINION:
 					context.getEnvironment().put(Environment.KILLED_MINION, target.getReference());
-					KillEvent killEvent = new KillEvent(context, target, previousLocation.get(target).getIndex());
+					KillEvent killEvent = new KillEvent(context, target);
 					context.fireGameEvent(killEvent);
 					context.getEnvironment().remove(Environment.KILLED_MINION);
 
@@ -1662,6 +1663,7 @@ public class GameLogic implements Cloneable, Serializable {
 			HealEvent healEvent = new HealEvent(context, player.getId(), target, healing);
 			// Implements Happy Ghoul
 			target.modifyAttribute(Attribute.HEALING_THIS_TURN, healing);
+			target.setAttribute(Attribute.LAST_HEAL, healing);
 			context.fireGameEvent(healEvent);
 			player.getStatistics().heal(healing);
 		}

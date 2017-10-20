@@ -1,0 +1,31 @@
+{
+  "name": "Tomb Lurker",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "Battlecry: Add a random Deathrattle minion that died this game to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardSource": {
+        "class": "GraveyardSource",
+        "targetPlayer": "BOTH"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "attribute": "DEATHRATTLES"
+      }
+    },
+    "targetSelection": "NONE"
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
