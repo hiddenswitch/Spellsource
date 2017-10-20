@@ -318,8 +318,17 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(player);
 		} else if (targetKey.equals(EntityReference.ENEMY_PLAYER)) {
 			return singleTargetAsList(context.getOpponent(player));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_DECK)) {
+			return new ArrayList<>(player.getDeck().toList());
+		} else if (targetKey.equals(EntityReference.ENEMY_DECK)) {
+			return new ArrayList<>(context.getOpponent(player).getDeck().toList());
+		} else if (targetKey.equals(EntityReference.BOTH_DECKS)) {
+			ArrayList<Entity> friendly = new ArrayList<>(player.getDeck().toList());
+			friendly.addAll(context.getOpponent(player).getDeck().toList());
+			return friendly;
+		} else if (targetKey.equals(EntityReference.TRANSFORM_REFERENCE)) {
+			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TRANSFORM_REFERENCE)));
 		}
-
 		return singleTargetAsList(findEntity(context, targetKey));
 	}
 

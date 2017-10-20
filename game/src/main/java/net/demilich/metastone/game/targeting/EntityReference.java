@@ -37,6 +37,10 @@ public class EntityReference implements Serializable {
 	public static final EntityReference ATTACKER_REFERENCE = new EntityReference(-30);
 	public static final EntityReference PENDING_CARD = new EntityReference(-31);
 	public static final EntityReference EVENT_CARD = new EntityReference(-32);
+	public static final EntityReference FRIENDLY_DECK = new EntityReference(-33);
+	public static final EntityReference ENEMY_DECK = new EntityReference(-34);
+	public static final EntityReference BOTH_DECKS = new EntityReference(-35);
+	public static final EntityReference TRANSFORM_REFERENCE = new EntityReference(-36);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

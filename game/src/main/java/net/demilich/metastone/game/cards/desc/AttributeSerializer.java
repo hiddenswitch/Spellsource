@@ -53,6 +53,7 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.HERO_POWER_FREEZES_TARGET, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.HERO_POWER_DAMAGE, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.HERO_POWER_USAGES, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.HERO_POWERS_DISABLED, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.IMMUNE_HERO, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.INVERT_HEALING, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.LIFESTEAL, jsonData, map, ParseValueType.BOOLEAN);

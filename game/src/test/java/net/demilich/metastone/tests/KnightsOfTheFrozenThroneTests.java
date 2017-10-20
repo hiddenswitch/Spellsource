@@ -34,6 +34,26 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testPrinceTaldaram() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+
+		Minion waterElemental = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_water_elemental"));
+		Minion princeTaldaram = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_prince_taldaram"));
+		Assert.assertEquals(princeTaldaram.getZone(), Zones.BATTLEFIELD);
+		Assert.assertEquals(princeTaldaram.getAttack(), 3);
+		Assert.assertEquals(princeTaldaram.getHp(), 3);
+		context.endTurn();
+		Minion arcaneGiant = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_arcane_giant"));
+		context.endTurn();
+		context.getLogic().fight(player, princeTaldaram, arcaneGiant);
+		Assert.assertTrue(arcaneGiant.hasAttribute(Attribute.FROZEN));
+	}
+
+	@Test
 	public void testMeatWagon() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
 		Player player = context.getActivePlayer();

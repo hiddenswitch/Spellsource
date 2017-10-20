@@ -280,6 +280,14 @@ public class ParseUtils {
 				return EntityReference.MINIONS_TO_LEFT;
 			case "minions_to_right":
 				return EntityReference.MINIONS_TO_RIGHT;
+			case "friendly_deck":
+				return EntityReference.FRIENDLY_DECK;
+			case "enemy_deck":
+				return EntityReference.ENEMY_DECK;
+			case "both_decks":
+				return EntityReference.BOTH_DECKS;
+			case "transform_reference":
+				return EntityReference.TRANSFORM_REFERENCE;
 			default:
 				return null;
 		}

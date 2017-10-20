@@ -1,0 +1,42 @@
+{
+  "name": "Prince Valanar",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If your deck has no 4-Cost cards, gain Lifesteal and Taunt.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "DeckContainsCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": 4
+      },
+      "invert": true
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "LIFESTEAL"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "TAUNT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

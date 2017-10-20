@@ -1,54 +1,43 @@
 {
-	"name": "The Mistcaller",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "SHAMAN",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Give all minions in your hand and deck +1/+1.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"target": "FRIENDLY_HAND",
-					"attackBonus": 1,
-					"hpBonus": 1,
-					"filter": {
-						"class": "CardFilter",
-						"cardType": "MINION"
-					}
-				},
-				{
-					"class": "AddEnchantmentSpell",
-					"target": "FRIENDLY_PLAYER",
-					"trigger": {
-						"eventTrigger": {
-							"class": "CardDrawnTrigger",
-							"targetPlayer": "SELF",
-							"queueCondition": {
-								"class": "CardPropertyCondition",
-								"target": "EVENT_TARGET",
-								"cardType": "MINION"
-							}
-						},
-						"spell": {
-							"class": "BuffSpell",
-							"target": "EVENT_TARGET",
-							"attackBonus": 1,
-							"hpBonus": 1
-						}
-					}
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "The Mistcaller",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "SHAMAN",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Give all minions in your hand and deck +1/+1.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "attackBonus": 1,
+          "hpBonus": 1,
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_DECK",
+          "attackBonus": 1,
+          "hpBonus": 1,
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

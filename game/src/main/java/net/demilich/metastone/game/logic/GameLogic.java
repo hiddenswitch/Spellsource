@@ -370,6 +370,11 @@ public class GameLogic implements Cloneable, Serializable {
 			if (heroPowerUsages != INFINITE && power.hasBeenUsed() >= heroPowerUsages) {
 				return false;
 			}
+
+			// Implements Mindbreaker
+			if (context.getPlayers().stream().anyMatch(p -> hasAttribute(p, Attribute.HERO_POWERS_DISABLED))) {
+				return false;
+			}
 		} else if (card.getCardType().isCardType(CardType.MINION)) {
 			return canSummonMoreMinions(player);
 		}

@@ -1,0 +1,30 @@
+{
+  "name": "Rattling Rascal",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "Battlecry: Summon a 5/5 Skeleton. Deathrattle: Summon a 5/5 Skeleton for your opponent.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "targetPlayer": "SELF",
+      "card": "token_skeletal_enforcer"
+    }
+  },
+  "deathrattle": {
+    "class": "SummonSpell",
+    "targetPlayer": "OPPONENT",
+    "card": "token_skeletal_enforcer"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
