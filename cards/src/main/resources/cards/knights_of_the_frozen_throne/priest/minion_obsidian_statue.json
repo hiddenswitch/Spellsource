@@ -1,0 +1,23 @@
+{
+  "name": "Obsidian Statue",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "heroClass": "PRIEST",
+  "rarity": "EPIC",
+  "description": "Taunt. Lifesteal. Deathrattle: Destroy a random enemy minion.",
+  "deathrattle": {
+    "class": "DestroySpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true,
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

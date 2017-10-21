@@ -1,0 +1,22 @@
+{
+  "name": "Eternal Servitude",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "RARE",
+  "description": "Discover a friendly minion that died this game. Summon it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverFilteredCardSpell",
+    "cardSource": {
+      "class": "GraveyardSource",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell"
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

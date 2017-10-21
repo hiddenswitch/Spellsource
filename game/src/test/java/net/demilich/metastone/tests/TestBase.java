@@ -39,7 +39,12 @@ public class TestBase {
 		}
 	}
 
-	public static void clearZone(GameContext context, EntityZone zone) {
+	public static void clearZone(GameContext context, EntityZone<? extends Entity> zone) {
+		if (zone.getZone() == Zones.GRAVEYARD) {
+			zone.iterator().forEachRemaining(e -> e.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY));
+			return;
+		}
+
 		for (int i = zone.size() - 1; i >= 0; i--) {
 			Entity entity = zone.get(i);
 			if (Card.class.isAssignableFrom(entity.getClass())) {

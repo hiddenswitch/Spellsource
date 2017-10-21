@@ -1,0 +1,26 @@
+{
+  "name": "Shadow Ascendant",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "heroClass": "PRIEST",
+  "rarity": "COMMON",
+  "description": "At the end of your turn, give another random friendly minion +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 2,
+      "hpBonus": 2,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
