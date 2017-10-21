@@ -1,0 +1,36 @@
+{
+  "name": "Voidform",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "PRIEST",
+  "rarity": "FREE",
+  "description": "Deal 2 damage. After you play a card, refresh this.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "CardPlayedTrigger",
+            "targetPlayer": "SELF",
+            "maxFires": 1
+          },
+          "spell": {
+            "class": "RefreshHeroPowerSpell",
+            "targetPlayer": "SELF"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

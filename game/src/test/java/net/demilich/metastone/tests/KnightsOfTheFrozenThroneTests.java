@@ -34,6 +34,62 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testEternalServitude() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		Minion friendlyMinion = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
+		context.endTurn();
+		Minion opposingMinion = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
+		context.endTurn();
+		context.getLogic().performGameAction(player.getId(), new PhysicalAttackAction(friendlyMinion.getReference()).withTargetReference(opposingMinion.getReference()));
+		Assert.assertEquals(player.getMinions().size(), 0);
+		playCard(context, player, CardCatalogue.getCardById("spell_eternal_servitude"));
+		Assert.assertEquals(player.getMinions().size(), 1);
+		Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");
+	}
+
+	@Test
+	public void testSpiritLash() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+		int originalHp = 1;
+		player.getHero().setHp(originalHp);
+		int expectedHealing = 5;
+		for (int i = 0; i < expectedHealing; i++) {
+			playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
+		}
+		playCard(context, player, CardCatalogue.getCardById("spell_spirit_lash"));
+		Assert.assertEquals(player.getHero().getHp(), originalHp + expectedHealing);
+	}
+
+	@Test
+	public void testShadowEssence() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+
+		playCard(context, player, CardCatalogue.getCardById("spell_shadow_essence"));
+
+		Minion minion = player.getMinions().get(0);
+		Assert.assertEquals(minion.getAttack(), 5);
+		Assert.assertEquals(minion.getHp(), 5);
+	}
+
+	@Test
 	public void testEmbraceDarkness() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
 		Player player = context.getActivePlayer();

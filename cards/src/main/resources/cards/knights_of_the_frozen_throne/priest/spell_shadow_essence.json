@@ -1,0 +1,34 @@
+{
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "description": "Summon a 5/5 copy of a random minion in your deck.",
+  "spell": {
+    "class": "SummonCopySpell",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "target": "FRIENDLY_DECK",
+    "randomTarget": true,
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 5
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 5
+        }
+      ]
+    }
+  },
+  "fileFormatVersion": 1,
+  "rarity": "RARE",
+  "heroClass": "PRIEST",
+  "targetSelection": "NONE",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "name": "Shadow Essence"
+}

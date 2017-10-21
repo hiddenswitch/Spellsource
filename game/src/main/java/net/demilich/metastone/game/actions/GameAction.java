@@ -124,9 +124,10 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 
 	/**
 	 * A user-renderable description of what occurred in this notification.
-	 * @return
+	 *
 	 * @param context
 	 * @param playerId
+	 * @return
 	 */
 	public String getDescription(GameContext context, int playerId) {
 		return getClass().getSimpleName();
@@ -141,5 +142,10 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	public List<Entity> getTargets(GameContext context, int player) {
 		final Entity target = context.resolveSingleTarget(getTargetReference());
 		return target == null ? Collections.emptyList() : Collections.singletonList(target);
+	}
+
+	public GameAction withTargetReference(EntityReference reference) {
+		setTargetReference(reference);
+		return this;
 	}
 }

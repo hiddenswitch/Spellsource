@@ -813,7 +813,7 @@ public class GameLogic implements Cloneable, Serializable {
 			return 0;
 		}
 		int damage = baseDamage;
-		Card sourceCard = source != null && source.getEntityType() == EntityType.CARD ? (Card) source : null;
+		Card sourceCard = source.getSourceCard();
 		if (!ignoreSpellDamage && sourceCard != null) {
 			if (sourceCard.getCardType().isCardType(CardType.SPELL)) {
 				damage = applySpellpower(player, source, baseDamage);
