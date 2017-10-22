@@ -13,7 +13,7 @@
 			"targetPlayer": "SELF"
 		},
 		"spell": {
-			"class": "ReturnMinionToHandSpell",
+			"class": "ReturnTargetToHandSpell",
 			"target": "SELF"
 		}
 	},

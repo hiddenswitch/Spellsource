@@ -245,9 +245,9 @@ public class CardInteractionTests extends TestBase {
 	
 	@Test
 	public void testBlessingOfWisdomMindControl() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.WARRIOR);
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		GameContext context = createContext(HeroClass.PALADIN, HeroClass.PALADIN);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
 		
 		int cardCount = player.getHand().getCount();
 		

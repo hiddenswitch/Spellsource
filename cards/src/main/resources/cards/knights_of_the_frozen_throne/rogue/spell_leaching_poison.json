@@ -1,0 +1,21 @@
+{
+  "name": "Leaching Poison",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "COMMON",
+  "description": "Give your weapon Lifesteal.",
+  "targetSelection": "NONE",
+  "condition": {
+    "class": "HasWeaponCondition",
+    "targetPlayer": "SELF"
+  },
+  "spell": {
+    "class": "AddAttributeSpell",
+    "attribute": "POISONOUS",
+    "target": "FRIENDLY_WEAPON"
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

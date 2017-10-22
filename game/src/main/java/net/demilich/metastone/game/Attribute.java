@@ -415,11 +415,11 @@ public enum Attribute {
 	 * @see net.demilich.metastone.game.spells.trigger.TriggerManager for the complete rules on event triggering.
 	 * @see Enchantment for the entity that corresponds to a passive trigger.
 	 */
-	PASSIVE_TRIGGER,
+	PASSIVE_TRIGGERS,
 	/**
 	 * Marks that this {@link Card} has a trigger that should be active while it is in the deck.
 	 *
-	 * @see #PASSIVE_TRIGGER for an attribute that marks the entity has a trigger that is only active in the player's
+	 * @see #PASSIVE_TRIGGERS for an attribute that marks the entity has a trigger that is only active in the player's
 	 * battlefield or hand.
 	 */
 	DECK_TRIGGER,

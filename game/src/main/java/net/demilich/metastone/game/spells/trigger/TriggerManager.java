@@ -90,9 +90,7 @@ public class TriggerManager implements Cloneable, Serializable {
 			}
 		}
 
-		for (Trigger trigger : removeTriggers) {
-			triggers.remove(trigger);
-		}
+		triggers.removeAll(removeTriggers);
 	}
 
 	@Suspendable
@@ -134,6 +132,7 @@ public class TriggerManager implements Cloneable, Serializable {
 				if (!removeAuras && trigger instanceof Aura) {
 					continue;
 				}
+				trigger.expire();
 				triggers.remove(trigger);
 			}
 		}

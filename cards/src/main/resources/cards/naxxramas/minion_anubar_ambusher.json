@@ -8,7 +8,7 @@
 	"rarity": "COMMON",
 	"description": "Deathrattle: Return a friendly minion to your hand.",
 	"deathrattle": {
-		"class": "ReturnMinionToHandSpell",
+		"class": "ReturnTargetToHandSpell",
 		"target": "FRIENDLY_MINIONS",
 		"randomTarget": true
 	},

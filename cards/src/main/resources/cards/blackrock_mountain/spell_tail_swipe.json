@@ -2,7 +2,7 @@
 	"name": "Tail Swipe",
 	"baseManaCost": 4,
 	"type": "SPELL",
-	"heroClass": "BOSS",
+	"heroClass": "INHERIT",
 	"rarity": "FREE",
 	"description": "Deal 4 damage.",
 	"targetSelection": "ANY",

@@ -9,7 +9,7 @@
   "baseHp": 9.0,
   "deathrattle": {
     "randomTarget": true,
-    "class": "ReturnMinionToHandSpell",
+    "class": "ReturnTargetToHandSpell",
     "target": "FRIENDLY_MINIONS"
   },
   "baseManaCost": 5.0,

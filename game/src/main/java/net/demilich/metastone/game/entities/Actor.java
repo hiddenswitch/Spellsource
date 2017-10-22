@@ -145,7 +145,7 @@ public abstract class Actor extends Entity {
 	}
 
 	public List<Enchantment> getEnchantments() {
-		return new ArrayList<Enchantment>(enchantments);
+		return new ArrayList<>(enchantments);
 	}
 
 	public boolean hasEnchantment() {

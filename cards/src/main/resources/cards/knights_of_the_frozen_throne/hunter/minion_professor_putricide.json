@@ -11,7 +11,7 @@
     "spell": {
       "class": "PutRandomSecretIntoPlaySpell",
       "cardSource": {
-        "class": "DefaultSource"
+        "class": "CatalogueSource"
       },
       "cardFilter": {
         "class": "CardFilter",

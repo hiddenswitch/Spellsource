@@ -1,0 +1,27 @@
+{
+  "name": "Spectral Pillager",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "ROGUE",
+  "rarity": "EPIC",
+  "description": "Combo: Deal damage equal to the number of other cards you've played this turn.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "COMBO"
+      }
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

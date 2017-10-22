@@ -12,7 +12,7 @@
 		"target": "NONE",
 		"spells": [
 			{
-				"class": "ReturnMinionToHandSpell",
+				"class": "ReturnTargetToHandSpell",
 				"target": "SELF"
 			},
 			{

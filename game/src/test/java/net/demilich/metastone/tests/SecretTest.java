@@ -101,8 +101,8 @@ public class SecretTest extends TestBase {
 	@Test
 	public void testDuplicate() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
 
 		playCard(context, player, CardCatalogue.getCardById("secret_duplicate"));
 
@@ -122,8 +122,12 @@ public class SecretTest extends TestBase {
 	@Test
 	public void testExplosivePlusFreezingTrap() {
 		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.HUNTER);
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
 
 		MinionCard minionCard = (MinionCard) CardCatalogue.getCardById("minion_wisp");
 		Minion minion = playMinionCard(context, player, minionCard);
@@ -146,8 +150,12 @@ public class SecretTest extends TestBase {
 	@Test
 	public void testFreezingPlusBearTrap() {
 		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.HUNTER);
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
 
 		MinionCard minionCard = (MinionCard) CardCatalogue.getCardById("minion_wisp");
 		Minion minion = playMinionCard(context, player, minionCard);

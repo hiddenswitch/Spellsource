@@ -12,10 +12,13 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.AttributeMap;
+
+import java.util.List;
 
 /**
  * The Card class is an entity that contains card information.
@@ -75,7 +78,11 @@ public abstract class Card extends Entity {
 		}
 
 		if (desc.passiveTrigger != null) {
-			getAttributes().put(Attribute.PASSIVE_TRIGGER, desc.passiveTrigger);
+			getAttributes().put(Attribute.PASSIVE_TRIGGERS, new TriggerDesc[]{desc.passiveTrigger});
+		}
+
+		if (desc.passiveTriggers != null) {
+			getAttributes().put(Attribute.PASSIVE_TRIGGERS, desc.passiveTriggers);
 		}
 
 		if (desc.deckTrigger != null) {
@@ -303,7 +310,7 @@ public abstract class Card extends Entity {
 	 * Collectible cards can be put into decks. Non-collectible cards are typically either "tokens," or cards that are
 	 * spawned by other cards, or narrative cards.
 	 * <p>
-	 * Even though tokens are almost always minions, effects like {@link net.demilich.metastone.game.spells.ReturnMinionToHandSpell}
+	 * Even though tokens are almost always minions, effects like {@link net.demilich.metastone.game.spells.ReturnTargetToHandSpell}
 	 * can create a card that represents a minion.
 	 *
 	 * @return <code>True</code> if the card is collectible.
@@ -431,5 +438,18 @@ public abstract class Card extends Entity {
 	@Override
 	public Card getSourceCard() {
 		return this;
+	}
+
+	public TriggerDesc[] getPassiveTriggers() {
+		return (TriggerDesc[]) getAttribute(Attribute.PASSIVE_TRIGGERS);
+	}
+
+	public void setPassiveTriggers(List<TriggerDesc> passiveTriggers) {
+		TriggerDesc[] triggers = new TriggerDesc[passiveTriggers.size()];
+		for (int i = 0; i < passiveTriggers.size(); i++) {
+			triggers[i] = passiveTriggers.get(i);
+		}
+
+		setAttribute(Attribute.PASSIVE_TRIGGERS, triggers);
 	}
 }

@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.trigger;
 
 import com.google.gson.*;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
@@ -76,6 +77,14 @@ public abstract class GameEventTrigger extends CustomCloneable {
 		Condition condition = (Condition) desc.get(EventTriggerArg.QUEUE_CONDITION);
 		Player owner = event.getGameContext().getPlayer(getOwner());
 		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, event.getEventSource(), event.getEventTarget())) {
+			return false;
+		}
+		// Hero power triggers are disabled if a {@link Attribute#HERO_POWERS_DISABLED} is in play.
+		// Implements Death's Shadow interaction with Mindbreaker.
+		if (host != null
+				&& host.getSourceCard() != null
+				&& host.getSourceCard().getCardType() == CardType.HERO_POWER
+				&& event.getGameContext().getLogic().heroPowersDisabled()) {
 			return false;
 		}
 		return fire(event, host);

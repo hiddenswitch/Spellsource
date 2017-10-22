@@ -3,7 +3,7 @@
 	"baseManaCost": 8,
 	"heroPower": "hero_power_die_insect",
 	"type": "HERO",
-	"heroClass": "BOSS",
+	"heroClass": "INHERIT",
 	"rarity": "LEGENDARY",
 	"attributes": {
 		"HP": 8,

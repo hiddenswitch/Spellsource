@@ -11,7 +11,7 @@
 		"class": "JoustSpell",
 		"target": "NONE",
 		"spell": {
-			"class": "ReturnMinionToHandSpell",
+			"class": "ReturnTargetToHandSpell",
 			"target": "SELF",
 			"condition": {
 				"class": "CardCountCondition",

@@ -31,7 +31,7 @@ public class RenounceClassSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-		
+
 		HeroClass renouncedClass = (HeroClass) cardFilter.getArg(FilterArg.HERO_CLASS);
 		HeroClass rebornClass = SpellUtils.getRandomHeroClassExcept(renouncedClass);
 		CardList cards = CardCatalogue.query(context.getDeckFormat());
@@ -41,17 +41,19 @@ public class RenounceClassSpell extends Spell {
 				result.addCard(card);
 			}
 		}
-		
+
 		int manaCostModifier = desc.getValue(SpellArg.MANA_MODIFIER, context, player, target, source, 0);
-		
+
 		CardList heroPowers = CardCatalogue.getHeroPowers(context.getDeckFormat());
 		for (Card heroPowerCard : heroPowers) {
 			if (heroPowerCard.getHeroClass() == rebornClass) {
-				HeroPowerCard heroPower = (HeroPowerCard) heroPowerCard;
-				heroPower.setId(context.getLogic().getIdFactory().generateId());
-				heroPower.setOwner(player.getHero().getOwner());
-				player.getHero().getHeroPowerZone().move(player.getHero().getHeroPower(), player.getGraveyard());
-				player.getHero().setHeroPower(heroPower);
+				HeroPowerCard newHeroPower = (HeroPowerCard) heroPowerCard;
+				newHeroPower.setId(context.getLogic().getIdFactory().generateId());
+				newHeroPower.setOwner(player.getHero().getOwner());
+				context.getLogic().removeCard(player.getHero().getHeroPower());
+				player.getHero().setHeroPower(newHeroPower);
+				context.getLogic().processPassiveTriggers(player, newHeroPower);
+				break;
 			}
 		}
 
@@ -75,7 +77,7 @@ public class RenounceClassSpell extends Spell {
 		triggerDesc.spell = CardCostModifierSpell.create(EntityReference.EVENT_TARGET, AlgebraicOperation.ADD, manaCostModifier, newCardFilter);
 		SpellDesc enchantmentSpell = AddEnchantmentSpell.create(triggerDesc);
 		SpellUtils.castChildSpell(context, player, enchantmentSpell, source, player);
-		
+
 		replacedCards = new CardArrayList();
 		for (Card card : player.getHand()) {
 			if (card.getHeroClass() == renouncedClass) {

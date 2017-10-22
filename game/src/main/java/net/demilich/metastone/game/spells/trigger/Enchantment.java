@@ -28,6 +28,8 @@ public class Enchantment extends Entity implements Trigger {
 	private int turnDelay;
 	private Integer maxFires;
 	private int fires;
+	private boolean keepAfterTransform;
+	private Card sourceCard;
 
 	protected Enchantment(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
 		this.primaryTrigger = primaryTrigger;
@@ -56,7 +58,7 @@ public class Enchantment extends Entity implements Trigger {
 		if (secondaryTrigger != null) {
 			clone.secondaryTrigger = (GameEventTrigger) secondaryTrigger.clone();
 		}
-		clone.spell = spell.clone();
+		clone.spell = getSpell().clone();
 		return clone;
 	}
 
@@ -79,7 +81,7 @@ public class Enchantment extends Entity implements Trigger {
 		return primaryTrigger.getOwner();
 	}
 
-	protected SpellDesc getSpell() {
+	public SpellDesc getSpell() {
 		return spell;
 	}
 
@@ -164,7 +166,7 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public String toString() {
-		return "[Enchantment primaryTrigger=" + primaryTrigger + ", secondaryTrigger=" + secondaryTrigger + ", spell=" + spell
+		return "[Enchantment primaryTrigger=" + primaryTrigger + ", secondaryTrigger=" + secondaryTrigger + ", spell=" + getSpell()
 				+ ", hostReference=" + hostReference + ", oneTurn=" + oneTurn + ", expired=" + expired + ", persistentOwner="
 				+ persistentOwner + ", turnDelay=" + turnDelay + "]";
 	}
@@ -219,7 +221,7 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	public Card getSourceCard() {
-		return null;
+		return sourceCard;
 	}
 
 	public Integer getMaxFires() {
@@ -228,5 +230,17 @@ public class Enchantment extends Entity implements Trigger {
 
 	public void setMaxFires(Integer maxFires) {
 		this.maxFires = maxFires;
+	}
+
+	public void setKeepAfterTransform(boolean keepAfterTransform) {
+		this.keepAfterTransform = keepAfterTransform;
+	}
+
+	public boolean isKeptAfterTransform() {
+		return keepAfterTransform;
+	}
+
+	public void setSourceCard(Card sourceCard) {
+		this.sourceCard = sourceCard;
 	}
 }

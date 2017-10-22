@@ -7,7 +7,7 @@
 	"description": "Return a friendly minion to your hand.",
 	"targetSelection": "FRIENDLY_MINIONS",
 	"spell": {
-		"class": "ReturnMinionToHandSpell"
+		"class": "ReturnTargetToHandSpell"
 	},
 	"collectible": false,
 	"set": "GOBLINS_VS_GNOMES",
