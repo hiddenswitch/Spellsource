@@ -1,0 +1,26 @@
+{
+  "name": "Shadowblade",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "damage": 3,
+  "durability": 2,
+  "heroClass": "ROGUE",
+  "rarity": "RARE",
+  "description": "Battlecry: Your hero is Immune this turn.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_HERO",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "IMMUNE",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -45,6 +45,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -180,23 +181,29 @@ public class GameLogic implements Cloneable, Serializable {
 	 *
 	 * @param player            Usually the current turn player.
 	 * @param gameEventListener A game event listener, like a {@link Aura}, {@link Secret} or {@link CardCostModifier}.
-	 * @param target            The {@link Entity} that will be pointed to by {@link Trigger#getHostReference()}.
+	 * @param host              The {@link Entity} that will be pointed to by {@link Trigger#getHostReference()}.
 	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete implementation of triggers.
 	 */
 	@Suspendable
-	public void addGameEventListener(Player player, Trigger gameEventListener, Entity target) {
+	public void addGameEventListener(Player player, Trigger gameEventListener, Entity host) {
 		if (isLoggingEnabled()) {
-			debugHistory.add("Player " + player.getId() + " has set event listener " + gameEventListener.getClass().getName() + " from entity " + target.getName() + "[Reference ID: " + target.getId() + "]");
+			debugHistory.add("Player " + player.getId() + " has set event listener " + gameEventListener.getClass().getName() + " from entity " + host.getName() + "[Reference ID: " + host.getId() + "]");
 		}
 
-		gameEventListener.setHost(target);
+		gameEventListener.setHost(host);
 		if (!gameEventListener.hasPersistentOwner() || gameEventListener.getOwner() == Entity.NO_OWNER) {
 			gameEventListener.setOwner(player.getId());
 		}
 
 		gameEventListener.onAdd(context);
 		context.addTrigger(gameEventListener);
-		log("New enchantment was added for {} on {}: {}", player.getName(), target, gameEventListener);
+		if (Enchantment.class.isAssignableFrom(gameEventListener.getClass())) {
+			Enchantment enchantment = (Enchantment) gameEventListener;
+			if (enchantment.getSourceCard() == null) {
+				enchantment.setSourceCard(host.getSourceCard());
+			}
+		}
+		log("New enchantment was added for {} on {}: {}", player.getName(), host, gameEventListener);
 	}
 
 	/**
@@ -372,7 +379,7 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 
 			// Implements Mindbreaker
-			if (context.getPlayers().stream().anyMatch(p -> hasAttribute(p, Attribute.HERO_POWERS_DISABLED))) {
+			if (heroPowersDisabled()) {
 				return false;
 			}
 		} else if (card.getCardType().isCardType(CardType.MINION)) {
@@ -384,6 +391,19 @@ public class GameLogic implements Cloneable, Serializable {
 			return spellCard.canBeCast(context, player);
 		}
 		return true;
+	}
+
+	/**
+	 * Are hero powers disabled?
+	 * <p>
+	 * Disables hero powers from being able to be played and disables their passive triggers.
+	 * <p>
+	 * This implements Mindbreaker
+	 *
+	 * @return {@code true} if hero powers are disabled.
+	 */
+	public boolean heroPowersDisabled() {
+		return context.getPlayers().stream().anyMatch(p -> hasAttribute(p, Attribute.HERO_POWERS_DISABLED));
 	}
 
 	/**
@@ -661,8 +681,13 @@ public class GameLogic implements Cloneable, Serializable {
 		log("{}'s hero has been changed to {}", player.getName(), hero);
 		hero.setOwner(player.getId());
 		hero.setWeapon(previousHero.getWeapon());
+		if (hero.getHeroClass().equals(HeroClass.INHERIT)) {
+			hero.setHeroClass(previousHero.getHeroClass());
+		}
 		// Remove the old hero from play
 		removeEnchantments(previousHero);
+		// This removes the hero power enchantments too
+		removeCard(previousHero.getHeroPower());
 		previousHero.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		player.setHero(hero);
 		hero.modifyArmor(previousArmor);
@@ -686,6 +711,8 @@ public class GameLogic implements Cloneable, Serializable {
 				addGameEventListener(player, trigger, hero);
 			}
 		}
+
+		processPassiveTriggers(player, hero.getHeroPower());
 	}
 
 	/**
@@ -1263,6 +1290,7 @@ public class GameLogic implements Cloneable, Serializable {
 		if (defenderDamage > 0) {
 			damage(player, attacker, defenderDamage, target);
 		}
+
 		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING)) {
 			attacker.getAttributes().remove(Attribute.IMMUNE);
 		}
@@ -1270,7 +1298,7 @@ public class GameLogic implements Cloneable, Serializable {
 		if (attacker.getEntityType() == EntityType.HERO) {
 			Hero hero = (Hero) attacker;
 			Weapon weapon = hero.getWeapon();
-			if (weapon != null && weapon.isActive()) {
+			if (weapon != null && weapon.isActive() && !weapon.hasAttribute(Attribute.IMMUNE)) {
 				modifyDurability(hero.getWeapon(), -1);
 			}
 		}
@@ -1906,9 +1934,13 @@ public class GameLogic implements Cloneable, Serializable {
 			minion.setOwner(player.getId());
 			applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
 			refreshAttacksPerRound(minion);
-			List<Trigger> triggers = context.getTriggersAssociatedWith(minion.getReference());
+			List<Trigger> triggers = context.getTriggersAssociatedWith(minion.getReference())
+					.stream().map(Trigger::clone).collect(toList());
 			removeEnchantments(minion);
 			for (Trigger trigger : triggers) {
+				if (!trigger.hasPersistentOwner()) {
+					trigger.setOwner(player.getId());
+				}
 				addGameEventListener(player, trigger, minion);
 			}
 			context.fireGameEvent(new BoardChangedEvent(context));
@@ -2310,10 +2342,7 @@ public class GameLogic implements Cloneable, Serializable {
 		CardZone hand = player.getHand();
 
 		if (hand.getCount() < MAX_HAND_CARDS) {
-			if (card.getAttribute(Attribute.PASSIVE_TRIGGER) != null) {
-				TriggerDesc triggerDesc = (TriggerDesc) card.getAttribute(Attribute.PASSIVE_TRIGGER);
-				addGameEventListener(player, triggerDesc.create(), card);
-			}
+			processPassiveTriggers(player, card);
 
 			log("{} receives card {}", player.getName(), card);
 			card.moveOrAddTo(context, Zones.HAND);
@@ -2326,6 +2355,33 @@ public class GameLogic implements Cloneable, Serializable {
 		} else {
 			log("{} has too many cards on his hand, card destroyed: {}", player.getName(), card);
 			discardCard(player, card);
+		}
+	}
+
+	/**
+	 * Process the {@link Trigger} specified as the passive trigger on a card.
+	 *
+	 * @param player The player who should own the trigger.
+	 * @param card   The card with the trigger.
+	 */
+	public void processPassiveTriggers(Player player, Card card) {
+		if (card.getPassiveTriggers() != null
+				&& card.getPassiveTriggers().length > 0) {
+			for (TriggerDesc triggerDesc : card.getPassiveTriggers()) {
+				Stream<Enchantment> existingTriggers = context.getTriggersAssociatedWith(card.getReference())
+						.stream()
+						.filter(t -> Enchantment.class.isAssignableFrom(t.getClass()))
+						.map(t -> (Enchantment) t);
+
+				if (existingTriggers.anyMatch(t -> t.getSourceCard().getCardId().equals(card.getCardId())
+						&& t.getSpell().getSpellClass().equals(triggerDesc.spell.getSpellClass()))) {
+					continue;
+				}
+
+				Enchantment enchantment = triggerDesc.create();
+				enchantment.setSourceCard(card);
+				addGameEventListener(player, enchantment, card);
+			}
 		}
 	}
 
@@ -2379,6 +2435,9 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void removeCard(Card card) {
 		log("Card {} has been moved from the {} to the GRAVEYARD", card, card.getEntityLocation().getZone().toString());
+		if (card.getPassiveTriggers() != null && card.getPassiveTriggers().length == 2) {
+			log("break");
+		}
 		removeEnchantments(card);
 		// If it's already in the graveyard, do nothing
 		if (card.getEntityLocation().getZone() == Zones.GRAVEYARD) {
@@ -2405,27 +2464,27 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Removes a minion by marking it {@link Attribute#DESTROYED} and moving it to...
+	 * Removes an actor by moving it to...
 	 * <p>
-	 * <ul> <li>The {@link Zones#GRAVEYARD} if the minion is being removed {@code peacefully == false}</li> <li>The
-	 * {@link Zones#SET_ASIDE_ZONE} if the minion is being removed {@code peacefully == true}. It will be sent to the
-	 * {@link Zones#GRAVEYARD} once {@link #checkForDeadEntities()} is called.</li> </ul>
+	 * <ul> <li>The {@link Zones#GRAVEYARD} if the actor is being removed {@code peacefully == false}. Also marks it
+	 * {@link Attribute#DESTROYED}.</li> <li>The {@link Zones#SET_ASIDE_ZONE} if the actor is being removed {@code
+	 * peacefully == true}. The caller is responsible for moving it elsewhere.</li> </ul>
 	 * <p>
-	 * Deathrattles are not triggered if the minion moves directly to the graveyard ({@code peacefully == false}).
+	 * Deathrattles are not triggered.
 	 *
-	 * @param minion     The minion to remove.
-	 * @param peacefully If {@code true}, remove the card typically due to a {@link ReturnMinionToHandSpell}--that is,
+	 * @param actor      The actor to remove.
+	 * @param peacefully If {@code true}, remove the card typically due to a {@link ReturnTargetToHandSpell}--that is,
 	 *                   not due to a destruction of the minion. Otherwise, move the {@link Minion} to the {@link
 	 *                   Zones#SET_ASIDE_ZONE} where it will be found by {@link #checkForDeadEntities()}.
-	 * @see ReturnMinionToHandSpell for usage of {@link #removeMinion(Minion, boolean)}. Note, this and {@link
+	 * @see ReturnTargetToHandSpell for usage of {@link #removeActor(Actor, boolean)}. Note, this and {@link
 	 * net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell} appear to be the only two users of this function.
 	 */
 	@Suspendable
-	public void removeMinion(Minion minion, boolean peacefully) {
-		removeEnchantments(minion);
-		log("{} was removed", minion);
-		minion.setAttribute(Attribute.DESTROYED);
-		minion.moveOrAddTo(context, peacefully ? Zones.SET_ASIDE_ZONE : Zones.GRAVEYARD);
+	public void removeActor(Actor actor, boolean peacefully) {
+		removeEnchantments(actor);
+		log("{} was removed", actor);
+		actor.setAttribute(Attribute.DESTROYED);
+		actor.moveOrAddTo(context, peacefully ? Zones.SET_ASIDE_ZONE : Zones.GRAVEYARD);
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -2463,44 +2522,48 @@ public class GameLogic implements Cloneable, Serializable {
 			trigger.onRemove(context);
 		}
 		context.removeTriggersAssociatedWith(entityReference, removeAuras);
-		for (Iterator<CardCostModifier> iterator = context.getCardCostModifiers().iterator(); iterator.hasNext(); ) {
-			CardCostModifier cardCostModifier = iterator.next();
-			if (cardCostModifier.getHostReference().equals(entityReference)) {
-				iterator.remove();
-			}
-		}
+		context.getCardCostModifiers().removeIf(cardCostModifier -> cardCostModifier.getHostReference().equals(entityReference));
 	}
 
 	/**
 	 * Replaces the specified old card with the specified new card. Deals with cards that have {@link
-	 * Attribute#PASSIVE_TRIGGER} (an in-hand trigger) correctly.
+	 * Attribute#PASSIVE_TRIGGERS} (an in-hand trigger) correctly.
 	 *
 	 * @param playerId The player whose {@link Zones#HAND} will be manipulated.
 	 * @param oldCard  The old {@link Card} to find and replace in this hand.
 	 * @param newCard  The replacement card.
+	 * @return A reference to the replacement, or {@code null} if no replacement was made..
 	 */
 	@Suspendable
-	public void replaceCardInHand(int playerId, Card oldCard, Card newCard) {
+	public Card replaceCardInHand(int playerId, Card oldCard, Card newCard) {
 		Player player = context.getPlayer(playerId);
 		if (newCard.getId() == IdFactory.UNASSIGNED) {
 			newCard.setId(getIdFactory().generateId());
 		}
 
 		if (!player.getHand().contains(oldCard)) {
-			return;
+			return null;
 		}
 
 		newCard.setOwner(playerId);
 		CardList hand = player.getHand();
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
-		removeEnchantments(oldCard);
 		hand.replace(oldCard, newCard);
+		transferKeptEnchantments(oldCard, newCard);
+		removeEnchantments(oldCard);
 		oldCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		if (newCard.getAttribute(Attribute.PASSIVE_TRIGGER) != null) {
-			TriggerDesc triggerDesc = (TriggerDesc) newCard.getAttribute(Attribute.PASSIVE_TRIGGER);
-			addGameEventListener(player, triggerDesc.create(), newCard);
-		}
+		processPassiveTriggers(player, newCard);
 		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, null, false));
+		return newCard;
+	}
+
+	protected void transferKeptEnchantments(Card oldCard, Card newCard) {
+		context.getTriggersAssociatedWith(oldCard.getReference())
+				.stream()
+				.filter(t -> Enchantment.class.isAssignableFrom(t.getClass()))
+				.map(t -> (Enchantment) t)
+				.filter(Enchantment::isKeptAfterTransform)
+				.forEach(e -> e.setHost(newCard));
 	}
 
 	/**

@@ -7,7 +7,7 @@
 	"description": "Return an enemy minion to your opponent's hand.",
 	"targetSelection": "ENEMY_MINIONS",
 	"spell": {
-		"class": "ReturnMinionToHandSpell"
+		"class": "ReturnTargetToHandSpell"
 	},
 	"collectible": true,
 	"set": "BASIC",

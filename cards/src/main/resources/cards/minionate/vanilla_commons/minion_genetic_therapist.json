@@ -10,7 +10,7 @@
 	"battlecry": {
 		"targetSelection": "FRIENDLY_MINIONS",
 		"spell": {
-			"class": "ReturnMinionToHandSpell"
+			"class": "ReturnTargetToHandSpell"
 		}
 	},
 	"attributes": {

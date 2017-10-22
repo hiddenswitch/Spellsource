@@ -6,10 +6,10 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.ReturnMinionToHandSpell;
+import net.demilich.metastone.game.spells.ReturnTargetToHandSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
-public class AlarmOBotSpell extends ReturnMinionToHandSpell {
+public class AlarmOBotSpell extends ReturnTargetToHandSpell {
 
 	@Override
 	@Suspendable

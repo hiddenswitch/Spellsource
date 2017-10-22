@@ -1,0 +1,45 @@
+{
+  "name": "Shadow Reflection",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "FREE",
+  "description": "Each time you play a card, transform this into a copy of  it.",
+  "passiveTriggers": [
+    {
+      "keepAfterTransform": true,
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveCardSpell",
+        "target": "SELF"
+      }
+    },
+    {
+      "keepAfterTransform": true,
+      "eventTrigger": {
+        "class": "CardPlayedTrigger",
+        "targetPlayer": "SELF",
+        "hostTargetType": "IGNORE_AS_TARGET"
+      },
+      "spell": {
+        "class": "custom.ShifterZerusSpell",
+        "target": "SELF",
+        "secondaryTarget": "EVENT_TARGET"
+      }
+    }
+  ],
+  "spell": {
+    "class": "NullSpell"
+  },
+  "targetSelection": "NONE",
+  "condition": {
+    "class": "OrCondition",
+    "conditions": []
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

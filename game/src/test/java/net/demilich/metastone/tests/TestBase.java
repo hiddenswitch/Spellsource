@@ -179,6 +179,10 @@ public class TestBase {
 		return minionList.get(minionList.size() - 1);
 	}
 
+	protected static void playCard(GameContext context, Player player, String cardId) {
+		playCard(context, player, CardCatalogue.getCardById(cardId));
+	}
+
 	protected static void playCard(GameContext context, Player player, Card card) {
 		context.getLogic().receiveCard(player.getId(), card);
 		context.getLogic().performGameAction(player.getId(), card.play());
@@ -189,6 +193,10 @@ public class TestBase {
 		GameAction action = card.play();
 		action.setTarget(target);
 		context.getLogic().performGameAction(player.getId(), action);
+	}
+
+	protected static Minion playMinionCard(GameContext context, Player player, String minionCardId) {
+		return playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById(minionCardId));
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, MinionCard minionCard) {

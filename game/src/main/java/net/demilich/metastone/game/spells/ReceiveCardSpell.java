@@ -30,7 +30,7 @@ public class ReceiveCardSpell extends Spell {
 			CardList result = new CardArrayList();
 
 			if (cardFilter != null) {
-				result = cards.filtered(c -> cardFilter.matches(context, player, c, source));
+				result = cards.filtered(cardFilter.matcher(context, player, source));
 			}
 
 			String replacementCard = (String) desc.get(SpellArg.CARD);

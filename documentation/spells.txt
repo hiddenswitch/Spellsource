@@ -351,7 +351,7 @@ ResurrectSpell
 Summons a random friendly minion that died this game.
 Examples: Resurrect
 
-ReturnMinionToHandSpell {}: Combine with ShuffleMinionToDeck (DeckLocation)
+ReturnTargetToHandSpell {}: Combine with ShuffleMinionToDeck (DeckLocation)
 Returns a minion to its owners hand.
 Examples: Dream(Ysera), Paralyzing Touch, Anub'Arak
 "target": The target of the spell.

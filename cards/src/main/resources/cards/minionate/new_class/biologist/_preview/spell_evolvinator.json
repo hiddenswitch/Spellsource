@@ -7,7 +7,7 @@
 	"description": "Return a friendly minion to your hand. It costs 2 less Energy.",
 	"targetSelection": "FRIENDLY_MINIONS",
 	"spell": {
-		"class": "ReturnMinionToHandSpell",
+		"class": "ReturnTargetToHandSpell",
 		"spell": {
 			"class": "CardCostModifierSpell",
 			"target": "FRIENDLY_PLAYER",

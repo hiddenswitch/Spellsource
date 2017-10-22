@@ -6,6 +6,7 @@ import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.*;
@@ -150,5 +151,13 @@ public class SpellDesc extends Desc<SpellArg> {
 
 	private static SpellDesc join(EntityReference target, boolean randomTarget, SpellDesc... descs) {
 		return MetaSpell.create(target, randomTarget, descs);
+	}
+
+	public EntityFilter getCardFilter() {
+		return (EntityFilter) get(SpellArg.CARD_FILTER);
+	}
+
+	public CardSource getCardSource() {
+		return (CardSource) get(SpellArg.CARD_SOURCE);
 	}
 }

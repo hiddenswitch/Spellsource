@@ -52,7 +52,7 @@ public class CopyCardSpell extends Spell {
 		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 
 		if (filter != null) {
-			sourceCollection = sourceCollection.filtered(card -> filter.matches(context, player, card, source));
+			sourceCollection = sourceCollection.filtered(filter.matcher(context, player, source));
 		}
 
 		for (int i = 0; i < numberOfCardsToCopy; i++) {

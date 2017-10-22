@@ -1,0 +1,33 @@
+{
+  "name": "Doomerang",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "EPIC",
+  "description": "Throw your weapon at a minion. It deals its damage, then returns to your hand.",
+  "targetSelection": "MINIONS",
+  "condition": {
+    "class": "HasWeaponCondition",
+    "targetPlayer": "SELF"
+  },
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_WEAPON",
+          "attribute": "ATTACK"
+        }
+      },
+      {
+        "class": "ReturnTargetToHandSpell",
+        "target": "FRIENDLY_WEAPON"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

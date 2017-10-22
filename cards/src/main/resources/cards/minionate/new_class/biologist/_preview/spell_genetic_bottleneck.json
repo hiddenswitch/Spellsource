@@ -7,7 +7,7 @@
 	"description": "Return every minion to its owner's hand.",
 	"targetSelection": "NONE",
 	"spell": {
-		"class": "ReturnMinionToHandSpell",
+		"class": "ReturnTargetToHandSpell",
 		"target": "ALL_MINIONS"
 	},
 	"collectible": true,

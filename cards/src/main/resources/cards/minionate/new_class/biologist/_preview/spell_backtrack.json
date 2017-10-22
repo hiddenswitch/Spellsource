@@ -7,7 +7,7 @@
 	"description": "Return an enemy minion to its owner’s hand.",
 	"targetSelection": "ENEMY_MINIONS",
 	"spell": {
-		"class": "ReturnMinionToHandSpell"
+		"class": "ReturnTargetToHandSpell"
 	},
 	"collectible": true,
 	"set": "SPELLSOURCE",

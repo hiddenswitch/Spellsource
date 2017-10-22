@@ -255,7 +255,7 @@ public interface CardList extends Iterable<Card> {
 	 * @param filter A predicate.
 	 * @return A new {@link CardList} filtered.
 	 */
-	default CardList filtered(Predicate<? super Entity> filter) {
+	default CardList filtered(Predicate<? super Card> filter) {
 		CardList filteredCards = new CardArrayList();
 		toList().stream().filter(filter).forEach(filteredCards::addCard);
 		return filteredCards;

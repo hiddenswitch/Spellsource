@@ -20,6 +20,39 @@ import java.util.List;
 
 public class JourneyToUngoroTests extends TestBase {
 	@Test
+	public void testMoltenBlade() {
+		for (String cardId : new String[] {"weapon_molten_blade", "minion_shifter_zerus"}) {
+			GameContext context = createContext(HeroClass.ROGUE, HeroClass.ROGUE);
+			Player player = context.getActivePlayer();
+			Player opponent = context.getOpponent(player);
+			clearHand(context, player);
+			clearHand(context, opponent);
+			clearZone(context, player.getDeck());
+			clearZone(context, opponent.getDeck());
+
+			player.setMana(10);
+			player.setMaxMana(10);
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById(cardId));
+			int oldId = player.getHand().get(0).getId();
+			Assert.assertEquals(player.getHand().get(0).getCardId(), cardId);
+			context.endTurn();
+			context.endTurn();
+			int oldId1 = player.getHand().get(0).getId();
+			Assert.assertNotEquals(oldId1, oldId);
+			context.endTurn();
+			context.endTurn();
+			int oldId2 = player.getHand().get(0).getId();
+			Assert.assertNotEquals(oldId2, oldId1);
+			Card card = player.getHand().get(0);
+			context.getLogic().performGameAction(player.getId(), card.play());
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(player.getHand().size(), 0);
+		}
+
+	}
+
+	@Test
 	public void testEarthenScales() {
 		GameContext context = createContext(HeroClass.DRUID, HeroClass.DRUID);
 		Player player = context.getPlayer1();

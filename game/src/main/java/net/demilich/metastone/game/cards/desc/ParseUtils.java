@@ -187,15 +187,14 @@ public class ParseUtils {
 				return array;
 			}
 			case TRIGGER:
-				JsonObject triggerObject = entry.getAsJsonObject();
-				TriggerDesc triggerDesc = new TriggerDesc();
-				triggerDesc.eventTrigger = triggerParser.deserialize(triggerObject.get("eventTrigger"), EventTriggerDesc.class, null);
-				triggerDesc.spell = spellParser.deserialize(triggerObject.get("spell"), SpellDesc.class, null);
-				triggerDesc.oneTurn = triggerObject.has("oneTurn") && triggerObject.get("oneTurn").getAsBoolean();
-				triggerDesc.persistentOwner = triggerObject.has("persistentOwner") && triggerObject.get("persistentOwner").getAsBoolean();
-				triggerDesc.turnDelay = triggerObject.has("turnDelay") ? triggerObject.get("turnDelay").getAsInt() : 0;
-				triggerDesc.maxFires = triggerObject.has("maxFires") ? triggerObject.get("maxFires").getAsInt() : null;
-				return triggerDesc;
+				return deserializeTriggerDesc(entry);
+			case TRIGGERS:
+				JsonArray array = entry.getAsJsonArray();
+				TriggerDesc[] triggerDescs = new TriggerDesc[array.size()];
+				for (int i = 0; i < array.size(); i++) {
+					triggerDescs[i] = deserializeTriggerDesc(array.get(i));
+				}
+				return triggerDescs;
 			case EVENT_TRIGGER:
 				if (entry.getAsJsonObject().has("desc")) {
 					entry = entry.getAsJsonObject().get("desc");
@@ -210,6 +209,19 @@ public class ParseUtils {
 				break;
 		}
 		return null;
+	}
+
+	protected static TriggerDesc deserializeTriggerDesc(JsonElement entry) {
+		JsonObject triggerObject = entry.getAsJsonObject();
+		TriggerDesc triggerDesc = new TriggerDesc();
+		triggerDesc.eventTrigger = triggerParser.deserialize(triggerObject.get("eventTrigger"), EventTriggerDesc.class, null);
+		triggerDesc.spell = spellParser.deserialize(triggerObject.get("spell"), SpellDesc.class, null);
+		triggerDesc.oneTurn = triggerObject.has("oneTurn") && triggerObject.get("oneTurn").getAsBoolean();
+		triggerDesc.persistentOwner = triggerObject.has("persistentOwner") && triggerObject.get("persistentOwner").getAsBoolean();
+		triggerDesc.turnDelay = triggerObject.has("turnDelay") ? triggerObject.get("turnDelay").getAsInt() : 0;
+		triggerDesc.maxFires = triggerObject.has("maxFires") ? triggerObject.get("maxFires").getAsInt() : null;
+		triggerDesc.keepAfterTransform = triggerObject.has("keepAfterTransform") && triggerObject.get("keepAfterTransform").getAsBoolean();
+		return triggerDesc;
 	}
 
 	private static EntityReference parseEntityReference(String str) {

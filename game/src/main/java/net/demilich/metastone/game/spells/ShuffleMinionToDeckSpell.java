@@ -13,7 +13,7 @@ public class ShuffleMinionToDeckSpell extends ShuffleToDeckSpell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (!target.isDestroyed()) {
-			context.getLogic().removeMinion((Minion) target, true);
+			context.getLogic().removeActor((Minion) target, true);
 		}
 
 		super.onCast(context, player, desc, source, target);

@@ -4,14 +4,8 @@ package net.demilich.metastone.tests;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
-import net.demilich.metastone.game.actions.HeroPowerAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.actions.PlayCardAction;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.ChooseBattlecryHeroCard;
-import net.demilich.metastone.game.cards.HeroCard;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.actions.*;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -33,6 +27,75 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
+	@Test
+	public void testValeeraTheHollow() {
+		GameContext context = createContext(HeroClass.ROGUE, HeroClass.ROGUE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		player.setMaxMana(10);
+		player.setMana(10);
+		playCard(context, player, "hero_valeera_the_hollow");
+		Assert.assertTrue(player.getHand().containsCard("token_shadow_reflection"));
+		Assert.assertFalse(context.getLogic().canPlayCard(player.getId(),
+				player.getHand().get(0).getCardReference()),
+				"You should not be able to play the Shadow Reflection because it doesn't do anything until a card is played.");
+		playCard(context, player, "minion_wisp");
+		Assert.assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getCardReference()),
+				"Since you have 1 mana left and we last played a Wisp, the Shadow Reflection should have transformed into the Wisp and it should be playable.");
+		context.endTurn();
+		Assert.assertEquals(player.getHand().size(), 0, "The Shadow Reflection-as-Wisp should have removed itself from the player's hand");
+		Minion bluegillWarrior = playMinionCard(context, opponent, "minion_bluegill_warrior");
+		List<GameAction> validActions = context.getValidActions();
+		Assert.assertFalse(validActions.stream().anyMatch(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK
+						&& ga.getTargetReference().equals(player.getHero().getReference())),
+				"Valeera has STEALTH, so she should not be targetable by the Bluegill Warrior");
+		context.endTurn();
+		Assert.assertTrue(player.getHand().containsCard("token_shadow_reflection"));
+		playCard(context, player, "minion_water_elemental");
+		playCard(context, player, "minion_wisp");
+		Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_wisp",
+				"Since Wisp was the last card the player played, Shadow Reflection should be a Wisp");
+		context.endTurn();
+		playCard(context, opponent, "minion_mindbreaker");
+		context.endTurn();
+		Assert.assertEquals(player.getHand().size(), 0, "The presence of Mindbreaker should prevent Shadow Reflection from entering the player's hand.");
+
+	}
+
+	@Test
+	public void testDoomerang() {
+		GameContext context = createContext(HeroClass.ROGUE, HeroClass.ROGUE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		// 4/2, Deathrattle deals 1 damage to all minions
+		playCard(context, player, CardCatalogue.getCardById("weapon_deaths_bite"));
+
+		Assert.assertTrue(player.getHero().getWeapon().isActive());
+		context.endTurn();
+		Minion tarCreeper1 = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_tar_creeper"));
+		Minion tarCreeper2 = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_tar_creeper"));
+		context.endTurn();
+		context.getLogic().performGameAction(player.getId(), new PhysicalAttackAction(player.getHero().getReference()).withTargetReference(tarCreeper1.getReference()));
+		Assert.assertEquals(tarCreeper1.getHp(), 1);
+		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_doomerang"), tarCreeper2);
+		Assert.assertEquals(tarCreeper1.getHp(), 1, "Deathrattle should not have triggered and should not have killed the first Tar Creeper.");
+		Assert.assertEquals(tarCreeper2.getHp(), 1, "The second Tar Creeper should have been damaged by the Doomerang");
+		Card card = player.getHand().get(player.getHand().getCount() - 1);
+		Assert.assertEquals(card.getSourceCard().getCardId(), "weapon_deaths_bite", "Doomerang should now be in the player's hand.");
+		Assert.assertEquals(player.getWeaponZone().size(), 0);
+		context.getLogic().performGameAction(player.getId(), card.play());
+		Assert.assertEquals(player.getHero().getWeapon().getDurability(), 2, "Doomerang should have 2 durability, not 1, since it was played fresh from the hand.");
+	}
+
 	@Test
 	public void testEternalServitude() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);

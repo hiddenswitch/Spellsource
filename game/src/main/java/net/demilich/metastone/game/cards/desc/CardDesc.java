@@ -28,6 +28,7 @@ public abstract class CardDesc implements Serializable {
 	public int fileFormatVersion = 1;
 	public ValueProviderDesc manaCostModifier;
 	public TriggerDesc passiveTrigger;
+	public TriggerDesc[] passiveTriggers;
 	public TriggerDesc deckTrigger;
 
 	public abstract Card createInstance();
