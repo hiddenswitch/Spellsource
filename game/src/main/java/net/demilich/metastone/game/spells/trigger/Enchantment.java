@@ -139,7 +139,8 @@ public class Enchantment extends Entity implements Trigger {
 		}
 		// Notify the game context that a spell trigger was successfully fired, as long as it wasn't due to a
 		// board changed event.
-		if (event.getEventType() != GameEventType.BOARD_CHANGED) {
+		if (event.getEventType() != GameEventType.BOARD_CHANGED
+				&& primaryTrigger.interestedIn() != GameEventType.ALL) {
 			event.getGameContext().onEnchantmentFired(this);
 		}
 		onFire(ownerId, getSpell(), event);

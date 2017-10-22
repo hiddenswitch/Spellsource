@@ -60,6 +60,7 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.MEGA_WINDFURY, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.OPPONENT_SPELL_DAMAGE, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.OVERLOAD, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.OVERLOADED_THIS_GAME, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.POISONOUS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.SPELL_AMPLIFY_MULTIPLIER, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.SPELL_DAMAGE, jsonData, map, ParseValueType.INTEGER);

@@ -43,7 +43,7 @@ public class AddAttributeSpell extends RevertableSpell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Attribute tag = (Attribute) desc.get(SpellArg.ATTRIBUTE);
-		context.getLogic().applyAttribute(target, tag);
+		context.getLogic().applyAttribute(target, tag, source);
 		super.onCast(context, player, desc, source, target);
 	}
 }

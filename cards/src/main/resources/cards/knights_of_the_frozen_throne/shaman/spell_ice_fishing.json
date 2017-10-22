@@ -1,0 +1,20 @@
+{
+  "name": "Ice Fishing",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "COMMON",
+  "description": "Draw 2 Murlocs from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "MURLOC"
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

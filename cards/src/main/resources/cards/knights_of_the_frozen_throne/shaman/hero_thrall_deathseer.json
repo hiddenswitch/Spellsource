@@ -1,0 +1,32 @@
+{
+  "name": "Thrall, Deathseer",
+  "baseManaCost": 5,
+  "heroPower": "hero_power_transmute_spirit",
+  "type": "HERO",
+  "heroClass": "SHAMAN",
+  "rarity": "LEGENDARY",
+  "attributes": {
+    "MAX_HP": 30,
+    "ARMOR": 5
+  },
+  "description": "Battlecry: Transform your minions into random ones that cost (2) more.",
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1,
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "TransformToRandomMinionSpell",
+      "target": "FRIENDLY_MINIONS",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": {
+          "class": "AttributeValueProvider",
+          "target": "SPELL_TARGET",
+          "attribute": "BASE_MANA_COST",
+          "offset": 2
+        }
+      }
+    }
+  }
+}

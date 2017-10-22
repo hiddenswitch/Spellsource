@@ -188,6 +188,10 @@ public class TestBase {
 		context.getLogic().performGameAction(player.getId(), card.play());
 	}
 
+	protected static void playCardWithTarget(GameContext context, Player player, String cardId, Entity target) {
+		playCardWithTarget(context, player, CardCatalogue.getCardById(cardId), target);
+	}
+
 	protected static void playCardWithTarget(GameContext context, Player player, Card card, Entity target) {
 		context.getLogic().receiveCard(player.getId(), card);
 		GameAction action = card.play();
