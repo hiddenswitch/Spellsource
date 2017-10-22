@@ -1,0 +1,17 @@
+{
+  "name": "Drakkari Defender",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "heroClass": "SHAMAN",
+  "rarity": "COMMON",
+  "description": "Taunt Overload: (3)",
+  "attributes": {
+    "OVERLOAD": 3,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

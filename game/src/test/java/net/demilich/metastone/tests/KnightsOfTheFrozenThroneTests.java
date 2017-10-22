@@ -28,6 +28,31 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testMoorabi() {
+		GameContext context = createContext(HeroClass.ROGUE, HeroClass.ROGUE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		Minion moorabi = playMinionCard(context, player, "minion_moorabi");
+		Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+		playCardWithTarget(context, player, "spell_freezing_potion", bloodfenRaptor);
+		Assert.assertEquals(player.getHand().size(), 1);
+		Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
+		playCardWithTarget(context, player, "spell_freezing_potion", moorabi);
+		Assert.assertEquals(player.getHand().size(), 1,
+				"Freezing Moorabi should not put a copy of Moorabi into your hand.");
+		context.endTurn();
+		Minion noviceEngineer = playMinionCard(context, player, "minion_novice_engineer");
+		playCardWithTarget(context, player, "spell_freezing_potion", noviceEngineer);
+		Assert.assertEquals(player.getHand().size(), 2);
+		Assert.assertEquals(player.getHand().get(1).getCardId(), "minion_novice_engineer");
+	}
+
+	@Test
 	public void testValeeraTheHollow() {
 		GameContext context = createContext(HeroClass.ROGUE, HeroClass.ROGUE);
 		Player player = context.getActivePlayer();

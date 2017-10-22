@@ -1,0 +1,24 @@
+{
+  "name": "Ice Breaker",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "damage": 1,
+  "durability": 3,
+  "heroClass": "SHAMAN",
+  "rarity": "RARE",
+  "description": "Destroy any Frozen minion damaged by this.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

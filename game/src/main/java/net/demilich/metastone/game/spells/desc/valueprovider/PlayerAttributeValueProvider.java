@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import net.demilich.metastone.game.Environment;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.PlayerAttribute;
+import net.demilich.metastone.game.*;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.statistics.Statistic;
 
@@ -33,6 +30,8 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return player.getSecrets().size();
 			case SPELLS_CAST:
 				return (int) player.getStatistics().getLong(Statistic.SPELLS_CAST);
+			case OVERLOADED_THIS_GAME:
+				return (int) player.getAttributes().getOrDefault(Attribute.OVERLOADED_THIS_GAME, 0);
 			default:
 				break;
 		}

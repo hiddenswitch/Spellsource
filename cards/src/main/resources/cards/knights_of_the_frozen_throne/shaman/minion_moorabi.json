@@ -1,0 +1,27 @@
+{
+  "name": "Moorabi",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "SHAMAN",
+  "rarity": "LEGENDARY",
+  "description": "Whenever another minion is Frozen, add a copy of it to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AttributeAppliedTrigger",
+      "requiredAttribute": "FROZEN",
+      "targetPlayer": "BOTH",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "EVENT_TARGET",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -272,6 +272,10 @@ public enum Attribute {
 	 */
 	OVERLOAD,
 	/**
+	 * The {@link Integer} amount of mana overloaded overloaded by the player over the course of the game.
+	 */
+	OVERLOADED_THIS_GAME,
+	/**
 	 * A {@link Card} with this attribute signals that it has two options that a player chooses from when the card is
 	 * played.
 	 */

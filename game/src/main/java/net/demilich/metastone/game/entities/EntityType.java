@@ -7,5 +7,7 @@ public enum EntityType {
 	WEAPON,
 	CARD,
 	PLAYER,
-	ENCHANTMENT, QUEST, SECRET
+	ENCHANTMENT,
+	QUEST,
+	SECRET
 }

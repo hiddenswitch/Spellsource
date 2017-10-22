@@ -1,0 +1,25 @@
+{
+  "name": "Cryostasis",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "EPIC",
+  "description": "Give a minion +3/+3 and Freeze it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN",
+  "fileFormatVersion": 1
+}

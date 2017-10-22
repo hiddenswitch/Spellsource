@@ -266,6 +266,20 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void applyAttribute(Entity entity, Attribute attr) {
+		applyAttribute(entity, attr, null);
+	}
+
+	/**
+	 * Gives an {@link Entity} a boolean {@link Attribute}.
+	 * <p>
+	 * This addresses bugs with {@link Attribute#WINDFURY} and should be the place for special rules around attributes
+	 * in the future.
+	 *
+	 * @param entity An {@link Entity}
+	 * @param attr   An {@link Attribute}
+	 * @param source A source entity for the attribute application.
+	 */
+	public void applyAttribute(Entity entity, Attribute attr, Entity source) {
 		if (attr == Attribute.MEGA_WINDFURY && entity.hasAttribute(Attribute.WINDFURY) && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
 			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, MEGA_WINDFURY_ATTACKS - WINDFURY_ATTACKS);
 		} else if (attr == Attribute.WINDFURY && !entity.hasAttribute(Attribute.WINDFURY) && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
@@ -274,6 +288,7 @@ public class GameLogic implements Cloneable, Serializable {
 			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, MEGA_WINDFURY_ATTACKS - 1);
 		}
 		entity.setAttribute(attr);
+		context.fireGameEvent(new AttributeAppliedEvent(context, entity.getId(), entity, source, attr));
 		log("Applying attr {} to {}", attr, entity);
 	}
 
@@ -2127,7 +2142,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * represents playing a card from the hand. This method then deducts the appropriate amount of mana (or health,
 	 * depending on the card). Then, it will check if the {@link SpellCard} was countered by Counter Spell (a {@link
 	 * Secret} which adds a {@link Attribute#COUNTERED} attribute to the card that was raised in the {@link
-	 * CardPlayedEvent}). Finally, it applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked
+	 * CardPlayedEvent}). It applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked
 	 * next turn. Finally, it removes the card from the player's {@link Zones#HAND} and puts it in the {@link
 	 * Zones#GRAVEYARD}.
 	 *
@@ -2176,6 +2191,8 @@ public class GameLogic implements Cloneable, Serializable {
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
+			// Implements Snowfury Giant
+			player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
 		}
 	}
 

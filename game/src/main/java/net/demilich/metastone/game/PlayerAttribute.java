@@ -9,5 +9,5 @@ public enum PlayerAttribute {
 	LAST_MANA_COST,
 	SECRET_COUNT,
 	SPELLS_CAST,
-	
+	OVERLOADED_THIS_GAME
 }
