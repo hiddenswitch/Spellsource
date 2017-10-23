@@ -20,8 +20,8 @@ import java.util.List;
 
 public class JourneyToUngoroTests extends TestBase {
 	@Test
-	public void testMoltenBlade() {
-		for (String cardId : new String[] {"weapon_molten_blade", "minion_shifter_zerus"}) {
+	public void testMoltenBladeAndShifterZerus() {
+		for (String cardId : new String[]{"weapon_molten_blade", "minion_shifter_zerus"}) {
 			GameContext context = createContext(HeroClass.ROGUE, HeroClass.ROGUE);
 			Player player = context.getActivePlayer();
 			Player opponent = context.getOpponent(player);
@@ -34,7 +34,7 @@ public class JourneyToUngoroTests extends TestBase {
 			player.setMaxMana(10);
 			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById(cardId));
 			int oldId = player.getHand().get(0).getId();
-			Assert.assertEquals(player.getHand().get(0).getCardId(), cardId);
+			Assert.assertEquals(player.getHand().get(0).getCardId(), cardId, String.format("%s should not have transformed yet: ", cardId));
 			context.endTurn();
 			context.endTurn();
 			int oldId1 = player.getHand().get(0).getId();
@@ -47,7 +47,7 @@ public class JourneyToUngoroTests extends TestBase {
 			context.getLogic().performGameAction(player.getId(), card.play());
 			context.endTurn();
 			context.endTurn();
-			Assert.assertEquals(player.getHand().size(), 0);
+			Assert.assertEquals(player.getHand().size(), 0, String.format("%s should have been played as %s, but the size of the hand was: ", cardId, card.getCardId()));
 		}
 
 	}

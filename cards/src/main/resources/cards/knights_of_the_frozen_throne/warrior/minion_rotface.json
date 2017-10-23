@@ -1,0 +1,31 @@
+{
+  "name": "Rotface",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "heroClass": "WARRIOR",
+  "rarity": "LEGENDARY",
+  "description": "Whenever this minion survives damage, summon a random Legendary minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "invert": true
+      }
+    },
+    "spell": {
+      "class": "SummonRandomMinionFilteredSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "LEGENDARY"
+      },
+      "boardPositionRelative": "RIGHT"
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

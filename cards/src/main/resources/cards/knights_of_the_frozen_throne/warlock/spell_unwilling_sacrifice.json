@@ -1,10 +1,10 @@
 {
-  "name": "Shadowflame",
-  "baseManaCost": 4,
+  "name": "Unwilling Sacrifice",
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "WARLOCK",
   "rarity": "RARE",
-  "description": "Destroy a friendly minion and deal its Attack damage to all enemy minions.",
+  "description": "Choose a friendly minion. Destroy it and a random enemy minion.",
   "targetSelection": "FRIENDLY_MINIONS",
   "condition": {
     "class": "MinionCountCondition",
@@ -18,20 +18,13 @@
         "class": "DestroySpell"
       },
       {
-        "class": "DamageSpell",
+        "class": "DestroySpell",
         "target": "ENEMY_MINIONS",
-        "value": {
-          "class": "AttributeValueProvider",
-          "target": "TARGET",
-          "attribute": "ATTACK"
-        }
+        "randomTarget": true
       }
     ]
   },
-  "attributes": {
-    "NAME": "Paucha's Kiss"
-  },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
   "fileFormatVersion": 1
 }

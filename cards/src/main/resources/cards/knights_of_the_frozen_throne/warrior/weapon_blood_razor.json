@@ -1,0 +1,30 @@
+{
+  "name": "Blood Razor",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "damage": 2,
+  "durability": 2,
+  "heroClass": "WARRIOR",
+  "rarity": "COMMON",
+  "description": "Battlecry and Deathrattle: Deal 1 damage to all minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 1
+    }
+  },
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "ALL_MINIONS",
+    "value": 1
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

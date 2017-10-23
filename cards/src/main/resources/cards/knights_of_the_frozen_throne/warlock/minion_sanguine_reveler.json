@@ -1,0 +1,33 @@
+{
+  "name": "Sanguine Reveler",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "heroClass": "WARLOCK",
+  "rarity": "COMMON",
+  "description": "Battlecry: Destroy a friendly minion and gain +2/+2.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 2,
+          "hpBonus": 2
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

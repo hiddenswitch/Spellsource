@@ -1,0 +1,25 @@
+{
+  "name": "Animated Berserker",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "heroClass": "WARRIOR",
+  "rarity": "COMMON",
+  "description": "After you play a minion, deal 1 damage to it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "EVENT_TARGET",
+      "value": 1,
+      "howMany": 1
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

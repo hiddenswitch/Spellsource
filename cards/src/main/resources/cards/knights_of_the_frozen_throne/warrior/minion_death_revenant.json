@@ -1,0 +1,27 @@
+{
+  "name": "Death Revenant",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "WARRIOR",
+  "rarity": "RARE",
+  "description": "Battlecry: Gain +1/+1 for each damaged minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "value": {
+        "class": "EntityCounter",
+        "target": "ALL_MINIONS",
+        "filter": {
+          "class": "DamagedFilter"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

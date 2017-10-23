@@ -30,6 +30,8 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return player.getSecrets().size();
 			case SPELLS_CAST:
 				return (int) player.getStatistics().getLong(Statistic.SPELLS_CAST);
+			case CARDS_DISCARDED:
+				return (int) player.getStatistics().getLong(Statistic.CARDS_DISCARDED);
 			case OVERLOADED_THIS_GAME:
 				return (int) player.getAttributes().getOrDefault(Attribute.OVERLOADED_THIS_GAME, 0);
 			default:

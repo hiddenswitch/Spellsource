@@ -1,0 +1,25 @@
+{
+  "name": "Despicable Dreadlord",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "heroClass": "WARLOCK",
+  "rarity": "RARE",
+  "race": "DEMON",
+  "description": "At the end of your turn, deal 1 damage to all enemy minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
