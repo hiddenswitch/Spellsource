@@ -32,6 +32,10 @@ public class GameStatistics implements Cloneable, Serializable {
 		add(Statistic.CARDS_DRAWN, 1);
 	}
 
+	public void cardDiscarded() {
+		add(Statistic.CARDS_DISCARDED, 1);
+	}
+
 	public void cardPlayed(Card card, int turn) {
 		add(Statistic.CARDS_PLAYED, 1);
 

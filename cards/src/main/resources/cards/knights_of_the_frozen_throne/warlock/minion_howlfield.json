@@ -1,0 +1,23 @@
+{
+  "name": "Howlfiend",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "heroClass": "WARLOCK",
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Whenever this minion takes damage, discard a random card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DiscardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

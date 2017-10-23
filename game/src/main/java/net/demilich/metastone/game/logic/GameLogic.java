@@ -1051,6 +1051,7 @@ public class GameLogic implements Cloneable, Serializable {
 		// only a 'real' discard should fire a DiscardEvent
 		if (card.getZone() == Zones.HAND) {
 			context.fireGameEvent(new DiscardEvent(context, player.getId(), card));
+			player.getStatistics().cardDiscarded();
 		} else if (card.getZone() == Zones.DECK) {
 			context.fireGameEvent(new MillEvent(context, player.getId(), card));
 		}

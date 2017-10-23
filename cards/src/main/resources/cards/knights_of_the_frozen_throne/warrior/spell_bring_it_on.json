@@ -1,0 +1,25 @@
+{
+  "name": "Bring It On!",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "EPIC",
+  "description": "Gain 10 Armor. Reduce the Cost of minions in your opponent's hand by (2).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CardCostModifierSpell",
+    "target": "ENEMY_HAND",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "operation": "SUBTRACT",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Mountainfire Armor",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "heroClass": "WARRIOR",
+  "rarity": "RARE",
+  "description": "Deathrattle: If it's your opponent's turn, gain 6 Armor.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "spell": {
+      "class": "BuffHeroSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 6
+    },
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "INACTIVE"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

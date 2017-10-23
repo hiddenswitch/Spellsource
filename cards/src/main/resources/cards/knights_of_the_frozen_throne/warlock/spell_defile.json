@@ -1,0 +1,20 @@
+{
+  "name": "Defile",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "RARE",
+  "description": "Deal 1 damage to all minions. If any die, cast this again.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.RecastDefileSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

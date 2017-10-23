@@ -1,0 +1,19 @@
+{
+  "name": "Drain Soul",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "COMMON",
+  "description": "Lifesteal. Deal 2 damage to a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 2
+  },
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

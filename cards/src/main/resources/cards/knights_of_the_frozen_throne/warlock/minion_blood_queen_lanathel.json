@@ -1,0 +1,29 @@
+{
+  "name": "Blood-Queen Lana'thel",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "heroClass": "WARLOCK",
+  "rarity": "LEGENDARY",
+  "description": "Lifesteal. Has +1 Attack for each card you've discarded this game.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BoardChangedTrigger"
+    },
+    "spell": {
+      "class": "ConditionalAttackBonusSpell",
+      "target": "SELF",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "CARDS_DISCARDED"
+      }
+    }
+  },
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}
