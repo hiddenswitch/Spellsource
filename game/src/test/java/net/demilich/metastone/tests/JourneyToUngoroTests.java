@@ -17,8 +17,42 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
+	@Test
+	public void testLivingMana() {
+		zip(Stream.of(5, 6, 7, 8, 9, 10), Stream.of(5, 6, 7, 7, 7, 7), (mana, maxMinionsSummoned) -> {
+			for (int i = 0; i <= 7; i++) {
+				GameContext context = createContext(HeroClass.DRUID, HeroClass.DRUID);
+				Player player = context.getActivePlayer();
+				Player opponent = context.getOpponent(player);
+				clearHand(context, player);
+				clearHand(context, opponent);
+				clearZone(context, player.getDeck());
+				clearZone(context, opponent.getDeck());
+
+				for (int j = 0; j < i; j++) {
+					playMinionCard(context, player, "minion_wisp");
+				}
+
+				player.setMaxMana(mana);
+				player.setMana(mana);
+				playCard(context, player, "spell_living_mana");
+				int minionsOnBoard = Math.min((int) maxMinionsSummoned + i, 7);
+				int minionsSummonedByLivingMana = Math.min(7, minionsOnBoard - i);
+				Assert.assertEquals(player.getMinions().size(), minionsOnBoard);
+				Assert.assertEquals(player.getMaxMana(), mana - minionsSummonedByLivingMana,
+						String.format("Prior max mana: %d, prior minions on  board: %d", mana, i));
+			}
+
+
+			return null;
+		}).collect(Collectors.toList());
+	}
+
 	@Test
 	public void testMoltenBladeAndShifterZerus() {
 		for (String cardId : new String[]{"weapon_molten_blade", "minion_shifter_zerus"}) {
