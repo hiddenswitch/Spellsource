@@ -5,21 +5,20 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.spells.TargetPlayer;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class EventTriggerDesc extends Desc<EventTriggerArg> {
 
-	public static Map<EventTriggerArg, Object> build(Class<? extends GameEventTrigger> triggerClass) {
+	public static Map<EventTriggerArg, Object> build(Class<? extends EventTrigger> triggerClass) {
 		final Map<EventTriggerArg, Object> arguments = new EnumMap<>(EventTriggerArg.class);
 		arguments.put(EventTriggerArg.CLASS, triggerClass);
 		return arguments;
 	}
 
-	public static EventTriggerDesc createEmpty(Class<? extends GameEventTrigger> triggerClass) {
+	public static EventTriggerDesc createEmpty(Class<? extends EventTrigger> triggerClass) {
 		return new EventTriggerDesc(EventTriggerDesc.build(triggerClass));
 	}
 
@@ -27,8 +26,8 @@ public class EventTriggerDesc extends Desc<EventTriggerArg> {
 		super(arguments);
 	}
 
-	public GameEventTrigger create() {
-		Class<? extends GameEventTrigger> triggerClass = getTriggerClass();
+	public EventTrigger create() {
+		Class<? extends EventTrigger> triggerClass = getTriggerClass();
 		try {
 			return triggerClass.getConstructor(EventTriggerDesc.class).newInstance(this);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -47,8 +46,8 @@ public class EventTriggerDesc extends Desc<EventTriggerArg> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Class<? extends GameEventTrigger> getTriggerClass() {
-		return (Class<? extends GameEventTrigger>) get(EventTriggerArg.CLASS);
+	public Class<? extends EventTrigger> getTriggerClass() {
+		return (Class<? extends EventTrigger>) get(EventTriggerArg.CLASS);
 	}
 
 }

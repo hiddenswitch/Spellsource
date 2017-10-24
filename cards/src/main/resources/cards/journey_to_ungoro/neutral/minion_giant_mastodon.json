@@ -1,1 +1,17 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "name": "Giant Mastodon", "heroClass": "ANY", "description": "Taunt", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 10, "race": "BEAST", "baseAttack": 6, "attributes": {"TAUNT": true}, "type": "MINION", "baseManaCost": 9}
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "Giant Mastodon",
+  "heroClass": "ANY",
+  "description": "Taunt",
+  "fileFormatVersion": 1,
+  "rarity": "COMMON",
+  "baseHp": 10,
+  "race": "BEAST",
+  "baseAttack": 6,
+  "attributes": {
+    "TAUNT": true
+  },
+  "type": "MINION",
+  "baseManaCost": 9
+}

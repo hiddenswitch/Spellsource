@@ -1,38 +1,38 @@
 {
-	"name": "Golakka Crawler",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"race": "BEAST",
-	"description": "Battlecry: Destroy a Pirate and gain +1/+1.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "DestroySpell"
-				},
-				{
-					"class": "BuffSpell",
-					"target": "SELF",
-					"attackBonus": 1,
-					"hpBonus": 1
-				}
-			],
-			"filter": {
-				"class": "RaceFilter",
-				"race": "PIRATE"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Golakka Crawler",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Battlecry: Destroy a Pirate and gain +1/+1.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 1,
+          "hpBonus": 1
+        }
+      ],
+      "filter": {
+        "class": "RaceFilter",
+        "race": "PIRATE"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

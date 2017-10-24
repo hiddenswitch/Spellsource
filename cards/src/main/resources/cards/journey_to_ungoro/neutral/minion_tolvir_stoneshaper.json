@@ -1,0 +1,44 @@
+{
+  "name": "Tol'vir Stoneshaper",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Battlecry: If you played an Elemental last turn, gain Taunt and Divine Shield.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "attribute": "DIVINE_SHIELD",
+            "target": "SELF"
+          },
+          {
+            "class": "AddAttributeSpell",
+            "attribute": "TAUNT",
+            "target": "SELF"
+          }
+        ]
+      },
+      "condition": {
+        "class": "PlayedLastTurnCondition",
+        "filter": {
+          "class": "CardFilter",
+          "race": "ELEMENTAL"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

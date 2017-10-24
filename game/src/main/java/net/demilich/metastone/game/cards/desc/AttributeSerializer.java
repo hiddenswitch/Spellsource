@@ -38,6 +38,7 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.CHARGE, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.COMBO, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.DIED_ON_TURN, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.DESCRIPTION, jsonData, map, ParseValueType.STRING);
 		parseAttribute(Attribute.DOUBLE_END_TURN_TRIGGERS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.NUMBER_OF_ATTACKS, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.SUMMONING_SICKNESS, jsonData, map, ParseValueType.BOOLEAN);

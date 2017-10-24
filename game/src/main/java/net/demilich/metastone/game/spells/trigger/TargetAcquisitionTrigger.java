@@ -9,7 +9,7 @@ import net.demilich.metastone.game.events.TargetAcquisitionEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class TargetAcquisitionTrigger extends GameEventTrigger {
+public class TargetAcquisitionTrigger extends EventTrigger {
 
 	public TargetAcquisitionTrigger(EventTriggerDesc desc) {
 		super(desc);

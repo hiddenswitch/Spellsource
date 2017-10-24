@@ -1,23 +1,23 @@
 {
-	"name": "Carnassa's Brood'",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "HUNTER",
-	"rarity": "FREE",
-	"race": "BEAST",
-	"description": "Battlecry: Draw a card.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "DrawCardSpell"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": false,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Carnassa's Brood'",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "heroClass": "HUNTER",
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Battlecry: Draw a card.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

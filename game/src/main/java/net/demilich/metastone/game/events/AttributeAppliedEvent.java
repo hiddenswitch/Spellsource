@@ -3,8 +3,6 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
 
 public class AttributeAppliedEvent extends GameEvent {
 	private final Entity target;

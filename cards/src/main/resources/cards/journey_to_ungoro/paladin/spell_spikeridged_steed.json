@@ -1,1 +1,33 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "description": "Give a minion +2/+6, Taunt and \"Deathrattle: Summon a Stegodon.\"", "spell": {"class": "MetaSpell", "spells": [{"attackBonus": 2, "class": "BuffSpell", "hpBonus": 6}, {"spell": {"class": "SummonSpell", "card": "minion_stegodon"}, "class": "AddDeathrattleSpell"}, {"attribute": "TAUNT", "class": "AddAttributeSpell"}]}, "fileFormatVersion": 1, "rarity": "RARE", "heroClass": "PALADIN", "targetSelection": "MINIONS", "baseManaCost": 6, "type": "SPELL", "name": "Spikeridged Steed"}
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "description": "Give a minion +2/+6, Taunt and \"Deathrattle: Summon a Stegodon.\"",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "attackBonus": 2,
+        "class": "BuffSpell",
+        "hpBonus": 6
+      },
+      {
+        "spell": {
+          "class": "SummonSpell",
+          "card": "minion_stegodon"
+        },
+        "class": "AddDeathrattleSpell"
+      },
+      {
+        "attribute": "TAUNT",
+        "class": "AddAttributeSpell"
+      }
+    ]
+  },
+  "fileFormatVersion": 1,
+  "rarity": "RARE",
+  "heroClass": "PALADIN",
+  "targetSelection": "MINIONS",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "name": "Spikeridged Steed"
+}

@@ -10,6 +10,7 @@ import net.demilich.metastone.game.GameValue;
 import net.demilich.metastone.game.PlayerAttribute;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.CardDescType;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -77,6 +78,8 @@ public class ParseUtils {
 				return Enum.valueOf(TargetPlayer.class, entry.getAsString());
 			case RACE:
 				return Enum.valueOf(Race.class, entry.getAsString());
+			case CARD_SET:
+				return Enum.valueOf(CardSet.class, entry.getAsString());
 			case SPELL:
 				return spellParser.deserialize(entry, SpellDesc.class, null);
 			case SPELL_ARRAY: {
@@ -220,6 +223,7 @@ public class ParseUtils {
 		triggerDesc.persistentOwner = triggerObject.has("persistentOwner") && triggerObject.get("persistentOwner").getAsBoolean();
 		triggerDesc.turnDelay = triggerObject.has("turnDelay") ? triggerObject.get("turnDelay").getAsInt() : 0;
 		triggerDesc.maxFires = triggerObject.has("maxFires") ? triggerObject.get("maxFires").getAsInt() : null;
+		triggerDesc.countUntilCast = triggerObject.has("countUntilCast") ? triggerObject.get("countUntilCast").getAsInt() : null;
 		triggerDesc.keepAfterTransform = triggerObject.has("keepAfterTransform") && triggerObject.get("keepAfterTransform").getAsBoolean();
 		return triggerDesc;
 	}

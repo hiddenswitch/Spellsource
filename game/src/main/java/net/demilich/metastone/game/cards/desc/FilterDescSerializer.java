@@ -34,6 +34,7 @@ public class FilterDescSerializer implements JsonDeserializer<FilterDesc>, JsonS
 		parseArgument(FilterArg.OPERATION, jsonData, arguments, ParseValueType.OPERATION);
 		parseArgument(FilterArg.INVERT, jsonData, arguments, ParseValueType.BOOLEAN);
 		parseArgument(FilterArg.CARD_TYPE, jsonData, arguments, ParseValueType.CARD_TYPE);
+		parseArgument(FilterArg.CARD_SET, jsonData, arguments, ParseValueType.CARD_SET);
 		parseArgument(FilterArg.HERO_CLASS, jsonData, arguments, ParseValueType.HERO_CLASS);
 		parseArgument(FilterArg.HERO_CLASSES, jsonData, arguments, ParseValueType.HERO_CLASS_ARRAY);
 		parseArgument(FilterArg.RARITY, jsonData, arguments, ParseValueType.RARITY);

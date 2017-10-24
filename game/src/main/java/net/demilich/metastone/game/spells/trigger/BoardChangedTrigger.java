@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class BoardChangedTrigger extends GameEventTrigger {
+public class BoardChangedTrigger extends EventTrigger {
 
 	public BoardChangedTrigger() {
 		this(EventTriggerDesc.createEmpty(BoardChangedTrigger.class));

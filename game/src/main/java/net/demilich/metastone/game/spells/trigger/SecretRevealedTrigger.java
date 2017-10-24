@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class SecretRevealedTrigger extends GameEventTrigger {
+public class SecretRevealedTrigger extends EventTrigger {
 
 	public SecretRevealedTrigger(EventTriggerDesc desc) {
 		super(desc);

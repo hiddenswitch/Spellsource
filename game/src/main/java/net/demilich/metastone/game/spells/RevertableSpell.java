@@ -7,7 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -21,9 +21,9 @@ public abstract class RevertableSpell extends Spell {
 		EventTriggerDesc triggerDesc = (EventTriggerDesc) desc.get(SpellArg.REVERT_TRIGGER);
 
 		if (triggerDesc != null) {
-			GameEventTrigger revertTrigger = triggerDesc.create();
+			EventTrigger revertTrigger = triggerDesc.create();
 			EventTriggerDesc secondTriggerDesc = (EventTriggerDesc) desc.get(SpellArg.SECOND_REVERT_TRIGGER);
-			GameEventTrigger secondRevertTrigger = secondTriggerDesc != null ? secondTriggerDesc.create() : null;
+			EventTrigger secondRevertTrigger = secondTriggerDesc != null ? secondTriggerDesc.create() : null;
 			SpellDesc revert = getReverseSpell(desc, target.getReference());
 			Enchantment removeTrigger = new Enchantment(revertTrigger, secondRevertTrigger, revert, true);
 			context.getLogic().addGameEventListener(player, removeTrigger, target);

@@ -84,7 +84,7 @@ public enum Environment {
 	 * This implements Frostmourne, keeping track of which particular entities a particular Frostmourne has
 	 * destroyed.
 	 */
-	FROSTMOURNE_DESTROY_LIST;
+	ENTITY_LIST;
 
 	public boolean customClone() {
 		return (this == SUMMON_REFERENCE_STACK ||

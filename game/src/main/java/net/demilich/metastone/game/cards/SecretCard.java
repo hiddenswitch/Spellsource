@@ -6,7 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.SecretCardDesc;
 import net.demilich.metastone.game.spells.AddSecretSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
@@ -14,7 +14,7 @@ public class SecretCard extends SpellCard {
 
 	public SecretCard(SecretCardDesc desc) {
 		super(desc);
-		GameEventTrigger trigger = desc.trigger.create();
+		EventTrigger trigger = desc.trigger.create();
 		setSecret(new Secret(trigger, desc.spell, this));
 		setAttribute(Attribute.SECRET);
 	}

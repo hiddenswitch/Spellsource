@@ -14,12 +14,14 @@ public class TriggerDesc implements Serializable {
 	public int turnDelay;
 	public boolean keepAfterTransform;
 	public Integer maxFires;
+	public Integer countUntilCast;
 
 	public Enchantment create() {
 		Enchantment trigger = new Enchantment(eventTrigger.create(), spell, oneTurn, turnDelay);
 		trigger.setMaxFires(maxFires);
 		trigger.setPersistentOwner(persistentOwner);
 		trigger.setKeepAfterTransform(keepAfterTransform);
+		trigger.setCountUntilCast(countUntilCast);
 		return trigger;
 	}
 

@@ -10,7 +10,7 @@ import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class MinionDeathTrigger extends GameEventTrigger {
+public class MinionDeathTrigger extends EventTrigger {
 
 	public MinionDeathTrigger(EventTriggerDesc desc) {
 		super(desc);

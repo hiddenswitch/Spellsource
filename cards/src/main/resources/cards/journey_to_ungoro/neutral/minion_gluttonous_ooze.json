@@ -1,1 +1,35 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "name": "Gluttonous Ooze", "heroClass": "ANY", "description": "Battlecry: Destroy your opponent's weapon and gain Armor equal to its Durability.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 3, "baseAttack": 3, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "MetaSpell", "spells": [{"armorBonus": {"attribute": "ATTACK", "class": "AttributeValueProvider", "target": "ENEMY_WEAPON"}, "class": "BuffHeroSpell"}, {"class": "DestroySpell", "target": "ENEMY_WEAPON"}]}}, "type": "MINION", "baseManaCost": 3}
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "Gluttonous Ooze",
+  "heroClass": "ANY",
+  "description": "Battlecry: Destroy your opponent's weapon and gain Armor equal to its Durability.",
+  "fileFormatVersion": 1,
+  "rarity": "EPIC",
+  "baseHp": 3,
+  "baseAttack": 3,
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "armorBonus": {
+            "attribute": "ATTACK",
+            "class": "AttributeValueProvider",
+            "target": "ENEMY_WEAPON"
+          },
+          "class": "BuffHeroSpell"
+        },
+        {
+          "class": "DestroySpell",
+          "target": "ENEMY_WEAPON"
+        }
+      ]
+    }
+  },
+  "type": "MINION",
+  "baseManaCost": 3
+}

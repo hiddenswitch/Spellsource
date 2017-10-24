@@ -1,28 +1,28 @@
 {
-	"name": "Tol'vir Warden",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 5,
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"description": "Battlecry: Draw two 1-Cost minions from your deck.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "FromDeckToHandSpell",
-			"value": 2,
-			"cardFilter": {
-				"class": "CardFilter",
-				"cardType": "MINION",
-				"manaCost": 1
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Tol'vir Warden",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "heroClass": "HUNTER",
+  "rarity": "RARE",
+  "description": "Battlecry: Draw two 1-Cost minions from your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

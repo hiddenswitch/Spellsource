@@ -8,7 +8,7 @@ import net.demilich.metastone.game.events.PhysicalAttackEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class PhysicalAttackTrigger extends GameEventTrigger {
+public class PhysicalAttackTrigger extends EventTrigger {
 
 	public PhysicalAttackTrigger(EventTriggerDesc desc) {
 		super(desc);

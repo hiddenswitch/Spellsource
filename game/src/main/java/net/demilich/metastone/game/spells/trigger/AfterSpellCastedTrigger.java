@@ -8,7 +8,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class AfterSpellCastedTrigger extends GameEventTrigger {
+public class AfterSpellCastedTrigger extends EventTrigger {
 
 	public AfterSpellCastedTrigger(EventTriggerDesc desc) {
 		super(desc);

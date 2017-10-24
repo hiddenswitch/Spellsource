@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class GameStateChangedTrigger extends GameEventTrigger {
+public class GameStateChangedTrigger extends EventTrigger {
 
 	public GameStateChangedTrigger(EventTriggerDesc desc) {
 		super(desc);

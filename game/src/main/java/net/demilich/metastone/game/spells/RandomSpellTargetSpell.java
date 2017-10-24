@@ -13,17 +13,18 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.ChooseOneCard;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class RandomSpellTargetSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		target = target == null ? (Card) desc.get(SpellArg.CARD) : target.getSourceCard();
 		if (!((Card) target).getCardType().isCardType(CardType.SPELL)) {
 			// In case Yogg-Saron tries to do something silly. Which he will.
 			return;
 		}
-		//SpellCard spellCard = null;
 		GameAction action = null;
 		if (target instanceof SpellCard) {
 			SpellCard spellCard = (SpellCard) target;
@@ -34,9 +35,10 @@ public class RandomSpellTargetSpell extends Spell {
 			SpellCard spellCard = (SpellCard) context.getCardById(chosenCardId);
 			action = new PlayChooseOneCardAction(spellCard.getSpell(), chooseOneCard, chosenCardId, spellCard.getTargetRequirement());
 		}
-		
+
 		List<Entity> targets = context.getLogic().getValidTargets(context.getActivePlayerId(), action);
 		Entity randomTarget = targets.get(context.getLogic().random(targets.size()));
 		context.getEnvironment().put(Environment.TARGET_OVERRIDE, randomTarget.getReference());
 	}
 }
+

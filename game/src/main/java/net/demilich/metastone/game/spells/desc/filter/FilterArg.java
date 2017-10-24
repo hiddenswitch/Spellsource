@@ -15,5 +15,5 @@ public enum FilterArg {
 	CARD_ID,
 	FILTERS,
 	INVERT,
-	TARGET
+	CARD_SET, TARGET
 }

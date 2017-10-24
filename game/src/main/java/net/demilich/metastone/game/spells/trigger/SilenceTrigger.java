@@ -6,7 +6,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.SilenceEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class SilenceTrigger extends GameEventTrigger {
+public class SilenceTrigger extends EventTrigger {
 
 	public SilenceTrigger(EventTriggerDesc desc) {
 		super(desc);

@@ -4,7 +4,6 @@
   "description": "Adapt a friendly minion.",
   "spell": {
     "class": "AdaptSpell",
-    "targetSelection": "FRIENDLY_MINIONS",
     "group": "group_adapt"
   },
   "fileFormatVersion": 1,

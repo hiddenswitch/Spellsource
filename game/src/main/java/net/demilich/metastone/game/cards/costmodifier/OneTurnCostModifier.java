@@ -4,12 +4,12 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 
 public class OneTurnCostModifier extends CardCostModifier {
 
-	private GameEventTrigger turnStartTrigger = new TurnStartTrigger();
+	private EventTrigger turnStartTrigger = new TurnStartTrigger();
 
 	public OneTurnCostModifier(CardCostModifierDesc desc) {
 		super(desc);
@@ -18,7 +18,7 @@ public class OneTurnCostModifier extends CardCostModifier {
 	@Override
 	public OneTurnCostModifier clone() {
 		OneTurnCostModifier clone = (OneTurnCostModifier) super.clone();
-		clone.turnStartTrigger = (GameEventTrigger) turnStartTrigger.clone();
+		clone.turnStartTrigger = (EventTrigger) turnStartTrigger.clone();
 		return clone;
 	}
 
