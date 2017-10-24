@@ -8,7 +8,7 @@ import net.demilich.metastone.game.events.LoseDivineShieldEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class LoseDivineShieldTrigger extends GameEventTrigger {
+public class LoseDivineShieldTrigger extends EventTrigger {
 	public LoseDivineShieldTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

@@ -37,7 +37,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerializer;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
@@ -144,7 +144,7 @@ public class Serialization {
 
 		// Concrete types
 		gsonBuilder.registerTypeHierarchyAdapter(Condition.class, new Condition.Serializer());
-		gsonBuilder.registerTypeHierarchyAdapter(GameEventTrigger.class, new GameEventTrigger.Serializer());
+		gsonBuilder.registerTypeHierarchyAdapter(EventTrigger.class, new EventTrigger.Serializer());
 		gsonBuilder.registerTypeHierarchyAdapter(ValueProvider.class, new ValueProvider.Serializer());
 		gsonBuilder.enableComplexMapKeySerialization();
 		gson = gsonBuilder.create();

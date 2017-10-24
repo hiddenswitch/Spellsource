@@ -68,5 +68,6 @@ public enum SpellArg {
 	TARGET_SELECTION,
 	TRIGGER,
 	GROUP,
-	TRIGGERS, VALUE
+	TRIGGERS,
+	VALUE
 }

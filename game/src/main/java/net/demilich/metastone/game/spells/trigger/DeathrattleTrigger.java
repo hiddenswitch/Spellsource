@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class DeathrattleTrigger extends GameEventTrigger {
+public class DeathrattleTrigger extends EventTrigger {
 	public DeathrattleTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

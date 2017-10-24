@@ -6,7 +6,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.utils.AttributeMap;
 
@@ -14,7 +14,7 @@ public class Secret extends Enchantment {
 
 	private Card source;
 
-	public Secret(GameEventTrigger trigger, SpellDesc spell, Card source) {
+	public Secret(EventTrigger trigger, SpellDesc spell, Card source) {
 		super(trigger, spell);
 		this.source = source;
 		setAttributes((AttributeMap) source.getAttributes().clone());

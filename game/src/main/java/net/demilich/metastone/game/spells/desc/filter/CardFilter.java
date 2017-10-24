@@ -4,6 +4,7 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.entities.Entity;
@@ -96,6 +97,11 @@ public class CardFilter extends EntityFilter {
 
 			int actualValue = card.getAttributeValue(attribute);
 			return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
+		}
+
+		CardSet cardSet = (CardSet) desc.get(FilterArg.CARD_SET);
+		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
+			return false;
 		}
 
 		return true;

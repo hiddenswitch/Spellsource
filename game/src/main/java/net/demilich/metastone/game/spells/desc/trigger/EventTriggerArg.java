@@ -16,4 +16,5 @@ public enum EventTriggerArg {
 	FIRE_CONDITION,
 	QUEUE_CONDITION,
 	TARGET_SELECTION,
+	VALUE
 }

@@ -16,9 +16,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 public class Enchantment extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
-
-	private GameEventTrigger primaryTrigger;
-	private GameEventTrigger secondaryTrigger;
+	private EventTrigger primaryTrigger;
+	private EventTrigger secondaryTrigger;
 	@Expose(serialize = false, deserialize = false)
 	private SpellDesc spell;
 	private EntityReference hostReference;
@@ -30,8 +29,10 @@ public class Enchantment extends Entity implements Trigger {
 	private int fires;
 	private boolean keepAfterTransform;
 	private Card sourceCard;
+	private int currentCount;
+	private Integer countUntilCast;
 
-	protected Enchantment(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
+	protected Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
 		this.primaryTrigger = primaryTrigger;
 		this.secondaryTrigger = secondaryTrigger;
 		this.spell = spell;
@@ -39,24 +40,24 @@ public class Enchantment extends Entity implements Trigger {
 		this.turnDelay = turnDelay;
 	}
 
-	public Enchantment(GameEventTrigger primaryTrigger, GameEventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
+	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
 		this(primaryTrigger, secondaryTrigger, spell, oneTurn, 0);
 	}
 
-	public Enchantment(GameEventTrigger trigger, SpellDesc spell) {
+	public Enchantment(EventTrigger trigger, SpellDesc spell) {
 		this(trigger, spell, false, 0);
 	}
 
-	public Enchantment(GameEventTrigger trigger, SpellDesc spell, boolean oneTime, int turnDelay) {
+	public Enchantment(EventTrigger trigger, SpellDesc spell, boolean oneTime, int turnDelay) {
 		this(trigger, null, spell, oneTime, turnDelay);
 	}
 
 	@Override
 	public Enchantment clone() {
 		Enchantment clone = (Enchantment) super.clone();
-		clone.primaryTrigger = (GameEventTrigger) primaryTrigger.clone();
+		clone.primaryTrigger = (EventTrigger) primaryTrigger.clone();
 		if (secondaryTrigger != null) {
-			clone.secondaryTrigger = (GameEventTrigger) secondaryTrigger.clone();
+			clone.secondaryTrigger = (EventTrigger) secondaryTrigger.clone();
 		}
 		clone.spell = getSpell().clone();
 		return clone;
@@ -182,7 +183,7 @@ public class Enchantment extends Entity implements Trigger {
 		return (triggerFires(primaryTrigger, event, host) || triggerFires(secondaryTrigger, event, host));
 	}
 
-	private boolean triggerFires(GameEventTrigger trigger, GameEvent event, Entity host) {
+	private boolean triggerFires(EventTrigger trigger, GameEvent event, Entity host) {
 		if (trigger == null) {
 			return false;
 		}
@@ -225,6 +226,10 @@ public class Enchantment extends Entity implements Trigger {
 		return sourceCard;
 	}
 
+	public int getFires() {
+		return fires;
+	}
+
 	public Integer getMaxFires() {
 		return maxFires;
 	}
@@ -243,5 +248,21 @@ public class Enchantment extends Entity implements Trigger {
 
 	public void setSourceCard(Card sourceCard) {
 		this.sourceCard = sourceCard;
+	}
+
+	public void setCountUntilCast(Integer countUntilCast) {
+		this.countUntilCast = countUntilCast;
+	}
+
+	public Integer getCountUntilCast() {
+		return countUntilCast;
+	}
+
+	public int getCurrentCount() {
+		return currentCount;
+	}
+
+	public void setCurrentCount(int currentCount) {
+		this.currentCount = currentCount;
 	}
 }

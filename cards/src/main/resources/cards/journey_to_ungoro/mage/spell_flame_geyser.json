@@ -1,26 +1,26 @@
 {
-	"name": "Flame Geyser",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "COMMON",
-	"description": "Deal 2 damage. Add a 1/2 Elemental to your hand.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": 2
-			},
-			{
-				"class": "ReceiveCardSpell",
-				"targetPlayer": "SELF",
-				"card": "token_elemental"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Flame Geyser",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "MAGE",
+  "rarity": "COMMON",
+  "description": "Deal 2 damage. Add a 1/2 Elemental to your hand.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF",
+        "card": "token_flame_elemental"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

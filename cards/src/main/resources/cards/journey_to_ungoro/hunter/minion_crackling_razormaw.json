@@ -1,30 +1,28 @@
 {
-	"name": "Crackling Razormaw",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "Battlecry: Adapt a friendly Beast.",
-	"battlecry": {
-		"targetSelection": "FRIENDLY_MINIONS",
-		"spell": {
-			"class": "AdaptSpell",
-			"target": "SELF",
-			"group": "group_adapt",
-			"filter": {
-				"class": "RaceFilter",
-				"race": "BEAST"
-			}
-		}
-	},
-	"attributes": {
-
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Crackling Razormaw",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "heroClass": "HUNTER",
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: Adapt a friendly Beast.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "AdaptSpell",
+      "group": "group_adapt",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

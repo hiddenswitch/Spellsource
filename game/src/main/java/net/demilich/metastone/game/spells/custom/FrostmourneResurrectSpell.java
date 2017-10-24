@@ -16,7 +16,7 @@ public class FrostmourneResurrectSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardList resurrect = FrostmourneDestroyList.getList(context).resurrectable(context, source).shuffle();
+		CardList resurrect = EnvironmentEntityList.getList(context).getCards(context, source).shuffle();
 		int i = 0;
 
 		while (context.getLogic().canSummonMoreMinions(player)
@@ -33,6 +33,7 @@ public class FrostmourneResurrectSpell extends Spell {
 			i++;
 		}
 
-		FrostmourneDestroyList.getList(context).clear(source);
+		EnvironmentEntityList.getList(context).clear(source);
 	}
 }
+

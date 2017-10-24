@@ -8,7 +8,7 @@ import net.demilich.metastone.game.events.HealEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class HealingTrigger extends GameEventTrigger {
+public class HealingTrigger extends EventTrigger {
 
 	public HealingTrigger(EventTriggerDesc desc) {
 		super(desc);

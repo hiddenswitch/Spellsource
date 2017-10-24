@@ -8,7 +8,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class CardDrawnTrigger extends GameEventTrigger {
+public class CardDrawnTrigger extends EventTrigger {
 
 	public CardDrawnTrigger(EventTriggerDesc desc) {
 		super(desc);

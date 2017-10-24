@@ -6,7 +6,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.WeaponDestroyedEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class WeaponDestroyedTrigger extends GameEventTrigger {
+public class WeaponDestroyedTrigger extends EventTrigger {
 
 	public WeaponDestroyedTrigger(EventTriggerDesc desc) {
 		super(desc);

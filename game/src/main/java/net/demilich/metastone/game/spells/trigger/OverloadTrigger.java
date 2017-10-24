@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class OverloadTrigger extends GameEventTrigger {
+public class OverloadTrigger extends EventTrigger {
 
 	public OverloadTrigger(EventTriggerDesc desc) {
 		super(desc);

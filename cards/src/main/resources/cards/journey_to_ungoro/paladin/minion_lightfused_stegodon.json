@@ -3,10 +3,11 @@
   "set": "JOURNEY_TO_UNGORO",
   "name": "Lightfused Stegodon",
   "heroClass": "PALADIN",
-  "description": "Battlecry: Adapt your Kodamas.",
+  "description": "Battlecry: Adapt your Silver Hand Recruits.",
   "fileFormatVersion": 1,
   "rarity": "RARE",
   "baseHp": 4,
+  "race": "BEAST",
   "baseAttack": 3,
   "attributes": {
     "BATTLECRY": true
@@ -15,7 +16,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "AdaptSpell",
-      "target": "SELF",
+      "target": "FRIENDLY_MINIONS",
       "group": "group_adapt",
       "filter": {
         "class": "SpecificCardFilter",

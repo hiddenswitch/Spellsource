@@ -1,25 +1,25 @@
 {
-	"name": "Fire Fly",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "ELEMENTAL",
-	"description": "Battlecry: Add a 1/2 Elemental to your hand.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"targetPlayer": "SELF",
-			"card": "token_elemental"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Fire Fly",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Add a 1/2 Elemental to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF",
+      "card": "token_flame_elemental"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

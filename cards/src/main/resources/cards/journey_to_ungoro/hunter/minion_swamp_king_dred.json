@@ -1,31 +1,28 @@
 {
-	"name": "Swamp King Dred",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 5,
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"description": "After your opponent plays a minion, attack it.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "CardPlayedTrigger",
-			"targetPlayer": "SELF",
-			"queueCondition": {
-				"class": "AttributeCondition",
-				"target": "FRIENDLY_PLAYER",
-				"attribute": "COMBO",
-				"operation": "GREATER_OR_EQUAL",
-				"value": 3
-			}
-		},
-		"spell": {
-			"class": "TransformMinionSpell",
-			"target": "SELF",
-			"card": "minion_sherazin_corpse_flower"
-		}
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Swamp King Dred",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 9,
+  "baseHp": 9,
+  "heroClass": "HUNTER",
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "After your opponent plays a minion, attack it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "targetPlayer": "OPPONENT",
+      "queueCondition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "INACTIVE"
+      }
+    },
+    "spell": {
+      "class": "FightSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

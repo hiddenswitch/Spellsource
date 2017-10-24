@@ -3126,7 +3126,6 @@ public class GameLogic implements Cloneable, Serializable {
 	public void playQuest(Player player, Quest quest, boolean fromHand) {
 		log("{} has a new quest activated: {}", player.getName(), quest.getSourceCard());
 		quest = quest.clone();
-		addGameEventListener(player, quest, player.getHero());
 		quest.setId(getIdFactory().generateId());
 		quest.setOwner(player.getId());
 		addGameEventListener(player, quest, player.getHero());

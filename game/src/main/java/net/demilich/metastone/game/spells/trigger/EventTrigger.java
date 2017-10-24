@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.trigger;
 import com.google.gson.*;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
@@ -16,17 +15,17 @@ import net.demilich.metastone.game.targeting.TargetType;
 
 import java.lang.reflect.Type;
 
-public abstract class GameEventTrigger extends CustomCloneable {
+public abstract class EventTrigger extends CustomCloneable {
 	private int owner = -1;
 	protected final EventTriggerDesc desc;
 
-	public GameEventTrigger(EventTriggerDesc desc) {
+	public EventTrigger(EventTriggerDesc desc) {
 		this.desc = desc;
 	}
 
 	@Override
-	public GameEventTrigger clone() {
-		return (GameEventTrigger) super.clone();
+	public EventTrigger clone() {
+		return (EventTrigger) super.clone();
 	}
 
 	protected boolean determineTargetPlayer(GameEvent event, TargetPlayer targetPlayer, Entity host, int targetPlayerId) {
@@ -114,14 +113,14 @@ public abstract class GameEventTrigger extends CustomCloneable {
 		return true;
 	}
 
-	public static class Serializer implements JsonSerializer<GameEventTrigger>, JsonDeserializer<GameEventTrigger> {
+	public static class Serializer implements JsonSerializer<EventTrigger>, JsonDeserializer<EventTrigger> {
 		@Override
-		public GameEventTrigger deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		public EventTrigger deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 			return new GameStartTrigger(context.deserialize(json.getAsJsonObject().getAsJsonObject("desc"), EventTriggerDesc.class));
 		}
 
 		@Override
-		public JsonElement serialize(GameEventTrigger src, Type typeOfSrc, JsonSerializationContext context) {
+		public JsonElement serialize(EventTrigger src, Type typeOfSrc, JsonSerializationContext context) {
 			return context.serialize(src.desc);
 		}
 	}

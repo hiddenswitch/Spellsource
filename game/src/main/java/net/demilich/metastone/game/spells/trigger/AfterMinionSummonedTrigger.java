@@ -9,7 +9,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class AfterMinionSummonedTrigger extends GameEventTrigger {
+public class AfterMinionSummonedTrigger extends EventTrigger {
 
 	public AfterMinionSummonedTrigger(EventTriggerDesc desc) {
 		super(desc);

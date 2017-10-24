@@ -14,17 +14,20 @@
   },
   "battlecry": {
     "spell": {
-      "class": "AdaptSpell",
-      "target": "SELF",
-      "group": "group_adapt"
+      "class": "ConditionalSpell",
+      "condition": {
+        "targetPlayer": "SELF",
+        "operation": "GREATER",
+        "class": "MinionCountCondition",
+        "value": 2
+      },
+      "spell": {
+        "class": "AdaptSpell",
+        "target": "SELF",
+        "group": "group_adapt"
+      }
     },
-    "targetSelection": "NONE",
-    "condition": {
-      "targetPlayer": "SELF",
-      "operation": "GREATER",
-      "class": "MinionCountCondition",
-      "value": 2
-    }
+    "targetSelection": "NONE"
   },
   "type": "MINION",
   "baseManaCost": 2

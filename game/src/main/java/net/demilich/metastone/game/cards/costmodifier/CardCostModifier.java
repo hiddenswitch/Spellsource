@@ -18,7 +18,7 @@ import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -27,7 +27,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	private boolean expired;
 	private int owner;
 	private EntityReference hostReference;
-	private GameEventTrigger expirationTrigger;
+	private EventTrigger expirationTrigger;
 
 	private CardCostModifierDesc desc;
 

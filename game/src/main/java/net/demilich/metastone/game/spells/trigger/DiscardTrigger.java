@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.DiscardEvent;
 import net.demilich.metastone.game.events.GameEvent;
@@ -12,7 +11,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
 
-public class DiscardTrigger extends GameEventTrigger {
+public class DiscardTrigger extends EventTrigger {
 
 	public DiscardTrigger(EventTriggerDesc desc) {
 		super(desc);

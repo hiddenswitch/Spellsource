@@ -624,7 +624,7 @@ public enum Attribute {
 	/**
 	 * Overrides the name of the {@link Entity}
 	 */
-	NAME;
+	NAME, DESCRIPTION;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

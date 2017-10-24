@@ -13,6 +13,9 @@ import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.DestroySpell;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.targeting.CardReference;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -22,6 +25,104 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
+	@Test()
+	public void testPrimalfinChampion() {
+		GameContext context = createContext(HeroClass.PALADIN, HeroClass.PALADIN);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		Minion primalfinChampion = playMinionCard(context, player, "minion_primalfin_champion");
+		Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+		playCardWithTarget(context, player, "spell_adaptation", primalfinChampion);
+		playCardWithTarget(context, player, "spell_adaptation", primalfinChampion);
+		playCardWithTarget(context, player, "spell_bananas", bloodfenRaptor);
+		context.endTurn();
+		Minion bloodfenRaptor2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+		playCardWithTarget(context, opponent, "spell_bananas", bloodfenRaptor2);
+		playCardWithTarget(context, opponent, "spell_assassinate", primalfinChampion);
+		Assert.assertEquals(player.getHand().size(), 2);
+		Assert.assertTrue(player.getHand().containsCard("spell_adaptation"));
+		Assert.assertFalse(player.getHand().containsCard("spell_bananas"));
+	}
+
+	@Test
+	public void testTheVoraxx() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		Minion voraxx = playMinionCard(context, player, "minion_the_voraxx");
+		playCardWithTarget(context, player, "spell_bananas", voraxx);
+		Assert.assertEquals(player.getMinions().size(), 2);
+		Assert.assertEquals(voraxx.getAttack(), 4, "The Voraxx should have been buffed by 1. ");
+		Assert.assertEquals(player.getMinions().get(1).getAttack(), 2, "The plant should be buffed");
+	}
+
+	@Test
+	public void testSteamSurger() {
+		GameContext context = createContext(HeroClass.MAGE, HeroClass.MAGE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		player.setMaxMana(10);
+		player.setMana(10);
+		playCard(context, player, "minion_pyros");
+		playCard(context, player, "minion_steam_surger");
+		Assert.assertFalse(player.getHand().containsCard("spell_flame_geyser"));
+		context.endTurn();
+		context.endTurn();
+		playCard(context, player, "minion_steam_surger");
+		Assert.assertTrue(player.getHand().containsCard("spell_flame_geyser"));
+		context.endTurn();
+		context.endTurn();
+		context.endTurn();
+		context.endTurn();
+		clearHand(context, player);
+		playCard(context, player, "minion_steam_surger");
+		Assert.assertFalse(player.getHand().containsCard("spell_flame_geyser"));
+	}
+
+	@Test
+	public void testJungleGiants() {
+		GameContext context = createContext(HeroClass.ROGUE, HeroClass.ROGUE);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		playCard(context, player, "quest_jungle_giants");
+		Assert.assertEquals(player.getQuests().size(), 1);
+		player.setMaxMana(10);
+		player.setMana(10);
+		context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("quest_jungle_giants"));
+		Assert.assertFalse(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getCardReference()),
+				"Since we already have a quest in play, we should not be able to play another quest.");
+
+		// Play 5 minions with 5 or more attack.
+		for (int i = 0; i < 5; i++) {
+			Assert.assertFalse(player.getHand().containsCard("token_barnabus_the_stomper"));
+			playMinionCard(context, player, "minion_leeroy_jenkins");
+		}
+		Assert.assertTrue(player.getHand().containsCard("token_barnabus_the_stomper"));
+		Assert.assertEquals(player.getQuests().size(), 0);
+		player.setMana(1);
+		Assert.assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getCardReference()));
+	}
+
 	@Test
 	public void testLivingMana() {
 		zip(Stream.of(5, 6, 7, 8, 9, 10), Stream.of(5, 6, 7, 7, 7, 7), (mana, maxMinionsSummoned) -> {

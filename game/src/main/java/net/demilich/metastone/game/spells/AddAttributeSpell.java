@@ -9,7 +9,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class AddAttributeSpell extends RevertableSpell {
@@ -18,7 +18,7 @@ public class AddAttributeSpell extends RevertableSpell {
 		return create(tag, null);
 	}
 
-	public static SpellDesc create(Attribute tag, GameEventTrigger revertTrigger) {
+	public static SpellDesc create(Attribute tag, EventTrigger revertTrigger) {
 		return create(null, tag, revertTrigger);
 	}
 
@@ -26,7 +26,7 @@ public class AddAttributeSpell extends RevertableSpell {
 		return create(target, tag, null);
 	}
 
-	public static SpellDesc create(EntityReference target, Attribute tag, GameEventTrigger revertTrigger) {
+	public static SpellDesc create(EntityReference target, Attribute tag, EventTrigger revertTrigger) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(AddAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);
 		arguments.put(SpellArg.REVERT_TRIGGER, revertTrigger);

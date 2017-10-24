@@ -1,0 +1,41 @@
+{
+  "name": "Servant of Kalimos",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: If you played an Elemental last turn, Discover an Elemental.",
+  "battlecry": {
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "PlayedLastTurnCondition",
+        "filter": {
+          "class": "CardFilter",
+          "race": "ELEMENTAL"
+        }
+      },
+      "spell": {
+        "class": "DiscoverRandomCardSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "race": "ELEMENTAL"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

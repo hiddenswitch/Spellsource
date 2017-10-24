@@ -1,0 +1,36 @@
+{
+  "name": "Journey to Un'Goro",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Add 5 Journey to Un'Goro cards to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardSet": "JOURNEY_TO_UNGORO",
+          "rarity": "EPIC"
+        }
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF",
+        "value": 4,
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardSet": "JOURNEY_TO_UNGORO"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

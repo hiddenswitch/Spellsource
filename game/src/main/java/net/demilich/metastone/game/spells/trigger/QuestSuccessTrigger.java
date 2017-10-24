@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class QuestSuccessTrigger extends GameEventTrigger {
+public class QuestSuccessTrigger extends EventTrigger {
 
 	public QuestSuccessTrigger(EventTriggerDesc desc) {
 		super(desc);

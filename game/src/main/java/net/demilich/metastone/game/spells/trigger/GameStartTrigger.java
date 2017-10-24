@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class GameStartTrigger extends GameEventTrigger {
+public class GameStartTrigger extends EventTrigger {
 
 	public GameStartTrigger() {
 		this(EventTriggerDesc.createEmpty(GameStartTrigger.class));

@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class FrostmourneDestroyList implements EnvironmentValue {
-	public static FrostmourneDestroyList getList(GameContext context) {
-		context.getEnvironment().putIfAbsent(Environment.FROSTMOURNE_DESTROY_LIST, new FrostmourneDestroyList());
-		FrostmourneDestroyList list = (FrostmourneDestroyList) context.getEnvironment().get(Environment.FROSTMOURNE_DESTROY_LIST);
+class EnvironmentEntityList implements EnvironmentValue {
+	public static EnvironmentEntityList getList(GameContext context) {
+		context.getEnvironment().putIfAbsent(Environment.ENTITY_LIST, new EnvironmentEntityList());
+		EnvironmentEntityList list = (EnvironmentEntityList) context.getEnvironment().get(Environment.ENTITY_LIST);
 		return list;
 	}
 
@@ -24,7 +24,7 @@ class FrostmourneDestroyList implements EnvironmentValue {
 
 	@Override
 	public EnvironmentValue getCopy() {
-		FrostmourneDestroyList copy = new FrostmourneDestroyList();
+		EnvironmentEntityList copy = new EnvironmentEntityList();
 		for (Map.Entry<EntityReference, List<EntityReference>> kv : data.entrySet()) {
 			ArrayList<EntityReference> value = new ArrayList<>();
 			value.addAll(kv.getValue());
@@ -42,7 +42,7 @@ class FrostmourneDestroyList implements EnvironmentValue {
 		data.remove(source.getReference());
 	}
 
-	public CardList resurrectable(GameContext context, Entity source) {
+	public CardList getCards(GameContext context, Entity source) {
 		CardArrayList cards = new CardArrayList();
 		if (!data.containsKey(source.getReference())) {
 			return cards;

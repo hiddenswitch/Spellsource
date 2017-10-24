@@ -7,7 +7,7 @@ import com.google.gson.*;
 
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.cards.desc.ParseValueType;
-import net.demilich.metastone.game.spells.trigger.GameEventTrigger;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
 public class EventTriggerDescSerializer implements JsonDeserializer<EventTriggerDesc>, JsonSerializer<EventTriggerDesc> {
 
@@ -18,10 +18,10 @@ public class EventTriggerDescSerializer implements JsonDeserializer<EventTrigger
 			throw new JsonParseException("Trigger parser expected an JsonObject but found " + json + " instead");
 		}
 		JsonObject jsonData = (JsonObject) json;
-		String triggerClassName = GameEventTrigger.class.getPackage().getName() + "." + jsonData.get("class").getAsString();
-		Class<? extends GameEventTrigger> triggerClass;
+		String triggerClassName = EventTrigger.class.getPackage().getName() + "." + jsonData.get("class").getAsString();
+		Class<? extends EventTrigger> triggerClass;
 		try {
-			triggerClass = (Class<? extends GameEventTrigger>) Class.forName(triggerClassName);
+			triggerClass = (Class<? extends EventTrigger>) Class.forName(triggerClassName);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			throw new JsonParseException("Trigger parser encountered an invalid class: " + triggerClassName);
@@ -40,6 +40,7 @@ public class EventTriggerDescSerializer implements JsonDeserializer<EventTrigger
 		parseArgument(EventTriggerArg.QUEUE_CONDITION, jsonData, arguments, ParseValueType.CONDITION);
 		parseArgument(EventTriggerArg.FIRE_CONDITION, jsonData, arguments, ParseValueType.CONDITION);
 		parseArgument(EventTriggerArg.TARGET, jsonData, arguments, ParseValueType.TARGET_REFERENCE);
+		parseArgument(EventTriggerArg.VALUE, jsonData, arguments, ParseValueType.VALUE);
 
 		return new EventTriggerDesc(arguments);
 	}

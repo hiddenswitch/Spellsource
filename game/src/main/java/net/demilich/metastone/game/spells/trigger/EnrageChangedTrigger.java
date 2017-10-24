@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class EnrageChangedTrigger extends GameEventTrigger {
+public class EnrageChangedTrigger extends EventTrigger {
 
 	public EnrageChangedTrigger() {
 		this(EventTriggerDesc.createEmpty(EnrageChangedTrigger.class));

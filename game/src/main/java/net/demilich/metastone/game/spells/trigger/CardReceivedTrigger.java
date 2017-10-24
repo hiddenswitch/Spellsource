@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class CardReceivedTrigger extends GameEventTrigger {
+public class CardReceivedTrigger extends EventTrigger {
 
 	public CardReceivedTrigger(EventTriggerDesc desc) {
 		super(desc);

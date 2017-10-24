@@ -6,6 +6,7 @@
   "description": "Battlecry: Adapt your Tanooki",
   "fileFormatVersion": 1,
   "rarity": "EPIC",
+  "race": "BEAST",
   "baseHp": 4,
   "baseAttack": 5,
   "attributes": {

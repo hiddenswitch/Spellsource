@@ -21,7 +21,7 @@ public class ShuffleToDeckSpell extends Spell {
 		Card card = null;
 		if (target != null) {
 			card = target.getSourceCard().getCopy();
-		} else if (desc.containsKey(SpellArg.CARD_FILTER)){
+		} else if (desc.containsKey(SpellArg.CARD_FILTER)) {
 			EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 			CardList cards = CardCatalogue.query(context.getDeckFormat());
 			CardList result = new CardArrayList();
@@ -33,13 +33,13 @@ public class ShuffleToDeckSpell extends Spell {
 			card = result.getRandom();
 		} else {
 			String cardId = (String) desc.get(SpellArg.CARD);
-			card = context.getCardById(cardId);						
+			card = context.getCardById(cardId);
 		}
 
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		for (int i = 0; i < howMany; i++) {
 			if (card != null) {
-				context.getLogic().shuffleToDeck(player, card.clone());
+				context.getLogic().shuffleToDeck(player, card.getCopy());
 			}
 		}
 	}

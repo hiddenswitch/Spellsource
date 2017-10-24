@@ -15,19 +15,13 @@
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "boardPositionRelative": "RIGHT",
-          "class": "SummonNewAttackTargetSpell",
-          "card": "token_sapling"
-        },
-        {
-          "class": "RecastSpell",
-          "card": "PENDING_CARD",
-          "target": "SELF"
-        }
-      ]
+      "class": "SummonNewAttackTargetSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_sapling",
+      "spell": {
+        "class": "RecastSpell",
+        "card": "PENDING_CARD"
+      }
     }
   },
   "baseAttack": 3,

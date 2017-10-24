@@ -1,31 +1,31 @@
 {
-	"name": "Stampede",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "EPIC",
-	"description": "Whenever you play a Beast this turn, add a random Beast to your hand.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "AddEnchantmentSpell",
-		"target": "FRIENDLY_PLAYER",
-		"trigger": {
-			"eventTrigger": {
-				"class": "MinionPlayedTrigger",
-				"targetPlayer": "SELF",
-				"race": "BEAST"
-			},
-			"spell": {
-				"class": "ReceiveCardSpell",
-				"cardFilter": {
-					"class": "RaceFilter",
-					"race": "BEAST"
-				}
-			},
-			"oneTurn": true
-		}
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Stampede",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "EPIC",
+  "description": "Whenever you play a Beast this turn, add a random Beast to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "MinionPlayedTrigger",
+        "targetPlayer": "SELF",
+        "race": "BEAST"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "cardFilter": {
+          "class": "RaceFilter",
+          "race": "BEAST"
+        }
+      },
+      "oneTurn": true
+    }
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

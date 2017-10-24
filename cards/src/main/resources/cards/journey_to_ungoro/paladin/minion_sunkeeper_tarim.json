@@ -1,33 +1,33 @@
 {
-	"name": "Sunkeeper Tarim",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 7,
-	"heroClass": "PALADIN",
-	"rarity": "LEGENDARY",
-	"description": "Taunt. Battlecry: Set all other minions' Attack and Health to 3.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"target": "ALL_OTHER_MINIONS",
-			"spells": [
-				{
-					"class": "SetAttackSpell",
-					"value": 3
-				},
-				{
-					"class": "SetHpSpell",
-					"value": 3
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Sunkeeper Tarim",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "heroClass": "PALADIN",
+  "rarity": "LEGENDARY",
+  "description": "Taunt. Battlecry: Set all other minions' Attack and Health to 3.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 3
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 3
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

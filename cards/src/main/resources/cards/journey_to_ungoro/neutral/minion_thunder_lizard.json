@@ -1,0 +1,31 @@
+{
+  "name": "Thunder Lizard",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: If you played an Elemental Last turn, Adapt.",
+  "battlecry": {
+    "spell": {
+      "class": "AdaptSpell",
+      "target": "SELF",
+      "group": "group_adapt"
+    },
+    "condition": {
+      "class": "PlayedLastTurnCondition",
+      "filter": {
+        "class": "CardFilter",
+        "race": "ELEMENTAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

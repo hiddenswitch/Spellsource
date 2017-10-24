@@ -9,7 +9,7 @@ import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class MinionSummonedTrigger extends GameEventTrigger {
+public class MinionSummonedTrigger extends EventTrigger {
 
 	public MinionSummonedTrigger(EventTriggerDesc desc) {
 		super(desc);
@@ -37,3 +37,5 @@ public class MinionSummonedTrigger extends GameEventTrigger {
 	}
 
 }
+
+
