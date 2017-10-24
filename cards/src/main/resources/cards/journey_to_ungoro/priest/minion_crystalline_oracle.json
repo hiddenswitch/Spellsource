@@ -10,7 +10,10 @@
   "description": "Deathrattle: Copy a card from your opponent's deck and add it to your hand.",
   "deathrattle": {
     "class": "CopyCardSpell",
-    "cardLocation": "DECK",
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "OPPONENT"
+    },
     "value": 1
   },
   "collectible": true,

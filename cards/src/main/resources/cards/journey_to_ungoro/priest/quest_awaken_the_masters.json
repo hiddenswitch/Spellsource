@@ -1,22 +1,22 @@
 {
-	"name": "Awaken the Masters",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "LEGENDARY",
-	"description": "Quest: Summon 7 Deathrattle minions. Reward: Amara, Warden of Hope.",
-	"targetSelection": "NONE",
-	"quest": {
-		"class": "MinionSummonedTrigger",
-		"targetPlayer": "SELF",
-		"requiredAttribute": "DEATHRATTLES",
-		"value": 7
-	},
-	"spell": {
-		"class": "ReceiveCardSpell",
-		"card": "token_amara_warden_of_hope"
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Awaken the Masters",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Summon 7 Deathrattle minions. Reward: Amara, Warden of Hope.",
+  "targetSelection": "NONE",
+  "quest": {
+    "class": "MinionSummonedTrigger",
+    "targetPlayer": "SELF",
+    "requiredAttribute": "DEATHRATTLES"
+  },
+  "countUntilCast": 7,
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "token_amara_warden_of_hope"
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

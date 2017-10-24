@@ -17,7 +17,6 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class DiscoverFilteredCardSpell extends Spell {
-
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(DiscoverFilteredCardSpell.class);
 		arguments.put(SpellArg.TARGET, target);

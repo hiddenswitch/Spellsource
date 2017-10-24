@@ -1,27 +1,27 @@
 {
-	"name": "Shadow Visions",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "EPIC",
-	"description": "Discover a copy of a spell in your deck.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DiscoverFilteredCardSpell",
-		"cardFilter": {
-			"class": "CardFilter",
-			"cardType": "SPELL"
-		},
-		"cardSource": {
-			"class": "DeckSource",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"targetPlayer": "SELF"
-		}
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Shadow Visions",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "EPIC",
+  "description": "Discover a copy of a spell in your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverFilteredCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }
