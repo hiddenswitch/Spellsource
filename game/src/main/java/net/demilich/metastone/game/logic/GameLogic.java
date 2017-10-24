@@ -1609,13 +1609,18 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Determines whether a {@link Player} or their {@link Minion} entities have a given attribute.
+	 * Determines whether a {@link Player}, the player's {@link Hero} or a player's {@link Minion} entities have a given
+	 * attribute.
 	 *
 	 * @param player The player whose player entity and minions will be queries for the attribute.
 	 * @param attr   The attribute to query.
 	 * @return {@code true} if the player entity or its minions have the given attribute.
 	 */
 	public boolean hasAttribute(Player player, Attribute attr) {
+		if (player.hasAttribute(attr)) {
+			return true;
+		}
+
 		if (player.getHero().hasAttribute(attr)) {
 			return true;
 		}
@@ -1791,6 +1796,10 @@ public class GameLogic implements Cloneable, Serializable {
 		player.getHero().getHeroPower().setId(getIdFactory().generateId());
 		assignCardIds(player.getDeck(), playerId);
 		assignCardIds(player.getHand(), playerId);
+
+		// Implements Open the Waygate
+		Stream.concat(player.getDeck().stream(),
+				player.getHand().stream()).forEach(c -> applyAttribute(c, Attribute.STARTED_IN_DECK));
 
 		log("Setting hero hp to {} for {}", player.getHero().getHp(), player.getName());
 		player.getDeck().shuffle();
@@ -2143,9 +2152,8 @@ public class GameLogic implements Cloneable, Serializable {
 	 * represents playing a card from the hand. This method then deducts the appropriate amount of mana (or health,
 	 * depending on the card). Then, it will check if the {@link SpellCard} was countered by Counter Spell (a {@link
 	 * Secret} which adds a {@link Attribute#COUNTERED} attribute to the card that was raised in the {@link
-	 * CardPlayedEvent}). It applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked
-	 * next turn. Finally, it removes the card from the player's {@link Zones#HAND} and puts it in the {@link
-	 * Zones#GRAVEYARD}.
+	 * CardPlayedEvent}). It applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked next turn.
+	 * Finally, it removes the card from the player's {@link Zones#HAND} and puts it in the {@link Zones#GRAVEYARD}.
 	 *
 	 * @param playerId      The player that is playing the card.
 	 * @param cardReference The card that got played.
@@ -2841,6 +2849,7 @@ public class GameLogic implements Cloneable, Serializable {
 		for (Minion minion : player.getMinions()) {
 			minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		}
+		player.setAttribute(Attribute.EXTRA_TURN, Math.max(player.getAttributeValue(Attribute.EXTRA_TURN) - 1, 0));
 
 		player.getHero().getHeroPower().setUsed(0);
 		player.getHero().activateWeapon(true);
@@ -3139,6 +3148,14 @@ public class GameLogic implements Cloneable, Serializable {
 		log("Quest was trigged: {}", quest.getSourceCard());
 		quest.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		context.fireGameEvent(new QuestSuccessfulEvent(context, (QuestCard) quest.getSourceCard(), player.getId()));
+	}
+
+	public int getNextActivePlayerId() {
+		if (context.getActivePlayer().getAttributeValue(Attribute.EXTRA_TURN) > 0) {
+			return context.getActivePlayerId();
+		} else {
+			return context.getActivePlayerId() == GameContext.PLAYER_1 ? GameContext.PLAYER_2 : GameContext.PLAYER_1;
+		}
 	}
 
 	protected class FirstHand {

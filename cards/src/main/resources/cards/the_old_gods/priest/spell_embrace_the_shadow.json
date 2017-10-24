@@ -8,7 +8,7 @@
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "AddAttributeSpell",
-		"target": "FRIENDLY_HERO",
+		"target": "FRIENDLY_PLAYER",
 		"attribute": "INVERT_HEALING",
 		"revertTrigger": {
 			"class": "TurnEndTrigger"
