@@ -13,8 +13,6 @@ public class SpellCastedTrigger extends EventTrigger {
 
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
-		//SpellCastedEvent spellCastedEvent = (SpellCastedEvent) event;
-
 		return true;
 	}
 

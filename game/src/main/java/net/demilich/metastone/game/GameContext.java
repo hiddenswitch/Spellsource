@@ -343,10 +343,12 @@ public class GameContext implements Cloneable, Serializable {
 	@Suspendable
 	public void endTurn() {
 		getLogic().endTurn(getActivePlayerId());
-		setActivePlayerId(getActivePlayerId() == PLAYER_1 ? PLAYER_2 : PLAYER_1);
+		setActivePlayerId(getLogic().getNextActivePlayerId());
 		onGameStateChanged();
 		setTurnState(TurnState.TURN_ENDED);
 	}
+
+
 
 	private Card findCardinCollection(Iterable<Card> cardCollection, int cardId) {
 		for (Card card : cardCollection) {

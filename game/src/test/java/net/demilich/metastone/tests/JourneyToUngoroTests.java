@@ -26,6 +26,37 @@ import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
 	@Test()
+	public void testTimeWarp() {
+		GameContext context = createContext(HeroClass.PALADIN, HeroClass.PALADIN);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		playCard(context, player, "quest_open_the_waygate");
+		// TODO: Test stolen cards from the opponent's deck.
+
+		// Didn't start in the deck.
+		for (int i = 0; i < 6; i++) {
+			playCard(context, player, "spell_arcane_explosion");
+		}
+
+		Assert.assertTrue(player.getHand().containsCard("spell_time_warp"));
+		// Multiple Time Warps stack - you take that many extra turns in a row.
+
+		playCard(context, player, "spell_time_warp");
+		playCard(context, player, "spell_time_warp");
+		context.endTurn();
+		Assert.assertEquals(context.getActivePlayer(), player);
+		context.endTurn();
+		Assert.assertEquals(context.getActivePlayer(), player);
+		context.endTurn();
+		Assert.assertEquals(context.getActivePlayer(), opponent);
+	}
+
+	@Test()
 	public void testPrimalfinChampion() {
 		GameContext context = createContext(HeroClass.PALADIN, HeroClass.PALADIN);
 		Player player = context.getActivePlayer();
