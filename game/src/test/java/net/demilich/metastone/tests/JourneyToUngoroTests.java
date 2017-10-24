@@ -25,6 +25,41 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
+	@Test
+	public void testGalvadon() {
+		GameContext context = createContext(HeroClass.PALADIN, HeroClass.PALADIN);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		playCard(context, player, "quest_the_last_kaleidosaur");
+
+		Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
+
+		for (int i = 0; i < 5; i++) {
+			playCardWithTarget(context, player, "spell_adaptation", target);
+		}
+
+		// Only spells that target a specific friendly minion will count towards the quest, meaning that randomly
+		// targeted and AoE spells such as Smuggler's Run, Competitive Spirit and Avenge will not count.
+
+		playCard(context, player, "spell_savage_roar");
+		Assert.assertFalse(player.getHand().containsCard("token_galvadon"));
+
+		context.endTurn();
+		Minion opponentTarget = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+		playCardWithTarget(context, opponent, "spell_adaptation", opponentTarget);
+		Assert.assertFalse(player.getHand().containsCard("token_galvadon"));
+		context.endTurn();
+		playCardWithTarget(context, player, "spell_adaptation", opponentTarget);
+		Assert.assertFalse(player.getHand().containsCard("token_galvadon"));
+		playCardWithTarget(context, player, "spell_adaptation", target);
+		Assert.assertTrue(player.getHand().containsCard("token_galvadon"));
+	}
+
 	@Test()
 	public void testTimeWarp() {
 		GameContext context = createContext(HeroClass.PALADIN, HeroClass.PALADIN);
