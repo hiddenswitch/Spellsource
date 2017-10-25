@@ -1,0 +1,33 @@
+{
+  "name": "Fire Plume Harbinger",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "heroClass": "SHAMAN",
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Reduce the Cost of Elementals in your hand by (1).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "CardFilter",
+        "race": "ELEMENTAL"
+      },
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "operation": "SUBTRACT",
+        "value": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

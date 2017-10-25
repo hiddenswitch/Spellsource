@@ -1,0 +1,28 @@
+{
+  "name": "Clutchmother Zavas",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "heroClass": "WARLOCK",
+  "rarity": "LEGENDARY",
+  "description": "Whenever you discard this, give it +2/+2 and return it to your hand.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "DiscardTrigger",
+      "target": "SELF"
+    },
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+      "target": "EVENT_TARGET",
+      "spell": {
+        "class": "BuffSpell",
+        "value": 2,
+        "target": "EVENT_CARD"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

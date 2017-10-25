@@ -1,23 +1,23 @@
 {
-	"name": "Lakkari Felhound",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 8,
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"description": "Taunt. Battlecry: Discard two random cards.",
-	"battlecry": {
-		"spell": {
-			"class": "DiscardSpell",
-			"value": 2
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Lakkari Felhound",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 8,
+  "heroClass": "WARLOCK",
+  "rarity": "COMMON",
+  "description": "Taunt. Battlecry: Discard two random cards.",
+  "battlecry": {
+    "spell": {
+      "class": "DiscardSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

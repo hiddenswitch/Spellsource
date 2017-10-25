@@ -10,6 +10,7 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 
@@ -46,9 +47,12 @@ public class RandomCardTargetSpell extends Spell {
 
 		action = new PlaySpellCardAction(spellCard.getSpell(), spellCard, spellCard.getTargetRequirement());
 		List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
-		Entity randomTarget = targets.get(context.getLogic().random(targets.size()));
-		context.getEnvironment().put(Environment.TARGET_OVERRIDE, randomTarget.getReference());
-		SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, randomTarget);
+		EntityReference randomTarget = null;
+		if (targets != null && targets.size() != 0) {
+			randomTarget = targets.get(context.getLogic().random(targets.size())).getReference();
+			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, context.resolveSingleTarget(randomTarget));
+		}
+
 		spellCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 	}
 

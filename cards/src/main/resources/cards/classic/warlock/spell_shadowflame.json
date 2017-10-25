@@ -13,6 +13,10 @@
   },
   "spell": {
     "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "ATTACK"
+    },
     "spells": [
       {
         "class": "DestroySpell"
@@ -21,9 +25,8 @@
         "class": "DamageSpell",
         "target": "ENEMY_MINIONS",
         "value": {
-          "class": "AttributeValueProvider",
-          "target": "TARGET",
-          "attribute": "ATTACK"
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
         }
       }
     ]

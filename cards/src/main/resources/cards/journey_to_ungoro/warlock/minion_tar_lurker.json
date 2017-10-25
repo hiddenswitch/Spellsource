@@ -1,1 +1,35 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "name": "Tar Lurker", "heroClass": "WARLOCK", "trigger": {"eventTrigger": {"targetPlayer": "OPPONENT", "class": "TurnStartTrigger"}, "spell": {"class": "TemporaryAttackSpell", "value": 3, "target": "SELF"}}, "description": "Taunt. This minion has +3 Attack on your opponent's turn.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 7, "race": "ELEMENTAL", "baseAttack": 1, "attributes": {"TAUNT": true}, "type": "MINION", "baseManaCost": 5}
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "Tar Lurker",
+  "heroClass": "WARLOCK",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BoardChangedTrigger"
+    },
+    "spell": {
+      "class": "ConditionalAttackBonusSpell",
+      "target": "SELF",
+      "value": {
+        "class": "ConditionalValueProvider",
+        "ifTrue": 0,
+        "ifFalse": 3,
+        "condition": {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "ACTIVE"
+        }
+      }
+    }
+  },
+  "description": "Taunt. Has +3 Attack during your opponent's turn.",
+  "fileFormatVersion": 1,
+  "rarity": "COMMON",
+  "baseHp": 7,
+  "race": "ELEMENTAL",
+  "baseAttack": 1,
+  "attributes": {
+    "TAUNT": true
+  },
+  "type": "MINION",
+  "baseManaCost": 5
+}

@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,17 +17,21 @@ public class ChangeHeroPowerSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(ChangeHeroPowerSpell.class);
 
+	@Suspendable
 	protected void changeHeroPower(GameContext context, String heroPowerCardId, Hero hero) {
 		HeroPowerCard heroPower = (HeroPowerCard) SpellUtils.getCardFromContextOrDiscover(context, heroPowerCardId);
 		heroPower.setId(context.getLogic().getIdFactory().generateId());
 		heroPower.setOwner(hero.getOwner());
 		logger.debug("{}'s hero power was changed to {}", hero.getName(), heroPower);
 		// The old hero power should be removed from play.
-		hero.getHeroPowerZone().move(hero.getHeroPower(), context.getPlayer(hero.getOwner()).getRemovedFromPlay());
+		HeroPowerCard oldHeroPower = hero.getHeroPower();
+		context.removeTriggersAssociatedWith(oldHeroPower.getReference(), false);
+		hero.getHeroPowerZone().move(oldHeroPower, context.getPlayer(hero.getOwner()).getRemovedFromPlay());
 		heroPower.moveOrAddTo(context, Zones.HERO_POWER);
 	}
-	
+
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String heroPowerName = (String) desc.get(SpellArg.CARD);
 		changeHeroPower(context, heroPowerName, player.getHero());

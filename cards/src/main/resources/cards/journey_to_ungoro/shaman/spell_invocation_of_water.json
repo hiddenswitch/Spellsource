@@ -1,0 +1,17 @@
+{
+  "name": "Invocation of Water",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "FREE",
+  "description": "Restore 12 Health to your hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 12
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

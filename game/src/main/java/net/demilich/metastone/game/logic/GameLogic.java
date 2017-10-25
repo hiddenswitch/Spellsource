@@ -668,6 +668,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param player The player whose hero to change.
 	 * @param hero   The new hero the player will have.
 	 */
+	@Suspendable
 	public void changeHero(Player player, Hero hero) {
 		changeHero(player, hero, true);
 	}
@@ -681,6 +682,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param resolveBattlecry Whether or not the battlecry specified on the hero should be resolved.
 	 * @see #changeHero(Player, Hero) for more information.
 	 */
+	@Suspendable
 	public void changeHero(final Player player, final Hero hero, boolean resolveBattlecry) {
 		final Hero previousHero = player.getHero();
 		hero.setId(previousHero.getId());
@@ -1050,6 +1052,7 @@ public class GameLogic implements Cloneable, Serializable {
 		logger.debug("{} discards {}", player.getName(), card);
 		// only a 'real' discard should fire a DiscardEvent
 		if (card.getZone() == Zones.HAND) {
+			card.getAttributes().put(Attribute.DISCARDED, true);
 			context.fireGameEvent(new DiscardEvent(context, player.getId(), card));
 			player.getStatistics().cardDiscarded();
 		} else if (card.getZone() == Zones.DECK) {
@@ -2390,6 +2393,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param player The player who should own the trigger.
 	 * @param card   The card with the trigger.
 	 */
+	@Suspendable
 	public void processPassiveTriggers(Player player, Card card) {
 		if (card.getPassiveTriggers() != null
 				&& card.getPassiveTriggers().length > 0) {
