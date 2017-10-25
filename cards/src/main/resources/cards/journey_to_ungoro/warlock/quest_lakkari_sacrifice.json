@@ -1,21 +1,21 @@
 {
-	"name": "Lakkari Sacrifice",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "LEGENDARY",
-	"description": "Quest: Discard 6 cards. Reward: Nether Portal.",
-	"targetSelection": "NONE",
-	"quest": {
-		"class": "DiscardTrigger",
-		"targetPlayer": "SELF",
-		"value": 6
-	},
-	"spell": {
-		"class": "ReceiveCardSpell",
-		"card": "spell_nether_portal"
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Lakkari Sacrifice",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Discard 6 cards. Reward: Nether Portal.",
+  "targetSelection": "NONE",
+  "quest": {
+    "class": "DiscardTrigger",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 6,
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_nether_portal"
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

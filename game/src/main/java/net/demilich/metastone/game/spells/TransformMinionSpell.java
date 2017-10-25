@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,3 +65,4 @@ public class TransformMinionSpell extends Spell {
 	}
 
 }
+

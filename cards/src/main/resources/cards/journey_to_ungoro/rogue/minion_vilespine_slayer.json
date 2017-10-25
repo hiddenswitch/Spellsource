@@ -1,25 +1,25 @@
 {
-	"name": "Vilespine Slayer",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Combo: Destroy a minion.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "DestroySpell"
-		},
-		"condition": {
-			"class": "ComboCondition"
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Vilespine Slayer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "heroClass": "ROGUE",
+  "rarity": "EPIC",
+  "description": "Combo: Destroy a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DestroySpell"
+    },
+    "condition": {
+      "class": "ComboCondition"
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }
