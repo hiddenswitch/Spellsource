@@ -1,22 +1,22 @@
 {
-	"name": "Unite the Murlocs",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "LEGENDARY",
-	"description": "Quest: Summon 10 Murlocs. Reward: Megafin.",
-	"targetSelection": "NONE",
-	"quest": {
-		"class": "MinionSummonedTrigger",
-		"targetPlayer": "SELF",
-		"race": "MURLOC",
-		"value": 10
-	},
-	"spell": {
-		"class": "ReceiveCardSpell",
-		"card": "token_megafin"
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Unite the Murlocs",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Summon 10 Murlocs. Reward: Megafin.",
+  "targetSelection": "NONE",
+  "quest": {
+    "class": "MinionSummonedTrigger",
+    "targetPlayer": "SELF",
+    "race": "MURLOC"
+  },
+  "countUntilCast": 10,
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "token_megafin"
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

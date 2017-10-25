@@ -33,6 +33,48 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.testng.annotations.BeforeMethod;
 
 public class TestBase {
+	@FunctionalInterface
+	interface GymConsumer {
+		void run(GameContext context, Player player, Player opponent);
+
+		default GymConsumer andThen(GymConsumer after) {
+			Objects.requireNonNull(after);
+			return (c, p, o) -> {
+				run(c, p, o);
+				after.run(c, p, o);
+			};
+		}
+	}
+
+	static class GymFactory {
+		GymConsumer first;
+
+		public void run(GymConsumer consumer) {
+			runGym(first.andThen(consumer));
+		}
+	}
+
+	public static GymFactory getGymFactory(GymConsumer initializer) {
+		GymFactory factory = new GymFactory();
+		factory.first = initializer;
+		return factory;
+	}
+
+	public static void runGym(GymConsumer consumer, HeroClass heroClass1, HeroClass heroClass2) {
+		GameContext context = createContext(heroClass1, heroClass2);
+		Player player = context.getActivePlayer();
+		Player opponent = context.getOpponent(player);
+		clearHand(context, player);
+		clearHand(context, opponent);
+		clearZone(context, player.getDeck());
+		clearZone(context, opponent.getDeck());
+
+		consumer.run(context, player, opponent);
+	}
+
+	public static void runGym(GymConsumer consumer) {
+		runGym(consumer, HeroClass.MAGE, HeroClass.MAGE);
+	}
 
 	public static void clearHand(GameContext context, Player player) {
 		for (int i = player.getHand().getCount() - 1; i >= 0; i--) {

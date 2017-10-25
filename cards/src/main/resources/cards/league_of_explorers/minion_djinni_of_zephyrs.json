@@ -1,27 +1,32 @@
 {
-	"name": "Djinni of Zephyrs",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "After you target another friendly minion with a spell, cast it on this one.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterSpellCastedTrigger",
-			"sourcePlayer": "SELF",
-			"targetPlayer": "SELF",
-			"targetEntityType": "MINION",
-			"hostTargetType": "IGNORE_AS_TARGET"
-		},
-		"spell": {
-			"class": "RecastSpell",
-			"target": "SELF",
-			"card": "PENDING_CARD"
-		}
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Djinni of Zephyrs",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "After you target another friendly minion with a spell, cast it on this one.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "sourcePlayer": "SELF",
+      "actionType": "SPELL",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF",
+      "queueCondition": {
+        "class": "OwnedByPlayerCondition",
+        "target": "EVENT_TARGET",
+        "targetPlayer": "SELF"
+      }
+    },
+    "spell": {
+      "class": "RecastSpell",
+      "target": "SELF",
+      "card": "PENDING_CARD"
+    }
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

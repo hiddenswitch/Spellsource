@@ -138,7 +138,7 @@ public class GameLogic implements Cloneable, Serializable {
 	private final ActionLogic actionLogic = new ActionLogic();
 	private final SpellFactory spellFactory = new SpellFactory();
 	private IdFactory idFactory;
-	private final Random random = new Random();
+	private Random random = new Random();
 	protected transient GameContext context;
 	private boolean loggingEnabled = false;
 	private final int MAX_HISTORY_ENTRIES = 100;
@@ -778,7 +778,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		// sort the destroyed actors by their id. This implies that actors with a lower id entered the game earlier than those with higher ids!
-		Collections.sort(destroyList, (a1, a2) -> Integer.compare(a1.getId(), a2.getId()));
+		destroyList.sort(Comparator.comparingInt(Entity::getId));
 		// this method performs the actual removal
 		destroy(destroyList.toArray(new Actor[0]));
 		if (context.updateAndGetGameOver()) {
@@ -2999,6 +2999,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 		Player owner = context.getPlayer(minion.getOwner());
 		int index = -1;
+		Zones oldZone = minion.getZone();
 		if (!minion.getEntityLocation().equals(EntityLocation.UNASSIGNED)
 				&& owner != null) {
 			index = minion.getEntityLocation().getIndex();
@@ -3059,8 +3060,11 @@ public class GameLogic implements Cloneable, Serializable {
 
 		}
 
-		// Move the old minion to the Set Aside Zone
-		owner.getSetAsideZone().add(minion);
+		if (oldZone == Zones.GRAVEYARD) {
+			minion.moveOrAddTo(context, Zones.GRAVEYARD);
+		} else {
+			minion.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+		}
 
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
@@ -3110,6 +3114,10 @@ public class GameLogic implements Cloneable, Serializable {
 
 	public Random getRandom() {
 		return random;
+	}
+
+	public void setRandom(Random random) {
+		this.random = random;
 	}
 
 	public IdFactory getIdFactory() {
