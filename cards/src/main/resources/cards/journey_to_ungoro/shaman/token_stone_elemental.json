@@ -1,13 +1,13 @@
 {
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",
-  "name": "Primalfin",
-  "heroClass": "ANY",
+  "name": "Stone Elemental",
+  "heroClass": "SHAMAN",
   "description": "",
   "fileFormatVersion": 1,
   "rarity": "FREE",
   "baseHp": 1,
-  "race": "MURLOC",
+  "race": "ELEMENTAL",
   "baseAttack": 1,
   "type": "MINION",
   "baseManaCost": 1

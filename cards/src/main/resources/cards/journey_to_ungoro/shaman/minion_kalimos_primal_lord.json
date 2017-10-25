@@ -1,0 +1,42 @@
+{
+  "name": "Kalimos, Primal Lord",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "heroClass": "SHAMAN",
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: If you played an Elemental last turn, cast an Elemental Invocation.",
+  "battlecry": {
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "PlayedLastTurnCondition",
+        "filter": {
+          "class": "CardFilter",
+          "race": "ELEMENTAL"
+        }
+      },
+      "spell": {
+        "class": "DiscoverCardSpell",
+        "cards": [
+          "spell_invocation_of_air",
+          "spell_invocation_of_earth",
+          "spell_invocation_of_fire",
+          "spell_invocation_of_water"
+        ],
+        "spell": {
+          "class": "RecastSpell"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "Stone Elemental",
+  "heroClass": "SHAMAN",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "fileFormatVersion": 1,
+  "rarity": "FREE",
+  "baseHp": 3,
+  "race": "ELEMENTAL",
+  "baseAttack": 2,
+  "type": "MINION",
+  "baseManaCost": 2
+}

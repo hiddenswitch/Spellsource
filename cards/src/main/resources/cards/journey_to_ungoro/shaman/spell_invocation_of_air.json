@@ -1,0 +1,17 @@
+{
+  "name": "Invocation of Air",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "FREE",
+  "description": "Deal 3 damage to all enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

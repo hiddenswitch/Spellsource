@@ -1,0 +1,28 @@
+{
+  "deathrattle": {
+    "class": "SummonRandomMinionFilteredSpell",
+    "cardSource": {
+      "class": "GraveyardSource",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "DISCARDED",
+      "operation": "HAS"
+    }
+  },
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "Cruel Dinomancer",
+  "heroClass": "WARLOCK",
+  "description": "Deathrattle: Summon a random minion you discarded this game.",
+  "fileFormatVersion": 1,
+  "collectible": true,
+  "rarity": "RARE",
+  "baseHp": 5,
+  "baseAttack": 5,
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "type": "MINION",
+  "baseManaCost": 6
+}

@@ -1,1 +1,27 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "description": "Corrupt all enemy minions. At the start of your turn, destroy them.", "spell": {"trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnStartTrigger"}, "spell": {"class": "DestroySpell", "target": "SELF"}}, "class": "AddEnchantmentSpell", "target": "ALL_MINIONS"}, "fileFormatVersion": 1, "rarity": "RARE", "heroClass": "WARLOCK", "targetSelection": "NONE", "baseManaCost": 2, "type": "SPELL", "name": "Corrupting Mist"}
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "description": "Corrupt all enemy minions. At the start of your turn, destroy them.",
+  "spell": {
+    "trigger": {
+      "persistentOwner": true,
+      "eventTrigger": {
+        "targetPlayer": "SELF",
+        "class": "TurnStartTrigger"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      }
+    },
+    "class": "AddEnchantmentSpell",
+    "target": "ALL_MINIONS"
+  },
+  "fileFormatVersion": 1,
+  "rarity": "RARE",
+  "heroClass": "WARLOCK",
+  "targetSelection": "NONE",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "name": "Corrupting Mist"
+}

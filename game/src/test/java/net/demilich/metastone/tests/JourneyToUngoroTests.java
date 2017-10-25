@@ -33,6 +33,19 @@ import java.util.stream.Stream;
 public class JourneyToUngoroTests extends TestBase {
 
 	@Test
+	public void testClutchmotherZavas() {
+		runGym((c, p, o) -> {
+			c.getLogic().receiveCard(p.getId(), CardCatalogue.getCardById("minion_clutchmother_zavas"));
+			playMinionCard(c, p, "minion_succubus");
+			c.getLogic().performGameAction(p.getId(), p.getHand().get(0).play());
+
+			Minion clutchmother = getSummonedMinion(p.getMinions());
+			Assert.assertEquals(clutchmother.getAttack(), 4);
+			Assert.assertEquals(clutchmother.getHp(), 4);
+		});
+	}
+
+	@Test
 	public void testPermanents() {
 		GymFactory factory = getGymFactory((context, player, opponent) -> {
 			Minion flower = playMinionCard(context, player, "minion_sherazin_corpse_flower");

@@ -1,0 +1,17 @@
+{
+  "name": "Invocation of Fire",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "FREE",
+  "description": "Fill your board with 1/1 Elementals.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_HERO",
+    "value": 6
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

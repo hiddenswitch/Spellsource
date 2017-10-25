@@ -1,1 +1,20 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "description": "Give your minions \"Deathrattle: Return this to your hand.\"", "spell": {"spell": {"class": "ReturnTargetToHandSpell", "target": "SELF"}, "class": "AddDeathrattleSpell", "target": "FRIENDLY_MINIONS"}, "fileFormatVersion": 1, "rarity": "EPIC", "heroClass": "SHAMAN", "targetSelection": "NONE", "baseManaCost": 3, "type": "SPELL", "name": "Spirit Echo"}
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "description": "Give your minions \"Deathrattle: Return this to your hand.\"",
+  "spell": {
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+      "target": "SELF"
+    },
+    "class": "AddDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS"
+  },
+  "fileFormatVersion": 1,
+  "rarity": "EPIC",
+  "heroClass": "SHAMAN",
+  "targetSelection": "NONE",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "name": "Spirit Echo"
+}

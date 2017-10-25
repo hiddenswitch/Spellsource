@@ -1,37 +1,37 @@
 {
-	"name": "Megafin",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "SHAMAN",
-	"rarity": "LEGENDARY",
-	"race": "MURLOC",
-	"description": "Battlecry: Fill your hand with random Murlocs.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"value": { 
-				"class": "AlgebraicValueProvider",
-				"operation": "SUBTRACT",
-				"value1": 10,
-				"value2": {
-					"class": "PlayerAttributeValueProvider",
-					"targetPlayer": "SELF",
-					"playerAttribute": "HAND_COUNT"
-				}
-			},
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "MURLOC"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": false,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Megafin",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "heroClass": "SHAMAN",
+  "rarity": "LEGENDARY",
+  "race": "MURLOC",
+  "description": "Battlecry: Fill your hand with random Murlocs.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
+        "value1": 10,
+        "value2": {
+          "class": "PlayerAttributeValueProvider",
+          "targetPlayer": "SELF",
+          "playerAttribute": "HAND_COUNT"
+        }
+      },
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "MURLOC"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }
