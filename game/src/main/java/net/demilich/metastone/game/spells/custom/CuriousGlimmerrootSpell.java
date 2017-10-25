@@ -53,7 +53,7 @@ public class CuriousGlimmerrootSpell extends Spell {
 
 		List<Card> others = CardCatalogue.query(context.getDeckFormat())
 				.shuffle(context.getLogic().getRandom())
-				.toList().stream()
+				.stream()
 				.filter(c -> c.getHeroClass() == correctClass)
 				.filter(c -> !c.getCardId().equals(correctCard.getCardId()))
 				.limit(2)
@@ -64,12 +64,12 @@ public class CuriousGlimmerrootSpell extends Spell {
 		others.forEach(cards::addCard);
 
 		cards.shuffle(context.getLogic().getRandom());
-		DiscoverAction result = SpellUtils.discoverCard(context, player, NullSpell.create(), cards);
+		DiscoverAction result = SpellUtils.discoverCard(context, player, desc, cards);
 		String cardId = result.getCard().getCardId();
 		if (cardId.equals(correctCard.getCardId())) {
-			SpellUtils.castChildSpell(context, player, rightChoice.addArg(SpellArg.CARD, cardId), source, correctCard);
+			SpellUtils.castChildSpell(context, player, rightChoice.addArg(SpellArg.CARD, cardId), source, null);
 		} else {
-			SpellUtils.castChildSpell(context, player, wrongChoice.addArg(SpellArg.CARD, cardId), source, result.getCard());
+			SpellUtils.castChildSpell(context, player, wrongChoice.addArg(SpellArg.CARD, cardId), source, null);
 		}
 	}
 }

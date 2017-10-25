@@ -11,6 +11,9 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "custom.CuriousGlimmerrootSpell",
+      "spell": {
+        "class": "NullSpell"
+      },
       "spell1": {
         "class": "ReceiveCardSpell"
       },

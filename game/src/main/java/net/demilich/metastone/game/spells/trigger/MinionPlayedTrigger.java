@@ -23,3 +23,4 @@ public class MinionPlayedTrigger extends MinionSummonedTrigger {
 	}
 
 }
+

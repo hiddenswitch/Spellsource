@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * An implementation of {@link CardList} for easy shuffling, choosing and uniqueness testing of lists of cards.
@@ -25,6 +26,11 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 	@Override
 	public boolean add(Card card) {
 		return cards.add(card);
+	}
+
+	@Override
+	public Stream<Card> stream() {
+		return cards.stream();
 	}
 
 	/**

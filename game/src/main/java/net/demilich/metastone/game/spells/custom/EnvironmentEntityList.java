@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class EnvironmentEntityList implements EnvironmentValue {
+public class EnvironmentEntityList implements EnvironmentValue {
 	public static EnvironmentEntityList getList(GameContext context) {
 		context.getEnvironment().putIfAbsent(Environment.ENTITY_LIST, new EnvironmentEntityList());
 		EnvironmentEntityList list = (EnvironmentEntityList) context.getEnvironment().get(Environment.ENTITY_LIST);

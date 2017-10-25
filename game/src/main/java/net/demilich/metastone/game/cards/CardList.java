@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 
 /**
@@ -257,7 +258,7 @@ public interface CardList extends Iterable<Card> {
 	 */
 	default CardList filtered(Predicate<? super Card> filter) {
 		CardList filteredCards = new CardArrayList();
-		toList().stream().filter(filter).forEach(filteredCards::addCard);
+		this.stream().filter(filter).forEach(filteredCards::addCard);
 		return filteredCards;
 	}
 
@@ -270,7 +271,11 @@ public interface CardList extends Iterable<Card> {
 	 */
 	default CardList getCopy() {
 		CardList copiedCards = new CardArrayList();
-		toList().stream().map(Card::getCopy).forEach(copiedCards::addCard);
+		this.stream().map(Card::getCopy).forEach(copiedCards::addCard);
 		return copiedCards;
+	}
+
+	default Stream<Card> stream() {
+		return toList().stream();
 	}
 }
