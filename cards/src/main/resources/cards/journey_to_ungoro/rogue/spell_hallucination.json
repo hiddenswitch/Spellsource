@@ -14,8 +14,7 @@
 		},
 		"cardFilter": {
 			"class": "CardFilter",
-			"attribute": "DEATHRATTLES",
-			"operation": "HAS"
+			"heroClass": "OPPONENT"
 		}
 	},
 	"collectible": true,

@@ -1,10 +1,10 @@
 {
-  "name": "Leaching Poison",
-  "baseManaCost": 2,
+  "name": "Envenom Weapon",
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "ROGUE",
-  "rarity": "COMMON",
-  "description": "Give your weapon Lifesteal.",
+  "rarity": "RARE",
+  "description": "Give your weapon Poisonous.",
   "targetSelection": "NONE",
   "condition": {
     "class": "HasWeaponCondition",
@@ -12,10 +12,10 @@
   },
   "spell": {
     "class": "AddAttributeSpell",
-    "attribute": "LIFESTEAL",
+    "attribute": "POISONOUS",
     "target": "FRIENDLY_WEAPON"
   },
   "collectible": true,
-  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
 }

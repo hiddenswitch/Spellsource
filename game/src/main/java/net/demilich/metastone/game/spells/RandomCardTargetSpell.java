@@ -40,7 +40,7 @@ public class RandomCardTargetSpell extends Spell {
 
 		if (spellCard.getTargetRequirement() == TargetSelection.NONE) {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
-			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			spellCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 			return;
 		}
 
@@ -49,7 +49,7 @@ public class RandomCardTargetSpell extends Spell {
 		Entity randomTarget = targets.get(context.getLogic().random(targets.size()));
 		context.getEnvironment().put(Environment.TARGET_OVERRIDE, randomTarget.getReference());
 		SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, randomTarget);
-		card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		spellCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 	}
 
 }

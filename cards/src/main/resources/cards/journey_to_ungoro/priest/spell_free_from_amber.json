@@ -12,7 +12,12 @@
       "operation": "GREATER_OR_EQUAL"
     },
     "spell": {
-      "class": "SummonSpell"
+      "class": "ReceiveCardAndDoSomethingSpell",
+      "targetPlayer": "SELF",
+      "spell": {
+        "class": "PutMinionOnBoardSpell",
+        "card": "EVENT_CARD"
+      }
     }
   },
   "fileFormatVersion": 1,

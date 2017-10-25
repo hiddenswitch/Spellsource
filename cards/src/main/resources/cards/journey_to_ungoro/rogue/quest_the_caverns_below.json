@@ -1,0 +1,20 @@
+{
+  "name": "The Caverns Below",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Play five minions with the same name. Reward: Crystal Core.",
+  "targetSelection": "NONE",
+  "quest": {
+    "class": "CavernsBelowTrigger"
+  },
+  "countUntilCast": 5,
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_crystal_core"
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

@@ -1799,7 +1799,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 		// Implements Open the Waygate
 		Stream.concat(player.getDeck().stream(),
-				player.getHand().stream()).forEach(c -> applyAttribute(c, Attribute.STARTED_IN_DECK));
+				player.getHand().stream()).forEach(c -> c.getAttributes().put(Attribute.STARTED_IN_DECK, true));
 
 		log("Setting hero hp to {} for {}", player.getHero().getHp(), player.getName());
 		player.getDeck().shuffle();

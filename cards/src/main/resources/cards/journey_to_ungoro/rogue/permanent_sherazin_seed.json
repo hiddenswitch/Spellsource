@@ -1,34 +1,34 @@
 {
-	"name": "Sherazin, Seed",
-	"type": "MINION",
-	"heroClass": "ROGUE",
-	"rarity": "FREE",
-	"baseManaCost": 0,
-	"baseAttack": 0,
-	"baseHp": 1,
-	"description": "When you play 4 cards in a turn, revive this minion.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "CardPlayedTrigger",
-			"targetPlayer": "SELF",
-			"queueCondition": {
-				"class": "AttributeCondition",
-				"target": "FRIENDLY_PLAYER",
-				"attribute": "COMBO",
-				"operation": "GREATER_OR_EQUAL",
-				"value": 3
-			}
-		},
-		"spell": {
-			"class": "TransformMinionSpell",
-			"target": "SELF",
-			"card": "minion_sherazin_corpse_flower"
-		}
-	},
-	"attributes": {
-		"PERMANENT": true
-	},
-	"collectible": false,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Sherazin, Seed",
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "rarity": "FREE",
+  "baseManaCost": 0,
+  "baseAttack": 0,
+  "baseHp": 1,
+  "description": "When you play 4 cards in a turn, revive this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "SELF",
+      "queueCondition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "COMBO",
+        "operation": "GREATER_OR_EQUAL",
+        "value": 3
+      }
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "minion_sherazin_corpse_flower"
+    }
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }
