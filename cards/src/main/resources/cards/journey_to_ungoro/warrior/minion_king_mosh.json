@@ -1,1 +1,27 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "name": "King Mosh", "heroClass": "WARRIOR", "description": "Destroy all damaged minions.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 7, "race": "BEAST", "baseAttack": 9, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"filter": {"class": "DamagedFilter"}, "class": "DestroySpell", "target": "ALL_MINIONS"}, "targetSelection": "NONE"}, "type": "MINION", "baseManaCost": 9}
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "King Mosh",
+  "heroClass": "WARRIOR",
+  "description": "Destroy all damaged minions.",
+  "fileFormatVersion": 1,
+  "rarity": "LEGENDARY",
+  "baseHp": 7,
+  "race": "BEAST",
+  "baseAttack": 9,
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "battlecry": {
+    "spell": {
+      "filter": {
+        "class": "DamagedFilter"
+      },
+      "class": "DestroySpell",
+      "target": "ALL_MINIONS"
+    },
+    "targetSelection": "NONE"
+  },
+  "type": "MINION",
+  "baseManaCost": 9
+}

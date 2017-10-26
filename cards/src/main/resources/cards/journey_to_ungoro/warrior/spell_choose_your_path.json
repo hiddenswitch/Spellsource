@@ -1,5 +1,5 @@
 {
-	"name": "Explore Un'Goro'",
+	"name": "Choose Your Path",
 	"baseManaCost": 1,
 	"type": "SPELL",
 	"heroClass": "WARRIOR",
@@ -13,7 +13,7 @@
 			"targetPlayer": "SELF"
 		}
 	},
-	"collectible": true,
+	"collectible": false,
 	"set": "JOURNEY_TO_UNGORO",
 	"fileFormatVersion": 1
 }

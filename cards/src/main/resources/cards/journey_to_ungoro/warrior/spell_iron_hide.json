@@ -1,1 +1,17 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "description": "Gain 5 Armor.", "spell": {"armorBonus": 5, "class": "BuffHeroSpell", "target": "FRIENDLY_HERO"}, "fileFormatVersion": 1, "rarity": "COMMON", "heroClass": "WARRIOR", "targetSelection": "NONE", "baseManaCost": 1, "type": "SPELL", "name": "Iron Hide"}
+{
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "description": "Gain 5 Armor.",
+  "spell": {
+    "armorBonus": 5,
+    "class": "BuffHeroSpell",
+    "target": "FRIENDLY_HERO"
+  },
+  "fileFormatVersion": 1,
+  "rarity": "COMMON",
+  "heroClass": "WARRIOR",
+  "targetSelection": "NONE",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "name": "Iron Hide"
+}

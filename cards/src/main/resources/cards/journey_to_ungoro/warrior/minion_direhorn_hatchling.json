@@ -1,1 +1,22 @@
-{"deathrattle": {"class": "ShuffleToDeckSpell", "card": "token_direhorn_patriarch"}, "set": "JOURNEY_TO_UNGORO", "name": "Direhorn Hatchling", "heroClass": "WARRIOR", "description": "Deathrattle: Shuffle a 6/9 Direhorn with Taunt into your deck.", "fileFormatVersion": 1, "collectible": true, "rarity": "RARE", "baseHp": 6, "race": "BEAST", "baseAttack": 3, "attributes": {"TAUNT": true, "DEATHRATTLES": true}, "type": "MINION", "baseManaCost": 5}
+{
+  "deathrattle": {
+    "class": "ShuffleToDeckSpell",
+    "card": "token_direhorn_matriarch"
+  },
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "Direhorn Hatchling",
+  "heroClass": "WARRIOR",
+  "description": "Taunt. Deathrattle: Shuffle a 6/9 Direhorn with Taunt into your deck.",
+  "fileFormatVersion": 1,
+  "collectible": true,
+  "rarity": "RARE",
+  "baseHp": 6,
+  "race": "BEAST",
+  "baseAttack": 3,
+  "attributes": {
+    "TAUNT": true,
+    "DEATHRATTLES": true
+  },
+  "type": "MINION",
+  "baseManaCost": 5
+}

@@ -1,0 +1,17 @@
+{
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "name": "Direhorn Matriarch",
+  "heroClass": "ANY",
+  "description": "Taunt",
+  "fileFormatVersion": 1,
+  "rarity": "RARE",
+  "baseHp": 9,
+  "race": "BEAST",
+  "baseAttack": 6,
+  "attributes": {
+    "TAUNT": true
+  },
+  "type": "MINION",
+  "baseManaCost": 5
+}

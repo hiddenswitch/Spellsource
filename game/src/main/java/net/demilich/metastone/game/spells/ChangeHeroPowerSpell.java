@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ public class ChangeHeroPowerSpell extends Spell {
 		HeroPowerCard oldHeroPower = hero.getHeroPower();
 		context.removeTriggersAssociatedWith(oldHeroPower.getReference(), false);
 		hero.getHeroPowerZone().move(oldHeroPower, context.getPlayer(hero.getOwner()).getRemovedFromPlay());
+		if (heroPower.getHeroClass() == HeroClass.INHERIT) {
+			heroPower.setHeroClass(hero.getHeroClass());
+		}
 		heroPower.moveOrAddTo(context, Zones.HERO_POWER);
 	}
 

@@ -1,18 +1,18 @@
 {
-	"name": "Beam of Destruction",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Deal 8 damage to a random enemy.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DamageSpell",
-		"target": "ENEMY_CHARACTERS",
-		"value": 8,
-		"randomTarget": true
-	},
-	"collectible": false,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "DIE, INSECT!",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "INHERIT",
+  "rarity": "FREE",
+  "description": "Deal 8 damage to a random enemy.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 8,
+    "randomTarget": true
+  },
+  "collectible": false,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1
 }

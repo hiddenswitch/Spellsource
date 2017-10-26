@@ -1,17 +1,17 @@
 {
-	"name": "Explore Un'Goro'",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "EPIC",
-	"description": "Replace your deck with copies of \"Discover a card.\"",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "ReplaceCardLocationSpell",
-		"cardLocation": "DECK",
-		"card": "spell_discover_a_card"
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Explore Un'Goro'",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "EPIC",
+  "description": "Replace your deck with copies of \"Discover a card.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReplaceCardLocationSpell",
+    "cardLocation": "DECK",
+    "card": "spell_choose_your_path"
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }
