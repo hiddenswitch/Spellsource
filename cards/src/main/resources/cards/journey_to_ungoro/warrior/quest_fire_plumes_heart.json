@@ -1,0 +1,22 @@
+{
+  "name": "Fire Plume's Heart",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Play 7 Taunt minions. Reward: Sulfuras.",
+  "targetSelection": "NONE",
+  "quest": {
+    "class": "MinionPlayedTrigger",
+    "targetPlayer": "SELF",
+    "requiredAttribute": "TAUNT"
+  },
+  "countUntilCast": 7,
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "weapon_sulfuras"
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

@@ -42,7 +42,7 @@ public abstract class Card extends Entity {
 	 * @see #getCardId()
 	 */
 	private String cardId;
-	private CardDesc desc;
+	protected CardDesc desc;
 
 	public Card() {
 		super();

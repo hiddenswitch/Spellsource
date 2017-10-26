@@ -701,6 +701,9 @@ public class GameLogic implements Cloneable, Serializable {
 		if (hero.getHeroClass().equals(HeroClass.INHERIT)) {
 			hero.setHeroClass(previousHero.getHeroClass());
 		}
+		if (hero.getHeroPower().getHeroClass() == HeroClass.INHERIT) {
+			hero.getHeroPower().setHeroClass(previousHero.getHeroClass());
+		}
 		// Remove the old hero from play
 		removeEnchantments(previousHero);
 		// This removes the hero power enchantments too
