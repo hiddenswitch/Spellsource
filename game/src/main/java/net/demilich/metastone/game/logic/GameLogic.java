@@ -850,7 +850,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param baseDamage        The base amount of damage to deal.
 	 * @param source            The source of the damage.
 	 * @param ignoreSpellDamage When {@code true}, spell damage bonuses are not added to the damage dealt.
-	 * @return
+	 * @return The amount of damage that was actually dealt
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage) {
@@ -900,15 +900,13 @@ public class GameLogic implements Cloneable, Serializable {
 
 			// Keyword effects for lifesteal and poisonous will come after all other events
 			// Implement poisonous
-			if (source != null
-					&& source.hasAttribute(Attribute.POISONOUS)
+			if (source.hasAttribute(Attribute.POISONOUS)
 					&& target.getEntityType() == EntityType.MINION) {
 				destroy(target);
 			}
 
 			// Implement lifesteal
-			if (source != null
-					&& source.hasAttribute(Attribute.LIFESTEAL)) {
+			if (source.hasAttribute(Attribute.LIFESTEAL)) {
 				Player sourceOwner = context.getPlayer(source.getOwner());
 				heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
 			}

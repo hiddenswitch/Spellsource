@@ -66,7 +66,10 @@ public class Entity  implements Serializable {
     SECRET("SECRET"),
     
     @SerializedName("QUEST")
-    QUEST("QUEST");
+    QUEST("QUEST"),
+    
+    @SerializedName("ENCHANTMENT")
+    ENCHANTMENT("ENCHANTMENT");
 
     private String value;
 

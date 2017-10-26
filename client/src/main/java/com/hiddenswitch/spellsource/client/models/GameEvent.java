@@ -70,6 +70,9 @@ public class GameEvent  implements Serializable {
    * The game event type corresponding to this game event. 
    */
   public enum EventTypeEnum {
+    @SerializedName("ALL")
+    ALL("ALL"),
+    
     @SerializedName("AFTER_PHYSICAL_ATTACK")
     AFTER_PHYSICAL_ATTACK("AFTER_PHYSICAL_ATTACK"),
     
@@ -78,6 +81,9 @@ public class GameEvent  implements Serializable {
     
     @SerializedName("AFTER_SUMMON")
     AFTER_SUMMON("AFTER_SUMMON"),
+    
+    @SerializedName("ATTRIBUTE_APPLIED")
+    ATTRIBUTE_APPLIED("ATTRIBUTE_APPLIED"),
     
     @SerializedName("ARMOR_GAINED")
     ARMOR_GAINED("ARMOR_GAINED"),
@@ -121,6 +127,9 @@ public class GameEvent  implements Serializable {
     @SerializedName("KILL")
     KILL("KILL"),
     
+    @SerializedName("LOSE_DIVINE_SHIELD")
+    LOSE_DIVINE_SHIELD("LOSE_DIVINE_SHIELD"),
+    
     @SerializedName("MILL")
     MILL("MILL"),
     
@@ -138,6 +147,12 @@ public class GameEvent  implements Serializable {
     
     @SerializedName("PRE_DAMAGE")
     PRE_DAMAGE("PRE_DAMAGE"),
+    
+    @SerializedName("QUEST_PLAYED")
+    QUEST_PLAYED("QUEST_PLAYED"),
+    
+    @SerializedName("QUEST_SUCCESSFUL")
+    QUEST_SUCCESSFUL("QUEST_SUCCESSFUL"),
     
     @SerializedName("REVEAL_CARD")
     REVEAL_CARD("REVEAL_CARD"),

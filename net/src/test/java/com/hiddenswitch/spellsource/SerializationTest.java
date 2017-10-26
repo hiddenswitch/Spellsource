@@ -22,7 +22,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.tests.TestBase;
+import com.hiddenswitch.spellsource.util.TestBase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.hiddenswitch.proto3.Assert.assertReflectionEquals;
+import static com.hiddenswitch.spellsource.Assert.assertReflectionEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

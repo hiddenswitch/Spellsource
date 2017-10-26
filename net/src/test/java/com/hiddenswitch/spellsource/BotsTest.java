@@ -24,8 +24,8 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.tests.DebugContext;
-import net.demilich.metastone.tests.TestBase;
+import com.hiddenswitch.spellsource.util.DebugContext;
+import com.hiddenswitch.spellsource.util.TestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
