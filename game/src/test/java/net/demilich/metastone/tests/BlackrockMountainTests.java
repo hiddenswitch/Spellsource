@@ -2,18 +2,59 @@ package net.demilich.metastone.tests;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.function.BiConsumer;
+
 
 public class BlackrockMountainTests extends BasicTests {
+
+	/**
+	 * You play a Grim Patron. Your opponent has a Knife Juggler and plays an Imp Gang Boss (the knife hits face). On
+	 * your turn, your Grim Patron attacks their Imp Gang Boss. The simultaneous damage triggers are queued in the order
+	 * [Imp Gang Boss, Grim Patron] because the defender queues first. An Imp is summoned, triggering the allied Knife
+	 * Juggler to throw a knife and mortally wound your Grim Patron. Now your Grim Patron would trigger, but it is
+	 * mortally wounded, so the trigger condition fails and you do not get a new Grim Patron.
+	 */
+	@Test
+	public void testGrimPatron() {
+		runGym((context, player, opponent) -> {
+			context.getLogic().setLoggingEnabled(true);
+			Minion grimPatron = playMinionCard(context, player, "minion_grim_patron");
+			context.endTurn();
+			Minion knifeJuggler = playMinionCard(context, opponent, "minion_knife_juggler");
+			overrideMissilesTrigger(context, knifeJuggler, player.getHero());
+			int startingHp = player.getHero().getHp();
+			Minion impGangBoss = playMinionCard(context, opponent, "minion_imp_gang_boss");
+			Assert.assertEquals(player.getHero().getHp(), startingHp - 1);
+			context.endTurn();
+			PhysicalAttackAction attack = new PhysicalAttackAction(grimPatron.getReference());
+			attack.setTargetReference(impGangBoss.getReference());
+			overrideMissilesTrigger(context, knifeJuggler, grimPatron);
+			context.getLogic().performGameAction(player.getId(), attack);
+			Assert.assertEquals(player.getMinions().size(), 0);
+		});
+	}
+
+	private void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
+		SpellDesc spell = ((Enchantment) context.getTriggersAssociatedWith(source.getReference())
+				.get(0)).getSpell();
+		spell.remove(SpellArg.RANDOM_TARGET);
+		spell.setTarget(target.getReference());
+	}
 
 	@Test
 	public void testAxeFlinger() {

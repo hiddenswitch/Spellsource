@@ -23,6 +23,7 @@ MINION | &quot;MINION&quot;
 WEAPON | &quot;WEAPON&quot;
 SECRET | &quot;SECRET&quot;
 QUEST | &quot;QUEST&quot;
+ENCHANTMENT | &quot;ENCHANTMENT&quot;
 
 
 

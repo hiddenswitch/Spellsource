@@ -1,4 +1,4 @@
-package com.hiddenswitch.proto3;
+package com.hiddenswitch.spellsource;
 
 import org.unitils.reflectionassert.ReflectionComparator;
 import org.unitils.reflectionassert.ReflectionComparatorFactory;

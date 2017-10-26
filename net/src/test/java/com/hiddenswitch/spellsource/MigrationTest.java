@@ -1,4 +1,4 @@
-package com.hiddenswitch.proto3;
+package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
 import com.hiddenswitch.spellsource.Spellsource;
