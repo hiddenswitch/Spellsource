@@ -1,7 +1,7 @@
 {
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
-  "name": "Vicious Fledgeling",
+  "name": "Vicious Fledgling",
   "heroClass": "ANY",
   "trigger": {
     "eventTrigger": {

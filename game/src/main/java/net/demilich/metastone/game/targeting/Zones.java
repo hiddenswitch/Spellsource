@@ -123,7 +123,7 @@ public enum Zones {
 	 * Unlike the official game rules, the three cards presented to a player by Tracking go into the {@link #DISCOVER}
 	 * zone.
 	 *
-	 * @see GameLogic#removeActor(Minion, boolean) for an example of usage of a set aside zone (when the method is
+	 * @see GameLogic#removeActor(Actor, boolean) for an example of usage of a set aside zone (when the method is
 	 * called with {@code peacefully = false;}.
 	 */
 	SET_ASIDE_ZONE,

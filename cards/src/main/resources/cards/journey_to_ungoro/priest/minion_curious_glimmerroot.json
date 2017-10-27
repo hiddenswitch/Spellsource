@@ -13,12 +13,6 @@
       "class": "custom.CuriousGlimmerrootSpell",
       "spell": {
         "class": "NullSpell"
-      },
-      "spell1": {
-        "class": "ReceiveCardSpell"
-      },
-      "spell2": {
-        "class": "NullSpell"
       }
     }
   },

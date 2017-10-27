@@ -1,10 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.actions.DiscoverAction;
@@ -36,9 +32,7 @@ public class DiscoverOptionSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<SpellDesc> spells = new ArrayList<SpellDesc>();
 		SpellDesc[] spellArray = (SpellDesc[]) desc.get(SpellArg.SPELLS);
-		for (SpellDesc spell : spellArray) {
-			spells.add(spell);
-		}
+		spells.addAll(Arrays.asList(spellArray));
 
 		Map<SpellDesc, Integer> spellOrder = new HashMap<SpellDesc, Integer>();
 		for (int i = 0; i < spells.size(); i++) {
@@ -51,7 +45,6 @@ public class DiscoverOptionSpell extends Spell {
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
 		List<Integer> chosenSpellInts = new ArrayList<Integer>();
 		List<SpellDesc> spellsCopy = new ArrayList<SpellDesc>(spells);
-		List<DiscoverAction> discoveries = new ArrayList<>();
 		for (int i = 0; i < value; i++) {
 			List<SpellDesc> spellChoices = new ArrayList<SpellDesc>();
 			for (int j = 0; j < count; j++) {
@@ -63,7 +56,6 @@ public class DiscoverOptionSpell extends Spell {
 			}
 			if (!spellChoices.isEmpty()) {
 				final DiscoverAction spellDiscover = SpellUtils.getSpellDiscover(context, player, desc, spellChoices, source);
-				discoveries.add(spellDiscover);
 				SpellDesc chosenSpell = spellDiscover.getSpell();
 				chosenSpellInts.add(spellOrder.get(chosenSpell));
 				if (exclusive) {
@@ -80,9 +72,6 @@ public class DiscoverOptionSpell extends Spell {
 		if (chosenSpellInts.size() > 0) {
 			SpellDesc metaSpell = MetaSpell.create(target != null ? target.getReference() : null, false, chosenSpells);
 			SpellUtils.castChildSpell(context, player, metaSpell, source, target);
-		}
-		for (DiscoverAction discovery : discoveries) {
-			discovery.getCard().moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		}
 	}
 

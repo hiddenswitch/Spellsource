@@ -77,9 +77,6 @@ public class CreateCardSpell extends Spell {
 		for (int i = 0; i < chosenSpellInts.size(); i++) {
 			chosenSpells[i] = spellArray[chosenSpellInts.get(i)];
 		}
-		for (DiscoverAction discovery : discoveries) {
-			discovery.getCard().moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		}
 		return chosenSpells;
 	}
 

@@ -203,6 +203,7 @@ public class SpellUtils {
 		return postDiscover(context, player, cards, discoverActions);
 	}
 
+	@Suspendable
 	private static DiscoverAction postDiscover(GameContext context, Player player, Iterable<? extends Card> cards, List<GameAction> discoverActions) {
 		if (discoverActions.size() == 0) {
 			return null;

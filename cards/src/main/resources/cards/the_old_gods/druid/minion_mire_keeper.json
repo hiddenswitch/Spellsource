@@ -1,6 +1,6 @@
 {
 	"name": "Mire Keeper",
-	"baseManaCost": 1,
+	"baseManaCost": 4,
 	"type": "MINION",
 	"baseAttack": 3,
 	"baseHp": 3,

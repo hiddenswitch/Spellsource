@@ -16,6 +16,7 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.List;
 import java.util.Map;
@@ -67,9 +68,7 @@ public class CuriousGlimmerrootSpell extends Spell {
 		DiscoverAction result = SpellUtils.discoverCard(context, player, desc, cards);
 		String cardId = result.getCard().getCardId();
 		if (cardId.equals(correctCard.getCardId())) {
-			SpellUtils.castChildSpell(context, player, rightChoice.addArg(SpellArg.CARD, cardId), source, null);
-		} else {
-			SpellUtils.castChildSpell(context, player, wrongChoice.addArg(SpellArg.CARD, cardId), source, null);
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById(cardId));
 		}
 	}
 }

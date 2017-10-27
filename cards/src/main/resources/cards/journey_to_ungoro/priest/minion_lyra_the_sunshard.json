@@ -1,7 +1,7 @@
 {
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
-  "name": "Lyra, the Sunshard",
+  "name": "Lyra the Sunshard",
   "heroClass": "PRIEST",
   "trigger": {
     "eventTrigger": {

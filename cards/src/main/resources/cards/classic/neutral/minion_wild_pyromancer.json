@@ -1,24 +1,27 @@
 {
-	"name": "Necromancer",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "After you cast a spell, deal 1 damage to ALL minions.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterSpellCastedTrigger",
-			"sourcePlayer": "SELF"
-		},
-		"spell": {
-			"class": "DamageSpell",
-			"target": "ALL_MINIONS",
-			"value": 1
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Wild Pyromancer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "After you cast a spell, deal 1 damage to ALL minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "NAME": "Necromancer"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

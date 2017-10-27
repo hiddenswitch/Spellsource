@@ -1,5 +1,5 @@
 {
-	"name": "Will of the Emperor Tech",
+	"name": "Mind Control Tech",
 	"baseManaCost": 3,
 	"type": "MINION",
 	"baseAttack": 3,
@@ -21,6 +21,7 @@
 		}
 	},
 	"attributes": {
+		"NAME": "Will of the Emperor Tech",
 		"BATTLECRY": true
 	},
 	"collectible": true,

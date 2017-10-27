@@ -14,6 +14,9 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import static net.demilich.metastone.game.GameContext.PLAYER_1;
+import static net.demilich.metastone.game.GameContext.PLAYER_2;
+
 public class Enchantment extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
 	private EventTrigger primaryTrigger;
@@ -141,7 +144,9 @@ public class Enchantment extends Entity implements Trigger {
 		// Notify the game context that a spell trigger was successfully fired, as long as it wasn't due to a
 		// board changed event.
 		if (event.getEventType() != GameEventType.BOARD_CHANGED
-				&& primaryTrigger.interestedIn() != GameEventType.ALL) {
+				&& primaryTrigger.interestedIn() != GameEventType.ALL
+				&& !(hostReference.equals(new EntityReference(PLAYER_1))
+				|| hostReference.equals(new EntityReference(PLAYER_2)))) {
 			event.getGameContext().onEnchantmentFired(this);
 		}
 		onFire(ownerId, getSpell(), event);

@@ -226,7 +226,7 @@ public class WebSocketClient implements Client {
 		}
 		simulatedContext.setIgnoreEvents(true);
 		return Games.getGameState(simulatedContext, local, opponent)
-				.powerHistory(powerHistory.stream().collect(Collectors.toList()));
+				.powerHistory(new ArrayList<>(powerHistory));
 	}
 
 	@Override
