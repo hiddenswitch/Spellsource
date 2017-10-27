@@ -171,7 +171,21 @@ public class GameSessionImpl implements GameSession {
 
 	protected void startGame() {
 		logger.debug("Starting game...");
-		DeckFormat simpleFormat = new DeckFormat().withCardSets(CardSet.values());
+		DeckFormat simpleFormat = new DeckFormat().withCardSets(CardSet.BASIC,
+				CardSet.CLASSIC,
+				CardSet.BLACKROCK_MOUNTAIN,
+				CardSet.GOBLINS_VS_GNOMES,
+				CardSet.LEAGUE_OF_EXPLORERS,
+				CardSet.MEAN_STREETS_OF_GADGETZHAN,
+				CardSet.NAXXRAMAS,
+				CardSet.ONE_NIGHT_IN_KARAZHAN,
+				CardSet.PROMO,
+				CardSet.REWARD,
+				CardSet.THE_GRAND_TOURNAMENT,
+				CardSet.THE_OLD_GODS,
+				CardSet.JOURNEY_TO_UNGORO,
+				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE);
+
 		// Configure the network behaviours on the players
 		if (isAgainstAI()) {
 			if (pregamePlayerConfiguration1.isAI()) {

@@ -5,6 +5,8 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DeckCreateRequest implements Serializable, Cloneable {
+	static Logger logger = LoggerFactory.getLogger(DeckCreateRequest.class);
 	private String userId;
 	private String name;
 	private HeroClass heroClass;
@@ -62,10 +65,18 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				continue;
 			}
 
+			String cardName = matcher.group("cardName");
 			if (matcher.group("count") != null
-					&& matcher.group("cardName") != null) {
+					&& cardName != null) {
 				int count = Integer.parseInt(matcher.group("count"));
-				String cardId = CardCatalogue.getCardByName(matcher.group("cardName")).getCardId();
+				String cardId;
+				try {
+					cardId = CardCatalogue.getCardByName(cardName).getCardId();
+				} catch (NullPointerException ex) {
+					logger.error(String.format("Could not find card with name %s while reading deck list %s", cardName, request.getName()));
+					continue;
+				}
+
 				for (int i = 0; i < count; i++) {
 					request.getCardIds().add(cardId);
 				}

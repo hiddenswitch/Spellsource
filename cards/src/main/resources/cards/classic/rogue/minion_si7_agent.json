@@ -1,5 +1,5 @@
 {
-	"name": "Bakeneko Assassin",
+	"name": "SI:7 Agent",
 	"baseManaCost": 3,
 	"type": "MINION",
 	"baseAttack": 3,
@@ -18,6 +18,7 @@
 		}
 	},
 	"attributes": {
+		"NAME": "Bakeneko Assassin",
 		"COMBO": true
 	},
 	"collectible": true,

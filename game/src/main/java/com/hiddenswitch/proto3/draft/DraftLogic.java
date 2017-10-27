@@ -88,11 +88,12 @@ public class DraftLogic {
 				CardSet.PROMO,
 				CardSet.REWARD,
 				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.THE_OLD_GODS
+				CardSet.THE_OLD_GODS,
+				CardSet.JOURNEY_TO_UNGORO
 		);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.JOURNEY_TO_UNGORO;
+		CardSet latestExpansion = CardSet.KNIGHTS_OF_THE_FROZEN_THRONE;
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(CardType.values()));
 

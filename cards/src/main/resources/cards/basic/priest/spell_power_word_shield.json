@@ -1,5 +1,5 @@
 {
-	"name": "Vestal Blessing",
+	"name": "Power Word: Shield",
 	"baseManaCost": 1,
 	"type": "SPELL",
 	"heroClass": "PRIEST",
@@ -17,6 +17,9 @@
 				"class": "DrawCardSpell"
 			}
 		]
+	},
+	"attributes": {
+		"NAME": "Vestal Blessing"
 	},
 	"collectible": true,
 	"set": "BASIC",

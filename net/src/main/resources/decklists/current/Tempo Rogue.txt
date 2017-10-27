@@ -1,0 +1,29 @@
+### Tempo Rogue
+# Class: Rogue
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (0) Backstab
+# 2x (0) Shadowstep
+# 2x (1) Cold Blood
+# 2x (1) Fire Fly
+# 1x (1) Patches the Pirate
+# 2x (1) Southsea Deckhand
+# 2x (1) Swashburglar
+# 1x (2) Prince Keleseth
+# 1x (3) Coldlight Oracle
+# 1x (3) Edwin VanCleef
+# 2x (3) SI:7 Agent
+# 1x (3) Southsea Captain
+# 1x (3) Tar Creeper
+# 2x (3) Vicious Fledgling
+# 1x (4) Spellbreaker
+# 2x (5) Cobalt Scalebane
+# 1x (5) Leeroy Jenkins
+# 2x (5) Vilespine Slayer
+# 1x (7) Bonemare
+# 1x (7) The Curator
+#
+AAECAaIHCpG8ApziAvgHsgKoBcrDAvIFrwSmzgK5sgIKtAHtAowC68IC1AWStgLdCJ/CAsrLAoHCAgA=
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

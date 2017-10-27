@@ -1,18 +1,21 @@
 {
-	"name": "Flash Flood",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "FREE",
-	"description": "Deal 4 damage to an enemy and 1 damage to all other enemies.",
-	"targetSelection": "ENEMY_CHARACTERS",
-	"spell": {
-		"class": "SwipeSpell",
-		"secondaryTarget": "ENEMY_CHARACTERS",
-		"value": 4,
-		"secondaryValue": 1
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Swipe",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "FREE",
+  "description": "Deal 4 damage to an enemy and 1 damage to all other enemies.",
+  "targetSelection": "ENEMY_CHARACTERS",
+  "spell": {
+    "class": "SwipeSpell",
+    "secondaryTarget": "ENEMY_CHARACTERS",
+    "value": 4,
+    "secondaryValue": 1
+  },
+  "attributes": {
+    "NAME": "Flash Flood"
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

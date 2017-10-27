@@ -685,7 +685,8 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void changeHero(final Player player, final Hero hero, boolean resolveBattlecry) {
 		final Hero previousHero = player.getHero();
-		hero.setId(previousHero.getId());
+		hero.setId(getIdFactory().generateId());
+		hero.setOwner(player.getId());
 		if (hero.getHeroClass() == null || hero.getHeroClass() == HeroClass.ANY) {
 			hero.setHeroClass(previousHero.getHeroClass());
 		}
@@ -696,7 +697,7 @@ public class GameLogic implements Cloneable, Serializable {
 		int previousArmor = previousHero.getArmor();
 
 		log("{}'s hero has been changed to {}", player.getName(), hero);
-		hero.setOwner(player.getId());
+
 		hero.setWeapon(previousHero.getWeapon());
 		if (hero.getHeroClass().equals(HeroClass.INHERIT)) {
 			hero.setHeroClass(previousHero.getHeroClass());
