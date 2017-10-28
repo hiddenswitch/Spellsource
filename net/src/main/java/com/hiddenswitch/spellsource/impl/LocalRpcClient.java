@@ -24,7 +24,7 @@ class LocalRpcClient<T extends AbstractService<T>> implements RpcClient<T> {
 	@Override
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	public <R> T async(Handler<AsyncResult<R>> handler) {
+	public <R> T async(Handler<AsyncResult<R>> handler, long timeout) {
 		return (T) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), new Class<?>[]{thisClass}, (proxy, method, args) -> {
 			try {
 				Object result = method.invoke(service, args);

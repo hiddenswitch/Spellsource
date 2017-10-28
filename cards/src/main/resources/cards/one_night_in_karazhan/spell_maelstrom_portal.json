@@ -1,5 +1,5 @@
 {
-	"name": "Exploding Egg",
+	"name": "Maelstorm Portal",
 	"baseManaCost": 2,
 	"type": "SPELL",
 	"heroClass": "SHAMAN",
@@ -22,6 +22,9 @@
 				}
 			}
 		]
+	},
+	"attributes": {
+		"NAME": "Exploding Egg"
 	},
 	"collectible": true,
 	"set": "ONE_NIGHT_IN_KARAZHAN",

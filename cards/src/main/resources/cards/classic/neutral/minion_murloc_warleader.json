@@ -1,24 +1,28 @@
 {
-	"name": "Tanooki Equipment",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"race": "MURLOC",
-	"description": "Your other Tanooki have +2/+1.",
-	"aura": {
-		"class": "BuffAura",
-		"target": "OTHER_FRIENDLY_MINIONS",
-		"attackBonus": 2,
-		"hpBonus": 1,
-		"filter": {
-			"class": "RaceFilter",
-			"race": "MURLOC"
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Murloc Warleader",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "race": "MURLOC",
+  "description": "Your other Murlocs have +2/+1.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 2,
+    "hpBonus": 1,
+    "filter": {
+      "class": "RaceFilter",
+      "race": "MURLOC"
+    }
+  },
+  "attributes": {
+    "NAME": "Tanooki Equipment",
+    "DESCRIPTION": "Your other Tanooki have +2/+1."
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

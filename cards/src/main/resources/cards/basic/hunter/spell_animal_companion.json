@@ -1,20 +1,23 @@
 {
-	"name": "Aid of Shiramba",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "FREE",
-	"description": "Summon a random Animal Spirit.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonRandomSpell",
-		"cards": [
-			"token_huffer",
-			"token_misha",
-			"token_leokk"
-		]
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Animal Companion",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "FREE",
+  "description": "Summon a random Animal Spirit.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonRandomSpell",
+    "cards": [
+      "token_huffer",
+      "token_misha",
+      "token_leokk"
+    ]
+  },
+  "attributes": {
+    "NAME": "Aid of Shiramba"
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

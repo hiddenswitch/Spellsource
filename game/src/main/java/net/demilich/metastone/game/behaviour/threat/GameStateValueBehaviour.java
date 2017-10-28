@@ -29,6 +29,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	private long timeout = 3500;
 
 	public GameStateValueBehaviour() {
+		this(FeatureVector.getFittest(), "Botty McBotface");
 	}
 
 	public GameStateValueBehaviour(FeatureVector featureVector, String nameSuffix) {

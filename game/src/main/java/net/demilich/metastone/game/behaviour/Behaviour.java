@@ -100,6 +100,5 @@ public interface Behaviour extends Cloneable {
 	 * @param winningPlayerId The winning player.
 	 */
 	@Suspendable
-	@Deprecated
 	void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId);
 }

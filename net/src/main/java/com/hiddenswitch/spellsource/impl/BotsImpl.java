@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.Rpc;
@@ -18,6 +17,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.FlatMonteCarlo;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.behaviour.threat.FeatureVector;
 import net.demilich.metastone.game.behaviour.threat.GameStateValueBehaviour;
@@ -27,6 +27,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -41,7 +42,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	private List<UserRecord> bots = new ArrayList<>();
 	private Queue<UserRecord> unusedBots = new ConcurrentLinkedQueue<>();
 	private Map<String, UserRecord> botToGame = new HashMap<>();
-	private Class<? extends Behaviour> botBehaviour = GameStateValueBehaviour.class;
+	private Supplier<? extends Behaviour> botBehaviour = GameStateValueBehaviour::new;
 	private Registration registration;
 
 	@Override
@@ -70,12 +71,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 
 		// Use execute blocking to improve throughput
 		response.gameAction = awaitResult(callback -> vertx.executeBlocking(done -> {
-			final Behaviour behaviour;
-			if (botBehaviour.equals(GameStateValueBehaviour.class)) {
-				behaviour = new GameStateValueBehaviour(FeatureVector.getFittest(), "Botty McBotface");
-			} else {
-				behaviour = new PlayRandomBehaviour();
-			}
+			final Behaviour behaviour = botBehaviour.get();
 
 			final GameContext context = new GameContext();
 			context.setLogic(new GameLogic());
@@ -156,11 +152,11 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 		return unusedBots.poll();
 	}
 
-	public Class<? extends Behaviour> getBotBehaviour() {
+	public Supplier<? extends Behaviour> getBotBehaviour() {
 		return botBehaviour;
 	}
 
-	public void setBotBehaviour(Class<? extends Behaviour> botBehaviour) {
+	public void setBotBehaviour(Supplier<? extends Behaviour> botBehaviour) {
 		this.botBehaviour = botBehaviour;
 	}
 

@@ -176,15 +176,15 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testBloodsailRaider() {
-		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.MAGE);
-		Player warrior = context.getPlayer1();
-		warrior.setMana(10);
+		runGym((context, warrior, opponent) -> {
+			warrior.setMana(10);
 
-		playCard(context, warrior, CardCatalogue.getCardById("weapon_arcanite_reaper"));
-		playCard(context, warrior, new TestMinionCard(2, 1, 0));
+			playCard(context, warrior, CardCatalogue.getCardById("weapon_arcanite_reaper"));
+			playCard(context, warrior, new TestMinionCard(2, 1, 0));
 
-		Minion bloodsailRaider = playMinionCard(context, warrior, (MinionCard) CardCatalogue.getCardById("minion_bloodsail_raider"));
-		Assert.assertEquals(bloodsailRaider.getAttack(), 7);
+			Minion bloodsailRaider = playMinionCard(context, warrior, (MinionCard) CardCatalogue.getCardById("minion_bloodsail_raider"));
+			Assert.assertEquals(bloodsailRaider.getAttack(), 7);
+		});
 	}
 
 	@Test
@@ -213,7 +213,7 @@ public class CardInteractionTests extends TestBase {
 		Assert.assertEquals(paladin.getMinions().size(), 0);
 		Assert.assertEquals(warrior.getMinions().size(), 0);
 	}
-	
+
 	@Test
 	public void testLordJaraxxus() {
 		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.WARLOCK);
@@ -224,7 +224,7 @@ public class CardInteractionTests extends TestBase {
 		Assert.assertEquals(warlock.getHero().getRace(), Race.DEMON);
 		Assert.assertEquals(warlock.getHero().getHp(), 15);
 		Assert.assertNotNull(warlock.getHero().getWeapon());
-		
+
 		// start a new game
 		context = createContext(HeroClass.WARLOCK, HeroClass.WARLOCK);
 		// opponent plays Repentance, which triggers on Lord Jaraxxus play
@@ -233,9 +233,10 @@ public class CardInteractionTests extends TestBase {
 		context.endTurn();
 		Card repentance = CardCatalogue.getCardById("secret_repentance");
 		playCard(context, paladin, repentance);
-		
-		context.endTurn();;
-		
+
+		context.endTurn();
+		;
+
 		jaraxxus = CardCatalogue.getCardById("minion_lord_jaraxxus");
 		playCard(context, warlock, jaraxxus);
 		Assert.assertEquals(warlock.getHero().getRace(), Race.DEMON);
@@ -243,118 +244,118 @@ public class CardInteractionTests extends TestBase {
 		Assert.assertEquals(warlock.getHero().getHp(), 1);
 		Assert.assertNotNull(warlock.getHero().getWeapon());
 	}
-	
+
 	@Test
 	public void testBlessingOfWisdomMindControl() {
 		GameContext context = createContext(HeroClass.PALADIN, HeroClass.PALADIN);
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
-		
+
 		int cardCount = player.getHand().getCount();
-		
+
 		Minion minion = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_chillwind_yeti"));
 		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_blessing_of_wisdom"), minion);
 		Assert.assertEquals(cardCount, player.getHand().getCount());
-		
+
 		attack(context, opponent, minion, opponent.getHero());
 		Assert.assertEquals(player.getHand().getCount(), cardCount + 1);
-		
+
 		context.getLogic().mindControl(opponent, minion);
 		attack(context, opponent, minion, player.getHero());
 		Assert.assertEquals(player.getHand().getCount(), cardCount + 2);
 	}
-	
+
 	@Test
 	public void testImpFlamestrike() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARLOCK);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
-		
+
 		context.endTurn();
 		for (int i = 0; i < GameLogic.MAX_MINIONS; i++) {
-			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_imp_gang_boss"));	
+			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_imp_gang_boss"));
 		}
-		
+
 		Assert.assertEquals(opponent.getMinions().size(), GameLogic.MAX_MINIONS);
 		context.endTurn();
-		
+
 		playCard(context, player, CardCatalogue.getCardById("spell_flamestrike"));
 		Assert.assertEquals(opponent.getMinions().size(), 0);
 	}
-	
+
 	@Test
 	public void testHarvestGolemFlamestrike() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARLOCK);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
-		
+
 		context.endTurn();
 		for (int i = 0; i < GameLogic.MAX_MINIONS; i++) {
-			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_harvest_golem"));	
+			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_harvest_golem"));
 		}
-		
+
 		Assert.assertEquals(opponent.getMinions().size(), GameLogic.MAX_MINIONS);
 		context.endTurn();
-		
+
 		playCard(context, player, CardCatalogue.getCardById("spell_flamestrike"));
 		Assert.assertEquals(opponent.getMinions().size(), 7);
-		
+
 	}
-	
+
 	@Test
 	public void testGrimPatrons() {
 		GameContext context = createContext(HeroClass.PALADIN, HeroClass.WARRIOR);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
-		
+
 		context.endTurn();
 		for (int i = 0; i < 4; i++) {
-			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_grim_patron"));	
+			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_grim_patron"));
 		}
-		
+
 		Assert.assertEquals(opponent.getMinions().size(), 4);
 		playCard(context, opponent, CardCatalogue.getCardById("spell_whirlwind"));
 		Assert.assertEquals(opponent.getMinions().size(), 7);
 		context.endTurn();
-		
+
 		playCard(context, player, CardCatalogue.getCardById("spell_consecration"));
 		Assert.assertEquals(opponent.getMinions().size(), 3);
-		
+
 	}
-	
+
 	@Test
 	public void testWobblingRunts() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
-		
+
 		context.endTurn();
 		playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_wobbling_runts"));
 		for (int i = 0; i < GameLogic.MAX_MINIONS - 1; i++) {
-			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_wisp"));	
+			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_wisp"));
 		}
-		
+
 		Assert.assertEquals(opponent.getMinions().size(), GameLogic.MAX_MINIONS);
 		context.endTurn();
-		
+
 		playCard(context, player, CardCatalogue.getCardById("minion_malygos"));
 		playCard(context, player, CardCatalogue.getCardById("spell_flamestrike"));
 		Assert.assertEquals(opponent.getMinions().size(), 3);
-		
+
 	}
-	
+
 	@Test
 	public void testHauntedCreeperHarvestGolem() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
-		
+
 		context.endTurn();
 		playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_haunted_creeper"));
 		playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_harvest_golem"));
 		Assert.assertEquals(opponent.getMinions().size(), 2);
 		context.endTurn();
-		
+
 		playCard(context, player, CardCatalogue.getCardById("spell_flamestrike"));
 		Assert.assertEquals(opponent.getMinions().size(), 3);
 		final int HARVEST_GOLEM = 1;
@@ -370,42 +371,42 @@ public class CardInteractionTests extends TestBase {
 			}
 		}
 	}
-	
+
 	@Test
 	public void testImpGangBossConeOfCold() {
 		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
-		
+
 		context.endTurn();
 		Minion firstYeti = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_chillwind_yeti"));
 		Minion impGangBoss = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_imp_gang_boss"));
 		Minion secondYeti = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_chillwind_yeti"));
 		Assert.assertEquals(opponent.getMinions().size(), 3);
 		context.endTurn();
-		
+
 		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_cone_of_cold"), impGangBoss);
 		Assert.assertEquals(opponent.getMinions().size(), 4);
 		Assert.assertTrue(firstYeti.hasAttribute(Attribute.FROZEN));
 		Assert.assertTrue(impGangBoss.hasAttribute(Attribute.FROZEN));
 		Assert.assertFalse(secondYeti.hasAttribute(Attribute.FROZEN));
 	}
-	
+
 	@Test
 	public void testSummoningStonePrep() {
 		GameContext context = createContext(HeroClass.ROGUE, HeroClass.WARRIOR);
 		Player player = context.getPlayer1();
-		
+
 		playCard(context, player, CardCatalogue.getCardById("minion_summoning_stone"));
 		playCard(context, player, CardCatalogue.getCardById("spell_preparation"));
 		playCard(context, player, CardCatalogue.getCardById("secret_ice_block"));
-		
+
 		Assert.assertEquals(player.getMinions().size(), 3);
 		for (Minion minion : player.getMinions()) {
 			if (minion.getSourceCard().getCardId().equalsIgnoreCase("minion_summoning_stone")) {
 				continue;
 			}
-			
+
 			Assert.assertEquals(minion.getSourceCard().getBaseManaCost(), 0);
 		}
 	}

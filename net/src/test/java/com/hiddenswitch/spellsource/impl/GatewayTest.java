@@ -679,7 +679,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		logic = new LogicImpl();
 		games = new GamesImpl();
 		bots = new BotsImpl();
-		bots.setBotBehaviour(PlayRandomBehaviour.class);
+		bots.setBotBehaviour(PlayRandomBehaviour::new);
 		matchmaking = new MatchmakingImpl();
 		deploy(Arrays.asList(
 				games,

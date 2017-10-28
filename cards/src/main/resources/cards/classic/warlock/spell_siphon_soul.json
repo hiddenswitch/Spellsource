@@ -1,25 +1,28 @@
 {
-	"name": "Lava Cleanse",
-	"baseManaCost": 6,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "RARE",
-	"description": "Destroy a minion. Restore 3 Health to your hero.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DestroySpell"
-			},
-			{
-				"class": "HealSpell",
-				"target": "FRIENDLY_HERO",
-				"value": 3
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Siphon Soul",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "RARE",
+  "description": "Destroy a minion. Restore 3 Health to your hero.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3
+      }
+    ]
+  },
+  "attributes": {
+    "NAME": "Lava Cleanse"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

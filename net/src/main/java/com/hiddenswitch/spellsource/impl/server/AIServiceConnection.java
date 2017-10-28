@@ -24,13 +24,19 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
- * Created by bberman on 12/9/16.
+ * Handles the marshalling between a {@link Client} and the {@link Bots} service.
+ *
+ * This method should typically not be overridden.
  */
 public class AIServiceConnection implements Client {
 	final int playerId;
 	final RpcClient<Bots> bots;
 	final WeakReference<ServerGameContext> context;
 	static final Logger logger = LoggerFactory.getLogger(AIServiceConnection.class);
+	/**
+	 * Make the default timeout slightly shorter than the networking timeout
+	 */
+	final long timeout = RpcClient.DEFAULT_TIMEOUT - 800;
 
 	public AIServiceConnection(ServerGameContext context, EventBus eventBus, int playerId) {
 		this.bots = Rpc.connect(Bots.class, eventBus);
@@ -84,7 +90,7 @@ public class AIServiceConnection implements Client {
 			}
 
 			gc.onActionReceived(messageId, result.result().gameAction);
-		})).requestAction(new RequestActionRequest(state, playerId, actions, gc.getDeckFormat()));
+		}), timeout).requestAction(new RequestActionRequest(state, playerId, actions, gc.getDeckFormat()));
 	}
 
 	@Override
@@ -98,7 +104,7 @@ public class AIServiceConnection implements Client {
 
 
 			gc.onMulliganReceived(messageId, gc.getPlayer(playerId), result.result().discardedCards);
-		})).mulligan(new MulliganRequest(cards));
+		}), timeout).mulligan(new MulliganRequest(cards));
 	}
 
 	@Override

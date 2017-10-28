@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * {@link net.demilich.metastone.game.entities.EntityZone}, which enforces that its containing {@link
  * net.demilich.metastone.game.entities.Entity} objects can only be in one {@link net.demilich.metastone.game.entities.EntityZone}
  * at a time, versus a plain {@link CardArrayList}, which is just an array of cards that various pieces of logic might
- * want to {@link #shuffle()} or {@link #addRandomly(Card)} into.
+ * want to {@link #shuffle()} or {@link #addCard(Card)} to.
  * <p>
  * Use {@link CardZone} for the {@link Zones#HAND}, {@link Zones#DECK} and {@link Zones#DISCOVER} zones--when a card
  * should only be in one place at a time. Use a {@link CardArrayList} for situations where you need to e.g., get a list
@@ -44,15 +44,6 @@ public interface CardList extends Iterable<Card> {
 	 * @return This instance.
 	 */
 	CardList addAll(CardList cardList);
-
-	/**
-	 * Used for shuffling a card into this list. Problematic because it uses ThreadLocalRandom instead of a random seed
-	 * from a {@link net.demilich.metastone.game.logic.GameLogic} instance.
-	 *
-	 * @param card The card to shuffle randomly into this list.
-	 */
-	@Deprecated
-	void addRandomly(Card card);
 
 	/**
 	 * Calls {@link Card#clone()} on every card in this list and returns a new copy of this list.

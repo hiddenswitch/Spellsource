@@ -4,7 +4,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.targeting.Zones;
-import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -38,12 +37,6 @@ public class CardZone extends EntityZone<Card> implements CardList {
 			super.add(card.clone());
 		}
 		return this;
-	}
-
-	@Override
-	public void addRandomly(Card card) {
-		int index = RandomUtils.nextInt(0, size());
-		add(index, card);
 	}
 
 	/**
