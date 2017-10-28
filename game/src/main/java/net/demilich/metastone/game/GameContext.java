@@ -851,15 +851,7 @@ public class GameContext implements Cloneable, Serializable {
 	public void play() {
 		logger.debug("Game starts: " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
 		init();
-		while (!updateAndGetGameOver()) {
-			startTurn(getActivePlayerId());
-			while (takeActionInTurn()) {
-			}
-			if (getTurn() > GameLogic.TURN_LIMIT) {
-				break;
-			}
-		}
-		endGame();
+		resume();
 	}
 
 	/**
@@ -1298,5 +1290,18 @@ public class GameContext implements Cloneable, Serializable {
 			getEnvironment().put(Environment.SPELL_VALUE_STACK, new ArrayDeque<>());
 		}
 		return (Deque<Integer>) getEnvironment().get(Environment.SPELL_VALUE_STACK);
+	}
+
+	@Suspendable
+	public void resume() {
+		while (!updateAndGetGameOver()) {
+			startTurn(getActivePlayerId());
+			while (takeActionInTurn()) {
+			}
+			if (getTurn() > GameLogic.TURN_LIMIT) {
+				break;
+			}
+		}
+		endGame();
 	}
 }

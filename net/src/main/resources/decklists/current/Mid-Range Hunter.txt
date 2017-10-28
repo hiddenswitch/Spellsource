@@ -1,0 +1,25 @@
+### Mid-Range Hunter - Standard Meta Snapshot - Sep. 24, 2017
+# Class: Hunter
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Alleycat
+# 2x (1) Fire Fly
+# 1x (1) Tracking
+# 2x (2) Crackling Razormaw
+# 2x (2) Golakka Crawler
+# 2x (2) Kindly Grandmother
+# 2x (2) Scavenging Hyena
+# 2x (3) Animal Companion
+# 2x (3) Bearshark
+# 1x (3) Deadly Shot
+# 2x (3) Eaglehorn Bow
+# 2x (3) Kill Command
+# 2x (3) Unleash the Hounds
+# 2x (4) Houndmaster
+# 2x (5) Bittertide Hydra
+# 2x (6) Savannah Highmane
+#
+AAECAYoWApcIxQgO6rsC68ICjsMC5MICubQCgQq1A9fNAv4MqALbCesHr8IC7QkA
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

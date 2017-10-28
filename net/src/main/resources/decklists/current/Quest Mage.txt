@@ -1,0 +1,26 @@
+### Exodia Mage - Standard Meta Snapshot - August 19, 2017
+# Class: Mage
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Babbling Book
+# 1x (1) Open the Waygate
+# 2x (2) Arcanologist
+# 2x (2) Doomsayer
+# 2x (2) Novice Engineer
+# 2x (2) Primordial Glyph
+# 2x (2) Sorcerer's Apprentice
+# 2x (3) Arcane Intellect
+# 2x (3) Coldlight Oracle
+# 2x (3) Frost Nova
+# 1x (3) Ice Barrier
+# 2x (3) Ice Block
+# 1x (3) Simulacrum
+# 2x (4) Molten Reflection
+# 2x (5) Cabalist's Tome
+# 2x (6) Blizzard
+# 1x (7) Archmage Antonidas
+#
+AAECAf0EBNDBAu0EudECuAgNgbICwcECigGcApjEAuYEqwT4B8sEwAHaxQKSrALJAwA=
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

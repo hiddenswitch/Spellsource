@@ -1,0 +1,26 @@
+### Zoolock - Standard Meta Snapshot - Oct. 8, 2017
+# Class: Warlock
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Acherus Veteran
+# 2x (1) Bloodsail Corsair
+# 2x (1) Fire Fly
+# 2x (1) Flame Imp
+# 2x (1) Malchezaar's Imp
+# 1x (1) Mortal Coil
+# 1x (1) Patches the Pirate
+# 2x (1) Soulfire
+# 2x (1) Voidwalker
+# 1x (2) Prince Keleseth
+# 2x (3) Darkshire Councilman
+# 2x (3) Southsea Captain
+# 2x (4) Saronite Chain Gang
+# 2x (5) Despicable Dreadlord
+# 2x (5) Doomguard
+# 2x (7) Bonemare
+# 1x (10) Bloodreaver Gul'dan
+#
+AAECAf0GBMQIkbwCnOICl9MCDZXOAuUH68ICwgi8tgLOBzC0rAKoBZvLAvfNAvcEps4CAA==
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
