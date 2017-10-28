@@ -18,5 +18,9 @@ public enum CardSet {
 	JOURNEY_TO_UNGORO,
 	KNIGHTS_OF_THE_FROZEN_THRONE,
 	CUSTOM,
-	SPELLSOURCE
+	SPELLSOURCE;
+
+	public static CardSet latest() {
+		return KNIGHTS_OF_THE_FROZEN_THRONE;
+	}
 }
