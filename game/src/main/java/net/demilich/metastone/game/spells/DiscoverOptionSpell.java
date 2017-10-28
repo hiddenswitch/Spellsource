@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.actions.DiscoverAction;
@@ -30,7 +31,7 @@ public class DiscoverOptionSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		List<SpellDesc> spells = new ArrayList<SpellDesc>();
+		List<SpellDesc> spells = new Vector<SpellDesc>();
 		SpellDesc[] spellArray = (SpellDesc[]) desc.get(SpellArg.SPELLS);
 		spells.addAll(Arrays.asList(spellArray));
 
@@ -43,27 +44,25 @@ public class DiscoverOptionSpell extends Spell {
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
-		List<Integer> chosenSpellInts = new ArrayList<Integer>();
-		List<SpellDesc> spellsCopy = new ArrayList<SpellDesc>(spells);
+		List<Integer> chosenSpellInts = new Vector<Integer>();
+		List<SpellDesc> shuffledSpells = new Vector<>(spells);
+
 		for (int i = 0; i < value; i++) {
-			List<SpellDesc> spellChoices = new ArrayList<SpellDesc>();
-			for (int j = 0; j < count; j++) {
-				if (!spellsCopy.isEmpty()) {
-					SpellDesc spell = spellsCopy.get(context.getLogic().random(spellsCopy.size()));
-					spellChoices.add(spell);
-					spellsCopy.remove(spell);
-				}
+			Collections.shuffle(shuffledSpells);
+			List<SpellDesc> spellChoices = shuffledSpells.stream().limit(count).collect(Collectors.toList());
+			if (spellChoices.isEmpty()) {
+				continue;
 			}
-			if (!spellChoices.isEmpty()) {
-				final DiscoverAction spellDiscover = SpellUtils.getSpellDiscover(context, player, desc, spellChoices, source);
-				SpellDesc chosenSpell = spellDiscover.getSpell();
-				chosenSpellInts.add(spellOrder.get(chosenSpell));
-				if (exclusive) {
-					spellChoices.removeIf(s -> s.get(SpellArg.NAME).equals(chosenSpell.get(SpellArg.NAME)));
-					spells.removeIf(s -> s.get(SpellArg.NAME).equals(chosenSpell.get(SpellArg.NAME)));
-				}
+
+			final DiscoverAction spellDiscover = SpellUtils.getSpellDiscover(context, player, desc, spellChoices, source);
+			SpellDesc chosenSpell = spellDiscover.getSpell();
+			chosenSpellInts.add(spellOrder.get(chosenSpell));
+
+			if (exclusive) {
+				shuffledSpells.removeIf(f -> f.equals(chosenSpell));
 			}
 		}
+
 		Collections.sort(chosenSpellInts);
 		SpellDesc[] chosenSpells = new SpellDesc[chosenSpellInts.size()];
 		for (int i = 0; i < chosenSpellInts.size(); i++) {
