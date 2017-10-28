@@ -93,7 +93,7 @@ public class DraftLogic {
 		);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.KNIGHTS_OF_THE_FROZEN_THRONE;
+		CardSet latestExpansion = CardSet.latest();
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(CardType.values()));
 

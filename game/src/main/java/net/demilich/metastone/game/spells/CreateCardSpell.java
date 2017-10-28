@@ -66,8 +66,8 @@ public class CreateCardSpell extends Spell {
 				SpellDesc chosenSpell = spellDiscover.getSpell();
 				chosenSpellInts.add(spellOrder.get(chosenSpell));
 				if (exclusive) {
-					spellChoices.remove(chosenSpell);
-					spells.remove(chosenSpell);
+					spellChoices.removeIf(s -> s.get(SpellArg.NAME).equals(chosenSpell.get(SpellArg.NAME)));
+					spells.removeIf(s -> s.get(SpellArg.NAME).equals(chosenSpell.get(SpellArg.NAME)));
 				}
 				discoveries.add(spellDiscover);
 			}

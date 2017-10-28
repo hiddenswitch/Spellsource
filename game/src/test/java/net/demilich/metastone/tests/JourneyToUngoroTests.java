@@ -7,6 +7,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
@@ -26,11 +27,51 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
+	@Test
+	public void testCuriousGlimmerroot() {
+		// Right choice
+		runGym((context, player, opponent) -> {
+			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
+			String rightCardId = "minion_shade_of_naxxramas";
+			context.getLogic().shuffleToDeck(opponent, CardCatalogue.getCardById(rightCardId));
+			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
+			OverrideBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
+					choices.stream()
+							.filter(da -> da.getCard().getCardId().equals(rightCardId))
+							.findFirst()
+							.orElseThrow(AssertionError::new));
+			player.setBehaviour(override);
+			playMinionCard(context, player, "minion_curious_glimmerroot");
+			Assert.assertEquals(player.getHand().size(), 1);
+			Assert.assertEquals(player.getHand().get(0).getCardId(), rightCardId);
+		});
+
+		// Wrong choice
+		runGym((context, player, opponent) -> {
+			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
+			String rightCardId = "minion_shade_of_naxxramas";
+			context.getLogic().shuffleToDeck(opponent, CardCatalogue.getCardById(rightCardId));
+			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
+			OverrideBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
+					choices.stream()
+							.filter(da -> !da.getCard().getCardId().equals(rightCardId))
+							.findFirst()
+							.orElseThrow(AssertionError::new));
+			player.setBehaviour(override);
+			playMinionCard(context, player, "minion_curious_glimmerroot");
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	private OverrideBehaviour overrideDiscoverChoice(Function<List<DiscoverAction>, GameAction> chooser) {
+		return new OverrideBehaviour(chooser);
+	}
 
 	@Test
 	public void testClutchmotherZavas() {

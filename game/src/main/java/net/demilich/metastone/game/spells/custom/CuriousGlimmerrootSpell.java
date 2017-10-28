@@ -4,10 +4,8 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -29,8 +27,6 @@ public class CuriousGlimmerrootSpell extends Spell {
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Player opponent = context.getOpponent(player);
-		SpellDesc rightChoice = (SpellDesc) desc.get(SpellArg.SPELL_1);
-		SpellDesc wrongChoice = (SpellDesc) desc.get(SpellArg.SPELL_2);
 
 		// Find all the cards which started in the opponent's deck.
 		Map<HeroClass, List<Entity>> deckCards = context.getEntities()
@@ -52,7 +48,7 @@ public class CuriousGlimmerrootSpell extends Spell {
 			correctClass = HeroClass.ANY;
 		}
 
-		List<Card> others = CardCatalogue.query(context.getDeckFormat())
+		List<Card> others = CardCatalogue.query(new DeckFormat().withCardSets(CardSet.latest(), CardSet.BASIC, CardSet.CLASSIC)/*prefer the latest expansion*/)
 				.shuffle(context.getLogic().getRandom())
 				.stream()
 				.filter(c -> c.getHeroClass() == correctClass)
