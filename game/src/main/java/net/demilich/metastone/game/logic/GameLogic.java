@@ -857,6 +857,36 @@ public class GameLogic implements Cloneable, Serializable {
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage) {
 		// sanity check to prevent StackOverFlowError with Mistress of Pain +
 		// Auchenai Soulpriest
+		int damageDealt = applyDamageToActor(target, baseDamage, player, source, ignoreSpellDamage);
+		resolveDamageEvent(player, target, source, damageDealt);
+		return damageDealt;
+	}
+
+	@Suspendable
+	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt) {
+		if (damageDealt > 0) {
+			// Keyword effects for lifesteal and poisonous will come BEFORE all other events
+			// Poisonous resolves in a queue with higher priority, and it stops Grim Patron spawning regardless of
+			// Dominant Player. However, Acidmaw can never stop Grim Patron spawning.
+			if (source.hasAttribute(Attribute.POISONOUS)
+					&& target.getEntityType() == EntityType.MINION) {
+				destroy(target);
+			}
+
+			// Implement lifesteal
+			if (source.hasAttribute(Attribute.LIFESTEAL)) {
+				Player sourceOwner = context.getPlayer(source.getOwner());
+				heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
+			}
+
+			player.getStatistics().damageDealt(damageDealt);
+			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt);
+			context.fireGameEvent(damageEvent);
+		}
+	}
+
+	@Suspendable
+	protected int applyDamageToActor(Actor target, int baseDamage, Player player, Entity source, boolean ignoreSpellDamage) {
 		if (target.getHp() < -100) {
 			return 0;
 		}
@@ -894,27 +924,6 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		target.setAttribute(Attribute.LAST_HIT, damageDealt);
-		if (damageDealt > 0) {
-			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt);
-
-			context.fireGameEvent(damageEvent);
-
-			// Keyword effects for lifesteal and poisonous will come after all other events
-			// Implement poisonous
-			if (source.hasAttribute(Attribute.POISONOUS)
-					&& target.getEntityType() == EntityType.MINION) {
-				destroy(target);
-			}
-
-			// Implement lifesteal
-			if (source.hasAttribute(Attribute.LIFESTEAL)) {
-				Player sourceOwner = context.getPlayer(source.getOwner());
-				heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
-			}
-
-			player.getStatistics().damageDealt(damageDealt);
-		}
-
 		return damageDealt;
 	}
 
@@ -1285,6 +1294,8 @@ public class GameLogic implements Cloneable, Serializable {
 
 		if (target != defender) {
 			log("Target of attack was changed! New Target: {}", target);
+			// Override the defender here for the sake of readability
+			defender = target;
 		}
 
 		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING)) {
@@ -1293,24 +1304,31 @@ public class GameLogic implements Cloneable, Serializable {
 
 		removeAttribute(attacker, Attribute.STEALTH);
 
+		// Hearthstone checks for win/loss/draw.
+		if (context.updateAndGetGameOver()) {
+			return;
+		}
+
 		int attackerDamage = attacker.getAttack();
-		int defenderDamage = target.getAttack();
-		context.fireGameEvent(new PhysicalAttackEvent(context, attacker, target, attackerDamage));
+		int defenderDamage = defender.getAttack();
+		context.fireGameEvent(new PhysicalAttackEvent(context, attacker, defender, attackerDamage));
 		// secret may have killed attacker ADDENDUM: or defender
-		if (attacker.isDestroyed() || target.isDestroyed()) {
+		if (attacker.isDestroyed() || defender.isDestroyed()) {
 			context.getEnvironment().remove(Environment.ATTACKER_REFERENCE);
 			return;
 		}
 
-		if (target.getOwner() == Entity.NO_OWNER) {
-			logger.error("Target has no owner!! {}", target);
+		if (defender.getOwner() == Entity.NO_OWNER) {
+			logger.error("defender has no owner!! {}", defender);
 		}
 
-		Player owningPlayer = context.getPlayer(target.getOwner());
-		boolean damaged = damage(owningPlayer, target, attackerDamage, attacker) > 0;
-		if (defenderDamage > 0) {
-			damage(player, attacker, defenderDamage, target);
-		}
+		// No events are fired by applying damage to an actor so it doesn't actually matter what order this occurs in
+		// This could change, theoretically, if the minion has an ability  whose damage depends on the other minion's HP.
+		int damageDealtToAttacker = applyDamageToActor(attacker, defenderDamage, player, defender, true);
+		int damageDealtToDefender = applyDamageToActor(defender, attackerDamage, player, attacker, true);
+		// Defender queues first
+		resolveDamageEvent(context.getPlayer(defender.getOwner()), defender, attacker, damageDealtToDefender);
+		resolveDamageEvent(context.getPlayer(attacker.getOwner()), attacker, defender, damageDealtToAttacker);
 
 		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING)) {
 			attacker.getAttributes().remove(Attribute.IMMUNE);
@@ -1324,9 +1342,7 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 		}
 		attacker.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, -1);
-
-		context.fireGameEvent(new AfterPhysicalAttackEvent(context, attacker, target, damaged ? attackerDamage : 0));
-
+		context.fireGameEvent(new AfterPhysicalAttackEvent(context, attacker, defender, damageDealtToDefender));
 		context.getEnvironment().remove(Environment.ATTACKER_REFERENCE);
 	}
 
@@ -2933,7 +2949,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 		player.getStatistics().minionSummoned(minion);
 		if (context.getEnvironment().get(Environment.TARGET_OVERRIDE) != null) {
-			Actor actor = (Actor) context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE));
+			Actor actor = (Actor) context.resolveTarget(player, source, (EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE)).get(0);
 			context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
 			SummonEvent summonEvent = new SummonEvent(context, actor, source);
 			context.fireGameEvent(summonEvent);

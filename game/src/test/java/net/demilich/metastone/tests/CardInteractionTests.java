@@ -216,8 +216,8 @@ public class CardInteractionTests extends TestBase {
 	
 	@Test
 	public void testLordJaraxxus() {
-		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.PALADIN);
-		Player warlock = context.getPlayer1();
+		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.WARLOCK);
+		Player warlock = context.getActivePlayer();
 		Card jaraxxus = CardCatalogue.getCardById("minion_lord_jaraxxus");
 		// first, just play Jaraxxus on an empty board
 		playCard(context, warlock, jaraxxus);
@@ -226,15 +226,16 @@ public class CardInteractionTests extends TestBase {
 		Assert.assertNotNull(warlock.getHero().getWeapon());
 		
 		// start a new game
-		context = createContext(HeroClass.WARLOCK, HeroClass.PALADIN);
+		context = createContext(HeroClass.WARLOCK, HeroClass.WARLOCK);
 		// opponent plays Repentance, which triggers on Lord Jaraxxus play
-		Player paladin = context.getPlayer2();
+		warlock = context.getActivePlayer();
+		Player paladin = context.getOpponent(warlock);
+		context.endTurn();
 		Card repentance = CardCatalogue.getCardById("secret_repentance");
 		playCard(context, paladin, repentance);
 		
-		context.getLogic().endTurn(paladin.getId());
+		context.endTurn();;
 		
-		warlock = context.getPlayer1();
 		jaraxxus = CardCatalogue.getCardById("minion_lord_jaraxxus");
 		playCard(context, warlock, jaraxxus);
 		Assert.assertEquals(warlock.getHero().getRace(), Race.DEMON);

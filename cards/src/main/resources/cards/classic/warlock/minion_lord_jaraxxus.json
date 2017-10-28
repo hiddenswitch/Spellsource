@@ -13,10 +13,6 @@
 			"class": "MetaSpell",
 			"spells": [
 				{
-					"class": "DestroySpell",
-					"target": "SELF"
-				},
-				{
 					"class": "ChangeHeroSpell",
 					"card": "hero_jaraxxus"
 				},
@@ -26,7 +22,7 @@
 				},
 				{
 					"class": "OverrideTargetSpell",
-					"target": "FRIENDLY_HERO" 
+					"target": "FRIENDLY_HERO"
 				}
 			]
 		}

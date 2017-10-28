@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 import java.util.function.BiConsumer;
 
 
-public class BlackrockMountainTests extends BasicTests {
+public class BlackrockMountainTests extends TestBase {
 
 	/**
 	 * You play a Grim Patron. Your opponent has a Knife Juggler and plays an Imp Gang Boss (the knife hits face). On
@@ -47,13 +47,6 @@ public class BlackrockMountainTests extends BasicTests {
 			context.getLogic().performGameAction(player.getId(), attack);
 			Assert.assertEquals(player.getMinions().size(), 0);
 		});
-	}
-
-	private void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
-		SpellDesc spell = ((Enchantment) context.getTriggersAssociatedWith(source.getReference())
-				.get(0)).getSpell();
-		spell.remove(SpellArg.RANDOM_TARGET);
-		spell.setTarget(target.getReference());
 	}
 
 	@Test
