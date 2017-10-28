@@ -1,0 +1,29 @@
+### Control Warlock - Standard Meta Snapshot - Oct. 8, 2017
+# Class: Warlock
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Mistress of Mixtures
+# 2x (1) Mortal Coil
+# 2x (1) Voidwalker
+# 1x (2) Bloodmage Thalnos
+# 2x (2) Defile
+# 1x (2) Doomsayer
+# 1x (2) Drain Soul
+# 2x (2) Golakka Crawler
+# 1x (2) Tainted Zealot
+# 2x (3) Earthen Ring Farseer
+# 1x (3) Shadow Bolt
+# 1x (4) Hellfire
+# 1x (4) Spellbreaker
+# 2x (4) Twilight Drake
+# 2x (5) Despicable Dreadlord
+# 2x (6) Siphon Soul
+# 2x (7) Abyssal Enforcer
+# 1x (8) The Lich King
+# 1x (10) Bloodreaver Gul'dan
+# 1x (12) Mountain Giant
+#
+AAECAf0GCu0FigGizQKX6AKSB7YH8gXCzgKX0wLhBwrexALECDDnywLkwgLzDI0I980CzAjdvAIA
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

@@ -56,7 +56,7 @@ public class FlatMonteCarlo extends AbstractBehaviour {
 		for (Player player : simulation.getPlayers()) {
 			player.setBehaviour(new PlayRandomBehaviour());
 		}
-		simulation.takeActionInTurn();
+		simulation.resume();
 		return simulation.getWinningPlayerId() == playerId ? 1 : 0;
 	}
 

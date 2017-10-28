@@ -1,0 +1,26 @@
+### Pirate Warrior - Standard Meta Snapshot - Sep. 24, 2017
+# Class: Warrior
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Fire Fly
+# 2x (1) N'Zoth's First Mate
+# 1x (1) Patches the Pirate
+# 2x (1) Southsea Deckhand
+# 2x (1) Upgrade!
+# 1x (2) Prince Keleseth
+# 2x (3) Bloodsail Cultist
+# 2x (3) Fiery War Axe
+# 2x (3) Frothing Berserker
+# 2x (3) Southsea Captain
+# 2x (4) Dread Corsair
+# 2x (4) Kor'kron Elite
+# 2x (4) Naga Corsair
+# 1x (4) Spellbreaker
+# 2x (5) Arcanite Reaper
+# 2x (5) Bittertide Hydra
+# 1x (5) Captain Greenskin
+#
+AAECAQcEkbwCnOIC8gXIAw3rwgKCsALUBf8DiLACkQOOBagF7gYcub8CsAKvwgIA
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

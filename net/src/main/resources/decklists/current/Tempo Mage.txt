@@ -1,0 +1,26 @@
+### Tempo Mage - Standard Meta Snapshot - Oct. 8, 2017
+# Class: Mage
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Mana Wyrm
+# 2x (2) Arcanologist
+# 2x (2) Frostbolt
+# 2x (2) Medivh's Valet
+# 2x (2) Primordial Glyph
+# 2x (3) Arcane Intellect
+# 2x (3) Counterspell
+# 2x (3) Kirin Tor Mage
+# 1x (3) Mirror Entity
+# 2x (3) Spellbender
+# 2x (4) Fireball
+# 2x (5) Bittertide Hydra
+# 2x (6) Kabal Crystal Runner
+# 1x (6) Meteor
+# 1x (6) The Black Knight
+# 2x (7) Firelands Portal
+# 1x (8) The Lich King
+#
+AAECAf0EBMMBlscC+AzCzgINlQPBwQKWBde2ApjEAqsEcewF7gK7Aq/CAoe9AqO2AgA=
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
