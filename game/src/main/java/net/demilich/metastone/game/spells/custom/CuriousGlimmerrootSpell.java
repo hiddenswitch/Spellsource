@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -16,15 +17,19 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toSet;
 
 public class CuriousGlimmerrootSpell extends Spell {
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Player opponent = context.getOpponent(player);
 
@@ -35,9 +40,11 @@ public class CuriousGlimmerrootSpell extends Spell {
 				.filter(e -> e.hasAttribute(Attribute.STARTED_IN_DECK))
 				.collect(groupingBy(e -> e.getSourceCard().getHeroClass()));
 
+		Set<String> startingDeck = deckCards.values().stream().flatMap(Collection::stream).map(Entity::getSourceCard).map(Card::getCardId).collect(toSet());
+
 		HeroClass opponentClass = opponent.getHero().getHeroClass();
 		HeroClass correctClass;
-		Card correctCard;
+		final Card correctCard;
 
 		if (deckCards.containsKey(opponentClass)
 				&& deckCards.get(opponentClass).size() > 0) {
@@ -53,6 +60,7 @@ public class CuriousGlimmerrootSpell extends Spell {
 				.stream()
 				.filter(c -> c.getHeroClass() == correctClass)
 				.filter(c -> !c.getCardId().equals(correctCard.getCardId()))
+				.filter(c -> !startingDeck.contains(c.getCardId()))
 				.limit(2)
 				.collect(Collectors.toList());
 
