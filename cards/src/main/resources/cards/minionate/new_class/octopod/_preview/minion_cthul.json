@@ -13,10 +13,6 @@
 			"class": "MetaSpell",
 			"spells": [
 				{
-					"class": "DestroySpell",
-					"target": "SELF"
-				},
-				{
 					"class": "ChangeHeroSpell",
 					"card": "hero_cthul"
 				},

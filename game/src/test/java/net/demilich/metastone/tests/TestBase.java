@@ -6,6 +6,9 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +36,13 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.testng.annotations.BeforeMethod;
 
 public class TestBase {
+	protected static void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
+		SpellDesc spell = ((Enchantment) context.getTriggersAssociatedWith(source.getReference())
+				.get(0)).getSpell();
+		spell.remove(SpellArg.RANDOM_TARGET);
+		spell.setTarget(target.getReference());
+	}
+
 	@FunctionalInterface
 	interface GymConsumer {
 		void run(GameContext context, Player player, Player opponent);

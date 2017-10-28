@@ -6,7 +6,7 @@
   "trigger": {
     "eventTrigger": {
       "targetEntityType": "HERO",
-      "class": "PhysicalAttackTrigger",
+      "class": "AfterPhysicalAttackTrigger",
       "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
