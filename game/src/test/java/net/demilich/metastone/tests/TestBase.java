@@ -37,10 +37,11 @@ import org.testng.annotations.BeforeMethod;
 
 public class TestBase {
 	protected static void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
-		SpellDesc spell = ((Enchantment) context.getTriggersAssociatedWith(source.getReference())
-				.get(0)).getSpell();
+		Enchantment enchantment = (Enchantment) context.getTriggersAssociatedWith(source.getReference()).get(0);
+		SpellDesc spell = enchantment.getSpell().clone();
 		spell.remove(SpellArg.RANDOM_TARGET);
 		spell.setTarget(target.getReference());
+		enchantment.setSpell(spell);
 	}
 
 	@FunctionalInterface

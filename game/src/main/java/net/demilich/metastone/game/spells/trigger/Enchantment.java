@@ -270,4 +270,8 @@ public class Enchantment extends Entity implements Trigger {
 	public void setCurrentCount(int currentCount) {
 		this.currentCount = currentCount;
 	}
+
+	public void setSpell(SpellDesc spell) {
+		this.spell = spell;
+	}
 }
