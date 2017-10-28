@@ -2787,8 +2787,13 @@ public class GameLogic implements Cloneable, Serializable {
 			card.setOwner(player.getId());
 		}
 
-		if (player.getDeck().getCount() < MAX_DECK_SIZE) {
-			player.getDeck().addRandomly(card);
+		int count = player.getDeck().getCount();
+		if (count < MAX_DECK_SIZE) {
+			if (count == 0) {
+				player.getDeck().add(card);
+			} else {
+				player.getDeck().add(getRandom().nextInt(count), card);
+			}
 
 			if (card.getAttribute(Attribute.DECK_TRIGGER) != null) {
 				TriggerDesc triggerDesc = (TriggerDesc) card.getAttribute(Attribute.DECK_TRIGGER);

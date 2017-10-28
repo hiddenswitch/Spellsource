@@ -17,13 +17,16 @@ class NetworkedRpcClient<T> implements RpcClient<T> {
 		this.serviceInterface = serviceInterface;
 	}
 
+
 	@Override
 	@SuppressWarnings("unchecked")
-	public <R> T async(Handler<AsyncResult<R>> handler) {
+	public <R> T async(Handler<AsyncResult<R>> handler, long timeout) {
+		VertxInvocationHandler<T> invocationHandler = new VertxInvocationHandler<T>(serviceInterface.getName(), bus, false, (Handler) handler);
+		invocationHandler.timeout = timeout;
 		return (T) Proxy.newProxyInstance(
 				serviceInterface.getClassLoader(),
 				new Class[]{serviceInterface},
-				new VertxInvocationHandler<T>(serviceInterface.getName(), bus, false, (Handler) handler)
+				invocationHandler
 		);
 	}
 

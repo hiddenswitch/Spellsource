@@ -1,26 +1,29 @@
 {
-	"name": "Stroke of Insanity",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "FREE",
-	"description": "Deal 1 damage to a minion. If that kills it, draw a card.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "ConditionalEffectSpell",
-		"spell1": {
-			"class": "DamageSpell",
-			"value": 1
-		},
-		"spell2": {
-			"class": "DrawCardSpell",
-			"value": 1
-		},
-		"condition": {
-			"class": "IsDeadCondition"
-		}
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Mortal Coil",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "FREE",
+  "description": "Deal 1 damage to a minion. If that kills it, draw a card.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 1
+    },
+    "spell2": {
+      "class": "DrawCardSpell",
+      "value": 1
+    },
+    "condition": {
+      "class": "IsDeadCondition"
+    }
+  },
+  "attributes": {
+    "NAME": "Stroke of Insanity"
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

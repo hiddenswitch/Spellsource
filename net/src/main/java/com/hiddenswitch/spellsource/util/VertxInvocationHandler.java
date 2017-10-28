@@ -32,12 +32,14 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 	final EventBus eb;
 	final boolean sync;
 	final Handler<AsyncResult<Object>> next;
+	long timeout;
 
 	VertxInvocationHandler(String name, EventBus eb, boolean sync, Handler<AsyncResult<Object>> next) {
 		this.name = name;
 		this.eb = eb;
 		this.sync = sync;
 		this.next = next;
+		this.timeout = RpcClient.DEFAULT_TIMEOUT;
 	}
 
 	@Override
@@ -67,7 +69,7 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			throw new RuntimeException();
 		}
 		Object result = null;
-		final DeliveryOptions deliveryOptions = new DeliveryOptions().setSendTimeout(Duration.of(8, ChronoUnit.SECONDS).toMillis());
+		final DeliveryOptions deliveryOptions = new DeliveryOptions().setSendTimeout(timeout);
 		RpcOptions options = method.getAnnotation(RpcOptions.class);
 		RpcOptions.Serialization serialization = RpcOptions.Serialization.JAVA;
 

@@ -1,5 +1,5 @@
 {
-	"name": "Xiaolian, Blademaster",
+	"name": "Finja, the Flying Star",
 	"baseManaCost": 5,
 	"type": "MINION",
 	"baseAttack": 2,
@@ -30,7 +30,9 @@
 		}
 	},
 	"attributes": {
-		"STEALTH": true
+		"STEALTH": true,
+		"DESCRIPTION": "Stealth. Whenever this attacks and kills a minion, summon 2 Tanooki from your deck.",
+		"NAME": "Xiaolian, Blademaster"
 	},
 	"collectible": true,
 	"set": "MEAN_STREETS_OF_GADGETZAN",

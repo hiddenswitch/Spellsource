@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.applications;
 import ch.qos.logback.classic.Level;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.util.Mongo;
+import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
@@ -24,7 +25,7 @@ public class Remote {
 		// Set significantly longer timeouts
 		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();
 		Vertx vertx = Vertx.vertx(new VertxOptions()
-				.setBlockedThreadCheckInterval(Duration.of(8, ChronoUnit.SECONDS).toMillis())
+				.setBlockedThreadCheckInterval(RpcClient.DEFAULT_TIMEOUT)
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)

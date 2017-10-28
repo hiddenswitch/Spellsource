@@ -4,7 +4,6 @@ import net.demilich.metastone.game.decks.DeckFormat;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -54,12 +53,6 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 			cards.add(card.clone());
 		}
 		return this;
-	}
-
-	@Override
-	public void addRandomly(Card card) {
-		int index = ThreadLocalRandom.current().nextInt(cards.size() + 1);
-		cards.add(index, card);
 	}
 
 	@Override

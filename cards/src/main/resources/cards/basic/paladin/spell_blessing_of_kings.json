@@ -1,5 +1,5 @@
 {
-	"name": "Ankylo's Strength",
+	"name": "Blessing of Kings",
 	"baseManaCost": 4,
 	"type": "SPELL",
 	"heroClass": "PALADIN",
@@ -10,6 +10,9 @@
 		"class": "BuffSpell",
 		"attackBonus": 4,
 		"hpBonus": 4
+	},
+	"attributes": {
+		"NAME": "Ankylo's Strength"
 	},
 	"collectible": true,
 	"set": "BASIC",

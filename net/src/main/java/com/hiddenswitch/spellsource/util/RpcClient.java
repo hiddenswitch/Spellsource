@@ -9,14 +9,16 @@ import io.vertx.core.Handler;
 
 /**
  * A remote procedure call client. Its methods, {@link #sync()}, {@link #uncheckedSync()} and {@link #async(Handler)}
- * provides three different convenient ways for you to make calls to other microservices using the same interface
- * {@link T}.
+ * provides three different convenient ways for you to make calls to other microservices using the same interface {@link
+ * T}.
  * <p>
  * Internally, this is proxy of a Vertx event bus communicating service.
  *
  * @param <T> The service class proxied.
  */
 public interface RpcClient<T> {
+	long DEFAULT_TIMEOUT = 8000;
+
 	/**
 	 * Make an RPC call with an idiomatically asynchronous coding convention, like what you would expect in Node.
 	 * <p>
@@ -54,7 +56,9 @@ public interface RpcClient<T> {
 	 * @param <R>     The return type of the method you will call on the proxy. This is typically a Response object.
 	 * @return A proxy whose methods will return null.
 	 */
-	<R> T async(Handler<AsyncResult<R>> handler);
+	default <R> T async(Handler<AsyncResult<R>> handler) {
+		return this.async(handler, DEFAULT_TIMEOUT);
+	}
 
 	/**
 	 * Calls the {@link #async(Handler)} idiom to return a promise.
@@ -72,6 +76,18 @@ public interface RpcClient<T> {
 		}
 		return future;
 	}
+
+	/**
+	 * Executes {@link #async(Handler)} with the specified timeout.
+	 *
+	 * @param handler A handler for this function,.
+	 * @param timeout The timeout, in milliseconds, until no reply is assuemed.
+	 * @param <R>     The result time.
+	 * @return A proxy whose methods will return null.
+	 * @see #async(Handler) for more complete documentation.
+	 */
+	@SuppressWarnings("unchecked")
+	<R> T async(Handler<AsyncResult<R>> handler, long timeout);
 
 	/**
 	 * Gets ready to make an idiomatically synchronous (in the sense of {@link co.paralleluniverse.fibers.Fiber}) call

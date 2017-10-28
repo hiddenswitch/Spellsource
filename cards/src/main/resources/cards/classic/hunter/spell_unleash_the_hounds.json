@@ -1,20 +1,23 @@
 {
-	"name": "Amate's Howl",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "For each enemy minion, summon a 1/1 Wolf with Charge.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"value": {
-			"class": "EntityCounter",
-			"target": "ENEMY_MINIONS"
-		},
-		"card": "token_hound"
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Amate's Howl",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "COMMON",
+  "description": "For each enemy minion, summon a 1/1 Wolf with Charge.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS"
+    },
+    "card": "token_hound"
+  },
+  "attributes": {
+    "NAME": "Amate's Howl"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }
