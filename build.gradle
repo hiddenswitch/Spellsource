@@ -17,13 +17,13 @@ swagger {
     language = 'java'
 
     additionalProperties = [
-            'invokerPackage'   : 'com.hiddenswitch.spellsource.client',
-            'modelPackage'     : 'com.hiddenswitch.spellsource.client.models',
-            'apiPackage'       : 'com.hiddenswitch.spellsource.client.api',
-            'library'          : 'okhttp-gson',
-            'serializableModel': 'true',
-            'dateLibrary'      : 'java8',
-            'artifactId'       : 'client',
+            'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
+            'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
+            'apiPackage'             : 'com.hiddenswitch.spellsource.client.api',
+            'library'                : 'okhttp-gson',
+            'serializableModel'      : 'true',
+            'dateLibrary'            : 'java8',
+            'artifactId'             : 'client',
             'hideGenerationTimestamp': 'true'
     ]
 }
