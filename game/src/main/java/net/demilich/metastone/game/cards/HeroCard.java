@@ -51,6 +51,7 @@ public class HeroCard extends Card {
 
 	/**
 	 * Gets the weapon equipped by a {@link EquipWeaponSpell} in this hero's battlecry.
+	 *
 	 * @return A weapon card, or {@code null} if none was found.
 	 */
 	public WeaponCard getWeapon() {
@@ -83,6 +84,11 @@ public class HeroCard extends Card {
 		}
 
 		return (WeaponCard) CardCatalogue.getCardById(cardId);
+	}
+
+	@Override
+	public CardType getCardType() {
+		return CardType.HERO;
 	}
 
 	public int getArmor() {

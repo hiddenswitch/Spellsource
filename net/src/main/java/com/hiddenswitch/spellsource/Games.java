@@ -269,7 +269,6 @@ public interface Games {
 				.stream()
 				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addHeroPowersItem))
 				.forEach(clientActions.getChooseOnes()::add);
-		;
 
 		// Weapons
 		actions.stream()
