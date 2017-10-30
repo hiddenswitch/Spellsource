@@ -1,5 +1,9 @@
 package net.demilich.metastone.tests;
 
+import net.demilich.metastone.tests.util.DebugContext;
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestMinionCard;
+import net.demilich.metastone.tests.util.TestSecretCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

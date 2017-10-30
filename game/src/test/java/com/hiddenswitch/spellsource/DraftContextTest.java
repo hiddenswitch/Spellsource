@@ -1,12 +1,14 @@
-package com.hiddenswitch.proto3.draft;
+package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import com.hiddenswitch.proto3.draft.*;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -46,7 +48,7 @@ public class DraftContextTest {
 				});
 		context.accept(then -> {
 		});
-		assertEquals(context.getPublicState().getSelectedCards().size(), DraftLogic.DRAFTS);
-		assertEquals(context.getPublicState().getStatus(), DraftStatus.COMPLETE);
+		Assert.assertEquals(context.getPublicState().getSelectedCards().size(), DraftLogic.DRAFTS);
+		Assert.assertEquals(context.getPublicState().getStatus(), DraftStatus.COMPLETE);
 	}
 }

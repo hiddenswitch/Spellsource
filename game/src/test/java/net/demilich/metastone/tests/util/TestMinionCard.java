@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package net.demilich.metastone.tests.util;
 
 import java.util.EnumMap;
 

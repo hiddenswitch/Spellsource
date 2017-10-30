@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package net.demilich.metastone.tests.util;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -45,7 +45,7 @@ public class TestBase {
 	}
 
 	@FunctionalInterface
-	interface GymConsumer {
+	public interface GymConsumer {
 		void run(GameContext context, Player player, Player opponent);
 
 		default GymConsumer andThen(GymConsumer after) {
@@ -57,7 +57,7 @@ public class TestBase {
 		}
 	}
 
-	static class GymFactory {
+	public static class GymFactory {
 		GymConsumer first;
 
 		public void run(GymConsumer consumer) {
@@ -146,7 +146,7 @@ public class TestBase {
 				: StreamSupport.stream(split, false);
 	}
 
-	protected static class TestBehaviour extends AbstractBehaviour {
+	public static class TestBehaviour extends AbstractBehaviour {
 
 		private EntityReference targetPreference;
 

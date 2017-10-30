@@ -1,5 +1,6 @@
 package net.demilich.metastone.tests;
 
+import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
