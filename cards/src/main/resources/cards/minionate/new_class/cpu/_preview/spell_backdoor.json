@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "MAGE",
 	"rarity": "RARE",
-	"description": "Add a random minion to your hand. It costs 3 less Energy.",
+	"description": "Add a random minion to your hand. It costs 3 less Mana.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "ReceiveCardAndDoSomethingSpell",

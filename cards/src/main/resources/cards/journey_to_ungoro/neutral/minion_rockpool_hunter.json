@@ -10,7 +10,7 @@
   "baseAttack": 2,
   "attributes": {
     "BATTLECRY": true,
-    "DESCRIPTION": "Battlecry: Give a friendly Tanooki +1/+1"
+    "DESCRIPTION": "Battlecry: Give a friendly Murloc +1/+1"
   },
   "battlecry": {
     "spell": {

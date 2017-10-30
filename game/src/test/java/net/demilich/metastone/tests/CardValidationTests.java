@@ -21,7 +21,7 @@ import net.demilich.metastone.utils.UserHomeMetastone;
  * This test will iterate through all the cards in the cards resources dir and invoke the CardParser.parseCard(cardFile)
  * method to ensure that each card is well formed and can be parsed.
  */
-public class ValidateCards {
+public class CardValidationTests {
 	private static final String CARDS_DIR = "src/main/resources/cards/"; // relative path from module root
 	private static final CardParser CARD_PARSER = new CardParser();
 	private static List<File> ALL_CARD_FILES;

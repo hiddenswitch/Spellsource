@@ -1,7 +1,7 @@
 {
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
-  "description": "The next spell you cast this turn costs Health instead of Energy.",
+  "description": "The next spell you cast this turn costs Health instead of Mana.",
   "spell": {
     "attribute": "SPELLS_COST_HEALTH",
     "revertTrigger": {

@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "COMMON",
-	"description": "Summon a Animated Shuriken. Gain an empty Energy.",
+	"description": "Summon a Animated Shuriken. Gain an empty Mana.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",

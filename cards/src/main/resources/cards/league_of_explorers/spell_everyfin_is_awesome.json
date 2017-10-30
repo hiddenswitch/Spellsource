@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "SHAMAN",
 	"rarity": "RARE",
-	"description": "Give your minions +2/+2. Costs (1) less for each Tanooki you control.",
+	"description": "Give your minions +2/+2. Costs (1) less for each Murloc you control.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "BuffSpell",

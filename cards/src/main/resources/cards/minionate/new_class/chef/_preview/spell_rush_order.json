@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "FREE",
-	"description": "Gain an an empty Energy Cell.",
+	"description": "Gain an an empty Mana Cell.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "EitherOrSpell",

@@ -7,7 +7,7 @@
 	"heroClass": "SHAMAN",
 	"rarity": "EPIC",
 	"race": "MURLOC",
-	"description": "Whenever another friendly Tanooki dies, draw a card. Overload: (1)",
+	"description": "Whenever another friendly Murloc dies, draw a card. Overload: (1)",
 	"trigger": {
 		"eventTrigger": {
 			"class": "MinionDeathTrigger",

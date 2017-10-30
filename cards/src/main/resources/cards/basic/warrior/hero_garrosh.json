@@ -1,17 +1,18 @@
 {
-	"id": "hero_garrosh",
-	"name": "Agfen",
-	"baseManaCost": 0,
-	"description": "Hero Power: Gain 2 armor",
-	"heroPower": "hero_power_armor_up",
-	"type": "HERO",
-	"heroClass": "WARRIOR",
-	"rarity": "FREE",
-	"attributes": {
-		"HP": 30,
-		"MAX_HP": 30
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "id": "hero_garrosh",
+  "name": "Garrosh Hellscream",
+  "baseManaCost": 0,
+  "description": "Hero Power: Gain 2 armor",
+  "heroPower": "hero_power_armor_up",
+  "type": "HERO",
+  "heroClass": "WARRIOR",
+  "rarity": "FREE",
+  "attributes": {
+    "NAME": "Agfen",
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

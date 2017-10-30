@@ -1,17 +1,20 @@
 {
-	"name": "Everfire",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "PALADIN",
-	"rarity": "FREE",
-	"description": "Deal 2 damage to all enemies.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DamageSpell",
-		"target": "ENEMY_CHARACTERS",
-		"value": 2
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Consecration",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "FREE",
+  "description": "Deal 2 damage to all enemies.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 2
+  },
+  "attributes": {
+    "NAME": "Everfire"
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

@@ -26,6 +26,7 @@ public class CardCatalogue {
 
 	private final static Map<String, Card> cards = new HashMap<>();
 	private final static Map<String, CardCatalogueRecord> records = new HashMap<>();
+	private final static Map<String, CardCatalogueRecord> recordsByName = new HashMap<>();
 
 	public static void add(Card card) {
 		cards.put(card.getCardId(), card);
@@ -52,12 +53,10 @@ public class CardCatalogue {
 	}
 
 	public static Card getCardByName(String name) {
-		for (Card card : cards.values()) {
-			if (card.isCollectible() && card.getName().equals(name)) {
-				return card.clone();
-			}
+		CardCatalogueRecord namedCard = recordsByName.get(name);
+		if (namedCard != null) {
+			return getCardById(namedCard.getId());
 		}
-
 		return null;
 	}
 
@@ -168,6 +167,7 @@ public class CardCatalogue {
 				}
 				cardDesc.put(desc.id, desc);
 				records.put(desc.id, record);
+				recordsByName.put(desc.name, record);
 			} catch (Exception e) {
 				//logger.error("Error parsing card '{}'", resourceInputStream.fileName);
 				logger.error(e.toString());

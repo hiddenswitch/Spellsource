@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "SHAMAN",
 	"rarity": "RARE",
-	"description": "Deal 2 damage. You are no longer Energy Surged.",
+	"description": "Deal 2 damage. You are no longer Mana Surged.",
 	"targetSelection": "ANY",
 	"spell": {
 		"class": "MetaSpell",

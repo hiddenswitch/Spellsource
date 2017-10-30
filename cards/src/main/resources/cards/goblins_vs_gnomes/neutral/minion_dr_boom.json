@@ -1,33 +1,34 @@
 {
-	"name": "Shiramba",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Summon two 1/1 Wrathful Spirits. WARNING: Bots may explode.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "SummonSpell",
-					"card": "token_boom_bot",
-					"boardPositionRelative": "RIGHT"
-				},
-				{
-					"class": "SummonSpell",
-					"card": "token_boom_bot",
-					"boardPositionRelative": "LEFT"
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Dr. Boom",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon two 1/1 Wrathful Spirits. WARNING: Bots may explode.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "card": "token_boom_bot",
+          "boardPositionRelative": "RIGHT"
+        },
+        {
+          "class": "SummonSpell",
+          "card": "token_boom_bot",
+          "boardPositionRelative": "LEFT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "NAME": "Shiramba",
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

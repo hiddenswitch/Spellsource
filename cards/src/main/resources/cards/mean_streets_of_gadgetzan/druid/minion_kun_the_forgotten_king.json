@@ -6,7 +6,7 @@
 	"baseHp": 7,
 	"heroClass": "DRUID",
 	"rarity": "LEGENDARY",
-	"description": "Choose One - Gain 10 Armor; or Refresh your Energy.",
+	"description": "Choose One - Gain 10 Armor; or Refresh your Mana.",
 	"options": [
 		{
 			"description": "Gain 10 Armor",

@@ -6,7 +6,7 @@
 	"durability": 8,
 	"heroClass": "SHAMAN",
 	"rarity": "EPIC",
-	"description": "Supersonic, Energy Surge: 2",
+	"description": "Supersonic, Mana Surge: 2",
 	"onEquip": {
 		"class": "AddAttributeSpell",
 		"target": "FRIENDLY_HERO",

@@ -6,7 +6,7 @@
 	"baseHp": 4,
 	"heroClass": "HUNTER",
 	"rarity": "COMMON",
-	"description": "Your Secrets cost 0 Energy.",
+	"description": "Your Secrets cost 0 Mana.",
 	"cardCostModifier": {
 		"class": "CardCostModifier",
 		"cardType": "SPELL",

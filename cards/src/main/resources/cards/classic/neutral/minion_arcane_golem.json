@@ -6,7 +6,7 @@
 	"baseHp": 4,
 	"heroClass": "ANY",
 	"rarity": "RARE",
-	"description": "Battlecry: Give your opponent a Energy.",
+	"description": "Battlecry: Give your opponent a Mana.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {

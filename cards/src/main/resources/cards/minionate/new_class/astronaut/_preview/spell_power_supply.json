@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "PALADIN",
 	"rarity": "EPIC",
-	"description": "Use all of your Energy. Heal for double the Energy spent.",
+	"description": "Use all of your Mana. Heal for double the Mana spent.",
 	"targetSelection": "ANY",
 	"spell": {
 		"class": "MetaSpell",

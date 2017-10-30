@@ -30,3 +30,7 @@ task scanSuspendables {
         }
     }
 }
+
+task updateCardDefs {
+
+}

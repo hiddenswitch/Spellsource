@@ -4,7 +4,7 @@
 	"type": "CHOOSE_ONE",
 	"heroClass": "DRUID",
 	"rarity": "RARE",
-	"description": "Select One - Draw 3 cards; or gain 2 Energy Cells.",
+	"description": "Select One - Draw 3 cards; or gain 2 Mana Cells.",
 	"targetSelection": "NONE",
 	"options": [
 		"spell_dinner_prep_2",

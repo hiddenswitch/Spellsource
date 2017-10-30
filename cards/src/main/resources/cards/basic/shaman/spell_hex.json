@@ -1,16 +1,19 @@
 {
-	"name": "Transmute",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "FREE",
-	"description": "Transform a minion into a 0/1 Slime with Taunt.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "TransformMinionSpell",
-		"card": "token_frog"
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Hex",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "FREE",
+  "description": "Transform a minion into a 0/1 Slime with Taunt.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "TransformMinionSpell",
+    "card": "token_frog"
+  },
+  "attributes": {
+    "NAME": "Transmute"
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

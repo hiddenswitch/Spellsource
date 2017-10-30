@@ -1,10 +1,10 @@
 {
-	"name": "Shiramba's Song",
+	"name": "Muster for Battle",
 	"baseManaCost": 3,
 	"type": "SPELL",
 	"heroClass": "PALADIN",
 	"rarity": "RARE",
-	"description": "Summon three 1/1 Kodamas. Equip a 1/4 Weapon.",
+	"description": "Summon three 1/1 Recruits. Equip a 1/4 Weapon.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",

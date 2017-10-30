@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "EPIC",
 	"race": "BEAST",
-	"description": "Battlecry: Destroy a Tanooki and gain +2/+2.",
+	"description": "Battlecry: Destroy a Murloc and gain +2/+2.",
 	"battlecry": {
 		"targetSelection": "MINIONS",
 		"spell": {

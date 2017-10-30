@@ -7,7 +7,7 @@
 	"heroClass": "PALADIN",
 	"rarity": "EPIC",
 	"race": "MURLOC",
-	"description": "Battlecry: Your Hero Power becomes 'Summon a 1/1 Tanooki.'",
+	"description": "Battlecry: Your Hero Power becomes 'Summon a 1/1 Murloc.'",
 	"battlecry": {
 		"spell": {
 			"class": "ChangeHeroPowerSpell",

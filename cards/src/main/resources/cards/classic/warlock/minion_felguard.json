@@ -7,7 +7,7 @@
 	"heroClass": "WARLOCK",
 	"rarity": "FREE",
 	"race": "DEMON",
-	"description": "Taunt. Battlecry: Destroy one of your Energy.",
+	"description": "Taunt. Battlecry: Destroy one of your Mana.",
 	"battlecry": {
 		"spell": {
 			"class": "ModifyMaxManaSpell",

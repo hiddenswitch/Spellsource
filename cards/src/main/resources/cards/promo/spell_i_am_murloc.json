@@ -1,10 +1,10 @@
 {
-	"name": "I Am Tanooki",
+	"name": "I Am Murloc",
 	"baseManaCost": 4,
 	"type": "SPELL",
 	"heroClass": "ANY",
 	"rarity": "FREE",
-	"description": "Summon three, four, or five 1/1 Tanooki.",
+	"description": "Summon three, four, or five 1/1 Murloc.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonSpell",

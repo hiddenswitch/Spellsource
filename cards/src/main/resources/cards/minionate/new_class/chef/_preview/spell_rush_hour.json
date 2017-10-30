@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "EPIC",
-	"description": "Gain 10 Energy Cells. Discard all cards from your hand.",
+	"description": "Gain 10 Mana Cells. Discard all cards from your hand.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",

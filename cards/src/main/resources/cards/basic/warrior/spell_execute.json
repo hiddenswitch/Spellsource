@@ -1,18 +1,21 @@
 {
-	"name": "Death Note",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "FREE",
-	"description": "Destroy a damaged enemy minion.",
-	"targetSelection": "ENEMY_MINIONS",
-	"spell": {
-		"class": "DestroySpell",
-		"filter": {
-			"class": "DamagedFilter"
-		}
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Execute",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "FREE",
+  "description": "Destroy a damaged enemy minion.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "DestroySpell",
+    "filter": {
+      "class": "DamagedFilter"
+    }
+  },
+  "attributes": {
+    "NAME": "Death Note"
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

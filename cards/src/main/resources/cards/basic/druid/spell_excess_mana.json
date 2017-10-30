@@ -1,10 +1,10 @@
 {
-	"name": "Excess Energy",
+	"name": "Excess Mana",
 	"baseManaCost": 0,
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "FREE",
-	"description": "Draw a card. (You can only have 10 Energy in your tray.)",
+	"description": "Draw a card. (You can only have 10 Mana in your tray.)",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "DrawCardSpell",

@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "SHAMAN",
 	"rarity": "COMMON",
-	"description": "Deal 3-6 damage. Energy Surge: 1",
+	"description": "Deal 3-6 damage. Mana Surge: 1",
 	"targetSelection": "ANY",
 	"spell": {
 		"class": "DamageSpell",

@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "SHAMAN",
 	"rarity": "RARE",
-	"description": "Transform your minions into random minions that cost 1 more Energy.",
+	"description": "Transform your minions into random minions that cost 1 more Mana.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "TransformToRandomMinionSpell",

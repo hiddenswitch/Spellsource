@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "PALADIN",
 	"rarity": "RARE",
-	"description": "Summon 7 Tanooki that died this game.",
+	"description": "Summon 7 Murloc that died this game.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "ResurrectFromBothSpell",

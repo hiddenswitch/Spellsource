@@ -6,10 +6,10 @@
 	"baseHp": 4,
 	"heroClass": "DRUID",
 	"rarity": "RARE",
-	"description": "Choose One - Give each player a Energy; or Each player draws a card.",
+	"description": "Choose One - Give each player a Mana; or Each player draws a card.",
 	"options": [
 		{
-			"description": "Energy",
+			"description": "Mana",
 			"spell": {
 				"class": "ModifyMaxManaSpell",
 				"targetPlayer": "BOTH",
@@ -27,7 +27,7 @@
 		}
 	],
 	"bothOptions": {
-		"description": "Energy and Draw",
+		"description": "Mana and Draw",
 		"spell": {
 			"class": "MetaSpell",
 			"spells": [

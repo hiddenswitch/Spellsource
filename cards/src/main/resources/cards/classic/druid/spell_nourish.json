@@ -4,7 +4,7 @@
 	"type": "CHOOSE_ONE",
 	"heroClass": "DRUID",
 	"rarity": "RARE",
-	"description": "Choose One - Gain 2 Energy; or Draw 3 cards.",
+	"description": "Choose One - Gain 2 Mana; or Draw 3 cards.",
 	"targetSelection": "NONE",
 	"options": [
 		"spell_nourish_1",
