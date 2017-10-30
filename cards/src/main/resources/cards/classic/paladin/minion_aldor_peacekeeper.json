@@ -1,23 +1,24 @@
 {
-	"name": "Butcher",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 4,
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"description": "Battlecry: Change an enemy minion's Attack to 0.",
-	"battlecry": {
-		"targetSelection": "ENEMY_MINIONS",
-		"spell": {
-			"class": "SetAttackSpell",
-			"value": 0
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Aldor Peacekeeper",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "heroClass": "PALADIN",
+  "rarity": "RARE",
+  "description": "Battlecry: Change an enemy minion's Attack to 0.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "SetAttackSpell",
+      "value": 0
+    }
+  },
+  "attributes": {
+    "NAME": "Butcher",
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

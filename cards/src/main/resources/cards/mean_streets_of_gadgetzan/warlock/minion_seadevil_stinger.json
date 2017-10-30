@@ -7,7 +7,7 @@
 	"heroClass": "WARLOCK",
 	"rarity": "RARE",
 	"race": "MURLOC",
-	"description": "Battlecry: The next Tanooki you play this turn costs Health instead of Energy.",
+	"description": "Battlecry: The next Murloc you play this turn costs Health instead of Mana.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {

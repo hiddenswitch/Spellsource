@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "ROGUE",
 	"rarity": "EPIC",
-	"description": "The next power you use this turn costs 3 less Energy.",
+	"description": "The next power you use this turn costs 3 less Mana.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "CardCostModifierSpell",

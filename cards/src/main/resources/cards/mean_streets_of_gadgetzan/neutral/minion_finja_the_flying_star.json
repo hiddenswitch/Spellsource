@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "LEGENDARY",
 	"race": "MURLOC",
-	"description": "Stealth. Whenever this attacks and kills a minion, summon 2 Tanooki from your deck.",
+	"description": "Stealth. Whenever this attacks and kills a minion, summon 2 Murloc from your deck.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "AfterPhysicalAttackTrigger",
@@ -31,7 +31,7 @@
 	},
 	"attributes": {
 		"STEALTH": true,
-		"DESCRIPTION": "Stealth. Whenever this attacks and kills a minion, summon 2 Tanooki from your deck.",
+		"DESCRIPTION": "Stealth. Whenever this attacks and kills a minion, summon 2 Murloc from your deck.",
 		"NAME": "Xiaolian, Blademaster"
 	},
 	"collectible": true,

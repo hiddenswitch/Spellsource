@@ -1,17 +1,18 @@
 {
-	"name": "River Ranger",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Charge, Divine Shield",
-	"attributes": {
-		"CHARGE": true,
-		"DIVINE_SHIELD": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Argent Commander",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Charge, Divine Shield",
+  "attributes": {
+    "CHARGE": true,
+    "NAME": "River Ranger",
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

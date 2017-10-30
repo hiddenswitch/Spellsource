@@ -49,7 +49,7 @@ Examples: Captain Greenskin, Deadly Poison, Upgrade!
 “hpBonus”: Optional Integer. The amount of Durability to give the target Weapon.
 
 CardCostModifierSpell
-Gives a energy cost modifier to the target card. This should target card types or specific cards.
+Gives a mana cost modifier to the target card. This should target card types or specific cards.
 Examples: Loatheb, Millhouse Manastorm, Dragon Consort, Wilfred Fizzlebang
 "cardCostModifier": CardCostModifier. The CardCostModifier to add to the target.
 
@@ -75,7 +75,7 @@ CheckDeadSpell
 []
 
 ClearOverloadSpell
-Removes the Overloaded Energy of the target Player.
+Removes the Overloaded Mana of the target Player.
 Examples: Lava Shock
 
 CloneMinionSpell
@@ -185,7 +185,7 @@ Examples: Coldlight Oracle, Gnomish Inventor, Cult Master
 
 EitherOrSpell
 Similar to ConditionalEffectSpell, has 1 effect if the spell meets a condition and another if it does not.
-Examples: Wild Growth(Excess Energy),Ice Lance, Upgrade!
+Examples: Wild Growth(Excess Mana),Ice Lance, Upgrade!
 "spell1": Spell to cast if condition is met.
 "spell2": Spell to cast if condition is not met.
 "condition": Condition to check for.
@@ -215,9 +215,9 @@ Target attacks the wrong enemy.
 Examples: Ogre Ninja, Mogor the Ogre, Ogre Brute, Ogre Warmaul
 
 GainManaSpell
-Gives target Player additional Energy this turn.
+Gives target Player additional Mana this turn.
 Examples: Focus, The Coin
-“value”: Integer. The amount of Energy to gain.
+“value”: Integer. The amount of Mana to gain.
 
 HealSpell
 Heals the target.
@@ -265,10 +265,10 @@ ModifyDurabilitySpell {}: Combine with Attribute Spell? (Only applies to Weapons
 []
 
 ModifyMaxManaSpell {}: Is this possible to combine with GainManaSpell?
-Target hero gains or loses energy crystals.
+Target hero gains or loses mana crystals.
 Examples: Wild Growth, Darnassus Aspirant, Felguard
 "value": Number of crystals to gain. Negative values destroy crystals instead.
-"targetPlayer": Player whose energy will be modified. Default is "SELF".
+"targetPlayer": Player whose mana will be modified. Default is "SELF".
 
 MultiTargetSpell
 A Spell that targets multiple random Entities with the given Spell.
@@ -407,7 +407,7 @@ Examples: Spellbender, Noble Sacrifice
 
 SummonRandomMinionFilteredSpell
 Summons a random minion from a filtered set.
-Examples: Piloted Shredder, Sneed's Old Shredder, Tanooki Knight, Bane of Doom
+Examples: Piloted Shredder, Sneed's Old Shredder, Murloc Knight, Bane of Doom
 "cardFilter": The set of minions to summon from.
 
 SummonRandomMinionFromSpell {}: Rename to SummonRandomMinionFromSourceSpell

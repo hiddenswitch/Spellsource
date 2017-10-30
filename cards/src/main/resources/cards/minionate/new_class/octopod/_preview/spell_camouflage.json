@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "WARLOCK",
 	"rarity": "EPIC",
-	"description": "Replace your Superpower and Octopod Cards with another hero’s. These cards cost 1 less Energy.",
+	"description": "Replace your Superpower and Octopod Cards with another hero’s. These cards cost 1 less Mana.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "RenounceClassSpell",

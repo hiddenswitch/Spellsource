@@ -1,14 +1,17 @@
 {
-	"name": "Focus",
+	"name": "Innervate",
 	"baseManaCost": 0,
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "FREE",
-	"description": "Gain 2 Energy this turn only.",
+	"description": "Gain 2 Mana this turn only.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "GainManaSpell",
 		"value": 2
+	},
+	"attributes": {
+		"NAME": "Focus"
 	},
 	"collectible": true,
 	"set": "BASIC",

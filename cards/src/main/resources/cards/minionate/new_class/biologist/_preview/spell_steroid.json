@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "ROGUE",
 	"rarity": "RARE",
-	"description": "Gain 1 Energy this turn.",
+	"description": "Gain 1 Mana this turn.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "GainManaSpell",

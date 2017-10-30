@@ -1,10 +1,10 @@
 {
-	"name": "Draw 3 cards and +2 Energy Cells ",
+	"name": "Draw 3 cards and +2 Mana Cells ",
 	"baseManaCost": 5,
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "RARE",
-	"description": "Draw 3 cards and gain 2 Energy Cells.",
+	"description": "Draw 3 cards and gain 2 Mana Cells.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",

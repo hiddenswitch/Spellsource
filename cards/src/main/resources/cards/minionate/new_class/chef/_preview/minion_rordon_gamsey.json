@@ -6,10 +6,10 @@
 	"baseHp": 7,
 	"heroClass": "DRUID",
 	"rarity": "LEGENDARY",
-	"description": "Select One - Renew your Energy Cells; or gain 10 Armor.",
+	"description": "Select One - Renew your Mana Cells; or gain 10 Armor.",
 	"options": [
 		{
-			"description": "Refresh Energy",
+			"description": "Refresh Mana",
 			"spell": {
 				"class": "GainManaSpell",
 				"value": {

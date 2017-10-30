@@ -6,7 +6,7 @@
 	"baseHp": 4,
 	"heroClass": "PALADIN",
 	"rarity": "COMMON",
-	"description": "Your Kodamas have +1 Attack.",
+	"description": "Your Recruits have +1 Attack.",
 	"aura": {
 		"class": "BuffAura",
 		"target": "FRIENDLY_MINIONS",

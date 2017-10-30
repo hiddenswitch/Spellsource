@@ -6,7 +6,7 @@
 	"baseHp": 6,
 	"heroClass": "ANY",
 	"rarity": "LEGENDARY",
-	"description": "Whenever you cast a 1-energy spell, add a random Mech to your hand.",
+	"description": "Whenever you cast a 1-mana spell, add a random Mech to your hand.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "SpellCastedTrigger",

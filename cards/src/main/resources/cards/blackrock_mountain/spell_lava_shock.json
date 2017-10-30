@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "SHAMAN",
 	"rarity": "RARE",
-	"description": "Deal 2 damage. Unlock your Overloaded Energy.",
+	"description": "Deal 2 damage. Unlock your Overloaded Mana.",
 	"targetSelection": "ANY",
 	"spell": {
 		"class": "MetaSpell",

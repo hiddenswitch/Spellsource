@@ -6,7 +6,7 @@
 	"baseHp": 3,
 	"heroClass": "DRUID",
 	"rarity": "RARE",
-	"description": "Choose One - Summon a 2/2 Slime; or Gain an empty Energy.",
+	"description": "Choose One - Summon a 2/2 Slime; or Gain an empty Mana.",
 	"options": [
 		{
 			"description": "Summon 2/2 Slime",
@@ -18,7 +18,7 @@
 			}
 		},
 		{
-			"description": "Energy",
+			"description": "Mana",
 			"spell": {
 				"class": "ModifyMaxManaSpell",
 				"targetPlayer": "SELF",
@@ -27,7 +27,7 @@
 		}
 	],
 	"bothOptions": {
-		"description": "Summon 2/2 Slime and Energy.",
+		"description": "Summon 2/2 Slime and Mana.",
 		"spell": {
 			"class": "MetaSpell",
 			"spells": [

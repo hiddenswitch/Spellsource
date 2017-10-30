@@ -19,8 +19,8 @@
     }
   },
   "attributes": {
-    "NAME": "Tanooki Equipment",
-    "DESCRIPTION": "Your other Tanooki have +2/+1."
+    "NAME": "Murloc Equipment",
+    "DESCRIPTION": "Your other Murloc have +2/+1."
   },
   "collectible": true,
   "set": "CLASSIC",

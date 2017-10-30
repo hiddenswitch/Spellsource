@@ -1,10 +1,10 @@
 {
-	"name": "+2 Energy Cells",
+	"name": "+2 Mana Cells",
 	"baseManaCost": 5,
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "RARE",
-	"description": "Gain 2 Energy Cells.",
+	"description": "Gain 2 Mana Cells.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "ModifyMaxManaSpell",

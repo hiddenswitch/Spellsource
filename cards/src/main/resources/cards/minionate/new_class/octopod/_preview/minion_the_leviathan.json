@@ -6,7 +6,7 @@
 	"baseHp": 7,
 	"heroClass": "WARLOCK",
 	"rarity": "LEGENDARY",
-	"description": "Call to Arms: The next spell you cast this turn costs Health instead of Energy.",
+	"description": "Call to Arms: The next spell you cast this turn costs Health instead of Mana.",
 	"battlecry": {
 		"targetSelection": "NONE",
 		"spell": {

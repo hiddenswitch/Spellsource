@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "ROGUE",
 	"rarity": "COMMON",
-	"description": "Return a friendly minion to your hand. It costs 2 less Energy.",
+	"description": "Return a friendly minion to your hand. It costs 2 less Mana.",
 	"targetSelection": "FRIENDLY_MINIONS",
 	"spell": {
 		"class": "ReturnTargetToHandSpell",

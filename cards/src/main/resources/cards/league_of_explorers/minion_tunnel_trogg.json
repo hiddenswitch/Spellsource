@@ -6,7 +6,7 @@
 	"baseHp": 3,
 	"heroClass": "SHAMAN",
 	"rarity": "COMMON",
-	"description": "Whenever you Overload, gain +1 Attack per locked Energy.",
+	"description": "Whenever you Overload, gain +1 Attack per locked Mana.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "OverloadTrigger",

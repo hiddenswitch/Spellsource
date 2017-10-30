@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "RARE",
 	"race": "MURLOC",
-	"description": "Battlecry: Deal 2 damage to all non-Tanooki minions.",
+	"description": "Battlecry: Deal 2 damage to all non-Murloc minions.",
 	"battlecry": {
 		"spell": {
 			"class": "DamageSpell",

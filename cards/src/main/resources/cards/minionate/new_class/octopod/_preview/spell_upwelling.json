@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "WARLOCK",
 	"rarity": "COMMON",
-	"description": "Destroy a minion in addition to one of your Energy Cells.",
+	"description": "Destroy a minion in addition to one of your Mana Cells.",
 	"targetSelection": "MINIONS",
 	"spell": {
 		"class": "MetaSpell",

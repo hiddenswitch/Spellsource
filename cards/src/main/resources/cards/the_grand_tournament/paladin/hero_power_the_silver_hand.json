@@ -4,7 +4,7 @@
 	"type": "HERO_POWER",
 	"heroClass": "PALADIN",
 	"rarity": "FREE",
-	"description": "Summon two 1/1 Kodamas.",
+	"description": "Summon two 1/1 Recruits.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "SummonSpell",

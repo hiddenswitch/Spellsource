@@ -6,7 +6,7 @@
 	"baseHp": 2,
 	"heroClass": "SHAMAN",
 	"rarity": "EPIC",
-	"description": "Battlecry: Unlock your Overloaded Energy.",
+	"description": "Battlecry: Unlock your Overloaded Mana.",
 	"battlecry": {
 		"spell": {
 			"class": "ClearOverloadSpell"

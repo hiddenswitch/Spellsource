@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "DRUID",
 	"rarity": "FREE",
-	"description": "Gain 2 Energy this turn.",
+	"description": "Gain 2 Mana this turn.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "GainManaSpell",

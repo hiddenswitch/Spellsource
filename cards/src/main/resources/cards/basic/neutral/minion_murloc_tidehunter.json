@@ -7,7 +7,7 @@
 	"heroClass": "ANY",
 	"rarity": "FREE",
 	"race": "MURLOC",
-	"description": "Battlecry: Summon a 1/1 Tanooki Scout.",
+	"description": "Battlecry: Summon a 1/1 Murloc Scout.",
 	"battlecry": {
 		"spell": {
 			"class": "SummonSpell",

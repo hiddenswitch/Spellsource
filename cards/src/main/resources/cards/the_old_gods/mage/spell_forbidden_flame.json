@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "MAGE",
 	"rarity": "EPIC",
-	"description": "Spend all your energy. Deal that much damage to a minion.",
+	"description": "Spend all your mana. Deal that much damage to a minion.",
 	"targetSelection": "MINIONS",
 	"spell": {
 		"class": "MetaSpell",

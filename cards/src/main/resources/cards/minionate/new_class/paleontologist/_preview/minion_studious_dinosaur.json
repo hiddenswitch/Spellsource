@@ -6,7 +6,7 @@
 	"baseHp": 4,
 	"heroClass": "SHAMAN",
 	"rarity": "COMMON",
-	"description": "Gain +1/+1 whenever you play a card with Energy Surge.",
+	"description": "Gain +1/+1 whenever you play a card with Mana Surge.",
 	"trigger": {
 		"eventTrigger": {
 			"class": "CardPlayedTrigger",

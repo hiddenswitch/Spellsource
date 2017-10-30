@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "SHAMAN",
 	"rarity": "RARE",
-	"description": "Transform all enemy minions into random ones that cost 1 less Energy.",
+	"description": "Transform all enemy minions into random ones that cost 1 less Mana.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "TransformToRandomMinionSpell",

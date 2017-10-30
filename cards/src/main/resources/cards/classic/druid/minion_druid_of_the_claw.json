@@ -1,39 +1,42 @@
 {
-	"name": "Fassnu Ronin",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"description": "Choose One - Charge; or +2 Health and Taunt.",
-	"options": [
-		{
-			"description": "Charge",
-			"spell": {
-				"class": "TransformMinionSpell",
-				"target": "SELF",
-				"card": "token_cat_form"
-			}
-		},
-		{
-			"description": "+2 Health and Taunt",
-			"spell": {
-				"class": "TransformMinionSpell",
-				"target": "SELF",
-				"card": "token_bear_form"
-			}
-		}
-	],
-	"bothOptions": {
-		"description": "Charge, +2 Health, and Taunt",
-		"spell": {
-			"class": "TransformMinionSpell",
-			"target": "SELF",
-			"card": "token_catbear_form"
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Druid of the Claw",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "DRUID",
+  "rarity": "COMMON",
+  "description": "Choose One - Charge; or +2 Health and Taunt.",
+  "options": [
+    {
+      "description": "Charge",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_cat_form"
+      }
+    },
+    {
+      "description": "+2 Health and Taunt",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_bear_form"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Charge, +2 Health, and Taunt",
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_catbear_form"
+    }
+  },
+  "attributes": {
+    "NAME": "Fassnu Ronin"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

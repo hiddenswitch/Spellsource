@@ -1,7 +1,7 @@
 Attributes
 
 BASE_MANA_COST
-The base Energy Cost of a card.
+The base Mana Cost of a card.
 
 HP
 The current HP or Durability of an Entity.
@@ -132,7 +132,7 @@ HEAL_AMPLIFY_MULTIPLIER: X
 Grants an Entity Heal Amplify Multiplier X. Healing dealt by Spells or Hero Powers played by the Entity’s owner are multiplied by X.
 
 MANA_COST_MODIFIER
-Grants a card a modified Energy Cost.
+Grants a card a modified Mana Cost.
 
 ATTACK_EQUALS_HP
 Grants a minion “This minion has Attack equal to its health.”
@@ -174,7 +174,7 @@ CTHUN_TAUNT
 Gives owner's C'thun Taunt
 
 SPELLS_COST_HEALTH
-Grants an Entity "Your spells cost Health instead of Energy." Whenever the owner of an entity with this attribute plays a spell, their hero will lose Health equal to the cost of the spell instead of energy.
+Grants an Entity "Your spells cost Health instead of Mana." Whenever the owner of an entity with this attribute plays a spell, their hero will lose Health equal to the cost of the spell instead of mana.
 
 IMMUNE_HERO
 Grants an Entity "Your hero has Immune." Immune heroes cannot take damage.

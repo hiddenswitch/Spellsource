@@ -6,7 +6,7 @@
 	"baseHp": 3,
 	"heroClass": "DRUID",
 	"rarity": "RARE",
-	"description": "Battlecry: Gain an empty Energy.Deathrattle: Lose a Energy.",
+	"description": "Battlecry: Gain an empty Mana.Deathrattle: Lose a Mana.",
 	"battlecry": {
 		"spell": {
 			"class": "ModifyMaxManaSpell",

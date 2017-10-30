@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "WARLOCK",
 	"rarity": "COMMON",
-	"description": "Give an Octopus +3/+3 and give your opponent an Energy Cell.",
+	"description": "Give an Octopus +3/+3 and give your opponent an Mana Cell.",
 	"targetSelection": "MINIONS",
 	"spell": {
 		"class": "MetaSpell",

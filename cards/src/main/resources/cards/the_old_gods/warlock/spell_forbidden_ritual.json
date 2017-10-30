@@ -4,7 +4,7 @@
 	"type": "SPELL",
 	"heroClass": "WARLOCK",
 	"rarity": "RARE",
-	"description": "Spend all your energy. Summon that many 1/1 Tentacles.",
+	"description": "Spend all your mana. Summon that many 1/1 Tentacles.",
 	"targetSelection": "NONE",
 	"spell": {
 		"class": "MetaSpell",

@@ -1,16 +1,19 @@
 {
-	"name": "Bender",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "EPIC",
-	"description": "Destroy all minions except one.  (chosen randomly)",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DestroyAllExceptOneSpell",
-		"target": "ALL_MINIONS"
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Brawl",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "EPIC",
+  "description": "Destroy all minions except one.  (chosen randomly)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroyAllExceptOneSpell",
+    "target": "ALL_MINIONS"
+  },
+  "attributes": {
+    "NAME": "Bender"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }
