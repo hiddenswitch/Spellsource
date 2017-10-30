@@ -1,7 +1,8 @@
-package net.demilich.metastone.game.cards.desc;
+package net.demilich.metastone.tests;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.demilich.metastone.game.cards.desc.ValueProviderDescSerializer;
 import net.demilich.metastone.game.spells.desc.valueprovider.RandomValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;

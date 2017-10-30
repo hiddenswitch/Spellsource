@@ -50,7 +50,6 @@ public class ValidateCards {
 			file = ALL_CARD_FILES.get(i);
 			matrix[i][0] = file;
 		}
-		;
 
 		return matrix;
 	}

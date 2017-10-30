@@ -1,5 +1,8 @@
 package net.demilich.metastone.tests;
 
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestMinionCard;
+import net.demilich.metastone.tests.util.TestSpellCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -20,7 +23,7 @@ import net.demilich.metastone.game.spells.aura.BuffAura;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
-public class AuraTests extends BasicTests {
+public class AuraTests extends TestBase {
 
 	@Test
 	public void testAdjacentAura() {

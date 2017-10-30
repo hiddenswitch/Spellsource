@@ -97,6 +97,7 @@ public class Rpc {
 	 * @param <T>              The service interface type.
 	 * @param <R>              A concrete implementation of the service interface type.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T, R extends T> void register(R instance, Class<T> serviceInterface, final EventBus eb, Handler<AsyncResult<Registration>> handler) {
 		final String name = serviceInterface.getName();
 
@@ -229,6 +230,7 @@ public class Rpc {
 	 * @param registration A registration entry returned by {@link #register(Object, Class, EventBus)}
 	 * @param handler      A handler that returns when all the consumers have been unregistered.
 	 */
+	@SuppressWarnings("unchecked")
 	public static void unregister(Registration registration, Handler<AsyncResult<CompositeFuture>> handler) {
 		List<MessageConsumer> consumers = registration.getMessageConsumers();
 		CompositeFuture.all(consumers.stream().map(consumer -> {

@@ -5,6 +5,9 @@ import java.util.List;
 
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestMinionCard;
+import net.demilich.metastone.tests.util.TestSpellCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -27,9 +30,7 @@ import net.demilich.metastone.game.spells.SilenceSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
-import static net.demilich.metastone.game.GameContext.PLAYER_1;
-
-public class AdvancedMechanicTests extends BasicTests {
+public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testChooseOne() {

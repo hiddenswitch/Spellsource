@@ -1,5 +1,7 @@
 package net.demilich.metastone.tests;
 
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestMinionCard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;

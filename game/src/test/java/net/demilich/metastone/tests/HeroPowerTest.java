@@ -1,5 +1,7 @@
 package net.demilich.metastone.tests;
 
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestSpellCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

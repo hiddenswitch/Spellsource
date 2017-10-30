@@ -3,6 +3,9 @@ package net.demilich.metastone.tests;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestMinionCard;
+import net.demilich.metastone.tests.util.TestSpellCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
