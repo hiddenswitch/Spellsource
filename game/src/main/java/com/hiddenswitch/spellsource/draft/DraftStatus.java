@@ -1,4 +1,4 @@
-package com.hiddenswitch.proto3.draft;
+package com.hiddenswitch.spellsource.draft;
 
 /**
  * Created by bberman on 12/14/16.

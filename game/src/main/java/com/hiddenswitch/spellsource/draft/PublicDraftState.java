@@ -1,7 +1,5 @@
-package com.hiddenswitch.proto3.draft;
+package com.hiddenswitch.spellsource.draft;
 
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;

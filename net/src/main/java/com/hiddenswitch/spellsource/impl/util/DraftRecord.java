@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl.util;
 
-import com.hiddenswitch.proto3.draft.PrivateDraftState;
-import com.hiddenswitch.proto3.draft.PublicDraftState;
+import com.hiddenswitch.spellsource.draft.PrivateDraftState;
+import com.hiddenswitch.spellsource.draft.PublicDraftState;
 
 import java.io.Serializable;
 

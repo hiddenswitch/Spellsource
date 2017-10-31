@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.hiddenswitch.proto3.draft.*;
+import com.hiddenswitch.spellsource.draft.*;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -14,8 +14,6 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
-
-import static org.testng.Assert.*;
 
 /**
  * Created by bberman on 12/14/16.
