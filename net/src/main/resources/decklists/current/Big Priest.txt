@@ -1,5 +1,5 @@
 ### BIG Priest - Standard Meta Snapshot - Sep. 3, 2017
-# Class: Priest
+# Class: White
 # Format: Standard
 # Year of the Mammoth
 #

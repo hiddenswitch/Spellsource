@@ -1,5 +1,5 @@
 ### Aggro Druid - Standard Meta Snapshot - Sep. 24, 2017
-# Class: Druid
+# Class: Brown
 # Format: Standard
 # Year of the Mammoth
 #

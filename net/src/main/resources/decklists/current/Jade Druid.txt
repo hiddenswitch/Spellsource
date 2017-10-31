@@ -1,5 +1,5 @@
 ### Jade Druid
-# Class: Druid
+# Class: Brown
 # Format: Standard
 # Year of the Mammoth
 #

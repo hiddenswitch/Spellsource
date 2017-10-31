@@ -33,8 +33,6 @@ public class MissingCardsTests {
 		Object[] names = StreamSupport.stream(Spliterators.spliterator(json.iterator(), json.size(), Spliterator.SIZED), false)
 				.map(JsonElement::getAsJsonObject)
 				.filter(jo -> jo.has("type")
-						&& jo.has("collectible")
-						&& jo.get("collectible").getAsBoolean()
 						&& !jo.get("type").getAsString().equals("ENCHANTMENT")
 						&& !jo.get("type").getAsString().equals("HERO"))
 				.map(jo -> jo.get("name").getAsString())

@@ -1,5 +1,5 @@
 ### Highlander Priest
-# Class: Priest
+# Class: White
 # Format: Standard
 # Year of the Mammoth
 #
