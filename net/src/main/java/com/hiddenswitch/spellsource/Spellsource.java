@@ -178,7 +178,7 @@ public class Spellsource {
 					e.printStackTrace();
 					return null;
 				}
-			}).filter(c -> null != c).collect(toList()));
+			}).filter(Objects::nonNull).collect(toList()));
 		}
 
 		return cachedStandardDecks;

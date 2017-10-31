@@ -1,0 +1,3 @@
+#!/bin/bash
+./gradlew cluster:shadowJar
+spark-submit --master "local[$1]" --class com.hiddenswitch.cluster.applications.ControlApplication cluster/build/libs/cluster-1.2.0-all.jar -output $2 -gamesperbatch $3 -batches $4
