@@ -113,7 +113,7 @@ public class SpellUtils {
 
 	/**
 	 * Consider the {@link net.demilich.metastone.game.Environment#PENDING_CARD} and {@link
-	 * net.demilich.metastone.game.Environment#EVENT_CARD}, the search the {@link Zones#DISCOVER} zone for the specified
+	 * net.demilich.metastone.game.Environment#EVENT_CARD}, and the {@link Zones#DISCOVER} zone for the specified
 	 * card
 	 *
 	 * @param context

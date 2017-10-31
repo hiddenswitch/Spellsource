@@ -1,4 +1,13 @@
 #!/usr/bin/python
+"""
+This script reformats all the cards specified inside the resources/cards directory.
+
+The preferred formatting is two space indents, all elements on their own line. An order for the keys is specified below,
+and is based on the historical ordering from metastone. Keys that are not in this order are otherwise appended to the
+end in alphabetical order.
+
+This script requires the objdict package to help it serialize to JSON  in the appropriate key order.
+"""
 from collections import Counter
 from json import dump, load
 from os import walk, path
