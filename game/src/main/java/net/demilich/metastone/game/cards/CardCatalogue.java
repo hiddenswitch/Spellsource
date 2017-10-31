@@ -4,18 +4,15 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.utils.ResourceInputStream;
-import net.demilich.metastone.utils.ResourceLoader;
-import net.demilich.metastone.utils.UserHomeMetastone;
+import net.demilich.metastone.game.shared.utils.ResourceInputStream;
+import net.demilich.metastone.game.shared.utils.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class CardCatalogue {

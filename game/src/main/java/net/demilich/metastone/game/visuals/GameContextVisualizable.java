@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.visuals;
 
-import net.demilich.metastone.GameNotification;
-import net.demilich.metastone.NotificationProxy;
+import net.demilich.metastone.game.shared.GameNotification;
+import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;

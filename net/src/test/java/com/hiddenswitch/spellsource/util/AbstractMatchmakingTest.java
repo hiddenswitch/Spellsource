@@ -16,7 +16,7 @@ import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFactory;
-import net.demilich.metastone.utils.Tuple;
+import net.demilich.metastone.game.shared.utils.Tuple;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

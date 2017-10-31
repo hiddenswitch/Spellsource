@@ -1,8 +1,8 @@
 package com.hiddenswitch.spellsource.common;
 
-import net.demilich.metastone.GameNotification;
-import net.demilich.nittygrittymvc.interfaces.INotification;
-import net.demilich.nittygrittymvc.interfaces.INotifier;
+import net.demilich.metastone.game.shared.GameNotification;
+import net.demilich.metastone.game.shared.INotification;
+import net.demilich.metastone.game.shared.INotifier;
 
 public class NullNotifier implements INotifier<GameNotification> {
 	@Override

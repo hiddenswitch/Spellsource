@@ -6,10 +6,10 @@ import com.google.gson.reflect.TypeToken;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.utils.MetastoneProperties;
-import net.demilich.metastone.utils.ResourceInputStream;
-import net.demilich.metastone.utils.ResourceLoader;
-import net.demilich.metastone.utils.UserHomeMetastone;
+import net.demilich.metastone.game.shared.utils.MetastoneProperties;
+import net.demilich.metastone.game.shared.utils.ResourceInputStream;
+import net.demilich.metastone.game.shared.utils.ResourceLoader;
+import net.demilich.metastone.game.shared.utils.UserHomeMetastone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

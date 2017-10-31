@@ -1,8 +1,8 @@
 package com.hiddenswitch.cluster.functions;
 
 import com.hiddenswitch.cluster.models.TestConfig;
-import net.demilich.metastone.game.behaviour.threat.FeatureVector;
-import net.demilich.metastone.game.behaviour.threat.GameStateValueBehaviour;
+import net.demilich.metastone.game.shared.threat.FeatureVector;
+import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.cards.CardSet;
