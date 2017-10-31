@@ -1,16 +1,16 @@
 {
-	"name": "Sen'jin Shieldmasta",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Taunt",
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Sen'jin Shieldmasta",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

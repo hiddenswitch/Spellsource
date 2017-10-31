@@ -15,8 +15,8 @@
       },
       {
         "class": "ReceiveCardSpell",
-        "targetPlayer": "SELF",
-        "card": "token_flame_elemental"
+        "card": "token_flame_elemental",
+        "targetPlayer": "SELF"
       }
     ]
   },

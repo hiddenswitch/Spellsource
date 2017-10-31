@@ -1,1 +1,26 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Bolderchte Earthen", "heroClass": "SHAMAN", "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnEndTrigger"}, "spell": {"class": "HealSpell", "value": 4, "target": "FRIENDLY_HERO"}}, "description": "At the end of your turn, restore 4 Health to your hero.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 3.0, "race": "TOTEM", "baseManaCost": 3.0, "type": "MINION", "id": "Bolderchte Earthen", "baseAttack": 3.0}
+{
+  "id": "Bolderchte Earthen",
+  "name": "Bolderchte Earthen",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 3.0,
+  "baseHp": 3.0,
+  "rarity": "RARE",
+  "race": "TOTEM",
+  "description": "At the end of your turn, restore 4 Health to your hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 4
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

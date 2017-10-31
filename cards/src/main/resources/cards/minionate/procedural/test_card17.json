@@ -1,13 +1,13 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Ravenclaw Harmer",
   "name": "Ravenclaw Harmer",
-  "heroClass": "WARRIOR",
-  "description": "When you draw this, deal 2 damage to your minions.",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
-  "baseHp": 6.0,
   "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 6.0,
+  "baseHp": 6.0,
+  "rarity": "EPIC",
+  "description": "When you draw this, deal 2 damage to your minions.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
@@ -15,11 +15,11 @@
     },
     "spell": {
       "class": "DamageSpell",
-      "value": 2,
-      "target": "FRIENDLY_MINIONS"
+      "target": "FRIENDLY_MINIONS",
+      "value": 2
     }
   },
-  "type": "MINION",
-  "id": "Ravenclaw Harmer",
-  "baseAttack": 6.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -1,1 +1,31 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Clashdodalp", "heroClass": "WARLOCK", "trigger": {"eventTrigger": {"targetPlayer": "BOTH", "class": "TurnEndTrigger", "queueCondition": {"targetPlayer": "OWNER", "operation": "LESS_OR_EQUAL", "class": "MinionCountCondition", "value": 1}}, "spell": {"class": "DestroySpell", "target": "SELF"}}, "description": "At the end of each turn, destroy this minion if it's your only one.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 6.0, "race": "MECH", "baseManaCost": 6.0, "type": "MINION", "id": "Clashdodalp", "baseAttack": 4.0}
+{
+  "id": "Clashdodalp",
+  "name": "Clashdodalp",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 4.0,
+  "baseHp": 6.0,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "At the end of each turn, destroy this minion if it's your only one.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "queueCondition": {
+        "class": "MinionCountCondition",
+        "value": 1,
+        "operation": "LESS_OR_EQUAL",
+        "targetPlayer": "OWNER"
+      },
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

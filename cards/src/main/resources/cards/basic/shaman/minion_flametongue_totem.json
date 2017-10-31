@@ -1,19 +1,19 @@
 {
-	"name": "Flametongue Totem",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 3,
-	"heroClass": "SHAMAN",
-	"rarity": "FREE",
-	"race": "TOTEM",
-	"description": "Adjacent minions have +2 Attack.",
-	"aura": {
-		"class": "BuffAura",
-		"target": "ADJACENT_MINIONS",
-		"attackBonus": 2
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Flametongue Totem",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "TOTEM",
+  "description": "Adjacent minions have +2 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "ADJACENT_MINIONS",
+    "attackBonus": 2
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

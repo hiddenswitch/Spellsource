@@ -1,17 +1,17 @@
 {
-	"name": "+8 armor",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"description": "Gain 8 Armor.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "BuffHeroSpell",
-		"target": "FRIENDLY_HERO",
-		"armorBonus": 8
-	},
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "+8 armor",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "COMMON",
+  "description": "Gain 8 Armor.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffHeroSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 8
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Elemental", "heroClass": "PRIEST", "description": "Taunt. Battlecry: Restore 5 Health.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 3.0, "baseManaCost": 4.0, "attributes": {"TAUNT": true, "BATTLECRY": true}, "battlecry": {"spell": {"class": "HealSpell", "value": 5}, "targetSelection": "ANY"}, "type": "MINION", "id": "Elemental", "baseAttack": 5.0}
+{
+  "id": "Elemental",
+  "name": "Elemental",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 5.0,
+  "baseHp": 3.0,
+  "rarity": "COMMON",
+  "description": "Taunt. Battlecry: Restore 5 Health.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "HealSpell",
+      "value": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -1,17 +1,17 @@
 {
-	"name": "Lightspawn",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 5,
-	"heroClass": "PRIEST",
-	"rarity": "COMMON",
-	"race": "ELEMENTAL",
-	"description": "This minion's Attack is always equal to its Health.",
-	"attributes": {
-		"ATTACK_EQUALS_HP": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Lightspawn",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 0,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "This minion's Attack is always equal to its Health.",
+  "attributes": {
+    "ATTACK_EQUALS_HP": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

@@ -2,9 +2,9 @@
   "name": "Kalimos, Primal Lord",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "SHAMAN",
   "baseAttack": 7,
   "baseHp": 7,
-  "heroClass": "SHAMAN",
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
   "description": "Battlecry: If you played an Elemental last turn, cast an Elemental Invocation.",
@@ -20,15 +20,15 @@
       },
       "spell": {
         "class": "DiscoverCardSpell",
+        "spell": {
+          "class": "RecastSpell"
+        },
         "cards": [
           "spell_invocation_of_air",
           "spell_invocation_of_earth",
           "spell_invocation_of_fire",
           "spell_invocation_of_water"
-        ],
-        "spell": {
-          "class": "RecastSpell"
-        }
+        ]
       }
     }
   },

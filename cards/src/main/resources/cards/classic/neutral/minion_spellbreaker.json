@@ -1,22 +1,22 @@
 {
-	"name": "Spellbreaker",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Battlecry: Silence a minion.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "SilenceSpell"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Spellbreaker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Silence a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SilenceSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

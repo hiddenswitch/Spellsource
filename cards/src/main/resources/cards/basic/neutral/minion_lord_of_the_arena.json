@@ -1,16 +1,16 @@
 {
-	"name": "Lord of the Arena",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Taunt",
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Lord of the Arena",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

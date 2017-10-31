@@ -1,26 +1,26 @@
 {
-	"name": "Draw 3 cards and +2 Mana Cells ",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Draw 3 cards and gain 2 Mana Cells.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "ModifyMaxManaSpell",
-				"fullManaCrystals": true,
-				"value": 2
-			},
-			{
-				"class": "DrawCardSpell",
-				"value": 3
-			}
-		]
-	},
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Draw 3 cards and +2 Mana Cells ",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "RARE",
+  "description": "Draw 3 cards and gain 2 Mana Cells.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ModifyMaxManaSpell",
+        "value": 2,
+        "fullManaCrystals": true
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

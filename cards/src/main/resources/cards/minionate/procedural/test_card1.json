@@ -1,40 +1,40 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "King Coar",
   "name": "King Coar",
+  "baseManaCost": 4.0,
+  "type": "MINION",
   "heroClass": "ROGUE",
-  "description": "Whenever your opponent casts a spell, gain a copy of it and give them a Coin.",
-  "fileFormatVersion": 1,
-  "rarity": "LEGENDARY",
+  "baseAttack": 3.0,
   "baseHp": 4.0,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your opponent casts a spell, gain a copy of it and give them a Coin.",
   "trigger": {
     "eventTrigger": {
-      "sourcePlayer": "OPPONENT",
       "class": "SpellCastedTrigger",
       "queueCondition": {
-        "invert": true,
         "class": "CardPropertyCondition",
-        "cardId": "spell_gallywixs_coin"
-      }
+        "cardId": "spell_gallywixs_coin",
+        "invert": true
+      },
+      "sourcePlayer": "OPPONENT"
     },
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
-          "targetPlayer": "SELF",
           "class": "CopyCardSpell",
-          "target": "EVENT_TARGET"
+          "target": "EVENT_TARGET",
+          "targetPlayer": "SELF"
         },
         {
-          "targetPlayer": "OPPONENT",
           "class": "ReceiveCardSpell",
-          "card": "spell_gallywixs_coin"
+          "card": "spell_gallywixs_coin",
+          "targetPlayer": "OPPONENT"
         }
       ]
     }
   },
-  "baseManaCost": 4.0,
-  "type": "MINION",
-  "id": "King Coar",
-  "baseAttack": 3.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

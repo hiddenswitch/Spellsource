@@ -1,29 +1,29 @@
 {
-	"name": "Homing Beacon",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"description": "Hire three 1/1 Alien Spawns. Issue a 1/4 Weapon.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "SummonSpell",
-				"cards": [
-					"token_alien_spawn",
-					"token_alien_spawn",
-					"token_alien_spawn"
-				]
-			},
-			{
-				"class": "EquipWeaponSpell",
-				"card": "weapon_crowbar"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Homing Beacon",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "RARE",
+  "description": "Hire three 1/1 Alien Spawns. Issue a 1/4 Weapon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "cards": [
+          "token_alien_spawn",
+          "token_alien_spawn",
+          "token_alien_spawn"
+        ]
+      },
+      {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_crowbar"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

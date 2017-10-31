@@ -1,16 +1,16 @@
 {
   "id": "hero_thrall",
   "name": "Thrall",
-  "baseManaCost": 0,
-  "description": "Hero Power: Summon a random supporting creature",
   "heroPower": "hero_power_totemic_call",
+  "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "SHAMAN",
   "rarity": "FREE",
+  "description": "Hero Power: Summon a random supporting creature",
   "attributes": {
-    "NAME": "Lir",
     "HP": 30,
-    "MAX_HP": 30
+    "MAX_HP": 30,
+    "NAME": "Lir"
   },
   "collectible": false,
   "set": "BASIC",

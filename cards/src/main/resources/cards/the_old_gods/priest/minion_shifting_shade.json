@@ -1,21 +1,21 @@
 {
-	"name": "Shifting Shade",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "PRIEST",
-	"rarity": "RARE",
-	"description": "Deathrattle: Copy a card from your opponent's deck and add it to your hand.",
-	"deathrattle": {
-		"class": "CopyCardSpell",
-		"cardLocation": "DECK",
-		"value": 1
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Shifting Shade",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Deathrattle: Copy a card from your opponent's deck and add it to your hand.",
+  "deathrattle": {
+    "class": "CopyCardSpell",
+    "value": 1,
+    "cardLocation": "DECK"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

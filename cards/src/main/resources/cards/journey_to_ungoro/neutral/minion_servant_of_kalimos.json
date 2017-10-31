@@ -2,9 +2,9 @@
   "name": "Servant of Kalimos",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "RARE",
   "race": "ELEMENTAL",
   "description": "Battlecry: If you played an Elemental last turn, Discover an Elemental.",
@@ -26,8 +26,8 @@
         },
         "cardFilter": {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "race": "ELEMENTAL"
+          "race": "ELEMENTAL",
+          "cardType": "MINION"
         }
       }
     }

@@ -1,18 +1,11 @@
 {
   "name": "Shadowreaper Anduin",
-  "baseManaCost": 8,
   "heroPower": "hero_power_voidform",
+  "baseManaCost": 8,
   "type": "HERO",
   "heroClass": "PRIEST",
   "rarity": "LEGENDARY",
-  "attributes": {
-    "MAX_HP": 30,
-    "ARMOR": 5
-  },
   "description": "Battlecry: Destroy all minions with 5 or more attack.",
-  "collectible": true,
-  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
-  "fileFormatVersion": 1,
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -20,10 +13,17 @@
       "target": "ALL_MINIONS",
       "filter": {
         "class": "AttributeFilter",
+        "value": 5,
         "attribute": "ATTACK",
-        "operation": "GREATER_OR_EQUAL",
-        "value": 5
+        "operation": "GREATER_OR_EQUAL"
       }
     }
-  }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
 }

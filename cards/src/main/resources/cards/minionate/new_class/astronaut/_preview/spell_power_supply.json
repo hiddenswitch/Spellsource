@@ -1,33 +1,33 @@
 {
-	"name": "Power Supply",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "PALADIN",
-	"rarity": "EPIC",
-	"description": "Use all of your Mana. Heal for double the Mana spent.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "HealSpell",
-				"value": {
-					"class": "PlayerAttributeValueProvider",
-					"playerAttribute": "MANA",
-					"multiplier": 2
-				}
-			},
-			{
-				"class": "GainManaSpell",
-				"value": {
-					"class": "PlayerAttributeValueProvider",
-					"playerAttribute": "MANA",
-					"multiplier": -1
-				}
-			}
-		]
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Power Supply",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "EPIC",
+  "description": "Use all of your Mana. Heal for double the Mana spent.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": {
+          "class": "PlayerAttributeValueProvider",
+          "multiplier": 2,
+          "playerAttribute": "MANA"
+        }
+      },
+      {
+        "class": "GainManaSpell",
+        "value": {
+          "class": "PlayerAttributeValueProvider",
+          "multiplier": -1,
+          "playerAttribute": "MANA"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

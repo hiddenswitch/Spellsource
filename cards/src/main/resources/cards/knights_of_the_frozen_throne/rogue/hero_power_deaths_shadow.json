@@ -5,7 +5,6 @@
   "heroClass": "ROGUE",
   "rarity": "FREE",
   "description": "Passive Hero Power. During your turn, add a 'Shadow Reflection' to your hand.",
-  "targetSelection": "NONE",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",
@@ -27,12 +26,13 @@
       }
     }
   },
-  "spell": {
-    "class": "NullSpell"
-  },
   "condition": {
     "class": "OrCondition",
     "conditions": []
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
   },
   "collectible": false,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

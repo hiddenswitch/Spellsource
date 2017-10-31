@@ -1,21 +1,21 @@
 {
-	"name": "Necromancy",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "WARLOCK",
-	"rarity": "FREE",
-	"description": "Summon a 6/6 Kraken.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"card": "token_kraken"
-	},
-	"condition": {
-		"class": "MinionCountCondition",
-		"operation": "LESS",
-		"value": 7
-	},
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Necromancy",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "WARLOCK",
+  "rarity": "FREE",
+  "description": "Summon a 6/6 Kraken.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_kraken"
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

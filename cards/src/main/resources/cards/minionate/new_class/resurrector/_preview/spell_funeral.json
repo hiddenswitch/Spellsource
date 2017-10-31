@@ -1,21 +1,21 @@
 {
-	"name": "Funeral",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "FREE",
-	"description": "Destroy a minion that has 5 or more Attack",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "DestroySpell",
-		"filter": {
-			"class": "AttributeFilter",
-			"attribute": "ATTACK",
-			"operation": "GREATER_OR_EQUAL",
-			"value": 5
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Funeral",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "FREE",
+  "description": "Destroy a minion that has 5 or more Attack",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 5,
+      "attribute": "ATTACK",
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

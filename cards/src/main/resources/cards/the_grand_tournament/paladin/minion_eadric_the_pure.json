@@ -1,23 +1,23 @@
 {
-	"name": "Eadric the Pure",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 7,
-	"heroClass": "PALADIN",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Change all enemy minions' Attack to 1.",
-	"battlecry": {
-		"spell": {
-			"class": "SetAttackSpell",
-			"target": "ENEMY_MINIONS",
-			"value": 1
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Eadric the Pure",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Change all enemy minions' Attack to 1.",
+  "battlecry": {
+    "spell": {
+      "class": "SetAttackSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

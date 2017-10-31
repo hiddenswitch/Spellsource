@@ -1,39 +1,39 @@
 {
-	"name": "Ancient Curse",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "When you draw this, take 7 damage and draw a card.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "NullSpell"
-	},
-	"passiveTrigger": {
-		"eventTrigger": {
-			"class": "CardDrawnTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS"
-		},
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "DamageSpell",
-					"target": "FRIENDLY_HERO",
-					"value": 7,
-					"ignoreSpellDamage": true
-				},
-				{
-					"class": "RemoveCardSpell",
-					"target": "EVENT_TARGET"
-				},
-				{
-					"class": "DrawCardSpell"
-				}
-			]
-		}
-	},
-	"collectible": false,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Ancient Curse",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "When you draw this, take 7 damage and draw a card.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 7,
+          "ignoreSpellDamage": true
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "EVENT_TARGET"
+        },
+        {
+          "class": "DrawCardSpell"
+        }
+      ]
+    }
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

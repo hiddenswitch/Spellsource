@@ -1,29 +1,29 @@
 {
-	"name": "Rallying Blade",
-	"baseManaCost": 3,
-	"type": "WEAPON",
-	"damage": 3,
-	"durability": 2,
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"description": "Battlecry: Give +1/+1 to your minions with Divine Shield.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "BuffSpell",
-			"target": "FRIENDLY_MINIONS",
-			"value": 1,
-			"filter": {
-				"class": "AttributeFilter",
-				"attribute": "DIVINE_SHIELD",
-				"operation": "HAS"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Rallying Blade",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "PALADIN",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Give +1/+1 to your minions with Divine Shield.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "value": 1,
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "DIVINE_SHIELD",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

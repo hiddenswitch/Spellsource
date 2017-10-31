@@ -1,16 +1,16 @@
 {
-	"name": "Slime",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Taunt",
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": false,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Slime",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

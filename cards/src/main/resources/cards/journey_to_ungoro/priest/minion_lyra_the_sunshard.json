@@ -1,29 +1,29 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Lyra the Sunshard",
+  "baseManaCost": 5,
+  "type": "MINION",
   "heroClass": "PRIEST",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Whenever you cast a spell, put a random Priest spell into your hand.",
   "trigger": {
     "eventTrigger": {
-      "sourcePlayer": "SELF",
-      "class": "SpellCastedTrigger"
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
     },
     "spell": {
-      "cardFilter": {
-        "heroClass": "PRIEST",
-        "cardType": "SPELL",
-        "class": "CardFilter"
-      },
       "class": "ReceiveCardSpell",
-      "value": 1
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "PRIEST",
+        "cardType": "SPELL"
+      }
     }
   },
-  "description": "Whenever you cast a spell, put a random Priest spell into your hand.",
-  "fileFormatVersion": 1,
-  "rarity": "LEGENDARY",
-  "baseHp": 5,
-  "race": "ELEMENTAL",
-  "baseAttack": 3,
-  "type": "MINION",
-  "baseManaCost": 5
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

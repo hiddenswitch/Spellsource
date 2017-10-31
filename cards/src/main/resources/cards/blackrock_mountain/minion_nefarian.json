@@ -1,30 +1,30 @@
 {
-	"name": "Nefarian",
-	"baseManaCost": 9,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "DRAGON",
-	"description": "Battlecry: Add 2 random spells to your hand (from your opponent's class).",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"value": 2,
-			"card": "spell_tail_swipe",
-			"cardFilter": {
-				"class": "CardFilter",
-				"cardType": "SPELL",
-				"heroClass": "OPPONENT"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Nefarian",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Battlecry: Add 2 random spells to your hand (from your opponent's class).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 2,
+      "card": "spell_tail_swipe",
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "OPPONENT",
+        "cardType": "SPELL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1
 }

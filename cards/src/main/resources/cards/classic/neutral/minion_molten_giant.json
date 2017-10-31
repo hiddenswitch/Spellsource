@@ -1,27 +1,27 @@
 {
-	"name": "Molten Giant",
-	"baseManaCost": 25,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "Costs (1) less for each damage your hero has taken.",
-	"manaCostModifier": {
-		"class": "AlgebraicValueProvider",
-		"operation": "SUBTRACT",
-		"value1": {
-			"class": "AttributeValueProvider",
-			"target": "FRIENDLY_HERO",
-			"attribute": "MAX_HP"
-		},
-		"value2": {
-			"class": "AttributeValueProvider",
-			"target": "FRIENDLY_HERO",
-			"attribute": "HP"
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Molten Giant",
+  "baseManaCost": 25,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Costs (1) less for each damage your hero has taken.",
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "AlgebraicValueProvider",
+    "operation": "SUBTRACT",
+    "value1": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_HERO",
+      "attribute": "MAX_HP"
+    },
+    "value2": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_HERO",
+      "attribute": "HP"
+    }
+  }
 }

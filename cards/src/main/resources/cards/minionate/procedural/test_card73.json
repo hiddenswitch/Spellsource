@@ -1,67 +1,67 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Autovererer",
   "name": "Autovererer",
-  "heroClass": "DRUID",
-  "description": "Battlecry: If your C'Thun has at least 10 Attack, gain +5 Health.",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "baseHp": 7.0,
   "baseManaCost": 6.0,
-  "attributes": {
-    "BATTLECRY": true
-  },
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 5.0,
+  "baseHp": 7.0,
+  "rarity": "RARE",
+  "description": "Battlecry: If your C'Thun has at least 10 Attack, gain +5 Health.",
   "battlecry": {
-    "spell": {
-      "hpBonus": 5,
-      "class": "BuffSpell",
-      "target": "SELF"
-    },
     "condition": {
+      "class": "OrCondition",
       "conditions": [
         {
-          "operation": "GREATER_OR_EQUAL",
           "class": "ComparisonCondition",
+          "operation": "GREATER_OR_EQUAL",
           "value1": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_MINIONS",
+            "attribute": "ATTACK",
             "filter": {
               "class": "SpecificCardFilter",
               "cardId": "minion_cthun"
-            },
-            "attribute": "ATTACK",
-            "class": "ReduceValueProvider",
-            "target": "FRIENDLY_MINIONS"
+            }
           },
           "value2": 10
         },
         {
-          "operation": "GREATER_OR_EQUAL",
           "class": "ComparisonCondition",
+          "operation": "GREATER_OR_EQUAL",
           "value1": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_HAND",
+            "attribute": "ATTACK",
             "filter": {
               "class": "SpecificCardFilter",
               "cardId": "minion_cthun"
-            },
-            "attribute": "ATTACK",
-            "class": "ReduceValueProvider",
-            "target": "FRIENDLY_HAND"
+            }
           },
           "value2": 10
         },
         {
-          "operation": "GREATER_OR_EQUAL",
           "class": "ComparisonCondition",
+          "operation": "GREATER_OR_EQUAL",
           "value1": {
-            "attribute": "CTHUN_ATTACK_BUFF",
             "class": "AttributeValueProvider",
-            "target": "FRIENDLY_PLAYER"
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "CTHUN_ATTACK_BUFF"
           },
           "value2": 4
         }
-      ],
-      "class": "OrCondition"
+      ]
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "hpBonus": 5
     }
   },
-  "type": "MINION",
-  "id": "Autovererer",
-  "baseAttack": 5.0
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -2,9 +2,9 @@
   "name": "Sulfuras",
   "baseManaCost": 3,
   "type": "WEAPON",
+  "heroClass": "WARRIOR",
   "damage": 4,
   "durability": 2,
-  "heroClass": "WARRIOR",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Your Hero Power becomes 'Deal 8 damage to a random enemy.'",
   "battlecry": {

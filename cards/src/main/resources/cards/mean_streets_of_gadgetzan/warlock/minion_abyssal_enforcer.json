@@ -2,9 +2,9 @@
   "name": "Abyssal Enforcer",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "WARLOCK",
   "baseAttack": 6,
   "baseHp": 6,
-  "heroClass": "WARLOCK",
   "rarity": "COMMON",
   "race": "DEMON",
   "description": "Battlecry: Deal 3 damage to all other characters.",
@@ -17,8 +17,8 @@
     }
   },
   "attributes": {
-    "NAME": "Mad Handmaiden",
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "NAME": "Mad Handmaiden"
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

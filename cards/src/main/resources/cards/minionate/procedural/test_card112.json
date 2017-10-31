@@ -1,1 +1,18 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Madojit Snake", "heroClass": "ANY", "description": "", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 5.0, "race": "BEAST", "baseManaCost": 6.0, "attributes": {"STEALTH": true}, "type": "MINION", "id": "Madojit Snake", "baseAttack": 5.0}
+{
+  "id": "Madojit Snake",
+  "name": "Madojit Snake",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5.0,
+  "baseHp": 5.0,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "",
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

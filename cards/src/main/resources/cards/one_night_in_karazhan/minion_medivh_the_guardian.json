@@ -1,23 +1,23 @@
 {
-	"name": "Medivh, the Guardian",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Equip Atiesh, Greatstaff of the Guardian.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "EquipWeaponSpell",
-			"card": "weapon_atiesh"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Medivh, the Guardian",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Equip Atiesh, Greatstaff of the Guardian.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "EquipWeaponSpell",
+      "card": "weapon_atiesh"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

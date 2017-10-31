@@ -1,33 +1,33 @@
 {
-	"name": "Defender of Argus",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Battlecry: Give adjacent minions +1/+1 and Taunt.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"target": "ADJACENT_MINIONS",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"attackBonus": 1,
-					"hpBonus": 1
-				},
-				{
-					"class": "AddAttributeSpell",
-					"attribute": "TAUNT"
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Defender of Argus",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Give adjacent minions +1/+1 and Taunt.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "target": "ADJACENT_MINIONS",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 1,
+          "hpBonus": 1
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

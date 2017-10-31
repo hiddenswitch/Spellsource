@@ -1,14 +1,14 @@
 {
+  "name": "Ultrasaur",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 14,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "",
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
-  "name": "Ultrasaur",
-  "heroClass": "ANY",
-  "description": "",
-  "fileFormatVersion": 1,
-  "rarity": "FREE",
-  "baseHp": 14,
-  "race": "BEAST",
-  "baseAttack": 7,
-  "type": "MINION",
-  "baseManaCost": 10
+  "fileFormatVersion": 1
 }

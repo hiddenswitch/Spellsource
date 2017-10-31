@@ -1,18 +1,18 @@
 {
-	"name": "Naga Sea Witch",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "Your cards cost (5).",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"operation": "SET",
-		"value": 5
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Naga Sea Witch",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Your cards cost (5).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 5,
+    "operation": "SET"
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

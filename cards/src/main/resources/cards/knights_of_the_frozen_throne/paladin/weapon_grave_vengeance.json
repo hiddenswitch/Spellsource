@@ -2,9 +2,9 @@
   "name": "Grave Vengeance",
   "baseManaCost": 8,
   "type": "WEAPON",
+  "heroClass": "PALADIN",
   "damage": 5,
   "durability": 3,
-  "heroClass": "PALADIN",
   "rarity": "FREE",
   "description": "Lifesteal",
   "attributes": {

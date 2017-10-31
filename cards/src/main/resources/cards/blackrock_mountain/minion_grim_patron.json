@@ -1,28 +1,28 @@
 {
-	"name": "Grim Patron",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Whenever this minion survives damage, summon another Grim Patron.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "DamageReceivedTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS",
-			"fireCondition": {
-				"class": "IsDeadCondition",
-				"invert": true
-			}
-		},
-		"spell": {
-			"class": "SummonSpell",
-			"card": "minion_grim_patron",
-			"boardPositionRelative": "RIGHT"
-		}
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Grim Patron",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Whenever this minion survives damage, summon another Grim Patron.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "invert": true
+      },
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "minion_grim_patron"
+    }
+  },
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1
 }

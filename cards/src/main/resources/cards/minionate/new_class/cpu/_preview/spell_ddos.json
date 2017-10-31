@@ -1,16 +1,16 @@
 {
-	"name": "DDoS",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "FREE",
-	"description": "Deal 6 damage.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "DamageSpell",
-		"value": 6
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "DDoS",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "MAGE",
+  "rarity": "FREE",
+  "description": "Deal 6 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 6
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -1,13 +1,13 @@
 {
-	"name": "Faceless Behemoth",
-	"baseManaCost": 10,
-	"type": "MINION",
-	"baseAttack": 10,
-	"baseHp": 10,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "",
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Faceless Behemoth",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "COMMON",
+  "description": "",
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

@@ -1,22 +1,22 @@
 {
-	"name": "Feral Spirit",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "RARE",
-	"description": "Summon two 2/3 Spirit Wolves with Taunt. Overload: (2)",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"cards": [
-			"token_spirit_wolf",
-			"token_spirit_wolf"
-		]
-	},
-	"attributes": {
-		"OVERLOAD": 2
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Feral Spirit",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "RARE",
+  "description": "Summon two 2/3 Spirit Wolves with Taunt. Overload: (2)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_spirit_wolf",
+      "token_spirit_wolf"
+    ]
+  },
+  "attributes": {
+    "OVERLOAD": 2
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

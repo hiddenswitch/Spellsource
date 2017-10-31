@@ -1,14 +1,14 @@
 {
-	"name": "Duskboar",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "",
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Duskboar",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "",
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

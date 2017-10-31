@@ -1,23 +1,23 @@
 {
-	"name": "Lance Carrier",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Battlecry: Give a friendly minion +2 Attack.",
-	"battlecry": {
-		"targetSelection": "FRIENDLY_MINIONS",
-		"spell": {
-			"class": "BuffSpell",
-			"attackBonus": 2
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Lance Carrier",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a friendly minion +2 Attack.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

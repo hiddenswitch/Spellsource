@@ -2,24 +2,24 @@
   "name": "Steam Surger",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "MAGE",
   "baseAttack": 5,
   "baseHp": 4,
-  "heroClass": "MAGE",
   "rarity": "RARE",
   "race": "ELEMENTAL",
   "description": "Battlecry: If you played an Elemental last turn, add a 'Flame Geyser' to your hand.",
   "battlecry": {
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF",
-      "card": "spell_flame_geyser"
-    },
     "condition": {
       "class": "PlayedLastTurnCondition",
       "filter": {
         "class": "CardFilter",
         "race": "ELEMENTAL"
       }
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_flame_geyser",
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

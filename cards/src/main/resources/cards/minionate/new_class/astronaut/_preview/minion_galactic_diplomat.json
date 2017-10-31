@@ -1,23 +1,23 @@
 {
-	"name": "Galactic Diplomat",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"description": "Call to Arms: Alter an enemy minion's Attack to be 1.",
-	"battlecry": {
-		"targetSelection": "ENEMY_MINIONS",
-		"spell": {
-			"class": "SetAttackSpell",
-			"value": 1
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Galactic Diplomat",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Call to Arms: Alter an enemy minion's Attack to be 1.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "SetAttackSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -1,17 +1,17 @@
 {
-	"id": "spell_mc_brawl",
-	"name": "MC Bender",
-	"baseManaCost": 10,
-	"type": "SPELL",
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Destroy all minions except one.  Keep control of that minion.(chosen randomly)",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DestroyAllExceptOneMCSpell",
-		"target": "ALL_MINIONS"
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "spell_mc_brawl",
+  "name": "MC Bender",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Destroy all minions except one.  Keep control of that minion.(chosen randomly)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroyAllExceptOneMCSpell",
+    "target": "ALL_MINIONS"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

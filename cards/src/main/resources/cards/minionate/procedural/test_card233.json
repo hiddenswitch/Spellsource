@@ -1,1 +1,31 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Gurush", "heroClass": "PRIEST", "description": "Windfury. Taunt. Battlecry: Give a friendly Mech +4 Health.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 5.0, "race": "MECH", "baseManaCost": 7.0, "attributes": {"TAUNT": true, "BATTLECRY": true, "WINDFURY": true}, "battlecry": {"spell": {"filter": {"race": "MECH", "class": "RaceFilter"}, "hpBonus": 4, "class": "BuffSpell"}, "targetSelection": "FRIENDLY_MINIONS"}, "type": "MINION", "id": "Gurush", "baseAttack": 6.0}
+{
+  "id": "Gurush",
+  "name": "Gurush",
+  "baseManaCost": 7.0,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 6.0,
+  "baseHp": 5.0,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Windfury. Taunt. Battlecry: Give a friendly Mech +4 Health.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH"
+      },
+      "hpBonus": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true,
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -2,9 +2,9 @@
   "name": "Righteous Protector",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "PALADIN",
   "rarity": "COMMON",
   "description": "Taunt. Divine Shield.",
   "attributes": {

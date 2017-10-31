@@ -1,24 +1,24 @@
 {
-	"name": "Cutpurse",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ROGUE",
-	"rarity": "RARE",
-	"description": "Whenever this minion attacks a hero, add the Coin to your hand.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "PhysicalAttackTrigger",
-			"targetEntityType": "HERO",
-			"hostTargetType": "IGNORE_OTHER_SOURCES"
-		},
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"card": "spell_the_coin"
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Cutpurse",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Whenever this minion attacks a hero, add the Coin to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "HERO"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_the_coin"
+    }
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

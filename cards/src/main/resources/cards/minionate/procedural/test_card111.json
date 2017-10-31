@@ -1,1 +1,22 @@
-{"collectible": true, "aura": {"attackBonus": 1, "class": "BuffAura", "target": "OTHER_FRIENDLY_MINIONS"}, "name": "Barian", "heroClass": "ANY", "description": "Taunt. Your other minions have +1 Attack.", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 1.0, "set": "SPELLSOURCE", "baseManaCost": 3.0, "attributes": {"TAUNT": true}, "type": "MINION", "id": "Barian", "baseAttack": 6.0}
+{
+  "id": "Barian",
+  "name": "Barian",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 1.0,
+  "rarity": "FREE",
+  "description": "Taunt. Your other minions have +1 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 1
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

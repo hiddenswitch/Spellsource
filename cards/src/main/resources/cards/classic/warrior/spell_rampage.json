@@ -1,20 +1,20 @@
 {
-	"name": "Rampage",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"description": "Give a damaged minion +3/+3.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "BuffSpell",
-		"attackBonus": 3,
-		"hpBonus": 3,
-		"filter": {
-			"class": "DamagedFilter"
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Rampage",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "COMMON",
+  "description": "Give a damaged minion +3/+3.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": 3,
+    "filter": {
+      "class": "DamagedFilter"
+    },
+    "hpBonus": 3
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

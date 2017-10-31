@@ -1,16 +1,16 @@
 {
-	"name": "Whirling Blades",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Give a minion +1 Attack.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "BuffSpell",
-		"attackBonus": 1
-	},
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Whirling Blades",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give a minion +1 Attack.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": 1
+  },
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

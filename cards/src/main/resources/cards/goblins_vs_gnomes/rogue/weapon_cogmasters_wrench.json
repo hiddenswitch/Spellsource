@@ -1,34 +1,34 @@
 {
-	"name": "Cogmaster's Wrench",
-	"baseManaCost": 3,
-	"type": "WEAPON",
-	"damage": 1,
-	"durability": 3,
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Has +2 Attack while you have a Mech.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "BoardChangedTrigger"
-		},
-		"spell": {
-			"class": "ConditionalAttackBonusSpell",
-			"target": "SELF",
-			"value": {
-				"class": "ConditionalValueProvider",
-				"ifTrue": 2,
-				"ifFalse": 0,
-				"condition": {
-					"class": "MinionOnBoardCondition",
-					"cardFilter": {
-						"class": "RaceFilter",
-						"race": "MECH"
-					}
-				}
-			}
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Cogmaster's Wrench",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "ROGUE",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "Has +2 Attack while you have a Mech.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BoardChangedTrigger"
+    },
+    "spell": {
+      "class": "ConditionalAttackBonusSpell",
+      "target": "SELF",
+      "value": {
+        "class": "ConditionalValueProvider",
+        "condition": {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "RaceFilter",
+            "race": "MECH"
+          }
+        },
+        "ifFalse": 0,
+        "ifTrue": 2
+      }
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

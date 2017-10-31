@@ -1,19 +1,19 @@
 {
-  "collectible": true,
-  "cardCostModifier": {
-    "cardType": "SPELL",
-    "class": "CardCostModifier",
-    "value": -1
-  },
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Radiant Elemental",
-  "heroClass": "PRIEST",
-  "description": "Your spells cost (1) less.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 3,
-  "race": "ELEMENTAL",
-  "baseAttack": 2,
+  "baseManaCost": 2,
   "type": "MINION",
-  "baseManaCost": 2
+  "heroClass": "PRIEST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Your spells cost (1) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -1,
+    "cardType": "SPELL"
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

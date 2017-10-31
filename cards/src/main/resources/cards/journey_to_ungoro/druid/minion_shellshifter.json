@@ -1,39 +1,39 @@
 {
-	"name": "Shellshifter",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Choose One - Transform into a 5/3 with Stealth; or a 3/5 with Taunt.",
-	"options": [
-		{
-			"description": "5/3 with Stealth",
-			"spell": {
-				"class": "TransformMinionSpell",
-				"target": "SELF",
-				"card": "token_shellshifter_stealth"
-			}
-		},
-		{
-			"description": "3/5 with Taunt",
-			"spell": {
-				"class": "TransformMinionSpell",
-				"target": "SELF",
-				"card": "token_shellshifter_taunt"
-			}
-		}
-	],
-	"bothOptions": {
-		"description": "5/5 with Stealth and Taunt",
-		"spell": {
-			"class": "TransformMinionSpell",
-			"target": "SELF",
-			"card": "token_shellshifter_stealth_taunt"
-		}
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Shellshifter",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Choose One - Transform into a 5/3 with Stealth; or a 3/5 with Taunt.",
+  "options": [
+    {
+      "description": "5/3 with Stealth",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_shellshifter_stealth"
+      }
+    },
+    {
+      "description": "3/5 with Taunt",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_shellshifter_taunt"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "5/5 with Stealth and Taunt",
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_shellshifter_stealth_taunt"
+    }
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

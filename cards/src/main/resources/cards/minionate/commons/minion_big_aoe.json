@@ -1,26 +1,26 @@
 {
-	"name": "Big AOE",
-	"baseManaCost": 9,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Deal damage to all minions equal to the number of minions on board.",
-	"battlecry": {
-		"spell": {
-			"class": "DamageSpell",
-			"target": "ALL_OTHER_MINIONS",
-			"value": {
-				"class": "EntityCounter",
-				"target": "ALL_OTHER_MINIONS"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Big AOE",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Deal damage to all minions equal to the number of minions on board.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "value": {
+        "class": "EntityCounter",
+        "target": "ALL_OTHER_MINIONS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

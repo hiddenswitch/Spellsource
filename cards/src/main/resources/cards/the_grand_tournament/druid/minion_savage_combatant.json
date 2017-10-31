@@ -1,25 +1,25 @@
 {
-	"name": "Savage Combatant",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 4,
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"race": "BEAST",
-	"description": "Inspire: Give your hero +2 Attack this turn.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "InspireTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "BuffHeroSpell",
-			"target": "FRIENDLY_HERO",
-			"attackBonus": 2
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Savage Combatant",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Inspire: Give your hero +2 Attack this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffHeroSpell",
+      "target": "FRIENDLY_HERO",
+      "attackBonus": 2
+    }
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

@@ -1,1 +1,17 @@
-{"collectible": true, "set": "JOURNEY_TO_UNGORO", "name": "Shellshifter", "heroClass": "ANY", "description": "Stealth", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 3, "race": "BEAST", "baseAttack": 5, "attributes": {"STEALTH": true}, "type": "MINION", "baseManaCost": 4}
+{
+  "name": "Shellshifter",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Stealth",
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

@@ -1,30 +1,30 @@
 {
-	"name": "Anub'arak",
-	"baseManaCost": 9,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 4,
-	"heroClass": "ROGUE",
-	"rarity": "LEGENDARY",
-	"description": "Deathrattle: Return this to your hand and summon a 4/4 Nerubian.",
-	"deathrattle": {
-		"class": "MetaSpell",
-		"target": "NONE",
-		"spells": [
-			{
-				"class": "ReturnTargetToHandSpell",
-				"target": "SELF"
-			},
-			{
-				"class": "SummonSpell",
-				"card": "token_nerubian"
-			}
-		]
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Anub'arak",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 8,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Return this to your hand and summon a 4/4 Nerubian.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "target": "NONE",
+    "spells": [
+      {
+        "class": "ReturnTargetToHandSpell",
+        "target": "SELF"
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_nerubian"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

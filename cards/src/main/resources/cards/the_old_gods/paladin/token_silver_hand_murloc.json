@@ -1,14 +1,14 @@
 {
-	"name": "Soldier",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "PALADIN",
-	"rarity": "COMMON",
-	"race": "MURLOC",
-	"description": "",
-	"collectible": false,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Soldier",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "MURLOC",
+  "description": "",
+  "collectible": false,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

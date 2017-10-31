@@ -1,1 +1,31 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Darkscale", "heroClass": "HUNTER", "trigger": {"eventTrigger": {"targetEntityType": "MINION", "class": "AfterPhysicalAttackTrigger", "fireCondition": {"class": "IsDeadCondition"}, "hostTargetType": "IGNORE_OTHER_SOURCES"}, "spell": {"attribute": "EXTRA_ATTACKS", "class": "ModifyAttributeSpell", "value": 1, "target": "SELF"}}, "description": "Whenever this attacks and kills a minion, it may attack again.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 6.0, "race": "BEAST", "baseManaCost": 6.0, "type": "MINION", "id": "Darkscale", "baseAttack": 5.0}
+{
+  "id": "Darkscale",
+  "name": "Darkscale",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 5.0,
+  "baseHp": 6.0,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Whenever this attacks and kills a minion, it may attack again.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "EXTRA_ATTACKS"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

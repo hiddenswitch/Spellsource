@@ -1,16 +1,16 @@
 {
-	"name": "Polymorph: Boar",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "RARE",
-	"description": "Transform a minion into a 4/2 Boar with Charge.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "TransformMinionSpell",
-		"card": "token_mage_huffer"
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Polymorph: Boar",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "MAGE",
+  "rarity": "RARE",
+  "description": "Transform a minion into a 4/2 Boar with Charge.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "TransformMinionSpell",
+    "card": "token_mage_huffer"
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

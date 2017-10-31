@@ -1,35 +1,35 @@
 {
-	"name": "Dragon Consort",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 5,
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"race": "DRAGON",
-	"description": "Battlecry: The next Dragon you play costs (2) less.",
-	"battlecry": {
-		"spell": {
-			"class": "CardCostModifierSpell",
-			"target": "FRIENDLY_PLAYER",
-			"cardCostModifier": {
-				"class": "CardCostModifier",
-				"cardType": "MINION",
-				"race": "DRAGON",
-				"operation": "SUBTRACT",
-				"value": 2,
-				"expirationTrigger": {
-					"class": "CardPlayedTrigger",
-					"targetPlayer": "SELF",
-					"race": "DRAGON"
-				}
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Dragon Consort",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: The next Dragon you play costs (2) less.",
+  "battlecry": {
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 2,
+        "race": "DRAGON",
+        "cardType": "MINION",
+        "expirationTrigger": {
+          "class": "CardPlayedTrigger",
+          "race": "DRAGON",
+          "targetPlayer": "SELF"
+        },
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1
 }

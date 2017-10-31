@@ -1,1 +1,28 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Picoraker Mathing", "heroClass": "ANY", "description": "Battlecry: Give both players a Power Chord card)", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 5.0, "baseManaCost": 5.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"targetPlayer": "BOTH", "cards": ["spell_i_am_murloc", "spell_power_of_the_horde", "spell_rogues_do_it"], "class": "ReceiveRandomCardSpell"}}, "type": "MINION", "id": "Picoraker Mathing", "baseAttack": 4.0}
+{
+  "id": "Picoraker Mathing",
+  "name": "Picoraker Mathing",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 5.0,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Give both players a Power Chord card)",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveRandomCardSpell",
+      "cards": [
+        "spell_i_am_murloc",
+        "spell_power_of_the_horde",
+        "spell_rogues_do_it"
+      ],
+      "targetPlayer": "BOTH"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

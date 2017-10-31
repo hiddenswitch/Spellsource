@@ -1,40 +1,39 @@
 {
-	"name": "Pilfered Power",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "EPIC",
-	"description": "Gain an empty Mana for each friendly minion.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "EitherOrSpell",
-		"spell1": {
-			"class": "ReceiveCardSpell",
-			"targetPlayer": "SELF",
-			"card": "spell_excess_mana"
-		},
-		"spell2": {
-			"class": "ModifyMaxManaSpell",
-			"value": {
-				"class": "EntityCounter",
-				"target": "FRIENDLY_MINIONS"
-			}
-		},
-		"condition": {
-			"class": "AndCondition",
-			"conditions": [
-				{
-					"class": "ManaMaxedCondition"
-				},
-				{
-					"class": "HasEntityCondition",
-					"target": "FRIENDLY_MINIONS"
-				}
-			]
-			
-		}
-	},
-	"collectible": true,
-	"set": "MEAN_STREETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Pilfered Power",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "EPIC",
+  "description": "Gain an empty Mana for each friendly minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "ManaMaxedCondition"
+        },
+        {
+          "class": "HasEntityCondition",
+          "target": "FRIENDLY_MINIONS"
+        }
+      ]
+    },
+    "spell1": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_excess_mana",
+      "targetPlayer": "SELF"
+    },
+    "spell2": {
+      "class": "ModifyMaxManaSpell",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

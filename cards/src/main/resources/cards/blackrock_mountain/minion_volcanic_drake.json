@@ -1,17 +1,17 @@
 {
-	"name": "Volcanic Drake",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "DRAGON",
-	"description": "Costs (1) less for each minion that died this turn.",
-	"manaCostModifier": {
-		"class": "DeadMinionsThisTurn"
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Volcanic Drake",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Costs (1) less for each minion that died this turn.",
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "DeadMinionsThisTurn"
+  }
 }

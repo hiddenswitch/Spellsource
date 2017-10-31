@@ -1,1 +1,26 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Axe Of Ofing", "heroClass": "ANY", "description": "Inspire: Gain +2/+2.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 5.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "InspireTrigger"}, "spell": {"attackBonus": 2, "class": "BuffSpell", "hpBonus": 2, "target": "SELF"}}, "baseManaCost": 5.0, "type": "MINION", "id": "Axe Of Ofing", "baseAttack": 7.0}
+{
+  "id": "Axe Of Ofing",
+  "name": "Axe Of Ofing",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7.0,
+  "baseHp": 5.0,
+  "rarity": "COMMON",
+  "description": "Inspire: Gain +2/+2.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 2,
+      "hpBonus": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

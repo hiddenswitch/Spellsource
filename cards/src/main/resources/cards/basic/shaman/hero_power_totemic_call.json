@@ -1,65 +1,65 @@
 {
-	"name": "Conjure",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "SHAMAN",
-	"rarity": "FREE",
-	"description": "Summon a Minor Creature.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonRandomNotOnBoardSpell",
-		"cards": [
-			"token_searing_totem",
-			"token_healing_totem",
-			"token_wrath_of_air_totem",
-			"token_stoneclaw_totem"
-		]
-	},
-	"condition": {
-		"class": "AndCondition",
-		"conditions": [
-			{
-				"class": "AndCondition",
-				"conditions": [
-					{
-						"class": "MinionOnBoardCondition",
-						"cardFilter": {
-							"class": "SpecificCardFilter",
-							"cardId": "token_searing_totem"
-						}
-					},
-					{
-						"class": "MinionOnBoardCondition",
-						"cardFilter": {
-							"class": "SpecificCardFilter",
-							"cardId": "token_healing_totem"
-						}
-					},
-					{
-						"class": "MinionOnBoardCondition",
-						"cardFilter": {
-							"class": "SpecificCardFilter",
-							"cardId": "token_wrath_of_air_totem"
-						}
-					},
-					{
-						"class": "MinionOnBoardCondition",
-						"cardFilter": {
-							"class": "SpecificCardFilter",
-							"cardId": "token_stoneclaw_totem"
-						}
-					}
-				],
-				"invert": true
-			},
-			{
-				"class": "MinionCountCondition",
-				"operation": "LESS",
-				"value": 7
-			}
-		]
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Conjure",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "SHAMAN",
+  "rarity": "FREE",
+  "description": "Summon a Minor Creature.",
+  "condition": {
+    "class": "AndCondition",
+    "conditions": [
+      {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "cardId": "token_searing_totem"
+            }
+          },
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "cardId": "token_healing_totem"
+            }
+          },
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "cardId": "token_wrath_of_air_totem"
+            }
+          },
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "cardId": "token_stoneclaw_totem"
+            }
+          }
+        ],
+        "invert": true
+      },
+      {
+        "class": "MinionCountCondition",
+        "value": 7,
+        "operation": "LESS"
+      }
+    ]
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonRandomNotOnBoardSpell",
+    "cards": [
+      "token_searing_totem",
+      "token_healing_totem",
+      "token_wrath_of_air_totem",
+      "token_stoneclaw_totem"
+    ]
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

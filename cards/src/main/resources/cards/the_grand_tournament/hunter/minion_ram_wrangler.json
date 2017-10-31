@@ -1,33 +1,33 @@
 {
-	"name": "Ram Wrangler",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"description": "Battlecry: If you have a Beast, summon a random Beast.",
-	"battlecry": {
-		"spell": {
-			"class": "SummonRandomMinionFilteredSpell",
-			"boardPositionRelative": "RIGHT",
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "BEAST"
-			}
-		},
-		"condition": {
-			"class": "MinionOnBoardCondition",
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "BEAST"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Ram Wrangler",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: If you have a Beast, summon a random Beast.",
+  "battlecry": {
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    },
+    "spell": {
+      "class": "SummonRandomMinionFilteredSpell",
+      "boardPositionRelative": "RIGHT",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

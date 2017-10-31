@@ -1,23 +1,23 @@
 {
-	"name": "Thing from Below",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 5,
-	"heroClass": "SHAMAN",
-	"rarity": "RARE",
-	"description": "Taunt. Costs (1) less for each Totem you've summoned this game.",
-	"manaCostModifier": {
-		"class": "MinionSummonValueProvider",
-		"filter": {
-			"class": "CardFilter",
-			"race": "TOTEM"
-		}
-	},
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Thing from Below",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Taunt. Costs (1) less for each Totem you've summoned this game.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "MinionSummonValueProvider",
+    "filter": {
+      "class": "CardFilter",
+      "race": "TOTEM"
+    }
+  }
 }

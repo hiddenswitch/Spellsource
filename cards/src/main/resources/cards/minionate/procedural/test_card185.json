@@ -1,1 +1,32 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Ghostry Yokthter", "heroClass": "WARLOCK", "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnEndTrigger"}, "spell": {"filter": {"invert": true, "race": "MECH", "class": "RaceFilter"}, "howMany": 1, "class": "MissilesSpell", "value": 2, "target": "ALL_MINIONS"}}, "description": "At the end of your turn, deal 2 damage to a non-Mech minion.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 4.0, "race": "MECH", "baseManaCost": 6.0, "type": "MINION", "id": "Ghostry Yokthter", "baseAttack": 6.0}
+{
+  "id": "Ghostry Yokthter",
+  "name": "Ghostry Yokthter",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 6.0,
+  "baseHp": 4.0,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "At the end of your turn, deal 2 damage to a non-Mech minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ALL_MINIONS",
+      "value": 2,
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH",
+        "invert": true
+      },
+      "howMany": 1
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

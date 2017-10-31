@@ -1,20 +1,20 @@
 {
-	"name": "Scrapyard Trip",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "FREE",
-	"description": "Hire a random Robot Assistant.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonRandomSpell",
-		"cards": [
-			"token_steel_reel",
-			"token_wally",
-			"token_CO"
-		]
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Scrapyard Trip",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "FREE",
+  "description": "Hire a random Robot Assistant.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonRandomSpell",
+    "cards": [
+      "token_steel_reel",
+      "token_wally",
+      "token_CO"
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

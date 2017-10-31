@@ -8,8 +8,8 @@
   "targetSelection": "ENEMY_CHARACTERS",
   "spell": {
     "class": "SwipeSpell",
-    "secondaryTarget": "ENEMY_CHARACTERS",
     "value": 4,
+    "secondaryTarget": "ENEMY_CHARACTERS",
     "secondaryValue": 1
   },
   "attributes": {

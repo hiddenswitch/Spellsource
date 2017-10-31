@@ -2,9 +2,9 @@
   "name": "Tirion Fordring",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 6,
   "baseHp": 6,
-  "heroClass": "PALADIN",
   "rarity": "LEGENDARY",
   "description": "Divine Shield. Taunt. Deathrattle: Equip a 5/3 Ashbringer.",
   "deathrattle": {
@@ -14,8 +14,8 @@
   "attributes": {
     "DEATHRATTLES": true,
     "DIVINE_SHIELD": true,
-    "TAUNT": true,
-    "NAME": "Hanjian Wu"
+    "NAME": "Hanjian Wu",
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CLASSIC",

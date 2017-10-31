@@ -1,16 +1,16 @@
 {
-	"name": "Windfury Harpy",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Windfury",
-	"attributes": {
-		"WINDFURY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Windfury Harpy",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Windfury",
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

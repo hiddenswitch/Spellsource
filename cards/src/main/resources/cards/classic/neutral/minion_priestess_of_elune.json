@@ -1,23 +1,23 @@
 {
-	"name": "Priestess of Elune",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Battlecry: Restore 4 Health to your hero.",
-	"battlecry": {
-		"spell": {
-			"class": "HealSpell",
-			"target": "FRIENDLY_HERO",
-			"value": 4
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Priestess of Elune",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Restore 4 Health to your hero.",
+  "battlecry": {
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

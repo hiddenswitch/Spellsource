@@ -2,9 +2,9 @@
   "name": "Stone Sentinel",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "SHAMAN",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "SHAMAN",
   "rarity": "EPIC",
   "race": "ELEMENTAL",
   "description": "Battlecry: If you played an Elemental last turn, summon two 2/3 Elementals with Taunt.",
@@ -23,13 +23,13 @@
         "spells": [
           {
             "class": "SummonSpell",
-            "card": "token_rock_elemental",
-            "boardPositionRelative": "LEFT"
+            "boardPositionRelative": "LEFT",
+            "card": "token_rock_elemental"
           },
           {
             "class": "SummonSpell",
-            "card": "token_rock_elemental",
-            "boardPositionRelative": "RIGHT"
+            "boardPositionRelative": "RIGHT",
+            "card": "token_rock_elemental"
           }
         ]
       }

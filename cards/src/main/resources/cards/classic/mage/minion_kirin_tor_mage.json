@@ -1,32 +1,32 @@
 {
-	"name": "Kirin Tor Mage",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "MAGE",
-	"rarity": "RARE",
-	"description": "Battlecry: The next Secret you play this turn costs (0).",
-	"battlecry": {
-		"spell": {
-			"class": "CardCostModifierSpell",
-			"target": "FRIENDLY_PLAYER",
-			"cardCostModifier": {
-				"class": "OneTurnCostModifier",
-				"cardType": "SPELL",
-				"operation": "SET",
-				"value": 0,
-				"expirationTrigger": {
-					"class": "SecretPlayedTrigger"
-				},
-				"requiredAttribute": "SECRET"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Kirin Tor Mage",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: The next Secret you play this turn costs (0).",
+  "battlecry": {
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "OneTurnCostModifier",
+        "value": 0,
+        "cardType": "SPELL",
+        "expirationTrigger": {
+          "class": "SecretPlayedTrigger"
+        },
+        "operation": "SET",
+        "requiredAttribute": "SECRET"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

@@ -1,36 +1,36 @@
 {
-	"name": "Lord Jaraxxus",
-	"baseManaCost": 9,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 15,
-	"heroClass": "WARLOCK",
-	"rarity": "LEGENDARY",
-	"race": "DEMON",
-	"description": "Battlecry: Destroy your hero and replace him with Lord Jaraxxus.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "ChangeHeroSpell",
-					"card": "hero_jaraxxus"
-				},
-				{
-					"class": "EquipWeaponSpell",
-					"card": "weapon_blood_fury"
-				},
-				{
-					"class": "OverrideTargetSpell",
-					"target": "FRIENDLY_HERO"
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Lord Jaraxxus",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 3,
+  "baseHp": 15,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Battlecry: Destroy your hero and replace him with Lord Jaraxxus.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ChangeHeroSpell",
+          "card": "hero_jaraxxus"
+        },
+        {
+          "class": "EquipWeaponSpell",
+          "card": "weapon_blood_fury"
+        },
+        {
+          "class": "OverrideTargetSpell",
+          "target": "FRIENDLY_HERO"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

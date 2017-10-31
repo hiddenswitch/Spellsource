@@ -1,24 +1,24 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Cornered Sentry",
+  "baseManaCost": 2,
+  "type": "MINION",
   "heroClass": "WARRIOR",
-  "description": "Taunt. Battlecry: Summon three 1/1 Raptors for your opponent.",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "baseHp": 6,
   "baseAttack": 2,
-  "attributes": {
-    "TAUNT": true,
-    "BATTLECRY": true
-  },
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Taunt. Battlecry: Summon three 1/1 Raptors for your opponent.",
   "battlecry": {
     "spell": {
-      "targetPlayer": "OPPONENT",
       "class": "SummonSpell",
-      "card": "token_raptor"
+      "card": "token_raptor",
+      "targetPlayer": "OPPONENT"
     }
   },
-  "type": "MINION",
-  "baseManaCost": 2
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

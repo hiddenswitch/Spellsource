@@ -1,21 +1,21 @@
 {
-	"name": "Tactition Droid",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "Your Secrets cost 0 Mana.",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"cardType": "SPELL",
-		"targetPlayer": "SELF",
-		"operation": "SET",
-		"value": 0,
-		"requiredAttribute": "SECRET"
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Tactition Droid",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Your Secrets cost 0 Mana.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 0,
+    "cardType": "SPELL",
+    "operation": "SET",
+    "requiredAttribute": "SECRET",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

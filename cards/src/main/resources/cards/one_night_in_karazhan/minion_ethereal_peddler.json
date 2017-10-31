@@ -1,37 +1,37 @@
 {
-	"name": "Ethereal Peddler",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 6,
-	"heroClass": "ROGUE",
-	"rarity": "RARE",
-	"description": "Battlecry: If you're holding any non-Rogue class cards, reduce their cost by (2).",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "CardCostModifierSpell",
-			"target": "FRIENDLY_PLAYER",
-			"cardFilter": {
-				"class": "CardFilter",
-				"heroClasses": [
-					"ROGUE",
-					"ANY"
-				],
-				"invert": true
-			},
-			"cardCostModifier": {
-				"class": "CardCostModifier",
-				"target": "FRIENDLY_HAND",
-				"operation": "SUBTRACT",
-				"value": 2
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Ethereal Peddler",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Battlecry: If you're holding any non-Rogue class cards, reduce their cost by (2).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "FRIENDLY_HAND",
+        "value": 2,
+        "operation": "SUBTRACT"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClasses": [
+          "ROGUE",
+          "ANY"
+        ],
+        "invert": true
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

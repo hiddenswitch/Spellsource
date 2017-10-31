@@ -1,16 +1,16 @@
 {
-	"name": "Wrath of Air Totem",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "FREE",
-	"description": "Summon a Wrath of Air Totem.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"card": "token_wrath_of_air_totem"
-	},
-	"collectible": false,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Wrath of Air Totem",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "FREE",
+  "description": "Summon a Wrath of Air Totem.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_wrath_of_air_totem"
+  },
+  "collectible": false,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

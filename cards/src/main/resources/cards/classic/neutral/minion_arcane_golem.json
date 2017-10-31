@@ -1,24 +1,24 @@
 {
-	"name": "Arcane Golem",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Battlecry: Give your opponent a Mana.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ModifyMaxManaSpell",
-			"targetPlayer": "OPPONENT",
-			"value": 1
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Arcane Golem",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: Give your opponent a Mana.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ModifyMaxManaSpell",
+      "value": 1,
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

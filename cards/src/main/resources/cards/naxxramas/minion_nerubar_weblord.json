@@ -1,20 +1,20 @@
 {
-	"name": "Nerub'ar Weblord",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Minions with Battlecry cost (2) more.",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"cardType": "MINION",
-		"targetPlayer": "BOTH",
-		"value": 2,
-		"requiredAttribute": "BATTLECRY"
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Nerub'ar Weblord",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Minions with Battlecry cost (2) more.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 2,
+    "cardType": "MINION",
+    "requiredAttribute": "BATTLECRY",
+    "targetPlayer": "BOTH"
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

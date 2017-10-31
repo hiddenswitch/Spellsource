@@ -2,9 +2,9 @@
   "name": "Blackguard",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 3,
   "baseHp": 9,
-  "heroClass": "PALADIN",
   "rarity": "EPIC",
   "description": "Whenever your hero is healed, deal that much damage to a random enemy minion.",
   "trigger": {
@@ -15,13 +15,13 @@
     },
     "spell": {
       "class": "DamageSpell",
-      "randomTarget": true,
       "target": "ENEMY_MINIONS",
       "value": {
         "class": "AttributeValueProvider",
         "target": "FRIENDLY_HERO",
         "attribute": "LAST_HEAL"
-      }
+      },
+      "randomTarget": true
     }
   },
   "collectible": true,

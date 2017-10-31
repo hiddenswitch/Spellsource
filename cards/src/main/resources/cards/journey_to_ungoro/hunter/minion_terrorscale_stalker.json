@@ -2,9 +2,9 @@
   "name": "Terrorscale Stalker",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "HUNTER",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "HUNTER",
   "rarity": "RARE",
   "description": "Battlecry: Trigger a friendly minion's Deathrattle.",
   "battlecry": {

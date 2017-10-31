@@ -1,1 +1,31 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Snake", "heroClass": "SHAMAN", "description": "Battlecry: Gain +1/+1 for each friendly Totem.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 3.0, "baseManaCost": 5.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "BuffSpell", "value": {"filter": {"race": "TOTEM", "class": "RaceFilter"}, "class": "EntityCounter", "target": "FRIENDLY_MINIONS"}, "target": "SELF"}}, "type": "MINION", "id": "Snake", "baseAttack": 5.0}
+{
+  "id": "Snake",
+  "name": "Snake",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 5.0,
+  "baseHp": 3.0,
+  "rarity": "RARE",
+  "description": "Battlecry: Gain +1/+1 for each friendly Totem.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "TOTEM"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

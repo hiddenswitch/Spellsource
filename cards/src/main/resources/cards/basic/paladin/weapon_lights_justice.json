@@ -2,15 +2,15 @@
   "name": "Light's Justice",
   "baseManaCost": 1,
   "type": "WEAPON",
+  "heroClass": "PALADIN",
   "damage": 1,
   "durability": 4,
-  "heroClass": "PALADIN",
   "rarity": "FREE",
   "description": "",
-  "collectible": true,
   "attributes": {
     "NAME": "Katana"
   },
+  "collectible": true,
   "set": "BASIC",
   "fileFormatVersion": 1
 }

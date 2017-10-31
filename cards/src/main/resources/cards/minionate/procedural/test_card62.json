@@ -1,1 +1,58 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Pattider", "heroClass": "ANY", "description": "Battlecry: Give a random friendly Beast, Dragon, and Murloc +2/+2.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 4.0, "baseManaCost": 5.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "MetaSpell", "spells": [{"randomTarget": true, "target": "FRIENDLY_MINIONS", "attackBonus": 2, "hpBonus": 2, "filter": {"race": "BEAST", "class": "CardFilter"}, "class": "BuffSpell"}, {"randomTarget": true, "target": "FRIENDLY_MINIONS", "attackBonus": 2, "hpBonus": 2, "filter": {"race": "DRAGON", "class": "CardFilter"}, "class": "BuffSpell"}, {"randomTarget": true, "target": "FRIENDLY_MINIONS", "attackBonus": 2, "hpBonus": 2, "filter": {"race": "MURLOC", "class": "CardFilter"}, "class": "BuffSpell"}]}, "targetSelection": "NONE"}, "type": "MINION", "id": "Pattider", "baseAttack": 4.0}
+{
+  "id": "Pattider",
+  "name": "Pattider",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 4.0,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a random friendly Beast, Dragon, and Murloc +2/+2.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 2,
+          "filter": {
+            "class": "CardFilter",
+            "race": "BEAST"
+          },
+          "hpBonus": 2,
+          "randomTarget": true
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 2,
+          "filter": {
+            "class": "CardFilter",
+            "race": "DRAGON"
+          },
+          "hpBonus": 2,
+          "randomTarget": true
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 2,
+          "filter": {
+            "class": "CardFilter",
+            "race": "MURLOC"
+          },
+          "hpBonus": 2,
+          "randomTarget": true
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -1,17 +1,17 @@
 {
-	"name": "Bog Creeper",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Taunt",
-	"attributes": {
-		"TAUNT": true,
-		"NAME": "Moromah Baboon"
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Bog Creeper",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "description": "Taunt",
+  "attributes": {
+    "NAME": "Moromah Baboon",
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

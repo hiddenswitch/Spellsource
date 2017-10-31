@@ -1,16 +1,16 @@
 {
-	"name": "Treant",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "DRUID",
-	"rarity": "FREE",
-	"description": "Taunt",
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Treant",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

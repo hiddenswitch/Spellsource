@@ -1,17 +1,17 @@
 {
-	"name": "Tank Up!",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "WARRIOR",
-	"rarity": "FREE",
-	"description": "Gain 4 Armor.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "BuffHeroSpell",
-		"target": "FRIENDLY_HERO",
-		"armorBonus": 4
-	},
-	"collectible": false,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Tank Up!",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "WARRIOR",
+  "rarity": "FREE",
+  "description": "Gain 4 Armor.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffHeroSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 4
+  },
+  "collectible": false,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

@@ -2,16 +2,16 @@
   "name": "Doomed Apprentice",
   "baseManaCost": 3,
   "type": "MINION",
-  "baseAttack":3,
-  "baseHp": 2,
   "heroClass": "MAGE",
+  "baseAttack": 3,
+  "baseHp": 2,
   "rarity": "RARE",
   "description": "Your opponent's spells cost (1) more.",
   "cardCostModifier": {
     "class": "CardCostModifier",
+    "value": 1,
     "cardType": "MINION",
-    "targetPlayer": "OPPONENT",
-    "value": 1
+    "targetPlayer": "OPPONENT"
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

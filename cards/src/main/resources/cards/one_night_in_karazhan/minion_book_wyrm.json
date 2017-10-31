@@ -1,36 +1,36 @@
 {
-	"name": "Book Wyrm",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"race": "DRAGON",
-	"description": "Battlecry: If you're holding a Dragon, destroy an enemy minion with 3 or less Attack.",
-	"battlecry": {
-		"targetSelection": "ENEMY_MINIONS",
-		"spell": {
-			"class": "DestroySpell",
-			"filter": {
-				"class": "AttributeFilter",
-				"attribute": "ATTACK",
-				"operation": "LESS_OR_EQUAL",
-				"value": 3
-			}
-		},
-		"condition": {
-			"class": "HoldsCardCondition",
-			"cardFilter": {
-				"class": "CardFilter",
-				"race": "DRAGON"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Book Wyrm",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, destroy an enemy minion with 3 or less Attack.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 3,
+        "attribute": "ATTACK",
+        "operation": "LESS_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

@@ -1,27 +1,27 @@
 {
-	"name": "Cleave",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "FREE",
-	"description": "Deal 2 damage to two random enemy minions.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MultiTargetSpell",
-		"target": "ENEMY_MINIONS",
-		"value": 2,
-		"spell": {
-			"class": "DamageSpell",
-			"value": 2
-		}
-	},
-	"condition": {
-		"class": "MinionCountCondition",
-		"targetPlayer": "OPPONENT",
-		"operation": "GREATER",
-		"value": 1
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Cleave",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "FREE",
+  "description": "Deal 2 damage to two random enemy minions.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 1,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

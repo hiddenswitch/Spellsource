@@ -1,23 +1,23 @@
 {
   "name": "Scourgelord Garrosh",
-  "baseManaCost": 8,
   "heroPower": "hero_power_bladestorm",
+  "baseManaCost": 8,
   "type": "HERO",
   "heroClass": "WARRIOR",
   "rarity": "LEGENDARY",
-  "attributes": {
-    "MAX_HP": 30,
-    "ARMOR": 5
-  },
   "description": "Battlecry: Equip a 4/3 Shadowmourne that also damages adjacent minions.",
-  "collectible": true,
-  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
-  "fileFormatVersion": 1,
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "EquipWeaponSpell",
       "card": "weapon_shadowmourne"
     }
-  }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
 }

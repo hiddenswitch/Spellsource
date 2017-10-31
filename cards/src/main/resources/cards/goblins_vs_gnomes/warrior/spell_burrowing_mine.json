@@ -1,39 +1,39 @@
 {
-	"name": "Burrowing Mine",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "FREE",
-	"description": "When you draw this, it explodes. You take 10 damage and draw a card.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "NullSpell"
-	},
-	"passiveTrigger": {
-		"eventTrigger": {
-			"class": "CardDrawnTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS"
-		},
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "DamageSpell",
-					"target": "FRIENDLY_HERO",
-					"value": 10,
-					"ignoreSpellDamage": true
-				},
-				{
-					"class": "RemoveCardSpell",
-					"target": "EVENT_TARGET"
-				},
-				{
-					"class": "DrawCardSpell"
-				}
-			]
-		}
-	},
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Burrowing Mine",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "FREE",
+  "description": "When you draw this, it explodes. You take 10 damage and draw a card.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 10,
+          "ignoreSpellDamage": true
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "EVENT_TARGET"
+        },
+        {
+          "class": "DrawCardSpell"
+        }
+      ]
+    }
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

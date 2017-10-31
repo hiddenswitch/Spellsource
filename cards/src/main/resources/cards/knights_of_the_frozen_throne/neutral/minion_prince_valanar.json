@@ -2,13 +2,12 @@
   "name": "Prince Valanar",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: If your deck has no 4-Cost cards, gain Lifesteal and Taunt.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "DeckContainsCondition",
       "cardFilter": {
@@ -17,6 +16,7 @@
       },
       "invert": true
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "MetaSpell",
       "spells": [

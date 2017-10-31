@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "card": "token_stone_elemental",
-    "value": 7
+    "value": 7,
+    "card": "token_stone_elemental"
   },
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",

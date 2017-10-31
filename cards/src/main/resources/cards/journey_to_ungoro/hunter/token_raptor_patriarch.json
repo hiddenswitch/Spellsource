@@ -1,14 +1,14 @@
 {
-	"name": "Raptor Patriarch",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "HUNTER",
-	"rarity": "FREE",
-	"race": "BEAST",
-	"description": "",
-	"collectible": false,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Raptor Patriarch",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

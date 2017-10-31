@@ -1,27 +1,27 @@
 {
-	"name": "Gorehowl",
-	"baseManaCost": 7,
-	"type": "WEAPON",
-	"damage": 7,
-	"durability": 1,
-	"heroClass": "WARRIOR",
-	"rarity": "EPIC",
-	"description": "Attacking a minion costs 1 Attack instead of 1 Durability.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterPhysicalAttackTrigger",
-			"sourcePlayer": "SELF",
-			"sourceEntityType": "HERO",
-			"targetEntityType": "MINION"
-		},
-		"spell": {
-			"class": "BuffWeaponSpell",
-			"target": "FRIENDLY_WEAPON",
-			"attackBonus": -1,
-			"hpBonus": 1
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Gorehowl",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "heroClass": "WARRIOR",
+  "damage": 7,
+  "durability": 1,
+  "rarity": "EPIC",
+  "description": "Attacking a minion costs 1 Attack instead of 1 Durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "BuffWeaponSpell",
+      "target": "FRIENDLY_WEAPON",
+      "attackBonus": -1,
+      "hpBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

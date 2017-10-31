@@ -19,8 +19,8 @@
         "trigger": {
           "eventTrigger": {
             "class": "CardPlayedTrigger",
-            "targetPlayer": "SELF",
-            "maxFires": 1
+            "maxFires": 1,
+            "targetPlayer": "SELF"
           },
           "spell": {
             "class": "RefreshHeroPowerSpell",

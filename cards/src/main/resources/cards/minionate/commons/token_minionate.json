@@ -1,14 +1,14 @@
 {
-	"id": "token_minionate",
-	"name": "Temp Token",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "token_minionate",
+  "name": "Temp Token",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

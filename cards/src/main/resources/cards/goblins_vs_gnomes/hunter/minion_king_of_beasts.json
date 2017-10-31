@@ -1,32 +1,32 @@
 {
-	"name": "King of Beasts",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 6,
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"race": "BEAST",
-	"description": "Taunt. Battlecry: Gain +1 Attack for each other Beast you have.",
-	"battlecry": {
-		"spell": {
-			"class": "BuffSpell",
-			"target": "SELF",
-			"attackBonus": {
-				"class": "EntityCounter",
-				"target": "OTHER_FRIENDLY_MINIONS",
-				"filter": {
-					"class": "RaceFilter",
-					"race": "BEAST"
-				}
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "King of Beasts",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Taunt. Battlecry: Gain +1 Attack for each other Beast you have.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": {
+        "class": "EntityCounter",
+        "target": "OTHER_FRIENDLY_MINIONS",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "BEAST"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

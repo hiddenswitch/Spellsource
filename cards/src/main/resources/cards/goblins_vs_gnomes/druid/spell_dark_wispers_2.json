@@ -1,26 +1,26 @@
 {
-	"name": "+5/5 and Taunt",
-	"baseManaCost": 6,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "EPIC",
-	"description": "+5/5 and Taunt",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "BuffSpell",
-				"attackBonus": 5,
-				"hpBonus": 5
-			},
-			{
-				"class": "AddAttributeSpell",
-				"attribute": "TAUNT"
-			}
-		]
-	},
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "+5/5 and Taunt",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "EPIC",
+  "description": "+5/5 and Taunt",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 5,
+        "hpBonus": 5
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

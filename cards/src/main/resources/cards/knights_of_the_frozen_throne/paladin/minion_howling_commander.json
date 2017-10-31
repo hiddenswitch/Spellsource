@@ -2,9 +2,9 @@
   "name": "Howling Commander",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "PALADIN",
   "rarity": "RARE",
   "description": "Battlecry: Draw a Divine Shield minion from your deck.",
   "battlecry": {

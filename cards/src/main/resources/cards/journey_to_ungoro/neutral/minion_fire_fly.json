@@ -2,9 +2,9 @@
   "name": "Fire Fly",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 2,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "race": "ELEMENTAL",
   "description": "Battlecry: Add a 1/2 Elemental to your hand.",
@@ -12,8 +12,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF",
-      "card": "token_flame_elemental"
+      "card": "token_flame_elemental",
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

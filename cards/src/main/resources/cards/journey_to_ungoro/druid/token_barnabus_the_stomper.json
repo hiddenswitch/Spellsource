@@ -2,9 +2,9 @@
   "name": "Barnabus the Stomper",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "DRUID",
   "baseAttack": 8,
   "baseHp": 8,
-  "heroClass": "DRUID",
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Battlecry: Reduce the Cost of minions in your deck to (0).",
@@ -13,14 +13,14 @@
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "FRIENDLY_DECK",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 0,
+        "operation": "SET"
+      },
       "filter": {
         "class": "CardFilter",
         "cardType": "MINION"
-      },
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "operation": "SET",
-        "value": 0
       }
     }
   },

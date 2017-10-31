@@ -1,17 +1,17 @@
 {
-  "set": "SPELLSOURCE",
+  "id": "Porsonid Champion",
   "name": "Porsonid Champion",
-  "description": "Stealth. ",
-  "baseHp": 10.0,
   "baseManaCost": 10.0,
   "type": "MINION",
-  "rarity": "LEGENDARY",
   "heroClass": "ANY",
-  "fileFormatVersion": 1,
-  "collectible": true,
+  "baseAttack": 8.0,
+  "baseHp": 10.0,
+  "rarity": "LEGENDARY",
+  "description": "Stealth. ",
   "attributes": {
     "STEALTH": true
   },
-  "id": "Porsonid Champion",
-  "baseAttack": 8.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

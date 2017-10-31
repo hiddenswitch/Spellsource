@@ -1,27 +1,27 @@
 {
-	"name": "Mal'Ganis",
-	"baseManaCost": 9,
-	"type": "MINION",
-	"baseAttack": 9,
-	"baseHp": 7,
-	"heroClass": "WARLOCK",
-	"rarity": "LEGENDARY",
-	"race": "DEMON",
-	"description": "Your other Demons have +2/+2. Your hero is Immune.",
-	"aura": {
-		"class": "BuffAura",
-		"target": "OTHER_FRIENDLY_MINIONS",
-		"attackBonus": 2,
-		"hpBonus": 2,
-		"filter": {
-			"class": "RaceFilter",
-			"race": "DEMON"
-		}
-	},
-	"attributes": {
-		"IMMUNE_HERO": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Mal'Ganis",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 9,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Your other Demons have +2/+2. Your hero is Immune.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 2,
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DEMON"
+    },
+    "hpBonus": 2
+  },
+  "attributes": {
+    "IMMUNE_HERO": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

@@ -1,14 +1,13 @@
 {
   "name": "Coldwraith",
-  "heroClass": "MAGE",
   "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "MAGE",
   "baseAttack": 3,
   "baseHp": 4,
-  "type": "MINION",
   "rarity": "COMMON",
   "description": "Battlecry: If an enemy is Frozen, draw a card.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "HasEntityCondition",
       "target": "ENEMY_CHARACTERS",
@@ -18,6 +17,7 @@
         "operation": "HAS"
       }
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "DrawCardSpell"
     }

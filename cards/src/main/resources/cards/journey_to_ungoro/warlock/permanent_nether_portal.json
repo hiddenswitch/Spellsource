@@ -1,11 +1,11 @@
 {
   "name": "Nether Portal",
+  "baseManaCost": 0,
   "type": "MINION",
   "heroClass": "WARLOCK",
-  "rarity": "LEGENDARY",
-  "baseManaCost": 0,
   "baseAttack": 0,
   "baseHp": 1,
+  "rarity": "LEGENDARY",
   "description": "At the end of your turn, summon two 3/2 Imps.",
   "trigger": {
     "eventTrigger": {
@@ -17,13 +17,13 @@
       "spells": [
         {
           "class": "SummonSpell",
-          "card": "token_nether_imp",
-          "boardPositionRelative": "RIGHT"
+          "boardPositionRelative": "RIGHT",
+          "card": "token_nether_imp"
         },
         {
           "class": "SummonSpell",
-          "card": "token_nether_imp",
-          "boardPositionRelative": "LEFT"
+          "boardPositionRelative": "LEFT",
+          "card": "token_nether_imp"
         }
       ]
     }

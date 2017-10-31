@@ -1,29 +1,29 @@
 {
-	"name": "Mogor the Ogre",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "All minions have a 50% chance to attack the wrong enemy.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TargetAcquisitionTrigger",
-			"actionType": "PHYSICAL_ATTACK",
-			"sourcePlayer": "BOTH",
-			"targetPlayer": "BOTH",
-			"sourceEntityType": "MINION",
-			"queueCondition": {
-				"class": "RandomCondition"
-			}
-		},
-		"spell": {
-			"class": "FumbleSpell",
-			"target": "EVENT_TARGET"
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Mogor the Ogre",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "All minions have a 50% chance to attack the wrong enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "queueCondition": {
+        "class": "RandomCondition"
+      },
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "BOTH",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "FumbleSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

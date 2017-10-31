@@ -1,16 +1,16 @@
 {
-	"name": "Healing Totem",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "FREE",
-	"description": "Summon a Healing Totem.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"card": "token_healing_totem"
-	},
-	"collectible": false,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Healing Totem",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "FREE",
+  "description": "Summon a Healing Totem.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_healing_totem"
+  },
+  "collectible": false,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

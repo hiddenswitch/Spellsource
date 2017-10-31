@@ -1,1 +1,23 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Soldier Of Ofen Xarvan", "heroClass": "ANY", "manaCostModifier": {"attribute": "ATTACK", "class": "AttributeValueProvider", "target": "FRIENDLY_WEAPON"}, "description": "Costs (1) less per Attack of your weapon.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 6.0, "race": "PIRATE", "baseManaCost": 5.0, "attributes": {"TAUNT": true}, "type": "MINION", "id": "Soldier Of Ofen Xarvan", "baseAttack": 6.0}
+{
+  "id": "Soldier Of Ofen Xarvan",
+  "name": "Soldier Of Ofen Xarvan",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 6.0,
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "Costs (1) less per Attack of your weapon.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "AttributeValueProvider",
+    "target": "FRIENDLY_WEAPON",
+    "attribute": "ATTACK"
+  }
+}

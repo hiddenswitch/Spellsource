@@ -1,16 +1,16 @@
 {
-	"name": "Fireword",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "PRIEST",
-	"rarity": "FREE",
-	"description": "Deal 2 damage.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "DamageSpell",
-		"value": 2
-	},
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Fireword",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "PRIEST",
+  "rarity": "FREE",
+  "description": "Deal 2 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 2
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

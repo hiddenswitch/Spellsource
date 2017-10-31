@@ -2,21 +2,21 @@
   "name": "Arrogant Crusader",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 5,
   "baseHp": 2,
-  "heroClass": "PALADIN",
   "rarity": "RARE",
   "description": "Deathrattle: If it's your opponent's turn, summon a 2/2 Ghoul.",
   "deathrattle": {
     "class": "ConditionalSpell",
-    "spell": {
-      "class": "SummonSpell",
-      "targetPlayer": "ACTIVE",
-      "card": "token_ghoul"
-    },
     "condition": {
       "class": "OwnedByPlayerCondition",
       "targetPlayer": "INACTIVE"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_ghoul",
+      "targetPlayer": "ACTIVE"
     }
   },
   "attributes": {

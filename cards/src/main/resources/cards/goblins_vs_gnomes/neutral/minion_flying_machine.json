@@ -1,17 +1,17 @@
 {
-	"name": "Flying Machine",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "MECH",
-	"description": "Windfury",
-	"attributes": {
-		"WINDFURY": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Flying Machine",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Windfury",
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

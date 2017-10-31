@@ -5,12 +5,12 @@
   "heroClass": "WARLOCK",
   "rarity": "RARE",
   "description": "Destroy a friendly minion and deal its Attack damage to all enemy minions.",
-  "targetSelection": "FRIENDLY_MINIONS",
   "condition": {
     "class": "MinionCountCondition",
-    "operation": "GREATER",
-    "value": 0
+    "value": 0,
+    "operation": "GREATER"
   },
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
     "value": {

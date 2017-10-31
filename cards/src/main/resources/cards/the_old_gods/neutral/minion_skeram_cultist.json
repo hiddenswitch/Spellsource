@@ -1,53 +1,53 @@
 {
-	"name": "Skeram Cultist",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Battlecry: Give your C'Thun +2/+2 (wherever it is).",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"target": "FRIENDLY_MINIONS",
-					"value": 2,
-					"filter": {
-						"class": "SpecificCardFilter",
-						"cardId": "minion_cthun"
-					}
-				},
-				{
-					"class": "BuffSpell",
-					"target": "FRIENDLY_HAND",
-					"value": 2,
-					"filter": {
-						"class": "SpecificCardFilter",
-						"cardId": "minion_cthun"
-					}
-				},
-				{
-					"class": "ModifyAttributeSpell",
-					"target": "FRIENDLY_PLAYER",
-					"attribute": "CTHUN_ATTACK_BUFF",
-					"value": 2
-				},
-				{
-					"class": "ModifyAttributeSpell",
-					"target": "FRIENDLY_PLAYER",
-					"attribute": "CTHUN_HEALTH_BUFF",
-					"value": 2
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Skeram Cultist",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Battlecry: Give your C'Thun +2/+2 (wherever it is).",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 2,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cardId": "minion_cthun"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "value": 2,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cardId": "minion_cthun"
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 2,
+          "attribute": "CTHUN_ATTACK_BUFF"
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 2,
+          "attribute": "CTHUN_HEALTH_BUFF"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

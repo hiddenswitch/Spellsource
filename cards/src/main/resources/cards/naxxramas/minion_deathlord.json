@@ -1,22 +1,22 @@
 {
-	"name": "Deathlord",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Taunt. Deathrattle: Your opponent puts a minion from their deck into the battlefield.",
-	"deathrattle": {
-		"class": "PutRandomMinionOnBoardSpell",
-		"targetPlayer": "OPPONENT",
-		"cardLocation": "DECK"
-	},
-	"attributes": {
-		"DEATHRATTLES": true,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Deathlord",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "description": "Taunt. Deathrattle: Your opponent puts a minion from their deck into the battlefield.",
+  "deathrattle": {
+    "class": "PutRandomMinionOnBoardSpell",
+    "cardLocation": "DECK",
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

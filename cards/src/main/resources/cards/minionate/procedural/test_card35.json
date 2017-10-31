@@ -1,1 +1,19 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Sneks", "heroClass": "ANY", "description": "Taunt. ", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 3.0, "race": "MECH", "baseManaCost": 2.0, "attributes": {"TAUNT": true, "DIVINE_SHIELD": true}, "type": "MINION", "id": "Sneks", "baseAttack": 1.0}
+{
+  "id": "Sneks",
+  "name": "Sneks",
+  "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1.0,
+  "baseHp": 3.0,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Taunt. ",
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

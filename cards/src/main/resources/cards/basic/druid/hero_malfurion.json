@@ -1,17 +1,17 @@
 {
-	"id": "hero_malfurion",
-	"name": "Shiramba",
-	"baseManaCost": 0,
-	"description": "Hero Power: Gain 1 armor and +1 Attack this turn",
-	"heroPower": "hero_power_shapeshift",
-	"type": "HERO",
-	"heroClass": "DRUID",
-	"rarity": "FREE",
-	"attributes": {
-		"HP": 30,
-		"MAX_HP": 30
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "id": "hero_malfurion",
+  "name": "Shiramba",
+  "heroPower": "hero_power_shapeshift",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "DRUID",
+  "rarity": "FREE",
+  "description": "Hero Power: Gain 1 armor and +1 Attack this turn",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

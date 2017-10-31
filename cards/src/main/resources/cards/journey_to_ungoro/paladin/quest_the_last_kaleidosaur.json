@@ -5,20 +5,20 @@
   "heroClass": "MAGE",
   "rarity": "LEGENDARY",
   "description": "Quest: Cast 6 spells on your minions. Reward: Galvadon",
-  "targetSelection": "NONE",
   "quest": {
     "class": "TargetAcquisitionTrigger",
-    "sourcePlayer": "SELF",
     "actionType": "SPELL",
-    "targetEntityType": "MINION",
-    "targetPlayer": "SELF",
     "queueCondition": {
       "class": "OwnedByPlayerCondition",
       "target": "EVENT_TARGET",
       "targetPlayer": "SELF"
-    }
+    },
+    "sourcePlayer": "SELF",
+    "targetEntityType": "MINION",
+    "targetPlayer": "SELF"
   },
   "countUntilCast": 6,
+  "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "card": "token_galvadon"

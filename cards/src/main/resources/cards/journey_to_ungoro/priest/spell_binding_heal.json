@@ -1,7 +1,11 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
+  "name": "Binding Heal",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "COMMON",
   "description": "Restore 5 health to a minion and to your hero.",
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
@@ -11,16 +15,12 @@
       },
       {
         "class": "HealSpell",
-        "value": 5,
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "value": 5
       }
     ]
   },
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "heroClass": "PRIEST",
-  "targetSelection": "MINIONS",
-  "baseManaCost": 1,
-  "type": "SPELL",
-  "name": "Binding Heal"
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

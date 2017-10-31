@@ -1,1 +1,55 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Darkbomm", "heroClass": "ANY", "description": "[x]Divine Shield\nBattlecry: Give your C'Thun\n+2/+2 (wherever it is).", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 4.0, "baseManaCost": 5.0, "attributes": {"BATTLECRY": true, "DIVINE_SHIELD": true}, "battlecry": {"spell": {"class": "MetaSpell", "spells": [{"filter": {"class": "SpecificCardFilter", "cardId": "minion_cthun"}, "class": "BuffSpell", "value": 2, "target": "FRIENDLY_MINIONS"}, {"filter": {"class": "SpecificCardFilter", "cardId": "minion_cthun"}, "class": "BuffSpell", "value": 2, "target": "FRIENDLY_HAND"}, {"attribute": "CTHUN_ATTACK_BUFF", "class": "ModifyAttributeSpell", "value": 2, "target": "FRIENDLY_PLAYER"}, {"attribute": "CTHUN_HEALTH_BUFF", "class": "ModifyAttributeSpell", "value": 2, "target": "FRIENDLY_PLAYER"}]}}, "type": "MINION", "id": "Darkbomm", "baseAttack": 6.0}
+{
+  "id": "Darkbomm",
+  "name": "Darkbomm",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 4.0,
+  "rarity": "COMMON",
+  "description": "[x]Divine Shield\nBattlecry: Give your C'Thun\n+2/+2 (wherever it is).",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 2,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cardId": "minion_cthun"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "value": 2,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cardId": "minion_cthun"
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 2,
+          "attribute": "CTHUN_ATTACK_BUFF"
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 2,
+          "attribute": "CTHUN_HEALTH_BUFF"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

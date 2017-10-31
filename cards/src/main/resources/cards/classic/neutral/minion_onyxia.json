@@ -2,9 +2,9 @@
   "name": "Onyxia",
   "baseManaCost": 9,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 8,
   "baseHp": 8,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "race": "DRAGON",
   "description": "Battlecry: Summon 1/1 Terracota Warriors until your side of the battlefield is full.",
@@ -14,40 +14,40 @@
       "spells": [
         {
           "class": "SummonSpell",
-          "card": "token_whelp",
-          "boardPositionRelative": "RIGHT"
+          "boardPositionRelative": "RIGHT",
+          "card": "token_whelp"
         },
         {
           "class": "SummonSpell",
-          "card": "token_whelp",
-          "boardPositionRelative": "LEFT"
+          "boardPositionRelative": "LEFT",
+          "card": "token_whelp"
         },
         {
           "class": "SummonSpell",
-          "card": "token_whelp",
-          "boardPositionRelative": "RIGHT"
+          "boardPositionRelative": "RIGHT",
+          "card": "token_whelp"
         },
         {
           "class": "SummonSpell",
-          "card": "token_whelp",
-          "boardPositionRelative": "LEFT"
+          "boardPositionRelative": "LEFT",
+          "card": "token_whelp"
         },
         {
           "class": "SummonSpell",
-          "card": "token_whelp",
-          "boardPositionRelative": "RIGHT"
+          "boardPositionRelative": "RIGHT",
+          "card": "token_whelp"
         },
         {
           "class": "SummonSpell",
-          "card": "token_whelp",
-          "boardPositionRelative": "LEFT"
+          "boardPositionRelative": "LEFT",
+          "card": "token_whelp"
         }
       ]
     }
   },
   "attributes": {
-    "NAME": "Emperor Colossus",
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "NAME": "Emperor Colossus"
   },
   "collectible": true,
   "set": "CLASSIC",

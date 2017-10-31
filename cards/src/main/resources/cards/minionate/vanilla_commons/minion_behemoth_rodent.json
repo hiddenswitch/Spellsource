@@ -1,13 +1,13 @@
 {
-	"name": "Behemoth Rodent",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Behemoth Rodent",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

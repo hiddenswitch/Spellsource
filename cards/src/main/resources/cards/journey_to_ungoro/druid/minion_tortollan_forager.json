@@ -2,9 +2,9 @@
   "name": "Tortollan Forager",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "DRUID",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "DRUID",
   "rarity": "COMMON",
   "description": "Battlecry: Add a random minion with 5 or more Attack to your hand.",
   "battlecry": {
@@ -13,10 +13,10 @@
       "class": "ReceiveCardSpell",
       "cardFilter": {
         "class": "CardFilter",
-        "cardType": "MINION",
+        "value": 5,
         "attribute": "ATTACK",
-        "operation": "GREATER_OR_EQUAL",
-        "value": 5
+        "cardType": "MINION",
+        "operation": "GREATER_OR_EQUAL"
       }
     }
   },

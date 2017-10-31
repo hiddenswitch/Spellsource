@@ -1,28 +1,28 @@
 {
-	"name": "Leeroy Jenkins",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "NONE",
-	"description": "Charge. Battlecry: Summon two 1/1 Terracota Warriors for your opponent.",
-	"battlecry": {
-		"spell": {
-			"class": "SummonSpell",
-			"targetPlayer": "OPPONENT",
-			"cards": [
-				"token_whelp",
-				"token_whelp"
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"CHARGE": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Leeroy Jenkins",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "race": "NONE",
+  "description": "Charge. Battlecry: Summon two 1/1 Terracota Warriors for your opponent.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_whelp",
+        "token_whelp"
+      ],
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

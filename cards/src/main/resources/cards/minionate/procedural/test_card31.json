@@ -1,27 +1,27 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Highly Protective Mink",
   "name": "Slightly Protective Mink",
-  "heroClass": "ANY",
-  "description": "All attacks deal 2 damage to your hero.",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "baseHp": 4.0,
-  "trigger": {
-    "eventTrigger": {
-      "targetPlayer": "SELF",
-      "targetEntityType": "HERO",
-      "sourcePlayer": "BOTH",
-      "class": "PreDamageTrigger"
-    },
-    "spell": {
-      "operation": "SET",
-      "class": "ModifyDamageSpell",
-      "value": 2
-    }
-  },
   "baseManaCost": 3.0,
   "type": "MINION",
-  "id": "Highly Protective Mink",
-  "baseAttack": 2.0
+  "heroClass": "ANY",
+  "baseAttack": 2.0,
+  "baseHp": 4.0,
+  "rarity": "RARE",
+  "description": "All attacks deal 2 damage to your hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PreDamageTrigger",
+      "sourcePlayer": "BOTH",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ModifyDamageSpell",
+      "value": 2,
+      "operation": "SET"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

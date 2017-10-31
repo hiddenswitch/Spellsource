@@ -1,17 +1,17 @@
 {
-  "set": "SPELLSOURCE",
+  "id": "Stormyniat Rader",
   "name": "Stormyniat Rader",
-  "description": "(2) Overload",
-  "type": "MINION",
-  "rarity": "LEGENDARY",
-  "heroClass": "ANY",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "baseHp": 11.0,
   "baseManaCost": 10.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7.0,
+  "baseHp": 11.0,
+  "rarity": "LEGENDARY",
+  "description": "(2) Overload",
   "attributes": {
     "OVERLOAD": 2.0
   },
-  "id": "Stormyniat Rader",
-  "baseAttack": 7.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

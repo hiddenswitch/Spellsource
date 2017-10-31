@@ -1,25 +1,25 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Pterrordax Hatchling",
+  "baseManaCost": 3,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Battlecry: Adapt.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 2,
-  "race": "BEAST",
   "baseAttack": 2,
-  "attributes": {
-    "BATTLECRY": true
-  },
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: Adapt.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "AdaptSpell",
       "target": "SELF",
       "group": "group_adapt"
-    },
-    "targetSelection": "NONE"
+    }
   },
-  "type": "MINION",
-  "baseManaCost": 3
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

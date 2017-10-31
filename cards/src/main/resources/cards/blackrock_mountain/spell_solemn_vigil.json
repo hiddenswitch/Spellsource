@@ -1,19 +1,19 @@
 {
-	"name": "Solemn Vigil",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "PALADIN",
-	"rarity": "COMMON",
-	"description": "Draw 2 cards. Costs (1) less for each minion that died this turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DrawCardSpell",
-		"value": 2
-	},
-	"manaCostModifier": {
-		"class": "DeadMinionsThisTurn"
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Solemn Vigil",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "COMMON",
+  "description": "Draw 2 cards. Costs (1) less for each minion that died this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "DeadMinionsThisTurn"
+  }
 }

@@ -1,13 +1,13 @@
 {
-	"name": "\"Little Friend\"",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": false,
-	"set": "MEAN_STREETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "\"Little Friend\"",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

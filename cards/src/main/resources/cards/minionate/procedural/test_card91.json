@@ -1,1 +1,40 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Scarlet", "heroClass": "ROGUE", "description": "Battlecry and Deathrattle: Add a random Toxin card to your hand.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 2.0, "deathrattle": {"cards": ["spell_bloodthistle_toxin", "spell_briarthorn_toxin", "spell_fadeleaf_toxin", "spell_firebloom_toxin", "spell_kingsblood_toxin"], "class": "ReceiveRandomCardSpell"}, "baseManaCost": 3.0, "attributes": {"BATTLECRY": true, "DEATHRATTLES": true}, "battlecry": {"spell": {"cards": ["spell_bloodthistle_toxin", "spell_briarthorn_toxin", "spell_fadeleaf_toxin", "spell_firebloom_toxin", "spell_kingsblood_toxin"], "class": "ReceiveRandomCardSpell"}}, "type": "MINION", "id": "Scarlet", "baseAttack": 5.0}
+{
+  "id": "Scarlet",
+  "name": "Scarlet",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 5.0,
+  "baseHp": 2.0,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry and Deathrattle: Add a random Toxin card to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveRandomCardSpell",
+      "cards": [
+        "spell_bloodthistle_toxin",
+        "spell_briarthorn_toxin",
+        "spell_fadeleaf_toxin",
+        "spell_firebloom_toxin",
+        "spell_kingsblood_toxin"
+      ]
+    }
+  },
+  "deathrattle": {
+    "class": "ReceiveRandomCardSpell",
+    "cards": [
+      "spell_bloodthistle_toxin",
+      "spell_briarthorn_toxin",
+      "spell_fadeleaf_toxin",
+      "spell_firebloom_toxin",
+      "spell_kingsblood_toxin"
+    ]
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

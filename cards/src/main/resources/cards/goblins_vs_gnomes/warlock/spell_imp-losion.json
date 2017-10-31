@@ -1,33 +1,33 @@
 {
-	"name": "Imp-losion",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "RARE",
-	"description": "Deal 2-4 damage to a minion. Summon a 1/1 Imp for each damage dealt.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": {
-					"class": "RandomValueProvider",
-					"min": 2,
-					"max": 4
-				}
-			},
-			{
-				"class": "SummonSpell",
-				"value": {
-					"class": "AttributeValueProvider",
-					"attribute": "LAST_HIT"
-				},
-				"card": "token_imp"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Imp-losion",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "RARE",
+  "description": "Deal 2-4 damage to a minion. Summon a 1/1 Imp for each damage dealt.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": {
+          "class": "RandomValueProvider",
+          "max": 4,
+          "min": 2
+        }
+      },
+      {
+        "class": "SummonSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "LAST_HIT"
+        },
+        "card": "token_imp"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

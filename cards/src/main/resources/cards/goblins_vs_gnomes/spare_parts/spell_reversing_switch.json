@@ -1,15 +1,15 @@
 {
-	"name": "Reversing Switch",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Swap a minion's Attack and Health",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "SwapAttackAndHpSpell"
-	},
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Reversing Switch",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Swap a minion's Attack and Health",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SwapAttackAndHpSpell"
+  },
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

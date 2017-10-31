@@ -1,16 +1,16 @@
 {
-	"name": "Mise en Place",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "FREE",
-	"description": "Gain 2 Mana this turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "GainManaSpell",
-		"value": 2
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Mise en Place",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "FREE",
+  "description": "Gain 2 Mana this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "GainManaSpell",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

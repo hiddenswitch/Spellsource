@@ -10,21 +10,21 @@
     "class": "DiscoverRandomCardSpell",
     "spell": {
       "class": "ReceiveCardAndDoSomethingSpell",
-      "targetPlayer": "SELF",
       "spell": {
         "class": "CardCostModifierSpell",
         "cardCostModifier": {
           "class": "CardCostModifier",
           "target": "EVENT_CARD",
-          "operation": "SUBTRACT",
-          "value": 2
+          "value": 2,
+          "operation": "SUBTRACT"
         }
-      }
+      },
+      "targetPlayer": "SELF"
     },
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "SPELL",
-      "heroClass": "MAGE"
+      "heroClass": "MAGE",
+      "cardType": "SPELL"
     }
   },
   "collectible": true,

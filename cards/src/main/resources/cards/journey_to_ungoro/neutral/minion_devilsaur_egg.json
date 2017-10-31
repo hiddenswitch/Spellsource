@@ -1,20 +1,20 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Devilsaur Egg",
+  "baseManaCost": 3,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Deathrattle: Summon a 5/5 Devilsaur.",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
+  "baseAttack": 0,
   "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Deathrattle: Summon a 5/5 Devilsaur.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_devilsaur"
   },
-  "baseAttack": 0,
   "attributes": {
     "DEATHRATTLES": true
   },
-  "type": "MINION",
-  "baseManaCost": 3
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

@@ -1,24 +1,24 @@
 {
-	"name": "Pit Lord",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 6,
-	"heroClass": "WARLOCK",
-	"rarity": "EPIC",
-	"race": "DEMON",
-	"description": "Battlecry: Deal 5 damage to your hero.",
-	"battlecry": {
-		"spell": {
-			"class": "DamageSpell",
-			"target": "FRIENDLY_HERO",
-			"value": 5
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Pit Lord",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "DEMON",
+  "description": "Battlecry: Deal 5 damage to your hero.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

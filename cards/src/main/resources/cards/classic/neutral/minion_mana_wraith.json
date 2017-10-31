@@ -1,19 +1,19 @@
 {
-	"name": "Mana Wraith",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "ALL minions cost (1) more.",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"cardType": "MINION",
-		"targetPlayer": "BOTH",
-		"value": 1
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Mana Wraith",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "ALL minions cost (1) more.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 1,
+    "cardType": "MINION",
+    "targetPlayer": "BOTH"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

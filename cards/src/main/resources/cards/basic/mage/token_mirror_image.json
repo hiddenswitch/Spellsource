@@ -1,16 +1,16 @@
 {
-	"name": "Mirror Image",
-	"baseManaCost": 0,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 2,
-	"heroClass": "MAGE",
-	"rarity": "FREE",
-	"description": "Taunt",
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Mirror Image",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

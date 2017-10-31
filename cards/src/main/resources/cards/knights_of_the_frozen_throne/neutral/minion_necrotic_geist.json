@@ -2,21 +2,21 @@
   "name": "Necrotic Geist",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Whenever one of your other minions dies, summon a 2/2 Ghoul.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
-      "targetPlayer": "SELF",
-      "hostTargetType": "IGNORE_AS_TARGET"
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "SummonSpell",
-      "targetPlayer": "SELF",
-      "card": "token_ghoul"
+      "card": "token_ghoul",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

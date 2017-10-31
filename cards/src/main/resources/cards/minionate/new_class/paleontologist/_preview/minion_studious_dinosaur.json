@@ -1,26 +1,26 @@
 {
-	"name": "Studious Dinosaur",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 4,
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"description": "Gain +1/+1 whenever you play a card with Mana Surge.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "CardPlayedTrigger",
-			"targetPlayer": "SELF",
-			"requiredAttribute": "OVERLOAD"
-		},
-		"spell": {
-			"class": "BuffSpell",
-			"target": "SELF",
-			"attackBonus": 1,
-			"hpBonus": 1
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Studious Dinosaur",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Gain +1/+1 whenever you play a card with Mana Surge.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "requiredAttribute": "OVERLOAD",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

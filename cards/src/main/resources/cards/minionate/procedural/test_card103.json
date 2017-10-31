@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Destroyed Bar Madeer", "heroClass": "ANY", "description": "Whenever your opponent casts a spell, summon a Burly Rockjaw Trogg.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 3.0, "trigger": {"eventTrigger": {"sourcePlayer": "OPPONENT", "class": "SpellCastedTrigger"}, "spell": {"boardPositionRelative": "RIGHT", "class": "SummonSpell", "card": "minion_burly_rockjaw_trogg"}}, "baseManaCost": 3.0, "type": "MINION", "id": "Destroyed Bar Madeer", "baseAttack": 4.0}
+{
+  "id": "Destroyed Bar Madeer",
+  "name": "Destroyed Bar Madeer",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 3.0,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your opponent casts a spell, summon a Burly Rockjaw Trogg.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "minion_burly_rockjaw_trogg"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

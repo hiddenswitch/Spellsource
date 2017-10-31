@@ -5,6 +5,12 @@
   "heroClass": "WARLOCK",
   "rarity": "EPIC",
   "description": "Destroy 2 random enemy minions. Discard 2 random cards.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 1,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -22,12 +28,6 @@
         "value": 2
       }
     ]
-  },
-  "condition": {
-    "class": "MinionCountCondition",
-    "targetPlayer": "OPPONENT",
-    "operation": "GREATER",
-    "value": 1
   },
   "collectible": true,
   "set": "THE_GRAND_TOURNAMENT",

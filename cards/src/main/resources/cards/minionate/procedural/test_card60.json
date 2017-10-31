@@ -1,60 +1,60 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Bald Snekin",
   "name": "Bald Snekin",
+  "baseManaCost": 9.0,
+  "type": "MINION",
   "heroClass": "DRUID",
-  "description": "Choose One -\n+5 Attack; or +5 Health and Taunt.",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
+  "baseAttack": 6.0,
   "baseHp": 8.0,
+  "rarity": "EPIC",
+  "description": "Choose One -\n+5 Attack; or +5 Health and Taunt.",
+  "options": [
+    {
+      "description": "+5 Attack",
+      "spell": {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "attackBonus": 5
+      }
+    },
+    {
+      "description": "+5 Health/Taunt",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "target": "SELF",
+            "hpBonus": 5
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "TAUNT"
+          }
+        ]
+      }
+    }
+  ],
   "bothOptions": {
+    "description": "+5/+5 and Taunt",
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
           "class": "BuffSpell",
-          "value": 5,
-          "target": "SELF"
+          "target": "SELF",
+          "value": 5
         },
         {
-          "attribute": "TAUNT",
           "class": "AddAttributeSpell",
-          "target": "SELF"
+          "target": "SELF",
+          "attribute": "TAUNT"
         }
       ]
-    },
-    "description": "+5/+5 and Taunt"
-  },
-  "options": [
-    {
-      "spell": {
-        "attackBonus": 5,
-        "class": "BuffSpell",
-        "target": "SELF"
-      },
-      "description": "+5 Attack"
-    },
-    {
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "hpBonus": 5,
-            "class": "BuffSpell",
-            "target": "SELF"
-          },
-          {
-            "attribute": "TAUNT",
-            "class": "AddAttributeSpell",
-            "target": "SELF"
-          }
-        ]
-      },
-      "description": "+5 Health/Taunt"
     }
-  ],
-  "baseManaCost": 9.0,
-  "type": "MINION",
-  "id": "Bald Snekin",
-  "baseAttack": 6.0
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

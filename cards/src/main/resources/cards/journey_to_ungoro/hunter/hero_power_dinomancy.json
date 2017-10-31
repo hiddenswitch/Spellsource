@@ -5,15 +5,15 @@
   "heroClass": "HUNTER",
   "rarity": "FREE",
   "description": "Give a Beast +2/+2",
-  "targetSelection": "MINIONS",
   "condition": {
     "class": "MinionOnBoardCondition",
-    "targetPlayer": "BOTH",
     "cardFilter": {
       "class": "CardFilter",
       "race": "BEAST"
-    }
+    },
+    "targetPlayer": "BOTH"
   },
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
     "value": 2,

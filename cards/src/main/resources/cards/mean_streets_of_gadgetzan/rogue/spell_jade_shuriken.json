@@ -1,55 +1,55 @@
 {
-	"name": "Jade Shuriken",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "Deal 2 damage. Combo: Summon a Animated Shuriken.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "ComboSpell",
-		"spell1": {
-			"class": "DamageSpell",
-			"value": 2
-		},
-		"spell2": {
-			"class": "CreateSummonSpell",
-			"name": "Animated Shuriken",
-			"attackBonus": {
-				"class": "AttributeValueProvider",
-				"target": "FRIENDLY_PLAYER",
-				"attribute": "JADE_BUFF",
-				"offset": 1
-			},
-			"hpBonus": {
-				"class": "AttributeValueProvider",
-				"target": "FRIENDLY_PLAYER",
-				"attribute": "JADE_BUFF",
-				"offset": 1
-			},
-			"mana": {
-				"class": "AlgebraicValueProvider",
-				"operation": "MINIMUM",
-				"value1": {
-					"class": "AttributeValueProvider",
-					"target": "FRIENDLY_PLAYER",
-					"attribute": "JADE_BUFF",
-					"offset": 1
-				},
-				"value2": 10
-			},
-			"spell": {
-				"class": "ModifyAttributeSpell",
-				"target": "FRIENDLY_PLAYER",
-				"attribute": "JADE_BUFF",
-				"value": 1
-			}
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "MEAN_STREETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Jade Shuriken",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "COMMON",
+  "description": "Deal 2 damage. Combo: Summon a Animated Shuriken.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ComboSpell",
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "CreateSummonSpell",
+      "name": "Animated Shuriken",
+      "spell": {
+        "class": "ModifyAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "value": 1,
+        "attribute": "JADE_BUFF"
+      },
+      "attackBonus": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "JADE_BUFF",
+        "offset": 1
+      },
+      "hpBonus": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "JADE_BUFF",
+        "offset": 1
+      },
+      "mana": {
+        "class": "AlgebraicValueProvider",
+        "operation": "MINIMUM",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "JADE_BUFF",
+          "offset": 1
+        },
+        "value2": 10
+      }
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

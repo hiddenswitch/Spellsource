@@ -2,11 +2,11 @@
   "name": "Bearshark",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "HUNTER",
   "baseAttack": 4,
   "baseHp": 3,
-  "race": "BEAST",
-  "heroClass": "HUNTER",
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Can't be targeted by spells or Hero Powers.",
   "attributes": {
     "UNTARGETABLE_BY_SPELLS": true

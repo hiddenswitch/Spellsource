@@ -1,16 +1,16 @@
 {
-	"name": "Holy Light",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "PALADIN",
-	"rarity": "FREE",
-	"description": "Restore 6 Health.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "HealSpell",
-		"value": 6
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Holy Light",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "FREE",
+  "description": "Restore 6 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 6
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

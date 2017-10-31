@@ -1,33 +1,33 @@
 {
-	"name": "Homing Chicken",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"race": "MECH",
-	"description": "At the start of your turn, destroy this minion and draw 3 cards.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnStartTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "DrawCardSpell",
-					"value": 3
-				},
-				{
-					"class": "DestroySpell",
-					"target": "SELF"
-				}
-			]
-		}
-	},
-	"collectible": false,
-	"set": "PROMO",
-	"fileFormatVersion": 1
+  "name": "Homing Chicken",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "At the start of your turn, destroy this minion and draw 3 cards.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DrawCardSpell",
+          "value": 3
+        },
+        {
+          "class": "DestroySpell",
+          "target": "SELF"
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "PROMO",
+  "fileFormatVersion": 1
 }

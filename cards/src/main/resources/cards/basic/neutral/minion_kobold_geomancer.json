@@ -1,16 +1,16 @@
 {
-	"name": "Kobold Geomancer",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Spell Damage +1",
-	"attributes": {
-		"SPELL_DAMAGE": 1
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Kobold Geomancer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Spell Damage +1",
+  "attributes": {
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

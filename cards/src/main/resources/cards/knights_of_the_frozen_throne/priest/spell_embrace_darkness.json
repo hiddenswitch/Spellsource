@@ -11,8 +11,8 @@
     "trigger": {
       "eventTrigger": {
         "class": "TurnStartTrigger",
-        "targetPlayer": "SELF",
-        "maxFires": 1
+        "maxFires": 1,
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "MindControlSpell",

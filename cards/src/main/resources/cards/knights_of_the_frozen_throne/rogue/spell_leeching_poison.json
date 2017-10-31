@@ -5,15 +5,15 @@
   "heroClass": "ROGUE",
   "rarity": "COMMON",
   "description": "Give your weapon Lifesteal.",
-  "targetSelection": "NONE",
   "condition": {
     "class": "HasWeaponCondition",
     "targetPlayer": "SELF"
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",
-    "attribute": "LIFESTEAL",
-    "target": "FRIENDLY_WEAPON"
+    "target": "FRIENDLY_WEAPON",
+    "attribute": "LIFESTEAL"
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

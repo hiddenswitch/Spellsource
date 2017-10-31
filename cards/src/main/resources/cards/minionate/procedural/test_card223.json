@@ -1,1 +1,23 @@
-{"deathrattle": {"class": "DamageSpell", "value": 2, "target": "ALL_MINIONS"}, "set": "SPELLSOURCE", "name": "Mover", "heroClass": "ANY", "description": "Deathrattle: Deal 2 damage to all minions.", "fileFormatVersion": 1, "collectible": true, "rarity": "COMMON", "baseHp": 4.0, "race": "MECH", "baseManaCost": 3.0, "attributes": {"DEATHRATTLES": true}, "type": "MINION", "id": "Mover", "baseAttack": 3.0}
+{
+  "id": "Mover",
+  "name": "Mover",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3.0,
+  "baseHp": 4.0,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Deathrattle: Deal 2 damage to all minions.",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "ALL_MINIONS",
+    "value": 2
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

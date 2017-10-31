@@ -1,16 +1,16 @@
 {
-	"name": "Fox Cub",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 1,
-	"heroClass": "ROGUE",
-	"rarity": "FREE",
-	"description": "",
-	"attributes": {
-		"NAME": "Fox Cub"
-	},
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Fox Cub",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {
+    "NAME": "Fox Cub"
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

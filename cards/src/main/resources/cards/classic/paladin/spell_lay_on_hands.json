@@ -1,25 +1,25 @@
 {
-	"name": "Lay on Hands",
-	"baseManaCost": 8,
-	"type": "SPELL",
-	"heroClass": "PALADIN",
-	"rarity": "EPIC",
-	"description": "Restore 8 Health. Draw 3 cards.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "HealSpell",
-				"value": 8
-			},
-			{
-				"class": "DrawCardSpell",
-				"value": 3
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Lay on Hands",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "EPIC",
+  "description": "Restore 8 Health. Draw 3 cards.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": 8
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

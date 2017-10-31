@@ -1,30 +1,30 @@
 {
-	"name": "Reno Jackson",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: If your deck contains no duplicates, fully heal your Hero.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "HealSpell",
-			"target": "FRIENDLY_HERO",
-			"value": {
-				"class": "AttributeValueProvider",
-				"attribute": "MAX_HP"
-			}
-		},
-		"condition": {
-			"class": "HighlanderDeckCondition"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Reno Jackson",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If your deck contains no duplicates, fully heal your Hero.",
+  "battlecry": {
+    "condition": {
+      "class": "HighlanderDeckCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "MAX_HP"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

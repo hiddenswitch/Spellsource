@@ -1,16 +1,16 @@
 {
-	"name": "Chi Blast",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "MAGE",
-	"rarity": "FREE",
-	"description": "Deal 2 damage.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "DamageSpell",
-		"value": 2
-	},
-	"collectible": false,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Chi Blast",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "MAGE",
+  "rarity": "FREE",
+  "description": "Deal 2 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 2
+  },
+  "collectible": false,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

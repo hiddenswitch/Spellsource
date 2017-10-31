@@ -2,9 +2,9 @@
   "name": "Spectral Pillager",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "ROGUE",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ROGUE",
   "rarity": "EPIC",
   "description": "Combo: Deal damage equal to the number of other cards you've played this turn.",
   "battlecry": {

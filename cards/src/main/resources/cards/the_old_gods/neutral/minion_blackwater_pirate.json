@@ -1,20 +1,20 @@
 {
-	"name": "Blackwater Pirate",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"race": "PIRATE",
-	"description": "Your Weapons cost (2) less.",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"cardType": "WEAPON",
-		"targetPlayer": "SELF",
-		"value": -2
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Blackwater Pirate",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "PIRATE",
+  "description": "Your Weapons cost (2) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -2,
+    "cardType": "WEAPON",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

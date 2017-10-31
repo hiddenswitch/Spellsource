@@ -1,1 +1,23 @@
-{"deathrattle": {"howMany": 1, "class": "MissilesSpell", "value": 3, "target": "ENEMY_MINIONS"}, "set": "JOURNEY_TO_UNGORO", "name": "Volatile Elemental", "heroClass": "ANY", "description": "Deathrattle: Deal 3 damage to a random enemy minion.", "fileFormatVersion": 1, "collectible": true, "rarity": "COMMON", "baseHp": 1, "race": "ELEMENTAL", "baseAttack": 1, "attributes": {"DEATHRATTLES": true}, "type": "MINION", "baseManaCost": 2}
+{
+  "name": "Volatile Elemental",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Deathrattle: Deal 3 damage to a random enemy minion.",
+  "deathrattle": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 3,
+    "howMany": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

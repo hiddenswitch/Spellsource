@@ -1,1 +1,28 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Smelly Wrestrary", "heroClass": "MAGE", "description": "Battlecry: Add a random spell to each player's hand.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 4.0, "baseManaCost": 4.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"targetPlayer": "BOTH", "cardFilter": {"cardType": "SPELL", "class": "CardFilter"}, "class": "ReceiveCardSpell"}, "targetSelection": "NONE"}, "type": "MINION", "id": "Smelly Wrestrary", "baseAttack": 4.0}
+{
+  "id": "Smelly Wrestrary",
+  "name": "Smelly Wrestrary",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 4.0,
+  "baseHp": 4.0,
+  "rarity": "COMMON",
+  "description": "Battlecry: Add a random spell to each player's hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+      "targetPlayer": "BOTH"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

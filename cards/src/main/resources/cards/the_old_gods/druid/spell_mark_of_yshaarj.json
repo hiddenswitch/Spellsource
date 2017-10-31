@@ -8,6 +8,10 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "RaceCondition",
+      "race": "BEAST"
+    },
     "spell1": {
       "class": "BuffSpell",
       "attackBonus": 2,
@@ -16,10 +20,6 @@
     "spell2": {
       "class": "DrawCardSpell",
       "value": 1
-    },
-    "condition": {
-      "class": "RaceCondition",
-      "race": "BEAST"
     }
   },
   "collectible": true,

@@ -1,27 +1,27 @@
 {
-	"name": "Powermace",
-	"baseManaCost": 3,
-	"type": "WEAPON",
-	"damage": 3,
-	"durability": 2,
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"description": "Deathrattle: Give a random friendly Mech +2/+2.",
-	"deathrattle": {
-		"class": "BuffSpell",
-		"target": "FRIENDLY_MINIONS",
-		"attackBonus": 2,
-		"hpBonus": 2,
-		"randomTarget": true,
-		"filter": {
-			"class": "RaceFilter",
-			"race": "MECH"
-		}
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Powermace",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "SHAMAN",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Give a random friendly Mech +2/+2.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 2,
+    "filter": {
+      "class": "RaceFilter",
+      "race": "MECH"
+    },
+    "hpBonus": 2,
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

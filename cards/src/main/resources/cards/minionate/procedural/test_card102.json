@@ -1,1 +1,27 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Ancehlor", "heroClass": "MAGE", "description": "Your hero can only take 1 damage at a time.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 2.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "targetEntityType": "HERO", "sourcePlayer": "BOTH", "class": "PreDamageTrigger"}, "spell": {"operation": "SET", "class": "ModifyDamageSpell", "value": 1}}, "baseManaCost": 3.0, "type": "MINION", "id": "Ancehlor", "baseAttack": 3.0}
+{
+  "id": "Ancehlor",
+  "name": "Ancehlor",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 3.0,
+  "baseHp": 2.0,
+  "rarity": "RARE",
+  "description": "Your hero can only take 1 damage at a time.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PreDamageTrigger",
+      "sourcePlayer": "BOTH",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ModifyDamageSpell",
+      "value": 1,
+      "operation": "SET"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

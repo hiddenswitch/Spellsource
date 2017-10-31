@@ -1,40 +1,40 @@
 {
-	"name": "Twilight Guardian",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"race": "DRAGON",
-	"description": "Battlecry: If you're holding a Dragon, gain +1 Attack and Taunt.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"target": "SELF",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"attackBonus": 1
-				},
-				{
-					"class": "AddAttributeSpell",
-					"attribute": "TAUNT"
-				}
-			]
-		},
-		"condition": {
-			"class": "HoldsCardCondition",
-			"cardFilter": {
-				"class": "CardFilter",
-				"race": "DRAGON"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Twilight Guardian",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, gain +1 Attack and Taunt.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "SELF",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 1
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

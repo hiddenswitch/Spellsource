@@ -1,38 +1,38 @@
 {
-	"name": "Headcrack",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "RARE",
-	"description": "Deal 2 damage to the enemy hero. Combo: Return this to your hand next turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "ComboSpell",
-		"spell1": {
-			"class": "DamageSpell",
-			"target": "ENEMY_HERO",
-			"value": 2
-		},
-		"spell2": {
-			"class": "AddEnchantmentSpell",
-			"target": "FRIENDLY_PLAYER",
-			"trigger": {
-				"eventTrigger": {
-					"class": "TurnEndTrigger",
-					"targetPlayer": "SELF"
-				},
-				"spell": {
-					"class": "ReceiveCardSpell",
-					"card": "spell_headcrack"
-				},
-				"oneTurn": true
-			}
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Headcrack",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "RARE",
+  "description": "Deal 2 damage to the enemy hero. Combo: Return this to your hand next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ComboSpell",
+    "spell1": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 2
+    },
+    "spell2": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "card": "spell_headcrack"
+        },
+        "oneTurn": true
+      }
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

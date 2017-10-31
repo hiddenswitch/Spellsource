@@ -1,35 +1,35 @@
 {
-	"name": "Harrison Jones",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Destroy your opponent's weapon and draw cards equal to its Durability.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "DrawCardSpell",
-					"value": {
-						"class": "AttributeValueProvider",
-						"target": "ENEMY_WEAPON",
-						"attribute": "HP"
-					}
-				},
-				{
-					"class": "DestroySpell",
-					"target": "ENEMY_WEAPON"
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Harrison Jones",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Destroy your opponent's weapon and draw cards equal to its Durability.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DrawCardSpell",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "ENEMY_WEAPON",
+            "attribute": "HP"
+          }
+        },
+        {
+          "class": "DestroySpell",
+          "target": "ENEMY_WEAPON"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

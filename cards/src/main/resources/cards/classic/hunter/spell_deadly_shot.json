@@ -1,23 +1,23 @@
 {
-	"name": "Deadly Shot",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "Destroy a random enemy minion.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DestroySpell",
-		"target": "ENEMY_MINIONS",
-		"randomTarget": true
-	},
-	"condition": {
-		"class": "MinionCountCondition",
-		"targetPlayer": "OPPONENT",
-		"operation": "GREATER",
-		"value": 0
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Deadly Shot",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "COMMON",
+  "description": "Destroy a random enemy minion.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroySpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

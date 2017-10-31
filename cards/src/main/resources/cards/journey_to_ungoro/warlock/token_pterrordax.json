@@ -1,14 +1,14 @@
 {
+  "name": "Pterrordax",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "",
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",
-  "name": "Pterrordax",
-  "heroClass": "WARLOCK",
-  "description": "",
-  "fileFormatVersion": 1,
-  "rarity": "FREE",
-  "baseHp": 1,
-  "race": "BEAST",
-  "baseAttack": 1,
-  "type": "MINION",
-  "baseManaCost": 1
+  "fileFormatVersion": 1
 }

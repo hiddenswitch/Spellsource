@@ -2,13 +2,12 @@
   "name": "Prince Taldaram",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: If your deck has no 3-Cost cards, transform into a 3/3 copy of a minion.",
   "battlecry": {
-    "targetSelection": "MINIONS",
     "condition": {
       "class": "DeckContainsCondition",
       "cardFilter": {
@@ -17,6 +16,7 @@
       },
       "invert": true
     },
+    "targetSelection": "MINIONS",
     "spell": {
       "class": "MetaSpell",
       "spells": [

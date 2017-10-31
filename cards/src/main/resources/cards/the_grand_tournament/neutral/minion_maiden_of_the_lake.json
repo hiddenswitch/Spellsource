@@ -1,19 +1,19 @@
 {
-	"name": "Maiden of the Lake",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Your Hero Power costs (1).",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"cardType": "HERO_POWER",
-		"operation": "SET",
-		"value": 1
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Maiden of the Lake",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Your Hero Power costs (1).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 1,
+    "cardType": "HERO_POWER",
+    "operation": "SET"
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

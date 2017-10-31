@@ -1,29 +1,29 @@
 {
-	"name": "Wrathguard",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"race": "DEMON",
-	"description": "Whenever this minion takes damage, also deal that amount to your hero.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "DamageReceivedTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS"
-		},
-		"spell": {
-			"class": "DamageSpell",
-			"target": "FRIENDLY_HERO",
-			"value": {
-				"class": "AttributeValueProvider",
-				"target": "SELF",
-				"attribute": "LAST_HIT"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Wrathguard",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Whenever this minion takes damage, also deal that amount to your hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "LAST_HIT"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

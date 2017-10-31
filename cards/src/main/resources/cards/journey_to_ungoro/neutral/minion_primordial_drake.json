@@ -1,27 +1,27 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Primordial Drake",
+  "baseManaCost": 8,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Taunt. Battlecry: Deal 2 damage to all other minions.",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
-  "baseHp": 8,
-  "race": "DRAGON",
   "baseAttack": 4,
-  "attributes": {
-    "TAUNT": true,
-    "BATTLECRY": true,
-    "NAME": "Frenzied Panda"
-  },
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Taunt. Battlecry: Deal 2 damage to all other minions.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "DamageSpell",
-      "value": 2,
-      "target": "ALL_OTHER_MINIONS"
-    },
-    "targetSelection": "NONE"
+      "target": "ALL_OTHER_MINIONS",
+      "value": 2
+    }
   },
-  "type": "MINION",
-  "baseManaCost": 8
+  "attributes": {
+    "BATTLECRY": true,
+    "NAME": "Frenzied Panda",
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

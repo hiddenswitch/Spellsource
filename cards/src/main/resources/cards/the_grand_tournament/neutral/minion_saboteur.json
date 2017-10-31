@@ -1,33 +1,33 @@
 {
-	"name": "Saboteur",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Battlecry: Your opponent's Hero Power costs (5) more next turn.",
-	"battlecry": {
-		"spell": {
-			"class": "CardCostModifierSpell",
-			"target": "FRIENDLY_PLAYER",
-			"cardCostModifier": {
-				"class": "CardCostModifier",
-				"cardType": "HERO_POWER",
-				"targetPlayer": "OPPONENT",
-				"operation": "ADD",
-				"value": 5,
-				"expirationTrigger": {
-					"class": "TurnEndTrigger",
-					"targetPlayer": "OPPONENT"
-				}
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Saboteur",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Your opponent's Hero Power costs (5) more next turn.",
+  "battlecry": {
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 5,
+        "cardType": "HERO_POWER",
+        "expirationTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "OPPONENT"
+        },
+        "operation": "ADD",
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

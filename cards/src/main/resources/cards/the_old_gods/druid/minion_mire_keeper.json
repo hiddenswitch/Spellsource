@@ -1,51 +1,51 @@
 {
-	"name": "Mire Keeper",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Choose One - Summon a 2/2 Slime; or Gain an empty Mana.",
-	"options": [
-		{
-			"description": "Summon 2/2 Slime",
-			"spell": {
-				"class": "SummonSpell",
-				"targetPlayer": "SELF",
-				"card": "token_tauren_slime",
-				"boardPositionRelative": "RIGHT"
-			}
-		},
-		{
-			"description": "Mana",
-			"spell": {
-				"class": "ModifyMaxManaSpell",
-				"targetPlayer": "SELF",
-				"value": 1
-			}
-		}
-	],
-	"bothOptions": {
-		"description": "Summon 2/2 Slime and Mana.",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "SummonSpell",
-					"targetPlayer": "SELF",
-					"card": "token_tauren_slime",
-					"boardPositionRelative": "RIGHT"
-				},
-				{
-					"class": "ModifyMaxManaSpell",
-					"targetPlayer": "SELF",
-					"value": 1
-				}
-			]
-		}
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Mire Keeper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Choose One - Summon a 2/2 Slime; or Gain an empty Mana.",
+  "options": [
+    {
+      "description": "Summon 2/2 Slime",
+      "spell": {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "card": "token_tauren_slime",
+        "targetPlayer": "SELF"
+      }
+    },
+    {
+      "description": "Mana",
+      "spell": {
+        "class": "ModifyMaxManaSpell",
+        "value": 1,
+        "targetPlayer": "SELF"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Summon 2/2 Slime and Mana.",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_tauren_slime",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "ModifyMaxManaSpell",
+          "value": 1,
+          "targetPlayer": "SELF"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

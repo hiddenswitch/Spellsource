@@ -1,17 +1,17 @@
 {
-	"name": "Fierce Monkey",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "Taunt",
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Fierce Monkey",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

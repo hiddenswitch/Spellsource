@@ -1,29 +1,29 @@
 {
-	"name": "Sushi",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "FREE",
-	"description": "Destroy an Octopus. Your hero regains 5 health.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DestroySpell"
-			},
-			{
-				"class": "HealSpell",
-				"target": "FRIENDLY_HERO",
-				"value": 5
-			}
-		],
-		"filter": {
-			"class": "RaceFilter",
-			"race": "DEMON"
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Sushi",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "FREE",
+  "description": "Destroy an Octopus. Your hero regains 5 health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DEMON"
+    },
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 5
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

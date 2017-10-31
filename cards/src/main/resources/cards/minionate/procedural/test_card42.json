@@ -1,1 +1,27 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Loiken", "heroClass": "ANY", "description": "Whenever you target this minion with a spell, gain Divine Shield.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 3.0, "trigger": {"eventTrigger": {"sourcePlayer": "SELF", "actionType": "SPELL", "class": "TargetAcquisitionTrigger", "hostTargetType": "IGNORE_OTHER_TARGETS"}, "spell": {"attribute": "DIVINE_SHIELD", "class": "AddAttributeSpell", "target": "SELF"}}, "baseManaCost": 4.0, "type": "MINION", "id": "Loiken", "baseAttack": 4.0}
+{
+  "id": "Loiken",
+  "name": "Loiken",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 3.0,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you target this minion with a spell, gain Divine Shield.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

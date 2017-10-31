@@ -1,1 +1,27 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Noury Chicken", "heroClass": "ANY", "description": "Enrage: +2 Attack.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 5.0, "trigger": {"eventTrigger": {"class": "EnrageChangedTrigger"}, "spell": {"attackBonus": 2, "class": "EnrageSpell", "target": "SELF"}}, "baseManaCost": 6.0, "attributes": {"ENRAGABLE": true}, "type": "MINION", "id": "Noury Chicken", "baseAttack": 5.0}
+{
+  "id": "Noury Chicken",
+  "name": "Noury Chicken",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5.0,
+  "baseHp": 5.0,
+  "rarity": "COMMON",
+  "description": "Enrage: +2 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "EnrageChangedTrigger"
+    },
+    "spell": {
+      "class": "EnrageSpell",
+      "target": "SELF",
+      "attackBonus": 2
+    }
+  },
+  "attributes": {
+    "ENRAGABLE": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

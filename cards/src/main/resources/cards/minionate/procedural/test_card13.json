@@ -1,1 +1,17 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Ringlehear", "heroClass": "DRUID", "description": "Your Choose One cards have both effects combined.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 4.0, "baseManaCost": 5.0, "attributes": {"BOTH_CHOOSE_ONE_OPTIONS": true}, "type": "MINION", "id": "Ringlehear", "baseAttack": 5.0}
+{
+  "id": "Ringlehear",
+  "name": "Ringlehear",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 5.0,
+  "baseHp": 4.0,
+  "rarity": "LEGENDARY",
+  "description": "Your Choose One cards have both effects combined.",
+  "attributes": {
+    "BOTH_CHOOSE_ONE_OPTIONS": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

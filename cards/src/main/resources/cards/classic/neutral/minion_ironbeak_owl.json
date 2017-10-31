@@ -1,23 +1,23 @@
 {
-	"name": "Ironbeak Owl",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "Battlecry: Silence a minion.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "SilenceSpell"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Ironbeak Owl",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: Silence a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SilenceSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

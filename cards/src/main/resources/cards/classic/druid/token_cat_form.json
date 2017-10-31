@@ -1,17 +1,17 @@
 {
-	"name": "Fassnu Ronin (Cat)",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "Charge",
-	"attributes": {
-		"CHARGE": true
-	},
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Fassnu Ronin (Cat)",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

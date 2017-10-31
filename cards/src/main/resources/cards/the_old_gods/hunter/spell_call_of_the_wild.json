@@ -1,20 +1,20 @@
 {
-	"name": "Call of the Wild",
-	"baseManaCost": 9,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "EPIC",
-	"description": "Summon all 3 Aid of Shirambas.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"cards": [
-			"token_huffer",
-			"token_misha",
-			"token_leokk"
-		]
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Call of the Wild",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "EPIC",
+  "description": "Summon all 3 Aid of Shirambas.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_huffer",
+      "token_misha",
+      "token_leokk"
+    ]
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

@@ -1,25 +1,25 @@
 {
-	"id": "minion_hand_heal",
-	"name": "Hand Heal",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Whenever a character is healed while this in your hand, gain +1 Attack.",
-	"passiveTrigger": {
-		"eventTrigger": {
-			"class": "HealingTrigger"
-		},
-		"spell": {
-			"class": "ModifyAttributeSpell",
-			"target": "SELF",
-			"attribute": "ATTACK_BONUS",
-			"value": 1
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "minion_hand_heal",
+  "name": "Hand Heal",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Whenever a character is healed while this in your hand, gain +1 Attack.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "ATTACK_BONUS"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

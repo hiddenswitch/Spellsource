@@ -1,48 +1,48 @@
 {
-	"name": "Mimiron's Head",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "MECH",
-	"description": "At the start of your turn, if you have at least 3 Mechs, destroy them all, and form V-07-TR-0N.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnStartTrigger",
-			"targetPlayer": "SELF",
-			"fireCondition": {
-				"class": "MinionOnBoardCondition",
-				"value": 3,
-				"cardFilter": {
-					"class": "RaceFilter",
-					"race": "MECH"
-				}
-			}
-		},
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "DestroySpell",
-					"target": "FRIENDLY_MINIONS",
-					"filter": {
-						"class": "RaceFilter",
-						"race": "MECH"
-					}
-				},
-				{
-					"class": "ForceDeathPhaseSpell"
-				},
-				{
-					"class": "SummonSpell",
-					"card": "token_v-07-tr-0n"
-				}
-			]
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Mimiron's Head",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "At the start of your turn, if you have at least 3 Mechs, destroy them all, and form V-07-TR-0N.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "fireCondition": {
+        "class": "MinionOnBoardCondition",
+        "value": 3,
+        "cardFilter": {
+          "class": "RaceFilter",
+          "race": "MECH"
+        }
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "FRIENDLY_MINIONS",
+          "filter": {
+            "class": "RaceFilter",
+            "race": "MECH"
+          }
+        },
+        {
+          "class": "ForceDeathPhaseSpell"
+        },
+        {
+          "class": "SummonSpell",
+          "card": "token_v-07-tr-0n"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

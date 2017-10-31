@@ -1,24 +1,24 @@
 {
-	"name": "Axe Flinger",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 5,
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"description": "Whenever this minion takes damage, deal 2 damage to the enemy hero.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "DamageReceivedTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS"
-		},
-		"spell": {
-			"class": "DamageSpell",
-			"target": "ENEMY_HERO",
-			"value": 2
-		}
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Axe Flinger",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Whenever this minion takes damage, deal 2 damage to the enemy hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1
 }

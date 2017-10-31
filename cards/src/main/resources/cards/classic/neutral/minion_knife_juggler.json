@@ -1,27 +1,27 @@
 {
-	"name": "Knife Juggler",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "After you summon a minion, deal 1 damage to a random enemy.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterMinionSummonedTrigger",
-			"targetPlayer": "SELF",
-			"hostTargetType": "IGNORE_AS_TARGET"
-		},
-		"spell": {
-			"class": "MissilesSpell",
-			"target": "ENEMY_CHARACTERS",
-			"value": 1,
-			"howMany": 1,
-			"randomTarget": true
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Knife Juggler",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "After you summon a minion, deal 1 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionSummonedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 1,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

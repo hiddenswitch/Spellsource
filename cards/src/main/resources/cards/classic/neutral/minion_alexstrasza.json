@@ -1,24 +1,24 @@
 {
-	"name": "Alexstrasza",
-	"baseManaCost": 9,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "DRAGON",
-	"description": "Battlecry: Set a hero's remaining Health to 15.",
-	"battlecry": {
-		"targetSelection": "HEROES",
-		"spell": {
-			"class": "SetHeroHpSpell",
-			"value": 15
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Alexstrasza",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Battlecry: Set a hero's remaining Health to 15.",
+  "battlecry": {
+    "targetSelection": "HEROES",
+    "spell": {
+      "class": "SetHeroHpSpell",
+      "value": 15
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

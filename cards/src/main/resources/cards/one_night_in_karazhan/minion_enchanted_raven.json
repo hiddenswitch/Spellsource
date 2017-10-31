@@ -1,14 +1,14 @@
 {
-	"name": "Enchanted Raven",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "",
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Enchanted Raven",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "",
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

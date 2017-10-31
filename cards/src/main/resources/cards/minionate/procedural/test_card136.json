@@ -1,1 +1,29 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Con The Ancient One", "heroClass": "MAGE", "description": "If you control a Secret at the end of your turn, gain +2/+2.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 5.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnEndTrigger", "queueCondition": {"class": "ControlsSecretCondition"}}, "spell": {"attackBonus": 2, "class": "BuffSpell", "hpBonus": 2, "target": "SELF"}}, "baseManaCost": 5.0, "type": "MINION", "id": "Con The Ancient One", "baseAttack": 3.0}
+{
+  "id": "Con The Ancient One",
+  "name": "Con The Ancient One",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 3.0,
+  "baseHp": 5.0,
+  "rarity": "RARE",
+  "description": "If you control a Secret at the end of your turn, gain +2/+2.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "queueCondition": {
+        "class": "ControlsSecretCondition"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 2,
+      "hpBonus": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

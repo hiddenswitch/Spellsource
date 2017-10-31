@@ -1,24 +1,24 @@
 {
-	"name": "Sponsored Funding",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "RARE",
-	"description": "Deal 2 damage. You are no longer Mana Surged.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": 2
-			},
-			{
-				"class": "ClearOverloadSpell"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Sponsored Funding",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "RARE",
+  "description": "Deal 2 damage. You are no longer Mana Surged.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "ClearOverloadSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

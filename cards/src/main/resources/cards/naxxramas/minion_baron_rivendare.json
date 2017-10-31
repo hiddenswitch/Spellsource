@@ -1,16 +1,16 @@
 {
-	"name": "Baron Rivendare",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Your minions trigger their Deathrattles twice.",
-	"attributes": {
-		"DOUBLE_DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Baron Rivendare",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Your minions trigger their Deathrattles twice.",
+  "attributes": {
+    "DOUBLE_DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

@@ -2,27 +2,27 @@
   "name": "Rotface",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "WARRIOR",
   "baseAttack": 4,
   "baseHp": 6,
-  "heroClass": "WARRIOR",
   "rarity": "LEGENDARY",
   "description": "Whenever this minion survives damage, summon a random Legendary minion.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS",
       "fireCondition": {
         "class": "IsDeadCondition",
         "invert": true
-      }
+      },
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
       "class": "SummonRandomMinionFilteredSpell",
+      "boardPositionRelative": "RIGHT",
       "cardFilter": {
         "class": "CardFilter",
         "rarity": "LEGENDARY"
-      },
-      "boardPositionRelative": "RIGHT"
+      }
     }
   },
   "collectible": true,

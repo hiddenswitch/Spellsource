@@ -1,1 +1,14 @@
-{"collectible": false, "set": "JOURNEY_TO_UNGORO", "name": "Owl Monkey", "heroClass": "ANY", "description": "", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 2, "race": "ELEMENTAL", "baseAttack": 1, "type": "MINION", "baseManaCost": 1}
+{
+  "name": "Owl Monkey",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "",
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

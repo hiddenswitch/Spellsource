@@ -1,17 +1,17 @@
 {
-	"id": "hero_rexxar",
-	"name": "Inora Ithkal",
-	"baseManaCost": 0,
-	"description": "Hero Power: Deal 2 damage to the enemy hero",
-	"heroPower": "hero_power_steady_shot",
-	"type": "HERO",
-	"heroClass": "HUNTER",
-	"rarity": "FREE",
-	"attributes": {
-		"HP": 30,
-		"MAX_HP": 30
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "id": "hero_rexxar",
+  "name": "Inora Ithkal",
+  "heroPower": "hero_power_steady_shot",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "HUNTER",
+  "rarity": "FREE",
+  "description": "Hero Power: Deal 2 damage to the enemy hero",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

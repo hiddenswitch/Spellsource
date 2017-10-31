@@ -5,15 +5,15 @@
   "heroClass": "ROGUE",
   "rarity": "RARE",
   "description": "Give your weapon Poisonous.",
-  "targetSelection": "NONE",
   "condition": {
     "class": "HasWeaponCondition",
     "targetPlayer": "SELF"
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",
-    "attribute": "POISONOUS",
-    "target": "FRIENDLY_WEAPON"
+    "target": "FRIENDLY_WEAPON",
+    "attribute": "POISONOUS"
   },
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",

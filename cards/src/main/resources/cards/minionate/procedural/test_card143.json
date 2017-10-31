@@ -1,1 +1,26 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Violentrary", "heroClass": "ANY", "description": "At the end of each turn, gain +1/+1 .", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 2.0, "trigger": {"eventTrigger": {"targetPlayer": "BOTH", "class": "TurnEndTrigger"}, "spell": {"attackBonus": 1, "class": "BuffSpell", "hpBonus": 1, "target": "SELF"}}, "baseManaCost": 5.0, "type": "MINION", "id": "Violentrary", "baseAttack": 7.0}
+{
+  "id": "Violentrary",
+  "name": "Violentrary",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7.0,
+  "baseHp": 2.0,
+  "rarity": "LEGENDARY",
+  "description": "At the end of each turn, gain +1/+1 .",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

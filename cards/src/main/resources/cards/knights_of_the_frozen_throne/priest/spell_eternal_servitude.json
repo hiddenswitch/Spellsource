@@ -8,12 +8,12 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverFilteredCardSpell",
+    "spell": {
+      "class": "SummonSpell"
+    },
     "cardSource": {
       "class": "GraveyardSource",
       "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "SummonSpell"
     }
   },
   "collectible": true,

@@ -2,9 +2,9 @@
   "name": "Amara, Warden of Hope",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "PRIEST",
   "baseAttack": 8,
   "baseHp": 8,
-  "heroClass": "PRIEST",
   "rarity": "LEGENDARY",
   "description": "Taunt. Battlecry: Set your hero's Health to 40'.",
   "battlecry": {

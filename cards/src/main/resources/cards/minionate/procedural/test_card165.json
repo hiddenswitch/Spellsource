@@ -1,1 +1,28 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Swordjerer", "heroClass": "ANY", "description": "Battlecry: If you're holding a Dragon, deal 3 damage.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 9.0, "baseManaCost": 7.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "DamageSpell", "value": 3}, "targetSelection": "ANY", "condition": {"race": "DRAGON", "class": "HoldsCardCondition"}}, "type": "MINION", "id": "Swordjerer", "baseAttack": 7.0}
+{
+  "id": "Swordjerer",
+  "name": "Swordjerer",
+  "baseManaCost": 7.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7.0,
+  "baseHp": 9.0,
+  "rarity": "COMMON",
+  "description": "Battlecry: If you're holding a Dragon, deal 3 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "race": "DRAGON"
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

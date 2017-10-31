@@ -1,21 +1,21 @@
 {
-	"name": "Harvest Golem",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "MECH",
-	"description": "Deathrattle: Summon a 2/1 Damaged Golem.",
-	"deathrattle": {
-		"class": "SummonSpell",
-		"card": "token_damaged_golem"
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Harvest Golem",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Deathrattle: Summon a 2/1 Damaged Golem.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_damaged_golem"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

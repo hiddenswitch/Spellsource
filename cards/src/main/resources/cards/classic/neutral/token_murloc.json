@@ -1,14 +1,14 @@
 {
-	"name": "Murloc",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"race": "MURLOC",
-	"description": "",
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Murloc",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "MURLOC",
+  "description": "",
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

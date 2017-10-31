@@ -1,18 +1,18 @@
 {
-	"name": "Sorcerer's Apprentice",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "MAGE",
-	"rarity": "COMMON",
-	"description": "Your spells cost (1) less.",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"cardType": "SPELL",
-		"value": -1
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Sorcerer's Apprentice",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Your spells cost (1) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -1,
+    "cardType": "SPELL"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

@@ -1,23 +1,23 @@
 {
-	"name": "Shrinkmeister",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "PRIEST",
-	"rarity": "COMMON",
-	"description": "Battlecry: Give a minion -2 Attack this turn.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "TemporaryAttackSpell",
-			"value": -2
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Shrinkmeister",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a minion -2 Attack this turn.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "value": -2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

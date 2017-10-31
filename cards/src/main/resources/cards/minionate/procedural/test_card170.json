@@ -1,1 +1,23 @@
-{"collectible": true, "aura": {"attackBonus": 1, "class": "BuffAura", "hpBonus": 1, "target": "OTHER_FRIENDLY_MINIONS"}, "name": "Merry!It Snake", "heroClass": "ANY", "description": "Your other minions have +1/+1.", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 6.0, "set": "SPELLSOURCE", "baseManaCost": 5.0, "attributes": {"TAUNT": true}, "type": "MINION", "id": "Merry!It Snake", "baseAttack": 6.0}
+{
+  "id": "Merry!It Snake",
+  "name": "Merry!It Snake",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 6.0,
+  "rarity": "FREE",
+  "description": "Your other minions have +1/+1.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 1
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

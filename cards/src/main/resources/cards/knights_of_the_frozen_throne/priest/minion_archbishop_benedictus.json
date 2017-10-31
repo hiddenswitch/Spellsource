@@ -2,9 +2,9 @@
   "name": "Archbishop Benedictus",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "PRIEST",
   "baseAttack": 4,
   "baseHp": 6,
-  "heroClass": "PRIEST",
   "rarity": "COMMON",
   "description": "Battlecry: Shuffle a copy of your opponent's deck into your deck.",
   "battlecry": {

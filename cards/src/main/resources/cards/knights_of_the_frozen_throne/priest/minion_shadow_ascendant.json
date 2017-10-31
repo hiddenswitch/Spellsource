@@ -2,9 +2,9 @@
   "name": "Shadow Ascendant",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "PRIEST",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "PRIEST",
   "rarity": "COMMON",
   "description": "At the end of your turn, give another random friendly minion +1/+1.",
   "trigger": {

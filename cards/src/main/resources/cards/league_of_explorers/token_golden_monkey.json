@@ -1,43 +1,43 @@
 {
-	"name": "Golden Monkey",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Taunt. Battlecry: Replace your hand and deck with Legendary minions.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "ReplaceCardLocationSpell",
-					"cardLocation": "HAND",
-					"cardFilter": {
-						"class": "CardFilter",
-						"cardType": "MINION",
-						"rarity": "LEGENDARY"
-					}
-				},
-				{
-					"class": "ReplaceCardLocationSpell",
-					"cardLocation": "DECK",
-					"cardFilter": {
-						"class": "CardFilter",
-						"cardType": "MINION",
-						"rarity": "LEGENDARY"
-					}
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"TAUNT": true
-	},
-	"collectible": false,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Golden Monkey",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "Taunt. Battlecry: Replace your hand and deck with Legendary minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReplaceCardLocationSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "cardType": "MINION"
+          },
+          "cardLocation": "HAND"
+        },
+        {
+          "class": "ReplaceCardLocationSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "cardType": "MINION"
+          },
+          "cardLocation": "DECK"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

@@ -8,11 +8,11 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
+    "value": 3,
     "cardSource": {
       "class": "DeckSource",
       "targetPlayer": "OPPONENT"
-    },
-    "value": 3
+    }
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

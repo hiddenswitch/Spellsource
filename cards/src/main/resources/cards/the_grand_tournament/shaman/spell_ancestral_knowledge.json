@@ -1,19 +1,19 @@
 {
-	"name": "Ancestral Knowledge",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"description": "Draw 2 cards. Overload: (2)",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DrawCardSpell",
-		"value": 2
-	},
-	"attributes": {
-		"OVERLOAD": 2
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Ancestral Knowledge",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "COMMON",
+  "description": "Draw 2 cards. Overload: (2)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 2
+  },
+  "attributes": {
+    "OVERLOAD": 2
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

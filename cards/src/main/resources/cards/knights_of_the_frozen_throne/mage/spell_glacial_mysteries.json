@@ -5,6 +5,7 @@
   "heroClass": "MAGE",
   "rarity": "EPIC",
   "description": "Put one of each Secret from your deck into the battlefield.",
+  "targetSelection": "NONE",
   "spell": {
     "class": "PutRandomSecretIntoPlaySpell",
     "cardSource": {
@@ -13,7 +14,6 @@
     "howMany": 60
   },
   "collectible": true,
-  "targetSelection": "NONE",
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
   "fileFormatVersion": 1
 }

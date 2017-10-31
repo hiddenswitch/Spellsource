@@ -1,1 +1,32 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Prideliteo", "heroClass": "MAGE", "description": "After you cast a spell, Freeze a random enemy.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 3.0, "trigger": {"eventTrigger": {"sourcePlayer": "SELF", "class": "AfterSpellCastedTrigger"}, "spell": {"filter": {"attribute": "FROZEN", "operation": "HAS", "invert": true, "class": "AttributeFilter"}, "attribute": "FROZEN", "randomTarget": true, "class": "AddAttributeSpell", "target": "ENEMY_CHARACTERS"}}, "baseManaCost": 3.0, "type": "MINION", "id": "Prideliteo", "baseAttack": 4.0}
+{
+  "id": "Prideliteo",
+  "name": "Prideliteo",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 4.0,
+  "baseHp": 3.0,
+  "rarity": "RARE",
+  "description": "After you cast a spell, Freeze a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ENEMY_CHARACTERS",
+      "attribute": "FROZEN",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "FROZEN",
+        "invert": true,
+        "operation": "HAS"
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

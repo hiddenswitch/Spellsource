@@ -1,50 +1,50 @@
 {
-	"name": "Commanding Shout",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "RARE",
-	"description": "Your minions can't be reduced below 1 Health this turn. Draw a card.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "AddAttributeSpell",
-				"target": "FRIENDLY_MINIONS",
-				"attribute": "CANNOT_REDUCE_HP_BELOW_1",
-				"revertTrigger": {
-					"class": "TurnEndTrigger",
-					"targetPlayer": "SELF"
-				}
-			},
-			{
-				"class": "AddEnchantmentSpell",
-				"target": "FRIENDLY_PLAYER",
-				"trigger": {
-					"eventTrigger": {
-						"class": "BeforeMinionSummonedTrigger",
-						"targetPlayer": "SELF"
-					},
-					"spell": {
-						"class": "AddAttributeSpell",
-						"target": "EVENT_TARGET",
-						"attribute": "CANNOT_REDUCE_HP_BELOW_1",
-						"revertTrigger": {
-							"class": "TurnEndTrigger",
-							"targetPlayer": "SELF"
-						}
-					},
-					"oneTurn": true
-				}
-			},
-			{
-				"class": "DrawCardSpell",
-				"value": 1
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Commanding Shout",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "RARE",
+  "description": "Your minions can't be reduced below 1 Health this turn. Draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "CANNOT_REDUCE_HP_BELOW_1",
+        "revertTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "SELF"
+        }
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "BeforeMinionSummonedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "target": "EVENT_TARGET",
+            "attribute": "CANNOT_REDUCE_HP_BELOW_1",
+            "revertTrigger": {
+              "class": "TurnEndTrigger",
+              "targetPlayer": "SELF"
+            }
+          },
+          "oneTurn": true
+        }
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

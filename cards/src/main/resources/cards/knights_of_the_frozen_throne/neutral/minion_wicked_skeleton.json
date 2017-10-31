@@ -2,9 +2,9 @@
   "name": "Wicked Skeleton",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Battlecry: Gain +1/+1 for each minion that died this turn.",
   "battlecry": {

@@ -1,14 +1,14 @@
 {
-	"name": "Puddlestomper",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "MURLOC",
-	"description": "",
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Puddlestomper",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "MURLOC",
+  "description": "",
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

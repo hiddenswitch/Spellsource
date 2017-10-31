@@ -1,24 +1,24 @@
 {
-	"name": "Lorewalker Cho",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Whenever a player casts a spell, put a copy into the other player's hand.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "SpellCastedTrigger",
-			"sourcePlayer": "BOTH"
-		},
-		"spell": {
-			"class": "CopyCardSpell",
-			"target": "EVENT_TARGET",
-			"targetPlayer": "INACTIVE"
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Lorewalker Cho",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever a player casts a spell, put a copy into the other player's hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "BOTH"
+    },
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "EVENT_TARGET",
+      "targetPlayer": "INACTIVE"
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

@@ -1,24 +1,24 @@
 {
-	"name": "The Blade",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "ROGUE",
-	"rarity": "FREE",
-	"description": "Equip a 1/2 Blade.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "ConditionalSpell",
-		"spell": {
-			"class": "EquipWeaponSpell",
-			"card": "weapon_wicked_knife"
-		},
-		"condition": {
-			"class": "HasWeaponCondition",
-			"cardId": "weapon_poisoned_blade",
-			"invert": "true"
-		}
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "The Blade",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ROGUE",
+  "rarity": "FREE",
+  "description": "Equip a 1/2 Blade.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "HasWeaponCondition",
+      "cardId": "weapon_poisoned_blade",
+      "invert": "true"
+    },
+    "spell": {
+      "class": "EquipWeaponSpell",
+      "card": "weapon_wicked_knife"
+    }
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

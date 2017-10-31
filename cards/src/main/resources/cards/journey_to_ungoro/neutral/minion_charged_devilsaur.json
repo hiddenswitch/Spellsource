@@ -1,29 +1,29 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Charged Devilsaur",
+  "baseManaCost": 8,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Charge. Battlecry: Can't attack heroes this turn.",
-  "fileFormatVersion": 1,
+  "baseAttack": 7,
+  "baseHp": 7,
   "rarity": "EPIC",
   "race": "BEAST",
-  "baseHp": 7,
-  "baseAttack": 7,
-  "attributes": {
-    "CHARGE": true,
-    "BATTLECRY": true
-  },
+  "description": "Charge. Battlecry: Can't attack heroes this turn.",
   "battlecry": {
     "spell": {
-      "revertTrigger": {
-        "targetPlayer": "OPPONENT",
-        "class": "TurnStartTrigger"
-      },
-      "attribute": "CANNOT_ATTACK_HEROES",
       "class": "AddAttributeSpell",
-      "target": "SELF"
+      "target": "SELF",
+      "attribute": "CANNOT_ATTACK_HEROES",
+      "revertTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "OPPONENT"
+      }
     }
   },
-  "type": "MINION",
-  "baseManaCost": 8
+  "attributes": {
+    "BATTLECRY": true,
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

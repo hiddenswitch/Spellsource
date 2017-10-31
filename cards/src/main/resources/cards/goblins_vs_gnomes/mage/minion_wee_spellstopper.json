@@ -1,18 +1,18 @@
 {
-	"name": "Wee Spellstopper",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 5,
-	"heroClass": "MAGE",
-	"rarity": "EPIC",
-	"description": "Adjacent minions can't be targeted by spells or Hero Powers.",
-	"aura": {
-		"class": "AttributeAura",
-		"target": "ADJACENT_MINIONS",
-		"attribute": "AURA_UNTARGETABLE_BY_SPELLS"
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Wee Spellstopper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Adjacent minions can't be targeted by spells or Hero Powers.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "ADJACENT_MINIONS",
+    "attribute": "AURA_UNTARGETABLE_BY_SPELLS"
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

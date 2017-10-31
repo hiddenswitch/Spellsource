@@ -1,51 +1,51 @@
 {
-	"name": "Grove Tender",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 4,
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Choose One - Give each player a Mana; or Each player draws a card.",
-	"options": [
-		{
-			"description": "Mana",
-			"spell": {
-				"class": "ModifyMaxManaSpell",
-				"targetPlayer": "BOTH",
-				"fullManaCrystals": true,
-				"value": 1
-			}
-		},
-		{
-			"description": "Draw",
-			"spell": {
-				"class": "DrawCardSpell",
-				"targetPlayer": "BOTH",
-				"value": 1
-			}
-		}
-	],
-	"bothOptions": {
-		"description": "Mana and Draw",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "ModifyMaxManaSpell",
-					"targetPlayer": "BOTH",
-					"fullManaCrystals": true,
-					"value": 1
-				},
-				{
-					"class": "DrawCardSpell",
-					"targetPlayer": "BOTH",
-					"value": 1
-				}
-			]
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Grove Tender",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Choose One - Give each player a Mana; or Each player draws a card.",
+  "options": [
+    {
+      "description": "Mana",
+      "spell": {
+        "class": "ModifyMaxManaSpell",
+        "value": 1,
+        "fullManaCrystals": true,
+        "targetPlayer": "BOTH"
+      }
+    },
+    {
+      "description": "Draw",
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": 1,
+        "targetPlayer": "BOTH"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Mana and Draw",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ModifyMaxManaSpell",
+          "value": 1,
+          "fullManaCrystals": true,
+          "targetPlayer": "BOTH"
+        },
+        {
+          "class": "DrawCardSpell",
+          "value": 1,
+          "targetPlayer": "BOTH"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

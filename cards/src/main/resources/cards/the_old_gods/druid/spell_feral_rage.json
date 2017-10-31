@@ -1,17 +1,17 @@
 {
-	"name": "Feral Rage",
-	"baseManaCost": 3,
-	"type": "CHOOSE_ONE",
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"description": "Choose One - Gain +4 Attack this turn; or Gain 8 Armor.",
-	"targetSelection": "NONE",
-	"options": [
-		"spell_feral_rage_1",
-		"spell_feral_rage_2"
-	],
-	"bothOptions": "spell_feral_rage_3",
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Feral Rage",
+  "baseManaCost": 3,
+  "type": "CHOOSE_ONE",
+  "heroClass": "DRUID",
+  "rarity": "COMMON",
+  "description": "Choose One - Gain +4 Attack this turn; or Gain 8 Armor.",
+  "targetSelection": "NONE",
+  "options": [
+    "spell_feral_rage_1",
+    "spell_feral_rage_2"
+  ],
+  "bothOptions": "spell_feral_rage_3",
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

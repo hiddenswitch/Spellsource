@@ -1,13 +1,13 @@
 {
-	"name": "Teapot",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"description": "",
-	"collectible": false,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Teapot",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "",
+  "collectible": false,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

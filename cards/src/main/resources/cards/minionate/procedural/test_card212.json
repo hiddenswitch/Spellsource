@@ -1,1 +1,54 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "King Sand Inhorn", "heroClass": "PRIEST", "description": "Whenever a character is healed, give your\nC'Thun +1/+1 (wherever it is).", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 5.0, "trigger": {"eventTrigger": {"class": "HealingTrigger"}, "spell": {"class": "MetaSpell", "spells": [{"filter": {"class": "SpecificCardFilter", "cardId": "minion_cthun"}, "class": "BuffSpell", "value": 1, "target": "FRIENDLY_MINIONS"}, {"filter": {"class": "SpecificCardFilter", "cardId": "minion_cthun"}, "class": "BuffSpell", "value": 1, "target": "FRIENDLY_HAND"}, {"attribute": "CTHUN_ATTACK_BUFF", "class": "ModifyAttributeSpell", "value": 1, "target": "FRIENDLY_PLAYER"}, {"attribute": "CTHUN_HEALTH_BUFF", "class": "ModifyAttributeSpell", "value": 1, "target": "FRIENDLY_PLAYER"}]}}, "baseManaCost": 6.0, "type": "MINION", "id": "King Sand Inhorn", "baseAttack": 5.0}
+{
+  "id": "King Sand Inhorn",
+  "name": "King Sand Inhorn",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 5.0,
+  "baseHp": 5.0,
+  "rarity": "COMMON",
+  "description": "Whenever a character is healed, give your\nC'Thun +1/+1 (wherever it is).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 1,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cardId": "minion_cthun"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "value": 1,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cardId": "minion_cthun"
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 1,
+          "attribute": "CTHUN_ATTACK_BUFF"
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 1,
+          "attribute": "CTHUN_HEALTH_BUFF"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

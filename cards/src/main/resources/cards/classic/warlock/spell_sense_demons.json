@@ -1,21 +1,21 @@
 {
-	"name": "Sense Demons",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"description": "Put 2 random Demons from your deck into your hand.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "FromDeckToHandSpell",
-		"value": 2,
-		"card": "token_worthless_imp",
-		"cardFilter": {
-			"class": "CardFilter",
-			"race": "DEMON"
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Sense Demons",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "COMMON",
+  "description": "Put 2 random Demons from your deck into your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 2,
+    "card": "token_worthless_imp",
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "DEMON"
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

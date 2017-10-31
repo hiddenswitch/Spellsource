@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Carricus Summoning", "heroClass": "ANY", "description": "At the end of your turn, summon a 2/2 Gnoll with Taunt.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 5.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnEndTrigger"}, "spell": {"boardPositionRelative": "RIGHT", "class": "SummonSpell", "card": "token_gnoll"}}, "baseManaCost": 4.0, "type": "MINION", "id": "Carricus Summoning", "baseAttack": 4.0}
+{
+  "id": "Carricus Summoning",
+  "name": "Carricus Summoning",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 5.0,
+  "rarity": "LEGENDARY",
+  "description": "At the end of your turn, summon a 2/2 Gnoll with Taunt.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_gnoll"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

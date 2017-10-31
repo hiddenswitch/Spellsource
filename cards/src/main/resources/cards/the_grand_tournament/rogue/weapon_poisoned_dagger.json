@@ -1,13 +1,13 @@
 {
-	"name": "Poisoned Blade",
-	"baseManaCost": 1,
-	"type": "WEAPON",
-	"damage": 2,
-	"durability": 2,
-	"heroClass": "ROGUE",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": false,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Poisoned Blade",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ROGUE",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

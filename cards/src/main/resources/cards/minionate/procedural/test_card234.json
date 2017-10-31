@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Boredh'Ster", "heroClass": "SHAMAN", "description": "Windfury. Battlecry: Give a friendly minion Windfury.", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 7.0, "baseManaCost": 6.0, "attributes": {"BATTLECRY": true, "WINDFURY": true}, "battlecry": {"spell": {"attribute": "WINDFURY", "class": "AddAttributeSpell"}, "targetSelection": "FRIENDLY_MINIONS"}, "type": "MINION", "id": "Boredh'Ster", "baseAttack": 6.0}
+{
+  "id": "Boredh'Ster",
+  "name": "Boredh'Ster",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 6.0,
+  "baseHp": 7.0,
+  "rarity": "FREE",
+  "description": "Windfury. Battlecry: Give a friendly minion Windfury.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "WINDFURY"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

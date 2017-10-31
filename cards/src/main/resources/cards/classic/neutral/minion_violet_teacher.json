@@ -1,24 +1,24 @@
 {
-	"name": "Violet Teacher",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Whenever you cast a spell, summon a 1/1 Violet Apprentice.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "SpellCastedTrigger",
-			"sourcePlayer": "SELF"
-		},
-		"spell": {
-			"class": "SummonSpell",
-			"card": "token_violet_apprentice",
-			"boardPositionRelative": "RIGHT"
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Violet Teacher",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Whenever you cast a spell, summon a 1/1 Violet Apprentice.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_violet_apprentice"
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

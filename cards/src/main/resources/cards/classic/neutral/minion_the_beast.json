@@ -1,22 +1,22 @@
 {
-	"name": "The Beast",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 9,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "BEAST",
-	"description": "Deathrattle: Summon a 3/3 Finkle Einhorn for your opponent.",
-	"deathrattle": {
-		"class": "SummonSpell",
-		"targetPlayer": "OPPONENT",
-		"card": "token_finkle_einhorn"
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "The Beast",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 9,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Deathrattle: Summon a 3/3 Finkle Einhorn for your opponent.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_finkle_einhorn",
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

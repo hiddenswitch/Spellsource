@@ -1,14 +1,14 @@
 {
+  "name": "Stone Elemental",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "",
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",
-  "name": "Stone Elemental",
-  "heroClass": "SHAMAN",
-  "description": "",
-  "fileFormatVersion": 1,
-  "rarity": "FREE",
-  "baseHp": 1,
-  "race": "ELEMENTAL",
-  "baseAttack": 1,
-  "type": "MINION",
-  "baseManaCost": 1
+  "fileFormatVersion": 1
 }

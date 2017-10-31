@@ -1,1 +1,24 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Darker", "heroClass": "PRIEST", "description": "Charge. Battlecry: Swap Health with another minion.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 4.0, "baseManaCost": 3.0, "attributes": {"CHARGE": true, "BATTLECRY": true}, "battlecry": {"spell": {"class": "SwapHpSpell"}, "targetSelection": "MINIONS"}, "type": "MINION", "id": "Darker", "baseAttack": 2.0}
+{
+  "id": "Darker",
+  "name": "Darker",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 2.0,
+  "baseHp": 4.0,
+  "rarity": "LEGENDARY",
+  "description": "Charge. Battlecry: Swap Health with another minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SwapHpSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

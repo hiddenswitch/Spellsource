@@ -1,15 +1,15 @@
 {
-	"name": "Blessed Champion",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"description": "Double a minion's Attack.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "DoubleAttackSpell"
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Blessed Champion",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "RARE",
+  "description": "Double a minion's Attack.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DoubleAttackSpell"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

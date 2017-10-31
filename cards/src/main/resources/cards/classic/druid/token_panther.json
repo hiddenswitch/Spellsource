@@ -1,14 +1,14 @@
 {
-	"name": "Panther",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "",
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Panther",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

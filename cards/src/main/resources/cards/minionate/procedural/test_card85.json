@@ -1,1 +1,31 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Loch\u2642Pary", "heroClass": "HUNTER", "trigger": {"eventTrigger": {"targetEntityType": "MINION", "class": "AfterPhysicalAttackTrigger", "fireCondition": {"class": "IsDeadCondition"}, "hostTargetType": "IGNORE_OTHER_SOURCES"}, "spell": {"attribute": "EXTRA_ATTACKS", "class": "ModifyAttributeSpell", "value": 1, "target": "SELF"}}, "description": "Whenever this attacks and kills a minion, it may attack again.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 9.0, "race": "BEAST", "baseManaCost": 9.0, "type": "MINION", "id": "Loch\u2642Pary", "baseAttack": 9.0}
+{
+  "id": "Loch\u2642Pary",
+  "name": "Loch\u2642Pary",
+  "baseManaCost": 9.0,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 9.0,
+  "baseHp": 9.0,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Whenever this attacks and kills a minion, it may attack again.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "EXTRA_ATTACKS"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

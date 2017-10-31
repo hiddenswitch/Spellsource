@@ -2,9 +2,9 @@
   "name": "Bone Baron",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ROGUE",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ROGUE",
   "rarity": "COMMON",
   "description": "Deathrattle: Add two 1/1 Skeletons to your hand.",
   "deathrattle": {

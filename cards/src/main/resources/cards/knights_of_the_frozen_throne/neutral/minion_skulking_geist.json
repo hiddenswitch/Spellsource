@@ -1,11 +1,11 @@
 {
   "name": "Skulking Geist",
-  "heroClass": "ANY",
-  "rarity": "EPIC",
-  "type": "MINION",
   "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 6,
+  "rarity": "EPIC",
   "description": "Battlecry: Destroy all 1-Cost spells in both hands and decks.",
   "battlecry": {
     "targetSelection": "NONE",

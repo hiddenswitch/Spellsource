@@ -1,32 +1,32 @@
 {
-	"name": "Cruel Taskmaster",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"description": "Battlecry: Deal 1 damage to a minion and give it +2 Attack.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"attackBonus": 2
-				},
-				{
-					"class": "DamageSpell",
-					"value": 1
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Cruel Taskmaster",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Deal 1 damage to a minion and give it +2 Attack.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 2
+        },
+        {
+          "class": "DamageSpell",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

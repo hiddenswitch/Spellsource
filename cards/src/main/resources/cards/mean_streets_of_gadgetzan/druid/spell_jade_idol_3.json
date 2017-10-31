@@ -1,56 +1,56 @@
 {
-	"name": "Summon Animated Shuriken and Add 3",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Summon a Animated Shuriken. Shuffle 3 copies of this card into your deck.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "ShuffleToDeckSpell",
-				"value": 3,
-				"target": "NONE",
-				"card": "spell_jade_idol"
-			},
-			{
-				"class": "CreateSummonSpell",
-				"name": "Animated Shuriken",
-				"attackBonus": {
-					"class": "AttributeValueProvider",
-					"target": "FRIENDLY_PLAYER",
-					"attribute": "JADE_BUFF",
-					"offset": 1
-				},
-				"hpBonus": {
-					"class": "AttributeValueProvider",
-					"target": "FRIENDLY_PLAYER",
-					"attribute": "JADE_BUFF",
-					"offset": 1
-				},
-				"mana": {
-					"class": "AlgebraicValueProvider",
-					"operation": "MINIMUM",
-					"value1": {
-						"class": "AttributeValueProvider",
-						"target": "FRIENDLY_PLAYER",
-						"attribute": "JADE_BUFF",
-						"offset": 1
-					},
-					"value2": 10
-				},
-				"spell": {
-					"class": "ModifyAttributeSpell",
-					"target": "FRIENDLY_PLAYER",
-					"attribute": "JADE_BUFF",
-					"value": 1
-				}
-			}
-		]
-	},
-	"collectible": false,
-	"set": "MEAN_STREETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Summon Animated Shuriken and Add 3",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "RARE",
+  "description": "Summon a Animated Shuriken. Shuffle 3 copies of this card into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ShuffleToDeckSpell",
+        "target": "NONE",
+        "value": 3,
+        "card": "spell_jade_idol"
+      },
+      {
+        "class": "CreateSummonSpell",
+        "name": "Animated Shuriken",
+        "spell": {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 1,
+          "attribute": "JADE_BUFF"
+        },
+        "attackBonus": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "JADE_BUFF",
+          "offset": 1
+        },
+        "hpBonus": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "JADE_BUFF",
+          "offset": 1
+        },
+        "mana": {
+          "class": "AlgebraicValueProvider",
+          "operation": "MINIMUM",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "JADE_BUFF",
+            "offset": 1
+          },
+          "value2": 10
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

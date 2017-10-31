@@ -2,21 +2,21 @@
   "name": "Abominable Bowman",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "HUNTER",
   "baseAttack": 6,
   "baseHp": 7,
-  "heroClass": "HUNTER",
   "rarity": "EPIC",
   "description": "Deathrattle: Summon a random friendly Beast that died this game.",
   "deathrattle": {
     "class": "SummonRandomMinionFilteredSpell",
     "boardPositionRelative": "RIGHT",
-    "cardSource": {
-      "class": "GraveyardSource",
-      "targetPlayer": "SELF"
-    },
     "cardFilter": {
       "class": "RaceFilter",
       "race": "BEAST"
+    },
+    "cardSource": {
+      "class": "GraveyardSource",
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

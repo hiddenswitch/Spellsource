@@ -1,13 +1,13 @@
 {
-	"name": "Slime",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "",
-	"collectible": false,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Slime",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "",
+  "collectible": false,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

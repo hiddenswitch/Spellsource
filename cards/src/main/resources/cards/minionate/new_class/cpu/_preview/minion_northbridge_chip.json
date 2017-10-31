@@ -1,24 +1,24 @@
 {
-	"name": "Northbridge Chip",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 4,
-	"heroClass": "MAGE",
-	"rarity": "RARE",
-	"description": "Deal 2 damage randomly split amongst all enemies after you use a power.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterSpellCastedTrigger",
-			"sourcePlayer": "SELF"
-		},
-		"spell": {
-			"class": "MissilesSpell",
-			"target": "ENEMY_CHARACTERS",
-			"howMany": 2
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Northbridge Chip",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Deal 2 damage randomly split amongst all enemies after you use a power.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "howMany": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

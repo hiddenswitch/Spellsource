@@ -1,23 +1,23 @@
 {
-	"name": "Succubus",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "WARLOCK",
-	"rarity": "FREE",
-	"race": "DEMON",
-	"description": "Battlecry: Discard a random card.",
-	"battlecry": {
-		"spell": {
-			"class": "DiscardSpell",
-			"value": 1
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Succubus",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "DEMON",
+  "description": "Battlecry: Discard a random card.",
+  "battlecry": {
+    "spell": {
+      "class": "DiscardSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

@@ -1,23 +1,23 @@
 {
-	"name": "Guardian of Kings",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 6,
-	"heroClass": "PALADIN",
-	"rarity": "FREE",
-	"description": "Battlecry: Restore 6 Health to your hero.",
-	"battlecry": {
-		"spell": {
-			"class": "HealSpell",
-			"target": "FRIENDLY_HERO",
-			"value": 6
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Guardian of Kings",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "Battlecry: Restore 6 Health to your hero.",
+  "battlecry": {
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 6
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

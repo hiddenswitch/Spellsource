@@ -1,41 +1,41 @@
 {
-	"name": "Nightbane Templar",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "PALADIN",
-	"rarity": "COMMON",
-	"description": "Battlecry: If you're holding a Dragon, summon two 1/1 Terracota Warriors.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "SummonSpell",
-					"card": "token_whelp",
-					"boardPositionRelative": "RIGHT"
-				},
-				{
-					"class": "SummonSpell",
-					"card": "token_whelp",
-					"boardPositionRelative": "LEFT"
-				}
-			]
-		},
-		"condition": {
-			"class": "HoldsCardCondition",
-			"cardFilter": {
-				"class": "CardFilter",
-				"race": "DRAGON"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Nightbane Templar",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: If you're holding a Dragon, summon two 1/1 Terracota Warriors.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_whelp"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_whelp"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

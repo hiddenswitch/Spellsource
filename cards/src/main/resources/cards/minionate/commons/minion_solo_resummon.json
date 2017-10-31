@@ -1,30 +1,30 @@
 {
-	"id": "minion_solo_resummon",
-	"name": "Solo Resummon",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Deathrattle: Resummon this minion if it was your only one.",
-	"deathrattle": {
-		"class": "ConditionalSpell",
-		"spell": {
-			"class": "SummonSpell",
-			"card": "minion_solo_resummon"
-		},
-		"condition": {
-			"class": "MinionCountCondition",
-			"targetPlayer": "OWNER",
-			"operation": "LESS",
-			"value": 1
-		}
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "minion_solo_resummon",
+  "name": "Solo Resummon",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Resummon this minion if it was your only one.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 1,
+      "operation": "LESS",
+      "targetPlayer": "OWNER"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_solo_resummon"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

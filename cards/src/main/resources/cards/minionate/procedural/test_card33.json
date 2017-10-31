@@ -1,45 +1,45 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Dragonholder Plusser",
   "name": "Dragonholder Plusser",
-  "heroClass": "PALADIN",
-  "description": "Taunt. Battlecry: If you're holding a Dragon, summon three 1/1 Whelps.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 2.0,
   "baseManaCost": 2.0,
-  "attributes": {
-    "TAUNT": true,
-    "BATTLECRY": true
-  },
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 2.0,
+  "baseHp": 2.0,
+  "rarity": "COMMON",
+  "description": "Taunt. Battlecry: If you're holding a Dragon, summon three 1/1 Whelps.",
   "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "race": "DRAGON"
+    },
+    "targetSelection": "NONE",
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
+          "class": "SummonSpell",
           "boardPositionRelative": "RIGHT",
-          "class": "SummonSpell",
           "card": "token_whelp"
         },
         {
-          "boardPositionRelative": "LEFT",
           "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
           "card": "token_whelp"
         },
         {
-          "boardPositionRelative": "LEFT",
           "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
           "card": "token_whelp"
         }
       ]
-    },
-    "targetSelection": "NONE",
-    "condition": {
-      "race": "DRAGON",
-      "class": "HoldsCardCondition"
     }
   },
-  "type": "MINION",
-  "id": "Dragonholder Plusser",
-  "baseAttack": 2.0
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -1,1 +1,26 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Jorseisc", "heroClass": "MAGE", "description": "When you draw this, deal 2 damage to all characters.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 8.0, "race": "MECH", "baseManaCost": 9.0, "passiveTrigger": {"eventTrigger": {"class": "CardDrawnTrigger", "hostTargetType": "IGNORE_OTHER_TARGETS"}, "spell": {"class": "DamageSpell", "value": 2, "target": "ALL_CHARACTERS"}}, "type": "MINION", "id": "Jorseisc", "baseAttack": 10.0}
+{
+  "id": "Jorseisc",
+  "name": "Jorseisc",
+  "baseManaCost": 9.0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 10.0,
+  "baseHp": 8.0,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "When you draw this, deal 2 damage to all characters.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_CHARACTERS",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

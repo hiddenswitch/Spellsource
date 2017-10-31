@@ -1,33 +1,33 @@
 {
-	"name": "Bloodsail Cultist",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "WARRIOR",
-	"rarity": "RARE",
-	"race": "PIRATE",
-	"description": "Battlecry: If you control a Pirate, give your weapon +1/+1.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "BuffWeaponSpell",
-			"target": "FRIENDLY_WEAPON",
-			"attackBonus": 1,
-			"hpBonus": 1
-		},
-		"condition": {
-			"class": "MinionOnBoardCondition",
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "PIRATE"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Bloodsail Cultist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "PIRATE",
+  "description": "Battlecry: If you control a Pirate, give your weapon +1/+1.",
+  "battlecry": {
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "PIRATE"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffWeaponSpell",
+      "target": "FRIENDLY_WEAPON",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

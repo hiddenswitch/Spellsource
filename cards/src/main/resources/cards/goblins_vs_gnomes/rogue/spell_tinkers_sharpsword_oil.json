@@ -1,29 +1,29 @@
 {
-	"name": "Tinker's Sharpsword Oil",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "Give your weapon +3 Attack. Combo: Give a random friendly minion +3 Attack.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "ComboSpell",
-		"spell1": {
-			"class": "BuffWeaponSpell",
-			"target": "FRIENDLY_WEAPON",
-			"attackBonus": 3
-		},
-		"spell2": {
-			"class": "BuffSpell",
-			"target": "FRIENDLY_MINIONS",
-			"attackBonus": 3,
-			"randomTarget": true
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Tinker's Sharpsword Oil",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "COMMON",
+  "description": "Give your weapon +3 Attack. Combo: Give a random friendly minion +3 Attack.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ComboSpell",
+    "spell1": {
+      "class": "BuffWeaponSpell",
+      "target": "FRIENDLY_WEAPON",
+      "attackBonus": 3
+    },
+    "spell2": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 3,
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

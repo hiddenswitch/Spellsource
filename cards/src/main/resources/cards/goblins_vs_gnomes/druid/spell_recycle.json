@@ -1,16 +1,16 @@
 {
-	"name": "Recycle",
-	"baseManaCost": 6,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Shuffle an enemy minion into your opponent's deck.",
-	"targetSelection": "ENEMY_MINIONS",
-	"spell": {
-		"class": "ShuffleMinionToDeckSpell",
-		"targetPlayer": "OWNER"
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Recycle",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "RARE",
+  "description": "Shuffle an enemy minion into your opponent's deck.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "ShuffleMinionToDeckSpell",
+    "targetPlayer": "OWNER"
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

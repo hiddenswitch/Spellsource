@@ -1,17 +1,17 @@
 {
-	"name": "Razorpetal Volley",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "Add two Razorpetals to your hand that deal 1 damage.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "ReceiveCardSpell",
-		"value": 2,
-		"card": "spell_razorpetal"
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Razorpetal Volley",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "COMMON",
+  "description": "Add two Razorpetals to your hand that deal 1 damage.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": 2,
+    "card": "spell_razorpetal"
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

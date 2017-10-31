@@ -8,6 +8,10 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition",
+      "invert": true
+    },
     "spell1": {
       "class": "DamageSpell",
       "value": 2
@@ -15,10 +19,6 @@
     "spell2": {
       "class": "AddAttributeSpell",
       "attribute": "POISONOUS"
-    },
-    "condition": {
-      "class": "IsDeadCondition",
-      "invert": true
     }
   },
   "collectible": true,

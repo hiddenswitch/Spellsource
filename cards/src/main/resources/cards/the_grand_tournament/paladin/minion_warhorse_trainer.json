@@ -1,22 +1,22 @@
 {
-	"name": "Warhorse Trainer",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 4,
-	"heroClass": "PALADIN",
-	"rarity": "COMMON",
-	"description": "Your Recruits have +1 Attack.",
-	"aura": {
-		"class": "BuffAura",
-		"target": "FRIENDLY_MINIONS",
-		"attackBonus": 1,
-		"filter": {
-			"class": "SpecificCardFilter",
-			"cardId": "token_silver_hand_recruit"
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Warhorse Trainer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Your Recruits have +1 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "filter": {
+      "class": "SpecificCardFilter",
+      "cardId": "token_silver_hand_recruit"
+    }
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

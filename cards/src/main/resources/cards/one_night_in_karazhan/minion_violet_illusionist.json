@@ -1,34 +1,34 @@
 {
-	"name": "Violet Illusionist",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "During your turn, your Hero is immune.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "BoardChangedTrigger"
-		},
-		"spell": {
-			"class": "EitherOrSpell",
-			"target": "SELF",
-			"spell1": {
-				"class": "AddAttributeSpell",
-				"attribute": "IMMUNE_HERO"
-			},
-			"spell2": {
-				"class": "RemoveAttributeSpell",
-				"attribute": "IMMUNE_HERO"
-			},
-			"condition": {
-				"class": "OwnedByPlayerCondition",
-				"targetPlayer": "ACTIVE"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Violet Illusionist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "During your turn, your Hero is immune.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BoardChangedTrigger"
+    },
+    "spell": {
+      "class": "EitherOrSpell",
+      "target": "SELF",
+      "condition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      },
+      "spell1": {
+        "class": "AddAttributeSpell",
+        "attribute": "IMMUNE_HERO"
+      },
+      "spell2": {
+        "class": "RemoveAttributeSpell",
+        "attribute": "IMMUNE_HERO"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

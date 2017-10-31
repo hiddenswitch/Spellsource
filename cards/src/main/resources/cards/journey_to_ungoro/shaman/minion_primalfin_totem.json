@@ -1,25 +1,25 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Primalfin Totem",
+  "baseManaCost": 2,
+  "type": "MINION",
   "heroClass": "SHAMAN",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "TOTEM",
+  "description": "At the end of your turn, summon a 1/1 Murloc.",
   "trigger": {
     "eventTrigger": {
-      "targetPlayer": "SELF",
-      "class": "TurnEndTrigger"
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
     },
     "spell": {
-      "boardPositionRelative": "RIGHT",
       "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
       "card": "token_primalfin"
     }
   },
-  "description": "At the end of your turn, summon a 1/1 Murloc.",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "baseHp": 3,
-  "race": "TOTEM",
-  "baseAttack": 0,
-  "type": "MINION",
-  "baseManaCost": 2
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

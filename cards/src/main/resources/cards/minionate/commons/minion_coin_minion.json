@@ -1,35 +1,35 @@
 {
-	"id": "minion_coin_minion",
-	"name": "Coin Minion",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Whenever your opponent summons a minion, gain a Coin.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "MinionSummonedTrigger",
-			"sourcePlayer": "OPPONENT",
-			"queueCondition": {
-				"class": "CardPropertyCondition",
-				"cardId": "spell_the_coin",
-				"invert": true
-			}
-		},
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "ReceiveCardSpell",
-					"targetPlayer": "SELF",
-					"card": "spell_the_coin"
-				}
-			]
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "minion_coin_minion",
+  "name": "Coin Minion",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your opponent summons a minion, gain a Coin.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "queueCondition": {
+        "class": "CardPropertyCondition",
+        "cardId": "spell_the_coin",
+        "invert": true
+      },
+      "sourcePlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReceiveCardSpell",
+          "card": "spell_the_coin",
+          "targetPlayer": "SELF"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

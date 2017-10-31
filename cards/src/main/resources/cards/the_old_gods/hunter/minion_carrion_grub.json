@@ -1,14 +1,14 @@
 {
-	"name": "Carrion Grub",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 5,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "",
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Carrion Grub",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "",
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

@@ -1,1 +1,27 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Axesnake", "heroClass": "MAGE", "description": "Battlecry: Summon a random 3-Cost minion.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 2.0, "baseManaCost": 2.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"cardFilter": {"manaCost": 3, "class": "CardFilter"}, "boardPositionRelative": "RIGHT", "class": "SummonRandomMinionFilteredSpell"}}, "type": "MINION", "id": "Axesnake", "baseAttack": 2.0}
+{
+  "id": "Axesnake",
+  "name": "Axesnake",
+  "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 2.0,
+  "baseHp": 2.0,
+  "rarity": "COMMON",
+  "description": "Battlecry: Summon a random 3-Cost minion.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonRandomMinionFilteredSpell",
+      "boardPositionRelative": "RIGHT",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": 3
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

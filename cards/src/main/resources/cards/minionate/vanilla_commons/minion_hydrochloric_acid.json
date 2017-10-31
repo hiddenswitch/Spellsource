@@ -1,22 +1,22 @@
 {
-	"name": "Hydrochloric Acid",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Call to Arms: Destroy your opponent's weapon.",
-	"battlecry": {
-		"spell": {
-			"class": "DestroySpell",
-			"target": "ENEMY_WEAPON"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Hydrochloric Acid",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Call to Arms: Destroy your opponent's weapon.",
+  "battlecry": {
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_WEAPON"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

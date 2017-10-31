@@ -2,9 +2,9 @@
   "name": "Blood Razor",
   "baseManaCost": 4,
   "type": "WEAPON",
+  "heroClass": "WARRIOR",
   "damage": 2,
   "durability": 2,
-  "heroClass": "WARRIOR",
   "rarity": "COMMON",
   "description": "Battlecry and Deathrattle: Deal 1 damage to all minions.",
   "battlecry": {

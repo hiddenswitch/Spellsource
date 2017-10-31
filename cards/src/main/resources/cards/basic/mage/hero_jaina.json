@@ -1,17 +1,17 @@
 {
-	"id": "hero_jaina",
-	"name": "Shun He",
-	"baseManaCost": 0,
-	"description": "Hero Power: Deal 1 damage to a target",
-	"heroPower": "hero_power_fireblast",
-	"type": "HERO",
-	"heroClass": "MAGE",
-	"rarity": "FREE",
-	"attributes": {
-		"HP": 30,
-		"MAX_HP": 30
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "id": "hero_jaina",
+  "name": "Shun He",
+  "heroPower": "hero_power_fireblast",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "MAGE",
+  "rarity": "FREE",
+  "description": "Hero Power: Deal 1 damage to a target",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

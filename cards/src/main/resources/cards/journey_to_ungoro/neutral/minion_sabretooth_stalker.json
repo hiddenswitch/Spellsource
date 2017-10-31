@@ -1,17 +1,17 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Sabretooth Stalker",
+  "baseManaCost": 6,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Stealth",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 2,
-  "race": "BEAST",
   "baseAttack": 8,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Stealth",
   "attributes": {
     "STEALTH": true
   },
-  "type": "MINION",
-  "baseManaCost": 6
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

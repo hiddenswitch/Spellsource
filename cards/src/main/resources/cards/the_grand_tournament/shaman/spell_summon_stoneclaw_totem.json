@@ -1,16 +1,16 @@
 {
-	"name": "Stoneclaw Totem",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "FREE",
-	"description": "Summon a Stoneclaw Totem.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"card": "token_stoneclaw_totem"
-	},
-	"collectible": false,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Stoneclaw Totem",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "FREE",
+  "description": "Summon a Stoneclaw Totem.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_stoneclaw_totem"
+  },
+  "collectible": false,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

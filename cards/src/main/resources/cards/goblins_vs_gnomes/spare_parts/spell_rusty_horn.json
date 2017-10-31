@@ -1,16 +1,16 @@
 {
-	"name": "Rusty Horn",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Give a minion Taunt.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "AddAttributeSpell",
-		"attribute": "TAUNT"
-	},
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Rusty Horn",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give a minion Taunt.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "attribute": "TAUNT"
+  },
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

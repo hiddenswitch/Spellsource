@@ -1,18 +1,18 @@
 {
-	"name": "Earth Elemental",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 8,
-	"heroClass": "SHAMAN",
-	"rarity": "EPIC",
-	"race": "ELEMENTAL",
-	"description": "Taunt. Overload: (3)",
-	"attributes": {
-		"OVERLOAD": 3,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Earth Elemental",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 7,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Taunt. Overload: (3)",
+  "attributes": {
+    "OVERLOAD": 3,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

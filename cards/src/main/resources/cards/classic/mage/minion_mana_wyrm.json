@@ -2,9 +2,9 @@
   "name": "Mana Wyrm",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "MAGE",
   "baseAttack": 1,
   "baseHp": 3,
-  "heroClass": "MAGE",
   "rarity": "COMMON",
   "description": "Whenever you cast a spell, gain +1 Attack.",
   "trigger": {

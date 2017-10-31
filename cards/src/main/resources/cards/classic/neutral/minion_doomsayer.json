@@ -2,9 +2,9 @@
   "name": "Doomsayer",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 0,
   "baseHp": 7,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "At the start of your turn, destroy ALL minions.",
   "trigger": {

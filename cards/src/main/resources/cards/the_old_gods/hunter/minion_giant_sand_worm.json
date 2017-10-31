@@ -1,30 +1,30 @@
 {
-	"name": "Giant Sand Worm",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "HUNTER",
-	"rarity": "EPIC",
-	"race": "BEAST",
-	"description": "Whenever this minion kills another minion, it may attack again.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterPhysicalAttackTrigger",
-			"targetEntityType": "MINION",
-			"hostTargetType": "IGNORE_OTHER_SOURCES",
-			"fireCondition": {
-				"class": "IsDeadCondition"
-			}
-		},
-		"spell": {
-			"class": "ModifyAttributeSpell",
-			"target": "SELF",
-			"attribute": "EXTRA_ATTACKS",
-			"value": 1
-		}
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Giant Sand Worm",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Whenever this minion kills another minion, it may attack again.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "EXTRA_ATTACKS"
+    }
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

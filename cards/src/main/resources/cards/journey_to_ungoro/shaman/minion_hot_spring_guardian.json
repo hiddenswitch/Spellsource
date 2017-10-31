@@ -1,25 +1,25 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Hot Spring Guardian",
+  "baseManaCost": 3,
+  "type": "MINION",
   "heroClass": "SHAMAN",
-  "description": "Taunt. Battlecry: Restore 3 Health.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 4,
-  "race": "ELEMENTAL",
   "baseAttack": 2,
-  "attributes": {
-    "TAUNT": true,
-    "BATTLECRY": true
-  },
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Taunt. Battlecry: Restore 3 Health.",
   "battlecry": {
+    "targetSelection": "ANY",
     "spell": {
       "class": "HealSpell",
       "value": 3
-    },
-    "targetSelection": "ANY"
+    }
   },
-  "type": "MINION",
-  "baseManaCost": 3
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

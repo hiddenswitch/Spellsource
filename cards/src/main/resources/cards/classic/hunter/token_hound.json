@@ -1,17 +1,17 @@
 {
-	"name": "Wolf",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "Charge",
-	"race": "BEAST",
-	"attributes": {
-		"CHARGE": true
-	},
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Wolf",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

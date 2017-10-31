@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "House Of Ofhant", "heroClass": "MAGE", "description": "Freeze any character damaged by this minion.", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 4.0, "trigger": {"eventTrigger": {"class": "DamageCausedTrigger", "hostTargetType": "IGNORE_OTHER_SOURCES"}, "spell": {"attribute": "FROZEN", "class": "AddAttributeSpell", "target": "EVENT_TARGET"}}, "baseManaCost": 5.0, "type": "MINION", "id": "House Of Ofhant", "baseAttack": 4.0}
+{
+  "id": "House Of Ofhant",
+  "name": "House Of Ofhant",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 4.0,
+  "baseHp": 4.0,
+  "rarity": "FREE",
+  "description": "Freeze any character damaged by this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "EVENT_TARGET",
+      "attribute": "FROZEN"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

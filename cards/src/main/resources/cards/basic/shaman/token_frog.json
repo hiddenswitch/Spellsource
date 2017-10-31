@@ -1,17 +1,17 @@
 {
-	"name": "Slime",
-	"baseManaCost": 0,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "Taunt",
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Slime",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

@@ -2,9 +2,9 @@
   "name": "Druid of the Claw",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "DRUID",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "DRUID",
   "rarity": "COMMON",
   "description": "Choose One - Charge; or +2 Health and Taunt.",
   "options": [

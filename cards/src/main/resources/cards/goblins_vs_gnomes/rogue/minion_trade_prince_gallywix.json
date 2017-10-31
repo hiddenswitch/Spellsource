@@ -1,39 +1,39 @@
 {
-	"name": "Trade Prince Gallywix",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 8,
-	"heroClass": "ROGUE",
-	"rarity": "LEGENDARY",
-	"description": "Whenever your opponent casts a spell, gain a copy of it and give them a Coin.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "SpellCastedTrigger",
-			"sourcePlayer": "OPPONENT",
-			"queueCondition": {
-				"class": "CardPropertyCondition",
-				"cardId": "spell_gallywixs_coin",
-				"invert": true
-			}
-		},
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "CopyCardSpell",
-					"target": "EVENT_TARGET",
-					"targetPlayer": "SELF"
-				},
-				{
-					"class": "ReceiveCardSpell",
-					"targetPlayer": "OPPONENT",
-					"card": "spell_gallywixs_coin"
-				}
-			]
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Trade Prince Gallywix",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your opponent casts a spell, gain a copy of it and give them a Coin.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "queueCondition": {
+        "class": "CardPropertyCondition",
+        "cardId": "spell_gallywixs_coin",
+        "invert": true
+      },
+      "sourcePlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CopyCardSpell",
+          "target": "EVENT_TARGET",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "card": "spell_gallywixs_coin",
+          "targetPlayer": "OPPONENT"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

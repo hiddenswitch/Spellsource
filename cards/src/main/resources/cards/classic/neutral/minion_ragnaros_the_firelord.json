@@ -1,29 +1,29 @@
 {
-	"name": "Ragnaros the Firelord",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "ELEMENTAL",
-	"description": "Can't Attack.  At the end of your turn, deal 8 damage to a random enemy.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "MissilesSpell",
-			"target": "ENEMY_CHARACTERS",
-			"value": 8,
-			"howMany": 1
-		}
-	},
-	"attributes": {
-		"CANNOT_ATTACK": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Ragnaros the Firelord",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Can't Attack.  At the end of your turn, deal 8 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 8,
+      "howMany": 1
+    }
+  },
+  "attributes": {
+    "CANNOT_ATTACK": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

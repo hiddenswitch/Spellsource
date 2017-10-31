@@ -1,17 +1,17 @@
 {
-	"name": "Nanobot",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "Storm",
-	"race": "BEAST",
-	"attributes": {
-		"CHARGE": true
-	},
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Nanobot",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Storm",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

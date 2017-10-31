@@ -7,7 +7,6 @@
   "description": "Each time you play a card, transform this into a copy of  it.",
   "passiveTriggers": [
     {
-      "keepAfterTransform": true,
       "eventTrigger": {
         "class": "TurnEndTrigger",
         "targetPlayer": "SELF"
@@ -15,29 +14,30 @@
       "spell": {
         "class": "RemoveCardSpell",
         "target": "SELF"
-      }
+      },
+      "keepAfterTransform": true
     },
     {
-      "keepAfterTransform": true,
       "eventTrigger": {
         "class": "CardPlayedTrigger",
-        "targetPlayer": "SELF",
-        "hostTargetType": "IGNORE_AS_TARGET"
+        "hostTargetType": "IGNORE_AS_TARGET",
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "custom.ShifterZerusSpell",
         "target": "SELF",
         "secondaryTarget": "EVENT_TARGET"
-      }
+      },
+      "keepAfterTransform": true
     }
   ],
-  "spell": {
-    "class": "NullSpell"
-  },
-  "targetSelection": "NONE",
   "condition": {
     "class": "OrCondition",
     "conditions": []
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

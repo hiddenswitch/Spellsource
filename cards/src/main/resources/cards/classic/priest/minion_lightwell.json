@@ -1,28 +1,28 @@
 {
-	"name": "Lightwell",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 5,
-	"heroClass": "PRIEST",
-	"rarity": "RARE",
-	"description": "At the start of your turn, restore 3 Health to a damaged friendly character.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnStartTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "HealSpell",
-			"target": "FRIENDLY_CHARACTERS",
-			"value": 3,
-			"randomTarget": true,
-			"filter": {
-				"class": "DamagedFilter"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Lightwell",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 0,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "At the start of your turn, restore 3 Health to a damaged friendly character.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "value": 3,
+      "filter": {
+        "class": "DamagedFilter"
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

@@ -1,17 +1,17 @@
 {
-  "set": "SPELLSOURCE",
+  "id": "Walkingit Snake",
   "name": "Walking Deathsnake",
-  "description": "Taunt. ",
-  "baseHp": 7.0,
   "baseManaCost": 9.0,
   "type": "MINION",
   "heroClass": "ANY",
-  "fileFormatVersion": 1,
-  "collectible": true,
+  "baseAttack": 8.0,
+  "baseHp": 7.0,
   "rarity": "LEGENDARY",
+  "description": "Taunt. ",
   "attributes": {
     "TAUNT": true
   },
-  "id": "Walkingit Snake",
-  "baseAttack": 8.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

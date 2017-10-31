@@ -2,9 +2,9 @@
   "name": "Shallow Gravedigger",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 1,
-  "heroClass": "ANY",
   "rarity": "RARE",
   "description": "Deathrattle: Add a random Deathrattle minion to your hand.",
   "deathrattle": {

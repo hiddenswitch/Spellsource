@@ -1,31 +1,31 @@
 {
-	"name": "Fel Cannon",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 5,
-	"heroClass": "WARLOCK",
-	"rarity": "RARE",
-	"race": "MECH",
-	"description": "At the end of your turn, deal 2 damage to a non-Mech minion.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "MissilesSpell",
-			"target": "ALL_MINIONS",
-			"value": 2,
-			"howMany": 1,
-			"filter": {
-				"class": "RaceFilter",
-				"race": "MECH",
-				"invert": true
-			}
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Fel Cannon",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "At the end of your turn, deal 2 damage to a non-Mech minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ALL_MINIONS",
+      "value": 2,
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH",
+        "invert": true
+      },
+      "howMany": 1
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

@@ -1,25 +1,25 @@
 {
-	"name": "Frost Shock",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "FREE",
-	"description": "Deal 1 damage to an enemy character and Freeze it.",
-	"targetSelection": "ENEMY_CHARACTERS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": 1
-			},
-			{
-				"class": "AddAttributeSpell",
-				"attribute": "FROZEN"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Frost Shock",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "FREE",
+  "description": "Deal 1 damage to an enemy character and Freeze it.",
+  "targetSelection": "ENEMY_CHARACTERS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

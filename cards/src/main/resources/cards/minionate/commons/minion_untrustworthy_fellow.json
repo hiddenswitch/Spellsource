@@ -1,33 +1,33 @@
 {
-	"id": "minion_untrustworthy_fellow",
-	"name": "Untrustworthy Fellow",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Charge. Battlecry: Give a random minion in your opponent's hand Charge.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "AddAttributeSpell",
-			"target": "ENEMY_HAND",
-			"attribute": "CHARGE",
-			"filter": {
-				"class": "AttributeFilter",
-				"attribute": "CHARGE",
-				"invert": true,
-				"operation": "HAS"
-			},
-			"randomTarget": true
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"CHARGE": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "minion_untrustworthy_fellow",
+  "name": "Untrustworthy Fellow",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Charge. Battlecry: Give a random minion in your opponent's hand Charge.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ENEMY_HAND",
+      "attribute": "CHARGE",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "CHARGE",
+        "invert": true,
+        "operation": "HAS"
+      },
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

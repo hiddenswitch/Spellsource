@@ -2,9 +2,9 @@
   "name": "Auctionmaster Beardo",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "After you cast a spell, refresh your Hero Power.",
   "trigger": {

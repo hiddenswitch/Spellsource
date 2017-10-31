@@ -1,27 +1,27 @@
 {
-	"name": "Seasonal Sous Chef",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Call to Arms: Gain an empty Mana Cell. Revenge: Lose an Mana Cell.",
-	"battlecry": {
-		"spell": {
-			"class": "ModifyMaxManaSpell",
-			"value": 1
-		}
-	},
-	"deathrattle": {
-		"class": "ModifyMaxManaSpell",
-		"value": -1
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Seasonal Sous Chef",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Call to Arms: Gain an empty Mana Cell. Revenge: Lose an Mana Cell.",
+  "battlecry": {
+    "spell": {
+      "class": "ModifyMaxManaSpell",
+      "value": 1
+    }
+  },
+  "deathrattle": {
+    "class": "ModifyMaxManaSpell",
+    "value": -1
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

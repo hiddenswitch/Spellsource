@@ -1,21 +1,21 @@
 {
-	"name": "Anub'ar Ambusher",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 5,
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "Deathrattle: Return a friendly minion to your hand.",
-	"deathrattle": {
-		"class": "ReturnTargetToHandSpell",
-		"target": "FRIENDLY_MINIONS",
-		"randomTarget": true
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Anub'ar Ambusher",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Return a friendly minion to your hand.",
+  "deathrattle": {
+    "class": "ReturnTargetToHandSpell",
+    "target": "FRIENDLY_MINIONS",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

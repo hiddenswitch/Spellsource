@@ -1,19 +1,19 @@
 {
-	"name": "Rigor Mortis",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "FREE",
-	"description": "Double a minion's Health.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "BuffSpell",
-		"hpBonus": {
-			"class": "AttributeValueProvider",
-			"attribute": "HP"
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Rigor Mortis",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "FREE",
+  "description": "Double a minion's Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "hpBonus": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

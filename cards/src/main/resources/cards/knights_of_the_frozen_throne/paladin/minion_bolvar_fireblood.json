@@ -2,16 +2,16 @@
   "name": "Bolvar, Fireblood",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 1,
   "baseHp": 7,
-  "heroClass": "PALADIN",
   "rarity": "LEGENDARY",
   "description": "Divine Shield. After a friendly minion loses Divine Shield, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDivineShieldTrigger",
-      "targetPlayer": "SELF",
-      "targetEntityType": "MINION"
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",

@@ -2,15 +2,15 @@
   "name": "Shielded Minibot",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "PALADIN",
   "rarity": "COMMON",
   "race": "MECH",
   "description": "Divine Shield",
   "attributes": {
-    "NAME": "Tree Pangolin",
-    "DIVINE_SHIELD": true
+    "DIVINE_SHIELD": true,
+    "NAME": "Tree Pangolin"
   },
   "collectible": true,
   "set": "GOBLINS_VS_GNOMES",

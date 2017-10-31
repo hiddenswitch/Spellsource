@@ -1,24 +1,24 @@
 {
-	"name": "Dark Iron Dwarf",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Battlecry: Give a minion +2 Attack this turn.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "TemporaryAttackSpell",
-			"value": 2
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"NAME": "Tanuki Blacksmith"
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Dark Iron Dwarf",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a minion +2 Attack this turn.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "NAME": "Tanuki Blacksmith"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

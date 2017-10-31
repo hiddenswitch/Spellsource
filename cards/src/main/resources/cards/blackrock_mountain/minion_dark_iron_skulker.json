@@ -1,27 +1,27 @@
 {
-	"name": "Dark Iron Skulker",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "ROGUE",
-	"rarity": "RARE",
-	"description": "Battlecry: Deal 2 damage to all undamaged enemy minions.",
-	"battlecry": {
-		"spell": {
-			"class": "DamageSpell",
-			"target": "ENEMY_MINIONS",
-			"value": 2,
-			"filter": {
-				"class": "DamagedFilter",
-				"invert": true
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Dark Iron Skulker",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Deal 2 damage to all undamaged enemy minions.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 2,
+      "filter": {
+        "class": "DamagedFilter",
+        "invert": true
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1
 }

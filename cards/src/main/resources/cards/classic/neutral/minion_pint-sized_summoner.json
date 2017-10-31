@@ -1,27 +1,27 @@
 {
-	"name": "Pint-Sized Summoner",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "The first minion you play each turn costs (1) less.",
-	"cardCostModifier": {
-		"class": "ToggleCostModifier",
-		"cardType": "MINION",
-		"targetPlayer": "SELF",
-		"value": -1,
-		"toggleOnTrigger": {
-			"class": "TurnStartTrigger"
-		},
-		"toggleOffTrigger": {
-			"class": "CardPlayedTrigger",
-			"cardType": "MINION",
-			"targetPlayer": "SELF"
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Pint-Sized Summoner",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "The first minion you play each turn costs (1) less.",
+  "cardCostModifier": {
+    "class": "ToggleCostModifier",
+    "value": -1,
+    "cardType": "MINION",
+    "targetPlayer": "SELF",
+    "toggleOffTrigger": {
+      "class": "CardPlayedTrigger",
+      "cardType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "toggleOnTrigger": {
+      "class": "TurnStartTrigger"
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

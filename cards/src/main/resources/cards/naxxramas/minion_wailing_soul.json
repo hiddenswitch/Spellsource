@@ -1,22 +1,22 @@
 {
-	"name": "Wailing Soul",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Battlecry: Silence your other minions.",
-	"battlecry": {
-		"spell": {
-			"class": "SilenceSpell",
-			"target": "OTHER_FRIENDLY_MINIONS"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Wailing Soul",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Battlecry: Silence your other minions.",
+  "battlecry": {
+    "spell": {
+      "class": "SilenceSpell",
+      "target": "OTHER_FRIENDLY_MINIONS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

@@ -1,17 +1,17 @@
 {
-	"name": "Mini-Mage",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "Stealth. Spell Damage +1",
-	"attributes": {
-		"SPELL_DAMAGE": 1,
-		"STEALTH": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Mini-Mage",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Stealth. Spell Damage +1",
+  "attributes": {
+    "SPELL_DAMAGE": 1,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

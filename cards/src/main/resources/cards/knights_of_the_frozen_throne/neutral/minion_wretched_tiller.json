@@ -2,21 +2,21 @@
   "name": "Wretched Tiller",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Whenever this minion attacks, deal 2 damage to the enemy hero.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "targetEntityType": "MINION",
-      "hostTargetType": "IGNORE_OTHER_SOURCES"
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "DamageSpell",
-      "value": 2,
-      "target": "ENEMY_HERO"
+      "target": "ENEMY_HERO",
+      "value": 2
     }
   },
   "collectible": true,

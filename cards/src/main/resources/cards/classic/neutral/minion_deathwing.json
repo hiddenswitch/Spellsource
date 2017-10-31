@@ -1,34 +1,34 @@
 {
-	"name": "Deathwing",
-	"baseManaCost": 10,
-	"type": "MINION",
-	"baseAttack": 12,
-	"baseHp": 12,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "DRAGON",
-	"description": "Battlecry: Destroy all other minions and discard your hand.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "DestroySpell",
-					"target": "ALL_OTHER_MINIONS"
-				},
-				{
-					"class": "DiscardSpell",
-					"value": -1
-				}
-			]
-		}
-	},
-	"attributes": {
-		"NAME": "The Flying Lotus",
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Deathwing",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 12,
+  "baseHp": 12,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Battlecry: Destroy all other minions and discard your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "ALL_OTHER_MINIONS"
+        },
+        {
+          "class": "DiscardSpell",
+          "value": -1
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "NAME": "The Flying Lotus"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

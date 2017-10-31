@@ -1,17 +1,17 @@
 {
-	"name": "Inoshi",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 2,
-	"heroClass": "HUNTER",
-	"rarity": "FREE",
-	"race": "BEAST",
-	"description": "Charge",
-	"attributes": {
-		"CHARGE": true
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Inoshi",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

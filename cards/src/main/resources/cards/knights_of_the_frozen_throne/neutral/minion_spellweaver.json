@@ -2,9 +2,9 @@
   "name": "Spellweaver",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Spell Damage +2",
   "attributes": {

@@ -1,22 +1,22 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Cleanerfear Happerion",
   "name": "Cleanerfear Happerion",
-  "heroClass": "ROGUE",
-  "description": "Deathrattle: Return a random friendly minion to your hand.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 9.0,
-  "deathrattle": {
-    "randomTarget": true,
-    "class": "ReturnTargetToHandSpell",
-    "target": "FRIENDLY_MINIONS"
-  },
   "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 3.0,
+  "baseHp": 9.0,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Return a random friendly minion to your hand.",
+  "deathrattle": {
+    "class": "ReturnTargetToHandSpell",
+    "target": "FRIENDLY_MINIONS",
+    "randomTarget": true
+  },
   "attributes": {
     "DEATHRATTLES": true
   },
-  "type": "MINION",
-  "id": "Cleanerfear Happerion",
-  "baseAttack": 3.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

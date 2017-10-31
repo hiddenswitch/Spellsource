@@ -1,16 +1,16 @@
 {
-	"name": "Kor'kron Elite",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "WARRIOR",
-	"rarity": "FREE",
-	"description": "Charge",
-	"attributes": {
-		"CHARGE": true
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Kor'kron Elite",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

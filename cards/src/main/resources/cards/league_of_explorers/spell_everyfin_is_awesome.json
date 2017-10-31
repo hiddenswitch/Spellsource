@@ -1,26 +1,26 @@
 {
-	"name": "Everyfin is Awesome",
-	"baseManaCost": 7,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "RARE",
-	"description": "Give your minions +2/+2. Costs (1) less for each Murloc you control.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "BuffSpell",
-		"target": "FRIENDLY_MINIONS",
-		"attackBonus": 2,
-		"hpBonus": 2
-	},
-	"manaCostModifier": {
-		"class": "EntityCounter",
-		"target": "FRIENDLY_MINIONS",
-		"filter": {
-			"class": "RaceFilter",
-			"race": "MURLOC"
-		}
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Everyfin is Awesome",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "RARE",
+  "description": "Give your minions +2/+2. Costs (1) less for each Murloc you control.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 2,
+    "hpBonus": 2
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "EntityCounter",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "MURLOC"
+    }
+  }
 }

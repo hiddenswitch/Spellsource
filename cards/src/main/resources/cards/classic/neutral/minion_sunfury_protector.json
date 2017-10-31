@@ -1,23 +1,23 @@
 {
-	"name": "Sunfury Protector",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Battlecry: Give adjacent minions Taunt.",
-	"battlecry": {
-		"spell": {
-			"class": "AddAttributeSpell",
-			"target": "ADJACENT_MINIONS",
-			"attribute": "TAUNT"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Sunfury Protector",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Give adjacent minions Taunt.",
+  "battlecry": {
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ADJACENT_MINIONS",
+      "attribute": "TAUNT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

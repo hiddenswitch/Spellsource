@@ -1,29 +1,29 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Happy Flurry",
   "name": "Happy Flurry",
-  "heroClass": "PALADIN",
-  "trigger": {
-    "eventTrigger": {
-      "targetPlayer": "SELF",
-      "class": "InspireTrigger"
-    },
-    "spell": {
-      "cardFilter": {
-        "race": "MURLOC",
-        "class": "CardFilter"
-      },
-      "boardPositionRelative": "RIGHT",
-      "class": "SummonRandomMinionFilteredSpell"
-    }
-  },
-  "description": "Inspire: Summon a random Murloc.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 5.0,
-  "race": "MURLOC",
   "baseManaCost": 4.0,
   "type": "MINION",
-  "id": "Happy Flurry",
-  "baseAttack": 3.0
+  "heroClass": "PALADIN",
+  "baseAttack": 3.0,
+  "baseHp": 5.0,
+  "rarity": "COMMON",
+  "race": "MURLOC",
+  "description": "Inspire: Summon a random Murloc.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonRandomMinionFilteredSpell",
+      "boardPositionRelative": "RIGHT",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "MURLOC"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

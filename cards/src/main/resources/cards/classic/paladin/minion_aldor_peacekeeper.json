@@ -2,9 +2,9 @@
   "name": "Aldor Peacekeeper",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 1,
   "baseHp": 4,
-  "heroClass": "PALADIN",
   "rarity": "RARE",
   "description": "Battlecry: Change an enemy minion's Attack to 0.",
   "battlecry": {
@@ -15,8 +15,8 @@
     }
   },
   "attributes": {
-    "NAME": "Butcher",
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "NAME": "Butcher"
   },
   "collectible": true,
   "set": "CLASSIC",

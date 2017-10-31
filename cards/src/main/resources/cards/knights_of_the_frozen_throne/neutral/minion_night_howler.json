@@ -2,9 +2,9 @@
   "name": "Night Howler",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Whenever this minion takes damage, gain +2 Attack.",
   "trigger": {

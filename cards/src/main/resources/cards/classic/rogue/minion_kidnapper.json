@@ -1,25 +1,25 @@
 {
-	"name": "Kidnapper",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 3,
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Combo: Return a minion to its owner's hand.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "ReturnTargetToHandSpell"
-		},
-		"condition": {
-			"class": "ComboCondition"
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Kidnapper",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Combo: Return a minion to its owner's hand.",
+  "battlecry": {
+    "condition": {
+      "class": "ComboCondition"
+    },
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "ReturnTargetToHandSpell"
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

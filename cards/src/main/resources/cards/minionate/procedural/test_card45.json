@@ -1,1 +1,40 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Black Windler", "heroClass": "ROGUE", "description": "Whenever your opponent casts a spell, gain a copy of it and give them a Coin.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 7.0, "trigger": {"eventTrigger": {"sourcePlayer": "OPPONENT", "class": "SpellCastedTrigger", "queueCondition": {"invert": true, "class": "CardPropertyCondition", "cardId": "spell_gallywixs_coin"}}, "spell": {"class": "MetaSpell", "spells": [{"targetPlayer": "SELF", "class": "CopyCardSpell", "target": "EVENT_TARGET"}, {"targetPlayer": "OPPONENT", "class": "ReceiveCardSpell", "card": "spell_gallywixs_coin"}]}}, "baseManaCost": 8.0, "type": "MINION", "id": "Black Windler", "baseAttack": 6.0}
+{
+  "id": "Black Windler",
+  "name": "Black Windler",
+  "baseManaCost": 8.0,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 6.0,
+  "baseHp": 7.0,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your opponent casts a spell, gain a copy of it and give them a Coin.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "queueCondition": {
+        "class": "CardPropertyCondition",
+        "cardId": "spell_gallywixs_coin",
+        "invert": true
+      },
+      "sourcePlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CopyCardSpell",
+          "target": "EVENT_TARGET",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "card": "spell_gallywixs_coin",
+          "targetPlayer": "OPPONENT"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

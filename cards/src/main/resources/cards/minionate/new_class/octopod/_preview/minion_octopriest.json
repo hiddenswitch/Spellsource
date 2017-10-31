@@ -1,25 +1,25 @@
 {
-	"name": "Octopriest",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"race": "DEMON",
-	"description": "Revenge: Place a random Octopus from your hand into play.",
-	"deathrattle": {
-		"class": "PutRandomMinionOnBoardSpell",
-		"cardLocation": "HAND",
-		"cardFilter": {
-			"class": "RaceFilter",
-			"race": "DEMON"
-		}
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Octopriest",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Revenge: Place a random Octopus from your hand into play.",
+  "deathrattle": {
+    "class": "PutRandomMinionOnBoardSpell",
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "DEMON"
+    },
+    "cardLocation": "HAND"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

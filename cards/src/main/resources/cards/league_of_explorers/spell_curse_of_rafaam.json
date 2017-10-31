@@ -1,17 +1,17 @@
 {
-	"name": "Curse of Rafaam",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"description": "Give your opponent a 'Cursed!' card. While they hold it, they take 2 damage on their turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "ReceiveCardSpell",
-		"targetPlayer": "OPPONENT",
-		"card": "spell_cursed"
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Curse of Rafaam",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "COMMON",
+  "description": "Give your opponent a 'Cursed!' card. While they hold it, they take 2 damage on their turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_cursed",
+    "targetPlayer": "OPPONENT"
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

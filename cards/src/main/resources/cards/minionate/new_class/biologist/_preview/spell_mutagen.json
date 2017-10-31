@@ -1,20 +1,20 @@
 {
-	"name": "Mutagen",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "FREE",
-	"description": "Deal 2 damage to an unharmed minion.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "DamageSpell",
-		"value": 2,
-		"filter": {
-			"class": "DamagedFilter",
-			"invert": true
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Mutagen",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "FREE",
+  "description": "Deal 2 damage to an unharmed minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 2,
+    "filter": {
+      "class": "DamagedFilter",
+      "invert": true
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

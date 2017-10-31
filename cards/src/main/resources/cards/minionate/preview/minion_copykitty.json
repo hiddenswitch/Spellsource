@@ -1,28 +1,28 @@
 {
-	"id": "minion_copykitty",
-	"name": "Copykitty",
-	"baseManaCost": 0,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Taunt. Whenever a minion dies, put its copy into its owner's opponent hand.",
-	"attributes": {
-		"TAUNT": true
-	},
-	"targetSelection": "NONE",
-	"trigger": {
-		"eventTrigger": {
-			"class": "MinionDeathTrigger",
-			"targetPlayer": "BOTH"
-		},
-		"spell": {
-			"class": "CopyCardSpell",
-			"target": "EVENT_TARGET"
-		}
-	},
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "minion_copykitty",
+  "name": "Copykitty",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "Taunt. Whenever a minion dies, put its copy into its owner's opponent hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "targetSelection": "NONE",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

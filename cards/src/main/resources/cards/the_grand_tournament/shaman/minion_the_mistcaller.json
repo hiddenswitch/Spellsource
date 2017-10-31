@@ -2,9 +2,9 @@
   "name": "The Mistcaller",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "SHAMAN",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "SHAMAN",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Give all minions in your hand and deck +1/+1.",
   "battlecry": {
@@ -15,21 +15,21 @@
           "class": "BuffSpell",
           "target": "FRIENDLY_HAND",
           "attackBonus": 1,
-          "hpBonus": 1,
           "filter": {
             "class": "CardFilter",
             "cardType": "MINION"
-          }
+          },
+          "hpBonus": 1
         },
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_DECK",
           "attackBonus": 1,
-          "hpBonus": 1,
           "filter": {
             "class": "CardFilter",
             "cardType": "MINION"
-          }
+          },
+          "hpBonus": 1
         }
       ]
     }

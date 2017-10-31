@@ -1,22 +1,22 @@
 {
-	"id": "minion_bluegill_donor",
-	"name": "Bluegill Donor",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Battlecry: Give your opponent a 2/1 Charge Fanatic.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"targetPlayer": "OPPONENT",
-			"card": "minion_bluegill_warrior"
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "minion_bluegill_donor",
+  "name": "Bluegill Donor",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Battlecry: Give your opponent a 2/1 Charge Fanatic.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "minion_bluegill_warrior",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -1,17 +1,17 @@
 {
-	"id": "hero_anduin",
-	"name": "Princess Briila",
-	"baseManaCost": 0,
-	"description": "Hero Power: Restore 2 health to a target",
-	"heroPower": "hero_power_lesser_heal",
-	"type": "HERO",
-	"heroClass": "PRIEST",
-	"rarity": "FREE",
-	"attributes": {
-		"HP": 30,
-		"MAX_HP": 30
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "id": "hero_anduin",
+  "name": "Princess Briila",
+  "heroPower": "hero_power_lesser_heal",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "PRIEST",
+  "rarity": "FREE",
+  "description": "Hero Power: Restore 2 health to a target",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

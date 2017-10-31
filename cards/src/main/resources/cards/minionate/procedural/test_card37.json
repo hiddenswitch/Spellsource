@@ -1,1 +1,40 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Combet", "heroClass": "ANY", "trigger": {"eventTrigger": {"class": "BoardChangedTrigger"}, "spell": {"exclusive": true, "condition": {"class": "HasWeaponCondition"}, "class": "ConditionalEffectSpell", "spell2": {"attribute": "CHARGE", "class": "AddAttributeSpell", "target": "SELF"}, "spell1": {"attribute": "CHARGE", "class": "RemoveAttributeSpell", "target": "SELF"}}}, "description": "Charge. Has Charge while you have a weapon equipped.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 3.0, "race": "PIRATE", "baseManaCost": 3.0, "attributes": {"CHARGE": true}, "type": "MINION", "id": "Combet", "baseAttack": 3.0}
+{
+  "id": "Combet",
+  "name": "Combet",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3.0,
+  "baseHp": 3.0,
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "Charge. Has Charge while you have a weapon equipped.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BoardChangedTrigger"
+    },
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "HasWeaponCondition"
+      },
+      "exclusive": true,
+      "spell1": {
+        "class": "RemoveAttributeSpell",
+        "target": "SELF",
+        "attribute": "CHARGE"
+      },
+      "spell2": {
+        "class": "AddAttributeSpell",
+        "target": "SELF",
+        "attribute": "CHARGE"
+      }
+    }
+  },
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

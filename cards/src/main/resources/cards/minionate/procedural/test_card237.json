@@ -1,23 +1,23 @@
 {
+  "id": "Odder",
+  "name": "Odder",
+  "baseManaCost": 1.0,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 2.0,
+  "baseHp": 1.0,
+  "rarity": "EPIC",
+  "race": "DEMON",
+  "description": "(2) Overload. Deathrattle: Summon a Dreadsteed.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "minion_dreadsteed"
   },
-  "set": "SPELLSOURCE",
-  "name": "Odder",
-  "heroClass": "WARLOCK",
-  "description": "(2) Overload. Deathrattle: Summon a Dreadsteed.",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "rarity": "EPIC",
-  "baseHp": 1.0,
-  "race": "DEMON",
-  "baseManaCost": 1.0,
   "attributes": {
-    "OVERLOAD": 2.0,
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "OVERLOAD": 2.0
   },
-  "type": "MINION",
-  "id": "Odder",
-  "baseAttack": 2.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

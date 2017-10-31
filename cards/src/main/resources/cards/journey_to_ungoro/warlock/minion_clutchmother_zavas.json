@@ -2,9 +2,9 @@
   "name": "Clutchmother Zavas",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "WARLOCK",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "WARLOCK",
   "rarity": "LEGENDARY",
   "description": "Whenever you discard this, give it +2/+2 and return it to your hand.",
   "passiveTrigger": {
@@ -17,8 +17,8 @@
       "target": "EVENT_TARGET",
       "spell": {
         "class": "BuffSpell",
-        "value": 2,
-        "target": "EVENT_CARD"
+        "target": "EVENT_CARD",
+        "value": 2
       }
     }
   },

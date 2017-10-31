@@ -1,31 +1,31 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Jubilantzqqqqqqqqqqqqqqqqqq ",
   "name": "Jubilant Zapeque from Spain",
-  "heroClass": "ANY",
-  "description": "Battlecry: If you're holding a Dragon, destroy a Legendary minion.",
-  "fileFormatVersion": 1,
-  "rarity": "LEGENDARY",
-  "baseHp": 7.0,
   "baseManaCost": 5.0,
-  "attributes": {
-    "BATTLECRY": true
-  },
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 7.0,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If you're holding a Dragon, destroy a Legendary minion.",
   "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "race": "DRAGON"
+    },
+    "targetSelection": "MINIONS",
     "spell": {
+      "class": "DestroySpell",
       "filter": {
         "class": "CardFilter",
         "rarity": "LEGENDARY"
-      },
-      "class": "DestroySpell"
-    },
-    "targetSelection": "MINIONS",
-    "condition": {
-      "race": "DRAGON",
-      "class": "HoldsCardCondition"
+      }
     }
   },
-  "type": "MINION",
-  "id": "Jubilantzqqqqqqqqqqqqqqqqqq ",
-  "baseAttack": 4.0
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

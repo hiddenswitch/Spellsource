@@ -2,9 +2,9 @@
   "name": "Elise the Trailblazer",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Shuffle a sealed Un'Goro pack into your deck.",
   "battlecry": {

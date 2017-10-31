@@ -1,13 +1,13 @@
 {
-	"name": "Assassin's Blade",
-	"baseManaCost": 5,
-	"type": "WEAPON",
-	"damage": 3,
-	"durability": 4,
-	"heroClass": "ROGUE",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Assassin's Blade",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "ROGUE",
+  "damage": 3,
+  "durability": 4,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

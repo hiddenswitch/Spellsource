@@ -1,14 +1,14 @@
 {
-  "set": "SPELLSOURCE",
-  "name": "Discheo",
-  "description": "",
-  "baseHp": 12.0,
-  "heroClass": "ANY",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "baseManaCost": 10.0,
   "id": "Discheo",
-  "baseAttack": 12.0,
+  "name": "Discheo",
+  "baseManaCost": 10.0,
   "type": "MINION",
-  "rarity": "LEGENDARY"
+  "heroClass": "ANY",
+  "baseAttack": 12.0,
+  "baseHp": 12.0,
+  "rarity": "LEGENDARY",
+  "description": "",
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

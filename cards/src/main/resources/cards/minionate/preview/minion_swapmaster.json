@@ -1,25 +1,25 @@
 {
-	"id": "minion_swapmaster",
-	"name": "Swapmaster",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"race": "MECH",
-	"description": "At the end of your turn, swap this minion with a random one on the battlefield..",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "SwapMinionSpell",
-			"target": "SELF"
-		}
-	},
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "minion_swapmaster",
+  "name": "Swapmaster",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "At the end of your turn, swap this minion with a random one on the battlefield..",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SwapMinionSpell",
+      "target": "SELF"
+    }
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

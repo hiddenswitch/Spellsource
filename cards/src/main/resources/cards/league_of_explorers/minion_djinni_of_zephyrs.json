@@ -2,23 +2,23 @@
   "name": "Djinni of Zephyrs",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 6,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "After you target another friendly minion with a spell, cast it on this one.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
-      "sourcePlayer": "SELF",
       "actionType": "SPELL",
-      "targetEntityType": "MINION",
-      "targetPlayer": "SELF",
       "queueCondition": {
         "class": "OwnedByPlayerCondition",
         "target": "EVENT_TARGET",
         "targetPlayer": "SELF"
-      }
+      },
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "RecastSpell",

@@ -2,9 +2,9 @@
   "name": "Keening Banshee",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "RARE",
   "description": "Whenever you play a card, remove the top 3 cards of your deck.",
   "trigger": {
@@ -14,11 +14,11 @@
     },
     "spell": {
       "class": "RemoveCardAndDoSomethingSpell",
-      "targetPlayer": "SELF",
       "value": 3,
       "spell": {
         "class": "NullSpell"
-      }
+      },
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

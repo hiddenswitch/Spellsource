@@ -1,8 +1,13 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Tar Lord",
+  "baseManaCost": 7,
+  "type": "MINION",
   "heroClass": "WARRIOR",
+  "baseAttack": 1,
+  "baseHp": 11,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Taunt. This minion has +4 Attack on your opponent's turn.",
   "trigger": {
     "eventTrigger": {
       "class": "BoardChangedTrigger"
@@ -12,24 +17,19 @@
       "target": "SELF",
       "value": {
         "class": "ConditionalValueProvider",
-        "ifTrue": 0,
-        "ifFalse": 4,
         "condition": {
           "class": "OwnedByPlayerCondition",
           "targetPlayer": "ACTIVE"
-        }
+        },
+        "ifFalse": 4,
+        "ifTrue": 0
       }
     }
   },
-  "description": "Taunt. This minion has +4 Attack on your opponent's turn.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 11,
-  "race": "ELEMENTAL",
-  "baseAttack": 1,
   "attributes": {
     "TAUNT": true
   },
-  "type": "MINION",
-  "baseManaCost": 7
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

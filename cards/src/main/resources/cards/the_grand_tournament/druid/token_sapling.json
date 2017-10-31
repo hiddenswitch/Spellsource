@@ -1,13 +1,13 @@
 {
-	"name": "Sapling",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"description": "",
-	"collectible": false,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Sapling",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "",
+  "collectible": false,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

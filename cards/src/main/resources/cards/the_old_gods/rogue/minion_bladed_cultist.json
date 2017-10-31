@@ -1,28 +1,28 @@
 {
-	"name": "Bladed Cultist",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "Combo: Gain +1/+1.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "BuffSpell",
-			"target": "SELF",
-			"attackBonus": 1,
-			"hpBonus": 1
-		},
-		"condition": {
-			"class": "ComboCondition"
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Bladed Cultist",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Combo: Gain +1/+1.",
+  "battlecry": {
+    "condition": {
+      "class": "ComboCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

@@ -2,9 +2,9 @@
   "name": "Furnacefire Colossus",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 6,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "Battlecry: Discard all weapons from your hand and gain their stats.",
   "battlecry": {
@@ -18,22 +18,22 @@
           "attackBonus": {
             "class": "ReduceValueProvider",
             "target": "FRIENDLY_HAND",
-            "operation": "ADD",
             "attribute": "ATTACK",
             "filter": {
               "class": "CardFilter",
               "cardType": "WEAPON"
-            }
+            },
+            "operation": "ADD"
           },
           "hpBonus": {
             "class": "ReduceValueProvider",
             "target": "FRIENDLY_HAND",
-            "operation": "ADD",
             "attribute": "HP",
             "filter": {
               "class": "CardFilter",
               "cardType": "WEAPON"
-            }
+            },
+            "operation": "ADD"
           }
         },
         {

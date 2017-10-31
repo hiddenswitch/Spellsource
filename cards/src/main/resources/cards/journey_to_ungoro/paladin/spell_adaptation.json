@@ -1,16 +1,16 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
+  "name": "Adaptation",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "COMMON",
   "description": "Adapt a friendly minion.",
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "AdaptSpell",
     "group": "group_adapt"
   },
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "heroClass": "PALADIN",
-  "targetSelection": "FRIENDLY_MINIONS",
-  "baseManaCost": 1,
-  "type": "SPELL",
-  "name": "Adaptation"
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

@@ -1,24 +1,24 @@
 {
-	"name": "Felguard",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 5,
-	"heroClass": "WARLOCK",
-	"rarity": "FREE",
-	"race": "DEMON",
-	"description": "Taunt. Battlecry: Destroy one of your Mana.",
-	"battlecry": {
-		"spell": {
-			"class": "ModifyMaxManaSpell",
-			"value": -1
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Felguard",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "DEMON",
+  "description": "Taunt. Battlecry: Destroy one of your Mana.",
+  "battlecry": {
+    "spell": {
+      "class": "ModifyMaxManaSpell",
+      "value": -1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

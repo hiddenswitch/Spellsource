@@ -2,9 +2,9 @@
   "name": "The Lich King",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 8,
   "baseHp": 8,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Taunt. At the end of your turn, add a random Death Knight card to your hand.",
   "trigger": {

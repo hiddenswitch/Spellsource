@@ -1,17 +1,17 @@
 {
-  "set": "SPELLSOURCE",
+  "id": "Roboticwers",
   "name": "Roboticwers",
-  "description": "Stealth. ",
-  "baseHp": 9.0,
   "baseManaCost": 9.0,
   "type": "MINION",
-  "rarity": "LEGENDARY",
   "heroClass": "ANY",
-  "fileFormatVersion": 1,
-  "collectible": true,
+  "baseAttack": 6.0,
+  "baseHp": 9.0,
+  "rarity": "LEGENDARY",
+  "description": "Stealth. ",
   "attributes": {
     "STEALTH": true
   },
-  "id": "Roboticwers",
-  "baseAttack": 6.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

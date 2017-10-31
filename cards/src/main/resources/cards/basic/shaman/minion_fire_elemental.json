@@ -1,25 +1,25 @@
 {
-	"name": "Fire Elemental",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 5,
-	"heroClass": "SHAMAN",
-	"rarity": "FREE",
-	"race": "ELEMENTAL",
-	"description": "Battlecry: Deal 3 damage.",
-	"battlecry": {
-		"targetSelection": "ANY",
-		"spell": {
-			"class": "DamageSpell",
-			"value": 3
-		}
-	},
-	"attributes": {
-		"NAME": "Sulphur Golem",
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Fire Elemental",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Deal 3 damage.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "NAME": "Sulphur Golem"
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

@@ -2,16 +2,16 @@
   "name": "Druid of the Swarm",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "DRUID",
   "baseAttack": 1,
   "baseHp": 2,
-  "heroClass": "DRUID",
   "rarity": "COMMON",
   "race": "BEAST",
   "description": "",
-  "collectible": false,
-  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
-  "fileFormatVersion": 1,
   "attributes": {
     "POISONOUUS": true
-  }
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
 }

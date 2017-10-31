@@ -1,29 +1,29 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Vinecleaver",
-  "durability": 3,
-  "fileFormatVersion": 1,
-  "damage": 4,
-  "rarity": "RARE",
+  "baseManaCost": 7,
+  "type": "WEAPON",
   "heroClass": "PALADIN",
+  "damage": 4,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "Whenever your hero attacks, summon two 1/1 Silver Hand Recruits.",
   "trigger": {
     "eventTrigger": {
-      "targetPlayer": "BOTH",
-      "sourcePlayer": "SELF",
-      "actionType": "PHYSICAL_ATTACK",
       "class": "TargetAcquisitionTrigger",
-      "sourceEntityType": "HERO"
+      "actionType": "PHYSICAL_ATTACK",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
     },
     "spell": {
+      "class": "SummonSpell",
       "cards": [
         "token_silver_hand_recruit",
         "token_silver_hand_recruit"
-      ],
-      "class": "SummonSpell"
+      ]
     }
   },
-  "baseManaCost": 7,
-  "type": "WEAPON",
-  "description": "Whenever your hero attacks, summon two 1/1 Silver Hand Recruits."
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

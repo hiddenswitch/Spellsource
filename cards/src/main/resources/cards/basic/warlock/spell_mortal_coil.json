@@ -8,6 +8,9 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition"
+    },
     "spell1": {
       "class": "DamageSpell",
       "value": 1
@@ -15,9 +18,6 @@
     "spell2": {
       "class": "DrawCardSpell",
       "value": 1
-    },
-    "condition": {
-      "class": "IsDeadCondition"
     }
   },
   "attributes": {

@@ -1,28 +1,28 @@
 {
-	"name": "Spiteful Smith",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Enrage: Your weapon has +2 Attack.",
-	"aura": {
-		"class": "EnrageAura",
-		"target": "FRIENDLY_WEAPON",
-		"applyEffect": {
-			"class": "BuffWeaponSpell",
-			"attackBonus": 2
-		},
-		"removeEffect": {
-			"class": "BuffWeaponSpell",
-			"attackBonus": -2
-		}
-	},
-	"attributes": {
-		"ENRAGABLE": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Spiteful Smith",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Enrage: Your weapon has +2 Attack.",
+  "aura": {
+    "class": "EnrageAura",
+    "target": "FRIENDLY_WEAPON",
+    "applyEffect": {
+      "class": "BuffWeaponSpell",
+      "attackBonus": 2
+    },
+    "removeEffect": {
+      "class": "BuffWeaponSpell",
+      "attackBonus": -2
+    }
+  },
+  "attributes": {
+    "ENRAGABLE": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

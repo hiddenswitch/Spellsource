@@ -1,27 +1,27 @@
 {
-	"name": "Stoneskin Gargoyle",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "At the start of your turn, restore this minion to full Health.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnStartTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "HealSpell",
-			"target": "SELF",
-			"value": {
-				"class": "AttributeValueProvider",
-				"attribute": "MAX_HP"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Stoneskin Gargoyle",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "At the start of your turn, restore this minion to full Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "MAX_HP"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

@@ -1,21 +1,21 @@
 {
-	"name": "Dreadsteed",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "WARLOCK",
-	"rarity": "EPIC",
-	"race": "DEMON",
-	"description": "Deathrattle: Summon a Dreadsteed.",
-	"deathrattle": {
-		"class": "SummonSpell",
-		"card": "minion_dreadsteed"
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Dreadsteed",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "DEMON",
+  "description": "Deathrattle: Summon a Dreadsteed.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "minion_dreadsteed"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

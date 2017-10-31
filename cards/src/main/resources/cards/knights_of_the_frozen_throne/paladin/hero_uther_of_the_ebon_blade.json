@@ -1,23 +1,23 @@
 {
   "name": "Uther of the Ebon Blade",
-  "baseManaCost": 9,
   "heroPower": "hero_power_the_four_horsemen",
+  "baseManaCost": 9,
   "type": "HERO",
   "heroClass": "PALADIN",
   "rarity": "LEGENDARY",
-  "attributes": {
-    "MAX_HP": 30,
-    "ARMOR": 5
-  },
   "description": "Battlecry: Equip a 5/3 Lifesteal weapon.",
-  "collectible": true,
-  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
-  "fileFormatVersion": 1,
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "EquipWeaponSpell",
       "card": "weapon_grave_vengeance"
     }
-  }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
 }
