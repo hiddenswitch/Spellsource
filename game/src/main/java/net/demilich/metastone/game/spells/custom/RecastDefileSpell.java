@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -22,6 +23,7 @@ public class RecastDefileSpell extends RecastWhileSpell {
 	}
 
 	@Override
+	@Suspendable
 	protected boolean isFulfilled(GameContext context, Player player, Entity source, Entity target, Condition condition, SpellDesc desc) {
 		return (int) desc.getOrDefault(SpellArg.SECONDARY_VALUE, 0) > getLivingMinionCount(context);
 	}
