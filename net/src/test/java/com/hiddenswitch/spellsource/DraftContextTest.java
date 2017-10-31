@@ -1,9 +1,9 @@
 package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
-import com.hiddenswitch.proto3.draft.DraftBehaviour;
-import com.hiddenswitch.proto3.draft.DraftContext;
-import com.hiddenswitch.proto3.draft.PublicDraftState;
+import com.hiddenswitch.spellsource.draft.DraftBehaviour;
+import com.hiddenswitch.spellsource.draft.DraftContext;
+import com.hiddenswitch.spellsource.draft.PublicDraftState;
 import com.hiddenswitch.spellsource.client.models.MatchmakingDeck;
 import com.hiddenswitch.spellsource.util.AbstractMatchmakingTest;
 import io.vertx.core.AsyncResult;

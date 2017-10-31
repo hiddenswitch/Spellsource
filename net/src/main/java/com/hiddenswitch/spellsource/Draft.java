@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.draft.PublicDraftState;
+import com.hiddenswitch.spellsource.draft.PublicDraftState;
 import com.hiddenswitch.spellsource.client.models.DraftState;
 import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.models.*;

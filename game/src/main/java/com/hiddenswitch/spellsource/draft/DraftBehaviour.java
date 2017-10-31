@@ -1,4 +1,4 @@
-package com.hiddenswitch.proto3.draft;
+package com.hiddenswitch.spellsource.draft;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;

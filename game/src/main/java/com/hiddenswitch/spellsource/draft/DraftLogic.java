@@ -1,8 +1,6 @@
-package com.hiddenswitch.proto3.draft;
+package com.hiddenswitch.spellsource.draft;
 
-import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.slf4j.Logger;
@@ -10,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 

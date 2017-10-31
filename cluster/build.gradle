@@ -12,8 +12,8 @@ buildscript {
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
-apply plugin: "com.github.johnrengelman.shadow"
 
 shadowJar {
     zip64 true
@@ -42,8 +42,7 @@ dependencies {
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.52'
     compile group: 'com.amazonaws', name: 'aws-java-sdk-emr', version: '1.11.52'
     compile group: 'org.apache.hadoop', name: 'hadoop-aws', version: '2.7.3'
-    compile project(':game')
-    compile project(':cards')
+    compile project(':net')
     testCompile group: 'org.testng', name: 'testng', version: '6.+'
 }
 

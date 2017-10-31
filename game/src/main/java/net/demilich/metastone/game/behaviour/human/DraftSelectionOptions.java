@@ -1,8 +1,6 @@
 package net.demilich.metastone.game.behaviour.human;
 
-import com.hiddenswitch.proto3.draft.DraftContext;
-import com.hiddenswitch.proto3.draft.HumanDraftBehaviour;
-import net.demilich.metastone.game.Player;
+import com.hiddenswitch.spellsource.draft.HumanDraftBehaviour;
 import net.demilich.metastone.game.cards.Card;
 
 import java.util.List;

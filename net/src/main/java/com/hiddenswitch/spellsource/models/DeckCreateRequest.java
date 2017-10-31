@@ -169,4 +169,11 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		}
 		return null;
 	}
+
+	public Deck toGameDeck() {
+		Deck deck = new Deck(getHeroClass());
+		deck.setName(getName());
+		getCardIds().forEach(cardId -> deck.getCards().addCard(CardCatalogue.getCardById(cardId)));
+		return deck;
+	}
 }

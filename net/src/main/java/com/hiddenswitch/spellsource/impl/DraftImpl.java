@@ -2,10 +2,10 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.proto3.draft.DraftContext;
-import com.hiddenswitch.proto3.draft.DraftStatus;
-import com.hiddenswitch.proto3.draft.PrivateDraftState;
-import com.hiddenswitch.proto3.draft.PublicDraftState;
+import com.hiddenswitch.spellsource.draft.DraftContext;
+import com.hiddenswitch.spellsource.draft.DraftStatus;
+import com.hiddenswitch.spellsource.draft.PrivateDraftState;
+import com.hiddenswitch.spellsource.draft.PublicDraftState;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.Decks;
 import com.hiddenswitch.spellsource.Draft;
