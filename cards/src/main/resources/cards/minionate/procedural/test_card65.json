@@ -1,1 +1,31 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Diggenn", "heroClass": "WARLOCK", "trigger": {"eventTrigger": {"targetPlayer": "BOTH", "class": "TurnEndTrigger", "queueCondition": {"targetPlayer": "OWNER", "operation": "LESS_OR_EQUAL", "class": "MinionCountCondition", "value": 1}}, "spell": {"class": "DestroySpell", "target": "SELF"}}, "description": "At the end of each turn, destroy this minion if it's your only one.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 5.0, "race": "MECH", "baseManaCost": 7.0, "type": "MINION", "id": "Diggenn", "baseAttack": 7.0}
+{
+  "id": "Diggenn",
+  "name": "Diggenn",
+  "baseManaCost": 7.0,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 7.0,
+  "baseHp": 5.0,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "At the end of each turn, destroy this minion if it's your only one.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "queueCondition": {
+        "class": "MinionCountCondition",
+        "value": 1,
+        "operation": "LESS_OR_EQUAL",
+        "targetPlayer": "OWNER"
+      },
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

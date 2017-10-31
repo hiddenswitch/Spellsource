@@ -1,51 +1,51 @@
 {
-	"name": "Intern Chef",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Select One - Hire a 2/2 token; or gain an empty Mana Cell.",
-	"options": [
-		{
-			"description": "Hire 2/2 token",
-			"spell": {
-				"class": "SummonSpell",
-				"targetPlayer": "SELF",
-				"card": "token_tauren_slime",
-				"boardPositionRelative": "RIGHT"
-			}
-		},
-		{
-			"description": "Mana Cell",
-			"spell": {
-				"class": "ModifyMaxManaSpell",
-				"targetPlayer": "SELF",
-				"value": 1
-			}
-		}
-	],
-	"bothOptions": {
-		"description": "Hire 2/2 token and Mana Cell.",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "SummonSpell",
-					"targetPlayer": "SELF",
-					"card": "token_two",
-					"boardPositionRelative": "RIGHT"
-				},
-				{
-					"class": "ModifyMaxManaSpell",
-					"targetPlayer": "SELF",
-					"value": 1
-				}
-			]
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Intern Chef",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Select One - Hire a 2/2 token; or gain an empty Mana Cell.",
+  "options": [
+    {
+      "description": "Hire 2/2 token",
+      "spell": {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "card": "token_tauren_slime",
+        "targetPlayer": "SELF"
+      }
+    },
+    {
+      "description": "Mana Cell",
+      "spell": {
+        "class": "ModifyMaxManaSpell",
+        "value": 1,
+        "targetPlayer": "SELF"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Hire 2/2 token and Mana Cell.",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_two",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "ModifyMaxManaSpell",
+          "value": 1,
+          "targetPlayer": "SELF"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

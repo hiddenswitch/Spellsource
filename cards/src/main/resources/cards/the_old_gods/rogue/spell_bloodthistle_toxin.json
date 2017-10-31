@@ -1,25 +1,25 @@
 {
-	"name": "Bloodthistle Toxin",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "FREE",
-	"description": "Return a friendly minion to your hand. It costs (2) less.",
-	"targetSelection": "FRIENDLY_MINIONS",
-	"spell": {
-		"class": "ReturnTargetToHandSpell",
-		"spell": {
-			"class": "CardCostModifierSpell",
-			"target": "FRIENDLY_PLAYER",
-			"cardCostModifier": {
-				"class": "CardCostModifier",
-				"target": "EVENT_CARD",
-				"operation": "SUBTRACT",
-				"value": 2
-			}
-		}
-	},
-	"collectible": false,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Bloodthistle Toxin",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "FREE",
+  "description": "Return a friendly minion to your hand. It costs (2) less.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "EVENT_CARD",
+        "value": 2,
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

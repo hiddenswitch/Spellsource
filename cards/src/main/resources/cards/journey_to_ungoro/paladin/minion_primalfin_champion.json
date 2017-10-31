@@ -1,23 +1,19 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Primalfin Champion",
+  "baseManaCost": 2,
+  "type": "MINION",
   "heroClass": "PALADIN",
-  "description": "Deathrattle: Return any spells you cast on this minion to your hand.",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
-  "baseHp": 2,
-  "race": "MURLOC",
   "baseAttack": 1,
-  "attributes": {
-    "DEATHRATTLES": true
-  },
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "MURLOC",
+  "description": "Deathrattle: Return any spells you cast on this minion to your hand.",
   "trigger": {
     "eventTrigger": {
-      "sourcePlayer": "SELF",
-      "actionType": "SPELL",
       "class": "TargetAcquisitionTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
+      "actionType": "SPELL",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "custom.StoreEntitySpell",
@@ -27,6 +23,10 @@
   "deathrattle": {
     "class": "custom.PrimalfinChampionReceiveSpell"
   },
-  "type": "MINION",
-  "baseManaCost": 2
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

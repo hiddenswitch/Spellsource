@@ -1,23 +1,23 @@
 {
-	"name": "Cursed Blade",
-	"baseManaCost": 1,
-	"type": "WEAPON",
-	"damage": 2,
-	"durability": 3,
-	"heroClass": "WARRIOR",
-	"rarity": "RARE",
-	"description": "Double all damage dealt to your hero.",
-	"onEquip": {
-		"class": "AddAttributeSpell",
-		"target": "FRIENDLY_HERO",
-		"attribute": "TAKE_DOUBLE_DAMAGE"
-	},
-	"onUnequip": {
-		"class": "RemoveAttributeSpell",
-		"target": "FRIENDLY_HERO",
-		"attribute": "TAKE_DOUBLE_DAMAGE"
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Cursed Blade",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "WARRIOR",
+  "damage": 2,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "Double all damage dealt to your hero.",
+  "onEquip": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "TAKE_DOUBLE_DAMAGE"
+  },
+  "onUnequip": {
+    "class": "RemoveAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "TAKE_DOUBLE_DAMAGE"
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

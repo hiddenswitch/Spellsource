@@ -1,16 +1,16 @@
 {
-	"name": "Draw 3 cards",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Draw 3 cards",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DrawCardSpell",
-		"value": 3
-	},
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Draw 3 cards",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "RARE",
+  "description": "Draw 3 cards",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

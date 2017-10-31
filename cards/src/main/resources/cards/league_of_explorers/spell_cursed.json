@@ -1,27 +1,27 @@
 {
-	"name": "Cursed!",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "FREE",
-	"description": "While this is in your hand, take 2 damage at the start of your turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "NullSpell"
-	},
-	"passiveTrigger": {
-		"eventTrigger": {
-			"class": "TurnStartTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "DamageSpell",
-			"target": "FRIENDLY_HERO",
-			"value": 2,
-			"ignoreSpellDamage": true
-		}
-	},
-	"collectible": false,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Cursed!",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "FREE",
+  "description": "While this is in your hand, take 2 damage at the start of your turn.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 2,
+      "ignoreSpellDamage": true
+    }
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

@@ -2,9 +2,9 @@
   "name": "Queen Carnassa",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "HUNTER",
   "baseAttack": 8,
   "baseHp": 8,
-  "heroClass": "HUNTER",
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Battlecry: Shuffle 15 Raptors into your deck.",
@@ -12,9 +12,9 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ShuffleToDeckSpell",
-      "targetPlayer": "SELF",
       "card": "token_carnassas_brood",
-      "howMany": 15
+      "howMany": 15,
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

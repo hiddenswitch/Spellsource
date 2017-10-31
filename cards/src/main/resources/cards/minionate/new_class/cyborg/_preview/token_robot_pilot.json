@@ -1,14 +1,14 @@
 {
-	"name": "Robot Pilot",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"race": "BEAST",
-	"description": "",
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Robot Pilot",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

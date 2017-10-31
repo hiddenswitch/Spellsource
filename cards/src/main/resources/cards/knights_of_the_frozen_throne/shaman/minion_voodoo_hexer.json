@@ -2,9 +2,9 @@
   "name": "Voodoo Hexxer",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "SHAMAN",
   "baseAttack": 2,
   "baseHp": 7,
-  "heroClass": "SHAMAN",
   "rarity": "RARE",
   "description": "Taunt. Freeze any character damaged by this minion.",
   "trigger": {

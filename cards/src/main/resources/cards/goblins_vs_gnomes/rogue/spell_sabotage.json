@@ -1,27 +1,27 @@
 {
-	"name": "Sabotage",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Destroy a random enemy minion. Combo: And your opponent's weapon.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "ComboSpell",
-		"spell1": {
-			"class": "DestroySpell",
-			"target": "ENEMY_MINIONS",
-			"randomTarget": true
-		},
-		"spell2": {
-			"class": "DestroySpell",
-			"target": "ENEMY_WEAPON"
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Sabotage",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "EPIC",
+  "description": "Destroy a random enemy minion. Combo: And your opponent's weapon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ComboSpell",
+    "spell1": {
+      "class": "DestroySpell",
+      "target": "ENEMY_MINIONS",
+      "randomTarget": true
+    },
+    "spell2": {
+      "class": "DestroySpell",
+      "target": "ENEMY_WEAPON"
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

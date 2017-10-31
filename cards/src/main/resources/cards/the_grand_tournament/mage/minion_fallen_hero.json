@@ -1,16 +1,16 @@
 {
-	"name": "Fallen Hero",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "MAGE",
-	"rarity": "RARE",
-	"description": "Your Hero Power deals 1 extra damage.",
-	"attributes": {
-		"HERO_POWER_DAMAGE": 1
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Fallen Hero",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Your Hero Power deals 1 extra damage.",
+  "attributes": {
+    "HERO_POWER_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

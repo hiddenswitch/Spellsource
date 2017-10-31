@@ -1,1 +1,17 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Old Giant", "heroClass": "DRUID", "description": "Your Choose One cards have both effects combined.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 5.0, "baseManaCost": 6.0, "attributes": {"BOTH_CHOOSE_ONE_OPTIONS": true}, "type": "MINION", "id": "Old Giant", "baseAttack": 5.0}
+{
+  "id": "Old Giant",
+  "name": "Old Giant",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 5.0,
+  "baseHp": 5.0,
+  "rarity": "LEGENDARY",
+  "description": "Your Choose One cards have both effects combined.",
+  "attributes": {
+    "BOTH_CHOOSE_ONE_OPTIONS": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

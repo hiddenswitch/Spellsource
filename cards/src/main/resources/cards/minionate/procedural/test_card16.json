@@ -1,1 +1,15 @@
-{"collectible": false, "set": "SPELLSOURCE", "name": "Curser", "heroClass": "DRUID", "description": "Choose One - Transform into a 5/2 minion; or a 2/5 minion.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 1.0, "race": "BEAST", "baseManaCost": 3.0, "type": "MINION", "id": "Curser", "baseAttack": 1.0}
+{
+  "id": "Curser",
+  "name": "Curser",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 1.0,
+  "baseHp": 1.0,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Choose One - Transform into a 5/2 minion; or a 2/5 minion.",
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

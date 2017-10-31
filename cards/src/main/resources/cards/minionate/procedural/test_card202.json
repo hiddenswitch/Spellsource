@@ -1,17 +1,17 @@
 {
-  "set": "SPELLSOURCE",
+  "id": "Eletter",
   "name": "Eletter",
-  "description": "Overload (5)",
-  "baseHp": 8.0,
-  "type": "MINION",
-  "rarity": "LEGENDARY",
   "baseManaCost": 7.0,
+  "type": "MINION",
   "heroClass": "ANY",
-  "fileFormatVersion": 1,
-  "collectible": true,
+  "baseAttack": 12.0,
+  "baseHp": 8.0,
+  "rarity": "LEGENDARY",
+  "description": "Overload (5)",
   "attributes": {
     "OVERLOAD": 5.0
   },
-  "id": "Eletter",
-  "baseAttack": 12.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

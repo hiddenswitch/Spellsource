@@ -1,29 +1,29 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Rockpool Hunter",
+  "baseManaCost": 2,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Battlecry: Give a friendly Murloc +1/+1",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 3,
   "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a friendly Murloc +1/+1",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 1,
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MURLOC"
+      },
+      "hpBonus": 1
+    }
+  },
   "attributes": {
     "BATTLECRY": true,
     "DESCRIPTION": "Battlecry: Give a friendly Murloc +1/+1"
   },
-  "battlecry": {
-    "spell": {
-      "filter": {
-        "race": "MURLOC",
-        "class": "RaceFilter"
-      },
-      "attackBonus": 1,
-      "class": "BuffSpell",
-      "hpBonus": 1
-    },
-    "targetSelection": "FRIENDLY_MINIONS"
-  },
-  "type": "MINION",
-  "baseManaCost": 2
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

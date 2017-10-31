@@ -1,26 +1,26 @@
 {
-	"name": "One-eyed Cheat",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 1,
-	"heroClass": "ROGUE",
-	"rarity": "RARE",
-	"race": "PIRATE",
-	"description": "Whenever you summon a Pirate, gain Stealth.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "MinionSummonedTrigger",
-			"targetPlayer": "SELF",
-			"race": "PIRATE"
-		},
-		"spell": {
-			"class": "AddAttributeSpell",
-			"target": "SELF",
-			"attribute": "STEALTH"
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "One-eyed Cheat",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "PIRATE",
+  "description": "Whenever you summon a Pirate, gain Stealth.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "race": "PIRATE",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "STEALTH"
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

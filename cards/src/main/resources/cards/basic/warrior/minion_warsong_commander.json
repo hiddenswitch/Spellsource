@@ -1,23 +1,23 @@
 {
-	"name": "Warsong Commander",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "WARRIOR",
-	"rarity": "FREE",
-	"description": "Your Charge minions have +1 Attack.",
-	"aura": {
-		"class": "BuffAura",
-		"target": "FRIENDLY_MINIONS",
-		"attackBonus": 1,
-		"filter": {
-			"class": "AttributeFilter",
-			"attribute": "CHARGE",
-			"operation": "HAS"
-		}
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Warsong Commander",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Your Charge minions have +1 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "CHARGE",
+      "operation": "HAS"
+    }
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

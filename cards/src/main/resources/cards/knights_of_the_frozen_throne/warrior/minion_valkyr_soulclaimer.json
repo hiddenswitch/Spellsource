@@ -2,24 +2,24 @@
   "name": "Val'kyr Soulclaimer",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "WARRIOR",
   "baseAttack": 1,
   "baseHp": 4,
-  "heroClass": "WARRIOR",
   "rarity": "RARE",
   "description": "Whenever this minion survives damage, summon a 2/2 Ghoul.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS",
       "fireCondition": {
         "class": "IsDeadCondition",
         "invert": true
-      }
+      },
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
       "class": "SummonSpell",
-      "targetPlayer": "SELF",
-      "card": "token_ghoul"
+      "card": "token_ghoul",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

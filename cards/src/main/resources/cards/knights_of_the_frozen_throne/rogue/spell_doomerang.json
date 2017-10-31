@@ -5,11 +5,11 @@
   "heroClass": "ROGUE",
   "rarity": "EPIC",
   "description": "Throw your weapon at a minion. It deals its damage, then returns to your hand.",
-  "targetSelection": "MINIONS",
   "condition": {
     "class": "HasWeaponCondition",
     "targetPlayer": "SELF"
   },
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [

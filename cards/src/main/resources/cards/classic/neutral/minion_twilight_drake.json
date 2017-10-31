@@ -1,28 +1,28 @@
 {
-	"name": "Twilight Drake",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"race": "DRAGON",
-	"description": "Battlecry: Gain +1 Health for each card in your hand.",
-	"battlecry": {
-		"spell": {
-			"class": "BuffSpell",
-			"target": "SELF",
-			"hpBonus": {
-				"class": "PlayerAttributeValueProvider",
-				"targetPlayer": "SELF",
-				"playerAttribute": "HAND_COUNT"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Twilight Drake",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: Gain +1 Health for each card in your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "hpBonus": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

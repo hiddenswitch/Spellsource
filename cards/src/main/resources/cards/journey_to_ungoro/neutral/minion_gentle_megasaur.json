@@ -1,29 +1,29 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Gentle Megasaur",
+  "baseManaCost": 4,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Battlecry: Adapt your Murloc",
-  "fileFormatVersion": 1,
+  "baseAttack": 5,
+  "baseHp": 4,
   "rarity": "EPIC",
   "race": "BEAST",
-  "baseHp": 4,
-  "baseAttack": 5,
-  "attributes": {
-    "BATTLECRY": true
-  },
+  "description": "Battlecry: Adapt your Murloc",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "AdaptSpell",
       "target": "SELF",
       "group": "group_adapt",
       "filter": {
-        "race": "MURLOC",
-        "class": "RaceFilter"
+        "class": "RaceFilter",
+        "race": "MURLOC"
       }
-    },
-    "targetSelection": "NONE"
+    }
   },
-  "type": "MINION",
-  "baseManaCost": 4
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

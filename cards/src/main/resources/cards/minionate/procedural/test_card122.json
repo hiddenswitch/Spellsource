@@ -1,1 +1,28 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Hingwary", "heroClass": "DRUID", "description": "Battlecry: Give a friendly Beast +3 Health.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 4.0, "baseManaCost": 4.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"filter": {"race": "BEAST", "class": "RaceFilter"}, "hpBonus": 3, "class": "BuffSpell"}, "targetSelection": "FRIENDLY_MINIONS"}, "type": "MINION", "id": "Hingwary", "baseAttack": 5.0}
+{
+  "id": "Hingwary",
+  "name": "Hingwary",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 5.0,
+  "baseHp": 4.0,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a friendly Beast +3 Health.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      },
+      "hpBonus": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

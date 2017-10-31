@@ -2,9 +2,9 @@
   "name": "Tol'vir Warden",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "HUNTER",
   "baseAttack": 3,
   "baseHp": 5,
-  "heroClass": "HUNTER",
   "rarity": "RARE",
   "description": "Battlecry: Draw two 1-Cost minions from your deck.",
   "battlecry": {

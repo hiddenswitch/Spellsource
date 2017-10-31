@@ -1,15 +1,15 @@
 {
-	"name": "Backtrack",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "FREE",
-	"description": "Return an enemy minion to its owner’s hand.",
-	"targetSelection": "ENEMY_MINIONS",
-	"spell": {
-		"class": "ReturnTargetToHandSpell"
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Backtrack",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "FREE",
+  "description": "Return an enemy minion to its owner\u2019s hand.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

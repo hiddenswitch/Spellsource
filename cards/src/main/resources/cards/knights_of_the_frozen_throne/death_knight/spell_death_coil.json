@@ -8,6 +8,10 @@
   "targetSelection": "ANY",
   "spell": {
     "class": "EitherOrSpell",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "OPPONENT"
+    },
     "spell1": {
       "class": "DamageSpell",
       "value": 5
@@ -15,10 +19,6 @@
     "spell2": {
       "class": "HealSpell",
       "value": 5
-    },
-    "condition": {
-      "class": "OwnedByPlayerCondition",
-      "targetPlayer": "OPPONENT"
     }
   },
   "collectible": false,

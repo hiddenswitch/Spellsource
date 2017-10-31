@@ -2,9 +2,9 @@
   "name": "Corpse Raiser",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "RARE",
   "description": "Battlecry: Give a friendly minion \"Deathrattle: Resummon this minon.\"",
   "battlecry": {

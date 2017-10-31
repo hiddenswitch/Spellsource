@@ -1,1 +1,40 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Raid Leader", "heroClass": "DRUID", "description": "Choose One - Transform to gain Charge; or +1/+1 and Stealth.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 2.0, "bothOptions": {"spell": {"class": "TransformMinionSpell", "card": "token_sabertooth_tiger", "target": "SELF"}, "description": "Charge, Stealth, +1/+1"}, "options": [{"spell": {"class": "TransformMinionSpell", "card": "token_sabertooth_lion", "target": "SELF"}, "description": "Charge"}, {"spell": {"class": "TransformMinionSpell", "card": "token_sabertooth_panther", "target": "SELF"}, "description": "Stealth +1/+1"}], "baseManaCost": 3.0, "type": "MINION", "id": "Raid Leader", "baseAttack": 3.0}
+{
+  "id": "Raid Leader",
+  "name": "Raid Leader",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 3.0,
+  "baseHp": 2.0,
+  "rarity": "COMMON",
+  "description": "Choose One - Transform to gain Charge; or +1/+1 and Stealth.",
+  "options": [
+    {
+      "description": "Charge",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_sabertooth_lion"
+      }
+    },
+    {
+      "description": "Stealth +1/+1",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_sabertooth_panther"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Charge, Stealth, +1/+1",
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_sabertooth_tiger"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

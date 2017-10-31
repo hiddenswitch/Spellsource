@@ -1,22 +1,22 @@
 {
-	"name": "Battle Rage",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"description": "Draw a card for each damaged friendly character.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DrawCardSpell",
-		"value": {
-			"class": "EntityCounter",
-			"target": "FRIENDLY_CHARACTERS",
-			"filter": {
-				"class": "DamagedFilter"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Battle Rage",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "COMMON",
+  "description": "Draw a card for each damaged friendly character.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_CHARACTERS",
+      "filter": {
+        "class": "DamagedFilter"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

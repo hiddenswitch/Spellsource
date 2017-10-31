@@ -1,28 +1,28 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Gang Gomems",
   "name": "Gang Gomems",
+  "baseManaCost": 7.0,
+  "type": "MINION",
   "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 12.0,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "(1) Overload. Whenever your opponent plays a card, remove one card from the top of your deck.",
   "trigger": {
     "eventTrigger": {
-      "targetPlayer": "OPPONENT",
-      "class": "CardPlayedTrigger"
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "OPPONENT"
     },
     "spell": {
       "class": "DiscardCardsFromDeckSpell",
       "value": 1
     }
   },
-  "description": "(1) Overload. Whenever your opponent plays a card, remove one card from the top of your deck.",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
-  "baseHp": 12.0,
-  "race": "MECH",
-  "baseManaCost": 7.0,
   "attributes": {
     "OVERLOAD": 1.0
   },
-  "type": "MINION",
-  "id": "Gang Gomems",
-  "baseAttack": 6.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

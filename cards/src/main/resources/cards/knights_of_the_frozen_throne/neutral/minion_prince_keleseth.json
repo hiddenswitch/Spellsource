@@ -2,13 +2,12 @@
   "name": "Prince Keleseth",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: If your deck has no 2-Cost cards, give all minions in your deck +1/+1.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "DeckContainsCondition",
       "cardFilter": {
@@ -17,15 +16,16 @@
       },
       "invert": true
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_DECK",
       "attackBonus": 1,
-      "hpBonus": 1,
       "filter": {
         "class": "CardFilter",
         "cardType": "MINION"
-      }
+      },
+      "hpBonus": 1
     }
   },
   "attributes": {

@@ -2,9 +2,9 @@
   "name": "Mysterious Challenger",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 6,
   "baseHp": 6,
-  "heroClass": "PALADIN",
   "rarity": "EPIC",
   "description": "Battlecry: Put one of each Secret from your deck into the battlefield.",
   "battlecry": {

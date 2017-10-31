@@ -1,27 +1,27 @@
 {
-	"name": "Warbot",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 3,
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"race": "MECH",
-	"description": "Enrage: +1 Attack.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "EnrageChangedTrigger"
-		},
-		"spell": {
-			"class": "EnrageSpell",
-			"target": "SELF",
-			"attackBonus": 1
-		}
-	},
-	"attributes": {
-		"ENRAGABLE": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Warbot",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Enrage: +1 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "EnrageChangedTrigger"
+    },
+    "spell": {
+      "class": "EnrageSpell",
+      "target": "SELF",
+      "attackBonus": 1
+    }
+  },
+  "attributes": {
+    "ENRAGABLE": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

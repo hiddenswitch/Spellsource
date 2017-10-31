@@ -1,17 +1,17 @@
 {
-	"name": "Mana Treant",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "DRUID",
-	"rarity": "FREE",
-	"description": "Deathrattle: Gain an empty Mana Crystal.",
-	"deathrattle": {
-		"class": "ModifyMaxManaSpell",
-		"value": 1
-	},
-	"collectible": false,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Mana Treant",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Deathrattle: Gain an empty Mana Crystal.",
+  "deathrattle": {
+    "class": "ModifyMaxManaSpell",
+    "value": 1
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

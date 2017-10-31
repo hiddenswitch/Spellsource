@@ -5,13 +5,13 @@
   "heroClass": "SHAMAN",
   "rarity": "LEGENDARY",
   "description": "Quest: Summon 10 Murlocs. Reward: Megafin.",
-  "targetSelection": "NONE",
   "quest": {
     "class": "MinionSummonedTrigger",
-    "targetPlayer": "SELF",
-    "race": "MURLOC"
+    "race": "MURLOC",
+    "targetPlayer": "SELF"
   },
   "countUntilCast": 10,
+  "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "card": "token_megafin"

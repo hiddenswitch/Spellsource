@@ -1,28 +1,28 @@
 {
-  "deathrattle": {
-    "attackBonus": 2,
-    "class": "BuffWeaponSpell",
-    "target": "FRIENDLY_WEAPON"
-  },
-  "set": "SPELLSOURCE",
-  "name": "Sad Flurry",
-  "heroClass": "ROGUE",
-  "description": "(2) Overload. Divine Shield. Windfury. Charge. Taunt. Deathrattle: Give your weapon +2 Attack.",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "rarity": "LEGENDARY",
-  "baseHp": 6.0,
-  "race": "PIRATE",
-  "baseManaCost": 8.0,
-  "attributes": {
-    "TAUNT": true,
-    "WINDFURY": true,
-    "CHARGE": true,
-    "OVERLOAD": 2.0,
-    "DIVINE_SHIELD": true,
-    "DEATHRATTLES": true
-  },
-  "type": "MINION",
   "id": "Sad Flurry",
-  "baseAttack": 3.0
+  "name": "Sad Flurry",
+  "baseManaCost": 8.0,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 3.0,
+  "baseHp": 6.0,
+  "rarity": "LEGENDARY",
+  "race": "PIRATE",
+  "description": "(2) Overload. Divine Shield. Windfury. Charge. Taunt. Deathrattle: Give your weapon +2 Attack.",
+  "deathrattle": {
+    "class": "BuffWeaponSpell",
+    "target": "FRIENDLY_WEAPON",
+    "attackBonus": 2
+  },
+  "attributes": {
+    "CHARGE": true,
+    "DEATHRATTLES": true,
+    "DIVINE_SHIELD": true,
+    "OVERLOAD": 2.0,
+    "TAUNT": true,
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

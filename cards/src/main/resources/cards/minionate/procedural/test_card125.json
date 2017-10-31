@@ -1,1 +1,35 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Sadeit Snake", "heroClass": "WARLOCK", "trigger": {"eventTrigger": {"targetPlayer": "SELF", "targetEntityType": "HERO", "class": "DamageReceivedTrigger", "fireCondition": {"targetPlayer": "ACTIVE", "class": "OwnedByPlayerCondition"}}, "spell": {"attackBonus": 2, "class": "BuffSpell", "hpBonus": 2, "target": "SELF"}}, "description": "Taunt. Whenever your hero takes damage on your turn, gain +2/+2.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 1.0, "race": "DEMON", "baseManaCost": 1.0, "attributes": {"TAUNT": true}, "type": "MINION", "id": "Sadeit Snake", "baseAttack": 1.0}
+{
+  "id": "Sadeit Snake",
+  "name": "Sadeit Snake",
+  "baseManaCost": 1.0,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 1.0,
+  "baseHp": 1.0,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Taunt. Whenever your hero takes damage on your turn, gain +2/+2.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      },
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 2,
+      "hpBonus": 2
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

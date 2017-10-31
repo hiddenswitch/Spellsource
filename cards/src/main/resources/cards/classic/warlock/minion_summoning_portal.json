@@ -1,19 +1,19 @@
 {
-	"name": "Summoning Portal",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 4,
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"description": "Your minions cost (2) less, but not less than (1).",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"cardType": "MINION",
-		"value": -2,
-		"minValue": 1
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Summoning Portal",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Your minions cost (2) less, but not less than (1).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -2,
+    "cardType": "MINION",
+    "minValue": 1
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

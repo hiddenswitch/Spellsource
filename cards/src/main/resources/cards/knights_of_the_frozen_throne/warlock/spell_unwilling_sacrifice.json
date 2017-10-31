@@ -5,12 +5,12 @@
   "heroClass": "WARLOCK",
   "rarity": "RARE",
   "description": "Choose a friendly minion. Destroy it and a random enemy minion.",
-  "targetSelection": "FRIENDLY_MINIONS",
   "condition": {
     "class": "MinionCountCondition",
-    "operation": "GREATER",
-    "value": 0
+    "value": 0,
+    "operation": "GREATER"
   },
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [

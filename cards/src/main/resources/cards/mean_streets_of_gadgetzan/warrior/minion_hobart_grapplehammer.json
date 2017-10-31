@@ -2,9 +2,9 @@
   "name": "Hobart Grapplehammer",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "WARRIOR",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "WARRIOR",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Give all weapons in your hand and deck +1 Attack.",
   "battlecry": {

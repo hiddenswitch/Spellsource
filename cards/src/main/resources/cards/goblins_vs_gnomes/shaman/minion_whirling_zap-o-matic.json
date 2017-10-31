@@ -1,17 +1,17 @@
 {
-	"name": "Whirling Zap-o-matic",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"race": "MECH",
-	"description": "Windfury",
-	"attributes": {
-		"WINDFURY": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Whirling Zap-o-matic",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Windfury",
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

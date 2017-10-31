@@ -1,14 +1,14 @@
 {
-	"name": "Big Bad Wolf",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "",
-	"collectible": false,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Big Bad Wolf",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

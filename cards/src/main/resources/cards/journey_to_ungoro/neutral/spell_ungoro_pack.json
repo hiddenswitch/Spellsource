@@ -11,22 +11,22 @@
     "spells": [
       {
         "class": "ReceiveCardSpell",
-        "targetPlayer": "SELF",
         "value": 1,
         "cardFilter": {
           "class": "CardFilter",
-          "cardSet": "JOURNEY_TO_UNGORO",
-          "rarity": "EPIC"
-        }
+          "rarity": "EPIC",
+          "cardSet": "JOURNEY_TO_UNGORO"
+        },
+        "targetPlayer": "SELF"
       },
       {
         "class": "ReceiveCardSpell",
-        "targetPlayer": "SELF",
         "value": 4,
         "cardFilter": {
           "class": "CardFilter",
           "cardSet": "JOURNEY_TO_UNGORO"
-        }
+        },
+        "targetPlayer": "SELF"
       }
     ]
   },

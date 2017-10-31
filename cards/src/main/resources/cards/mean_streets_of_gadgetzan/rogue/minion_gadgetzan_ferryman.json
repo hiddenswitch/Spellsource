@@ -1,25 +1,25 @@
 {
-	"name": "Gadgetzan Ferryman",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ROGUE",
-	"rarity": "RARE",
-	"description": "Combo: Return a friendly minion to your hand.",
-	"battlecry": {
-		"targetSelection": "FRIENDLY_MINIONS",
-		"spell": {
-			"class": "ReturnTargetToHandSpell"
-		},
-		"condition": {
-			"class": "ComboCondition"
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "MEAN_STREETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Gadgetzan Ferryman",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Combo: Return a friendly minion to your hand.",
+  "battlecry": {
+    "condition": {
+      "class": "ComboCondition"
+    },
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "ReturnTargetToHandSpell"
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

@@ -1,23 +1,23 @@
 {
-	"name": "Supercomputer",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 7,
-	"heroClass": "MAGE",
-	"rarity": "LEGENDARY",
-	"description": "Place a 'DDoS' power into your hand whenever you use a power. ",
-	"trigger": {
-		"eventTrigger": {
-			"class": "SpellCastedTrigger",
-			"sourcePlayer": "SELF"
-		},
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"card": "spell_fireball"
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Supercomputer",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Place a 'DDoS' power into your hand whenever you use a power. ",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_fireball"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

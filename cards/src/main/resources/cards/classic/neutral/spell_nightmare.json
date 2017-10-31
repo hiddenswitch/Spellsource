@@ -1,35 +1,35 @@
 {
-	"name": "Nightmare",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Give a minion +5/+5. At the start of your next turn, destroy it.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "BuffSpell",
-				"attackBonus": 5,
-				"hpBonus": 5
-			},
-			{
-				"class": "AddEnchantmentSpell",
-				"trigger": {
-					"eventTrigger": {
-						"class": "TurnStartTrigger",
-						"targetPlayer": "SELF"
-					},
-					"spell": {
-						"class": "DestroySpell",
-						"target": "SELF"
-					}
-				}
-			}
-		]
-	},
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Nightmare",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give a minion +5/+5. At the start of your next turn, destroy it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 5,
+        "hpBonus": 5
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DestroySpell",
+            "target": "SELF"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

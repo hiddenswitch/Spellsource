@@ -1,30 +1,30 @@
 {
-	"name": "Knight of the Wild",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 6,
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Whenever you summon a Beast, reduce the Cost of this card by (1).",
-	"passiveTrigger": {
-		"eventTrigger": {
-			"class": "MinionSummonedTrigger",
-			"targetPlayer": "SELF",
-			"race": "BEAST"
-		},
-		"spell": {
-			"class": "CardCostModifierSpell",
-			"target": "FRIENDLY_PLAYER",
-			"cardCostModifier": {
-				"class": "CardCostModifier",
-				"target": "SELF",
-				"operation": "SUBTRACT",
-				"value": 1
-			}
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Knight of the Wild",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Whenever you summon a Beast, reduce the Cost of this card by (1).",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "race": "BEAST",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

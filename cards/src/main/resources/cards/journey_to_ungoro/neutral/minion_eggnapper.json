@@ -1,25 +1,25 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Eggnapper",
+  "baseManaCost": 3,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Deathrattle: Summon two 1/1 Raptors.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
+  "baseAttack": 3,
   "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Summon two 1/1 Raptors.",
   "deathrattle": {
+    "class": "SummonSpell",
     "cards": [
       "token_raptor",
       "token_raptor"
-    ],
-    "class": "SummonSpell"
+    ]
   },
-  "baseAttack": 3,
   "attributes": {
-    "NAME": "Forest Witch",
     "DEATHRATTLES": true,
-    "DESCRIPTION": "Deathrattle: Summon two 1/1 Wild Cats."
+    "DESCRIPTION": "Deathrattle: Summon two 1/1 Wild Cats.",
+    "NAME": "Forest Witch"
   },
-  "type": "MINION",
-  "baseManaCost": 3
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

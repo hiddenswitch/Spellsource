@@ -1,27 +1,27 @@
 {
-	"name": "SI:7 Agent",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "ROGUE",
-	"rarity": "RARE",
-	"description": "Combo: Deal 2 damage.",
-	"battlecry": {
-		"targetSelection": "ANY",
-		"spell": {
-			"class": "DamageSpell",
-			"value": 2
-		},
-		"condition": {
-			"class": "ComboCondition"
-		}
-	},
-	"attributes": {
-		"NAME": "Bakeneko Assassin",
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "SI:7 Agent",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Combo: Deal 2 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "ComboCondition"
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "COMBO": true,
+    "NAME": "Bakeneko Assassin"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

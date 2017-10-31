@@ -1,15 +1,15 @@
 {
-	"name": "Baaraxxus",
-	"baseManaCost": 1,
-	"heroPower": "hero_power_inferno",
-	"type": "HERO",
-	"heroClass": "MAGE",
-	"rarity": "FREE",
-	"attributes": {
-		"HP": 1,
-		"MAX_HP": 1
-	},
-	"collectible": false,
-	"set": "MEAN_STREETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Baaraxxus",
+  "heroPower": "hero_power_inferno",
+  "baseManaCost": 1,
+  "type": "HERO",
+  "heroClass": "MAGE",
+  "rarity": "FREE",
+  "attributes": {
+    "HP": 1,
+    "MAX_HP": 1
+  },
+  "collectible": false,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

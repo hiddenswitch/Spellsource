@@ -1,30 +1,30 @@
 {
-	"name": "Recombobulator",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "Battlecry: Transform a friendly minion into a random minion with the same Cost.",
-	"battlecry": {
-		"targetSelection": "FRIENDLY_MINIONS",
-		"spell": {
-			"class": "TransformToRandomMinionSpell",
-			"cardFilter": {
-				"class": "CardFilter",
-				"manaCost": {
-					"class": "AttributeValueProvider",
-					"target": "TARGET",
-					"attribute": "BASE_MANA_COST"
-				}
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Recombobulator",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Battlecry: Transform a friendly minion into a random minion with the same Cost.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "TransformToRandomMinionSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": {
+          "class": "AttributeValueProvider",
+          "target": "TARGET",
+          "attribute": "BASE_MANA_COST"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

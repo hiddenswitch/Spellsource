@@ -5,6 +5,12 @@
   "heroClass": "MAGE",
   "rarity": "COMMON",
   "description": "Deal 2 damage to a random enemy minion and Freeze it.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -20,12 +26,6 @@
         "attribute": "FROZEN"
       }
     ]
-  },
-  "condition": {
-    "class": "MinionCountCondition",
-    "targetPlayer": "OPPONENT",
-    "operation": "GREATER",
-    "value": 0
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

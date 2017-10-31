@@ -1,30 +1,30 @@
 {
-	"name": "Druid of the Fang",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"description": "Battlecry: If you have a Beast, transform this minion into a 7/7.",
-	"battlecry": {
-		"spell": {
-			"class": "TransformMinionSpell",
-			"target": "SELF",
-			"card": "token_cobra_form"
-		},
-		"condition": {
-			"class": "MinionOnBoardCondition",
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "BEAST"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Druid of the Fang",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: If you have a Beast, transform this minion into a 7/7.",
+  "battlecry": {
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_cobra_form"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

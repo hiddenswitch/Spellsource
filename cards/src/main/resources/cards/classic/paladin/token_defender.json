@@ -1,13 +1,13 @@
 {
-	"name": "Defender",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 1,
-	"heroClass": "PALADIN",
-	"rarity": "COMMON",
-	"description": "",
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Defender",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "",
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

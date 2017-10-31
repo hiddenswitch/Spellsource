@@ -1,21 +1,21 @@
 {
-	"name": "Sludge Belcher",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Taunt. Deathrattle: Summon a 1/2 Slime with Taunt.",
-	"deathrattle": {
-		"class": "SummonSpell",
-		"card": "token_slime"
-	},
-	"attributes": {
-		"DEATHRATTLES": true,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Sludge Belcher",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Taunt. Deathrattle: Summon a 1/2 Slime with Taunt.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_slime"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

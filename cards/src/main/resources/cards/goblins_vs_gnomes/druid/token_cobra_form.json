@@ -1,14 +1,14 @@
 {
-	"name": "Druid Of The Fang (Cobra Form)",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 7,
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "",
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Druid Of The Fang (Cobra Form)",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

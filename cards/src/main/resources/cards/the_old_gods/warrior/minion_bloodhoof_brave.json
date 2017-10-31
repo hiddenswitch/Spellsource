@@ -1,27 +1,27 @@
 {
-	"name": "Bloodhoof Brave",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 6,
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"description": "Taunt. Enrage: +3 Attack",
-	"trigger": {
-		"eventTrigger": {
-			"class": "EnrageChangedTrigger"
-		},
-		"spell": {
-			"class": "EnrageSpell",
-			"target": "SELF",
-			"attackBonus": 3
-		}
-	},
-	"attributes": {
-		"ENRAGABLE": true,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Bloodhoof Brave",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Taunt. Enrage: +3 Attack",
+  "trigger": {
+    "eventTrigger": {
+      "class": "EnrageChangedTrigger"
+    },
+    "spell": {
+      "class": "EnrageSpell",
+      "target": "SELF",
+      "attackBonus": 3
+    }
+  },
+  "attributes": {
+    "ENRAGABLE": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

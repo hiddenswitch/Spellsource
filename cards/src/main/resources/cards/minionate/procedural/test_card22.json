@@ -1,55 +1,55 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Clerical",
   "name": "Clerical",
-  "heroClass": "DRUID",
-  "description": "Taunt. Battlecry: Give your C'Thun +3/+3 (wherever it is).",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 5.0,
   "baseManaCost": 7.0,
-  "attributes": {
-    "TAUNT": true,
-    "BATTLECRY": true
-  },
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 6.0,
+  "baseHp": 5.0,
+  "rarity": "COMMON",
+  "description": "Taunt. Battlecry: Give your C'Thun +3/+3 (wherever it is).",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 3,
           "filter": {
             "class": "SpecificCardFilter",
             "cardId": "minion_cthun"
-          },
-          "class": "BuffSpell",
-          "value": 3,
-          "target": "FRIENDLY_MINIONS"
+          }
         },
         {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "value": 3,
           "filter": {
             "class": "SpecificCardFilter",
             "cardId": "minion_cthun"
-          },
-          "class": "BuffSpell",
-          "value": 3,
-          "target": "FRIENDLY_HAND"
+          }
         },
         {
-          "attribute": "CTHUN_ATTACK_BUFF",
           "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
           "value": 3,
-          "target": "FRIENDLY_PLAYER"
+          "attribute": "CTHUN_ATTACK_BUFF"
         },
         {
-          "attribute": "CTHUN_HEALTH_BUFF",
           "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
           "value": 3,
-          "target": "FRIENDLY_PLAYER"
+          "attribute": "CTHUN_HEALTH_BUFF"
         }
       ]
     }
   },
-  "type": "MINION",
-  "id": "Clerical",
-  "baseAttack": 6.0
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

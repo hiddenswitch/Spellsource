@@ -1,22 +1,22 @@
 {
-	"name": "Selfless Hero",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 1,
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"description": "Deathrattle: Give a random friendly minion Divine Shield.",
-	"deathrattle": {
-		"class": "AddAttributeSpell",
-		"target": "FRIENDLY_MINIONS",
-		"attribute": "DIVINE_SHIELD",
-		"randomTarget": true
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Selfless Hero",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Deathrattle: Give a random friendly minion Divine Shield.",
+  "deathrattle": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "DIVINE_SHIELD",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

@@ -1,17 +1,17 @@
 {
-	"name": "Coldarra Drake",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 6,
-	"heroClass": "MAGE",
-	"rarity": "EPIC",
-	"description": "You can use your Hero Power any number of times.",
-	"race": "DRAGON",
-	"attributes": {
-		"HERO_POWER_USAGES": -1
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Coldarra Drake",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "You can use your Hero Power any number of times.",
+  "attributes": {
+    "HERO_POWER_USAGES": -1
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

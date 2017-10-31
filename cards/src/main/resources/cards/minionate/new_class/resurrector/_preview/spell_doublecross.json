@@ -1,15 +1,15 @@
 {
-	"name": "Doublecross",
-	"baseManaCost": 10,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "FREE",
-	"description": "Take permanent control of an enemy minion.",
-	"targetSelection": "ENEMY_MINIONS",
-	"spell": {
-		"class": "MindControlSpell"
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Doublecross",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "FREE",
+  "description": "Take permanent control of an enemy minion.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MindControlSpell"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

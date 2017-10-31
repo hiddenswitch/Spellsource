@@ -1,20 +1,20 @@
 {
-	"name": "Ball of Spiders",
-	"baseManaCost": 6,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"description": "Summon three 1/1 Webspinners.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"cards": [
-			"minion_webspinner",
-			"minion_webspinner",
-			"minion_webspinner"
-		]
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Ball of Spiders",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "RARE",
+  "description": "Summon three 1/1 Webspinners.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "minion_webspinner",
+      "minion_webspinner",
+      "minion_webspinner"
+    ]
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

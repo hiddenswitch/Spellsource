@@ -1,16 +1,16 @@
 {
-	"name": "Roll the Dice",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "EPIC",
-	"description": "Destroy all but one random minion.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DestroyAllExceptOneSpell",
-		"target": "ALL_MINIONS"
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Roll the Dice",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "EPIC",
+  "description": "Destroy all but one random minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroyAllExceptOneSpell",
+    "target": "ALL_MINIONS"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -1,18 +1,18 @@
 {
-	"name": "Sunwalker",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Taunt. Divine Shield",
-	"attributes": {
-		"DIVINE_SHIELD": true,
-		"TAUNT": true,
-		"NAME": "Fassnu Samurai"
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Sunwalker",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Taunt. Divine Shield",
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "NAME": "Fassnu Samurai",
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

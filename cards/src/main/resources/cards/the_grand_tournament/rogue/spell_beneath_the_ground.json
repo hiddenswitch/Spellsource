@@ -1,18 +1,18 @@
 {
-	"name": "Beneath the Grounds",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Shuffle 3 Ambushes into your opponent's deck. When drawn, you summon a 4/4 Nerubian.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "ShuffleToDeckSpell",
-		"targetPlayer": "OPPONENT",
-		"card": "spell_ambush",
-		"howMany": 3
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Beneath the Grounds",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "EPIC",
+  "description": "Shuffle 3 Ambushes into your opponent's deck. When drawn, you summon a 4/4 Nerubian.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "card": "spell_ambush",
+    "howMany": 3,
+    "targetPlayer": "OPPONENT"
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

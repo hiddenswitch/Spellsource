@@ -2,17 +2,17 @@
   "name": "Tuskarr Fisherman",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Battlecry: Give a friendly minion Spell Damage +1.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
       "class": "AddAttributeSpell",
-      "attribute": "SPELL_DAMAGE",
-      "value": 1
+      "value": 1,
+      "attribute": "SPELL_DAMAGE"
     }
   },
   "attributes": {

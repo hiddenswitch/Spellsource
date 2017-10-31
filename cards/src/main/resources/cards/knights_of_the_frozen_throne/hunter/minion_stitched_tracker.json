@@ -2,25 +2,25 @@
   "name": "Stitched Tracker",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "HUNTER",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "HUNTER",
   "rarity": "COMMON",
   "description": "Battlecry: Discover a copy of a minion in your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "DiscoverFilteredCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION"
       },
       "cardSource": {
         "class": "DeckSource",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-        "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"
       }
     }

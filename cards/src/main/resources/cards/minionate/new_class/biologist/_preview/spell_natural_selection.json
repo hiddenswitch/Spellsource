@@ -14,8 +14,8 @@
       "cardCostModifier": {
         "class": "CardCostModifier",
         "target": "EVENT_CARD",
-        "operation": "SUBTRACT",
-        "value": 2
+        "value": 2,
+        "operation": "SUBTRACT"
       }
     }
   },

@@ -1,16 +1,16 @@
 {
-	"name": "Steroid",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "RARE",
-	"description": "Gain 1 Mana this turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "GainManaSpell",
-		"value": 1
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Steroid",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "RARE",
+  "description": "Gain 1 Mana this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "GainManaSpell",
+    "value": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

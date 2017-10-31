@@ -1,1 +1,23 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Painry Thtryguurzar", "heroClass": "PALADIN", "description": "Battlecry: Put one of each Secret from your deck into the battlefield.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 8.0, "baseManaCost": 8.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"howMany": 99, "class": "PutRandomSecretIntoPlaySpell"}}, "type": "MINION", "id": "Painry Thtryguurzar", "baseAttack": 5.0}
+{
+  "id": "Painry Thtryguurzar",
+  "name": "Painry Thtryguurzar",
+  "baseManaCost": 8.0,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 5.0,
+  "baseHp": 8.0,
+  "rarity": "EPIC",
+  "description": "Battlecry: Put one of each Secret from your deck into the battlefield.",
+  "battlecry": {
+    "spell": {
+      "class": "PutRandomSecretIntoPlaySpell",
+      "howMany": 99
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

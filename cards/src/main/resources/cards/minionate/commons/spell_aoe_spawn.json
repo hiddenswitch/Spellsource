@@ -1,31 +1,31 @@
 {
-	"id": "spell_aoe_spawn",
-	"name": "AOE Spawn",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Deal 1 damage to all enemy minions. Summon a 1/1 for each enemy hit.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"target": "ENEMY_MINIONS",
-				"value": 1
-			},
-			{
-				"class": "SummonSpell",
-				"value": {
-					"class": "EntityCounter",
-					"target": "ENEMY_MINIONS"
-				},
-				"card": "token_minionate"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "id": "spell_aoe_spawn",
+  "name": "AOE Spawn",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Deal 1 damage to all enemy minions. Summon a 1/1 for each enemy hit.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "SummonSpell",
+        "value": {
+          "class": "EntityCounter",
+          "target": "ENEMY_MINIONS"
+        },
+        "card": "token_minionate"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

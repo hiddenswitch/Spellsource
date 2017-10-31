@@ -1,1 +1,17 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Roboser", "heroClass": "PRIEST", "description": "This minion's Attack is always equal to its Health.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 3.0, "baseManaCost": 3.0, "attributes": {"ATTACK_EQUALS_HP": true}, "type": "MINION", "id": "Roboser", "baseAttack": 3.0}
+{
+  "id": "Roboser",
+  "name": "Roboser",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 3.0,
+  "baseHp": 3.0,
+  "rarity": "COMMON",
+  "description": "This minion's Attack is always equal to its Health.",
+  "attributes": {
+    "ATTACK_EQUALS_HP": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

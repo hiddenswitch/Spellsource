@@ -13,16 +13,16 @@
         "class": "HealSpell",
         "value": {
           "class": "PlayerAttributeValueProvider",
-          "playerAttribute": "MANA",
-          "multiplier": 2
+          "multiplier": 2,
+          "playerAttribute": "MANA"
         }
       },
       {
         "class": "GainManaSpell",
         "value": {
           "class": "PlayerAttributeValueProvider",
-          "playerAttribute": "MANA",
-          "multiplier": -1
+          "multiplier": -1,
+          "playerAttribute": "MANA"
         }
       }
     ]

@@ -1,31 +1,31 @@
 {
-	"name": "Fossilized Devilsaur",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Battlecry: If you control a Beast, gain Taunt.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "AddAttributeSpell",
-			"target": "SELF",
-			"attribute": "TAUNT"
-		},
-		"condition": {
-			"class": "MinionOnBoardCondition",
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "BEAST"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Fossilized Devilsaur",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "description": "Battlecry: If you control a Beast, gain Taunt.",
+  "battlecry": {
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "TAUNT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

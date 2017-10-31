@@ -1,8 +1,13 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Bittertide Hydra",
+  "baseManaCost": 5,
+  "type": "MINION",
   "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Whenever this minion takes damage, deal 3 damage to your hero.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -10,16 +15,11 @@
     },
     "spell": {
       "class": "DamageSpell",
-      "value": 3,
-      "target": "FRIENDLY_HERO"
+      "target": "FRIENDLY_HERO",
+      "value": 3
     }
   },
-  "description": "Whenever this minion takes damage, deal 3 damage to your hero.",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
-  "baseHp": 8,
-  "race": "BEAST",
-  "baseAttack": 8,
-  "type": "MINION",
-  "baseManaCost": 5
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

@@ -1,1 +1,21 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Chair Of Ofeher", "heroClass": "ANY", "description": "Deathrattle: Summon a 4/5 Baine Bloodhoof.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 4.0, "deathrattle": {"class": "SummonSpell", "card": "token_baine_bloodhoof"}, "baseManaCost": 3.0, "attributes": {"DEATHRATTLES": true}, "type": "MINION", "id": "Chair Of Ofeher", "baseAttack": 2.0}
+{
+  "id": "Chair Of Ofeher",
+  "name": "Chair Of Ofeher",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2.0,
+  "baseHp": 4.0,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Summon a 4/5 Baine Bloodhoof.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_baine_bloodhoof"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

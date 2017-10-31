@@ -1,34 +1,34 @@
 {
-	"name": "Coghammer",
-	"baseManaCost": 3,
-	"type": "WEAPON",
-	"damage": 2,
-	"durability": 3,
-	"heroClass": "PALADIN",
-	"rarity": "EPIC",
-	"description": "Battlecry: Give a random friendly minion Divine Shield and Taunt.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-			"target": "FRIENDLY_MINIONS",
-			"spells": [
-				{
-					"class": "AddAttributeSpell",
-					"attribute": "DIVINE_SHIELD"
-				},
-				{
-					"class": "AddAttributeSpell",
-					"attribute": "TAUNT"
-				}
-			],
-			"randomTarget": true
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Coghammer",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "PALADIN",
+  "damage": 2,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "Battlecry: Give a random friendly minion Divine Shield and Taunt.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "target": "FRIENDLY_MINIONS",
+      "randomTarget": true,
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DIVINE_SHIELD"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

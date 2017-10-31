@@ -1,17 +1,17 @@
 {
-	"name": "Prophet Velen",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 7,
-	"heroClass": "PRIEST",
-	"rarity": "LEGENDARY",
-	"description": "Double the damage and healing of your spells and Hero Power.",
-	"attributes": {
-		"HEAL_AMPLIFY_MULTIPLIER": 2,
-		"SPELL_AMPLIFY_MULTIPLIER": 2
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Prophet Velen",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Double the damage and healing of your spells and Hero Power.",
+  "attributes": {
+    "HEAL_AMPLIFY_MULTIPLIER": 2,
+    "SPELL_AMPLIFY_MULTIPLIER": 2
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

@@ -1,38 +1,38 @@
 {
-	"name": "Hungry Crab",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"race": "BEAST",
-	"description": "Battlecry: Destroy a Murloc and gain +2/+2.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "DestroySpell"
-				},
-				{
-					"class": "BuffSpell",
-					"target": "SELF",
-					"attackBonus": 2,
-					"hpBonus": 2
-				}
-			],
-			"filter": {
-				"class": "RaceFilter",
-				"race": "MURLOC"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Hungry Crab",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: Destroy a Murloc and gain +2/+2.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MURLOC"
+      },
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 2,
+          "hpBonus": 2
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

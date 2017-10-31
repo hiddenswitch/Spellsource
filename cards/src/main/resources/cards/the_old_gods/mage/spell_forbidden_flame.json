@@ -1,35 +1,35 @@
 {
-	"name": "Forbidden Flame",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "EPIC",
-	"description": "Spend all your mana. Deal that much damage to a minion.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": {
-					"class": "PlayerAttributeValueProvider",
-					"playerAttribute": "MANA"
-				}
-			},
-			{
-				"class": "GainManaSpell",
-				"value": {
-					"class": "AlgebraicValueProvider",
-					"operation": "NEGATE",
-					"value1": {
-						"class": "PlayerAttributeValueProvider",
-						"playerAttribute": "MANA"
-					}
-				}
-			}
-		]
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Forbidden Flame",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "MAGE",
+  "rarity": "EPIC",
+  "description": "Spend all your mana. Deal that much damage to a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "MANA"
+        }
+      },
+      {
+        "class": "GainManaSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "NEGATE",
+          "value1": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

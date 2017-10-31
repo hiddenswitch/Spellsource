@@ -2,9 +2,9 @@
   "name": "Keeper of Uldaman",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "PALADIN",
   "rarity": "COMMON",
   "description": "Battlecry: Set a minion's Attack and Health to 3.",
   "battlecry": {

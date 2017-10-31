@@ -1,30 +1,30 @@
 {
-	"name": "Wilfred Fizzlebang",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "WARLOCK",
-	"rarity": "LEGENDARY",
-	"description": "Cards you draw from your Hero Power cost (0).",
-	"trigger": {
-		"eventTrigger": {
-			"class": "CardDrawnTrigger",
-			"sourceType": "HERO_POWER",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "CardCostModifierSpell",
-			"target": "FRIENDLY_PLAYER",
-			"cardCostModifier": {
-				"class": "CardCostModifier",
-				"target": "EVENT_TARGET",
-				"operation": "SET",
-				"value": 0
-			}
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Wilfred Fizzlebang",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Cards you draw from your Hero Power cost (0).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "sourceType": "HERO_POWER",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "EVENT_TARGET",
+        "value": 0,
+        "operation": "SET"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

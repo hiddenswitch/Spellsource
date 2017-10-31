@@ -1,13 +1,13 @@
 {
-	"name": "Crowbar",
-	"baseManaCost": 1,
-	"type": "WEAPON",
-	"damage": 1,
-	"durability": 4,
-	"heroClass": "PALADIN",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Crowbar",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "PALADIN",
+  "damage": 1,
+  "durability": 4,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

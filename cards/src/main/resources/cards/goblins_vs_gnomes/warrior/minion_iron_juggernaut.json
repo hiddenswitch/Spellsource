@@ -1,24 +1,24 @@
 {
-	"name": "Iron Juggernaut",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 5,
-	"heroClass": "WARRIOR",
-	"rarity": "LEGENDARY",
-	"race": "MECH",
-	"description": "Battlecry: Shuffle a Mine into your opponent's deck. When drawn, it explodes for 10 damage.",
-	"battlecry": {
-		"spell": {
-			"class": "ShuffleToDeckSpell",
-			"targetPlayer": "OPPONENT",
-			"card": "spell_burrowing_mine"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Iron Juggernaut",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Battlecry: Shuffle a Mine into your opponent's deck. When drawn, it explodes for 10 damage.",
+  "battlecry": {
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "spell_burrowing_mine",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

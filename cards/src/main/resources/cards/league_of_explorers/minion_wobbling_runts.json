@@ -1,24 +1,24 @@
 {
-	"name": "Wobbling Runts",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Deathrattle: Summon three 2/2 Runts.",
-	"deathrattle": {
-		"class": "SummonSpell",
-		"cards": [
-			"token_grumbly_runt",
-			"token_rascally_runt",
-			"token_wily_runt"
-		]
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Wobbling Runts",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Deathrattle: Summon three 2/2 Runts.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_grumbly_runt",
+      "token_rascally_runt",
+      "token_wily_runt"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

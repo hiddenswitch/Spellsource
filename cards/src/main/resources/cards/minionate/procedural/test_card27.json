@@ -1,30 +1,30 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Canner",
   "name": "Canner",
+  "baseManaCost": 5.0,
+  "type": "MINION",
   "heroClass": "SHAMAN",
-  "description": "Taunt. Whenever you play a card with Overload, gain +1/+1.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
+  "baseAttack": 5.0,
   "baseHp": 5.0,
+  "rarity": "COMMON",
+  "description": "Taunt. Whenever you play a card with Overload, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
-      "targetPlayer": "SELF",
+      "class": "CardPlayedTrigger",
       "requiredAttribute": "OVERLOAD",
-      "class": "CardPlayedTrigger"
+      "targetPlayer": "SELF"
     },
     "spell": {
-      "attackBonus": 1,
       "class": "BuffSpell",
-      "hpBonus": 1,
-      "target": "SELF"
+      "target": "SELF",
+      "attackBonus": 1,
+      "hpBonus": 1
     }
   },
-  "baseManaCost": 5.0,
   "attributes": {
     "TAUNT": true
   },
-  "type": "MINION",
-  "id": "Canner",
-  "baseAttack": 5.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

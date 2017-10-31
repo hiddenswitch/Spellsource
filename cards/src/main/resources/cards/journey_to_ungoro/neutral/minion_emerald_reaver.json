@@ -1,34 +1,34 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Emerald Reaver",
+  "baseManaCost": 1,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Battlecry: Deal 1 damage to each hero.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 1,
-  "race": "BEAST",
   "baseAttack": 2,
-  "attributes": {
-    "BATTLECRY": true
-  },
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: Deal 1 damage to each hero.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
           "class": "DamageSpell",
-          "value": 1,
-          "target": "ENEMY_HERO"
+          "target": "ENEMY_HERO",
+          "value": 1
         },
         {
           "class": "DamageSpell",
-          "value": 1,
-          "target": "FRIENDLY_HERO"
+          "target": "FRIENDLY_HERO",
+          "value": 1
         }
       ]
     }
   },
-  "type": "MINION",
-  "baseManaCost": 1
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

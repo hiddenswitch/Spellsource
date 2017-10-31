@@ -1,22 +1,22 @@
 {
-	"name": "Summon 5 Wisps",
-	"baseManaCost": 6,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "EPIC",
-	"description": "Summon 5 Wisps",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"cards": [
-			"minion_wisp",
-			"minion_wisp",
-			"minion_wisp",
-			"minion_wisp",
-			"minion_wisp"
-		]
-	},
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Summon 5 Wisps",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "EPIC",
+  "description": "Summon 5 Wisps",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "minion_wisp",
+      "minion_wisp",
+      "minion_wisp",
+      "minion_wisp",
+      "minion_wisp"
+    ]
+  },
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

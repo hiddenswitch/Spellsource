@@ -1,26 +1,26 @@
 {
-	"name": "Cobalt Guardian",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 3,
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"race": "MECH",
-	"description": "Whenever you summon a Mech, gain Divine Shield.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "MinionSummonedTrigger",
-			"targetPlayer": "SELF",
-			"race": "MECH"
-		},
-		"spell": {
-			"class": "AddAttributeSpell",
-			"target": "SELF",
-			"attribute": "DIVINE_SHIELD"
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Cobalt Guardian",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Whenever you summon a Mech, gain Divine Shield.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "race": "MECH",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

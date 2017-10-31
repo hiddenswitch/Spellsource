@@ -2,9 +2,9 @@
   "name": "Hemet, Jungle Hunter",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 6,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Destroy all cards in your deck that cost (3) or less.",
   "battlecry": {

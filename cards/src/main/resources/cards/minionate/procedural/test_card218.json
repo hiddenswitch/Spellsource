@@ -1,24 +1,24 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "King Kodo",
   "name": "King Kodo",
-  "heroClass": "ANY",
-  "description": "(2) Overload. Battlecry: Choose a minion and become a copy of it.",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
-  "baseHp": 3.0,
   "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1.0,
+  "baseHp": 3.0,
+  "rarity": "EPIC",
+  "description": "(2) Overload. Battlecry: Choose a minion and become a copy of it.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "custom.FacelessSpell"
+    }
+  },
   "attributes": {
     "BATTLECRY": true,
     "OVERLOAD": 2.0
   },
-  "battlecry": {
-    "spell": {
-      "class": "custom.FacelessSpell"
-    },
-    "targetSelection": "MINIONS"
-  },
-  "type": "MINION",
-  "id": "King Kodo",
-  "baseAttack": 1.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

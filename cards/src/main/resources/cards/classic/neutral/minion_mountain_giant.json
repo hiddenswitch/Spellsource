@@ -1,19 +1,19 @@
 {
-	"name": "Mountain Giant",
-	"baseManaCost": 12,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "Costs (1) less for each other card in your hand.",
-	"manaCostModifier": {
-		"class": "PlayerAttributeValueProvider",
-		"targetPlayer": "SELF",
-		"playerAttribute": "HAND_COUNT",
-		"offset": -1
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Mountain Giant",
+  "baseManaCost": 12,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Costs (1) less for each other card in your hand.",
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "offset": -1,
+    "playerAttribute": "HAND_COUNT",
+    "targetPlayer": "SELF"
+  }
 }

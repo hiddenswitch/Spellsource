@@ -1,21 +1,21 @@
 {
-	"name": "Sylvanas Windrunner",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Deathrattle: Take control of a random enemy minion.",
-	"deathrattle": {
-		"class": "MindControlSpell",
-		"target": "ENEMY_MINIONS",
-		"randomTarget": true
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Sylvanas Windrunner",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Take control of a random enemy minion.",
+  "deathrattle": {
+    "class": "MindControlSpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

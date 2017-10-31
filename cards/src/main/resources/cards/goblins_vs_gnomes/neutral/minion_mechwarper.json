@@ -1,21 +1,21 @@
 {
-	"name": "Mechwarper",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "MECH",
-	"description": "Your Mechs cost (1) less.",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"cardType": "MINION",
-		"targetPlayer": "SELF",
-		"race": "MECH",
-		"value": -1
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Mechwarper",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Your Mechs cost (1) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -1,
+    "race": "MECH",
+    "cardType": "MINION",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

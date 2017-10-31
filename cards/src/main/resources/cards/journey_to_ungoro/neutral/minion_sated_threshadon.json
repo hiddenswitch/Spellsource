@@ -1,25 +1,25 @@
 {
+  "name": "Sated Threshadon",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Deathrattle: Summon three 1/1 Murlocs.",
   "deathrattle": {
+    "class": "SummonSpell",
     "cards": [
       "token_primalfin",
       "token_primalfin",
       "token_primalfin"
-    ],
-    "class": "SummonSpell"
+    ]
   },
-  "set": "JOURNEY_TO_UNGORO",
-  "name": "Sated Threshadon",
-  "heroClass": "ANY",
-  "description": "Deathrattle: Summon three 1/1 Murlocs.",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "rarity": "COMMON",
-  "baseHp": 7,
-  "race": "BEAST",
-  "baseAttack": 5,
   "attributes": {
     "DEATHRATTLES": true
   },
-  "type": "MINION",
-  "baseManaCost": 7
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

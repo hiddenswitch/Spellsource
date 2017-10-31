@@ -1,54 +1,54 @@
 {
-	"name": "Dark Arakkoa",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 7,
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"description": "Battlecry: Give your C'Thun +3/+3 (wherever it is).",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"target": "FRIENDLY_MINIONS",
-					"value": 3,
-					"filter": {
-						"class": "SpecificCardFilter",
-						"cardId": "minion_cthun"
-					}
-				},
-				{
-					"class": "BuffSpell",
-					"target": "FRIENDLY_HAND",
-					"value": 3,
-					"filter": {
-						"class": "SpecificCardFilter",
-						"cardId": "minion_cthun"
-					}
-				},
-				{
-					"class": "ModifyAttributeSpell",
-					"target": "FRIENDLY_PLAYER",
-					"attribute": "CTHUN_ATTACK_BUFF",
-					"value": 3
-				},
-				{
-					"class": "ModifyAttributeSpell",
-					"target": "FRIENDLY_PLAYER",
-					"attribute": "CTHUN_HEALTH_BUFF",
-					"value": 3
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Dark Arakkoa",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give your C'Thun +3/+3 (wherever it is).",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 3,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cardId": "minion_cthun"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "value": 3,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cardId": "minion_cthun"
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 3,
+          "attribute": "CTHUN_ATTACK_BUFF"
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 3,
+          "attribute": "CTHUN_HEALTH_BUFF"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

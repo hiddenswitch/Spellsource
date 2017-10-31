@@ -1,29 +1,29 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Original Gangster Snekin",
   "name": "Original Gangster Snekin",
-  "heroClass": "SHAMAN",
-  "description": "Inspire: Give your Totems +2 Attack.",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "baseHp": 4.0,
-  "trigger": {
-    "eventTrigger": {
-      "targetPlayer": "SELF",
-      "class": "InspireTrigger"
-    },
-    "spell": {
-      "filter": {
-        "race": "TOTEM",
-        "class": "RaceFilter"
-      },
-      "attackBonus": 2,
-      "class": "BuffSpell",
-      "target": "FRIENDLY_MINIONS"
-    }
-  },
   "baseManaCost": 3.0,
   "type": "MINION",
-  "id": "Original Gangster Snekin",
-  "baseAttack": 1.0
+  "heroClass": "SHAMAN",
+  "baseAttack": 1.0,
+  "baseHp": 4.0,
+  "rarity": "RARE",
+  "description": "Inspire: Give your Totems +2 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 2,
+      "filter": {
+        "class": "RaceFilter",
+        "race": "TOTEM"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

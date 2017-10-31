@@ -1,23 +1,23 @@
 {
   "name": "Sherazin, Seed",
+  "baseManaCost": 0,
   "type": "MINION",
   "heroClass": "ROGUE",
-  "rarity": "FREE",
-  "baseManaCost": 0,
   "baseAttack": 0,
   "baseHp": 1,
+  "rarity": "FREE",
   "description": "When you play 4 cards in a turn, revive this minion.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",
-      "targetPlayer": "SELF",
       "queueCondition": {
         "class": "AttributeCondition",
         "target": "FRIENDLY_PLAYER",
+        "value": 3,
         "attribute": "COMBO",
-        "operation": "GREATER_OR_EQUAL",
-        "value": 3
-      }
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "TransformMinionSpell",

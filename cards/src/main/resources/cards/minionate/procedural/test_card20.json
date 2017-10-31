@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Oxed Nething", "heroClass": "WARRIOR", "description": "At the end of your turn, summon a 1/1 Scarab with Taunt.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 8.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnEndTrigger"}, "spell": {"boardPositionRelative": "RIGHT", "class": "SummonSpell", "card": "token_scarab"}}, "baseManaCost": 9.0, "type": "MINION", "id": "Oxed Nething", "baseAttack": 8.0}
+{
+  "id": "Oxed Nething",
+  "name": "Oxed Nething",
+  "baseManaCost": 9.0,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 8.0,
+  "baseHp": 8.0,
+  "rarity": "COMMON",
+  "description": "At the end of your turn, summon a 1/1 Scarab with Taunt.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_scarab"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

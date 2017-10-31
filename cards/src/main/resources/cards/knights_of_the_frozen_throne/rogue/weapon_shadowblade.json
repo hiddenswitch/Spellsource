@@ -2,9 +2,9 @@
   "name": "Shadowblade",
   "baseManaCost": 3,
   "type": "WEAPON",
+  "heroClass": "ROGUE",
   "damage": 3,
   "durability": 2,
-  "heroClass": "ROGUE",
   "rarity": "RARE",
   "description": "Battlecry: Your hero is Immune this turn.",
   "battlecry": {

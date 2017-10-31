@@ -1,20 +1,20 @@
 {
-	"name": "Nanobot Swarm",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "Hire a 1/1 Nanobot with Storm for each enemy minion.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"value": {
-			"class": "EntityCounter",
-			"target": "ENEMY_MINIONS"
-		},
-		"card": "token_nanobot"
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Nanobot Swarm",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "COMMON",
+  "description": "Hire a 1/1 Nanobot with Storm for each enemy minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS"
+    },
+    "card": "token_nanobot"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

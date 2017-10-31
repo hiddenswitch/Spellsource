@@ -1,1 +1,38 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Shirymage", "heroClass": "ANY", "description": "Battlecry: Give your other minions Windfury, Taunt, or Divine Shield.\n(at random)", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 5.0, "race": "MECH", "baseManaCost": 3.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"spells": [{"attribute": "WINDFURY", "class": "AddAttributeSpell"}, {"attribute": "TAUNT", "class": "AddAttributeSpell"}, {"attribute": "DIVINE_SHIELD", "class": "AddAttributeSpell"}], "class": "RandomlyCastSpell", "target": "OTHER_FRIENDLY_MINIONS"}}, "type": "MINION", "id": "Shirymage", "baseAttack": 0.0}
+{
+  "id": "Shirymage",
+  "name": "Shirymage",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0.0,
+  "baseHp": 5.0,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "Battlecry: Give your other minions Windfury, Taunt, or Divine Shield.\n(at random)",
+  "battlecry": {
+    "spell": {
+      "class": "RandomlyCastSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "WINDFURY"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DIVINE_SHIELD"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

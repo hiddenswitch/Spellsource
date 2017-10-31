@@ -1,22 +1,22 @@
 {
-	"name": "Kabal Crystal Runner",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 5,
-	"heroClass": "MAGE",
-	"rarity": "RARE",
-	"description": "Costs (2) less for each Secret you've played this game.",
-	"manaCostModifier": {
-		"class": "CardsPlayedValueProvider",
-		"filter": {
-			"class": "CardFilter",
-			"operation": "HAS",
-			"attribute": "SECRET"
-		},
-		"multiplier": 2
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Kabal Crystal Runner",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Costs (2) less for each Secret you've played this game.",
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "CardsPlayedValueProvider",
+    "filter": {
+      "class": "CardFilter",
+      "attribute": "SECRET",
+      "operation": "HAS"
+    },
+    "multiplier": 2
+  }
 }

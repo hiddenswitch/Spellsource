@@ -1,1 +1,36 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Bold Sers", "heroClass": "WARLOCK", "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "InspireTrigger"}, "spell": {"class": "MetaSpell", "spells": [{"randomTarget": true, "class": "DestroySpell", "target": "FRIENDLY_MINIONS"}, {"randomTarget": true, "class": "DestroySpell", "target": "ENEMY_MINIONS"}]}}, "description": "Inspire: Destroy a random minion for each player.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 4.0, "race": "DEMON", "baseManaCost": 2.0, "type": "MINION", "id": "Bold Sers", "baseAttack": 0.0}
+{
+  "id": "Bold Sers",
+  "name": "Bold Sers",
+  "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 0.0,
+  "baseHp": 4.0,
+  "rarity": "RARE",
+  "race": "DEMON",
+  "description": "Inspire: Destroy a random minion for each player.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "FRIENDLY_MINIONS",
+          "randomTarget": true
+        },
+        {
+          "class": "DestroySpell",
+          "target": "ENEMY_MINIONS",
+          "randomTarget": true
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -1,30 +1,30 @@
 {
+  "name": "Giant Anaconda",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Deathrattle: Summon a random minion with 5 or more attack from your hand.",
   "deathrattle": {
-    "targetPlayer": "SELF",
+    "class": "PutRandomMinionOnBoardSpell",
+    "value": 1,
     "cardFilter": {
-      "attribute": "ATTACK",
-      "operation": "GREATER_OR_EQUAL",
       "class": "CardFilter",
+      "value": 5,
+      "attribute": "ATTACK",
       "cardType": "MINION",
-      "value": 5
+      "operation": "GREATER_OR_EQUAL"
     },
     "cardLocation": "HAND",
-    "class": "PutRandomMinionOnBoardSpell",
-    "value": 1
+    "targetPlayer": "SELF"
   },
-  "set": "JOURNEY_TO_UNGORO",
-  "name": "Giant Anaconda",
-  "heroClass": "DRUID",
-  "description": "Deathrattle: Summon a random minion with 5 or more attack from your hand.",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "rarity": "EPIC",
-  "baseHp": 3,
-  "race": "BEAST",
-  "baseAttack": 5,
   "attributes": {
     "DEATHRATTLES": true
   },
-  "type": "MINION",
-  "baseManaCost": 7
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

@@ -1,1 +1,24 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Inmess Sharpa", "heroClass": "ANY", "description": "Deathrattle: Give a random friendly minion +3/+3.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 2.0, "deathrattle": {"randomTarget": true, "attackBonus": 3, "class": "BuffSpell", "hpBonus": 3, "target": "FRIENDLY_MINIONS"}, "baseManaCost": 2.0, "attributes": {"DEATHRATTLES": true}, "type": "MINION", "id": "Inmess Sharpa", "baseAttack": 2.0}
+{
+  "id": "Inmess Sharpa",
+  "name": "Inmess Sharpa",
+  "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2.0,
+  "baseHp": 2.0,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Give a random friendly minion +3/+3.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 3,
+    "hpBonus": 3,
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

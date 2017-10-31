@@ -2,9 +2,9 @@
   "name": "Runeforge Haunter",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ROGUE",
   "baseAttack": 5,
   "baseHp": 3,
-  "heroClass": "ROGUE",
   "rarity": "RARE",
   "description": "During your turn, your weapon doesn't lose Durability.",
   "trigger": {
@@ -14,6 +14,10 @@
     "spell": {
       "class": "EitherOrSpell",
       "target": "FRIENDLY_WEAPON",
+      "condition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      },
       "spell1": {
         "class": "AddAttributeSpell",
         "attribute": "IMMUNE"
@@ -21,10 +25,6 @@
       "spell2": {
         "class": "RemoveAttributeSpell",
         "attribute": "IMMUNE"
-      },
-      "condition": {
-        "class": "OwnedByPlayerCondition",
-        "targetPlayer": "ACTIVE"
       }
     }
   },

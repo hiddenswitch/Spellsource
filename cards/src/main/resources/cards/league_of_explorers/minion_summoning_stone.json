@@ -1,29 +1,29 @@
 {
-	"name": "Summoning Stone",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "Whenever you cast a spell, summon a minion of the same Cost.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "SpellCastedTrigger",
-			"sourcePlayer": "SELF"
-		},
-		"spell": {
-			"class": "SummonRandomMinionFilteredSpell",
-			"cardFilter": {
-				"class": "CardFilter",
-				"manaCost": {
-					"class": "PlayerAttributeValueProvider",
-					"playerAttribute": "LAST_MANA_COST"
-				}
-			}
-		}
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Summoning Stone",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Whenever you cast a spell, summon a minion of the same Cost.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonRandomMinionFilteredSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "LAST_MANA_COST"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

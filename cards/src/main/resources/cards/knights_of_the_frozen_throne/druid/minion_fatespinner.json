@@ -2,9 +2,9 @@
   "name": "Fatespinner",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "DRUID",
   "baseAttack": 5,
   "baseHp": 3,
-  "heroClass": "DRUID",
   "rarity": "EPIC",
   "description": "Choose a Deathrattle (Secretly) - Deal 3 damage to all minions; or Give them +2/+2",
   "options": [

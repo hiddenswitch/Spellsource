@@ -2,9 +2,9 @@
   "name": "Primalfin Lookout",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 2,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "race": "MURLOC",
   "description": "Battlecry: If you control another Murloc, Discover a Murloc.",
@@ -27,8 +27,8 @@
         },
         "cardFilter": {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "race": "MURLOC"
+          "race": "MURLOC",
+          "cardType": "MINION"
         }
       }
     }

@@ -1,33 +1,33 @@
 {
-	"name": "Loatheb",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Enemy spells cost (5) more next turn.",
-	"battlecry": {
-		"spell": {
-			"class": "CardCostModifierSpell",
-			"target": "FRIENDLY_PLAYER",
-			"cardCostModifier": {
-				"class": "CardCostModifier",
-				"cardType": "SPELL",
-				"targetPlayer": "OPPONENT",
-				"operation": "ADD",
-				"value": 5,
-				"expirationTrigger": {
-					"class": "TurnEndTrigger",
-					"targetPlayer": "OPPONENT"
-				}
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Loatheb",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Enemy spells cost (5) more next turn.",
+  "battlecry": {
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 5,
+        "cardType": "SPELL",
+        "expirationTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "OPPONENT"
+        },
+        "operation": "ADD",
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

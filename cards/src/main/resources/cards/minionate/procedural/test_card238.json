@@ -1,1 +1,24 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Anunament Valeon", "heroClass": "ANY", "description": "Battlecry: Silence a minion.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 3.0, "race": "BEAST", "baseManaCost": 2.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "SilenceSpell"}, "targetSelection": "MINIONS"}, "type": "MINION", "id": "Anunament Valeon", "baseAttack": 1.0}
+{
+  "id": "Anunament Valeon",
+  "name": "Anunament Valeon",
+  "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1.0,
+  "baseHp": 3.0,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: Silence a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SilenceSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

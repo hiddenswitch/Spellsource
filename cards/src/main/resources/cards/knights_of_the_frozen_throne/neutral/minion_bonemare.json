@@ -2,9 +2,9 @@
   "name": "Bonemare",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Battlecry: Give a friendly minion +4/+4 and Taunt.",
   "battlecry": {

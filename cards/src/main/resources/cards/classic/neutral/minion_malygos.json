@@ -1,17 +1,17 @@
 {
-	"name": "Malygos",
-	"baseManaCost": 9,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 12,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "DRAGON",
-	"description": "Spell Damage +5",
-	"attributes": {
-		"SPELL_DAMAGE": 5
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Malygos",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 12,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Spell Damage +5",
+  "attributes": {
+    "SPELL_DAMAGE": 5
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

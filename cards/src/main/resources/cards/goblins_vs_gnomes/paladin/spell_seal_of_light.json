@@ -1,26 +1,26 @@
 {
-	"name": "Seal of Light",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "PALADIN",
-	"rarity": "COMMON",
-	"description": "Restore 4 Health to your hero and gain +2 Attack this turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MetaSpell",
-		"target": "FRIENDLY_HERO",
-		"spells": [
-			{
-				"class": "HealSpell",
-				"value": 4
-			},
-			{
-				"class": "BuffHeroSpell",
-				"attackBonus": 2
-			}
-		]
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Seal of Light",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "COMMON",
+  "description": "Restore 4 Health to your hero and gain +2 Attack this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "FRIENDLY_HERO",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": 4
+      },
+      {
+        "class": "BuffHeroSpell",
+        "attackBonus": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

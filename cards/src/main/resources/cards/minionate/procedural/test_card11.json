@@ -1,1 +1,32 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Sinter Brewmast ", "heroClass": "ROGUE", "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnEndTrigger"}, "spell": {"randomTarget": true, "target": "OTHER_FRIENDLY_MINIONS", "attackBonus": 2, "hpBonus": 2, "filter": {"race": "MECH", "class": "RaceFilter"}, "class": "BuffSpell"}}, "description": "At the end of your turn, give another friendly Mech +2/+2.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 3.0, "race": "MECH", "baseManaCost": 3.0, "type": "MINION", "id": "Sinter Brewmast ", "baseAttack": 3.0}
+{
+  "id": "Sinter Brewmast ",
+  "name": "Sinter Brewmast ",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 3.0,
+  "baseHp": 3.0,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "At the end of your turn, give another friendly Mech +2/+2.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 2,
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH"
+      },
+      "hpBonus": 2,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

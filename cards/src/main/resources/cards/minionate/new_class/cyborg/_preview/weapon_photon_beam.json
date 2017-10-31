@@ -1,25 +1,25 @@
 {
-	"name": "Photon Beam",
-	"baseManaCost": 2,
-	"type": "WEAPON",
-	"damage": 2,
-	"durability": 2,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "Call to Arms: Give +1 Attack to a random friendly minion.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "BuffSpell",
-			"target": "FRIENDLY_MINIONS",
-			"attackBonus": 1,
-			"randomTarget": "true"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Photon Beam",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "HUNTER",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "Call to Arms: Give +1 Attack to a random friendly minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 1,
+      "randomTarget": "true"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

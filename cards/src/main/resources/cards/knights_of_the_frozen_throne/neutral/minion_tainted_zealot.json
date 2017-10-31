@@ -2,14 +2,14 @@
   "name": "Tainted Zealot",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Divine Shield. Spell Damage +1",
   "attributes": {
-    "SPELL_DAMAGE": 1,
-    "DIVINE_SHIELD": 1
+    "DIVINE_SHIELD": 1,
+    "SPELL_DAMAGE": 1
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

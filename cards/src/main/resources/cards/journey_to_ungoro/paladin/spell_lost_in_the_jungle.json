@@ -1,19 +1,19 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
+  "name": "Lost in the Jungle",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "COMMON",
   "description": "Summon two 1/1 Silver Hand Recruits.",
+  "targetSelection": "NONE",
   "spell": {
+    "class": "SummonSpell",
     "cards": [
       "token_silver_hand_recruit",
       "token_silver_hand_recruit"
-    ],
-    "class": "SummonSpell"
+    ]
   },
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "heroClass": "PALADIN",
-  "targetSelection": "NONE",
-  "baseManaCost": 1,
-  "type": "SPELL",
-  "name": "Lost in the Jungle"
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

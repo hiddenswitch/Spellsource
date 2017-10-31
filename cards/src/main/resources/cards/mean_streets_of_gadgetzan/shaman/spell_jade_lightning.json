@@ -16,6 +16,12 @@
       {
         "class": "CreateSummonSpell",
         "name": "Animated Shuriken",
+        "spell": {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 1,
+          "attribute": "JADE_BUFF"
+        },
         "attackBonus": {
           "class": "AttributeValueProvider",
           "target": "FRIENDLY_PLAYER",
@@ -38,12 +44,6 @@
             "offset": 1
           },
           "value2": 10
-        },
-        "spell": {
-          "class": "ModifyAttributeSpell",
-          "target": "FRIENDLY_PLAYER",
-          "attribute": "JADE_BUFF",
-          "value": 1
         }
       }
     ]

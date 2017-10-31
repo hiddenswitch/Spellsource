@@ -19,11 +19,11 @@
       {
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
-        "targetPlayer": "SELF",
         "value": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
-        }
+        },
+        "targetPlayer": "SELF"
       }
     ]
   },

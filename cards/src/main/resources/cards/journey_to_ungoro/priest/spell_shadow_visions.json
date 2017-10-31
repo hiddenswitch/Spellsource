@@ -8,16 +8,16 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverFilteredCardSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "SPELL"
     },
     "cardSource": {
       "class": "DeckSource",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "ReceiveCardSpell",
       "targetPlayer": "SELF"
     }
   },

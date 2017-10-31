@@ -1,37 +1,37 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Smithy of Voletts",
   "name": "Smithy of Voletts",
-  "heroClass": "ANY",
-  "description": "Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.",
-  "fileFormatVersion": 1,
-  "rarity": "LEGENDARY",
-  "baseHp": 7.0,
   "baseManaCost": 5.0,
-  "attributes": {
-    "BATTLECRY": true
-  },
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5.0,
+  "baseHp": 7.0,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.",
   "battlecry": {
     "spell": {
+      "class": "EitherOrSpell",
       "condition": {
         "class": "RandomCondition"
       },
-      "class": "EitherOrSpell",
-      "spell2": {
-        "randomTarget": true,
-        "class": "TransformMinionSpell",
-        "card": "token_squirrel",
-        "target": "ALL_OTHER_MINIONS"
-      },
       "spell1": {
-        "randomTarget": true,
         "class": "TransformMinionSpell",
+        "target": "ALL_OTHER_MINIONS",
         "card": "token_devilsaur",
-        "target": "ALL_OTHER_MINIONS"
+        "randomTarget": true
+      },
+      "spell2": {
+        "class": "TransformMinionSpell",
+        "target": "ALL_OTHER_MINIONS",
+        "card": "token_squirrel",
+        "randomTarget": true
       }
     }
   },
-  "type": "MINION",
-  "id": "Smithy of Voletts",
-  "baseAttack": 5.0
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

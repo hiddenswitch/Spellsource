@@ -1,13 +1,13 @@
 {
-	"name": "Recruit",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "PALADIN",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Recruit",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

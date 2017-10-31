@@ -1,1 +1,24 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Sand Protoncien Trogg", "heroClass": "ANY", "description": "Battlecry: Deal 1 damage.", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 4.0, "baseManaCost": 3.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "DamageSpell", "value": 1}, "targetSelection": "ANY"}, "type": "MINION", "id": "Sand Protoncien Trogg", "baseAttack": 1.0}
+{
+  "id": "Sand Protoncien Trogg",
+  "name": "Sand Protoncien Trogg",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1.0,
+  "baseHp": 4.0,
+  "rarity": "FREE",
+  "description": "Battlecry: Deal 1 damage.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

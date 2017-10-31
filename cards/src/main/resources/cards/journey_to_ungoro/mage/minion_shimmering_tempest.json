@@ -2,9 +2,9 @@
   "name": "Shimmering Tempest",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "MAGE",
   "baseAttack": 2,
   "baseHp": 1,
-  "heroClass": "MAGE",
   "rarity": "COMMON",
   "race": "ELEMENTAL",
   "description": "Deathrattle: Add a random Mage spell to your hand.",
@@ -12,14 +12,14 @@
     "class": "ReceiveCardSpell",
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "SPELL",
-      "heroClass": "MAGE"
+      "heroClass": "MAGE",
+      "cardType": "SPELL"
     }
   },
-  "collectible": true,
   "attributes": {
     "DEATHRATTLES": true
   },
+  "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
 }

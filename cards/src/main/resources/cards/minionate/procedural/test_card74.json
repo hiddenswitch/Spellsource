@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Raid Lub", "heroClass": "ANY", "description": "At the start of your turn, set this minion's Attack to 7.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 1.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnStartTrigger"}, "spell": {"class": "SetAttackSpell", "value": 7, "target": "SELF"}}, "baseManaCost": 1.0, "type": "MINION", "id": "Raid Lub", "baseAttack": 1.0}
+{
+  "id": "Raid Lub",
+  "name": "Raid Lub",
+  "baseManaCost": 1.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1.0,
+  "baseHp": 1.0,
+  "rarity": "EPIC",
+  "description": "At the start of your turn, set this minion's Attack to 7.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SetAttackSpell",
+      "target": "SELF",
+      "value": 7
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

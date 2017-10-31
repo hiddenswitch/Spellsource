@@ -2,9 +2,9 @@
   "name": "Volcanosaur",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 6,
-  "heroClass": "ANY",
   "rarity": "RARE",
   "race": "BEAST",
   "description": "Battlecry: Adapt, then Adapt.",
@@ -12,8 +12,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "AdaptSpell",
-      "value": 2,
       "target": "SELF",
+      "value": 2,
       "group": "group_adapt"
     }
   },

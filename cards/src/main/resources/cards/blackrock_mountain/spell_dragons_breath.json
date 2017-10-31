@@ -1,19 +1,19 @@
 {
-	"name": "Dragon's Breath",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "COMMON",
-	"description": "Deal 4 damage. Costs (1) less for each minion that died this turn.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "DamageSpell",
-		"value": 4
-	},
-	"manaCostModifier": {
-		"class": "DeadMinionsThisTurn"
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Dragon's Breath",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "MAGE",
+  "rarity": "COMMON",
+  "description": "Deal 4 damage. Costs (1) less for each minion that died this turn.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 4
+  },
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "DeadMinionsThisTurn"
+  }
 }

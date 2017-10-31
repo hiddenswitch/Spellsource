@@ -9,8 +9,8 @@
   "spell": {
     "class": "ModifyAttributeSpell",
     "target": "FRIENDLY_PLAYER",
-    "attribute": "EXTRA_TURN",
-    "value": 1
+    "value": 1,
+    "attribute": "EXTRA_TURN"
   },
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",

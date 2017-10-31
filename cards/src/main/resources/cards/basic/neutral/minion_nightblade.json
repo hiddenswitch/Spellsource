@@ -1,23 +1,23 @@
 {
-	"name": "Nightblade",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Battlecry: Deal 3 damage to the enemy hero.",
-	"battlecry": {
-		"spell": {
-			"class": "DamageSpell",
-			"target": "ENEMY_HERO",
-			"value": 3
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Nightblade",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Battlecry: Deal 3 damage to the enemy hero.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

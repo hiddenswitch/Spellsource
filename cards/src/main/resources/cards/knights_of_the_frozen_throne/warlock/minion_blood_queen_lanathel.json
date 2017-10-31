@@ -2,9 +2,9 @@
   "name": "Blood-Queen Lana'thel",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "WARLOCK",
   "baseAttack": 1,
   "baseHp": 6,
-  "heroClass": "WARLOCK",
   "rarity": "LEGENDARY",
   "description": "Lifesteal. Has +1 Attack for each card you've discarded this game.",
   "trigger": {

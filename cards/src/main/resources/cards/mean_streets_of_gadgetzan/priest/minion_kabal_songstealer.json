@@ -2,9 +2,9 @@
   "name": "Kabal Songstealer",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "PRIEST",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "PRIEST",
   "rarity": "COMMON",
   "description": "Battlecry: Silence a minion.",
   "battlecry": {
@@ -14,8 +14,8 @@
     }
   },
   "attributes": {
-    "NAME": "Vahlok Librarian",
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "NAME": "Vahlok Librarian"
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

@@ -1,32 +1,32 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Volettile",
   "name": "Volettile",
+  "baseManaCost": 3.0,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "At the start of your opponent's turn, they have a 50% chance to draw an extra card.",
-  "fileFormatVersion": 1,
-  "rarity": "LEGENDARY",
+  "baseAttack": 3.0,
   "baseHp": 2.0,
+  "rarity": "LEGENDARY",
+  "description": "At the start of your opponent's turn, they have a 50% chance to draw an extra card.",
   "trigger": {
     "eventTrigger": {
-      "targetPlayer": "OPPONENT",
-      "class": "TurnStartTrigger"
+      "class": "TurnStartTrigger",
+      "targetPlayer": "OPPONENT"
     },
     "spell": {
-      "targetPlayer": "OPPONENT",
       "class": "DrawCardSpell",
       "value": {
-        "ifFalse": 0,
         "class": "ConditionalValueProvider",
         "condition": {
           "class": "RandomCondition"
         },
+        "ifFalse": 0,
         "ifTrue": 1
-      }
+      },
+      "targetPlayer": "OPPONENT"
     }
   },
-  "baseManaCost": 3.0,
-  "type": "MINION",
-  "id": "Volettile",
-  "baseAttack": 3.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

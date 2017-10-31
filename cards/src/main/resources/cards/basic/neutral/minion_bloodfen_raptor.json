@@ -1,14 +1,14 @@
 {
-	"name": "Bloodfen Raptor",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"race": "BEAST",
-	"description": "",
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Bloodfen Raptor",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

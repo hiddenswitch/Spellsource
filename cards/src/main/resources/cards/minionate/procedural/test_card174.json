@@ -1,36 +1,36 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "White Snekin",
   "name": "White Snekin",
-  "heroClass": "PALADIN",
-  "description": "Battlecry: The next Dragon you play costs (2) less.",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "baseHp": 1.0,
-  "race": "DRAGON",
   "baseManaCost": 1.0,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 1.0,
+  "baseHp": 1.0,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: The next Dragon you play costs (2) less.",
+  "battlecry": {
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": "2",
+        "race": "DRAGON",
+        "cardType": "MINION",
+        "expirationTrigger": {
+          "class": "CardPlayedTrigger",
+          "race": "DRAGON",
+          "targetPlayer": "SELF"
+        },
+        "operation": "SUBTRACT"
+      }
+    }
+  },
   "attributes": {
     "BATTLECRY": true
   },
-  "battlecry": {
-    "spell": {
-      "cardCostModifier": {
-        "expirationTrigger": {
-          "targetPlayer": "SELF",
-          "race": "DRAGON",
-          "class": "CardPlayedTrigger"
-        },
-        "value": "2",
-        "cardType": "MINION",
-        "race": "DRAGON",
-        "operation": "SUBTRACT",
-        "class": "CardCostModifier"
-      },
-      "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER"
-    }
-  },
-  "type": "MINION",
-  "id": "White Snekin",
-  "baseAttack": 1.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

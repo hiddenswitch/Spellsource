@@ -1,1 +1,17 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Darkveler", "heroClass": "ANY", "description": "Windfury. ", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 8.0, "baseManaCost": 8.0, "attributes": {"WINDFURY": true}, "type": "MINION", "id": "Darkveler", "baseAttack": 10.0}
+{
+  "id": "Darkveler",
+  "name": "Darkveler",
+  "baseManaCost": 8.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 10.0,
+  "baseHp": 8.0,
+  "rarity": "FREE",
+  "description": "Windfury. ",
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

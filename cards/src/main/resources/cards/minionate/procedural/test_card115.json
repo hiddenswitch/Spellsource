@@ -1,19 +1,19 @@
 {
-  "set": "SPELLSOURCE",
-  "name": "King Garnos",
-  "description": "Charge. Stealth. Taunt.",
-  "baseHp": 2.0,
-  "type": "MINION",
-  "rarity": "LEGENDARY",
-  "heroClass": "ANY",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "baseManaCost": 9.0,
-  "attributes": {
-    "TAUNT": true,
-    "CHARGE": true,
-    "STEALTH": true
-  },
   "id": "King Garnos",
-  "baseAttack": 12.0
+  "name": "King Garnos",
+  "baseManaCost": 9.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 12.0,
+  "baseHp": 2.0,
+  "rarity": "LEGENDARY",
+  "description": "Charge. Stealth. Taunt.",
+  "attributes": {
+    "CHARGE": true,
+    "STEALTH": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

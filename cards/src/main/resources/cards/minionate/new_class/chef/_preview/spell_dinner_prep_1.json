@@ -1,17 +1,17 @@
 {
-	"name": "+2 Mana Cells",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Gain 2 Mana Cells.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "ModifyMaxManaSpell",
-		"fullManaCrystals": true,
-		"value": 2
-	},
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "+2 Mana Cells",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "RARE",
+  "description": "Gain 2 Mana Cells.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ModifyMaxManaSpell",
+    "value": 2,
+    "fullManaCrystals": true
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

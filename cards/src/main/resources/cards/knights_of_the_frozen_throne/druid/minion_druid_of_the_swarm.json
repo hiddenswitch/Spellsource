@@ -2,9 +2,9 @@
   "name": "Druid of the Swarm",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "DRUID",
   "baseAttack": 1,
   "baseHp": 2,
-  "heroClass": "DRUID",
   "rarity": "RARE",
   "description": "Choose One - Transform into a 1/2 with Poisonouus; or a 1/5 with Taunt.",
   "options": [

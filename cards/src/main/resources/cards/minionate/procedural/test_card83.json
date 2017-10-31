@@ -1,29 +1,29 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Raid Summoner",
   "name": "Raid Summoner",
-  "heroClass": "SHAMAN",
-  "description": "Battlecry: Gain 1-4 Attack. Overload: (1)",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 6.0,
   "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 1.0,
+  "baseHp": 6.0,
+  "rarity": "COMMON",
+  "description": "Battlecry: Gain 1-4 Attack. Overload: (1)",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": {
+        "class": "RandomValueProvider",
+        "max": 4,
+        "min": 1
+      }
+    }
+  },
   "attributes": {
     "BATTLECRY": true,
     "OVERLOAD": 1
   },
-  "battlecry": {
-    "spell": {
-      "attackBonus": {
-        "max": 4,
-        "class": "RandomValueProvider",
-        "min": 1
-      },
-      "class": "BuffSpell",
-      "target": "SELF"
-    }
-  },
-  "type": "MINION",
-  "id": "Raid Summoner",
-  "baseAttack": 1.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

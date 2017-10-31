@@ -2,16 +2,16 @@
   "name": "Light's Sorrow",
   "baseManaCost": 4,
   "type": "WEAPON",
+  "heroClass": "PALADIN",
   "damage": 1,
   "durability": 4,
-  "heroClass": "PALADIN",
   "rarity": "EPIC",
   "description": "After a friendly minion loses Divine Shield, gain +1 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDivineShieldTrigger",
-      "targetPlayer": "SELF",
-      "targetEntityType": "MINION"
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",

@@ -1,31 +1,31 @@
 {
-	"name": "Alarm-o-Bot",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"race": "MECH",
-	"description": "At the start of your turn, swap this minion with a random one in your hand.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnStartTrigger",
-			"targetPlayer": "SELF",
-			"queueCondition": {
-				"class": "HoldsCardCondition",
-				"cardFilter": {
-					"class": "CardFilter",
-					"cardType": "MINION"
-				}
-			}
-		},
-		"spell": {
-			"class": "custom.AlarmOBotSpell",
-			"target": "SELF"
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Alarm-o-Bot",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "At the start of your turn, swap this minion with a random one in your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "queueCondition": {
+        "class": "HoldsCardCondition",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.AlarmOBotSpell",
+      "target": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

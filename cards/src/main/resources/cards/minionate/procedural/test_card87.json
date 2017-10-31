@@ -1,1 +1,27 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Dangerdroy Altarion", "heroClass": "ANY", "description": "After you summon a minion, deal 1 damage to a random enemy.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 3.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "MinionSummonedTrigger"}, "spell": {"randomTarget": true, "howMany": 1, "class": "MissilesSpell", "value": 1, "target": "ENEMY_CHARACTERS"}}, "baseManaCost": 3.0, "type": "MINION", "id": "Dangerdroy Altarion", "baseAttack": 2.0}
+{
+  "id": "Dangerdroy Altarion",
+  "name": "Dangerdroy Altarion",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2.0,
+  "baseHp": 3.0,
+  "rarity": "RARE",
+  "description": "After you summon a minion, deal 1 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 1,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

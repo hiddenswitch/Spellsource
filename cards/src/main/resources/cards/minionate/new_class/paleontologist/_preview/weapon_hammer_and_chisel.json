@@ -1,26 +1,26 @@
 {
-	"name": "Hammer and Chisel",
-	"baseManaCost": 5,
-	"type": "WEAPON",
-	"damage": 2,
-	"durability": 8,
-	"heroClass": "SHAMAN",
-	"rarity": "EPIC",
-	"description": "Supersonic, Mana Surge: 2",
-	"onEquip": {
-		"class": "AddAttributeSpell",
-		"target": "FRIENDLY_HERO",
-		"attribute": "WINDFURY"
-	},
-	"onUnequip": {
-		"class": "RemoveAttributeSpell",
-		"target": "FRIENDLY_HERO",
-		"attribute": "WINDFURY"
-	},
-	"attributes": {
-		"OVERLOAD": 2
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Hammer and Chisel",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "SHAMAN",
+  "damage": 2,
+  "durability": 8,
+  "rarity": "EPIC",
+  "description": "Supersonic, Mana Surge: 2",
+  "onEquip": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "WINDFURY"
+  },
+  "onUnequip": {
+    "class": "RemoveAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "WINDFURY"
+  },
+  "attributes": {
+    "OVERLOAD": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

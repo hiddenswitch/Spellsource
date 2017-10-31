@@ -1,17 +1,17 @@
 {
-	"name": "Tyrantus",
-	"baseManaCost": 10,
-	"type": "MINION",
-	"baseAttack": 12,
-	"baseHp": 12,
-	"heroClass": "DRUID",
-	"rarity": "LEGENDARY",
-	"race": "BEAST",
-	"description": "Can't be targeted by spells or Hero Powers.",
-	"attributes": {
-		"UNTARGETABLE_BY_SPELLS": true
-	},
-	"collectible": true,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Tyrantus",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 12,
+  "baseHp": 12,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Can't be targeted by spells or Hero Powers.",
+  "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

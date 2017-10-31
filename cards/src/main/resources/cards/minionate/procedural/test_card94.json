@@ -1,1 +1,26 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Ony", "heroClass": "ANY", "description": "Spell Damage +1. Battlecry: Draw a card.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 8.0, "race": "DRAGON", "baseManaCost": 7.0, "attributes": {"BATTLECRY": true, "SPELL_DAMAGE": 1}, "battlecry": {"spell": {"class": "DrawCardSpell", "value": 1}, "targetSelection": "NONE"}, "type": "MINION", "id": "Ony", "baseAttack": 6.0}
+{
+  "id": "Ony",
+  "name": "Ony",
+  "baseManaCost": 7.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 8.0,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Spell Damage +1. Battlecry: Draw a card.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

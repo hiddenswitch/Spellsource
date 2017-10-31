@@ -1,27 +1,27 @@
 {
-	"name": "Unearthed Raptor",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "ROGUE",
-	"rarity": "RARE",
-	"description": "Battlecry: Choose a friendly minion. Gain a copy of its Deathrattle effect.",
-	"battlecry": {
-		"targetSelection": "FRIENDLY_MINIONS",
-		"spell": {
-			"class": "CopyDeathrattleSpell",
-			"filter": {
-				"class": "AttributeFilter",
-				"attribute": "DEATHRATTLES",
-				"operation": "HAS"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Unearthed Raptor",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: Choose a friendly minion. Gain a copy of its Deathrattle effect.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "CopyDeathrattleSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "DEATHRATTLES",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

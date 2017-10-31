@@ -2,9 +2,9 @@
   "name": "Drakkari Defender",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "SHAMAN",
   "baseAttack": 2,
   "baseHp": 8,
-  "heroClass": "SHAMAN",
   "rarity": "COMMON",
   "description": "Taunt Overload: (3)",
   "attributes": {

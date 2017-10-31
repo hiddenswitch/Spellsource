@@ -2,9 +2,9 @@
   "name": "Sanguine Reveler",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "WARLOCK",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "WARLOCK",
   "rarity": "COMMON",
   "description": "Battlecry: Destroy a friendly minion and gain +2/+2.",
   "battlecry": {

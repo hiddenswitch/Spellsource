@@ -1,1 +1,30 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Grey", "heroClass": "ANY", "description": "At the start of your turn, put a 10-Cost minion from your deck into your hand.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 4.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnStartTrigger"}, "spell": {"targetPlayer": "SELF", "cardFilter": {"cardType": "MINION", "manaCost": 10, "class": "CardFilter"}, "class": "FromDeckToHandSpell", "value": 1}}, "baseManaCost": 4.0, "type": "MINION", "id": "Grey", "baseAttack": 3.0}
+{
+  "id": "Grey",
+  "name": "Grey",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3.0,
+  "baseHp": 4.0,
+  "rarity": "EPIC",
+  "description": "At the start of your turn, put a 10-Cost minion from your deck into your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": 10
+      },
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

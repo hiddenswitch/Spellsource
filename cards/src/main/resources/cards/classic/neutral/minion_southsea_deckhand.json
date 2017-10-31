@@ -1,36 +1,36 @@
 {
-	"name": "Southsea Deckhand",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "PIRATE",
-	"description": "Has Charge while you have a weapon equipped.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "BoardChangedTrigger"
-		},
-		"spell": {
-			"class": "ConditionalEffectSpell",
-			"exclusive": true,
-			"spell1": {
-				"class": "RemoveAttributeSpell",
-				"target": "SELF",
-				"attribute": "CHARGE"
-			},
-			"spell2": {
-				"class": "AddAttributeSpell",
-				"target": "SELF",
-				"attribute": "CHARGE"
-			},
-			"condition": {
-				"class": "HasWeaponCondition"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Southsea Deckhand",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "Has Charge while you have a weapon equipped.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BoardChangedTrigger"
+    },
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "HasWeaponCondition"
+      },
+      "exclusive": true,
+      "spell1": {
+        "class": "RemoveAttributeSpell",
+        "target": "SELF",
+        "attribute": "CHARGE"
+      },
+      "spell2": {
+        "class": "AddAttributeSpell",
+        "target": "SELF",
+        "attribute": "CHARGE"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

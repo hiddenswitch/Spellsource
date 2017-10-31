@@ -1,1 +1,27 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Pridefulstcarlet", "heroClass": "ANY", "description": "Battlecry: Summon a 1/1 copy of a random minion in your deck.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 3.0, "baseManaCost": 4.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"cardFilter": {"class": "InDeckFilter"}, "boardPositionRelative": "RIGHT", "class": "SummonOneOneCopySpell"}, "targetSelection": "NONE"}, "type": "MINION", "id": "Pridefulstcarlet", "baseAttack": 4.0}
+{
+  "id": "Pridefulstcarlet",
+  "name": "Pridefulstcarlet",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 3.0,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon a 1/1 copy of a random minion in your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonOneOneCopySpell",
+      "boardPositionRelative": "RIGHT",
+      "cardFilter": {
+        "class": "InDeckFilter"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Zerafn", "heroClass": "WARRIOR", "description": "When you draw this, deal 1 damage to your minions.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 8.0, "baseManaCost": 7.0, "passiveTrigger": {"eventTrigger": {"class": "CardDrawnTrigger", "hostTargetType": "IGNORE_OTHER_TARGETS"}, "spell": {"class": "DamageSpell", "value": 1, "target": "FRIENDLY_MINIONS"}}, "type": "MINION", "id": "Zerafn", "baseAttack": 4.0}
+{
+  "id": "Zerafn",
+  "name": "Zerafn",
+  "baseManaCost": 7.0,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 4.0,
+  "baseHp": 8.0,
+  "rarity": "EPIC",
+  "description": "When you draw this, deal 1 damage to your minions.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_MINIONS",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

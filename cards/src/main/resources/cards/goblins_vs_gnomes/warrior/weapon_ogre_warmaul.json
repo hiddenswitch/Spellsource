@@ -1,28 +1,28 @@
 {
-	"name": "Ogre Warmaul",
-	"baseManaCost": 3,
-	"type": "WEAPON",
-	"damage": 4,
-	"durability": 2,
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"description": "50% chance to attack the wrong enemy.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TargetAcquisitionTrigger",
-			"actionType": "PHYSICAL_ATTACK",
-			"sourcePlayer": "SELF",
-			"sourceEntityType": "HERO",
-			"queueCondition": {
-				"class": "RandomCondition"
-			}
-		},
-		"spell": {
-			"class": "FumbleSpell",
-			"target": "EVENT_TARGET"
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Ogre Warmaul",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "WARRIOR",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "50% chance to attack the wrong enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "queueCondition": {
+        "class": "RandomCondition"
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "FumbleSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

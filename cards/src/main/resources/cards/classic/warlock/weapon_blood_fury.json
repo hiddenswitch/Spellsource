@@ -1,13 +1,13 @@
 {
-	"name": "Blood Fury",
-	"baseManaCost": 3,
-	"type": "WEAPON",
-	"damage": 3,
-	"durability": 8,
-	"heroClass": "WARLOCK",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Blood Fury",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "WARLOCK",
+  "damage": 3,
+  "durability": 8,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

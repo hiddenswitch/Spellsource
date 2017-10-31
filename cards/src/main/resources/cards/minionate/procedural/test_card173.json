@@ -1,1 +1,17 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Pistold'S Valet", "heroClass": "ANY", "description": "You can use your Hero Power twice a turn.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 3.0, "baseManaCost": 4.0, "attributes": {"HERO_POWER_USAGES": 2}, "type": "MINION", "id": "Pistold'S Valet", "baseAttack": 4.0}
+{
+  "id": "Pistold'S Valet",
+  "name": "Pistold'S Valet",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 3.0,
+  "rarity": "EPIC",
+  "description": "You can use your Hero Power twice a turn.",
+  "attributes": {
+    "HERO_POWER_USAGES": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

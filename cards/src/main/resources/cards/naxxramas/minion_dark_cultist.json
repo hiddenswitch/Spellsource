@@ -1,22 +1,22 @@
 {
-	"name": "Dark Cultist",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "PRIEST",
-	"rarity": "COMMON",
-	"description": "Deathrattle: Give a random friendly minion +3 Health.",
-	"deathrattle": {
-		"class": "BuffSpell",
-		"target": "FRIENDLY_MINIONS",
-		"hpBonus": 3,
-		"randomTarget": true
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Dark Cultist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Give a random friendly minion +3 Health.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "hpBonus": 3,
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

@@ -1,24 +1,24 @@
 {
-	"name": "Sea Reaver",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 7,
-	"heroClass": "WARRIOR",
-	"rarity": "EPIC",
-	"description": "When you draw this, deal 1 damage to your minions.",
-	"passiveTrigger": {
-		"eventTrigger": {
-			"class": "CardDrawnTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS"
-		},
-		"spell": {
-			"class": "DamageSpell",
-			"target": "FRIENDLY_MINIONS",
-			"value": 1
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Sea Reaver",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 6,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "description": "When you draw this, deal 1 damage to your minions.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_MINIONS",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

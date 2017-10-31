@@ -1,31 +1,31 @@
 {
-	"name": "Floating Watcher",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"race": "DEMON",
-	"description": "Whenever your hero takes damage on your turn, gain +2/+2.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "DamageReceivedTrigger",
-			"targetPlayer": "SELF",
-			"targetEntityType": "HERO",
-			"fireCondition": {
-				"class": "OwnedByPlayerCondition",
-				"targetPlayer": "ACTIVE"
-			}
-		},
-		"spell": {
-			"class": "BuffSpell",
-			"target": "SELF",
-			"attackBonus": 2,
-			"hpBonus": 2
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Floating Watcher",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Whenever your hero takes damage on your turn, gain +2/+2.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      },
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 2,
+      "hpBonus": 2
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

@@ -1,1 +1,17 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Monken", "heroClass": "ANY", "description": "Can't be targeted by spells or Hero Powers.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 5.0, "baseManaCost": 6.0, "attributes": {"UNTARGETABLE_BY_SPELLS": true}, "type": "MINION", "id": "Monken", "baseAttack": 5.0}
+{
+  "id": "Monken",
+  "name": "Monken",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5.0,
+  "baseHp": 5.0,
+  "rarity": "COMMON",
+  "description": "Can't be targeted by spells or Hero Powers.",
+  "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -2,9 +2,9 @@
   "name": "Corpsetaker",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "Battlecry: Gain Taunt if your deck has a Taunt minion. Repeat for Divine Shield, Lifesteal, Windfury.",
   "battlecry": {
@@ -14,70 +14,70 @@
       "spells": [
         {
           "class": "ConditionalSpell",
-          "spell": {
-            "class": "AddAttributeSpell",
-            "attribute": "TAUNT",
-            "target": "SELF"
-          },
           "condition": {
             "class": "DeckContainsCondition",
-            "targetPlayer": "SELF",
             "cardFilter": {
               "class": "AttributeFilter",
               "attribute": "TAUNT",
               "operation": "HAS"
-            }
+            },
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "TAUNT"
           }
         },
         {
           "class": "ConditionalSpell",
-          "spell": {
-            "class": "AddAttributeSpell",
-            "attribute": "DIVINE_SHIELD",
-            "target": "SELF"
-          },
           "condition": {
             "class": "DeckContainsCondition",
-            "targetPlayer": "SELF",
             "cardFilter": {
               "class": "AttributeFilter",
               "attribute": "DIVINE_SHIELD",
               "operation": "HAS"
-            }
+            },
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "DIVINE_SHIELD"
           }
         },
         {
           "class": "ConditionalSpell",
-          "spell": {
-            "class": "AddAttributeSpell",
-            "attribute": "LIFESTEAL",
-            "target": "SELF"
-          },
           "condition": {
             "class": "DeckContainsCondition",
-            "targetPlayer": "SELF",
             "cardFilter": {
               "class": "AttributeFilter",
               "attribute": "LIFESTEAL",
               "operation": "HAS"
-            }
+            },
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "LIFESTEAL"
           }
         },
         {
           "class": "ConditionalSpell",
-          "spell": {
-            "class": "AddAttributeSpell",
-            "attribute": "WINDFURY",
-            "target": "SELF"
-          },
           "condition": {
             "class": "DeckContainsCondition",
-            "targetPlayer": "SELF",
             "cardFilter": {
               "class": "AttributeFilter",
               "attribute": "WINDFURY",
               "operation": "HAS"
-            }
+            },
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "WINDFURY"
           }
         }
       ]

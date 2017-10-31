@@ -1,17 +1,17 @@
 {
-	"name": "Dino Seer",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 2,
-	"heroClass": "SHAMAN",
-	"rarity": "FREE",
-	"race": "TOTEM",
-	"description": "Power Damage +1",
-	"attributes": {
-		"SPELL_DAMAGE": 1
-	},
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Dino Seer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "TOTEM",
+  "description": "Power Damage +1",
+  "attributes": {
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

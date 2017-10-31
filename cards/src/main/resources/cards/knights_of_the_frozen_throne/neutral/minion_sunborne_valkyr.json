@@ -2,16 +2,16 @@
   "name": "Sunborne Val'kyr",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 4,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Battlecry: Give adjacent minions +2 Health.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",
-      "hpBonus": 2,
-      "target": "ADJACENT_MINIONS"
+      "target": "ADJACENT_MINIONS",
+      "hpBonus": 2
     }
   },
   "attributes": {

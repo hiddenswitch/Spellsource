@@ -1,22 +1,22 @@
 {
-	"name": "Onyx Bishop",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "PRIEST",
-	"rarity": "RARE",
-	"description": "Battlecry: Summon a friendly minion that died this game.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ResurrectSpell"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Onyx Bishop",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: Summon a friendly minion that died this game.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ResurrectSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

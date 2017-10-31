@@ -2,9 +2,9 @@
   "name": "Deathspeaker",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Battlecry: Give a friendly minion Immune this turn.",
   "battlecry": {

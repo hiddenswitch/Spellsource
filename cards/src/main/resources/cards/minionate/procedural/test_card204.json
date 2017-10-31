@@ -1,1 +1,24 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Sinees", "heroClass": "ANY", "description": "Battlecry: Summon a 2/2 Squire.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 3.0, "baseManaCost": 4.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"boardPositionRelative": "RIGHT", "class": "SummonSpell", "card": "token_squire"}}, "type": "MINION", "id": "Sinees", "baseAttack": 4.0}
+{
+  "id": "Sinees",
+  "name": "Sinees",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 3.0,
+  "rarity": "COMMON",
+  "description": "Battlecry: Summon a 2/2 Squire.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_squire"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

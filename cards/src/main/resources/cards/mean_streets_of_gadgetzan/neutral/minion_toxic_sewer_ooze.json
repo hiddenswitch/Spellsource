@@ -1,24 +1,24 @@
 {
-	"name": "Toxic Sewer Ooze",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Battlecry: Remove 1 Durability from your opponent's weapon.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ModifyDurabilitySpell",
-			"targetPlayer": "OPPONENT",
-			"value": -1
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "MEAN_STREETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Toxic Sewer Ooze",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Remove 1 Durability from your opponent's weapon.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ModifyDurabilitySpell",
+      "value": -1,
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

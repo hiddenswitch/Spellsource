@@ -1,33 +1,33 @@
 {
-	"name": "Foe Reaper 4000",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 9,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "MECH",
-	"description": "Also damages the minions next to whomever he attacks.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterPhysicalAttackTrigger",
-			"targetEntityType": "MINION",
-			"hostTargetType": "IGNORE_OTHER_SOURCES"
-		},
-		"spell": {
-			"class": "AdjacentEffectSpell",
-			"target": "EVENT_TARGET",
-			"spell2": {
-				"class": "DamageSpell",
-				"value": {
-					"class": "AttributeValueProvider",
-					"target": "SELF",
-					"attribute": "ATTACK"
-				}
-			}
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Foe Reaper 4000",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Also damages the minions next to whomever he attacks.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "target": "EVENT_TARGET",
+      "spell2": {
+        "class": "DamageSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SELF",
+          "attribute": "ATTACK"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

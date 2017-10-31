@@ -2,20 +2,20 @@
   "name": "Swamp King Dred",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "HUNTER",
   "baseAttack": 9,
   "baseHp": 9,
-  "heroClass": "HUNTER",
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "After your opponent plays a minion, attack it.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
-      "targetPlayer": "OPPONENT",
       "queueCondition": {
         "class": "OwnedByPlayerCondition",
         "targetPlayer": "INACTIVE"
-      }
+      },
+      "targetPlayer": "OPPONENT"
     },
     "spell": {
       "class": "FightSpell",

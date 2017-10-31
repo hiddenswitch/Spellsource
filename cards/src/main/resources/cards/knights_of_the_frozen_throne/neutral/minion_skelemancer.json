@@ -2,21 +2,21 @@
   "name": "Skelemancer",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Deathrattle: If it's your opponent's turn, summon an 8/8 Skeleton.",
   "deathrattle": {
     "class": "ConditionalSpell",
-    "spell": {
-      "class": "SummonSpell",
-      "targetPlayer": "ACTIVE",
-      "card": "token_skeletal_flayer"
-    },
     "condition": {
       "class": "OwnedByPlayerCondition",
       "targetPlayer": "INACTIVE"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_skeletal_flayer",
+      "targetPlayer": "ACTIVE"
     }
   },
   "attributes": {

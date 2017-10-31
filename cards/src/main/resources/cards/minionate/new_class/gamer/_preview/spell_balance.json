@@ -1,26 +1,26 @@
 {
-	"name": "Balance",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"description": "Deal 3 damage. Acquire 3 Armor.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": 3
-			},
-			{
-				"class": "BuffHeroSpell",
-				"target": "FRIENDLY_HERO",
-				"armorBonus": 3
-			}
-		]
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Balance",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "COMMON",
+  "description": "Deal 3 damage. Acquire 3 Armor.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "BuffHeroSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

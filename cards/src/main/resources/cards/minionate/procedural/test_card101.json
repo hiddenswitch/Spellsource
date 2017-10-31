@@ -1,1 +1,30 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Wood", "heroClass": "ROGUE", "description": "Taunt. Combo: Gain +2/+2 for each card played earlier this turn.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 5.0, "baseManaCost": 4.0, "attributes": {"TAUNT": true, "COMBO": true}, "battlecry": {"spell": {"class": "BuffSpell", "value": {"attribute": "COMBO", "multiplier": 2, "class": "AttributeValueProvider", "target": "FRIENDLY_PLAYER"}, "target": "SELF"}}, "type": "MINION", "id": "Wood", "baseAttack": 3.0}
+{
+  "id": "Wood",
+  "name": "Wood",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 3.0,
+  "baseHp": 5.0,
+  "rarity": "LEGENDARY",
+  "description": "Taunt. Combo: Gain +2/+2 for each card played earlier this turn.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "COMBO",
+        "multiplier": 2
+      }
+    }
+  },
+  "attributes": {
+    "COMBO": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

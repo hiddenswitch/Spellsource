@@ -2,9 +2,9 @@
   "name": "Drakkari Enchanter",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "Your end of turn effects trigger twice.",
   "attributes": {

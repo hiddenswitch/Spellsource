@@ -1,19 +1,19 @@
 {
+  "name": "Stubborn Gastropod",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Taunt. Poisonous.",
+  "attributes": {
+    "NAME": "Blowgunner",
+    "POISONOUS": true,
+    "TAUNT": true
+  },
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
-  "name": "Stubborn Gastropod",
-  "heroClass": "ANY",
-  "description": "Taunt. Poisonous.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 2,
-  "race": "BEAST",
-  "baseAttack": 1,
-  "attributes": {
-    "TAUNT": true,
-    "POISONOUS": true,
-    "NAME": "Blowgunner"
-  },
-  "type": "MINION",
-  "baseManaCost": 2
+  "fileFormatVersion": 1
 }

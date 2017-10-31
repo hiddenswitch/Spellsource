@@ -5,13 +5,13 @@
   "heroClass": "PRIEST",
   "rarity": "LEGENDARY",
   "description": "Quest: Summon 7 Deathrattle minions. Reward: Amara, Warden of Hope.",
-  "targetSelection": "NONE",
   "quest": {
     "class": "MinionSummonedTrigger",
-    "targetPlayer": "SELF",
-    "requiredAttribute": "DEATHRATTLES"
+    "requiredAttribute": "DEATHRATTLES",
+    "targetPlayer": "SELF"
   },
   "countUntilCast": 7,
+  "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "card": "token_amara_warden_of_hope"

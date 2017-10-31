@@ -1,18 +1,18 @@
 {
-  "set": "SPELLSOURCE",
-  "name": "Garriu",
-  "description": "Windfury. (1) Overload",
-  "baseHp": 4.0,
-  "type": "MINION",
-  "rarity": "LEGENDARY",
-  "baseManaCost": 10.0,
-  "heroClass": "ANY",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "attributes": {
-    "WINDFURY": true,
-    "OVERLOAD": 1.0
-  },
   "id": "Garriu",
-  "baseAttack": 8.0
+  "name": "Garriu",
+  "baseManaCost": 10.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8.0,
+  "baseHp": 4.0,
+  "rarity": "LEGENDARY",
+  "description": "Windfury. (1) Overload",
+  "attributes": {
+    "OVERLOAD": 1.0,
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

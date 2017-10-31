@@ -1,25 +1,25 @@
 {
-	"name": "Flame Leviathan",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 7,
-	"heroClass": "MAGE",
-	"rarity": "LEGENDARY",
-	"race": "MECH",
-	"description": "When you draw this, deal 2 damage to all characters.",
-	"passiveTrigger": {
-		"eventTrigger": {
-			"class": "CardDrawnTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS"
-		},
-		"spell": {
-			"class": "DamageSpell",
-			"target": "ALL_CHARACTERS",
-			"value": 2
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Flame Leviathan",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "When you draw this, deal 2 damage to all characters.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_CHARACTERS",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

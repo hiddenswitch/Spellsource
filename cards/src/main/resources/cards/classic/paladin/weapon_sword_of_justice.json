@@ -1,38 +1,38 @@
 {
-	"name": "Sword of Justice",
-	"baseManaCost": 3,
-	"type": "WEAPON",
-	"damage": 1,
-	"durability": 5,
-	"heroClass": "PALADIN",
-	"rarity": "EPIC",
-	"description": "After you summon a minion, give it +1/+1 and this loses 1 Durability.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterMinionSummonedTrigger",
-			"targetPlayer": "SELF",
-			"fireCondition": {
-				"class": "HasWeaponCondition"
-			}
-		},
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"target": "EVENT_TARGET",
-					"attackBonus": 1,
-					"hpBonus": 1
-				},
-				{
-					"class": "ModifyDurabilitySpell",
-					"targetPlayer": "SELF",
-					"value": -1
-				}
-			]
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Sword of Justice",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "PALADIN",
+  "damage": 1,
+  "durability": 5,
+  "rarity": "EPIC",
+  "description": "After you summon a minion, give it +1/+1 and this loses 1 Durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionSummonedTrigger",
+      "fireCondition": {
+        "class": "HasWeaponCondition"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "EVENT_TARGET",
+          "attackBonus": 1,
+          "hpBonus": 1
+        },
+        {
+          "class": "ModifyDurabilitySpell",
+          "value": -1,
+          "targetPlayer": "SELF"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

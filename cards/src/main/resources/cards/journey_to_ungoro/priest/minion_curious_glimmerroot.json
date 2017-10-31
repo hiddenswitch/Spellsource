@@ -2,9 +2,9 @@
   "name": "Curious Glimmerroot",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "PRIEST",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "PRIEST",
   "rarity": "EPIC",
   "description": "Battlecry: Look at 3 cards. Guess which one started in your opponent's deck to get a copy of it.",
   "battlecry": {

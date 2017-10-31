@@ -5,19 +5,19 @@
   "heroClass": "MAGE",
   "rarity": "LEGENDARY",
   "description": "Quest: Cast 6 spells that didn't start in your deck. Reward: Time Warp.",
-  "targetSelection": "NONE",
   "quest": {
     "class": "SpellCastedTrigger",
-    "targetPlayer": "SELF",
     "queueCondition": {
       "class": "AttributeCondition",
       "target": "PENDING_CARD",
       "attribute": "STARTED_IN_DECK",
       "invert": true,
       "operation": "HAS"
-    }
+    },
+    "targetPlayer": "SELF"
   },
   "countUntilCast": 6,
+  "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "card": "spell_time_warp"

@@ -1,23 +1,23 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Gartor Destroyer",
   "name": "Gartor Destroyer",
-  "heroClass": "ANY",
-  "description": "Deathrattle: Give your minions +1/+1.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 6.0,
-  "deathrattle": {
-    "attackBonus": 1,
-    "class": "BuffSpell",
-    "hpBonus": 1,
-    "target": "OTHER_FRIENDLY_MINIONS"
-  },
   "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 6.0,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Give your minions +1/+1.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 1
+  },
   "attributes": {
     "DEATHRATTLES": true
   },
-  "type": "MINION",
-  "id": "Gartor Destroyer",
-  "baseAttack": 6.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

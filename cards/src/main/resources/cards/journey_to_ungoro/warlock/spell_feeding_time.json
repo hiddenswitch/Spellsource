@@ -1,7 +1,11 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
+  "name": "Feeding Time",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "RARE",
   "description": "Deal 3 damage. Summon three 1/1 Pterrordaxes.",
+  "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
     "spells": [
@@ -10,20 +14,16 @@
         "value": 3
       },
       {
+        "class": "SummonSpell",
         "cards": [
           "token_pterrordax",
           "token_pterrordax",
           "token_pterrordax"
-        ],
-        "class": "SummonSpell"
+        ]
       }
     ]
   },
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "heroClass": "WARLOCK",
-  "targetSelection": "ANY",
-  "baseManaCost": 5,
-  "type": "SPELL",
-  "name": "Feeding Time"
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

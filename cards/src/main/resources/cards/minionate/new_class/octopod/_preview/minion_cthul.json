@@ -1,36 +1,36 @@
 {
-	"name": "C’thul",
-	"baseManaCost": 9,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 15,
-	"heroClass": "WARLOCK",
-	"rarity": "LEGENDARY",
-	"race": "DEMON",
-	"description": "Call to Arms: Destroy your hero and replace him with C’thul.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "ChangeHeroSpell",
-					"card": "hero_cthul"
-				},
-				{
-					"class": "EquipWeaponSpell",
-					"card": "weapon_tentaclaws"
-				},
-				{
-					"class": "OverrideTargetSpell",
-					"target": "FRIENDLY_HERO" 
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "C\u2019thul",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 3,
+  "baseHp": 15,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Call to Arms: Destroy your hero and replace him with C\u2019thul.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ChangeHeroSpell",
+          "card": "hero_cthul"
+        },
+        {
+          "class": "EquipWeaponSpell",
+          "card": "weapon_tentaclaws"
+        },
+        {
+          "class": "OverrideTargetSpell",
+          "target": "FRIENDLY_HERO"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

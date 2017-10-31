@@ -1,33 +1,33 @@
 {
-	"name": "Millhouse Manastorm",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Enemy spells cost (0) next turn.",
-	"battlecry": {
-		"spell": {
-			"class": "CardCostModifierSpell",
-			"target": "FRIENDLY_PLAYER",
-			"cardCostModifier": {
-				"class": "CardCostModifier",
-				"cardType": "SPELL",
-				"targetPlayer": "OPPONENT",
-				"operation": "SET",
-				"value": 0,
-				"expirationTrigger": {
-					"class": "TurnEndTrigger",
-					"targetPlayer": "OPPONENT"
-				}
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Millhouse Manastorm",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Enemy spells cost (0) next turn.",
+  "battlecry": {
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 0,
+        "cardType": "SPELL",
+        "expirationTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "OPPONENT"
+        },
+        "operation": "SET",
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

@@ -1,17 +1,17 @@
 {
-	"name": "Savage Roar",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "FREE",
-	"description": "Give your characters +2 Attack this turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "TemporaryAttackSpell",
-		"target": "FRIENDLY_CHARACTERS",
-		"value": 2
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Savage Roar",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "FREE",
+  "description": "Give your characters +2 Attack this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "TemporaryAttackSpell",
+    "target": "FRIENDLY_CHARACTERS",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

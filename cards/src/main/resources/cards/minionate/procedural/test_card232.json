@@ -1,1 +1,30 @@
-{"deathrattle": {"cards": ["spell_armor_plating", "spell_emergency_coolant", "spell_finicky_cloakfield", "spell_reversing_switch", "spell_rusty_horn", "spell_time_rewinder", "spell_whirling_blades"], "class": "ReceiveRandomCardSpell"}, "set": "SPELLSOURCE", "name": "Crogy", "heroClass": "ANY", "description": "Deathrattle: Add a Spare Part card to your hand.", "fileFormatVersion": 1, "collectible": true, "rarity": "COMMON", "baseHp": 2.0, "race": "MECH", "baseManaCost": 3.0, "attributes": {"DEATHRATTLES": true}, "type": "MINION", "id": "Crogy", "baseAttack": 3.0}
+{
+  "id": "Crogy",
+  "name": "Crogy",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3.0,
+  "baseHp": 2.0,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Deathrattle: Add a Spare Part card to your hand.",
+  "deathrattle": {
+    "class": "ReceiveRandomCardSpell",
+    "cards": [
+      "spell_armor_plating",
+      "spell_emergency_coolant",
+      "spell_finicky_cloakfield",
+      "spell_reversing_switch",
+      "spell_rusty_horn",
+      "spell_time_rewinder",
+      "spell_whirling_blades"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

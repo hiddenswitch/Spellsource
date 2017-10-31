@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ReplaceCardLocationSpell",
-    "cardLocation": "DECK",
-    "card": "spell_choose_your_path"
+    "card": "spell_choose_your_path",
+    "cardLocation": "DECK"
   },
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",

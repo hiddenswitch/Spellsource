@@ -1,25 +1,25 @@
 {
-	"name": "Flame Juggler",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Battlecry: Deal 1 damage to a random enemy.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MissilesSpell",
-			"target": "ENEMY_CHARACTERS",
-			"value": 1,
-			"howMany": 1
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Flame Juggler",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Deal 1 damage to a random enemy.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

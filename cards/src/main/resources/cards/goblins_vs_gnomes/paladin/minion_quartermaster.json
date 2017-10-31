@@ -1,28 +1,28 @@
 {
-	"name": "Quartermaster",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 5,
-	"heroClass": "PALADIN",
-	"rarity": "EPIC",
-	"description": "Battlecry: Give your Recruits +2/+2.",
-	"battlecry": {
-		"spell": {
-			"class": "BuffSpell",
-			"target": "FRIENDLY_MINIONS",
-			"attackBonus": 2,
-			"hpBonus": 2,
-			"filter": {
-				"class": "SpecificCardFilter",
-				"cardId": "token_silver_hand_recruit"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Quartermaster",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Battlecry: Give your Recruits +2/+2.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 2,
+      "filter": {
+        "class": "SpecificCardFilter",
+        "cardId": "token_silver_hand_recruit"
+      },
+      "hpBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

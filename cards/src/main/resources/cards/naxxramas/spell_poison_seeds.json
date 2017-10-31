@@ -1,15 +1,15 @@
 {
-	"name": "Poison Seeds",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"description": "Destroy all minions and summon 2/2 treants to replace them",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "custom.PoisonSeedsSpell"
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Poison Seeds",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "COMMON",
+  "description": "Destroy all minions and summon 2/2 treants to replace them",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.PoisonSeedsSpell"
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

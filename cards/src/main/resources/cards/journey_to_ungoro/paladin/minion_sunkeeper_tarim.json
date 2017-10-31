@@ -2,9 +2,9 @@
   "name": "Sunkeeper Tarim",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 3,
   "baseHp": 7,
-  "heroClass": "PALADIN",
   "rarity": "LEGENDARY",
   "description": "Taunt. Battlecry: Set all other minions' Attack and Health to 3.",
   "battlecry": {

@@ -1,13 +1,13 @@
 {
-	"name": "Candle",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"description": "",
-	"collectible": false,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Candle",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "",
+  "collectible": false,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

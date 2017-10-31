@@ -1,23 +1,23 @@
 {
-	"name": "Infest",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"description": "Give your minions \"Deathrattle: Add a random Beast card to your hand.\"",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "AddDeathrattleSpell",
-		"target": "FRIENDLY_MINIONS",
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "BEAST"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Infest",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "RARE",
+  "description": "Give your minions \"Deathrattle: Add a random Beast card to your hand.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

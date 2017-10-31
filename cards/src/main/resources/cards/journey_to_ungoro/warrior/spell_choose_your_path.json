@@ -1,19 +1,19 @@
 {
-	"name": "Choose Your Path",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "FREE",
-	"description": "Discover a card.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DiscoverFilteredCardSpell",
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"targetPlayer": "SELF"
-		}
-	},
-	"collectible": false,
-	"set": "JOURNEY_TO_UNGORO",
-	"fileFormatVersion": 1
+  "name": "Choose Your Path",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "FREE",
+  "description": "Discover a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverFilteredCardSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

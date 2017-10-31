@@ -1,1 +1,41 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Elvenurr Ooyer", "heroClass": "PALADIN", "description": "Stealth. Battlecry: If you're holding a Dragon, summon two 1/1 Whelps.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 5.0, "baseManaCost": 5.0, "attributes": {"TAUNT": true, "STEALTH": true, "BATTLECRY": true}, "battlecry": {"spell": {"class": "MetaSpell", "spells": [{"boardPositionRelative": "RIGHT", "class": "SummonSpell", "card": "token_whelp"}, {"boardPositionRelative": "LEFT", "class": "SummonSpell", "card": "token_whelp"}]}, "targetSelection": "NONE", "condition": {"race": "DRAGON", "class": "HoldsCardCondition"}}, "type": "MINION", "id": "Elvenurr Ooyer", "baseAttack": 4.0}
+{
+  "id": "Elvenurr Ooyer",
+  "name": "Elvenurr Ooyer",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 4.0,
+  "baseHp": 5.0,
+  "rarity": "COMMON",
+  "description": "Stealth. Battlecry: If you're holding a Dragon, summon two 1/1 Whelps.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "race": "DRAGON"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_whelp"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_whelp"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "STEALTH": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

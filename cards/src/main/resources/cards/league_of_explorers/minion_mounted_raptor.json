@@ -1,24 +1,24 @@
 {
-	"name": "Mounted Raptor",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "Deathrattle: Summon a random 1-Cost minion.",
-	"deathrattle": {
-		"class": "SummonRandomMinionFilteredSpell",
-		"cardFilter": {
-			"class": "CardFilter",
-			"manaCost": 1
-		}
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Mounted Raptor",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DRUID",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Deathrattle: Summon a random 1-Cost minion.",
+  "deathrattle": {
+    "class": "SummonRandomMinionFilteredSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "manaCost": 1
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

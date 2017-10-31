@@ -1,1 +1,28 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Worper", "heroClass": "ANY", "description": "At the start of your turn, restore this minion to full Health.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 6.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "TurnStartTrigger"}, "spell": {"class": "HealSpell", "value": {"attribute": "MAX_HP", "class": "AttributeValueProvider"}, "target": "SELF"}}, "baseManaCost": 5.0, "type": "MINION", "id": "Worper", "baseAttack": 4.0}
+{
+  "id": "Worper",
+  "name": "Worper",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 6.0,
+  "rarity": "COMMON",
+  "description": "At the start of your turn, restore this minion to full Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "MAX_HP"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

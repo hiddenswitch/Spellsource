@@ -1,25 +1,25 @@
 {
-	"name": "Yogg-Saron, Hope's End",
-	"baseManaCost": 10,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Cast a random spell for each spell you've cast this game (targets chosen randomly).",
-	"battlecry": {
-		"spell": {
-			"class": "CastRandomSpellSpell",
-			"value": {
-				"class": "PlayerAttributeValueProvider",
-				"playerAttribute": "SPELLS_CAST"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Yogg-Saron, Hope's End",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Cast a random spell for each spell you've cast this game (targets chosen randomly).",
+  "battlecry": {
+    "spell": {
+      "class": "CastRandomSpellSpell",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "SPELLS_CAST"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

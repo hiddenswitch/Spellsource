@@ -1,16 +1,16 @@
 {
-	"name": "3 damage",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"description": "Deal 3 damage to a minion.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "DamageSpell",
-		"value": 3
-	},
-	"collectible": false,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "3 damage",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DRUID",
+  "rarity": "COMMON",
+  "description": "Deal 3 damage to a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

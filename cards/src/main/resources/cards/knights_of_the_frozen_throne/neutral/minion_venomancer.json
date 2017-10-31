@@ -2,9 +2,9 @@
   "name": "Venomancer",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Poisonous.",
   "attributes": {

@@ -1,17 +1,13 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Lightfused Stegodon",
+  "baseManaCost": 4,
+  "type": "MINION",
   "heroClass": "PALADIN",
-  "description": "Battlecry: Adapt your Silver Hand Recruits.",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "baseHp": 4,
-  "race": "BEAST",
   "baseAttack": 3,
-  "attributes": {
-    "BATTLECRY": true
-  },
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Battlecry: Adapt your Silver Hand Recruits.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -24,6 +20,10 @@
       }
     }
   },
-  "type": "MINION",
-  "baseManaCost": 4
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

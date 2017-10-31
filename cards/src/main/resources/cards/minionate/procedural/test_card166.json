@@ -1,1 +1,23 @@
-{"collectible": true, "aura": {"attackBonus": 1, "class": "BuffAura", "hpBonus": 1, "target": "OTHER_FRIENDLY_MINIONS"}, "name": "Sneaky", "heroClass": "ANY", "description": "Taunt. Your other minions have +1/+1.", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 4.0, "set": "SPELLSOURCE", "baseManaCost": 3.0, "attributes": {"TAUNT": true}, "type": "MINION", "id": "Sneaky", "baseAttack": 1.0}
+{
+  "id": "Sneaky",
+  "name": "Sneaky",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1.0,
+  "baseHp": 4.0,
+  "rarity": "FREE",
+  "description": "Taunt. Your other minions have +1/+1.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 1
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

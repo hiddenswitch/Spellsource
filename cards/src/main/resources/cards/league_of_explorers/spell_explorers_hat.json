@@ -1,29 +1,29 @@
 {
-	"name": "Explorer's Hat",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"description": "Give a minion +1/+1 and \"Deathrattle: Add an Explorer's Hat to your Hand.\"",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "BuffSpell",
-				"attackBonus": 1,
-				"hpBonus": 1
-			},
-			{
-				"class": "AddDeathrattleSpell",
-				"spell": {
-					"class": "ReceiveCardSpell",
-					"card": "spell_explorers_hat"
-				}
-			}
-		]
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Explorer's Hat",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "HUNTER",
+  "rarity": "RARE",
+  "description": "Give a minion +1/+1 and \"Deathrattle: Add an Explorer's Hat to your Hand.\"",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 1
+      },
+      {
+        "class": "AddDeathrattleSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "card": "spell_explorers_hat"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

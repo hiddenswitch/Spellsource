@@ -1,27 +1,27 @@
 {
-	"name": "Excavated Evil",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "RARE",
-	"description": "Deal 3 damage to all minions. Shuffle this card into your opponent's deck.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"target": "ALL_MINIONS",
-				"value": 3
-			},
-			{
-				"class": "ShuffleToDeckSpell",
-				"targetPlayer": "OPPONENT",
-				"card": "spell_excavated_evil"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Excavated Evil",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "RARE",
+  "description": "Deal 3 damage to all minions. Shuffle this card into your opponent's deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 3
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "spell_excavated_evil",
+        "targetPlayer": "OPPONENT"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

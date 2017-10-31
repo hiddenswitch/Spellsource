@@ -1,18 +1,18 @@
 {
-	"name": "V-07-TR-0N",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "MECH",
-	"description": "Charge. Mega-Windfury (Can attack four times a turn.)",
-	"attributes": {
-		"CHARGE": true,
-		"MEGA_WINDFURY": true
-	},
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "V-07-TR-0N",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Charge. Mega-Windfury (Can attack four times a turn.)",
+  "attributes": {
+    "CHARGE": true,
+    "MEGA_WINDFURY": true
+  },
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

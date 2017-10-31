@@ -1,23 +1,23 @@
 {
-	"name": "Darkshire Alchemist",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 5,
-	"heroClass": "PRIEST",
-	"rarity": "COMMON",
-	"description": "Battlecry: Restore 5 Health.",
-	"battlecry": {
-		"targetSelection": "ANY",
-		"spell": {
-			"class": "HealSpell",
-			"value": 5
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Darkshire Alchemist",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Battlecry: Restore 5 Health.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "HealSpell",
+      "value": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

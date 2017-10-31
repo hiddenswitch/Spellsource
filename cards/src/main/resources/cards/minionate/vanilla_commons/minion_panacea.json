@@ -1,33 +1,33 @@
 {
-	"name": "Panacea",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Call to Arms: Restore 4 Health to each hero.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "HealSpell",
-					"target": "FRIENDLY_HERO",
-					"value": 4
-				},
-				{
-					"class": "HealSpell",
-					"target": "ENEMY_HERO",
-					"value": 4
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Panacea",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Call to Arms: Restore 4 Health to each hero.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "HealSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 4
+        },
+        {
+          "class": "HealSpell",
+          "target": "ENEMY_HERO",
+          "value": 4
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

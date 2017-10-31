@@ -1,20 +1,20 @@
 {
-	"name": "Shatter",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "COMMON",
-	"description": "Destroy a Frozen minion.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "DestroySpell",
-		"filter": {
-			"class": "AttributeFilter",
-			"attribute": "FROZEN",
-			"operation": "HAS"
-		}
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Shatter",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "MAGE",
+  "rarity": "COMMON",
+  "description": "Destroy a Frozen minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    }
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

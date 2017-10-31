@@ -1,1 +1,24 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Etorcer", "heroClass": "ANY", "description": "Battlecry: Shuffle an 'Ancient Curse' into your deck that deals 7 damage to you when drawn.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 5.0, "baseManaCost": 5.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "ShuffleToDeckSpell", "card": "spell_ancient_curse"}, "targetSelection": "NONE"}, "type": "MINION", "id": "Etorcer", "baseAttack": 7.0}
+{
+  "id": "Etorcer",
+  "name": "Etorcer",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7.0,
+  "baseHp": 5.0,
+  "rarity": "RARE",
+  "description": "Battlecry: Shuffle an 'Ancient Curse' into your deck that deals 7 damage to you when drawn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "spell_ancient_curse"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

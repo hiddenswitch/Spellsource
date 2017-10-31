@@ -1,27 +1,27 @@
 {
-	"name": "Wrathful Spirit",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"race": "MECH",
-	"description": "Deathrattle: Deal 1-4 damage to a random enemy.",
-	"deathrattle": {
-		"class": "MissilesSpell",
-		"target": "ENEMY_CHARACTERS",
-		"value": {
-			"class": "RandomValueProvider",
-			"min": 1,
-			"max": 4
-		},
-		"howMany": 1
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Wrathful Spirit",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "Deathrattle: Deal 1-4 damage to a random enemy.",
+  "deathrattle": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": {
+      "class": "RandomValueProvider",
+      "max": 4,
+      "min": 1
+    },
+    "howMany": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

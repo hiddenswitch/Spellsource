@@ -1,27 +1,27 @@
 {
-	"name": "Concoction",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "The next power you use this turn costs 3 less Mana.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "CardCostModifierSpell",
-		"target": "FRIENDLY_PLAYER",
-		"cardCostModifier": {
-			"class": "OneTurnCostModifier",
-			"cardType": "SPELL",
-			"operation": "SUBTRACT",
-			"value": 3,
-			"expirationTrigger": {
-				"class": "CardPlayedTrigger",
-				"cardType": "SPELL",
-				"targetPlayer": "SELF"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Concoction",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "EPIC",
+  "description": "The next power you use this turn costs 3 less Mana.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
+    "cardCostModifier": {
+      "class": "OneTurnCostModifier",
+      "value": 3,
+      "cardType": "SPELL",
+      "expirationTrigger": {
+        "class": "CardPlayedTrigger",
+        "cardType": "SPELL",
+        "targetPlayer": "SELF"
+      },
+      "operation": "SUBTRACT"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

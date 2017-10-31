@@ -1,14 +1,14 @@
 {
-	"name": "Chicken",
-	"baseManaCost": 0,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"race": "BEAST",
-	"description": "Hey Chicken!",
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Chicken",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Hey Chicken!",
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

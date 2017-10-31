@@ -1,16 +1,16 @@
 {
-	"name": "Heal",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "PRIEST",
-	"rarity": "FREE",
-	"description": "Restore 2 Health.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "HealSpell",
-		"value": 2
-	},
-	"collectible": false,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Heal",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "PRIEST",
+  "rarity": "FREE",
+  "description": "Restore 2 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 2
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

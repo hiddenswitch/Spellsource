@@ -1,13 +1,13 @@
 {
-	"name": "Arcanite Reaper",
-	"baseManaCost": 5,
-	"type": "WEAPON",
-	"damage": 5,
-	"durability": 2,
-	"heroClass": "WARRIOR",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Arcanite Reaper",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "WARRIOR",
+  "damage": 5,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

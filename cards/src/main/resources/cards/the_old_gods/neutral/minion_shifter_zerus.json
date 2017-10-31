@@ -2,13 +2,12 @@
   "name": "Shifter Zerus",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Each turn this is in your hand, transform it into a random minion.",
   "passiveTrigger": {
-    "keepAfterTransform": true,
     "eventTrigger": {
       "class": "TurnStartTrigger",
       "targetPlayer": "SELF"
@@ -20,7 +19,8 @@
         "class": "CardFilter",
         "cardType": "MINION"
       }
-    }
+    },
+    "keepAfterTransform": true
   },
   "collectible": true,
   "set": "THE_OLD_GODS",

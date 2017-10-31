@@ -1,24 +1,24 @@
 {
-	"name": "Chromaggus",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "DRAGON",
-	"description": "Whenever you draw a card, put another copy into your hand.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "CardDrawnTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "CopyCardSpell",
-			"target": "EVENT_TARGET"
-		}
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Chromaggus",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Whenever you draw a card, put another copy into your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1
 }

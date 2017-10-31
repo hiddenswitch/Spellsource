@@ -1,17 +1,17 @@
 {
-	"name": "Boar",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 2,
-	"heroClass": "MAGE",
-	"rarity": "FREE",
-	"race": "BEAST",
-	"description": "Charge",
-	"attributes": {
-		"CHARGE": true
-	},
-	"collectible": false,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Boar",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

@@ -1,15 +1,15 @@
 {
-	"name": "Assassinate",
-	"baseManaCost": 5,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "FREE",
-	"description": "Destroy an enemy minion.",
-	"targetSelection": "ENEMY_MINIONS",
-	"spell": {
-		"class": "DestroySpell"
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Assassinate",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "FREE",
+  "description": "Destroy an enemy minion.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "DestroySpell"
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

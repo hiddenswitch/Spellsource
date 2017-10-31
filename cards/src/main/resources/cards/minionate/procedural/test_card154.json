@@ -1,18 +1,18 @@
 {
+  "id": "Ditmon",
+  "name": "Ditmon Blastdealer",
+  "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5.0,
+  "baseHp": 3.0,
+  "rarity": "COMMON",
+  "description": "(3) Overload.",
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "OVERLOAD": 3.0
+  },
   "collectible": true,
   "set": "SPELLSOURCE",
-  "name": "Ditmon Blastdealer",
-  "heroClass": "ANY",
-  "description": "(3) Overload.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 3.0,
-  "baseManaCost": 2.0,
-  "attributes": {
-    "OVERLOAD": 3.0,
-    "DIVINE_SHIELD": true
-  },
-  "type": "MINION",
-  "id": "Ditmon",
-  "baseAttack": 5.0
+  "fileFormatVersion": 1
 }

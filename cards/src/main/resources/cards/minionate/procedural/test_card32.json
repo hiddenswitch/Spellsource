@@ -1,33 +1,33 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Shiel Raver",
   "name": "Shiel Raver",
-  "heroClass": "ANY",
-  "description": "(2) Overload. At the start of your turn, reduce this card's\nCost by (1).",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 1.0,
   "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 1.0,
+  "rarity": "COMMON",
+  "description": "(2) Overload. At the start of your turn, reduce this card's\nCost by (1).",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+        "operation": "SUBTRACT"
+      }
+    }
+  },
   "attributes": {
     "OVERLOAD": 2.0
   },
-  "passiveTrigger": {
-    "eventTrigger": {
-      "targetPlayer": "SELF",
-      "class": "TurnStartTrigger"
-    },
-    "spell": {
-      "cardCostModifier": {
-        "operation": "SUBTRACT",
-        "class": "CardCostModifier",
-        "value": 1,
-        "target": "SELF"
-      },
-      "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER"
-    }
-  },
-  "type": "MINION",
-  "id": "Shiel Raver",
-  "baseAttack": 4.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

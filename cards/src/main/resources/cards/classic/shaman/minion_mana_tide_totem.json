@@ -1,24 +1,24 @@
 {
-	"name": "Mana Tide Totem",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 3,
-	"heroClass": "SHAMAN",
-	"rarity": "RARE",
-	"race": "TOTEM",
-	"description": "At the end of your turn, draw a card.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "DrawCardSpell",
-			"value": 1
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Mana Tide Totem",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "TOTEM",
+  "description": "At the end of your turn, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

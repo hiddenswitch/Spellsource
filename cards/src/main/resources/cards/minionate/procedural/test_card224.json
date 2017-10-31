@@ -1,1 +1,18 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Questingz\u2642Zquri Madneken", "heroClass": "ANY", "description": "", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 4.0, "baseManaCost": 5.0, "attributes": {"STEALTH": true, "DIVINE_SHIELD": true}, "type": "MINION", "id": "Questingz\u2642Zquri Madneken", "baseAttack": 5.0}
+{
+  "id": "Questingz\u2642Zquri Madneken",
+  "name": "Questingz\u2642Zquri Madneken",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5.0,
+  "baseHp": 4.0,
+  "rarity": "COMMON",
+  "description": "",
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

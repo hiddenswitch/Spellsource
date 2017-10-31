@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Raid Light", "heroClass": "WARLOCK", "description": "Battlecry: Deal 1 damage to ALL other characters.", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 5.0, "race": "DEMON", "baseManaCost": 5.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "DamageSpell", "value": 1, "target": "ALL_OTHER_CHARACTERS"}}, "type": "MINION", "id": "Raid Light", "baseAttack": 7.0}
+{
+  "id": "Raid Light",
+  "name": "Raid Light",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 7.0,
+  "baseHp": 5.0,
+  "rarity": "FREE",
+  "race": "DEMON",
+  "description": "Battlecry: Deal 1 damage to ALL other characters.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_OTHER_CHARACTERS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

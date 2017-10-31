@@ -1,17 +1,17 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Snake2",
   "name": "Snakity Sneks Eater",
-  "heroClass": "ANY",
-  "description": "",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 8.0,
   "baseManaCost": 9.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 8.0,
+  "rarity": "COMMON",
+  "description": "",
   "attributes": {
     "TAUNT": true
   },
-  "type": "MINION",
-  "id": "Snake2",
-  "baseAttack": 6.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -1,27 +1,27 @@
 {
-	"name": "Frostwolf Warlord",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "BuffSpell",
-			"target": "SELF",
-			"value": {
-				"class": "EntityCounter",
-				"target": "OTHER_FRIENDLY_MINIONS"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Frostwolf Warlord",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "value": {
+        "class": "EntityCounter",
+        "target": "OTHER_FRIENDLY_MINIONS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

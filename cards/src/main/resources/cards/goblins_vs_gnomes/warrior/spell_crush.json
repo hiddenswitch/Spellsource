@@ -1,27 +1,27 @@
 {
-	"name": "Crush",
-	"baseManaCost": 7,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "EPIC",
-	"description": "Destroy a minion. If you have a damaged minion, this costs (4) less.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "DestroySpell"
-	},
-	"manaCostModifier": {
-		"class": "ConditionalValueProvider",
-		"ifTrue": 4,
-		"ifFalse": 0,
-		"condition": {
-			"class": "HasEntityCondition",
-			"target": "FRIENDLY_MINIONS",
-			"filter": {
-				"class": "DamagedFilter"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Crush",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "EPIC",
+  "description": "Destroy a minion. If you have a damaged minion, this costs (4) less.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell"
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "HasEntityCondition",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "DamagedFilter"
+      }
+    },
+    "ifFalse": 0,
+    "ifTrue": 4
+  }
 }

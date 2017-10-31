@@ -1,1 +1,24 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Shield Black", "heroClass": "ANY", "description": "Battlecry: Freeze a character.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 4.0, "baseManaCost": 3.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"attribute": "FROZEN", "class": "AddAttributeSpell"}, "targetSelection": "ANY"}, "type": "MINION", "id": "Shield Black", "baseAttack": 3.0}
+{
+  "id": "Shield Black",
+  "name": "Shield Black",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3.0,
+  "baseHp": 4.0,
+  "rarity": "COMMON",
+  "description": "Battlecry: Freeze a character.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "FROZEN"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

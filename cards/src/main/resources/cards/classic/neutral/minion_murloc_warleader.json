@@ -2,9 +2,9 @@
   "name": "Murloc Warleader",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "race": "MURLOC",
   "description": "Your other Murlocs have +2/+1.",
@@ -12,15 +12,15 @@
     "class": "BuffAura",
     "target": "OTHER_FRIENDLY_MINIONS",
     "attackBonus": 2,
-    "hpBonus": 1,
     "filter": {
       "class": "RaceFilter",
       "race": "MURLOC"
-    }
+    },
+    "hpBonus": 1
   },
   "attributes": {
-    "NAME": "Murloc Equipment",
-    "DESCRIPTION": "Your other Murloc have +2/+1."
+    "DESCRIPTION": "Your other Murloc have +2/+1.",
+    "NAME": "Murloc Equipment"
   },
   "collectible": true,
   "set": "CLASSIC",

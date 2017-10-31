@@ -2,9 +2,9 @@
   "name": "Megafin",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "SHAMAN",
   "baseAttack": 8,
   "baseHp": 8,
-  "heroClass": "SHAMAN",
   "rarity": "LEGENDARY",
   "race": "MURLOC",
   "description": "Battlecry: Fill your hand with random Murlocs.",
@@ -18,8 +18,8 @@
         "value1": 10,
         "value2": {
           "class": "PlayerAttributeValueProvider",
-          "targetPlayer": "SELF",
-          "playerAttribute": "HAND_COUNT"
+          "playerAttribute": "HAND_COUNT",
+          "targetPlayer": "SELF"
         }
       },
       "cardFilter": {

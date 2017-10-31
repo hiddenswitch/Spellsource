@@ -1,25 +1,25 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Jingle!",
   "name": "Jingle! Again!",
-  "heroClass": "PRIEST",
-  "description": "(2) Overload. Charge. Deathrattle: Give a random friendly minion +3 Health.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 7.0,
-  "deathrattle": {
-    "randomTarget": true,
-    "hpBonus": 3,
-    "class": "BuffSpell",
-    "target": "FRIENDLY_MINIONS"
-  },
   "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 3.0,
+  "baseHp": 7.0,
+  "rarity": "COMMON",
+  "description": "(2) Overload. Charge. Deathrattle: Give a random friendly minion +3 Health.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "hpBonus": 3,
+    "randomTarget": true
+  },
   "attributes": {
     "CHARGE": true,
-    "OVERLOAD": 2.0,
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "OVERLOAD": 2.0
   },
-  "type": "MINION",
-  "id": "Jingle!",
-  "baseAttack": 3.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

@@ -1,17 +1,17 @@
 {
-	"name": "Plague",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"description": "Alter the Health of ALL minions to become 1.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SetHpSpell",
-		"target": "ALL_MINIONS",
-		"value": 1
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Plague",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PALADIN",
+  "rarity": "RARE",
+  "description": "Alter the Health of ALL minions to become 1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SetHpSpell",
+    "target": "ALL_MINIONS",
+    "value": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

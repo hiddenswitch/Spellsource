@@ -2,9 +2,9 @@
   "name": "Wild Pyromancer",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 2,
-  "heroClass": "ANY",
   "rarity": "RARE",
   "description": "After you cast a spell, deal 1 damage to ALL minions.",
   "trigger": {

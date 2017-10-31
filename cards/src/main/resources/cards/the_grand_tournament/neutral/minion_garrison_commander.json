@@ -1,16 +1,16 @@
 {
-	"name": "Garrison Commander",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "You can use your Hero Power twice a turn.",
-	"attributes": {
-		"HERO_POWER_USAGES": 2
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Garrison Commander",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "You can use your Hero Power twice a turn.",
+  "attributes": {
+    "HERO_POWER_USAGES": 2
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

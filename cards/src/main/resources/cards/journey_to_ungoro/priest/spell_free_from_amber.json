@@ -1,30 +1,30 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
+  "name": "Free From Amber",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "RARE",
   "description": "Discover a minion that costs (8), then summon it.",
+  "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverRandomCardSpell",
-    "cardFilter": {
-      "attribute": "BASE_MANA_COST",
-      "cardType": "MINION",
-      "value": 8,
-      "class": "CardFilter",
-      "operation": "GREATER_OR_EQUAL"
-    },
     "spell": {
       "class": "ReceiveCardAndDoSomethingSpell",
-      "targetPlayer": "SELF",
       "spell": {
         "class": "PutMinionOnBoardSpell",
         "card": "EVENT_CARD"
-      }
+      },
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "value": 8,
+      "attribute": "BASE_MANA_COST",
+      "cardType": "MINION",
+      "operation": "GREATER_OR_EQUAL"
     }
   },
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "heroClass": "PRIEST",
-  "targetSelection": "NONE",
-  "baseManaCost": 8,
-  "type": "SPELL",
-  "name": "Free From Amber"
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

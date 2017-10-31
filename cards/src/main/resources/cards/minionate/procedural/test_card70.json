@@ -1,1 +1,23 @@
-{"deathrattle": {"class": "HealSpell", "value": 8, "target": "ENEMY_HERO"}, "set": "SPELLSOURCE", "name": "Grimer", "heroClass": "ANY", "description": "Deathrattle: Restore 8 Health to the enemy hero.", "fileFormatVersion": 1, "collectible": true, "rarity": "RARE", "baseHp": 3.0, "race": "MECH", "baseManaCost": 4.0, "attributes": {"DEATHRATTLES": true}, "type": "MINION", "id": "Grimer", "baseAttack": 4.0}
+{
+  "id": "Grimer",
+  "name": "Grimer",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4.0,
+  "baseHp": 3.0,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Deathrattle: Restore 8 Health to the enemy hero.",
+  "deathrattle": {
+    "class": "HealSpell",
+    "target": "ENEMY_HERO",
+    "value": 8
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

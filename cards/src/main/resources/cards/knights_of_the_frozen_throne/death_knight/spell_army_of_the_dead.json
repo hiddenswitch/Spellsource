@@ -11,9 +11,6 @@
     "value": 5,
     "spell": {
       "class": "ConditionalSpell",
-      "spell": {
-        "class": "PutMinionOnBoardSpell"
-      },
       "condition": {
         "class": "AndCondition",
         "conditions": [
@@ -23,11 +20,14 @@
           },
           {
             "class": "MinionCountCondition",
-            "targetPlayer": "SELF",
+            "value": 7,
             "operation": "LESS",
-            "value": 7
+            "targetPlayer": "SELF"
           }
         ]
+      },
+      "spell": {
+        "class": "PutMinionOnBoardSpell"
       }
     }
   },

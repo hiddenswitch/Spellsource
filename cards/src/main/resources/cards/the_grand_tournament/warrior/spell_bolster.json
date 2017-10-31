@@ -1,23 +1,23 @@
 {
-	"name": "Bolster",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"description": "Give your Taunt minions +2/+2.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "BuffSpell",
-		"target": "FRIENDLY_MINIONS",
-		"attackBonus": 2,
-		"hpBonus": 2,
-		"filter": {
-			"class": "AttributeFilter",
-			"attribute": "TAUNT",
-			"operation": "HAS"
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Bolster",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "COMMON",
+  "description": "Give your Taunt minions +2/+2.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 2,
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "TAUNT",
+      "operation": "HAS"
+    },
+    "hpBonus": 2
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

@@ -2,15 +2,15 @@
   "name": "Wickerflame Burnbristle",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "PALADIN",
   "rarity": "LEGENDARY",
   "description": "Divine Shield. Taunt. Lifesteal.",
   "attributes": {
     "DIVINE_SHIELD": true,
-    "TAUNT": true,
-    "LIFESTEAL": true
+    "LIFESTEAL": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

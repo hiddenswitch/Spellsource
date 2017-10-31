@@ -1,17 +1,17 @@
 {
-	"name": "Dust Devil",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 1,
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"description": "Windfury. Overload: (2)",
-	"attributes": {
-		"OVERLOAD": 2,
-		"WINDFURY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Dust Devil",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Windfury. Overload: (2)",
+  "attributes": {
+    "OVERLOAD": 2,
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

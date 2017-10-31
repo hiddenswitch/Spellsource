@@ -1,23 +1,23 @@
 {
+  "id": "Raver3",
+  "name": "Raver Reaver",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 6.0,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Deathrattle: Restore 8 Health to the enemy hero.",
   "deathrattle": {
     "class": "HealSpell",
-    "value": 8,
-    "target": "ENEMY_HERO"
+    "target": "ENEMY_HERO",
+    "value": 8
   },
-  "set": "SPELLSOURCE",
-  "name": "Raver Reaver",
-  "heroClass": "ANY",
-  "description": "Deathrattle: Restore 8 Health to the enemy hero.",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "rarity": "RARE",
-  "baseHp": 6.0,
-  "race": "MECH",
-  "baseManaCost": 6.0,
   "attributes": {
     "DEATHRATTLES": true
   },
-  "type": "MINION",
-  "id": "Raver3",
-  "baseAttack": 6.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

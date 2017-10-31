@@ -1,27 +1,27 @@
 {
-	"name": "Patient Assassin",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Stealth. Destroy any minion damaged by this minion.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "DamageCausedTrigger",
-			"targetEntityType": "MINION",
-			"hostTargetType": "IGNORE_OTHER_SOURCES"
-		},
-		"spell": {
-			"class": "DestroySpell",
-			"target": "EVENT_TARGET"
-		}
-	},
-	"attributes": {
-		"STEALTH": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Patient Assassin",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Stealth. Destroy any minion damaged by this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

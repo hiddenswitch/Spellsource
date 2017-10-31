@@ -1,15 +1,15 @@
 {
-	"name": "Ragnaros the Firelord",
-	"baseManaCost": 8,
-	"heroPower": "hero_power_die_insect",
-	"type": "HERO",
-	"heroClass": "INHERIT",
-	"rarity": "LEGENDARY",
-	"attributes": {
-		"HP": 8,
-		"MAX_HP": 8
-	},
-	"collectible": false,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Ragnaros the Firelord",
+  "heroPower": "hero_power_die_insect",
+  "baseManaCost": 8,
+  "type": "HERO",
+  "heroClass": "INHERIT",
+  "rarity": "LEGENDARY",
+  "attributes": {
+    "HP": 8,
+    "MAX_HP": 8
+  },
+  "collectible": false,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1
 }

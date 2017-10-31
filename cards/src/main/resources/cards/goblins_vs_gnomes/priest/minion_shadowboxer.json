@@ -1,25 +1,25 @@
 {
-	"name": "Shadowboxer",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "PRIEST",
-	"rarity": "COMMON",
-	"race": "MECH",
-	"description": "Whenever a character is healed, deal 1 damage to a random enemy.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "HealingTrigger"
-		},
-		"spell": {
-			"class": "MissilesSpell",
-			"target": "ENEMY_CHARACTERS",
-			"value": 1,
-			"howMany": 1
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Shadowboxer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Whenever a character is healed, deal 1 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 1
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

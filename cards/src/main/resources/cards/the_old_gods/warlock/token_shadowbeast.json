@@ -1,13 +1,13 @@
 {
-	"name": "Shadowbeast",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "WARLOCK",
-	"rarity": "FREE",
-	"description": "",
-	"collectible": false,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Shadowbeast",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

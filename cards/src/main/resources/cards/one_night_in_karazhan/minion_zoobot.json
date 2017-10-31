@@ -1,58 +1,58 @@
 {
-	"name": "Zoobot",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "MECH",
-	"description": "Battlecry: Give a random friendly Beast, Dragon, and Murloc +1/+1.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"attackBonus": 1,
-					"hpBonus": 1,
-					"target": "FRIENDLY_MINIONS",
-					"randomTarget": true,
-					"filter": {
-						"class": "CardFilter",
-						"race": "BEAST"
-					}
-				},
-				{
-					"class": "BuffSpell",
-					"attackBonus": 1,
-					"hpBonus": 1,
-					"target": "FRIENDLY_MINIONS",
-					"randomTarget": true,
-					"filter": {
-						"class": "CardFilter",
-						"race": "DRAGON"
-					}
-				},
-				{
-					"class": "BuffSpell",
-					"attackBonus": 1,
-					"hpBonus": 1,
-					"target": "FRIENDLY_MINIONS",
-					"randomTarget": true,
-					"filter": {
-						"class": "CardFilter",
-						"race": "MURLOC"
-					}
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Zoobot",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Battlecry: Give a random friendly Beast, Dragon, and Murloc +1/+1.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 1,
+          "filter": {
+            "class": "CardFilter",
+            "race": "BEAST"
+          },
+          "hpBonus": 1,
+          "randomTarget": true
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 1,
+          "filter": {
+            "class": "CardFilter",
+            "race": "DRAGON"
+          },
+          "hpBonus": 1,
+          "randomTarget": true
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 1,
+          "filter": {
+            "class": "CardFilter",
+            "race": "MURLOC"
+          },
+          "hpBonus": 1,
+          "randomTarget": true
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

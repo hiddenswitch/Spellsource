@@ -2,9 +2,9 @@
   "name": "Chillblade Champion",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "PALADIN",
   "baseAttack": 3,
   "baseHp": 2,
-  "heroClass": "PALADIN",
   "rarity": "COMMON",
   "description": "Charge. Lifesteal.",
   "attributes": {

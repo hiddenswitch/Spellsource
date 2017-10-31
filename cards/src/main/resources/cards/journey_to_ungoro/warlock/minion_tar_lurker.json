@@ -1,8 +1,13 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Tar Lurker",
+  "baseManaCost": 5,
+  "type": "MINION",
   "heroClass": "WARLOCK",
+  "baseAttack": 1,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Taunt. Has +3 Attack during your opponent's turn.",
   "trigger": {
     "eventTrigger": {
       "class": "BoardChangedTrigger"
@@ -12,24 +17,19 @@
       "target": "SELF",
       "value": {
         "class": "ConditionalValueProvider",
-        "ifTrue": 0,
-        "ifFalse": 3,
         "condition": {
           "class": "OwnedByPlayerCondition",
           "targetPlayer": "ACTIVE"
-        }
+        },
+        "ifFalse": 3,
+        "ifTrue": 0
       }
     }
   },
-  "description": "Taunt. Has +3 Attack during your opponent's turn.",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 7,
-  "race": "ELEMENTAL",
-  "baseAttack": 1,
   "attributes": {
     "TAUNT": true
   },
-  "type": "MINION",
-  "baseManaCost": 5
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

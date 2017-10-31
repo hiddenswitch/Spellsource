@@ -2,9 +2,9 @@
   "name": "Animated Berserker",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "WARRIOR",
   "baseAttack": 1,
   "baseHp": 3,
-  "heroClass": "WARRIOR",
   "rarity": "COMMON",
   "description": "After you play a minion, deal 1 damage to it.",
   "trigger": {

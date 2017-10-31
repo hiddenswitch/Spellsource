@@ -1,27 +1,27 @@
 {
-	"name": "Power Word: Shield",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "COMMON",
-	"description": "Give a minion +2 Health. Draw a card.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "BuffSpell",
-				"hpBonus": 2
-			},
-			{
-				"class": "DrawCardSpell"
-			}
-		]
-	},
-	"attributes": {
-		"NAME": "Vestal Blessing"
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Power Word: Shield",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "COMMON",
+  "description": "Give a minion +2 Health. Draw a card.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "hpBonus": 2
+      },
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
+  },
+  "attributes": {
+    "NAME": "Vestal Blessing"
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

@@ -1,1 +1,29 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Magick", "heroClass": "PRIEST", "description": "Battlecry: Give a friendly Mech +4 Health.", "fileFormatVersion": 1, "rarity": "RARE", "baseHp": 3.0, "race": "MECH", "baseManaCost": 4.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"filter": {"race": "MECH", "class": "RaceFilter"}, "hpBonus": 4, "class": "BuffSpell"}, "targetSelection": "FRIENDLY_MINIONS"}, "type": "MINION", "id": "Magick", "baseAttack": 4.0}
+{
+  "id": "Magick",
+  "name": "Magick",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 4.0,
+  "baseHp": 3.0,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Battlecry: Give a friendly Mech +4 Health.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH"
+      },
+      "hpBonus": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -1,24 +1,24 @@
 {
-	"name": "Reincarnate",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"description": "Destroy a minion, then return it to life with full Health.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DestroySpell"
-			},
-			{
-				"class": "ReviveMinionSpell",
-				"targetPlayer": "OWNER"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Reincarnate",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "COMMON",
+  "description": "Destroy a minion, then return it to life with full Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "ReviveMinionSpell",
+        "targetPlayer": "OWNER"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

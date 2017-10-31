@@ -1,31 +1,31 @@
 {
-	"name": "Demonfuse",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"description": "Give a Demon +3/+3. Give your opponent a Mana.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "BuffSpell",
-				"attackBonus": 3,
-				"hpBonus": 3
-			},
-			{
-				"class": "ModifyMaxManaSpell",
-				"targetPlayer": "OPPONENT",
-				"value": 1
-			}
-		],
-		"filter": {
-			"class": "RaceFilter",
-			"race": "DEMON"
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Demonfuse",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "COMMON",
+  "description": "Give a Demon +3/+3. Give your opponent a Mana.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DEMON"
+    },
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 3,
+        "hpBonus": 3
+      },
+      {
+        "class": "ModifyMaxManaSpell",
+        "value": 1,
+        "targetPlayer": "OPPONENT"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

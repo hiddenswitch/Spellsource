@@ -1,18 +1,18 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Battor1",
   "name": "Battorical Umbrage",
-  "heroClass": "MAGE",
-  "description": "Spell Damage +2",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "baseHp": 5.0,
-  "race": "MECH",
   "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 3.0,
+  "baseHp": 5.0,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Spell Damage +2",
   "attributes": {
     "SPELL_DAMAGE": 2
   },
-  "type": "MINION",
-  "id": "Battor1",
-  "baseAttack": 3.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

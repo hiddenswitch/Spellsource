@@ -2,9 +2,9 @@
   "name": "Ice Breaker",
   "baseManaCost": 3,
   "type": "WEAPON",
+  "heroClass": "SHAMAN",
   "damage": 1,
   "durability": 3,
-  "heroClass": "SHAMAN",
   "rarity": "RARE",
   "description": "Destroy any Frozen minion damaged by this.",
   "trigger": {

@@ -1,16 +1,16 @@
 {
-	"name": "Armor Plating",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Give a minion +1 Health.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "BuffSpell",
-		"hpBonus": 1
-	},
-	"collectible": false,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Armor Plating",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give a minion +1 Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "hpBonus": 1
+  },
+  "collectible": false,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

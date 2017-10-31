@@ -1,31 +1,31 @@
 {
-	"name": "Hobgoblin",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "Whenever you play a 1-Attack minion, give it +2/+2.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "BeforeMinionPlayedTrigger",
-			"targetPlayer": "SELF",
-			"queueCondition": {
-				"class": "AttributeCondition",
-				"attribute": "ATTACK",
-				"operation": "EQUAL",
-				"value": 1
-			}
-		},
-		"spell": {
-			"class": "BuffSpell",
-			"target": "EVENT_TARGET",
-			"attackBonus": 2,
-			"hpBonus": 2
-		}
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Hobgoblin",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Whenever you play a 1-Attack minion, give it +2/+2.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BeforeMinionPlayedTrigger",
+      "queueCondition": {
+        "class": "AttributeCondition",
+        "value": 1,
+        "attribute": "ATTACK",
+        "operation": "EQUAL"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "attackBonus": 2,
+      "hpBonus": 2
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

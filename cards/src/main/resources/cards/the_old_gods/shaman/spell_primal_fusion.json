@@ -1,23 +1,23 @@
 {
-	"name": "Primal Fusion",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"description": "Give a minion +1/+1 for each of your Totems.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "BuffSpell",
-		"value": {
-			"class": "EntityCounter",
-			"target": "FRIENDLY_MINIONS",
-			"filter": {
-				"class": "RaceFilter",
-				"race": "TOTEM"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Primal Fusion",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "COMMON",
+  "description": "Give a minion +1/+1 for each of your Totems.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "TOTEM"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

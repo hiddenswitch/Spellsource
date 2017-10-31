@@ -1,30 +1,30 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Bright-Eyed Scout",
+  "baseManaCost": 4,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Draw a card and set its cost to (5).",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
-  "baseHp": 4,
-  "targetSelection": "NONE",
   "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Draw a card and set its cost to (5).",
   "battlecry": {
     "spell": {
-      "spell": {
-        "cardCostModifier": {
-          "operation": "SET",
-          "class": "CardCostModifier",
-          "value": 5,
-          "target": "EVENT_CARD"
-        },
-        "class": "CardCostModifierSpell",
-        "target": "FRIENDLY_PLAYER"
-      },
       "class": "DrawCardAndDoSomethingSpell",
-      "value": 1
+      "value": 1,
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "EVENT_CARD",
+          "value": 5,
+          "operation": "SET"
+        }
+      }
     }
   },
-  "type": "MINION",
-  "baseManaCost": 4
+  "targetSelection": "NONE",
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

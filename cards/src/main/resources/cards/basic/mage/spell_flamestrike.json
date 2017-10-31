@@ -1,17 +1,17 @@
 {
-	"name": "Flamestrike",
-	"baseManaCost": 7,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "FREE",
-	"description": "Deal 4 damage to all enemy minions.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DamageSpell",
-		"target": "ENEMY_MINIONS",
-		"value": 4
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Flamestrike",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "MAGE",
+  "rarity": "FREE",
+  "description": "Deal 4 damage to all enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 4
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

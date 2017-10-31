@@ -2,20 +2,20 @@
   "name": "Gnomeferatu",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "WARLOCK",
   "baseAttack": 2,
   "baseHp": 3,
-  "heroClass": "WARLOCK",
   "rarity": "EPIC",
   "description": "Battlecry: Remove the top card from your opponent's deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "RemoveCardAndDoSomethingSpell",
-      "targetPlayer": "OPPONENT",
       "value": 1,
       "spell": {
         "class": "NullSpell"
-      }
+      },
+      "targetPlayer": "OPPONENT"
     }
   },
   "collectible": true,

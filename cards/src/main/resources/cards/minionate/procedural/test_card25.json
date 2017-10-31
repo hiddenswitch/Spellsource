@@ -1,18 +1,18 @@
 {
-  "collectible": true,
-  "set": "SPELLSOURCE",
+  "id": "Handersome",
   "name": "Handsome Hander",
+  "baseManaCost": 2.0,
+  "type": "MINION",
   "heroClass": "ANY",
+  "baseAttack": 1.0,
+  "baseHp": 3.0,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Destroy any minion damaged by this minion.",
   "attributes": {
     "POISONOUS": true
   },
-  "description": "Destroy any minion damaged by this minion.",
-  "fileFormatVersion": 1,
-  "rarity": "RARE",
-  "baseHp": 3.0,
-  "race": "BEAST",
-  "baseManaCost": 2.0,
-  "type": "MINION",
-  "id": "Handersome",
-  "baseAttack": 1.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

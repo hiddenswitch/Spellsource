@@ -5,18 +5,18 @@
   "heroClass": "DRUID",
   "rarity": "LEGENDARY",
   "description": "Quest: Summon 5 minions with 5 or more Attack. Reward: Barnabus the Stomper.",
-  "targetSelection": "NONE",
   "quest": {
     "class": "MinionSummonedTrigger",
-    "targetPlayer": "SELF",
     "queueCondition": {
       "class": "AttributeCondition",
+      "value": 5,
       "attribute": "ATTACK",
-      "operation": "GREATER_OR_EQUAL",
-      "value": 5
-    }
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "targetPlayer": "SELF"
   },
   "countUntilCast": 5,
+  "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "card": "token_barnabus_the_stomper"

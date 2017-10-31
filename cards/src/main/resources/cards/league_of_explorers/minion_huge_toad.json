@@ -1,23 +1,23 @@
 {
-	"name": "Huge Toad",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "Deathrattle: Deal 1 damage to a random enemy.",
-	"deathrattle": {
-		"class": "MissilesSpell",
-		"target": "ENEMY_CHARACTERS",
-		"value": 1,
-		"howMany": 1
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "LEAGUE_OF_EXPLORERS",
-	"fileFormatVersion": 1
+  "name": "Huge Toad",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Deathrattle: Deal 1 damage to a random enemy.",
+  "deathrattle": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 1,
+    "howMany": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "LEAGUE_OF_EXPLORERS",
+  "fileFormatVersion": 1
 }

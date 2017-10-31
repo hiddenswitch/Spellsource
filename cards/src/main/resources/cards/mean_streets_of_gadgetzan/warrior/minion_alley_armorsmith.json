@@ -2,9 +2,9 @@
   "name": "Alley Armorsmith",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "WARRIOR",
   "baseAttack": 2,
   "baseHp": 7,
-  "heroClass": "WARRIOR",
   "rarity": "RARE",
   "description": "Taunt. Whenever this minion deals damage, gain that much Armor.",
   "trigger": {

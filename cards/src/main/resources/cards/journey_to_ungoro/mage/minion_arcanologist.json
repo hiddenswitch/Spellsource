@@ -2,9 +2,9 @@
   "name": "Arcanologist",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "MAGE",
   "baseAttack": 2,
   "baseHp": 3,
-  "heroClass": "MAGE",
   "rarity": "COMMON",
   "description": "Battlecry: Draw a Secret from your deck.",
   "battlecry": {

@@ -2,9 +2,9 @@
   "name": "Fire Plume Harbinger",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "SHAMAN",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "SHAMAN",
   "rarity": "RARE",
   "race": "ELEMENTAL",
   "description": "Battlecry: Reduce the Cost of Elementals in your hand by (1).",
@@ -13,14 +13,14 @@
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "FRIENDLY_HAND",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 1,
+        "operation": "SUBTRACT"
+      },
       "filter": {
         "class": "CardFilter",
         "race": "ELEMENTAL"
-      },
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "operation": "SUBTRACT",
-        "value": 1
       }
     }
   },

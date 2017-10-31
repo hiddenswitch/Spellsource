@@ -1,13 +1,13 @@
 {
-	"name": "Shadow of Nothing",
-	"baseManaCost": 0,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 1,
-	"heroClass": "PRIEST",
-	"rarity": "EPIC",
-	"description": "Mindgames whiffed! Your opponent had no minions!",
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Shadow of Nothing",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Mindgames whiffed! Your opponent had no minions!",
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

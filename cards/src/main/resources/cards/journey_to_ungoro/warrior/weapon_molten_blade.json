@@ -2,13 +2,12 @@
   "name": "Molten Blade",
   "baseManaCost": 1,
   "type": "WEAPON",
+  "heroClass": "WARRIOR",
   "damage": 1,
   "durability": 1,
-  "heroClass": "WARRIOR",
   "rarity": "RARE",
   "description": "Each turn this is in your hand, transform it into a new weapon.",
   "passiveTrigger": {
-    "keepAfterTransform": true,
     "eventTrigger": {
       "class": "TurnStartTrigger",
       "targetPlayer": "SELF"
@@ -20,7 +19,8 @@
         "class": "CardFilter",
         "cardType": "WEAPON"
       }
-    }
+    },
+    "keepAfterTransform": true
   },
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",

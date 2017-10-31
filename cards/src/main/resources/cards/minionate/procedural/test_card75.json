@@ -1,1 +1,26 @@
-{"collectible": true, "cardCostModifier": {"targetPlayer": "SELF", "requiredAttribute": "SECRET", "value": 0, "cardType": "SPELL", "operation": "SET", "class": "CardCostModifier"}, "set": "SPELLSOURCE", "name": "Tirter", "heroClass": "HUNTER", "description": "Windfury. Taunt. Your Secrets cost (0).", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 5.0, "baseManaCost": 5.0, "attributes": {"TAUNT": true, "WINDFURY": true}, "type": "MINION", "id": "Tirter", "baseAttack": 4.0}
+{
+  "id": "Tirter",
+  "name": "Tirter",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 4.0,
+  "baseHp": 5.0,
+  "rarity": "COMMON",
+  "description": "Windfury. Taunt. Your Secrets cost (0).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 0,
+    "cardType": "SPELL",
+    "operation": "SET",
+    "requiredAttribute": "SECRET",
+    "targetPlayer": "SELF"
+  },
+  "attributes": {
+    "TAUNT": true,
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -1,17 +1,17 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Stegodon",
+  "baseManaCost": 4,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Taunt",
-  "fileFormatVersion": 1,
-  "rarity": "COMMON",
-  "baseHp": 6,
-  "race": "BEAST",
   "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Taunt",
   "attributes": {
     "TAUNT": true
   },
-  "type": "MINION",
-  "baseManaCost": 4
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

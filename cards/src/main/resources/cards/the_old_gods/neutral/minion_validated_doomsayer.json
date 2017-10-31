@@ -1,24 +1,24 @@
 {
-	"name": "Validated Doomsayer",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "At the start of your turn, set this minion's Attack to 7.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnStartTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "SetAttackSpell",
-			"target": "SELF",
-			"value": 7
-		}
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Validated Doomsayer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "description": "At the start of your turn, set this minion's Attack to 7.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SetAttackSpell",
+      "target": "SELF",
+      "value": 7
+    }
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

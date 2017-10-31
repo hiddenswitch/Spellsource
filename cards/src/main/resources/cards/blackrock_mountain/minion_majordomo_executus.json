@@ -1,20 +1,20 @@
 {
-	"name": "Majordomo Executus",
-	"baseManaCost": 9,
-	"type": "MINION",
-	"baseAttack": 9,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Deathrattle: Replace your hero with Ragnaros, the Firelord.",
-	"deathrattle": {
-		"class": "ChangeHeroSpell",
-		"card": "hero_ragnaros"
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "BLACKROCK_MOUNTAIN",
-	"fileFormatVersion": 1
+  "name": "Majordomo Executus",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 9,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Replace your hero with Ragnaros, the Firelord.",
+  "deathrattle": {
+    "class": "ChangeHeroSpell",
+    "card": "hero_ragnaros"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BLACKROCK_MOUNTAIN",
+  "fileFormatVersion": 1
 }

@@ -1,23 +1,23 @@
 {
-	"name": "Twilight Flamecaller",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "MAGE",
-	"rarity": "COMMON",
-	"description": "Battlecry: Deal 1 damage to all enemy minions.",
-	"battlecry": {
-		"spell": {
-			"class": "DamageSpell",
-			"target": "ENEMY_MINIONS",
-			"value": 1
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Twilight Flamecaller",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Deal 1 damage to all enemy minions.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

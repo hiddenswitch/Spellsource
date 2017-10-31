@@ -1,16 +1,16 @@
 {
-	"name": "Archmage",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "Spell Damage +1",
-	"attributes": {
-		"SPELL_DAMAGE": 1
-	},
-	"collectible": true,
-	"set": "BASIC",
-	"fileFormatVersion": 1
+  "name": "Archmage",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "FREE",
+  "description": "Spell Damage +1",
+  "attributes": {
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
 }

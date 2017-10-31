@@ -1,13 +1,13 @@
 {
-	"name": "Thaddius",
-	"baseManaCost": 10,
-	"type": "MINION",
-	"baseAttack": 11,
-	"baseHp": 11,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "",
-	"collectible": false,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Thaddius",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 11,
+  "baseHp": 11,
+  "rarity": "LEGENDARY",
+  "description": "",
+  "collectible": false,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

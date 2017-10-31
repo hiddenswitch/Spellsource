@@ -1,27 +1,27 @@
 {
   "name": "Lilian Voss",
   "baseManaCost": 4,
-  "baseAttack": 4,
-  "baseHp": 5,
   "type": "MINION",
   "heroClass": "ROGUE",
+  "baseAttack": 4,
+  "baseHp": 5,
   "rarity": "LEGENDARY",
   "description": "Battlecry: Replace spells in your hand with random spells (from your opponent's class).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ReplaceCardsSpell",
-      "cardSource": {
-        "class": "CatalogueSource"
-      },
       "target": "FRIENDLY_HAND",
-      "filter": {
-        "class": "CardFilter",
-        "cardType": "SPELL"
-      },
       "cardFilter": {
         "class": "CardFilter",
         "heroClass": "OPPONENT",
+        "cardType": "SPELL"
+      },
+      "cardSource": {
+        "class": "CatalogueSource"
+      },
+      "filter": {
+        "class": "CardFilter",
         "cardType": "SPELL"
       }
     }

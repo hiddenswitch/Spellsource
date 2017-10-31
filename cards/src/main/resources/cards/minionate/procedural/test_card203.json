@@ -1,1 +1,24 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Amoon Gromental Cherious ", "heroClass": "SHAMAN", "description": "Battlecry: Deal 3 damage.", "fileFormatVersion": 1, "rarity": "FREE", "baseHp": 5.0, "baseManaCost": 4.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "DamageSpell", "value": 3}, "targetSelection": "ANY"}, "type": "MINION", "id": "Amoon Gromental Cherious ", "baseAttack": 2.0}
+{
+  "id": "Amoon Gromental Cherious ",
+  "name": "Amoon Gromental Cherious ",
+  "baseManaCost": 4.0,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 2.0,
+  "baseHp": 5.0,
+  "rarity": "FREE",
+  "description": "Battlecry: Deal 3 damage.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

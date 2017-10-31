@@ -1,15 +1,15 @@
 {
-	"name": "Betrayal",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "An enemy minion deals its damage to the minions next to it.",
-	"targetSelection": "ENEMY_MINIONS",
-	"spell": {
-		"class": "custom.BetrayalSpell"
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Betrayal",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "COMMON",
+  "description": "An enemy minion deals its damage to the minions next to it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "custom.BetrayalSpell"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

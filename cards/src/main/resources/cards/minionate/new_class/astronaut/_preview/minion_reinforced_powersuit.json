@@ -1,17 +1,17 @@
 {
-	"name": "Reinforced Powersuit",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "PALADIN",
-	"rarity": "COMMON",
-	"race": "MECH",
-	"description": "Blastproof",
-	"attributes": {
-		"DIVINE_SHIELD": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Reinforced Powersuit",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Blastproof",
+  "attributes": {
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

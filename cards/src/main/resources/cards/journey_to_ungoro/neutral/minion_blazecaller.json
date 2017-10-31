@@ -2,24 +2,24 @@
   "name": "Blazecaller",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 6,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "race": "ELEMENTAL",
   "description": "Battlecry: If you played an Elemental last turn, deal 5 damage.",
   "battlecry": {
-    "targetSelection": "ANY",
-    "spell": {
-      "class": "DamageSpell",
-      "value": 5
-    },
     "condition": {
       "class": "PlayedLastTurnCondition",
       "filter": {
         "class": "CardFilter",
         "race": "ELEMENTAL"
       }
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 5
     }
   },
   "attributes": {

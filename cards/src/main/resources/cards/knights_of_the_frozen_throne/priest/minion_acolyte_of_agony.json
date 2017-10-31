@@ -2,9 +2,9 @@
   "name": "Acolyte of Agony",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "PRIEST",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "PRIEST",
   "rarity": "COMMON",
   "description": "Lifesteal.",
   "attributes": {

@@ -2,17 +2,17 @@
   "name": "Ghastly Conjurer",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "MAGE",
   "baseAttack": 2,
   "baseHp": 6,
-  "heroClass": "MAGE",
   "rarity": "RARE",
   "description": "Battlecry: Add a Mirror Image to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF",
-      "card": "spell_mirror_image"
+      "card": "spell_mirror_image",
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

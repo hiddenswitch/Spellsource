@@ -1,1 +1,25 @@
-{"collectible": true, "aura": {"filter": {"race": "MURLOC", "class": "RaceFilter"}, "attackBonus": 2, "class": "BuffAura", "hpBonus": 1, "target": "ALL_OTHER_MINIONS"}, "set": "SPELLSOURCE", "name": "Sneparin", "heroClass": "ANY", "description": "ALL other Murlocs have +2/+1.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 6.0, "race": "MURLOC", "baseManaCost": 3.0, "type": "MINION", "id": "Sneparin", "baseAttack": 1.0}
+{
+  "id": "Sneparin",
+  "name": "Sneparin",
+  "baseManaCost": 3.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1.0,
+  "baseHp": 6.0,
+  "rarity": "EPIC",
+  "race": "MURLOC",
+  "description": "ALL other Murlocs have +2/+1.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "ALL_OTHER_MINIONS",
+    "attackBonus": 2,
+    "filter": {
+      "class": "RaceFilter",
+      "race": "MURLOC"
+    },
+    "hpBonus": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -2,24 +2,24 @@
   "name": "Crystalline Oracle",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "PRIEST",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "PRIEST",
   "rarity": "RARE",
   "race": "ELEMENTAL",
   "description": "Deathrattle: Copy a card from your opponent's deck and add it to your hand.",
   "deathrattle": {
     "class": "CopyCardSpell",
+    "value": 1,
     "cardSource": {
       "class": "DeckSource",
       "targetPlayer": "OPPONENT"
-    },
-    "value": 1
+    }
   },
-  "collectible": true,
   "attributes": {
     "DEATHRATTLES": true
   },
+  "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
 }

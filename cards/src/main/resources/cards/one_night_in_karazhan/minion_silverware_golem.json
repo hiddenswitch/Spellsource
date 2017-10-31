@@ -1,23 +1,23 @@
 {
-	"name": "Silverware Golem",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "WARLOCK",
-	"rarity": "RARE",
-	"description": "If you discard this minion, summon it.",
-	"passiveTrigger": {
-		"eventTrigger": {
-			"class": "DiscardTrigger",
-			"target": "SELF"
-		},
-		"spell": {
-			"class": "SummonSpell",
-			"card": "minion_silverware_golem"
-		}
-	},
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Silverware Golem",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "If you discard this minion, summon it.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "DiscardTrigger",
+      "target": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_silverware_golem"
+    }
+  },
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

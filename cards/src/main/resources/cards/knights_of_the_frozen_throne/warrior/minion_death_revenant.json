@@ -2,9 +2,9 @@
   "name": "Death Revenant",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "WARRIOR",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "WARRIOR",
   "rarity": "RARE",
   "description": "Battlecry: Gain +1/+1 for each damaged minion.",
   "battlecry": {

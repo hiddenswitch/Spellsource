@@ -2,9 +2,9 @@
   "name": "Biteweed",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ROGUE",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "ROGUE",
   "rarity": "EPIC",
   "description": "Combo: Gain +1/+1 for each other card you've played this turn.",
   "battlecry": {

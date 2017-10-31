@@ -1,18 +1,18 @@
 {
+  "name": "Giant Wasp",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Stealth. Poisonous.",
+  "attributes": {
+    "POISONOUS": true,
+    "STEALTH": true
+  },
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
-  "name": "Giant Wasp",
-  "heroClass": "ROGUE",
-  "description": "Stealth. Poisonous.",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
-  "baseHp": 2,
-  "race": "BEAST",
-  "baseAttack": 2,
-  "attributes": {
-    "STEALTH": true,
-    "POISONOUS": true
-  },
-  "type": "MINION",
-  "baseManaCost": 3
+  "fileFormatVersion": 1
 }

@@ -11,8 +11,8 @@
     "condition": {
       "class": "AttributeCondition",
       "attribute": "DEATHRATTLES",
-      "operation": "HAS",
-      "invert": true
+      "invert": true,
+      "operation": "HAS"
     }
   },
   "collectible": true,

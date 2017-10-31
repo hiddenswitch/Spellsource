@@ -1,40 +1,40 @@
 {
-	"name": "Finja, the Flying Star",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "MURLOC",
-	"description": "Stealth. Whenever this attacks and kills a minion, summon 2 Murloc from your deck.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterPhysicalAttackTrigger",
-			"targetEntityType": "MINION",
-			"hostTargetType": "IGNORE_OTHER_SOURCES",
-			"fireCondition": {
-				"class": "IsDeadCondition"
-			}
-		},
-		"spell": {
-			"class": "PutRandomMinionOnBoardSpell",
-			"value": 2,
-			"targetPlayer": "SELF",
-			"cardLocation": "DECK",
-			"cardFilter": {
-				"class": "CardFilter",
-				"cardType": "MINION",
-				"race": "MURLOC"
-			}
-		}
-	},
-	"attributes": {
-		"STEALTH": true,
-		"DESCRIPTION": "Stealth. Whenever this attacks and kills a minion, summon 2 Murloc from your deck.",
-		"NAME": "Xiaolian, Blademaster"
-	},
-	"collectible": true,
-	"set": "MEAN_STREETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Finja, the Flying Star",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "MURLOC",
+  "description": "Stealth. Whenever this attacks and kills a minion, summon 2 Murloc from your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "PutRandomMinionOnBoardSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "MURLOC",
+        "cardType": "MINION"
+      },
+      "cardLocation": "DECK",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "DESCRIPTION": "Stealth. Whenever this attacks and kills a minion, summon 2 Murloc from your deck.",
+    "NAME": "Xiaolian, Blademaster",
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

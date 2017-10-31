@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Creneo", "heroClass": "WARLOCK", "description": "Battlecry: Deal 5 damage to your hero.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 7.0, "race": "DEMON", "baseManaCost": 6.0, "attributes": {"BATTLECRY": true}, "battlecry": {"spell": {"class": "DamageSpell", "value": 5, "target": "FRIENDLY_HERO"}}, "type": "MINION", "id": "Creneo", "baseAttack": 3.0}
+{
+  "id": "Creneo",
+  "name": "Creneo",
+  "baseManaCost": 6.0,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 3.0,
+  "baseHp": 7.0,
+  "rarity": "EPIC",
+  "race": "DEMON",
+  "description": "Battlecry: Deal 5 damage to your hero.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

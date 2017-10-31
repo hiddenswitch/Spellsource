@@ -1,31 +1,31 @@
 {
-	"name": "Demented Frostcaller",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 4,
-	"heroClass": "MAGE",
-	"rarity": "RARE",
-	"description": "After you cast a spell, Freeze a random enemy.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterSpellCastedTrigger",
-			"sourcePlayer": "SELF"
-		},
-		"spell": {
-			"class": "AddAttributeSpell",
-			"target": "ENEMY_CHARACTERS",
-			"attribute": "FROZEN",
-			"randomTarget": true,
-			"filter": {
-				"class": "AttributeFilter",
-				"attribute": "FROZEN",
-				"operation": "HAS",
-				"invert": true
-			}
-		}
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Demented Frostcaller",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "After you cast a spell, Freeze a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ENEMY_CHARACTERS",
+      "attribute": "FROZEN",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "FROZEN",
+        "invert": true,
+        "operation": "HAS"
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

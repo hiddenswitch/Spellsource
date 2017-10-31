@@ -5,21 +5,21 @@
   "heroClass": "HUNTER",
   "rarity": "LEGENDARY",
   "description": "Quest: Play seven 1-Cost minions. Reward: Queen Carnassa.",
-  "targetSelection": "NONE",
   "quest": {
     "class": "MinionPlayedTrigger",
-    "targetPlayer": "SELF",
     "queueCondition": {
       "class": "ComparisonCondition",
+      "operation": "EQUAL",
       "value1": {
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "LAST_MANA_COST"
       },
-      "value2": 1,
-      "operation": "EQUAL"
-    }
+      "value2": 1
+    },
+    "targetPlayer": "SELF"
   },
   "countUntilCast": 7,
+  "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "card": "token_queen_carnassa"

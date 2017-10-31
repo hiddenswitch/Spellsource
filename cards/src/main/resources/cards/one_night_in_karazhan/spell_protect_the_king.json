@@ -1,20 +1,20 @@
 {
-	"name": "Protect the King!",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "RARE",
-	"description": "For each enemy minion, summon a 1/1 Pawn with Taunt.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"value": {
-			"class": "EntityCounter",
-			"target": "ENEMY_MINIONS"
-		},
-		"card": "token_pawn"
-	},
-	"collectible": true,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Protect the King!",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "RARE",
+  "description": "For each enemy minion, summon a 1/1 Pawn with Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS"
+    },
+    "card": "token_pawn"
+  },
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

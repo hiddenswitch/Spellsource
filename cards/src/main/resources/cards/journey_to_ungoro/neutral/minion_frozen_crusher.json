@@ -1,25 +1,25 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Frozen Crusher",
+  "baseManaCost": 6,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "After this minion attacks, freeze it.",
-  "fileFormatVersion": 1,
-  "race": "ELEMENTAL",
-  "rarity": "RARE",
+  "baseAttack": 8,
   "baseHp": 8,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "After this minion attacks, freeze it.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
       "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
-      "attribute": "FROZEN",
       "class": "AddAttributeSpell",
-      "target": "SELF"
+      "target": "SELF",
+      "attribute": "FROZEN"
     }
   },
-  "baseAttack": 8,
-  "type": "MINION",
-  "baseManaCost": 6
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

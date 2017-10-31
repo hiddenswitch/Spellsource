@@ -1,24 +1,24 @@
 {
-	"name": "Cold Blood",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "Give a minion +2 Attack. Combo: +4 Attack instead.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "ComboSpell",
-		"exclusive": true,
-		"spell1": {
-			"class": "BuffSpell",
-			"attackBonus": 2
-		},
-		"spell2": {
-			"class": "BuffSpell",
-			"attackBonus": 4
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Cold Blood",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "COMMON",
+  "description": "Give a minion +2 Attack. Combo: +4 Attack instead.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ComboSpell",
+    "exclusive": true,
+    "spell1": {
+      "class": "BuffSpell",
+      "attackBonus": 2
+    },
+    "spell2": {
+      "class": "BuffSpell",
+      "attackBonus": 4
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

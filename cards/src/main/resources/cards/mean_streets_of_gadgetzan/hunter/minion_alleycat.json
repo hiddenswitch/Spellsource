@@ -1,24 +1,24 @@
 {
-	"name": "Alleycat",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Battlecry: Summon a 1/1 Cat.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "SummonSpell",
-			"card": "token_rat"
-		}
-	},
-	"attributes": {
-		"NAME": "Lovebirds",
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Alleycat",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Summon a 1/1 Cat.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_rat"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "NAME": "Lovebirds"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

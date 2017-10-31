@@ -1,24 +1,24 @@
 {
-	"name": "Lightning Storm",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "RARE",
-	"description": "Deal 2-3 damage to all enemy minions. Overload: (2)",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DamageSpell",
-		"target": "ENEMY_MINIONS",
-		"value": {
-			"class": "RandomValueProvider",
-			"min": 2,
-			"max": 3
-		}
-	},
-	"attributes": {
-		"OVERLOAD": 2
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Lightning Storm",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "RARE",
+  "description": "Deal 2-3 damage to all enemy minions. Overload: (2)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_MINIONS",
+    "value": {
+      "class": "RandomValueProvider",
+      "max": 3,
+      "min": 2
+    }
+  },
+  "attributes": {
+    "OVERLOAD": 2
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

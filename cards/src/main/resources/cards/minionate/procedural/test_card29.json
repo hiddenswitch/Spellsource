@@ -1,25 +1,25 @@
 {
+  "id": "Betterxzsjurant",
+  "name": "Betterbugs",
+  "baseManaCost": 8.0,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 7.0,
+  "baseHp": 7.0,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Deathrattle: Summon two 2/2 Hyenas.",
   "deathrattle": {
+    "class": "SummonSpell",
     "cards": [
       "token_hyena",
       "token_hyena"
-    ],
-    "class": "SummonSpell"
+    ]
   },
-  "set": "SPELLSOURCE",
-  "name": "Betterbugs",
-  "heroClass": "HUNTER",
-  "description": "Deathrattle: Summon two 2/2 Hyenas.",
-  "fileFormatVersion": 1,
-  "collectible": true,
-  "rarity": "RARE",
-  "baseHp": 7.0,
-  "race": "BEAST",
-  "baseManaCost": 8.0,
   "attributes": {
     "DEATHRATTLES": true
   },
-  "type": "MINION",
-  "id": "Betterxzsjurant",
-  "baseAttack": 7.0
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

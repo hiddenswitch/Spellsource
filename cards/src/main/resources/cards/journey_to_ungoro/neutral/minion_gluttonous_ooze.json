@@ -1,27 +1,23 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Gluttonous Ooze",
+  "baseManaCost": 3,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "Battlecry: Destroy your opponent's weapon and gain Armor equal to its Durability.",
-  "fileFormatVersion": 1,
-  "rarity": "EPIC",
-  "baseHp": 3,
   "baseAttack": 3,
-  "attributes": {
-    "BATTLECRY": true
-  },
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Battlecry: Destroy your opponent's weapon and gain Armor equal to its Durability.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
+          "class": "BuffHeroSpell",
           "armorBonus": {
-            "attribute": "ATTACK",
             "class": "AttributeValueProvider",
-            "target": "ENEMY_WEAPON"
-          },
-          "class": "BuffHeroSpell"
+            "target": "ENEMY_WEAPON",
+            "attribute": "ATTACK"
+          }
         },
         {
           "class": "DestroySpell",
@@ -30,6 +26,10 @@
       ]
     }
   },
-  "type": "MINION",
-  "baseManaCost": 3
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

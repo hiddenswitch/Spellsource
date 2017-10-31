@@ -1,23 +1,23 @@
 {
-	"name": "Fiery Bat",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 1,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "Deathrattle: Deal 1 damage to a random enemy.",
-	"deathrattle": {
-		"class": "MissilesSpell",
-		"target": "ENEMY_CHARACTERS",
-		"value": 1,
-		"howMany": 1
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Fiery Bat",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "HUNTER",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Deathrattle: Deal 1 damage to a random enemy.",
+  "deathrattle": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 1,
+    "howMany": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

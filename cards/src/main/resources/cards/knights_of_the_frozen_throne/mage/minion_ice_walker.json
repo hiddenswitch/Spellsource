@@ -1,10 +1,10 @@
 {
   "name": "Ice Walker",
-  "heroClass": "MAGE",
   "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "MAGE",
   "baseAttack": 1,
   "baseHp": 3,
-  "type": "MINION",
   "rarity": "RARE",
   "description": "Your Hero Power also Freezes the target.",
   "attributes": {

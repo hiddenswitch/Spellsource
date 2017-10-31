@@ -2,15 +2,15 @@
   "name": "Scarab Beetle",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "DRUID",
   "baseAttack": 1,
   "baseHp": 5,
+  "rarity": "FREE",
   "race": "BEAST",
+  "description": "Taunt",
   "attributes": {
     "TAUNT": true
   },
-  "heroClass": "DRUID",
-  "rarity": "FREE",
-  "description": "Taunt",
   "collectible": false,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
   "fileFormatVersion": 1

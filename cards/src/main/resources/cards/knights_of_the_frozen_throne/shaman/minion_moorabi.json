@@ -2,18 +2,18 @@
   "name": "Moorabi",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "SHAMAN",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "SHAMAN",
   "rarity": "LEGENDARY",
   "description": "Whenever another minion is Frozen, add a copy of it to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "AttributeAppliedTrigger",
-      "requiredAttribute": "FROZEN",
-      "targetPlayer": "BOTH",
       "hostTargetType": "IGNORE_AS_TARGET",
-      "targetEntityType": "MINION"
+      "requiredAttribute": "FROZEN",
+      "targetEntityType": "MINION",
+      "targetPlayer": "BOTH"
     },
     "spell": {
       "class": "CopyCardSpell",

@@ -2,9 +2,9 @@
   "name": "Shadowmourne",
   "baseManaCost": 8,
   "type": "WEAPON",
+  "heroClass": "WARRIOR",
   "damage": 4,
   "durability": 3,
-  "heroClass": "WARRIOR",
   "rarity": "FREE",
   "description": "Also damages the minions next to whomever your hero attacks.",
   "trigger": {

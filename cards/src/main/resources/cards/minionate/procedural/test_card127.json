@@ -1,1 +1,15 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Minita", "heroClass": "ANY", "description": "Players only have 15 seconds to take their turns.", "fileFormatVersion": 1, "rarity": "LEGENDARY", "baseHp": 7.0, "race": "DRAGON", "baseManaCost": 8.0, "type": "MINION", "id": "Minita", "baseAttack": 6.0}
+{
+  "id": "Minita",
+  "name": "Minita",
+  "baseManaCost": 8.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6.0,
+  "baseHp": 7.0,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Players only have 15 seconds to take their turns.",
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

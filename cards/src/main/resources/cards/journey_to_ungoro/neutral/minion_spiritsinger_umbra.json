@@ -1,28 +1,28 @@
 {
-  "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
   "name": "Spiritsinger Umbra",
+  "baseManaCost": 4,
+  "type": "MINION",
   "heroClass": "ANY",
-  "description": "After you summon a minion, trigger its Deathrattle effect.",
-  "fileFormatVersion": 1,
-  "rarity": "LEGENDARY",
+  "baseAttack": 3,
   "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "After you summon a minion, trigger its Deathrattle effect.",
   "trigger": {
     "eventTrigger": {
-      "targetPlayer": "SELF",
       "class": "AfterMinionSummonedTrigger",
       "queueCondition": {
+        "class": "AttributeCondition",
         "attribute": "DEATHRATTLES",
-        "operation": "HAS",
-        "class": "AttributeCondition"
-      }
+        "operation": "HAS"
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "TriggerDeathrattleSpell",
       "target": "EVENT_TARGET"
     }
   },
-  "baseAttack": 3,
-  "type": "MINION",
-  "baseManaCost": 4
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
 }

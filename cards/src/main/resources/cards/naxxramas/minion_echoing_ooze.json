@@ -1,32 +1,32 @@
 {
-	"name": "Echoing Ooze",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "Battlecry: Summon an exact copy of this minion at the end of the turn.",
-	"battlecry": {
-		"spell": {
-			"class": "AddEnchantmentSpell",
-			"target": "SELF",
-			"trigger": {
-				"eventTrigger": {
-					"class": "TurnEndTrigger"
-				},
-				"spell": {
-					"class": "SummonCopySpell",
-					"target": "SELF"
-				},
-				"oneTurn": true
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "NAXXRAMAS",
-	"fileFormatVersion": 1
+  "name": "Echoing Ooze",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Battlecry: Summon an exact copy of this minion at the end of the turn.",
+  "battlecry": {
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "SELF",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnEndTrigger"
+        },
+        "spell": {
+          "class": "SummonCopySpell",
+          "target": "SELF"
+        },
+        "oneTurn": true
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "NAXXRAMAS",
+  "fileFormatVersion": 1
 }

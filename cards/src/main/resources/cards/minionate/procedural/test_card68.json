@@ -1,1 +1,19 @@
-{"collectible": true, "aura": {"attribute": "AURA_UNTARGETABLE_BY_SPELLS", "class": "AttributeAura", "target": "ADJACENT_MINIONS"}, "name": "Trapinwath", "heroClass": "MAGE", "description": "Adjacent minions can't be targeted by spells or Hero Powers.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 2.0, "set": "SPELLSOURCE", "baseManaCost": 2.0, "type": "MINION", "id": "Trapinwath", "baseAttack": 2.0}
+{
+  "id": "Trapinwath",
+  "name": "Trapinwath",
+  "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "MAGE",
+  "baseAttack": 2.0,
+  "baseHp": 2.0,
+  "rarity": "EPIC",
+  "description": "Adjacent minions can't be targeted by spells or Hero Powers.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "ADJACENT_MINIONS",
+    "attribute": "AURA_UNTARGETABLE_BY_SPELLS"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -2,9 +2,9 @@
   "name": "Dr. Boom",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 7,
   "baseHp": 7,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Summon two 1/1 Wrathful Spirits. WARNING: Bots may explode.",
   "battlecry": {
@@ -13,20 +13,20 @@
       "spells": [
         {
           "class": "SummonSpell",
-          "card": "token_boom_bot",
-          "boardPositionRelative": "RIGHT"
+          "boardPositionRelative": "RIGHT",
+          "card": "token_boom_bot"
         },
         {
           "class": "SummonSpell",
-          "card": "token_boom_bot",
-          "boardPositionRelative": "LEFT"
+          "boardPositionRelative": "LEFT",
+          "card": "token_boom_bot"
         }
       ]
     }
   },
   "attributes": {
-    "NAME": "Shiramba",
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "NAME": "Shiramba"
   },
   "collectible": true,
   "set": "GOBLINS_VS_GNOMES",

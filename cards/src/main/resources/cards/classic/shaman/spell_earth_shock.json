@@ -1,24 +1,24 @@
 {
-	"name": "Earth Shock",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"description": "Silence a minion, then deal 1 damage to it.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "SilenceSpell"
-			},
-			{
-				"class": "DamageSpell",
-				"value": 1
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Earth Shock",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "COMMON",
+  "description": "Silence a minion, then deal 1 damage to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SilenceSpell"
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

@@ -2,15 +2,15 @@
   "name": "Frost Widow",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "DRUID",
   "baseAttack": 1,
   "baseHp": 2,
+  "rarity": "FREE",
   "race": "BEAST",
+  "description": "Poisonous",
   "attributes": {
     "POISONOUS": true
   },
-  "heroClass": "DRUID",
-  "rarity": "FREE",
-  "description": "Poisonous",
   "collectible": false,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
   "fileFormatVersion": 1

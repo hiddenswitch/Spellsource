@@ -1,24 +1,24 @@
 {
-	"name": "Poisoned Blade",
-	"baseManaCost": 4,
-	"type": "WEAPON",
-	"damage": 1,
-	"durability": 3,
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Your Hero Ability gives this weapon +1 Attack instead of replacing it.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "InspireTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "BuffWeaponSpell",
-			"target": "FRIENDLY_WEAPON",
-			"attackBonus": 1
-		}
-	},
-	"collectible": true,
-	"set": "THE_GRAND_TOURNAMENT",
-	"fileFormatVersion": 1
+  "name": "Poisoned Blade",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "ROGUE",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "Your Hero Ability gives this weapon +1 Attack instead of replacing it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffWeaponSpell",
+      "target": "FRIENDLY_WEAPON",
+      "attackBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
 }

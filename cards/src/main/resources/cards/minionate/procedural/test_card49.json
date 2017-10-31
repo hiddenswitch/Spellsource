@@ -1,1 +1,25 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Jualting Menite", "heroClass": "WARRIOR", "description": "Inspire: Give your weapon +1 Attack.", "fileFormatVersion": 1, "rarity": "COMMON", "baseHp": 2.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "InspireTrigger"}, "spell": {"attackBonus": 1, "class": "BuffWeaponSpell", "target": "FRIENDLY_WEAPON"}}, "baseManaCost": 2.0, "type": "MINION", "id": "Jualting Menite", "baseAttack": 2.0}
+{
+  "id": "Jualting Menite",
+  "name": "Jualting Menite",
+  "baseManaCost": 2.0,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 2.0,
+  "baseHp": 2.0,
+  "rarity": "COMMON",
+  "description": "Inspire: Give your weapon +1 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffWeaponSpell",
+      "target": "FRIENDLY_WEAPON",
+      "attackBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

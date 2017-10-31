@@ -1,16 +1,16 @@
 {
-	"name": "Animated Shield",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 5,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Taunt",
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": false,
-	"set": "ONE_NIGHT_IN_KARAZHAN",
-	"fileFormatVersion": 1
+  "name": "Animated Shield",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1
 }

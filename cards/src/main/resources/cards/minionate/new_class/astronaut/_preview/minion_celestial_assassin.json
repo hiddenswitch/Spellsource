@@ -1,22 +1,22 @@
 {
-	"name": "Celestial Assassin",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 6,
-	"heroClass": "PALADIN",
-	"rarity": "EPIC",
-	"description": "Call to Arms: Place one of each Secret from your deck into play.",
-	"battlecry": {
-		"spell": {
-			"class": "PutRandomSecretIntoPlaySpell",
-			"howMany": 99
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SPELLSOURCE",
-	"fileFormatVersion": 1
+  "name": "Celestial Assassin",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "Call to Arms: Place one of each Secret from your deck into play.",
+  "battlecry": {
+    "spell": {
+      "class": "PutRandomSecretIntoPlaySpell",
+      "howMany": 99
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
 }

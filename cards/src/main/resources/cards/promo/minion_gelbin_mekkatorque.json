@@ -1,27 +1,27 @@
 {
-	"name": "Gelbin Mekkatorque",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Summon an AWESOME invention.",
-	"battlecry": {
-		"spell": {
-			"class": "SummonRandomSpell",
-			"cards": [
-				"token_emboldener_3000",
-				"token_homing_chicken",
-				"token_poultryizer",
-				"token_repair_bot"
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "PROMO",
-	"fileFormatVersion": 1
+  "name": "Gelbin Mekkatorque",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon an AWESOME invention.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonRandomSpell",
+      "cards": [
+        "token_emboldener_3000",
+        "token_homing_chicken",
+        "token_poultryizer",
+        "token_repair_bot"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "PROMO",
+  "fileFormatVersion": 1
 }

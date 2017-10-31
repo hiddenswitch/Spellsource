@@ -1,16 +1,16 @@
 {
-	"name": "Spirit Wolf",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "SHAMAN",
-	"rarity": "RARE",
-	"description": "",
-	"attributes": {
-		"TAUNT": true
-	},
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Spirit Wolf",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

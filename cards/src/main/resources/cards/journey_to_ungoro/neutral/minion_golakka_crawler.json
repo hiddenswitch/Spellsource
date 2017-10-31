@@ -2,9 +2,9 @@
   "name": "Golakka Crawler",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "RARE",
   "race": "BEAST",
   "description": "Battlecry: Destroy a Pirate and gain +1/+1.",
@@ -12,6 +12,10 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "MetaSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "PIRATE"
+      },
       "spells": [
         {
           "class": "DestroySpell"
@@ -22,11 +26,7 @@
           "attackBonus": 1,
           "hpBonus": 1
         }
-      ],
-      "filter": {
-        "class": "RaceFilter",
-        "race": "PIRATE"
-      }
+      ]
     }
   },
   "attributes": {

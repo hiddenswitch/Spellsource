@@ -1,17 +1,17 @@
 {
-	"name": "Ancestor's Call",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "EPIC",
-	"description": "Put a random minion from each player's hand into the battlefield.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "PutRandomMinionOnBoardSpell",
-		"targetPlayer": "BOTH",
-		"cardLocation": "HAND"
-	},
-	"collectible": true,
-	"set": "GOBLINS_VS_GNOMES",
-	"fileFormatVersion": 1
+  "name": "Ancestor's Call",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "EPIC",
+  "description": "Put a random minion from each player's hand into the battlefield.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "PutRandomMinionOnBoardSpell",
+    "cardLocation": "HAND",
+    "targetPlayer": "BOTH"
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
 }

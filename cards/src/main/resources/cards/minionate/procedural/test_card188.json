@@ -1,1 +1,34 @@
-{"collectible": true, "set": "SPELLSOURCE", "name": "Captain", "heroClass": "ANY", "description": "Whenever you play a card with Battlecry, gain +1/+1.", "fileFormatVersion": 1, "rarity": "EPIC", "baseHp": 4.0, "trigger": {"eventTrigger": {"targetPlayer": "SELF", "class": "CardPlayedTrigger", "queueCondition": {"attribute": "BATTLECRY", "operation": "HAS", "class": "AttributeCondition"}}, "spell": {"attackBonus": 1, "class": "BuffSpell", "hpBonus": 1, "target": "SELF"}}, "baseManaCost": 5.0, "attributes": {"TAUNT": true}, "type": "MINION", "id": "Captain", "baseAttack": 5.0}
+{
+  "id": "Captain",
+  "name": "Captain",
+  "baseManaCost": 5.0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5.0,
+  "baseHp": 4.0,
+  "rarity": "EPIC",
+  "description": "Whenever you play a card with Battlecry, gain +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "queueCondition": {
+        "class": "AttributeCondition",
+        "attribute": "BATTLECRY",
+        "operation": "HAS"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

@@ -1,36 +1,36 @@
 {
-	"name": "Tinkmaster Overspark",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.",
-	"battlecry": {
-		"spell": {
-			"class": "EitherOrSpell",
-			"spell1": {
-				"class": "TransformMinionSpell",
-				"target": "ALL_OTHER_MINIONS",
-				"card": "token_devilsaur",
-				"randomTarget": true
-			},
-			"spell2": {
-				"class": "TransformMinionSpell",
-				"target": "ALL_OTHER_MINIONS",
-				"card": "token_squirrel",
-				"randomTarget": true
-			},
-			"condition": {
-				"class": "RandomCondition"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Tinkmaster Overspark",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.",
+  "battlecry": {
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "RandomCondition"
+      },
+      "spell1": {
+        "class": "TransformMinionSpell",
+        "target": "ALL_OTHER_MINIONS",
+        "card": "token_devilsaur",
+        "randomTarget": true
+      },
+      "spell2": {
+        "class": "TransformMinionSpell",
+        "target": "ALL_OTHER_MINIONS",
+        "card": "token_squirrel",
+        "randomTarget": true
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

@@ -1,27 +1,27 @@
 {
-	"name": "Defias Ringleader",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "Combo: Summon a 2/1 Fox Cub.",
-	"battlecry": {
-		"spell": {
-			"class": "SummonSpell",
-			"card": "token_defias_bandit",
-			"boardPositionRelative": "RIGHT"
-		},
-		"condition": {
-			"class": "ComboCondition"
-		}
-	},
-	"attributes": {
-		"NAME": "Fox Vixen",
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Defias Ringleader",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROGUE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Combo: Summon a 2/1 Fox Cub.",
+  "battlecry": {
+    "condition": {
+      "class": "ComboCondition"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_defias_bandit"
+    }
+  },
+  "attributes": {
+    "COMBO": true,
+    "NAME": "Fox Vixen"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }
