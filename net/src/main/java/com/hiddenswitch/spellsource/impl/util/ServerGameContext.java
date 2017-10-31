@@ -100,7 +100,7 @@ public class ServerGameContext extends GameContext {
 
 	@Override
 	@Suspendable
-	protected void startTurn(int playerId) {
+	public void startTurn(int playerId) {
 		super.startTurn(playerId);
 		GameState state = new GameState(this, TurnState.TURN_IN_PROGRESS);
 		getListenerMap().get(getPlayer1()).onUpdate(state);

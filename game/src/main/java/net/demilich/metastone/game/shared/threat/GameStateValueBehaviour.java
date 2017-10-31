@@ -23,10 +23,10 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);
 
-	private IGameStateHeuristic heuristic;
-	private FeatureVector featureVector;
-	private String nameSuffix = "";
-	private long timeout = 3500;
+	protected IGameStateHeuristic heuristic;
+	protected FeatureVector featureVector;
+	protected String nameSuffix = "";
+	protected long timeout = 3500;
 
 	public GameStateValueBehaviour() {
 		this(FeatureVector.getFittest(), "Botty McBotface");
@@ -65,7 +65,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 		return score;
 	}
 
-	private GameContext getClone(GameContext original) {
+	protected GameContext getClone(GameContext original) {
 		GameContext context = original.clone();
 		// Assume that the players are GameStateValueBehaviour players
 		context.getPlayer1().setBehaviour(new GameStateValueBehaviour(featureVector, nameSuffix));

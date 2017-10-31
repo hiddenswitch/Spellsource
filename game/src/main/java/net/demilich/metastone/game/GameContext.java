@@ -1031,7 +1031,7 @@ public class GameContext implements Cloneable, Serializable {
 	 * @param playerId The player whose turn should be started.
 	 */
 	@Suspendable
-	protected void startTurn(int playerId) {
+	public void startTurn(int playerId) {
 		setTurn(getTurn() + 1);
 		getLogic().startTurn(playerId);
 		onGameStateChanged();
