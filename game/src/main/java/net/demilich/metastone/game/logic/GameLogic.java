@@ -35,7 +35,7 @@ import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
-import net.demilich.metastone.utils.MathUtils;
+import net.demilich.metastone.game.shared.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

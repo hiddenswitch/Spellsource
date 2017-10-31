@@ -12,7 +12,7 @@ import io.vertx.core.Handler;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.utils.Tuple;
+import net.demilich.metastone.game.shared.utils.Tuple;
 import org.junit.Test;
 
 import java.util.List;

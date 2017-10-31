@@ -8,7 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.neutralnetwork.HiddenUnit;
 import net.demilich.metastone.game.behaviour.neutralnetwork.NeuralNetwork;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.utils.MathUtils;
+import net.demilich.metastone.game.shared.utils.MathUtils;
 
 public class Brain implements IBrain {
 

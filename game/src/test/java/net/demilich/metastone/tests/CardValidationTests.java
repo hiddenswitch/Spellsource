@@ -14,8 +14,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import net.demilich.metastone.game.cards.CardParser;
-import net.demilich.metastone.utils.ResourceInputStream;
-import net.demilich.metastone.utils.UserHomeMetastone;
+import net.demilich.metastone.game.shared.utils.ResourceInputStream;
 
 /**
  * This test will iterate through all the cards in the cards resources dir and invoke the CardParser.parseCard(cardFile)
