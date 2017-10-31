@@ -27,6 +27,26 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testDefile() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion bloodfenRaptor = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCard(context, player, "spell_defile");
+			Assert.assertEquals(bloodfenRaptor.getHp(), 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion bloodfenRaptor = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion patches = playMinionCard(context, opponent, "minion_patches_the_pirate");
+			context.endTurn();
+			playCard(context, player, "spell_defile");
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+	}
+
+	@Test
 	public void testMoorabi() {
 		runGym((context, player, opponent) -> {
 			Minion moorabi = playMinionCard(context, player, "minion_moorabi");

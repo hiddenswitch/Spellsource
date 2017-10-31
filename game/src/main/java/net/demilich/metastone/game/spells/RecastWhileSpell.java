@@ -15,11 +15,12 @@ public class RecastWhileSpell extends Spell {
 		int limit = 100;
 		// case 1 - only one condition
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
-		beforeCast(context, desc);
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		// Cast the spell at least once
 		do {
+			beforeCast(context, desc);
 			SpellUtils.castChildSpell(context, player, spell, source, target);
+			context.getLogic().checkForDeadEntities();
 			limit--;
 			if (limit < 0) {
 				throw new RuntimeException("RecastWhileSpell infinite loop detected.");
@@ -30,6 +31,7 @@ public class RecastWhileSpell extends Spell {
 	protected void beforeCast(GameContext context, SpellDesc desc) {
 	}
 
+	@Suspendable
 	protected boolean isFulfilled(GameContext context, Player player, Entity source, Entity target, Condition condition, SpellDesc desc) {
 		return condition.isFulfilled(context, player, source, target);
 	}
