@@ -2,7 +2,7 @@
   "name": "Soulfire",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Deal 4 damage. Discard a random card.",
   "targetSelection": "ANY",

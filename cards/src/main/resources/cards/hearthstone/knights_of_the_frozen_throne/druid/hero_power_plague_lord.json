@@ -2,7 +2,7 @@
   "name": "Plague Lord",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Choose One - +3 Attack this turn; or Gain 3 Armor",
   "targetSelection": "NONE",

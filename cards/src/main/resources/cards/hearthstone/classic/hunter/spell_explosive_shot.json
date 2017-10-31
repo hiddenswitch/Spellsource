@@ -2,7 +2,7 @@
   "name": "Explosive Shot",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "RARE",
   "description": "Deal 5 damage to a minion and 2 damage to adjacent ones.",
   "targetSelection": "MINIONS",

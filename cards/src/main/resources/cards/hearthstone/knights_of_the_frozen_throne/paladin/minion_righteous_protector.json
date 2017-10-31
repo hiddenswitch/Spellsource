@@ -2,7 +2,7 @@
   "name": "Righteous Protector",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",

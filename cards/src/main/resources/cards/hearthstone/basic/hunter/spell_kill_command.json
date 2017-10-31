@@ -2,7 +2,7 @@
   "name": "Kill Command",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Deal 3 damage. If you have a Beast, deal 5 damage instead.",
   "targetSelection": "ANY",

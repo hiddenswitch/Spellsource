@@ -2,7 +2,7 @@
   "name": "Twilight Elemental",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "EPIC",

@@ -2,7 +2,7 @@
   "name": "Resurrect",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Summon a random friendly minion that died this game.",
   "condition": {

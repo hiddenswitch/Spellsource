@@ -2,7 +2,7 @@
   "name": "Execute",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Destroy a damaged enemy minion.",
   "targetSelection": "ENEMY_MINIONS",

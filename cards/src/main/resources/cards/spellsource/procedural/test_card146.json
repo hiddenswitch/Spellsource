@@ -3,7 +3,7 @@
   "name": "Wrath",
   "baseManaCost": 4.0,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 4.0,
   "baseHp": 5.0,
   "rarity": "COMMON",

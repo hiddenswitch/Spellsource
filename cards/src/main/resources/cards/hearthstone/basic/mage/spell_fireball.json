@@ -2,7 +2,7 @@
   "name": "Fireball",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Deal 6 damage.",
   "targetSelection": "ANY",

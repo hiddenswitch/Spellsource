@@ -2,7 +2,7 @@
   "name": "Inspiration",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Draw a card.",
   "targetSelection": "NONE",

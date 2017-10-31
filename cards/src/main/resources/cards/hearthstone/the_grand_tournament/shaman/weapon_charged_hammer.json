@@ -2,7 +2,7 @@
   "name": "Charged Hammer",
   "baseManaCost": 4,
   "type": "WEAPON",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "damage": 2,
   "durability": 4,
   "rarity": "EPIC",

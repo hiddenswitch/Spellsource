@@ -2,7 +2,7 @@
   "name": "Convert",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Put a copy of an enemy minion into your hand.",
   "targetSelection": "ENEMY_MINIONS",

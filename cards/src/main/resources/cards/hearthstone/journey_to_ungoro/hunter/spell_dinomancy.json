@@ -2,7 +2,7 @@
   "name": "Dinomancy",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "EPIC",
   "description": "Your Hero Power becomes 'Give a Beast +2/+2.'",
   "targetSelection": "NONE",

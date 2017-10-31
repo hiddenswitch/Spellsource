@@ -2,7 +2,7 @@
   "name": "Shadow Essence",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Summon a 5/5 copy of a random minion in your deck.",
   "targetSelection": "NONE",

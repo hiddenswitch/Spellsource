@@ -2,7 +2,7 @@
   "name": "Pint-Size Potion",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Give all enemy minions -3 Attack this turn only.",
   "targetSelection": "NONE",

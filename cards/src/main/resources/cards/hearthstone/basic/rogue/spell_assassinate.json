@@ -2,7 +2,7 @@
   "name": "Assassinate",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Destroy an enemy minion.",
   "targetSelection": "ENEMY_MINIONS",

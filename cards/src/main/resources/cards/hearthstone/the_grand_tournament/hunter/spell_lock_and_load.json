@@ -2,7 +2,7 @@
   "name": "Lock and Load",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "EPIC",
   "description": "Each time you cast a spell this turn, add a random Hunter card to your hand.",
   "targetSelection": "NONE",
@@ -18,7 +18,7 @@
         "class": "ReceiveCardSpell",
         "cardFilter": {
           "class": "CardFilter",
-          "heroClass": "HUNTER"
+          "heroClass": "GREEN"
         }
       },
       "oneTurn": true

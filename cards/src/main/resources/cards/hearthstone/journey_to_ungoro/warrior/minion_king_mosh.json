@@ -2,7 +2,7 @@
   "name": "King Mosh",
   "baseManaCost": 9,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 9,
   "baseHp": 7,
   "rarity": "LEGENDARY",

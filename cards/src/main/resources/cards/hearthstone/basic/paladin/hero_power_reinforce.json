@@ -2,7 +2,7 @@
   "name": "Conscript",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Summon a 1/1 Recruit.",
   "condition": {

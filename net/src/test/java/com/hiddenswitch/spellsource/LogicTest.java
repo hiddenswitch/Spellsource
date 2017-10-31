@@ -172,11 +172,11 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 				.stream().limit(29), Stream.of(foreverPostdocInventoryId)).collect(Collectors.toList());
 
 		DeckCreateResponse dcr1 = decks.createDeck(new DeckCreateRequest().withName("d1").withHeroClass(HeroClass
-				.WARRIOR).withUserId(userId1).withInventoryIds(inventoryIds));
+				.RED).withUserId(userId1).withInventoryIds(inventoryIds));
 
 		// Create a 30 card deck
 		DeckCreateResponse dcr2 = decks.createDeck(new DeckCreateRequest().withName("d2").withHeroClass(HeroClass
-				.WARLOCK).withUserId(userId2).withCardIds(Collections.nCopies(30, "minion_novice_engineer")));
+				.VIOLET).withUserId(userId2).withCardIds(Collections.nCopies(30, "minion_novice_engineer")));
 
 		StartGameResponse sgr = service.startGame(new StartGameRequest().withGameId(gameId).withPlayers(new
 				StartGameRequest.Player().withId(0).withUserId(userId1).withDeckId(dcr1.getDeckId()), new

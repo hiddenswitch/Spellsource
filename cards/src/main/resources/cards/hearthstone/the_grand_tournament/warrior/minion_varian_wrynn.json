@@ -2,7 +2,7 @@
   "name": "Varian Wrynn",
   "baseManaCost": 10,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",

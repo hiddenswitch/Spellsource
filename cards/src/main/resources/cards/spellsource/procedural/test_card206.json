@@ -3,7 +3,7 @@
   "name": "Raid Leader",
   "baseManaCost": 3.0,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 3.0,
   "baseHp": 2.0,
   "rarity": "COMMON",

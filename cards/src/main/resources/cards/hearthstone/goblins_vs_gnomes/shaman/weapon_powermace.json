@@ -2,7 +2,7 @@
   "name": "Powermace",
   "baseManaCost": 3,
   "type": "WEAPON",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "damage": 3,
   "durability": 2,
   "rarity": "COMMON",

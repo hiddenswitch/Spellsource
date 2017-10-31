@@ -2,7 +2,7 @@
   "name": "Mulch",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Destroy a minion. Add a random minion to your opponent's hand.",
   "targetSelection": "MINIONS",

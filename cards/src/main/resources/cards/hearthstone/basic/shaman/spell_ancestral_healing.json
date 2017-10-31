@@ -2,7 +2,7 @@
   "name": "Ancestral Healing",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Restore a minion to full Health and give it Taunt.",
   "targetSelection": "MINIONS",

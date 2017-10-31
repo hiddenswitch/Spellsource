@@ -2,7 +2,7 @@
   "name": "Journey Below",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "RARE",
   "description": "Discover a Deathrattle card.",
   "targetSelection": "NONE",

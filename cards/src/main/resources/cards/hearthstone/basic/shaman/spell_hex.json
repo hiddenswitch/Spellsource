@@ -2,7 +2,7 @@
   "name": "Hex",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Transform a minion into a 0/1 Slime with Taunt.",
   "targetSelection": "MINIONS",

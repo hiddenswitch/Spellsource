@@ -156,7 +156,7 @@ public class GetCollectionResponse implements Serializable {
 			displayName = getName();
 		}
 
-		final HeroClass fakeHeroClass = getHeroClass() == null ? HeroClass.WARRIOR : getHeroClass();
+		final HeroClass fakeHeroClass = getHeroClass() == null ? HeroClass.RED : getHeroClass();
 		GameContext emptyContext = GameContext.uninitialized(fakeHeroClass, fakeHeroClass);
 
 		InventoryCollection collection = new InventoryCollection()

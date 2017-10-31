@@ -2,7 +2,7 @@
   "name": "Kingsblood Toxin",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Draw a card.",
   "targetSelection": "NONE",

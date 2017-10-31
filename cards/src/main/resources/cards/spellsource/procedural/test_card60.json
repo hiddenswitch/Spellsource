@@ -3,7 +3,7 @@
   "name": "Bald Snekin",
   "baseManaCost": 9.0,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 6.0,
   "baseHp": 8.0,
   "rarity": "EPIC",

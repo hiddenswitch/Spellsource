@@ -2,7 +2,7 @@
   "name": "Crackle",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Deal 3-6 damage. Overload: (1)",
   "targetSelection": "ANY",

@@ -2,7 +2,7 @@
   "name": "Crystalline Oracle",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "RARE",

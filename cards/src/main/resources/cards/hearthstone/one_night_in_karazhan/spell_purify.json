@@ -2,7 +2,7 @@
   "name": "Purify",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Silence a friendly minion. Draw a card.",
   "targetSelection": "FRIENDLY_MINIONS",

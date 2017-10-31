@@ -2,7 +2,7 @@
   "name": "Ravaging Ghoul",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",

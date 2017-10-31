@@ -3,7 +3,7 @@
   "name": "Happy Flurry",
   "baseManaCost": 4.0,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 3.0,
   "baseHp": 5.0,
   "rarity": "COMMON",

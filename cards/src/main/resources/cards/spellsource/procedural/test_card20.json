@@ -3,7 +3,7 @@
   "name": "Oxed Nething",
   "baseManaCost": 9.0,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 8.0,
   "baseHp": 8.0,
   "rarity": "COMMON",

@@ -2,7 +2,7 @@
   "name": "Flamestrike",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Deal 4 damage to all enemy minions.",
   "targetSelection": "NONE",

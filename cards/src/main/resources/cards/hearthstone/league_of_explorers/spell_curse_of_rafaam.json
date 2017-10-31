@@ -2,7 +2,7 @@
   "name": "Curse of Rafaam",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "COMMON",
   "description": "Give your opponent a 'Cursed!' card. While they hold it, they take 2 damage on their turn.",
   "targetSelection": "NONE",

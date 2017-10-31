@@ -2,7 +2,7 @@
   "name": "Intern Chef",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",

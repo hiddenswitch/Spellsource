@@ -2,7 +2,7 @@
   "name": "Moonglade Portal",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Restore 6 Health. Summon a random 6-Cost minion.",
   "targetSelection": "ANY",

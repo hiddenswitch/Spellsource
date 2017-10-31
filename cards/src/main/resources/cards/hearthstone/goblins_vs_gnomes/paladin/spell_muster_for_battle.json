@@ -2,7 +2,7 @@
   "name": "Muster for Battle",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Summon three 1/1 Recruits. Equip a 1/4 Weapon.",
   "targetSelection": "NONE",

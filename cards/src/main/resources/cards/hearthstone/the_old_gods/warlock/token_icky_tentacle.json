@@ -2,7 +2,7 @@
   "name": "Icky Tentacle",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "FREE",

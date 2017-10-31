@@ -2,7 +2,7 @@
   "name": "Living Roots",
   "baseManaCost": 1,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Choose One - Deal 2 damage; or Summon two 1/1 Saplings.",
   "targetSelection": "NONE",

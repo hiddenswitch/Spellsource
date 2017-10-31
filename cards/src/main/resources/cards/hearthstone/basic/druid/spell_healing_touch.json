@@ -2,7 +2,7 @@
   "name": "Healing Touch",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Restore 8 Health.",
   "targetSelection": "ANY",

@@ -2,7 +2,7 @@
   "name": "Anodized Robo Cub",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",

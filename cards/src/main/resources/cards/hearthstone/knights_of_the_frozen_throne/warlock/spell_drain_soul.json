@@ -2,7 +2,7 @@
   "name": "Drain Soul",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "COMMON",
   "description": "Lifesteal. Deal 2 damage to a minion.",
   "targetSelection": "MINIONS",

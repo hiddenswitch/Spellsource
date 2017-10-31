@@ -2,7 +2,7 @@
   "name": "Tundra Rhino",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "FREE",

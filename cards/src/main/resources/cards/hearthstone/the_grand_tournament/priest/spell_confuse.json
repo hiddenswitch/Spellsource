@@ -2,7 +2,7 @@
   "name": "Confuse",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Swap the Attack and Health of all minions.",
   "targetSelection": "NONE",

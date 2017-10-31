@@ -2,7 +2,7 @@
   "name": "Ornery Direhorn",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",

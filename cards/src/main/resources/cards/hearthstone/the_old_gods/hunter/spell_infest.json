@@ -2,7 +2,7 @@
   "name": "Infest",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "RARE",
   "description": "Give your minions \"Deathrattle: Add a random Beast card to your hand.\"",
   "targetSelection": "NONE",

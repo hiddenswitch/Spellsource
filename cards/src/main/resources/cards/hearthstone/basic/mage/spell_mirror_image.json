@@ -2,7 +2,7 @@
   "name": "Mirror Image",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Summon two 0/2 minions with Taunt.",
   "targetSelection": "NONE",

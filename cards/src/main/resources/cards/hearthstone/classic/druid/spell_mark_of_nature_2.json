@@ -2,7 +2,7 @@
   "name": "+4 Health, Taunt",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "+4 Health and Taunt",
   "targetSelection": "MINIONS",

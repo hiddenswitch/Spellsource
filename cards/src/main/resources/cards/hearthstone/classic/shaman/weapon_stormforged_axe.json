@@ -2,7 +2,7 @@
   "name": "Stormforged Axe",
   "baseManaCost": 2,
   "type": "WEAPON",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "damage": 2,
   "durability": 3,
   "rarity": "COMMON",

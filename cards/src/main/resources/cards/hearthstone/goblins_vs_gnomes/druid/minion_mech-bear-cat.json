@@ -2,7 +2,7 @@
   "name": "Mech-Bear-Cat",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 7,
   "baseHp": 6,
   "rarity": "RARE",

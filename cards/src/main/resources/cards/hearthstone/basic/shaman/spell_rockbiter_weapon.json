@@ -2,7 +2,7 @@
   "name": "Rockbiter Weapon",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Give a friendly character +3 Attack this turn.",
   "targetSelection": "FRIENDLY_CHARACTERS",

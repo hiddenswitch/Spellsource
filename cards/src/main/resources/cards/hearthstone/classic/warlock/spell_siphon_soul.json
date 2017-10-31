@@ -2,7 +2,7 @@
   "name": "Siphon Soul",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "RARE",
   "description": "Destroy a minion. Restore 3 Health to your hero.",
   "targetSelection": "MINIONS",

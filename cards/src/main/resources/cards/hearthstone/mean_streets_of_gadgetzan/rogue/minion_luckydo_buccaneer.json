@@ -2,7 +2,7 @@
   "name": "Luckydo Buccaneer",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",

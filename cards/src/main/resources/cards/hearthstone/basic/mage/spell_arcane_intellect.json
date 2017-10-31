@@ -2,7 +2,7 @@
   "name": "Arcane Intellect",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Draw 2 cards.",
   "targetSelection": "NONE",

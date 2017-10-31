@@ -2,7 +2,7 @@
   "name": "Greater Healing Potion",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Restore 12 Health to a friendly character.",
   "targetSelection": "FRIENDLY_CHARACTERS",

@@ -2,7 +2,7 @@
   "name": "Sleep with the Fishes",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Deal 3 damage to all damaged minions.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Earth Shock",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Silence a minion, then deal 1 damage to it.",
   "targetSelection": "MINIONS",

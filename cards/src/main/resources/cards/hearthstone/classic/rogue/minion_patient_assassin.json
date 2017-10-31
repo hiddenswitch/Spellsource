@@ -2,7 +2,7 @@
   "name": "Patient Assassin",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",

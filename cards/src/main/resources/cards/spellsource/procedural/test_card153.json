@@ -3,7 +3,7 @@
   "name": "Maggic C'Laggic",
   "baseManaCost": 4.0,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 3.0,
   "baseHp": 5.0,
   "rarity": "COMMON",

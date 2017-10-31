@@ -2,7 +2,7 @@
   "name": "Obsidian Destroyer",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "COMMON",

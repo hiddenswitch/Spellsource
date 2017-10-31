@@ -4,9 +4,9 @@
   "type": "MINION",
   "heroClass": "ANY",
   "heroClasses": [
-    "MAGE",
-    "PRIEST",
-    "WARLOCK"
+    "BLUE",
+    "WHITE",
+    "VIOLET"
   ],
   "baseAttack": 2,
   "baseHp": 2,
@@ -23,15 +23,15 @@
       "cardFilters": [
         {
           "class": "CardFilter",
-          "heroClass": "MAGE"
+          "heroClass": "BLUE"
         },
         {
           "class": "CardFilter",
-          "heroClass": "PRIEST"
+          "heroClass": "WHITE"
         },
         {
           "class": "CardFilter",
-          "heroClass": "WARLOCK"
+          "heroClass": "VIOLET"
         }
       ]
     }

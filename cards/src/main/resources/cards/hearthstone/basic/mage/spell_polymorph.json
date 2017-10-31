@@ -2,7 +2,7 @@
   "name": "Polymorph",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Transform a minion into a 1/1 Sheep.",
   "targetSelection": "MINIONS",

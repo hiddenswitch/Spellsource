@@ -2,7 +2,7 @@
   "name": "Invocation of Air",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Fill your board with 1/1 Elementals.",
   "targetSelection": "NONE",

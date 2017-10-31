@@ -2,7 +2,7 @@
   "name": "Envenom Weapon",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "RARE",
   "description": "Give your weapon Poisonous.",
   "condition": {

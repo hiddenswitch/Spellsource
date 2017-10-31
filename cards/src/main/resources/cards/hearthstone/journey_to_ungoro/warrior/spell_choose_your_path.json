@@ -2,7 +2,7 @@
   "name": "Choose Your Path",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Discover a card.",
   "targetSelection": "NONE",

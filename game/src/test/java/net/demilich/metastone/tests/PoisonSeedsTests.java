@@ -19,7 +19,7 @@ public class PoisonSeedsTests extends TestBase {
 
 	@Test
 	public void testPoisonSeeds() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.ROGUE);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.BLACK);
 		Player druid = context.getPlayer1();
 		Player rogue = context.getPlayer2();
 		MinionCard chillwindYeti = (MinionCard) CardCatalogue.getCardById("minion_chillwind_yeti");
@@ -50,7 +50,7 @@ public class PoisonSeedsTests extends TestBase {
 
 	@Test
 	public void testPoisonSeedsAuchenai() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.PRIEST);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.WHITE);
 		Player druid = context.getPlayer1();
 		Player priest = context.getPlayer2();
 
@@ -77,7 +77,7 @@ public class PoisonSeedsTests extends TestBase {
 
 	@Test
 	public void testPoisonSeedsHauntedCreeper() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.ROGUE);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.BLACK);
 		Player druid = context.getPlayer1();
 		MinionCard hauntedCreeper = (MinionCard) CardCatalogue.getCardById("minion_haunted_creeper");
 

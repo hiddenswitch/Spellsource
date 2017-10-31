@@ -2,7 +2,7 @@
   "name": "Strongshell Scavenger",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",

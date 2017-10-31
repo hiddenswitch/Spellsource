@@ -2,7 +2,7 @@
   "name": "Pit Lord",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 5,
   "baseHp": 6,
   "rarity": "EPIC",

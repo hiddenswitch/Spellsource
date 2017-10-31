@@ -2,7 +2,7 @@
   "name": "Temple Enforcer",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "COMMON",

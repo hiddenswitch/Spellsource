@@ -3,7 +3,7 @@
   "name": "Jingle! Again!",
   "baseManaCost": 5.0,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 3.0,
   "baseHp": 7.0,
   "rarity": "COMMON",

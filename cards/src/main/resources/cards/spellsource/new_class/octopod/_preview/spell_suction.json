@@ -2,7 +2,7 @@
   "name": "Suction",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Deal 2 damage to a character. Then, restore 2 Health to your hero.",
   "targetSelection": "ANY",

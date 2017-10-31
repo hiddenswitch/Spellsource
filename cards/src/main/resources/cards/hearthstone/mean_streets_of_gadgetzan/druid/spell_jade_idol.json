@@ -2,7 +2,7 @@
   "name": "Jade Idol",
   "baseManaCost": 1,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Choose One - Summon a Animated Shuriken; or Shuffle 3 copies of this card into your deck.",
   "targetSelection": "NONE",

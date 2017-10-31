@@ -2,7 +2,7 @@
   "name": "Johnny",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "LEGENDARY",

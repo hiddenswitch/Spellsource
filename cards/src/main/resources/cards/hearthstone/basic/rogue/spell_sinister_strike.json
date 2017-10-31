@@ -2,7 +2,7 @@
   "name": "Sinister Strike",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Deal 3 damage to the enemy hero.",
   "targetSelection": "NONE",

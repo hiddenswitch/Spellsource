@@ -3,7 +3,7 @@
   "name": "Barly",
   "baseManaCost": 3.0,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 2.0,
   "baseHp": 5.0,
   "rarity": "COMMON",

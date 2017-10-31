@@ -2,7 +2,7 @@
   "name": "Explore Un'Goro",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Replace your deck with copies of \"Discover a card.\"",
   "targetSelection": "NONE",

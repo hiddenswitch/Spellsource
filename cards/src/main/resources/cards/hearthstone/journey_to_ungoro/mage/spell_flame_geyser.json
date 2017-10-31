@@ -2,7 +2,7 @@
   "name": "Flame Geyser",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Deal 2 damage. Add a 1/2 Elemental to your hand.",
   "targetSelection": "ANY",

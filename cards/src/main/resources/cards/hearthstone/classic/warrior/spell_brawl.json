@@ -2,7 +2,7 @@
   "name": "Brawl",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Destroy all minions except one.  (chosen randomly)",
   "targetSelection": "NONE",

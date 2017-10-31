@@ -2,7 +2,7 @@
   "name": "Frost Shock",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Deal 1 damage to an enemy character and Freeze it.",
   "targetSelection": "ENEMY_CHARACTERS",

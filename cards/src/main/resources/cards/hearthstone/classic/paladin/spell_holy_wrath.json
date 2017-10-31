@@ -2,7 +2,7 @@
   "name": "Holy Wrath",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Draw a card and deal damage equal to its cost.",
   "targetSelection": "ANY",

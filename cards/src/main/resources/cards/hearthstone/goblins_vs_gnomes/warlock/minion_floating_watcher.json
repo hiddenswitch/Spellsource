@@ -2,7 +2,7 @@
   "name": "Floating Watcher",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",

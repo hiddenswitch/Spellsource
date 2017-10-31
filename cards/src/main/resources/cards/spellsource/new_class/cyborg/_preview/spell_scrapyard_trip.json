@@ -2,7 +2,7 @@
   "name": "Scrapyard Trip",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Hire a random Robot Assistant.",
   "targetSelection": "NONE",

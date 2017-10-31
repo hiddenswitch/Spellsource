@@ -20,7 +20,7 @@ public class Deck implements Serializable {
 	private boolean arbitrary;
 
 	static {
-		EMPTY = new Deck(HeroClass.WARRIOR);
+		EMPTY = new Deck(HeroClass.RED);
 	}
 
 	protected Deck() {

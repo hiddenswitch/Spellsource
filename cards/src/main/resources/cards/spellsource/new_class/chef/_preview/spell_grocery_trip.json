@@ -2,7 +2,7 @@
   "name": "Grocery Trip",
   "baseManaCost": 1,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Select One - Discover a power; or discover a minion.",
   "targetSelection": "NONE",

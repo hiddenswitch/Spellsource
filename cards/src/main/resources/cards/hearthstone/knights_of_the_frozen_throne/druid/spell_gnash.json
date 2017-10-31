@@ -2,7 +2,7 @@
   "name": "Gnash",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Give your hero +3 Attack this turn. Gain 3 Armor.",
   "targetSelection": "NONE",

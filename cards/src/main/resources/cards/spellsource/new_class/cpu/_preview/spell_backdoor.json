@@ -2,7 +2,7 @@
   "name": "Backdoor",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "RARE",
   "description": "Add a random minion to your hand. It costs 3 less Mana.",
   "targetSelection": "NONE",

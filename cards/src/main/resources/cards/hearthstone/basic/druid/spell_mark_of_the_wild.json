@@ -2,7 +2,7 @@
   "name": "Mark of the Wild",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Give a minion Taunt and +2/+2. (+2 Attack/+2 Health)",
   "targetSelection": "MINIONS",

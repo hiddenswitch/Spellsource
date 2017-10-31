@@ -2,7 +2,7 @@
   "name": "Crystal Core",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "LEGENDARY",
   "description": "For the rest of the game, your minions are 5/5.",
   "targetSelection": "NONE",

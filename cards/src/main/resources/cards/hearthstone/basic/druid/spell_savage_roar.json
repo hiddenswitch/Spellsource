@@ -2,7 +2,7 @@
   "name": "Savage Roar",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Give your characters +2 Attack this turn.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Voidform",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Deal 2 damage. After you play a card, refresh this.",
   "targetSelection": "ANY",

@@ -2,7 +2,7 @@
   "name": "Molten Reflection",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Choose a friendly minion. Summon a copy of it.",
   "targetSelection": "FRIENDLY_MINIONS",

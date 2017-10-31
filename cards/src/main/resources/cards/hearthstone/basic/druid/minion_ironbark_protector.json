@@ -2,7 +2,7 @@
   "name": "Ironbark Protector",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "FREE",

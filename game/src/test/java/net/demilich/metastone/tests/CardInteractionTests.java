@@ -30,7 +30,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testAttackBuffStacking() {
-		GameContext context = createContext(HeroClass.HUNTER, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.GREEN, HeroClass.RED);
 		Player hunter = context.getPlayer1();
 
 		// summon Ghaz'rilla
@@ -79,7 +79,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testKnifeJugglerPlusStealth() {
-		GameContext context = createContext(HeroClass.ROGUE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLACK, HeroClass.RED);
 		Player player = context.getPlayer1();
 
 		Minion knifeJuggler = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_knife_juggler"));
@@ -94,7 +94,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testSilenceWithBuffs() {
-		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.VIOLET, HeroClass.RED);
 		Player player = context.getPlayer1();
 
 		// summon attack target
@@ -144,7 +144,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testSwapWithBuffs() {
-		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.VIOLET, HeroClass.RED);
 		Player player = context.getPlayer1();
 
 		// summon test minion
@@ -192,7 +192,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testWildPyroPlusEquality() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.RED);
 		Player paladin = context.getPlayer1();
 		playCard(context, paladin, new TestMinionCard(3, 2, 0));
 		playCard(context, paladin, new TestMinionCard(4, 4, 0));
@@ -219,7 +219,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testLordJaraxxus() {
-		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.WARLOCK);
+		GameContext context = createContext(HeroClass.VIOLET, HeroClass.VIOLET);
 		Player warlock = context.getActivePlayer();
 		Card jaraxxus = CardCatalogue.getCardById("minion_lord_jaraxxus");
 		// first, just play Jaraxxus on an empty board
@@ -229,7 +229,7 @@ public class CardInteractionTests extends TestBase {
 		Assert.assertNotNull(warlock.getHero().getWeapon());
 
 		// start a new game
-		context = createContext(HeroClass.WARLOCK, HeroClass.WARLOCK);
+		context = createContext(HeroClass.VIOLET, HeroClass.VIOLET);
 		// opponent plays Repentance, which triggers on Lord Jaraxxus play
 		warlock = context.getActivePlayer();
 		Player paladin = context.getOpponent(warlock);
@@ -250,7 +250,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testBlessingOfWisdomMindControl() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.PALADIN);
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.GOLD);
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
 
@@ -270,7 +270,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testImpFlamestrike() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARLOCK);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.VIOLET);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -288,7 +288,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testHarvestGolemFlamestrike() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARLOCK);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.VIOLET);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -307,7 +307,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testGrimPatrons() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -328,7 +328,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testWobblingRunts() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -349,7 +349,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testHauntedCreeperHarvestGolem() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -377,7 +377,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testImpGangBossConeOfCold() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -397,7 +397,7 @@ public class CardInteractionTests extends TestBase {
 
 	@Test
 	public void testSummoningStonePrep() {
-		GameContext context = createContext(HeroClass.ROGUE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLACK, HeroClass.RED);
 		Player player = context.getPlayer1();
 
 		playCard(context, player, CardCatalogue.getCardById("minion_summoning_stone"));

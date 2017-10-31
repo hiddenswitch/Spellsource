@@ -2,7 +2,7 @@
   "name": "Bloodhoof Brave",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "COMMON",

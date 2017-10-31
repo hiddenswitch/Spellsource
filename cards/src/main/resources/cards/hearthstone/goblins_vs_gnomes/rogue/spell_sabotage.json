@@ -2,7 +2,7 @@
   "name": "Sabotage",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "EPIC",
   "description": "Destroy a random enemy minion. Combo: And your opponent's weapon.",
   "targetSelection": "NONE",

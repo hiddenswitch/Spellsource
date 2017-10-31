@@ -3,7 +3,7 @@
   "name": "Raid Summoner",
   "baseManaCost": 3.0,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 1.0,
   "baseHp": 6.0,
   "rarity": "COMMON",

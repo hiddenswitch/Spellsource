@@ -2,7 +2,7 @@
   "name": "Sacrifice",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Take 2 damage and draw a card.",
   "targetSelection": "NONE",

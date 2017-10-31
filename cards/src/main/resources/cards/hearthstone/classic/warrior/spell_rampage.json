@@ -2,7 +2,7 @@
   "name": "Rampage",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "COMMON",
   "description": "Give a damaged minion +3/+3.",
   "targetSelection": "MINIONS",

@@ -4,7 +4,7 @@
   "heroPower": "hero_power_life_tap",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Hero Power: Take 2 damage and draw a card",
   "attributes": {

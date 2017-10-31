@@ -2,7 +2,7 @@
   "name": "Katanaka",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Deal 3 damage to the enemy hero.",
   "targetSelection": "NONE",

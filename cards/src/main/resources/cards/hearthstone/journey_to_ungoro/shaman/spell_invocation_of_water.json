@@ -2,7 +2,7 @@
   "name": "Invocation of Water",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Restore 12 Health to your hero.",
   "targetSelection": "NONE",

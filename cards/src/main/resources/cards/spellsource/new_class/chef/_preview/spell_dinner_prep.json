@@ -2,7 +2,7 @@
   "name": "Dinner Prep",
   "baseManaCost": 5,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Select One - Draw 3 cards; or gain 2 Mana Cells.",
   "targetSelection": "NONE",

@@ -3,7 +3,7 @@
   "heroPower": "hero_power_the_four_horsemen",
   "baseManaCost": 9,
   "type": "HERO",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Equip a 5/3 Lifesteal weapon.",
   "battlecry": {

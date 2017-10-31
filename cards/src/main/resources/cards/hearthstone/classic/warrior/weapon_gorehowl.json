@@ -2,7 +2,7 @@
   "name": "Gorehowl",
   "baseManaCost": 7,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 7,
   "durability": 1,
   "rarity": "EPIC",

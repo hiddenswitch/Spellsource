@@ -2,7 +2,7 @@
   "name": "Shadowform",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Your Hero Power becomes 'Deal 2 damage'. If already in Shadowform: 3 damage.",
   "targetSelection": "NONE",

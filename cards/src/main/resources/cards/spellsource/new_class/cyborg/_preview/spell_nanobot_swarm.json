@@ -2,7 +2,7 @@
   "name": "Nanobot Swarm",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "Hire a 1/1 Nanobot with Storm for each enemy minion.",
   "targetSelection": "NONE",

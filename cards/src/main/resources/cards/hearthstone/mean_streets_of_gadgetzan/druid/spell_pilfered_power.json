@@ -2,7 +2,7 @@
   "name": "Pilfered Power",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Gain an empty Mana for each friendly minion.",
   "targetSelection": "NONE",

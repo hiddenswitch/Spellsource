@@ -20,7 +20,7 @@ public class LeagueOfExplorersTests extends TestBase {
 	@Test(description =
 			"Tests Sir Finley Mrrgglton and also confirms that players can do stuff to discovered cards besides receive them.")
 	public void testSirFinleyMrrgglton() {
-		GameContext context = createContext(HeroClass.PRIEST, HeroClass.PRIEST);
+		GameContext context = createContext(HeroClass.WHITE, HeroClass.WHITE);
 		Player player = context.getActivePlayer();
 		int oldId = player.getHero().getHeroPower().getId();
 		final DiscoverAction[] action = {null};

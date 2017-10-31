@@ -2,7 +2,7 @@
   "name": "Twisting Nether",
   "baseManaCost": 8,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "description": "Destroy all minions.",
   "targetSelection": "NONE",

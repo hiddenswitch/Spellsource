@@ -2,7 +2,7 @@
   "name": "Shadow Word: Death",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Destroy a minion with an Attack of 5 or more.",
   "targetSelection": "MINIONS",

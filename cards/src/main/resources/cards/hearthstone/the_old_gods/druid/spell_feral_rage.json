@@ -2,7 +2,7 @@
   "name": "Feral Rage",
   "baseManaCost": 3,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Choose One - Gain +4 Attack this turn; or Gain 8 Armor.",
   "targetSelection": "NONE",

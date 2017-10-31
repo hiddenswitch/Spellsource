@@ -2,7 +2,7 @@
   "name": "Mimic Pod",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "RARE",
   "description": "Draw a card, then add a copy of it to your hand.",
   "targetSelection": "NONE",

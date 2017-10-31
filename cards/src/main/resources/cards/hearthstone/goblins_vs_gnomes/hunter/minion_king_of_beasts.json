@@ -2,7 +2,7 @@
   "name": "King of Beasts",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "RARE",

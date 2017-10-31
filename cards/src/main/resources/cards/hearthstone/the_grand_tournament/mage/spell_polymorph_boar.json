@@ -2,7 +2,7 @@
   "name": "Polymorph: Boar",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "RARE",
   "description": "Transform a minion into a 4/2 Boar with Charge.",
   "targetSelection": "MINIONS",

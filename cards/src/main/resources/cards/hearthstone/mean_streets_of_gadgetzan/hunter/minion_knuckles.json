@@ -2,7 +2,7 @@
   "name": "Knuckles",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "LEGENDARY",

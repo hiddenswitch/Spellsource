@@ -3,7 +3,7 @@
   "name": "Growling Snekin",
   "baseManaCost": 2.0,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 1.0,
   "baseHp": 3.0,
   "rarity": "COMMON",

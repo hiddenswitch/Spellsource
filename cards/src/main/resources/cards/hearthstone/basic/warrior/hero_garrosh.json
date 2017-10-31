@@ -4,7 +4,7 @@
   "heroPower": "hero_power_armor_up",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Hero Power: Gain 2 armor",
   "attributes": {

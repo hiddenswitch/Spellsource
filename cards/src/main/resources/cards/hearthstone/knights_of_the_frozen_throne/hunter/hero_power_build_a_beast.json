@@ -2,7 +2,7 @@
   "name": "Build-A-Beast",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Craft a custom Zombeast",
   "targetSelection": "NONE",

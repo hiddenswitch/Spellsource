@@ -2,7 +2,7 @@
   "name": "Dinomancy",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Give a Beast +2/+2",
   "condition": {

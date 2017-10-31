@@ -2,7 +2,7 @@
   "name": "Plague",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Alter the Health of ALL minions to become 1.",
   "targetSelection": "NONE",

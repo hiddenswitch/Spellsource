@@ -2,7 +2,7 @@
   "name": "Circle of Healing",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Restore 4 Health to ALL minions.",
   "targetSelection": "NONE",

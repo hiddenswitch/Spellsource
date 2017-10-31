@@ -2,7 +2,7 @@
   "name": "Servant of Yogg-Saron",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",

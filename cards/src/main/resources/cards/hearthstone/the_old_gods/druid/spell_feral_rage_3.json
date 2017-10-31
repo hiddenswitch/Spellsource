@@ -2,7 +2,7 @@
   "name": "Evolve Spines and Scales",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Gain 4 Attack and 8 Armor.",
   "targetSelection": "NONE",

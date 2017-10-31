@@ -4,9 +4,9 @@
   "type": "MINION",
   "heroClass": "ANY",
   "heroClasses": [
-    "DRUID",
-    "ROGUE",
-    "SHAMAN"
+    "BROWN",
+    "BLACK",
+    "SILVER"
   ],
   "baseAttack": 5,
   "baseHp": 3,
@@ -23,15 +23,15 @@
       "cardFilters": [
         {
           "class": "CardFilter",
-          "heroClass": "DRUID"
+          "heroClass": "BROWN"
         },
         {
           "class": "CardFilter",
-          "heroClass": "ROGUE"
+          "heroClass": "BLACK"
         },
         {
           "class": "CardFilter",
-          "heroClass": "SHAMAN"
+          "heroClass": "SILVER"
         }
       ]
     }

@@ -2,7 +2,7 @@
   "name": "Deal 2 damage and summon two 1/1",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Deal 2 damage and hire two 1/1 tokens.",
   "targetSelection": "ANY",

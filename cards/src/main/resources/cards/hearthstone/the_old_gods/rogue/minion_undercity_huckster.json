@@ -2,7 +2,7 @@
   "name": "Undercity Huckster",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",

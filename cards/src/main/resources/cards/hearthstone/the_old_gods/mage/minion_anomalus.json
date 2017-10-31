@@ -2,7 +2,7 @@
   "name": "Anomalus",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 8,
   "baseHp": 6,
   "rarity": "LEGENDARY",

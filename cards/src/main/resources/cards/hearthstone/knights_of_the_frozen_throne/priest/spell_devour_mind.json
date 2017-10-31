@@ -2,7 +2,7 @@
   "name": "Devour Mind",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Copy 3 cards from your opponent's deck and add them to your hand.",
   "targetSelection": "NONE",

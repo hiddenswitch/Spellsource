@@ -2,7 +2,7 @@
   "name": "Wee Spellstopper",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "EPIC",

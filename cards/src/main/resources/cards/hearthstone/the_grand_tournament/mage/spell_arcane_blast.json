@@ -2,7 +2,7 @@
   "name": "Arcane Blast",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "EPIC",
   "description": "Deal 2 damage to a minion. This spell gets double bonus from Spell Damage.",
   "targetSelection": "MINIONS",

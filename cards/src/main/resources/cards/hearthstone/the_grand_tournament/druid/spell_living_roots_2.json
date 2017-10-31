@@ -2,7 +2,7 @@
   "name": "Summon two 1/1",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Summon two 1/1 Saplings",
   "targetSelection": "NONE",

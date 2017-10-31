@@ -2,7 +2,7 @@
   "name": "Tentacles for Arms",
   "baseManaCost": 5,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 2,
   "durability": 2,
   "rarity": "EPIC",

@@ -4,9 +4,9 @@
   "type": "MINION",
   "heroClass": "ANY",
   "heroClasses": [
-    "MAGE",
-    "PRIEST",
-    "WARLOCK"
+    "BLUE",
+    "WHITE",
+    "VIOLET"
   ],
   "baseAttack": 3,
   "baseHp": 3,

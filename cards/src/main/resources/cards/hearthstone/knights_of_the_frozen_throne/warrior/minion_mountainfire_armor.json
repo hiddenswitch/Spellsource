@@ -2,7 +2,7 @@
   "name": "Mountainfire Armor",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "RARE",

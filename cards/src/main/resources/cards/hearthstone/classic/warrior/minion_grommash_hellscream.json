@@ -2,7 +2,7 @@
   "name": "Grommash Hellscream",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 4,
   "baseHp": 9,
   "rarity": "LEGENDARY",

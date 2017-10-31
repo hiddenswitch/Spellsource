@@ -2,7 +2,7 @@
   "name": "Ancient of Lore",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",

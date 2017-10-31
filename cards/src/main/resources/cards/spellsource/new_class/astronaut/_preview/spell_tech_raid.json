@@ -2,7 +2,7 @@
   "name": "Tech Raid",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Grant a target minion +4/+4.",
   "targetSelection": "MINIONS",

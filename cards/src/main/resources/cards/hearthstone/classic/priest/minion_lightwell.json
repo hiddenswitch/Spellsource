@@ -2,7 +2,7 @@
   "name": "Lightwell",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 0,
   "baseHp": 5,
   "rarity": "RARE",

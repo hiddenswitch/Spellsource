@@ -2,7 +2,7 @@
   "name": "Ball of Spiders",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "RARE",
   "description": "Summon three 1/1 Webspinners.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Give your minions +2/2",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Your minions get +2/2",
   "targetSelection": "NONE",

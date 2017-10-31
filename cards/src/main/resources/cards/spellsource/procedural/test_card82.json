@@ -3,7 +3,7 @@
   "name": "Elvenurr Ooyer",
   "baseManaCost": 5.0,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 4.0,
   "baseHp": 5.0,
   "rarity": "COMMON",

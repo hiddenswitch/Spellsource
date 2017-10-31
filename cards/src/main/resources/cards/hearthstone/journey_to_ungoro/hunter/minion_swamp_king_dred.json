@@ -2,7 +2,7 @@
   "name": "Swamp King Dred",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 9,
   "baseHp": 9,
   "rarity": "LEGENDARY",

@@ -2,7 +2,7 @@
   "name": "Ice Fishing",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Draw 2 Murlocs from your deck.",
   "targetSelection": "NONE",

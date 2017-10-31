@@ -2,7 +2,7 @@
   "name": "Lost in the Jungle",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "COMMON",
   "description": "Summon two 1/1 Silver Hand Recruits.",
   "targetSelection": "NONE",

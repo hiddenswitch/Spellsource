@@ -2,7 +2,7 @@
   "name": "Aldor Peacekeeper",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "RARE",

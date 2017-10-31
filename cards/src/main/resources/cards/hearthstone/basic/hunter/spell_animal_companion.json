@@ -2,7 +2,7 @@
   "name": "Animal Companion",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Summon a random Animal Spirit.",
   "targetSelection": "NONE",

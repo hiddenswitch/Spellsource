@@ -3,7 +3,7 @@
   "name": "Ravenclaw Harmer",
   "baseManaCost": 4.0,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 6.0,
   "baseHp": 6.0,
   "rarity": "EPIC",

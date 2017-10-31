@@ -2,7 +2,7 @@
   "name": "Anub'arak",
   "baseManaCost": 9,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 8,
   "baseHp": 4,
   "rarity": "LEGENDARY",

@@ -2,7 +2,7 @@
   "name": "Jade Shuriken",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Deal 2 damage. Combo: Summon a Animated Shuriken.",
   "targetSelection": "ANY",

@@ -2,7 +2,7 @@
   "name": "Shifting Shade",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "RARE",

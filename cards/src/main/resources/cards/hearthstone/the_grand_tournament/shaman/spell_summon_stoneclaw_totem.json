@@ -2,7 +2,7 @@
   "name": "Stoneclaw Totem",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Summon a Stoneclaw Totem.",
   "targetSelection": "NONE",

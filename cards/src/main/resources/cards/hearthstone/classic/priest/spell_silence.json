@@ -2,7 +2,7 @@
   "name": "Silence",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Silence a minion.",
   "targetSelection": "MINIONS",

@@ -2,7 +2,7 @@
   "name": "Corrupting Mist",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "RARE",
   "description": "Corrupt all enemy minions. At the start of your turn, destroy them.",
   "targetSelection": "NONE",

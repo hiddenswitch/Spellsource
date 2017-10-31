@@ -2,7 +2,7 @@
   "name": "Sacrificial Pact",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Destroy a Demon. Restore 5 Health to your hero.",
   "targetSelection": "ANY",

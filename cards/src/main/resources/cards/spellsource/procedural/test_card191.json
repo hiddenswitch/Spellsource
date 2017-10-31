@@ -3,7 +3,7 @@
   "name": "House Of Ofhant",
   "baseManaCost": 5.0,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 4.0,
   "baseHp": 4.0,
   "rarity": "FREE",

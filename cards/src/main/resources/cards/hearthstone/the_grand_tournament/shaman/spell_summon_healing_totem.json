@@ -2,7 +2,7 @@
   "name": "Healing Totem",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Summon a Healing Totem.",
   "targetSelection": "NONE",

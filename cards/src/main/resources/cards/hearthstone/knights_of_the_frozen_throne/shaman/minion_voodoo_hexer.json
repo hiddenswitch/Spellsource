@@ -2,7 +2,7 @@
   "name": "Voodoo Hexxer",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 2,
   "baseHp": 7,
   "rarity": "RARE",

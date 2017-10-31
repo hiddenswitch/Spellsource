@@ -2,7 +2,7 @@
   "name": "Roll the Bones",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "RARE",
   "description": "Draw a card. If it has Deathrattle, cast this again.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Volcanic Lumberer",
   "baseManaCost": 9,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 7,
   "baseHp": 8,
   "rarity": "RARE",

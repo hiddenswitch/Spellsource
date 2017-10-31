@@ -3,7 +3,7 @@
   "heroPower": "hero_power_void",
   "baseManaCost": 9,
   "type": "HERO",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "LEGENDARY",
   "race": "DEMON",
   "attributes": {

@@ -2,7 +2,7 @@
   "name": "Fassnu Ronin (Bear)",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 4,
   "baseHp": 6,
   "rarity": "COMMON",

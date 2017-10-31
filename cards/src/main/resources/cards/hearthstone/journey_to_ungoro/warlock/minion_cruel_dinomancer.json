@@ -2,7 +2,7 @@
   "name": "Cruel Dinomancer",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",

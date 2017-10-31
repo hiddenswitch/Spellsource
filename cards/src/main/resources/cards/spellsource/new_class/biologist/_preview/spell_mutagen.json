@@ -2,7 +2,7 @@
   "name": "Mutagen",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Deal 2 damage to an unharmed minion.",
   "targetSelection": "MINIONS",

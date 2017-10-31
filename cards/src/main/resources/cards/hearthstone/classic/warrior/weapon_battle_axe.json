@@ -2,7 +2,7 @@
   "name": "Battle Axe",
   "baseManaCost": 1,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",

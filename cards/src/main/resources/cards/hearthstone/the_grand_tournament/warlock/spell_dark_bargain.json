@@ -2,7 +2,7 @@
   "name": "Dark Bargain",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "description": "Destroy 2 random enemy minions. Discard 2 random cards.",
   "condition": {

@@ -2,7 +2,7 @@
   "name": "Primordial Glyph",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Discover a spell. Reduce its Cost by (2).",
   "targetSelection": "NONE",
@@ -23,7 +23,7 @@
     },
     "cardFilter": {
       "class": "CardFilter",
-      "heroClass": "MAGE",
+      "heroClass": "BLUE",
       "cardType": "SPELL"
     }
   },

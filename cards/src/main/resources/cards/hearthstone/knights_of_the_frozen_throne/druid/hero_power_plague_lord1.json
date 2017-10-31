@@ -2,7 +2,7 @@
   "name": "Plague Lord Attack",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "+3 Attack this turn",
   "targetSelection": "NONE",

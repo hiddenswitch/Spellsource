@@ -16,7 +16,7 @@ public class ClassicMageCards extends TestBase {
 	
 	@Test
 	public void testBlizzard() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARLOCK);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.VIOLET);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 		

@@ -2,7 +2,7 @@
   "name": "Cone of Cold",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Freeze a minion and the minions next to it, and deal 1 damage to them.",
   "targetSelection": "MINIONS",

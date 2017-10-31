@@ -3,7 +3,7 @@
   "name": "Clow",
   "baseManaCost": 8.0,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 7.0,
   "baseHp": 8.0,
   "rarity": "EPIC",

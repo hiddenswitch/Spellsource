@@ -2,7 +2,7 @@
   "name": "Seal of Champions",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "COMMON",
   "description": "Give a minion +3 Attack and Divine Shield.",
   "targetSelection": "MINIONS",

@@ -2,7 +2,7 @@
   "name": "Unleash the Hounds",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "For each enemy minion, summon a 1/1 Wolf with Charge.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Dragonfire Potion",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Deal 5 damage to all minions except Dragons.",
   "targetSelection": "NONE",

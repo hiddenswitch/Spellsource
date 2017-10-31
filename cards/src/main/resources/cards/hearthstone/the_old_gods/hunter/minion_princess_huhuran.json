@@ -2,7 +2,7 @@
   "name": "Princess Huhuran",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "LEGENDARY",

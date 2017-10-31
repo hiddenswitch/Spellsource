@@ -2,7 +2,7 @@
   "name": "Tracking",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Look at the top three cards of your deck. Draw one and discard the others.",
   "targetSelection": "NONE",

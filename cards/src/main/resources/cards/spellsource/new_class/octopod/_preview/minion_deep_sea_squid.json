@@ -2,7 +2,7 @@
   "name": "Deep Sea Squid",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "RARE",

@@ -2,7 +2,7 @@
   "name": "Hellfire",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Deal 3 damage to ALL characters.",
   "targetSelection": "NONE",

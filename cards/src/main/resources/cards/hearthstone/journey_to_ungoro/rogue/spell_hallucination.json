@@ -2,7 +2,7 @@
   "name": "Hallucination",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Discover a card from your opponent's class'.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Kraken",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "COMMON",

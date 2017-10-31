@@ -2,7 +2,7 @@
   "name": "Adaptation",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "COMMON",
   "description": "Adapt a friendly minion.",
   "targetSelection": "FRIENDLY_MINIONS",

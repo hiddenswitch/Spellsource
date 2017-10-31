@@ -2,7 +2,7 @@
   "name": "Swipe",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Deal 4 damage to an enemy and 1 damage to all other enemies.",
   "targetSelection": "ENEMY_CHARACTERS",

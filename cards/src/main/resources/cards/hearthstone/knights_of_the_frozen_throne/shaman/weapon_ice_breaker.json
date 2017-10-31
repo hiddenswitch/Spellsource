@@ -2,7 +2,7 @@
   "name": "Ice Breaker",
   "baseManaCost": 3,
   "type": "WEAPON",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "damage": 1,
   "durability": 3,
   "rarity": "RARE",

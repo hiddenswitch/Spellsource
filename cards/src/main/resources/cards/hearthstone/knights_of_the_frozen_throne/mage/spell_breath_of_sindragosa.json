@@ -2,7 +2,7 @@
   "name": "Breath of Sindragosa",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Deal 2 damage to a random enemy minion and Freeze it.",
   "condition": {

@@ -2,7 +2,7 @@
   "name": "Reinforce",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Gain 2 Armor.",
   "targetSelection": "NONE",

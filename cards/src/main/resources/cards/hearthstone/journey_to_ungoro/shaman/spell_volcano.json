@@ -2,7 +2,7 @@
   "name": "Volcano",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Deal 15 damage randomly split among all minions. Overload: (2)",
   "targetSelection": "NONE",

@@ -3,7 +3,7 @@
   "name": "Ringlehear",
   "baseManaCost": 5.0,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 5.0,
   "baseHp": 4.0,
   "rarity": "LEGENDARY",

@@ -3,7 +3,7 @@
   "heroPower": "hero_power_siphon_life",
   "baseManaCost": 10,
   "type": "HERO",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Summon all friendly Demons that died this game.",
   "battlecry": {

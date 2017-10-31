@@ -3,7 +3,7 @@
   "name": "Trapinwath",
   "baseManaCost": 2.0,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 2.0,
   "baseHp": 2.0,
   "rarity": "EPIC",

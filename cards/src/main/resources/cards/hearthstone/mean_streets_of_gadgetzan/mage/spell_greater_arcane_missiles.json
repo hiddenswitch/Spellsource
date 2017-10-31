@@ -2,7 +2,7 @@
   "name": "Greater Arcane Missiles",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "EPIC",
   "description": "Shoot three missiles at random enemies that deal 3 damage each.",
   "targetSelection": "NONE",

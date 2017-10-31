@@ -2,7 +2,7 @@
   "name": "Spirit Claws",
   "baseManaCost": 1,
   "type": "WEAPON",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "damage": 1,
   "durability": 3,
   "rarity": "COMMON",

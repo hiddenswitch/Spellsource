@@ -2,7 +2,7 @@
   "name": "Divine Strength",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "COMMON",
   "description": "Give a minion +1/+2.",
   "targetSelection": "MINIONS",

@@ -2,7 +2,7 @@
   "name": "Primal Fusion",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Give a minion +1/+1 for each of your Totems.",
   "targetSelection": "MINIONS",

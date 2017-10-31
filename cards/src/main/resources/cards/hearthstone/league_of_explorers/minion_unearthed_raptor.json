@@ -2,7 +2,7 @@
   "name": "Unearthed Raptor",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",

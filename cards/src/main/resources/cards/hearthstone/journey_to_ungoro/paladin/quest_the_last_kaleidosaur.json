@@ -2,7 +2,7 @@
   "name": "The Last Kaleidosaur",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "description": "Quest: Cast 6 spells on your minions. Reward: Galvadon",
   "quest": {

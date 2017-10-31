@@ -2,7 +2,7 @@
   "name": "Elder Longneck",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 5,
   "baseHp": 1,
   "rarity": "COMMON",

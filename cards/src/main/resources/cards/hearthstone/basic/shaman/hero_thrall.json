@@ -4,7 +4,7 @@
   "heroPower": "hero_power_totemic_call",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Hero Power: Summon a random supporting creature",
   "attributes": {

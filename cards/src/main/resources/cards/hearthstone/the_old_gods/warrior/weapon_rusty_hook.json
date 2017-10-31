@@ -2,7 +2,7 @@
   "name": "Rusty Hook",
   "baseManaCost": 1,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 1,
   "durability": 3,
   "rarity": "FREE",

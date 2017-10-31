@@ -2,7 +2,7 @@
   "name": "Earthen Scales",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Give a friendly minion +1/+1, then gain Armor equal to its Attack.",
   "targetSelection": "FRIENDLY_MINIONS",

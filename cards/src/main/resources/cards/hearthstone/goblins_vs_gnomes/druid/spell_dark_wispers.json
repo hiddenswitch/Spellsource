@@ -2,7 +2,7 @@
   "name": "Dark Wispers",
   "baseManaCost": 6,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Choose One - Summon 5 Wisps; or Give a minion +5/+5 and Taunt.",
   "targetSelection": "NONE",

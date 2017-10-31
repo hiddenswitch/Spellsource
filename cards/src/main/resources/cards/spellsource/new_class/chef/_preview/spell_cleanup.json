@@ -2,7 +2,7 @@
   "name": "Cleanup",
   "baseManaCost": 2,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Select One - Deal 1 damage and draw a card; or deal 3 damage.",
   "targetSelection": "NONE",

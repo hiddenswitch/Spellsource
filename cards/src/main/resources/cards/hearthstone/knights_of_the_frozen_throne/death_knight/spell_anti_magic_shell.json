@@ -2,7 +2,7 @@
   "name": "Anti-Magic Shell",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "DEATH_KNIGHT",
+  "heroClass": "SPIRIT",
   "rarity": "FREE",
   "description": "Give your minions +2/+2 and \"Can't be targeted by spells or Hero Powers.\"",
   "targetSelection": "NONE",

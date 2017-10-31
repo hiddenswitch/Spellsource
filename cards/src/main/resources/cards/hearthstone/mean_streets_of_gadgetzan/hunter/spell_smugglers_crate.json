@@ -2,7 +2,7 @@
   "name": "Smuggler's Crate",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "Give a random Beast in your hand +2/+2.",
   "targetSelection": "NONE",

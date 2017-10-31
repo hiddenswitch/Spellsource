@@ -2,7 +2,7 @@
   "name": "Deadly Poison",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Give your weapon +2 Attack.",
   "condition": {

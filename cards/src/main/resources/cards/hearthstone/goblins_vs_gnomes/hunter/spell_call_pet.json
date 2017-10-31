@@ -2,7 +2,7 @@
   "name": "Call Pet",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "RARE",
   "description": "Draw a card, if it's a Beast it costs (4) less.",
   "targetSelection": "NONE",

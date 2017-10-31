@@ -2,7 +2,7 @@
   "name": "Obliterate",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "DEATH_KNIGHT",
+  "heroClass": "SPIRIT",
   "rarity": "FREE",
   "description": "Destroy a minion. Your hero takes damage equal to its Health.",
   "targetSelection": "MINIONS",

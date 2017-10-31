@@ -127,7 +127,7 @@ public class GeneratorTest {
 	@Test
 	@Ignore
 	public void testNewSummonSpell() throws CardParseException, IOException, URISyntaxException {
-		GameContext gc = GameContext.uninitialized(HeroClass.MAGE, HeroClass.HUNTER);
+		GameContext gc = GameContext.uninitialized(HeroClass.BLUE, HeroClass.GREEN);
 		Player player1 = gc.getPlayer1();
 		Card source = (new Generator()).getSpellRecords().get(0).toCard();
 		assertNotNull(SpellUtils.getMinionCardFromSummonSpell(gc, player1, source, ((SpellCard) source).getSpell()));

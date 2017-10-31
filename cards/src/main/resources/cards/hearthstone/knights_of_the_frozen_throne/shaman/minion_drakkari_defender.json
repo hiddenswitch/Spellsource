@@ -2,7 +2,7 @@
   "name": "Drakkari Defender",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 2,
   "baseHp": 8,
   "rarity": "COMMON",

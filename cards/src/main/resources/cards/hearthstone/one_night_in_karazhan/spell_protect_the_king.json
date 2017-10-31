@@ -2,7 +2,7 @@
   "name": "Protect the King!",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "RARE",
   "description": "For each enemy minion, summon a 1/1 Pawn with Taunt.",
   "targetSelection": "NONE",

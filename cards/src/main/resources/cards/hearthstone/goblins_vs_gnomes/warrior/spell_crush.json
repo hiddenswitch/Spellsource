@@ -2,7 +2,7 @@
   "name": "Crush",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Destroy a minion. If you have a damaged minion, this costs (4) less.",
   "targetSelection": "MINIONS",

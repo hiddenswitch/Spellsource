@@ -2,7 +2,7 @@
   "name": "Gadgetzan Ferryman",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",

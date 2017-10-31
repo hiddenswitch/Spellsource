@@ -3,7 +3,7 @@
   "heroPower": "hero_power_build_a_beast",
   "baseManaCost": 6,
   "type": "HERO",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Deal 2 damage to all enemy minions.",
   "battlecry": {

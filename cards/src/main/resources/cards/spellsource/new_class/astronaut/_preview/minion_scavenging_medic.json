@@ -2,7 +2,7 @@
   "name": "Scavenging Medic",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",

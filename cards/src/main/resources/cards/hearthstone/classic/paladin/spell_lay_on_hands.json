@@ -2,7 +2,7 @@
   "name": "Lay on Hands",
   "baseManaCost": 8,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "Restore 8 Health. Draw 3 cards.",
   "targetSelection": "ANY",

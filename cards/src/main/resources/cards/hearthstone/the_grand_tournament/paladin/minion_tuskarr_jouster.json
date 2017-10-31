@@ -2,7 +2,7 @@
   "name": "Tuskarr Jouster",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",

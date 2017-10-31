@@ -2,7 +2,7 @@
   "name": "Invocation of Air",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Deal 3 damage to all enemy minions.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Shimmering Tempest",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
@@ -12,7 +12,7 @@
     "class": "ReceiveCardSpell",
     "cardFilter": {
       "class": "CardFilter",
-      "heroClass": "MAGE",
+      "heroClass": "BLUE",
       "cardType": "SPELL"
     }
   },

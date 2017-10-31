@@ -2,7 +2,7 @@
   "name": "Siphon Life",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Hero Power: Deal 1 damage to all minions.",
   "targetSelection": "ANY",

@@ -2,7 +2,7 @@
   "name": "Totemic Might",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Give your Totems +2 Health.",
   "targetSelection": "NONE",

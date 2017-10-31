@@ -2,7 +2,7 @@
   "name": "Arcane Shot",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Deal 2 damage.",
   "targetSelection": "ANY",

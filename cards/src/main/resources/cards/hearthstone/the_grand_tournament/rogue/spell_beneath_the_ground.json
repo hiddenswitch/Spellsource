@@ -2,7 +2,7 @@
   "name": "Beneath the Grounds",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "EPIC",
   "description": "Shuffle 3 Ambushes into your opponent's deck. When drawn, you summon a 4/4 Nerubian.",
   "targetSelection": "NONE",

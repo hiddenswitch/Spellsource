@@ -2,7 +2,7 @@
   "name": "Crystal",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",

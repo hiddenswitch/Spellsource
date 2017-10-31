@@ -2,7 +2,7 @@
   "name": "Seasonal Sous Chef",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",

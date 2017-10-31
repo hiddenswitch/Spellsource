@@ -2,7 +2,7 @@
   "name": "Abyssal Enforcer",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "COMMON",

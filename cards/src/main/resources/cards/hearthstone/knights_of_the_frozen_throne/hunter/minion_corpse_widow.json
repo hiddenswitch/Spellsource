@@ -2,7 +2,7 @@
   "name": "Corpse Widow",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 4,
   "baseHp": 6,
   "rarity": "RARE",

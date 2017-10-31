@@ -3,7 +3,7 @@
   "name": "Wood",
   "baseManaCost": 4.0,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 3.0,
   "baseHp": 5.0,
   "rarity": "LEGENDARY",

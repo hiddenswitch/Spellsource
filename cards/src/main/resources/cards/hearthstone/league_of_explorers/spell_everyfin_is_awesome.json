@@ -2,7 +2,7 @@
   "name": "Everyfin is Awesome",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Give your minions +2/+2. Costs (1) less for each Murloc you control.",
   "targetSelection": "NONE",

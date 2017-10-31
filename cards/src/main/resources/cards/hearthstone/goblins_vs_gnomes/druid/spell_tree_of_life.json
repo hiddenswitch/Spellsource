@@ -2,7 +2,7 @@
   "name": "Tree of Life",
   "baseManaCost": 9,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Restore all characters to full Health.",
   "targetSelection": "NONE",

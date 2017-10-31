@@ -2,7 +2,7 @@
   "name": "Tar Lurker",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 1,
   "baseHp": 7,
   "rarity": "COMMON",

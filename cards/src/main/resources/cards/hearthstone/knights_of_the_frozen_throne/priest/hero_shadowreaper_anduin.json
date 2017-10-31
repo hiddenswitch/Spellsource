@@ -3,7 +3,7 @@
   "heroPower": "hero_power_voidform",
   "baseManaCost": 8,
   "type": "HERO",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Destroy all minions with 5 or more attack.",
   "battlecry": {

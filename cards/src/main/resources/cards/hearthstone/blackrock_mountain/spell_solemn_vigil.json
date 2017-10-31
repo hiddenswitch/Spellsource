@@ -2,7 +2,7 @@
   "name": "Solemn Vigil",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "COMMON",
   "description": "Draw 2 cards. Costs (1) less for each minion that died this turn.",
   "targetSelection": "NONE",

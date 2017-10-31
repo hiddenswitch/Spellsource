@@ -3,7 +3,7 @@
   "heroPower": "hero_power_icy_touch",
   "baseManaCost": 9,
   "type": "HERO",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Summon a 3/6 Water Elemental. Your Elementals have Lifesteal for the rest of the game.",
   "battlecry": {

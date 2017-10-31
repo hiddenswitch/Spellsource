@@ -2,7 +2,7 @@
   "name": "Seal of Light",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "COMMON",
   "description": "Restore 4 Health to your hero and gain +2 Attack this turn.",
   "targetSelection": "NONE",

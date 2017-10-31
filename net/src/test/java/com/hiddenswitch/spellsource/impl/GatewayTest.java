@@ -352,7 +352,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 				Fiber<Void> fiber = new Fiber<Void>(io.vertx.ext.sync.Sync.getContextScheduler(), () -> {
 					DeckCreateResponse res = service.getDecks().createDeck(new DeckCreateRequest()
 							.withUserId(client.getAccount().getId())
-							.withHeroClass(HeroClass.ROGUE)
+							.withHeroClass(HeroClass.BLACK)
 							.withName("Test Weapon Deck")
 							.withCardIds(Collections.nCopies(30, "weapon_clandestine_laser")));
 					deckId[0] = res.getDeckId();

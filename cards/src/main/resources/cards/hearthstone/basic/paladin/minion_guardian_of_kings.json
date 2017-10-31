@@ -2,7 +2,7 @@
   "name": "Guardian of Kings",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 5,
   "baseHp": 6,
   "rarity": "FREE",

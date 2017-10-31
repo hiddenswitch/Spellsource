@@ -2,7 +2,7 @@
   "name": "DOOM!",
   "baseManaCost": 10,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "description": "Destroy all minions. Draw a card for each.",
   "targetSelection": "NONE",

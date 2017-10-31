@@ -3,7 +3,7 @@
   "name": "Scarlet",
   "baseManaCost": 3.0,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 5.0,
   "baseHp": 2.0,
   "rarity": "LEGENDARY",

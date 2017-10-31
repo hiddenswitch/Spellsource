@@ -19,7 +19,7 @@ public class HeroPowerTest extends TestBase {
 
 	@Test
 	public void testArmorUp() {
-		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.MAGE);
+		GameContext context = createContext(HeroClass.RED, HeroClass.BLUE);
 		final Hero warrior = context.getPlayer1().getHero();
 
 		Assert.assertEquals(warrior.getHp(), GameLogic.MAX_HERO_HP);
@@ -50,7 +50,7 @@ public class HeroPowerTest extends TestBase {
 
 	@Test
 	public void testFireblast() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Hero mage = context.getPlayer1().getHero();
 		Hero victim = context.getPlayer2().getHero();
 		Assert.assertEquals(victim.getHp(), GameLogic.MAX_HERO_HP);
@@ -64,7 +64,7 @@ public class HeroPowerTest extends TestBase {
 
 	@Test
 	public void testLesserHeal() {
-		GameContext context = createContext(HeroClass.PRIEST, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
 		Hero priest = context.getPlayer1().getHero();
 
 		int lesserHealing = 2;
@@ -81,7 +81,7 @@ public class HeroPowerTest extends TestBase {
 
 	@Test
 	public void testLifeTap() {
-		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.VIOLET, HeroClass.RED);
 		Player warlockPlayer = context.getPlayer1();
 		Hero warlock = warlockPlayer.getHero();
 

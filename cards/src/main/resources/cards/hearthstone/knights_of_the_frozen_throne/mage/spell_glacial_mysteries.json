@@ -2,7 +2,7 @@
   "name": "Glacial Mysteries",
   "baseManaCost": 8,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "EPIC",
   "description": "Put one of each Secret from your deck into the battlefield.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Mindgames",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Put a copy of a random minion from your opponent's deck into the battlefield.",
   "targetSelection": "NONE",

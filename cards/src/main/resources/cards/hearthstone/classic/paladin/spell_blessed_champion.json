@@ -2,7 +2,7 @@
   "name": "Blessed Champion",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Double a minion's Attack.",
   "targetSelection": "MINIONS",

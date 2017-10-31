@@ -2,7 +2,7 @@
   "name": "Fierce Monkey",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",

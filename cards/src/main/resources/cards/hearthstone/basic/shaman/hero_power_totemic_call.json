@@ -2,7 +2,7 @@
   "name": "Conjure",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Summon a Minor Creature.",
   "condition": {

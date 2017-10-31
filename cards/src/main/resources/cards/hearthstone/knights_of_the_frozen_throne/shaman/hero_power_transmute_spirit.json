@@ -2,7 +2,7 @@
   "name": "Transmute Spirit",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Hero Power: Transform a friendly minion into a random one that costs (1) more.",
   "targetSelection": "FRIENDLY_MINIONS",

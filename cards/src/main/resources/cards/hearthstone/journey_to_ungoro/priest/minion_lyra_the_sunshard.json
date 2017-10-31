@@ -2,7 +2,7 @@
   "name": "Lyra the Sunshard",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "LEGENDARY",
@@ -18,7 +18,7 @@
       "value": 1,
       "cardFilter": {
         "class": "CardFilter",
-        "heroClass": "PRIEST",
+        "heroClass": "WHITE",
         "cardType": "SPELL"
       }
     }

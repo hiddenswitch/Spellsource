@@ -2,7 +2,7 @@
   "name": "Obituary",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Place a copy of a random card that\u2019s in your opponent's hand into your own hand.",
   "targetSelection": "NONE",

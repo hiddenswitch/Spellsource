@@ -2,7 +2,7 @@
   "name": "Bestial Wrath",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "EPIC",
   "description": "Give a friendly Beast +2 Attack and Immune this turn.",
   "targetSelection": "FRIENDLY_MINIONS",

@@ -2,7 +2,7 @@
   "name": "Blade of C'Thun",
   "baseManaCost": 9,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",

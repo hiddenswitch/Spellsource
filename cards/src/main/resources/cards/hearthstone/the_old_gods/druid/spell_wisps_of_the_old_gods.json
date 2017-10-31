@@ -2,7 +2,7 @@
   "name": "Wisps of the Old Gods",
   "baseManaCost": 7,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Choose One - Summon 7 Wisps; or Give your minions +2/+2.",
   "targetSelection": "NONE",

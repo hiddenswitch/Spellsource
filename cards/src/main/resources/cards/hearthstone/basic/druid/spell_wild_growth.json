@@ -2,7 +2,7 @@
   "name": "Wild Growth",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Gain an empty Mana.",
   "targetSelection": "NONE",

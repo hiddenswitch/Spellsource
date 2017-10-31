@@ -2,7 +2,7 @@
   "name": "Doom Pact",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "DEATH_KNIGHT",
+  "heroClass": "SPIRIT",
   "rarity": "FREE",
   "description": "Destroy all minions. Remove the top card from your deck for each minion destroyed.",
   "targetSelection": "NONE",

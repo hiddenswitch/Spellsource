@@ -2,7 +2,7 @@
   "name": "Entomb",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Choose an enemy minion. Shuffle it into your deck.",
   "targetSelection": "ENEMY_MINIONS",

@@ -2,7 +2,7 @@
   "name": "Frostbolt",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Deal 3 damage to a character and Freeze it.",
   "targetSelection": "ANY",

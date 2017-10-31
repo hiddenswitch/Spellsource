@@ -2,7 +2,7 @@
   "name": "Vinecleaver",
   "baseManaCost": 7,
   "type": "WEAPON",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "damage": 4,
   "durability": 3,
   "rarity": "RARE",

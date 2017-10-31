@@ -2,7 +2,7 @@
   "name": "Tyrantus",
   "baseManaCost": 10,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 12,
   "baseHp": 12,
   "rarity": "LEGENDARY",

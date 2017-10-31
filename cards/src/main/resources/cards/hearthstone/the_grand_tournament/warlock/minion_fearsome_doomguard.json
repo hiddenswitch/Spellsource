@@ -2,7 +2,7 @@
   "name": "Fearsome Doomguard",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 6,
   "baseHp": 8,
   "rarity": "COMMON",

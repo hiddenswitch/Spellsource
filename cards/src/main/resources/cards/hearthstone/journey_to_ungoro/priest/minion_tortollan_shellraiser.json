@@ -2,7 +2,7 @@
   "name": "Tortollan Shellraiser",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "COMMON",

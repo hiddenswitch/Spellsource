@@ -3,7 +3,7 @@
   "name": "Savant",
   "baseManaCost": 3.0,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 2.0,
   "baseHp": 4.0,
   "rarity": "RARE",

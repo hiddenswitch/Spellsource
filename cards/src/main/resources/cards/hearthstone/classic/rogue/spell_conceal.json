@@ -2,7 +2,7 @@
   "name": "Conceal",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Give your minions Stealth until your next turn.",
   "targetSelection": "NONE",

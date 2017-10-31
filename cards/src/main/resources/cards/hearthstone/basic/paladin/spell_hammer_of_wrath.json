@@ -2,7 +2,7 @@
   "name": "Hammer of Wrath",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Deal 3 damage. Draw a card.",
   "targetSelection": "ANY",

@@ -2,7 +2,7 @@
   "name": "Revive",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Transform your minions into random minions that cost 1 more Mana.",
   "targetSelection": "NONE",

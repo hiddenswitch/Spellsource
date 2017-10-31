@@ -2,7 +2,7 @@
   "name": "Jade Blossom",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Summon a Animated Shuriken. Gain an empty Mana.",
   "targetSelection": "NONE",

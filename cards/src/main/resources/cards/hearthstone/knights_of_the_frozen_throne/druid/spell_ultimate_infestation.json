@@ -2,7 +2,7 @@
   "name": "Ultimate Infestation",
   "baseManaCost": 10,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Deal 5 damage. Draw 5 cards. Gain 5 Armor. Summon a 5/5 Ghoul.",
   "targetSelection": "ANY",

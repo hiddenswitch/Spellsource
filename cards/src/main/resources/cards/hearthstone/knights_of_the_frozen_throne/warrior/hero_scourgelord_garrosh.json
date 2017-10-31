@@ -3,7 +3,7 @@
   "heroPower": "hero_power_bladestorm",
   "baseManaCost": 8,
   "type": "HERO",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Equip a 4/3 Shadowmourne that also damages adjacent minions.",
   "battlecry": {

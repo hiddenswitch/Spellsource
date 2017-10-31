@@ -2,7 +2,7 @@
   "name": "Virmen Sensei",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "RARE",

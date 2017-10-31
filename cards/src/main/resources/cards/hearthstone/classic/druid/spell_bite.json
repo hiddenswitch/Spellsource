@@ -2,7 +2,7 @@
   "name": "Bite",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Give your hero +4 Attack this turn and 4 Armor.",
   "targetSelection": "NONE",

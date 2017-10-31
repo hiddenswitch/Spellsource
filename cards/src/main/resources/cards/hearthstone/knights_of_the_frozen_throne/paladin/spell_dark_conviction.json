@@ -2,7 +2,7 @@
   "name": "Dark Conviction",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "COMMON",
   "description": "Set a minion's Attack and Health to 3.",
   "targetSelection": "MINIONS",

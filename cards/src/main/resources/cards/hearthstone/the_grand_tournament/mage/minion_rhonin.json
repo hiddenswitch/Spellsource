@@ -2,7 +2,7 @@
   "name": "Rhonin",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",

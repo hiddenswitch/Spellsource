@@ -2,7 +2,7 @@
   "name": "Wicked Witch Doctor",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "EPIC",

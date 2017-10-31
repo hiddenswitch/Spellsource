@@ -2,7 +2,7 @@
   "name": "Cryostasis",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "EPIC",
   "description": "Give a minion +3/+3 and Freeze it.",
   "targetSelection": "MINIONS",

@@ -2,7 +2,7 @@
   "name": "Avenging Wrath",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "Deal 8 damage randomly split among all enemies.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Play Dead",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "Trigger a friendly minion's Deathrattle.",
   "targetSelection": "FRIENDLY_MINIONS",

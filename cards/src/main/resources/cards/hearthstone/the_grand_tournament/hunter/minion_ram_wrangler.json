@@ -2,7 +2,7 @@
   "name": "Ram Wrangler",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",

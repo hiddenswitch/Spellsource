@@ -2,7 +2,7 @@
   "name": "Alley Armorsmith",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 2,
   "baseHp": 7,
   "rarity": "RARE",

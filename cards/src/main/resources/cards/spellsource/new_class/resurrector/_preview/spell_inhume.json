@@ -2,7 +2,7 @@
   "name": "Inhume",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Destroy a minion that has 3 or less Attack.",
   "targetSelection": "MINIONS",

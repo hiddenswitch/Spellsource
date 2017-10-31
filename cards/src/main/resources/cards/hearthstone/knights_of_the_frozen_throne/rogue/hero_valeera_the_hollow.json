@@ -3,7 +3,7 @@
   "heroPower": "hero_power_deaths_shadow",
   "baseManaCost": 9,
   "type": "HERO",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Gain Stealth until your next turn.",
   "battlecry": {

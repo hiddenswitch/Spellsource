@@ -2,7 +2,7 @@
   "name": "Bloodthistle Toxin",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Return a friendly minion to your hand. It costs (2) less.",
   "targetSelection": "FRIENDLY_MINIONS",

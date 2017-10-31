@@ -2,7 +2,7 @@
   "name": "Gang Up",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Choose a minion. Shuffle 3 copies of it into your deck.",
   "targetSelection": "MINIONS",

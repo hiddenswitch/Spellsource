@@ -2,7 +2,7 @@
   "name": "Nether Portal",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "LEGENDARY",
   "description": "Open a permanent portal that summons 3/2 Imps.",
   "targetSelection": "NONE",

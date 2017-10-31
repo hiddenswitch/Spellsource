@@ -2,7 +2,7 @@
   "name": "Stolen Goods",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "RARE",
   "description": "Give a random Taunt minion in your hand +3/+3.",
   "targetSelection": "NONE",

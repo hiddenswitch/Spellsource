@@ -59,7 +59,7 @@ public class SerializationTest extends TestBase {
 		for (CardSet set : CardSet.values()) {
 			deckFormat.addSet(set);
 		}
-		Deck deck = DeckFactory.getRandomDeck(HeroClass.MAGE, deckFormat);
+		Deck deck = DeckFactory.getRandomDeck(HeroClass.BLUE, deckFormat);
 		String s = Serialization.serialize(deck);
 		Deck deck2 = Serialization.deserialize(s, Deck.class);
 		assertReflectionEquals(deck, deck2);

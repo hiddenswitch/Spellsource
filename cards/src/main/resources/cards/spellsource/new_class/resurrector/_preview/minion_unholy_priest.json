@@ -2,7 +2,7 @@
   "name": "Unholy Priest",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "RARE",

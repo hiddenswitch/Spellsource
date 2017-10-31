@@ -2,7 +2,7 @@
   "name": "Totem Golem",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",

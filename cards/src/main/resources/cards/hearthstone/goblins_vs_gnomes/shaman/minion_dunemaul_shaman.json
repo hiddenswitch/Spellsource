@@ -2,7 +2,7 @@
   "name": "Dunemaul Shaman",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",

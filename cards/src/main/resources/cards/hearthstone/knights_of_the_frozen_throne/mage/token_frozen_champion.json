@@ -2,7 +2,7 @@
   "name": "Frozen Champion",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "FREE",

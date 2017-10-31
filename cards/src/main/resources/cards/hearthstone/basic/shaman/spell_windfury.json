@@ -2,7 +2,7 @@
   "name": "Windfury",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Give a minion Windfury.",
   "targetSelection": "MINIONS",

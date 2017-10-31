@@ -2,7 +2,7 @@
   "name": "Unite the Murlocs",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "LEGENDARY",
   "description": "Quest: Summon 10 Murlocs. Reward: Megafin.",
   "quest": {

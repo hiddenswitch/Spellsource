@@ -27,7 +27,7 @@ public class AuraTests extends TestBase {
 
 	@Test
 	public void testAdjacentAura() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getPlayer1();
 
 		TestMinionCard minionCard = new TestMinionCard(1, 1);
@@ -63,7 +63,7 @@ public class AuraTests extends TestBase {
 
 	@Test
 	public void testAura() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -101,7 +101,7 @@ public class AuraTests extends TestBase {
 
 	@Test
 	public void testAuraPlusFaceless() {
-		GameContext context = createContext(HeroClass.PRIEST, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
 		Player player = context.getPlayer1();
 
 		Minion murloc = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_bluegill_warrior"));
@@ -128,7 +128,7 @@ public class AuraTests extends TestBase {
 
 	@Test
 	public void testAuraPlusMindControl() {
-		GameContext context = createContext(HeroClass.PRIEST, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -158,7 +158,7 @@ public class AuraTests extends TestBase {
 	
 	@Test
 	public void testOpponentAuraPlusFaceless() {
-		GameContext context = createContext(HeroClass.PRIEST, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 

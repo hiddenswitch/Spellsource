@@ -2,7 +2,7 @@
   "name": "Shiv",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Deal 1 damage. Draw a card.",
   "targetSelection": "ANY",

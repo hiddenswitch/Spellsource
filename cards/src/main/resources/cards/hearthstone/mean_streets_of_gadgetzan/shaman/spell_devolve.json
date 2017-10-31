@@ -2,7 +2,7 @@
   "name": "Devolve",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Transform all enemy minions into random ones that cost (1) less.",
   "targetSelection": "NONE",

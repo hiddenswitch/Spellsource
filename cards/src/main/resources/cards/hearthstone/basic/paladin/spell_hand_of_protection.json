@@ -2,7 +2,7 @@
   "name": "Hand of Protection",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Give a minion Divine Shield.",
   "targetSelection": "MINIONS",

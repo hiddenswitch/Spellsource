@@ -2,7 +2,7 @@
   "name": "Jungle Giants",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "LEGENDARY",
   "description": "Quest: Summon 5 minions with 5 or more Attack. Reward: Barnabus the Stomper.",
   "quest": {

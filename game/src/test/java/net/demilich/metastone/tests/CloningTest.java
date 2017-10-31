@@ -61,14 +61,14 @@ public class CloningTest extends TestBase {
 			deckFormat.addSet(set);
 		}
 		for (int i = 0; i < 100; i++) {
-			PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(HeroClass.MAGE, deckFormat), new PlayRandomBehaviour());
+			PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(HeroClass.BLUE, deckFormat), new PlayRandomBehaviour());
 			player1Config.setName("Player 1");
-			player1Config.setHeroCard(getHeroCardForClass(HeroClass.MAGE));
+			player1Config.setHeroCard(getHeroCardForClass(HeroClass.BLUE));
 			Player player1 = new Player(player1Config);
 
-			PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(HeroClass.WARRIOR, deckFormat), new PlayRandomBehaviour());
+			PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(HeroClass.RED, deckFormat), new PlayRandomBehaviour());
 			player2Config.setName("Player 2");
-			player2Config.setHeroCard(getHeroCardForClass(HeroClass.WARRIOR));
+			player2Config.setHeroCard(getHeroCardForClass(HeroClass.RED));
 			Player player2 = new Player(player2Config);
 
 			

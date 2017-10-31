@@ -2,7 +2,7 @@
   "name": "Wyrmrest Agent",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "RARE",

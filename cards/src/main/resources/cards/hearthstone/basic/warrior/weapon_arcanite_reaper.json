@@ -2,7 +2,7 @@
   "name": "Arcanite Reaper",
   "baseManaCost": 5,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 5,
   "durability": 2,
   "rarity": "FREE",

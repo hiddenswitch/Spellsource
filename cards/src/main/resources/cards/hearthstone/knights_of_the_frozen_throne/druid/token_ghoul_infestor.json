@@ -2,7 +2,7 @@
   "name": "Ghoul Infestor",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "FREE",

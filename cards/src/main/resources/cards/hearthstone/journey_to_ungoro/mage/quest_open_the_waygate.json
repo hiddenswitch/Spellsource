@@ -2,7 +2,7 @@
   "name": "Open the Waygate",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "description": "Quest: Cast 6 spells that didn't start in your deck. Reward: Time Warp.",
   "quest": {

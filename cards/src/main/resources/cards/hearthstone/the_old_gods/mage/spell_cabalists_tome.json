@@ -2,7 +2,7 @@
   "name": "Cabalist's Tome",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "EPIC",
   "description": "Add 3 random Mage spells to your hand.",
   "targetSelection": "NONE",
@@ -11,7 +11,7 @@
     "value": 3,
     "cardFilter": {
       "class": "CardFilter",
-      "heroClass": "MAGE",
+      "heroClass": "BLUE",
       "cardType": "SPELL"
     }
   },

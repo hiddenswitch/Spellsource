@@ -2,7 +2,7 @@
   "name": "Defile",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "RARE",
   "description": "Deal 1 damage to all minions. If any die, cast this again.",
   "targetSelection": "NONE",

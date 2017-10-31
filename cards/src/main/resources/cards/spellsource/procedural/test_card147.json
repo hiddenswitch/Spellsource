@@ -3,7 +3,7 @@
   "name": "Blade Of Of Justingher",
   "baseManaCost": 3.0,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 3.0,
   "baseHp": 4.0,
   "rarity": "COMMON",

@@ -2,7 +2,7 @@
   "name": "Professor Putricide",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
@@ -15,7 +15,7 @@
       "class": "PutRandomSecretIntoPlaySpell",
       "cardFilter": {
         "class": "CardFilter",
-        "heroClass": "HUNTER"
+        "heroClass": "GREEN"
       },
       "cardSource": {
         "class": "CatalogueSource"

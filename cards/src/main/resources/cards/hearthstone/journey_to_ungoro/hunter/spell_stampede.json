@@ -2,7 +2,7 @@
   "name": "Stampede",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "EPIC",
   "description": "Whenever you play a Beast this turn, add a random Beast to your hand.",
   "targetSelection": "NONE",

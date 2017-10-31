@@ -2,7 +2,7 @@
   "name": "Death Grip",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "DEATH_KNIGHT",
+  "heroClass": "SPIRIT",
   "rarity": "FREE",
   "description": "Steal a minion from your opponent's deck and add it to your hand.",
   "targetSelection": "NONE",
