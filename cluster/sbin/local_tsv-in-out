@@ -1,0 +1,3 @@
+#!/bin/bash
+./gradlew cluster:shadowJar
+java -cp cluster/build/libs/cluster-1.2.0-all.jar com.hiddenswitch.cluster.applications.ResultsToTSV -profile default -input $1 -output $2
