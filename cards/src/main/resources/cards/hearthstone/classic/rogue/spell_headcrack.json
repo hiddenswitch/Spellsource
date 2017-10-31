@@ -2,7 +2,7 @@
   "name": "Headcrack",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "RARE",
   "description": "Deal 2 damage to the enemy hero. Combo: Return this to your hand next turn.",
   "targetSelection": "NONE",

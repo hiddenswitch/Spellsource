@@ -2,7 +2,7 @@
   "name": "Discover a minion and a spell",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Discover a minion. Discover a spell.",
   "targetSelection": "NONE",

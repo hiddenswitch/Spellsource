@@ -2,7 +2,7 @@
   "name": "Piranha Launcher",
   "baseManaCost": 5,
   "type": "WEAPON",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "damage": 2,
   "durability": 4,
   "rarity": "EPIC",

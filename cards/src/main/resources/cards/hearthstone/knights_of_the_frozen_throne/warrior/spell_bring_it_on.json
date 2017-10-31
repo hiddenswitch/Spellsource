@@ -2,7 +2,7 @@
   "name": "Bring It On!",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Gain 10 Armor. Reduce the Cost of minions in your opponent's hand by (2).",
   "targetSelection": "NONE",

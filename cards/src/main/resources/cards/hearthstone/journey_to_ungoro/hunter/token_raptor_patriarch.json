@@ -2,7 +2,7 @@
   "name": "Raptor Patriarch",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "FREE",

@@ -2,7 +2,7 @@
   "name": "Bladed Cultist",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",

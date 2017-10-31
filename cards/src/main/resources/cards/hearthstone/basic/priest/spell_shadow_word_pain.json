@@ -2,7 +2,7 @@
   "name": "Shadow Word: Pain",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Destroy a minion with 3 or less Attack.",
   "targetSelection": "MINIONS",

@@ -2,7 +2,7 @@
   "name": "Briarthorn Toxin",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Give a minion +3 Attack.",
   "targetSelection": "MINIONS",

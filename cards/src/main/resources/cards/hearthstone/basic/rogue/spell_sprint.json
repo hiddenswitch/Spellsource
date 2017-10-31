@@ -2,7 +2,7 @@
   "name": "Sprint",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Draw 4 cards.",
   "targetSelection": "NONE",

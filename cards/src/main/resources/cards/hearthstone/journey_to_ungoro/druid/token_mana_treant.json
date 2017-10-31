@@ -2,7 +2,7 @@
   "name": "Mana Treant",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",

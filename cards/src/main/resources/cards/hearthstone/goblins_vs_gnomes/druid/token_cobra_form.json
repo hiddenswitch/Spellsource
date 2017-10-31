@@ -2,7 +2,7 @@
   "name": "Druid Of The Fang (Cobra Form)",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "COMMON",

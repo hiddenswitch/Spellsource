@@ -2,7 +2,7 @@
   "name": "Summon Animated Shuriken and Add 3",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Summon a Animated Shuriken. Shuffle 3 copies of this card into your deck.",
   "targetSelection": "NONE",

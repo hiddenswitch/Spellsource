@@ -2,7 +2,7 @@
   "name": "Evolving Spores",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Adapt your minions.",
   "targetSelection": "NONE",

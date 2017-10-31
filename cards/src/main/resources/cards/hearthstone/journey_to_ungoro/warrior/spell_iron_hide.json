@@ -2,7 +2,7 @@
   "name": "Iron Hide",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "COMMON",
   "description": "Gain 5 Armor.",
   "targetSelection": "NONE",

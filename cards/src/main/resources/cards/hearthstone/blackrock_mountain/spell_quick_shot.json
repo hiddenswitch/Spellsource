@@ -2,7 +2,7 @@
   "name": "Quick Shot",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "Deal 3 damage. If your hand is empty, draw a card.",
   "targetSelection": "ANY",

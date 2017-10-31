@@ -2,7 +2,7 @@
   "name": "Plasma Blast",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "Deal 3 damage. Draw a card if you have no cards in hand.",
   "targetSelection": "ANY",

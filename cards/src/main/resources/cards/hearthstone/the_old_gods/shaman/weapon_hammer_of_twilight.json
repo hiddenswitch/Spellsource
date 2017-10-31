@@ -2,7 +2,7 @@
   "name": "Hammer of Twilight",
   "baseManaCost": 5,
   "type": "WEAPON",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "damage": 4,
   "durability": 2,
   "rarity": "EPIC",

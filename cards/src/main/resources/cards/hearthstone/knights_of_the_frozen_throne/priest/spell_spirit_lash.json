@@ -2,7 +2,7 @@
   "name": "Spirit Lash",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Lifesteal. Deal 1 damage to all minions.",
   "targetSelection": "NONE",

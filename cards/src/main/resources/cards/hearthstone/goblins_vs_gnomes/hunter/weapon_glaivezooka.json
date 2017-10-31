@@ -2,7 +2,7 @@
   "name": "Glaivezooka",
   "baseManaCost": 2,
   "type": "WEAPON",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "damage": 2,
   "durability": 2,
   "rarity": "COMMON",

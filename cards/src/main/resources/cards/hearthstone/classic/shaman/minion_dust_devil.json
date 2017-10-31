@@ -2,7 +2,7 @@
   "name": "Dust Devil",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",

@@ -2,7 +2,7 @@
   "name": "Mirror Image",
   "baseManaCost": 0,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "FREE",

@@ -2,7 +2,7 @@
   "name": "Cold Blood",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Give a minion +2 Attack. Combo: +4 Attack instead.",
   "targetSelection": "MINIONS",

@@ -2,7 +2,7 @@
   "name": "Heal",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Restore 4 Health.",
   "targetSelection": "ANY",

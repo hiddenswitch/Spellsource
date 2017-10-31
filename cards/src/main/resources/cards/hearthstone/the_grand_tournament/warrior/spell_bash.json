@@ -2,7 +2,7 @@
   "name": "Bash",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "COMMON",
   "description": "Deal 3 damage. Gain 3 Armor.",
   "targetSelection": "ANY",

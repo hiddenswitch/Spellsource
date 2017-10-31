@@ -4,7 +4,7 @@
   "heroPower": "hero_power_dagger_mastery",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Hero Power: Equip a 1/2 weapon",
   "attributes": {

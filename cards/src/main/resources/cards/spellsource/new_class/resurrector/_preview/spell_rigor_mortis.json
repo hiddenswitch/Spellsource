@@ -2,7 +2,7 @@
   "name": "Rigor Mortis",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Double a minion's Health.",
   "targetSelection": "MINIONS",

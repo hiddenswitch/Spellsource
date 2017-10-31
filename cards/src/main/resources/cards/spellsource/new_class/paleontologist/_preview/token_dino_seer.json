@@ -2,7 +2,7 @@
   "name": "Dino Seer",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "FREE",

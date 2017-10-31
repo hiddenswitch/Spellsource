@@ -2,7 +2,7 @@
   "name": "1 damage + draw card",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Deal 1 damage to a minion and draw a card.",
   "targetSelection": "MINIONS",

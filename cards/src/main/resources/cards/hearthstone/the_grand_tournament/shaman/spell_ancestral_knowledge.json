@@ -2,7 +2,7 @@
   "name": "Ancestral Knowledge",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Draw 2 cards. Overload: (2)",
   "targetSelection": "NONE",

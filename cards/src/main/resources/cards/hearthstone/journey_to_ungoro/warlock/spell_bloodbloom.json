@@ -2,7 +2,7 @@
   "name": "Bloodbloom",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "description": "The next spell you cast this turn costs Health instead of Mana.",
   "targetSelection": "NONE",

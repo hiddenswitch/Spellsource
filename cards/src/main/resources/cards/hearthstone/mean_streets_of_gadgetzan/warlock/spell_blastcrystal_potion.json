@@ -2,7 +2,7 @@
   "name": "Blastcrystal Potion",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "COMMON",
   "description": "Destroy a minion and one of your Mana.",
   "targetSelection": "MINIONS",

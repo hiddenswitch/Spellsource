@@ -2,7 +2,7 @@
   "name": "Awaken the Makers",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "LEGENDARY",
   "description": "Quest: Summon 7 Deathrattle minions. Reward: Amara, Warden of Hope.",
   "quest": {

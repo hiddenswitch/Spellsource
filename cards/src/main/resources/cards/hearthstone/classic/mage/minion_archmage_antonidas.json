@@ -2,7 +2,7 @@
   "name": "Archmage Antonidas",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "LEGENDARY",

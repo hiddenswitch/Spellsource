@@ -2,7 +2,7 @@
   "name": "Feral Spirit",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Summon two 2/3 Spirit Wolves with Taunt. Overload: (2)",
   "targetSelection": "NONE",

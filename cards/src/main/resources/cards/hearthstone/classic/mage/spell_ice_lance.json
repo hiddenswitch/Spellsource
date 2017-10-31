@@ -2,7 +2,7 @@
   "name": "Ice Lance",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Freeze a character. If it was already Frozen, deal 4 damage instead.",
   "targetSelection": "ANY",

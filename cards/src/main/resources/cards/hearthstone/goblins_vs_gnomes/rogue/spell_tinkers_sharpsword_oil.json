@@ -2,7 +2,7 @@
   "name": "Tinker's Sharpsword Oil",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Give your weapon +3 Attack. Combo: Give a random friendly minion +3 Attack.",
   "targetSelection": "NONE",

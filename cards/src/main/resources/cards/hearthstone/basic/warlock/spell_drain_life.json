@@ -2,7 +2,7 @@
   "name": "Drain Life",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Deal 2 damage. Restore 2 Health to your hero.",
   "targetSelection": "ANY",

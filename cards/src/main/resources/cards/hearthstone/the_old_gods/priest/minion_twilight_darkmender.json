@@ -2,7 +2,7 @@
   "name": "Twilight Darkmender",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "RARE",

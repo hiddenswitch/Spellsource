@@ -3,7 +3,7 @@
   "name": "Raid Light",
   "baseManaCost": 5.0,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 7.0,
   "baseHp": 5.0,
   "rarity": "FREE",

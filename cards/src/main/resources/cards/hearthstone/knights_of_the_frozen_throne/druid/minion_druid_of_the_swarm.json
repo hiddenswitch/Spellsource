@@ -2,7 +2,7 @@
   "name": "Druid of the Swarm",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",

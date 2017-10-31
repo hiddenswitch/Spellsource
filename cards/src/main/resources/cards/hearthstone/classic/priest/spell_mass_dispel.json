@@ -2,7 +2,7 @@
   "name": "Mass Dispel",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Silence all enemy minions. Draw a card.",
   "targetSelection": "NONE",

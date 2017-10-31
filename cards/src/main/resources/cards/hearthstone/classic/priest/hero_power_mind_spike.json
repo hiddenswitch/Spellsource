@@ -2,7 +2,7 @@
   "name": "Fireword",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Deal 2 damage.",
   "targetSelection": "ANY",

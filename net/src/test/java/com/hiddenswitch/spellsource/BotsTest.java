@@ -64,7 +64,7 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 	}
 
 	private void requestAction() throws SuspendExecution, InterruptedException {
-		DebugContext context = TestBase.createContext(HeroClass.HUNTER, HeroClass.PALADIN);
+		DebugContext context = TestBase.createContext(HeroClass.GREEN, HeroClass.GOLD);
 		context.endTurn();
 		context.forceStartTurn(context.getActivePlayerId());
 		int startTurn = context.getTurn();

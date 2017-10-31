@@ -2,7 +2,7 @@
   "name": "Feign Death",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "EPIC",
   "description": "Trigger all Deathrattles on your minions.",
   "targetSelection": "NONE",

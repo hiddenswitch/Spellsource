@@ -2,7 +2,7 @@
   "name": "Forbidden Ancient",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",

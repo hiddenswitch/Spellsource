@@ -2,7 +2,7 @@
   "name": "Burgle",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "RARE",
   "description": "Add 2 random class cards to your hand (from your opponent's class).",
   "targetSelection": "NONE",

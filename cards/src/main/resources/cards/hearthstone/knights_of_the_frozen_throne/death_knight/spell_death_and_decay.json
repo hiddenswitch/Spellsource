@@ -2,7 +2,7 @@
   "name": "Death and Decay",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DEATH_KNIGHT",
+  "heroClass": "SPIRIT",
   "rarity": "FREE",
   "description": "Deal 3 damage to all enemies",
   "targetSelection": "NONE",

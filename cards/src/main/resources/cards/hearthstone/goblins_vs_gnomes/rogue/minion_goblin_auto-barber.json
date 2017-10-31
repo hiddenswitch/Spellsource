@@ -2,7 +2,7 @@
   "name": "Goblin Auto-Barber",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",

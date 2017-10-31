@@ -2,7 +2,7 @@
   "name": "Confessor Paletress",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",

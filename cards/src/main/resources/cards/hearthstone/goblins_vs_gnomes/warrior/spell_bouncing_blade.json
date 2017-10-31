@@ -2,7 +2,7 @@
   "name": "Bouncing Blade",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Deals 1 damage to a random minion. Repeat until a minion dies.",
   "targetSelection": "NONE",

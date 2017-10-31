@@ -2,7 +2,7 @@
   "name": "Knight of the Wild",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "RARE",

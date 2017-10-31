@@ -2,7 +2,7 @@
   "name": "Gahz'rilla",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 6,
   "baseHp": 9,
   "rarity": "LEGENDARY",

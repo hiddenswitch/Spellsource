@@ -2,7 +2,7 @@
   "name": "Sulfuras",
   "baseManaCost": 3,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 4,
   "durability": 2,
   "rarity": "LEGENDARY",

@@ -2,7 +2,7 @@
   "name": "Celestial Dreamer",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",

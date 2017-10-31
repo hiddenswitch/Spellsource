@@ -2,7 +2,7 @@
   "name": "Amara, Warden of Hope",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",

@@ -2,7 +2,7 @@
   "name": "Summon Panther and +1/+1",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Summon a 3/2 Panther. Give your minions +1/+1.",
   "targetSelection": "NONE",

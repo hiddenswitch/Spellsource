@@ -4,9 +4,9 @@
   "type": "MINION",
   "heroClass": "ANY",
   "heroClasses": [
-    "HUNTER",
-    "PALADIN",
-    "WARRIOR"
+    "GREEN",
+    "GOLD",
+    "RED"
   ],
   "baseAttack": 5,
   "baseHp": 6,

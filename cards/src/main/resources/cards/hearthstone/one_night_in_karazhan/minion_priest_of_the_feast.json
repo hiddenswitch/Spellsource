@@ -2,7 +2,7 @@
   "name": "Priest of the Feast",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "COMMON",

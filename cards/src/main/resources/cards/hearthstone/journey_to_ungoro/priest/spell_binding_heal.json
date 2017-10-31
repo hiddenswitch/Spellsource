@@ -2,7 +2,7 @@
   "name": "Binding Heal",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Restore 5 health to a minion and to your hero.",
   "targetSelection": "MINIONS",

@@ -2,7 +2,7 @@
   "name": "Time Warp",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "description": "Take an extra turn.",
   "targetSelection": "ANY",

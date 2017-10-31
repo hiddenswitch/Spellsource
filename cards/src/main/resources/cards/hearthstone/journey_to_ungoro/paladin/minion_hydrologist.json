@@ -2,7 +2,7 @@
   "name": "Hydrologist",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
@@ -18,7 +18,7 @@
       },
       "cardFilter": {
         "class": "AttributeFilter",
-        "heroClass": "PALADIN",
+        "heroClass": "GOLD",
         "attribute": "SECRET",
         "operation": "HAS"
       }

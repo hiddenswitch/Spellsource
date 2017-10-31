@@ -2,7 +2,7 @@
   "name": "Ice Walker",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "RARE",

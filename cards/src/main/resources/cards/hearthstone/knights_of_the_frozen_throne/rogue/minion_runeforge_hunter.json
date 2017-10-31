@@ -2,7 +2,7 @@
   "name": "Runeforge Haunter",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "RARE",

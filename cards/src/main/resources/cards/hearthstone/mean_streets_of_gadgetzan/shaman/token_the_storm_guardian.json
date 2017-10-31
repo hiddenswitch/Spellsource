@@ -2,7 +2,7 @@
   "name": "The Storm Guardian",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "FREE",

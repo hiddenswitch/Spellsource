@@ -2,7 +2,7 @@
   "name": "Homing Beacon",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Hire three 1/1 Alien Spawns. Issue a 1/4 Weapon.",
   "targetSelection": "NONE",

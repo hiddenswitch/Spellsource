@@ -2,7 +2,7 @@
   "name": "Rush Hour",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Gain 10 Mana Cells. Discard all cards from your hand.",
   "targetSelection": "NONE",

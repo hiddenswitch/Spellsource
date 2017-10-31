@@ -2,7 +2,7 @@
   "name": "Spirit Echo",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "EPIC",
   "description": "Give your minions \"Deathrattle: Return this to your hand.\"",
   "targetSelection": "NONE",

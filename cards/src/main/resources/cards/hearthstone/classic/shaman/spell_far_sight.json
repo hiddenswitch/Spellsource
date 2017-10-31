@@ -2,7 +2,7 @@
   "name": "Far Sight",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "EPIC",
   "description": "Draw a card. That card costs (3) less.",
   "targetSelection": "NONE",

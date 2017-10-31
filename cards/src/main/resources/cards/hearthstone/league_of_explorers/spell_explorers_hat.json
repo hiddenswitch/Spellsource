@@ -2,7 +2,7 @@
   "name": "Explorer's Hat",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "RARE",
   "description": "Give a minion +1/+1 and \"Deathrattle: Add an Explorer's Hat to your Hand.\"",
   "targetSelection": "MINIONS",

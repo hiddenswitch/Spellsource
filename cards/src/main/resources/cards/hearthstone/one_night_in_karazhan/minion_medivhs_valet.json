@@ -2,7 +2,7 @@
   "name": "Medivh's Valet",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",

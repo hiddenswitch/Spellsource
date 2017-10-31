@@ -2,7 +2,7 @@
   "name": "Plague Lord Armor",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Gain 3 Armor",
   "targetSelection": "NONE",

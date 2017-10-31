@@ -2,7 +2,7 @@
   "name": "Spike",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Acquire 5 Armor. Draw a card.",
   "targetSelection": "NONE",

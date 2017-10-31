@@ -2,7 +2,7 @@
   "name": "Shatter",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Destroy a Frozen minion.",
   "targetSelection": "MINIONS",

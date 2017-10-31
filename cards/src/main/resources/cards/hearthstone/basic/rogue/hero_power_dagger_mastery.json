@@ -2,7 +2,7 @@
   "name": "The Blade",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Equip a 1/2 Blade.",
   "targetSelection": "NONE",

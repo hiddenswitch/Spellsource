@@ -2,7 +2,7 @@
   "name": "Holy Nova",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Deal 2 damage to all enemies. Restore 2 Health to all friendly characters.",
   "targetSelection": "NONE",

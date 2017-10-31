@@ -2,7 +2,7 @@
   "name": "Dinosize",
   "baseManaCost": 8,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "Set a minion's Attack and Health to 10",
   "targetSelection": "MINIONS",

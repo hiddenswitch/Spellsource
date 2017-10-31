@@ -2,7 +2,7 @@
   "name": "Public Defender",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 0,
   "baseHp": 7,
   "rarity": "COMMON",

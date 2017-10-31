@@ -24,7 +24,7 @@ public class SecretTest extends TestBase {
 
 	@Test
 	public void testKillingStopsAttack() {
-		DebugContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		DebugContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -48,7 +48,7 @@ public class SecretTest extends TestBase {
 
 	@Test
 	public void testNewSpellTarget() {
-		DebugContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		DebugContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -82,7 +82,7 @@ public class SecretTest extends TestBase {
 
 	@Test
 	public void testPlayOnlyOnce() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -104,7 +104,7 @@ public class SecretTest extends TestBase {
 
 	@Test
 	public void testDuplicate() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
 
@@ -125,7 +125,7 @@ public class SecretTest extends TestBase {
 
 	@Test
 	public void testExplosivePlusFreezingTrap() {
-		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.RED, HeroClass.GREEN);
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
 		clearHand(context, player);
@@ -153,7 +153,7 @@ public class SecretTest extends TestBase {
 
 	@Test
 	public void testFreezingPlusBearTrap() {
-		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.RED, HeroClass.GREEN);
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
 		clearHand(context, player);
@@ -182,7 +182,7 @@ public class SecretTest extends TestBase {
 
 	@Test
 	public void testIceBlockWithArmor() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -200,7 +200,7 @@ public class SecretTest extends TestBase {
 
 	@Test
 	public void testAvenge() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 

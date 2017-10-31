@@ -2,7 +2,7 @@
   "name": "Spikeridged Steed",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Give a minion +2/+6, Taunt and \"Deathrattle: Summon a Stegodon.\"",
   "targetSelection": "MINIONS",

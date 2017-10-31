@@ -2,7 +2,7 @@
   "name": "Power Supply",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "Use all of your Mana. Heal for double the Mana spent.",
   "targetSelection": "ANY",

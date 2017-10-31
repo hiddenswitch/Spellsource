@@ -2,7 +2,7 @@
   "name": "Arcane Missiles",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Deal 3 damage randomly split among all enemies.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Revenge",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "RARE",
   "description": "Deal 1 damage to all minions. If you have 12 or less Health, deal 3 damage instead.",
   "targetSelection": "NONE",

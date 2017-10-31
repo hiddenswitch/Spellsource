@@ -2,7 +2,7 @@
   "name": "Dragon's Breath",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Deal 4 damage. Costs (1) less for each minion that died this turn.",
   "targetSelection": "ANY",

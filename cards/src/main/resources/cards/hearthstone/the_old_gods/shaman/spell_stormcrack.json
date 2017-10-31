@@ -2,7 +2,7 @@
   "name": "Stormcrack",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Deal 4 damage to a minion. Overload: (1)",
   "targetSelection": "MINIONS",

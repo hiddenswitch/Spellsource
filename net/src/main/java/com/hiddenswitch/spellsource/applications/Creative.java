@@ -43,16 +43,16 @@ public class Creative {
 				String race = "";
 
 				switch (deck.getHeroClass()) {
-					case ROGUE:
+					case BLACK:
 						heroClass = "COMBOS";
 						break;
-					case HUNTER:
+					case GREEN:
 						heroClass = "OVERWHELMING_MINIONS";
 						break;
-					case WARLOCK:
+					case VIOLET:
 						heroClass = "SELF_SACRIFICE";
 						break;
-					case PRIEST:
+					case WHITE:
 						heroClass = "HEAL_AND_STEAL";
 						break;
 					default:

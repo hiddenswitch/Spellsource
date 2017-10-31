@@ -2,7 +2,7 @@
   "name": "Call in the Finishers",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Summon 4 1/1 Murlocs.",
   "targetSelection": "NONE",

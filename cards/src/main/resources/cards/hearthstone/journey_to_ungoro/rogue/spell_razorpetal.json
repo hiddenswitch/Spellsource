@@ -2,7 +2,7 @@
   "name": "Razorpetal",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Deal 1 damage.",
   "targetSelection": "ANY",

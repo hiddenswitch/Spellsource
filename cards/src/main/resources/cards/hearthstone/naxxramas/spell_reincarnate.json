@@ -2,7 +2,7 @@
   "name": "Reincarnate",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Destroy a minion, then return it to life with full Health.",
   "targetSelection": "MINIONS",

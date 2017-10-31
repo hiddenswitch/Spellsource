@@ -2,7 +2,7 @@
   "name": "Heroic Strike",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Give your hero +4 Attack this turn.",
   "targetSelection": "NONE",

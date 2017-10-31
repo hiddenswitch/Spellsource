@@ -3,7 +3,7 @@
   "name": "Knight Of The Pure",
   "baseManaCost": 10.0,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 8.0,
   "baseHp": 8.0,
   "rarity": "FREE",

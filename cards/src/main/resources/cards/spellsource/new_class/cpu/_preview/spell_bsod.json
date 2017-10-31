@@ -2,7 +2,7 @@
   "name": "BSoD",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Shrink a character and deal 3 damage to it.",
   "targetSelection": "ANY",

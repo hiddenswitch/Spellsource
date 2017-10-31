@@ -2,7 +2,7 @@
   "name": "Finders Keepers",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "EPIC",
   "description": "Discover a card with Overload. Overload: (1)",
   "targetSelection": "NONE",

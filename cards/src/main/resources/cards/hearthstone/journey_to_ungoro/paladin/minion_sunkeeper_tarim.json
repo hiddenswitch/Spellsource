@@ -2,7 +2,7 @@
   "name": "Sunkeeper Tarim",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "LEGENDARY",

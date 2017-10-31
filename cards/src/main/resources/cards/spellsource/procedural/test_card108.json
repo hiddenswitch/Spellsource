@@ -3,7 +3,7 @@
   "name": "Cansh",
   "baseManaCost": 2.0,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 1.0,
   "baseHp": 3.0,
   "rarity": "RARE",

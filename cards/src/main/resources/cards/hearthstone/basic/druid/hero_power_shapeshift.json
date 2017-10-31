@@ -2,7 +2,7 @@
   "name": "Shapeshift",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "+1 Attack this turn. +1 Armor.",
   "targetSelection": "NONE",

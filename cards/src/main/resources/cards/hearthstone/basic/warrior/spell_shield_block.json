@@ -2,7 +2,7 @@
   "name": "Shield Block",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Gain 5 Armor. Draw a card.",
   "targetSelection": "NONE",

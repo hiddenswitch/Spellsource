@@ -2,7 +2,7 @@
   "name": "Ancestor's Call",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "EPIC",
   "description": "Put a random minion from each player's hand into the battlefield.",
   "targetSelection": "NONE",

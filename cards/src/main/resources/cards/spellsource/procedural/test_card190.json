@@ -3,7 +3,7 @@
   "name": "Kanight",
   "baseManaCost": 4.0,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 5.0,
   "baseHp": 4.0,
   "rarity": "RARE",

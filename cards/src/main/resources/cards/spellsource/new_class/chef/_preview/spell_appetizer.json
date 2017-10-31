@@ -2,7 +2,7 @@
   "name": "Appetizer",
   "baseManaCost": 1,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Select One - Summon two 1/1 tokens; or deal 2 damage.",
   "targetSelection": "NONE",

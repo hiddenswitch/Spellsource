@@ -2,7 +2,7 @@
   "name": "Chi Hammer",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Deal 1 damage.",
   "targetSelection": "ANY",

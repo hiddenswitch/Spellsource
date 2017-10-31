@@ -2,7 +2,7 @@
   "name": "Celestial Assassin",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "EPIC",

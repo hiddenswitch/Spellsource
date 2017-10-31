@@ -2,7 +2,7 @@
   "name": "Healing Wave",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Restore 7 Health. Reveal a minion in each deck. If yours costs more, Restore 14 instead.",
   "targetSelection": "ANY",

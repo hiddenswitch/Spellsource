@@ -2,7 +2,7 @@
   "name": "Northbridge Chip",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",

@@ -2,7 +2,7 @@
   "name": "The Marsh Queen",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "LEGENDARY",
   "description": "Quest: Play seven 1-Cost minions. Reward: Queen Carnassa.",
   "quest": {

@@ -4,7 +4,7 @@
   "heroPower": "hero_power_lesser_heal",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Hero Power: Restore 2 health to a target",
   "attributes": {

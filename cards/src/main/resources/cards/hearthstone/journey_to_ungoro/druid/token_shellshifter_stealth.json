@@ -2,7 +2,7 @@
   "name": "Shellshifter (Stealth)",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "RARE",

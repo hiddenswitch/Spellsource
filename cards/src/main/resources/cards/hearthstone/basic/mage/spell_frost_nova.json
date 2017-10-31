@@ -2,7 +2,7 @@
   "name": "Frost Nova",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Freeze all enemy minions.",
   "targetSelection": "NONE",

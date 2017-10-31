@@ -2,7 +2,7 @@
   "name": "Nightmarish Hanger",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Gain 2 Armor and +2 Attack this turn.",
   "targetSelection": "NONE",

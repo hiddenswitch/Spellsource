@@ -2,7 +2,7 @@
   "name": "Arcane Explosion",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Deal 1 damage to all enemy minions.",
   "targetSelection": "NONE",

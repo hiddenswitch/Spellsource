@@ -2,7 +2,7 @@
   "name": "Anyfin Can Happen",
   "baseManaCost": 10,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Summon 7 Murloc that died this game.",
   "targetSelection": "NONE",

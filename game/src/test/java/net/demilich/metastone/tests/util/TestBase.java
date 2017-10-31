@@ -84,7 +84,7 @@ public class TestBase {
 	}
 
 	public static void runGym(GymConsumer consumer) {
-		runGym(consumer, HeroClass.MAGE, HeroClass.MAGE);
+		runGym(consumer, HeroClass.BLUE, HeroClass.BLUE);
 	}
 
 	public static void clearHand(GameContext context, Player player) {

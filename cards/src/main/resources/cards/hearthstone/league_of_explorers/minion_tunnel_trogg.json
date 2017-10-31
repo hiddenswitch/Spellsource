@@ -2,7 +2,7 @@
   "name": "Tunnel Trogg",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",

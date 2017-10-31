@@ -2,7 +2,7 @@
   "name": "Light of the Naaru",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Restore 3 Health. If the target is still damaged, summon a Lightwarden.",
   "targetSelection": "ANY",

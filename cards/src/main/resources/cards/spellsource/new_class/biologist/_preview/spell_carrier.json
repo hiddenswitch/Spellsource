@@ -2,7 +2,7 @@
   "name": "Carrier",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Grant your minions Invisible until your following turn.",
   "targetSelection": "NONE",

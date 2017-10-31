@@ -16,7 +16,7 @@ public class ClassicNeutralCards extends TestBase {
 
 	@Test
 	public void testElvenArcher() {
-		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.SHAMAN);
+		GameContext context = createContext(HeroClass.RED, HeroClass.SILVER);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -28,7 +28,7 @@ public class ClassicNeutralCards extends TestBase {
 
 	@Test
 	public void testNoviceEngineer() {
-		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.SHAMAN);
+		GameContext context = createContext(HeroClass.RED, HeroClass.SILVER);
 		Player player = context.getPlayer1();
 
 		int cardCount = player.getHand().getCount();
@@ -40,7 +40,7 @@ public class ClassicNeutralCards extends TestBase {
 
 	@Test
 	public void testKoboldGeomancer() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -60,7 +60,7 @@ public class ClassicNeutralCards extends TestBase {
 
 	@Test
 	public void testAcidicSwampOoze() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 

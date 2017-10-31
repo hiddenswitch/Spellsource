@@ -2,7 +2,7 @@
   "name": "Evolvinator",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Return a friendly minion to your hand. It costs 2 less Mana.",
   "targetSelection": "FRIENDLY_MINIONS",

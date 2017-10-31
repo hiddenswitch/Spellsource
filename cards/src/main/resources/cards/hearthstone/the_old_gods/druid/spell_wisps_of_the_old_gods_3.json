@@ -2,7 +2,7 @@
   "name": "Summon 7 Wisps and give your minions +2/+2",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Summon 7 Wisps. Give your minions +2/+2.",
   "targetSelection": "NONE",

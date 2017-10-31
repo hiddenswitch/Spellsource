@@ -2,7 +2,7 @@
   "name": "Co-DM",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "RARE",

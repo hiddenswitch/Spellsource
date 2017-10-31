@@ -2,7 +2,7 @@
   "name": "Dreadsteed",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",

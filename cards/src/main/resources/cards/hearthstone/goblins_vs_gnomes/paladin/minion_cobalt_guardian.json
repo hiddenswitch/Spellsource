@@ -2,7 +2,7 @@
   "name": "Cobalt Guardian",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "RARE",

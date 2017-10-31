@@ -2,7 +2,7 @@
   "name": "Prophet Velen",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",

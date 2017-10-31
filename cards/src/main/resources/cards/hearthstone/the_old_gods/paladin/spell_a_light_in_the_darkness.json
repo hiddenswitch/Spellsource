@@ -2,7 +2,7 @@
   "name": "A Light in the Darkness",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "COMMON",
   "description": "Discover a minion. Give it +1/+1.",
   "targetSelection": "NONE",

@@ -4,9 +4,9 @@
   "type": "MINION",
   "heroClass": "ANY",
   "heroClasses": [
-    "DRUID",
-    "ROGUE",
-    "SHAMAN"
+    "BROWN",
+    "BLACK",
+    "SILVER"
   ],
   "baseAttack": 5,
   "baseHp": 3,

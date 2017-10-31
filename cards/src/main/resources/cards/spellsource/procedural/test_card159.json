@@ -3,7 +3,7 @@
   "name": "Trap",
   "baseManaCost": 7.0,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 6.0,
   "baseHp": 7.0,
   "rarity": "EPIC",

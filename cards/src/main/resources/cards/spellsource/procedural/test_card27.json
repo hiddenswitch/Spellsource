@@ -3,7 +3,7 @@
   "name": "Canner",
   "baseManaCost": 5.0,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 5.0,
   "baseHp": 5.0,
   "rarity": "COMMON",

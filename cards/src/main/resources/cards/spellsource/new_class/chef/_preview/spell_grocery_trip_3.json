@@ -2,7 +2,7 @@
   "name": "Discover a power and a minion",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Discover a power. Discover a minion.",
   "targetSelection": "NONE",

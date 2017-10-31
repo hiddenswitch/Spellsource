@@ -2,7 +2,7 @@
   "name": "Lava Burst",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Deal 5 damage. Overload: (2)",
   "targetSelection": "ANY",

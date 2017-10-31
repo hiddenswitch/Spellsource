@@ -2,7 +2,7 @@
   "name": "2 damage AoE",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Deal 2 damage to all enemy minions",
   "targetSelection": "NONE",

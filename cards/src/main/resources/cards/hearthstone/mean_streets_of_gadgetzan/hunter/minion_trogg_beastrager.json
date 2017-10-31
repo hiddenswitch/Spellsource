@@ -2,7 +2,7 @@
   "name": "Trogg Beastrager",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",

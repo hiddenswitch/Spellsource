@@ -54,7 +54,7 @@ public class TheOldGodsTests extends TestBase {
 
 	@Test
 	public void testALightInTheDarkness() {
-		GameContext context = createContext(HeroClass.SHAMAN, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.SILVER, HeroClass.RED);
 		Player player = context.getActivePlayer();
 		final DiscoverAction[] action = {null};
 		final Minion[] originalMinion = new Minion[1];

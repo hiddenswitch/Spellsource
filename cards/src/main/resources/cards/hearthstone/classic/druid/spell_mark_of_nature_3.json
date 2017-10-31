@@ -2,7 +2,7 @@
   "name": "+4/+4, Taunt",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Give a minion +4/+4 and Taunt",
   "targetSelection": "MINIONS",

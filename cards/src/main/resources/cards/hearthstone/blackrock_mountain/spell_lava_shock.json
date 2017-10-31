@@ -2,7 +2,7 @@
   "name": "Lava Shock",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Deal 2 damage. Unlock your Overloaded Mana.",
   "targetSelection": "ANY",

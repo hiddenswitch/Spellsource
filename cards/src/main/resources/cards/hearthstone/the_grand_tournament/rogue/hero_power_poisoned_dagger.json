@@ -2,7 +2,7 @@
   "name": "Poisoned Blade",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Equip a 2/2 Dagger.",
   "targetSelection": "NONE",

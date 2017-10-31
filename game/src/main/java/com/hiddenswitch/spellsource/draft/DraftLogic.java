@@ -55,15 +55,15 @@ public class DraftLogic {
 
 	private List<HeroClass> createHeroChoices() {
 		List<HeroClass> classes = Arrays.asList(
-				HeroClass.DRUID,
-				HeroClass.HUNTER,
-				HeroClass.MAGE,
-				HeroClass.PALADIN,
-				HeroClass.PRIEST,
-				HeroClass.ROGUE,
-				HeroClass.SHAMAN,
-				HeroClass.WARLOCK,
-				HeroClass.WARRIOR
+				HeroClass.BROWN,
+				HeroClass.GREEN,
+				HeroClass.BLUE,
+				HeroClass.GOLD,
+				HeroClass.WHITE,
+				HeroClass.BLACK,
+				HeroClass.SILVER,
+				HeroClass.VIOLET,
+				HeroClass.RED
 		);
 
 		Collections.shuffle(classes, getRandom());
@@ -180,7 +180,7 @@ public class DraftLogic {
 				});
 
 				CardList neutralCards = CardCatalogue.query(format, c -> {
-					return (c.hasHeroClass(HeroClass.ANY) || c.hasHeroClass(HeroClass.NEUTRAL))
+					return c.hasHeroClass(HeroClass.ANY)
 							&& !bannedCards.contains(c.getCardId())
 							&& c.getRarity() == rarity
 							&& validCardTypes.contains(c.getCardType())

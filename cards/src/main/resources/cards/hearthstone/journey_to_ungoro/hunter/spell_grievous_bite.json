@@ -2,7 +2,7 @@
   "name": "Grievous Bite",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "Deal 2 damage to a minion and 1 damage to adjacent ones.",
   "targetSelection": "MINIONS",

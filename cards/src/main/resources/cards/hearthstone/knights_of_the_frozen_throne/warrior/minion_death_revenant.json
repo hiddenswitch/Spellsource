@@ -2,7 +2,7 @@
   "name": "Death Revenant",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",

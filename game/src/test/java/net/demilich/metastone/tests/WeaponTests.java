@@ -15,7 +15,7 @@ public class WeaponTests extends TestBase {
 	
 	@Test
 	public void testWeapon() {
-		DebugContext context = createContext(HeroClass.WARRIOR, HeroClass.WARRIOR);
+		DebugContext context = createContext(HeroClass.RED, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Hero warrior = player.getHero();
 
@@ -35,7 +35,7 @@ public class WeaponTests extends TestBase {
 	
 	@Test
 	public void testKingsDefenderAttendee() {
-		DebugContext context = createContext(HeroClass.WARRIOR, HeroClass.WARRIOR);
+		DebugContext context = createContext(HeroClass.RED, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Hero hero = player.getHero();
 		
@@ -52,7 +52,7 @@ public class WeaponTests extends TestBase {
 	
 	@Test
 	public void testKingsDefenderHogger() {
-		DebugContext context = createContext(HeroClass.WARRIOR, HeroClass.WARRIOR);
+		DebugContext context = createContext(HeroClass.RED, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Hero hero = player.getHero();
 		

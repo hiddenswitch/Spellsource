@@ -2,7 +2,7 @@
   "name": "Lunar Visions",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Draw 2 cards. Minions drawn cost (2) less.",
   "targetSelection": "NONE",

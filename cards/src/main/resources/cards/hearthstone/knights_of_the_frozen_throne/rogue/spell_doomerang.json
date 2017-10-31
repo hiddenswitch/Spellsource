@@ -2,7 +2,7 @@
   "name": "Doomerang",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "EPIC",
   "description": "Throw your weapon at a minion. It deals its damage, then returns to your hand.",
   "condition": {

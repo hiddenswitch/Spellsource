@@ -3,7 +3,7 @@
   "name": "Jualting Menite",
   "baseManaCost": 2.0,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 2.0,
   "baseHp": 2.0,
   "rarity": "COMMON",

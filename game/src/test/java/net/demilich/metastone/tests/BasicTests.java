@@ -32,7 +32,7 @@ public class BasicTests extends TestBase {
 
 	@Test
 	public void testBattlecry() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -51,7 +51,7 @@ public class BasicTests extends TestBase {
 
 	@Test
 	public void testHeroAttack() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.DRUID);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.BROWN);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player druid = context.getPlayer2();
@@ -85,7 +85,7 @@ public class BasicTests extends TestBase {
 
 	@Test
 	public void testMinionAttack() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -119,7 +119,7 @@ public class BasicTests extends TestBase {
 
 	@Test
 	public void testSummon() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		for (Card card : mage.getHand().toList()) {
 			context.getLogic().removeCard(card);
@@ -150,7 +150,7 @@ public class BasicTests extends TestBase {
 
 	@Test
 	public void testTheCoin() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		Player warrior = context.getPlayer2();
 

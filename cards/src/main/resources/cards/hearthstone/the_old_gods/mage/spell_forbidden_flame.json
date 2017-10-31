@@ -2,7 +2,7 @@
   "name": "Forbidden Flame",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "EPIC",
   "description": "Spend all your mana. Deal that much damage to a minion.",
   "targetSelection": "MINIONS",

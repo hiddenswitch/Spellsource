@@ -2,7 +2,7 @@
   "name": "The Thing",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",

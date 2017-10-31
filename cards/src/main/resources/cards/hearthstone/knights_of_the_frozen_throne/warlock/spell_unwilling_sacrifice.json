@@ -2,7 +2,7 @@
   "name": "Unwilling Sacrifice",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "RARE",
   "description": "Choose a friendly minion. Destroy it and a random enemy minion.",
   "condition": {

@@ -2,7 +2,7 @@
   "name": "Ethereal Peddler",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 5,
   "baseHp": 6,
   "rarity": "RARE",
@@ -21,7 +21,7 @@
       "cardFilter": {
         "class": "CardFilter",
         "heroClasses": [
-          "ROGUE",
+          "BLACK",
           "ANY"
         ],
         "invert": true

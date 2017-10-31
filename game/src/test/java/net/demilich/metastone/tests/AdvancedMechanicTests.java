@@ -34,7 +34,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testChooseOne() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -68,7 +68,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testCopyCards() {
-		GameContext context = createContext(HeroClass.PRIEST, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 		clearHand(context, player);
@@ -84,7 +84,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testDivineShield() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -117,7 +117,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testEnrage() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.PRIEST);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.WHITE);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player priest = context.getPlayer2();
@@ -165,7 +165,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testOverload() {
-		GameContext context = createContext(HeroClass.SHAMAN, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.SILVER, HeroClass.RED);
 		Player player = context.getPlayer1();
 		int playerId = player.getId();
 
@@ -190,7 +190,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testSetHpPlusSilence() {
-		GameContext context = createContext(HeroClass.HUNTER, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.GREEN, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -225,7 +225,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testShorttermBuffs() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -263,7 +263,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testSpellpower() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -297,7 +297,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testBuffWithBoardWipe() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.PRIEST);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.WHITE);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player priest = context.getPlayer2();
@@ -321,7 +321,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testDiscardAndDraw() {
-		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.WARLOCK);
+		GameContext context = createContext(HeroClass.VIOLET, HeroClass.VIOLET);
 		Player warlock = context.getActivePlayer();
 		clearHand(context, warlock);
 		clearZone(context, warlock.getDeck());

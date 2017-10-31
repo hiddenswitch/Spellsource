@@ -2,7 +2,7 @@
   "name": "Spieg Spikel",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",

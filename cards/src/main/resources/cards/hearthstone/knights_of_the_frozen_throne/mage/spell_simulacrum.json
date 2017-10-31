@@ -2,7 +2,7 @@
   "name": "Simulacrum",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "EPIC",
   "description": "Copy the lowest Cost minion in your hand.",
   "targetSelection": "NONE",

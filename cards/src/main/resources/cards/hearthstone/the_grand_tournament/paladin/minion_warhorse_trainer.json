@@ -2,7 +2,7 @@
   "name": "Warhorse Trainer",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",

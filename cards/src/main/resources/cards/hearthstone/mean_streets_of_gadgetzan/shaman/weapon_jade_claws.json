@@ -2,7 +2,7 @@
   "name": "Jade Claws",
   "baseManaCost": 2,
   "type": "WEAPON",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "damage": 2,
   "durability": 2,
   "rarity": "RARE",

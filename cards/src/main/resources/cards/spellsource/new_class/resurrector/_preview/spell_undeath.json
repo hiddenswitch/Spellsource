@@ -2,7 +2,7 @@
   "name": "Undeath",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Your Superpower becomes 'Deal 2 damage'. If already in Undeath: 3 damage.",
   "targetSelection": "NONE",

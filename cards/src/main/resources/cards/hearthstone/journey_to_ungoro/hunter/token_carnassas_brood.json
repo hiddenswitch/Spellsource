@@ -2,7 +2,7 @@
   "name": "Carnassa's Brood'",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "FREE",

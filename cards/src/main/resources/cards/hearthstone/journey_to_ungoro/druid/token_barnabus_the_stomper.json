@@ -2,7 +2,7 @@
   "name": "Barnabus the Stomper",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",

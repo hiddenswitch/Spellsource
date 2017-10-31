@@ -2,7 +2,7 @@
   "name": "Bane of Doom",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "description": "Deal 2 damage to a character.  If that kills it, summon a random Demon.",
   "targetSelection": "ANY",

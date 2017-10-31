@@ -35,7 +35,7 @@ public class CreateZombeastSpell extends Spell {
 		Map<Integer, List<MinionCard>> cards = CardCatalogue.stream()
 				.filter(c -> c.getRace() == Race.BEAST)
 				.filter(c -> c.getCardType() == CardType.MINION)
-				.filter(c -> c.getHeroClass() == HeroClass.ANY || c.getHeroClass() == HeroClass.HUNTER)
+				.filter(c -> c.getHeroClass() == HeroClass.ANY || c.getHeroClass() == HeroClass.GREEN)
 				.filter(c -> c.getBaseManaCost() <= 5)
 				.filter(c -> context.getDeckFormat().isInFormat(c))
 				.map(c -> (MinionCard) c)

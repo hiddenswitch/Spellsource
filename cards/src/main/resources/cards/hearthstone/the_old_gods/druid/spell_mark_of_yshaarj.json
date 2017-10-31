@@ -2,7 +2,7 @@
   "name": "Mark of Y'Shaarj",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Give a minion +2/+2. If it's a Beast, draw a card.",
   "targetSelection": "MINIONS",

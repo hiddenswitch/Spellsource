@@ -2,7 +2,7 @@
   "name": "Renounce Darkness",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "description": "Replace your Hero Power and Warlock Cards with another class's. The cards cost (1) less.",
   "targetSelection": "NONE",
@@ -10,7 +10,7 @@
     "class": "RenounceClassSpell",
     "cardFilter": {
       "class": "CardFilter",
-      "heroClass": "WARLOCK"
+      "heroClass": "VIOLET"
     },
     "manaModifier": -1
   },

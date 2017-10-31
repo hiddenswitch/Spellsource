@@ -2,7 +2,7 @@
   "name": "Mind Blast",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Deal 5 damage to the enemy hero.",
   "targetSelection": "NONE",

@@ -48,7 +48,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testAxeFlinger() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player player = context.getPlayer1();
 
 		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_axe_flinger"));
@@ -65,7 +65,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testBlackwingCorruptor() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
 		Player player = context.getPlayer1();
 		clearHand(context, player);
 
@@ -84,7 +84,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testBlackwingTechnician() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
 		Player player = context.getPlayer1();
 		clearHand(context, player);
 
@@ -100,7 +100,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testChromaggus() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
 		Player player = context.getPlayer1();
 		clearHand(context, player);
 
@@ -121,7 +121,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testCoreRager() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
 		Player player = context.getPlayer1();
 		clearHand(context, player);
 
@@ -138,7 +138,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testDarkIronSkulker() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
 		Player player = context.getPlayer1();
 		Player opponent = context.getOpponent(player);
 
@@ -169,7 +169,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testDragonConsort() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
 		Player player = context.getPlayer1();
 
 		final int MANA_REDUCTION = 2;
@@ -184,7 +184,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testDragonEgg() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
 		Player player = context.getPlayer1();
 
 		final String TOKEN = "token_black_whelp";
@@ -199,7 +199,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testDragonkinSorceror() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
 		Player player = context.getPlayer1();
 
 		final int ATTACK_BONUS = 1;
@@ -217,7 +217,7 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testDrakonidCrusher() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.HUNTER);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 

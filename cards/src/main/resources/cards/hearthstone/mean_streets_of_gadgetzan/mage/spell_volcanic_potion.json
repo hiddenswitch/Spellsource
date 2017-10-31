@@ -2,7 +2,7 @@
   "name": "Volcanic Potion",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "RARE",
   "description": "Deal 2 damage to all minions.",
   "targetSelection": "NONE",

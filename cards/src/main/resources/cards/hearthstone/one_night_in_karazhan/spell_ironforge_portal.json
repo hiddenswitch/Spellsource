@@ -2,7 +2,7 @@
   "name": "Ironforge Portal",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "COMMON",
   "description": "Gain +4 Armor. Summon a random 4-Cost minion.",
   "targetSelection": "NONE",

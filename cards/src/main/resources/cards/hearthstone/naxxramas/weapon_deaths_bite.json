@@ -2,7 +2,7 @@
   "name": "Death's Bite",
   "baseManaCost": 4,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 4,
   "durability": 2,
   "rarity": "COMMON",

@@ -2,7 +2,7 @@
   "name": "Mise en Place",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Gain 2 Mana this turn.",
   "targetSelection": "NONE",

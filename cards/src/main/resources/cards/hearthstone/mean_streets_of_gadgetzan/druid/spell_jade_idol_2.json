@@ -2,7 +2,7 @@
   "name": "Shuffle 3 Copies",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Shuffle 3 copies of this into your deck.",
   "targetSelection": "NONE",

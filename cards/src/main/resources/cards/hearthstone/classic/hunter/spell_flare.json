@@ -2,7 +2,7 @@
   "name": "Flare",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "RARE",
   "description": "All minions lose Stealth. Destroy all enemy Secrets. Draw a card.",
   "targetSelection": "NONE",

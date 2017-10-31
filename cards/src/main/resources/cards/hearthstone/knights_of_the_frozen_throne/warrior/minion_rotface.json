@@ -2,7 +2,7 @@
   "name": "Rotface",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 4,
   "baseHp": 6,
   "rarity": "LEGENDARY",

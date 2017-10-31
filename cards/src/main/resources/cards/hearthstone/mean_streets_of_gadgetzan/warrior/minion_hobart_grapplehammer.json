@@ -2,7 +2,7 @@
   "name": "Hobart Grapplehammer",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",

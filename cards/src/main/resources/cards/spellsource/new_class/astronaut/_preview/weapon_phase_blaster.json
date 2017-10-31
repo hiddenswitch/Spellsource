@@ -2,7 +2,7 @@
   "name": "Phase Blaster",
   "baseManaCost": 4,
   "type": "WEAPON",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "damage": 4,
   "durability": 2,
   "rarity": "FREE",

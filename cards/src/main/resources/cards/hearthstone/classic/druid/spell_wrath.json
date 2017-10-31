@@ -2,7 +2,7 @@
   "name": "Wrath",
   "baseManaCost": 2,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Choose One - Deal 3 damage to a minion; or 1 damage and draw a card.",
   "targetSelection": "NONE",

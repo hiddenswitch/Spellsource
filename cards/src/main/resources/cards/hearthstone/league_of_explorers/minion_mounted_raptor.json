@@ -2,7 +2,7 @@
   "name": "Mounted Raptor",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",

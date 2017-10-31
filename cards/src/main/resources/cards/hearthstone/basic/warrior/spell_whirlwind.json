@@ -2,7 +2,7 @@
   "name": "Whirlwind",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Deal 1 damage to ALL minions.",
   "targetSelection": "NONE",

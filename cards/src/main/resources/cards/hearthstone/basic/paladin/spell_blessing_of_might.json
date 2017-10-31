@@ -2,7 +2,7 @@
   "name": "Blessing of Might",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Give a minion +3 Attack.",
   "targetSelection": "MINIONS",

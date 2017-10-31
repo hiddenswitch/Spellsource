@@ -2,7 +2,7 @@
   "name": "Forbidden Healing",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "Spend all your mana. Heal for double the mana spent.",
   "targetSelection": "ANY",

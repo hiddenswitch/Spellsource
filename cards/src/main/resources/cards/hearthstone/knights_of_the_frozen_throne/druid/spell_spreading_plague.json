@@ -2,7 +2,7 @@
   "name": "Spreading Plague",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Summon a 1/5 Scarab with Taunt. If your opponent has more minions, cast this again.",
   "targetSelection": "NONE",

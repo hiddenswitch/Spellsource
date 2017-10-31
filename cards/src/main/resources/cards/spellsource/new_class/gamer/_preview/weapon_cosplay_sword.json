@@ -2,7 +2,7 @@
   "name": "Cosplay Sword",
   "baseManaCost": 2,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 3,
   "durability": 2,
   "rarity": "FREE",

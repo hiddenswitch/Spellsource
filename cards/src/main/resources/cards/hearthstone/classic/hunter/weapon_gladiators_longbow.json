@@ -2,7 +2,7 @@
   "name": "Gladiator's Longbow",
   "baseManaCost": 7,
   "type": "WEAPON",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "damage": 5,
   "durability": 2,
   "rarity": "EPIC",

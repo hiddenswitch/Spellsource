@@ -2,7 +2,7 @@
   "name": "Bloodlust",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Give your minions +3 Attack this turn.",
   "targetSelection": "NONE",

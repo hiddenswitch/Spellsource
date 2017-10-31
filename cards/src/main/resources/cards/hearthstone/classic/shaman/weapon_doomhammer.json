@@ -2,7 +2,7 @@
   "name": "Doomhammer",
   "baseManaCost": 5,
   "type": "WEAPON",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "damage": 2,
   "durability": 8,
   "rarity": "EPIC",

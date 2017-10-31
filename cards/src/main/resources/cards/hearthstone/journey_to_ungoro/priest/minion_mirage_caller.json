@@ -2,7 +2,7 @@
   "name": "Mirage Caller",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",

@@ -28,7 +28,7 @@ public class DeckFactory {
 	}
 
 	public static Deck getRandomDeck() {
-		HeroClass[] heroClasses = {HeroClass.DRUID, HeroClass.HUNTER, HeroClass.MAGE, HeroClass.PALADIN, HeroClass.PRIEST, HeroClass.ROGUE, HeroClass.SHAMAN, HeroClass.WARLOCK, HeroClass.WARRIOR};
+		HeroClass[] heroClasses = {HeroClass.BROWN, HeroClass.GREEN, HeroClass.BLUE, HeroClass.GOLD, HeroClass.WHITE, HeroClass.BLACK, HeroClass.SILVER, HeroClass.VIOLET, HeroClass.RED};
 		Deck randomDeck = DeckFactory.getRandomDeck(
 				heroClasses[RandomUtils.nextInt(0, heroClasses.length)],
 				new DeckFormat().withCardSets(

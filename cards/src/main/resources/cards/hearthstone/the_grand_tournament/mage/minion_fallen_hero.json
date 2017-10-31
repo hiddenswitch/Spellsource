@@ -2,7 +2,7 @@
   "name": "Fallen Hero",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",

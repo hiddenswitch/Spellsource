@@ -2,7 +2,7 @@
   "name": "Flash Heal",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Restore 5 Health.",
   "targetSelection": "ANY",

@@ -4,7 +4,7 @@
   "heroPower": "hero_power_shapeshift",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Hero Power: Gain 1 armor and +1 Attack this turn",
   "attributes": {

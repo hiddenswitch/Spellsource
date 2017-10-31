@@ -2,7 +2,7 @@
   "name": "Summon a Animated Shuriken",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Summon a Animated Shuriken.",
   "targetSelection": "NONE",

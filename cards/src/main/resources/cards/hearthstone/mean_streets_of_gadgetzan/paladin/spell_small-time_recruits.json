@@ -2,7 +2,7 @@
   "name": "Small-Time Recruits",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "Draw three 1-Cost minions from your deck.",
   "targetSelection": "NONE",

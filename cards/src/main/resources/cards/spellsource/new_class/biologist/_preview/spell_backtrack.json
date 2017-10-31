@@ -2,7 +2,7 @@
   "name": "Backtrack",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Return an enemy minion to its owner\u2019s hand.",
   "targetSelection": "ENEMY_MINIONS",

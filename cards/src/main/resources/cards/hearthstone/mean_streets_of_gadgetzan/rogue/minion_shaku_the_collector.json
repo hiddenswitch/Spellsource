@@ -2,7 +2,7 @@
   "name": "Shaku, the Collector",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "LEGENDARY",

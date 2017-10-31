@@ -3,7 +3,7 @@
   "heroPower": "hero_power_transmute_spirit",
   "baseManaCost": 5,
   "type": "HERO",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Transform your minions into random ones that cost (2) more.",
   "battlecry": {

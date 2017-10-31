@@ -4,7 +4,7 @@
   "heroPower": "hero_power_fireblast",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Hero Power: Deal 1 damage to a target",
   "attributes": {

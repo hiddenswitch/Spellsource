@@ -2,7 +2,7 @@
   "name": "Kirin Tor Mage",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "RARE",

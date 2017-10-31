@@ -2,7 +2,7 @@
   "name": "Pyroblast",
   "baseManaCost": 10,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "EPIC",
   "description": "Deal 10 damage.",
   "targetSelection": "ANY",

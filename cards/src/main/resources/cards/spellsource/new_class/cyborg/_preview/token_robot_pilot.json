@@ -2,7 +2,7 @@
   "name": "Robot Pilot",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",

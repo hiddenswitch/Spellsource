@@ -2,7 +2,7 @@
   "name": "Shadow Rager",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 5,
   "baseHp": 1,
   "rarity": "COMMON",

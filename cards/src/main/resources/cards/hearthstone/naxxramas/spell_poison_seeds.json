@@ -2,7 +2,7 @@
   "name": "Poison Seeds",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Destroy all minions and summon 2/2 treants to replace them",
   "targetSelection": "NONE",

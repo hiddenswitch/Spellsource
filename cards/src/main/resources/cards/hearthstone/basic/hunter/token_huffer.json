@@ -2,7 +2,7 @@
   "name": "Inoshi",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "FREE",

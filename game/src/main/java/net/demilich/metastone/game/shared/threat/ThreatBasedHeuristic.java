@@ -56,13 +56,13 @@ public class ThreatBasedHeuristic implements IGameStateHeuristic, Serializable {
 
 	private static int getHeroDamage(Hero hero) {
 		int heroDamage = 0;
-		if (hero.getHeroClass() == HeroClass.MAGE) {
+		if (hero.getHeroClass() == HeroClass.BLUE) {
 			heroDamage += 1;
-		} else if (hero.getHeroClass() == HeroClass.HUNTER) {
+		} else if (hero.getHeroClass() == HeroClass.GREEN) {
 			heroDamage += 2;
-		} else if (hero.getHeroClass() == HeroClass.DRUID) {
+		} else if (hero.getHeroClass() == HeroClass.BROWN) {
 			heroDamage += 1;
-		} else if (hero.getHeroClass() == HeroClass.ROGUE) {
+		} else if (hero.getHeroClass() == HeroClass.BLACK) {
 			heroDamage += 1;
 		}
 		if (hero.getWeapon() != null) {

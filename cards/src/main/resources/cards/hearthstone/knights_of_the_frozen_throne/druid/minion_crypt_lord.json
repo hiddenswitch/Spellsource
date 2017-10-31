@@ -2,7 +2,7 @@
   "name": "Crypt Lord",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 1,
   "baseHp": 6,
   "rarity": "COMMON",

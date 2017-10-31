@@ -2,7 +2,7 @@
   "name": "Consecration",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Deal 2 damage to all enemies.",
   "targetSelection": "NONE",

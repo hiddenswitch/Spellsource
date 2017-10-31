@@ -2,7 +2,7 @@
   "name": "Nerf",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Deal 1 damage to EVERY minion.",
   "targetSelection": "NONE",

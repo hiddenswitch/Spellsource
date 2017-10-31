@@ -2,7 +2,7 @@
   "name": "Multi-Shot",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Deal 3 damage to two random enemy minions.",
   "condition": {

@@ -2,7 +2,7 @@
   "name": "The Caverns Below",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "LEGENDARY",
   "description": "Quest: Play five minions with the same name. Reward: Crystal Core.",
   "quest": {

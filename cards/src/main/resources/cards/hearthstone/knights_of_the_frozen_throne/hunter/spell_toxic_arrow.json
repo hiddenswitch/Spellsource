@@ -2,7 +2,7 @@
   "name": "Toxic Arrow",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "EPIC",
   "description": "Deal 2 damage to a minion. If it survives, give it Poisonous.",
   "targetSelection": "MINIONS",

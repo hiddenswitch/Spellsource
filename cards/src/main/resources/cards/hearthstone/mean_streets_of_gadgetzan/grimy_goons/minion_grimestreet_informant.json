@@ -4,9 +4,9 @@
   "type": "MINION",
   "heroClass": "ANY",
   "heroClasses": [
-    "HUNTER",
-    "PALADIN",
-    "WARRIOR"
+    "GREEN",
+    "GOLD",
+    "RED"
   ],
   "baseAttack": 1,
   "baseHp": 1,
@@ -23,15 +23,15 @@
       "cardFilters": [
         {
           "class": "CardFilter",
-          "heroClass": "HUNTER"
+          "heroClass": "GREEN"
         },
         {
           "class": "CardFilter",
-          "heroClass": "PALADIN"
+          "heroClass": "GOLD"
         },
         {
           "class": "CardFilter",
-          "heroClass": "WARRIOR"
+          "heroClass": "RED"
         }
       ]
     }

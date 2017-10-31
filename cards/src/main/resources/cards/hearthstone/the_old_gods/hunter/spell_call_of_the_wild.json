@@ -2,7 +2,7 @@
   "name": "Call of the Wild",
   "baseManaCost": 9,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "EPIC",
   "description": "Summon all 3 Aid of Shirambas.",
   "targetSelection": "NONE",

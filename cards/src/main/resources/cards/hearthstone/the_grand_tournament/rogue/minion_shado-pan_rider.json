@@ -2,7 +2,7 @@
   "name": "Shado-Pan Rider",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "COMMON",

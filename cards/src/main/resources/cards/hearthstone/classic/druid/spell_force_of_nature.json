@@ -2,7 +2,7 @@
   "name": "Force of Nature",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Summon three 2/2 Treants.",
   "targetSelection": "NONE",

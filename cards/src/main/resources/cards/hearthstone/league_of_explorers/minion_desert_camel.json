@@ -2,7 +2,7 @@
   "name": "Desert Camel",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",

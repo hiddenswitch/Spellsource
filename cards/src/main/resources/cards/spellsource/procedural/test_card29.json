@@ -3,7 +3,7 @@
   "name": "Betterbugs",
   "baseManaCost": 8.0,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 7.0,
   "baseHp": 7.0,
   "rarity": "RARE",

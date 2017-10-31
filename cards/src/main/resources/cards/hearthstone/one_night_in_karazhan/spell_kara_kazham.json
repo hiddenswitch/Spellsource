@@ -2,7 +2,7 @@
   "name": "Kara Kazham!",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "COMMON",
   "description": "Summon a 1/1 Candle, 2/2 Broom, and 3/3 Teapot.",
   "targetSelection": "NONE",

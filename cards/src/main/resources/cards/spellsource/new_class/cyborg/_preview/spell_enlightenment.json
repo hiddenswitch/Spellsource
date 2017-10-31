@@ -2,7 +2,7 @@
   "name": "Enlightenment",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "EPIC",
   "description": "Add a random Cyborg card to your hand each time you use a power this turn.",
   "targetSelection": "NONE",
@@ -18,7 +18,7 @@
         "class": "ReceiveCardSpell",
         "cardFilter": {
           "class": "CardFilter",
-          "heroClass": "HUNTER"
+          "heroClass": "GREEN"
         }
       },
       "oneTurn": true

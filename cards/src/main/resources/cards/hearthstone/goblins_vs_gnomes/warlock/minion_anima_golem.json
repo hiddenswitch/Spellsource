@@ -2,7 +2,7 @@
   "name": "Anima Golem",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 9,
   "baseHp": 9,
   "rarity": "EPIC",

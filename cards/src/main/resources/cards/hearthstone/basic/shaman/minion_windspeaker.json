@@ -2,7 +2,7 @@
   "name": "Windspeaker",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",

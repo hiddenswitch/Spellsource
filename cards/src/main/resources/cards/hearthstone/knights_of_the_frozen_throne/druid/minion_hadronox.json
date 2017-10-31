@@ -2,7 +2,7 @@
   "name": "Hadronox",
   "baseManaCost": 9,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "LEGENDARY",

@@ -2,7 +2,7 @@
   "name": "Forbidden Shaping",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Spend all your mana. Summon a random minion that costs that much.",
   "targetSelection": "NONE",

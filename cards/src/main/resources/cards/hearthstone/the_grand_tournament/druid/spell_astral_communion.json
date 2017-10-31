@@ -2,7 +2,7 @@
   "name": "Astral Communion",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Gain 10 Mana. Discard your hand.",
   "targetSelection": "NONE",

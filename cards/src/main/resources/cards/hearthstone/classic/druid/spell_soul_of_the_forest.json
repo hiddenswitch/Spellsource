@@ -2,7 +2,7 @@
   "name": "Soul of the Forest",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Give your minions \"Deathrattle: Summon a 2/2 Treant.\"",
   "targetSelection": "NONE",

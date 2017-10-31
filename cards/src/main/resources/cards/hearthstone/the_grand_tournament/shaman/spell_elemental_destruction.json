@@ -2,7 +2,7 @@
   "name": "Elemental Destruction",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "EPIC",
   "description": "Deal 4-5 damage to all minions. Overload: (5)",
   "targetSelection": "NONE",

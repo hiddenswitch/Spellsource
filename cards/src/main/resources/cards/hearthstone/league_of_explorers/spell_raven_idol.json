@@ -2,7 +2,7 @@
   "name": "Raven Idol",
   "baseManaCost": 1,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Choose One - Discover a minion; or Discover a spell.",
   "targetSelection": "NONE",

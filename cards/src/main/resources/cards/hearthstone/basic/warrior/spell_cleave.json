@@ -2,7 +2,7 @@
   "name": "Cleave",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "FREE",
   "description": "Deal 2 damage to two random enemy minions.",
   "condition": {

@@ -2,7 +2,7 @@
   "name": "Shadow of Nothing",
   "baseManaCost": 0,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "EPIC",

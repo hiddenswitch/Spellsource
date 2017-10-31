@@ -2,7 +2,7 @@
   "name": "Shady Dealer",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "RARE",

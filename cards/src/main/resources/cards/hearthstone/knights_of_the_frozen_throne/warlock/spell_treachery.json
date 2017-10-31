@@ -2,7 +2,7 @@
   "name": "Treachery",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "description": "Choose a friendly minion and give it to your opponent.",
   "targetSelection": "FRIENDLY_MINIONS",

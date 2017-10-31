@@ -2,7 +2,7 @@
   "name": "Savagery",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Deal damage equal to your hero's Attack to a minion.",
   "targetSelection": "MINIONS",

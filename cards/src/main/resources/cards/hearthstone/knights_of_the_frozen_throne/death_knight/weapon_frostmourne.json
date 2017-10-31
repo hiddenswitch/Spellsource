@@ -2,7 +2,7 @@
   "name": "Frostmourne",
   "baseManaCost": 7,
   "type": "WEAPON",
-  "heroClass": "DEATH_KNIGHT",
+  "heroClass": "SPIRIT",
   "damage": 5,
   "durability": 3,
   "rarity": "FREE",

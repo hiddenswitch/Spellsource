@@ -2,7 +2,7 @@
   "name": "Sindragosa",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",

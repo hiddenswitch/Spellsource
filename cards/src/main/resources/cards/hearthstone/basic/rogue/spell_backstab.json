@@ -2,7 +2,7 @@
   "name": "Backstab",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Deal 2 damage to an undamaged minion.",
   "targetSelection": "MINIONS",

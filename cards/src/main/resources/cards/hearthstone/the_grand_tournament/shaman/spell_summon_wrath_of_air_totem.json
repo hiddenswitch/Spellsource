@@ -2,7 +2,7 @@
   "name": "Wrath of Air Totem",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Summon a Wrath of Air Totem.",
   "targetSelection": "NONE",

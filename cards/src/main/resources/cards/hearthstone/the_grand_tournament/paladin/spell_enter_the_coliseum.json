@@ -2,7 +2,7 @@
   "name": "Enter the Coliseum",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "Destroy all minions except each player's highest Attack minion.",
   "targetSelection": "NONE",

@@ -19,23 +19,23 @@ public class MetaHero extends HeroCard {
 
 	public static HeroCard getHeroCard(HeroClass heroClass) {
 		switch (heroClass) {
-		case DRUID:
+		case BROWN:
 			return (HeroCard) CardCatalogue.getCardById("hero_malfurion");
-		case HUNTER:
+		case GREEN:
 			return (HeroCard) CardCatalogue.getCardById("hero_rexxar");
-		case MAGE:
+		case BLUE:
 			return (HeroCard) CardCatalogue.getCardById("hero_jaina");
-		case PALADIN:
+		case GOLD:
 			return (HeroCard) CardCatalogue.getCardById("hero_uther");
-		case PRIEST:
+		case WHITE:
 			return (HeroCard) CardCatalogue.getCardById("hero_anduin");
-		case ROGUE:
+		case BLACK:
 			return (HeroCard) CardCatalogue.getCardById("hero_valeera");
-		case SHAMAN:
+		case SILVER:
 			return (HeroCard) CardCatalogue.getCardById("hero_thrall");
-		case WARLOCK:
+		case VIOLET:
 			return (HeroCard) CardCatalogue.getCardById("hero_guldan");
-		case WARRIOR:
+		case RED:
 			return (HeroCard) CardCatalogue.getCardById("hero_garrosh");
 		default:
 			break;

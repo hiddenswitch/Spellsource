@@ -2,7 +2,7 @@
   "name": "Dinner Time",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "RARE",
   "description": "Deal 3 damage. Summon three 1/1 Pterrordaxes.",
   "targetSelection": "ANY",

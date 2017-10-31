@@ -2,7 +2,7 @@
   "name": "Shadow Visions",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Discover a copy of a spell in your deck.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Unearth",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Deal 3-6 damage. Mana Surge: 1",
   "targetSelection": "ANY",

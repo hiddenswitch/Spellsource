@@ -2,7 +2,7 @@
   "name": "Sudden Genesis",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Summon a copy of each friendly damaged minion.",
   "targetSelection": "NONE",

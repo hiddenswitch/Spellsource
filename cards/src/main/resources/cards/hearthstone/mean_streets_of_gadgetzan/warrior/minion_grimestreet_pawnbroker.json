@@ -2,7 +2,7 @@
   "name": "Grimestreet Pawnbroker",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",

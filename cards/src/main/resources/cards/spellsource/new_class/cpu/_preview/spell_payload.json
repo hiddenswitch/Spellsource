@@ -2,7 +2,7 @@
   "name": "Payload",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Deal 6 damage.",
   "targetSelection": "ANY",

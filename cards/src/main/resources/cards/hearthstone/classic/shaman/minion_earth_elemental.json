@@ -2,7 +2,7 @@
   "name": "Earth Elemental",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 7,
   "baseHp": 8,
   "rarity": "EPIC",

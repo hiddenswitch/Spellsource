@@ -2,7 +2,7 @@
   "name": "Chittering Tunneler",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",

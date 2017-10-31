@@ -2,7 +2,7 @@
   "name": "SI:7 Agent",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",

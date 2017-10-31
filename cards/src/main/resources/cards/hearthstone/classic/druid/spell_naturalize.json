@@ -2,7 +2,7 @@
   "name": "Naturalize",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Destroy a minion. Your opponent draws 2 cards.",
   "targetSelection": "MINIONS",

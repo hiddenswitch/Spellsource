@@ -2,7 +2,7 @@
   "name": "Steamwheedle Sniper",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "EPIC",

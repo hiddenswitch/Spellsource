@@ -2,7 +2,7 @@
   "name": "Unholy Frenzy",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Alter a minion's Attack to be the same as its Health.",
   "targetSelection": "MINIONS",

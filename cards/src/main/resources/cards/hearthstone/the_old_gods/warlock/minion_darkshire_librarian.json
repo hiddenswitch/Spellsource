@@ -2,7 +2,7 @@
   "name": "Darkshire Librarian",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",

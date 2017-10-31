@@ -2,7 +2,7 @@
   "name": "Alexstrasza's Champion",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",

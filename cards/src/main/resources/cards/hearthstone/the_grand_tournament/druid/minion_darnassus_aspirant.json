@@ -2,7 +2,7 @@
   "name": "Darnassus Aspirant",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",

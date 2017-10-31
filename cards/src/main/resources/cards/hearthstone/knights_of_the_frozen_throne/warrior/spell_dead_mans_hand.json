@@ -2,7 +2,7 @@
   "name": "Dead Man's Hand",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Shuffle a copy of your hand into your deck.",
   "targetSelection": "NONE",

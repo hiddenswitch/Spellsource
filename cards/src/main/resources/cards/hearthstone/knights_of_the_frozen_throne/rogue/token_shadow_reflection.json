@@ -2,7 +2,7 @@
   "name": "Shadow Reflection",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Each time you play a card, transform this into a copy of  it.",
   "passiveTriggers": [

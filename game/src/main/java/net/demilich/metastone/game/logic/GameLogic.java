@@ -2270,7 +2270,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 	void processTargetModifiers(Player player, GameAction action) {
 		HeroPowerCard heroPower = player.getHero().getHeroPower();
-		if (heroPower.getHeroClass() != HeroClass.HUNTER) {
+		if (heroPower.getHeroClass() != HeroClass.GREEN) {
 			return;
 		}
 		if (action.getActionType() == ActionType.HERO_POWER && hasAttribute(player, Attribute.HERO_POWER_CAN_TARGET_MINIONS)) {

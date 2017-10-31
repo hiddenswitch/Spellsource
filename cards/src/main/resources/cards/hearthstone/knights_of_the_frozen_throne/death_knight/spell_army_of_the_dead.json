@@ -2,7 +2,7 @@
   "name": "Army of the Dead",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "DEATH_KNIGHT",
+  "heroClass": "SPIRIT",
   "rarity": "FREE",
   "description": "Remove the top 5 cards of your deck. Summon any minions removed.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Swarm",
   "baseManaCost": 10,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Hire 7 Aliens that died this game.",
   "targetSelection": "NONE",

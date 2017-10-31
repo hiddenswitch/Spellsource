@@ -2,7 +2,7 @@
   "name": "Blizzard",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "RARE",
   "description": "Deal 2 damage to all enemy minions and Freeze them.",
   "targetSelection": "NONE",

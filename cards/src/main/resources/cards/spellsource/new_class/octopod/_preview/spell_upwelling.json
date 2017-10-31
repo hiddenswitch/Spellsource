@@ -2,7 +2,7 @@
   "name": "Upwelling",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "COMMON",
   "description": "Destroy a minion in addition to one of your Mana Cells.",
   "targetSelection": "MINIONS",

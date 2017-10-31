@@ -2,7 +2,7 @@
   "name": "Enchanted Raven",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",

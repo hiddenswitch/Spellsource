@@ -2,7 +2,7 @@
   "name": "Sponsored Funding",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Deal 2 damage. You are no longer Mana Surged.",
   "targetSelection": "ANY",

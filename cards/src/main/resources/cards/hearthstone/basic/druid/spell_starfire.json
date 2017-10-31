@@ -2,7 +2,7 @@
   "name": "Starfire",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Deal 5 damage. Draw a card.",
   "targetSelection": "ANY",

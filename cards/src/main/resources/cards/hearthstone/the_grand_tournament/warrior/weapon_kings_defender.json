@@ -2,7 +2,7 @@
   "name": "King's Defender",
   "baseManaCost": 3,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 3,
   "durability": 2,
   "rarity": "RARE",

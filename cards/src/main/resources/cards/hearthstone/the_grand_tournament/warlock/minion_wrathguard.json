@@ -2,7 +2,7 @@
   "name": "Wrathguard",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",

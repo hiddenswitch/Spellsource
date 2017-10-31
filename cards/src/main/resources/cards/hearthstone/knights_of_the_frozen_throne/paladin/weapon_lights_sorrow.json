@@ -2,7 +2,7 @@
   "name": "Light's Sorrow",
   "baseManaCost": 4,
   "type": "WEAPON",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "damage": 1,
   "durability": 4,
   "rarity": "EPIC",

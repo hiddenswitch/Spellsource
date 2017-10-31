@@ -2,7 +2,7 @@
   "name": "Leeching Poison",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Give your weapon Lifesteal.",
   "condition": {

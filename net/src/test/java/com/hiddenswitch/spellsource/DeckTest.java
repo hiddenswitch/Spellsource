@@ -37,7 +37,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 		List<String> inventoryIds = collection.getInventoryRecords().subList(0, 30).stream().map(InventoryRecord::getId).collect(Collectors.toList());
 		return decks.createDeck(new DeckCreateRequest()
 				.withUserId(userId)
-				.withHeroClass(HeroClass.WARRIOR)
+				.withHeroClass(HeroClass.RED)
 				.withName("Test Deck")
 				.withInventoryIds(inventoryIds));
 	}

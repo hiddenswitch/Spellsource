@@ -2,7 +2,7 @@
   "name": "Poisoned Blade",
   "baseManaCost": 1,
   "type": "WEAPON",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",

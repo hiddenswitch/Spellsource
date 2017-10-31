@@ -2,7 +2,7 @@
   "name": "Power Word: Glory",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Choose a minion. Whenever it attacks, restore 4 Health to your hero.",
   "targetSelection": "MINIONS",

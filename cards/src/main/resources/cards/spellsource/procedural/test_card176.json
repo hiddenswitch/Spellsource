@@ -3,7 +3,7 @@
   "name": "Sad Flurry",
   "baseManaCost": 8.0,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 3.0,
   "baseHp": 6.0,
   "rarity": "LEGENDARY",

@@ -2,7 +2,7 @@
   "name": "Death's Shadow",
   "baseManaCost": 0,
   "type": "HERO_POWER",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Passive Hero Power. During your turn, add a 'Shadow Reflection' to your hand.",
   "passiveTrigger": {

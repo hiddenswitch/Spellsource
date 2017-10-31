@@ -3,7 +3,7 @@
   "name": "Con The Ancient One",
   "baseManaCost": 5.0,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 3.0,
   "baseHp": 5.0,
   "rarity": "RARE",

@@ -2,7 +2,7 @@
   "name": "Vol'jin",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 6,
   "baseHp": 2,
   "rarity": "LEGENDARY",

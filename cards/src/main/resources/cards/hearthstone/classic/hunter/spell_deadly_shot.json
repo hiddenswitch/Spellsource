@@ -2,7 +2,7 @@
   "name": "Deadly Shot",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "Destroy a random enemy minion.",
   "condition": {

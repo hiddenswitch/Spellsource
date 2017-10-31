@@ -2,7 +2,7 @@
   "name": "Power Word: Shield",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Give a minion +2 Health. Draw a card.",
   "targetSelection": "MINIONS",

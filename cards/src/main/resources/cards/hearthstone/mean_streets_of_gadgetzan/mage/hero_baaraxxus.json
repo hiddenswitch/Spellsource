@@ -3,7 +3,7 @@
   "heroPower": "hero_power_inferno",
   "baseManaCost": 1,
   "type": "HERO",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "attributes": {
     "HP": 1,

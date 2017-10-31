@@ -2,7 +2,7 @@
   "name": "Cryomancer",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",

@@ -313,17 +313,17 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		// Any Hero Power that targets will also freeze that target. So it does work with Frost Lich Jaina. (And even
 		// works with Anduin's basic HP!)
 		checkIceWalker(true, new HeroClass[]{
-				HeroClass.MAGE,
-				HeroClass.PRIEST
+				HeroClass.BLUE,
+				HeroClass.WHITE
 		});
 		checkIceWalker(false, new HeroClass[]{
-				HeroClass.ROGUE,
-				HeroClass.WARLOCK,
-				HeroClass.DRUID,
-				HeroClass.PALADIN,
-				HeroClass.SHAMAN,
-				HeroClass.WARRIOR,
-				HeroClass.HUNTER
+				HeroClass.BLACK,
+				HeroClass.VIOLET,
+				HeroClass.BROWN,
+				HeroClass.GOLD,
+				HeroClass.SILVER,
+				HeroClass.RED,
+				HeroClass.GREEN
 		});
 	}
 
@@ -366,14 +366,14 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 				} else {
 					Assert.assertFalse(target.hasAttribute(Attribute.FROZEN));
 				}
-			}, heroClass, HeroClass.MAGE);
+			}, heroClass, HeroClass.BLUE);
 		}
 	}
 
 	@Test
 	public void testSpreadingPlague() {
 		Stream.of(0, 3, 7).forEach(minionCount -> {
-			GameContext context = createContext(HeroClass.DRUID, HeroClass.DRUID);
+			GameContext context = createContext(HeroClass.BROWN, HeroClass.BROWN);
 			Player player = context.getActivePlayer();
 			Player opponent = context.getOpponent(player);
 			context.endTurn();
@@ -423,7 +423,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 					.map(actionGetter -> {
 						ChooseBattlecryHeroCard malfurion = (ChooseBattlecryHeroCard) CardCatalogue.getCardById("hero_malfurion_the_pestilent");
 
-						GameContext context1 = createContext(HeroClass.DRUID, HeroClass.WARRIOR);
+						GameContext context1 = createContext(HeroClass.BROWN, HeroClass.RED);
 						Player player = context1.getPlayer1();
 						clearHand(context1, player);
 						clearZone(context1, player.getDeck());

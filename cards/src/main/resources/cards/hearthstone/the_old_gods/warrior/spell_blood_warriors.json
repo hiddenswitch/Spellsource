@@ -2,7 +2,7 @@
   "name": "Blood Warriors",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Add a copy of each damaged friendly minion to your hand.",
   "targetSelection": "NONE",

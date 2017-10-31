@@ -2,7 +2,7 @@
   "name": "Shady Hacker",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "RARE",
@@ -13,7 +13,7 @@
       "class": "ReceiveCardSpell",
       "cardFilter": {
         "class": "CardFilter",
-        "heroClass": "MAGE",
+        "heroClass": "BLUE",
         "cardType": "SPELL"
       }
     }

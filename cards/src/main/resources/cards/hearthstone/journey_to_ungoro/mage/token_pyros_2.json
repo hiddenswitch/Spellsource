@@ -2,7 +2,7 @@
   "name": "Pyros",
   "baseManaCost": 10,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "LEGENDARY",

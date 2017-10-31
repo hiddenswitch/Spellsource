@@ -2,7 +2,7 @@
   "name": "Humility",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Change a minion's Attack to 1.",
   "targetSelection": "MINIONS",

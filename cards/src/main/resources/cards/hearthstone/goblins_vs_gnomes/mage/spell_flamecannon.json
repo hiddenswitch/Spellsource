@@ -2,7 +2,7 @@
   "name": "Flamecannon",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Deal 4 damage to a random enemy minion.",
   "condition": {

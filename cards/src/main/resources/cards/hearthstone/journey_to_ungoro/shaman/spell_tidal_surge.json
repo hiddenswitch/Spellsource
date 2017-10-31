@@ -2,7 +2,7 @@
   "name": "Tidal Surge",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Deal 4 damage to a minion. Restore 4 health to your hero.",
   "targetSelection": "MINIONS",

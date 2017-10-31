@@ -2,7 +2,7 @@
   "name": "Firebloom Toxin",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Deal 2 damage.",
   "targetSelection": "ANY",

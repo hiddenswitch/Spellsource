@@ -2,7 +2,7 @@
   "name": "Embrace the Shadow",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Your healing effects deal damage instead this turn.",
   "targetSelection": "NONE",

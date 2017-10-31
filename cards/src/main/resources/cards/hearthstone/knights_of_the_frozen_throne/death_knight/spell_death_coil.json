@@ -2,7 +2,7 @@
   "name": "Death Coil",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "DEATH_KNIGHT",
+  "heroClass": "SPIRIT",
   "rarity": "FREE",
   "description": "Deal 5 damage to an enemy, or restore 5 Health to a friendly character.",
   "targetSelection": "ANY",

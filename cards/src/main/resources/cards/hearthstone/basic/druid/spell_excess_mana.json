@@ -2,7 +2,7 @@
   "name": "Excess Mana",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Draw a card. (You can only have 10 Mana in your tray.)",
   "targetSelection": "NONE",

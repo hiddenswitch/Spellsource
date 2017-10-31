@@ -3,7 +3,7 @@
   "name": "Black Windler",
   "baseManaCost": 8.0,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 6.0,
   "baseHp": 7.0,
   "rarity": "LEGENDARY",

@@ -2,7 +2,7 @@
   "name": "Stone Elemental",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "FREE",

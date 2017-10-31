@@ -2,7 +2,7 @@
   "name": "Conjuring",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Summon a 6/6 Infernal.",
   "condition": {

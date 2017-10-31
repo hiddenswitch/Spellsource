@@ -2,7 +2,7 @@
   "name": "Sea Reaver",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 6,
   "baseHp": 7,
   "rarity": "EPIC",

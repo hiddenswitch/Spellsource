@@ -2,7 +2,7 @@
   "name": "Siphon Life",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Hero Power: Lifesteal. Deal 3 damage.",
   "targetSelection": "ANY",

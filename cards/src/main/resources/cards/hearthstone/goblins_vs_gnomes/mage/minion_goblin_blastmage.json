@@ -2,7 +2,7 @@
   "name": "Goblin Blastmage",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",

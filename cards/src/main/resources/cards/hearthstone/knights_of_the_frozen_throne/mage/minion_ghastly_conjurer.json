@@ -2,7 +2,7 @@
   "name": "Ghastly Conjurer",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "RARE",

@@ -4,7 +4,7 @@
   "heroPower": "hero_power_reinforce",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Hero Power: Summon a 1/1 creature",
   "attributes": {

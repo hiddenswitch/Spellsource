@@ -2,7 +2,7 @@
   "name": "Claw",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Give your hero +2 Attack this turn and 2 Armor.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Imp Gang Boss",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",

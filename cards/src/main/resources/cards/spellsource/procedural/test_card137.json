@@ -3,7 +3,7 @@
   "name": "Darkscale",
   "baseManaCost": 6.0,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 5.0,
   "baseHp": 6.0,
   "rarity": "EPIC",

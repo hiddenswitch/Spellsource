@@ -3,7 +3,7 @@
   "name": "Old Giant",
   "baseManaCost": 6.0,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 5.0,
   "baseHp": 5.0,
   "rarity": "LEGENDARY",

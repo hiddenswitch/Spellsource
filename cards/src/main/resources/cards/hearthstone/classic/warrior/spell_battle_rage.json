@@ -2,7 +2,7 @@
   "name": "Battle Rage",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "COMMON",
   "description": "Draw a card for each damaged friendly character.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Druid of the Flame",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "COMMON",

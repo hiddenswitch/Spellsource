@@ -2,7 +2,7 @@
   "name": "Ancestral Spirit",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Give a minion \"Deathrattle: Resummon this minion.\"",
   "targetSelection": "MINIONS",

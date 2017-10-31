@@ -2,7 +2,7 @@
   "name": "Extra Ingredient",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Draw a card.",
   "targetSelection": "NONE",

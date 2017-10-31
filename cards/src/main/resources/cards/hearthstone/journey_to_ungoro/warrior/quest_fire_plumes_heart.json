@@ -2,7 +2,7 @@
   "name": "Fire Plume's Heart",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "LEGENDARY",
   "description": "Quest: Play 7 Taunt minions. Reward: Sulfuras.",
   "quest": {

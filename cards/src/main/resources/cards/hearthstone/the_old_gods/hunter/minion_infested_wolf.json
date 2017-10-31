@@ -2,7 +2,7 @@
   "name": "Infested Wolf",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",

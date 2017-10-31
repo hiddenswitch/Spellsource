@@ -79,7 +79,7 @@ public interface Draft {
 	 * @return A client-ready draft state view.
 	 */
 	static DraftState toDraftState(PublicDraftState inState) {
-		GameContext workingContext = GameContext.uninitialized(inState.getHeroClass() == null ? HeroClass.WARRIOR : inState.getHeroClass(), HeroClass.WARRIOR);
+		GameContext workingContext = GameContext.uninitialized(inState.getHeroClass() == null ? HeroClass.RED : inState.getHeroClass(), HeroClass.RED);
 		return new DraftState()
 				.cardsRemaining(inState.getCardsRemaining())
 				.currentCardChoices(inState.getCurrentCardChoices() == null ? null :

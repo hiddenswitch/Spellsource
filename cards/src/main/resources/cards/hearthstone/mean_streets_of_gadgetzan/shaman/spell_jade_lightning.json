@@ -2,7 +2,7 @@
   "name": "Jade Lightning",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Deal 4 damage. Summon a Animated Shuriken.",
   "targetSelection": "ANY",

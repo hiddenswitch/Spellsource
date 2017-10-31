@@ -3,7 +3,7 @@
   "heroPower": "hero_power_plague_lord",
   "baseManaCost": 7,
   "type": "HERO",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "LEGENDARY",
   "description": "Choose One - Summon 2 Poisonous Spiders; or 2 Scarabs with Taunt.",
   "options": [

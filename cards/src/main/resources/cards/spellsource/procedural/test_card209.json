@@ -3,7 +3,7 @@
   "name": "Chandel",
   "baseManaCost": 5.0,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 5.0,
   "baseHp": 6.0,
   "rarity": "LEGENDARY",

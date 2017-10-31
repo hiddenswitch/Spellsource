@@ -2,7 +2,7 @@
   "name": "Stand Against Darkness",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "COMMON",
   "description": "Summon five 1/1 Recruits.",
   "targetSelection": "NONE",

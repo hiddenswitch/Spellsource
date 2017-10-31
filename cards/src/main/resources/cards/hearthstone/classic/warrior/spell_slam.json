@@ -2,7 +2,7 @@
   "name": "Slam",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "COMMON",
   "description": "Deal 2 damage to a minion. If it survives, draw a card.",
   "targetSelection": "MINIONS",

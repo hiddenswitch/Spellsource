@@ -2,7 +2,7 @@
   "name": "Jericho",
   "baseManaCost": 5,
   "type": "WEAPON",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "damage": 5,
   "durability": 3,
   "rarity": "LEGENDARY",

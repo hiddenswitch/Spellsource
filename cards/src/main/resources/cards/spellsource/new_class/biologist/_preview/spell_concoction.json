@@ -2,7 +2,7 @@
   "name": "Concoction",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "EPIC",
   "description": "The next power you use this turn costs 3 less Mana.",
   "targetSelection": "NONE",

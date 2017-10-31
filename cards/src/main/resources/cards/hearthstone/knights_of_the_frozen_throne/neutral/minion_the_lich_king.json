@@ -16,7 +16,7 @@
       "class": "ReceiveCardSpell",
       "cardFilter": {
         "class": "CardFilter",
-        "heroClass": "DEATH_KNIGHT"
+        "heroClass": "SPIRIT"
       }
     }
   },

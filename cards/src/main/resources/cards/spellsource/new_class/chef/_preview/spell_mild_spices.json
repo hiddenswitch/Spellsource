@@ -2,7 +2,7 @@
   "name": "Mild Spices",
   "baseManaCost": 3,
   "type": "CHOOSE_ONE",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Select One - Gain 8 Armor; or gain +4 Attack this turn only.",
   "targetSelection": "NONE",

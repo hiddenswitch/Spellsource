@@ -2,7 +2,7 @@
   "name": "Living Mana",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "Transform your Mana Crystals into 2/2 minions. Recover the mana when they die.",
   "targetSelection": "NONE",

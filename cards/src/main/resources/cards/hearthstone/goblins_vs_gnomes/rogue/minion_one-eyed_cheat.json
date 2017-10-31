@@ -2,7 +2,7 @@
   "name": "One-eyed Cheat",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 4,
   "baseHp": 1,
   "rarity": "RARE",

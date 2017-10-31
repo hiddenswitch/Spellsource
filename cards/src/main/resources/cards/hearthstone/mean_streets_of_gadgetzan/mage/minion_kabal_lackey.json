@@ -2,7 +2,7 @@
   "name": "Kabal Lackey",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",

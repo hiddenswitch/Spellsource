@@ -2,7 +2,7 @@
   "name": "Roll the Dice",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Destroy all but one random minion.",
   "targetSelection": "NONE",

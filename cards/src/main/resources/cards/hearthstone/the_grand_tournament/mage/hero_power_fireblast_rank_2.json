@@ -2,7 +2,7 @@
   "name": "Chi Blast",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "Deal 2 damage.",
   "targetSelection": "ANY",

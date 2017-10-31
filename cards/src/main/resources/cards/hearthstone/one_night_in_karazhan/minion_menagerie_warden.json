@@ -2,7 +2,7 @@
   "name": "Menagerie Warden",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",

@@ -2,7 +2,7 @@
   "name": "Tol'vir Warden",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "RARE",

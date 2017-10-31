@@ -2,7 +2,7 @@
   "name": "Bolster",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "COMMON",
   "description": "Give your Taunt minions +2/+2.",
   "targetSelection": "NONE",

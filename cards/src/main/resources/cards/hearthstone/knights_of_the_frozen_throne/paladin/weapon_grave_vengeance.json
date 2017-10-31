@@ -2,7 +2,7 @@
   "name": "Grave Vengeance",
   "baseManaCost": 8,
   "type": "WEAPON",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "damage": 5,
   "durability": 3,
   "rarity": "FREE",

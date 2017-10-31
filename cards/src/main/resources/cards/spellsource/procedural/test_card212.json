@@ -3,7 +3,7 @@
   "name": "King Sand Inhorn",
   "baseManaCost": 6.0,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 5.0,
   "baseHp": 5.0,
   "rarity": "COMMON",

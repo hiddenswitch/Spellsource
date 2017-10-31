@@ -2,7 +2,7 @@
   "name": "Broom",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",

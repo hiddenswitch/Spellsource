@@ -2,7 +2,7 @@
   "name": "Avalanche",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Freeze a minion and deal 3 damage to adjacent ones.",
   "targetSelection": "MINIONS",

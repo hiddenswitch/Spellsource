@@ -2,7 +2,7 @@
   "name": "Draw 3 cards",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "RARE",
   "description": "Draw 3 cards",
   "targetSelection": "NONE",

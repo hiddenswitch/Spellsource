@@ -2,7 +2,7 @@
   "name": "Crowbar",
   "baseManaCost": 1,
   "type": "WEAPON",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "damage": 1,
   "durability": 4,
   "rarity": "FREE",

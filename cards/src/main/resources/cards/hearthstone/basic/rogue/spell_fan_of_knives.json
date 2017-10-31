@@ -2,7 +2,7 @@
   "name": "Fan of Knives",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Deal 1 damage to all enemy minions. Draw a card.",
   "targetSelection": "NONE",

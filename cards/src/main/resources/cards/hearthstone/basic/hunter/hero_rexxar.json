@@ -4,7 +4,7 @@
   "heroPower": "hero_power_steady_shot",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Hero Power: Deal 2 damage to the enemy hero",
   "attributes": {

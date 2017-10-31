@@ -31,7 +31,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testFaerieDragon() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -70,7 +70,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testGurubashiBerserker() {
-		GameContext context = createContext(HeroClass.MAGE, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -109,7 +109,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testSavageRoar() {
-		GameContext context = createContext(HeroClass.DRUID, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.BROWN, HeroClass.RED);
 		Player player = context.getPlayer1();
 		Hero druid = player.getHero();
 
@@ -144,7 +144,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testSpitefulSmith() {
-		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.RED, HeroClass.RED);
 		Player player = context.getPlayer1();
 		player.setMana(10);
 
@@ -186,7 +186,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testSummoningPortal() {
-		GameContext context = createContext(HeroClass.WARLOCK, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.VIOLET, HeroClass.RED);
 		Player player = context.getPlayer1();
 		player.setMana(10);
 
@@ -216,7 +216,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testWildPyromancer() {
-		GameContext context = createContext(HeroClass.PRIEST, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
 		Player warrior = context.getPlayer2();
 		Card hauntedCreeper = CardCatalogue.getCardById("minion_haunted_creeper");
 		playCard(context, warrior, hauntedCreeper);
@@ -240,7 +240,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testBetrayal() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.ROGUE);
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player paladin = context.getPlayer1();
 
 		MinionCard adjacentMinionCard1 = new TestMinionCard(1, 5, 0);
@@ -274,7 +274,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testBetrayalNotAffectedBySpellDamage() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.ROGUE);
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player paladin = context.getPlayer1();
 
 		MinionCard adjacentMinionCard1 = new TestMinionCard(1, 5, 0);
@@ -308,7 +308,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testBetrayalOnEmperorCobraDestroysAdjacentMinions() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.ROGUE);
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player paladin = context.getPlayer1();
 
 		MinionCard adjacentMinionCard1 = new TestMinionCard(1, 5, 0);
@@ -338,7 +338,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testEydisDarkbane() {
-		GameContext context = createContext(HeroClass.PRIEST, HeroClass.WARRIOR);
+		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
 		Player priest = context.getPlayer1();
 		Player warrior = context.getPlayer2();
 
@@ -366,7 +366,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testBetrayalOnBurlyRockjawTroggDeals5Damage() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.ROGUE);
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player paladin = context.getPlayer1();
 
 		MinionCard adjacentMinionCard1 = new TestMinionCard(1, 5, 0);
@@ -396,7 +396,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testRallyingBlade() {
-		GameContext context = createContext(HeroClass.PALADIN, HeroClass.ROGUE);
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player player = context.getPlayer1();
 		MinionCard argentSquireCard = (MinionCard) CardCatalogue.getCardById("minion_argent_squire");
 		Minion argentSquire = playMinionCard(context, player, argentSquireCard);
@@ -411,7 +411,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testCurseOfRafaam() {
-		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.WARLOCK);
+		GameContext context = createContext(HeroClass.RED, HeroClass.VIOLET);
 
 		Player player = context.getPlayer1();
 		Card koboldGeomancerCard = CardCatalogue.getCardById("minion_kobold_geomancer");
@@ -432,7 +432,7 @@ public class SpecialCardTests extends TestBase {
 
 	@Test
 	public void testEmperorThaurissanEmptyHand() {
-		GameContext context = createContext(HeroClass.WARRIOR, HeroClass.WARLOCK);
+		GameContext context = createContext(HeroClass.RED, HeroClass.VIOLET);
 
 		Player player = context.getPlayer1();
 		MinionCard emperorThaurissanCard = (MinionCard) CardCatalogue.getCardById("minion_emperor_thaurissan");

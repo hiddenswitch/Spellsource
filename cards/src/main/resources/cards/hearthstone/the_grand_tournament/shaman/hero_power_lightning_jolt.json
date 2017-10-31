@@ -2,7 +2,7 @@
   "name": "Katana",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Deal 2 damage.",
   "targetSelection": "ANY",

@@ -2,7 +2,7 @@
   "name": "Bloodfury Potion",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "RARE",
   "description": "Give a minion +3 Attack. If it's a Demon, also give it +3 Health.",
   "targetSelection": "MINIONS",

@@ -2,7 +2,7 @@
   "name": "Corruption",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Choose an enemy minion. At the start of your turn, destroy it.",
   "targetSelection": "ENEMY_MINIONS",

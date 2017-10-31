@@ -2,7 +2,7 @@
   "name": "Holy Light",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Restore 6 Health.",
   "targetSelection": "ANY",

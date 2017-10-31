@@ -2,7 +2,7 @@
   "name": "Inquisitor Whitemane",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",

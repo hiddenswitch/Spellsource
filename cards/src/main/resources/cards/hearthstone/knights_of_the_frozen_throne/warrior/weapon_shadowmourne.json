@@ -2,7 +2,7 @@
   "name": "Shadowmourne",
   "baseManaCost": 8,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 4,
   "durability": 3,
   "rarity": "FREE",

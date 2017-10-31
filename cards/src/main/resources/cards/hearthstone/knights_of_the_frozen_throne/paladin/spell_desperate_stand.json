@@ -2,7 +2,7 @@
   "name": "Desperate Stand",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Give a minion \"Deathrattle: Return this to life with 1 Health.\"",
   "targetSelection": "MINIONS",

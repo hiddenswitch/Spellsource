@@ -2,7 +2,7 @@
   "name": "King Krush",
   "baseManaCost": 9,
   "type": "MINION",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",

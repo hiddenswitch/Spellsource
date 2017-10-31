@@ -2,7 +2,7 @@
   "name": "Direhorn Hatchling",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",

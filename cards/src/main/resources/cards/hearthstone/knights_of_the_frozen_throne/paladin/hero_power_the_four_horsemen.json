@@ -2,7 +2,7 @@
   "name": "The Four Horsemen",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Summon a 2/2 Horseman. If you have all 4, destroy the enemy hero.",
   "condition": {

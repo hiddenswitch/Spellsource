@@ -2,7 +2,7 @@
   "name": "Molten Blade",
   "baseManaCost": 1,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 1,
   "durability": 1,
   "rarity": "RARE",

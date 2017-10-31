@@ -2,7 +2,7 @@
   "name": "Mortal Coil",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "FREE",
   "description": "Deal 1 damage to a minion. If that kills it, draw a card.",
   "targetSelection": "MINIONS",

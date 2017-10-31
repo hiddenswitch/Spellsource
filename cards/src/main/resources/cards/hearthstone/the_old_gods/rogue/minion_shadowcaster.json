@@ -2,7 +2,7 @@
   "name": "Shadowcaster",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",

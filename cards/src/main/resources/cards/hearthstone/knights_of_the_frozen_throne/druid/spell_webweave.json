@@ -2,7 +2,7 @@
   "name": "Webweave",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Summon two 1/2 Poisonous Spiders.",
   "targetSelection": "NONE",
