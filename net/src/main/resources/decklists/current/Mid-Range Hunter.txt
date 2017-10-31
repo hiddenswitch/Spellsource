@@ -1,5 +1,5 @@
 ### Mid-Range Hunter - Standard Meta Snapshot - Sep. 24, 2017
-# Class: Hunter
+# Class: Green
 # Format: Standard
 # Year of the Mammoth
 #

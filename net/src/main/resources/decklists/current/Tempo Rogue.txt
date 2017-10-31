@@ -1,5 +1,5 @@
 ### Tempo Rogue
-# Class: Rogue
+# Class: Black
 # Format: Standard
 # Year of the Mammoth
 #

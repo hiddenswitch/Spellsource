@@ -1,5 +1,5 @@
 ### Aggro Paladin - Standard Meta Snapshot - Sep. 24, 2017
-# Class: Paladin
+# Class: Gold
 # Format: Standard
 # Year of the Mammoth
 #

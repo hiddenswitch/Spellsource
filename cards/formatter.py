@@ -85,7 +85,7 @@ def main():
                 for i, (k, v) in enumerate(card.iteritems()):
                     locations.update([(k, i)])
 
-                fixed_card = sort_dict(card)
+                fixed_card = fix_dict(card)
             with open(filepath, 'w') as fp:
                 dump(fixed_card, fp, indent=2, separators=(',', ': '), cls=JsonEncoder)
 
@@ -93,14 +93,14 @@ def main():
     print locations.__repr__().replace(':', '\n')
 
 
-def sort_list(v):
+def fix_list(v):
     new_v = [None] * len(v)
     for i, x in enumerate(v):
         new_v[i] = fix_value(x)
     return new_v
 
 
-def sort_dict(in_dict):
+def fix_dict(in_dict):
     new_dict = OrderedDict()
     for k in ORDER:
         if k not in in_dict:
@@ -116,9 +116,9 @@ def sort_dict(in_dict):
 
 def fix_value(v):
     if isinstance(v, dict) or isinstance(v, OrderedDict):
-        return sort_dict(v)
+        return fix_dict(v)
     if isinstance(v, list):
-        return sort_list(v)
+        return fix_list(v)
     else:
         return v
 
