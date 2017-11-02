@@ -102,6 +102,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 				return CreateCollectionResponse.user(request.getUserId(), newInventoryIds);
 			case DECK:
 				CollectionRecord record1 = CollectionRecord.deck(request.getUserId(), request.getName(), request.getHeroClass(), request.isDraft());
+				record1.setHeroCardId(request.getHeroCardId());
 				final String deckId = Mongo.mongo().insert(COLLECTIONS, QuickJson.toJson(record1));
 
 				if (request.getInventoryIds() != null
@@ -270,7 +271,8 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 		if (type == CollectionTypes.DECK) {
 			CollectionRecord deck = Mongo.mongo().findOne(COLLECTIONS, QuickJson.json("_id", collectionId), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), inventoryRecords, deck.isTrashed(), deck.getDeckType());
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), inventoryRecords, deck.isTrashed(), deck.getDeckType())
+					.withHeroCardId(deck.getHeroCardId());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(request.getUserId(), inventoryRecords);
 		} /*  else {

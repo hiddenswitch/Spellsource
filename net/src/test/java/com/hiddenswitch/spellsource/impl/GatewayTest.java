@@ -196,6 +196,34 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		unwrap();
 	}
 
+	@Test
+	public void testScenario(TestContext context) throws InterruptedException, SuspendExecution {
+		setLoggingLevel(Level.ERROR);
+		wrap(context);
+		final Async async = context.async();
+
+		UnityClient client = new UnityClient(getContext()) {
+			@Override
+			protected void assertValidStateAndChanges(ServerToClientMessage message) {
+				super.assertValidStateAndChanges(message);
+				getContext().assertEquals(message.getGameState().getEntities().stream().filter(e -> e.getCardId() != null && e.getCardId().equals("hero_necromancer")).count(), 1L);
+			}
+		};
+
+		client.createUserAccount(null);
+		client.matchmakeAndPlayAgainstAI(client.getAccount().getDecks()
+				.stream().filter(d -> d.getName().equals("Necromancer")).findFirst().orElseThrow(AssertionError::new).getId());
+		float time = 0f;
+		while (!(time > 120f || client.isGameOver())) {
+			Strand.sleep(1000);
+			time += 1f;
+		}
+		getContext().assertTrue(client.isGameOver());
+
+		async.complete();
+		unwrap();
+	}
+
 	private String userIdDisconnecting;
 
 	@Test

@@ -1809,12 +1809,12 @@ public class GameLogic implements Cloneable, Serializable {
 	public Player initializePlayer(int playerId) {
 		Player player = context.getPlayer(playerId);
 		player.setOwner(player.getId());
+		Hero hero = player.getHero();
 		player.getHero().setId(getIdFactory().generateId());
 		player.getHero().setOwner(player.getId());
 		player.getHero().setMaxHp(player.getHero().getAttributeValue(Attribute.BASE_HP));
 		player.getHero().setHp(player.getHero().getAttributeValue(Attribute.BASE_HP));
-
-		player.getHero().getHeroPower().setId(getIdFactory().generateId());
+		hero.getHeroPower().setId(getIdFactory().generateId());
 		assignCardIds(player.getDeck(), playerId);
 		assignCardIds(player.getHand(), playerId);
 
@@ -1822,8 +1822,14 @@ public class GameLogic implements Cloneable, Serializable {
 		Stream.concat(player.getDeck().stream(),
 				player.getHand().stream()).forEach(c -> c.getAttributes().put(Attribute.STARTED_IN_DECK, true));
 
-		log("Setting hero hp to {} for {}", player.getHero().getHp(), player.getName());
+		log("Setting hero hp to {} for {}", hero.getHp(), player.getName());
 		player.getDeck().shuffle();
+		if (player.getHero().hasEnchantment()) {
+			for (Enchantment trigger : player.getHero().getEnchantments()) {
+				addGameEventListener(player, trigger, player.getHero());
+			}
+		}
+		processPassiveTriggers(player, hero.getHeroPower());
 		return player;
 	}
 

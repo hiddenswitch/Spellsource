@@ -216,8 +216,11 @@ public class UnityClient {
 		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
 		context.assertTrue(message.getChanges().stream().allMatch(e -> e.getId() >= 0));
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.PLAYER).count() == 2);
-		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).count() == 2);
-		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).allMatch(h ->
+		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).count() >= 2);
+		context.assertTrue(message.getGameState().getEntities().stream().filter(e ->
+				e.getEntityType() == Entity.EntityTypeEnum.HERO
+						&& e.getState().getLocation().getZone() == EntityLocation.ZoneEnum.HERO
+		).allMatch(h ->
 				null != h.getState().getMaxMana()));
 		context.assertNotNull(message.getGameState().getTurnNumber());
 		if (message.getGameState().getTurnNumber() > 0) {

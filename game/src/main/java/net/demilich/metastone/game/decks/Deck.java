@@ -3,6 +3,7 @@ package net.demilich.metastone.game.decks;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 
@@ -14,6 +15,7 @@ public class Deck implements Serializable {
 	public static final Deck EMPTY;
 	private String name = "";
 	private HeroClass heroClass;
+	private HeroCard heroCard;
 	protected CardList cards = new CardArrayList();
 	private String description;
 	private String filename;
@@ -117,5 +119,13 @@ public class Deck implements Serializable {
 			builder.append(", ");
 		}
 		return builder.toString();
+	}
+
+	public HeroCard getHeroCard() {
+		return heroCard;
+	}
+
+	public void setHeroCard(HeroCard heroCard) {
+		this.heroCard = heroCard;
 	}
 }

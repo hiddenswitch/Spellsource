@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 
 public class HeroCard extends Card {
 	private static final long serialVersionUID = 1L;
@@ -41,6 +42,20 @@ public class HeroCard extends Card {
 		}
 		hero.setBattlecry(desc.getBattlecryAction());
 		hero.setRace(desc.race);
+
+		if (desc.deathrattle != null) {
+			hero.getAttributes().remove(Attribute.DEATHRATTLES);
+			hero.addDeathrattle(desc.deathrattle);
+		}
+		if (desc.trigger != null) {
+			hero.addEnchantment(desc.trigger.create());
+		}
+		if (desc.triggers != null) {
+			for (TriggerDesc trigger : desc.triggers) {
+				hero.addEnchantment(trigger.create());
+			}
+		}
+
 		return hero;
 	}
 

@@ -28,6 +28,7 @@ public class CollectionRecord extends MongoRecord {
 	 * Names for alliance and deck collection records.
 	 */
 	private String name;
+	private String heroCardId;
 
 	protected CollectionRecord() {
 	}
@@ -164,6 +165,14 @@ public class CollectionRecord extends MongoRecord {
 
 	public void setDeckType(DeckType deckType) {
 		this.deckType = deckType;
+	}
+
+	public void setHeroCardId(String heroCardId) {
+		this.heroCardId = heroCardId;
+	}
+
+	public String getHeroCardId() {
+		return heroCardId;
 	}
 }
 
