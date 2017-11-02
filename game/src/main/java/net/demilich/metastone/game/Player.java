@@ -38,6 +38,7 @@ public class Player extends Entity implements Serializable {
 	public static Player forUser(String userId, int id, Deck deck) {
 		Player player = new Player();
 		PlayerConfig config = new PlayerConfig(deck, new HumanBehaviour());
+		config.setHeroCard(deck.getHeroCard());
 		player.setId(id);
 		player.buildFromConfig(config);
 		player.setUserId(userId);

@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
@@ -27,6 +28,7 @@ public class GetCollectionResponse implements Serializable {
 	private String userId;
 	private boolean trashed;
 	private DeckType deckType;
+	private String heroCardId;
 
 	public static GetCollectionResponse batch(List<GetCollectionResponse> responses) {
 		return new GetCollectionResponse()
@@ -208,6 +210,19 @@ public class GetCollectionResponse implements Serializable {
 
 	public GetCollectionResponse withDeckType(final DeckType deckType) {
 		this.deckType = deckType;
+		return this;
+	}
+
+	public String getHeroCardId() {
+		return heroCardId;
+	}
+
+	public void setHeroCardId(String heroCardId) {
+		this.heroCardId = heroCardId;
+	}
+
+	public GetCollectionResponse withHeroCardId(String heroCardId) {
+		this.heroCardId = heroCardId;
 		return this;
 	}
 }

@@ -17,6 +17,8 @@ import com.hiddenswitch.spellsource.models.*;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckWithId;
@@ -149,6 +151,11 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 			Deck deck = new DeckWithId(player.getDeckId());
 			deck.setHeroClass(deckCollection.getHeroClass());
 			deck.setName(deckCollection.getName());
+			String heroCardId = deckCollection.getHeroCardId();
+			if (heroCardId != null) {
+				deck.setHeroCard((HeroCard) CardCatalogue.getCardById(heroCardId));
+			}
+
 			deckCollection.getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord,
 					player.getUserId(), player.getDeckId())).map(CardDesc::createInstance).forEach(deck.getCards()
 					::addCard);
@@ -175,8 +182,8 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	 * <code>Call to Arms: If this is the first time you've played this minion, permanently cost (1) less.</code>
 	 * <p>
 	 * Every time Forever Post-Doc is summoned, the Games service knows it must call beforeSummon to process the
-	 * minion's persistent side effects. It will return the correct change in its cost for the Games service to apply
-	 * to the live running game.
+	 * minion's persistent side effects. It will return the correct change in its cost for the Games service to apply to
+	 * the live running game.
 	 *
 	 * @param request Information about the summoned minion.
 	 * @return The side effects of summoning the minion which affect the game.
@@ -234,9 +241,9 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	 * <code>Call to Arms: Summon the last minion Sourcing Specialist destroyed.</code>
 	 * <p>
 	 * Whenever Sourcing Specialist attacks and destroys its target, this method will correctly record the last minion
-	 * it destroyed. Other code inside Sourcing Specialist looks up the attribute "LAST_MINION_DESTROYED_ID" to
-	 * summon the actual minion. The purpose of this method is to record the last minion destroyed, but not to actually
-	 * perform in-game summoning.
+	 * it destroyed. Other code inside Sourcing Specialist looks up the attribute "LAST_MINION_DESTROYED_ID" to summon
+	 * the actual minion. The purpose of this method is to record the last minion destroyed, but not to actually perform
+	 * in-game summoning.
 	 *
 	 * @param request Information about the physical attack.
 	 * @return The side effects of the physical attack which affect the game.

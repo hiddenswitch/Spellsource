@@ -77,6 +77,10 @@ public enum Environment {
 	 */
 	LAST_MANA_COST,
 	/**
+	 * This variable stores how many minions have been summoned this turn.
+	 */
+	LAST_SUMMON_THIS_TURN,
+	/**
 	 * This implements Living Mana and Earthen Scales.
 	 */
 	SPELL_VALUE_STACK,

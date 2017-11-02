@@ -21,6 +21,7 @@ public class CreateCollectionRequest implements Serializable {
 	private HeroClass heroClass;
 	private boolean draft;
 	private int copies = 1;
+	private String heroCardId;
 
 	protected CreateCollectionRequest() {
 	}
@@ -212,5 +213,18 @@ public class CreateCollectionRequest implements Serializable {
 	public CreateCollectionRequest withDraft(final boolean draft) {
 		this.draft = draft;
 		return this;
+	}
+
+	public CreateCollectionRequest withHeroCardId(String heroCardId) {
+		this.heroCardId = heroCardId;
+		return this;
+	}
+
+	public String getHeroCardId() {
+		return heroCardId;
+	}
+
+	public void setHeroCardId(String heroCardId) {
+		this.heroCardId = heroCardId;
 	}
 }

@@ -33,8 +33,8 @@ public class SummonCopySpell extends Spell {
 			template = (Minion) target;
 		}
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
-		Stream<SpellDesc> subSpells = desc.subSpells();
 		for (int i = 0; i < value; i++) {
+			Stream<SpellDesc> subSpells = desc.subSpells();
 			Minion clone = template.getCopy();
 			clone.clearEnchantments();
 

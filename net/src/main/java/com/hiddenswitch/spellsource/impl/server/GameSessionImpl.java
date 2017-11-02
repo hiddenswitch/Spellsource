@@ -169,7 +169,10 @@ public class GameSessionImpl implements GameSession {
 				|| (player1 == null && player2 != null);
 	}
 
-	protected void startGame() {
+	/**
+	 * This is where a game is actually started in the networked engine.
+	 */
+	private void startGame() {
 		logger.debug("Starting game...");
 		DeckFormat simpleFormat = new DeckFormat().withCardSets(CardSet.BASIC,
 				CardSet.CLASSIC,
@@ -195,9 +198,11 @@ public class GameSessionImpl implements GameSession {
 			}
 		}
 
-		getPlayer1().setBehaviour(new NetworkBehaviour(getPlayer1().getBehaviour()));
-		getPlayer2().setBehaviour(new NetworkBehaviour(getPlayer2().getBehaviour()));
-		this.gameContext = new ServerGameContext(getPlayer1(), getPlayer2(), simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()));
+		Player player1 = getPlayer1();
+		Player player2 = getPlayer2();
+		player1.setBehaviour(new NetworkBehaviour(player1.getBehaviour()));
+		player2.setBehaviour(new NetworkBehaviour(player2.getBehaviour()));
+		this.gameContext = new ServerGameContext(player1, player2, simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()));
 		final Client listener1;
 		final Client listener2;
 
@@ -230,8 +235,8 @@ public class GameSessionImpl implements GameSession {
 		}
 
 
-		getGameContext().setUpdateListener(getPlayer1(), listener1);
-		getGameContext().setUpdateListener(getPlayer2(), listener2);
+		getGameContext().setUpdateListener(player1, listener1);
+		getGameContext().setUpdateListener(player2, listener2);
 		getGameContext().handleEndGame(sgc -> {
 			gameOverHandlers.forEach(h -> {
 				h.handle(this);

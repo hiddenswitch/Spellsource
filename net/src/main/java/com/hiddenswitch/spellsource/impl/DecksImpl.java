@@ -48,8 +48,6 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		// Create the starting decks
 		try {
 			CardCatalogue.loadCardsFromPackage();
-			DeckCatalogue.loadDecksFromPackage();
-
 		} catch (IOException | URISyntaxException e) {
 			throw new RuntimeException();
 		} catch (CardParseException e) {
@@ -100,7 +98,8 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		// Creates a new collection representing this deck
 		final String userId = request.getUserId();
 		CreateCollectionResponse createCollectionResponse = inventory.sync()
-				.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft()));
+				.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft())
+				.withHeroCardId(request.getHeroCardId()));
 
 		// Update the user document with this deck ID
 		final String deckId = createCollectionResponse.getCollectionId();

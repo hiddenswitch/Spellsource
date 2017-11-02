@@ -1,0 +1,35 @@
+### Necromancer
+# Class: Violet
+# Hero: Necromancer
+# Format: Wild
+#
+# 1x (1) Tracking
+# 1x (2) Bear Trap
+# 1x (2) Explosive Trap
+# 1x (2) Freezing Trap
+# 1x (2) King's Elekk
+# 1x (2) Mad Scientist
+# 1x (3) Animal Companion
+# 1x (3) Eaglehorn Bow
+# 1x (3) Stitched Tracker
+# 3x (5) Naga Sea Witch
+# 2x (10) Sea Giant
+# 1x (12) Clockwork Giant
+# 1x (25) Molten Giant
+# 1x (1) Bloodsail Corsair
+# 1x (1) Fire Fly
+# 1x (1) Flame Imp
+# 1x (1) Malchezaar's Imp
+# 1x (1) Patches the Pirate
+# 1x (1) Soulfire
+# 1x (1) Voidwalker
+# 1x (3) Darkshire Councilman
+# 1x (3) Southsea Captain
+# 2x (4) Saronite Chain Gang
+# 1x (4) Voidcaller
+# 1x (5) Doomguard
+# 1x (9) Mal'Ganis
+#
+AAEBAR8ChwSG0wIOlwjRFPixAskEyxT3DbUDxLQC/gzTzQLeFtMBuRHcCgA=
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

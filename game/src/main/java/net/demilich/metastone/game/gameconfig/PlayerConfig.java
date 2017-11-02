@@ -59,6 +59,9 @@ public class PlayerConfig implements Cloneable, Serializable {
 	}
 
 	public HeroCard getHeroForPlay() {
+		if (deck.getHeroCard() != null) {
+			return deck.getHeroCard();
+		}
 		return heroForPlay;
 	}
 

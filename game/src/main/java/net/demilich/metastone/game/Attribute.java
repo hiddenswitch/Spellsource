@@ -631,7 +631,21 @@ public enum Attribute {
 	/**
 	 * Overrides the name of the {@link Entity}
 	 */
-	NAME, DESCRIPTION, EXTRA_TURN, DISCARDED;
+	NAME,
+	/**
+	 * Overrides the description of the {@link Entity}
+	 */
+	DESCRIPTION,
+	/**
+	 * Indicates how many extra turns the player has.
+	 * <p>
+	 * Implements Open the Waygate.
+	 */
+	EXTRA_TURN,
+	/**
+	 * Indicates how many cards the player has discarded during the game.
+	 */
+	DISCARDED;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

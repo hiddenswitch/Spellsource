@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.models;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -21,6 +22,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	private String userId;
 	private String name;
 	private HeroClass heroClass;
+	private String heroCardId;
 	private boolean draft;
 	private List<String> inventoryIds;
 	private List<String> cardIds;
@@ -51,7 +53,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		DeckCreateRequest request = new DeckCreateRequest()
 				.withCardIds(new ArrayList<>());
 		// Parse with a regex
-		String regex = "(?:###\\s?(?<name>.+$))|(?:Class:\\s?(?<heroClass>\\w+))|(?:(?<count>\\d+)x[\\s\\(\\)\\d]+(?<cardName>.+$))";
+		String regex = "(?:###\\s?(?<name>.+$))|(?:Class:\\s?(?<heroClass>\\w+))|(?:Hero:\\s?(?<heroCard>\\w+))|(?:(?<count>\\d+)x[\\s\\(\\)\\d]+(?<cardName>.+$))";
 		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
 		Matcher matcher = pattern.matcher(deckList);
 		while (matcher.find()) {
@@ -62,6 +64,11 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 
 			if (matcher.group("heroClass") != null) {
 				request.setHeroClass(HeroClass.valueOf(matcher.group("heroClass").toUpperCase()));
+				continue;
+			}
+
+			if (matcher.group("heroCard") != null) {
+				request.setHeroCardId(CardCatalogue.getCardByName(matcher.group("heroCard")).getCardId());
 				continue;
 			}
 
@@ -173,7 +180,23 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	public Deck toGameDeck() {
 		Deck deck = new Deck(getHeroClass());
 		deck.setName(getName());
+		if (getHeroCardId() != null) {
+			deck.setHeroCard((HeroCard) CardCatalogue.getCardById(getHeroCardId()));
+		}
 		getCardIds().forEach(cardId -> deck.getCards().addCard(CardCatalogue.getCardById(cardId)));
 		return deck;
+	}
+
+	public String getHeroCardId() {
+		return heroCardId;
+	}
+
+	public void setHeroCardId(String heroCardId) {
+		this.heroCardId = heroCardId;
+	}
+
+	public DeckCreateRequest withHeroCardId(final String heroCardId) {
+		this.heroCardId = heroCardId;
+		return this;
 	}
 }
