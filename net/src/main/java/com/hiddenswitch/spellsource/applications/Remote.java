@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 public class Remote {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
-		System.setProperty("javax.net.ssl.trustStore", "/home/ubuntu/Spellsource/metastone/mongostore");
+		System.setProperty("javax.net.ssl.trustStore", "/home/ubuntu/Minionate/metastone/mongostore");
 		System.setProperty("javax.net.ssl.trustStorePassword", "ilikeamiga");
 		System.setProperty("org.mongodb.async.type", "netty");
 
