@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
@@ -16,6 +16,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.minions.RelativeToSource;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -112,8 +113,8 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Consider the {@link net.demilich.metastone.game.Environment#PENDING_CARD} and {@link
-	 * net.demilich.metastone.game.Environment#EVENT_CARD}, and the {@link Zones#DISCOVER} zone for the specified
+	 * Consider the {@link Environment#PENDING_CARD} and {@link
+	 * Environment#EVENT_CARD}, and the {@link Zones#DISCOVER} zone for the specified
 	 * card
 	 *
 	 * @param context

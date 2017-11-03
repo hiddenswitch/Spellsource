@@ -5,26 +5,26 @@ import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.ClientToServerMessage;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.util.Rpc;
-import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
+import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -79,7 +79,7 @@ public class GameSessionImpl implements GameSession {
 		// TODO: It's obviously insecure to allow the client to specify things like their player object
 		Player tempPlayer = player.getPlayer();
 		if (tempPlayer == null) {
-			PlayerConfig playerConfig = new PlayerConfig(player.getDeck(), new HumanBehaviour());
+			PlayerConfig playerConfig = new PlayerConfig(player.getDeck(), new DoNothingBehaviour());
 			tempPlayer = new Player(playerConfig);
 		}
 		tempPlayer.setId(id);
@@ -200,8 +200,8 @@ public class GameSessionImpl implements GameSession {
 
 		Player player1 = getPlayer1();
 		Player player2 = getPlayer2();
-		player1.setBehaviour(new NetworkBehaviour(player1.getBehaviour()));
-		player2.setBehaviour(new NetworkBehaviour(player2.getBehaviour()));
+		player1.setBehaviour(new NetworkBehaviour());
+		player2.setBehaviour(new NetworkBehaviour());
 		this.gameContext = new ServerGameContext(player1, player2, simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()));
 		final Client listener1;
 		final Client listener2;
@@ -298,7 +298,7 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	private Player createAIPlayer(PregamePlayerConfiguration pregame, int id) {
-		PlayerConfig playerConfig = new PlayerConfig(pregame.getDeck(), new HumanBehaviour());
+		PlayerConfig playerConfig = new PlayerConfig(pregame.getDeck(), new DoNothingBehaviour());
 		Player player = new Player(playerConfig);
 		player.setId(id);
 		return player;

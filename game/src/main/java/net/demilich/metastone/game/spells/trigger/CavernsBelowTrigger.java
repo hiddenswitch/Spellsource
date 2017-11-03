@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;

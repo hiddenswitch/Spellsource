@@ -32,14 +32,14 @@ public class SpellCard extends Card {
 	public boolean canBeCast(GameContext context, Player player) {
 		Player opponent = context.getOpponent(player);
 		switch (targetRequirement) {
-		case ENEMY_MINIONS:
-			return context.getMinionCount(opponent) > 0;
-		case FRIENDLY_MINIONS:
-			return context.getMinionCount(player) > 0;
-		case MINIONS:
-			return context.getTotalMinionCount() > 0;
-		default:
-			break;
+			case ENEMY_MINIONS:
+				return context.getMinionCount(opponent) > 0;
+			case FRIENDLY_MINIONS:
+				return context.getMinionCount(player) > 0;
+			case MINIONS:
+				return context.getTotalMinionCount() > 0;
+			default:
+				break;
 		}
 		if (condition != null) {
 			return condition.isFulfilled(context, player, null, null);
@@ -71,10 +71,12 @@ public class SpellCard extends Card {
 	}
 
 	/**
-	 * Determines which targets this spell requires in order to be cast. If {@code null}, the spell doesn't need to
-	 * have any valid targets in order to be cast; otherwise, the {@link TargetSelection} filters all the possible {@link Entity}
-	 * objects and allows the spell to be cast if there is at least one entity in that filtered listt.
-	 * @return A {@link TargetSelection}, or {@code null} if no target is required.
+	 * Determines which targets this spell requires in order to be cast. If {@link TargetSelection#NONE}, the spell
+	 * doesn't need to have any valid targets in order to be cast; otherwise, the {@link TargetSelection} filters all
+	 * the possible {@link Entity} objects and allows the spell to be cast if there is at least one entity in that
+	 * filtered list.
+	 *
+	 * @return A {@link TargetSelection}, or {@link TargetSelection#NONE} if no target is required.
 	 */
 	public TargetSelection getTargetRequirement() {
 		return targetRequirement;

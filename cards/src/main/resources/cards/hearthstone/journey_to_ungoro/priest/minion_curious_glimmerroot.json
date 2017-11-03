@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "custom.CuriousGlimmerrootSpell",
+      "class": "custom.GuessCardSpell",
       "spell": {
         "class": "NullSpell"
       }

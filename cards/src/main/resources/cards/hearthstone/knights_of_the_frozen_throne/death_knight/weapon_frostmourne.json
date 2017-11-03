@@ -23,7 +23,7 @@
     }
   },
   "deathrattle": {
-    "class": "custom.FrostmourneResurrectSpell"
+    "class": "custom.ResurrectFromEntityStorageSpell"
   },
   "attributes": {
     "DEATHRATTLES": true

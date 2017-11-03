@@ -11,7 +11,7 @@
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "AdaptSpell",
+      "class": "CastFromGroupSpell",
       "group": "group_adapt",
       "filter": {
         "class": "RaceFilter",

@@ -1,12 +1,11 @@
 package net.demilich.metastone.game.cards.desc;
 
 import java.lang.reflect.Type;
-import java.util.EnumMap;
 import java.util.Map;
 
 import com.google.gson.*;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 public class AttributeSerializer implements JsonDeserializer<AttributeMap>, JsonSerializer<AttributeMap> {

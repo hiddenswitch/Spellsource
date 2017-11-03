@@ -1,32 +1,32 @@
 package com.hiddenswitch.spellsource.client;
 
+import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
-import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.util.LoggerUtils;
-import net.demilich.metastone.game.shared.GameNotification;
-import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.shared.GameNotification;
+import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.visuals.GameContextVisuals;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
+@Deprecated
 public class RemoteGameContext extends GameContext implements GameContextVisuals, Client {
 	private final List<GameEvent> gameEvents = new ArrayList<>();
 	private boolean blockedByAnimation;
@@ -198,9 +198,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 		if (behaviour == null) {
 			return true;
 		}
-		return behaviour instanceof NetworkBehaviour ?
-				(((NetworkBehaviour) behaviour).getWrapBehaviour() instanceof HumanBehaviour)
-				: behaviour instanceof HumanBehaviour;
+		return behaviour instanceof NetworkBehaviour;
 	}
 
 	protected void requestLocalAction() {

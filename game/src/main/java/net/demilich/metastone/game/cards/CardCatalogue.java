@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.cards;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -15,6 +15,9 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+/**
+ * A place that stores {@link CardCatalogueRecord} records that were generated from the "cards" Java package.
+ */
 public class CardCatalogue {
 
 	public static final String CARDS_FOLDER = "cards";

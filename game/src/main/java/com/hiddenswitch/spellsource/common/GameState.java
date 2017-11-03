@@ -2,10 +2,10 @@ package com.hiddenswitch.spellsource.common;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
-import net.demilich.metastone.game.Environment;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.TurnState;
+import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.Entity;

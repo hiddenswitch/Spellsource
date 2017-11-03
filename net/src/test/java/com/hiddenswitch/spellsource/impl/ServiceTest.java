@@ -145,7 +145,7 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 			return (Future) future;
 		}).collect(Collectors.toList());
 
-		CompositeFuture.all(verticles).setHandler(then -> {
+		CompositeFuture.join(verticles).setHandler(then -> {
 			vertx.deployVerticle(thisService, then2 -> {
 				handler.handle(Future.succeededFuture(thisService));
 			});

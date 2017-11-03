@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.spells.custom;
 
-import net.demilich.metastone.game.Environment;
-import net.demilich.metastone.game.EnvironmentValue;
+import net.demilich.metastone.game.environment.Environment;
+import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;

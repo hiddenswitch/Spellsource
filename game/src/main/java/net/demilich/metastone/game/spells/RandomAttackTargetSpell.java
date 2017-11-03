@@ -2,7 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import java.util.List;
 
-import net.demilich.metastone.game.Environment;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;

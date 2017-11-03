@@ -21,7 +21,7 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "custom.AlarmOBotSpell",
+      "class": "custom.SwapWithHandSpell",
       "target": "SELF"
     }
   },

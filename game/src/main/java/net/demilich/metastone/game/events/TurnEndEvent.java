@@ -19,4 +19,8 @@ public class TurnEndEvent extends GameEvent {
 		return GameEventType.TURN_END;
 	}
 
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

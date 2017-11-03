@@ -26,4 +26,9 @@ public class CardPlayedEvent extends GameEvent {
 	public GameEventType getEventType() {
 		return GameEventType.PLAY_CARD;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

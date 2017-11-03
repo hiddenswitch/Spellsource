@@ -9,7 +9,7 @@ import net.demilich.metastone.game.cards.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;

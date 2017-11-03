@@ -17,6 +17,9 @@ import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.heroes.MetaHero;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.environment.Environment;
+import net.demilich.metastone.game.environment.EnvironmentStack;
+import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
@@ -29,6 +32,8 @@ import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.NetworkDelegate;
+import net.demilich.metastone.game.utils.TurnState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,7 +125,7 @@ import java.util.stream.Stream;
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
  * @see #getEntities() for a way to enumerate through all of the entities in the game.
  */
-public class GameContext implements Cloneable, Serializable {
+public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
 
@@ -149,6 +154,13 @@ public class GameContext implements Cloneable, Serializable {
 	public GameContext() {
 	}
 
+	/**
+	 * Creates an uninitialized game context (i.e., no cards in the decks of the players or behaviours specified).
+	 *
+	 * @param playerHero1 The first player's {@link HeroClass}
+	 * @param playerHero2 The second player's {@link HeroClass}
+	 * @return A game context.
+	 */
 	public static GameContext uninitialized(HeroClass playerHero1, HeroClass playerHero2) {
 		final Player player1 = new Player();
 		final Player player2 = new Player();
@@ -224,6 +236,9 @@ public class GameContext implements Cloneable, Serializable {
 	 * <p>
 	 * Internally, this is used by AI functions to evaluate a game state until a win condition (or just the end of the
 	 * turn) is reached.
+	 * <p>
+	 * This method is marked {@code synchronized} because the {@link GameContext} object is not thread safe. Two threads
+	 * can't clone and mutate a context at the same time.
 	 *
 	 * @return A cloned instance of the game context.
 	 */
@@ -264,6 +279,7 @@ public class GameContext implements Cloneable, Serializable {
 	/**
 	 * Clears state to ensure this context isn't referencing it anymore.
 	 */
+	@Deprecated
 	public synchronized void dispose() {
 		this.disposed = true;
 		this.players = null;
@@ -284,36 +300,18 @@ public class GameContext implements Cloneable, Serializable {
 		calculateStatistics();
 	}
 
-	/**
-	 * Makes a request over the network for a game action. Unsupported in this game context.
-	 *
-	 * @param state    The game state to send.
-	 * @param playerId The player ID to request from.
-	 * @param actions  The valid actions to choose from.
-	 * @param callback A handler for the response.
-	 */
+	@Override
 	@Suspendable
 	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * If possible, makes a request over the network for which cards to mulligan. Unsupported in this game context.
-	 *
-	 * @param player       The player to request from.
-	 * @param starterCards The cards the player started with.
-	 * @param callback     A handler for the response.
-	 */
+	@Override
 	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * Notifies the recipient player that the {@code winner} player won the game.
-	 *
-	 * @param recipient The player to notify.
-	 * @param winner    The winner.
-	 */
+	@Override
 	public void sendGameOver(Player recipient, Player winner) {
 	}
 
@@ -349,7 +347,7 @@ public class GameContext implements Cloneable, Serializable {
 	}
 
 
-
+	@Deprecated
 	private Card findCardinCollection(Iterable<Card> cardCollection, int cardId) {
 		for (Card card : cardCollection) {
 			if (card.getId() == cardId) {
@@ -461,6 +459,14 @@ public class GameContext implements Cloneable, Serializable {
 		return TargetLogic.withoutPermanents(adjacentMinions);
 	}
 
+	/**
+	 * Retrieves a hero power action that occurs automatically at the start of the turn, if one is specified for the
+	 * hero.
+	 * <p>
+	 * Implements certain scenarios.
+	 *
+	 * @return The game action that should be performed.
+	 */
 	@Suspendable
 	public GameAction getAutoHeroPowerAction() {
 		return getLogic().getAutoHeroPowerAction(getActivePlayerId());
@@ -493,6 +499,13 @@ public class GameContext implements Cloneable, Serializable {
 		return cardCostModifiers;
 	}
 
+	/**
+	 * Retrieves all the damage values that are supposed to be applied.
+	 * <p>
+	 * Implements spells that override the amount of damage something deals.
+	 *
+	 * @return The stack.
+	 */
 	@SuppressWarnings("unchecked")
 	public Stack<Integer> getDamageStack() {
 		if (!getEnvironment().containsKey(Environment.DAMAGE_STACK)) {
@@ -1292,6 +1305,11 @@ public class GameContext implements Cloneable, Serializable {
 		return (Deque<Integer>) getEnvironment().get(Environment.SPELL_VALUE_STACK);
 	}
 
+	/**
+	 * Resumes a game, playing it to completion.
+	 * <p>
+	 * Useful for implementing Monte Carlo Tree Search AI algorithms.
+	 */
 	@Suspendable
 	public void resume() {
 		while (!updateAndGetGameOver()) {

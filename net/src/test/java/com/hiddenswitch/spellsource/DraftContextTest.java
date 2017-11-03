@@ -13,6 +13,7 @@ import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.shared.utils.Tuple;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 public class DraftContextTest extends AbstractMatchmakingTest {
     @Test(timeout = 80000L)
+    @Ignore
     public void testDraftAndJoin(TestContext context) {
         setLoggingLevel(Level.DEBUG);
         wrapSync(context, this::createTwoPlayersAndMatchmake);

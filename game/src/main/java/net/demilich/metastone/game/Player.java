@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.decks.Deck;
@@ -22,9 +21,20 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * The {@link Player} class stores all the state that corresponds to a particular player, like a collection of {@link
+ * EntityZone} objects, a reference to a {@link Behaviour} that gets delegated requests for actions from the {@link
+ * GameContext}, and select {@link Attribute} and {@link net.demilich.metastone.game.spells.PlayerAttribute} attributes
+ * as an {@link Entity} that exists in the game.
+ *
+ * @see Behaviour for more on what player entities are requests to do.
+ * @see Zones for a description of the difference zones (i.e. lists) of entities that each player has.
+ * @see EntityZone for a description of the class that stores the {@link Entity} objects in the game.
+ */
 public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -37,7 +47,7 @@ public class Player extends Entity implements Serializable {
 
 	public static Player forUser(String userId, int id, Deck deck) {
 		Player player = new Player();
-		PlayerConfig config = new PlayerConfig(deck, new HumanBehaviour());
+		PlayerConfig config = new PlayerConfig(deck, new DoNothingBehaviour());
 		config.setHeroCard(deck.getHeroCard());
 		player.setId(id);
 		player.buildFromConfig(config);

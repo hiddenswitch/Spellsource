@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.util.AbstractMatchmakingTest;
 import com.hiddenswitch.spellsource.impl.ServiceTest;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -15,13 +16,15 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(VertxUnitRunner.class)
 public class MatchmakingTest extends AbstractMatchmakingTest {
-	@Test()
+	@Test
+	@Ignore
 	public void testMatchmakeAndJoin(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::createTwoPlayersAndMatchmake);
 	}
 
-	@Test()
+	@Test
+	@Ignore
 	public void testMatchmakeSamePlayersTwice(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {

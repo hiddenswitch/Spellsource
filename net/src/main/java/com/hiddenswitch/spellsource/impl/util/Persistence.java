@@ -9,7 +9,7 @@ import com.hiddenswitch.spellsource.models.PersistAttributeRequest;
 import com.hiddenswitch.spellsource.models.PersistAttributeResponse;
 import com.hiddenswitch.spellsource.impl.PersistenceContextImpl;
 import com.hiddenswitch.spellsource.util.RpcClient;
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
@@ -70,17 +70,18 @@ public class Persistence {
 			for (Map.Entry<EntityReference, Map<Attribute, Object>> entry : response.getModifiedAttributes()
 					.entrySet()) {
 
-				Entity entity = context.tryFind(entry.getKey());
+				EntityReference target = entry.getKey();
+				Entity entity = context.tryFind(target);
 
 				if (entity == null) {
 					continue;
 				}
 
 				for (Map.Entry<Attribute, Object> kv : entry.getValue().entrySet()) {
-					SpellDesc spell = SetAttributeSpell.create(entry.getKey(), kv.getKey(), kv.getValue());
+					SpellDesc spell = SetAttributeSpell.create(target, kv.getKey(), kv.getValue());
 					// By setting childSpell to true, additional spell casting triggers don't get called
 					// But target overriding effects apply, as they should.
-					context.getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), null, true);
+					context.getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), target, true);
 				}
 			}
 		}

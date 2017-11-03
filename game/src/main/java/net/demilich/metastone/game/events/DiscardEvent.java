@@ -25,5 +25,9 @@ public class DiscardEvent extends GameEvent {
 	public GameEventType getEventType() {
 		return GameEventType.DISCARD;
 	}
-	
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

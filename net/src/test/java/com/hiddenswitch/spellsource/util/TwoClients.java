@@ -31,6 +31,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 /**
  * Created by bberman on 11/18/16.
  */
+@Deprecated
 public class TwoClients {
 	private RemoteGameContext playerContext1;
 	private RemoteGameContext playerContext2;

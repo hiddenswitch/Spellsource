@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * Created by bberman on 2/7/17.
+ * A record that stores a card's ID, JSON representation and {@link CardDesc}.
  */
 public class CardCatalogueRecord implements Serializable {
 	private String id;

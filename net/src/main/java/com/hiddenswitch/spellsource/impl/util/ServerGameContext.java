@@ -11,7 +11,7 @@ import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.TurnState;
+import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;

@@ -3,8 +3,7 @@ package net.demilich.metastone.game.shared.threat;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.TurnState;
-import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 
 import java.util.List;

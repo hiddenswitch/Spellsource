@@ -5,10 +5,10 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "COMMON",
-  "description": "Destroy all minions except one.  Keep control of that minion.(chosen randomly)",
+  "description": "Destroy all minions except one. Keep control of that minion. (chosen randomly)",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DestroyAllExceptOneMCSpell",
+    "class": "DestroyAllExceptOneAndMindControlSpell",
     "target": "ALL_MINIONS"
   },
   "collectible": true,

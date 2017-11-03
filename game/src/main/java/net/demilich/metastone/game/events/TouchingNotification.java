@@ -61,4 +61,9 @@ public class TouchingNotification implements Notification {
 	public int getPlayerId() {
 		return playerId;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

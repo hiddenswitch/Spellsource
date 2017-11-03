@@ -1,8 +1,8 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import net.demilich.metastone.game.Environment;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.GameValue;
+import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 

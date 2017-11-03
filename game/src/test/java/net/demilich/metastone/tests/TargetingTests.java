@@ -7,7 +7,7 @@ import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;

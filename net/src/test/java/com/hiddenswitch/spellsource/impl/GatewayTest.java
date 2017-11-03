@@ -8,7 +8,6 @@ import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Inventory;
 import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Spellsource;
-import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -29,7 +28,7 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.SendContext;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEventType;
@@ -197,6 +196,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testScenario(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);

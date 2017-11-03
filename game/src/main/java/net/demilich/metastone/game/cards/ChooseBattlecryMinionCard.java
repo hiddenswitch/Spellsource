@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.cards;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.actions.PlayMinionCardAction;
@@ -10,7 +10,7 @@ import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
-public class ChooseBattlecryMinionCard extends MinionCard implements IChooseOneCard {
+public class ChooseBattlecryMinionCard extends MinionCard implements HasChooseOneActions {
 	private final BattlecryDesc[] battlecryOptions;
 	private final BattlecryDesc battlecryBothOptions;
 

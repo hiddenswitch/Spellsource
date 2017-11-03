@@ -1,8 +1,6 @@
 package net.demilich.metastone.tests.util;
 
-import java.util.EnumMap;
-
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.Rarity;

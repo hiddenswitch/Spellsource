@@ -2,16 +2,13 @@ package net.demilich.metastone.game.cards;
 
 import java.util.*;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.actions.PlayHeroCardAction;
 import net.demilich.metastone.game.cards.desc.HeroCardDesc;
-import net.demilich.metastone.game.cards.desc.WeaponCardDesc;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.EquipWeaponSpell;
-import net.demilich.metastone.game.spells.MetaSpell;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;

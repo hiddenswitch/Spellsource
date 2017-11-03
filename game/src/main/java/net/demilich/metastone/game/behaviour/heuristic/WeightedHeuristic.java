@@ -1,11 +1,11 @@
 package net.demilich.metastone.game.behaviour.heuristic;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.minions.Minion;
 
-public class WeightedHeuristic implements IGameStateHeuristic {
+public class WeightedHeuristic implements Heuristic {
 
 	private float calculateMinionScore(Minion minion) {
 		float minionScore = minion.getAttack() + minion.getHp();

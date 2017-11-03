@@ -11,7 +11,7 @@ import net.demilich.metastone.tests.util.TestSpellCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -19,7 +19,7 @@ import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.IChooseOneCard;
+import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Actor;
@@ -48,7 +48,7 @@ public class AdvancedMechanicTests extends TestBase {
 			context.getLogic().removeCard(card);
 		}
 		Card wrath = CardCatalogue.getCardById("spell_wrath");
-		IChooseOneCard wrathChooseOne = (IChooseOneCard) wrath;
+		HasChooseOneActions wrathChooseOne = (HasChooseOneActions) wrath;
 		context.getLogic().receiveCard(player.getId(), wrath);
 		player.setMana(wrath.getBaseManaCost() + 1);
 		List<GameAction> validActions = context.getLogic().getValidActions(player.getId());

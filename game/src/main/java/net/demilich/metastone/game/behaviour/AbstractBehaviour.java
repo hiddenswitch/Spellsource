@@ -10,6 +10,9 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 
+/**
+ * A base class for behaviours that implement no action or a default action when its methods are called.
+ */
 public abstract class AbstractBehaviour implements Behaviour, Serializable {
 	public Behaviour clone() {
 		try {

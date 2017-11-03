@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "custom.MoatLurkerSpell"
+      "class": "custom.JailMinionSpell"
     }
   },
   "deathrattle": {

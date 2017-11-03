@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import io.vertx.core.json.JsonObject;
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
@@ -10,7 +10,6 @@ import net.demilich.metastone.game.cards.desc.SpellCardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.ConditionalSpell;
 import net.demilich.metastone.game.spells.SummonSpell;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;

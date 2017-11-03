@@ -7,7 +7,7 @@
   "description": "Acquire control of an enemy minion with 3 Attack or less until the end of turn.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
-    "class": "custom.ShadowMadnessSpell",
+    "class": "custom.MindControlOneTurnSpell",
     "filter": {
       "class": "AttributeFilter",
       "value": 3,

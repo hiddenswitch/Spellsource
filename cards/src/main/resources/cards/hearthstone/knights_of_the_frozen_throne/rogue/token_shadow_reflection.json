@@ -24,7 +24,7 @@
         "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "custom.ShifterZerusSpell",
+        "class": "custom.TransformInHandSpell",
         "target": "SELF",
         "secondaryTarget": "EVENT_TARGET"
       },

@@ -5,9 +5,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.demilich.metastone.game.Attribute;
-import net.demilich.metastone.game.GameValue;
-import net.demilich.metastone.game.PlayerAttribute;
+import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.spells.GameValue;
+import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.CardDescType;
 import net.demilich.metastone.game.cards.CardSet;

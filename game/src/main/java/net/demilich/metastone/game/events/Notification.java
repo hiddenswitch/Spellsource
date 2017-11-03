@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
@@ -7,10 +8,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Represents a general notification from inside the {@link net.demilich.metastone.game.logic.GameLogic} that the
- * {@link GameContext} or players might be interested in.
+ * Represents a general notification from inside the {@link net.demilich.metastone.game.logic.GameLogic} that the {@link
+ * GameContext} or players might be interested in.
  * <p>
- * Unlike a {@link GameEvent}, a notification does not say anything about having side effects or triggering other rules.
+ * Unlike a {@link GameEvent}, a notification does not say anything about having side effects or triggering other
+ * rules.
  */
 public interface Notification extends Serializable {
 	/**
@@ -36,10 +38,21 @@ public interface Notification extends Serializable {
 
 	/**
 	 * A user-renderable description of what occurred in this notification.
-	 * @return
+	 *
 	 * @param context
 	 * @param playerId
+	 * @return
 	 */
 	String getDescription(GameContext context, int playerId);
+
+	/**
+	 * Should this notification be sent in the {@link com.hiddenswitch.spellsource.common.Client#onNotification(Notification,
+	 * GameState)} pipeline altogether?
+	 *
+	 * @return {@code false} by default.
+	 */
+	default boolean isClientInterested() {
+		return false;
+	}
 }
 

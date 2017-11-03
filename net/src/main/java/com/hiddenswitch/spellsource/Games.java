@@ -6,7 +6,7 @@ import com.hiddenswitch.spellsource.client.models.Entity;
 import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.models.*;
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
@@ -71,6 +71,7 @@ public interface Games {
 	 * @param playerId       The player to process actions for.
 	 * @return A list of game client actions.
 	 */
+	@Suspendable
 	static GameActions getClientActions(GameContext workingContext, List<GameAction> actions, int playerId) {
 		final GameActions clientActions = new GameActions();
 
@@ -306,13 +307,14 @@ public interface Games {
 		return clientActions;
 	}
 
-	static <T extends PlayCardAction & IChoiceCard> ChooseOneOptions buildChooseOneOptions(GameContext workingContext, int playerId, int[] chooseOneVirtualEntitiesId, int sourceId, List<T> choices, BiConsumer<ChooseOneOptions, SpellAction> adder) {
+	@Suspendable
+	static <T extends PlayCardAction & HasChoiceCard> ChooseOneOptions buildChooseOneOptions(GameContext workingContext, int playerId, int[] chooseOneVirtualEntitiesId, int sourceId, List<T> choices, BiConsumer<ChooseOneOptions, SpellAction> adder) {
 		ChooseOneOptions spell = new ChooseOneOptions();
 		EntityLocation sourceCardLocation = workingContext.resolveCardReference(choices.get(0).getCardReference()).getEntityLocation();
 		spell.cardInHandId(sourceId);
 
 		choices.stream()
-				.collect(Collectors.groupingBy(IChoiceCard::getChoiceCardId))
+				.collect(Collectors.groupingBy(HasChoiceCard::getChoiceCardId))
 				.forEach((cardId, choiceActions) -> {
 					Entity entity = Games.getEntity(workingContext, CardCatalogue.getCardById(cardId), playerId);
 					int id = chooseOneVirtualEntitiesId[0];
@@ -354,6 +356,7 @@ public interface Games {
 		return summonAction;
 	}
 
+	@Suspendable
 	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> playCardActions) {
 		SpellAction spellAction = new SpellAction()
 				.sourceId(sourceCardId);

@@ -44,4 +44,8 @@ public class AfterPhysicalAttackEvent extends GameEvent {
 		return GameEventType.AFTER_PHYSICAL_ATTACK;
 	}
 
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

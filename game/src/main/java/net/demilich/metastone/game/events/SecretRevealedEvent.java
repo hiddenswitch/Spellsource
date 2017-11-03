@@ -26,4 +26,8 @@ public class SecretRevealedEvent extends GameEvent {
 		return secretCard;
 	}
 
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import io.vertx.core.Handler;
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 

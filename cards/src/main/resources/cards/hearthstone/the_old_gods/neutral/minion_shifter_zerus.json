@@ -13,7 +13,7 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "custom.ShifterZerusSpell",
+      "class": "custom.TransformInHandSpell",
       "target": "SELF",
       "cardFilter": {
         "class": "CardFilter",

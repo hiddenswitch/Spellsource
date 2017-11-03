@@ -16,14 +16,14 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.heuristic.IGameStateHeuristic;
+import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
 
 public class GameStateValueBehaviour extends AbstractBehaviour {
 
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);
 
-	protected IGameStateHeuristic heuristic;
+	protected Heuristic heuristic;
 	protected FeatureVector featureVector;
 	protected String nameSuffix = "";
 	protected long timeout = 3500;

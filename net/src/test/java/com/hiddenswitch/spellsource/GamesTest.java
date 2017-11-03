@@ -53,6 +53,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 	private MatchmakingImpl matchmaking;
 
 	@Test
+	@Ignore
 	public void testCreateGameSession(TestContext context) throws CardParseException, IOException, URISyntaxException {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::getAndTestTwoClients);
@@ -76,6 +77,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 	}
 
 	@Test
+	@Ignore
 	public void testTwoGameSessionsOneAfterAnother(TestContext context) throws CardParseException, IOException, URISyntaxException {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
@@ -84,7 +86,8 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test()
+	@Test
+	@Ignore
 	public void testTerminatingSession(TestContext context) throws CardParseException, IOException, URISyntaxException {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
@@ -111,7 +114,8 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test()
+	@Test
+	@Ignore
 	public void testTimeoutSession(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
@@ -131,7 +135,8 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test()
+	@Test
+	@Ignore
 	public void testRemoveSessionAfterNormalGameOver(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
@@ -143,7 +148,8 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test()
+	@Test
+	@Ignore
 	public void testTwoSimultaneousSessions(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
 
@@ -153,6 +159,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 	}
 
 	@Test(timeout = 4 * 60 * 1000L)
+	@Ignore
 	public void testTenSimultaneousSessionsTwice(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
@@ -163,7 +170,8 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 		});
 	}
 
-	@Test()
+	@Test
+	@Ignore
 	public void testReconnects(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
@@ -203,6 +211,7 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 
 
 	@Test
+	@Ignore
 	public void testPerformGameActionRemotelyInGame(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
