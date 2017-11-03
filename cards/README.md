@@ -2,6 +2,10 @@
 
 This module contains gameplay definitions for cards.
 
+### Formatting
+
+Use the provided <code>[formatter.py](formatter.py)</code> to automatically format your JSON to a canonical ordering and indentation.
+
 ### What belongs in this module
 
  - **Functional game content**: This module must contain only functional game content. This means a definition of the behaviour of cards, like what happens when they enter play, their mana costs, triggers, attack and defense values, and other things that represent the minimum the game engine needs to know to correctly execute the rules of the card.

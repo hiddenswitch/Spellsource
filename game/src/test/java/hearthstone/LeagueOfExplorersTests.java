@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package hearthstone;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;

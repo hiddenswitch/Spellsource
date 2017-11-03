@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package hearthstone;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
