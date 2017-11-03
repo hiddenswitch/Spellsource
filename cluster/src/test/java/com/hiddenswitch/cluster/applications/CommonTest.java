@@ -7,12 +7,12 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 public class CommonTest {
-	@Test
+	@Test(enabled = false)
 	public void testGetDefaultDecks() throws Exception {
 		assertTrue(Common.getDefaultDecks().size() > 0);
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void testAllDecksValid() throws Exception {
 		CardCatalogue.loadCardsFromPackage();
 		DeckCatalogue.loadDecksFromPackage();

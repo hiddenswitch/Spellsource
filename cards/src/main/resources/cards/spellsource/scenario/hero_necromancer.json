@@ -48,12 +48,13 @@
                 "target": "SELF",
                 "value": {
                   "class": "AttributeValueProvider",
-                  "attribute": "BASE_MANA_COST"
+                  "attribute": "BASE_MANA_COST",
+                  "offset": -1
                 },
                 "attribute": "BASE_MANA_COST",
                 "boardPositionRelative": "RIGHT",
                 "cardType": "MINION",
-                "operation": "LESS"
+                "operation": "EQUAL"
               }
             }
           }

@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 public class ScenarioTests extends TestBase {
 
-	@Test
+	@Test(invocationCount = 100)
 	void testNecromancer() {
 		runGym((context, player, opponent) -> {
 			context.getLogic().setLoggingEnabled(true);
