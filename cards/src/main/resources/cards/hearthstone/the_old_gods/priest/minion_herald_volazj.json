@@ -9,7 +9,7 @@
   "description": "Battlecry: Summon a 1/1 copy of each of your other minions.",
   "battlecry": {
     "spell": {
-      "class": "custom.HeraldVolajzSpell"
+      "class": "custom.SummonOneOneCopiesSpell"
     }
   },
   "attributes": {

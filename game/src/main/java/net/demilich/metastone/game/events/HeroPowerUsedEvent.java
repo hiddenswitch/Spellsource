@@ -27,4 +27,8 @@ public class HeroPowerUsedEvent extends GameEvent {
 		return heroPower;
 	}
 
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

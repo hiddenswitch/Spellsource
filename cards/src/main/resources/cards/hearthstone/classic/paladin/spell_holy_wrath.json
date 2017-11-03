@@ -7,7 +7,7 @@
   "description": "Draw a card and deal damage equal to its cost.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "custom.HolyWrathSpell"
+    "class": "custom.DealDamageFromDrawnCardSpell"
   },
   "collectible": true,
   "set": "CLASSIC",

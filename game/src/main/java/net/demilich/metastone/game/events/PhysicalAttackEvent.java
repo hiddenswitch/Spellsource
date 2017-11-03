@@ -53,4 +53,9 @@ public class PhysicalAttackEvent extends GameEvent implements HasVictim, HasValu
 	public int getValue() {
 		return damageDealt;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

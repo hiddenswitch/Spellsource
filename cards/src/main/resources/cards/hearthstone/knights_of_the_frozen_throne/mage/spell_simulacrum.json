@@ -7,7 +7,10 @@
   "description": "Copy the lowest Cost minion in your hand.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "custom.SimulacrumSpell"
+    "class": "custom.CopyLowestCostMinionSpell",
+    "cardSource": {
+      "class": "HandSource"
+    }
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

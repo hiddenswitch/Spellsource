@@ -1,9 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
 import java.io.Serializable;
-import java.util.Map;
 
-import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;

@@ -1,15 +1,15 @@
 package net.demilich.metastone.game.heroes.powers;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.HeroPowerAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.IChooseOneCard;
+import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
 import net.demilich.metastone.game.spells.NullSpell;
 
-public class HeroPowerChooseOneCard extends HeroPowerCard implements IChooseOneCard {
+public class HeroPowerChooseOneCard extends HeroPowerCard implements HasChooseOneActions {
 
 	private String[] cardIds;
 	private String cardId;

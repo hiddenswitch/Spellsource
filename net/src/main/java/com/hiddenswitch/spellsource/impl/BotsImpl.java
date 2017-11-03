@@ -2,14 +2,11 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.RpcClient;
-import com.hiddenswitch.spellsource.Accounts;
-import com.hiddenswitch.spellsource.Bots;
-import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.QuickJson;
 import io.vertx.core.Future;
@@ -93,7 +90,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 		BotsStartGameResponse response = new BotsStartGameResponse();
 		UserRecord bot = pollBot();
 		String gameId = RandomStringUtils.randomAlphanumeric(10).toLowerCase();
-		String botDeckId = bot.getDecks().get(RandomUtils.nextInt(0, bot.getDecks().size()));
+		String botDeckId = getRandomDeck(bot);
 
 		botToGame.put(gameId, bot);
 
@@ -103,6 +100,22 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 		response.setBotUserId(bot.getId());
 		response.setBotDeckId(botDeckId);
 		return response;
+	}
+
+	protected String getRandomDeck(UserRecord bot) {
+		return bot.getDecks().get(RandomUtils.nextInt(0, bot.getDecks().size()));
+	}
+
+	private String getDeckByName(UserRecord bot, String deckName) throws SuspendExecution, InterruptedException {
+		GetCollectionResponse deckCollections = Rpc.connect(Inventory.class, vertx.eventBus()).sync()
+				.getCollection(GetCollectionRequest.decks(bot.getDecks()));
+		return deckCollections
+				.getResponses()
+				.stream()
+				.map(GetCollectionResponse::asInventoryCollection)
+				.filter(ic -> ic.getName().equals(deckName))
+				.findFirst()
+				.orElseThrow(RuntimeException::new).getId();
 	}
 
 	@Override

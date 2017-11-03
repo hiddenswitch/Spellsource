@@ -6,7 +6,15 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * Created by bberman on 4/16/17.
+ * EntityZone is an abstract list that enforces that (1) supports gameplay-safe cloning and (2) enforces that an {@link
+ * Entity} object is only in one zone at any time.
+ * <p>
+ * Each zone has a corresponding {@link Zones} and owning {@link net.demilich.metastone.game.Player} ID.
+ *
+ * @param <E> The subclass of {@link Entity} that is stored. For example, {@link Zones#BATTLEFIELD} can only store
+ *            {@link net.demilich.metastone.game.entities.minions.Minion} entities.
+ * @see net.demilich.metastone.game.cards.CardList for an interface that adds additional features for lists of cards,
+ * like the {@link Zones#HAND} and the {@link Zones#DECK}.
  */
 public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		List<E>, Iterable<E>, Cloneable, Serializable {

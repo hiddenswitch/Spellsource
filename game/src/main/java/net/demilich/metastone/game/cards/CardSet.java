@@ -1,5 +1,8 @@
 package net.demilich.metastone.game.cards;
 
+/**
+ * An enumeration of card sets from various games.
+ */
 public enum CardSet {
 	ANY,
 	BASIC,

@@ -9,7 +9,7 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.TurnState;
+import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
@@ -81,6 +81,10 @@ public class WebSocketClient implements Client {
 
 	@Override
 	public void onNotification(Notification event, com.hiddenswitch.spellsource.common.GameState gameState) {
+		if (!event.isClientInterested()) {
+			return;
+		}
+
 		// Quickly send touch notifications
 		if (TouchingNotification.class.isAssignableFrom(event.getClass())) {
 			TouchingNotification touchingNotification = (TouchingNotification) event;

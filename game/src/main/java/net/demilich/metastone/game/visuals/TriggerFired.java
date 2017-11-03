@@ -57,4 +57,9 @@ public class TriggerFired implements Notification {
 		}
 		return "An ability was triggered.";
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

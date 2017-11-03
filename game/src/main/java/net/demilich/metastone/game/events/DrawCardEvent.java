@@ -40,4 +40,8 @@ public class DrawCardEvent extends GameEvent {
 		return drawn;
 	}
 
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

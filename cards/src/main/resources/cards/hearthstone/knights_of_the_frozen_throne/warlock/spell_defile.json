@@ -7,7 +7,7 @@
   "description": "Deal 1 damage to all minions. If any die, cast this again.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "custom.RecastDefileSpell",
+    "class": "custom.RecastIfMinionsDestroyedSpell",
     "spell": {
       "class": "DamageSpell",
       "target": "ALL_MINIONS",

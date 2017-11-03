@@ -19,7 +19,7 @@ public class DamageEvent extends GameEvent implements HasVictim, HasValue {
 	public int getDamage() {
 		return damage;
 	}
-	
+
 	@Override
 	public Entity getEventSource() {
 		return getSource();
@@ -48,5 +48,10 @@ public class DamageEvent extends GameEvent implements HasVictim, HasValue {
 	@Override
 	public int getValue() {
 		return getDamage();
+	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
 	}
 }

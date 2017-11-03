@@ -5,13 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gson.annotations.SerializedName;
-import net.demilich.metastone.game.Attribute;
-import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.actions.PlayWeaponCardAction;
 import net.demilich.metastone.game.cards.desc.WeaponCardDesc;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 
 public class WeaponCard extends Card {

@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource;
 import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.TurnState;
+import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.events.Notification;

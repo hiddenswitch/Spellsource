@@ -12,4 +12,9 @@ public class MillEvent extends DiscardEvent {
 	public GameEventType getEventType() {
 		return GameEventType.MILL;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.util;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
+import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
@@ -228,10 +229,10 @@ public class UnityClient {
 					h.getState().getMaxMana() >= 1));
 		}
 		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
-		final List<Integer> changeIds = message.getChanges().stream().map(EntityChangeSetInner::getId).collect(Collectors.toList());
+		final Set<Integer> changeIds = message.getChanges().stream().map(EntityChangeSetInner::getId).collect(Collectors.toSet());
 		final boolean contains = entityIds.containsAll(changeIds);
 		if (!contains) {
-			context.fail(message.toString());
+			context.fail(/*message.toString()*/ "An ID is missing! " + Sets.difference(changeIds, entityIds).toString());
 		}
 		if (message.getMessageType() == MessageType.ON_GAME_EVENT
 				&& message.getEvent() != null

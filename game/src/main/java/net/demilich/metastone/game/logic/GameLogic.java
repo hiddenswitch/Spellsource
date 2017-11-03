@@ -14,6 +14,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.*;
@@ -36,6 +37,7 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.game.shared.utils.MathUtils;
+import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -279,6 +281,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param attr   An {@link Attribute}
 	 * @param source A source entity for the attribute application.
 	 */
+	@Suspendable
 	public void applyAttribute(Entity entity, Attribute attr, Entity source) {
 		if (attr == Attribute.MEGA_WINDFURY && entity.hasAttribute(Attribute.WINDFURY) && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
 			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, MEGA_WINDFURY_ATTACKS - WINDFURY_ATTACKS);
@@ -2814,7 +2817,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * It does not remove damage or minion type.
 	 *
 	 * @param playerId The ID of the player (typically the owner of the target). This is used by {@link
-	 *                 net.demilich.metastone.game.spells.custom.ShadowMadnessSpell} to reverse the mind control of a
+	 *                 net.demilich.metastone.game.spells.custom.MindControlOneTurnSpell} to reverse the mind control of a
 	 *                 minion that somehow gets silenced during the turn that spell is cast.
 	 * @param target   A {@link Minion} to silence.
 	 * @see <a href="http://hearthstone.gamepedia.com/Silence">Silence</a> for a complete description of the silencing

@@ -9,7 +9,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 
 import java.io.Serializable;
 
-public class HeroPowerAction extends PlaySpellCardAction implements IChoiceCard, Serializable {
+public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCard, Serializable {
 	private final String choiceCardId;
 
 	private HeroPowerAction() {

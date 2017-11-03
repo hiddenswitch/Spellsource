@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.heuristic.IGameStateHeuristic;
+import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
 
 public class GreedyOptimizeMove extends AbstractBehaviour {
 
 	private final static Logger logger = LoggerFactory.getLogger(GreedyOptimizeMove.class);
 
-	private final IGameStateHeuristic heuristic;
+	private final Heuristic heuristic;
 
-	public GreedyOptimizeMove(IGameStateHeuristic heuristic) {
+	public GreedyOptimizeMove(Heuristic heuristic) {
 		this.heuristic = heuristic;
 	}
 

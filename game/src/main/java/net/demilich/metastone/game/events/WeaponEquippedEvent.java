@@ -25,4 +25,9 @@ public class WeaponEquippedEvent extends GameEvent {
 	public Weapon getWeapon() {
 		return weapon;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

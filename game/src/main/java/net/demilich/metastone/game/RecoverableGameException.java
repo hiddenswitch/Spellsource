@@ -1,8 +1,6 @@
 package net.demilich.metastone.game;
 
-/**
- * Created by bberman on 12/2/16.
- */
+@Deprecated
 public class RecoverableGameException extends RuntimeException {
 	private final GameContext context;
 

@@ -5,15 +5,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gson.annotations.SerializedName;
-import net.demilich.metastone.game.Attribute;
-import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.actions.PlayMinionCardAction;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

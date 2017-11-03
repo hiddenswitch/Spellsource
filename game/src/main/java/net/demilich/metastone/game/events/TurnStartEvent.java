@@ -19,4 +19,9 @@ public class TurnStartEvent extends GameEvent {
 	public GameEventType getEventType() {
 		return GameEventType.TURN_START;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

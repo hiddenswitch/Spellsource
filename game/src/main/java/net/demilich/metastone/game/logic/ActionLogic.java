@@ -6,15 +6,15 @@ import java.util.Collection;
 import java.util.List;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.TurnState;
+import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.EndTurnAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.IChooseOneCard;
+import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -54,7 +54,7 @@ public class ActionLogic implements Serializable {
 			return heroPowerActions;
 		}
 		if (heroPower.hasAttribute(Attribute.CHOOSE_ONE)) {
-			IChooseOneCard chooseOneCard = (IChooseOneCard) heroPower;
+			HasChooseOneActions chooseOneCard = (HasChooseOneActions) heroPower;
 			for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
 				rollout(chooseOneAction, context, player, heroPowerActions);
 			}
@@ -91,7 +91,7 @@ public class ActionLogic implements Serializable {
 			}
 
 			if (card.hasAttribute(Attribute.CHOOSE_ONE)) {
-				IChooseOneCard chooseOneCard = (IChooseOneCard) card;
+				HasChooseOneActions chooseOneCard = (HasChooseOneActions) card;
 				if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS) && chooseOneCard.hasBothOptions()) {
 					GameAction chooseOneAction = chooseOneCard.playBothOptions();
 					rollout(chooseOneAction, context, player, playCardActions);

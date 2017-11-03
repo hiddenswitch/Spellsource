@@ -2,7 +2,8 @@ package net.demilich.metastone.game.cards;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.annotations.SerializedName;
-import net.demilich.metastone.game.Attribute;
+import io.vertx.core.json.JsonObject;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -25,6 +26,13 @@ import java.util.List;
  * <p>
  * Cards are typically in the hand, deck or graveyard. They are playable from the hand or as hero powers. They may be
  * created by other cards. Like all entities, they have attributes and are mutable.
+ *
+ * @see Entity#getSourceCard() for a way to retrieve the card that backs an entity. For a {@link
+ * net.demilich.metastone.game.entities.minions.Minion} summoned from the hand, this typically corresponds to a {@link
+ * MinionCard} in the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. This saves you from doing many
+ * kinds of casts for {@link net.demilich.metastone.game.entities.Actor} objects.
+ * @see CardDesc for the class that is the base of the serialized representation of cards.
+ * @see CardParser#parseCard(JsonObject) to see how cards are deserialized from their JSON representation.
  */
 public abstract class Card extends Entity {
 	private static final long serialVersionUID = 1L;
@@ -444,6 +452,14 @@ public abstract class Card extends Entity {
 		return (TriggerDesc[]) getAttribute(Attribute.PASSIVE_TRIGGERS);
 	}
 
+	/**
+	 * Sets the passive triggers, or triggers that are active in the hand or as the hero power, on this {@link Card}
+	 * entity.
+	 *
+	 * @param passiveTriggers An array of {@link TriggerDesc} objects from which the triggers will eventually be created
+	 *                        when this card enters the {@link net.demilich.metastone.game.targeting.Zones#HAND} or
+	 *                        {@link net.demilich.metastone.game.targeting.Zones#HERO_POWER}.
+	 */
 	public void setPassiveTriggers(List<TriggerDesc> passiveTriggers) {
 		TriggerDesc[] triggers = new TriggerDesc[passiveTriggers.size()];
 		for (int i = 0; i < passiveTriggers.size(); i++) {

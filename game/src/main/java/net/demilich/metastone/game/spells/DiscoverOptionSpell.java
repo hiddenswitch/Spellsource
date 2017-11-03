@@ -35,10 +35,10 @@ public class DiscoverOptionSpell extends Spell {
 		SpellDesc[] spellArray = (SpellDesc[]) desc.get(SpellArg.SPELLS);
 		spells.addAll(Arrays.asList(spellArray));
 
-		Map<SpellDesc, Integer> spellOrder = new HashMap<SpellDesc, Integer>();
+		Map<String, Integer> spellOrder = new HashMap<>();
 		for (int i = 0; i < spells.size(); i++) {
 			SpellDesc spell = spells.get(i);
-			spellOrder.put(spell, i);
+			spellOrder.put(spell.getString(SpellArg.NAME), i);
 		}
 
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
@@ -55,11 +55,11 @@ public class DiscoverOptionSpell extends Spell {
 			}
 
 			final DiscoverAction spellDiscover = SpellUtils.getSpellDiscover(context, player, desc, spellChoices, source);
-			SpellDesc chosenSpell = spellDiscover.getSpell();
+			String chosenSpell = spellDiscover.getSpell().getString(SpellArg.NAME);
 			chosenSpellInts.add(spellOrder.get(chosenSpell));
 
 			if (exclusive) {
-				shuffledSpells.removeIf(f -> f.equals(chosenSpell));
+				shuffledSpells.removeIf(f -> f.getString(SpellArg.NAME).equals(chosenSpell));
 			}
 		}
 

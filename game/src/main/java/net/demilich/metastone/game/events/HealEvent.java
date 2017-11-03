@@ -32,4 +32,8 @@ public class HealEvent extends GameEvent {
 		return target;
 	}
 
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.models;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;

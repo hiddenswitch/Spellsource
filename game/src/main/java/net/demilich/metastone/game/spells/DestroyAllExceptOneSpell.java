@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.paralleluniverse.fibers.Suspendable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,7 @@ public class DestroyAllExceptOneSpell extends DestroySpell {
 	public static Logger logger = LoggerFactory.getLogger(DestroyAllExceptOneSpell.class);
 
 	@Override
+	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		if (targets == null || targets.isEmpty()) {
 			return;

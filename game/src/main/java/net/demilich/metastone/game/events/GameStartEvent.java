@@ -19,4 +19,9 @@ public class GameStartEvent extends GameEvent {
 	public GameEventType getEventType() {
 		return GameEventType.GAME_START;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

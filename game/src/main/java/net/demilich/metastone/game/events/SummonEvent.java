@@ -39,4 +39,8 @@ public class SummonEvent extends GameEvent {
 		return "[Summon Event MINION " + minion + " from SOURCE " + source + "]";
 	}
 
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

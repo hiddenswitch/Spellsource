@@ -26,6 +26,7 @@ import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import com.hiddenswitch.spellsource.util.DebugContext;
 import com.hiddenswitch.spellsource.util.TestBase;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -101,6 +102,7 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 	}
 
 	@Test
+	@Ignore
 	public void testPlaysGameAgainstAI(TestContext context) throws CardParseException, IOException, URISyntaxException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::playAgainstAI);

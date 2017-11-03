@@ -11,6 +11,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonCopySpell",
+      "boardPositionRelative": "RIGHT",
       "target": "SELF"
     }
   },

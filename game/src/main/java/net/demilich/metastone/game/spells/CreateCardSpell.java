@@ -36,10 +36,10 @@ public class CreateCardSpell extends Spell {
 			spells.add(spell);
 		}
 
-		Map<SpellDesc, Integer> spellOrder = new HashMap<SpellDesc, Integer>();
+		Map<String, Integer> spellOrder = new HashMap<String, Integer>();
 		for (int i = 0; i < spells.size(); i++) {
 			SpellDesc spell = spells.get(i);
-			spellOrder.put(spell, i);
+			spellOrder.put(spell.getString(SpellArg.NAME), i);
 		}
 
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
@@ -56,12 +56,12 @@ public class CreateCardSpell extends Spell {
 			}
 
 			final DiscoverAction spellDiscover = SpellUtils.getSpellDiscover(context, player, desc, spellChoices, source);
-			SpellDesc chosenSpell = spellDiscover.getSpell();
+			String chosenSpell = spellDiscover.getSpell().getString(SpellArg.NAME);
 			chosenSpellInts.add(spellOrder.get(chosenSpell));
 			discoveries.add(spellDiscover);
 
 			if (exclusive) {
-				shuffledSpells.removeIf(f -> f.equals(chosenSpell));
+				shuffledSpells.removeIf(f -> f.getString(SpellArg.NAME).equals(chosenSpell));
 			}
 		}
 		Collections.sort(chosenSpellInts);

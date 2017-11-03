@@ -11,7 +11,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "AdaptSpell",
+      "class": "CastFromGroupSpell",
       "target": "SELF",
       "value": 2,
       "group": "group_adapt"

@@ -148,4 +148,9 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 		setTargetReference(reference);
 		return this;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

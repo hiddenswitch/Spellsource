@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonElement;
 
+/**
+ * A class responsible for deserializing JSON representations of cards.
+ */
 public class CardParser {
 	private static Logger logger = LoggerFactory.getLogger(CardParser.class);
 

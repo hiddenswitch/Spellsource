@@ -2,7 +2,7 @@ package net.demilich.metastone.game.entities;
 
 import java.io.Serializable;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -37,7 +37,7 @@ import net.demilich.metastone.game.utils.AttributeMap;
  * net.demilich.metastone.game.spells.trigger.secrets.Secret} entities should have their description or card IDs visible
  * to their opponents.
  */
-public abstract class Entity extends CustomCloneable implements Serializable, ICardSource {
+public abstract class Entity extends CustomCloneable implements Serializable, HasCard {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The value for the {@link #ownerIndex} when no owner has been assigned.

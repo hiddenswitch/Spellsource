@@ -15,7 +15,7 @@ import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import com.hiddenswitch.spellsource.models.*;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.HeroCard;
@@ -35,7 +35,6 @@ import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;

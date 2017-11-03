@@ -17,7 +17,7 @@
     },
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "custom.MadamGoyaSpell"
+      "class": "custom.SwapMinionWithDeckSpell"
     }
   },
   "attributes": {

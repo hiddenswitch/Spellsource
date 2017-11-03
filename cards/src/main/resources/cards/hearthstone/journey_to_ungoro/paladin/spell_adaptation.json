@@ -7,7 +7,7 @@
   "description": "Adapt a friendly minion.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "AdaptSpell",
+    "class": "CastFromGroupSpell",
     "group": "group_adapt"
   },
   "collectible": true,

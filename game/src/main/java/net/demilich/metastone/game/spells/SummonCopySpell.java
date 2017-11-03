@@ -27,6 +27,7 @@ public class SummonCopySpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Minion template;
+		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		if (target.getEntityType() == EntityType.CARD) {
 			template = ((MinionCard) target.getSourceCard()).summon();
 		} else {
@@ -38,7 +39,7 @@ public class SummonCopySpell extends Spell {
 			Minion clone = template.getCopy();
 			clone.clearEnchantments();
 
-			boolean summoned = context.getLogic().summon(player.getId(), clone, null, -1, false);
+			boolean summoned = context.getLogic().summon(player.getId(), clone, null, boardPosition, false);
 			if (!summoned) {
 				return;
 			}

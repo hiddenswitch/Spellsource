@@ -1,13 +1,13 @@
 package net.demilich.metastone.game.cards;
 
-import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.actions.PlayHeroCardAction;
 import net.demilich.metastone.game.cards.desc.ChooseBattlecryHeroCardDesc;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
-public class ChooseBattlecryHeroCard extends HeroCard implements IChooseOneCard {
+public class ChooseBattlecryHeroCard extends HeroCard implements HasChooseOneActions {
 	private final BattlecryDesc[] battlecryOptions;
 	private final BattlecryDesc battlecryBothOptions;
 

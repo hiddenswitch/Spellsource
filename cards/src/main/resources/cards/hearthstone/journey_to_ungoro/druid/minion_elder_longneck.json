@@ -21,7 +21,7 @@
     },
     "targetSelection": "NONE",
     "spell": {
-      "class": "AdaptSpell",
+      "class": "CastFromGroupSpell",
       "target": "SELF",
       "group": "group_adapt"
     }

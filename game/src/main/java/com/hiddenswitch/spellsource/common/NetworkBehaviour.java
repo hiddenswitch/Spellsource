@@ -17,32 +17,27 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Represents a behaviour that delegates its requests to a networking interface provided by a {@link GameContext}.
+ */
 public class NetworkBehaviour extends AbstractBehaviour implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Logger logger = LoggerFactory.getLogger(NetworkBehaviour.class);
-	private Behaviour wrapBehaviour;
 
-	public NetworkBehaviour(Behaviour wrapBehaviour) {
-		this.wrapBehaviour = wrapBehaviour;
+	public NetworkBehaviour() {
 	}
 
 	@Override
 	public String getName() {
-		return getWrapBehaviour().getName();
+		return "Network behaviour";
 	}
 
 	@Override
 	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		if (isServer()) {
-			logger.debug("Requesting mulligan from wrapped behaviour using blocking behaviour. Player: {}, cards: {}", player, cards);
-			List<Card> mulliganResults = Sync.awaitFiber(done -> context.networkRequestMulligan(player, cards, result -> done.handle(Future.succeededFuture(result))));
-			return mulliganResults;
-		} else {
-			logger.debug("Requesting mulligan from wrapped behaviour. Player: {}, cards: {}", player, cards);
-			return getWrapBehaviour().mulligan(context, player, cards);
-		}
+		logger.debug("Requesting mulligan from wrapped behaviour using blocking behaviour. Player: {}, cards: {}", player, cards);
+		return Sync.awaitFiber(done -> context.networkRequestMulligan(player, cards, result -> done.handle(Future.succeededFuture(result))));
 	}
 
 	@Override
@@ -55,41 +50,20 @@ public class NetworkBehaviour extends AbstractBehaviour implements Serializable 
 	@Override
 	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-		if (isServer()) {
-			logger.debug("Requesting action from network using blocking behaviour.");
-			GameAction action = Sync.awaitFiber(done -> requestActionAsync(context, player, validActions, result -> done.handle(Future.succeededFuture(result))));
-			return action;
-		} else {
-			logger.debug("Requesting action from wrapped behaviour. Player: {}, validActions: {}", player, validActions);
-			return getWrapBehaviour().requestAction(context, player, validActions);
-		}
-	}
-
-	/**
-	 * TODO: We're not necessarily in the server if we're running in a fiber, but this is only really relevant in the
-	 * strange world that is the Java legacy client.
-	 *
-	 * @return {@code true} if this is running in the server context.
-	 */
-	private boolean isServer() {
-		return Fiber.isCurrentFiber();
+		logger.debug("Requesting action from network using blocking behaviour.");
+		return Sync.awaitFiber(done -> requestActionAsync(context, player, validActions, result -> done.handle(Future.succeededFuture(result))));
 	}
 
 	@Suspendable
 	@Override
 	public void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler) {
-		if (isServer()) {
-			logger.debug("Requesting action from network. Player: {}, validActions: {}", player, validActions);
-			context.networkRequestAction(context.getGameStateCopy(), player.getId(), validActions, handler);
-		} else {
-			super.requestActionAsync(context, player, validActions, handler);
-		}
+		logger.debug("Requesting action from network. Player: {}, validActions: {}", player, validActions);
+		context.networkRequestAction(context.getGameStateCopy(), player.getId(), validActions, handler);
 	}
 
 	@Override
 	@Suspendable
 	public void onGameOver(GameContext context, int playerId, int winningPlayerId) {
-		getWrapBehaviour().onGameOver(context, playerId, winningPlayerId);
 	}
 
 	@Override
@@ -100,9 +74,5 @@ public class NetworkBehaviour extends AbstractBehaviour implements Serializable 
 		} else {
 			context.sendGameOver(context.getPlayer(playerId), null);
 		}
-	}
-
-	public Behaviour getWrapBehaviour() {
-		return wrapBehaviour;
 	}
 }

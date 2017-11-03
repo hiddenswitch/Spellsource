@@ -79,7 +79,7 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 		}
 
 		if (sync) {
-			RpcOptions.Serialization finalSerialization = serialization;
+			final RpcOptions.Serialization finalSerialization = serialization;
 			result = awaitFiber(done -> {
 				call(methodName, args, deliveryOptions, finalSerialization, done);
 			});

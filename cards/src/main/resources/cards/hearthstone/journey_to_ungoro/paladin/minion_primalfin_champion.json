@@ -21,7 +21,7 @@
     }
   },
   "deathrattle": {
-    "class": "custom.PrimalfinChampionReceiveSpell"
+    "class": "custom.ReceiveCardsInStorageSpell"
   },
   "attributes": {
     "DEATHRATTLES": true

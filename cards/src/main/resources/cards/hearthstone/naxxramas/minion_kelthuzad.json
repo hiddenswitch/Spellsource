@@ -13,7 +13,7 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "custom.KelThuzadSpell"
+      "class": "custom.SummonFriendlyMinionsThatDiedSpell"
     }
   },
   "collectible": true,

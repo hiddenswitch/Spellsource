@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.utils;
 
-import net.demilich.metastone.game.Attribute;
-
 import java.io.Serializable;
 import java.util.*;
 
