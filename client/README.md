@@ -86,7 +86,7 @@ public class DefaultApiExample {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://api-us-east-2.hiddenswitch.com:8080/v1*
+All URIs are relative to *http://api-us-east-2.hiddenswitch.com:8080/v2*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -106,10 +106,10 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**getFriendConversation**](docs/DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
-*DefaultApi* | [**matchmakingConstructedDelete**](docs/DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/constructed | 
-*DefaultApi* | [**matchmakingConstructedGet**](docs/DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/constructed | 
-*DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
-*DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/constructed/queue | 
+*DefaultApi* | [**matchmakingConstructedGet**](docs/DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/{queueId} | 
+*DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/{queueId} | 
+*DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
+*DefaultApi* | [**matchmakingGet**](docs/DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 *DefaultApi* | [**sendFriendMessage**](docs/DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
 
 
@@ -178,9 +178,12 @@ Class | Method | HTTP request | Description
  - [MatchCancelResponse](docs/MatchCancelResponse.md)
  - [MatchConcedeResponse](docs/MatchConcedeResponse.md)
  - [MatchmakingDeck](docs/MatchmakingDeck.md)
+ - [MatchmakingQueueItem](docs/MatchmakingQueueItem.md)
+ - [MatchmakingQueueItemRequires](docs/MatchmakingQueueItemRequires.md)
  - [MatchmakingQueuePutRequest](docs/MatchmakingQueuePutRequest.md)
  - [MatchmakingQueuePutResponse](docs/MatchmakingQueuePutResponse.md)
  - [MatchmakingQueuePutResponseUnityConnection](docs/MatchmakingQueuePutResponseUnityConnection.md)
+ - [MatchmakingQueuesResponse](docs/MatchmakingQueuesResponse.md)
  - [Message](docs/Message.md)
  - [MessageType](docs/MessageType.md)
  - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)

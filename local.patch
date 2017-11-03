@@ -8,6 +8,6 @@ index d0a54cf5f..7d5618aed 100644
      url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
 -host: api-us-east-2.hiddenswitch.com:8080
 +host: localhost:8080
- basePath: /v1
+ basePath: /v2
  schemes:
    - http

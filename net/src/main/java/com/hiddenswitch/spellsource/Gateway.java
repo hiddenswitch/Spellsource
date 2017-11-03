@@ -123,13 +123,15 @@ public interface Gateway {
 
 	WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException;
 
-	WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext context, String userId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException;
+	WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext context, String userId, String queueId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException;
 
-	WebResult<MatchCancelResponse> matchmakingConstructedQueueDelete(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
+	WebResult<MatchCancelResponse> matchmakingConstructedQueueDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException;
 
-	WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
+	WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException;
 
-	WebResult<GameState> matchmakingConstructedGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
+	WebResult<GameState> matchmakingConstructedGet(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException;
+
+	WebResult<MatchmakingQueuesResponse> matchmakingGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
 
 	WebResult<FriendPutResponse> putFriend(RoutingContext context, String userId, FriendPutRequest req) throws SuspendExecution, InterruptedException;
 

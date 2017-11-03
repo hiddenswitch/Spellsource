@@ -45,11 +45,11 @@ import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetConversationResponse;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
-import com.hiddenswitch.spellsource.client.models.MatchConcedeResponse;
 import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.MatchCancelResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
+import com.hiddenswitch.spellsource.client.models.MatchmakingQueuesResponse;
 import com.hiddenswitch.spellsource.client.models.SendMessageResponse;
 import com.hiddenswitch.spellsource.client.models.SendMessageRequest;
 import org.junit.Test;
@@ -325,29 +325,15 @@ public class DefaultApiTest {
     /**
      * 
      *
-     * Concedes the player&#39;s current constructed game. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void matchmakingConstructedDeleteTest() throws ApiException {
-        // MatchConcedeResponse response = api.matchmakingConstructedDelete();
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * Gets a renderable gamestate representing this player&#39;s current game. 
+     * Gets a renderable gamestate representing this player&#39;s current game in this queue. 
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
     public void matchmakingConstructedGetTest() throws ApiException {
-        // GameState response = api.matchmakingConstructedGet();
+        String queueId = null;
+        // GameState response = api.matchmakingConstructedGet(queueId);
 
         // TODO: test validations
     }
@@ -370,15 +356,31 @@ public class DefaultApiTest {
     /**
      * 
      *
-     * Enters your client into a matchmaking queue for constructed deck matchmaking. Clients have to keep their matchmaking queue entry alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
     public void matchmakingConstructedQueuePutTest() throws ApiException {
+        String queueId = null;
         MatchmakingQueuePutRequest request = null;
-        // MatchmakingQueuePutResponse response = api.matchmakingConstructedQueuePut(request);
+        // MatchmakingQueuePutResponse response = api.matchmakingConstructedQueuePut(queueId, request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Gets a list of queues available for matchmaking. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void matchmakingGetTest() throws ApiException {
+        // MatchmakingQueuesResponse response = api.matchmakingGet();
 
         // TODO: test validations
     }

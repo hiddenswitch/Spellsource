@@ -57,11 +57,11 @@ import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetConversationResponse;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
-import com.hiddenswitch.spellsource.client.models.MatchConcedeResponse;
 import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.MatchCancelResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
+import com.hiddenswitch.spellsource.client.models.MatchmakingQueuesResponse;
 import com.hiddenswitch.spellsource.client.models.SendMessageResponse;
 import com.hiddenswitch.spellsource.client.models.SendMessageRequest;
 
@@ -1780,111 +1780,19 @@ public class DefaultApi {
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
-    /* Build call for matchmakingConstructedDelete */
-    private com.squareup.okhttp.Call matchmakingConstructedDeleteCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-        Object localVarPostBody = null;
-        
-
-        // create path and map variables
-        String localVarPath = "/matchmaking/constructed".replaceAll("\\{format\\}","json");
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        if(progressListener != null) {
-            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
-                @Override
-                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
-                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
-                    return originalResponse.newBuilder()
-                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
-                    .build();
-                }
-            });
-        }
-
-        String[] localVarAuthNames = new String[] { "TokenSecurity" };
-        return apiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
-    }
-
-    /**
-     * 
-     * Concedes the player&#39;s current constructed game. 
-     * @return MatchConcedeResponse
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     */
-    public MatchConcedeResponse matchmakingConstructedDelete() throws ApiException {
-        ApiResponse<MatchConcedeResponse> resp = matchmakingConstructedDeleteWithHttpInfo();
-        return resp.getData();
-    }
-
-    /**
-     * 
-     * Concedes the player&#39;s current constructed game. 
-     * @return ApiResponse&lt;MatchConcedeResponse&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     */
-    public ApiResponse<MatchConcedeResponse> matchmakingConstructedDeleteWithHttpInfo() throws ApiException {
-        com.squareup.okhttp.Call call = matchmakingConstructedDeleteCall(null, null);
-        Type localVarReturnType = new TypeToken<MatchConcedeResponse>(){}.getType();
-        return apiClient.execute(call, localVarReturnType);
-    }
-
-    /**
-     *  (asynchronously)
-     * Concedes the player&#39;s current constructed game. 
-     * @param callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     */
-    public com.squareup.okhttp.Call matchmakingConstructedDeleteAsync(final ApiCallback<MatchConcedeResponse> callback) throws ApiException {
-
-        ProgressResponseBody.ProgressListener progressListener = null;
-        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
-
-        if (callback != null) {
-            progressListener = new ProgressResponseBody.ProgressListener() {
-                @Override
-                public void update(long bytesRead, long contentLength, boolean done) {
-                    callback.onDownloadProgress(bytesRead, contentLength, done);
-                }
-            };
-
-            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
-                @Override
-                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
-                    callback.onUploadProgress(bytesWritten, contentLength, done);
-                }
-            };
-        }
-
-        com.squareup.okhttp.Call call = matchmakingConstructedDeleteCall(progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<MatchConcedeResponse>(){}.getType();
-        apiClient.executeAsync(call, localVarReturnType, callback);
-        return call;
-    }
     /* Build call for matchmakingConstructedGet */
-    private com.squareup.okhttp.Call matchmakingConstructedGetCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call matchmakingConstructedGetCall(String queueId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
+        
+        // verify the required parameter 'queueId' is set
+        if (queueId == null) {
+            throw new ApiException("Missing the required parameter 'queueId' when calling matchmakingConstructedGet(Async)");
+        }
         
 
         // create path and map variables
-        String localVarPath = "/matchmaking/constructed".replaceAll("\\{format\\}","json");
+        String localVarPath = "/matchmaking/{queueId}".replaceAll("\\{format\\}","json")
+        .replaceAll("\\{" + "queueId" + "\\}", apiClient.escapeString(queueId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
@@ -1922,35 +1830,38 @@ public class DefaultApi {
 
     /**
      * 
-     * Gets a renderable gamestate representing this player&#39;s current game. 
+     * Gets a renderable gamestate representing this player&#39;s current game in this queue. 
+     * @param queueId The ID of the queue to enter. (required)
      * @return GameState
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public GameState matchmakingConstructedGet() throws ApiException {
-        ApiResponse<GameState> resp = matchmakingConstructedGetWithHttpInfo();
+    public GameState matchmakingConstructedGet(String queueId) throws ApiException {
+        ApiResponse<GameState> resp = matchmakingConstructedGetWithHttpInfo(queueId);
         return resp.getData();
     }
 
     /**
      * 
-     * Gets a renderable gamestate representing this player&#39;s current game. 
+     * Gets a renderable gamestate representing this player&#39;s current game in this queue. 
+     * @param queueId The ID of the queue to enter. (required)
      * @return ApiResponse&lt;GameState&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<GameState> matchmakingConstructedGetWithHttpInfo() throws ApiException {
-        com.squareup.okhttp.Call call = matchmakingConstructedGetCall(null, null);
+    public ApiResponse<GameState> matchmakingConstructedGetWithHttpInfo(String queueId) throws ApiException {
+        com.squareup.okhttp.Call call = matchmakingConstructedGetCall(queueId, null, null);
         Type localVarReturnType = new TypeToken<GameState>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
     /**
      *  (asynchronously)
-     * Gets a renderable gamestate representing this player&#39;s current game. 
+     * Gets a renderable gamestate representing this player&#39;s current game in this queue. 
+     * @param queueId The ID of the queue to enter. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call matchmakingConstructedGetAsync(final ApiCallback<GameState> callback) throws ApiException {
+    public com.squareup.okhttp.Call matchmakingConstructedGetAsync(String queueId, final ApiCallback<GameState> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1971,7 +1882,7 @@ public class DefaultApi {
             };
         }
 
-        com.squareup.okhttp.Call call = matchmakingConstructedGetCall(progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = matchmakingConstructedGetCall(queueId, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<GameState>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
@@ -1982,7 +1893,7 @@ public class DefaultApi {
         
 
         // create path and map variables
-        String localVarPath = "/matchmaking/constructed/queue".replaceAll("\\{format\\}","json");
+        String localVarPath = "/matchmaking/{queueId}".replaceAll("\\{format\\}","json");
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
@@ -2075,8 +1986,13 @@ public class DefaultApi {
         return call;
     }
     /* Build call for matchmakingConstructedQueuePut */
-    private com.squareup.okhttp.Call matchmakingConstructedQueuePutCall(MatchmakingQueuePutRequest request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call matchmakingConstructedQueuePutCall(String queueId, MatchmakingQueuePutRequest request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = request;
+        
+        // verify the required parameter 'queueId' is set
+        if (queueId == null) {
+            throw new ApiException("Missing the required parameter 'queueId' when calling matchmakingConstructedQueuePut(Async)");
+        }
         
         // verify the required parameter 'request' is set
         if (request == null) {
@@ -2085,7 +2001,8 @@ public class DefaultApi {
         
 
         // create path and map variables
-        String localVarPath = "/matchmaking/constructed/queue".replaceAll("\\{format\\}","json");
+        String localVarPath = "/matchmaking/{queueId}".replaceAll("\\{format\\}","json")
+        .replaceAll("\\{" + "queueId" + "\\}", apiClient.escapeString(queueId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
@@ -2123,38 +2040,41 @@ public class DefaultApi {
 
     /**
      * 
-     * Enters your client into a matchmaking queue for constructed deck matchmaking. Clients have to keep their matchmaking queue entry alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * @param queueId The ID of the queue to enter. (required)
      * @param request The matchmaking queue entry. Contains the deck.  (required)
      * @return MatchmakingQueuePutResponse
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public MatchmakingQueuePutResponse matchmakingConstructedQueuePut(MatchmakingQueuePutRequest request) throws ApiException {
-        ApiResponse<MatchmakingQueuePutResponse> resp = matchmakingConstructedQueuePutWithHttpInfo(request);
+    public MatchmakingQueuePutResponse matchmakingConstructedQueuePut(String queueId, MatchmakingQueuePutRequest request) throws ApiException {
+        ApiResponse<MatchmakingQueuePutResponse> resp = matchmakingConstructedQueuePutWithHttpInfo(queueId, request);
         return resp.getData();
     }
 
     /**
      * 
-     * Enters your client into a matchmaking queue for constructed deck matchmaking. Clients have to keep their matchmaking queue entry alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * @param queueId The ID of the queue to enter. (required)
      * @param request The matchmaking queue entry. Contains the deck.  (required)
      * @return ApiResponse&lt;MatchmakingQueuePutResponse&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<MatchmakingQueuePutResponse> matchmakingConstructedQueuePutWithHttpInfo(MatchmakingQueuePutRequest request) throws ApiException {
-        com.squareup.okhttp.Call call = matchmakingConstructedQueuePutCall(request, null, null);
+    public ApiResponse<MatchmakingQueuePutResponse> matchmakingConstructedQueuePutWithHttpInfo(String queueId, MatchmakingQueuePutRequest request) throws ApiException {
+        com.squareup.okhttp.Call call = matchmakingConstructedQueuePutCall(queueId, request, null, null);
         Type localVarReturnType = new TypeToken<MatchmakingQueuePutResponse>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
     /**
      *  (asynchronously)
-     * Enters your client into a matchmaking queue for constructed deck matchmaking. Clients have to keep their matchmaking queue entry alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * @param queueId The ID of the queue to enter. (required)
      * @param request The matchmaking queue entry. Contains the deck.  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call matchmakingConstructedQueuePutAsync(MatchmakingQueuePutRequest request, final ApiCallback<MatchmakingQueuePutResponse> callback) throws ApiException {
+    public com.squareup.okhttp.Call matchmakingConstructedQueuePutAsync(String queueId, MatchmakingQueuePutRequest request, final ApiCallback<MatchmakingQueuePutResponse> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -2175,8 +2095,106 @@ public class DefaultApi {
             };
         }
 
-        com.squareup.okhttp.Call call = matchmakingConstructedQueuePutCall(request, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = matchmakingConstructedQueuePutCall(queueId, request, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<MatchmakingQueuePutResponse>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /* Build call for matchmakingGet */
+    private com.squareup.okhttp.Call matchmakingGetCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+
+        // create path and map variables
+        String localVarPath = "/matchmaking".replaceAll("\\{format\\}","json");
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "TokenSecurity" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+
+    /**
+     * 
+     * Gets a list of queues available for matchmaking. 
+     * @return MatchmakingQueuesResponse
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public MatchmakingQueuesResponse matchmakingGet() throws ApiException {
+        ApiResponse<MatchmakingQueuesResponse> resp = matchmakingGetWithHttpInfo();
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * Gets a list of queues available for matchmaking. 
+     * @return ApiResponse&lt;MatchmakingQueuesResponse&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<MatchmakingQueuesResponse> matchmakingGetWithHttpInfo() throws ApiException {
+        com.squareup.okhttp.Call call = matchmakingGetCall(null, null);
+        Type localVarReturnType = new TypeToken<MatchmakingQueuesResponse>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * Gets a list of queues available for matchmaking. 
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call matchmakingGetAsync(final ApiCallback<MatchmakingQueuesResponse> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = matchmakingGetCall(progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<MatchmakingQueuesResponse>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
