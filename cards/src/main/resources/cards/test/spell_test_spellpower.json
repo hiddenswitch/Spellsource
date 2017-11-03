@@ -1,0 +1,17 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_HERO",
+    "value": 5
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

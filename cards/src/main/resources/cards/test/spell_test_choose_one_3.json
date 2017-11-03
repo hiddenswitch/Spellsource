@@ -1,0 +1,26 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "COMMON",
+  "description": "",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 4
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1,
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

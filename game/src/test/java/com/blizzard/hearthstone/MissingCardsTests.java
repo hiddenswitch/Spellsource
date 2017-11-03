@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package com.blizzard.hearthstone;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

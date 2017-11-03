@@ -1,4 +1,4 @@
-package hearthstone;
+package com.blizzard.hearthstone;
 
 
 import net.demilich.metastone.game.GameContext;
@@ -10,10 +10,12 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
+import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -85,5 +87,39 @@ public class TheOldGodsTests extends TestBase {
 		Assert.assertEquals(player.getMinions().get(0).getAttack(), originalMinion[0].getAttack() + buff);
 		Assert.assertEquals(player.getMinions().get(0).getHp(), originalMinion[0].getHp() + buff);
 	}
+
+	@Test
+	public void testKingsDefenderHogger() {
+		DebugContext context = createContext(HeroClass.RED, HeroClass.RED);
+		Player player = context.getPlayer1();
+		Hero hero = player.getHero();
+
+		playCard(context, player, CardCatalogue.getCardById("weapon_deaths_bite"));
+		Assert.assertEquals(hero.getWeapon().getAttack(), 4);
+		Assert.assertEquals(hero.getWeapon().getDurability(), 2);
+		playCard(context, player, CardCatalogue.getCardById("minion_hogger_doom_of_elwynn"));
+		Assert.assertEquals(player.getMinions().size(), 1);
+		playCard(context, player, CardCatalogue.getCardById("weapon_kings_defender"));
+		Assert.assertEquals(hero.getWeapon().getAttack(), 3);
+		Assert.assertEquals(hero.getWeapon().getDurability(), 2);
+		Assert.assertEquals(player.getMinions().size(), 2);
+	}
+
+
+	@Test
+	public void testRallyingBlade() {
+		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
+		Player player = context.getPlayer1();
+		MinionCard argentSquireCard = (MinionCard) CardCatalogue.getCardById("minion_argent_squire");
+		Minion argentSquire = playMinionCard(context, player, argentSquireCard);
+		Assert.assertEquals(argentSquire.getAttack(), 1);
+		Assert.assertEquals(argentSquire.getHp(), 1);
+
+		Card rallyingBladeCard = CardCatalogue.getCardById("weapon_rallying_blade");
+		playCard(context, player, rallyingBladeCard);
+		Assert.assertEquals(argentSquire.getAttack(), 2);
+		Assert.assertEquals(argentSquire.getHp(), 2);
+	}
+
 }
 

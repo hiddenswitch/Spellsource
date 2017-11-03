@@ -1,8 +1,9 @@
-package hearthstone;
+package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.SpellCard;
@@ -10,6 +11,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
@@ -233,5 +235,54 @@ public class BlackrockMountainTests extends TestBase {
 		drakonid = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_drakonid_crusher"));
 		Assert.assertEquals(drakonid.getAttack(), drakonid.getBaseAttack() + ATTACK_BONUS);
 		Assert.assertEquals(drakonid.getHp(), drakonid.getBaseHp() + HP_BONUS);
+	}
+
+	@Test
+	public void testImpGangBossConeOfCold() {
+		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
+		Player player = context.getPlayer1();
+		Player opponent = context.getPlayer2();
+
+		context.endTurn();
+		Minion firstYeti = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_chillwind_yeti"));
+		Minion impGangBoss = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_imp_gang_boss"));
+		Minion secondYeti = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_chillwind_yeti"));
+		Assert.assertEquals(opponent.getMinions().size(), 3);
+		context.endTurn();
+
+		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_cone_of_cold"), impGangBoss);
+		Assert.assertEquals(opponent.getMinions().size(), 4);
+		Assert.assertTrue(firstYeti.hasAttribute(Attribute.FROZEN));
+		Assert.assertTrue(impGangBoss.hasAttribute(Attribute.FROZEN));
+		Assert.assertFalse(secondYeti.hasAttribute(Attribute.FROZEN));
+	}
+
+
+	@Test
+	public void testEmperorThaurissanEmptyHand() {
+		GameContext context = createContext(HeroClass.RED, HeroClass.VIOLET);
+
+		Player player = context.getPlayer1();
+		MinionCard emperorThaurissanCard = (MinionCard) CardCatalogue.getCardById("minion_emperor_thaurissan");
+		Minion emperorThaurissan = playMinionCard(context, player, emperorThaurissanCard);
+		for (Card card : player.getHand().toList()) {
+			context.getLogic().removeCard(card);
+
+		}
+		Assert.assertTrue(player.getHand().isEmpty());
+		context.endTurn();
+
+		Player opponent = context.getPlayer2();
+		Card assassinateCard = CardCatalogue.getCardById("spell_assassinate");
+		playCardWithTarget(context, opponent, assassinateCard, emperorThaurissan);
+		context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_chillwind_yeti"));
+		context.endTurn();
+
+		Card card = player.getHand().peekFirst();
+		int modifiedCost = context.getLogic().getModifiedManaCost(player, card);
+		System.out.println("Card [" + card.getName() + "] has baseManaCost of " + card.getBaseManaCost()
+				+ " and current actual manacost of " + modifiedCost);
+		Assert.assertEquals(card.getBaseManaCost(), modifiedCost);
+
 	}
 }

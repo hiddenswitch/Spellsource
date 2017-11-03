@@ -1,0 +1,17 @@
+{
+  "name": "",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CopyCardSpell",
+    "value": 2,
+    "cardLocation": "DECK"
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

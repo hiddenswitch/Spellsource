@@ -1,4 +1,4 @@
-package hearthstone;
+package com.blizzard.hearthstone;
 
 
 import net.demilich.metastone.game.utils.Attribute;
