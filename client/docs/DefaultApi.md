@@ -1,6 +1,6 @@
 # DefaultApi
 
-All URIs are relative to *http://api-us-east-2.hiddenswitch.com:8080/v1*
+All URIs are relative to *http://api-us-east-2.hiddenswitch.com:8080/v2*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -20,10 +20,10 @@ Method | HTTP request | Description
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
 [**getFriendConversation**](DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
-[**matchmakingConstructedDelete**](DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/constructed | 
-[**matchmakingConstructedGet**](DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/constructed | 
-[**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/constructed/queue | 
-[**matchmakingConstructedQueuePut**](DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/constructed/queue | 
+[**matchmakingConstructedGet**](DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/{queueId} | 
+[**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/{queueId} | 
+[**matchmakingConstructedQueuePut**](DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
+[**matchmakingGet**](DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 [**sendFriendMessage**](DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
 
 
@@ -880,64 +880,13 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="matchmakingConstructedDelete"></a>
-# **matchmakingConstructedDelete**
-> MatchConcedeResponse matchmakingConstructedDelete()
-
-
-
-Concedes the player&#39;s current constructed game. 
-
-### Example
-```java
-// Import classes:
-//import com.hiddenswitch.spellsource.client.ApiClient;
-//import com.hiddenswitch.spellsource.client.ApiException;
-//import com.hiddenswitch.spellsource.client.Configuration;
-//import com.hiddenswitch.spellsource.client.auth.*;
-//import com.hiddenswitch.spellsource.client.api.DefaultApi;
-
-ApiClient defaultClient = Configuration.getDefaultApiClient();
-
-// Configure API key authorization: TokenSecurity
-ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
-TokenSecurity.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//TokenSecurity.setApiKeyPrefix("Token");
-
-DefaultApi apiInstance = new DefaultApi();
-try {
-    MatchConcedeResponse result = apiInstance.matchmakingConstructedDelete();
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling DefaultApi#matchmakingConstructedDelete");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-[**MatchConcedeResponse**](MatchConcedeResponse.md)
-
-### Authorization
-
-[TokenSecurity](../README.md#TokenSecurity)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
 <a name="matchmakingConstructedGet"></a>
 # **matchmakingConstructedGet**
-> GameState matchmakingConstructedGet()
+> GameState matchmakingConstructedGet(queueId)
 
 
 
-Gets a renderable gamestate representing this player&#39;s current game. 
+Gets a renderable gamestate representing this player&#39;s current game in this queue. 
 
 ### Example
 ```java
@@ -957,8 +906,9 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
+String queueId = "queueId_example"; // String | The ID of the queue to enter.
 try {
-    GameState result = apiInstance.matchmakingConstructedGet();
+    GameState result = apiInstance.matchmakingConstructedGet(queueId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#matchmakingConstructedGet");
@@ -967,7 +917,10 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **queueId** | **String**| The ID of the queue to enter. |
 
 ### Return type
 
@@ -1035,11 +988,11 @@ This endpoint does not need any parameter.
 
 <a name="matchmakingConstructedQueuePut"></a>
 # **matchmakingConstructedQueuePut**
-> MatchmakingQueuePutResponse matchmakingConstructedQueuePut(request)
+> MatchmakingQueuePutResponse matchmakingConstructedQueuePut(queueId, request)
 
 
 
-Enters your client into a matchmaking queue for constructed deck matchmaking. Clients have to keep their matchmaking queue entry alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
 
 ### Example
 ```java
@@ -1059,9 +1012,10 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
+String queueId = "queueId_example"; // String | The ID of the queue to enter.
 MatchmakingQueuePutRequest request = new MatchmakingQueuePutRequest(); // MatchmakingQueuePutRequest | The matchmaking queue entry. Contains the deck. 
 try {
-    MatchmakingQueuePutResponse result = apiInstance.matchmakingConstructedQueuePut(request);
+    MatchmakingQueuePutResponse result = apiInstance.matchmakingConstructedQueuePut(queueId, request);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#matchmakingConstructedQueuePut");
@@ -1073,11 +1027,63 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **queueId** | **String**| The ID of the queue to enter. |
  **request** | [**MatchmakingQueuePutRequest**](MatchmakingQueuePutRequest.md)| The matchmaking queue entry. Contains the deck.  |
 
 ### Return type
 
 [**MatchmakingQueuePutResponse**](MatchmakingQueuePutResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="matchmakingGet"></a>
+# **matchmakingGet**
+> MatchmakingQueuesResponse matchmakingGet()
+
+
+
+Gets a list of queues available for matchmaking. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+try {
+    MatchmakingQueuesResponse result = apiInstance.matchmakingGet();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#matchmakingGet");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**MatchmakingQueuesResponse**](MatchmakingQueuesResponse.md)
 
 ### Authorization
 

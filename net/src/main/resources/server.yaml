@@ -11,7 +11,7 @@ info:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
 host: api-us-east-2.hiddenswitch.com:8080
-basePath: /v1
+basePath: /v2
 schemes:
   - http
 consumes:
@@ -1251,6 +1251,64 @@ definitions:
         description: |
           Retires a draft early. Typically this costs some number of lives.
         type: 'boolean'
+  MatchmakingQueuesResponse:
+    type: 'object'
+    description: |
+      Represents a list of queues.
+    properties:
+      queues:
+        description: |
+          The available queues.
+        type: 'array'
+        items:
+          $ref: '#/definitions/MatchmakingQueueItem'
+  MatchmakingQueueItem:
+    type: 'object'
+    description: |
+      A queue the user can enter to play a match in.
+    properties:
+      name:
+        type: 'string'
+        description: |
+          The renderable name of the queue
+      description:
+        type: 'string'
+        description: |
+          A detailed description for this queue.
+      tooltip:
+        type: 'string'
+        description: |
+          A tooltip for this queue.
+      queueId:
+        type: 'string'
+        description: |
+          The ID of the queue the user should put a MatchmakingQueuePutRequest into.
+      requires:
+        type: 'object'
+        description: |
+          The arguments required for the matchmaking request.
+        properties:
+          deck:
+            type: 'boolean'
+            description: |
+              Indicates that a deck choice is required.
+          heroClass:
+            type: 'boolean'
+            description: |
+              Indicates that a hero class choice is required. When a deck choice is not required, the user only
+              picks a hero.
+          deckChoices:
+            type: 'array'
+            items:
+              $ref: '#/definitions/InventoryCollection'
+            description: |
+              Indicates that the player must choose from the specified decks.
+          deckIdChoices:
+            type: 'array'
+            items:
+              type: 'string'
+            description: |
+              Indicates that the player must choose from the specified deck IDs in the player's account.
 paths:
   /accounts/{targetUserId}:
     get:
@@ -1414,11 +1472,33 @@ paths:
         "200":
           description: |
             The deck has been deleted.
-  /matchmaking/constructed:
+  /matchmaking:
     get:
       description: |
-        Gets a renderable gamestate representing this player's current game.
+        Gets a list of queues available for matchmaking.
+      operationId: matchmakingGet
+      security:
+        - TokenSecurity: []
+      responses:
+        "404":
+          description: |
+            No queues are available to play at the moment.
+        "200":
+          description: |
+            A list of queues is available for the user.
+          schema:
+            $ref: '#/definitions/MatchmakingQueuesResponse'
+  /matchmaking/{queueId}:
+    get:
+      description: |
+        Gets a renderable gamestate representing this player's current game in this queue.
       operationId: matchmakingConstructedGet
+      parameters:
+        - name: queueId
+          in: path
+          required: true
+          description: The ID of the queue to enter.
+          type: 'string'
       security:
         - TokenSecurity: []
       responses:
@@ -1432,8 +1512,14 @@ paths:
             $ref: '#/definitions/GameState'
     delete:
       description: |
-        Concedes the player's current constructed game.
+        Concedes the player's current game in this queue.
       operationId: matchmakingConstructedDelete
+      parameters:
+        - name: queueId
+          in: path
+          required: true
+          description: The ID of the queue to enter.
+          type: 'string'
       security:
         - TokenSecurity: []
       responses:
@@ -1442,14 +1528,19 @@ paths:
             The client's game was successfully conceded.
           schema:
             $ref: '#/definitions/MatchConcedeResponse'
-  /matchmaking/constructed/queue:
     put:
       description: |
-        Enters your client into a matchmaking queue for constructed deck matchmaking. Clients have to keep their matchmaking queue entry alive by regularly retrying when they have not yet been matched. Retry within 5 seconds.
+        Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry
+         alive by regularly retrying when they have not yet been matched. Retry within 5 seconds.
       operationId: matchmakingConstructedQueuePut
       security:
         - TokenSecurity: []
       parameters:
+        - name: queueId
+          in: path
+          required: true
+          description: The ID of the queue to enter.
+          type: 'string'
         - name: request
           in: body
           description: |
@@ -1460,12 +1551,14 @@ paths:
       responses:
         "200":
           description: |
-            The client has been matched with a client and is ready to connect. Use the "connection" field for connection information (client specific).
+            The client has been matched with a client and is ready to connect. Use the "connection" field for connection
+            information (client specific).
           schema:
             $ref: '#/definitions/MatchmakingQueuePutResponse'
         "202":
           description: |
-            The client is waiting in the matchmaking queue and has been given a MatchmakingRequest object to retry with in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
+            The client is waiting in the matchmaking queue and has been given a MatchmakingRequest object to retry with
+            in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
           schema:
             $ref: '#/definitions/MatchmakingQueuePutResponse'
     delete:
