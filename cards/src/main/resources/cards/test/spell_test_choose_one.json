@@ -1,0 +1,17 @@
+{
+  "name": "Test Choose One",
+  "baseManaCost": 2,
+  "type": "CHOOSE_ONE",
+  "heroClass": "BROWN",
+  "rarity": "COMMON",
+  "description": "",
+  "targetSelection": "NONE",
+  "options": [
+    "spell_test_choose_one_1",
+    "spell_test_choose_one_2"
+  ],
+  "bothOptions": "spell_test_choose_one_3",
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

@@ -47,7 +47,7 @@ public class AdvancedMechanicTests extends TestBase {
 		for (Card card : player.getHand().toList()) {
 			context.getLogic().removeCard(card);
 		}
-		Card wrath = CardCatalogue.getCardById("spell_wrath");
+		Card wrath = CardCatalogue.getCardById("spell_test_choose_one");
 		HasChooseOneActions wrathChooseOne = (HasChooseOneActions) wrath;
 		context.getLogic().receiveCard(player.getId(), wrath);
 		player.setMana(wrath.getBaseManaCost() + 1);
@@ -75,7 +75,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 		int cardsInHand = player.getHand().getCount();
 		int cardsInOpponentsDeck = opponent.getDeck().getCount();
-		Card thoughtsteal = CardCatalogue.getCardById("spell_thoughtsteal");
+		Card thoughtsteal = CardCatalogue.getCardById("spell_test_copy_cards");
 		context.getLogic().receiveCard(player.getId(), thoughtsteal);
 		context.getLogic().performGameAction(player.getId(), thoughtsteal.play());
 		Assert.assertEquals(opponent.getDeck().getCount(), cardsInOpponentsDeck);
@@ -125,7 +125,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 		final int BASE_ATTACK = 2;
 		final int ENRAGE_ATTACK_BONUS = 3;
-		playCard(context, priest, CardCatalogue.getCardById("minion_amani_berserker"));
+		playCard(context, priest, CardCatalogue.getCardById("minion_test_enrage"));
 
 		playCard(context, mage, new TestMinionCard(1, 10));
 
@@ -255,7 +255,7 @@ public class AdvancedMechanicTests extends TestBase {
 		Actor testSubject = getSingleMinion(mage.getMinions());
 		Assert.assertEquals(testSubject.getAttack(), baseAttack);
 
-		playCard(context, mage, CardCatalogue.getCardById("minion_abusive_sergeant"));
+		playCard(context, mage, CardCatalogue.getCardById("minion_test_buffs"));
 		Assert.assertEquals(testSubject.getAttack(), baseAttack + 2);
 		context.getLogic().endTurn(mage.getId());
 		Assert.assertEquals(testSubject.getAttack(), baseAttack);
@@ -263,83 +263,34 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testSpellpower() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
-		Player mage = context.getPlayer1();
-		mage.setMana(10);
-		Player warrior = context.getPlayer2();
-		warrior.setMana(10);
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
+			opponent.setMana(10);
 
-		Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp());
-		Card damageSpell = CardCatalogue.getCardById("spell_mind_blast");
-		int mindBlastDamage = 5;
-		context.getLogic().receiveCard(mage.getId(), damageSpell);
+			Assert.assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp());
+			Card damageSpell = CardCatalogue.getCardById("spell_test_spellpower");
+			int expectedDamage = 5;
+			context.getLogic().receiveCard(player.getId(), damageSpell);
 
-		context.getLogic().performGameAction(mage.getId(), damageSpell.play());
-		Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - mindBlastDamage);
+			context.getLogic().performGameAction(player.getId(), damageSpell.play());
+			Assert.assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - expectedDamage);
 
-		MinionCard spellPowerMinionCard = (MinionCard) CardCatalogue.getCardById("minion_kobold_geomancer");
-		context.getLogic().receiveCard(mage.getId(), spellPowerMinionCard);
-		context.getLogic().performGameAction(mage.getId(), spellPowerMinionCard.play());
-		damageSpell = damageSpell.getCopy();
-		context.getLogic().receiveCard(mage.getId(), damageSpell);
-		context.getLogic().performGameAction(mage.getId(), damageSpell.play());
-		int spellPower = getSingleMinion(mage.getMinions()).getAttributeValue(Attribute.SPELL_DAMAGE);
-		Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - 2 * mindBlastDamage - spellPower);
+			MinionCard spellPowerMinionCard = (MinionCard) CardCatalogue.getCardById("minion_test_spellpower");
+			context.getLogic().receiveCard(player.getId(), spellPowerMinionCard);
+			context.getLogic().performGameAction(player.getId(), spellPowerMinionCard.play());
+			damageSpell = damageSpell.getCopy();
+			context.getLogic().receiveCard(player.getId(), damageSpell);
+			context.getLogic().performGameAction(player.getId(), damageSpell.play());
+			int spellPower = getSingleMinion(player.getMinions()).getAttributeValue(Attribute.SPELL_DAMAGE);
+			Assert.assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2 * expectedDamage - spellPower);
 
-		int opponentHp = warrior.getHero().getHp();
-		GameAction useHeroPower = mage.getHero().getHeroPower().play();
-		useHeroPower.setTarget(warrior.getHero());
-		context.getLogic().performGameAction(mage.getId(), useHeroPower);
+			int opponentHp = opponent.getHero().getHp();
+			GameAction useHeroPower = player.getHero().getHeroPower().play();
+			useHeroPower.setTarget(opponent.getHero());
+			context.getLogic().performGameAction(player.getId(), useHeroPower);
 
-		// mage hero power should not be affected by SPELL_DAMAGE, and thus deal 1 damage
-		Assert.assertEquals(warrior.getHero().getHp(), opponentHp - 1);
+			// hero power should not be affected by SPELL_DAMAGE, and thus deal 1 damage
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+		});
 	}
-
-	@Test
-	public void testBuffWithBoardWipe() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.WHITE);
-		Player mage = context.getPlayer1();
-		mage.setMana(10);
-		Player priest = context.getPlayer2();
-		priest.setMana(10);
-
-		Card darkCultist = CardCatalogue.getCardById("minion_dark_cultist");
-		playCard(context, priest, darkCultist);
-		Card darkIronDwarf = CardCatalogue.getCardById("minion_dark_iron_dwarf");
-		playCard(context, priest, darkIronDwarf);
-
-		Assert.assertEquals(priest.getMinions().size(), 2);
-
-		Card flamestrike = CardCatalogue.getCardById("spell_flamestrike");
-		playCard(context, mage, flamestrike);
-
-		// there should be no minions left after the Flamestrike
-		// the Dark Cultist Deathrattle shouldn't have any effect, as both minions are removed simultaneously
-		Assert.assertEquals(priest.getMinions().size(), 0);
-
-	}
-
-	@Test
-	public void testDiscardAndDraw() {
-		GameContext context = createContext(HeroClass.VIOLET, HeroClass.VIOLET);
-		Player warlock = context.getActivePlayer();
-		clearHand(context, warlock);
-		clearZone(context, warlock.getDeck());
-		final Card acidicSwampOoze = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
-		acidicSwampOoze.setOwner(warlock.getId());
-		acidicSwampOoze.setId(context.getLogic().getIdFactory().generateId());
-		warlock.getDeck().addCard(acidicSwampOoze);
-		final Card minionNoviceEngineer = CardCatalogue.getCardById("minion_novice_engineer");
-		context.getLogic().receiveCard(warlock.getId(), minionNoviceEngineer);
-		final Card malchezaarsImpl = CardCatalogue.getCardById("minion_malchezaars_imp");
-		final Card soulfire = CardCatalogue.getCardById("spell_soulfire");
-		playCard(context, warlock, malchezaarsImpl);
-		context.getLogic().receiveCard(warlock.getId(), soulfire);
-		PlayCardAction action = soulfire.play();
-		action.setTarget(context.getPlayer2().getHero());
-		context.getLogic().performGameAction(warlock.getId(), action);
-		Assert.assertEquals(warlock.getHand().get(0).getCardId(), "minion_acidic_swamp_ooze", "The player should have Acidic Swamp Ooze in their hand after playing soulfire.");
-		Assert.assertEquals(minionNoviceEngineer.getZone(), Zones.GRAVEYARD, "Novice engineer should be in the graveyard.");
-	}
-
 }

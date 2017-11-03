@@ -1,13 +1,15 @@
-package hearthstone;
+package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
@@ -61,5 +63,46 @@ public class LeagueOfExplorersTests extends TestBase {
 				"But the hero power card should be the discovered hero power.");
 		Assert.assertNotEquals(currentHeroPower.getId(), oldId,
 				"The old hero power should not be the current one");
+	}
+
+	@Test
+	public void testSummoningStone() {
+		GameContext context = createContext(HeroClass.BLACK, HeroClass.RED);
+		Player player = context.getPlayer1();
+
+		playCard(context, player, CardCatalogue.getCardById("minion_summoning_stone"));
+		playCard(context, player, CardCatalogue.getCardById("spell_preparation"));
+		playCard(context, player, CardCatalogue.getCardById("secret_ice_block"));
+
+		Assert.assertEquals(player.getMinions().size(), 3);
+		for (Minion minion : player.getMinions()) {
+			if (minion.getSourceCard().getCardId().equalsIgnoreCase("minion_summoning_stone")) {
+				continue;
+			}
+
+			Assert.assertEquals(minion.getSourceCard().getBaseManaCost(), 0);
+		}
+	}
+
+
+	@Test
+	public void testCurseOfRafaam() {
+		GameContext context = createContext(HeroClass.RED, HeroClass.VIOLET);
+
+		Player player = context.getPlayer1();
+		Card koboldGeomancerCard = CardCatalogue.getCardById("minion_kobold_geomancer");
+		playCard(context, player, koboldGeomancerCard);
+		context.endTurn();
+
+		Player opponent = context.getPlayer2();
+		Card curseOfRafaamCard = CardCatalogue.getCardById("spell_curse_of_rafaam");
+		playCard(context, opponent, curseOfRafaamCard);
+		context.endTurn();
+
+		final int CURSE_OF_RAFAAM_DAMAGE = 2;
+		// first player should take exactly 2 damage (NOT 3, because the spell
+		// damage should not be applied)
+		Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - CURSE_OF_RAFAAM_DAMAGE);
+
 	}
 }

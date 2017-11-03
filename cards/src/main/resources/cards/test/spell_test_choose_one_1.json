@@ -1,0 +1,16 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "COMMON",
+  "description": "",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

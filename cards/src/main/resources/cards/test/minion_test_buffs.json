@@ -1,0 +1,23 @@
+{
+  "name": "",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
