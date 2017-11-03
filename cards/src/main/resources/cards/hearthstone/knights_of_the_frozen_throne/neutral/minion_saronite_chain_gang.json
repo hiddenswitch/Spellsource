@@ -11,8 +11,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonCopySpell",
-      "boardPositionRelative": "RIGHT",
-      "target": "SELF"
+      "target": "SELF",
+      "boardPositionRelative": "RIGHT"
     }
   },
   "attributes": {
