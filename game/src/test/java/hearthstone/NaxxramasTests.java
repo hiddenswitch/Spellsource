@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package hearthstone;
 
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;

@@ -6,7 +6,7 @@ This module contains a card game engine.
 
  - **Engine interfaces and implementation**: [GameContext](src/main/java/net/demilich/metastone/game/GameContext.java) is the core object that executes a single match of Spellsource. The best AI is implemented by [GameStateValueBehaviour](src/main/java/net/demilich/metastone/game/shared/threat/GameStateValueBehaviour.java).
 
- - **Clean room implementations**: Whenever the title and description are included, they were written as a "clean room" implementation: the author had only seen a behaviour and never a reverse engineered piece of game code from another game.
+ - **Clean room implementations**: Code must be written as a "clean room" implementation: the author had only seen a behaviour and never a reverse engineered piece of game code from another game.
 
  - **Card-specific spells**: Some spells require a code implementation to deal with complicated behaviour. 
  
