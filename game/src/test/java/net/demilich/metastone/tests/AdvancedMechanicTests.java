@@ -165,27 +165,25 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testOverload() {
-		GameContext context = createContext(HeroClass.SILVER, HeroClass.RED);
-		Player player = context.getPlayer1();
-		int playerId = player.getId();
+		runGym((context, player, opponent) -> {
+			Assert.assertEquals(player.getMana(), 1);
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(player.getMana(), 2);
 
-		context.getLogic().startTurn(playerId);
-		Assert.assertEquals(player.getMana(), 1);
-		context.getLogic().endTurn(playerId);
-		context.getLogic().startTurn(playerId);
-		Assert.assertEquals(player.getMana(), 2);
+			Card overloadCard = new TestMinionCard(1, 1);
+			overloadCard.setAttribute(Attribute.OVERLOAD, 2);
+			context.getLogic().receiveCard(player.getId(), overloadCard);
+			context.getLogic().performGameAction(player.getId(), overloadCard.play());
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(player.getMana(), 1);
 
-		Card overloadCard = new TestMinionCard(1, 1);
-		overloadCard.setAttribute(Attribute.OVERLOAD, 2);
-		context.getLogic().receiveCard(playerId, overloadCard);
-		context.getLogic().performGameAction(playerId, overloadCard.play());
-		context.getLogic().endTurn(playerId);
-		context.getLogic().startTurn(playerId);
-		Assert.assertEquals(player.getMana(), 1);
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(player.getMana(), 4);
+		});
 
-		context.getLogic().endTurn(playerId);
-		context.getLogic().startTurn(playerId);
-		Assert.assertEquals(player.getMana(), 4);
 	}
 
 	@Test

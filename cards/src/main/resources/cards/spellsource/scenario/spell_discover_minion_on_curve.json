@@ -1,0 +1,27 @@
+{
+  "name": "Minion on Curve",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Discover a minion on curve.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverFilteredCardSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "manaCost": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "MAX_MANA"
+      },
+      "cardType": "MINION"
+    }
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

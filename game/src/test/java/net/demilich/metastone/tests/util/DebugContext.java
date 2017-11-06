@@ -18,8 +18,9 @@ public class DebugContext extends GameContext {
 		getLogic().initializePlayer(PLAYER_2);
 		getLogic().init(getActivePlayerId(), true);
 		getLogic().init(getOpponent(getActivePlayer()).getId(), false);
+		startTurn(getActivePlayerId());
 	}
-	
+
 	public void endTurn() {
 		super.endTurn();
 		startTurn(getActivePlayerId());
