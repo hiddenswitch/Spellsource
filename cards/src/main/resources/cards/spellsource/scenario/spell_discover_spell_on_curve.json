@@ -1,0 +1,27 @@
+{
+  "name": "Spell on Curve",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Discover a spell on curve.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverFilteredCardSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "manaCost": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "MAX_MANA"
+      },
+      "cardType": "SPELL"
+    }
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

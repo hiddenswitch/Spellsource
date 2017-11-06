@@ -1,0 +1,61 @@
+{
+  "name": "Two Cards on Curve",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Discover two cards whose total cost is on curve.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "RandomValueProvider",
+      "min": 0,
+      "max": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "MAX_MANA"
+      }
+    },
+    "spells": [
+      {
+        "class": "DiscoverFilteredCardSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "manaCost": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
+      },
+      {
+        "class": "DiscoverFilteredCardSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "manaCost": {
+            "class": "AlgebraicValueProvider",
+            "value1": {
+              "class": "PlayerAttributeValueProvider",
+              "playerAttribute": "MAX_MANA"
+            },
+            "value2": {
+              "class": "GameValueProvider",
+              "gameValue": "SPELL_VALUE"
+            },
+            "operation": "SUBTRACT"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}
