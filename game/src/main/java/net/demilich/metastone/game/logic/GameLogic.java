@@ -1250,6 +1250,8 @@ public class GameLogic implements Cloneable, Serializable {
 	/**
 	 * Causes two actors to fight.
 	 * <p>
+	 * From Gamepedia:
+	 * <p>
 	 * A fight, or an "attack," is what occurs when a player commands one character to attack another, causing them to
 	 * simultaneously deal damage to each other. Combat is the source of the majority of the damage dealt in many
 	 * Hearthstone matches, especially those involving a large number of minions. The core combat mechanics are quite
@@ -2817,8 +2819,8 @@ public class GameLogic implements Cloneable, Serializable {
 	 * It does not remove damage or minion type.
 	 *
 	 * @param playerId The ID of the player (typically the owner of the target). This is used by {@link
-	 *                 net.demilich.metastone.game.spells.custom.MindControlOneTurnSpell} to reverse the mind control of a
-	 *                 minion that somehow gets silenced during the turn that spell is cast.
+	 *                 net.demilich.metastone.game.spells.custom.MindControlOneTurnSpell} to reverse the mind control of
+	 *                 a minion that somehow gets silenced during the turn that spell is cast.
 	 * @param target   A {@link Minion} to silence.
 	 * @see <a href="http://hearthstone.gamepedia.com/Silence">Silence</a> for a complete description of the silencing
 	 * game rules.

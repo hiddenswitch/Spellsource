@@ -93,7 +93,4 @@ public class GameConfig implements Cloneable, Serializable {
 		this.casual = casual;
 	}
 
-	public boolean isCasual() {
-		return casual;
-	}
 }
