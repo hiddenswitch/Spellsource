@@ -1,8 +1,8 @@
 {
   "public": {
     "buildName": {
-      "exe": "Minionate.exe",
-      "mac": "Minionate.app"
+      "exe": "Spellsource.exe",
+      "mac": "Spellsource.app"
     }
   },
   "galaxy.meteor.com": {

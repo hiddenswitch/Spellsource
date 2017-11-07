@@ -1,5 +1,12 @@
 import {Versions} from '../collections';
-let LocalVersions = new Ground.Collection('localVersions');
+import localforage from 'localforage';
+
+let storageAdapter = localforage.createInstance({
+    name: 'localVersions',
+    driver: localforage.LOCALSTORAGE,
+    version: 1.0 // options.version
+});
+let LocalVersions = new Ground.Collection('localVersions', {storageAdapter: storageAdapter});
 let downloadProgress = new ReactiveVar(0);
 let ready = new ReactiveVar(!Electron.isWindows());
 
