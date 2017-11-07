@@ -6,6 +6,7 @@ import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,7 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class CastRandomSpellSpell extends Spell {
-	
+
 	Logger logger = LoggerFactory.getLogger(CastRandomSpellSpell.class);
 
 	public static SpellDesc create(int value) {
@@ -34,9 +35,10 @@ public class CastRandomSpellSpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// TODO: Disable this spell for now since it causes too many problems with the way it is implemented.
-		return;
+		internalYogg(context, player, desc, source, target);
 	}
 
 	@Suspendable
@@ -61,7 +63,7 @@ public class CastRandomSpellSpell extends Spell {
 		Player originalPlayer = player;
 		Player opponent = context.getOpponent(player);
 		opponent.setAttribute(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION, true);
-		player.setAttribute(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION, true); 
+		player.setAttribute(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION, true);
 		// HAHAHAHAHAHAHAHAHAHA!
 
 		int numberOfSpellsToCast = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
@@ -69,7 +71,8 @@ public class CastRandomSpellSpell extends Spell {
 			// In case Yogg changes sides, this should case who the spells are being cast for.
 			player = context.getPlayer(source.getOwner());
 			// If Yogg is removed from the board, stop casting spells.
-			if (!player.getMinions().contains(source)) {
+			if (source.getZone() != Zones.BATTLEFIELD
+					|| source.isDestroyed()) {
 				break;
 			}
 			Card randomCard = filteredSpells.getRandom();
