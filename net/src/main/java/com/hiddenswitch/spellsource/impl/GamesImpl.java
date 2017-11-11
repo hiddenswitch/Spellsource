@@ -7,7 +7,6 @@ import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
-import com.hiddenswitch.spellsource.impl.server.SocketClient;
 import com.hiddenswitch.spellsource.impl.server.GameSessionImpl;
 import com.hiddenswitch.spellsource.impl.server.WebSocketClient;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
@@ -27,7 +26,6 @@ import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.net.NetServer;
-import io.vertx.core.net.NetSocket;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.Entity;
@@ -49,20 +47,16 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	private final Map<String, GameSession> games = new HashMap<>();
 	private final Map<String, GameSession> gameForUserId = new HashMap<>();
 	private final Map<Object, GameSession> gameForSocket = new HashMap<>();
-	private final Map<Object, IncomingMessage> netMessages = new HashMap<>();
 	private final Map<String, ActivityMonitor> gameActivityMonitors = new HashMap<>();
 	private final Map<String, String> keyToSecret = new HashMap<>();
 
-	private NetServer server;
 	private HttpServer websocketServer;
-	private final int legacyPort;
 	private final int websocketPort;
 
 	private RpcClient<Matchmaking> matchmaking;
 	private Registration registration;
 
 	public GamesImpl() {
-		this.legacyPort = RandomUtils.nextInt(6200, 8080);
 		// Skip 8080
 		this.websocketPort = RandomUtils.nextInt(8081, 16200);
 	}
@@ -98,27 +92,6 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 		}));
 
 		logger.debug("GamesImpl::start Loaded cards.");
-
-		ignored = awaitResult(then -> {
-			server = vertx.createNetServer();
-
-			server.connectHandler(socket -> {
-				socket.handler(fiberHandler(messageBuffer -> {
-					handleLegacySocketMessage(socket, messageBuffer);
-				}));
-			});
-
-			server.listen(getLegacyPort(), getHost(), listenResult -> {
-				if (!listenResult.succeeded()) {
-					logger.error("Failure deploying socket listener: {}", listenResult.cause());
-					then.handle(Future.failedFuture(listenResult.cause()));
-				} else {
-					then.handle(Future.succeededFuture());
-				}
-			});
-		});
-
-		logger.debug("GamesImpl::start Created socket server.");
 
 		HttpServer listenResult = awaitResult(then -> {
 			websocketServer = vertx.createHttpServer(new HttpServerOptions()
@@ -187,7 +160,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 			throw new RuntimeException("Game ID cannot be null in a create game session request.");
 		}
 
-		GameSessionImpl session = new GameSessionImpl(getHost(), getLegacyPort(), getWebsocketPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
+		GameSessionImpl session = new GameSessionImpl(getHost(), getWebsocketPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
 		session.handleGameOver(this::onGameOver);
 		final String finalGameId = session.getGameId();
 		games.put(finalGameId, session);
@@ -210,118 +183,12 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	}
 
 	/**
-	 * The legacy message handler. Handles TCP clients using the Java serialization-based TCP API.
-	 * <p>
-	 * Messages are of the format {8x magic bytes}, followed by a {4xbyte 32bit content length}, followed by the
-	 * content. {@link IncomingMessage} is responsible for concatenating the network data until a complete message is
-	 * received. Once it is received, the message is deserialized to a {@link com.hiddenswitch.spellsource.common.ClientToServerMessage} and is processed.
-	 *
-	 * @param socket        The socket corresponding to the server-client connection.
-	 * @param messageBuffer The buffer containing data from the client. It may be part of a message.
-	 */
-	@Suspendable
-	private void handleLegacySocketMessage(NetSocket socket, Buffer messageBuffer) {
-		logger.trace("Getting buffer from socket with hashCode {} length {}. Incoming message count: {}", socket.hashCode(), messageBuffer.length(), netMessages.size());
-		// Do we have a reader for this socket?
-		com.hiddenswitch.spellsource.common.ClientToServerMessage message = null;
-		int bytesRead = 0;
-		Buffer remainder = null;
-		if (!netMessages.containsKey(socket)) {
-			try {
-				IncomingMessage firstMessage = new IncomingMessage(messageBuffer);
-				netMessages.put(socket, firstMessage);
-				bytesRead = firstMessage.getBufferWithoutHeader().length() + IncomingMessage.HEADER_SIZE;
-			} catch (IOException e) {
-				e.printStackTrace();
-				return;
-			}
-		} else {
-			bytesRead = netMessages.get(socket).append(messageBuffer);
-		}
-
-		IncomingMessage incomingMessage = netMessages.get(socket);
-
-		if (!incomingMessage.isComplete()) {
-			return;
-		}
-
-		// If there appears to be data left over after finishing the message, hold onto the remainder of the buffer.
-		if (bytesRead < messageBuffer.length()) {
-			logger.trace("Some remainder of a message was found. Bytes read: {}, remainder: {}", bytesRead, messageBuffer.length() - bytesRead);
-			remainder = messageBuffer.getBuffer(bytesRead, messageBuffer.length());
-		}
-
-		try {
-			message = Serialization.deserialize(incomingMessage.getBufferWithoutHeader().getBytes());
-		} catch (IOException | ClassNotFoundException e) {
-			logger.error("Deserializing the message failed!", e);
-		} catch (Exception e) {
-			logger.error("A different deserialization error occurred!", e);
-		} finally {
-			netMessages.remove(socket);
-		}
-
-		logger.trace("IncomingMessage complete on socket {}, expectedLength {} actual {}", socket.hashCode(), incomingMessage.getExpectedLength(), incomingMessage.getBufferWithoutHeader().length());
-
-		if (message == null) {
-			return;
-		}
-
-		GameSession session = null;
-		if (message.getGameId() != null) {
-			session = getGames().get(message.getGameId());
-		} else {
-			session = gameForSocket.get(socket);
-		}
-
-		// Show activity on the game activity monitor
-		if (session == null) {
-			logger.error("Received a message from a client for a game session that is killed.");
-			logger.error("Message: " + message.toString());
-			return;
-		}
-
-		keepAlive(session);
-
-		switch (message.getMt()) {
-			case FIRST_MESSAGE:
-				logger.debug("First message received from {}", message.getPlayer1().toString());
-				Client client = new SocketClient(socket);
-				gameForSocket.put(client.getPrivateSocket(), session);
-				// Is this a reconnect?
-				if (session.isGameReady()) {
-					// TODO: Remove references to the old socket
-					// Replace the client
-					session.onPlayerReconnected(message.getPlayer1(), client);
-				} else {
-					logger.debug("Calling onPlayerConnected for {}, {}", toString(), message.getPlayer1().toString());
-					session.onPlayerConnected(message.getPlayer1(), client);
-				}
-				break;
-			case UPDATE_ACTION:
-				logger.debug("Server received message with ID {} action {}", message.getId(), message.getAction());
-				session.onActionReceived(message.getId(), message.getAction());
-				break;
-
-			case UPDATE_MULLIGAN:
-				session.onMulliganReceived(message.getId(), message.getPlayer1(), message.getDiscardedCards());
-				break;
-		}
-
-		if (remainder != null) {
-			handleLegacySocketMessage(socket, remainder);
-		}
-	}
-
-	/**
 	 * The Unity Websocket client message handler.
 	 * <p>
 	 * A complete message is received and processed here. Users can only send 3 kinds of messages: <ul> <li>{@link
-	 * MessageType#FIRST_MESSAGE}: The first message from the client which
-	 * authenticates it to the server. </li> <li>{@link MessageType#UPDATE_ACTION}:
-	 * The client has chosen an action and it is packed into this message.</li> <li>{@link
-	 * MessageType#UPDATE_MULLIGAN}: The client has chosen which cards to
-	 * mulligan.</li> </ul>
+	 * MessageType#FIRST_MESSAGE}: The first message from the client which authenticates it to the server. </li>
+	 * <li>{@link MessageType#UPDATE_ACTION}: The client has chosen an action and it is packed into this message.</li>
+	 * <li>{@link MessageType#UPDATE_MULLIGAN}: The client has chosen which cards to mulligan.</li> </ul>
 	 * <p>
 	 * All messages are deserialized into {@link com.hiddenswitch.spellsource.client.models.ClientToServerMessage}
 	 * messages as generated by the Swagger specification.
@@ -428,8 +295,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	public void stop() throws Exception {
 		super.stop();
 		getGames().values().forEach(GameSession::kill);
-		Void r = awaitResult(h -> server.close(h));
-		r = awaitResult(h -> websocketServer.close(h));
+		Void r = awaitResult(h -> websocketServer.close(h));
 		if (registration != null) {
 			Rpc.unregister(registration);
 			freeSingleton();
@@ -522,7 +388,6 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 		sockets.forEach(s -> {
 			if (s != null) {
 				gameForSocket.remove(s);
-				netMessages.remove(s);
 			}
 		});
 
@@ -534,19 +399,10 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	}
 
 	/**
-	 * Gets the port that the legacy game services are hosted at. Typically randomly generated.
-	 *
-	 * @return The port number.
-	 */
-	private int getLegacyPort() {
-		return legacyPort;
-	}
-
-	/**
 	 * The host that this server is running on.
 	 * <p>
-	 * Originally, this function would return the publicly-accessible DNS name of this host. But the hostname lookup
-	 * is broken, mysteriously, on Oracle Java 8 in Vert.x, and it hangs.
+	 * Originally, this function would return the publicly-accessible DNS name of this host. But the hostname lookup is
+	 * broken, mysteriously, on Oracle Java 8 in Vert.x, and it hangs.
 	 *
 	 * @return {@code "0.0.0.0"} because the hosts are not aware of their publicly-accessible host names yet.
 	 */

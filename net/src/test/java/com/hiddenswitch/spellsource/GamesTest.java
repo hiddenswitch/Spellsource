@@ -221,8 +221,8 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 					.withPregame2(new PregamePlayerConfiguration(DeckFactory.getRandomDeck(), "testDeck2")));
 
 			final GameSession gameSession = service.getGameSession(response.getGameId());
-			gameSession.onPlayerConnected(response.getConfigurationForPlayer1().getFirstMessage().getPlayer1(), new TestClient());
-			gameSession.onPlayerConnected(response.getConfigurationForPlayer2().getFirstMessage().getPlayer1(), new TestClient());
+//			gameSession.onPlayerConnected(response.getConfigurationForPlayer1().getFirstMessage().getPlayer1(), new TestClient());
+//			gameSession.onPlayerConnected(response.getConfigurationForPlayer2().getFirstMessage().getPlayer1(), new TestClient());
 			final PerformGameActionRequest request = new PerformGameActionRequest();
 			SpellCard fireball = (SpellCard) CardCatalogue.getCardById("spell_fireball");
 			fireball.setOwner(0);
@@ -253,8 +253,9 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 					.withPregame2(new PregamePlayerConfiguration(DeckFactory.getRandomDeck(), "testDeck2")));
 
 			final GameSession gameSession = service.getGameSession(response.getGameId());
-			gameSession.onPlayerConnected(response.getConfigurationForPlayer1().getFirstMessage().getPlayer1(), new TestClient());
-			gameSession.onPlayerConnected(response.getConfigurationForPlayer2().getFirstMessage().getPlayer1(), new TestClient());
+			getContext().fail();
+			gameSession.onPlayerConnected(null, new TestClient());
+			gameSession.onPlayerConnected(null, new TestClient());
 
 			// Deploy an http router that will accept the JSON to put into the game
 			final HttpServer server = vertx.createHttpServer();

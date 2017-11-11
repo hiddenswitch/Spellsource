@@ -76,7 +76,7 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 		logger.info("Matchmaking for player1 entered, 2nd time.");
 
 		// Now try connecting
-		TwoClients twoClients = new TwoClients().invoke(response1, deckTuple1.getSecond(), response2, deckTuple2.getSecond(), response1.getConnection().getFirstMessage().getGameId(), gameSessions);
+		TwoClients twoClients = new TwoClients().invoke(response1, deckTuple1.getSecond(), response2, deckTuple2.getSecond(),  null, gameSessions);
 		twoClients.play();
 		float time = 0f;
 		while (time < 60f && !twoClients.gameDecided()) {
@@ -84,7 +84,7 @@ public abstract class AbstractMatchmakingTest extends ServiceTest<MatchmakingImp
 			time += 1.0f;
 		}
 		twoClients.assertGameOver();
-		return response1.getConnection().getFirstMessage().getGameId();
+		return null;
 	}
 
 	protected Tuple<MatchmakingDeck, Deck> createDeckForMatchmaking(int playerId) {

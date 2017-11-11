@@ -48,17 +48,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	private long serverTimeDiff = 0;
 
 	public RemoteGameContext(ClientConnectionConfiguration connectionConfiguration) {
-		super(connectionConfiguration.getFirstMessage().getPlayer1(), null, new GameLogic(), new DeckFormat()
-				.withCardSets(CardSet.values()));
-		this.connectionConfiguration = connectionConfiguration;
-		this.host = connectionConfiguration.getHost();
-		this.port = connectionConfiguration.getPort();
-		this.socketClientConnection = new SocketClientConnection(host, port);
-		this.ccs = socketClientConnection;
-		this.ccr = socketClientConnection;
-		ccr.RegisterListener(this);
-		Thread networkingThread = new Thread(socketClientConnection);
-		networkingThread.start();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -156,7 +146,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 
 	@Override
 	public void init() {
-		ccs.getSendToServer().sendGenericMessage(connectionConfiguration.getFirstMessage());
+//		ccs.getSendToServer().sendGenericMessage(connectionConfiguration.getFirstMessage());
 	}
 
 	@Override
