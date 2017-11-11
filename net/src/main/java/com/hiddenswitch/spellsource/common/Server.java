@@ -20,9 +20,6 @@ public interface Server extends ClientConnectionHandler {
 	void onActionReceived(String id, GameAction action);
 
 	@Suspendable
-	void onMulliganReceived(String id, Player player, List<Card> discardedCards);
-
-	@Suspendable
 	void onMulliganReceived(String messageId2, List<Integer> discardedCardIndices);
 
 	void onEmote(int entityId, Emote.MessageEnum message);

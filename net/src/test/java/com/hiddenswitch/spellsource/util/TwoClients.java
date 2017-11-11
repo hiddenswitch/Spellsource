@@ -125,43 +125,12 @@ public class TwoClients {
 
 	@Suspendable
 	public TwoClients invoke(MatchmakingResponse response1, Deck deck1, MatchmakingResponse response2, Deck deck2, String gameId, GamesImpl service) {
-		this.service = service;
-		this.gameId = gameId;
-		// Manually override the player in the configurations
-		AIPlayer player1 = new AIPlayer(deck1).withUserId(response1.getConnection().getFirstMessage().getPlayer1().getUserId());
-		AIPlayer player2 = new AIPlayer(deck2).withUserId(response2.getConnection().getFirstMessage().getPlayer1().getUserId());
-		ClientToServerMessage firstMessage1 = response1.getConnection().getFirstMessage();
-		ClientToServerMessage firstMessage2 = response2.getConnection().getFirstMessage();
-		player1.setId(firstMessage1.getPlayer1().getId());
-		player2.setId(firstMessage2.getPlayer1().getId());
-		firstMessage1.setPlayer1(player1);
-		firstMessage2.setPlayer1(player2);
-		configurationForPlayer1 = response1.getConnection();
-		configurationForPlayer2 = response2.getConnection();
-		connect(PLAYER_1);
-		connect(PLAYER_2);
-		return this;
+		throw new UnsupportedOperationException();
 	}
 
 	@Suspendable
 	public TwoClients invoke(GamesImpl service, CreateGameSessionResponse cgsr, StartGameResponse sgr, String userId1, String userId2) {
-		this.service = service;
-		this.gameId = cgsr.getGameId();
-
-		// Manually override the player in the configurations
-		AIPlayer player1 = new AIPlayer(sgr.getPlayers().get(0).getDeck()).withUserId(userId1);
-		AIPlayer player2 = new AIPlayer(sgr.getPlayers().get(1).getDeck()).withUserId(userId2);
-		ClientToServerMessage firstMessage1 = cgsr.getConfigurationForPlayer1().getFirstMessage();
-		ClientToServerMessage firstMessage2 = cgsr.getConfigurationForPlayer2().getFirstMessage();
-		player1.setId(firstMessage1.getPlayer1().getId());
-		player2.setId(firstMessage2.getPlayer1().getId());
-		firstMessage1.setPlayer1(player1);
-		firstMessage2.setPlayer1(player2);
-		configurationForPlayer1 = cgsr.getConfigurationForPlayer1();
-		configurationForPlayer2 = cgsr.getConfigurationForPlayer2();
-		connect(PLAYER_1);
-		connect(PLAYER_2);
-		return this;
+		throw new UnsupportedOperationException();
 	}
 
 	public void connect(int playerId) {

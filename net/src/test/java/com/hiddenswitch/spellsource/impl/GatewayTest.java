@@ -57,7 +57,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	private static DefaultApi defaultApi = new DefaultApi();
 
 	static {
-		defaultApi.getApiClient().setBasePath("http://localhost:8080/v1"); //TODO: read from configuration
+		defaultApi.getApiClient().setBasePath(UnityClient.basePath);
 	}
 
 	private MatchmakingImpl matchmaking;
@@ -122,7 +122,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 				} catch (SuspendExecution suspendExecution) {
 					suspendExecution.printStackTrace();
 				}
-				ApiClient client = new ApiClient().setBasePath("http://localhost:8080/v1");
+				ApiClient client = new ApiClient().setBasePath(UnityClient.basePath);
 				client.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
 				client.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
 				client.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
@@ -523,7 +523,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 		//bootstrap three accounts
 		DefaultApi defaultApi = new DefaultApi();
-		defaultApi.getApiClient().setBasePath("http://localhost:8080/v1"); //TODO: read from configuration
+		defaultApi.getApiClient().setBasePath(UnityClient.basePath); //TODO: read from configuration
 		CreateAccountResponse createAccount1Response = createRandomAccount(testContext, defaultApi);
 		defaultApi.getApiClient().setApiKey(createAccount1Response.getLoginToken());
 		CreateAccountResponse createAccount2Response = createRandomAccount(testContext, defaultApi);
@@ -630,7 +630,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 	@Test
 	public void testDraftAPI(TestContext context) throws ApiException {
-		DefaultApi api = new DefaultApi(new ApiClient().setBasePath("http://localhost:8080/v1"));
+		DefaultApi api = new DefaultApi(new ApiClient().setBasePath(UnityClient.basePath));
 
 		CreateAccountResponse car = api.createAccount(new CreateAccountRequest()
 				.name("testuser")

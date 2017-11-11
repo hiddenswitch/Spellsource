@@ -9,6 +9,7 @@ import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.impl.GatewayImpl;
 import io.vertx.core.Handler;
 import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class UnityClient {
+	public static String basePath = "http://localhost:8080" + GatewayImpl.version;
 	private ApiClient apiClient;
 	private DefaultApi api;
 	private boolean gameOver;
@@ -34,9 +36,10 @@ public class UnityClient {
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 
+
 	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
-		apiClient.setBasePath("http://localhost:8080/v1");
+		apiClient.setBasePath(basePath);
 		api = new DefaultApi(apiClient);
 		this.context = context;
 	}
@@ -84,7 +87,7 @@ public class UnityClient {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
 		try {
-			MatchmakingQueuePutResponse mqpr = api.matchmakingConstructedQueuePut(new MatchmakingQueuePutRequest()
+			MatchmakingQueuePutResponse mqpr = api.matchmakingConstructedQueuePut("constructed", new MatchmakingQueuePutRequest()
 					.casual(true)
 					.deckId(deckId));
 
@@ -105,7 +108,7 @@ public class UnityClient {
 		try {
 			MatchmakingQueuePutResponseUnityConnection unityConnection = null;
 			while (unityConnection == null) {
-				MatchmakingQueuePutResponse mqpr = api.matchmakingConstructedQueuePut(new MatchmakingQueuePutRequest()
+				MatchmakingQueuePutResponse mqpr = api.matchmakingConstructedQueuePut("constructed", new MatchmakingQueuePutRequest()
 						.casual(false)
 						.deckId(deckId));
 				unityConnection = mqpr.getUnityConnection();

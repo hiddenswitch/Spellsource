@@ -6,7 +6,6 @@ import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
-import com.hiddenswitch.spellsource.common.ClientToServerMessage;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.util.Rpc;
@@ -18,7 +17,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.TouchingNotification;
@@ -38,7 +36,6 @@ import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_2;
 
 public class GameSessionImpl implements GameSession {
 	private String host;
-	private int port;
 	private int websocketPort;
 	private Client c1;
 	private Client c2;
@@ -54,10 +51,8 @@ public class GameSessionImpl implements GameSession {
 	private final HashSet<Handler<GameSessionImpl>> gameOverHandlers = new HashSet<>();
 	private final Vertx vertx;
 
-	private GameSessionImpl(String host, int port, int websocketPort, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx) {
-		super();
+	public GameSessionImpl(String host, int websocketPort, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx, long noActivityTimeout) {
 		setHost(host);
-		setPort(port);
 		this.pregamePlayerConfiguration1 = p1;
 		this.pregamePlayerConfiguration2 = p2;
 		this.gameId = gameId;
@@ -68,10 +63,6 @@ public class GameSessionImpl implements GameSession {
 				this.secretForUserId.put(userId, RandomStringUtils.randomAlphanumeric(40));
 			}
 		}
-	}
-
-	public GameSessionImpl(String host, int port, int websocketPort, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx, long noActivityTimeout) {
-		this(host, port, websocketPort, p1, p2, gameId, vertx);
 		this.noActivityTimeout = noActivityTimeout;
 	}
 
@@ -83,8 +74,7 @@ public class GameSessionImpl implements GameSession {
 			tempPlayer = new Player(playerConfig);
 		}
 		tempPlayer.setId(id);
-		return new ClientConnectionConfiguration(getHost(), getPort(),
-				new ClientToServerMessage(tempPlayer, getGameId()),
+		return new ClientConnectionConfiguration(
 				getUrl(), player.getUserId(), getSecret(player.getUserId()));
 	}
 
@@ -155,23 +145,16 @@ public class GameSessionImpl implements GameSession {
 	@Override
 	public boolean isGameReady() {
 		return (isAgainstAI()
-				&& isExactlyOnePlayerJoined())
-				|| areBothPlayersJoined();
-	}
-
-	public boolean areBothPlayersJoined() {
-		return player1 != null
+				&& ((player1 != null && player2 == null)
+				|| (player1 == null && player2 != null)))
+				|| player1 != null
 				&& player2 != null;
-	}
-
-	public boolean isExactlyOnePlayerJoined() {
-		return (player1 != null && player2 == null)
-				|| (player1 == null && player2 != null);
 	}
 
 	/**
 	 * This is where a game is actually started in the networked engine.
 	 */
+	@Suspendable
 	private void startGame() {
 		logger.debug("Starting game...");
 		DeckFormat simpleFormat = new DeckFormat().withCardSets(CardSet.BASIC,
@@ -246,13 +229,6 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	@Override
-	@Suspendable
-	public void onMulliganReceived(String id, Player player, List<Card> ReceivedCards) {
-		checkContext();
-		getGameContext().onMulliganReceived(id, player, ReceivedCards);
-	}
-
-	@Override
 	public ClientConnectionConfiguration getConfigurationForPlayer1() {
 		return getConfigurationFor(pregamePlayerConfiguration1, PLAYER_1);
 	}
@@ -310,14 +286,6 @@ public class GameSessionImpl implements GameSession {
 
 	private void setHost(String host) {
 		this.host = host;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	private void setPort(int port) {
-		this.port = port;
 	}
 
 	public Client getClient1() {
