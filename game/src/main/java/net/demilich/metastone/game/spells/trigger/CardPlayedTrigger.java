@@ -23,12 +23,17 @@ public class CardPlayedTrigger extends EventTrigger {
 		if (cardType != null && !cardPlayedEvent.getCard().getCardType().isCardType(cardType)) {
 			return false;
 		}
-		
+
+		Attribute requiredAttribute = (Attribute) desc.get(EventTriggerArg.REQUIRED_ATTRIBUTE);
+		if (requiredAttribute != null && !cardPlayedEvent.getCard().getAttributes().containsKey(requiredAttribute)) {
+			return false;
+		}
+
 		Race race = (Race) desc.get(EventTriggerArg.RACE);
 		if (race != null && cardPlayedEvent.getCard().getAttribute(Attribute.RACE) != race) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
