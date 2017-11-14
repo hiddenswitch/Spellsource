@@ -9,7 +9,6 @@ import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.impl.GatewayImpl;
 import io.vertx.core.Handler;
 import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -24,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class UnityClient {
-	public static String basePath = "http://localhost:80" + GatewayImpl.version;
+	public static String basePath = "http://localhost:80" + "";
 	private ApiClient apiClient;
 	private DefaultApi api;
 	private boolean gameOver;

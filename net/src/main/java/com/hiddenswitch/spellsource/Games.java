@@ -307,29 +307,47 @@ public interface Games {
 		return clientActions;
 	}
 
-	@Suspendable
+	/**
+	 * Builds choose one options from a choice card, incrementing the {@code chooseOneVirtualEntitiesId} for every
+	 * virtual entity it has added using {@code adder}.
+	 *
+	 * @param workingContext             A {@link GameContext} to query for state.
+	 * @param playerId                   The point of view whom we should build the choices from.
+	 * @param chooseOneVirtualEntitiesId A single-element array whose item is used to "out" the incremented entities ID
+	 *                                   (i.e., {@code chooseOneVirtualEntitiesId[0]++})
+	 * @param sourceId                   The source card's entity ID.
+	 * @param choices                    The list of {@link PlayCardAction} choices.
+	 * @param adder                      A method that accepts a {@link SpellAction} to return to the user.
+	 * @param <T>                        The particular action type that supports the interface {@link HasChoiceCard}
+	 * @return The choose one options.
+	 */
 	static <T extends PlayCardAction & HasChoiceCard> ChooseOneOptions buildChooseOneOptions(GameContext workingContext, int playerId, int[] chooseOneVirtualEntitiesId, int sourceId, List<T> choices, BiConsumer<ChooseOneOptions, SpellAction> adder) {
 		ChooseOneOptions spell = new ChooseOneOptions();
 		EntityLocation sourceCardLocation = workingContext.resolveCardReference(choices.get(0).getCardReference()).getEntityLocation();
 		spell.cardInHandId(sourceId);
 
-		choices.stream()
-				.collect(Collectors.groupingBy(HasChoiceCard::getChoiceCardId))
-				.forEach((cardId, choiceActions) -> {
-					Entity entity = Games.getEntity(workingContext, CardCatalogue.getCardById(cardId), playerId);
-					int id = chooseOneVirtualEntitiesId[0];
+		Map<String, List<T>> intermediate = choices.stream()
+				.collect(Collectors.groupingBy(HasChoiceCard::getChoiceCardId));
 
-					// Use the source card location
-					entity.id(id)
-							.getState().playable(true)
-							.location(Games.toClientLocation(sourceCardLocation));
-					SpellAction choiceSpell = getSpellAction(id, choiceActions);
+		// In Java 8u155 right now, there's an issue setting up the anonymous method's instrumentation for Quasar. This
+		// removes the anonymous method here.
+		for (String cardId : intermediate.keySet()) {
+			List<T> choiceActions = intermediate.get(cardId);
 
-					spell.addEntitiesItem(entity);
-					adder.accept(spell, choiceSpell);
+			Entity entity = Games.getEntity(workingContext, CardCatalogue.getCardById(cardId), playerId);
+			int id = chooseOneVirtualEntitiesId[0];
 
-					chooseOneVirtualEntitiesId[0]++;
-				});
+			// Use the source card location
+			entity.id(id)
+					.getState().playable(true)
+					.location(Games.toClientLocation(sourceCardLocation));
+			SpellAction choiceSpell = getSpellAction(id, choiceActions);
+
+			spell.addEntitiesItem(entity);
+			adder.accept(spell, choiceSpell);
+
+			chooseOneVirtualEntitiesId[0]++;
+		}
 
 		return spell;
 	}
@@ -832,7 +850,7 @@ public interface Games {
 	 * A view of a secret or quest. Censors information from opposing players if it's a quest.
 	 *
 	 * @param workingContext The context to generate the client view for.
-	 * @param enchantment   The secret or quest entity. Any entity backed by a {@link Enchantment} is valid here.
+	 * @param enchantment    The secret or quest entity. Any entity backed by a {@link Enchantment} is valid here.
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */

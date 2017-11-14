@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 public class Remote {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
-		System.setProperty("javax.net.ssl.trustStore", "/home/ubuntu/Minionate/metastone/mongostore");
+		System.setProperty("javax.net.ssl.trustStore", "./mongostore");
 		System.setProperty("javax.net.ssl.trustStorePassword", "ilikeamiga");
 		System.setProperty("org.mongodb.async.type", "netty");
 
@@ -31,7 +31,7 @@ public class Remote {
 				.setMaxWorkerExecuteTime(nanos)
 				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 10));
 
-		Mongo.mongo().connect(vertx, "mongodb://localhost:27017/production");
+		Mongo.mongo().connect(vertx, "mongodb://spellsource1:9AD3uubaeIf71a4M11lPVAV2mJcbPzV1EC38Y4WF26M@aws-us-east-1-portal.9.dblayer.com:20276/production?ssl=true");
 		Spellsource.Spellsource().migrate(vertx, then -> {
 			if (then.failed()) {
 				root.error("Migration failed: " + then.cause().getMessage());

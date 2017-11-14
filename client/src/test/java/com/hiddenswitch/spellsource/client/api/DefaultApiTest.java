@@ -309,6 +309,21 @@ public class DefaultApiTest {
     /**
      * 
      *
+     * Returns an empty body if the server is available. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void healthCheckTest() throws ApiException {
+        // api.healthCheck();
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * Login with a username and password, receiving an authentication token to use for future sessions. 
      *
      * @throws ApiException
