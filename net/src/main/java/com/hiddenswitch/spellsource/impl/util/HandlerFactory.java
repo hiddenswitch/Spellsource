@@ -59,6 +59,13 @@ public class HandlerFactory {
 		});
 	}
 
+	public static <R> Handler<RoutingContext> handler(EmptyHandler<R> internalHandler) {
+		return Sync.suspendableHandler((context) -> {
+			WebResult<R> result = internalHandler.call(context);
+			respond(context, result);
+		});
+	}
+
 	private static <R> void respond(RoutingContext context, WebResult<R> result) {
 		if (result.succeeded()) {
 			context.response().setStatusCode(result.responseCode());
@@ -109,5 +116,10 @@ public class HandlerFactory {
 	@FunctionalInterface
 	public interface ParamHandler<R> {
 		WebResult<R> call(RoutingContext context, String param) throws SuspendExecution, InterruptedException;
+	}
+
+	@FunctionalInterface
+	public interface EmptyHandler<R> {
+		WebResult<R> call(RoutingContext context) throws SuspendExecution, InterruptedException;
 	}
 }

@@ -86,7 +86,7 @@ public class DefaultApiExample {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://spellsource-us-west-2-api-dev.us-west-2.elasticbeanstalk.com*
+All URIs are relative to *http://metastone-dev.us-west-2.elasticbeanstalk.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -105,6 +105,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**getFriendConversation**](docs/DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
+*DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
 *DefaultApi* | [**matchmakingConstructedGet**](docs/DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/{queueId} | 
 *DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/{queueId} | 

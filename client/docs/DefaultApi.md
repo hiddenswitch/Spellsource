@@ -1,6 +1,6 @@
 # DefaultApi
 
-All URIs are relative to *http://spellsource-us-west-2-api-dev.us-west-2.elasticbeanstalk.com*
+All URIs are relative to *http://metastone-dev.us-west-2.elasticbeanstalk.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -19,6 +19,7 @@ Method | HTTP request | Description
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
 [**getFriendConversation**](DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
+[**healthCheck**](DefaultApi.md#healthCheck) | **GET** / | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
 [**matchmakingConstructedGet**](DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/{queueId} | 
 [**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/{queueId} | 
@@ -829,6 +830,46 @@ Name | Type | Description  | Notes
 ### Authorization
 
 [TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="healthCheck"></a>
+# **healthCheck**
+> healthCheck()
+
+
+
+Returns an empty body if the server is available. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+
+DefaultApi apiInstance = new DefaultApi();
+try {
+    apiInstance.healthCheck();
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#healthCheck");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
 
 ### HTTP request headers
 

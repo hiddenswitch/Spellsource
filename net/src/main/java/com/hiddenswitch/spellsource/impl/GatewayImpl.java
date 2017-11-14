@@ -13,7 +13,6 @@ import com.hiddenswitch.spellsource.impl.util.FriendRecord;
 import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
 import com.hiddenswitch.spellsource.impl.util.MessageRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
-import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.models.*;
@@ -46,7 +45,6 @@ import static java.util.stream.Collectors.toList;
  * @see Gateway for a detailed description on how to add methods to the API gateway.
  */
 public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway {
-	public static final String version = "/v2";
 	static Logger logger = LoggerFactory.getLogger(GatewayImpl.class);
 	HttpServer server;
 
@@ -82,132 +80,135 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			context.next();
 		});
 
-		router.route(version + "/accounts/:targetUserId")
+		router.route("/")
+				.handler(HandlerFactory.handler(this::healthCheck));
+
+		router.route("/accounts/:targetUserId")
 				.handler(authHandler);
-		router.route(version + "/accounts/:targetUserId")
+		router.route("/accounts/:targetUserId")
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler("targetUserId", this::getAccount));
 
-		router.route(version + "/accounts")
+		router.route("/accounts")
 				.handler(bodyHandler);
-		router.route(version + "/accounts")
+		router.route("/accounts")
 				.method(HttpMethod.POST)
 				.handler(HandlerFactory.handler(LoginRequest.class, this::login));
-		router.route(version + "/accounts")
+		router.route("/accounts")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(CreateAccountRequest.class, this::createAccount));
-		router.route(version + "/accounts")
+		router.route("/accounts")
 				.method(HttpMethod.GET)
 				.handler(authHandler);
-		router.route(version + "/accounts")
+		router.route("/accounts")
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
 
 
-		router.route(version + "/decks")
+		router.route("/decks")
 				.handler(bodyHandler);
-		router.route(version + "/decks")
+		router.route("/decks")
 				.handler(authHandler);
-		router.route(version + "/decks")
+		router.route("/decks")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(DecksPutRequest.class, this::decksPut));
-		router.route(version + "/decks")
+		router.route("/decks")
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler(this::decksGetAll));
 
-		router.route(version + "/decks/:deckId")
+		router.route("/decks/:deckId")
 				.handler(bodyHandler);
-		router.route(version + "/decks/:deckId")
+		router.route("/decks/:deckId")
 				.handler(authHandler);
-		router.route(version + "/decks/:deckId")
+		router.route("/decks/:deckId")
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler("deckId", this::decksGet));
 
-		router.route(version + "/decks/:deckId")
+		router.route("/decks/:deckId")
 				.method(HttpMethod.POST)
 				.handler(HandlerFactory.handler(DecksUpdateCommand.class, "deckId", this::decksUpdate));
 
-		router.route(version + "/decks/:deckId")
+		router.route("/decks/:deckId")
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("deckId", this::decksDelete));
 
-		router.route(version + "/matchmaking/:queueId")
+		router.route("/matchmaking/:queueId")
 				.handler(bodyHandler);
-		router.route(version + "/matchmaking/:queueId")
+		router.route("/matchmaking/:queueId")
 				.handler(authHandler);
-		router.route(version + "/matchmaking/:queueId")
+		router.route("/matchmaking/:queueId")
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler("queueId", this::matchmakingConstructedGet));
-		router.route(version + "/matchmaking/constructed")
+		router.route("/matchmaking/constructed")
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("queueId", this::matchmakingConstructedDelete));
 
-		router.route(version + "/matchmaking/:queueId")
+		router.route("/matchmaking/:queueId")
 				.handler(bodyHandler);
-		router.route(version + "/matchmaking/:queueId")
+		router.route("/matchmaking/:queueId")
 				.handler(authHandler);
-		router.route(version + "/matchmaking/:queueId")
+		router.route("/matchmaking/:queueId")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(MatchmakingQueuePutRequest.class, "queueId",
 						this::matchmakingConstructedQueuePut));
 
-		router.route(version + "/matchmaking/:queueId")
+		router.route("/matchmaking/:queueId")
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("queueId", this::matchmakingConstructedQueueDelete));
 
-		router.route(version + "/friends")
+		router.route("/friends")
 				.handler(bodyHandler);
-		router.route(version + "/friends")
+		router.route("/friends")
 				.handler(authHandler);
-		router.route(version + "/friends")
+		router.route("/friends")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(FriendPutRequest.class, this::putFriend));
 
-		router.route(version + "/friends/:friendId")
+		router.route("/friends/:friendId")
 				.handler(bodyHandler);
-		router.route(version + "/friends/:friendId")
+		router.route("/friends/:friendId")
 				.handler(authHandler);
-		router.route(version + "/friends/:friendId")
+		router.route("/friends/:friendId")
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("friendId", this::unFriend));
 
-		router.route(version + "/drafts")
+		router.route("/drafts")
 				.handler(bodyHandler);
-		router.route(version + "/drafts")
+		router.route("/drafts")
 				.handler(authHandler);
-		router.route(version + "/drafts")
+		router.route("/drafts")
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler(this::draftsGet));
 
-		router.route(version + "/drafts")
+		router.route("/drafts")
 				.method(HttpMethod.POST)
 				.handler(HandlerFactory.handler(DraftsPostRequest.class, this::draftsPost));
 
-		router.route(version + "/drafts/hero")
+		router.route("/drafts/hero")
 				.handler(bodyHandler);
-		router.route(version + "/drafts/hero")
+		router.route("/drafts/hero")
 				.handler(authHandler);
-		router.route(version + "/drafts/hero")
+		router.route("/drafts/hero")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(DraftsChooseHeroRequest.class, this::draftsChooseHero));
 
-		router.route(version + "/drafts/cards")
+		router.route("/drafts/cards")
 				.handler(bodyHandler);
-		router.route(version + "/drafts/cards")
+		router.route("/drafts/cards")
 				.handler(authHandler);
-		router.route(version + "/drafts/cards")
+		router.route("/drafts/cards")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
 
-		router.route(version + "/friends/:friendId/conversation")
+		router.route("/friends/:friendId/conversation")
 				.handler(bodyHandler);
-		router.route(version + "/friends/:friendId/conversation")
+		router.route("/friends/:friendId/conversation")
 				.handler(authHandler);
-		router.route(version + "/friends/:friendId/conversation")
+		router.route("/friends/:friendId/conversation")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(SendMessageRequest.class, "friendId",
 						this::sendFriendMessage));
-		router.route(version + "/friends/:friendId/conversation")
+		router.route("/friends/:friendId/conversation")
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler("friendId", this::getFriendConversation));
 
@@ -560,6 +561,11 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				Conversations.getCreateConversation(getMongo(), userId, friendId).toConversationDto());
 
 		return WebResult.succeeded(getConversationResponse);
+	}
+
+	@Override
+	public WebResult<Void> healthCheck(RoutingContext context) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(200, null);
 	}
 
 	public WebResult<SendMessageResponse> sendFriendMessage(

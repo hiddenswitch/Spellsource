@@ -124,7 +124,7 @@ public class ApiClient {
      */
     public static final String LENIENT_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
-    private String basePath = "http://spellsource-us-west-2-api-dev.us-west-2.elasticbeanstalk.com";
+    private String basePath = "http://metastone-dev.us-west-2.elasticbeanstalk.com";
     private boolean lenientOnJson = false;
     private boolean debugging = false;
     private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
@@ -190,7 +190,7 @@ public class ApiClient {
     /**
      * Set base path
      *
-     * @param basePath Base path of the URL (e.g http://spellsource-us-west-2-api-dev.us-west-2.elasticbeanstalk.com
+     * @param basePath Base path of the URL (e.g http://metastone-dev.us-west-2.elasticbeanstalk.com
      * @return An instance of OkHttpClient
      */
     public ApiClient setBasePath(String basePath) {

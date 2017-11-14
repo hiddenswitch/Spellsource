@@ -54,11 +54,11 @@ import io.vertx.ext.web.RoutingContext;
  *     // by accessing fields in the routingContext and adapting one of the HandlerFactor methods.
  *     }
  * </pre></li><li>Implement this
- * interface in {@link GatewayImpl}, or whatever {@link io.vertx.core.Verticle} or class
- * will serve as an <a href="https://www.linkedin.com/pulse/api-gateway-pattern-subhash-chandran">API gateway</a>. This
- * method should return a {@link WebResult}.</li><li>In the body of {@link GatewayImpl#start()}, add a {@link
- * Router#route()} call actually handle the request. Idiosyncratically, you cannot chain route handlers, so adding the
- * route typically looks like this:
+ * interface in {@link GatewayImpl}, or whatever {@link io.vertx.core.Verticle} or class will serve as an <a
+ * href="https://www.linkedin.com/pulse/api-gateway-pattern-subhash-chandran">API gateway</a>. This method should return
+ * a {@link WebResult}.</li><li>In the body of {@link GatewayImpl#start()}, add a {@link Router#route()} call actually
+ * handle the request. Idiosyncratically, you cannot chain route handlers, so adding the route typically looks like
+ * this:
  * <pre>
  *     {@code
  *     // Parse the body
@@ -146,6 +146,8 @@ public interface Gateway {
 	WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException;
 
 	WebResult getFriendConversation(RoutingContext context, String userId, String friendId) throws SuspendExecution, InterruptedException;
+
+	WebResult<Void> healthCheck(RoutingContext context) throws SuspendExecution, InterruptedException;
 
 	WebResult<SendMessageResponse> sendFriendMessage(RoutingContext context, String userId, String friendId, SendMessageRequest request) throws SuspendExecution, InterruptedException;
 }

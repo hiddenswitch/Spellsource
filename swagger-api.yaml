@@ -11,7 +11,6 @@ info:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
 host: metastone-dev.us-west-2.elasticbeanstalk.com
-port: 80
 schemes:
   - http
 consumes:
@@ -1310,6 +1309,15 @@ definitions:
             description: |
               Indicates that the player must choose from the specified deck IDs in the player's account.
 paths:
+  /:
+    get:
+      description: |
+        Returns an empty body if the server is available.
+      operationId: healthCheck
+      responses:
+        "200":
+          description: |
+            The server is okay!
   /accounts/{targetUserId}:
     get:
       description: |
