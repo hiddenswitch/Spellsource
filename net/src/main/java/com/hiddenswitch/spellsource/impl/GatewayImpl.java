@@ -56,7 +56,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		super.start();
 		server = vertx.createHttpServer(new HttpServerOptions()
 				.setHost("0.0.0.0")
-				.setPort(8080));
+				.setPort(Port.PORT));
 		Router router = Router.router(vertx);
 
 		logger.info("Configuring router...");
@@ -76,7 +76,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				.allowCredentials(true)
 				.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS)));
 
-		//add "content-type=application/json" to all responses
+		// add "content-type=application/json" to all responses
 		router.route().handler(context -> {
 			context.response().putHeader("Content-Type", "application/json");
 			context.next();

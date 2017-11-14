@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Matchmaking;
+import com.hiddenswitch.spellsource.Port;
 import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
@@ -51,14 +52,11 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	private final Map<String, String> keyToSecret = new HashMap<>();
 
 	private HttpServer websocketServer;
-	private final int websocketPort;
 
 	private RpcClient<Matchmaking> matchmaking;
 	private Registration registration;
 
 	public GamesImpl() {
-		// Skip 8080
-		this.websocketPort = RandomUtils.nextInt(8081, 16200);
 	}
 
 	/**
@@ -95,12 +93,12 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 		HttpServer listenResult = awaitResult(then -> {
 			websocketServer = vertx.createHttpServer(new HttpServerOptions()
-					.setPort(websocketPort)
+					.setPort(Port.PORT)
 					.setMaxWebsocketFrameSize(1500));
 
 			websocketServer.websocketHandler(socket -> {
 				if (!socket.uri().startsWith("/" + Games.WEBSOCKET_PATH)) {
-					throw new RuntimeException();
+					return;
 				}
 
 				socket.handler(fiberHandler(messageBuffer -> {
@@ -160,7 +158,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 			throw new RuntimeException("Game ID cannot be null in a create game session request.");
 		}
 
-		GameSessionImpl session = new GameSessionImpl(getHost(), getWebsocketPort(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
+		GameSessionImpl session = new GameSessionImpl(getHost(), Port.PORT, request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
 		session.handleGameOver(this::onGameOver);
 		final String finalGameId = session.getGameId();
 		games.put(finalGameId, session);
@@ -452,14 +450,5 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	private void onGameOver(GameSession session) {
 		final String gameOverId = session.getGameId();
 		vertx.setTimer(CLEANUP_DELAY_MILLISECONDS, Sync.suspendableHandler(t -> kill(gameOverId)));
-	}
-
-	/**
-	 * Gets the port that the Unity WebSocket API is running on.
-	 *
-	 * @return The port number. Typically randomly generated.
-	 */
-	private int getWebsocketPort() {
-		return websocketPort;
 	}
 }

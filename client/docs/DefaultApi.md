@@ -1,6 +1,6 @@
 # DefaultApi
 
-All URIs are relative to *http://api-us-east-2.hiddenswitch.com:8080/v2*
+All URIs are relative to *http://spellsource-us-west-2-api-dev.us-west-2.elasticbeanstalk.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
