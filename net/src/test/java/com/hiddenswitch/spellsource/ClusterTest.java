@@ -8,7 +8,7 @@ import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
+//import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
 import org.apache.curator.test.TestingServer;
 import org.junit.After;
 import org.junit.Before;
@@ -41,11 +41,11 @@ public class ClusterTest {
 
 		setLoggingLevel(Level.ERROR);
 
-		ZookeeperClusterManager clusterManager = new ZookeeperClusterManager(new JsonObject()
-				.put("zookeeperHosts", "127.0.0.1:2181"));
+//		ZookeeperClusterManager clusterManager = new ZookeeperClusterManager(new JsonObject()
+//				.put("zookeeperHosts", "127.0.0.1:2181"));
 
-		VertxOptions options = new VertxOptions().setClusterManager(clusterManager);
-
+//		VertxOptions options = new VertxOptions().setClusterManager(clusterManager);
+		VertxOptions options = new VertxOptions();
 
 		// Test instance. nothing special here
 		Vertx vertxTest = Vertx.vertx();
@@ -69,10 +69,10 @@ public class ClusterTest {
 			CompositeFuture.all(services).setHandler(context.asyncAssertSuccess());
 		}));
 
-		clusterManager = new ZookeeperClusterManager(new JsonObject()
-				.put("zookeeperHosts", "127.0.0.1:2181"));
+//		clusterManager = new ZookeeperClusterManager(new JsonObject()
+//				.put("zookeeperHosts", "127.0.0.1:2181"));
 
-		options = new VertxOptions().setClusterManager(clusterManager);
+//		options = new VertxOptions().setClusterManager(clusterManager);
 
 		// Instance 2, deploy all the supporting services
 		Vertx.clusteredVertx(options, context.asyncAssertSuccess(vertx2 -> {

@@ -18,3 +18,8 @@ cards/src/main/resources/metastone.properties
 .DS_Store
 net/dump
 cards/out
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

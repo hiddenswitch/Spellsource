@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'org.detoeuf.swagger-codegen'
 
 swagger {
-    inputSpec = 'net/src/main/resources/server.yaml'
+    inputSpec = 'swagger-api.yaml'
 
     output = 'client'
     language = 'java'

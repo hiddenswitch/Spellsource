@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class UnityClient {
-	public static String basePath = "http://localhost:8080" + GatewayImpl.version;
+	public static String basePath = "http://localhost:80" + GatewayImpl.version;
 	private ApiClient apiClient;
 	private DefaultApi api;
 	private boolean gameOver;

@@ -10,8 +10,8 @@ info:
   license:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
-host: api-us-east-2.hiddenswitch.com:8080
-basePath: /v2
+host: metastone-dev.us-west-2.elasticbeanstalk.com
+port: 80
 schemes:
   - http
 consumes:

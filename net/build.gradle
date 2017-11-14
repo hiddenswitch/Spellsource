@@ -35,6 +35,7 @@ repositories {
 dependencies {
     quasar files("lib/quasar-core-0.7.5-jdk8.jar")
 
+    compile group: 'com.hazelcast', name: 'hazelcast-aws', version: '2.1.0'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
@@ -46,7 +47,7 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.4.1'
     compile group: 'io.vertx', name: 'vertx-web', version: '3.4.1'
     compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.4.1'
-    compile group: 'io.vertx', name: 'vertx-zookeeper', version: '3.4.1'
+    compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.4.1'
     compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.0'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
 
