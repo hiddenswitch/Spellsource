@@ -97,8 +97,8 @@ public class Mongo {
 		}
 
 		if (System.getProperties().containsKey("mongo.url")
-				|| System.getenv().containsKey("MONGO_URL")) {
-			String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017/local"));
+				|| System.getenv("MONGO_URL") != null) {
+			String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv("MONGO_URL"));
 			return connect(vertx, mongoUrl);
 		} else {
 			return startEmbedded().connect(vertx);
