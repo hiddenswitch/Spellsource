@@ -1,2 +1,7 @@
 node_modules/
 .meteor-electron/
+build/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
