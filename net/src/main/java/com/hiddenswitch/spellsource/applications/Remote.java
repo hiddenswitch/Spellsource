@@ -32,11 +32,11 @@ public class Remote {
 		root.error(System.getenv("MONGO_URL"));
 
 		Mongo.mongo().connectWithEnvironment(vertx);
-		Spellsource.Spellsource().migrate(vertx, then -> {
+		Spellsource.spellsource().migrate(vertx, then -> {
 			if (then.failed()) {
 				root.error("Migration failed: " + then.cause().getMessage());
 			}
-			Spellsource.Spellsource().deployAll(vertx, Future.future());
+			Spellsource.spellsource().deployAll(vertx, Future.future());
 		});
 	}
 

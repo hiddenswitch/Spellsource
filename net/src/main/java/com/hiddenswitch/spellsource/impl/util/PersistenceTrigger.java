@@ -66,7 +66,7 @@ public class PersistenceTrigger implements Trigger {
 		}
 
 		try {
-			Spellsource.Spellsource().persistence().persistenceTrigger(logic, event);
+			Spellsource.spellsource().persistence().persistenceTrigger(logic, event);
 		} catch (VertxException e) {
 			logger.error("Failed a persistence call and silently continuing. Details:\n" + context.toLongString());
 		}

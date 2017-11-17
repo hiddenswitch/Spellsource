@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Port;
+import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
@@ -21,17 +22,13 @@ import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.ReplyException;
 import io.vertx.core.eventbus.ReplyFailure;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.http.*;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.core.net.NetServer;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
-import org.apache.commons.lang3.RandomUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -50,8 +47,6 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	private final Map<Object, GameSession> gameForSocket = new HashMap<>();
 	private final Map<String, ActivityMonitor> gameActivityMonitors = new HashMap<>();
 	private final Map<String, String> keyToSecret = new HashMap<>();
-
-	private HttpServer websocketServer;
 
 	private RpcClient<Matchmaking> matchmaking;
 	private Registration registration;
@@ -91,28 +86,18 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 		logger.debug("GamesImpl::start Loaded cards.");
 
-		HttpServer listenResult = awaitResult(then -> {
-			websocketServer = vertx.createHttpServer(new HttpServerOptions()
-					.setPort(Port.PORT)
-					.setMaxWebsocketFrameSize(1500));
-
-			websocketServer.websocketHandler(socket -> {
-				if (!socket.uri().startsWith("/" + Games.WEBSOCKET_PATH)) {
-					return;
-				}
-
-				socket.handler(fiberHandler(messageBuffer -> {
-					handleWebSocketMessage(socket, messageBuffer);
-				}));
-			});
-
-			websocketServer.listen(then);
-		});
-
-		logger.debug("GamesImpl::start Created websocket server.");
 
 		// TODO: Until expire game session is registered correctly, limit this service to a singleton.
 		if (noInstancesYet()) {
+			Spellsource.spellsource().router(vertx).route("/" + Games.WEBSOCKET_PATH)
+					.method(HttpMethod.GET)
+					.handler(context -> {
+						ServerWebSocket socket = context.request().upgrade();
+						socket.handler(fiberHandler(message -> {
+							handleWebSocketMessage(socket, message);
+						}));
+					});
+
 			registration = Rpc.register(this, Games.class, vertx.eventBus());
 		}
 
@@ -158,7 +143,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 			throw new RuntimeException("Game ID cannot be null in a create game session request.");
 		}
 
-		GameSessionImpl session = new GameSessionImpl(getHost(), Port.PORT, request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
+		GameSessionImpl session = new GameSessionImpl(getHost(), Port.port(), request.getPregame1(), request.getPregame2(), request.getGameId(), getVertx(), request.getNoActivityTimeout());
 		session.handleGameOver(this::onGameOver);
 		final String finalGameId = session.getGameId();
 		games.put(finalGameId, session);
@@ -195,7 +180,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	 * @param messageBuffer The message received from the client.
 	 */
 	@Suspendable
-	private void handleWebSocketMessage(ServerWebSocket socket, Buffer messageBuffer) {
+	public void handleWebSocketMessage(ServerWebSocket socket, Buffer messageBuffer) {
 		com.hiddenswitch.spellsource.client.models.ClientToServerMessage message =
 				Configuration.getDefaultApiClient().getJSON().deserialize(messageBuffer.toString(),
 						com.hiddenswitch.spellsource.client.models.ClientToServerMessage.class);
@@ -293,7 +278,6 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	public void stop() throws Exception {
 		super.stop();
 		getGames().values().forEach(GameSession::kill);
-		Void r = awaitResult(h -> websocketServer.close(h));
 		if (registration != null) {
 			Rpc.unregister(registration);
 			freeSingleton();

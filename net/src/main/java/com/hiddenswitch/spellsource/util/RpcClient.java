@@ -17,7 +17,7 @@ import io.vertx.core.Handler;
  * @param <T> The service class proxied.
  */
 public interface RpcClient<T> {
-	long DEFAULT_TIMEOUT = 8000;
+	long DEFAULT_TIMEOUT = 30000;
 
 	/**
 	 * Make an RPC call with an idiomatically asynchronous coding convention, like what you would expect in Node.

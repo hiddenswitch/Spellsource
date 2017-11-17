@@ -1,8 +1,6 @@
 package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
-import com.hiddenswitch.spellsource.Spellsource;
-import com.hiddenswitch.spellsource.Migrations;
 import com.hiddenswitch.spellsource.common.Recursive;
 import com.hiddenswitch.spellsource.impl.MigrationsImpl;
 import com.hiddenswitch.spellsource.models.MigrateToRequest;
@@ -187,9 +185,9 @@ public class MigrationTest {
 			done.handle(Future.failedFuture("MongoDump failed."));
 		}, context.asyncAssertSuccess(then -> {
 			// Then deploy locally with production
-			Spellsource.Spellsource().migrate(vertx, context.asyncAssertSuccess(then2 -> {
+			Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(then2 -> {
 				// Assert a game still works
-				Spellsource.Spellsource().deployAll(vertx, context.asyncAssertSuccess(then3 -> {
+				Spellsource.spellsource().deployAll(vertx, context.asyncAssertSuccess(then3 -> {
 					Mongo.mongo().client().findOne(MigrationsImpl.MIGRATIONS, json(), json(), context.asyncAssertSuccess(doc -> {
 						context.assertNotNull(doc.getBoolean("locked"));
 						context.assertFalse(doc.getBoolean("locked"));

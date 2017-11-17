@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-
-./build.sh
-
-# Server from port 80
-eb local run
+export PORT=8080
+# Put a URL override for the client
+cat << EOF > ../Minionate/Assets/Resources/Url.txt
+http://localhost:$PORT
+EOF
+./gradlew net:run
+rm ../Minionate/Assets/Resources/Url.txt

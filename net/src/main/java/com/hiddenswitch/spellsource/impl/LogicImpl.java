@@ -52,19 +52,19 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		registration = Rpc.register(this, Logic.class, vertx.eventBus());
 
 		// Register new persistence effects
-		Spellsource.Spellsource().persistAttribute(LegacyPersistenceHandler.create(
+		Spellsource.spellsource().persistAttribute(LegacyPersistenceHandler.create(
 				"unique-champion-ids-1",
 				GameEventType.BEFORE_SUMMON,
 				this::beforeSummon,
 				PersistenceTrigger::beforeSummon));
 
-		Spellsource.Spellsource().persistAttribute(LegacyPersistenceHandler.create(
+		Spellsource.spellsource().persistAttribute(LegacyPersistenceHandler.create(
 				"last-minion-destroyed-1",
 				GameEventType.AFTER_PHYSICAL_ATTACK,
 				this::afterPhysicalAttack,
 				PersistenceTrigger::afterPhysicalAttack));
 
-		Spellsource.Spellsource().persistAttribute(
+		Spellsource.spellsource().persistAttribute(
 				"total-damage-dealt-1",
 				GameEventType.AFTER_PHYSICAL_ATTACK,
 				Attribute.TOTAL_DAMAGE_DEALT,
@@ -75,7 +75,7 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 				}
 		);
 
-		Spellsource.Spellsource().persistAttribute(
+		Spellsource.spellsource().persistAttribute(
 				"one-upper-1",
 				GameEventType.KILL,
 				Attribute.WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
@@ -108,7 +108,7 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		response.setCreateCollectionResponse(CreateCollectionResponse.user(userId, new ArrayList<>()));
 
 		// Load in the starting deck lists
-		List<DeckCreateRequest> standardDecks = Spellsource.Spellsource().getStandardDecks();
+		List<DeckCreateRequest> standardDecks = Spellsource.spellsource().getStandardDecks();
 		for (DeckCreateRequest deckCreateRequest : standardDecks) {
 			final DeckCreateResponse deckCreate = decks.sync().createDeck(deckCreateRequest.clone().withUserId(userId));
 			response.getDeckCreateResponses().add(deckCreate);
@@ -291,7 +291,7 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 	@SuppressWarnings("unchecked")
 	public PersistAttributeResponse persistAttribute(PersistAttributeRequest request) {
 		if (request.getRequest() != null) {
-			return new PersistAttributeResponse().withResponse(Spellsource.Spellsource().persistence().getLogicHandler(request
+			return new PersistAttributeResponse().withResponse(Spellsource.spellsource().persistence().getLogicHandler(request
 					.getId()).onLogicRequest(request.getRequest()));
 		} else {
 			final String attributeName = request.getAttribute().toKeyCase();

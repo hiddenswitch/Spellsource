@@ -69,7 +69,6 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		wrap(context);
 		final Async async = context.async();
 
-		getContext().assertNotNull(service.server);
 		getContext().assertNotNull(logic.deploymentID());
 		getContext().assertNotNull(games.deploymentID());
 
@@ -108,7 +107,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	@Test(timeout = 60000L)
 	public void testAccountFlow(TestContext context) throws InterruptedException {
 		wrap(context);
-		Set<String> decks = Spellsource.Spellsource().getStandardDecks().stream().map(DeckCreateRequest::getName).collect(Collectors.toSet());
+		Set<String> decks = Spellsource.spellsource().getStandardDecks().stream().map(DeckCreateRequest::getName).collect(Collectors.toSet());
 		final Async async = context.async();
 		final AtomicInteger count = new AtomicInteger(20);
 		// Interleave these calls
@@ -146,7 +145,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 						getContext().assertNotNull(account.getName());
 						getContext().assertNotNull(account.getPersonalCollection());
 						getContext().assertNotNull(account.getDecks());
-						getContext().assertTrue(account.getDecks().size() == Spellsource.Spellsource().getStandardDecks().size());
+						getContext().assertTrue(account.getDecks().size() == Spellsource.spellsource().getStandardDecks().size());
 						getContext().assertTrue(account.getDecks().stream().map(InventoryCollection::getName).collect(Collectors.toSet()).containsAll(decks));
 						getContext().assertTrue(account.getPersonalCollection().getInventory().size() > 0);
 					}
@@ -265,7 +264,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		UnityClient client1 = new UnityClient(getContext());
 		Thread clientThread1 = new Thread(() -> {
 			client1.createUserAccount("user1");
-			final String startDeckId1 = client1.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.Spellsource().getStandardDecks().get(0).getName())).findFirst().get().getId();
+			final String startDeckId1 = client1.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.spellsource().getStandardDecks().get(0).getName())).findFirst().get().getId();
 			try {
 				client1.matchmakeAndPlay(startDeckId1);
 			} catch (InterruptedException e) {
@@ -275,7 +274,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		UnityClient client2 = new UnityClient(getContext());
 		Thread clientThread2 = new Thread(() -> {
 			client2.createUserAccount("user2");
-			String startDeckId2 = client2.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.Spellsource().getStandardDecks().get(1).getName())).findFirst().get().getId();
+			String startDeckId2 = client2.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.spellsource().getStandardDecks().get(1).getName())).findFirst().get().getId();
 			try {
 				client2.matchmakeAndPlay(startDeckId2);
 			} catch (InterruptedException e) {
@@ -329,7 +328,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 		// Use all random yogg as a test attribute
 		vertx.runOnContext(ignored -> {
-			Spellsource.Spellsource().persistAttribute("yogg-only-1", GameEventType.TURN_END, Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION, persistenceContext -> {
+			Spellsource.spellsource().persistAttribute("yogg-only-1", GameEventType.TURN_END, Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION, persistenceContext -> {
 				// Save the turn number to this yogg attribute
 				long updated = persistenceContext.update(EntityReference.ALL_MINIONS, persistenceContext.event().getGameContext().getTurn());
 				queue.add(updated);

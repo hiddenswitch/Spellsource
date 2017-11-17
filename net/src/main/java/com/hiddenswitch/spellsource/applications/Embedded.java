@@ -20,9 +20,9 @@ public class Embedded {
 
 		Vertx vertx = Vertx.vertx();
 		mongo().connectWithEnvironment(vertx);
-		Spellsource.Spellsource().migrate(vertx, then -> {
+		Spellsource.spellsource().migrate(vertx, then -> {
 			if (then.succeeded()) {
-				Spellsource.Spellsource().deployAll(vertx, Future.future());
+				Spellsource.spellsource().deployAll(vertx, Future.future());
 			} else {
 				System.err.println("Failed to migrate, deployment aborted.");
 			}

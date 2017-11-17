@@ -17,9 +17,9 @@ import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
@@ -46,22 +46,28 @@ import static java.util.stream.Collectors.toList;
  */
 public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway {
 	static Logger logger = LoggerFactory.getLogger(GatewayImpl.class);
-	HttpServer server;
 
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
 		super.start();
-		server = vertx.createHttpServer(new HttpServerOptions()
-				.setHost("0.0.0.0")
-				.setPort(Port.PORT));
-		Router router = Router.router(vertx);
+		Router router = Spellsource.spellsource().router(vertx);
 
 		logger.info("Configuring router...");
 
 		final TokenAuthProvider authProvider = new TokenAuthProvider(vertx);
 		final ApiKeyAuthHandler authHandler = ApiKeyAuthHandler.create(authProvider, "X-Auth-Token");
-		final BodyHandler bodyHandler = BodyHandler.create();
+		final BodyHandler bodyHandlerInternal = BodyHandler.create();
+
+		Handler<RoutingContext> bodyHandler = context -> {
+			// Connection upgrade requests never end and therefore the body handler will never
+			// pass through to the subsequent route handlers.
+			if ("websocket".equalsIgnoreCase(context.request().getHeader("Upgrade"))) {
+				context.next();
+			} else {
+				bodyHandlerInternal.handle(context);
+			}
+		};
 
 		// All routes need logging.
 		router.route().handler(LoggerHandler.create());
@@ -79,6 +85,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			context.response().putHeader("Content-Type", "application/json");
 			context.next();
 		});
+
 
 		router.route("/")
 				.handler(HandlerFactory.handler(this::healthCheck));
@@ -208,13 +215,24 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(SendMessageRequest.class, "friendId",
 						this::sendFriendMessage));
+
 		router.route("/friends/:friendId/conversation")
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler("friendId", this::getFriendConversation));
 
+		Void listen = awaitResult(done -> {
+			try {
+				Spellsource.spellsource().httpServer(vertx).listen(then -> {
+					done.handle(Future.succeededFuture());
+				});
+			} catch (IllegalStateException alreadyListening) {
+				done.handle(Future.succeededFuture());
+			} catch (Exception e) {
+				done.handle(Future.failedFuture(e));
+			}
+		});
+
 		logger.info("Router configured.");
-		server = awaitResult(done -> server.requestHandler(router::accept).listen(done));
-		logger.info("Listening on port " + Integer.toString(server.actualPort()));
 	}
 
 	@Override
@@ -640,6 +658,5 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	@Override
 	@Suspendable
 	public void stop() throws Exception {
-		Void t = awaitResult(h -> server.close(h));
 	}
 }

@@ -7,12 +7,15 @@ import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
+import io.vertx.ext.web.Router;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.events.GameEvent;
@@ -34,7 +37,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 /**
- * The Spellsource Server API. Access it with {@link Spellsource#Spellsource()}.
+ * The Spellsource Server API. Access it with {@link Spellsource#spellsource()}.
  * <p>
  * This class provides an easy way to provide a new persist attribute with {@link #persistAttribute(LegacyPersistenceHandler)}.
  * <p>
@@ -45,6 +48,8 @@ public class Spellsource {
 	private List<DeckCreateRequest> cachedStandardDecks;
 	private Map<String, LegacyPersistenceHandler> legacyPersistenceHandlers = new HashMap<>();
 	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
+	private HttpServer httpServer;
+	private Router router;
 
 	private Spellsource() {
 	}
@@ -54,7 +59,7 @@ public class Spellsource {
 	 *
 	 * @return An API instance.
 	 */
-	public static Spellsource Spellsource() {
+	public static Spellsource spellsource() {
 		if (instance == null) {
 			instance = new Spellsource();
 		}
@@ -102,7 +107,7 @@ public class Spellsource {
 							String deploymentId2 = awaitResult(h -> thisVertx.deployVerticle(inventory, h));
 							String deploymentId3 = awaitResult(h -> thisVertx.deployVerticle(cards, h));
 							decksImpl.updateAllDecks(new DeckListUpdateRequest()
-									.withDeckCreateRequests(Spellsource.Spellsource().getStandardDecks()));
+									.withDeckCreateRequests(Spellsource.spellsource().getStandardDecks()));
 							Void ignored = awaitResult(h -> thisVertx.undeploy(deploymentId, h));
 							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId2, h));
 							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId3, h));
@@ -182,8 +187,8 @@ public class Spellsource {
 	}
 
 	/**
-	 * Persist an attribute when the given game event occurs, using the provided handler to compute the new value and
-	 * to persist it with a {@link PersistenceContext#update(EntityReference, Object)} call inside the handler.
+	 * Persist an attribute when the given game event occurs, using the provided handler to compute the new value and to
+	 * persist it with a {@link PersistenceContext#update(EntityReference, Object)} call inside the handler.
 	 * <p>
 	 * For example, let's say we want to persist the total amount of damage a minion has dealt:
 	 * <pre>
@@ -275,5 +280,38 @@ public class Spellsource {
 
 	public Map<String, PersistenceHandler> getPersistAttributeHandlers() {
 		return persistAttributeHandlers;
+	}
+
+	/**
+	 * Gets the shared http server for this vertx instance
+	 *
+	 * @param vertx The Vertx instance
+	 * @return The server
+	 */
+	public synchronized HttpServer httpServer(Vertx vertx) {
+		if (httpServer == null) {
+			httpServer = vertx.createHttpServer(new HttpServerOptions().setHost("0.0.0.0").setPort(Port.port()));
+		}
+		return httpServer;
+	}
+
+	/**
+	 * Gets the shared router for this vertx instance
+	 *
+	 * @param vertx
+	 * @return
+	 */
+	public synchronized Router router(Vertx vertx) {
+		if (router == null) {
+			HttpServer server = httpServer(vertx);
+			router = Router.router(vertx);
+			server.requestHandler(router::accept);
+			try {
+				server.listen();
+			} catch (IllegalStateException ignored) {
+			}
+		}
+
+		return router;
 	}
 }
