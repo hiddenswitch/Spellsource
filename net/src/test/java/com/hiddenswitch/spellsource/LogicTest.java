@@ -124,7 +124,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 				toSet());
 
 		// Get the starting decks distinct card IDs
-		Set<String> actualCardIds = Spellsource.Spellsource().getStandardDecks().stream().flatMap(d -> d.getCardIds().stream()).collect(toSet());
+		Set<String> actualCardIds = Spellsource.spellsource().getStandardDecks().stream().flatMap(d -> d.getCardIds().stream()).collect(toSet());
 
 		getContext().assertTrue(cardIds.equals(actualCardIds), "The user's initial collection should contain all the cards they need in the starter decks.");
 	}

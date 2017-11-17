@@ -123,8 +123,8 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 
 	@Test
 	public void testGetStandardDecks(TestContext context) {
-		context.assertTrue(Spellsource.Spellsource().getStandardDecks().size() > 0);
-		Spellsource.Spellsource().getStandardDecks().forEach(d -> context.assertEquals(30, d.getCardIds().size()));
+		context.assertTrue(Spellsource.spellsource().getStandardDecks().size() > 0);
+		Spellsource.spellsource().getStandardDecks().forEach(d -> context.assertEquals(30, d.getCardIds().size()));
 	}
 
 	@Override

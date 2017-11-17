@@ -34,7 +34,6 @@ public interface Client {
 	@Suspendable
 	void onUpdate(GameState state);
 
-	@Suspendable
 	void onRequestAction(String messageId, GameState state, List<GameAction> actions);
 
 	@Suspendable

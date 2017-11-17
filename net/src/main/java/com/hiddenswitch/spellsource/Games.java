@@ -71,7 +71,6 @@ public interface Games {
 	 * @param playerId       The player to process actions for.
 	 * @return A list of game client actions.
 	 */
-	@Suspendable
 	static GameActions getClientActions(GameContext workingContext, List<GameAction> actions, int playerId) {
 		final GameActions clientActions = new GameActions();
 

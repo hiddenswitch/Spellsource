@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Games;
+import com.hiddenswitch.spellsource.Port;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class UnityClient {
-	public static String basePath = "http://localhost:80" + "";
+	public static String basePath = "http://localhost:" + Integer.toString(Port.port());
 	private ApiClient apiClient;
 	private DefaultApi api;
 	private boolean gameOver;
