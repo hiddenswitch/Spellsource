@@ -8,9 +8,13 @@ public interface Port {
 	 */
 	static int port() {
 		String environmentPort = System.getenv("PORT");
+		String systemPropertyPort = System.getProperty("spellsource.port");
 		int port = 80;
 		if (environmentPort != null) {
 			port = Integer.parseInt(environmentPort);
+		}
+		if (systemPropertyPort != null) {
+			port = Integer.parseInt(systemPropertyPort);
 		}
 		return port;
 	}

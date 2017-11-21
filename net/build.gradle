@@ -71,6 +71,7 @@ tasks.withType(JavaExec) {
 
 test {
     jvmArgs "-javaagent:${configurations.quasar.iterator().next()}"
+    systemProperty "spellsource.port", "8080"
     useJUnit()
     testLogging {
         events "failed"
