@@ -110,7 +110,7 @@ public class AuraTests extends TestBase {
 
 		Minion warleader = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_murloc_warleader"));
 		Assert.assertEquals(murloc.getAttack(), 4);
-		Assert.assertEquals(murloc.getHp(), 2);
+		Assert.assertEquals(murloc.getHp(), 1);
 		Assert.assertEquals(warleader.getAttack(), 3);
 		Assert.assertEquals(warleader.getHp(), 3);
 
@@ -123,7 +123,7 @@ public class AuraTests extends TestBase {
 		action.setTarget(warleader);
 		context.getLogic().performGameAction(player.getId(), action);
 		Assert.assertEquals(murloc.getAttack(), 6);
-		Assert.assertEquals(murloc.getHp(), 3);
+		Assert.assertEquals(murloc.getHp(), 1);
 	}
 
 	@Test
