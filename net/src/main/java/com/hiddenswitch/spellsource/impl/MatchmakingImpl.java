@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.MatchmakingDeck;
@@ -17,10 +18,9 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import org.apache.commons.collections.set.SynchronizedSet;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
@@ -32,6 +32,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	private Matchmaker matchmaker = Matchmaker.local();
 	private Map<String, ClientConnectionConfiguration> connections = new HashMap<>();
 	private Registration registration;
+	private Set<String> processing = Collections.synchronizedSet(new HashSet<>());
 
 	@Override
 	public void start() throws SuspendExecution {
@@ -101,6 +102,12 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Suspendable
 	public MatchmakingResponse matchmakeAndJoin(MatchmakingRequest matchmakingRequest) throws SuspendExecution, InterruptedException {
 		final String userId = matchmakingRequest.getUserId();
+		if (processing.contains(userId)) {
+			Strand.sleep(250);
+			return new MatchmakingResponse().withRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null).withDeckId(matchmakingRequest.getDeckId()).withUserId(userId));
+		}
+
+		processing.add(userId);
 		MatchmakingResponse response = new MatchmakingResponse();
 
 		final boolean isRetry = matchmaker.contains(userId);
@@ -128,6 +135,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			connections.put(userId, connection);
 			Accounts.update(userId, QuickJson.json("$set", QuickJson.json("connection", json(connection.toUnityConnection()))));
 			response.setConnection(connection);
+			processing.remove(userId);
 			return response;
 		}
 
@@ -150,9 +158,12 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 		if (match == null) {
 			response.setRetry(new MatchmakingRequest(matchmakingRequest).withDeck(null).withDeckId(matchmakingRequest.getDeckId()).withUserId(userId));
+			processing.remove(matchmakingRequest.getUserId());
 			return response;
 		}
 
+		processing.add(match.entry1.userId);
+		processing.add(match.entry2.userId);
 		final ContainsGameSessionResponse contains = gameSessions.sync().containsGameSession(new ContainsGameSessionRequest(match.gameId));
 
 		if (!contains.result) {
@@ -169,6 +180,8 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		}
 
 		response.setConnection(connections.get(userId));
+		processing.remove(match.entry1.userId);
+		processing.remove(match.entry2.userId);
 		return response;
 	}
 

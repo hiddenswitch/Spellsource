@@ -33,6 +33,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.http.client.HttpClient;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -65,6 +66,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 
 	@Test(timeout = 120000L)
+	@Ignore
 	public void testShutdownAndRestartServer(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
@@ -176,30 +178,24 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
-		final String property = System.getProperty("Spellsource.unityTests");
-		final int tests = Integer.parseInt(property != null ? property : "10");
 		final Async async = context.async();
 
-		for (int i = 0; i < tests; i++) {
+		for (int i = 0; i < 10; i++) {
 			UnityClient client = new UnityClient(getContext());
 			client.createUserAccount(null);
 			client.matchmakeAndPlayAgainstAI(null);
-			float time = 0f;
-			while (!(time > 120f || client.isGameOver())) {
-				Strand.sleep(1000);
-				time += 1f;
-			}
+			client.waitUntilDone();
 			getContext().assertTrue(client.isGameOver());
 		}
 		async.complete();
 		unwrap();
 	}
 
-	@Test(timeout = 60000L)
+	@Test(timeout = 130000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
-		final int count = 20;
+		final int count = 10;
 		CountDownLatch latch = new CountDownLatch(count);
 		CompositeFuture.join(Collections.nCopies(7, Arrays.asList(
 				new GatewayImpl(),
@@ -223,8 +219,8 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 			})).limit(count).forEach(Thread::start);
 		});
 
-
-		latch.await(50L, TimeUnit.SECONDS);
+		// Random games can take quite a long time to finish so be patient...
+		latch.await(130L, TimeUnit.SECONDS);
 		getContext().assertEquals(latch.getCount(), 0L);
 		unwrap();
 	}
@@ -247,11 +243,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		client.createUserAccount(null);
 		client.matchmakeAndPlayAgainstAI(client.getAccount().getDecks()
 				.stream().filter(d -> d.getName().equals("Necromancer")).findFirst().orElseThrow(AssertionError::new).getId());
-		float time = 0f;
-		while (!(time > 120f || client.isGameOver())) {
-			Strand.sleep(1000);
-			time += 1f;
-		}
+		client.waitUntilDone();
 		getContext().assertTrue(client.isGameOver());
 
 		async.complete();
