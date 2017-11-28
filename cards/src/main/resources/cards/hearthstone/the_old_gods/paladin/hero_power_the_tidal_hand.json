@@ -1,10 +1,10 @@
 {
-  "name": "To Battle!",
+  "name": "The Tidal Hand",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "GOLD",
   "rarity": "FREE",
-  "description": "Summon a 1/1 Soldier.",
+  "description": "Summon a 1/1 Murloc.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 7,

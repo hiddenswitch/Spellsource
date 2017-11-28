@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "MURLOC",
-  "description": "Your other Murlocs have +2/+1.",
+  "description": "Your other Murlocs have +2 Attack.",
   "aura": {
     "class": "BuffAura",
     "target": "OTHER_FRIENDLY_MINIONS",
@@ -15,11 +15,10 @@
     "filter": {
       "class": "RaceFilter",
       "race": "MURLOC"
-    },
-    "hpBonus": 1
+    }
   },
   "attributes": {
-    "DESCRIPTION": "Your other Murloc have +2/+1.",
+    "DESCRIPTION": "Your other Murlocs have +2/+1.",
     "NAME": "Murloc Equipment"
   },
   "collectible": true,

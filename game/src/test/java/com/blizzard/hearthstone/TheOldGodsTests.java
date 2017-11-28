@@ -23,6 +23,14 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 public class TheOldGodsTests extends TestBase {
+	@Test
+	public void testVilefinInquisitor() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, CardCatalogue.getCardById("minion_vilefin_inquisitor"));
+			Assert.assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_the_tidal_hand");
+		});
+	}
+
 
 	@Test
 	public void testCallInTheFinishers() {
