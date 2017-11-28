@@ -14,7 +14,7 @@
 FROM phusion/baseimage:0.9.22
 
 ADD ./net/build/libs/net-1.3.0-all.jar /data/net-1.3.0-all.jar
-ADD ./net/lib/quasar-core-0.7.5-jdk8.jar /data/quasar-core-0.7.5-jdk8.jar
+ADD ./net/lib/quasar-core-0.7.9-jdk8.jar /data/quasar-core-0.7.9-jdk8.jar
 
 # Ad the daemon for the main java process
 

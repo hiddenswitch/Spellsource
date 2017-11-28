@@ -1,10 +1,12 @@
 package com.hiddenswitch.spellsource.models;
 
+import com.hiddenswitch.spellsource.Spellsource;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by bberman on 1/19/17.
@@ -41,9 +43,7 @@ public class CreateCollectionRequest implements Serializable {
 				.withType(CollectionTypes.USER)
 				.withUserId(userId)
 				.withName(userId + "'s Collection")
-				.withCopies(2)
-				.withCardsQuery(new QueryCardsRequest()
-						.withSets(CardSet.SPELLSOURCE));
+				.withCardIds(Spellsource.spellsource().getStandardDecks().stream().flatMap(deckCreateRequest -> deckCreateRequest.getCardIds().stream()).collect(Collectors.toList()));
 	}
 
 	public static CreateCollectionRequest alliance(String allianceId, String ownerUserId, List<String> userIds, List<String> inventoryIds) {

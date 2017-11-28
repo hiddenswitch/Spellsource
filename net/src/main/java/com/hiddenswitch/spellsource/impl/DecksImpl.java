@@ -59,12 +59,17 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 
 	@Override
 	public DeckCreateResponse createDeck(DeckCreateRequest request) throws SuspendExecution, InterruptedException {
+		if (request.getUserId() == null) {
+			throw new RuntimeException();
+		}
+
 		List<String> inventoryIds = new ArrayList<>();
 		if (request.getInventoryIds() != null) {
 			inventoryIds.addAll(request.getInventoryIds());
 		}
 
-		if (request.getCardIds() != null) {
+		if (request.getCardIds() != null
+				&& request.getCardIds().size() > 0) {
 			// Find the card IDs in the user's collection, using copies wherever available, to put into the deck
 			GetCollectionResponse userCollection = inventory.sync().getCollection(GetCollectionRequest.user(request.getUserId()));
 			Map<String, List<String>> cards = userCollection.getInventoryRecords().stream().collect(groupingBy(InventoryRecord::getCardId, mapping(InventoryRecord::getId, toList())));
@@ -99,7 +104,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		final String userId = request.getUserId();
 		CreateCollectionResponse createCollectionResponse = inventory.sync()
 				.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft())
-				.withHeroCardId(request.getHeroCardId()));
+						.withHeroCardId(request.getHeroCardId()));
 
 		// Update the user document with this deck ID
 		final String deckId = createCollectionResponse.getCollectionId();

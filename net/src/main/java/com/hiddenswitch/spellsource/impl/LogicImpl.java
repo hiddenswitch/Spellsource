@@ -104,8 +104,11 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		final InitializeUserResponse response = new InitializeUserResponse();
 		response.setDeckCreateResponses(new ArrayList<>());
 		final String userId = request.getUserId();
-		// Do not create any cards with a starting collection request. Allow deck creation to create the card IDs on demand.
-		response.setCreateCollectionResponse(CreateCollectionResponse.user(userId, new ArrayList<>()));
+		if (userId == null) {
+			throw new RuntimeException();
+		}
+
+		response.setCreateCollectionResponse(inventory.sync().createCollection(CreateCollectionRequest.startingCollection(userId)));
 
 		// Load in the starting deck lists
 		List<DeckCreateRequest> standardDecks = Spellsource.spellsource().getStandardDecks();

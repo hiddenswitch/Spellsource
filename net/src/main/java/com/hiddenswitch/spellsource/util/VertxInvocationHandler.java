@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
@@ -12,6 +13,7 @@ import io.vertx.ext.sync.Sync;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -45,7 +47,7 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 	@Override
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+	public Object invoke(Object proxy, Method method, Object[] args) throws VertxException, IllegalAccessException, InvocationTargetException {
 		// Call default methods normally
 		if (Objects.equals(method.getName(), "toString")) {
 			return "Proxy Object for " + name;

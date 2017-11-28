@@ -453,12 +453,15 @@ public class ServerGameContext extends GameContext {
 
 	@Suspendable
 	public void kill() {
-		if (!updateAndGetGameOver()) {
-			endGame();
+		try {
+			if (!updateAndGetGameOver()) {
+				endGame();
+			}
+			isRunning = false;
+			// Clear out even more stuff
+			dispose();
+		} catch (Exception ignored) {
 		}
-		isRunning = false;
-		// Clear out even more stuff
-		dispose();
 	}
 
 	@Override

@@ -16,7 +16,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.shared.threat.StartOfNextTurnValueBehaviour;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 
@@ -108,7 +107,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 
 	private String getDeckByName(UserRecord bot, String deckName) throws SuspendExecution, InterruptedException {
 		GetCollectionResponse deckCollections = Rpc.connect(Inventory.class, vertx.eventBus()).sync()
-				.getCollection(GetCollectionRequest.decks(bot.getDecks()));
+				.getCollection(GetCollectionRequest.decks(bot.getId(), bot.getDecks()));
 		return deckCollections
 				.getResponses()
 				.stream()
@@ -149,7 +148,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 						.withPassword("securebotpassword")
 						.withBot(true));
 
-				logic.sync().initializeUser(new InitializeUserRequest().withUserId(response.getUserId()));
+				logic.sync().initializeUser(new InitializeUserRequest(response.getUserId()));
 				newBotIds.add(response.getUserId());
 			}
 

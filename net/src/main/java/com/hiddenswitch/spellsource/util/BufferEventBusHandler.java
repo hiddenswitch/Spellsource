@@ -8,6 +8,7 @@ import io.vertx.core.eventbus.Message;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by bberman on 6/7/17.
@@ -37,8 +38,12 @@ class BufferEventBusHandler<T, R> implements Handler<Message<Buffer>> {
 			response = method.apply(request);
 		} catch (InterruptedException | SuspendExecution e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			message.fail(-1, getMessage(e.getCause()));
+			return;
 		} catch (Throwable e) {
 			message.fail(-1, getMessage(e));
+			return;
 		}
 
 		Buffer reply = Buffer.buffer(512);

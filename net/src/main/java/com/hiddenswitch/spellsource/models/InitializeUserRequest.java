@@ -8,6 +8,10 @@ import java.io.Serializable;
 public class InitializeUserRequest implements Serializable {
 	private String userId;
 
+	public InitializeUserRequest(String userId) {
+		setUserId(userId);
+	}
+
 	public String getUserId() {
 		return userId;
 	}

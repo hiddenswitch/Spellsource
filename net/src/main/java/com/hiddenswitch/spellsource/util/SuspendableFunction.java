@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
 @FunctionalInterface
@@ -16,7 +17,7 @@ public interface SuspendableFunction<T, R> extends Serializable {
 	 * @return the function result
 	 */
 	@Suspendable
-	R apply(T t) throws InterruptedException, SuspendExecution;
+	R apply(T t) throws InterruptedException, SuspendExecution, InvocationTargetException, IllegalAccessException;
 
 	/**
 	 * Returns a function that always returns its input argument.

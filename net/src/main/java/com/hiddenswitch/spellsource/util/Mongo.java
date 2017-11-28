@@ -13,6 +13,7 @@ import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * There is only one Mongo.
@@ -59,9 +60,7 @@ public class Mongo {
 	public Mongo stopEmbedded() {
 		if (localMongoServer != null) {
 			try {
-				client.close();
 				localMongoServer.stop();
-				client = null;
 				localMongoServer = null;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -85,8 +84,8 @@ public class Mongo {
 	}
 
 	/**
-	 * Connect by interpreting the MONGO_URL environment variable or the mongo.url system property. Otherwise, start
-	 * an embedded server if it doens't already exist and connect to it.
+	 * Connect by interpreting the MONGO_URL environment variable or the mongo.url system property. Otherwise, start an
+	 * embedded server if it doens't already exist and connect to it.
 	 *
 	 * @param vertx The vertx instance to build the mongo client with.
 	 * @return This {@link Mongo} instance.
@@ -132,6 +131,18 @@ public class Mongo {
 	@Suspendable
 	public List<JsonObject> find(String collection, JsonObject query) {
 		return awaitResult(h -> client.find(collection, query, h));
+	}
+
+	@Suspendable
+	public <T extends MongoRecord> List<T> find(String collection, JsonObject query, Class<T> returnClass) {
+		final List<JsonObject> objs = awaitResult(h -> client.find(collection, query, h));
+		return QuickJson.fromJson(objs, returnClass);
+	}
+
+	@Suspendable
+	public <T extends MongoRecord> List<T> findWithOptions(String collection, JsonObject query, FindOptions options, Class<T> returnClass) {
+		final List<JsonObject> objs = awaitResult(h -> client.findWithOptions(collection, query, options, h));
+		return QuickJson.fromJson(objs, returnClass);
 	}
 
 	@Suspendable
@@ -245,9 +256,78 @@ public class Mongo {
 		return awaitResult(h -> client.createCollection(collectionName, h));
 	}
 
+	/**
+	 * Find a single matching document in the specified collection and update it.
+	 * <p>
+	 * This operation might change <i>_id</i> field of <i>query</i> parameter
+	 *
+	 * @param collection the collection
+	 * @param query      the query used to match the document
+	 * @param update     used to describe how the documents will be updated
+	 */
 	@Suspendable
 	public <T extends MongoRecord> T findOneAndUpdate(String collection, JsonObject query, JsonObject update, Class<? extends T> returnClass) {
 		final JsonObject obj = awaitResult(h -> client.findOneAndUpdate(collection, query, update, then -> h.handle(then.otherwiseEmpty())));
 		return QuickJson.fromJson(obj, returnClass);
+	}
+
+
+	/**
+	 * Execute a bulk operation. Can insert, update, replace, and/or delete multiple documents with one request.
+	 *
+	 * @param collection the collection
+	 * @param operations the operations to execute
+	 */
+	@Suspendable
+	public MongoClientBulkWriteResult bulkWrite(String collection, List<BulkOperation> operations) {
+		return awaitResult(h -> client.bulkWrite(collection, operations, h));
+	}
+
+	/**
+	 * Execute a bulk operation with the specified write options. Can insert, update, replace, and/or delete multiple
+	 * documents with one request.
+	 *
+	 * @param collection       the collection
+	 * @param operations       the operations to execute
+	 * @param bulkWriteOptions the write options
+	 */
+	@Suspendable
+	public MongoClientBulkWriteResult bulkWriteWithOptions(String collection, List<BulkOperation> operations, BulkWriteOptions bulkWriteOptions) {
+		return awaitResult(h -> client.bulkWriteWithOptions(collection, operations, bulkWriteOptions, h));
+	}
+
+	/**
+	 * Executes a bulk insert operation.
+	 *
+	 * @param collection The collection
+	 * @param documents  The documents
+	 * @return The result of the insert.
+	 */
+	@Suspendable
+	public MongoClientBulkWriteResult insertMany(String collection, List<JsonObject> documents) {
+		return bulkWrite(collection, documents.stream().map(BulkOperation::createInsert).collect(Collectors.toList()));
+	}
+
+	/**
+	 * Executes a bulk insert operation with options.
+	 *
+	 * @param collection The collection
+	 * @param documents  The documents
+	 * @param options    The options for writing, specifically whether or not the insert has to be ordered.
+	 * @return The result of the insert
+	 */
+	@Suspendable
+	public MongoClientBulkWriteResult insertManyWithOptions(String collection, List<JsonObject> documents, BulkWriteOptions options) {
+		return bulkWriteWithOptions(collection, documents.stream().map(BulkOperation::createInsert).collect(Collectors.toList()), options);
+	}
+
+
+	public void close() {
+		if (client == null) {
+			return;
+		}
+		client.close();
+		client = null;
+		instance = null;
 	}
 }

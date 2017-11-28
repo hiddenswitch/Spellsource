@@ -19,10 +19,7 @@ import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.util.*;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.SendContext;
@@ -35,16 +32,20 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.http.client.HttpClient;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by bberman on 2/18/17.
@@ -108,67 +109,67 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	public void testAccountFlow(TestContext context) throws InterruptedException {
 		wrap(context);
 		Set<String> decks = Spellsource.spellsource().getStandardDecks().stream().map(DeckCreateRequest::getName).collect(Collectors.toSet());
-		final Async async = context.async();
-		final AtomicInteger count = new AtomicInteger(20);
-		// Interleave these calls
-		for (int i = 0; i < 100; i++) {
-			final int j = i;
-			Thread t = new Thread(() -> {
-				try {
-					Strand.sleep(RandomUtils.nextInt(10, 100));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (SuspendExecution suspendExecution) {
-					suspendExecution.printStackTrace();
-				}
-				ApiClient client = new ApiClient().setBasePath(UnityClient.basePath);
-				client.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
-				client.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
-				client.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
-				DefaultApi api = new DefaultApi(client);
-				String random = RandomStringUtils.randomAlphanumeric(36) + Integer.toString(j);
-				try {
-					CreateAccountResponse response1 = api.createAccount(new CreateAccountRequest()
-							.name("username" + random)
-							.email("email" + random + "@email.com")
-							.password("password"));
 
-					api.getApiClient().setApiKey(response1.getLoginToken());
-					final String userId = response1.getAccount().getId();
-					getContext().assertNotNull(userId);
-					GetAccountsResponse response2 = api.getAccount(userId);
-					getContext().assertTrue(response2.getAccounts().size() > 0);
+		final int expectedCount = 64;
+		CountDownLatch latch = new CountDownLatch(expectedCount);
+		CompositeFuture.join(Collections.nCopies(7, Arrays.asList(
+				new GatewayImpl(),
+				new CardsImpl(),
+				new DecksImpl(),
+				new LogicImpl(),
+				new AccountsImpl(),
+				new InventoryImpl()))
+				.stream().flatMap(Collection::stream).map(v -> {
+					Future<String> future = Future.future();
+					vertx.deployVerticle(v, future);
+					return future;
+				}).collect(Collectors.toList())).setHandler(then -> {
+			// Interleave these calls
+			for (int i = 0; i < expectedCount; i++) {
+				final int j = i;
 
-					for (Account account : new Account[]{response1.getAccount(), response2.getAccounts().get(0)}) {
-						getContext().assertNotNull(account.getId());
-						getContext().assertNotNull(account.getEmail());
-						getContext().assertNotNull(account.getName());
-						getContext().assertNotNull(account.getPersonalCollection());
-						getContext().assertNotNull(account.getDecks());
-						getContext().assertTrue(account.getDecks().size() == Spellsource.spellsource().getStandardDecks().size());
-						getContext().assertTrue(account.getDecks().stream().map(InventoryCollection::getName).collect(Collectors.toSet()).containsAll(decks));
-						getContext().assertTrue(account.getPersonalCollection().getInventory().size() > 0);
+				Thread t = new Thread(() -> {
+					ApiClient client = new ApiClient().setBasePath(UnityClient.basePath);
+					client.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
+					client.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
+					client.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
+					DefaultApi api = new DefaultApi(client);
+					String random = RandomStringUtils.randomAlphanumeric(36) + Integer.toString(j);
+					try {
+						CreateAccountResponse response1 = api.createAccount(new CreateAccountRequest()
+								.name("username" + random)
+								.email("email" + random + "@email.com")
+								.password("password"));
+
+						api.getApiClient().setApiKey(response1.getLoginToken());
+						final String userId = response1.getAccount().getId();
+						getContext().assertNotNull(userId);
+						GetAccountsResponse response2 = api.getAccount(userId);
+						getContext().assertTrue(response2.getAccounts().size() > 0);
+
+						for (Account account : new Account[]{response1.getAccount(), response2.getAccounts().get(0)}) {
+							getContext().assertNotNull(account.getId());
+							getContext().assertNotNull(account.getEmail());
+							getContext().assertNotNull(account.getName());
+							getContext().assertNotNull(account.getPersonalCollection());
+							getContext().assertNotNull(account.getDecks());
+							getContext().assertTrue(account.getDecks().size() == Spellsource.spellsource().getStandardDecks().size());
+							getContext().assertTrue(account.getDecks().stream().map(InventoryCollection::getName).collect(Collectors.toSet()).containsAll(decks));
+							getContext().assertTrue(account.getPersonalCollection().getInventory().size() > 0);
+						}
+					} catch (ApiException e) {
+						getContext().fail("API error: " + e.getMessage());
+						return;
 					}
-				} catch (ApiException e) {
-					getContext().fail("API error: " + e.getMessage());
-					return;
-				}
-				count.decrementAndGet();
-			});
-			t.start();
-		}
+					latch.countDown();
+				});
 
-		float timeout = 50f;
-		while (count.get() > 0 && timeout > 0) {
-			try {
-				Strand.sleep(100);
-			} catch (SuspendExecution suspendExecution) {
-				suspendExecution.printStackTrace();
+				t.start();
 			}
-			timeout -= 0.1f;
-		}
-		async.complete();
-		unwrap();
+		});
+
+		latch.await(50L, TimeUnit.SECONDS);
+		getContext().assertEquals(latch.getCount(), 0L);
 	}
 
 	@Test
@@ -191,6 +192,40 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 			getContext().assertTrue(client.isGameOver());
 		}
 		async.complete();
+		unwrap();
+	}
+
+	@Test(timeout = 60000L)
+	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
+		setLoggingLevel(Level.ERROR);
+		wrap(context);
+		final int count = 20;
+		CountDownLatch latch = new CountDownLatch(count);
+		CompositeFuture.join(Collections.nCopies(7, Arrays.asList(
+				new GatewayImpl(),
+				new CardsImpl(),
+				new DecksImpl(),
+				new LogicImpl(),
+				new AccountsImpl(),
+				new InventoryImpl()))
+				.stream().flatMap(Collection::stream).map(v -> {
+					Future<String> future = Future.future();
+					vertx.deployVerticle(v, future);
+					return future;
+				}).collect(Collectors.toList())).setHandler(then -> {
+			Stream.generate(() -> new Thread(() -> {
+				UnityClient client = new UnityClient(getContext());
+				client.createUserAccount(null);
+				client.matchmakeAndPlay(null);
+				client.waitUntilDone();
+				getContext().assertTrue(client.isGameOver());
+				latch.countDown();
+			})).limit(count).forEach(Thread::start);
+		});
+
+
+		latch.await(50L, TimeUnit.SECONDS);
+		getContext().assertEquals(latch.getCount(), 0L);
 		unwrap();
 	}
 
@@ -265,21 +300,13 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		Thread clientThread1 = new Thread(() -> {
 			client1.createUserAccount("user1");
 			final String startDeckId1 = client1.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.spellsource().getStandardDecks().get(0).getName())).findFirst().get().getId();
-			try {
-				client1.matchmakeAndPlay(startDeckId1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			client1.matchmakeAndPlay(startDeckId1);
 		});
 		UnityClient client2 = new UnityClient(getContext());
 		Thread clientThread2 = new Thread(() -> {
 			client2.createUserAccount("user2");
 			String startDeckId2 = client2.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.spellsource().getStandardDecks().get(1).getName())).findFirst().get().getId();
-			try {
-				client2.matchmakeAndPlay(startDeckId2);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			client2.matchmakeAndPlay(startDeckId2);
 		});
 		clientThread1.start();
 		clientThread2.start();

@@ -13,18 +13,22 @@ import com.hiddenswitch.spellsource.util.RpcClient;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.BulkWriteOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.mongo.WriteOption;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.Rarity;
+import org.apache.commons.lang3.RandomStringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.function.Function;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
+import static java.util.stream.Collectors.*;
 
 /**
  * Created by bberman on 1/19/17.
@@ -38,18 +42,18 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 	public void start() throws SuspendExecution {
 		super.start();
 		cards = Rpc.connect(Cards.class, vertx.eventBus());
-		List<String> collections = Mongo.mongo().getCollections();
+		List<String> collections = mongo().getCollections();
 
 		if (!collections.contains(INVENTORY)) {
-			Mongo.mongo().createCollection(INVENTORY);
+			mongo().createCollection(INVENTORY);
 		}
 
 		if (!collections.contains(COLLECTIONS)) {
-			Mongo.mongo().createCollection(COLLECTIONS);
+			mongo().createCollection(COLLECTIONS);
 		}
 
-		Mongo.mongo().createIndex(INVENTORY, QuickJson.json("userId", 1));
-		Mongo.mongo().createIndex(INVENTORY, QuickJson.json("collectionIds", 1));
+		mongo().createIndex(INVENTORY, json("userId", 1));
+		mongo().createIndex(INVENTORY, json("collectionIds", 1));
 
 		registration = Rpc.register(this, Inventory.class, vertx.eventBus());
 	}
@@ -73,50 +77,58 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 				.queryCards(new QueryCardsRequest()
 						.withRequests(commons, allianceRares));
 
-		List<String> ids = createCardsForUser(request.getUserId(), response.getRecords().stream().map(CardCatalogueRecord::getJson).collect(Collectors.toList()));
+		List<String> ids = createCardsForUser(request.getUserId(), response.getRecords().stream().map(CardCatalogueRecord::getJson).collect(toList()));
 		return new OpenCardPackResponse(ids);
 	}
 
 	@Override
 	@Suspendable
-	public CreateCollectionResponse createCollection(CreateCollectionRequest request) throws SuspendExecution, InterruptedException {
+	public CreateCollectionResponse createCollection(final CreateCollectionRequest request) throws SuspendExecution, InterruptedException {
+		final String userId = request.getUserId();
 		switch (request.getType()) {
 			case USER:
-				Long count = awaitResult(h -> getMongo().count(COLLECTIONS, QuickJson.json("_id", request.getUserId()), h));
+				if (userId == null) {
+					throw new RuntimeException();
+				}
+				Long count = mongo().count(COLLECTIONS, json("_id", userId));
 
 				if (count.equals(0L)) {
-					String ignore = awaitResult(h -> getMongo().insert(COLLECTIONS, QuickJson.toJson(CollectionRecord.user(request.getUserId())), h));
+					String ignore = mongo().insert(COLLECTIONS, QuickJson.toJson(CollectionRecord.user(userId)));
 				}
-				List<String> newInventoryIds = Collections.emptyList();
+				List<String> newInventoryIds = new ArrayList<>();
 				if (request.getQueryCardsRequest() != null) {
 					int copies = request.getCopies();
 					final QueryCardsResponse cardsResponse = cards.sync().queryCards(request.getQueryCardsRequest());
-					List<JsonObject> cardsToAdd = cardsResponse.getRecords().stream().map(CardCatalogueRecord::getJson).collect(Collectors.toList());
-					newInventoryIds = createCardsForUser(request.getUserId(), cardsToAdd, copies);
+					List<JsonObject> cardsToAdd = cardsResponse.getRecords().stream().map(CardCatalogueRecord::getJson).collect(toList());
+					newInventoryIds.addAll(createCardsForUser(userId, cardsToAdd, copies));
+				}
+				if (request.getCardIds() != null
+						&& request.getCardIds().size() != 0) {
+					newInventoryIds.addAll(createCardsForUser(request.getCardIds(), userId));
 				}
 
 				if (request.getOpenCardPackRequest() != null) {
 					newInventoryIds.addAll(openCardPack(request.getOpenCardPackRequest()).getCreatedInventoryIds());
 				}
 
-				return CreateCollectionResponse.user(request.getUserId(), newInventoryIds);
+				return CreateCollectionResponse.user(userId, newInventoryIds);
 			case DECK:
-				CollectionRecord record1 = CollectionRecord.deck(request.getUserId(), request.getName(), request.getHeroClass(), request.isDraft());
+				CollectionRecord record1 = CollectionRecord.deck(userId, request.getName(), request.getHeroClass(), request.isDraft());
 				record1.setHeroCardId(request.getHeroCardId());
-				final String deckId = Mongo.mongo().insert(COLLECTIONS, QuickJson.toJson(record1));
+				final String deckId = mongo().insert(COLLECTIONS, QuickJson.toJson(record1));
 
 				if (request.getInventoryIds() != null
 						&& request.getInventoryIds().size() > 0) {
-					MongoClientUpdateResult update = Mongo.mongo()
+					MongoClientUpdateResult update = mongo()
 							.updateCollectionWithOptions(INVENTORY,
-									QuickJson.json("_id", QuickJson.json("$in", request.getInventoryIds())),
-									QuickJson.json("$addToSet", QuickJson.json("collectionIds", deckId)),
+									json("_id", json("$in", request.getInventoryIds())),
+									json("$addToSet", json("collectionIds", deckId)),
 									new UpdateOptions().setMulti(true));
 				}
 
 				return CreateCollectionResponse.deck(deckId);
 			case ALLIANCE:
-				CollectionRecord record2 = CollectionRecord.alliance(request.getAllianceId(), request.getUserId());
+				CollectionRecord record2 = CollectionRecord.alliance(request.getAllianceId(), userId);
 				final String allianceId = awaitResult(h -> getMongo().insert(COLLECTIONS, QuickJson.toJson(record2), h));
 
 				return CreateCollectionResponse.alliance(allianceId);
@@ -130,17 +142,19 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 			throw new NullPointerException();
 		}
 
-		List<String> ids = new ArrayList<>();
-		for (JsonObject card : cardsToAdd) {
-			for (int i = 0; i < copies; i++) {
-				InventoryRecord cardRecord = new InventoryRecord(card)
+		List<String> userIdCollection = Collections.singletonList(userId);
+		List<JsonObject> documents = Collections.nCopies(copies, cardsToAdd)
+				.stream()
+				.flatMap(Collection::stream)
+				.map(card -> new InventoryRecord(RandomStringUtils.randomAlphanumeric(36), card)
 						.withUserId(userId)
-						.withCollectionIds(Collections.singletonList(userId));
+						.withCollectionIds(userIdCollection))
+				.map(QuickJson::toJson)
+				.collect(toList());
 
-				ids.add(awaitResult(h -> getMongo().insert(INVENTORY, QuickJson.toJson(cardRecord), h)));
-			}
-		}
-		return ids;
+		mongo().insertManyWithOptions(INVENTORY, documents, new BulkWriteOptions().setOrdered(false).setWriteOption(WriteOption.ACKNOWLEDGED));
+
+		return documents.stream().map(o -> o.getString("_id")).collect(toList());
 	}
 
 	protected List<String> createCardsForUser(final String userId, final List<JsonObject> cardsToAdd) throws InterruptedException, SuspendExecution {
@@ -149,7 +163,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 	protected List<String> createCardsForUser(final List<String> cardIds, final String userId, int copies) throws InterruptedException, SuspendExecution {
 		return createCardsForUser(userId,
-				cards.sync().queryCards(new QueryCardsRequest().withCardIds(cardIds)).getRecords().stream().map(CardCatalogueRecord::getJson).collect(Collectors.toList()), copies);
+				cards.sync().queryCards(new QueryCardsRequest().withCardIds(cardIds)).getRecords().stream().map(CardCatalogueRecord::getJson).collect(toList()), copies);
 	}
 
 	protected List<String> createCardsForUser(final List<String> cardIds, final String userId) throws InterruptedException, SuspendExecution {
@@ -172,8 +186,8 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 		}
 
 		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollectionWithOptions(Inventory.INVENTORY,
-				QuickJson.json("_id", QuickJson.json("$in", inventoryIds)),
-				QuickJson.json("$addToSet", QuickJson.json("collectionIds", collectionId)),
+				json("_id", json("$in", inventoryIds)),
+				json("$addToSet", json("collectionIds", collectionId)),
 				new UpdateOptions().setMulti(true),
 				h));
 
@@ -183,8 +197,8 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 	@Override
 	public RemoveFromCollectionResponse removeFromCollection(RemoveFromCollectionRequest request) throws SuspendExecution, InterruptedException {
 		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollectionWithOptions(Inventory.INVENTORY,
-				QuickJson.json("_id", QuickJson.json("$in", request.getInventoryIds())),
-				QuickJson.json("$pull", QuickJson.json("collectionIds", request.getCollectionId())),
+				json("_id", json("$in", request.getInventoryIds())),
+				json("$pull", json("collectionIds", request.getCollectionId())),
 				new UpdateOptions().setMulti(true),
 				h));
 
@@ -195,9 +209,9 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 	public DonateToCollectionResponse donateToCollection(DonateToCollectionRequest request) throws SuspendExecution, InterruptedException {
 		MongoClientUpdateResult r = awaitResult(h -> getMongo().updateCollection(
 				Inventory.INVENTORY,
-				QuickJson.json("_id", QuickJson.json("$in", request.getInventoryIds())),
-				QuickJson.json("$set", QuickJson.json("allianceId", request.getAllianceId()),
-						"$addToSet", QuickJson.json("collectionIds", request.getAllianceId())), h));
+				json("_id", json("$in", request.getInventoryIds())),
+				json("$set", json("allianceId", request.getAllianceId()),
+						"$addToSet", json("collectionIds", request.getAllianceId())), h));
 
 		return new DonateToCollectionResponse();
 	}
@@ -215,8 +229,8 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 		}
 
 		MongoClientUpdateResult update = awaitResult(h -> getMongo().updateCollectionWithOptions(INVENTORY,
-				QuickJson.json("collectionIds", QuickJson.json("$in", collectionIds)),
-				QuickJson.json("$set", QuickJson.json("borrowed", true, "borrowedByUserId", request.getUserId())),
+				json("collectionIds", json("$in", collectionIds)),
+				json("$set", json("borrowed", true, "borrowedByUserId", request.getUserId())),
 				new UpdateOptions().setMulti(true),
 				h));
 
@@ -227,8 +241,8 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 	@Suspendable
 	public ReturnToCollectionResponse returnToCollection(ReturnToCollectionRequest request) {
 		MongoClientUpdateResult update = awaitResult(h -> getMongo().updateCollectionWithOptions(INVENTORY,
-				QuickJson.json("collectionIds", QuickJson.json("$in", request.getDeckIds())),
-				QuickJson.json("$set", QuickJson.json("borrowed", false, "borrowedByUserId", null)),
+				json("collectionIds", json("$in", request.getDeckIds())),
+				json("$set", json("borrowed", false, "borrowedByUserId", null)),
 				new UpdateOptions().setMulti(true),
 				h));
 
@@ -239,11 +253,43 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 	@Suspendable
 	public GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution, InterruptedException {
 		if (request.isBatchRequest()) {
-			List<GetCollectionResponse> responses = new ArrayList<>();
+			final List<GetCollectionResponse> responses = new ArrayList<>();
+			final List<GetCollectionRequest> requests = request.getRequests();
 
-			for (GetCollectionRequest subRequest : request.getRequests()) {
-				responses.add(getCollection(subRequest));
+			// Retrieve deck requests and process them separately
+			final List<GetCollectionRequest> deckRequests = new ArrayList<>();
+			Iterator<GetCollectionRequest> requestsIterator = requests.iterator();
+			while (requestsIterator.hasNext()) {
+				GetCollectionRequest subRequest = requestsIterator.next();
+				if (subRequest.getDeckId() != null) {
+					requestsIterator.remove();
+					deckRequests.add(subRequest);
+				} else {
+					responses.add(getCollection(subRequest));
+				}
 			}
+
+			// Bulk retrieve deck inventory records and collection information
+			final List<String> deckIds = deckRequests.stream().map(GetCollectionRequest::getDeckId).collect(toList());
+			final Map<String, CollectionRecord> deckRecords = mongo().find(COLLECTIONS, json("_id", json("$in", deckIds)), CollectionRecord.class)
+					.stream().collect(toMap(CollectionRecord::getId, Function.identity()));
+
+			final Map<String, List<InventoryRecord>> deckInventories = new HashMap<>();
+			for (String deckId : deckIds) {
+				deckInventories.put(deckId, new Vector<>());
+			}
+
+			mongo().find(INVENTORY, json("collectionIds", json("$in", deckIds)), InventoryRecord.class)
+					.forEach(ir -> ir.getCollectionIds().forEach(cid -> {
+						if (deckInventories.containsKey(cid)) {
+							deckInventories.get(cid).add(ir);
+						}
+					}));
+
+			deckIds.forEach(deckId -> {
+				CollectionRecord record = deckRecords.get(deckId);
+				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), deckInventories.get(deckId), record.isTrashed(), record.getDeckType(), record.getHeroCardId()));
+			});
 
 			return GetCollectionResponse.batch(responses);
 		}
@@ -266,13 +312,12 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 			throw new RuntimeException();
 		}
 
-		List<JsonObject> results = awaitResult(h -> getMongo().find(INVENTORY, QuickJson.json("collectionIds", collectionId), h));
-		final List<InventoryRecord> inventoryRecords = results.stream().map(r -> QuickJson.fromJson(r, InventoryRecord.class)).collect(Collectors.toList());
+		List<JsonObject> results = awaitResult(h -> getMongo().find(INVENTORY, json("collectionIds", collectionId), h));
+		final List<InventoryRecord> inventoryRecords = results.stream().map(r -> QuickJson.fromJson(r, InventoryRecord.class)).collect(toList());
 
 		if (type == CollectionTypes.DECK) {
-			CollectionRecord deck = Mongo.mongo().findOne(COLLECTIONS, QuickJson.json("_id", collectionId), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), inventoryRecords, deck.isTrashed(), deck.getDeckType())
-					.withHeroCardId(deck.getHeroCardId());
+			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), inventoryRecords, deck.isTrashed(), deck.getDeckType(), deck.getHeroCardId());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(request.getUserId(), inventoryRecords);
 		} /*  else {
@@ -287,13 +332,13 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 		MongoClientUpdateResult result1 = awaitResult(h -> getMongo()
 				.updateCollection(COLLECTIONS,
-						QuickJson.json("_id", collectionId, "trashed", false),
-						QuickJson.json("$set", QuickJson.json("trashed", true)), h));
+						json("_id", collectionId, "trashed", false),
+						json("$set", json("trashed", true)), h));
 
 		MongoClientUpdateResult result2 = awaitResult(h -> getMongo()
 				.updateCollectionWithOptions(INVENTORY,
-						QuickJson.json("collectionIds", collectionId),
-						QuickJson.json("$pull", QuickJson.json("collectionIds", collectionId)),
+						json("collectionIds", collectionId),
+						json("$pull", json("collectionIds", collectionId)),
 						new UpdateOptions().setMulti(true), h));
 
 		return new TrashCollectionResponse(result1.getDocModified() == 1, result2.getDocModified());
@@ -304,14 +349,14 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 		String collectionId = setCollectionRequest.getCollectionId();
 		MongoClientUpdateResult r = awaitResult(h -> getMongo()
 				.updateCollectionWithOptions(Inventory.INVENTORY,
-						QuickJson.json("collectionId", collectionId, "_id", QuickJson.json("$nin", setCollectionRequest.getInventoryIds())),
-						QuickJson.json("$pull", QuickJson.json("collectionIds", collectionId)),
+						json("collectionId", collectionId, "_id", json("$nin", setCollectionRequest.getInventoryIds())),
+						json("$pull", json("collectionIds", collectionId)),
 						new UpdateOptions().setMulti(true), h));
 
 		MongoClientUpdateResult r2 = awaitResult(h -> getMongo()
 				.updateCollectionWithOptions(Inventory.INVENTORY,
-						QuickJson.json("_id", QuickJson.json("$in", setCollectionRequest.getInventoryIds())),
-						QuickJson.json("$addToSet", QuickJson.json("collectionIds", collectionId)),
+						json("_id", json("$in", setCollectionRequest.getInventoryIds())),
+						json("$addToSet", json("collectionIds", collectionId)),
 						new UpdateOptions().setMulti(true), h));
 
 		return new SetCollectionResponse(r2, r);

@@ -280,8 +280,6 @@ public class BlackrockMountainTests extends TestBase {
 
 		Card card = player.getHand().peekFirst();
 		int modifiedCost = context.getLogic().getModifiedManaCost(player, card);
-		System.out.println("Card [" + card.getName() + "] has baseManaCost of " + card.getBaseManaCost()
-				+ " and current actual manacost of " + modifiedCost);
 		Assert.assertEquals(card.getBaseManaCost(), modifiedCost);
 
 	}

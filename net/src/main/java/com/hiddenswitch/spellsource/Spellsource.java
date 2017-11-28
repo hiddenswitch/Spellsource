@@ -59,7 +59,7 @@ public class Spellsource {
 	 *
 	 * @return An API instance.
 	 */
-	public static Spellsource spellsource() {
+	public synchronized static Spellsource spellsource() {
 		if (instance == null) {
 			instance = new Spellsource();
 		}
@@ -158,7 +158,7 @@ public class Spellsource {
 	 *
 	 * @return A list of deck create requests without a {@link DeckCreateRequest#userId} specified.
 	 */
-	public List<DeckCreateRequest> getStandardDecks() {
+	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
 			cachedStandardDecks = new ArrayList<>();
 //			cachedStandardDecks = Stream.of("Basic Biologist", "Basic Cyborg", "Basic Gamer", "Basic Octopod Demo", "Basic Resurrector")
@@ -313,5 +313,11 @@ public class Spellsource {
 		}
 
 		return router;
+	}
+
+	public void close() {
+		httpServer = null;
+		router = null;
+		instance = null;
 	}
 }

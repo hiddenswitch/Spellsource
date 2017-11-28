@@ -4,9 +4,12 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
+import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.common.Recursive;
 import com.hiddenswitch.spellsource.util.Mongo;
+import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.*;
+import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -22,6 +25,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -35,18 +39,8 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 
 	static TestContext wrappedContext;
 	Logger logger = LoggerFactory.getLogger(ServiceTest.class);
-	protected static Vertx vertx = Vertx.vertx();
+	protected Vertx vertx;
 	protected T service;
-
-	@Before
-	public void loadCards(TestContext context) {
-		try {
-			CardCatalogue.loadCardsFromPackage();
-		} catch (IOException | URISyntaxException | CardParseException e) {
-			context.fail(e);
-		}
-		context.async().complete();
-	}
 
 	public void setLoggingLevel(Level level) {
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
@@ -54,60 +48,46 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 		root.setLevel(level);
 	}
 
-	public abstract void deployServices(Vertx vertx, Handler<AsyncResult<T>> done);
-
 	@Before
-	public void setUp(TestContext context) {
+	public void loadCards(TestContext context) {
+		vertx = Vertx.vertx(new VertxOptions().setEventLoopPoolSize(20).setWorkerPoolSize(20));
+		vertx.exceptionHandler(h -> {
+			getContext().fail(h.getCause());
+		});
+		try {
+			CardCatalogue.loadCardsFromPackage();
+		} catch (IOException | URISyntaxException | CardParseException e) {
+			context.fail(e);
+		}
+
 		Mongo.mongo().startEmbedded().connect(vertx);
 
 		deployServices(vertx, context.asyncAssertSuccess(i -> {
 			service = i;
+
+			Async async = context.async();
+
+			if (service != null
+					&& service.getMongo() != null) {
+
+				service.getMongo().getCollections(collections -> {
+					final List<Future> futures = collections.result().stream().map(collection -> {
+						Future<MongoClientDeleteResult> thisFuture = Future.future();
+						service.getMongo().removeDocuments(collection, new JsonObject(), thisFuture.completer());
+						return thisFuture;
+					}).collect(Collectors.toList());
+
+					CompositeFuture.join(futures).setHandler(then -> {
+						async.complete();
+					});
+				});
+			} else {
+				async.complete();
+			}
 		}));
 	}
 
-	@Before
-	public void clearMongoDatabase(TestContext context) {
-		final Async async = context.async();
-		if (service != null
-				&& service.getMongo() != null) {
-
-			service.getMongo().getCollections(collections -> {
-				final List<Future> futures = collections.result().stream().map(collection -> {
-					Future<MongoClientDeleteResult> thisFuture = Future.future();
-					service.getMongo().removeDocuments(collection, new JsonObject(), thisFuture.completer());
-					return thisFuture;
-				}).collect(Collectors.toList());
-
-				CompositeFuture.join(futures).setHandler(then -> {
-					async.complete();
-				});
-			});
-		} else {
-			async.complete();
-		}
-	}
-
-
-	@After
-	public void undeploy(TestContext context) {
-		// Recursively undeploy the currently deployed verticles.
-		Recursive<Consumer<String>> r = new Recursive<>();
-		r.func = (String deploymentId) -> {
-			vertx.undeploy(deploymentId, context.asyncAssertSuccess(then -> {
-				Set<String> moreDeployments = vertx.deploymentIDs();
-				if (moreDeployments.size() != 0) {
-					r.func.accept(moreDeployments.iterator().next());
-				}
-			}));
-		};
-
-		if (vertx.deploymentIDs().size() == 0) {
-			return;
-		} else {
-			final String next = vertx.deploymentIDs().iterator().next();
-			r.func.accept(next);
-		}
-	}
+	public abstract void deployServices(Vertx vertx, Handler<AsyncResult<T>> done);
 
 	@Suspendable
 	protected void wrapSync(TestContext context, SuspendableRunnable code) {
@@ -158,5 +138,26 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 
 	protected void unwrap() {
 		ServiceTest.wrappedContext = null;
+	}
+
+	@After
+	public void destroyVertx(TestContext context) {
+//		Async async = context.async();
+		List<UnityClient> clients = context.get("clients");
+
+		if (clients != null) {
+			Iterator<UnityClient> iterator = clients.iterator();
+			while (iterator.hasNext()) {
+				iterator.next().disconnect();
+				iterator.remove();
+			}
+		}
+
+		vertx.close(context.asyncAssertSuccess(then -> {
+			Mongo.mongo().stopEmbedded();
+			Mongo.mongo().close();
+			Spellsource.spellsource().close();
+//			async.complete();
+		}));
 	}
 }

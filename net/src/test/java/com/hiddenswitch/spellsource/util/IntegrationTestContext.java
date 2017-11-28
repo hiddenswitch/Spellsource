@@ -38,8 +38,8 @@ public class IntegrationTestContext {
 		CreateAccountResponse car2 = accounts.sync().createAccount(new CreateAccountRequest().withName("player2").withEmailAddress("test2@test.com").withPassword("testpassword"));
 
 		RpcClient<Logic> logic = Rpc.connect(Logic.class, vertx.eventBus());
-		logic.uncheckedSync().initializeUser(new InitializeUserRequest().withUserId(car1.getUserId()));
-		logic.uncheckedSync().initializeUser(new InitializeUserRequest().withUserId(car2.getUserId()));
+		logic.uncheckedSync().initializeUser(new InitializeUserRequest(car1.getUserId()));
+		logic.uncheckedSync().initializeUser(new InitializeUserRequest(car2.getUserId()));
 
 		logic.sync().startGame(new StartGameRequest()
 				.withGameId(gameId)

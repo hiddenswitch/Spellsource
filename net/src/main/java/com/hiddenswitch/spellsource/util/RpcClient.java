@@ -7,6 +7,8 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * A remote procedure call client. Its methods, {@link #sync()}, {@link #uncheckedSync()} and {@link #async(Handler)}
  * provides three different convenient ways for you to make calls to other microservices using the same interface {@link
@@ -71,7 +73,7 @@ public interface RpcClient<T> {
 		Future<Res> future = Future.future();
 		try {
 			callHere.apply(async(future.completer()));
-		} catch (SuspendExecution | InterruptedException ignore) {
+		} catch (SuspendExecution | InterruptedException | IllegalAccessException | InvocationTargetException ignore) {
 			// Ignored, since this is just around to ensure fiber stuff gets fiber'ed
 		}
 		return future;

@@ -73,7 +73,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		router.route().handler(LoggerHandler.create());
 
 		// CORS
-		router.route().handler(CorsHandler.create("*")
+		router.route().handler(CorsHandler.create("localhost")
 				.allowedHeader("Content-Type")
 				.allowedHeader("X-Auth-Token")
 				.exposedHeader("Content-Type")
@@ -267,12 +267,15 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			return WebResult.failed(new RuntimeException("Invalid email address."));
 		} else if (internalResponse.isInvalidPassword()) {
 			return WebResult.failed(new RuntimeException("Invalid password."));
+		} else if (internalResponse.isInvalidName()) {
+			return WebResult.failed(new RuntimeException("Invalid name."));
+		} else if (internalResponse.getUserId() == null) {
+			throw new RuntimeException();
 		}
 
 		// Initialize the collection
 		final String userId = internalResponse.getUserId();
-		getLogic().initializeUser(new InitializeUserRequest().withUserId(userId));
-
+		getLogic().initializeUser(new InitializeUserRequest(userId));
 		final Account account = getAccount(userId);
 		return WebResult.succeeded(new CreateAccountResponse()
 				.loginToken(internalResponse.getLoginToken().getToken())
@@ -606,7 +609,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		GetCollectionResponse personalCollection = getInventory().getCollection(GetCollectionRequest.user(record.getId()));
 
 		// Get the decks
-		GetCollectionResponse deckCollections = getInventory().getCollection(GetCollectionRequest.decks(record.getDecks()));
+		GetCollectionResponse deckCollections = getInventory().getCollection(GetCollectionRequest.decks(userId, record.getDecks()));
 
 		final String displayName = record.getProfile().getDisplayName();
 		return new Account()

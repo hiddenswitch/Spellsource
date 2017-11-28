@@ -53,7 +53,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 	public static InitializeUserResponse initializeUserId(Logic service, String userId) throws SuspendExecution,
 			InterruptedException {
-		return service.initializeUser(new InitializeUserRequest().withUserId(userId));
+		return service.initializeUser(new InitializeUserRequest(userId).withUserId(userId));
 	}
 
 	private void startsGameSync() throws SuspendExecution, InterruptedException {
@@ -116,7 +116,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 				"testpass", "doctorpangloss");
 		final String userId = createAccountResponse.getUserId();
 
-		service.initializeUser(new InitializeUserRequest().withUserId(userId));
+		service.initializeUser(new InitializeUserRequest(userId).withUserId(userId));
 
 		GetCollectionResponse response = inventory.getCollection(GetCollectionRequest.user(userId));
 
@@ -142,8 +142,8 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		String userId2 = accounts.createAccount("a@c.com", "1235688", "abde").getUserId();
 
 		// Initialize them
-		InitializeUserResponse userResponse1 = service.initializeUser(new InitializeUserRequest().withUserId(userId1));
-		InitializeUserResponse userResponse2 = service.initializeUser(new InitializeUserRequest().withUserId(userId2));
+		InitializeUserResponse userResponse1 = service.initializeUser(new InitializeUserRequest(userId1));
+		InitializeUserResponse userResponse2 = service.initializeUser(new InitializeUserRequest(userId2));
 
 		// Give a player the forever post doc card
 		AddToCollectionResponse minionResponse = inventory.addToCollection(new AddToCollectionRequest().withUserId

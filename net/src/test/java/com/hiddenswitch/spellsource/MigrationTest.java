@@ -163,6 +163,7 @@ public class MigrationTest {
 	}
 
 	@Test
+	@Ignore
 	public void testAllMigrations(final TestContext context) {
 		setLoggingLevel(Level.ERROR);
 

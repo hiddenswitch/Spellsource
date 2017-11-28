@@ -17,7 +17,7 @@ import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
 /**
  * A user record.
- *
+ * <p>
  * The fields in this object correspond to the ones stored in Mongo. This also implements the Vertx User interface,
  * which allows queries to see if a user is authorized to do a particular task (very lightly implemented).
  */
@@ -44,6 +44,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Creates a user record with the specified ID.
+	 *
 	 * @param id The user ID.
 	 */
 	public UserRecord(String id) {
@@ -53,6 +54,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	/**
 	 * Gets user profile information. This isn't safe to share with the public, because it contains the user's email
 	 * address.
+	 *
 	 * @return A Profile object.
 	 */
 	public Profile getProfile() {
@@ -61,6 +63,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Sets the user's profile.
+	 *
 	 * @param profile A Profile object.
 	 */
 	public void setProfile(Profile profile) {
@@ -69,7 +72,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	@Override
 	@JsonIgnore
-	public User isAuthorised(String authority, Handler<AsyncResult<Boolean>> resultHandler) {
+	public User isAuthorized(String authority, Handler<AsyncResult<Boolean>> resultHandler) {
 		resultHandler.handle(Future.succeededFuture(true));
 		return this;
 	}
@@ -94,6 +97,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Gets the user's login tokens and password hash. Not public safe.
+	 *
 	 * @return An AuthorizationRecord object.
 	 */
 	public AuthorizationRecord getAuth() {
@@ -102,6 +106,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Sets the user's login token and password hash information.
+	 *
 	 * @param auth An AuthorizationRecord object.
 	 */
 	public void setAuth(AuthorizationRecord auth) {
@@ -110,6 +115,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Gets a list of deck IDs associated with this user. Query the collection service for their complete contents.
+	 *
 	 * @return A list of deck IDs.
 	 */
 	public List<String> getDecks() {
@@ -119,6 +125,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * get freinds list
+	 *
 	 * @return list of friend records
 	 */
 	public List<FriendRecord> getFriends() {
@@ -127,6 +134,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Sets the UserRecord's deck IDs. Does not have side effects.
+	 *
 	 * @param decks A list of deck IDs.
 	 */
 	public void setDecks(List<String> decks) {
@@ -135,6 +143,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Does this user record belong to a bot?
+	 *
 	 * @return True if the user is actually a bot account user.
 	 */
 	public boolean isBot() {
@@ -143,6 +152,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Mark that this user record belongs to a bot.
+	 *
 	 * @param bot True if the record belongs to a bot.
 	 */
 	public void setBot(boolean bot) {
@@ -151,6 +161,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Set user's friends list
+	 *
 	 * @return
 	 */
 	public void setFriends(List<FriendRecord> friends) {
@@ -159,6 +170,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Check if given friendId belongs to a friend
+	 *
 	 * @param friendId
 	 * @return true if friend with friendId exists
 	 */
@@ -168,6 +180,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Get friend by friend Id
+	 *
 	 * @param friendId
 	 * @return friend object if friends, null otherwise
 	 */

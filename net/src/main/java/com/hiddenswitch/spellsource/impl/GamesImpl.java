@@ -77,7 +77,8 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 				return;
 			}
 
-			DefaultChannelId.newInstance();
+			// Fixes exceptions related to {@link #handleWebSocketMessage}
+//			DefaultChannelId.newInstance();
 			// TODO: These ports shouldn't be totally randomized because of AWS security groups
 			blocking.complete();
 		}, then -> {
@@ -148,10 +149,17 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 		final String finalGameId = session.getGameId();
 		games.put(finalGameId, session);
 		for (String userId : new String[]{request.getPregame1().getUserId(), request.getPregame2().getUserId()}) {
-			if (userId != null) {
-				gameForUserId.put(userId, session);
-				keyToSecret.put(userId, session.getSecret(userId));
+			if (userId == null) {
+				throw new RuntimeException();
 			}
+			if (gameForUserId.containsKey(userId)) {
+				throw new RuntimeException();
+			}
+			if (keyToSecret.containsKey(userId)) {
+				throw new RuntimeException();
+			}
+			gameForUserId.put(userId, session);
+			keyToSecret.put(userId, session.getSecret(userId));
 		}
 
 		// If the game has no activity after a certain amount of time, kill it automatically.
