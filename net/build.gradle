@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    quasar files("lib/quasar-core-0.7.5-jdk8.jar")
+    quasar files("lib/quasar-core-0.7.9-jdk8.jar")
 
     compile group: 'com.hazelcast', name: 'hazelcast-aws', version: '2.1.0'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
@@ -41,13 +41,13 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.4.1'
     compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
-    compile group: 'io.vertx', name: 'vertx-core', version: '3.4.1'
-    compile group: 'com.github.hiddenswitch', name: 'vertx-sync', version: '3.4.1.FA1'
-    compile group: 'io.vertx', name: 'vertx-service-discovery', version: '3.4.1'
-    compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.4.1'
-    compile group: 'io.vertx', name: 'vertx-web', version: '3.4.1'
-    compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.4.1'
-    compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.4.1'
+    compile group: 'io.vertx', name: 'vertx-core', version: '3.5.0'
+    compile group: 'com.github.hiddenswitch', name: 'vertx-sync', version: 'master-SNAPSHOT'
+    compile group: 'io.vertx', name: 'vertx-service-discovery', version: '3.5.0'
+    compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.5.0'
+    compile group: 'io.vertx', name: 'vertx-web', version: '3.5.0'
+    compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.5.0'
+    compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.5.0'
     compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.0'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
 
@@ -57,7 +57,7 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'
-    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.4.1'
+    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.5.0'
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
     testCompile group: 'javax.websocket', name: 'javax.websocket-client-api', version: '1.1'
@@ -66,11 +66,11 @@ dependencies {
 }
 
 tasks.withType(JavaExec) {
-    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}"
+    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
 }
 
 test {
-    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}"
+    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
     systemProperty "spellsource.port", "8080"
     useJUnit()
     testLogging {
@@ -81,5 +81,5 @@ test {
 task(runDebug, dependsOn: 'classes', type: JavaExec) {
     main = 'com.hiddenswitch.spellsource.applications.Embedded'
     classpath = sourceSets.main.runtimeClasspath
-    jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005", "-javaagent:${configurations.quasar.iterator().next()}"]
+    jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005", "-javaagent:${configurations.quasar.iterator().next()}=mb"]
 }

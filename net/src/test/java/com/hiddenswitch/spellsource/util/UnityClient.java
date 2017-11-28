@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -40,8 +41,17 @@ public class UnityClient {
 	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
 		apiClient.setBasePath(basePath);
+		apiClient.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
+		apiClient.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
+		apiClient.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
 		api = new DefaultApi(apiClient);
 		this.context = context;
+		List<UnityClient> clients = context.get("clients");
+		if (clients == null) {
+			clients = new Vector<>();
+			context.put("clients", clients);
+		}
+		clients.add(this);
 	}
 
 	public UnityClient(TestContext context, int turnsToPlay) {
@@ -100,7 +110,7 @@ public class UnityClient {
 		return this;
 	}
 
-	public UnityClient matchmakeAndPlay(String deckId) throws InterruptedException {
+	public UnityClient matchmakeAndPlay(String deckId) {
 		if (deckId == null) {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
@@ -118,6 +128,8 @@ public class UnityClient {
 			play(unityConnection);
 		} catch (ApiException | URISyntaxException e) {
 			context.fail(e.getMessage());
+		} catch (InterruptedException e) {
+			context.fail();
 		}
 		return this;
 	}
@@ -207,7 +219,9 @@ public class UnityClient {
 
 	public void disconnect() {
 		try {
-			endpoint.getUserSession().close();
+			if (endpoint != null) {
+				endpoint.getUserSession().close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -7,7 +7,6 @@ import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
@@ -43,13 +42,14 @@ public class GetCollectionResponse implements Serializable {
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<InventoryRecord> inventoryRecords, boolean trashed, DeckType deckType) {
+	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<InventoryRecord> inventoryRecords, boolean trashed, DeckType deckType, String heroCardId) {
 		return new GetCollectionResponse()
 				.withTrashed(trashed)
 				.withCollectionType(CollectionTypes.DECK)
 				.withCollectionId(deckId)
 				.withCardRecords(inventoryRecords)
 				.withHeroClass(heroClass)
+				.withHeroCardId(heroCardId)
 				.withUserId(userId)
 				.withDeckType(deckType)
 				.withName(name);
@@ -166,7 +166,8 @@ public class GetCollectionResponse implements Serializable {
 				.id(getCollectionId())
 				.type(InventoryCollection.TypeEnum.valueOf(getCollectionType().toString()))
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
-				.inventory(getInventoryRecords().stream().map(cr ->
+				// Massively increase the performance of inventory record creation by making parallel the inventory record creation here
+				.inventory(getInventoryRecords().parallelStream().map(cr ->
 						new CardRecord()
 								.userId(cr.getUserId())
 								.collectionIds(cr.getCollectionIds())

@@ -30,7 +30,6 @@ public class LocalMongo {
 	private MongodProcess mongodProcess;
 
 	static {
-
 		final FixedPath fixedPath = new FixedPath(System.getProperty("user.dir") + "/.mongo");
 		IDirectory artifactStorePath = fixedPath;
 

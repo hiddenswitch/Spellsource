@@ -12,6 +12,7 @@ import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.apache.curator.test.TestingServer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ public class ClusterTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
+	@Ignore
 	public void testClusteredDeploy(TestContext context) {
 
 		setLoggingLevel(Level.ERROR);

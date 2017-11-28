@@ -326,10 +326,10 @@ public interface Games {
 		spell.cardInHandId(sourceId);
 
 		Map<String, List<T>> intermediate = choices.stream()
-				.collect(Collectors.groupingBy(HasChoiceCard::getChoiceCardId));
+				// Solves LambdaConversionException
+				.collect(Collectors.groupingBy(s -> s.getChoiceCardId()));
 
-		// In Java 8u155 right now, there's an issue setting up the anonymous method's instrumentation for Quasar. This
-		// removes the anonymous method here.
+
 		for (String cardId : intermediate.keySet()) {
 			List<T> choiceActions = intermediate.get(cardId);
 

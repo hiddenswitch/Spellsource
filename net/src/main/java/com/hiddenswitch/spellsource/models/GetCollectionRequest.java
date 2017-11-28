@@ -52,9 +52,10 @@ public class GetCollectionRequest implements Serializable {
 				.withDeckId(deckId);
 	}
 
-	public static GetCollectionRequest decks(List<String> decks) {
+	public static GetCollectionRequest decks(String userId, List<String> decks) {
 		return new GetCollectionRequest()
-				.withRequests(decks.stream().map(GetCollectionRequest::deck).collect(Collectors.toList()));
+				.withUserId(userId)
+				.withRequests(decks.stream().map(GetCollectionRequest::deck).map(request -> request.withUserId(userId)).collect(Collectors.toList()));
 	}
 
 	public List<GetCollectionRequest> getRequests() {

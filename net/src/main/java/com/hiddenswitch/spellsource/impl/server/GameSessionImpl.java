@@ -58,10 +58,14 @@ public class GameSessionImpl implements GameSession {
 		this.gameId = gameId;
 		this.vertx = vertx;
 		this.websocketPort = websocketPort;
+		if (p1.getUserId().equals(p2.getUserId())) {
+			throw new RuntimeException();
+		}
 		for (String userId : new String[]{p1.getUserId(), p2.getUserId()}) {
-			if (userId != null) {
-				this.secretForUserId.put(userId, RandomStringUtils.randomAlphanumeric(40));
+			if (userId == null) {
+				throw new RuntimeException();
 			}
+			this.secretForUserId.put(userId, RandomStringUtils.randomAlphanumeric(40));
 		}
 		this.noActivityTimeout = noActivityTimeout;
 	}

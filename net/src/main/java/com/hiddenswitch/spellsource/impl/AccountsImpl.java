@@ -78,7 +78,7 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 			return response;
 		}
 
-		String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
+		final String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
 		UserRecord record = new UserRecord(userId);
 		record.setDecks(new ArrayList<>());
 		record.setFriends(new ArrayList<>());

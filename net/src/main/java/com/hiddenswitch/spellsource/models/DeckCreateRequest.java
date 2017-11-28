@@ -24,8 +24,8 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	private HeroClass heroClass;
 	private String heroCardId;
 	private boolean draft;
-	private List<String> inventoryIds;
-	private List<String> cardIds;
+	private List<String> inventoryIds = new ArrayList<>();
+	private List<String> cardIds = new ArrayList<>();
 
 	public static DeckCreateRequest fromDeckCatalogue(String name) {
 		try {
@@ -169,12 +169,17 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 
 	@Override
 	public DeckCreateRequest clone() {
+		DeckCreateRequest clone;
 		try {
-			return (DeckCreateRequest) super.clone();
+			clone = (DeckCreateRequest) super.clone();
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+			return null;
 		}
-		return null;
+		clone.inventoryIds = new ArrayList<>();
+		clone.cardIds = new ArrayList<>();
+		clone.inventoryIds.addAll(inventoryIds);
+		clone.cardIds.addAll(cardIds);
+		return clone;
 	}
 
 	public Deck toGameDeck() {

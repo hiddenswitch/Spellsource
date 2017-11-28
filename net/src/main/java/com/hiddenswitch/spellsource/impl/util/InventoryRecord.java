@@ -32,8 +32,8 @@ public class InventoryRecord extends MongoRecord {
 	private String userId;
 
 	/**
-	 * The ID of the alliance this card belongs to, or null if this card is not shared with an alliance.
-	 * The ID is also a collection ID.
+	 * The ID of the alliance this card belongs to, or null if this card is not shared with an alliance. The ID is also
+	 * a collection ID.
 	 */
 	@JsonProperty
 	private String allianceId;
@@ -58,6 +58,11 @@ public class InventoryRecord extends MongoRecord {
 	}
 
 	public InventoryRecord(JsonObject card) {
+		this.cardDesc = card.getMap();
+	}
+
+	public InventoryRecord(String id, JsonObject card) {
+		super(id);
 		this.cardDesc = card.getMap();
 	}
 

@@ -106,21 +106,7 @@ public class Rpc {
 		registration.setMessageConsumers(Stream.of(serviceInterface.getDeclaredMethods()).map(method -> {
 			String methodName = name + "::" + method.getName();
 
-			SuspendableFunction<Object, Object> method1 = arg -> {
-				try {
-					return method.invoke(instance, arg);
-				} catch (InvocationTargetException e) {
-					RuntimeException re = (RuntimeException) (e.getTargetException());
-					if (re != null) {
-						throw re;
-					}
-					return null;
-				} catch (IllegalAccessException e) {
-					return null;
-				} catch (Throwable e) {
-					throw e;
-				}
-			};
+			SuspendableFunction<Object, Object> method1 = arg -> method.invoke(instance, arg);
 
 			// Get the context at the time of calling this function
 			RpcOptions.Serialization serialization = RpcOptions.Serialization.JAVA;
@@ -191,8 +177,7 @@ public class Rpc {
 	/**
 	 * Gets an address from a named method call.
 	 * <p>
-	 * For example, to get the address of an {@link Accounts#createAccount(CreateAccountRequest)}
-	 * call, do:
+	 * For example, to get the address of an {@link Accounts#createAccount(CreateAccountRequest)} call, do:
 	 * <p>
 	 * <pre>
 	 *     {@code

@@ -9,6 +9,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public class SharedData {
 	private static SharedData instance;
 	private io.vertx.core.shareddata.SharedData client;
+	private Vertx vertx;
 
 	private SharedData() {
 	}
@@ -22,7 +23,9 @@ public class SharedData {
 	}
 
 	public SharedData connect(Vertx vertx) {
-		if (client == null) {
+		if ((this.vertx != null
+				&& !this.vertx.equals(vertx))
+				|| client == null) {
 			client = vertx.sharedData();
 		}
 

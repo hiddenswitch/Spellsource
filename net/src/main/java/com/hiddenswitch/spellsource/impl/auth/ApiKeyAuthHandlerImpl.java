@@ -1,6 +1,9 @@
 package com.hiddenswitch.spellsource.impl.auth;
 
 import com.hiddenswitch.spellsource.util.ApiKeyAuthHandler;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonObject;
@@ -25,6 +28,9 @@ public class ApiKeyAuthHandlerImpl extends AuthHandlerImpl implements ApiKeyAuth
 		options = new JsonObject();
 	}
 
+	private static void ignore(AsyncResult<Void> event) {
+	}
+
 	@Override
 	public ApiKeyAuthHandlerImpl setHeader(String header) {
 		options.put("header", header);
@@ -37,37 +43,50 @@ public class ApiKeyAuthHandlerImpl extends AuthHandlerImpl implements ApiKeyAuth
 	}
 
 	@Override
-	public void handle(RoutingContext context) {
+	public void handle(final RoutingContext context) {
 		User user = context.user();
 		if (user != null) {
 			// Already authenticated in, just authorise
-			authorise(user, context);
+			authorize(user, (then) -> {
+				if (then.succeeded()) {
+					context.next();
+				} else {
+					context.fail(then.cause());
+				}
+			});
 		} else {
-			final HttpServerRequest request = context.request();
-
 			if (skip != null && context.normalisedPath().startsWith(skip)) {
 				context.next();
 				return;
 			}
 
-			final String token = request.headers().get(getHeader());
-
-			if (token == null) {
-				log.warn("No {} header was found", getHeader());
-				context.fail(401);
-				return;
-			}
-
-			authProvider.authenticate(new JsonObject().put("token", token).put("options", options), res -> {
+			parseCredentials(context, credentials -> authProvider.authenticate(credentials.result(), res -> {
 				if (res.succeeded()) {
 					final User user2 = res.result();
 					context.setUser(user2);
-					authorise(user2, context);
+					authorize(user2, (then) -> {
+						if (then.succeeded()) {
+							context.next();
+						} else {
+							context.fail(then.cause());
+						}
+					});
 				} else {
 					log.warn("Authentication failure.", res.cause());
 					context.fail(401);
 				}
-			});
+			}));
+		}
+	}
+
+	@Override
+	public void parseCredentials(RoutingContext context, Handler<AsyncResult<JsonObject>> handler) {
+		final HttpServerRequest request = context.request();
+		final String token = request.headers().get(getHeader());
+		if (token == null) {
+			handler.handle(Future.failedFuture(String.format("No %s header was found", getHeader())));
+		} else {
+			handler.handle(Future.succeededFuture(new JsonObject().put("token", token).put("options", options)));
 		}
 	}
 }
