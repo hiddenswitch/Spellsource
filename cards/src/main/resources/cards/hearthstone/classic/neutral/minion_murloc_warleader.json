@@ -18,7 +18,7 @@
     }
   },
   "attributes": {
-    "DESCRIPTION": "Your other Murlocs have +2/+1.",
+    "DESCRIPTION": "Your other Murlocs have +2 Attack.",
     "NAME": "Murloc Equipment"
   },
   "collectible": true,
