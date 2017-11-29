@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * A service that starts a game session, accepts connections from players and manages the state of the game.
  */
 public interface Games {
-	long DEFAULT_NO_ACTIVITY_TIMEOUT = 180000L;
+	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 	String WEBSOCKET_PATH = "games";
 
 	/**

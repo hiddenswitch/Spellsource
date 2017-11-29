@@ -66,6 +66,7 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.SPELL_DAMAGE, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.SPELL_DAMAGE_MULTIPLIER, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.STEALTH, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.TURN_TIME, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);
 		// TODO: Remove from Spellstopper
 		parseAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);

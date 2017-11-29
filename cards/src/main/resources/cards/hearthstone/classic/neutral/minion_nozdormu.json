@@ -9,6 +9,9 @@
   "race": "DRAGON",
   "description": "Players only have 15 seconds to take their turns.",
   "collectible": true,
+  "attributes": {
+    "TURN_TIME": 15
+  },
   "set": "CLASSIC",
   "fileFormatVersion": 1
 }

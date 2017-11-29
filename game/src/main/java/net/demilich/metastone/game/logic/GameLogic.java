@@ -110,7 +110,15 @@ public class GameLogic implements Cloneable, Serializable {
 	 * If both heroes take measures to survive for this long, the game ends in an unconditional draw at the start of the
 	 * 90th turn, even if both players are Immune.
 	 */
-	public static final int TURN_LIMIT = 90;
+	public static final int TURN_LIMIT = 89;
+	/**
+	 * The default amount of time a player has to complete a turn in seconds.
+	 */
+	public static final int DEFAULT_TURN_TIME = 75;
+	/**
+	 * The default amount of time a player has to mulligan in seconds.
+	 */
+	public static final int DEFAULT_MULLIGAN_TIME = 65;
 	/**
 	 * The number of attacks gained by {@link Attribute#WINDFURY}.
 	 *
@@ -1786,6 +1794,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 	@Suspendable
 	protected void startGameForPlayer(Player player) {
+		player.setAttribute(Attribute.GAME_STARTED);
 		for (Card card : player.getDeck()) {
 			if (card.getAttribute(Attribute.DECK_TRIGGER) != null) {
 				TriggerDesc triggerDesc = (TriggerDesc) card.getAttribute(Attribute.DECK_TRIGGER);
@@ -2868,7 +2877,13 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void startTurn(int playerId) {
+		final int now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 		Player player = context.getPlayer(playerId);
+		final int gameStartTime = (int) player.getAttributes().get(Attribute.GAME_START_TIME_MILLIS);
+		final int _startTime = now - gameStartTime;
+		final int startTime = _startTime + (_startTime < 0 ? Integer.MAX_VALUE : 0);
+		player.getAttributes().put(Attribute.TURN_START_TIME_MILLIS, startTime);
+
 		if (player.getMaxMana() < MAX_MANA) {
 			player.setMaxMana(player.getMaxMana() + 1);
 		}
@@ -3204,6 +3219,10 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	public long getMulliganTimeMillis() {
+		return GameLogic.DEFAULT_MULLIGAN_TIME * 1000L;
+	}
+
 	protected class FirstHand {
 		private Player player;
 		private boolean begins;
@@ -3341,5 +3360,16 @@ public class GameLogic implements Cloneable, Serializable {
 				|| player.getHero().getHp() < 1
 				|| player.getHero().hasAttribute(Attribute.DESTROYED)
 				|| player.hasAttribute(Attribute.DESTROYED);
+	}
+
+	/**
+	 * Compute the turn time in milliseconds for the specified player.
+	 * <p>
+	 * TODO: Consider how many turns the player has skipped.
+	 *
+	 * @return The turn time in milliseconds.
+	 */
+	public int getTurnTimeMillis(int playerId) {
+		return Integer.parseInt(System.getProperty("games.turnTimeMillis", Integer.toString(DEFAULT_TURN_TIME * 1000)));
 	}
 }

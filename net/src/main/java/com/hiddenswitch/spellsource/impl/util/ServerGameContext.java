@@ -11,6 +11,8 @@ import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.utils.NetworkDelegate;
 import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
@@ -42,12 +44,14 @@ import java.util.stream.Collectors;
 public class ServerGameContext extends GameContext {
 	private final String gameId;
 	private Map<Player, Client> listenerMap = new HashMap<>();
-	private final Map<CallbackId, GameplayRequest> requestCallbacks = new HashMap<>();
+	private final Map<CallbackId, GameplayRequest> requestCallbacks = Collections.synchronizedMap(new HashMap<>());
 	private boolean isRunning = true;
 	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
 	private final List<Trigger> gameTriggers = new ArrayList<>();
 	private final transient RpcClient<Logic> logic;
+	private final Timers timers;
 	private AtomicInteger eventCounter = new AtomicInteger(0);
+	private int timerElapsedForPlayerId;
 
 	/**
 	 * {@inheritDoc}
@@ -59,8 +63,9 @@ public class ServerGameContext extends GameContext {
 	 * @param deckFormat The legal cards that can be played.
 	 * @param gameId     The game ID that corresponds to this game context.
 	 * @param logic      The {@link RpcClient} on which this trigger will make {@link Logic} requests.
+	 * @param timers     The {@link Timers} instance to use for scheduling game events.
 	 */
-	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, RpcClient<Logic> logic) {
+	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, RpcClient<Logic> logic, Timers timers) {
 		// The player's IDs are set here
 		super(player1, player2, new GameLogicAsync(), deckFormat);
 		if (player1.getId() == player2.getId()
@@ -72,6 +77,7 @@ public class ServerGameContext extends GameContext {
 		NotificationProxy.init(new NullNotifier());
 		this.gameId = gameId;
 		this.logic = logic;
+		this.timers = timers;
 
 		enablePersistenceEffects();
 	}
@@ -126,6 +132,28 @@ public class ServerGameContext extends GameContext {
 		throw new UnsupportedOperationException("ServerGameContext::play should not be called. Use ::networkPlay instead.");
 	}
 
+	/**
+	 * Ends the mulligans early due to timer elapsing.
+	 *
+	 * @param ignored The ignored timer elapse result.
+	 */
+	@Suspendable
+	@SuppressWarnings("unchecked")
+	private void endMulligans(long ignored) {
+		Iterator<Map.Entry<CallbackId, GameplayRequest>> requests = requestCallbacks.entrySet().iterator();
+		while (requests.hasNext()) {
+			Map.Entry<CallbackId, GameplayRequest> next = requests.next();
+			if (next.getValue().type == GameplayRequestType.MULLIGAN) {
+				requests.remove();
+				// TODO: We should probably actually mulligan out the cards that the player checked a big X on
+				((Handler<List<Card>>) next.getValue().handler).handle(Collections.emptyList());
+			}
+		}
+	}
+
+	/**
+	 * Starts the game and initializes the turn loop.
+	 */
 	@Suspendable
 	public void networkPlay() {
 		logger.debug("Game starts: " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
@@ -134,6 +162,7 @@ public class ServerGameContext extends GameContext {
 		logger.debug(getActivePlayer().getName() + " begins");
 
 		updateActivePlayers();
+		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 
 		// Make sure the players are initialized before sending the original player updates.
 		getNetworkGameLogic().initializePlayer(IdFactory.PLAYER_1);
@@ -146,13 +175,23 @@ public class ServerGameContext extends GameContext {
 		Future<Void> init1 = Future.future();
 		Future<Void> init2 = Future.future();
 
+		// Set the mulligan timer
+		final Long mulliganTimerId = timers.setTimer(getLogic().getMulliganTimeMillis(), Sync.fiberHandler(this::endMulligans));
+
 		getNetworkGameLogic().initAsync(getActivePlayerId(), true, p -> init1.complete());
 		getNetworkGameLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, p -> init2.complete());
 
 		// Mulligan simultaneously now
 		CompositeFuture.all(init1, init2).setHandler(cf -> {
+			timers.cancelTimer(mulliganTimerId);
+			final Long[] turnTimerId = {null};
 			Recursive<Runnable> playTurnLoop = new Recursive<>();
 			playTurnLoop.func = () -> {
+				// End the existing turn timer, if it's set
+				if (turnTimerId[0] != null) {
+					timers.cancelTimer(turnTimerId[0]);
+				}
+
 				if (!isRunning) {
 					endGame();
 					return;
@@ -164,7 +203,13 @@ public class ServerGameContext extends GameContext {
 					return;
 				}
 
-				startTurn(getActivePlayerId());
+				final int activePlayerId = getActivePlayerId();
+				startTurn(activePlayerId);
+
+				// Start the turn timer
+				timerElapsedForPlayerId = -1;
+				turnTimerId[0] = timers.setTimer(getTurnTimeForPlayer(activePlayerId), Sync.fiberHandler(this::elapseTurn));
+
 				Recursive<Handler<Boolean>> actionLoop = new Recursive<>();
 
 				actionLoop.func = hasMoreActions -> {
@@ -190,6 +235,31 @@ public class ServerGameContext extends GameContext {
 			// Start the active player's turn once the game is initialized.
 			playTurnLoop.func.run();
 		});
+	}
+
+	@Suspendable
+	protected void elapseTurn(long ignored) {
+		// Since executing the callback may itself trigger more action requests, we'll indicate to
+		// the NetworkDelegate (i.e., this ServerGameContext instance) that further
+		// networkRequestActions should be executed immediately.
+		timerElapsedForPlayerId = getActivePlayerId();
+
+		// Enumerate the pending callbacks and remove them.
+		Iterator<Map.Entry<CallbackId, GameplayRequest>> requests = requestCallbacks.entrySet().iterator();
+		while (requests.hasNext()) {
+			Map.Entry<CallbackId, GameplayRequest> next = requests.next();
+			GameplayRequest request = next.getValue();
+			if (request.type == GameplayRequestType.ACTION) {
+				requests.remove();
+				processActionForElapsedTurn(request.actions, request.handler);
+			}
+		}
+
+		// At this point, end turn should have been called.
+	}
+
+	private int getTurnTimeForPlayer(int activePlayerId) {
+		return getLogic().getTurnTimeMillis(activePlayerId);
 	}
 
 	protected void setLocalPlayer2() {
@@ -314,10 +384,41 @@ public class ServerGameContext extends GameContext {
 	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
 		String id = RandomStringUtils.randomAscii(8);
 		logger.debug("Requesting action with callback {} for playerId {}", id, playerId);
-		requestCallbacks.put(new CallbackId(id, playerId), new GameplayRequest(GameplayRequestType.ACTION, state, actions, callback));
+		final CallbackId callbackId = new CallbackId(id, playerId);
+		requestCallbacks.put(callbackId, new GameplayRequest(GameplayRequestType.ACTION, state, actions, callback));
 		// Send a state update for the other player too
 		getListenerMap().get(getOpponent(getPlayer(playerId))).onUpdate(state);
-		getListenerMap().get(getPlayer(playerId)).onRequestAction(id, state, actions);
+
+		// The player's turn may have ended, so handle the action immediately in this case.
+		if (timerElapsedForPlayerId == playerId) {
+			getListenerMap().get(getPlayer(playerId)).onUpdate(state);
+			requestCallbacks.remove(callbackId);
+			processActionForElapsedTurn(actions, callback);
+		} else {
+			getListenerMap().get(getPlayer(playerId)).onRequestAction(id, state, actions);
+		}
+
+
+	}
+
+	/**
+	 * When a player's turn ends prematurely, this method will process a player's turn, choosing {@link
+	 * ActionType#BATTLECRY} and {@link ActionType#DISCOVER} randomly and performing an {@link ActionType#END_TURN} as
+	 * soon as possible.
+	 *
+	 * @param actions  The possible {@link GameAction} for this request.
+	 * @param callback The callback for this request.
+	 */
+	@Suspendable
+	@SuppressWarnings("unchecked")
+	private void processActionForElapsedTurn(List<GameAction> actions, Handler callback) {
+		// If the request contains an end turn action, execute it. Otherwise, choose an action
+		// at random.
+		final GameAction action = actions.stream()
+				.filter(ga -> ga.getActionType() == ActionType.END_TURN)
+				.findFirst().orElse(actions.get(getLogic().random(actions.size())));
+
+		Sync.fiberHandler((Handler<GameAction>) callback).handle(action);
 	}
 
 	/**
@@ -345,6 +446,11 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public void onActionReceived(String messageId, GameAction action) {
+		// The action may have been removed due to the timer, so it's okay if it doesn't exist.
+		if (!requestCallbacks.containsKey(CallbackId.of(messageId))) {
+			return;
+		}
+
 		logger.debug("Accepting action for callback {}", messageId);
 		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
 		requestCallbacks.remove(CallbackId.of(messageId));
@@ -362,6 +468,11 @@ public class ServerGameContext extends GameContext {
 	@SuppressWarnings("unchecked")
 	@Suspendable
 	public void onMulliganReceived(String messageId, Player player, List<Card> discardedCards) {
+		// The mulligan might have been removed due to the timer, so it's okay if it doesn't exist.
+		if (!requestCallbacks.containsKey(CallbackId.of(messageId))) {
+			return;
+		}
+
 		logger.debug("Mulligan received from {}", player.getName());
 		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
 		requestCallbacks.remove(CallbackId.of(messageId));
@@ -496,4 +607,7 @@ public class ServerGameContext extends GameContext {
 		onMulliganReceived(messageId, getPlayer(reqId.playerId), discardedCards);
 	}
 
+	public NetworkDelegate getNetworkDelegate() {
+		return this;
+	}
 }

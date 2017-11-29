@@ -189,7 +189,7 @@ public class GameSessionImpl implements GameSession {
 		Player player2 = getPlayer2();
 		player1.setBehaviour(new NetworkBehaviour());
 		player2.setBehaviour(new NetworkBehaviour());
-		this.gameContext = new ServerGameContext(player1, player2, simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()));
+		this.gameContext = new ServerGameContext(player1, player2, simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()), new VertxTimers(vertx));
 		final Client listener1;
 		final Client listener2;
 
