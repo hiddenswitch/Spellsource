@@ -2879,7 +2879,13 @@ public class GameLogic implements Cloneable, Serializable {
 	public void startTurn(int playerId) {
 		final int now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 		Player player = context.getPlayer(playerId);
-		final int gameStartTime = (int) player.getAttributes().get(Attribute.GAME_START_TIME_MILLIS);
+		final int gameStartTime;
+		if (player.getAttributes().containsKey(Attribute.GAME_START_TIME_MILLIS)) {
+			gameStartTime = now;
+		} else {
+			gameStartTime = (int) player.getAttributes().get(Attribute.GAME_START_TIME_MILLIS);
+		}
+
 		final int _startTime = now - gameStartTime;
 		final int startTime = _startTime + (_startTime < 0 ? Integer.MAX_VALUE : 0);
 		player.getAttributes().put(Attribute.TURN_START_TIME_MILLIS, startTime);
