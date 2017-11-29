@@ -645,9 +645,25 @@ public enum Attribute {
 	 */
 	EXTRA_TURN,
 	/**
+	 * Indicates the amount of time, in seconds, a player has to perform their turn.
+	 */
+	TURN_TIME,
+	/**
+	 * Indicates the time, in millis since the beginning of the match, that a player's turn was started.
+	 */
+	TURN_START_TIME_MILLIS,
+	/**
+	 * Indicates the time, in millis, that a game was started
+	 */
+	GAME_START_TIME_MILLIS,
+	/**
 	 * Indicates how many cards the player has discarded during the game.
 	 */
-	DISCARDED;
+	DISCARDED,
+	/**
+	 * Indicates that the game has started for the specified player.
+	 */
+	GAME_STARTED;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

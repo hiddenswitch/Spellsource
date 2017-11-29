@@ -234,7 +234,17 @@ public class Spellsource {
 	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
 	 */
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
-		final List<SyncVerticle> verticles = Arrays.asList(new SyncVerticle[]{
+		final List<SyncVerticle> verticles = Arrays.asList(services());
+
+		CompositeFuture.all(verticles.stream().map(verticle -> {
+			final Future<String> future = Future.future();
+			vertx.deployVerticle(verticle, future);
+			return future;
+		}).collect(toList())).setHandler(deployments);
+	}
+
+	protected SyncVerticle[] services() {
+		return new SyncVerticle[]{
 				new CardsImpl(),
 				new AccountsImpl(),
 				new GamesImpl(),
@@ -244,13 +254,7 @@ public class Spellsource {
 				new DecksImpl(),
 				new InventoryImpl(),
 				new DraftImpl(),
-				new GatewayImpl()});
-
-		CompositeFuture.all(verticles.stream().map(verticle -> {
-			final Future<String> future = Future.future();
-			vertx.deployVerticle(verticle, future);
-			return future;
-		}).collect(toList())).setHandler(deployments);
+				new GatewayImpl()};
 	}
 
 	/**

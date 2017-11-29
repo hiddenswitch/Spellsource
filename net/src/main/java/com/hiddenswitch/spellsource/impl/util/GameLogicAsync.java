@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static io.vertx.ext.sync.Sync.fiberHandler;
+
 /**
  * Created by bberman on 11/23/16.
  */
@@ -64,10 +66,10 @@ public class GameLogicAsync extends GameLogic {
 	public void initAsync(int playerId, boolean begins, Handler<Player> callback) {
 		Player player = context.getPlayer(playerId);
 
-		mulliganAsync(player, begins, o -> {
+		mulliganAsync(player, begins, fiberHandler(o -> {
 			startGameForPlayer(player);
 			callback.handle(player);
-		});
+		}));
 	}
 
 	@Override
@@ -187,7 +189,7 @@ public class GameLogicAsync extends GameLogic {
 		};
 
 		if (resolveBattlecry && minion.getBattlecry() != null) {
-			resolveBattlecryAsync(player.getId(), minion, Sync.fiberHandler((o) -> {
+			resolveBattlecryAsync(player.getId(), minion, fiberHandler((o) -> {
 				postSummonHandler.handle(SummonResult.SUMMONED);
 			}));
 		} else {

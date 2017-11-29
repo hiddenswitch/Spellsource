@@ -2,6 +2,7 @@ package net.demilich.metastone.game.utils;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.common.GameState;
+import com.hiddenswitch.spellsource.common.GameplayRequest;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
