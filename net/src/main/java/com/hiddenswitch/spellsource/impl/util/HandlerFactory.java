@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import com.hiddenswitch.spellsource.client.models.SpellsourceException;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.WebResult;
 import com.hiddenswitch.spellsource.util.Sync;
@@ -67,8 +68,8 @@ public class HandlerFactory {
 	}
 
 	private static <R> void respond(RoutingContext context, WebResult<R> result) {
+		context.response().setStatusCode(result.responseCode());
 		if (result.succeeded()) {
-			context.response().setStatusCode(result.responseCode());
 			if (result.result() == null) {
 				// Allow empty response bodies
 				context.response().end();
@@ -76,7 +77,11 @@ public class HandlerFactory {
 				context.response().end(Serialization.serialize(result.result()));
 			}
 		} else {
-			context.fail(result.responseCode());
+			if (result.cause() != null) {
+				context.fail(result.cause());
+			} else {
+				context.fail(result.responseCode());
+			}
 		}
 	}
 

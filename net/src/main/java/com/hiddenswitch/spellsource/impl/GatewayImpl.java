@@ -86,6 +86,22 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			context.next();
 		});
 
+		// Use a standardized failure handler
+		router.route().failureHandler(routingContext -> {
+			if (!routingContext.failed()) {
+				routingContext.next();
+				return;
+			}
+
+			if (routingContext.failure() != null) {
+				logger.error(routingContext.failure());
+				routingContext.response().end(Serialization.serialize(new SpellsourceException().message(routingContext.failure().getMessage())));
+			} else {
+				routingContext.response().end(Serialization.serialize(new SpellsourceException().message("An internal server error occurred. Try again later.")));
+			}
+
+		});
+
 
 		router.route("/")
 				.handler(HandlerFactory.handler(this::healthCheck));
@@ -301,15 +317,28 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<DecksPutResponse> decksPut(RoutingContext context, String userId, DecksPutRequest request) throws SuspendExecution, InterruptedException {
-		final HeroClass heroClass = HeroClass.valueOf(request.getHeroClass());
+		DeckCreateRequest createRequest;
+		if (request.getDeckList() == null) {
+			final HeroClass heroClass = HeroClass.valueOf(request.getHeroClass());
 
-		DeckCreateResponse internalResponse = getDecks().createDeck(new DeckCreateRequest()
-				.withName(request.getName())
-				.withInventoryIds(request.getInventoryIds())
-				.withHeroClass(heroClass)
+			createRequest = new DeckCreateRequest()
+					.withName(request.getName())
+					.withInventoryIds(request.getInventoryIds())
+					.withHeroClass(heroClass);
+		} else {
+			try {
+				createRequest = DeckCreateRequest.fromDeckList(request.getDeckList());
+			} catch (Exception e) {
+				return WebResult.failed(e);
+			}
+		}
+
+		DeckCreateResponse internalResponse = getDecks().createDeck(createRequest
 				.withUserId(userId));
 
-		return WebResult.succeeded(new DecksPutResponse().deckId(internalResponse.getDeckId()));
+		return WebResult.succeeded(new DecksPutResponse()
+				.deckId(internalResponse.getDeckId())
+				.collection(internalResponse.getCollection().asInventoryCollection()));
 	}
 
 	private WebResult<DecksGetResponse> getDeck(String userId, String deckId) throws SuspendExecution, InterruptedException {

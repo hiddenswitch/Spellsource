@@ -192,6 +192,7 @@ Class | Method | HTTP request | Description
  - [SendMessageResponse](docs/SendMessageResponse.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
  - [SpellAction](docs/SpellAction.md)
+ - [SpellsourceException](docs/SpellsourceException.md)
  - [SummonAction](docs/SummonAction.md)
  - [SummonActionIndexToActions](docs/SummonActionIndexToActions.md)
  - [TargetActionPair](docs/TargetActionPair.md)

@@ -47,6 +47,9 @@ public class DecksPutRequest  implements Serializable {
   @SerializedName("inventoryIds")
   private List<String> inventoryIds = new ArrayList<String>();
 
+  @SerializedName("deckList")
+  private String deckList = null;
+
   public DecksPutRequest heroClass(String heroClass) {
     this.heroClass = heroClass;
     return this;
@@ -56,7 +59,7 @@ public class DecksPutRequest  implements Serializable {
    * Get heroClass
    * @return heroClass
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(example = "null", value = "")
   public String getHeroClass() {
     return heroClass;
   }
@@ -74,7 +77,7 @@ public class DecksPutRequest  implements Serializable {
    * Get name
    * @return name
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(example = "null", value = "")
   public String getName() {
     return name;
   }
@@ -106,6 +109,24 @@ public class DecksPutRequest  implements Serializable {
     this.inventoryIds = inventoryIds;
   }
 
+  public DecksPutRequest deckList(String deckList) {
+    this.deckList = deckList;
+    return this;
+  }
+
+   /**
+   * A community-standard decklist. 
+   * @return deckList
+  **/
+  @ApiModelProperty(example = "null", value = "A community-standard decklist. ")
+  public String getDeckList() {
+    return deckList;
+  }
+
+  public void setDeckList(String deckList) {
+    this.deckList = deckList;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -118,12 +139,13 @@ public class DecksPutRequest  implements Serializable {
     DecksPutRequest decksPutRequest = (DecksPutRequest) o;
     return Objects.equals(this.heroClass, decksPutRequest.heroClass) &&
         Objects.equals(this.name, decksPutRequest.name) &&
-        Objects.equals(this.inventoryIds, decksPutRequest.inventoryIds);
+        Objects.equals(this.inventoryIds, decksPutRequest.inventoryIds) &&
+        Objects.equals(this.deckList, decksPutRequest.deckList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(heroClass, name, inventoryIds);
+    return Objects.hash(heroClass, name, inventoryIds, deckList);
   }
 
   @Override
@@ -134,6 +156,7 @@ public class DecksPutRequest  implements Serializable {
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    inventoryIds: ").append(toIndentedString(inventoryIds)).append("\n");
+    sb.append("    deckList: ").append(toIndentedString(deckList)).append("\n");
     sb.append("}");
     return sb.toString();
   }

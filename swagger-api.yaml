@@ -159,9 +159,6 @@ definitions:
         type: 'string'
   DecksPutRequest:
     type: 'object'
-    required:
-      - 'heroClass'
-      - 'name'
     properties:
       heroClass:
         type: 'string'
@@ -171,11 +168,17 @@ definitions:
         type: 'array'
         items:
           type: 'string'
+      deckList:
+        type: 'string'
+        description: |
+          A community-standard decklist.
   DecksPutResponse:
     type: 'object'
     properties:
       deckId:
         type: 'string'
+      collection:
+        $ref: '#/definitions/InventoryCollection'
   DecksUpdateCommand:
     type: 'object'
     properties:
@@ -1308,6 +1311,22 @@ definitions:
               type: 'string'
             description: |
               Indicates that the player must choose from the specified deck IDs in the player's account.
+  SpellsourceException:
+    type: object
+    description: |
+      A server-side exception with content renderable to the client.
+    properties:
+      message:
+        description: |
+          A user-renderable message explaining the source of the error.
+        type: string
+    required:
+      - message
+responses:
+  InternalServerError:
+    description: The request raised an exception on the server and produced a user-renderable message.
+    schema:
+      $ref: '#/definitions/SpellsourceException'
 paths:
   /:
     get:
@@ -1336,6 +1355,8 @@ paths:
             A specific user account.
           schema:
             $ref: '#/definitions/GetAccountsResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
   /accounts:
     get:
       description: |
@@ -1355,6 +1376,8 @@ paths:
             Gets a list of user profile accounts
           schema:
             $ref: '#/definitions/GetAccountsResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
     put:
       description: |
         Create an account with Spellsource.
@@ -1371,6 +1394,8 @@ paths:
             An account has been successfully created.
           schema:
             $ref: '#/definitions/CreateAccountResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
     post:
       description: |
         Login with a username and password, receiving an authentication token to use for future sessions.
@@ -1387,6 +1412,8 @@ paths:
             A response containing the token to put into future request headers.
           schema:
             $ref: '#/definitions/LoginResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
   /decks:
     get:
       description: |
@@ -1400,6 +1427,8 @@ paths:
             The server returns an array of DeckGetResponses for each deck
           schema:
             $ref: '#/definitions/DecksGetAllResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
     put:
       description: |
         Creates a new deck with optionally specified inventory IDs, a name and a hero class.
@@ -1420,6 +1449,8 @@ paths:
             The server has created a deck with the optionally specified cards and provides the ID of the deck for later use.
           schema:
             $ref: '#/definitions/DecksPutResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
   /decks/{deckId}:
     get:
       description: |
@@ -1439,6 +1470,8 @@ paths:
             The deck has been successfully retrieved.
           schema:
             $ref: '#/definitions/DecksGetResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
     post:
       description: |
         Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.
@@ -1464,6 +1497,8 @@ paths:
             The update has been successfully applied.
           schema:
             $ref: '#/definitions/DecksGetResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
     delete:
       description: |
         Deletes the specified deck by ID.
@@ -1480,6 +1515,8 @@ paths:
         "200":
           description: |
             The deck has been deleted.
+        default:
+          $ref: '#/responses/InternalServerError'
   /matchmaking:
     get:
       description: |
@@ -1496,6 +1533,8 @@ paths:
             A list of queues is available for the user.
           schema:
             $ref: '#/definitions/MatchmakingQueuesResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
   /matchmaking/{queueId}:
     get:
       description: |
@@ -1518,6 +1557,8 @@ paths:
             The client has a game and its state was delivered.
           schema:
             $ref: '#/definitions/GameState'
+        default:
+          $ref: '#/responses/InternalServerError'
     delete:
       description: |
         Concedes the player's current game in this queue.
@@ -1536,6 +1577,8 @@ paths:
             The client's game was successfully conceded.
           schema:
             $ref: '#/definitions/MatchConcedeResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
     put:
       description: |
         Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry
@@ -1569,6 +1612,8 @@ paths:
             in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
           schema:
             $ref: '#/definitions/MatchmakingQueuePutResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
     delete:
       description: Removes your client from the matchmaking queue.
       operationId: matchmakingConstructedQueueDelete
@@ -1580,6 +1625,8 @@ paths:
             The client's cancel request has been processed. The result can be found in the body's MatchCancelResponse.
           schema:
             $ref: '#/definitions/MatchCancelResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
   /friends:
     put:
       description: |
@@ -1607,6 +1654,8 @@ paths:
         "409":
           description: |
             already friends
+        default:
+          $ref: '#/responses/InternalServerError'
 
   /friends/{friendId}:
     delete:
@@ -1630,6 +1679,8 @@ paths:
         "404":
           description: |
             Not a friend
+        default:
+          $ref: '#/responses/InternalServerError'
   /drafts:
     get:
       description: |
@@ -1646,6 +1697,8 @@ paths:
         "404":
           description: |
             You have not started a draft. Start one first.
+        default:
+          $ref: '#/responses/InternalServerError'
     post:
       description: |
         Starts a draft, or make a change to your draft, like retiring early.
@@ -1668,6 +1721,8 @@ paths:
           description: |
             You sent an invalid draft request, like starting a draft when you already have
             a draft started.
+        default:
+          $ref: '#/responses/InternalServerError'
   /drafts/hero:
     put:
       description: |
@@ -1690,6 +1745,8 @@ paths:
         "400":
           description: |
             An invalid option was chosen, or it's not time to choose a hero.
+        default:
+          $ref: '#/responses/InternalServerError'
   /drafts/cards:
     put:
       description: |
@@ -1712,6 +1769,8 @@ paths:
         "400":
           description: |
             An invalid option was chosen, or it's not time to choose a card (usually your draft is finished).
+        default:
+          $ref: '#/responses/InternalServerError'
 
   /friends/{friendId}/conversation:
     get:
@@ -1735,6 +1794,8 @@ paths:
         "404":
           description: |
             Friend not found
+        default:
+          $ref: '#/responses/InternalServerError'
     put:
       description: |
         send message to friend
@@ -1762,3 +1823,5 @@ paths:
         "404":
           description: |
             Friend not found
+        default:
+          $ref: '#/responses/InternalServerError'

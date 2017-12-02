@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,13 +50,14 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		return request;
 	}
 
-	public static DeckCreateRequest fromDeckList(String deckList) throws Exception {
+	public static DeckCreateRequest fromDeckList(String deckList) throws DeckListParsingException {
 		DeckCreateRequest request = new DeckCreateRequest()
 				.withCardIds(new ArrayList<>());
 		// Parse with a regex
 		String regex = "(?:###\\s?(?<name>.+$))|(?:Class:\\s?(?<heroClass>\\w+))|(?:Hero:\\s?(?<heroCard>\\w+))|(?:(?<count>\\d+)x[\\s\\(\\)\\d]+(?<cardName>.+$))";
 		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
 		Matcher matcher = pattern.matcher(deckList);
+		List<Throwable> errors = new ArrayList<>();
 		while (matcher.find()) {
 			if (matcher.group("name") != null) {
 				request.setName(matcher.group("name"));
@@ -63,12 +65,24 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 			}
 
 			if (matcher.group("heroClass") != null) {
-				request.setHeroClass(HeroClass.valueOf(matcher.group("heroClass").toUpperCase()));
+				final String heroClass = matcher.group("heroClass").toUpperCase();
+				try {
+					request.setHeroClass(HeroClass.valueOf(heroClass));
+				} catch (IllegalArgumentException ex) {
+					errors.add(new IllegalArgumentException(String.format("No class named %s could be found", heroClass), ex));
+				} catch (NullPointerException ex) {
+					errors.add(new NullPointerException("No hero class specified"));
+				}
 				continue;
 			}
 
 			if (matcher.group("heroCard") != null) {
-				request.setHeroCardId(CardCatalogue.getCardByName(matcher.group("heroCard")).getCardId());
+				final String heroCard = matcher.group("heroCard");
+				try {
+					request.setHeroCardId(CardCatalogue.getCardByName(heroCard).getCardId());
+				} catch (NullPointerException ex) {
+					errors.add(new NullPointerException(String.format("No hero card named %s could be found", heroCard)));
+				}
 				continue;
 			}
 
@@ -80,7 +94,8 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				try {
 					cardId = CardCatalogue.getCardByName(cardName).getCardId();
 				} catch (NullPointerException ex) {
-					logger.error(String.format("Could not find card with name %s while reading deck list %s", cardName, request.getName()));
+					String message = String.format("Could not find a card named %s%s", cardName, request.getName() == null ? "" : " while reading deck list " + request.getName());
+					errors.add(new NullPointerException(message));
 					continue;
 				}
 
@@ -88,6 +103,22 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 					request.getCardIds().add(cardId);
 				}
 			}
+		}
+
+		if (request.getCardIds().size() != 30) {
+			errors.add(new IllegalArgumentException(String.format("You must specify a deck with 30 cards. You gave %d", request.getCardIds().size())));
+		}
+
+		if (request.getHeroClass() == null) {
+			errors.add(new NullPointerException("You must specify a hero class."));
+		}
+
+		if (request.getName() == null || request.getName().length() == 0) {
+			errors.add(new NullPointerException("You must specify a name for the deck."));
+		}
+
+		if (errors.size() > 0) {
+			throw new DeckListParsingException(errors);
 		}
 
 		return request;
@@ -203,5 +234,17 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	public DeckCreateRequest withHeroCardId(final String heroCardId) {
 		this.heroCardId = heroCardId;
 		return this;
+	}
+
+	public boolean isValid() {
+		return getName() != null
+				&& getHeroClass() != null
+				&& getHeroClass().isBaseClass()
+				&& (getCardIds().size() + getInventoryIds().size()) == 30;
+	}
+
+	@Override
+	public String toString() {
+		return new ReflectionToStringBuilder(this).toString();
 	}
 }
