@@ -27,56 +27,35 @@ package com.hiddenswitch.spellsource.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * DecksPutResponse
+ * A server-side exception with content renderable to the client. 
  */
+@ApiModel(description = "A server-side exception with content renderable to the client. ")
 
-public class DecksPutResponse  implements Serializable {
-  @SerializedName("deckId")
-  private String deckId = null;
+public class SpellsourceException  implements Serializable {
+  @SerializedName("message")
+  private String message = null;
 
-  @SerializedName("collection")
-  private InventoryCollection collection = null;
-
-  public DecksPutResponse deckId(String deckId) {
-    this.deckId = deckId;
+  public SpellsourceException message(String message) {
+    this.message = message;
     return this;
   }
 
    /**
-   * Get deckId
-   * @return deckId
+   * A user-renderable message explaining the source of the error. 
+   * @return message
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getDeckId() {
-    return deckId;
+  @ApiModelProperty(example = "null", required = true, value = "A user-renderable message explaining the source of the error. ")
+  public String getMessage() {
+    return message;
   }
 
-  public void setDeckId(String deckId) {
-    this.deckId = deckId;
-  }
-
-  public DecksPutResponse collection(InventoryCollection collection) {
-    this.collection = collection;
-    return this;
-  }
-
-   /**
-   * Get collection
-   * @return collection
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public InventoryCollection getCollection() {
-    return collection;
-  }
-
-  public void setCollection(InventoryCollection collection) {
-    this.collection = collection;
+  public void setMessage(String message) {
+    this.message = message;
   }
 
 
@@ -88,23 +67,21 @@ public class DecksPutResponse  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DecksPutResponse decksPutResponse = (DecksPutResponse) o;
-    return Objects.equals(this.deckId, decksPutResponse.deckId) &&
-        Objects.equals(this.collection, decksPutResponse.collection);
+    SpellsourceException spellsourceException = (SpellsourceException) o;
+    return Objects.equals(this.message, spellsourceException.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(deckId, collection);
+    return Objects.hash(message);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DecksPutResponse {\n");
+    sb.append("class SpellsourceException {\n");
     
-    sb.append("    deckId: ").append(toIndentedString(deckId)).append("\n");
-    sb.append("    collection: ").append(toIndentedString(collection)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }

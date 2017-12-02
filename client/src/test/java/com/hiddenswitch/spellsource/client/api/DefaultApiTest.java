@@ -28,6 +28,7 @@ package com.hiddenswitch.spellsource.client.api;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
+import com.hiddenswitch.spellsource.client.models.SpellsourceException;
 import com.hiddenswitch.spellsource.client.models.DecksGetResponse;
 import com.hiddenswitch.spellsource.client.models.DecksGetAllResponse;
 import com.hiddenswitch.spellsource.client.models.DecksPutRequest;

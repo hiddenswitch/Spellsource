@@ -22,10 +22,8 @@ import net.demilich.metastone.game.decks.DeckCatalogue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.AccessDeniedException;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
@@ -60,7 +58,11 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 	@Override
 	public DeckCreateResponse createDeck(DeckCreateRequest request) throws SuspendExecution, InterruptedException {
 		if (request.getUserId() == null) {
-			throw new RuntimeException();
+			throw new SecurityException();
+		}
+
+		if (!request.isValid()) {
+			throw new IllegalArgumentException("Invalid deck creation request.");
 		}
 
 		List<String> inventoryIds = new ArrayList<>();
