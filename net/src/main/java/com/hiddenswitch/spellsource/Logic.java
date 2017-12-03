@@ -3,25 +3,25 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
+import com.hiddenswitch.spellsource.impl.util.LegacyPersistenceHandler;
 import com.hiddenswitch.spellsource.impl.util.PersistenceTrigger;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.impl.util.LegacyPersistenceHandler;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  * A Logic service that handles complex game logic.
  * <p>
- * To implement a new persistence effect, see
- * {@link Spellsource#persistAttribute(LegacyPersistenceHandler)}.
+ * To implement a new persistence effect, see {@link Spellsource#persistAttribute(LegacyPersistenceHandler)}.
  */
 public interface Logic {
 
 	/**
-	 * Performs account creation action side effects, like adding the first cards to the player's collection,
-	 * defining their starting decks and in the future, creating friend recommendations.
+	 * Performs account creation action side effects, like adding the first cards to the player's collection, defining
+	 * their starting decks and in the future, creating friend recommendations.
 	 * <p>
 	 * Some users, like test users or some kinds of bots, will not need starting decks or starting inventory.
 	 *
@@ -44,9 +44,9 @@ public interface Logic {
 	EndGameResponse endGame(EndGameRequest request) throws SuspendExecution, InterruptedException;
 
 	/**
-	 * Starts a game for the given two users and their deck selections. This generates information the Games service
-	 * can use to actually create a game. It does not create a connectable game. But it does convert a deck ID into
-	 * an actual deck of cards. It fills in various attributes for the cards that are used for alliance / persistence
+	 * Starts a game for the given two users and their deck selections. This generates information the Games service can
+	 * use to actually create a game. It does not create a connectable game. But it does convert a deck ID into an
+	 * actual deck of cards. It fills in various attributes for the cards that are used for alliance / persistence
 	 * effects.
 	 *
 	 * @param request The users and their chosen deck IDs.
@@ -69,10 +69,16 @@ public interface Logic {
 	 */
 	static CardDesc getDescriptionFromRecord(InventoryRecord cardRecord, String userId, String deckId) {
 		// Set up the attributes
+		// Hearthstone cards are read directly from the database, since they do not support any mutability  rules.
 		CardDesc desc = cardRecord.getCardDesc();
+		if (desc.set.isHearthstoneSet()) {
+			desc = CardCatalogue.getCardById(desc.id).getDesc();
+		}
+
 		if (desc.attributes == null) {
 			desc.attributes = new AttributeMap();
 		}
+
 		desc.attributes.put(Attribute.USER_ID, userId);
 		desc.attributes.put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
 		desc.attributes.put(Attribute.DECK_ID, deckId);
@@ -89,7 +95,9 @@ public interface Logic {
 
 	/**
 	 * Persists the requested attribute for an inventory ID.
-	 * @param request The information abotu the attribute, inventory item and game necessary to save it to the database.
+	 *
+	 * @param request The information abotu the attribute, inventory item and game necessary to save it to the
+	 *                database.
 	 * @return The results to apply to the entity.
 	 */
 	@Suspendable

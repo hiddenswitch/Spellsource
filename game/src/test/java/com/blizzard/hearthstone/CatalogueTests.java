@@ -61,7 +61,11 @@ public class CatalogueTests {
 		String text = cardObject.has("text") ? cardObject.get("text").getAsString() : "";
 		text = Jsoup.parse(text).text();
 		text = text.replaceAll("[\\$\\#]", "").replaceAll("\\[x\\]", "");
-		Assert.assertEquals(card.getDescription(), text, "Wrong description for " + name);
+		String description = card.getDescription();
+		// Only compare non-whitespace and non-punctuation
+		text = text.replaceAll("[\\s.,:;]", "");
+		description = description.replaceAll("[\\s.,:;]", "");
+		Assert.assertEquals(description, text, "Wrong description for " + name);
 		Assert.assertEquals(card.getBaseManaCost(), cardObject.get("cost").getAsInt(), "Wrong cost for " + name);
 		if (card.getCardType() == CardType.MINION) {
 			MinionCard minionCard = (MinionCard) card;

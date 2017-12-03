@@ -17,3 +17,4 @@ public class CatalogueSource extends CardSource {
 	}
 
 }
+
