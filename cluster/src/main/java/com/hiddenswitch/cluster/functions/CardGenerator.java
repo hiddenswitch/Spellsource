@@ -11,20 +11,12 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public class CardGenerator implements FlatMapFunction<String, Card> {
-	public CardGenerator() throws CardParseException, IOException, URISyntaxException {
-		try {
-			CardCatalogue.loadCardsFromPackage();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (CardParseException e) {
-			e.printStackTrace();
-		}
+	public CardGenerator() {
+		CardCatalogue.loadCardsFromPackage();
 	}
 
 	@Override
-	public Iterator<Card> call(String s) throws Exception {
+	public Iterator<Card> call(String s) {
 		// TODO: Just return fireball for now
 		Card fireball = CardCatalogue.getCardById("spell_fireball");
 

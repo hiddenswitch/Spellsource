@@ -1,6 +1,6 @@
 {
   "name": "Murloc",
-  "baseManaCost": 1,
+  "baseManaCost": 0,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 1,
@@ -9,6 +9,6 @@
   "race": "MURLOC",
   "description": "",
   "collectible": false,
-  "set": "CLASSIC",
+  "set": "HALL_OF_FAME",
   "fileFormatVersion": 1
 }

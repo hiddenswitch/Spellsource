@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Battlecry: Destroy your opponent's weapon and gain Armor equal to its Durability.",
+  "description": "Battlecry: Destroy your opponent's weapon and gain Armor equal to its Attack.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

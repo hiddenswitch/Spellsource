@@ -1,10 +1,10 @@
 {
   "name": "Tol'vir Stoneshaper",
-  "baseManaCost": 3,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 3,
-  "baseHp": 3,
+  "baseHp": 5,
   "rarity": "RARE",
   "description": "Battlecry: If you played an Elemental last turn, gain Taunt and Divine Shield.",
   "battlecry": {

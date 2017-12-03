@@ -4,8 +4,8 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "Deal 3 damage. Summon three 1/1 Pterrordaxes.",
-  "targetSelection": "ANY",
+  "description": "Deal 3 damage to a minion. Summon three 1/1 Pterrordaxes.",
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [

@@ -42,13 +42,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		super.start();
 		inventory = Rpc.connect(Inventory.class, vertx.eventBus());
 		// Create the starting decks
-		try {
-			CardCatalogue.loadCardsFromPackage();
-		} catch (IOException | URISyntaxException e) {
-			throw new RuntimeException();
-		} catch (CardParseException e) {
-			e.printStackTrace();
-		}
+		CardCatalogue.loadCardsFromPackage();
 
 		registration = Rpc.register(this, Decks.class, vertx.eventBus());
 	}

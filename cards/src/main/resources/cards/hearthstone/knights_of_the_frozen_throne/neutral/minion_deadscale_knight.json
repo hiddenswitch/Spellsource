@@ -1,10 +1,10 @@
 {
   "name": "Deadscale Knight",
-  "baseManaCost": 4,
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 3,
-  "baseHp": 3,
+  "baseAttack": 1,
+  "baseHp": 1,
   "rarity": "COMMON",
   "race": "MURLOC",
   "description": "Lifesteal.",

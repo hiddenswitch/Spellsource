@@ -7,12 +7,12 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Battlecry: Adapt your Murloc",
+  "description": "Battlecry: Adapt your Murlocs",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "CastFromGroupSpell",
-      "target": "SELF",
+      "target": "FRIENDLY_MINIONS",
       "group": "group_adapt",
       "filter": {
         "class": "RaceFilter",

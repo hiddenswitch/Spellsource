@@ -1,6 +1,6 @@
 {
   "name": "Shadow Essence",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "WHITE",
   "rarity": "RARE",

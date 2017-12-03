@@ -68,15 +68,7 @@ public class TestBase {
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 		root.setLevel(Level.DEBUG);
 
-		try {
-			CardCatalogue.loadCardsFromPackage();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (CardParseException e) {
-			System.err.println(e.getMessage());
-		}
+		CardCatalogue.loadCardsFromPackage();
 	}
 
 	protected static void attack(GameContext context, Player player, Entity attacker, Entity target) {

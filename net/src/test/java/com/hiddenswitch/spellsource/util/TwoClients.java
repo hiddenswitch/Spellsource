@@ -71,11 +71,7 @@ public class TwoClients {
 	@Suspendable
 	public TwoClients invoke(GamesImpl service, long noActivityTimeout) throws SuspendExecution, InterruptedException {
 		this.service = service;
-		try {
-			CardCatalogue.loadCardsFromPackage();
-		} catch (IOException | URISyntaxException | CardParseException e) {
-			e.printStackTrace();
-		}
+		CardCatalogue.loadCardsFromPackage();
 
 		AIPlayer player1 = new AIPlayer();
 		AIPlayer player2 = new AIPlayer();

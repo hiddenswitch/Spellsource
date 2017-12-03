@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Destroy all damaged minions.",
+  "description": "Battlecry: Destroy all damaged minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

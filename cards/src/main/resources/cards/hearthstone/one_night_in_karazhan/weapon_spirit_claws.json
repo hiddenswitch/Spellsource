@@ -1,6 +1,6 @@
 {
   "name": "Spirit Claws",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "WEAPON",
   "heroClass": "SILVER",
   "damage": 1,

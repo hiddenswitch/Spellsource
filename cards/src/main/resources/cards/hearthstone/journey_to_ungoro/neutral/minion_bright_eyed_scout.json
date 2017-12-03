@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Draw a card and set its cost to (5).",
+  "description": "Battlecry: Draw a card and set its cost to (5).",
   "battlecry": {
     "spell": {
       "class": "DrawCardAndDoSomethingSpell",
