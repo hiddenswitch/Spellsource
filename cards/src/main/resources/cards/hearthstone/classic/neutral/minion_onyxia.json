@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Battlecry: Summon 1/1 Terracota Warriors until your side of the battlefield is full.",
+  "description": "Battlecry: Summon 1/1 Whelps until your side of the battlefield is full.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

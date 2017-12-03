@@ -4,8 +4,8 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "COMMON",
-  "description": "Freeze a character.",
-  "targetSelection": "ANY",
+  "description": "Freeze an enemy.",
+  "targetSelection": "ENEMY_CHARACTERS",
   "spell": {
     "class": "AddAttributeSpell",
     "attribute": "FROZEN"

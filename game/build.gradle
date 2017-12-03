@@ -7,6 +7,7 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-core', version: '3.5.0'
     compile group: 'com.github.hiddenswitch', name: 'vertx-sync', version: 'master-SNAPSHOT'
     testCompile project(':cards')
+    testCompile group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
     testCompile group: 'org.testng', name: 'testng', version: '6.+'
 }
 

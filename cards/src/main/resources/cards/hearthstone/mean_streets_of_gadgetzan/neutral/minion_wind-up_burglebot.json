@@ -1,6 +1,6 @@
 {
   "name": "Wind-up Burglebot",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 5,

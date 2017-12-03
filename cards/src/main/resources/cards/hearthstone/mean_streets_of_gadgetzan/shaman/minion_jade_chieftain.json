@@ -6,12 +6,12 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Battlecry: Summon a Animated Shuriken. Give it Taunt.",
+  "description": "Battlecry: Summon a Jade Golem. Give it Taunt.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "CreateSummonSpell",
-      "name": "Animated Shuriken",
+      "name": "Jade Golem",
       "spell": {
         "class": "ModifyAttributeSpell",
         "target": "FRIENDLY_PLAYER",

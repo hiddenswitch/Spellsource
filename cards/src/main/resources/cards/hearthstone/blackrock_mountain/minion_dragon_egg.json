@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Whenever this minion takes damage, summon a 2/1 Terracota Warrior.",
+  "description": "Whenever this minion takes damage, summon a 2/1 Whelp.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

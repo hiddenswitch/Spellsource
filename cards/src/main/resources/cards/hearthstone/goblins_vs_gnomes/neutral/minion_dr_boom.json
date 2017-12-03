@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon two 1/1 Wrathful Spirits. WARNING: Bots may explode.",
+  "description": "Battlecry: Summon two 1/1 Boom Bots. WARNING: Bots may explode.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

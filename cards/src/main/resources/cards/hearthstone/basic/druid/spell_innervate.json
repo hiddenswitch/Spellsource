@@ -4,11 +4,11 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "FREE",
-  "description": "Gain 2 Mana this turn only.",
+  "description": "Gain 1 Mana Crystal this turn only.",
   "targetSelection": "NONE",
   "spell": {
     "class": "GainManaSpell",
-    "value": 2
+    "value": 1
   },
   "attributes": {
     "NAME": "Focus"

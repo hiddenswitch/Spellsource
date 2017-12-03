@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "NONE",
-  "description": "Charge. Battlecry: Summon two 1/1 Terracota Warriors for your opponent.",
+  "description": "Charge. Battlecry: Summon two 1/1 Whelps for your opponent.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

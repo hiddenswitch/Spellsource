@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Combo: Summon a 2/1 Fox Cub.",
+  "description": "Combo: Summon a 2/1 Defias Bandit.",
   "battlecry": {
     "condition": {
       "class": "ComboCondition"

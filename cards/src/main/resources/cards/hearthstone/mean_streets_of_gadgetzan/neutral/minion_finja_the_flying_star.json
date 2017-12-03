@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "MURLOC",
-  "description": "Stealth. Whenever this attacks and kills a minion, summon 2 Murloc from your deck.",
+  "description": "Stealth. Whenever this attacks and kills a minion, summon 2 Murlocs from your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
@@ -30,7 +30,7 @@
     }
   },
   "attributes": {
-    "DESCRIPTION": "Stealth. Whenever this attacks and kills a minion, summon 2 Murloc from your deck.",
+    "DESCRIPTION": "Stealth. Whenever this attacks and kills a minion, summon 2 Murlocs from your deck.",
     "NAME": "Xiaolian, Blademaster",
     "STEALTH": true
   },

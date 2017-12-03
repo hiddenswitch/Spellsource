@@ -7,10 +7,20 @@
   "baseHp": 1,
   "rarity": "EPIC",
   "race": "DEMON",
-  "description": "Deathrattle: Summon a Dreadsteed.",
+  "description": "Deathrattle: At the end of the turn, summon a Dreadsteed.",
   "deathrattle": {
-    "class": "SummonSpell",
-    "card": "minion_dreadsteed"
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "minion_dreadsteed"
+      },
+      "oneTurn": true
+    }
   },
   "attributes": {
     "DEATHRATTLES": true

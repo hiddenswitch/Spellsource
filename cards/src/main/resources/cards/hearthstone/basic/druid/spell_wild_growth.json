@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "FREE",
-  "description": "Gain an empty Mana.",
+  "description": "Gain an empty Mana Crystal.",
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",

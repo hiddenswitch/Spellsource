@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Add 4 random Murloc to your hand. Overload: (3)",
+  "description": "Battlecry: Add 4 random Murlocs to your hand. Overload: (3)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

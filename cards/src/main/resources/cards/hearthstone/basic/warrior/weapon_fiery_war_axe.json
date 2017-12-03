@@ -1,6 +1,6 @@
 {
   "name": "Fiery War Axe",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "WEAPON",
   "heroClass": "RED",
   "damage": 3,

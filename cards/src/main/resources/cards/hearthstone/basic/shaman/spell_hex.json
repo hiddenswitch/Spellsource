@@ -1,10 +1,10 @@
 {
   "name": "Hex",
-  "baseManaCost": 3,
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "FREE",
-  "description": "Transform a minion into a 0/1 Slime with Taunt.",
+  "description": "Transform a minion into a 0/1 Frog with Taunt.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "TransformMinionSpell",

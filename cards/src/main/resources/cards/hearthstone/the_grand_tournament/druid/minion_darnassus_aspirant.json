@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Gain an empty Mana.Deathrattle: Lose a Mana.",
+  "description": "Battlecry: Gain an empty Mana Crystal. Deathrattle: Lose a Mana Crystal.",
   "battlecry": {
     "spell": {
       "class": "ModifyMaxManaSpell",

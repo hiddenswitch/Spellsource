@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "EPIC",
-  "description": "Gain 10 Mana. Discard your hand.",
+  "description": "Gain 10 Mana Crystals. Discard your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

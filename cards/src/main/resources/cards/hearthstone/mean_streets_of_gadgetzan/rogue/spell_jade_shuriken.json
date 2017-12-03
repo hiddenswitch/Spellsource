@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",
-  "description": "Deal 2 damage. Combo: Summon a Animated Shuriken.",
+  "description": "Deal 2 damage. Combo: Summon a Jade Golem.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ComboSpell",
@@ -14,7 +14,7 @@
     },
     "spell2": {
       "class": "CreateSummonSpell",
-      "name": "Animated Shuriken",
+      "name": "Jade Golem",
       "spell": {
         "class": "ModifyAttributeSpell",
         "target": "FRIENDLY_PLAYER",
