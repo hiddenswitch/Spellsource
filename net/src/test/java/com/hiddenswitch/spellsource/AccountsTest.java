@@ -12,10 +12,6 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.AuthProvider;
-import io.vertx.ext.auth.User;
-import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
 

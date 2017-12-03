@@ -11,8 +11,6 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.sync.SyncVerticle;
 
-import static io.vertx.ext.sync.Sync.awaitResult;
-
 /**
  * An abstract class providing common backend features for microservices in Spellsource.
  * <p>

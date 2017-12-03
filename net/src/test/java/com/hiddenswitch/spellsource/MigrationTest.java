@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitEvent;
-import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * Note that the collection names should all be different because I'm lazy with the collection removal.

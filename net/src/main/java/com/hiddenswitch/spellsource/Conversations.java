@@ -8,7 +8,6 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 
-import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**

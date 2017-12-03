@@ -10,8 +10,6 @@ import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
-import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.reflections.Reflections;
@@ -22,7 +20,6 @@ import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 

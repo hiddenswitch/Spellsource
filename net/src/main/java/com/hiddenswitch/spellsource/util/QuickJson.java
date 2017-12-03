@@ -1,13 +1,8 @@
 package com.hiddenswitch.spellsource.util;
 
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.FiberScheduler;
-import co.paralleluniverse.strands.SuspendableCallable;
-import co.paralleluniverse.strands.SuspendableRunnable;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.sync.Sync;
 
 import java.util.Collections;
 import java.util.List;

@@ -3,9 +3,7 @@ package com.hiddenswitch.spellsource.common;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.impl.server.ClientConnectionHandler;
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
 
 import java.util.List;
 

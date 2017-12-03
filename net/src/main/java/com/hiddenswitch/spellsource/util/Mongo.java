@@ -9,7 +9,6 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.*;
 
-import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 import java.util.List;

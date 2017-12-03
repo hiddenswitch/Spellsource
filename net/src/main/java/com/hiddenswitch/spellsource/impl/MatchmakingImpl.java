@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.*;
-import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.MatchmakingDeck;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.impl.server.PregamePlayerConfiguration;
@@ -18,7 +17,6 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.apache.commons.collections.set.SynchronizedSet;
 
 import java.util.*;
 

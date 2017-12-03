@@ -16,8 +16,6 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import static com.hiddenswitch.spellsource.util.QuickJson.json;
-
 /**
  * A user record.
  * <p>

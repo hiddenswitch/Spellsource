@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.models;
 
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.MongoClientDeleteResult;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 
 import java.io.Serializable;

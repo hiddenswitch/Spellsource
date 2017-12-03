@@ -13,7 +13,6 @@ import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.ext.sync.Sync;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.stream.Collectors;

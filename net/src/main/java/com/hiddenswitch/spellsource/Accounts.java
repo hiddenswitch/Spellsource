@@ -17,7 +17,6 @@ import io.vertx.ext.mongo.UpdateOptions;
 
 import java.util.List;
 
-import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 

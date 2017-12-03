@@ -13,7 +13,6 @@ import de.flapdoodle.embed.process.io.directories.IDirectory;
 import de.flapdoodle.embed.process.runtime.Network;
 import de.flapdoodle.embed.process.store.Downloader;
 import de.flapdoodle.embed.process.store.ExtractedArtifactStoreBuilder;
-import io.vertx.core.json.JsonObject;
 
 /**
  * Created by bberman on 2/2/17.
