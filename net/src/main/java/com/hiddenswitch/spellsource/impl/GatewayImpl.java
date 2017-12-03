@@ -7,7 +7,6 @@ import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
-import com.hiddenswitch.spellsource.impl.auth.TokenAuthProvider;
 import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.impl.util.FriendRecord;
 import com.hiddenswitch.spellsource.impl.util.HandlerFactory;

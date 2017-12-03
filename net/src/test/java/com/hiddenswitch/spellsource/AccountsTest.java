@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.impl.AccountsImpl;
-import com.hiddenswitch.spellsource.impl.auth.TokenAuthProvider;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.LoginRequest;
 import com.hiddenswitch.spellsource.models.LoginResponse;
@@ -26,42 +25,6 @@ import java.time.Instant;
 import static org.junit.Assert.*;
 
 public class AccountsTest extends ServiceTest<AccountsImpl> {
-	@Test
-	public void testAuthProvider(TestContext context) throws Exception {
-		final String username = "doctorpangloss";
-		final String password = "destructoid";
-		final String emailAddress = "benjamin.s.berman@gmail.com";
-
-		wrapSync(context, () -> {
-			final AuthProvider tokenAuthProvider = new TokenAuthProvider(vertx);
-			final CreateAccountResponse response = service.createAccount(emailAddress, password, username);
-			getContext().assertNotNull(response);
-
-			User user = Sync.awaitResult(done -> tokenAuthProvider.authenticate(
-					new JsonObject()
-							.put("username", emailAddress)
-							.put("password", password),
-					done));
-
-			getContext().assertNotNull(user);
-			final UserRecord userRecord = (UserRecord) user;
-			getContext().assertNotNull(userRecord);
-			getContext().assertNotNull(userRecord.getProfile().getEmailAddress());
-			getContext().assertEquals(emailAddress, userRecord.getProfile().getEmailAddress());
-			getContext().assertNotNull(response.getLoginToken());
-			getContext().assertNotNull(response.getLoginToken().getToken());
-
-			final String token = response.getLoginToken().getToken();
-			User userTokened = Sync.awaitResult(done -> {
-				tokenAuthProvider.authenticate(
-						new JsonObject()
-								.put("token", token),
-						done);
-			});
-			getContext().assertNotNull(userTokened);
-		});
-	}
-
 	@Test
 	public void testCreateAccount(TestContext context) throws Exception {
 		setLoggingLevel(Level.ERROR);
