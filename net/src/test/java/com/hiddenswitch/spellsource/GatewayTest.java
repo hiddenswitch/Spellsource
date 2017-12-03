@@ -260,7 +260,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 			@Override
 			protected void assertValidStateAndChanges(ServerToClientMessage message) {
 				super.assertValidStateAndChanges(message);
-				getContext().assertEquals(message.getGameState().getEntities().stream().filter(e -> e.getCardId() != null && e.getCardId().equals("hero_necromancer")).count(), 1L);
+				getContext().assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getCardId() != null && e.getCardId().equals("hero_necromancer")).count() >= 1L);
 			}
 		};
 

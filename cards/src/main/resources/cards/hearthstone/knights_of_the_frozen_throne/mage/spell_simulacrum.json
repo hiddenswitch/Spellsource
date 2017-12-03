@@ -1,6 +1,6 @@
 {
   "name": "Simulacrum",
-  "baseManaCost": 1,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",

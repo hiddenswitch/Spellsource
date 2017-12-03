@@ -1,6 +1,6 @@
 {
   "name": "Blackguard",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "GOLD",
   "baseAttack": 3,

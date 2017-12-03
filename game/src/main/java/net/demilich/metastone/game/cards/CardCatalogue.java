@@ -123,19 +123,27 @@ public class CardCatalogue {
 		return result;
 	}
 
-	public static void loadCardsFromPackage() throws IOException, URISyntaxException, CardParseException {
+	public static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
 		synchronized (cards) {
 			if (!cards.isEmpty()) {
 				return;
 			}
 
-			Collection<ResourceInputStream> inputStreams = ResourceLoader.loadJsonInputStreams(CARDS_FOLDER, false);
+			Collection<ResourceInputStream> inputStreams = null;
 			try {
+				inputStreams = ResourceLoader.loadJsonInputStreams(CARDS_FOLDER, false);
 				loadCards(inputStreams);
-			} catch (CardParseException e) {
-				logger.error(e.getMessage());
-				throw e;
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+//			try {
+
+//			} catch (CardParseException e) {
+//				logger.error(e.getMessage());
+////				throw e;
+//			}
 		}
 	}
 
@@ -172,7 +180,7 @@ public class CardCatalogue {
 				//logger.error("Error parsing card '{}'", resourceInputStream.fileName);
 				logger.error(e.toString());
 				badCards.add(resourceInputStream.fileName);
-				throw e;
+//				throw e;
 			}
 		}
 
@@ -184,9 +192,9 @@ public class CardCatalogue {
 
 		logger.debug("{} cards loaded.", CardCatalogue.cards.size());
 
-		if (!badCards.isEmpty()) {
-			throw new CardParseException(badCards);
-		}
+//		if (!badCards.isEmpty()) {
+//			throw new CardParseException(badCards);
+//		}
 	}
 
 	public static Stream<Card> stream() {

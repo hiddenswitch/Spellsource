@@ -1,7 +1,6 @@
 {
-  "id": "Wrath",
-  "name": "Wrath",
-  "baseManaCost": 4.0,
+  "name": "Alternative Wrath",
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "BROWN",
   "baseAttack": 4.0,

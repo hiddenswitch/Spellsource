@@ -3,7 +3,7 @@ package net.demilich.metastone.game.cards;
 import java.util.Arrays;
 import java.util.List;
 
-public class CardParseException extends Exception {
+public class CardParseException extends RuntimeException {
 
 	/**
 	 * 

@@ -69,13 +69,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 		matchmaking = Rpc.connect(Matchmaking.class, vertx.eventBus());
 
 		Void ignored = awaitResult(h -> vertx.executeBlocking(blocking -> {
-			try {
-				CardCatalogue.loadCardsFromPackage();
-			} catch (IOException | URISyntaxException | CardParseException e) {
-				blocking.fail(e);
-				return;
-			}
-
+			CardCatalogue.loadCardsFromPackage();
 			// Fixes exceptions related to {@link #handleWebSocketMessage}
 //			DefaultChannelId.newInstance();
 			// TODO: These ports shouldn't be totally randomized because of AWS security groups

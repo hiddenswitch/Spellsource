@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "Corrupt all enemy minions. At the start of your turn, destroy them.",
+  "description": "Corrupt every minion. Destroy them at the start of your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

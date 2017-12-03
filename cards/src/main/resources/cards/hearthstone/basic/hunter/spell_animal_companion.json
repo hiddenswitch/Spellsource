@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "FREE",
-  "description": "Summon a random Animal Spirit.",
+  "description": "Summon a random Beast Companion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonRandomSpell",

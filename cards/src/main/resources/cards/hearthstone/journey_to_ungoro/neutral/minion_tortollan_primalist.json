@@ -1,10 +1,10 @@
 {
   "name": "Tortollan Primalist",
-  "baseManaCost": 3,
+  "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 3,
-  "baseHp": 3,
+  "baseAttack": 5,
+  "baseHp": 4,
   "rarity": "EPIC",
   "description": "Battlecry: Discover a spell and cast it with random targets.",
   "battlecry": {

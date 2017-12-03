@@ -37,11 +37,8 @@ public class CardsImpl extends AbstractService<CardsImpl> implements Cards {
 	@Suspendable
 	public QueryCardsResponse queryCards(QueryCardsRequest request) throws SuspendExecution, InterruptedException {
 		// For now, just use the CardCatalogue
-		try {
-			CardCatalogue.loadCardsFromPackage();
-		} catch (IOException | URISyntaxException | CardParseException e) {
-			throw new RuntimeException("Could not load cards in CardsImpl::queryCards.");
-		}
+		CardCatalogue.loadCardsFromPackage();
+
 		final QueryCardsResponse response;
 
 		if (request.isBatchRequest()) {

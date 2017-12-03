@@ -50,11 +50,8 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 		vertx.exceptionHandler(h -> {
 			getContext().fail(h.getCause());
 		});
-		try {
-			CardCatalogue.loadCardsFromPackage();
-		} catch (IOException | URISyntaxException | CardParseException e) {
-			context.fail(e);
-		}
+
+		CardCatalogue.loadCardsFromPackage();
 
 		Mongo.mongo().startEmbedded().connect(vertx);
 
