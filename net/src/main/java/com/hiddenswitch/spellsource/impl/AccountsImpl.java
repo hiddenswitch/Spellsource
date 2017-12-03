@@ -7,7 +7,6 @@ import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.LoginResponse;
 import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Registration;
-import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.models.LoginRequest;
@@ -23,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class AccountsImpl extends AbstractService<AccountsImpl> implements Accounts {

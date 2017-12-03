@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.hiddenswitch.spellsource.client.models.SpellsourceException;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.WebResult;
 import com.hiddenswitch.spellsource.util.Sync;

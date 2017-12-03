@@ -5,11 +5,9 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hiddenswitch.spellsource.Spellsource;
-import com.hiddenswitch.spellsource.common.Recursive;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.*;
-import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -27,8 +25,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @RunWith(VertxUnitRunner.class)

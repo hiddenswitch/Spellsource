@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.models;
 
 import com.hiddenswitch.spellsource.Spellsource;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;

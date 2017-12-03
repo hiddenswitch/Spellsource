@@ -5,7 +5,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.GamesImpl;
 import com.hiddenswitch.spellsource.client.RemoteGameContext;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
-import com.hiddenswitch.spellsource.common.ClientToServerMessage;
 import com.hiddenswitch.spellsource.impl.ServiceTest;
 import com.hiddenswitch.spellsource.models.MatchmakingResponse;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;

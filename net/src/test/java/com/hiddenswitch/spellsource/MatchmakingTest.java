@@ -11,9 +11,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 @RunWith(VertxUnitRunner.class)
 public class MatchmakingTest extends AbstractMatchmakingTest {
 	@Test

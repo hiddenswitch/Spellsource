@@ -16,7 +16,6 @@ import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.client.models.MessageType;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
-import io.netty.channel.DefaultChannelId;
 import io.vertx.core.Future;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;

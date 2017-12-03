@@ -18,11 +18,9 @@ import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
-import net.demilich.metastone.game.decks.DeckCatalogue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.AccessDeniedException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 

@@ -8,7 +8,6 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
 

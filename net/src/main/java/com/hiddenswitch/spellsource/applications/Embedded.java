@@ -6,7 +6,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
-import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * Created by bberman on 11/29/16.

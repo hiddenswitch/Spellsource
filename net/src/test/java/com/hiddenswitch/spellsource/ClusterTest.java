@@ -5,7 +5,6 @@ import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import com.hiddenswitch.spellsource.impl.*;
 import io.vertx.core.*;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 //import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
