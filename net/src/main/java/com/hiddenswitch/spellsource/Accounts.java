@@ -139,7 +139,7 @@ public interface Accounts {
 	 * Gets a user record for the given token.
 	 *
 	 * @param token The token that was returned by a login or create account request.
-	 * @return The user record.
+	 * @return The user record. or {@code null} if no user record for the specified token was found.
 	 */
 	@Suspendable
 	UserRecord getWithToken(String token);
@@ -148,7 +148,7 @@ public interface Accounts {
 	 * Gets a user record for the given user ID.
 	 *
 	 * @param userId The user's ID as returned by a login or create account request.
-	 * @return The user record.
+	 * @return The user record, or {@code null} if no user record with the specified ID was found.
 	 */
 	@Suspendable
 	UserRecord get(String userId);
