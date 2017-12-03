@@ -5,7 +5,10 @@ import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponseUni
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.shareddata.impl.ClusterSerializable;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
 
@@ -21,7 +24,7 @@ import static com.hiddenswitch.spellsource.util.QuickJson.json;
  * The fields in this object correspond to the ones stored in Mongo. This also implements the Vertx User interface,
  * which allows queries to see if a user is authorized to do a particular task (very lightly implemented).
  */
-public class UserRecord extends MongoRecord implements User, Serializable {
+public class UserRecord extends MongoRecord implements User, Serializable, ClusterSerializable {
 	private Profile profile;
 	private AuthorizationRecord auth;
 	private List<String> decks;
@@ -86,7 +89,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	@Override
 	@JsonIgnore
 	public JsonObject principal() {
-		return json(this);
+		return new JsonObject().put("_id", this._id);
 	}
 
 	@Override
@@ -194,5 +197,15 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	public void setConnection(MatchmakingQueuePutResponseUnityConnection connection) {
 		this.connection = connection;
+	}
+
+	@Override
+	public void writeToBuffer(Buffer buffer) {
+		Json.encodeToBuffer(this).writeToBuffer(buffer);
+	}
+
+	@Override
+	public int readFromBuffer(int pos, Buffer buffer) {
+		throw new UnsupportedOperationException();
 	}
 }

@@ -24,6 +24,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.LoggerHandler;
@@ -55,8 +56,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 		logger.info("Configuring router...");
 
-		final TokenAuthProvider authProvider = new TokenAuthProvider(vertx);
-		final ApiKeyAuthHandler authHandler = ApiKeyAuthHandler.create(authProvider, "X-Auth-Token");
+		final AuthHandler authHandler = new SpellsourceAuthHandler(vertx.eventBus());
 		final BodyHandler bodyHandlerInternal = BodyHandler.create();
 
 		Handler<RoutingContext> bodyHandler = context -> {
@@ -91,6 +91,13 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			if (!routingContext.failed()) {
 				routingContext.next();
 				return;
+			}
+
+			if (routingContext.statusCode() > 0
+					&& routingContext.failure() == null) {
+				routingContext.response().setStatusCode(routingContext.statusCode());
+			} else if (routingContext.response().getStatusCode() < 400) {
+				routingContext.response().setStatusCode(500);
 			}
 
 			if (routingContext.failure() != null) {
@@ -258,7 +265,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			final Account account = getAccount(userId);
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(account)));
 		} else {
-			UserRecord record = getAccounts().get(userId);
+			UserRecord record = getAccounts().get(targetUserId);
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(new Account()
 					.name(record.getProfile().getDisplayName())
 					.id(targetUserId))));
@@ -691,4 +698,5 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	@Suspendable
 	public void stop() throws Exception {
 	}
+
 }

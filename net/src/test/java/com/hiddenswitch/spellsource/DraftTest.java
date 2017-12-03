@@ -1,6 +1,7 @@
-package com.hiddenswitch.spellsource.impl;
+package com.hiddenswitch.spellsource;
 
 import com.hiddenswitch.spellsource.draft.DraftStatus;
+import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.models.DraftActionRequest;

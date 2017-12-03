@@ -1,4 +1,4 @@
-package com.hiddenswitch.spellsource.impl;
+package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
@@ -11,6 +11,7 @@ import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
+import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.models.CreateGameSessionRequest;
 import com.hiddenswitch.spellsource.models.CurrentMatchRequest;
 import com.hiddenswitch.spellsource.models.DeckCreateRequest;
@@ -172,6 +173,35 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 		latch.await(50L, TimeUnit.SECONDS);
 		getContext().assertEquals(latch.getCount(), 0L);
+	}
+
+	@Test
+	public void testLoginWithInvalidToken(TestContext context) throws ApiException {
+		DefaultApi api = new DefaultApi(new ApiClient().setBasePath(UnityClient.basePath));
+		CreateAccountResponse car = api.createAccount(new CreateAccountRequest()
+				.email("test@test.com")
+				.name("name")
+				.password("password"));
+		api.getApiClient().setApiKey(car.getLoginToken());
+		GetAccountsResponse accountsResponse = api.getAccount(car.getAccount().getId());
+		// Assert we have access to private information here
+		context.assertNotNull(accountsResponse.getAccounts().get(0).getEmail());
+		// Change the key to something differently invalid
+		api.getApiClient().setApiKey("invaliduserid:invalidtoken");
+		try {
+			accountsResponse = api.getAccount(car.getAccount().getId());
+			context.fail("Successfully received account when we shouldn't have had.");
+		} catch (ApiException ex) {
+			context.assertEquals(ex.getCode(), 403, "Assert not authorized");
+		}
+		// Change the key to something invalid
+		api.getApiClient().setApiKey(car.getAccount().getId() + ":invalidtoken");
+		try {
+			accountsResponse = api.getAccount(car.getAccount().getId());
+			context.fail("Successfully received account when we shouldn't have had.");
+		} catch (ApiException ex) {
+			context.assertEquals(ex.getCode(), 403, "Assert not authorized");
+		}
 	}
 
 	@Test
