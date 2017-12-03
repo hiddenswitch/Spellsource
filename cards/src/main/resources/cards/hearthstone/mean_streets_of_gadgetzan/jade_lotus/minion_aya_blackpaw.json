@@ -11,12 +11,12 @@
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Battlecry and Deathrattle: Summon a Animated Shuriken.",
+  "description": "Battlecry and Deathrattle: Summon a Jade Golem.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "CreateSummonSpell",
-      "name": "Animated Shuriken",
+      "name": "Jade Golem",
       "spell": {
         "class": "ModifyAttributeSpell",
         "target": "FRIENDLY_PLAYER",
@@ -50,7 +50,7 @@
   },
   "deathrattle": {
     "class": "CreateSummonSpell",
-    "name": "Animated Shuriken",
+    "name": "Jade Golem",
     "spell": {
       "class": "ModifyAttributeSpell",
       "target": "FRIENDLY_PLAYER",

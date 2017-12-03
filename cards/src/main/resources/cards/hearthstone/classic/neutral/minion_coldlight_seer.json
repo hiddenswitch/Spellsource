@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "MURLOC",
-  "description": "Battlecry: Give your other Murloc +2 Health.",
+  "description": "Battlecry: Give your other Murlocs +2 Health.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

@@ -3,15 +3,15 @@
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "GOLD",
-  "baseAttack": 1,
-  "baseHp": 4,
+  "baseAttack": 3,
+  "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Change an enemy minion's Attack to 0.",
+  "description": "Battlecry: Change an enemy minion's Attack to 1.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
       "class": "SetAttackSpell",
-      "value": 0
+      "value": 1
     }
   },
   "attributes": {

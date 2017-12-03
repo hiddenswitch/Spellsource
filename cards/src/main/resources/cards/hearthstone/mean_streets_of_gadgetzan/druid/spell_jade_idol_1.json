@@ -1,14 +1,14 @@
 {
-  "name": "Summon a Animated Shuriken",
+  "name": "Summon a Jade Golem",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Summon a Animated Shuriken.",
+  "description": "Summon a Jade Golem.",
   "targetSelection": "NONE",
   "spell": {
     "class": "CreateSummonSpell",
-    "name": "Animated Shuriken",
+    "name": "Jade Golem",
     "spell": {
       "class": "ModifyAttributeSpell",
       "target": "FRIENDLY_PLAYER",

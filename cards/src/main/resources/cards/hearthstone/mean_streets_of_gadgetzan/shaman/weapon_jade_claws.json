@@ -6,12 +6,12 @@
   "damage": 2,
   "durability": 2,
   "rarity": "RARE",
-  "description": "Battlecry: Summon a Animated Shuriken. Overload: (1)",
+  "description": "Battlecry: Summon a Jade Golem. Overload: (1)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "CreateSummonSpell",
-      "name": "Animated Shuriken",
+      "name": "Jade Golem",
       "spell": {
         "class": "ModifyAttributeSpell",
         "target": "FRIENDLY_PLAYER",

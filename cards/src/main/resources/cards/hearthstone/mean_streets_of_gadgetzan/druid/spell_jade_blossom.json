@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "COMMON",
-  "description": "Summon a Animated Shuriken. Gain an empty Mana.",
+  "description": "Summon a Jade Golem. Gain an empty Mana Crystal.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "CreateSummonSpell",
-        "name": "Animated Shuriken",
+        "name": "Jade Golem",
         "spell": {
           "class": "ModifyAttributeSpell",
           "target": "FRIENDLY_PLAYER",

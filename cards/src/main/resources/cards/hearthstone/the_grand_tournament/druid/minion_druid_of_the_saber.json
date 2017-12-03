@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Choose One - Transform to gain Charge; or +1/+1 and Stealth.",
+  "description": "Choose One - Transform into a 2/1 with Charge; or a 3/2 with Stealth.",
   "options": [
     {
       "description": "Charge",

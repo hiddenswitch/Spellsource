@@ -15,6 +15,17 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class TheGrandTournamentTests extends TestBase {
+	@Test
+	public void testDefileDreadsteedInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_dreadsteed");
+			try {
+				playCard(context, player, "spell_defile");
+			} catch (Throwable ex) {
+				Assert.fail("Should not throw exception", ex);
+			}
+		});
+	}
 
 	@Test
 	public void testKingsDefenderAttendee() {

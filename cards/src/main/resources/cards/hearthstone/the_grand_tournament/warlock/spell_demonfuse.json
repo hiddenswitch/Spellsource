@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "Give a Demon +3/+3. Give your opponent a Mana.",
+  "description": "Give a Demon +3/+3. Give your opponent a Mana Crystal.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",
-  "description": "An enemy minion deals its damage to the minions next to it.",
+  "description": "Force an enemy minion to deal its damage to the minions next to it.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "custom.DamageAdjacentMinionsSpell"

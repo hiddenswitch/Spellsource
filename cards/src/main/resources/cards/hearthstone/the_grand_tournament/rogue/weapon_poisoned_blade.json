@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "Your Hero Ability gives this weapon +1 Attack instead of replacing it.",
+  "description": "Your Hero Power gives this weapon +1 Attack instead of replacing it.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

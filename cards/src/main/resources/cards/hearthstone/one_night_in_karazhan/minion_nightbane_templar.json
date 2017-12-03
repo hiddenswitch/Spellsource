@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Battlecry: If you're holding a Dragon, summon two 1/1 Terracota Warriors.",
+  "description": "Battlecry: If you're holding a Dragon, summon two 1/1 Whelps.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

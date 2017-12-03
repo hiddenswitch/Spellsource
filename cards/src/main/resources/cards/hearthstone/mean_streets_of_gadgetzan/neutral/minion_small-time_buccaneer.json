@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 1,
-  "baseHp": 2,
+  "baseHp": 1,
   "rarity": "RARE",
   "race": "PIRATE",
   "description": "Has +2 Attack while you have a weapon equipped.",

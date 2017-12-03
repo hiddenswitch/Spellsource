@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Can't Attack.  At the end of your turn, deal 8 damage to a random enemy.",
+  "description": "Can't attack. At the end of your turn, deal 8 damage to a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -24,6 +24,6 @@
     "CANNOT_ATTACK": true
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "HALL_OF_FAME",
   "fileFormatVersion": 1
 }

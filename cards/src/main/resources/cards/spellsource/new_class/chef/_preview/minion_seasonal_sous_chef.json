@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Call to Arms: Gain an empty Mana Cell. Revenge: Lose an Mana Cell.",
+  "description": "Call to Arms: Gain an empty Mana Crystal. Revenge: Lose an Mana Cell.",
   "battlecry": {
     "spell": {
       "class": "ModifyMaxManaSpell",

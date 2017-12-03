@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Deal 4 damage. Summon a Animated Shuriken.",
+  "description": "Deal 4 damage. Summon a Jade Golem.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -15,7 +15,7 @@
       },
       {
         "class": "CreateSummonSpell",
-        "name": "Animated Shuriken",
+        "name": "Jade Golem",
         "spell": {
           "class": "ModifyAttributeSpell",
           "target": "FRIENDLY_PLAYER",

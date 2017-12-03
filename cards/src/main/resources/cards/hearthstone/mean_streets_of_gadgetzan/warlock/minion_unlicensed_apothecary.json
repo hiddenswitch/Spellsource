@@ -6,10 +6,10 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Whenever you summon a minion, deal 5 damage to your Hero.",
+  "description": "After you summon a minion, deal 5 damage to your Hero.",
   "trigger": {
     "eventTrigger": {
-      "class": "MinionSummonedTrigger",
+      "class": "AfterMinionSummonedTrigger",
       "requiredAttribute": "DEATHRATTLES",
       "targetPlayer": "SELF"
     },
