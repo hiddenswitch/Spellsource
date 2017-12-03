@@ -6,3 +6,4 @@ http://localhost:$PORT
 EOF
 ./gradlew net:run --continuous
 rm ../Minionate/Assets/Resources/Url.txt
+rm ../Minionate/Assets/Resources/Url.txt.neta

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+set -e
 ./gradlew swagger
 
 OUTPUT_DIR=$(pwd)/../Minionate/Assets/Plugins/Client
