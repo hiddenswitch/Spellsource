@@ -78,7 +78,7 @@ public class Common {
 	}
 
 	public static JavaPairRDD<TestConfig, SimulationResult> simulate(JavaPairRDD<TestConfig, GameConfig> configs) {
-		final StorageLevel storageLevel = new StorageLevel(true, false, false, false, 1);
+		final StorageLevel storageLevel = StorageLevel.apply(true, false, false, false, 1);
 		JavaPairRDD<TestConfig, SimulationResult> simulations = configs.repartition((int) configs.count() / 10 + 1).persist(storageLevel).mapValues(new Simulator()).persist(storageLevel);
 		return simulations.reduceByKey(new MergeSimulationResults());
 	}
