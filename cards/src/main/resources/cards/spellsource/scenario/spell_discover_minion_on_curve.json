@@ -14,11 +14,11 @@
     },
     "cardFilter": {
       "class": "CardFilter",
+      "cardType": "MINION",
       "manaCost": {
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "MAX_MANA"
-      },
-      "cardType": "MINION"
+      }
     }
   },
   "collectible": false,

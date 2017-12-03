@@ -13,6 +13,9 @@
     "cardFilter": {
       "class": "CardFilter",
       "heroClass": "SPIRIT"
+    },
+    "cardSource": {
+      "class": "UncollectibleCatalogueSource"
     }
   },
   "attributes": {

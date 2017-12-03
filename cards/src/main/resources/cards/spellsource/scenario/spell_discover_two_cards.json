@@ -10,11 +10,11 @@
     "class": "MetaSpell",
     "value": {
       "class": "RandomValueProvider",
-      "min": 0,
       "max": {
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "MAX_MANA"
-      }
+      },
+      "min": 0
     },
     "spells": [
       {
@@ -41,6 +41,7 @@
           "class": "CardFilter",
           "manaCost": {
             "class": "AlgebraicValueProvider",
+            "operation": "SUBTRACT",
             "value1": {
               "class": "PlayerAttributeValueProvider",
               "playerAttribute": "MAX_MANA"
@@ -48,8 +49,7 @@
             "value2": {
               "class": "GameValueProvider",
               "gameValue": "SPELL_VALUE"
-            },
-            "operation": "SUBTRACT"
+            }
           }
         }
       }

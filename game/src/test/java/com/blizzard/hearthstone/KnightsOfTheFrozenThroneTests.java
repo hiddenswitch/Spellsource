@@ -27,6 +27,15 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testLichKing() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_the_lich_king");
+			context.endTurn();
+			Assert.assertEquals(player.getHand().get(0).getHeroClass(), HeroClass.SPIRIT);
+		});
+	}
+
+	@Test
 	public void testDefile() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();

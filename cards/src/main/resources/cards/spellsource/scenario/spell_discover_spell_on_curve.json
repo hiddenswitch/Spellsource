@@ -14,11 +14,11 @@
     },
     "cardFilter": {
       "class": "CardFilter",
+      "cardType": "SPELL",
       "manaCost": {
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "MAX_MANA"
-      },
-      "cardType": "SPELL"
+      }
     }
   },
   "collectible": false,
