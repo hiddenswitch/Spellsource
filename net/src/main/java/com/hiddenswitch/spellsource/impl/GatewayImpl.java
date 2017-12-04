@@ -23,10 +23,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.AuthHandler;
-import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.CorsHandler;
-import io.vertx.ext.web.handler.LoggerHandler;
+import io.vertx.ext.web.handler.*;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.IOException;
@@ -78,6 +75,9 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				.exposedHeader("Content-Type")
 				.allowCredentials(true)
 				.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS)));
+
+		// Pass through cookies
+		router.route().handler(CookieHandler.create());
 
 		// add "content-type=application/json" to all responses
 		router.route().handler(context -> {
