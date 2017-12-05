@@ -19,7 +19,12 @@ public class HandlerFactory {
 		return Sync.suspendableHandler((context) -> {
 			String userId = context.user().principal().getString("_id");
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
-			WebResult<R> result = internalHandler.call(context, userId, request);
+			WebResult<R> result;
+			try {
+				result = internalHandler.call(context, userId, request);
+			} catch (RuntimeException ex) {
+				result = WebResult.failed(ex);
+			}
 			respond(context, result);
 		});
 	}
@@ -27,7 +32,12 @@ public class HandlerFactory {
 	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, RequestHandler<T, R> internalHandler) {
 		return Sync.suspendableHandler((context) -> {
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
-			WebResult<R> result = internalHandler.call(context, request);
+			WebResult<R> result;
+			try {
+				result = internalHandler.call(context, request);
+			} catch (RuntimeException ex) {
+				result = WebResult.failed(ex);
+			}
 			respond(context, result);
 		});
 	}
@@ -36,7 +46,12 @@ public class HandlerFactory {
 		return Sync.suspendableHandler((context) -> {
 			String request = context.pathParam(paramName);
 			String userId = context.user().principal().getString("_id");
-			WebResult<R> result = internalHandler.call(context, userId, request);
+			WebResult<R> result;
+			try {
+				result = internalHandler.call(context, userId, request);
+			} catch (RuntimeException ex) {
+				result = WebResult.failed(ex);
+			}
 			respond(context, result);
 		});
 	}
@@ -46,7 +61,12 @@ public class HandlerFactory {
 			String param = context.pathParam(paramName);
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			String userId = context.user().principal().getString("_id");
-			WebResult<R> result = internalHandler.call(context, userId, param, request);
+			WebResult<R> result;
+			try {
+				result = internalHandler.call(context, userId, param, request);
+			} catch (RuntimeException ex) {
+				result = WebResult.failed(ex);
+			}
 			respond(context, result);
 		});
 	}
@@ -54,14 +74,24 @@ public class HandlerFactory {
 	public static <R> Handler<RoutingContext> handler(AuthorizedHandler<R> internalHandler) {
 		return Sync.suspendableHandler((context) -> {
 			String userId = context.user().principal().getString("_id");
-			WebResult<R> result = internalHandler.call(context, userId);
+			WebResult<R> result;
+			try {
+				result = internalHandler.call(context, userId);
+			} catch (RuntimeException ex) {
+				result = WebResult.failed(ex);
+			}
 			respond(context, result);
 		});
 	}
 
 	public static <R> Handler<RoutingContext> handler(EmptyHandler<R> internalHandler) {
 		return Sync.suspendableHandler((context) -> {
-			WebResult<R> result = internalHandler.call(context);
+			WebResult<R> result;
+			try {
+				result = internalHandler.call(context);
+			} catch (RuntimeException ex) {
+				result = WebResult.failed(ex);
+			}
 			respond(context, result);
 		});
 	}
@@ -87,7 +117,12 @@ public class HandlerFactory {
 	public static <R> Handler<RoutingContext> paramHandler(String paramName, ParamHandler<R> internalHandler) {
 		return Sync.suspendableHandler((context) -> {
 			String request = context.pathParam(paramName);
-			WebResult<R> result = internalHandler.call(context, request);
+			WebResult<R> result;
+			try {
+				result = internalHandler.call(context, request);
+			} catch (RuntimeException ex) {
+				result = WebResult.failed(ex);
+			}
 			respond(context, result);
 		});
 	}
