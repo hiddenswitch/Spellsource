@@ -23,7 +23,6 @@ Name | Type | Description | Notes
 **joust** | [**GameEventJoust**](GameEventJoust.md) |  |  [optional]
 **weaponDestroyed** | [**GameEventWeaponDestroyed**](GameEventWeaponDestroyed.md) |  |  [optional]
 **heroPowerUsed** | [**GameEventHeroPowerUsed**](GameEventHeroPowerUsed.md) |  |  [optional]
-**cardRevealed** | [**GameEventCardRevealed**](GameEventCardRevealed.md) |  |  [optional]
 **enrageChanged** | [**GameEventSilence**](GameEventSilence.md) |  |  [optional]
 **targetAcquisition** | [**GameEventTargetAcquisition**](GameEventTargetAcquisition.md) |  |  [optional]
 **damage** | [**GameEventDamage**](GameEventDamage.md) |  |  [optional]
@@ -75,7 +74,6 @@ PLAY_CARD | &quot;PLAY_CARD&quot;
 PRE_DAMAGE | &quot;PRE_DAMAGE&quot;
 QUEST_PLAYED | &quot;QUEST_PLAYED&quot;
 QUEST_SUCCESSFUL | &quot;QUEST_SUCCESSFUL&quot;
-REVEAL_CARD | &quot;REVEAL_CARD&quot;
 SECRET_PLAYED | &quot;SECRET_PLAYED&quot;
 SECRET_REVEALED | &quot;SECRET_REVEALED&quot;
 SPELL_CASTED | &quot;SPELL_CASTED&quot;

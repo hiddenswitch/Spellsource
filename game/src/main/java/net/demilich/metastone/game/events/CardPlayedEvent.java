@@ -4,7 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
-public class CardPlayedEvent extends GameEvent {
+public class CardPlayedEvent extends GameEvent implements HasCard {
 
 	private final Card card;
 
@@ -13,6 +13,7 @@ public class CardPlayedEvent extends GameEvent {
 		this.card = card;
 	}
 
+	@Override
 	public Card getCard() {
 		return card;
 	}

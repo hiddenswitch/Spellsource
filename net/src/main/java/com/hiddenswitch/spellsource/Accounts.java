@@ -65,7 +65,7 @@ public interface Accounts {
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
-	static MongoClientUpdateResult update(JsonObject query, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
+	static MongoClientUpdateResult update(JsonObject query, JsonObject updateCommand) throws SuspendExecution {
 		return Mongo.mongo().updateCollectionWithOptions(Accounts.USERS, query, updateCommand, new UpdateOptions().setMulti(true));
 	}
 

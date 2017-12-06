@@ -36,7 +36,7 @@ public class StartGameRequest implements Serializable {
 	public static class Player implements Serializable {
 		private String userId;
 		private String deckId;
-		private int id;
+		private int id = -1;
 
 		public String getUserId() {
 			return userId;

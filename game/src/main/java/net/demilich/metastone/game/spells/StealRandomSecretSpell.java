@@ -41,7 +41,7 @@ public class StealRandomSecretSpell extends Spell {
 		}
 
 		if (!validSecrets.isEmpty()) {
-			Secret secret = validSecrets.get(context.getLogic().random(validSecrets.size()));
+			Secret secret = context.getLogic().getRandom(validSecrets);
 			opponent.getSecrets().remove(secret);
 			secret.setHost(player.getHero());
 			secret.setOwner(player.getId());
@@ -49,7 +49,7 @@ public class StealRandomSecretSpell extends Spell {
 		} else {
 			// no valid secret to steal; instead destroy one for the opponent at
 			// least
-			Secret secret = secrets.get(context.getLogic().random(secrets.size()));
+			Secret secret = context.getLogic().getRandom(secrets);
 			opponent.getSecrets().remove(secret);
 			context.removeTrigger(secret);
 		}

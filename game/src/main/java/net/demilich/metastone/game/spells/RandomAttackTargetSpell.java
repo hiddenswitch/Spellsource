@@ -21,7 +21,7 @@ public class RandomAttackTargetSpell extends Spell {
 			return;
 		}
 		List<Entity> targets = context.getLogic().getValidTargets(context.getActivePlayerId(), action);
-		Entity randomTarget = targets.get(context.getLogic().random(targets.size()));
+		Entity randomTarget = context.getLogic().getRandom(targets);
 		context.getEnvironment().put(Environment.TARGET_OVERRIDE, randomTarget.getReference());
 	}
 }

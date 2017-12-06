@@ -34,7 +34,7 @@ public class ResurrectSpell extends Spell {
 			if (deadMinions.isEmpty()) {
 				return;
 			}
-			Minion resurrectedMinion = deadMinions.get(context.getLogic().random(deadMinions.size()));
+			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
 			MinionCard minionCard = (MinionCard) resurrectedMinion.getSourceCard();
 			context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false);
 			deadMinions.remove(resurrectedMinion);

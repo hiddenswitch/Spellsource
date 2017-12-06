@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Entity;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.models.*;
+import net.demilich.metastone.game.events.HasCard;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -453,8 +454,8 @@ public interface Games {
 
 			clientEvent.kill(new GameEventKill()
 					.victim(entity));
-		} else if (event instanceof CardPlayedEvent) {
-			final CardPlayedEvent cardPlayedEvent = (CardPlayedEvent) event;
+		} else if (HasCard.class.isAssignableFrom(event.getClass())) {
+			final HasCard cardPlayedEvent = (HasCard) event;
 			final Card card = cardPlayedEvent.getCard();
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
 			if (card.getCardType() == CardType.SPELL
@@ -464,6 +465,7 @@ public interface Games {
 			}
 
 			clientEvent.cardPlayed(new CardEvent()
+					.showLocal(event instanceof CardRevealedEvent)
 					.card(entity));
 		} else if (event instanceof HeroPowerUsedEvent) {
 			final HeroPowerUsedEvent heroPowerUsedEvent = (HeroPowerUsedEvent) event;

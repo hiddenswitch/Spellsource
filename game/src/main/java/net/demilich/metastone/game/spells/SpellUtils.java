@@ -211,8 +211,8 @@ public class SpellUtils {
 		}
 		final DiscoverAction discoverAction;
 
-		if (context.getLogic().attributeExists(Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION)) {
-			discoverAction = (DiscoverAction) discoverActions.get(context.getLogic().random(discoverActions.size()));
+		if (context.getLogic().attributeExists(Attribute.RANDOM_TARGETS)) {
+			discoverAction = (DiscoverAction) context.getLogic().getRandom(discoverActions);
 		} else {
 			discoverAction = (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
 		}

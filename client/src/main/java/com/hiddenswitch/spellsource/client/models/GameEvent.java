@@ -31,7 +31,6 @@ import com.hiddenswitch.spellsource.client.models.CardEvent;
 import com.hiddenswitch.spellsource.client.models.GameEventAfterSpellCasted;
 import com.hiddenswitch.spellsource.client.models.GameEventArmorGained;
 import com.hiddenswitch.spellsource.client.models.GameEventBeforeSummon;
-import com.hiddenswitch.spellsource.client.models.GameEventCardRevealed;
 import com.hiddenswitch.spellsource.client.models.GameEventDamage;
 import com.hiddenswitch.spellsource.client.models.GameEventHeal;
 import com.hiddenswitch.spellsource.client.models.GameEventHeroPowerUsed;
@@ -154,9 +153,6 @@ public class GameEvent  implements Serializable {
     @SerializedName("QUEST_SUCCESSFUL")
     QUEST_SUCCESSFUL("QUEST_SUCCESSFUL"),
     
-    @SerializedName("REVEAL_CARD")
-    REVEAL_CARD("REVEAL_CARD"),
-    
     @SerializedName("SECRET_PLAYED")
     SECRET_PLAYED("SECRET_PLAYED"),
     
@@ -249,9 +245,6 @@ public class GameEvent  implements Serializable {
 
   @SerializedName("heroPowerUsed")
   private GameEventHeroPowerUsed heroPowerUsed = null;
-
-  @SerializedName("cardRevealed")
-  private GameEventCardRevealed cardRevealed = null;
 
   @SerializedName("enrageChanged")
   private GameEventSilence enrageChanged = null;
@@ -646,24 +639,6 @@ public class GameEvent  implements Serializable {
     this.heroPowerUsed = heroPowerUsed;
   }
 
-  public GameEvent cardRevealed(GameEventCardRevealed cardRevealed) {
-    this.cardRevealed = cardRevealed;
-    return this;
-  }
-
-   /**
-   * Get cardRevealed
-   * @return cardRevealed
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public GameEventCardRevealed getCardRevealed() {
-    return cardRevealed;
-  }
-
-  public void setCardRevealed(GameEventCardRevealed cardRevealed) {
-    this.cardRevealed = cardRevealed;
-  }
-
   public GameEvent enrageChanged(GameEventSilence enrageChanged) {
     this.enrageChanged = enrageChanged;
     return this;
@@ -999,7 +974,6 @@ public class GameEvent  implements Serializable {
         Objects.equals(this.joust, gameEvent.joust) &&
         Objects.equals(this.weaponDestroyed, gameEvent.weaponDestroyed) &&
         Objects.equals(this.heroPowerUsed, gameEvent.heroPowerUsed) &&
-        Objects.equals(this.cardRevealed, gameEvent.cardRevealed) &&
         Objects.equals(this.enrageChanged, gameEvent.enrageChanged) &&
         Objects.equals(this.targetAcquisition, gameEvent.targetAcquisition) &&
         Objects.equals(this.damage, gameEvent.damage) &&
@@ -1021,7 +995,7 @@ public class GameEvent  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, entityTouched, entityUntouched, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, cardRevealed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, questSuccessful, questPlayed, summon, afterSpellCasted, discard, mill, kill, triggerFired);
+    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, entityTouched, entityUntouched, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, questSuccessful, questPlayed, summon, afterSpellCasted, discard, mill, kill, triggerFired);
   }
 
   @Override
@@ -1048,7 +1022,6 @@ public class GameEvent  implements Serializable {
     sb.append("    joust: ").append(toIndentedString(joust)).append("\n");
     sb.append("    weaponDestroyed: ").append(toIndentedString(weaponDestroyed)).append("\n");
     sb.append("    heroPowerUsed: ").append(toIndentedString(heroPowerUsed)).append("\n");
-    sb.append("    cardRevealed: ").append(toIndentedString(cardRevealed)).append("\n");
     sb.append("    enrageChanged: ").append(toIndentedString(enrageChanged)).append("\n");
     sb.append("    targetAcquisition: ").append(toIndentedString(targetAcquisition)).append("\n");
     sb.append("    damage: ").append(toIndentedString(damage)).append("\n");

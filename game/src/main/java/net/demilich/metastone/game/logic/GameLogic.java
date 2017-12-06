@@ -2312,6 +2312,27 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
+	 * Choose a random item from a list of options.
+	 *
+	 * @param options Options items
+	 * @param <T>     Typically entities or other
+	 * @return {@code null} if the options array was of length zero, otherwise a choice.
+	 */
+	public <T> T getRandom(List<T> options) {
+		if (options.size() == 0) {
+			return null;
+		}
+		return options.get(getRandom().nextInt(options.size()));
+	}
+
+	public <T> T removeRandom(List<T> options) {
+		if (options.size() == 0) {
+			return null;
+		}
+		return options.remove(getRandom().nextInt(options.size()));
+	}
+
+	/**
 	 * Gets a random boolean value.
 	 *
 	 * @return A random boolean.

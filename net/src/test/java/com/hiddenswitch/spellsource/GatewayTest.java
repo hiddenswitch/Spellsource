@@ -4,10 +4,6 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
-import com.hiddenswitch.spellsource.Games;
-import com.hiddenswitch.spellsource.Inventory;
-import com.hiddenswitch.spellsource.Matchmaking;
-import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -371,7 +367,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 		// Use all random yogg as a test attribute
 		vertx.runOnContext(ignored -> {
-			Spellsource.spellsource().persistAttribute("yogg-only-1", GameEventType.TURN_END, Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION, persistenceContext -> {
+			Spellsource.spellsource().persistAttribute("yogg-only-1", GameEventType.TURN_END, Attribute.RANDOM_TARGETS, persistenceContext -> {
 				// Save the turn number to this yogg attribute
 				long updated = persistenceContext.update(EntityReference.ALL_MINIONS, persistenceContext.event().getGameContext().getTurn());
 				queue.add(updated);
@@ -390,7 +386,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		}, context.asyncAssertSuccess(also -> {
 			context.assertTrue(queue.stream().anyMatch(l -> l > 0L), "Any number of the entities updated was greater than zero.");
 			Mongo.mongo().client().count(Inventory.INVENTORY,
-					QuickJson.json("facts." + Attribute.ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION.toKeyCase(), QuickJson.json("$exists", true)),
+					QuickJson.json("facts." + Attribute.RANDOM_TARGETS.toKeyCase(), QuickJson.json("$exists", true)),
 					context.asyncAssertSuccess(count -> {
 						context.assertTrue(count > 0L, "There is at least one inventory item that has the attribute that we configured to listen for.");
 					}));

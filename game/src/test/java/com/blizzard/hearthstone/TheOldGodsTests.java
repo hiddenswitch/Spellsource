@@ -1,28 +1,118 @@
 package com.blizzard.hearthstone;
 
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.cards.SpellCard;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.MinionCardDesc;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.BuffSpell;
+import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.SourceArg;
+import net.demilich.metastone.game.spells.desc.source.SourceDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
+import net.demilich.metastone.game.spells.trigger.CardRevealedTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
+import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+
+import static net.demilich.metastone.game.targeting.EntityReference.EVENT_TARGET;
 
 public class TheOldGodsTests extends TestBase {
+	@Test
+	public void testYoggSaronHopesEnd() {
+		// Test that yogg casts the expected number of spells.
+		runGym((context, player, opponent) -> {
+			final int expectedSpells = 3;
+			final Map<SpellArg, Object> build = SpellDesc.build(YoggTestSpell1.class);
+			build.put(SpellArg.TARGET, EVENT_TARGET);
+			final Enchantment testEnchantment = new Enchantment(
+					new CardRevealedTrigger(EventTriggerDesc.createEmpty(CardRevealedTrigger.class)),
+					new SpellDesc(build));
+			testEnchantment.setHost(player);
+			testEnchantment.setOwner(player.getId());
+			context.addTrigger(testEnchantment);
+			for (int i = 0; i < expectedSpells; i++) {
+				playCard(context, player, "spell_innervate");
+			}
+			// Modify yogg to only cast the coin
+			MinionCard yoggCard = (MinionCard) CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
+			final BattlecryDesc battlecry = ((MinionCardDesc) yoggCard.getDesc()).battlecry;
+			final SpellDesc originalSpell = battlecry.spell;
+			Map<SourceArg, Object> cardSourceArgs = SourceDesc.build(CardSource.class);
+			cardSourceArgs.put(SourceArg.TARGET_PLAYER, TargetPlayer.SELF);
+			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new SourceDesc(cardSourceArgs)) {
+				@Override
+				protected CardList match(GameContext context, Player player) {
+					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_the_coin"));
+				}
+			});
+			playMinionCard(context, player, "minion_yogg_saron_hopes_end");
+			Assert.assertEquals(YoggTestSpell1.counter.getCount(), 0, "The number of spells left to cast should be zero.");
+			battlecry.spell = originalSpell;
+		});
+
+		// Test that if yogg destroys itself, the spell casting ends.
+		runGym((context, player, opponent) -> {
+			final int expectedSpells = 3;
+			GameLogic spyLogic = Mockito.spy(context.getLogic());
+			context.setLogic(spyLogic);
+			Mockito.when(spyLogic.getRandom(Mockito.anyList()))
+					.thenAnswer(invocation -> {
+						List<Entity> targets = invocation.getArgument(0);
+						Assert.assertTrue(targets.stream().anyMatch(e -> e.getSourceCard().getCardId().equals("minion_yogg_saron_hopes_end")));
+						return targets.stream().filter(e -> e.getSourceCard().getCardId().equals("minion_yogg_saron_hopes_end")).findFirst().orElseThrow(AssertionError::new);
+					});
+
+			final Map<SpellArg, Object> build = SpellDesc.build(YoggTestSpell2.class);
+			build.put(SpellArg.TARGET, EVENT_TARGET);
+			final Enchantment testEnchantment = new Enchantment(
+					new CardRevealedTrigger(EventTriggerDesc.createEmpty(CardRevealedTrigger.class)),
+					new SpellDesc(build));
+			testEnchantment.setHost(player);
+			testEnchantment.setOwner(player.getId());
+			context.addTrigger(testEnchantment);
+			for (int i = 0; i < expectedSpells; i++) {
+				playCard(context, player, "spell_innervate");
+			}
+			// Modify yogg to only cast the coin
+			MinionCard yoggCard = (MinionCard) CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
+			final BattlecryDesc battlecry = ((MinionCardDesc) yoggCard.getDesc()).battlecry;
+			final SpellDesc originalSpell = battlecry.spell;
+			Map<SourceArg, Object> cardSourceArgs = SourceDesc.build(CardSource.class);
+			cardSourceArgs.put(SourceArg.TARGET_PLAYER, TargetPlayer.SELF);
+			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new SourceDesc(cardSourceArgs)) {
+				@Override
+				protected CardList match(GameContext context, Player player) {
+					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_fireball"));
+				}
+			});
+			playCard(context, player, "minion_yogg_saron_hopes_end");
+			Assert.assertEquals(YoggTestSpell2.counter.getCount(), 2, "Since yogg fireballed itself, we expect two spells left uncasted.");
+			battlecry.spell = originalSpell;
+		});
+	}
+
 	@Test
 	public void testVilefinInquisitor() {
 		runGym((context, player, opponent) -> {
@@ -129,5 +219,32 @@ public class TheOldGodsTests extends TestBase {
 		Assert.assertEquals(argentSquire.getHp(), 2);
 	}
 
+	public static class YoggTestSpell1 extends Spell {
+		private static final CountDownLatch counter = new CountDownLatch(3);
+
+		public YoggTestSpell1() {
+		}
+
+		@Override
+		@Suspendable
+		protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+			Assert.assertEquals(target.getSourceCard().getCardId(), "spell_the_coin");
+			counter.countDown();
+		}
+	}
+
+	public static class YoggTestSpell2 extends Spell {
+		private static final CountDownLatch counter = new CountDownLatch(3);
+
+		public YoggTestSpell2() {
+		}
+
+		@Override
+		@Suspendable
+		protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+			Assert.assertEquals(target.getSourceCard().getCardId(), "spell_fireball");
+			counter.countDown();
+		}
+	}
 }
 

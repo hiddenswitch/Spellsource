@@ -1,31 +1,36 @@
 package net.demilich.metastone.game.spells;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.CardRevealedEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class RandomCardTargetSpell extends Spell {
-
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = SpellUtils.getCard(context, desc);
+		castCardWithRandomTargets(context, player, source, card);
+	}
+
+	@Suspendable
+	public static void castCardWithRandomTargets(GameContext context, Player player, Entity source, Card card) {
 		SpellCard spellCard;
-
-		GameAction action = null;
-
+		GameAction action;
 		if (ChooseOneCard.class.isAssignableFrom(card.getClass())) {
 			ChooseOneCard chooseOneCard = (ChooseOneCard) card;
-			int choice = context.getLogic().random(chooseOneCard.getChoiceCards().length);
-			spellCard = (SpellCard) chooseOneCard.getChoiceCards()[choice];
+			spellCard = (SpellCard) context.getLogic().getRandom(Arrays.asList(chooseOneCard.getChoiceCards()));
 		} else if (SpellCard.class.isAssignableFrom(card.getClass())) {
 			spellCard = (SpellCard) card;
 		} else {
@@ -35,6 +40,8 @@ public class RandomCardTargetSpell extends Spell {
 		spellCard.setOwner(player.getId());
 		spellCard.setId(context.getLogic().getIdFactory().generateId());
 		spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+
+		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), spellCard, 1.2));
 
 		if (spellCard.getTargetRequirement() == TargetSelection.NONE) {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
@@ -46,7 +53,7 @@ public class RandomCardTargetSpell extends Spell {
 		List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
 		EntityReference randomTarget = null;
 		if (targets != null && targets.size() != 0) {
-			randomTarget = targets.get(context.getLogic().random(targets.size())).getReference();
+			randomTarget = context.getLogic().getRandom(targets).getReference();
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, context.resolveSingleTarget(randomTarget));
 		}
 
