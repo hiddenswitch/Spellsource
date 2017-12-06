@@ -47,7 +47,7 @@ public class CastFromGroupSpell extends Spell {
 			List<SpellDesc> adaptions = new ArrayList<SpellDesc>(spellList);
 			List<SpellDesc> spells = new ArrayList<SpellDesc>();
 			for (int i = 0; i < howMany; i++) {
-				SpellDesc spell = adaptions.remove(context.getLogic().random(adaptions.size()));
+				SpellDesc spell = context.getLogic().removeRandom(adaptions);
 				spells.add(spell);
 			}
 			

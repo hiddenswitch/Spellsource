@@ -9,6 +9,7 @@ dependencies {
     testCompile project(':cards')
     testCompile group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
     testCompile group: 'org.testng', name: 'testng', version: '6.+'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.+'
 }
 
 test {

@@ -151,7 +151,6 @@ Class | Method | HTTP request | Description
  - [GameEventAfterSpellCasted](docs/GameEventAfterSpellCasted.md)
  - [GameEventArmorGained](docs/GameEventArmorGained.md)
  - [GameEventBeforeSummon](docs/GameEventBeforeSummon.md)
- - [GameEventCardRevealed](docs/GameEventCardRevealed.md)
  - [GameEventDamage](docs/GameEventDamage.md)
  - [GameEventHeal](docs/GameEventHeal.md)
  - [GameEventHeroPowerUsed](docs/GameEventHeroPowerUsed.md)

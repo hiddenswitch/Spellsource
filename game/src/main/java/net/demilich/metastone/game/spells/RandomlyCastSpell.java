@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
@@ -23,9 +24,7 @@ public class RandomlyCastSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellDesc[] spells = (SpellDesc[]) desc.get(SpellArg.SPELLS);
-		
-		int i = context.getLogic().random(spells.length);
-		SpellUtils.castChildSpell(context, player, spells[i], source, target);
+		SpellUtils.castChildSpell(context, player, context.getLogic().getRandom(Arrays.asList(spells)), source, target);
 	}
 
 }

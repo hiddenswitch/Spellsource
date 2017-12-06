@@ -37,8 +37,29 @@ import java.io.Serializable;
  */
 
 public class CardEvent  implements Serializable {
+  @SerializedName("showLocal")
+  private Boolean showLocal = null;
+
   @SerializedName("card")
   private Entity card = null;
+
+  public CardEvent showLocal(Boolean showLocal) {
+    this.showLocal = showLocal;
+    return this;
+  }
+
+   /**
+   * Forces this card event to be shown locally 
+   * @return showLocal
+  **/
+  @ApiModelProperty(example = "null", value = "Forces this card event to be shown locally ")
+  public Boolean getShowLocal() {
+    return showLocal;
+  }
+
+  public void setShowLocal(Boolean showLocal) {
+    this.showLocal = showLocal;
+  }
 
   public CardEvent card(Entity card) {
     this.card = card;
@@ -68,12 +89,13 @@ public class CardEvent  implements Serializable {
       return false;
     }
     CardEvent cardEvent = (CardEvent) o;
-    return Objects.equals(this.card, cardEvent.card);
+    return Objects.equals(this.showLocal, cardEvent.showLocal) &&
+        Objects.equals(this.card, cardEvent.card);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(card);
+    return Objects.hash(showLocal, card);
   }
 
   @Override
@@ -81,6 +103,7 @@ public class CardEvent  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class CardEvent {\n");
     
+    sb.append("    showLocal: ").append(toIndentedString(showLocal)).append("\n");
     sb.append("    card: ").append(toIndentedString(card)).append("\n");
     sb.append("}");
     return sb.toString();

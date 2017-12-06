@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
@@ -22,7 +23,7 @@ public class SummonRandomSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String[] minionCardsId = (String[]) desc.get(SpellArg.CARDS);
-		String randomMinionId = minionCardsId[context.getLogic().random(minionCardsId.length)];
+		String randomMinionId = context.getLogic().getRandom(Arrays.asList(minionCardsId));
 		MinionCard randomMinionCard = (MinionCard) context.getCardById(randomMinionId);
 		context.getLogic().summon(player.getId(), randomMinionCard.summon(), null, -1, false);
 	}

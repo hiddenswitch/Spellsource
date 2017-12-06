@@ -2,10 +2,7 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.Games;
-import com.hiddenswitch.spellsource.Matchmaking;
-import com.hiddenswitch.spellsource.Port;
-import com.hiddenswitch.spellsource.Spellsource;
+import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
@@ -33,6 +30,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static io.vertx.ext.sync.Sync.fiberHandler;
 
@@ -83,6 +81,9 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 		// TODO: Until expire game session is registered correctly, limit this service to a singleton.
 		if (noInstancesYet()) {
+			// Kill all existing connections
+			Accounts.update(json(), json("$unset", json("connection", null)));
+
 			Spellsource.spellsource().router(vertx).route("/" + Games.WEBSOCKET_PATH)
 					.method(HttpMethod.GET)
 					.handler(context -> {
@@ -143,13 +144,13 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 		games.put(finalGameId, session);
 		for (String userId : new String[]{request.getPregame1().getUserId(), request.getPregame2().getUserId()}) {
 			if (userId == null) {
-				throw new RuntimeException();
+				throw new RuntimeException("The player must be authenticated.");
 			}
 			if (gameForUserId.containsKey(userId)) {
-				throw new RuntimeException();
+				throw new RuntimeException("The player cannot be in two games at once.");
 			}
 			if (keyToSecret.containsKey(userId)) {
-				throw new RuntimeException();
+				throw new RuntimeException("The player cannot be in two games at once.");
 			}
 			gameForUserId.put(userId, session);
 			keyToSecret.put(userId, session.getSecret(userId));

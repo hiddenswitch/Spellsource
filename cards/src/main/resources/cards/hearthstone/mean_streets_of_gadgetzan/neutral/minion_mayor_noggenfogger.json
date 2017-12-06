@@ -34,7 +34,7 @@
     }
   ],
   "attributes": {
-    "ALL_RANDOM_FINAL_DESTINATION": true
+    "RANDOM_TARGETS": true
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

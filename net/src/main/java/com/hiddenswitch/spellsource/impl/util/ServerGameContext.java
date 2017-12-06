@@ -416,7 +416,7 @@ public class ServerGameContext extends GameContext {
 		// at random.
 		final GameAction action = actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.END_TURN)
-				.findFirst().orElse(actions.get(getLogic().random(actions.size())));
+				.findFirst().orElse(getLogic().getRandom(actions));
 
 		Sync.fiberHandler((Handler<GameAction>) callback).handle(action);
 	}

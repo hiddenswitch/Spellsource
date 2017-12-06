@@ -513,18 +513,12 @@ public enum Attribute {
 	 */
 	JADE_BUFF,
 	/**
-	 * When any {@link Entity} has this attribute, targets are chosen randomly.
+	 * When any {@link Entity} has this attribute, spells are cast with random targets, random discover choices are
+	 * made, physical attacks target randomly, and battlecries target randomly.
 	 * <p>
-	 * Implements Mayor Noggenfogger.
+	 * Implements Yogg-Saron, Hope's End; Servant of Yogg-Saron; Mayor Noggenfogger
 	 */
-	@Deprecated
-	ALL_RANDOM_FINAL_DESTINATION,
-	/**
-	 * When any {@link Entity} has this attribute, spells are cast with random targets.
-	 * <p>
-	 * Implements Yogg-Saron, Hope's End; Servant of Yogg-Saron
-	 */
-	ALL_RANDOM_YOGG_ONLY_FINAL_DESTINATION,
+	RANDOM_TARGETS,
 	/**
 	 * A {@link #QUEST} {@link Entity} is an untargetable permanent that lives in the {@link Zones#SECRET} zone but is
 	 * visible to the opponent.

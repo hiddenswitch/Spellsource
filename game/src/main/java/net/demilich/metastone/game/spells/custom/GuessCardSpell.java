@@ -45,10 +45,10 @@ public class GuessCardSpell extends Spell {
 
 		if (deckCards.containsKey(opponentClass)
 				&& deckCards.get(opponentClass).size() > 0) {
-			correctCard = (Card) deckCards.get(opponentClass).get(context.getLogic().random(deckCards.get(opponentClass).size()));
+			correctCard = (Card) context.getLogic().getRandom(deckCards.get(opponentClass));
 			correctClass = opponentClass;
 		} else {
-			correctCard = (Card) deckCards.get(HeroClass.ANY).get(context.getLogic().random(deckCards.get(HeroClass.ANY).size()));
+			correctCard = (Card) context.getLogic().getRandom(deckCards.get(HeroClass.ANY));
 			correctClass = HeroClass.ANY;
 		}
 
