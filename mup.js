@@ -2,7 +2,7 @@ module.exports = {
   servers: {
     one: {
       // TODO: set host address, username, and authentication method
-      host: '54.213.111.75',
+      host: 'launcher.hiddenswitch.com',
       username: 'ubuntu',
       // pem: './path/to/pem'
       // password: 'server-password'
