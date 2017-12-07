@@ -5,7 +5,8 @@
       "mac": "Spellsource.app"
     }
   },
-  "apiKey": "3Zd5wQlEhwCMlZEBZcdCa95jCSXZwGzozPjoCC0ubFI=",
+  "apiKey": "00a7e7b1513ec52aa522e67d54b63119e6975d48b7d874d94b074da46e40e9ac2872f242aeb5a00ae12d476b45eafd61b0e759659e9fb5b19d0f9023b8d91e4a2a27f43c35d9175ca36eddbade89e027429eb0ee4364a98258ce0feebd0b4a28bcccaf04628bb4d637a65d0f46078b597e04fe202f37fe8903c4bc7599b9da11cd748109ecbd1bbbf88782f4f465e1cc0f611cde4af51bfcb23b4406cbaaf86b714ac20ab560f4226abda3b03a5c32f4b5d0ebdd00bef8e8ab134afb2933bec75203eaf0a2510edc0439d40fecc3c03448fed445feacbc1ba0c570299dca4687abae686b9b7585bcbeb887772543ccb48d5329b7fb544095f6409bcfc5c195b9",
+  "apiKeyVerify": "0ace371a07ef7d96b5a5af979715db243373f6d5f587b31f01a45d9ef72722c73b3d0c5e5da043a8a52b4bcd20324b82184d152d83dd7646f510d7bb53e4ca78",
   "electron": {
     "autoPackage": true,
     "bundleClient": false,
