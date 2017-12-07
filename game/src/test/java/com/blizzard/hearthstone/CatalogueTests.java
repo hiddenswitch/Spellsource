@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.demilich.metastone.game.cards.*;
 import org.apache.commons.io.IOUtils;
-import org.jsoup.Jsoup;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
