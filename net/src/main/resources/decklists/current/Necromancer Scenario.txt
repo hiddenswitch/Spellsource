@@ -1,4 +1,4 @@
-### Necromancer
+### Necromancer (Tavern Brawl)
 # Class: Violet
 # Hero: Necromancer
 # Format: Wild

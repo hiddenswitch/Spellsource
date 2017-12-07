@@ -1,4 +1,4 @@
-### Token Shaman - Standard Meta Snapshot - Oct. 8, 2017
+### Token Shaman
 # Class: Silver
 # Format: Standard
 # Year of the Mammoth

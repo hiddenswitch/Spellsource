@@ -1,4 +1,4 @@
-### Exodia Mage - Standard Meta Snapshot - August 19, 2017
+### Exodia Mage
 # Class: Blue
 # Format: Standard
 # Year of the Mammoth
