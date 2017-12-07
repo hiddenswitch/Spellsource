@@ -1,4 +1,4 @@
-### Pirate Warrior - Standard Meta Snapshot - Sep. 24, 2017
+### Pirate Warrior
 # Class: Red
 # Format: Standard
 # Year of the Mammoth

@@ -102,6 +102,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	}
 
 	protected String getRandomDeck(UserRecord bot) {
+		// TODO: Prevent the bot from choosing a tavern brawl configuration here.
 		return bot.getDecks().get(RandomUtils.nextInt(0, bot.getDecks().size()));
 	}
 

@@ -1,4 +1,4 @@
-### Zoolock - Standard Meta Snapshot - Oct. 8, 2017
+### Zoolock
 # Class: Violet
 # Format: Standard
 # Year of the Mammoth

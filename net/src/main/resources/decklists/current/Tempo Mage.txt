@@ -1,4 +1,4 @@
-### Tempo Mage - Standard Meta Snapshot - Oct. 8, 2017
+### Tempo Mage
 # Class: Blue
 # Format: Standard
 # Year of the Mammoth
