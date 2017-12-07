@@ -4,6 +4,6 @@ export PORT=8080
 cat << EOF > ../Minionate/Assets/Resources/Url.txt
 http://localhost:$PORT
 EOF
-./gradlew net:runDebug
+./gradlew net:run
 rm ../Minionate/Assets/Resources/Url.txt
 # rm ../Minionate/Assets/Resources/Url.txt.neta
