@@ -3,6 +3,7 @@
  */
 import {Versions} from '../collections'
 
+const crypto = require('crypto');
 SimpleRest.configure({
     collections: []
 });
@@ -13,8 +14,11 @@ Meteor.publish('versions', function () {
 
 Meteor.methods({
     latest(url, buildName, platform, apiKey) {
-        if (apiKey !== Meteor.settings.apiKey) {
-            return;
+        const hash = crypto.createHash('sha512');
+        hash.update(Meteor.settings.apiKey + ':' + apiKey);
+
+        if (hash.digest('hex') !== Meteor.settings.apiKeyVerify) {
+            throw new Meteor.Error(401, 'Permission denied.');
         }
         let windows = platform === 'windows';
 
@@ -30,9 +34,3 @@ Meteor.methods({
 
     }
 });
-//
-// Meteor.startup(() => {
-//     if (!Versions.findOne("test11")) {
-//         Versions.insert({_id: "test11", url: "https://s3.us-east-2.amazonaws.com/minionate/builds/latest_win.zip", createdAt: new Date()});
-//     }
-// });
