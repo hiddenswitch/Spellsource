@@ -1,0 +1,17 @@
+branch-defaults:
+  default:
+    environment: metastone-dev
+global:
+  application_name: metastone
+  branch: null
+  default_ec2_keyname: null
+  default_platform: Docker 17.03.2-ce
+  default_region: us-west-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  repository: null
+  sc: null
+  workspace_type: Application
