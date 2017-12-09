@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+ #!/usr/bin/env bash
 export PORT=8080
 # Put a URL override for the client
 cat << EOF > ../Minionate/Assets/Resources/Url.txt

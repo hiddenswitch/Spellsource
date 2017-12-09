@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.*;
 import org.apache.commons.io.IOUtils;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -20,10 +21,19 @@ import java.util.List;
 public class CatalogueTests {
 	static Gson gson = new Gson();
 
+	private static String getCurrentCards() {
+		String testedUrl = "https://api.hearthstonejson.com/v1/21517/enUS/cards.json";
+		String overrideUrl = System.getProperty("spellsource.cards.url", System.getenv("SPELLSOURCE_CARDS_URL"));
+		if (overrideUrl != null && !overrideUrl.equals("")) {
+			testedUrl = overrideUrl;
+		}
+		return testedUrl;
+	}
+
 	@DataProvider(name = "HearthstoneCards")
 	public static Object[][] getHearthstoneCards() throws IOException, URISyntaxException, CardParseException {
 		CardCatalogue.loadCardsFromPackage();
-		URL url = new URL("https://api.hearthstonejson.com/v1/21517/enUS/cards.json");
+		URL url = new URL(getCurrentCards());
 		URLConnection connection = url.openConnection();
 		connection.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
 		String cards = IOUtils.toString(connection.getInputStream());
@@ -53,6 +63,7 @@ public class CatalogueTests {
 		Assert.assertNotNull(card);
 	}
 
+	@Ignore
 	@Test(dataProvider = "HearthstoneCards")
 	public void testAttributes(JsonObject cardObject) {
 		final Card card = CardCatalogue.getCardByName(cardObject.get("name").getAsString());

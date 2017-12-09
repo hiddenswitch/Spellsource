@@ -12,6 +12,14 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
+/**
+ * The base class for "spells," or collections of effects in the engine.
+ * <p>
+ * Spell in this context means something broader than a spell card. It refers to anything that causes changes to the
+ * game, like a deathrattle or a triggered effect.
+ * <p>
+ * To browse all the possible effects, visit the deriving classes of this class.
+ */
 public abstract class Spell implements Serializable {
 	/**
 	 * Casts a spell for the given arguments.

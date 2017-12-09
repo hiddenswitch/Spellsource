@@ -1,124 +1,106 @@
-# MetaStone 
+# Spellsource-Server
 
-### What is it? ###
-MetaStone is a simulator for the online collectible card game (CCG) Hearthstone&reg; by Activison Blizzard written in Java. It strives to be a useful tool for card value analyzation, deck building and performance evaluation. There is also support for custom cards, allowing users to implement their own card inventions and testing them within the simulator engine. MetaStone tries to re-implement all game mechanics and rules from the original game as accurately as possible. 
+A multiplayer, networked adaptation of `metastone`
 
-### What is it not? ###
-This is no Hearthstone replacement or clone. Please do not request better graphical effects, sounds or anything which makes it feel more like Hearthstone. There won't be any mode to battle against other human players. This is a tool meant for advanced players; if you just want to play Hearthstone, please play the real game.
+### Description
 
-### How do I run it on Linux? ###
-* Go to [Releases](https://github.com/demilich1/metastone/releases) and download the latest release (`metastone-X_Y_Z_jar.zip`).
-* Extract the contents of the .zip file.
-* Open the Terminal (`Ctrl+Alt+T` on Ubuntu) and access `../MetaStone-X.Y.Z/bin`.
-* Execute this command: `./MetaStone`.
-    * Executing `sudo ./MetaStone` will execute the file as Root ("Super User"), this is not necessary though.
-    * You might need to make the file executable (On Ubuntu: Right Click the File -> Properties -> Permissions -> Allow executing file as program).
+`metastone` is a simulator for the online collectible card game (CCG) Hearthstone&reg; by Activison Blizzard written in Java. It strives to be a useful tool for card value analyzation, deck building and performance evaluation. There is also support for custom cards, allowing users to implement their own card inventions and testing them within the simulator engine. MetaStone tries to re-implement all game mechanics and rules from the original game as accurately as possible. 
 
-### Can I contribute? ###
-Sure! There is still a lot to do and anybody willing to contribute is welcome
+The `Spellsource-Server` project adapts `metastone` to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches.
 
-### What needs to be done? ###
-- UI improvements in general are welcome
-- We always need more unit tests! If you don't know what to test, take a look at http://hearthstone.gamepedia.com/Advanced_rulebook and just pick an example of card interaction from that wiki page
-- Code refactorings to make the code simpler and/or faster
-- There is a bug in the code and you know how to fix it? Great!
-- Better AI: at the moment the most advanced AI is 'Game State Value', however it is very subpar compared to human players. A more sophisticated AI would be a huge boon
-- Also consider having a look at the open issues
-- Anything else you would like to improve
+### Quick Start Guide
 
-### How do I compile the code on my machine? ###
-* NOTE **JDK 1.8 is required!**
-* Clone the repo.  See [https://help.github.com/articles/cloning-a-repository/](https://help.github.com/articles/cloning-a-repository/) for help.
-* Open a terminal / command prompt and nagivate to your to your git repo location
-* Run the application from the command line: 
-   * Linux/Mac OSX `./gradlew run`
-   * Windows `gradlew.bat run`
-   * Note: this will download all dependecies, compile and assemble all modules and then run the app.
-* Download dependecies and compile: 
-   * Linux/Mac OSX `./gradlew compileJava`
-   * Windows `gradlew.bat compileJava`
-   * Note: this will download all dependecies and compile all modules.  Usefull when developing.
-* Get a list of all gradle tasks: 
-   * Linux/Mac OSX `./gradlew tasks --all`
-   * Windows `gradlew.bat tasks --all`
+If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:
 
-#### Building with an IDE
-* If you want to build from Eclipse, create the Eclipse project files: 
-   * Linux/Mac OSX `./gradlew eclipse`
-   * Windows `gradlew.bat eclipse`
-   * _The above gradle task will automatically generate the `BuildConfig.java` file._
-   * Open Eclipse and choose `File > Import > General > Existing projects into workspace`
-   * Select the `Search for nested project` checkbox on the `Import Projects` screen.
-   * Change `Eclipse > Window > Preferences > Java > Compiler > Compiler Complience Level` to 1.8
-   * Change `Eclipse > Window > Preferences > Java > Compiler > Building > Circular dependencies` from `Error` to `Warning`.  There is a [known bug](https://issues.gradle.org/browse/GRADLE-2200) with importing multi-module gradle projects into Eclipse. The IDE of choice for working with gradle projects is [IntelliJ IDEA](https://www.jetbrains.com/idea/).
-* If you want to build from IntelliJ IDEA, create the IntelliJ project files:
-   * Linux/Mac OSX `./gradlew idea`
-   * Windows `gradlew.bat idea`
-   * _The above gradle task will automatically generate the `BuildConfig.java` file._
-   * Open IntelliJ and select `File > Open` then navigate to the project root dir.
-* ***Optionally*** (advanced option), you can choose to import the project into your respective IDE from the `build.gradle` files. When doing so, you **must** manually generate the `BuildConfig.java` file.  Otherwise your IDE will complain about unresolved references to `BuildConfig.java`.
-   * Linux/Mac OSX `./gradlew compileBuildConfig`
-   * Windows `gradlew.bat compileBuildConfig`
+ 1. Install the Java 8 SDK (JDK).
+ 2. Clone this repository.
+ 3. To run the server locally, execute the following on a command prompt:
+    * Linux/Mac OS X: Run `./gradlew net:local`.
+    * Windows: Run `gradlew.bat net:local`.
+ 4. Download the Hidden Switch Launcher.
+ 5. Download the Spellsource Client from within the launcher and start it.
+ 6. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
 
-### Project structure
-* MetaStone is made up of a handfull of source modules.  Here's what the top level structure looks like:
-```
-metastone
- ├── app    // Application UI code and resources. Depends on 'game' and 'cards' modules.
- ├── game   // Game source code. Depends on 'shared' module.
- ├── shared // Shared code between 'app' and 'game' modules.
- └── cards  // Cards, decks and deckFormat data files.
-```
-* Each module can be built separately.  Their respective dependencies will get compiled and pulled in at build time. For example:
-* To produce a `cards.jar` file which contains all the cards, decks and deckFormat data files:
-   * Linux/Mac OSX `./gradlew cards:assemble`
-   * Windows `gradlew.bat cards:assemble`
-* To build the game module and produce a `game.jar` file:
-   * Linux/Mac OSX `./gradlew game:assemble`
-   * Windows `gradlew.bat game:assemble`
-* To produce a standalone distributable app binary:
-   * Linux/Mac OSX `./gradlew app:assemble`
-   * Windows `gradlew.bat app:assemble`
+### Contributing Cards
 
-### How do I build my own cards? ###
-**This feature is in very early stages and there is no official support yet.** There is no documentation at all. If you really want to start right now, here's how you can start:
-- You can build your own cards or modify existing cards without having to fork the project!
-- Card files are located in the `metastone/cards` directory.  **Use these as reference!**
-   * Linux/Mac OSX `~/metastone/cards`
-   * Windows `C:\Users\[username]\Documents\metastone\cards`
-   * You can override the default metastone home dir by setting an environment varialble `USER_HOME_METASTONE` and specifying a new path.
-   * You must launch the app at least once for card data files to be copied.
-- Any `.json` files you place in your `metastone/cards` folder will be parsed and treated like built-in cards.
-- To learn the cards format it is highly recommended that you copy an existing card, change the `filename` and the `id` attribute (**<-- important!**) and make small changes.
-- Restart MetaStone for new cards to be detected.
-- If you are building out official cards or fixing existing cards, you will need to fork the project then make your changes in your repo's `metastone/cards/src/main/resources/cards` dir.  Then open a [Pull Request](https://help.github.com/articles/using-pull-requests/) into the project [master](https://github.com/demilich1/metastone/tree/master) branch with your changes.
-- Make sure to validate that the cards you added are well formed and can be parsed! Run the following command: 
-   - Linux/Mac OSX `./gradlew cards:test` 
-   - Windows `gradlew.bat cards:test`
-- **The card format is subject to change; cards you create now MAY NOT work in future versions**
-- In the rare chance that your card files get messed up beyond repair,  you can always force the app to overwrite your local card files with the versions distributed with the app in `cards.jar`.
-   * _Option 1_: Delete the `~/metastone` dir.  
-      * You **WILL LOOSE** all your changes, including **ALL new files** you may have added. DANGEROUS! MAKE A BACKUP!!
-      * Linux/Mac OSX `rm -rf ~/metastone`
-      * Windows `rmdir /s C:\Users\[username]\Documents\metastone`
-      * Card data files will be copied in their prestine state after you restart the app.
-   * _Option 2_: Edit the `~/metastone/metastone.properties` file and update the `cards.copied` property.
-      * delete the `cards.copied` property and save the file
-      * New files you may have added will NOT be affected.
-      * All card files that are distributed with the app will be overritten after you restart the app.
+Contributing cards consists of writing specially-crafted JSON files into the `cards` directories and writing tests for them.
 
-### Running tests
-* The easiest way to run tests is from the command line.
-   * Linux/Mac OSX `./gradlew game:test`
-   * Windows `gradlew.bat game:test`
-* You can also run tests from your favorite IDE. For example:
-   * In IntelliJ right click on `src/test` folder in a given module and select `Run All Tests`
-* You can also run individual tests using the `-Dtest.single=[TEST NAME]` command line option.
-   * From the command line
-      * Linux/Mac OSX `./gradlew game:test -Dtest.single=SecretTest`
-      * Windows `gradlew.bat game:test -Dtest.single=SecretTest`
-   * From your IDE
-      * Right click on the individual test file and select `Run Test`
-* If you encounter test failures open the test report file `build/reports/tests/index.html` for details on the failures
-* Look [**here**](/game/src/test/java/net/demilich/metastone/tests) for list of existing game tests.
+Additionally, to make it easier to contribute Hearthstone card functionality, the project has an automated test that accepts a URL to a community-standardized `cards.json` and checks which cards are missing. To use this feature, set the environment variable `SPELLSOURCE_CARDS_URL` to `https://api.hearthstonejson.com/v1/latest/enUS/cards.json`, or modify [CatalogueTests](game/src/test/java/com/blizzard/hearthstone/CatalogueTests.java) `getCurrentCards()` method to retrieve the latest URL.
 
+Let's run through a complete example of implementing a card, "Exampler" that reads: `Neutral (1) 4/4. Battlecry: Summon a 5/5 Skeleton for your opponent.`
+
+ 1. In GitHub, **fork** the Spellsource-Server repository. Clone your fork. You'll save your new card to this fork.
+ 2. Create a file, [minion_exampler.json](cards/src/main/resources/cards/custom/minion_exampler.json), in the directory `cards/src/main/resources/cards/custom`. If the `custom` folder does not exist, create it; or, create a folder named after the game or mode for which you are creating cards.
+ 3. Find a similar card to start as a base. In this case, we'll search for cards that summon other cards. Let's use [Rattling Rascal](cards/src/main/resources/cards/hearthstone/knights_of_the_frozen_throne/neutral/minion_rattling_rascal.json). Copy the contents of that card into `minion_exampler.json`.
+ 4. Edit the appropriate fields to create this card. My version is below:
+ 
+     ```json
+     {
+       "name": "Exampler",
+       "baseManaCost": 1,
+       "type": "MINION",
+       "heroClass": "ANY",
+       "baseAttack": 4,
+       "baseHp": 4,
+       "rarity": "EPIC",
+       "description": "Battlecry: Summon a 5/5 Skeleton for your opponent",
+       "battlecry": {
+         "targetSelection": "NONE",
+         "spell": {
+           "class": "SummonSpell",
+           "card": "token_skeletal_enforcer",
+           "targetPlayer": "OPPONENT"
+         }
+       },
+       "attributes": {
+         "BATTLECRY": true
+       },
+       "collectible": true,
+       "set": "CUSTOM",
+       "fileFormatVersion": 1
+     }
+     ```
+     
+     A more detailed documentation of what all these fields mean is forthcoming. You're strongly encouraged to look at existing cards to see how various fields, like `battlecry`, `trigger`, and `attributes` work. The various enumerations can be found in the code, but most surprisingly hero classes have been renamed to colors.
+
+ 5. Write a test that verifies that the card works. We'll create a new file, [ExampleCardTests](game/src/test/java/com/hiddenswitch/spellsource/ExampleCardTests.java), that uses a "gym" to test that the card does what it is supposed to do. Here's an example test for Exampler:
+ 
+    ```java
+    package com.hiddenswitch.spellsource;
+    
+    import net.demilich.metastone.tests.util.TestBase;
+    import org.testng.Assert;
+    import org.testng.annotations.Test;
+    
+    public class ExampleCardTests extends TestBase {
+        @Test
+    	public void testExampler() {
+    		runGym((context, player, opponent) -> {
+    			playCard(context, player, "minion_exampler");
+    			Assert.assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(),
+    					"token_skeletal_enforcer",
+    					"The opponent should have a Skeletal Enforcer after Exampler is summoned");
+    		});
+    	}
+    }
+    ```
+    
+    These tests can be as involved as you'd like, and should explore corner cases or interactions whenever possible. Many simple cards do not require tests. But when you start writing your own code to implement cards, tests are especially important to verify functionality. **All** community-contributed cards that get distributed to the production Spellsource server must have tests.
+    
+    Visit other tests to see how more complex cards are tested. An example of modifying random outcomes can be found in [`TheOldGodsTests#testYoggSaronHopesEnd`](/game/src/test/java/com/blizzard/hearthstone/TheOldGodsTests.java). For an example of overriding a discover action, see [`JourneyToUngoroTests#testFreeFromAmber()`](game/src/test/java/com/blizzard/hearthstone/JourneyToUngoroTests.java).
+    
+ 6. Run your tests by executing `./gradlew game:test` on Mac or `gradlew.bat game:test` on Windows from a command line. You should receive no errors. If the engine has an issue parsing your card, you'll see an error in `CardValidationTests` with your card name specified.
+ 
+ 7. To play with the card, start the server and client using the instructions in the Quick Start guide.
+ 
+ 8. Inside the client, choose Quick Play and create a new deck. The format for the deck list uses a standardized community pattern. Here's my example deck list:
+ 
+     ```text
+     ### Test Deck Name
+     Hero Class: Warrior
+     15x Exampler
+     15x Innervate
+     ```
+     
+    Select this deck when starting your game.
+ 9. You will now play against an AI using the card. To play against others on your local network, enter Matchmaking instead of Quick Play. As long as your opponent's client is running on the local network and the network supports UDP broadcasting (most local Wi-Fi networks), your opponent's client will discover your local server.

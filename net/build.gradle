@@ -83,3 +83,10 @@ task(runDebug, dependsOn: 'classes', type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005", "-javaagent:${configurations.quasar.iterator().next()}=mb"]
 }
+
+task(local, dependsOn: 'classes', type: JavaExec) {
+    systemProperty "spellsource.port", "8080"
+    main = 'com.hiddenswitch.spellsource.applications.Embedded'
+    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
+    classpath = sourceSets.main.runtimeClasspath
+}

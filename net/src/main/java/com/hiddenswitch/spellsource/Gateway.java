@@ -9,6 +9,15 @@ import com.hiddenswitch.spellsource.client.models.*;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 /**
  * A specification for the HTTP API that clients can access. See the Swagger specification for detailed documentation of
  * each of these methods.
@@ -150,4 +159,40 @@ public interface Gateway {
 	WebResult<Void> healthCheck(RoutingContext context) throws SuspendExecution, InterruptedException;
 
 	WebResult<SendMessageResponse> sendFriendMessage(RoutingContext context, String userId, String friendId, SendMessageRequest request) throws SuspendExecution, InterruptedException;
+
+	/**
+	 * Heuristically retrieves the primary networking interface for this device.
+	 *
+	 * @return A Java {@link NetworkInterface} object that can be used by {@link io.vertx.core.Vertx}.
+	 * @throws SocketException Typically if the application is not permitted to enumerate network interfaces.
+	 */
+	static NetworkInterface mainInterface() throws SocketException {
+		final ArrayList<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+		final NetworkInterface networkInterface = interfaces.stream().filter(ni -> {
+			boolean isLoopback = false;
+			boolean supportsMulticast = false;
+			try {
+				isLoopback = ni.isLoopback();
+				supportsMulticast = ni.supportsMulticast();
+			} catch (IOException loopbackTestFailure) {
+			}
+			final boolean hasIPv4 = ni.getInterfaceAddresses().stream().anyMatch(ia -> ia.getAddress() instanceof Inet4Address);
+			return supportsMulticast && !isLoopback && !ni.isVirtual() && hasIPv4;
+		}).sorted(Comparator.comparing(NetworkInterface::getName)).findFirst().orElse(null);
+		return networkInterface;
+	}
+
+	/**
+	 * Retrieves a local-network-accessible IPv4 valid hostname for this instance by heuristically picking the "primary"
+	 * network interface on this device.
+	 *
+	 * @return A string
+	 */
+	static String getHostAddress() throws SocketException {
+		final InterfaceAddress hostAddress = mainInterface().getInterfaceAddresses().stream().filter(ia -> ia.getAddress() instanceof Inet4Address).findFirst().orElse(null);
+		if (hostAddress == null) {
+			return null;
+		}
+		return hostAddress.getAddress().getHostAddress();
+	}
 }
