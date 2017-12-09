@@ -31,7 +31,7 @@ public class Mongo {
 		mongoLogger.setLevel(Level.ERROR);
 	}
 
-	public static Mongo mongo() {
+	public synchronized static Mongo mongo() {
 		if (instance == null) {
 			instance = new Mongo();
 		}
@@ -39,7 +39,7 @@ public class Mongo {
 		return instance;
 	}
 
-	public Mongo startEmbedded() {
+	public synchronized Mongo startEmbedded() {
 		if (localMongoServer == null) {
 			logger.info("Starting Mongod embedded...");
 			localMongoServer = new LocalMongo();
@@ -56,7 +56,7 @@ public class Mongo {
 		return this;
 	}
 
-	public Mongo stopEmbedded() {
+	public synchronized Mongo stopEmbedded() {
 		if (localMongoServer != null) {
 			try {
 				localMongoServer.stop();
@@ -89,7 +89,7 @@ public class Mongo {
 	 * @param vertx The vertx instance to build the mongo client with.
 	 * @return This {@link Mongo} instance.
 	 */
-	public Mongo connectWithEnvironment(Vertx vertx) {
+	public synchronized Mongo connectWithEnvironment(Vertx vertx) {
 		if (client != null) {
 			return this;
 		}
