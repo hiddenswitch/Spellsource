@@ -7,6 +7,7 @@ import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.*;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
+import de.flapdoodle.embed.process.extract.UUIDTempNaming;
 import de.flapdoodle.embed.process.extract.UserTempNaming;
 import de.flapdoodle.embed.process.io.directories.FixedPath;
 import de.flapdoodle.embed.process.io.directories.IDirectory;
@@ -41,7 +42,7 @@ public class LocalMongo {
 				.extractDir(fixedPath)
 				.tempDir(fixedPath)
 				.extractExecutableNaming(new UserTempNaming())
-				.executableNaming(new UserTempNaming())
+				.executableNaming(new UUIDTempNaming())
 				.downloader(new Downloader())
 				.download(new DownloadConfigBuilder()
 						.defaultsForCommand(command)
