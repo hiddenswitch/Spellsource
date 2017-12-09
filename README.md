@@ -4,7 +4,7 @@
 
 A multiplayer, networked adaptation of `metastone`
 
-Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client to use with this server.
+Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client. Play online against others! No other installation required.
 
 Please see the issues tab to report bugs or request functionality.
 
@@ -14,9 +14,17 @@ Please see the issues tab to report bugs or request functionality.
 
 The `Spellsource-Server` project adapts `metastone` to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches.
 
+The `Spellsource-Client` project is not yet released, but it backs the game client for this server. It is fully animated.
+
 The project also contains adapters for Amazon Elastic MapReduce for processor-intensive AI training. Please reach out to the developers in an issue if you'd like to learn more or to use part of our AWS budget for AI experimentation.
 
-### Quick Start Guide
+### Quick Start Multiplayer
+
+ 1. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
+ 2. Download the Spellsource Client from within the launcher and start it.
+ 3. Enter Quick Play to play against a bot, or Matchmaking to play against a random opponent.
+
+### Quick Start Contributing Cards
 
 If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:
 
