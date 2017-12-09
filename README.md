@@ -1,5 +1,7 @@
 # Spellsource-Server
 
+[![Build Status](https://travis-ci.org/hiddenswitch/Spellsource-Server.svg?branch=master)](https://travis-ci.org/hiddenswitch/Spellsource-Server)
+
 ![In-Game Screenshot](docs/sn2.png)
 
 A multiplayer, networked adaptation of `metastone`
