@@ -2,6 +2,8 @@
 
 This module contains gameplay definitions for cards.
 
+Work still needs to be done to make this module in-line with the requirements below.
+
 ### Formatting
 
 Use the provided <code>[formatter.py](formatter.py)</code> to automatically format your JSON to a canonical ordering and indentation.

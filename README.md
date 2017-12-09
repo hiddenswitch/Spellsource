@@ -2,24 +2,31 @@
 
 A multiplayer, networked adaptation of `metastone`
 
+Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client to use with this server.
+
+Please see the issues tab to report bugs or request functionality.
+
 ### Description
 
 `metastone` is a simulator for the online collectible card game (CCG) Hearthstone&reg; by Activison Blizzard written in Java. It strives to be a useful tool for card value analyzation, deck building and performance evaluation. There is also support for custom cards, allowing users to implement their own card inventions and testing them within the simulator engine. MetaStone tries to re-implement all game mechanics and rules from the original game as accurately as possible. 
 
 The `Spellsource-Server` project adapts `metastone` to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches.
 
+The project also contains adapters for Amazon Elastic MapReduce for processor-intensive AI training. Please reach out to the developers in an issue if you'd like to learn more or to use part of our AWS budget for AI experimentation.
+
 ### Quick Start Guide
 
 If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:
 
  1. Install the Java 8 SDK (JDK).
- 2. Clone this repository.
- 3. To run the server locally, execute the following on a command prompt:
+ 2. Optionally, install exactly `swagger-codegen` version 2.2.2.
+ 3. Clone this repository.
+ 4. To run the server locally, execute the following on a command prompt:
     * Linux/Mac OS X: Run `./gradlew net:local`.
     * Windows: Run `gradlew.bat net:local`.
- 4. Download the Hidden Switch Launcher.
- 5. Download the Spellsource Client from within the launcher and start it.
- 6. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
+ 5. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
+ 6. Download the Spellsource Client from within the launcher and start it.
+ 7. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
 
 ### Contributing Cards
 
@@ -102,5 +109,9 @@ Let's run through a complete example of implementing a card, "Exampler" that rea
      15x Innervate
      ```
      
-    Select this deck when starting your game.
- 9. You will now play against an AI using the card. To play against others on your local network, enter Matchmaking instead of Quick Play. As long as your opponent's client is running on the local network and the network supports UDP broadcasting (most local Wi-Fi networks), your opponent's client will discover your local server.
+    Select this deck when starting your game. Note the three hashes to indicate the start of a deck name; otherwise, the formatting given here is the minimal amount of content needed to make a valid deck.
+    
+    You can support more diverse scenarios/Tavern Brawls by specifying a Hero Card by name. For example, create a custom hero named `Enchantress` and add the line `Hero Card: Enchantress` to your decklist.
+ 9. You will now play against an AI using the card. To play against others on your local network, enter Matchmaking instead of Quick Play. As long as your opponent's client is running on the local network and the network supports UDP broadcasting (most local Wi-Fi networks), your opponent's client will discover your local server. In the Spellsource client, a toast will appear at the bottom of your login screen indicating that you have connected to a local server if it successfully found one.
+ 10. Once you are satisfied with your card, format it correctly by executing [`formatter.py`](cards/formatter.py) from the `cards` directory in a command line. You must have `python` on your path to execute the formatter.
+ 11. To contribute the card to the public networking servers, commit your changes to your fork with `git commit -am "A custom note about the card"`, `git push` and then pull-request to this repository.
