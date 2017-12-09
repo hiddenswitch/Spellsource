@@ -103,9 +103,9 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		wrap(context);
 		Set<String> decks = Spellsource.spellsource().getStandardDecks().stream().map(DeckCreateRequest::getName).collect(Collectors.toSet());
 
-		final int expectedCount = 64;
+		final int expectedCount = 10;
 		CountDownLatch latch = new CountDownLatch(expectedCount);
-		CompositeFuture.join(Collections.nCopies(7, Arrays.asList(
+		CompositeFuture.join(Collections.nCopies(2, Arrays.asList(
 				new GatewayImpl(),
 				new CardsImpl(),
 				new DecksImpl(),
@@ -273,6 +273,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	private String userIdDisconnecting;
 
 	@Test
+	@Ignore
 	public void testDisconnectingUnityClient(TestContext context) {
 		wrap(context);
 		setLoggingLevel(Level.ERROR);
