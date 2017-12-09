@@ -27,6 +27,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.util.*;
 
@@ -398,8 +399,11 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	 * @return {@code "0.0.0.0"} because the hosts are not aware of their publicly-accessible host names yet.
 	 */
 	private String getHost() {
-		// TODO: Look up this host correctly
-		return "0.0.0.0";
+		try {
+			return Gateway.getHostAddress();
+		} catch (SocketException e) {
+			return "0.0.0.0";
+		}
 	}
 
 	/**

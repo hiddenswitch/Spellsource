@@ -1,24 +1,21 @@
 package com.hiddenswitch.spellsource.impl;
 
+import com.hiddenswitch.spellsource.Broadcaster;
 import com.hiddenswitch.spellsource.Gateway;
 import com.hiddenswitch.spellsource.Port;
-import io.netty.channel.DefaultChannelId;
-import io.netty.util.NetUtil;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.datagram.DatagramSocket;
 import io.vertx.core.datagram.DatagramSocketOptions;
 
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class BroadcastImpl extends AbstractVerticle {
+public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 	private final String multicastAddress = "230.0.0.1";
 	private final String clientCall = "LOXX";
 	private final String responsePrefix = "SPLL";
@@ -43,9 +40,8 @@ public class BroadcastImpl extends AbstractVerticle {
 
 		return vertx.createDatagramSocket(new DatagramSocketOptions()
 				.setReuseAddress(true)
-				.setReusePort(true)
-				.setBroadcast(true))
-				.listen(getBroadcastPort(), "0.0.0.0", next -> {
+				.setReusePort(true))
+				.listen(getMulticastPort(), "0.0.0.0", next -> {
 					next.result().listenMulticastGroup(multicastAddress, networkInterface.getName(), null, listener -> {
 						final DatagramSocket socket = listener.result();
 						socket.handler(packet -> {
@@ -54,7 +50,7 @@ public class BroadcastImpl extends AbstractVerticle {
 							}
 
 							// Reply with the local base path
-							socket.send(getResponsePrefix() + "http://" + host + ":" + Integer.toString(Port.port()), getBroadcastPort(), getMulticastAddress(), Future.future());
+							socket.send(getResponsePrefix() + "http://" + host + ":" + Integer.toString(Port.port()), getMulticastPort(), getMulticastAddress(), Future.future());
 						});
 
 						isListening.complete();
@@ -71,18 +67,22 @@ public class BroadcastImpl extends AbstractVerticle {
 		}).collect(Collectors.toList())).setHandler(then -> stopFuture.complete());
 	}
 
+	@Override
 	public String getMulticastAddress() {
 		return multicastAddress;
 	}
 
+	@Override
 	public String getClientCall() {
 		return clientCall;
 	}
 
-	public int getBroadcastPort() {
+	@Override
+	public int getMulticastPort() {
 		return 6112;
 	}
 
+	@Override
 	public String getResponsePrefix() {
 		return responsePrefix;
 	}
