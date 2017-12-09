@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource;
 
-import com.hiddenswitch.spellsource.impl.BroadcastImpl;
 import io.vertx.core.Vertx;
 import io.vertx.core.datagram.DatagramSocketOptions;
 import io.vertx.ext.unit.Async;
@@ -23,14 +22,13 @@ public class BroadcastTest {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		final Vertx vertx = contextRule.vertx();
 		vertx.exceptionHandler(context.exceptionHandler());
-		final BroadcastImpl verticle = new BroadcastImpl();
+		final Broadcaster verticle = Broadcaster.create();
 		final String expectedHostname = Gateway.getHostAddress();
 		vertx.deployVerticle(verticle, context.asyncAssertSuccess(then -> {
 			vertx.createDatagramSocket(new DatagramSocketOptions()
-					.setBroadcast(true)
 					.setReuseAddress(true)
 					.setReusePort(true))
-					.listen(verticle.getBroadcastPort(), "0.0.0.0", context.asyncAssertSuccess(listening -> {
+					.listen(verticle.getMulticastPort(), "0.0.0.0", context.asyncAssertSuccess(listening -> {
 						listening.listenMulticastGroup(verticle.getMulticastAddress(), "en0", null, context.asyncAssertSuccess(socket -> {
 							final Async async = context.async();
 							socket.handler(packet -> {
@@ -43,7 +41,7 @@ public class BroadcastTest {
 								context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Integer.toString(Port.port()));
 								async.complete();
 							});
-							socket.send(verticle.getClientCall(), verticle.getBroadcastPort(), verticle.getMulticastAddress(), context.asyncAssertSuccess());
+							socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), context.asyncAssertSuccess());
 						}));
 					}));
 

@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.applications;
 
 import ch.qos.logback.classic.Level;
+import com.hiddenswitch.spellsource.Broadcaster;
 import com.hiddenswitch.spellsource.Spellsource;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -17,11 +18,18 @@ public class Embedded {
 				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
 		root.setLevel(Level.ERROR);
 
-		Vertx vertx = Vertx.vertx();
+		final Vertx vertx = Vertx.vertx();
 		mongo().connectWithEnvironment(vertx);
 		Spellsource.spellsource().migrate(vertx, then -> {
 			if (then.succeeded()) {
-				Spellsource.spellsource().deployAll(vertx, Future.future());
+				Spellsource.spellsource().deployAll(vertx, deployed -> {
+					if (deployed.failed()) {
+						root.error("Failed to deploy: " + deployed.cause().getMessage());
+					} else {
+						// Deploy the broadcaster so that the client knows we're running local.
+						vertx.deployVerticle(Broadcaster.create(), Future.future());
+					}
+				});
 			} else {
 				System.err.println("Failed to migrate, deployment aborted.");
 			}

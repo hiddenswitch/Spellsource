@@ -65,6 +65,13 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			}
 		};
 
+		// Health check comes first
+		router.route("/")
+				.handler(routingContext -> {
+					routingContext.response().setStatusCode(200);
+					routingContext.response().end("OK");
+				});
+
 		// All routes need logging.
 		router.route().handler(LoggerHandler.create());
 
@@ -107,10 +114,6 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			}
 
 		});
-
-
-		router.route("/")
-				.handler(HandlerFactory.handler(this::healthCheck));
 
 		router.route("/accounts/:targetUserId")
 				.handler(authHandler);
