@@ -1,5 +1,7 @@
 # Spellsource-Server
 
+![In-Game Screenshot](docs/sn2.png)
+
 A multiplayer, networked adaptation of `metastone`
 
 Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client to use with this server.
