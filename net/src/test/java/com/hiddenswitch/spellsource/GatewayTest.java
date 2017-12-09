@@ -262,7 +262,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 		client.createUserAccount(null);
 		client.matchmakeAndPlayAgainstAI(client.getAccount().getDecks()
-				.stream().filter(d -> d.getName().equals("Necromancer")).findFirst().orElseThrow(AssertionError::new).getId());
+				.stream().filter(d -> d.getName().equals("Necromancer (Tavern Brawl)")).findFirst().orElseThrow(AssertionError::new).getId());
 		client.waitUntilDone();
 		getContext().assertTrue(client.isGameOver());
 

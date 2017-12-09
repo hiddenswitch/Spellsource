@@ -12,9 +12,9 @@ Please see the issues tab to report bugs or request functionality.
 
 ### Description
 
-`metastone` is a simulator for the online collectible card game (CCG) Hearthstone&reg; by Activison Blizzard written in Java. It strives to be a useful tool for card value analyzation, deck building and performance evaluation. There is also support for custom cards, allowing users to implement their own card inventions and testing them within the simulator engine. MetaStone tries to re-implement all game mechanics and rules from the original game as accurately as possible. 
+`metastone` was a simulator for the online collectible card game (CCG) Hearthstone&reg; by Activison Blizzard written in Java. It strives to be a useful tool for card value analysis, deck building and performance evaluation. There is also support for custom cards, allowing users to implement their own card inventions and testing them within the simulator engine. `metastone` tries to re-implement all game mechanics and rules from the original game as accurately as possible. 
 
-The `Spellsource-Server` project adapts `metastone` to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches.
+The `Spellsource-Server` project adapts and updates `metastone` to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches. It currently covers 100% of Hearthstone cards, with a handful of bugs, up to Knights of the Frozen Throne.
 
 The `Spellsource-Client` project is not yet released, but it backs the game client for this server. It is fully animated.
 

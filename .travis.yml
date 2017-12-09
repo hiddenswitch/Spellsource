@@ -9,7 +9,6 @@ cache:
 jdk:
   - oraclejdk8
 script:
-  - cd metastone
   - ./gradlew check --max-workers=1
 dist: trusty
 sudo: false
