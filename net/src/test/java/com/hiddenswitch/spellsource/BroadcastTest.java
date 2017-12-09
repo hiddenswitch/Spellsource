@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.net.NetworkInterface;
 import java.net.SocketException;
 
 @RunWith(VertxUnitRunner.class)
@@ -29,20 +30,24 @@ public class BroadcastTest {
 					.setReuseAddress(true)
 					.setReusePort(true))
 					.listen(verticle.getMulticastPort(), "0.0.0.0", context.asyncAssertSuccess(listening -> {
-						listening.listenMulticastGroup(verticle.getMulticastAddress(), "en0", null, context.asyncAssertSuccess(socket -> {
-							final Async async = context.async();
-							socket.handler(packet -> {
-								final String packetData = packet.data().toString();
-								if (packetData.equals(verticle.getClientCall())) {
-									return;
-								}
-								context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Integer.toString(Port.port()));
-								context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Integer.toString(Port.port()));
-								context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Integer.toString(Port.port()));
-								async.complete();
-							});
-							socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), context.asyncAssertSuccess());
-						}));
+						try {
+							listening.listenMulticastGroup(verticle.getMulticastAddress(), Gateway.mainInterface().getName(), null, context.asyncAssertSuccess(socket -> {
+								final Async async = context.async();
+								socket.handler(packet -> {
+									final String packetData = packet.data().toString();
+									if (packetData.equals(verticle.getClientCall())) {
+										return;
+									}
+									context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Integer.toString(Port.port()));
+									context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Integer.toString(Port.port()));
+									context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Integer.toString(Port.port()));
+									async.complete();
+								});
+								socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), context.asyncAssertSuccess());
+							}));
+						} catch (SocketException e) {
+							context.fail("Could not retrieve main network interface.");
+						}
 					}));
 
 		}));
