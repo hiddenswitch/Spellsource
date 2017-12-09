@@ -7,11 +7,7 @@ import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
-import com.hiddenswitch.spellsource.impl.util.DraftRecord;
-import com.hiddenswitch.spellsource.impl.util.FriendRecord;
-import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
-import com.hiddenswitch.spellsource.impl.util.MessageRecord;
-import com.hiddenswitch.spellsource.impl.util.UserRecord;
+import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.models.*;
@@ -387,6 +383,10 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException {
+		GetCollectionResponse collection = getInventory().getCollection(GetCollectionRequest.deck(deckId));
+		if (!collection.getUserId().equals(userId)) {
+			return WebResult.failed(new SecurityException("You can't delete someone else's deck!"));
+		}
 		return WebResult.succeeded(getDecks().deleteDeck(new DeckDeleteRequest(deckId)));
 	}
 
