@@ -2,7 +2,7 @@
 set -e
 ./gradlew swagger
 
-OUTPUT_DIR=$(pwd)/../Minionate/Assets/Plugins/Client
+OUTPUT_DIR=$(pwd)/../Spellsource-Client/Assets/Plugins/Client
 
 swagger-codegen generate -DsupportingFiles=false -DapiTests=false -DmodelTests=false -DmodelDocs=false -DapiDocs=false -o $OUTPUT_DIR -c "csharpconfig.json"  -i "swagger-api.yaml" -l csharp
 rm -rf $OUTPUT_DIR/src/
