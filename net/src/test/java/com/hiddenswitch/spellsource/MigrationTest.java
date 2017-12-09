@@ -71,6 +71,7 @@ public class MigrationTest {
 		});
 	}
 
+	@Ignore
 	@Test
 	public void testDeployAndMigrate(final TestContext context) {
 		MigrationsImpl migrations = new MigrationsImpl();
@@ -103,6 +104,7 @@ public class MigrationTest {
 		}));
 	}
 
+	@Ignore
 	@Test
 	public void testAndMigrateWithAPI(final TestContext context) {
 		Migrations.migrate(vertx)
@@ -127,6 +129,7 @@ public class MigrationTest {
 				}));
 	}
 
+	@Ignore
 	@Test
 	public void testInOrder(final TestContext context) {
 		Migrations.migrate(vertx)
@@ -158,6 +161,7 @@ public class MigrationTest {
 				}));
 	}
 
+	@Ignore
 	@Test
 	public void testLongMigration(final TestContext context) {
 		Migrations.migrate(vertx)
