@@ -13,6 +13,7 @@ import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.ext.mongo.MongoClientDeleteResult;
+import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.*;
@@ -33,22 +34,41 @@ import static io.vertx.ext.sync.Sync.awaitEvent;
  */
 @RunWith(VertxUnitRunner.class)
 public class MigrationTest {
-	private static Vertx vertx = Vertx.vertx();
+	private Vertx vertx;
 
-	@BeforeClass
-	public static void startEmbeddedMongo() {
-		Mongo.mongo().startEmbedded().connect(vertx, "mongodb://localhost:27017/production");
+	@Before
+	public void startEmbeddedMongo(TestContext context) {
+		vertx = Vertx.vertx();
+		Mongo.mongo().startEmbedded().connectWithEnvironment(vertx);
+		Async async = context.async();
+		vertx.runOnContext(cleanupContext -> {
+			cleanup(Future.future().setHandler(context.asyncAssertSuccess(then -> {
+				async.complete();
+			})));
+		});
+	}
+
+	public void cleanup(final Future done) {
+		Mongo.mongo().client().getCollections(collections -> {
+			CompositeFuture cf = CompositeFuture.all(collections.result().stream().map(collection -> {
+				Future<Void> future = Future.future();
+				Mongo.mongo().client().dropCollection(collection, future.completer());
+				return future;
+			}).collect(Collectors.toList())).setHandler(then2 -> {
+				Spellsource.spellsource().close();
+				Mongo.mongo().close();
+				done.complete();
+			});
+		});
 	}
 
 	@After
-	public void cleanup(TestContext context) {
-		Mongo.mongo().connectWithEnvironment(vertx).client().getCollections(context.asyncAssertSuccess(then -> {
-			CompositeFuture cf = CompositeFuture.all(then.stream().map(collection -> {
-				Future<MongoClientDeleteResult> future = Future.future();
-				Mongo.mongo().client().removeDocuments(collection, json(), future.completer());
-				return future;
-			}).collect(Collectors.toList())).setHandler(context.asyncAssertSuccess());
-		}));
+	public void done(TestContext context) {
+		vertx.runOnContext(cleanupContext -> {
+			cleanup(Future.future().setHandler(context.asyncAssertSuccess(then -> {
+				vertx.close(context.asyncAssertSuccess());
+			})));
+		});
 	}
 
 	@Test
@@ -170,7 +190,8 @@ public class MigrationTest {
 		vertx.executeBlocking(done -> {
 			Process mongodump = null;
 			try {
-				mongodump = new ProcessBuilder("mongodump", "--username=spellsource1", "--password=9AD3uubaeIf71a4M11lPVAV2mJcbPzV1EC38Y4WF26M", "--host=aws-us-east-1-portal.9.dblayer.com", "--port=20276", "--db=production", "--ssl", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames").start();
+				// The passwords that used to be here are invalid anyway.
+				mongodump = new ProcessBuilder("mongodump", "--host=localhost", "--port=20276", "--db=production", "--ssl", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames").start();
 				int waitFor1 = mongodump.waitFor();
 				Process mongorestore = new ProcessBuilder("mongorestore", "--host=localhost", "--port=27017", "dump").start();
 				int waitFor2 = mongorestore.waitFor();

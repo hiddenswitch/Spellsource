@@ -153,6 +153,9 @@ public class GameEvent  implements Serializable {
     @SerializedName("QUEST_SUCCESSFUL")
     QUEST_SUCCESSFUL("QUEST_SUCCESSFUL"),
     
+    @SerializedName("REVEAL_CARD")
+    REVEAL_CARD("REVEAL_CARD"),
+    
     @SerializedName("SECRET_PLAYED")
     SECRET_PLAYED("SECRET_PLAYED"),
     
