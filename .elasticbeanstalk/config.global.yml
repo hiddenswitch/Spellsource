@@ -1,6 +1,8 @@
 branch-defaults:
   default:
     environment: metastone-dev
+deploy:
+  artifact: artifact.zip
 global:
   application_name: metastone
   branch: null
