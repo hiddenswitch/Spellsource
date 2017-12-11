@@ -4,7 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
-public class CardRevealedEvent extends GameEvent implements HasCard {
+public final class CardRevealedEvent extends GameEvent implements HasCard {
 
 	private final Card card;
 	private final double delay;

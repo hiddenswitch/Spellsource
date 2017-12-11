@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.events.HasValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,7 +140,7 @@ public class Enchantment extends Entity implements Trigger {
 		if (event.getEventTarget() != null) {
 			event.getGameContext().getEventTargetStack().push(event.getEventTarget().getReference());
 		} else {
-			event.getGameContext().getEventTargetStack().push(null);
+			event.getGameContext().getEventTargetStack().push(EntityReference.NONE);
 		}
 		// Notify the game context that a spell trigger was successfully fired, as long as it wasn't due to a
 		// board changed event.

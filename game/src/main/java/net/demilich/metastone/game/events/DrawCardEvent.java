@@ -5,7 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 
-public class DrawCardEvent extends GameEvent {
+public final class DrawCardEvent extends GameEvent implements HasCard {
 
 	private final Card card;
 	private final CardType sourceType;
@@ -21,7 +21,7 @@ public class DrawCardEvent extends GameEvent {
 	public Card getCard() {
 		return card;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return card;

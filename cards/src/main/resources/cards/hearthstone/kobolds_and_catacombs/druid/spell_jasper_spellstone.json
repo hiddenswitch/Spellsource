@@ -1,0 +1,36 @@
+{
+  "name": "Jasper Spellstone",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Deal 4 damage to a minion. (Gain 3 Armor to upgrade.)",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "ArmorGainedTrigger",
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EventValueProvider"
+        },
+        "value2": 3,
+        "operation": "GREATER_OR_EQUAL"
+      }
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_greater_jasper_spellstone"
+    },
+    "keepAfterTransform": false
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 4
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -918,7 +918,7 @@ public class GameLogic implements Cloneable, Serializable {
 			damage *= 2;
 		}
 		context.getDamageStack().push(damage);
-		context.fireGameEvent(new PreDamageEvent(context, target, source));
+		context.fireGameEvent(new PreDamageEvent(context, target, source, damage));
 		damage = context.getDamageStack().pop();
 		if (damage > 0) {
 			source.getAttributes().remove(Attribute.STEALTH);
@@ -1373,7 +1373,7 @@ public class GameLogic implements Cloneable, Serializable {
 		player.getHero().modifyArmor(armor);
 		player.getStatistics().armorGained(armor);
 		if (armor > 0) {
-			context.fireGameEvent(new ArmorGainedEvent(context, player.getHero()));
+			context.fireGameEvent(new ArmorGainedEvent(context, player.getHero(), armor));
 		}
 	}
 

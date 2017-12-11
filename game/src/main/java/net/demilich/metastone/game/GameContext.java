@@ -18,7 +18,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.heroes.MetaHero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
-import net.demilich.metastone.game.environment.EnvironmentStack;
+import net.demilich.metastone.game.environment.EnvironmentDeque;
 import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -508,11 +508,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 * @return The stack.
 	 */
 	@SuppressWarnings("unchecked")
-	public Stack<Integer> getDamageStack() {
+	public Deque<Integer> getDamageStack() {
 		if (!getEnvironment().containsKey(Environment.DAMAGE_STACK)) {
-			getEnvironment().put(Environment.DAMAGE_STACK, new EnvironmentStack<Integer>());
+			getEnvironment().put(Environment.DAMAGE_STACK, new EnvironmentDeque<Integer>());
 		}
-		return (Stack<Integer>) getEnvironment().get(Environment.DAMAGE_STACK);
+		return (Deque<Integer>) getEnvironment().get(Environment.DAMAGE_STACK);
 	}
 
 	/**
@@ -554,11 +554,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 * @see Environment#EVENT_TARGET_REFERENCE_STACK for more.
 	 */
 	@SuppressWarnings("unchecked")
-	public Stack<EntityReference> getEventTargetStack() {
+	public Deque<EntityReference> getEventTargetStack() {
 		if (!getEnvironment().containsKey(Environment.EVENT_TARGET_REFERENCE_STACK)) {
-			getEnvironment().put(Environment.EVENT_TARGET_REFERENCE_STACK, new EnvironmentStack<EntityReference>());
+			getEnvironment().put(Environment.EVENT_TARGET_REFERENCE_STACK, new EnvironmentDeque<EntityReference>());
 		}
-		return (Stack<EntityReference>) getEnvironment().get(Environment.EVENT_TARGET_REFERENCE_STACK);
+		return (Deque<EntityReference>) getEnvironment().get(Environment.EVENT_TARGET_REFERENCE_STACK);
 	}
 
 	/**
@@ -738,11 +738,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 * @return A stack of summons.
 	 */
 	@SuppressWarnings("unchecked")
-	public Stack<EntityReference> getSummonReferenceStack() {
+	public Deque<EntityReference> getSummonReferenceStack() {
 		if (!getEnvironment().containsKey(Environment.SUMMON_REFERENCE_STACK)) {
-			getEnvironment().put(Environment.SUMMON_REFERENCE_STACK, new EnvironmentStack<EntityReference>());
+			getEnvironment().put(Environment.SUMMON_REFERENCE_STACK, new EnvironmentDeque<EntityReference>());
 		}
-		return (Stack<EntityReference>) getEnvironment().get(Environment.SUMMON_REFERENCE_STACK);
+		return (Deque<EntityReference>) getEnvironment().get(Environment.SUMMON_REFERENCE_STACK);
 	}
 
 	/**
@@ -1040,6 +1040,15 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public int getEventValue() {
+		if (getEnvironment().containsKey(Environment.EVENT_VALUE_STACK)) {
+			return ((Deque<Integer>) getEnvironment().get(Environment.EVENT_VALUE_STACK)).peek();
+		} else {
+			return 0;
+		}
+	}
+
 	/**
 	 * Starts the turn for a player.
 	 *
@@ -1302,9 +1311,17 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	@SuppressWarnings("unchecked")
 	public Deque<Integer> getSpellValueStack() {
 		if (!getEnvironment().containsKey(Environment.SPELL_VALUE_STACK)) {
-			getEnvironment().put(Environment.SPELL_VALUE_STACK, new ArrayDeque<>());
+			getEnvironment().put(Environment.SPELL_VALUE_STACK, new EnvironmentDeque<Integer>());
 		}
 		return (Deque<Integer>) getEnvironment().get(Environment.SPELL_VALUE_STACK);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Deque<Integer> getEventValueStack() {
+		if (!getEnvironment().containsKey(Environment.EVENT_VALUE_STACK)) {
+			getEnvironment().put(Environment.EVENT_VALUE_STACK, new EnvironmentDeque<>());
+		}
+		return (Deque<Integer>) getEnvironment().get(Environment.EVENT_VALUE_STACK);
 	}
 
 	/**

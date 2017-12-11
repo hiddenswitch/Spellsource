@@ -454,7 +454,8 @@ public interface Games {
 
 			clientEvent.kill(new GameEventKill()
 					.victim(entity));
-		} else if (HasCard.class.isAssignableFrom(event.getClass())) {
+		} else if (event instanceof CardPlayedEvent
+				|| event instanceof CardRevealedEvent) {
 			final HasCard cardPlayedEvent = (HasCard) event;
 			final Card card = cardPlayedEvent.getCard();
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);

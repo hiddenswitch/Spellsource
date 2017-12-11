@@ -1,0 +1,26 @@
+{
+  "name": "Barkskin",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "COMMON",
+  "description": "Give a minion +3 Health. Gain 3 Armor.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffHeroSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 3
+      },
+      {
+        "class": "BuffSpell",
+        "hpBonus": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

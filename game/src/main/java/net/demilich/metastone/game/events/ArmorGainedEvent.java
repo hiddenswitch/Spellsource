@@ -4,15 +4,16 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 
-public class ArmorGainedEvent extends GameEvent {
-
+public final class ArmorGainedEvent extends GameEvent implements HasValue {
 	private final Hero hero;
+	private final int armor;
 
-	public ArmorGainedEvent(GameContext context, Hero hero) {
+	public ArmorGainedEvent(GameContext context, Hero hero, int armor) {
 		super(context, hero.getOwner(), -1);
 		this.hero = hero;
+		this.armor = armor;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return hero;
@@ -23,4 +24,8 @@ public class ArmorGainedEvent extends GameEvent {
 		return GameEventType.ARMOR_GAINED;
 	}
 
+	@Override
+	public int getValue() {
+		return armor;
+	}
 }
