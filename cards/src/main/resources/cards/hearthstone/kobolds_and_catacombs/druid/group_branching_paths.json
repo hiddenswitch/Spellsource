@@ -1,0 +1,30 @@
+{
+  "name": "Which Paths Will You Take",
+  "baseManaCost": 0,
+  "type": "GROUP",
+  "heroClass": "BROWN",
+  "group": [
+    {
+      "class": "DrawCardSpell",
+      "name": "Eat the Mushroom",
+      "description": "Draw a card."
+    },
+    {
+      "class": "BuffSpell",
+      "name": "Explore the Darkness",
+      "description": "Give your minions +1 Attack.",
+      "attackBonus": 1,
+      "target": "FRIENDLY_MINIONS"
+    },
+    {
+      "class": "BuffHeroSpell",
+      "name": "Loot the Chest",
+      "description": "Gain 6 Armor.",
+      "hpBonus": 6
+    }
+  ],
+  "rarity": "FREE",
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

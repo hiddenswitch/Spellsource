@@ -16,11 +16,11 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class CastFromGroupSpell extends Spell {
-	
+
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(DiscoverCardSpell.class);
 		arguments.put(SpellArg.TARGET, target);
-		arguments.put(SpellArg.SPELL, spell);  
+		arguments.put(SpellArg.SPELL, spell);
 		return new SpellDesc(arguments);
 	}
 
@@ -40,6 +40,7 @@ public class CastFromGroupSpell extends Spell {
 		SpellDesc[] group = SpellUtils.getGroup(context, desc);
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 3);
 		int count = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
+		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, true);
 		List<SpellDesc> spellList = new ArrayList<SpellDesc>();
 		Collections.addAll(spellList, group);
 
@@ -47,16 +48,22 @@ public class CastFromGroupSpell extends Spell {
 			List<SpellDesc> adaptions = new ArrayList<SpellDesc>(spellList);
 			List<SpellDesc> spells = new ArrayList<SpellDesc>();
 			for (int i = 0; i < howMany; i++) {
-				SpellDesc spell = context.getLogic().removeRandom(adaptions);
+				SpellDesc spell;
+				if (exclusive) {
+					spell = context.getLogic().removeRandom(adaptions);
+				} else {
+					spell = context.getLogic().getRandom(adaptions);
+				}
+
 				spells.add(spell);
 			}
-			
+
 			if (spells.isEmpty()) {
 				return;
 			}
 			SpellDesc spell = SpellUtils.getSpellDiscover(context, player, desc, spells, source).getSpell();
 			spellList.remove(spell);
-			
+
 			if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
 				onCast(context, player, spell, source, randomTarget);
 			} else {

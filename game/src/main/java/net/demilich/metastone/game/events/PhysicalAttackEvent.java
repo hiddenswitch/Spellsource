@@ -4,7 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 
-public class PhysicalAttackEvent extends GameEvent implements HasVictim, HasValue {
+public final class PhysicalAttackEvent extends GameEvent implements HasVictim, HasValue {
 
 	private final Actor attacker;
 	private final Actor defender;

@@ -3,7 +3,7 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
-public class DamageEvent extends GameEvent implements HasVictim, HasValue {
+public final class DamageEvent extends GameEvent implements HasVictim, HasValue {
 
 	private final Entity victim;
 	private final int damage;

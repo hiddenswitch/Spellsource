@@ -3,15 +3,17 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
-public class PreDamageEvent extends GameEvent {
+public final class PreDamageEvent extends GameEvent implements HasValue, HasVictim {
 
 	private final Entity victim;
 	private final Entity source;
+	private final int amount;
 
-	public PreDamageEvent(GameContext context, Entity victim, Entity source) {
+	public PreDamageEvent(GameContext context, Entity victim, Entity source, int amount) {
 		super(context, victim.getOwner(), source.getOwner());
 		this.victim = victim;
 		this.source = source;
+		this.amount = amount;
 	}
 
 	@Override
@@ -40,5 +42,10 @@ public class PreDamageEvent extends GameEvent {
 	@Override
 	public boolean isClientInterested() {
 		return true;
+	}
+
+	@Override
+	public int getValue() {
+		return amount;
 	}
 }

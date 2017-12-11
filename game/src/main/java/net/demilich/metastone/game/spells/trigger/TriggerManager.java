@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.events.HasValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +46,10 @@ public class TriggerManager implements Cloneable, Serializable {
 
 	@Suspendable
 	public void fireGameEvent(GameEvent event, List<Trigger> gameTriggers) {
+		if (event instanceof HasValue) {
+			event.getGameContext().getEventValueStack().push(((HasValue) event).getValue());
+		}
+
 		List<Trigger> triggers = new ArrayList<>(this.triggers);
 		if (gameTriggers != null
 				&& gameTriggers.size() > 0) {
@@ -91,6 +96,10 @@ public class TriggerManager implements Cloneable, Serializable {
 		}
 
 		triggers.removeAll(removeTriggers);
+
+		if (event instanceof HasValue) {
+			event.getGameContext().getEventValueStack().pop();
+		}
 	}
 
 	@Suspendable

@@ -1,0 +1,17 @@
+{
+  "name": "Branching Paths",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "EPIC",
+  "description": "Choose Twice - Draw a card; Give your minions +1 Attack; Gain 6 Armor.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CastFromGroupSpell",
+    "group": "group_branching_paths",
+    "target": "NONE"
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Greater Jasper Spellstone",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Deal 6 damage to a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 6
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

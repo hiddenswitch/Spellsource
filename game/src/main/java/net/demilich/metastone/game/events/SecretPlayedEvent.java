@@ -1,10 +1,11 @@
 package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.SecretCard;
 import net.demilich.metastone.game.entities.Entity;
 
-public class SecretPlayedEvent extends GameEvent {
+public class SecretPlayedEvent extends GameEvent implements HasCard {
 
 	private final SecretCard secretCard;
 
@@ -12,7 +13,7 @@ public class SecretPlayedEvent extends GameEvent {
 		super(context, playerId, -1);
 		this.secretCard = secretCard;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getSecretCard();
@@ -27,4 +28,8 @@ public class SecretPlayedEvent extends GameEvent {
 		return secretCard;
 	}
 
+	@Override
+	public Card getCard() {
+		return secretCard;
+	}
 }

@@ -85,15 +85,12 @@ public enum Environment {
 	 */
 	SPELL_VALUE_STACK,
 	/**
+	 * This implements Spellstones
+	 */
+	EVENT_VALUE_STACK,
+	/**
 	 * This implements Frostmourne, keeping track of which particular entities a particular Frostmourne has
 	 * destroyed.
 	 */
 	ENTITY_LIST;
-
-	public boolean customClone() {
-		return (this == SUMMON_REFERENCE_STACK ||
-				this == EVENT_TARGET_REFERENCE_STACK ||
-				this == DAMAGE_STACK ||
-				this == SPELL_VALUE_STACK);
-	}
 }

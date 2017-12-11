@@ -113,9 +113,8 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Consider the {@link Environment#PENDING_CARD} and {@link
-	 * Environment#EVENT_CARD}, and the {@link Zones#DISCOVER} zone for the specified
-	 * card
+	 * Consider the {@link Environment#PENDING_CARD} and {@link Environment#EVENT_CARD}, and the {@link Zones#DISCOVER}
+	 * zone for the specified card
 	 *
 	 * @param context
 	 * @param cardId
@@ -140,9 +139,11 @@ public class SpellUtils {
 		String[] cardIds;
 		if (spell.containsKey(SpellArg.CARDS)) {
 			cardIds = (String[]) spell.get(SpellArg.CARDS);
-		} else {
+		} else if (spell.containsKey(SpellArg.CARD)) {
 			cardIds = new String[1];
 			cardIds[0] = (String) spell.get(SpellArg.CARD);
+		} else {
+			return new Card[0];
 		}
 		Card[] cards = new Card[cardIds.length];
 		for (int i = 0; i < cards.length; i++) {
