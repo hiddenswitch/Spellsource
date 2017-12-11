@@ -8,7 +8,7 @@
   "rarity": "EPIC",
   "description": "Deathrattle: Shuffle a copy of this minion into your deck.",
   "deathrattle": {
-    "class": "ShuffleMinionToDeckSpell",
+    "class": "ShuffleToDeckSpell",
     "target": "SELF"
   },
   "collectible": true,
