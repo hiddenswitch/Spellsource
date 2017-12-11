@@ -9,7 +9,7 @@
   "description": "Deathrattle: Shuffle a copy of this minion into your deck.",
   "deathrattle": {
     "class": "ShuffleMinionToDeckSpell",
-    "targetPlayer": "OWNER"
+    "target": "SELF"
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
