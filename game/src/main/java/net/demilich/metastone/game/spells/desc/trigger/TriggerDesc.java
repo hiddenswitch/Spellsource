@@ -15,6 +15,7 @@ public class TriggerDesc implements Serializable {
 	public boolean keepAfterTransform;
 	public Integer maxFires;
 	public Integer countUntilCast;
+	public boolean countByValue;
 
 	public Enchantment create() {
 		Enchantment trigger = new Enchantment(eventTrigger.create(), spell, oneTurn, turnDelay);
@@ -22,6 +23,7 @@ public class TriggerDesc implements Serializable {
 		trigger.setPersistentOwner(persistentOwner);
 		trigger.setKeepAfterTransform(keepAfterTransform);
 		trigger.setCountUntilCast(countUntilCast);
+		trigger.setCountByValue(countByValue);
 		return trigger;
 	}
 

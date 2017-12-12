@@ -27,11 +27,12 @@ public class Secret extends Enchantment {
 
 	@Override
 	@Suspendable
-	protected void onFire(int ownerId, SpellDesc spell, GameEvent event) {
+	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
 		Player owner = event.getGameContext().getPlayer(ownerId);
 		event.getGameContext().getLogic().secretTriggered(owner, this);
-		super.onFire(ownerId, spell, event);
+		boolean spellCasts = super.onFire(ownerId, spell, event);
 		expire();
+		return spellCasts;
 	}
 
 	@Override
