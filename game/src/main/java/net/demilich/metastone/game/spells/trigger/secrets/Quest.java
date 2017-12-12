@@ -24,14 +24,14 @@ public class Quest extends Enchantment {
 	}
 
 	@Override
-	protected void onFire(int ownerId, SpellDesc spell, GameEvent event) {
-		setCurrentCount(getCurrentCount() + 1);
-		if (getCountUntilCast() == null || getCurrentCount() >= getCountUntilCast()) {
-			super.onFire(ownerId, spell, event);
+	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
+		final boolean spellFired = super.onFire(ownerId, spell, event);
+		if (spellFired) {
 			Player owner = event.getGameContext().getPlayer(ownerId);
 			event.getGameContext().getLogic().questTriggered(owner, this);
 			expire();
 		}
+		return spellFired;
 	}
 
 	@Override

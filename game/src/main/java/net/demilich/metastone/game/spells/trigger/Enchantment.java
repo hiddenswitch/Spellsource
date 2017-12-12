@@ -33,8 +33,8 @@ public class Enchantment extends Entity implements Trigger {
 	private int fires;
 	private boolean keepAfterTransform;
 	private Card sourceCard;
-	private int currentCount;
 	private Integer countUntilCast;
+	private boolean countByValue;
 
 	protected Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
 		this.primaryTrigger = primaryTrigger;
@@ -108,14 +108,34 @@ public class Enchantment extends Entity implements Trigger {
 	public void onAdd(GameContext context) {
 	}
 
+	/**
+	 * Processes a firing. If the
+	 *
+	 * @param ownerId
+	 * @param spell
+	 * @param event
+	 * @return
+	 */
 	@Suspendable
-	protected void onFire(int ownerId, SpellDesc spell, GameEvent event) {
-		event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, null, true);
-		fires++;
+	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
+		if (countByValue && event instanceof HasValue) {
+			fires += ((HasValue) event).getValue();
+		} else {
+			fires++;
+		}
+
+		boolean spellCasts = true;
+		if (countUntilCast != null && fires < countUntilCast) {
+			spellCasts = false;
+		}
+		if (spellCasts) {
+			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, null, true);
+		}
 		if (maxFires != null
 				&& fires >= maxFires) {
 			expire();
 		}
+		return spellCasts;
 	}
 
 	@Override
@@ -214,7 +234,7 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	public boolean isDelayed() {
-		return turnDelay > 0 ? true : false;
+		return turnDelay > 0;
 	}
 
 	public boolean oneTurnOnly() {
@@ -264,15 +284,15 @@ public class Enchantment extends Entity implements Trigger {
 		return countUntilCast;
 	}
 
-	public int getCurrentCount() {
-		return currentCount;
-	}
-
-	public void setCurrentCount(int currentCount) {
-		this.currentCount = currentCount;
-	}
-
 	public void setSpell(SpellDesc spell) {
 		this.spell = spell;
+	}
+
+	public void setCountByValue(boolean countByValue) {
+		this.countByValue = countByValue;
+	}
+
+	public boolean isCountByValue() {
+		return countByValue;
 	}
 }

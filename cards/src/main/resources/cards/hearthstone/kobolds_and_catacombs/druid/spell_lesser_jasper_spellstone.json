@@ -8,22 +8,16 @@
   "passiveTrigger": {
     "eventTrigger": {
       "class": "ArmorGainedTrigger",
-      "targetPlayer": "SELF",
-      "fireCondition": {
-        "class": "ComparisonCondition",
-        "value1": {
-          "class": "EventValueProvider"
-        },
-        "value2": 3,
-        "operation": "GREATER_OR_EQUAL"
-      }
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
       "card": "spell_jasper_spellstone"
     },
-    "keepAfterTransform": false
+    "countByValue": true,
+    "keepAfterTransform": false,
+    "countUntilCast": 3
   },
   "targetSelection": "MINIONS",
   "spell": {
