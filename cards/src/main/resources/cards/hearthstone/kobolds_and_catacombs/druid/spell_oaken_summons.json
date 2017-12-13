@@ -1,0 +1,33 @@
+{
+  "name": "Oaken Summons",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "COMMON",
+  "description": "Gain 6 Armor. Recruit a minion that costs (4) or less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffHeroSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 6
+      },
+      {
+        "class": "RecruitSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 4
+        },
+        "cardLocation": "DECK",
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
