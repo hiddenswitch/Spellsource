@@ -11,10 +11,10 @@
     },
     {
       "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
       "name": "Explore the Darkness",
       "description": "Give your minions +1 Attack.",
-      "attackBonus": 1,
-      "target": "FRIENDLY_MINIONS"
+      "attackBonus": 1
     },
     {
       "class": "BuffHeroSpell",

@@ -5,9 +5,9 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class ArmorGainedTrigger extends EventTrigger {
+public class ArmorChangedTrigger extends EventTrigger {
 
-	public ArmorGainedTrigger(EventTriggerDesc desc) {
+	public ArmorChangedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}
 

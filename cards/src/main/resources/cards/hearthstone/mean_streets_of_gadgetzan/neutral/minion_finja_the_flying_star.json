@@ -18,7 +18,7 @@
       "targetEntityType": "MINION"
     },
     "spell": {
-      "class": "PutRandomMinionOnBoardSpell",
+      "class": "RecruitSpell",
       "value": 2,
       "cardFilter": {
         "class": "CardFilter",

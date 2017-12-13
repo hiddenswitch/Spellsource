@@ -10,7 +10,15 @@
   "description": "Whenever you gain Armor, give this minion +1 Attack.",
   "trigger": {
     "eventTrigger": {
-      "class": "ArmorGainedTrigger",
+      "class": "ArmorChangedTrigger",
+      "fireCondition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER",
+        "value1": {
+          "class": "EventValueProvider"
+        },
+        "value2": 0
+      },
       "targetPlayer": "SELF"
     },
     "spell": {

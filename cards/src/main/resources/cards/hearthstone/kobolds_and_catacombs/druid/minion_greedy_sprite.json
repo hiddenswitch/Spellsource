@@ -1,0 +1,20 @@
+{
+  "name": "Greedy Sprite",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Deathrattle: Gain an empty Mana Crystal.",
+  "deathrattle": {
+    "class": "ModifyMaxManaSpell",
+    "value": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

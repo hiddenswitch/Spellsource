@@ -13,7 +13,7 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "PutRandomMinionOnBoardSpell",
+      "class": "RecruitSpell",
       "cardLocation": "DECK",
       "targetPlayer": "SELF"
     }

@@ -13,7 +13,7 @@
     },
     "targetSelection": "NONE",
     "spell": {
-      "class": "PutRandomMinionOnBoardSpell",
+      "class": "RecruitSpell",
       "value": 7,
       "cardFilter": {
         "class": "CardFilter",

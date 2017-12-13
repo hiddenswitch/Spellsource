@@ -81,9 +81,16 @@ public class CardFilter extends EntityFilter {
 			return false;
 		}
 
-		if (desc.containsKey(FilterArg.ATTRIBUTE) && desc.containsKey(FilterArg.OPERATION)) {
+		if (desc.containsKey(FilterArg.ATTRIBUTE)) {
 			Attribute attribute = (Attribute) desc.get(FilterArg.ATTRIBUTE);
-			Operation operation = (Operation) desc.get(FilterArg.OPERATION);
+			Operation operation = null;
+			if (desc.containsKey(FilterArg.OPERATION)) {
+				operation = (Operation) desc.get(FilterArg.OPERATION);
+			}
+			if (!desc.containsKey(FilterArg.OPERATION)
+					&& desc.containsKey(FilterArg.VALUE)) {
+				operation = Operation.EQUAL;
+			}
 			if (operation == Operation.HAS || operation == null) {
 				return card.hasAttribute(attribute);
 			}

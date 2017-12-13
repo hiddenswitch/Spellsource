@@ -9,6 +9,24 @@ import org.testng.annotations.Test;
 
 public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
+	public void testIronwoodGolem() {
+		runGym((context, player, opponent) -> {
+			Minion ironwoodGolem = playMinionCard(context,player,"minion_ironwood_golem");
+			context.endTurn();
+			context.endTurn();
+			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
+			playCard(context, player, "spell_claw");
+			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
+			playCard(context, player, "spell_claw");
+			Assert.assertTrue(ironwoodGolem.canAttackThisTurn());
+			context.endTurn();
+			playCardWithTarget(context,opponent,"spell_fireball", player.getHero());
+			context.endTurn();
+			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
+		});
+	}
+
+	@Test
 	public void testJasperSpellstone() {
 		runGym((context, player, opponent) -> {
 			/*

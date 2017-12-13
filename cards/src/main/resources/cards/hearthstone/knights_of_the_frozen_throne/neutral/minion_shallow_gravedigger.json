@@ -11,7 +11,8 @@
     "class": "ReceiveCardSpell",
     "cardFilter": {
       "class": "CardFilter",
-      "attribute": "DEATHRATTLES"
+      "attribute": "DEATHRATTLES",
+      "operation": "HAS"
     }
   },
   "attributes": {

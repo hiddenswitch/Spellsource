@@ -9,7 +9,7 @@
   "race": "DEMON",
   "description": "Deathrattle: Put a random Demon from your hand into the battlefield.",
   "deathrattle": {
-    "class": "PutRandomMinionOnBoardSpell",
+    "class": "RecruitSpell",
     "cardFilter": {
       "class": "RaceFilter",
       "race": "DEMON"

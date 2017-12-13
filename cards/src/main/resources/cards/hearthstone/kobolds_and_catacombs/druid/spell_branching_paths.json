@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "CastFromGroupSpell",
-    "group": "group_branching_paths",
-    "target": "NONE"
+    "target": "NONE",
+    "group": "group_branching_paths"
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
