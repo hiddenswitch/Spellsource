@@ -1,0 +1,38 @@
+{
+  "name": "Seeping Oozeling",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: Gain the Deathrattle of a random minion in your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CopyDeathrattleSpell",
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "type": "MINION"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "DEATHRATTLES",
+            "operation": "HAS"
+          }
+        ]
+      },
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

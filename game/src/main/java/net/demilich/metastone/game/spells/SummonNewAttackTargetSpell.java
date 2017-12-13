@@ -12,6 +12,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import static java.util.stream.Collectors.toList;
@@ -28,7 +30,13 @@ public class SummonNewAttackTargetSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
+		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
 		MinionCard minionCard = (MinionCard) SpellUtils.getCard(context, desc);
+		if (minionCard == null) {
+			minionCard = SummonRandomMinionFilteredSpell.getRandomMatchingMinionCard(context, player, cardFilter, cardSource, source);
+		}
+
 		Minion targetMinion = minionCard.summon();
 		context.getLogic().summon(player.getId(), targetMinion, null, -1, false);
 		List<SpellDesc> spells = desc.subSpells().collect(toList());

@@ -1,0 +1,52 @@
+{
+  "name": "Rhok'delar",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "heroClass": "GREEN",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If your deck has no minions, fill your hand with Hunter spells.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "EQUAL",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK",
+          "filter": {
+            "class": "CardFilter",
+            "type": "MINION"
+          }
+        },
+        "value2": 0
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": 10,
+          "value2": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "HAND_COUNT",
+            "targetPlayer": "SELF"
+          }
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "heroClass": "GREEN"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

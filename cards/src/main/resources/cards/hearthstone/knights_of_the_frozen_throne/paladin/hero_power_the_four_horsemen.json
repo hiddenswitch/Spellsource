@@ -92,7 +92,8 @@
         "token_darion_mograine",
         "token_inquisitor_whitemane",
         "token_thoras_trollbane"
-      ]
+      ],
+      "exclusive": true
     },
     "spell2": {
       "class": "DestroySpell",
