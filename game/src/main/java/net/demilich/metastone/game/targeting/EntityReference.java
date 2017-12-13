@@ -42,6 +42,8 @@ public class EntityReference implements Serializable {
 	public static final EntityReference BOTH_DECKS = new EntityReference(-35);
 	public static final EntityReference BOTH_HANDS = new EntityReference(-36);
 	public static final EntityReference TRANSFORM_REFERENCE = new EntityReference(-37);
+	public static final EntityReference RIGHTMOST_FRIENDLY_MINION = new EntityReference(-38);
+	public static final EntityReference RIGHTMOST_ENEMY_MINION = new EntityReference(-39);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

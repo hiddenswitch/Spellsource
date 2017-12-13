@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import co.paralleluniverse.fibers.Suspendable;
@@ -33,7 +34,11 @@ public class SummonRandomNotOnBoardSpell extends Spell {
 			}
 		}
 		if (eligibleMinions.isEmpty()) {
-			return;
+			if (desc.getBool(SpellArg.EXCLUSIVE)) {
+				return;
+			} else {
+				eligibleMinions.addAll(Arrays.asList(minionCardsId));
+			}
 		}
 
 		String randomMinionId = context.getLogic().getRandom(eligibleMinions);

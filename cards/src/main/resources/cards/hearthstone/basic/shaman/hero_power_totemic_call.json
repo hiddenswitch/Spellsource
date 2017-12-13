@@ -1,10 +1,10 @@
 {
-  "name": "Conjure",
+  "name": "Totemic Call",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "SILVER",
   "rarity": "FREE",
-  "description": "Summon a Minor Creature.",
+  "description": "Summon a Basic Totem.",
   "condition": {
     "class": "AndCondition",
     "conditions": [
@@ -57,7 +57,8 @@
       "token_healing_totem",
       "token_wrath_of_air_totem",
       "token_stoneclaw_totem"
-    ]
+    ],
+    "exclusive": true
   },
   "collectible": true,
   "set": "BASIC",

@@ -406,7 +406,7 @@ public class SpellUtils {
 
 	public static int getBoardPosition(GameContext context, Player player, SpellDesc desc, Entity source) {
 		final int UNDEFINED = -1;
-		int boardPosition = desc.getInt(SpellArg.BOARD_POSITION_ABSOLUTE, UNDEFINED);
+		int boardPosition = desc.getValue(SpellArg.BOARD_POSITION_ABSOLUTE, context, player, null, source, UNDEFINED);
 		if (boardPosition != UNDEFINED) {
 			return boardPosition;
 		}

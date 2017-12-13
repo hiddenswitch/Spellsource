@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.demilich.metastone.game.entities.EntityZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -281,6 +282,30 @@ public class TargetLogic implements Serializable {
 			return new ArrayList<>(context.getLeftMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_RIGHT)) {
 			return new ArrayList<>(context.getRightMinions(player, source.getReference()));
+		} else if (targetKey.equals(EntityReference.LEFTMOST_ENEMY_MINION)) {
+			final EntityZone<Minion> minions = context.getOpponent(player).getMinions();
+			if (minions.size() == 0) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(minions.get(0));
+		} else if (targetKey.equals(EntityReference.LEFTMOST_FRIENDLY_MINION)) {
+			final EntityZone<Minion> minions = player.getMinions();
+			if (minions.size() == 0) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(minions.get(0));
+		} else if (targetKey.equals(EntityReference.RIGHTMOST_ENEMY_MINION)) {
+			final EntityZone<Minion> minions = context.getOpponent(player).getMinions();
+			if (minions.size() == 0) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(minions.get(minions.size() - 1));
+		} else if (targetKey.equals(EntityReference.RIGHTMOST_FRIENDLY_MINION)) {
+			final EntityZone<Minion> minions = player.getMinions();
+			if (minions.size() == 0) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(minions.get(minions.size() - 1));
 		} else if (targetKey.equals(EntityReference.SELF)) {
 			return singleTargetAsList(source);
 		} else if (targetKey.equals(EntityReference.EVENT_TARGET)) {

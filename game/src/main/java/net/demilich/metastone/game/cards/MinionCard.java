@@ -54,7 +54,8 @@ public class MinionCard extends Card {
 
 		if (desc.deathrattle != null) {
 			minion.getAttributes().remove(Attribute.DEATHRATTLES);
-			minion.addDeathrattle(desc.deathrattle);
+			// Clone the deathrattle defined here just in case it's mutated somewhere else
+			minion.addDeathrattle(desc.deathrattle.clone());
 		}
 		if (desc.trigger != null) {
 			minion.addEnchantment(desc.trigger.create());

@@ -1,0 +1,31 @@
+{
+  "name": "Lesser Emerald Spellstone",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "description": "Summon two 3/3 Wolves. (Play a Secret to upgrade.)",
+  "passiveTrigger": {
+    "countUntilCast": 1,
+    "eventTrigger": {
+      "class": "SecretPlayedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_emerald_spellstone"
+    },
+    "countByValue": false,
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 2,
+    "card": "token_wolf"
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
