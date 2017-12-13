@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "PutRandomMinionOnBoardSpell",
+      "class": "RecruitSpell",
       "cardLocation": "HAND",
       "targetPlayer": "OPPONENT"
     }

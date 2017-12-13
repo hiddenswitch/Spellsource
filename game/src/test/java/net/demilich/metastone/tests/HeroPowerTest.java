@@ -53,13 +53,13 @@ public class HeroPowerTest extends TestBase {
 		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
 		Hero mage = context.getPlayer1().getHero();
 		Hero victim = context.getPlayer2().getHero();
-		Assert.assertEquals(victim.getHp(), GameLogic.MAX_HERO_HP);
+		int victimStartHp = victim.getHp();
 
 		GameAction fireblast = mage.getHeroPower().play();
 		fireblast.setTarget(victim);
 		final int fireblastDamage = 1;
 		context.getLogic().performGameAction(context.getPlayer1().getId(), fireblast);
-		Assert.assertEquals(victim.getHp(), GameLogic.MAX_HERO_HP - fireblastDamage);
+		Assert.assertEquals(victim.getHp(), victimStartHp - fireblastDamage);
 	}
 
 	@Test

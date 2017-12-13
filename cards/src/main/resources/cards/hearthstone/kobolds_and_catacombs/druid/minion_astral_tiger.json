@@ -1,10 +1,10 @@
 {
   "name": "Astral Tiger",
   "baseManaCost": 4,
-  "baseAttack":3,
-  "baseHp":5,
   "type": "MINION",
   "heroClass": "BROWN",
+  "baseAttack": 3,
+  "baseHp": 5,
   "rarity": "EPIC",
   "description": "Deathrattle: Shuffle a copy of this minion into your deck.",
   "deathrattle": {

@@ -12,7 +12,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
 
-public class PutRandomMinionOnBoardSpell extends Spell {
+public class RecruitSpell extends Spell {
 
 	@Override
 	@Suspendable
@@ -41,7 +41,7 @@ public class PutRandomMinionOnBoardSpell extends Spell {
 		if (minionCard == null) {
 			return;
 		}
-		
+
 		// we need to remove the card temporarily here, because there are card interactions like Starving Buzzard + Desert Camel
 		// which could result in the card being drawn while a minion is summoned
 		if (cardLocation == Zones.DECK) {
@@ -49,12 +49,12 @@ public class PutRandomMinionOnBoardSpell extends Spell {
 		}
 
 		boolean summonSuccess = context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false);
-		
+
 		// re-add the card here if we removed it before
 		if (cardLocation == Zones.DECK) {
 			player.getSetAsideZone().move(minionCard, player.getDeck());
 		}
-		
+
 		if (summonSuccess) {
 			if (cardLocation == Zones.HAND) {
 				context.getLogic().removeCard(minionCard);

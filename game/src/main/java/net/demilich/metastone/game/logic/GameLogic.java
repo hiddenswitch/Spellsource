@@ -716,6 +716,10 @@ public class GameLogic implements Cloneable, Serializable {
 		if (hero.getHeroPower().getHeroClass() == HeroClass.INHERIT) {
 			hero.getHeroPower().setHeroClass(previousHero.getHeroClass());
 		}
+		// Set hero power ID before events trigger to prevent issues
+		hero.getHeroPower().setId(getIdFactory().generateId());
+		hero.getHeroPower().setOwner(hero.getOwner());
+
 		// Remove the old hero from play
 		removeEnchantments(previousHero);
 		// This removes the hero power enchantments too
@@ -723,14 +727,17 @@ public class GameLogic implements Cloneable, Serializable {
 		previousHero.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		player.setHero(hero);
 		hero.modifyArmor(previousArmor);
+		final int armorChange = hero.getArmor() - previousArmor;
+		if (armorChange != 0) {
+			context.fireGameEvent(new ArmorChangedEvent(context, player.getHero(), armorChange));
+		}
 
 		// Only override the HP if both max and new HP is defined.
 		if (!(hero.hasAttribute(Attribute.MAX_HP) && hero.hasAttribute(Attribute.HP))) {
 			hero.setHp(previousHp);
 		}
 
-		hero.getHeroPower().setId(getIdFactory().generateId());
-		hero.getHeroPower().setOwner(hero.getOwner());
+
 		refreshAttacksPerRound(hero);
 
 		if (resolveBattlecry && hero.getBattlecry() != null) {
@@ -944,7 +951,10 @@ public class GameLogic implements Cloneable, Serializable {
 			return 0;
 		}
 		int effectiveHp = hero.getHp() + hero.getArmor();
-		hero.modifyArmor(-damage);
+		final int armorChange = hero.modifyArmor(-damage);
+		if (armorChange != 0) {
+			context.fireGameEvent(new ArmorChangedEvent(context, hero, armorChange));
+		}
 		int newHp = Math.min(hero.getHp(), effectiveHp - damage);
 		hero.setHp(newHp);
 		log(hero.getName() + " receives " + damage + " damage, hp now: " + hero.getHp() + "(" + hero.getArmor() + ")");
@@ -1360,7 +1370,7 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Gains armor and triggers an {@link ArmorGainedEvent}.
+	 * Gains armor and triggers an {@link ArmorChangedEvent}.
 	 *
 	 * @param player The player whose {@link Hero} should gain armor.
 	 * @param armor  The amount of armor to gain.
@@ -1372,8 +1382,8 @@ public class GameLogic implements Cloneable, Serializable {
 		logger.debug("{} gains {} armor", player.getHero(), armor);
 		player.getHero().modifyArmor(armor);
 		player.getStatistics().armorGained(armor);
-		if (armor > 0) {
-			context.fireGameEvent(new ArmorGainedEvent(context, player.getHero(), armor));
+		if (armor != 0) {
+			context.fireGameEvent(new ArmorChangedEvent(context, player.getHero(), armor));
 		}
 	}
 

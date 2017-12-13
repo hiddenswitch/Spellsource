@@ -6,8 +6,17 @@
   "rarity": "RARE",
   "description": "Deal 4 damage to a minion. (Gain 3 Armor to upgrade.)",
   "passiveTrigger": {
+    "countUntilCast": 3,
     "eventTrigger": {
-      "class": "ArmorGainedTrigger",
+      "class": "ArmorChangedTrigger",
+      "fireCondition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER",
+        "value1": {
+          "class": "EventValueProvider"
+        },
+        "value2": 0
+      },
       "targetPlayer": "SELF"
     },
     "spell": {
@@ -16,7 +25,6 @@
       "card": "spell_greater_jasper_spellstone"
     },
     "countByValue": true,
-    "countUntilCast": 3,
     "keepAfterTransform": false
   },
   "targetSelection": "MINIONS",

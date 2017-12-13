@@ -9,7 +9,7 @@
   "race": "DRAGON",
   "description": "Deathrattle: Put all Dragons in your hand into the battlefield.",
   "deathrattle": {
-    "class": "PutRandomMinionOnBoardSpell",
+    "class": "RecruitSpell",
     "value": 7,
     "cardFilter": {
       "class": "CardFilter",

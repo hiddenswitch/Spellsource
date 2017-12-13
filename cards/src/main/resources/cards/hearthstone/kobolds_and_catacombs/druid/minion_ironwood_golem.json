@@ -1,0 +1,42 @@
+{
+  "name": "Ironwood Golem",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Taunt. Can only attack if you have 3 or more Armor.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "ArmorChangedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_HERO",
+        "value": 3,
+        "attribute": "ARMOR",
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "spell1": {
+        "class": "RemoveAttributeSpell",
+        "target": "SELF",
+        "attribute": "CANNOT_ATTACK"
+      },
+      "spell2": {
+        "class": "AddAttributeSpell",
+        "target": "SELF",
+        "attribute": "CANNOT_ATTACK"
+      }
+    }
+  },
+  "attributes": {
+    "CANNOT_ATTACK": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

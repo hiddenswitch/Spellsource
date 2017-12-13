@@ -8,7 +8,7 @@
   "rarity": "RARE",
   "description": "Taunt. Deathrattle: Your opponent puts a minion from their deck into the battlefield.",
   "deathrattle": {
-    "class": "PutRandomMinionOnBoardSpell",
+    "class": "RecruitSpell",
     "cardLocation": "DECK",
     "targetPlayer": "OPPONENT"
   },

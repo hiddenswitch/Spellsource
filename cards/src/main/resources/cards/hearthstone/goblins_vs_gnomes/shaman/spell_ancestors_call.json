@@ -7,7 +7,7 @@
   "description": "Put a random minion from each player's hand into the battlefield.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "PutRandomMinionOnBoardSpell",
+    "class": "RecruitSpell",
     "cardLocation": "HAND",
     "targetPlayer": "BOTH"
   },
