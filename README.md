@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/hiddenswitch/Spellsource-Server.svg?branch=master)](https://travis-ci.org/hiddenswitch/Spellsource-Server)
 
+Check [the project](https://github.com/hiddenswitch/Spellsource-Server/projects/1?) tab for progress on Kobolds and Catacombs. 100% card coverage in Wild and Standard up to the end of Knights of the Frozen Throne.
+
 ![In-Game Screenshot](docs/sn2.png)
 
 A multiplayer, networked adaptation of `metastone`
