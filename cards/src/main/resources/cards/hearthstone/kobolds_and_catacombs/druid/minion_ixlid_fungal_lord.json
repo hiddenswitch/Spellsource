@@ -1,0 +1,24 @@
+{
+  "name": "Ixlid, Fungal Lord",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "After you play a minion, deal 1 damage to it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonCopySpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

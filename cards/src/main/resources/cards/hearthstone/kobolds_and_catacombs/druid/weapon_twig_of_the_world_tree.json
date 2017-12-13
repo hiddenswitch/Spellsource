@@ -1,0 +1,32 @@
+{
+  "name": "Twig of the World Tree",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "BROWN",
+  "damage": 1,
+  "durability": 5,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Gain 10 Mana Crystals.",
+  "deathrattle": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "ManaMaxedCondition"
+    },
+    "spell1": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_excess_mana",
+      "targetPlayer": "SELF"
+    },
+    "spell2": {
+      "class": "ModifyMaxManaSpell",
+      "value": 10,
+      "fullManaCrystals": true
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
