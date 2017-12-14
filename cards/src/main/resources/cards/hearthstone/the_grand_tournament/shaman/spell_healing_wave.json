@@ -8,6 +8,10 @@
   "targetSelection": "ANY",
   "spell": {
     "class": "JoustSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
     "spell1": {
       "class": "HealSpell",
       "value": 7

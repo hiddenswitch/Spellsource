@@ -1,0 +1,38 @@
+{
+  "name": "Dragon's Fury",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Reveal a spell from your deck. Deal damage equal to its Cost to all minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RevealCardSpell",
+    "spell": {
+      "class": "MetaSpell",
+      "value": {
+        "class": "ManaCostProvider"
+      },
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "ALL_MINIONS",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
+      ]
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "cardSource": {
+      "class": "DeckSource"
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

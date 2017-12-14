@@ -17,7 +17,7 @@
         "cardType": "MINION"
       },
       "cardSource": {
-        "class": "GraveyardSource",
+        "class": "GraveyardMinionsSource",
         "targetPlayer": "BOTH"
       }
     }

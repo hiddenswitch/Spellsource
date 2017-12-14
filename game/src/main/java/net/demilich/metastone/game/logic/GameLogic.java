@@ -657,6 +657,14 @@ public class GameLogic implements Cloneable, Serializable {
 			spellDesc = SpellDesc.join(spellDesc, AddAttributeSpell.create(Attribute.FROZEN));
 		}
 
+		// This implements a more durable tracking of spells that were casted
+		if (sourceCard != null
+				&& sourceCard instanceof SpellCard
+				&& !sourceCard.getCardType().isCardType(CardType.HERO_POWER)
+				&& !childSpell) {
+			sourceCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK);
+		}
+
 		Spell spell = spellFactory.getSpell(spellDesc);
 		spell.cast(context, player, spellDesc, source, targets);
 		if (sourceCard != null && sourceCard.getCardType().isCardType(CardType.SPELL) && !childSpell) {
@@ -1020,7 +1028,7 @@ public class GameLogic implements Cloneable, Serializable {
 					context.fireGameEvent(killEvent);
 					context.getEnvironment().remove(Environment.KILLED_MINION);
 
-					target.setAttribute(Attribute.DESTROYED);
+					applyAttribute(target, Attribute.DESTROYED);
 					target.setAttribute(Attribute.DIED_ON_TURN, context.getTurn());
 					break;
 				case WEAPON:
@@ -1871,11 +1879,19 @@ public class GameLogic implements Cloneable, Serializable {
 	 * A joust describes when cards are revealed from each player's deck, and the "winner" of a joust is determined by
 	 * whoever draws a card with a higher {@link Card#getBaseManaCost()}.
 	 *
-	 * @param player The player who initiated the joust.
+	 * @param player     The player who initiated the joust.
+	 * @param cardFilter
+	 * @param source
 	 * @return The joust event that was fired.
 	 */
-	public JoustEvent joust(Player player) {
-		Card ownCard = player.getDeck().getRandomOfType(CardType.MINION);
+	public JoustEvent joust(Player player, EntityFilter cardFilter, Entity source) {
+		Card ownCard;
+		CardList ownCards = player.getDeck().filtered(c -> cardFilter.matches(context, player, c, source));
+		if (ownCards.size() == 0) {
+			ownCard = null;
+		} else {
+			ownCard = getRandom(ownCards);
+		}
 		Card opponentCard = null;
 		boolean won = false;
 		// no minions left in deck - automatically loose joust
@@ -1884,7 +1900,10 @@ public class GameLogic implements Cloneable, Serializable {
 			log("Jousting LOST - no minion card left");
 		} else {
 			Player opponent = context.getOpponent(player);
-			opponentCard = opponent.getDeck().getRandomOfType(CardType.MINION);
+			CardList opponentCards = opponent.getDeck().filtered(c -> cardFilter.matches(context, opponent, c, source));
+			if (opponentCards.size() > 0) {
+				opponentCard = getRandom(opponentCards);
+			}
 			// opponent has no minions left in deck - automatically win joust
 			if (opponentCard == null) {
 				won = true;
@@ -3218,6 +3237,13 @@ public class GameLogic implements Cloneable, Serializable {
 		this.idFactory = idFactory;
 	}
 
+	/**
+	 * Concedes the game for the specified player.
+	 * <p>
+	 * Concession is implemented by destroy's the player's {@link Hero}.
+	 *
+	 * @param playerId The player that should concede.
+	 */
 	public void concede(int playerId) {
 		final Hero hero = context.getPlayer(playerId).getHero();
 		if (!hero.isDestroyed()
@@ -3226,10 +3252,25 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	/**
+	 * Plays a quest from the hand.
+	 *
+	 * @param player
+	 * @param quest
+	 * @see #playQuest(Player, Quest, boolean) for a complete reference.
+	 */
 	public void playQuest(Player player, Quest quest) {
 		playQuest(player, quest, true);
 	}
 
+	/**
+	 * Plays the specified quest. The quest goes into the {@link Zones#QUEST} zone and triggers using the enchantment's
+	 * {@link Enchantment#countUntilCast} functionality.
+	 *
+	 * @param player   The player that triggered the quest.
+	 * @param quest    The quest to put into play.
+	 * @param fromHand If {@code true}, fires a {@link QuestPlayedEvent}.
+	 */
 	public void playQuest(Player player, Quest quest, boolean fromHand) {
 		log("{} has a new quest activated: {}", player.getName(), quest.getSourceCard());
 		quest = quest.clone();
@@ -3242,12 +3283,27 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	/**
+	 * Indicates that a quest was successful (its spell was casted).
+	 *
+	 * @param player The player that triggered the quest. May be different than its owner.
+	 * @param quest  The quest {@link Enchantment} living inside the {@link Zones#QUEST} zone.
+	 */
 	public void questTriggered(Player player, Quest quest) {
 		log("Quest was trigged: {}", quest.getSourceCard());
 		quest.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		context.fireGameEvent(new QuestSuccessfulEvent(context, (QuestCard) quest.getSourceCard(), player.getId()));
 	}
 
+	/**
+	 * Gets the player ID of the player who is going to take the next turn.
+	 * <p>
+	 * Takes into account {@link Attribute#EXTRA_TURN}.
+	 * <p>
+	 * Implements Open the Waygate.
+	 *
+	 * @return The player ID.
+	 */
 	public int getNextActivePlayerId() {
 		if (context.getActivePlayer().getAttributeValue(Attribute.EXTRA_TURN) > 0) {
 			return context.getActivePlayerId();
@@ -3256,8 +3312,26 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 	}
 
+	/**
+	 * Get the amount of time the player has to mulligan, in milliseconds.
+	 *
+	 * @return The default mulligan time for now.
+	 */
 	public long getMulliganTimeMillis() {
 		return GameLogic.DEFAULT_MULLIGAN_TIME * 1000L;
+	}
+
+	/**
+	 * Reveals a card to both players.
+	 * <p>
+	 * Implements Dragon's Fury.
+	 *
+	 * @param player       The player who is revealing the card.
+	 * @param cardToReveal The card that should be revealed.
+	 */
+	public void revealCard(Player player, Card cardToReveal) {
+		// For now, just trigger a reveal card event.
+		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), cardToReveal, 1.0));
 	}
 
 	protected class FirstHand {

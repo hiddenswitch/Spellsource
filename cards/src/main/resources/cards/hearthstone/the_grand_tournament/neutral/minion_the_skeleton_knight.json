@@ -19,6 +19,10 @@
         "operation": "LESS",
         "targetPlayer": "SELF"
       }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
     }
   },
   "attributes": {

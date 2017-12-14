@@ -25,6 +25,10 @@
             "attribute": "DIVINE_SHIELD"
           }
         ]
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
       }
     }
   },

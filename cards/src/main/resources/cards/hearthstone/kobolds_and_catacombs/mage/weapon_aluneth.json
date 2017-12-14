@@ -1,0 +1,24 @@
+{
+  "name": "Aluneth",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "BLUE",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "At the end of your turn, draw 3 cards.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 3,
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

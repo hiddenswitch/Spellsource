@@ -17,7 +17,7 @@
         "targetPlayer": "SELF"
       },
       "cardSource": {
-        "class": "GraveyardSource",
+        "class": "GraveyardMinionsSource",
         "targetPlayer": "BOTH"
       }
     }

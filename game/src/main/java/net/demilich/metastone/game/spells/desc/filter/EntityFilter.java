@@ -83,4 +83,7 @@ public abstract class EntityFilter implements Serializable {
 		return desc == null || desc.equals(rhs.desc);
 	}
 
+	public static EntityFilter all() {
+		return new AndFilter(new FilterDesc(FilterDesc.build(AndFilter.class)));
+	}
 }
