@@ -12,7 +12,7 @@
       "class": "SummonSpell"
     },
     "cardSource": {
-      "class": "GraveyardSource",
+      "class": "GraveyardMinionsSource",
       "targetPlayer": "SELF"
     }
   },

@@ -15,7 +15,7 @@
       "race": "BEAST"
     },
     "cardSource": {
-      "class": "GraveyardSource",
+      "class": "GraveyardMinionsSource",
       "targetPlayer": "SELF"
     }
   },

@@ -79,6 +79,8 @@ public class TestBase {
 		clearHand(context, opponent);
 		clearZone(context, player.getDeck());
 		clearZone(context, opponent.getDeck());
+		clearZone(context, player.getGraveyard());
+		clearZone(context, opponent.getGraveyard());
 
 		consumer.run(context, player, opponent);
 	}
@@ -95,7 +97,10 @@ public class TestBase {
 
 	public static void clearZone(GameContext context, EntityZone<? extends Entity> zone) {
 		if (zone.getZone() == Zones.GRAVEYARD) {
-			zone.iterator().forEachRemaining(e -> e.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY));
+			for (int i = zone.size() - 1; i >= 0; i--) {
+				zone.get(i).moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			}
+
 			return;
 		}
 

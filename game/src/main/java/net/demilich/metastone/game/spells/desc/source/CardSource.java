@@ -15,11 +15,11 @@ public abstract class CardSource implements Serializable {
 	public CardSource(SourceDesc desc) {
 		this.desc = desc;
 	}
-	
+
 	public Object getArg(SourceArg arg) {
 		return desc.get(arg);
 	}
-	
+
 	public boolean hasArg(SourceArg arg) {
 		return desc.containsKey(arg);
 	}
@@ -31,30 +31,33 @@ public abstract class CardSource implements Serializable {
 		}
 		Player providingPlayer = null;
 		switch (targetPlayer) {
-		case ACTIVE:
-			providingPlayer = context.getActivePlayer();
-			break;
-		case BOTH:
-			CardList cards = new CardArrayList();
-			for (Player selectedPlayer : context.getPlayers()) {
-				cards.addAll(this.match(context, selectedPlayer));
-			}
-			return cards;
-		case INACTIVE:
-			providingPlayer = context.getOpponent(context.getActivePlayer());
-			break;
-		case OPPONENT:
-			providingPlayer = context.getOpponent(player);
-			break;
-		case OWNER:
-		case SELF:
-		default:
-			providingPlayer = player;
-			break;
+			case ACTIVE:
+				providingPlayer = context.getActivePlayer();
+				break;
+			case BOTH:
+				CardList cards = new CardArrayList();
+				for (Player selectedPlayer : context.getPlayers()) {
+					cards.addAll(this.match(context, selectedPlayer));
+				}
+				return cards;
+			case INACTIVE:
+				providingPlayer = context.getOpponent(context.getActivePlayer());
+				break;
+			case OPPONENT:
+				providingPlayer = context.getOpponent(player);
+				break;
+			case OWNER:
+			case SELF:
+			default:
+				providingPlayer = player;
+				break;
 		}
 		return this.match(context, providingPlayer);
 	}
 
 	protected abstract CardList match(GameContext context, Player player);
 
+	public static CardSource all() {
+		return new CatalogueSource(new SourceDesc(SourceDesc.build(CatalogueSource.class)));
+	}
 }

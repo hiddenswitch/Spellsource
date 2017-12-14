@@ -508,8 +508,7 @@ public enum Attribute {
 	 */
 	CANNOT_ATTACK_HERO_ON_SUMMON,
 	/**
-	 * An attribute that keeps track of how much attack and hitpoints to add to the next Jade Golem that gets
-	 * summoned.
+	 * An attribute that keeps track of how much attack and hitpoints to add to the next Jade Golem that gets summoned.
 	 */
 	JADE_BUFF,
 	/**
@@ -625,6 +624,10 @@ public enum Attribute {
 	 */
 	DOUBLE_END_TURN_TRIGGERS,
 	/**
+	 * Indicates that the specified spell card was casted from the hand or the deck.
+	 */
+	CAST_FROM_HAND_OR_DECK,
+	/**
 	 * Overrides the name of the {@link Entity}
 	 */
 	NAME,
@@ -657,7 +660,15 @@ public enum Attribute {
 	/**
 	 * Indicates that the game has started for the specified player.
 	 */
-	GAME_STARTED;
+	GAME_STARTED,
+	/**
+	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
+	 * <p>
+	 */
+	RESERVED_INTEGER_1,
+	RESERVED_INTEGER_2,
+	RESERVED_INTEGER_3,
+	RESERVED_INTEGER_4;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

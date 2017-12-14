@@ -1,10 +1,15 @@
 package net.demilich.metastone.game.spells.desc;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -159,5 +164,19 @@ public class SpellDesc extends Desc<SpellArg> {
 
 	public CardSource getCardSource() {
 		return (CardSource) get(SpellArg.CARD_SOURCE);
+	}
+
+	public CardList getFilteredCards(GameContext context, Player player, Entity host) {
+		CardSource source = getCardSource();
+		final EntityFilter filter;
+		if (source == null) {
+			source = CardSource.all();
+		}
+		if (containsKey(SpellArg.CARD_FILTER)) {
+			filter = getCardFilter();
+		} else {
+			filter = CardFilter.all();
+		}
+		return source.getCards(context, player).filtered(c -> filter.matches(context, player, c, host));
 	}
 }

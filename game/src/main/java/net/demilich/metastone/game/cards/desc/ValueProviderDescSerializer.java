@@ -32,6 +32,8 @@ public class ValueProviderDescSerializer implements JsonDeserializer<ValueProvid
 		parseArgument(ValueProviderArg.PLAYER_ATTRIBUTE, jsonData, arguments, ParseValueType.PLAYER_ATTRIBUTE);
 		parseArgument(ValueProviderArg.ATTRIBUTE, jsonData, arguments, ParseValueType.ATTRIBUTE);
 		parseArgument(ValueProviderArg.MULTIPLIER, jsonData, arguments, ParseValueType.INTEGER);
+		parseArgument(ValueProviderArg.CARD_SOURCE, jsonData, arguments, ParseValueType.CARD_SOURCE);
+		parseArgument(ValueProviderArg.CARD_FILTER, jsonData, arguments, ParseValueType.ENTITY_FILTER);
 		parseArgument(ValueProviderArg.VALUE, jsonData, arguments, ParseValueType.INTEGER);
 		parseArgument(ValueProviderArg.MIN, jsonData, arguments, ParseValueType.VALUE);
 		parseArgument(ValueProviderArg.MAX, jsonData, arguments, ParseValueType.VALUE);

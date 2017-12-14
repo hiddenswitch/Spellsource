@@ -17,6 +17,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class TransformInHandSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = (Card) target;
+		boolean startedInDeck = card.hasAttribute(Attribute.STARTED_IN_DECK);
 		EntityFilter cardFilter = desc.getCardFilter();
 		EntityReference secondaryTarget = (EntityReference) desc.get(SpellArg.SECONDARY_TARGET);
 		List<Card> replacementCard = Arrays.asList(SpellUtils.getCards(context, desc));
@@ -47,7 +49,13 @@ public class TransformInHandSpell extends Spell {
 			}
 		}
 
-		context.getLogic().replaceCardInHand(player.getId(), card, newCard);
+		Card replaced = context.getLogic().replaceCardInHand(player.getId(), card, newCard);
+
+		// Cards that are transformed in the hand started in the deck if the originating card started in the deck
+		// See https://www.reddit.com/r/hearthstone/comments/7ia60v/shifting_scroll_does_not_work_with_leyline/
+		if (startedInDeck) {
+			replaced.setAttribute(Attribute.STARTED_IN_DECK);
+		}
 	}
 
 }

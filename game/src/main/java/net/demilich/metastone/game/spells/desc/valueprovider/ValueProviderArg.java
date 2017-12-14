@@ -19,6 +19,7 @@ public enum ValueProviderArg {
 	VALUE_2,
 	GAME_VALUE,
 	MIN,
-	MAX
-
+	MAX,
+	CARD_SOURCE,
+	CARD_FILTER
 }

@@ -15,6 +15,10 @@
         "class": "ModifyDurabilitySpell",
         "value": 1,
         "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
       }
     }
   },
