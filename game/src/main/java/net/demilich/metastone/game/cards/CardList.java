@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
@@ -28,7 +29,7 @@ import java.util.stream.Stream;
  * @see CardZone for the entity zone that implements this interface.
  * @see CardArrayList for a {@link List} implementation of this interface.
  */
-public interface CardList extends Iterable<Card> {
+public interface CardList extends Iterable<Card>, List<Card> {
 	/**
 	 * Adds the card fluently.
 	 *
@@ -131,7 +132,9 @@ public interface CardList extends Iterable<Card> {
 	 * @param cardType The {@link CardType} to filter with.
 	 * @return A card, or {@code null} if none is found.
 	 * @see #getRandom() for a complete usage description.
+	 * @deprecated Use {@link GameLogic#getRandom(List)} to choose a random card.
 	 */
+	@Deprecated
 	default Card getRandomOfType(CardType cardType) {
 		List<Card> relevantCards = new ArrayList<>();
 		for (Card card : this) {

@@ -1,0 +1,44 @@
+{
+  "name": "Dragoncaller Alanna",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon a 5/5 Dragon for each spell you cast this game that costs (5) or more.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "value": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "attribute": "CAST_FROM_HAND_OR_DECK",
+              "operation": "HAS"
+            },
+            {
+              "class": "ManaCostFilter",
+              "value": 5,
+              "operation": "GREATER_OR_EQUAL"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "GraveyardSpellsSource",
+          "targetPlayer": "SELF"
+        }
+      },
+      "card": "token_fire_dragon"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -30,6 +30,7 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.RACE, jsonData, map, ParseValueType.RACE);
 		parseAttribute(Attribute.LAST_HIT, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.BOTH_CHOOSE_ONE_OPTIONS, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.CAST_FROM_HAND_OR_DECK, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CANNOT_ATTACK, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CHOOSE_ONE, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CANNOT_ATTACK_HERO_ON_SUMMON, jsonData, map, ParseValueType.BOOLEAN);
@@ -74,6 +75,10 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.WINDFURY, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.PERMANENT, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.QUEST, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.RESERVED_INTEGER_1, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.RESERVED_INTEGER_2, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.RESERVED_INTEGER_3, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.RESERVED_INTEGER_4, jsonData, map, ParseValueType.INTEGER);
 
 		return map;
 	}

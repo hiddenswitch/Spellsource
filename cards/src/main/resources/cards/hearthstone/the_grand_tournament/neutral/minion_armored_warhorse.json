@@ -16,6 +16,10 @@
         "class": "AddAttributeSpell",
         "target": "SELF",
         "attribute": "CHARGE"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
       }
     }
   },

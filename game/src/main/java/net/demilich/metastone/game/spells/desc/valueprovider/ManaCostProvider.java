@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 public class ManaCostProvider extends ValueProvider {
 
@@ -14,6 +15,11 @@ public class ManaCostProvider extends ValueProvider {
 
 	@Override
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
+		EntityReference targetOverride = (EntityReference) desc.get(ValueProviderArg.TARGET);
+		if (target == null
+				&& targetOverride != null) {
+			target = context.resolveSingleTarget(targetOverride);
+		}
 		Card targetCard = target.getSourceCard();
 		if (targetCard == null) {
 			return 0;

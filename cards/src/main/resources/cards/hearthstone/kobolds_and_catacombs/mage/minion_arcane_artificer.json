@@ -1,0 +1,27 @@
+{
+  "name": "Arcane Artificer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Whenever you cast a spell, gain Armor equal to its Cost.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffHeroSpell",
+      "armorBonus": {
+        "class": "ManaCostProvider",
+        "target": "EVENT_TARGET"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
