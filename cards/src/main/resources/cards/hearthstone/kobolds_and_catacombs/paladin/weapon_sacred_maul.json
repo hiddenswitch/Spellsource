@@ -1,0 +1,24 @@
+{
+  "name": "Sacred Maul",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "GOLD",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Give your minions Taunt.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attribute": "TAUNT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

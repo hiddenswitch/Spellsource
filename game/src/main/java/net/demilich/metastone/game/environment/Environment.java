@@ -5,8 +5,8 @@ import com.hiddenswitch.spellsource.common.GameState;
 /**
  * A collection of environment variables.
  * <p>
- * This enum contains the keys to the {@link GameState#environment} field, and they
- * help implement various card texts that modify other card texts.
+ * This enum contains the keys to the {@link GameState#environment} field, and they help implement various card texts
+ * that modify other card texts.
  */
 public enum Environment {
 	/**
@@ -89,8 +89,12 @@ public enum Environment {
 	 */
 	EVENT_VALUE_STACK,
 	/**
-	 * This implements Frostmourne, keeping track of which particular entities a particular Frostmourne has
-	 * destroyed.
+	 * This implements Frostmourne, keeping track of which particular entities a particular Frostmourne has destroyed.
 	 */
-	ENTITY_LIST;
+	ENTITY_LIST,
+	/**
+	 * This entity list implements Lynessa Sunsorrow, keeping track of each spell cast a player cast on his own
+	 * minions.
+	 */
+	LYNESSA_SUNSORROW_ENTITY_LIST;
 }

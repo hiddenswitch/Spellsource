@@ -1,0 +1,32 @@
+{
+  "name": "Lesser Pearl Spellstone",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "RARE",
+  "description": "Summon a 2/2 Spirit with Taunt. (Restore 3 Health to upgrade.)",
+  "passiveTrigger": {
+    "countUntilCast": 3,
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_pearl_spellstone"
+    },
+    "countByValue": true,
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_lesser_guardian_spirit"
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

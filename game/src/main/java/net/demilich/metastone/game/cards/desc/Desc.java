@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @param <T>
  */
-public class Desc<T extends Enum> extends HashMap<T, Object> implements Serializable {
+public class Desc<T extends Enum> extends HashMap<T, Object> implements Serializable, Cloneable {
 	public Desc(Map<T, Object> arguments) {
 		super(arguments);
 	}

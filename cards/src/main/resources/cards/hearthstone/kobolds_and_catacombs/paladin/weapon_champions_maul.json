@@ -1,0 +1,24 @@
+{
+  "name": "Champion's Maul",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "GOLD",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Summon two 1/1 Silver Hand Recruits.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "value": 2,
+      "card": "token_silver_hand_recruit"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

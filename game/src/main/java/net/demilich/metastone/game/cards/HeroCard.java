@@ -13,15 +13,11 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 
-public class HeroCard extends Card {
+public class HeroCard extends ActorCard {
 	private static final long serialVersionUID = 1L;
 
 	protected static final Set<Attribute> inheritedAttributes = new HashSet<>(
 			Arrays.asList(Attribute.HP, Attribute.MAX_HP, Attribute.BASE_HP, Attribute.ARMOR));
-
-	protected HeroCard() {
-		super();
-	}
 
 	public HeroCard(HeroCardDesc desc) {
 		super(desc);

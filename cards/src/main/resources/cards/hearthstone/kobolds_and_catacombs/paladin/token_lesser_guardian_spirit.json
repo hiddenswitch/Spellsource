@@ -1,0 +1,16 @@
+{
+  "name": "Guardian Spirit",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

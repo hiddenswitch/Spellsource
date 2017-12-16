@@ -1,17 +1,16 @@
 {
-  "name": "Greater Emerald Spellstone",
+  "name": "Greater Pearl Spellstone",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "GREEN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
-  "description": "Summon four 3/3 Wolves.",
+  "description": "Summon a 6/6 Spirit with Taunt.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "value": 4,
-    "card": "token_wolf"
+    "card": "token_greater_guardian_spirit"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1
 }

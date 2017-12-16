@@ -1,0 +1,21 @@
+{
+  "name": "Crystal Lion",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Divine Shield. Costs (1) less for each Silver Hand Recruit you control.",
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "EntityCounter",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "SpecificCardFilter",
+      "cardId": "token_silver_hand_recruit"
+    }
+  }
+}

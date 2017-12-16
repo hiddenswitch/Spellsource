@@ -1,0 +1,25 @@
+{
+  "name": "Benevolent Djinn",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "At the end of your turn, restore 3 Health to your hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
