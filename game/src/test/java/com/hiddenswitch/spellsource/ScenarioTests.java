@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 public class ScenarioTests extends TestBase {
 
-	@Ignore
 	@Test
 	void testNecromancer() {
 		runGym((context, player, opponent) -> {
