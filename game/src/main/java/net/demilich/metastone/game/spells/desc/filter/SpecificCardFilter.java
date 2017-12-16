@@ -7,20 +7,14 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 
 public class SpecificCardFilter extends EntityFilter {
-	
+
 	public SpecificCardFilter(FilterDesc desc) {
 		super(desc);
 	}
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		String cardId = null;
-		if (entity instanceof Card) {
-			cardId = ((Card) entity).getCardId();
-		} else if (entity instanceof Actor) {
-			cardId = ((Actor) entity).getSourceCard().getCardId();
-		}
-
+		String cardId = entity.getSourceCard().getCardId();
 		String requiredCardId = desc.getString(FilterArg.CARD_ID);
 		return cardId.equalsIgnoreCase(requiredCardId);
 	}

@@ -1,0 +1,21 @@
+{
+  "name": "Drygulch Jailor",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Add 3 Silver Hand Recruits to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "value": 3,
+    "card": "token_silver_hand_recruit"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

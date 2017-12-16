@@ -19,6 +19,7 @@ import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.SpellFactory;
@@ -667,6 +668,17 @@ public class GameLogic implements Cloneable, Serializable {
 
 		Spell spell = spellFactory.getSpell(spellDesc);
 		spell.cast(context, player, spellDesc, source, targets);
+
+		// This implements Lynessa Sunsorrow
+		if (sourceCard != null
+				&& targetSelection != TargetSelection.NONE
+				&& targets.size() == 1
+				&& targets.get(0).getOwner() == playerId
+				&& !childSpell) {
+			EnvironmentEntityList.getList(context, Environment.LYNESSA_SUNSORROW_ENTITY_LIST)
+					.add(context.getPlayer(playerId), sourceCard);
+		}
+
 		if (sourceCard != null && sourceCard.getCardType().isCardType(CardType.SPELL) && !childSpell) {
 			context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
 

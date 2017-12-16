@@ -96,6 +96,7 @@ public class Serialization {
 		for (RuntimeTypeAdapterFactory factory : new RuntimeTypeAdapterFactory[]{entities, cards}) {
 			factory.registerSubtype(ChooseOneCard.class, "CHOOSE_ONE_CARD");
 			factory.registerSubtype(ChooseBattlecryMinionCard.class, "CHOOSE_BATTLECRY_CARD");
+			factory.registerSubtype(ActorCard.class, "ACTOR_CARD");
 			factory.registerSubtype(HeroCard.class, "HERO_CARD");
 			factory.registerSubtype(ChooseBattlecryHeroCard.class, "CHOOSE_BATTLECRY_HERO_CARD");
 			factory.registerSubtype(MinionCard.class, "MINION_CARD");

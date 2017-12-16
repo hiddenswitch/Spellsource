@@ -18,6 +18,73 @@ import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
+	public void testValanyr() {
+		runGym((context, player, opponent) -> {
+			final Card bloodfenCard = CardCatalogue.getCardById("minion_bloodfen_raptor");
+			context.getLogic().receiveCard(player.getId(), bloodfenCard);
+			playCard(context, player, "weapon_valanyr");
+			attack(context, player, player.getHero(), opponent.getHero());
+			context.endTurn();
+			context.endTurn();
+			attack(context, player, player.getHero(), opponent.getHero());
+			Assert.assertEquals(player.getHero().getWeaponZone().size(), 0);
+			context.getLogic().performGameAction(player.getId(), bloodfenCard.play());
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_assassinate", player.getMinions().get(0));
+			Assert.assertEquals(player.getHero().getWeapon().getSourceCard().getCardId(), "weapon_valanyr");
+		});
+	}
+
+	@Test
+	public void testLynessaSunsorrow() {
+		// Confirm that the opponent's spells don't count
+		runGym((context, player, opponent) -> {
+			Minion silverHand1 = playMinionCard(context, player, "token_silver_hand_recruit");
+			context.endTurn();
+			Stream.of("spell_divine_strength").forEach(cardId -> {
+				playCardWithTarget(context, opponent, cardId, silverHand1);
+			});
+			context.endTurn();
+			Stream.of("spell_divine_strength", "spell_divine_strength").forEach(cardId -> {
+				playCardWithTarget(context, player, cardId, silverHand1);
+			});
+			Minion lynessaSunsorrow = playMinionCard(context, player, "minion_lynessa_sunsorrow");
+			Assert.assertEquals(lynessaSunsorrow.getAttack(), 1 + 2);
+			Assert.assertEquals(lynessaSunsorrow.getHp(), 1 + 4);
+		});
+
+		// Confirm that group spells don't count
+		runGym((context, player, opponent) -> {
+			Minion silverHand1 = playMinionCard(context, player, "token_silver_hand_recruit");
+
+			Stream.of("spell_level_up", "spell_divine_strength").forEach(cardId -> {
+				playCardWithTarget(context, player, cardId, silverHand1);
+			});
+			Minion lynessaSunsorrow = playMinionCard(context, player, "minion_lynessa_sunsorrow");
+			Assert.assertEquals(lynessaSunsorrow.getAttack(), 1 + 1);
+			Assert.assertEquals(lynessaSunsorrow.getHp(), 1 + 2);
+			Assert.assertFalse(lynessaSunsorrow.hasAttribute(Attribute.TAUNT));
+		});
+
+		// Confirm that shadowstep will pull lynessa off the board
+		runGym((context, player, opponent) -> {
+			Minion silverHand1 = playMinionCard(context, player, "token_silver_hand_recruit");
+			Minion silverHand2 = playMinionCard(context, player, "token_silver_hand_recruit");
+			Stream.of("spell_divine_strength").forEach(cardId -> {
+				playCardWithTarget(context, player, cardId, silverHand1);
+			});
+
+			Stream.of("spell_shadowstep").forEach(cardId -> {
+				playCardWithTarget(context, player, cardId, silverHand2);
+			});
+			playCard(context, player, "minion_lynessa_sunsorrow");
+			// Note the silver hand recruit is in index 0 in the hand
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(1)),
+					CardCatalogue.getCardById("minion_lynessa_sunsorrow").getBaseManaCost() - 2);
+		});
+	}
+
+	@Test
 	public void testRhokdelar() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_rhokdelar");

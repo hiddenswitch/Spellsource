@@ -72,6 +72,7 @@ public class CardFilter extends EntityFilter {
 
 		if (desc.containsKey(FilterArg.MANA_COST)) {
 			int manaCost = desc.getValue(FilterArg.MANA_COST, context, player, null, null, 0);
+			// TODO: Should we be looking at base mana cost or modified mana cost here?
 			if (manaCost != card.getBaseManaCost()) {
 				return false;
 			}

@@ -1,8 +1,6 @@
 package net.demilich.metastone.game.cards;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import com.google.gson.annotations.SerializedName;
 import net.demilich.metastone.game.utils.Attribute;
@@ -16,7 +14,7 @@ import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MinionCard extends Card {
+public class MinionCard extends ActorCard {
 	private static Logger logger = LoggerFactory.getLogger(MinionCard.class);
 	private static final Set<Attribute> ignoredAttributes = new HashSet<Attribute>(
 			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGER, Attribute.MANA_COST_MODIFIER, Attribute.BASE_ATTACK,
@@ -57,6 +55,11 @@ public class MinionCard extends Card {
 			// Clone the deathrattle defined here just in case it's mutated somewhere else
 			minion.addDeathrattle(desc.deathrattle.clone());
 		}
+
+		if (deathrattleEnchantments.size() > 0) {
+			deathrattleEnchantments.forEach(minion::addDeathrattle);
+		}
+
 		if (desc.trigger != null) {
 			minion.addEnchantment(desc.trigger.create());
 		}
@@ -133,7 +136,4 @@ public class MinionCard extends Card {
 		return desc.battlecry != null;
 	}
 
-	public boolean hasDeathrattle() {
-		return desc.deathrattle != null;
-	}
 }

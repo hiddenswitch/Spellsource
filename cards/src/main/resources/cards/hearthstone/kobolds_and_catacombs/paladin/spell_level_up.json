@@ -1,0 +1,35 @@
+{
+  "name": "Level Up!",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "EPIC",
+  "description": "Give your Silver Hand Recruits +2/+2 and Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "value": 2,
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cardId": "token_silver_hand_recruit"
+        }
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "TAUNT",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cardId": "token_silver_hand_recruit"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

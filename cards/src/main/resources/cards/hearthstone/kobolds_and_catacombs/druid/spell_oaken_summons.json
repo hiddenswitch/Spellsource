@@ -18,9 +18,18 @@
         "class": "RecruitSpell",
         "value": 1,
         "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "manaCost": 4
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            {
+              "class": "ManaCostFilter",
+              "value": 4,
+              "operation": "LESS_OR_EQUAL"
+            }
+          ]
         },
         "cardLocation": "DECK",
         "targetPlayer": "SELF"

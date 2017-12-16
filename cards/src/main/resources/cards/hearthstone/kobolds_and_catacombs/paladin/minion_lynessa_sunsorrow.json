@@ -1,0 +1,23 @@
+{
+  "name": "Lynessa Sunsorrow",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Cast each spell you cast on your minions this game on this one.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.RecastMinionSpells",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
