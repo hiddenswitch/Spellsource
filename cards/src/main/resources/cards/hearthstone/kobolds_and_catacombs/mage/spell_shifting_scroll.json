@@ -14,9 +14,19 @@
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
       "cardFilter": {
-        "class": "CardFilter",
-        "heroClass": "BLUE",
-        "cardType": "SPELL"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "heroClass": "BLUE",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          }
+        ]
       }
     },
     "keepAfterTransform": true

@@ -37,9 +37,19 @@
           }
         },
         "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "SPELL",
-          "heroClass": "GREEN"
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "heroClass": "GREEN",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "CardFilter",
+              "rarity": "LEGENDARY",
+              "invert": true
+            }
+          ]
         }
       }
     }

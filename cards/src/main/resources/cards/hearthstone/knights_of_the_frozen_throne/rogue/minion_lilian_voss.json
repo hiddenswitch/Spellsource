@@ -13,9 +13,19 @@
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
       "cardFilter": {
-        "class": "CardFilter",
-        "heroClass": "OPPONENT",
-        "cardType": "SPELL"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "heroClass": "OPPONENT",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          }
+        ]
       },
       "cardSource": {
         "class": "CatalogueSource"
