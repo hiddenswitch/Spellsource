@@ -18,9 +18,6 @@ public class WeaponCard extends ActorCard {
 			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGER, Attribute.MANA_COST_MODIFIER, Attribute.BASE_ATTACK,
 					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO));
 
-	@SerializedName("WeaponDesc")
-	private final WeaponCardDesc desc;
-
 	public WeaponCard(WeaponCardDesc desc) {
 		super(desc);
 		setAttribute(Attribute.BASE_ATTACK, desc.damage);
@@ -33,6 +30,7 @@ public class WeaponCard extends ActorCard {
 
 	protected Weapon createWeapon(Attribute... tags) {
 		Weapon weapon = new Weapon(this);
+		WeaponCardDesc desc = (WeaponCardDesc) getDesc();
 		// assign battlecry if there is one specified
 		for (Attribute gameTag : getAttributes().keySet()) {
 			if (!ignoredAttributes.contains(gameTag)) {
@@ -46,21 +44,8 @@ public class WeaponCard extends ActorCard {
 		weapon.setBaseHp(getBaseDurability());
 		weapon.setBattlecry(desc.getBattlecryAction());
 
-		if (desc.deathrattle != null) {
-			weapon.getAttributes().remove(Attribute.DEATHRATTLES);
-			weapon.addDeathrattle(desc.deathrattle);
-		}
-		if (desc.trigger != null) {
-			weapon.addEnchantment(desc.trigger.create());
-		}
-		if (desc.triggers != null) {
-			for (TriggerDesc trigger : desc.triggers) {
-				weapon.addEnchantment(trigger.create());
-			}
-		}
-		if (desc.cardCostModifier != null) {
-			weapon.setCardCostModifier(desc.cardCostModifier.create());
-		}
+		populate(weapon);
+
 		weapon.setOnEquip(desc.onEquip);
 		weapon.setOnUnequip(desc.onUnequip);
 		return weapon;

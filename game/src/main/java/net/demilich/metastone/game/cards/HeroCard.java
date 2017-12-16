@@ -33,21 +33,8 @@ public class HeroCard extends ActorCard {
 				hero.setAttribute(gameTag, getAttribute(gameTag));
 			}
 		}
-		hero.setBattlecry(desc.getBattlecryAction());
-		hero.setRace(desc.race);
 
-		if (desc.deathrattle != null) {
-			hero.getAttributes().remove(Attribute.DEATHRATTLES);
-			hero.addDeathrattle(desc.deathrattle);
-		}
-		if (desc.trigger != null) {
-			hero.addEnchantment(desc.trigger.create());
-		}
-		if (desc.triggers != null) {
-			for (TriggerDesc trigger : desc.triggers) {
-				hero.addEnchantment(trigger.create());
-			}
-		}
+		populate(hero);
 
 		return hero;
 	}
