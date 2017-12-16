@@ -1,14 +1,11 @@
 package net.demilich.metastone.game.spells.custom;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -33,6 +30,7 @@ public class CreateCardFromChoicesSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Map<Integer, List<MinionCard>> cards = CardCatalogue.stream()
+				.filter(Card::isCollectible)
 				.filter(c -> c.getRace() == Race.BEAST)
 				.filter(c -> c.getCardType() == CardType.MINION)
 				.filter(c -> c.getHeroClass() == HeroClass.ANY || c.getHeroClass() == HeroClass.GREEN)
@@ -76,8 +74,8 @@ public class CreateCardFromChoicesSpell extends Spell {
 		MinionCard other = (MinionCard) chosen[1].getCard().getCopy();
 		card.setName(desc.getString(SpellArg.NAME));
 		card.setDescription(card.getDescription() + "\n" + other.getDescription());
-		card.getAttributes().put(Attribute.BASE_ATTACK, card.getAttack() + other.getAttack());
-		card.getAttributes().put(Attribute.BASE_HP, card.getHp() + other.getHp());
+		card.getAttributes().put(Attribute.BASE_ATTACK, card.getBaseAttack() + other.getBaseAttack());
+		card.getAttributes().put(Attribute.BASE_HP, card.getBaseHp() + other.getBaseHp());
 		card.getAttributes().put(Attribute.BASE_MANA_COST, card.getBaseManaCost() + other.getBaseManaCost());
 		for (Attribute attribute : other.getAttributes().keySet()) {
 			if (attribute == Attribute.BASE_ATTACK

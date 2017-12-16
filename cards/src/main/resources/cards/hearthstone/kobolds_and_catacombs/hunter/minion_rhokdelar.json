@@ -19,7 +19,7 @@
           "target": "FRIENDLY_DECK",
           "filter": {
             "class": "CardFilter",
-            "type": "MINION"
+            "cardType": "MINION"
           }
         },
         "value2": 0
@@ -38,6 +38,7 @@
         },
         "cardFilter": {
           "class": "CardFilter",
+          "cardType": "SPELL",
           "heroClass": "GREEN"
         }
       }

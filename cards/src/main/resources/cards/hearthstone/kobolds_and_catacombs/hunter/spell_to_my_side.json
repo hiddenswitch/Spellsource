@@ -22,7 +22,7 @@
       "value2": 0
     },
     "spell1": {
-      "class": "SummonSpell",
+      "class": "SummonRandomNotOnBoardSpell",
       "cards": [
         "token_huffer",
         "token_misha",

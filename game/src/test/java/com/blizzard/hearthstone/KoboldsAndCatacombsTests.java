@@ -4,8 +4,11 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -14,6 +17,18 @@ import org.testng.annotations.Test;
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+	@Test
+	public void testRhokdelar() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_rhokdelar");
+			Assert.assertEquals(player.getHand().size(), GameLogic.MAX_HAND_CARDS);
+			Assert.assertEquals(player.getHand().stream()
+					.filter(c -> c.getCardType() == CardType.SPELL)
+					.filter(c -> c.getHeroClass() == HeroClass.GREEN)
+					.count(), 10L);
+		});
+	}
+
 	@Test
 	public void testLeylineManipulator() {
 		runGym((context, player, opponent) -> {
