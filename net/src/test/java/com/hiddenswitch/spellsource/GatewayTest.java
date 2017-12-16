@@ -368,7 +368,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 		// Use all random yogg as a test attribute
 		vertx.runOnContext(ignored -> {
-			Spellsource.spellsource().persistAttribute("yogg-only-1", GameEventType.TURN_END, Attribute.RANDOM_TARGETS, persistenceContext -> {
+			Spellsource.spellsource().persistAttribute("yogg-only-1", GameEventType.TURN_END, Attribute.RANDOM_CHOICES, persistenceContext -> {
 				// Save the turn number to this yogg attribute
 				long updated = persistenceContext.update(EntityReference.ALL_MINIONS, persistenceContext.event().getGameContext().getTurn());
 				queue.add(updated);
@@ -387,7 +387,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		}, context.asyncAssertSuccess(also -> {
 			context.assertTrue(queue.stream().anyMatch(l -> l > 0L), "Any number of the entities updated was greater than zero.");
 			Mongo.mongo().client().count(Inventory.INVENTORY,
-					QuickJson.json("facts." + Attribute.RANDOM_TARGETS.toKeyCase(), QuickJson.json("$exists", true)),
+					QuickJson.json("facts." + Attribute.RANDOM_CHOICES.toKeyCase(), QuickJson.json("$exists", true)),
 					context.asyncAssertSuccess(count -> {
 						context.assertTrue(count > 0L, "There is at least one inventory item that has the attribute that we configured to listen for.");
 					}));

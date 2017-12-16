@@ -517,7 +517,7 @@ public enum Attribute {
 	 * <p>
 	 * Implements Yogg-Saron, Hope's End; Servant of Yogg-Saron; Mayor Noggenfogger
 	 */
-	RANDOM_TARGETS,
+	RANDOM_CHOICES,
 	/**
 	 * A {@link #QUEST} {@link Entity} is an untargetable permanent that lives in the {@link Zones#SECRET} zone but is
 	 * visible to the opponent.

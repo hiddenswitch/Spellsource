@@ -11,6 +11,7 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.List;
 
@@ -32,9 +33,10 @@ public class RecastMinionSpells extends Spell {
 
 			SpellCard spellCard = (SpellCard) card;
 			context.getLogic().revealCard(player, card);
+			player.getAttributes().put(Attribute.RANDOM_CHOICES, true);
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), spellCard, target);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 		}
-
 
 
 	}

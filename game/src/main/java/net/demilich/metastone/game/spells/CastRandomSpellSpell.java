@@ -49,7 +49,7 @@ public class CastRandomSpellSpell extends Spell {
 			}
 		}
 
-		player.setAttribute(Attribute.RANDOM_TARGETS, true);
+		player.setAttribute(Attribute.RANDOM_CHOICES, true);
 
 		int numberOfSpellsToCast = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < numberOfSpellsToCast; i++) {
@@ -66,7 +66,7 @@ public class CastRandomSpellSpell extends Spell {
 			context.getLogic().checkForDeadEntities();
 		}
 
-		player.getAttributes().remove(Attribute.RANDOM_TARGETS);
+		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 	}
 
 }
