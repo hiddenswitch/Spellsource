@@ -10,10 +10,6 @@ import net.demilich.metastone.game.entities.EntityType;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * Created by finaris on 1/24/17.
- */
-
 public class GraveyardMinionsSource extends CardSource implements Serializable {
 
 	public GraveyardMinionsSource(SourceDesc desc) {
