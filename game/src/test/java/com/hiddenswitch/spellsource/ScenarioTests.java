@@ -7,12 +7,14 @@ import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.stream.Collectors;
 
 public class ScenarioTests extends TestBase {
 
+	@Ignore
 	@Test
 	void testNecromancer() {
 		runGym((context, player, opponent) -> {
