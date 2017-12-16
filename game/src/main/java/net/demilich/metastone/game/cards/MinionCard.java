@@ -20,9 +20,6 @@ public class MinionCard extends ActorCard {
 			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGER, Attribute.MANA_COST_MODIFIER, Attribute.BASE_ATTACK,
 					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO));
 
-	@SerializedName("minionDesc")
-	private final MinionCardDesc desc;
-
 	public MinionCard(MinionCardDesc desc) {
 		super(desc);
 		setAttribute(Attribute.BASE_ATTACK, desc.baseAttack);
@@ -37,50 +34,30 @@ public class MinionCard extends ActorCard {
 	}
 
 	protected Minion createMinion(Attribute... tags) {
+		MinionCardDesc desc = getDesc();
 		Minion minion = new Minion(this);
 		for (Attribute gameTag : getAttributes().keySet()) {
 			if (!ignoredAttributes.contains(gameTag)) {
 				minion.setAttribute(gameTag, getAttribute(gameTag));
 			}
 		}
+
+		populate(minion);
+
 		minion.setBaseAttack(getBaseAttack());
 		minion.setAttack(getAttack());
 		minion.setHp(getHp());
 		minion.setMaxHp(getHp());
 		minion.setBaseHp(getBaseHp());
 		minion.setBattlecry(desc.getBattlecryAction());
-
-		if (desc.deathrattle != null) {
-			minion.getAttributes().remove(Attribute.DEATHRATTLES);
-			// Clone the deathrattle defined here just in case it's mutated somewhere else
-			minion.addDeathrattle(desc.deathrattle.clone());
-		}
-
-		if (deathrattleEnchantments.size() > 0) {
-			deathrattleEnchantments.forEach(minion::addDeathrattle);
-		}
-
-		if (desc.trigger != null) {
-			minion.addEnchantment(desc.trigger.create());
-		}
-		if (desc.triggers != null) {
-			for (TriggerDesc trigger : desc.triggers) {
-				minion.addEnchantment(trigger.create());
-			}
-		}
-		if (desc.aura != null) {
-			final Aura enchantment = desc.aura.create();
-			if (enchantment == null) {
-				logger.error("Failed to create an aura for minion!. cardId {}", minion.getSourceCard().getCardId());
-			} else {
-				minion.addEnchantment(enchantment);
-			}
-		}
-		if (desc.cardCostModifier != null) {
-			minion.setCardCostModifier(desc.cardCostModifier.create());
-		}
 		minion.setHp(minion.getMaxHp());
+
 		return minion;
+	}
+
+	@Override
+	public MinionCardDesc getDesc() {
+		return (MinionCardDesc) super.getDesc();
 	}
 
 	public int getAttack() {
@@ -121,19 +98,19 @@ public class MinionCard extends ActorCard {
 	}
 
 	public boolean hasTrigger() {
-		return desc.trigger != null || (desc.triggers != null && desc.triggers.length > 0);
+		return getDesc().trigger != null || (getDesc().triggers != null && getDesc().triggers.length > 0);
 	}
 
 	public boolean hasAura() {
-		return desc.aura != null;
+		return getDesc().aura != null;
 	}
 
 	public boolean hasCardCostModifier() {
-		return desc.cardCostModifier != null;
+		return getDesc().cardCostModifier != null;
 	}
 
 	public boolean hasBattlecry() {
-		return desc.battlecry != null;
+		return getDesc().battlecry != null;
 	}
 
 }

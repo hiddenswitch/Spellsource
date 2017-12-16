@@ -7,7 +7,6 @@ import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 
 public class HeroCardDesc extends ActorCardDesc {
 	public String heroPower;
-	public Race race = Race.NONE;
 
 	@Override
 	public Card createInstance() {

@@ -11,7 +11,7 @@ import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.utils.AttributeMap;
 
-public abstract class CardDesc implements Serializable {
+public abstract class CardDesc implements Serializable, Cloneable {
 	public String id;
 	public String name;
 	public String description;

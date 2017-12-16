@@ -1,9 +1,11 @@
 package net.demilich.metastone.game.cards.desc;
 
 import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
+import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 
 public abstract class ActorCardDesc extends CardDesc {
@@ -12,6 +14,8 @@ public abstract class ActorCardDesc extends CardDesc {
 	public TriggerDesc trigger;
 	public TriggerDesc[] triggers;
 	public AuraDesc aura;
+	public Race race;
+	public CardCostModifierDesc cardCostModifier;
 
 	public BattlecryAction getBattlecryAction() {
 		if (battlecry == null) {

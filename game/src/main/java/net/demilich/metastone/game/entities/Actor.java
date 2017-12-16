@@ -65,13 +65,20 @@ public abstract class Actor extends Entity {
 		for (Enchantment trigger : getEnchantments()) {
 			clone.enchantments.add(trigger.clone());
 		}
-		if (hasAttribute(Attribute.DEATHRATTLES)) {
+		if (hasAttribute(Attribute.DEATHRATTLES)
+				|| (getDeathrattles() != null
+				&& getDeathrattles().size() > 0)) {
 			clone.getAttributes().remove(Attribute.DEATHRATTLES);
 			for (SpellDesc deathrattleSpell : getDeathrattles()) {
 				SpellDesc deathrattleClone = deathrattleSpell.clone();
 				clone.addDeathrattle(deathrattleClone);
 			}
 		}
+
+		if (cardCostModifier != null) {
+			clone.cardCostModifier = cardCostModifier.clone();
+		}
+
 		updateTriggers();
 		return clone;
 	}
