@@ -15,9 +15,19 @@
       "value": 2,
       "card": "spell_tail_swipe",
       "cardFilter": {
-        "class": "CardFilter",
-        "heroClass": "OPPONENT",
-        "cardType": "SPELL"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "heroClass": "OPPONENT",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          }
+        ]
       }
     }
   },
