@@ -6,6 +6,7 @@ bin
 .idea
 .vertx
 .mongo
+.mongo-backup
 test-output
 report.log
 /~$card_checklist.xlsx
