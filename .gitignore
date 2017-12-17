@@ -25,3 +25,5 @@ cards/out
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+.vagrant/
