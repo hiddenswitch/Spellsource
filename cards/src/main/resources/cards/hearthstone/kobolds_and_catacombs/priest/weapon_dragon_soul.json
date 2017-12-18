@@ -1,0 +1,64 @@
+{
+  "name": "Dragon Soul",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "WHITE",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "After you cast 3 spells in a turn, summon a 5/5 Dragon.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "SetAttributeSpell",
+        "attribute": "RESERVED_INTEGER_1",
+        "value": 0,
+        "target": "SELF"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "AfterSpellCastedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "ConditionalEffectSpell",
+        "target": "SELF",
+        "spell1": {
+          "class": "ModifyAttributeSpell",
+          "target": "SELF",
+          "value": 1,
+          "attribute": "RESERVED_INTEGER_1"
+        },
+        "spell2": {
+          "class": "SummonSpell",
+          "card": "token_dragon_spirit"
+        },
+        "condition": {
+          "class": "ComparisonCondition",
+          "value1": {
+            "class": "AlgebraicValueProvider",
+            "value1": {
+              "class": "AttributeValueProvider",
+              "attribute": "RESERVED_INTEGER_1"
+            },
+            "value2": 3,
+            "operation": "MODULO"
+          },
+          "value2": 0,
+          "operation": "EQUAL"
+        }
+      }
+    }
+  ],
+  "attributes": {
+    "RESERVED_INTEGER_1": 0
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

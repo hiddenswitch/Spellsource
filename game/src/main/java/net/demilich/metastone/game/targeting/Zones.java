@@ -20,19 +20,20 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 /**
  * Zones describe the different locations for entities in the game.
  * <p>
- * In a standard game, the local player can see their {@link #HAND}, their {@link #SECRET} zone, and both player's {@link #BATTLEFIELD} zones. They
- * know the count of the number of entities in the opponent's {@link #HAND}, opponent's {@link #DECK}, opponent's {@link #SECRET} zone
- * and their own {@link #DECK}. While neither player can browse through the {@link #GRAVEYARD} the information inside of
- * it is not considered secret.
+ * In a standard game, the local player can see their {@link #HAND}, their {@link #SECRET} zone, and both player's
+ * {@link #BATTLEFIELD} zones. They know the count of the number of entities in the opponent's {@link #HAND}, opponent's
+ * {@link #DECK}, opponent's {@link #SECRET} zone and their own {@link #DECK}. While neither player can browse through
+ * the {@link #GRAVEYARD} the information inside of it is not considered secret.
  * <p>
- * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Card, int, boolean)}
- * performs the consequences of playing a {@link MinionCard}; the card is moved to the {@link #GRAVEYARD}
- * and a new {@link Minion} is created by {@link MinionCard#summon()} and placed into the {@link #BATTLEFIELD}. Or, some
- * effects may summon a minion from an {@link EntityFilter} that has a zone specified, like a {@link SummonRandomMinionFilteredSpell}.
+ * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Card, int,
+ * boolean)} performs the consequences of playing a {@link MinionCard}; the card is moved to the {@link #GRAVEYARD} and
+ * a new {@link Minion} is created by {@link MinionCard#summon()} and placed into the {@link #BATTLEFIELD}. Or, some
+ * effects may summon a minion from an {@link EntityFilter} that has a zone specified, like a {@link
+ * SummonRandomMinionFilteredSpell}.
  *
- * @see Entity#moveOrAddTo(GameContext, Zones) for the method that generally moves
- * entities from one zone to another.
- * @see net.demilich.metastone.game.entities.EntityLocation for more about entity locations and how zones are manipulated.
+ * @see Entity#moveOrAddTo(GameContext, Zones) for the method that generally moves entities from one zone to another.
+ * @see net.demilich.metastone.game.entities.EntityLocation for more about entity locations and how zones are
+ * manipulated.
  */
 public enum Zones {
 	/**
@@ -53,9 +54,9 @@ public enum Zones {
 	DECK,
 	/**
 	 * The graveyard is where a {@link Card} has been played with {@link GameLogic#playCard(int, CardReference)} goes;
-	 * and where an {@link Actor} that has been destroyed with {@link GameLogic#destroy(Actor...)} goes.
-	 * A {@link net.demilich.metastone.game.spells.trigger.secrets.Secret} and other entities subclassing
-	 * {@link Enchantment} go to {@link #REMOVED_FROM_PLAY}.
+	 * and where an {@link Actor} that has been destroyed with {@link GameLogic#destroy(Actor...)} goes. A {@link
+	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} and other entities subclassing {@link Enchantment} go
+	 * to {@link #REMOVED_FROM_PLAY}.
 	 *
 	 * @see #REMOVED_FROM_PLAY for the alternative location for "destroyed" entities.
 	 * @see GameLogic#destroy(Actor...) for more about destroying actors.
@@ -75,12 +76,14 @@ public enum Zones {
 	/**
 	 * This zone is  where {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} entities go, which behave
 	 * like secrets that are visible to the opponent and do not go away the first time they  are triggered.
+	 *
 	 * @see GameLogic#playQuest(Player, Quest) for more about quests.
 	 */
 	QUEST,
 	/**
-	 * The hero power zone stores the {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} for a corresponding
-	 * {@link net.demilich.metastone.game.entities.heroes.Hero}. Only one such card can be in the zone at a time.
+	 * The hero power zone stores the {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} for a
+	 * corresponding {@link net.demilich.metastone.game.entities.heroes.Hero}. Only one such card can be in the zone at
+	 * a time.
 	 *
 	 * @see Hero#getHeroPowerZone() for more about the hero power zone.
 	 */
@@ -99,7 +102,8 @@ public enum Zones {
 	 */
 	WEAPON,
 	/**
-	 * The discover zone has any cards that are being currently chosen by the player as part of a {@link net.demilich.metastone.game.actions.DiscoverAction}.
+	 * The discover zone has any cards that are being currently chosen by the player as part of a {@link
+	 * net.demilich.metastone.game.actions.DiscoverAction}.
 	 * <p>
 	 * The opposing player can see the count, but not the contents, of cards the player is choosing between.
 	 *
@@ -109,8 +113,8 @@ public enum Zones {
 	 */
 	DISCOVER,
 	/**
-	 * An {@link Entity} in this zone is "deleted" in the sense that it will never
-	 * appear in any {@link EntityFilter} filters or targeting lists.
+	 * An {@link Entity} in this zone is "deleted" in the sense that it will never appear in any {@link EntityFilter}
+	 * filters or targeting lists.
 	 *
 	 * @see #GRAVEYARD for the usual place entities go when they are destroyed by effects rather than deleted.
 	 */
@@ -123,8 +127,8 @@ public enum Zones {
 	 * Unlike the official game rules, the three cards presented to a player by Tracking go into the {@link #DISCOVER}
 	 * zone.
 	 *
-	 * @see GameLogic#removeActor(Actor, boolean) for an example of usage of a set aside zone (when the method is
-	 * called with {@code peacefully = false;}.
+	 * @see GameLogic#removeActor(Actor, boolean) for an example of usage of a set aside zone (when the method is called
+	 * with {@code peacefully = false;}.
 	 */
 	SET_ASIDE_ZONE,
 	/**

@@ -62,8 +62,7 @@ import static java.util.stream.Collectors.toList;
  * GameContext#clone()} to create an "immutable" equivalent behaviour.
  * <p>
  * Most effects are encoded in {@link Spell} classes, which subsequently call functions in this class. However, a few
- * key functions are called by {@link GameAction#execute(GameContext, int)} calls directly, like {@link #summon(int,
- * Minion, Card, int, boolean)} and {@link #fight(Player, Actor, Actor)}.
+ * key functions are called by {@link GameAction#execute(GameContext, int)} calls directly, like {@link #summon(int, Minion, Card, int, boolean)} and {@link #fight(Player, Actor, Actor)}.
  */
 public class GameLogic implements Cloneable, Serializable {
 	protected static Logger logger = LoggerFactory.getLogger(GameLogic.class);
@@ -3014,7 +3013,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 *                         opponent).
 	 * @param minion           The minion to summon. Typically the result of a {@link MinionCard#summon()} call, but
 	 *                         other cards have effects that summon minions on e.g., battlecry with a {@link
-	 *                         net.demilich.metastone.game.spells.SummonSpell}.
+	 *                         SummonSpell}.
 	 * @param source           The {@link MinionCard} or {@link Entity} response for this minion.
 	 * @param index            The location on the {@link Zones#BATTLEFIELD} to place this minion.
 	 * @param resolveBattlecry If {@code true}, the battlecry should be cast. Battlecries are only cast when a {@link
@@ -3032,12 +3031,12 @@ public class GameLogic implements Cloneable, Serializable {
 			checkForDeadEntities();
 		}
 
-		postSummon(minion, source, player);
+		postSummon(minion, source, player, false);
 		return true;
 	}
 
 	@Suspendable
-	protected void postSummon(Minion minion, Card source, Player player) {
+	protected void postSummon(Minion minion, Card source, Player player, boolean skipAfterSummon) {
 		if (context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null) {
 			minion = (Minion) context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TRANSFORM_REFERENCE));
 			minion.setBattlecry(null);
@@ -3080,7 +3079,8 @@ public class GameLogic implements Cloneable, Serializable {
 		handleEnrage(minion);
 
 		context.getSummonReferenceStack().pop();
-		if (player.getMinions().contains(minion)) {
+		if (player.getMinions().contains(minion)
+				&& !skipAfterSummon) {
 			context.fireGameEvent(new AfterSummonEvent(context, minion, source));
 		}
 		context.fireGameEvent(new BoardChangedEvent(context));

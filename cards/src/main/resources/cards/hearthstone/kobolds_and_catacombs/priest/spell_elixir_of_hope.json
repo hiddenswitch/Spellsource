@@ -1,0 +1,28 @@
+{
+  "name": "Elixir of Hope",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "Give a minion +2/+2 and \"Deathrattle: Return this minion to your hand.\"",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 2
+      },
+      {
+        "class": "AddDeathrattleSpell",
+        "spell": {
+          "class": "ReturnTargetToHandSpell",
+          "target": "SELF"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

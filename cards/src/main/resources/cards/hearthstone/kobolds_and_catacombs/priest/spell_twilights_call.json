@@ -1,0 +1,38 @@
+{
+  "name": "Twilight's Call",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "RARE",
+  "description": "Summon 1/1 copies of 2 friendly Deathrattle minions that died this game.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ResurrectSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "DEATHRATTLES",
+      "operation": "HAS"
+    },
+    "cardSource": {
+      "class": "GraveyardMinionsSource",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 1
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
