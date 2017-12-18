@@ -1,0 +1,32 @@
+{
+  "name": "Unidentified Elixir",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "Give a minion +2/+2. Gains a bonus effect in your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "value": 2
+  },
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "cards": [
+        "spell_elixir_of_hope",
+        "spell_elixir_of_life",
+        "spell_elixir_of_purity",
+        "spell_elixir_of_shadows"
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

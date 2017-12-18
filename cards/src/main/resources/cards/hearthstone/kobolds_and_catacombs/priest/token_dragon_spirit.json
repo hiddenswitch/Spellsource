@@ -1,0 +1,14 @@
+{
+  "name": "Dragon Spirit",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "",
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

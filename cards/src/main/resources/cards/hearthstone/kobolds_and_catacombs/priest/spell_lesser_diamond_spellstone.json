@@ -1,0 +1,30 @@
+{
+  "name": "Lesser Diamond Spellstone",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "RARE",
+  "description": "Resurrect 2 different friendly minions. (Cast 4 spells to upgrade.)",
+  "passiveTrigger": {
+    "countUntilCast": 4,
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_diamond_spellstone"
+    },
+    "countByValue": false,
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ResurrectSpell",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

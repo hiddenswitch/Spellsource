@@ -19,6 +19,51 @@ import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
+	public void testTemporus() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_temporus");
+			Assert.assertEquals(context.getActivePlayerId(), player.getId());
+			context.endTurn();
+			Assert.assertEquals(context.getActivePlayerId(), opponent.getId());
+			context.endTurn();
+			Assert.assertEquals(context.getActivePlayerId(), opponent.getId());
+			context.endTurn();
+			Assert.assertEquals(context.getActivePlayerId(), player.getId());
+			context.endTurn();
+			Assert.assertEquals(context.getActivePlayerId(), player.getId());
+			context.endTurn();
+			Assert.assertEquals(context.getActivePlayerId(), opponent.getId());
+			context.endTurn();
+			Assert.assertEquals(context.getActivePlayerId(), player.getId());
+		});
+	}
+
+	@Test
+	public void testDragonSoul() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_dragon_soul");
+			for (int i = 0; i < 3; i++) {
+				Assert.assertEquals(player.getMinions().size(), 0);
+				playCard(context, player, "spell_innervate");
+			}
+			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_dragon_spirit");
+			for (int i = 0; i < 3; i++) {
+				Assert.assertEquals(player.getMinions().size(), 1);
+				playCard(context, player, "spell_innervate");
+			}
+			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_dragon_spirit");
+			// Tick up the spell casting count just before the turn ends
+			playCard(context, player, "spell_innervate");
+			context.endTurn();
+			context.endTurn();
+			playCard(context, player, "spell_innervate");
+			playCard(context, player, "spell_innervate");
+			// An extra dragon should not have appeared
+			Assert.assertEquals(player.getMinions().size(), 2);
+		});
+	}
+
+	@Test
 	public void testValanyr() {
 		runGym((context, player, opponent) -> {
 			final Card bloodfenCard = CardCatalogue.getCardById("minion_bloodfen_raptor");

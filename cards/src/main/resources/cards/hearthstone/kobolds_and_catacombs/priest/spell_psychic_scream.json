@@ -1,0 +1,17 @@
+{
+  "name": "Psychic Scream",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "EPIC",
+  "description": "Shuffle all minions into your opponent's deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleMinionToDeckSpell",
+    "target": "ALL_MINIONS",
+    "targetPlayer": "OPPONENT"
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

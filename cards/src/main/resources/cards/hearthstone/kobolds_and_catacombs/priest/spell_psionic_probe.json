@@ -1,0 +1,24 @@
+{
+  "name": "Psionic Probe",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "FREE",
+  "description": "Copy a spell in your opponent's deck and add it to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CopyCardSpell",
+    "value": 1,
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "OPPONENT"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

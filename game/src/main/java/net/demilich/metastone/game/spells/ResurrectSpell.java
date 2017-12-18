@@ -13,6 +13,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class ResurrectSpell extends Spell {
 	@Override
@@ -36,7 +37,13 @@ public class ResurrectSpell extends Spell {
 			}
 			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
 			MinionCard minionCard = (MinionCard) resurrectedMinion.getSourceCard();
-			context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false);
+			final Minion summonedMinion = minionCard.summon();
+			final boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, null, -1, false);
+			if (summoned
+					&& desc.containsKey(SpellArg.SPELL)
+					&& summonedMinion.getZone() == Zones.BATTLEFIELD) {
+				SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, summonedMinion);
+			}
 			deadMinions.remove(resurrectedMinion);
 		}
 	}

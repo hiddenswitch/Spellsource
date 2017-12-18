@@ -17,6 +17,12 @@ public class DeckFormat implements Serializable {
 		sets = new ArrayList<CardSet>();
 	}
 
+	public static DeckFormat basicFormat() {
+		return new DeckFormat().withCardSets(
+				CardSet.BASIC,
+				CardSet.CLASSIC);
+	}
+
 	public void addSet(CardSet cardSet) {
 		sets.add(cardSet);
 	}

@@ -1,0 +1,24 @@
+{
+  "name": "Elixir of Shadows",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "Give a minion +2/+2. Summon a 1/1 copy of it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 2
+      },
+      {
+        "class": "SummonOneOneCopySpell"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -48,11 +48,13 @@ public class BlackrockMountainTests extends TestBase {
 		});
 	}
 
-	@Test
+	@Test()
 	public void testAxeFlinger() {
 		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
+		context.getLogic().setLoggingEnabled(true);
 		Player player = context.getPlayer1();
-
+		int playerStartingHp = player.getHero().getHp();
+		int opponentStartingHp = context.getPlayer2().getHero().getHp();
 		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_axe_flinger"));
 		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_axe_flinger"));
 
@@ -61,8 +63,8 @@ public class BlackrockMountainTests extends TestBase {
 
 		SpellCard damageCard = new TestSpellCard(DamageSpell.create(EntityReference.ENEMY_CHARACTERS, 1));
 		playCard(context, opponent, damageCard);
-		Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 1);
-		Assert.assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 4);
+		Assert.assertEquals(player.getHero().getHp(), playerStartingHp - 1);
+		Assert.assertEquals(opponent.getHero().getHp(), opponentStartingHp - 4);
 	}
 
 	@Test

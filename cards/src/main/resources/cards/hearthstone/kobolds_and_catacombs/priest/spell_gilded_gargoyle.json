@@ -1,0 +1,20 @@
+{
+  "name": "Gilded Gargoyle",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Add a Coin to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_the_coin"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
