@@ -98,7 +98,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 	}
 
-	@Test(timeout = 60000L)
+	@Test(timeout = 100000L)
 	public void testAccountFlow(TestContext context) throws InterruptedException {
 		wrap(context);
 		Set<String> decks = Spellsource.spellsource().getStandardDecks().stream().map(DeckCreateRequest::getName).collect(Collectors.toSet());
@@ -161,7 +161,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 			}
 		});
 
-		latch.await(50L, TimeUnit.SECONDS);
+		latch.await(90L, TimeUnit.SECONDS);
 		getContext().assertEquals(latch.getCount(), 0L);
 	}
 
@@ -240,7 +240,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(18L, TimeUnit.SECONDS);
+		latch.await(60L, TimeUnit.SECONDS);
 		getContext().assertEquals(latch.getCount(), 0L);
 		unwrap();
 	}
