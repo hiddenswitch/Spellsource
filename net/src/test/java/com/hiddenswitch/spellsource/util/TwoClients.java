@@ -75,8 +75,8 @@ public class TwoClients {
 
 		AIPlayer player1 = new AIPlayer();
 		AIPlayer player2 = new AIPlayer();
-		pregame1 = new PregamePlayerConfiguration(player1.getConfiguredDeck(), "Player 1").withPlayer(player1.withUserId("userId1"));
-		pregame2 = new PregamePlayerConfiguration(player2.getConfiguredDeck(), "Player 2").withPlayer(player2.withUserId("userId2"));
+		pregame1 = new PregamePlayerConfiguration(player1.getConfiguredDeck(), "Player 1");
+		pregame2 = new PregamePlayerConfiguration(player2.getConfiguredDeck(), "Player 2");
 
 		CreateGameSessionRequest request = new CreateGameSessionRequest();
 		request.setPregame1(pregame1);
@@ -100,7 +100,7 @@ public class TwoClients {
 		CardCatalogue.loadCardsFromPackage();
 
 		AIPlayer player1 = new AIPlayer();
-		pregame1 = new PregamePlayerConfiguration(player1.getConfiguredDeck(), "Player 1").withPlayer(player1.withUserId("localPlayerUserId1"));
+		pregame1 = new PregamePlayerConfiguration(player1.getConfiguredDeck(), "Player 1");
 		pregame2 = new PregamePlayerConfiguration(DeckFactory.getRandomDeck(), "Player 2").withAI(true);
 
 		CreateGameSessionRequest request = new CreateGameSessionRequest();

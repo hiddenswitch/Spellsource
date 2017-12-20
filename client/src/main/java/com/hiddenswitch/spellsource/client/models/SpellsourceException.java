@@ -32,9 +32,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * A server-side exception with content renderable to the client. 
+ * A server-side exception with content renderable to the writer. 
  */
-@ApiModel(description = "A server-side exception with content renderable to the client. ")
+@ApiModel(description = "A server-side exception with content renderable to the writer. ")
 
 public class SpellsourceException  implements Serializable {
   @SerializedName("message")

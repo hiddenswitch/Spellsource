@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.client;
 
-import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
@@ -10,8 +10,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -27,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
 @Deprecated
-public class RemoteGameContext extends GameContext implements GameContextVisuals, Client {
+public class RemoteGameContext extends GameContext implements GameContextVisuals, Writer {
 	private final List<GameEvent> gameEvents = new ArrayList<>();
 	private boolean blockedByAnimation;
 	private int localPlayerId = -1;

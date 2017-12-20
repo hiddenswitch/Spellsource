@@ -254,8 +254,8 @@ public class GamesTest extends ServiceTest<GamesImpl> {
 
 			final GameSession gameSession = service.getGameSession(response.getGameId());
 			getContext().fail();
-			gameSession.onPlayerConnected(null, new TestClient());
-			gameSession.onPlayerConnected(null, new TestClient());
+			gameSession.onPlayerConnected(0, new TestWriter());
+			gameSession.onPlayerConnected(1, new TestWriter());
 
 			// Deploy an http router that will accept the JSON to put into the game
 			final HttpServer server = vertx.createHttpServer();

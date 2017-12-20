@@ -8,12 +8,13 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EnvironmentEntityList implements EnvironmentValue {
+public class EnvironmentEntityList implements EnvironmentValue, Serializable {
 	public static EnvironmentEntityList getList(GameContext context) {
 		return getList(context, Environment.ENTITY_LIST);
 	}

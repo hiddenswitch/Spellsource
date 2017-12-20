@@ -88,10 +88,10 @@ public class GameEventPerformedGameAction  implements Serializable {
   }
 
    /**
-   * A plain-text description of the game action that should be rendered on the client. 
+   * A plain-text description of the game action that should be rendered on the writer. 
    * @return description
   **/
-  @ApiModelProperty(example = "null", value = "A plain-text description of the game action that should be rendered on the client. ")
+  @ApiModelProperty(example = "null", value = "A plain-text description of the game action that should be rendered on the writer. ")
   public String getDescription() {
     return description;
   }

@@ -4,10 +4,10 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.Configuration;
-import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
 import com.hiddenswitch.spellsource.impl.server.GameSessionImpl;
-import com.hiddenswitch.spellsource.impl.server.WebSocketClient;
+import com.hiddenswitch.spellsource.impl.server.WebSocketWriter;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.client.models.MessageType;
@@ -22,19 +22,17 @@ import io.vertx.core.http.*;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 
-import java.io.IOException;
 import java.net.SocketException;
-import java.net.URISyntaxException;
 import java.util.*;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static io.vertx.ext.sync.Sync.fiberHandler;
 
+@Deprecated
 public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	private Logger logger = LoggerFactory.getLogger(GamesImpl.class);
 
@@ -69,8 +67,6 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 		Void ignored = awaitResult(h -> vertx.executeBlocking(blocking -> {
 			CardCatalogue.loadCardsFromPackage();
-			// Fixes exceptions related to {@link #handleWebSocketMessage}
-//			DefaultChannelId.newInstance();
 			// TODO: These ports shouldn't be totally randomized because of AWS security groups
 			blocking.complete();
 		}, then -> {
@@ -210,15 +206,15 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 				keepAlive(session);
 
-				Client client = new WebSocketClient(socket, userId, session.getPlayer(userId).getId());
-				gameForSocket.put(client.getPrivateSocket(), session);
+				Writer writer = new WebSocketWriter(socket, userId, session.getPlayer(userId).getId());
+				gameForSocket.put(writer.getPrivateSocket(), session);
 
 				if (session.isGameReady()) {
 					// TODO: Remove references to the old socket
 					// Replace the client
-					session.onPlayerReconnected(session.getPlayer(userId), client);
+					session.onPlayerReconnected(session.getPlayer(userId).getId(), writer);
 				} else {
-					session.onPlayerConnected(session.getPlayer(userId), client);
+					session.onPlayerConnected(session.getPlayer(userId).getId(), writer);
 				}
 				break;
 			case UPDATE_ACTION:
@@ -401,7 +397,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 	private String getHost() {
 		try {
 			return Gateway.getHostAddress();
-		} catch (SocketException e) {
+		} catch (VertxException e) {
 			return "0.0.0.0";
 		}
 	}

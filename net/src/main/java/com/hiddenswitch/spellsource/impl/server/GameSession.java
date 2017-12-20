@@ -3,8 +3,9 @@ package com.hiddenswitch.spellsource.impl.server;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.Server;
-import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
+import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -68,7 +69,7 @@ public interface GameSession extends Server {
 
 	/**
 	 * Gets the {@link GameAction} that corresponds to the specified {@code actionIndex} that the connected {@link
-	 * Client} was prompted for.
+	 * Writer} was prompted for.
 	 *
 	 * @param messageId   The message where a {@link net.demilich.metastone.game.behaviour.Behaviour#requestAction(GameContext,
 	 *                    Player, List)} was made.
@@ -79,4 +80,6 @@ public interface GameSession extends Server {
 	GameAction getActionForMessage(String messageId, int actionIndex);
 
 	int getPlayerIdForSocket(Object socket);
+
+	void handleGameOver(Handler<GameSessionImpl> handler);
 }

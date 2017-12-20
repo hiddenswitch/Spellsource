@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
 import com.hiddenswitch.spellsource.models.DeckDeleteResponse;
 import com.hiddenswitch.spellsource.util.WebResult;
 import com.hiddenswitch.spellsource.client.models.*;
+import io.vertx.core.VertxException;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
@@ -188,11 +189,15 @@ public interface Gateway {
 	 *
 	 * @return A string
 	 */
-	static String getHostAddress() throws SocketException {
-		final InterfaceAddress hostAddress = mainInterface().getInterfaceAddresses().stream().filter(ia -> ia.getAddress() instanceof Inet4Address).findFirst().orElse(null);
-		if (hostAddress == null) {
-			return null;
+	static String getHostAddress() {
+		try {
+			final InterfaceAddress hostAddress = mainInterface().getInterfaceAddresses().stream().filter(ia -> ia.getAddress() instanceof Inet4Address).findFirst().orElse(null);
+			if (hostAddress == null) {
+				return null;
+			}
+			return hostAddress.getAddress().getHostAddress();
+		} catch (SocketException ex) {
+			throw new VertxException(ex);
 		}
-		return hostAddress.getAddress().getHostAddress();
 	}
 }

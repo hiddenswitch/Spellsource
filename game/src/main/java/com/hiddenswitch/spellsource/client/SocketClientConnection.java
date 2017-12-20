@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import com.hiddenswitch.spellsource.common.ClientToServerMessage;
-import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.ServerToClientMessage;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -21,7 +21,7 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 	private final String host;
 	private final int port;
 	private BlockingQueue<ClientToServerMessage> queue = new LinkedBlockingDeque<>();
-	private Client updateListener;
+	private Writer updateListener;
 	private boolean shouldRun = true;
 	private Logger logger = LoggerFactory.getLogger(SocketClientConnection.class);
 	private boolean isGameEnded;
@@ -37,8 +37,8 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 	}
 
 	@Override
-	public void RegisterListener(Client client) {
-		this.updateListener = client;
+	public void RegisterListener(Writer writer) {
+		this.updateListener = writer;
 	}
 
 	@Override

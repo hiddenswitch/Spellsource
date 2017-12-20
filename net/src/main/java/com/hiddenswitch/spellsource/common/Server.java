@@ -8,7 +8,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import java.util.List;
 
 /**
- * An interface that specifies a server instance that's capable of processing {@link Client} actions.
+ * An interface that specifies a server instance that's capable of processing {@link Writer} actions.
  */
 public interface Server extends ClientConnectionHandler {
 	@Suspendable
@@ -28,7 +28,7 @@ public interface Server extends ClientConnectionHandler {
 
 	void onUntouch(int playerId, int entityId);
 
-	Client getClient1();
+	Writer getClient1();
 
-	Client getClient2();
+	Writer getClient2();
 }

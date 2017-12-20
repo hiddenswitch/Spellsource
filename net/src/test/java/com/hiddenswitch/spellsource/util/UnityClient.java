@@ -36,6 +36,7 @@ public class UnityClient {
 	private String gameId;
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
+	private String loginToken;
 
 
 	public UnityClient(TestContext context) {
@@ -70,7 +71,8 @@ public class UnityClient {
 
 		try {
 			CreateAccountResponse car = api.createAccount(new CreateAccountRequest().email(username + "@hiddenswitch.com").name(username).password("testpass"));
-			api.getApiClient().setApiKey(car.getLoginToken());
+			loginToken = car.getLoginToken();
+			api.getApiClient().setApiKey(loginToken);
 			account = car.getAccount();
 			context.assertNotNull(account);
 			context.assertTrue(account.getDecks().size() > 0);
@@ -146,10 +148,9 @@ public class UnityClient {
 		Assert.assertNotNull(url);
 
 		// Get the port from the url
+		url = "ws://localhost:" + Integer.toString((new URI(url)).getPort()) + "/" + Games.WEBSOCKET_PATH + "-clustered";
 
-		url = "ws://localhost:" + Integer.toString((new URI(url)).getPort()) + "/" + Games.WEBSOCKET_PATH;
-
-		endpoint = new WebsocketClientEndpoint(new URI(url));
+		endpoint = new WebsocketClientEndpoint(url, loginToken);
 		endpoint.addMessageHandler(h -> {
 			ServerToClientMessage message = apiClient.getJSON().deserialize(h, ServerToClientMessage.class);
 
@@ -197,10 +198,7 @@ public class UnityClient {
 					break;
 				case ON_GAME_END:
 					// The game has ended.
-					try {
-						endpoint.getUserSession().close();
-					} catch (IOException ignored) {
-					}
+					endpoint.close();
 					this.gameOver = true;
 					if (onGameOver != null) {
 						onGameOver.handle(this);
@@ -218,12 +216,8 @@ public class UnityClient {
 	}
 
 	public void disconnect() {
-		try {
-			if (endpoint != null) {
-				endpoint.getUserSession().close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (endpoint != null) {
+			endpoint.close();
 		}
 	}
 
@@ -322,7 +316,8 @@ public class UnityClient {
 	public UnityClient loginWithUserAccount(String username, String password) {
 		try {
 			LoginResponse lr = api.login(new LoginRequest().email(username + "@hiddenswitch.com").password(password));
-			api.getApiClient().setApiKey(lr.getLoginToken());
+			loginToken = lr.getLoginToken();
+			api.getApiClient().setApiKey(loginToken);
 			account = lr.getAccount();
 			context.assertNotNull(account);
 		} catch (ApiException e) {

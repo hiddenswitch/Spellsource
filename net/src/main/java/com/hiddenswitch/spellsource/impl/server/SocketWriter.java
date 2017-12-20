@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl.server;
 
 import com.hiddenswitch.spellsource.common.GameState;
-import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.ServerToClientMessage;
 import com.hiddenswitch.spellsource.util.IncomingMessage;
 import com.hiddenswitch.spellsource.util.Serialization;
@@ -19,11 +19,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class SocketClient implements Client {
+public class SocketWriter implements Writer {
 	private NetSocket privateSocket;
 	private ConcurrentLinkedQueue<Buffer> messageBuffer = new ConcurrentLinkedQueue<>();
 
-	public SocketClient(NetSocket socket) {
+	public SocketWriter(NetSocket socket) {
 		this.setPrivateSocket(socket);
 	}
 

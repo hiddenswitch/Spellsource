@@ -1,6 +1,8 @@
 package net.demilich.metastone.game.environment;
 
-public interface EnvironmentValue extends Cloneable {
+import java.io.Serializable;
+
+public interface EnvironmentValue extends Cloneable, Serializable {
 	EnvironmentValue getCopy();
 }
 

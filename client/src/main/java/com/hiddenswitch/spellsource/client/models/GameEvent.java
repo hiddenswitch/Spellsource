@@ -306,10 +306,10 @@ public class GameEvent  implements Serializable {
   }
 
    /**
-   * An integer ID corresponding to the order of this event from the client's point of view. 
+   * An integer ID corresponding to the order of this event from the writer's point of view. 
    * @return id
   **/
-  @ApiModelProperty(example = "null", value = "An integer ID corresponding to the order of this event from the client's point of view. ")
+  @ApiModelProperty(example = "null", value = "An integer ID corresponding to the order of this event from the writer's point of view. ")
   public Integer getId() {
     return id;
   }

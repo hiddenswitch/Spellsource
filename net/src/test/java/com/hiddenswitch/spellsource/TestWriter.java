@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.utils.TurnState;
@@ -10,7 +10,7 @@ import net.demilich.metastone.game.events.Notification;
 
 import java.util.List;
 
-public class TestClient implements Client {
+public class TestWriter implements Writer {
 	@Override
 	public void onNotification(Notification event, GameState gameState) {
 
