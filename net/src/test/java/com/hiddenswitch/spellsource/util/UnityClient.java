@@ -306,7 +306,7 @@ public class UnityClient {
 	@Suspendable
 	public UnityClient waitUntilDone() {
 		float time = 0f;
-		while (!(time > 36f || this.isGameOver())) {
+		while (!(time > 52f || this.isGameOver())) {
 			try {
 				Strand.sleep(1000);
 			} catch (SuspendExecution | InterruptedException suspendExecution) {
