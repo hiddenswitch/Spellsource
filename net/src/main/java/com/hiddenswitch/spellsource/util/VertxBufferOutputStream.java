@@ -12,7 +12,11 @@ public class VertxBufferOutputStream extends OutputStream {
 	private final Buffer buffer;
 
 	public VertxBufferOutputStream() {
-		buffer = Buffer.buffer(24000);
+		this(512);
+	}
+
+	public VertxBufferOutputStream(int initialSize) {
+		buffer = Buffer.buffer(initialSize);
 	}
 
 	public VertxBufferOutputStream(Buffer input) {
@@ -24,6 +28,7 @@ public class VertxBufferOutputStream extends OutputStream {
 		buffer.appendByte((byte) b);
 	}
 
+	@Override
 	public void write(byte b[], int off, int len) throws IOException {
 		if (b == null) {
 			throw new NullPointerException();

@@ -45,15 +45,15 @@ import java.util.stream.Stream;
 public class GatewayTest extends ServiceTest<GatewayImpl> {
 	private String deploymentId;
 	private LogicImpl logic;
-	private GamesImpl games;
+	private ClusteredGamesImpl games;
 	private BotsImpl bots;
 	private static DefaultApi defaultApi = new DefaultApi();
+	private MatchmakingImpl matchmaking;
+
 
 	static {
 		defaultApi.getApiClient().setBasePath(UnityClient.basePath);
 	}
-
-	private MatchmakingImpl matchmaking;
 
 
 	@Test(timeout = 120000L)
@@ -744,7 +744,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
 		GatewayImpl instance = new GatewayImpl();
 		logic = new LogicImpl();
-		games = new GamesImpl();
+		games = new ClusteredGamesImpl();
 		bots = new BotsImpl();
 		bots.setBotBehaviour(PlayRandomBehaviour::new);
 		matchmaking = new MatchmakingImpl();

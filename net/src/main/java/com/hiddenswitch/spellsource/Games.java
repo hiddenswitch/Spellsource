@@ -4,7 +4,9 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Entity;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
 import com.hiddenswitch.spellsource.models.*;
+import io.vertx.core.Verticle;
 import net.demilich.metastone.game.events.HasCard;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
@@ -38,6 +40,10 @@ import java.util.stream.Collectors;
 public interface Games {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 	String WEBSOCKET_PATH = "games";
+
+	static Games create() {
+		return new ClusteredGamesImpl();
+	}
 
 	/**
 	 * Get an entity representing a censored secret card.

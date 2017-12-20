@@ -43,4 +43,16 @@ public class SharedData {
 			done.handle(Future.succeededFuture(new SuspendableMap<K, V>(then.result())));
 		}));
 	}
+
+	@Suspendable
+	public static <K, V> SuspendableMap<K, V> getClusterWideMap(String name, final io.vertx.core.shareddata.SharedData client) {
+		return awaitResult(done -> client.<K, V>getClusterWideMap(name, then -> {
+			if (then.failed()) {
+				done.handle(Future.failedFuture(then.cause()));
+				return;
+			}
+
+			done.handle(Future.succeededFuture(new SuspendableMap<K, V>(then.result())));
+		}));
+	}
 }

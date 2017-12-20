@@ -4,6 +4,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Assert;
 
 import javax.websocket.*;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 
@@ -17,8 +18,9 @@ public class WebsocketClientEndpoint {
 	private Session userSession = null;
 	private MessageHandler messageHandler;
 
-	public WebsocketClientEndpoint(URI endpointURI) {
+	public WebsocketClientEndpoint(String endpoint, String auth) {
 		try {
+			URI endpointURI = new URI(endpoint + "?X-Auth-Token=" + auth);
 			WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 			container.connectToServer(this, endpointURI);
 		} catch (Exception e) {
@@ -91,6 +93,14 @@ public class WebsocketClientEndpoint {
 
 	public Session getUserSession() {
 		return userSession;
+	}
+
+	public void close() {
+		try {
+			userSession.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@FunctionalInterface

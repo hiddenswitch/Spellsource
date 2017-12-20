@@ -315,7 +315,7 @@ definitions:
       id:
         type: 'string'
         description: |
-          An optional ID used to disambiguate multiple client replies. Include this ID in the repliesTo field of your
+          An optional ID used to disambiguate multiple writer replies. Include this ID in the repliesTo field of your
           ClientToServerMessage if this field is not null.
       localPlayerId:
         type: 'integer'
@@ -349,7 +349,7 @@ definitions:
       repliesTo:
         type: 'string'
         description: |
-          The ID of the server message this client message is replying to.
+          The ID of the server message this writer message is replying to.
       firstMessage:
         type: 'object'
         properties:
@@ -375,11 +375,11 @@ definitions:
         $ref: '#/definitions/Emote'
       entityTouch:
         description: |
-          When specified with an entity ID, indicates the client is "touching" this entity.
+          When specified with an entity ID, indicates the writer is "touching" this entity.
         type: 'integer'
       entityUntouch:
         description: |
-          When specified with an entity ID, indicates the client is no longer touching the specified entity.
+          When specified with an entity ID, indicates the writer is no longer touching the specified entity.
         type: 'integer'
   PhysicalAttackEvent:
     type: 'object'
@@ -425,7 +425,7 @@ definitions:
           - 'PLAYER'
   EntityChangeSet:
     description: |
-      An abbreviated description of changes since the last change set this client received.
+      An abbreviated description of changes since the last change set this writer received.
     type: 'array'
     items:
       type: 'object'
@@ -462,7 +462,7 @@ definitions:
     properties:
       id:
         description: |
-          An integer ID corresponding to the order of this event from the client's point of view.
+          An integer ID corresponding to the order of this event from the writer's point of view.
         type: 'integer'
       description:
         description: |
@@ -619,7 +619,7 @@ definitions:
             $ref: '#/definitions/Entity'
           description:
             description: |
-              A plain-text description of the game action that should be rendered on the client.
+              A plain-text description of the game action that should be rendered on the writer.
             type: 'string'
       physicalAttack:
         $ref: '#/definitions/PhysicalAttackEvent'
@@ -936,7 +936,7 @@ definitions:
     properties:
       compatibility:
         description: |
-          An array of game action indices. Choose one at random for compatibility purposes until the client can support
+          An array of game action indices. Choose one at random for compatibility purposes until the writer can support
           all actions
         type: 'array'
         items:
@@ -1310,7 +1310,7 @@ definitions:
   SpellsourceException:
     type: object
     description: |
-      A server-side exception with content renderable to the client.
+      A server-side exception with content renderable to the writer.
     properties:
       message:
         description: |
@@ -1550,7 +1550,7 @@ paths:
             There is no game currently available.
         "200":
           description: |
-            The client has a game and its state was delivered.
+            The writer has a game and its state was delivered.
           schema:
             $ref: '#/definitions/GameState'
         default:
@@ -1570,14 +1570,14 @@ paths:
       responses:
         "200":
           description: |
-            The client's game was successfully conceded.
+            The writer's game was successfully conceded.
           schema:
             $ref: '#/definitions/MatchConcedeResponse'
         default:
           $ref: '#/responses/InternalServerError'
     put:
       description: |
-        Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry
+        Enters your writer into the specified matchmaking queue. Clients have to keep their matchmaking queue entry
          alive by regularly retrying when they have not yet been matched. Retry within 5 seconds.
       operationId: matchmakingConstructedQueuePut
       security:
@@ -1598,27 +1598,27 @@ paths:
       responses:
         "200":
           description: |
-            The client has been matched with a client and is ready to connect. Use the "connection" field for connection
-            information (client specific).
+            The writer has been matched with a writer and is ready to connect. Use the "connection" field for connection
+            information (writer specific).
           schema:
             $ref: '#/definitions/MatchmakingQueuePutResponse'
         "202":
           description: |
-            The client is waiting in the matchmaking queue and has been given a MatchmakingRequest object to retry with
+            The writer is waiting in the matchmaking queue and has been given a MatchmakingRequest object to retry with
             in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
           schema:
             $ref: '#/definitions/MatchmakingQueuePutResponse'
         default:
           $ref: '#/responses/InternalServerError'
     delete:
-      description: Removes your client from the matchmaking queue.
+      description: Removes your writer from the matchmaking queue.
       operationId: matchmakingConstructedQueueDelete
       security:
         - TokenSecurity: []
       responses:
         "200":
           description: |
-            The client's cancel request has been processed. The result can be found in the body's MatchCancelResponse.
+            The writer's cancel request has been processed. The result can be found in the body's MatchCancelResponse.
           schema:
             $ref: '#/definitions/MatchCancelResponse'
         default:

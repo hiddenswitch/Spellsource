@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.Emote;
-import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
@@ -37,13 +37,11 @@ import static net.demilich.metastone.game.targeting.IdFactory.PLAYER_2;
 public class GameSessionImpl implements GameSession {
 	private String host;
 	private int websocketPort;
-	private Client c1;
-	private Client c2;
+	private Writer c1;
+	private Writer c2;
 	private PregamePlayerConfiguration pregamePlayerConfiguration1;
 	private PregamePlayerConfiguration pregamePlayerConfiguration2;
 	private ServerGameContext gameContext;
-	private Player player1;
-	private Player player2;
 	private final String gameId;
 	private final Map<String, String> secretForUserId = new HashMap<>();
 	private Logger logger = LoggerFactory.getLogger(GameSessionImpl.class);
@@ -71,13 +69,6 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	private ClientConnectionConfiguration getConfigurationFor(PregamePlayerConfiguration player, int id) {
-		// TODO: It's obviously insecure to allow the client to specify things like their player object
-		Player tempPlayer = player.getPlayer();
-		if (tempPlayer == null) {
-			PlayerConfig playerConfig = new PlayerConfig(player.getDeck(), new DoNothingBehaviour());
-			tempPlayer = new Player(playerConfig);
-		}
-		tempPlayer.setId(id);
 		return new ClientConnectionConfiguration(
 				getUrl(), player.getUserId(), getSecret(player.getUserId()));
 	}
@@ -88,20 +79,18 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	@Suspendable
-	public void onPlayerConnected(Player player, Client client) {
-		logger.debug("Receive connections from {}", player.toString());
-		if (player.getId() == PLAYER_1) {
-			if (getPlayer1() != null) {
-				throw new RuntimeException("Two players tried to connect to the same player slot.");
+	public void onPlayerConnected(int playerId, final Writer writer) {
+		logger.debug("Receive connections from {}", Integer.toString(playerId));
+		if (playerId == PLAYER_1) {
+			if (Writer.isOpen(c1)) {
+				c1.close();
 			}
-			setClient1(client);
-			setPlayer1(player);
-		} else if (player.getId() == IdFactory.PLAYER_2) {
-			if (getPlayer2() != null) {
-				throw new RuntimeException("Two players tried to connect to the same player slot.");
+			setClient1(writer);
+		} else if (playerId == IdFactory.PLAYER_2) {
+			if (Writer.isOpen(c2)) {
+				c2.close();
 			}
-			setClient2(client);
-			setPlayer2(player);
+			setClient2(writer);
 		} else {
 			throw new RuntimeException("A player without an ID set has attempted to connect.");
 		}
@@ -113,24 +102,24 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	@Suspendable
-	public void onPlayerReconnected(Player player, Client client) {
+	public void onPlayerReconnected(int playerId, Writer writer) {
 		checkContext();
-		if (player.getId() == PLAYER_1) {
+		if (playerId == PLAYER_1) {
 			if (getClient1() != null) {
 				getClient1().close();
 			}
-			setClient1(client);
-		} else if (player.getId() == IdFactory.PLAYER_2) {
+			setClient1(writer);
+		} else if (playerId == IdFactory.PLAYER_2) {
 			if (getClient2() != null) {
 				getClient2().close();
 			}
 
-			setClient2(client);
+			setClient2(writer);
 		} else {
 			throw new RuntimeException("A player without an ID set has attempted to connect.");
 		}
 
-		getGameContext().onPlayerReconnected(player, client);
+		getGameContext().onPlayerReconnected(getGameContext().getPlayer(playerId), writer);
 	}
 
 	@Override
@@ -148,11 +137,10 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public boolean isGameReady() {
-		return (isAgainstAI()
-				&& ((player1 != null && player2 == null)
-				|| (player1 == null && player2 != null)))
-				|| player1 != null
-				&& player2 != null;
+		final boolean aiReady = isAgainstAI() &&
+				(Writer.isOpen(getClient1()) || Writer.isOpen(getClient2()));
+		return aiReady
+				|| (Writer.isOpen(getClient1()) && Writer.isOpen(getClient2()));
 	}
 
 	/**
@@ -177,36 +165,29 @@ public class GameSessionImpl implements GameSession {
 				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE);
 
 		// Configure the network behaviours on the players
-		if (isAgainstAI()) {
-			if (pregamePlayerConfiguration1.isAI()) {
-				setPlayer1(createAIPlayer(pregamePlayerConfiguration1, PLAYER_1));
-			} else if (pregamePlayerConfiguration2.isAI()) {
-				setPlayer2(createAIPlayer(pregamePlayerConfiguration2, PLAYER_2));
-			}
-		}
-
-		Player player1 = getPlayer1();
-		Player player2 = getPlayer2();
+		Player player1 = getPlayer(pregamePlayerConfiguration1.getUserId());
+		Player player2 = getPlayer(pregamePlayerConfiguration2.getUserId());
 		player1.setBehaviour(new NetworkBehaviour());
 		player2.setBehaviour(new NetworkBehaviour());
 		this.gameContext = new ServerGameContext(player1, player2, simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()), new VertxTimers(vertx));
-		final Client listener1;
-		final Client listener2;
-
+		final Writer listener1;
+		final Writer listener2;
 
 		if (isAgainstAI()) {
 			if (pregamePlayerConfiguration1.isAI()) {
 				listener1 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_1);
-				setClient1(listener1);
 				listener2 = getPlayerListener(PLAYER_2);
-			} else {
+				setClient1(listener1);
+			} else if (pregamePlayerConfiguration2.isAI()) {
 				listener1 = getPlayerListener(PLAYER_1);
 				listener2 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_2);
 				setClient2(listener2);
+			} else {
+				throw new RuntimeException();
 			}
 		} else {
-			listener1 = getPlayerListener(PLAYER_1);
-			listener2 = getPlayerListener(PLAYER_2);
+			listener1 = getClient1();
+			listener2 = getClient2();
 		}
 
 		// Merge in attributes
@@ -242,7 +223,7 @@ public class GameSessionImpl implements GameSession {
 		return getConfigurationFor(pregamePlayerConfiguration2, PLAYER_2);
 	}
 
-	private Client getPlayerListener(int player) {
+	private Writer getPlayerListener(int player) {
 		if (player == 0) {
 			return getClient1();
 		} else {
@@ -292,19 +273,19 @@ public class GameSessionImpl implements GameSession {
 		this.host = host;
 	}
 
-	public Client getClient1() {
+	public Writer getClient1() {
 		return c1;
 	}
 
-	private void setClient1(Client c1) {
+	private void setClient1(Writer c1) {
 		this.c1 = c1;
 	}
 
-	public Client getClient2() {
+	public Writer getClient2() {
 		return c2;
 	}
 
-	private void setClient2(Client c2) {
+	private void setClient2(Writer c2) {
 		this.c2 = c2;
 	}
 
@@ -315,28 +296,19 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public Player getPlayer(String userId) {
-		if (getPlayer1() != null
-				&& getPlayer1().getUserId().equals(userId)) {
-			return getPlayer1();
-		} else if (getPlayer2() != null
-				&& getPlayer2().getUserId().equals(userId)) {
-			return getPlayer2();
-		} else {
-			if (pregamePlayerConfiguration1.getUserId().equals(userId)) {
-				if (pregamePlayerConfiguration1.getPlayer() != null) {
-					return pregamePlayerConfiguration1.getPlayer();
+		final PregamePlayerConfiguration[] configs = {pregamePlayerConfiguration1, pregamePlayerConfiguration2};
+
+		for (int i = 0; i < 2; i++) {
+			PregamePlayerConfiguration pregame = configs[i];
+			if (pregame.getUserId().equals(userId)) {
+				if (pregame.isAI()) {
+					return createAIPlayer(pregame, i);
 				} else {
-					return Player.forUser(userId, IdFactory.PLAYER_1, pregamePlayerConfiguration1.getDeck());
-				}
-			} else if (pregamePlayerConfiguration2.getUserId().equals(userId)) {
-				if (pregamePlayerConfiguration2.getPlayer() != null) {
-					return pregamePlayerConfiguration2.getPlayer();
-				} else {
-					return Player.forUser(userId, IdFactory.PLAYER_2, pregamePlayerConfiguration2.getDeck());
+					return Player.forUser(userId, i, pregame.getDeck());
 				}
 			}
 		}
-		throw new RuntimeException();
+		throw new IllegalStateException("Session was not configured with valid players.");
 	}
 
 	@Override
@@ -395,22 +367,6 @@ public class GameSessionImpl implements GameSession {
 						getGameContext().getGameState());
 	}
 
-	private Player getPlayer1() {
-		return player1;
-	}
-
-	private void setPlayer1(Player player1) {
-		this.player1 = player1;
-	}
-
-	private Player getPlayer2() {
-		return player2;
-	}
-
-	private void setPlayer2(Player player2) {
-		this.player2 = player2;
-	}
-
 	public String getGameId() {
 		return gameId;
 	}
@@ -420,6 +376,7 @@ public class GameSessionImpl implements GameSession {
 		return noActivityTimeout;
 	}
 
+	@Override
 	public void handleGameOver(Handler<GameSessionImpl> handler) {
 		gameOverHandlers.add(handler);
 	}

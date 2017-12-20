@@ -34,7 +34,15 @@ class SpellsourceAuthHandler implements AuthHandler {
 	@Override
 	public void parseCredentials(RoutingContext context, Handler<AsyncResult<JsonObject>> handler) {
 		try {
-			String apiKey = context.request().getHeader("X-Auth-Token");
+			String apiKey;
+			if (context.request().headers().contains("X-Auth-Token")) {
+				apiKey = context.request().getHeader("X-Auth-Token");
+			} else if (context.request().params().contains("X-Auth-Token")) {
+				apiKey = context.request().params().get("X-Auth-Token");
+			} else {
+				throw new IllegalArgumentException("No X-Auth-Token header or param specified.");
+			}
+
 			String[] components = apiKey.split(":");
 			String userId = components[0];
 			String secret = components[1];

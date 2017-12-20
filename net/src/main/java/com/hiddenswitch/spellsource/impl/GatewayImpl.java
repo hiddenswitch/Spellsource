@@ -61,6 +61,8 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			}
 		};
 
+		ClusteredGamesImpl.configureWebsocketHandler(router, vertx.eventBus());
+
 		// Health check comes first
 		router.route("/")
 				.handler(routingContext -> {

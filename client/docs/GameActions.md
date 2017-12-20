@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**compatibility** | **List&lt;Integer&gt;** | An array of game action indices. Choose one at random for compatibility purposes until the client can support all actions  |  [optional]
+**compatibility** | **List&lt;Integer&gt;** | An array of game action indices. Choose one at random for compatibility purposes until the writer can support all actions  |  [optional]
 **endTurn** | **Integer** | The end turn action. Not necessarily always available, because you cannot end your turn in the middle of a discover or a battlecry. The value corresponds to which integer index to reply with.  |  [optional]
 **physicalAttacks** | [**List&lt;GameActionsPhysicalAttacks&gt;**](GameActionsPhysicalAttacks.md) | An array of entity ID - target IDs pairs that represent valid physical attacks.  |  [optional]
 **summons** | [**List&lt;SummonAction&gt;**](SummonAction.md) | The cards in your hand that can be summoned. These are typically only minions.  |  [optional]

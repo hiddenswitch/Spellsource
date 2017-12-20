@@ -10,7 +10,6 @@ import java.io.Serializable;
 public class PregamePlayerConfiguration implements Serializable {
 	private final Deck deck;
 	private final String name;
-	private Player player;
 	private AttributeMap attributes;
 	private boolean isAI;
 
@@ -18,19 +17,6 @@ public class PregamePlayerConfiguration implements Serializable {
 		this.deck = deck;
 		this.name = name;
 		this.attributes = new AttributeMap();
-	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
-	public PregamePlayerConfiguration withPlayer(Player player1) {
-		setPlayer(player1);
-		return this;
 	}
 
 	public Deck getDeck() {
