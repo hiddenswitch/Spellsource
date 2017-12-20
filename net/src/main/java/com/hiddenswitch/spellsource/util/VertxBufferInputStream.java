@@ -42,4 +42,8 @@ public class VertxBufferInputStream extends InputStream {
 		position = destination;
 		return difference;
 	}
+
+	public long getPosition() {
+		return this.position;
+	}
 }

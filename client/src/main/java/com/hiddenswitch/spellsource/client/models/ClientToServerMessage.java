@@ -89,10 +89,10 @@ public class ClientToServerMessage  implements Serializable {
   }
 
    /**
-   * The ID of the server message this client message is replying to. 
+   * The ID of the server message this writer message is replying to. 
    * @return repliesTo
   **/
-  @ApiModelProperty(example = "null", value = "The ID of the server message this client message is replying to. ")
+  @ApiModelProperty(example = "null", value = "The ID of the server message this writer message is replying to. ")
   public String getRepliesTo() {
     return repliesTo;
   }
@@ -184,10 +184,10 @@ public class ClientToServerMessage  implements Serializable {
   }
 
    /**
-   * When specified with an entity ID, indicates the client is \"touching\" this entity. 
+   * When specified with an entity ID, indicates the writer is \"touching\" this entity. 
    * @return entityTouch
   **/
-  @ApiModelProperty(example = "null", value = "When specified with an entity ID, indicates the client is \"touching\" this entity. ")
+  @ApiModelProperty(example = "null", value = "When specified with an entity ID, indicates the writer is \"touching\" this entity. ")
   public Integer getEntityTouch() {
     return entityTouch;
   }
@@ -202,10 +202,10 @@ public class ClientToServerMessage  implements Serializable {
   }
 
    /**
-   * When specified with an entity ID, indicates the client is no longer touching the specified entity. 
+   * When specified with an entity ID, indicates the writer is no longer touching the specified entity. 
    * @return entityUntouch
   **/
-  @ApiModelProperty(example = "null", value = "When specified with an entity ID, indicates the client is no longer touching the specified entity. ")
+  @ApiModelProperty(example = "null", value = "When specified with an entity ID, indicates the writer is no longer touching the specified entity. ")
   public Integer getEntityUntouch() {
     return entityUntouch;
   }

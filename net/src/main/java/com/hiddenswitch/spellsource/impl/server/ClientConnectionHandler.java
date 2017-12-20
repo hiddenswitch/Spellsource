@@ -1,16 +1,15 @@
 package com.hiddenswitch.spellsource.impl.server;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.common.Client;
-import net.demilich.metastone.game.Player;
+import com.hiddenswitch.spellsource.common.Writer;
 
 /**
- * A delegate that needs to know when players have connected, and with which {@link Client}.
+ * A delegate that needs to know when players have connected, and with which {@link Writer}.
  */
 public interface ClientConnectionHandler {
 	@Suspendable
-	void onPlayerConnected(Player player, Client client);
+	void onPlayerConnected(int playerId, Writer writer);
 
 	@Suspendable
-	void onPlayerReconnected(Player player, Client client);
+	void onPlayerReconnected(int playerId, Writer writer);
 }

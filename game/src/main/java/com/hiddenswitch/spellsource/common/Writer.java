@@ -15,7 +15,7 @@ import net.demilich.metastone.game.events.Notification;
  * An interface that specifies the boundary between a {@link net.demilich.metastone.game.GameContext} and a networking
  * channel like a websocket or a plain TCP socket.
  */
-public interface Client {
+public interface Writer {
 	@Suspendable
 	void onNotification(Notification event, GameState gameState);
 
@@ -23,6 +23,7 @@ public interface Client {
 	void onGameEnd(Player winner);
 
 	@Suspendable
+	@Deprecated
 	void setPlayers(Player localPlayer, Player remotePlayer);
 
 	@Suspendable
@@ -41,31 +42,41 @@ public interface Client {
 
 	/**
 	 * Send an emote to a client. By default, there's no implementation except for Unity clients.
+	 *
 	 * @param entityId The entity from which the emote should originate. Typically a hero entity.
-	 * @param emote The emote to send
+	 * @param emote    The emote to send
 	 */
 	@Suspendable
 	default void onEmote(int entityId, Emote.MessageEnum emote) {
-	};
+	}
 
 	@Suspendable
 	void close();
 
 	/**
 	 * Gets an object that represents the underlying networking socket that powers this client. This is helpful for
-	 * keeping track of reconnecting users, who may be the same {@link Client} but connected with different sockets.
+	 * keeping track of reconnecting users, who may be the same {@link Writer} but connected with different sockets.
 	 *
 	 * @return An object whose {@link Object#hashCode()} is valid for {@link java.util.Map} keys, to help the server
-	 * infrastructure keep track of which sockets correspond to which {@link Client} objects.
+	 * infrastructure keep track of which sockets correspond to which {@link Writer} objects.
 	 */
 	@Suspendable
 	Object getPrivateSocket();
 
 	/**
 	 * Called when the last event in a stack of {@link GameEvent} has been evaluated. Typically, a client should be
-	 * notified of an entire sequence of events, so that it has valid data at the end of each event, rather than
-	 * as the events are processed.
+	 * notified of an entire sequence of events, so that it has valid data at the end of each event, rather than as the
+	 * events are processed.
 	 */
 	@Suspendable
 	void lastEvent();
+
+	static boolean isOpen(Writer writer) {
+		return writer != null
+				&& writer.isOpen();
+	}
+
+	default boolean isOpen() {
+		return true;
+	}
 }

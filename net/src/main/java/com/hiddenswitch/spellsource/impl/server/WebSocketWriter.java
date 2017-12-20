@@ -4,9 +4,10 @@ import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.Writer;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.utils.TurnState;
@@ -28,17 +29,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class WebSocketClient implements Client {
+public class WebSocketWriter implements Writer {
 	private final String userId;
 	private final int playerId;
 	private final Queue<ServerToClientMessage> messageBuffer;
-	private ServerWebSocket privateSocket;
+	private WriteStream<Buffer> privateSocket;
 	private com.hiddenswitch.spellsource.common.GameState lastStateSent;
 	private boolean open = true;
 	private AtomicInteger eventCounter = new AtomicInteger();
 	private Deque<GameEvent> powerHistory = new ArrayDeque<>();
 
-	public WebSocketClient(ServerWebSocket socket, String userId, int playerId) {
+	public WebSocketWriter(ServerWebSocket socket, String userId, int playerId) {
 		// Be notified when the socket is closed
 		socket.endHandler(this::onSocketClosed);
 		this.playerId = playerId;
@@ -47,7 +48,15 @@ public class WebSocketClient implements Client {
 		this.messageBuffer = new ConcurrentLinkedQueue<>();
 	}
 
-	private void onSocketClosed(Void ignored) {
+	protected WebSocketWriter(WriteStream<Buffer> writer, String userId, int playerId) {
+		// Be notified when the socket is closed
+		this.playerId = playerId;
+		this.setPrivateSocket(writer);
+		this.userId = userId;
+		this.messageBuffer = new ConcurrentLinkedQueue<>();
+	}
+
+	protected void onSocketClosed(Void ignored) {
 		open = false;
 	}
 
@@ -59,7 +68,7 @@ public class WebSocketClient implements Client {
 		}
 	}
 
-	private void sendMessage(ServerWebSocket socket, ServerToClientMessage message) throws IOException {
+	protected void sendMessage(WriteStream<Buffer> socket, ServerToClientMessage message) throws IOException {
 		// Always include the playerId in the message
 		message.setLocalPlayerId(playerId);
 		// Don't send the message if the socket is closed
@@ -74,7 +83,7 @@ public class WebSocketClient implements Client {
 			if (!open) {
 				return;
 			}
-			privateSocket.close();
+			privateSocket.end();
 		} catch (Exception ignored) {
 		}
 	}
@@ -269,7 +278,7 @@ public class WebSocketClient implements Client {
 						.message(emote)));
 	}
 
-	public ServerWebSocket getPrivateSocket() {
+	public WriteStream<Buffer> getPrivateSocket() {
 		return privateSocket;
 	}
 
@@ -278,13 +287,18 @@ public class WebSocketClient implements Client {
 		flush();
 	}
 
+	@Override
+	public boolean isOpen() {
+		return open;
+	}
+
 	private void flush() {
 		while (!messageBuffer.isEmpty()) {
 			sendMessage(messageBuffer.poll());
 		}
 	}
 
-	private void setPrivateSocket(ServerWebSocket privateSocket) {
+	private void setPrivateSocket(WriteStream<Buffer> privateSocket) {
 		this.privateSocket = privateSocket;
 	}
 
@@ -321,5 +335,9 @@ public class WebSocketClient implements Client {
 		lastStateSent = current;
 
 		return changes;
+	}
+
+	public String getUserId() {
+		return userId;
 	}
 }

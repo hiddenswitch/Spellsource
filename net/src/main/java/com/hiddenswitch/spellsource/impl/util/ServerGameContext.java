@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * A networked game context from the server's point of view.
  * <p>
- * In addition to storing game state, this class also stores references to {@link Client} objects that (1) get notified
+ * In addition to storing game state, this class also stores references to {@link Writer} objects that (1) get notified
  * when game state changes and how, and (2) allow this class to {@link net.demilich.metastone.game.behaviour.Behaviour#requestAction(GameContext,
  * Player, List)} and {@link net.demilich.metastone.game.behaviour.Behaviour#mulligan(GameContext, Player, List)} over a
  * network.
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  */
 public class ServerGameContext extends GameContext {
 	private final String gameId;
-	private Map<Player, Client> listenerMap = new HashMap<>();
+	private Map<Player, Writer> listenerMap = new HashMap<>();
 	private final Map<CallbackId, GameplayRequest> requestCallbacks = Collections.synchronizedMap(new HashMap<>());
 	private boolean isRunning = true;
 	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
@@ -95,7 +95,7 @@ public class ServerGameContext extends GameContext {
 		return (GameLogicAsync) getLogic();
 	}
 
-	public void setUpdateListener(Player player, Client listener) {
+	public void setUpdateListener(Player player, Writer listener) {
 		listenerMap.put(player, listener);
 	}
 
@@ -372,7 +372,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	/**
-	 * Request an action from a {@link Client} that corresponds to the given {@code playerId}.
+	 * Request an action from a {@link Writer} that corresponds to the given {@code playerId}.
 	 *
 	 * @param state    The game state to send.
 	 * @param playerId The player ID to request from.
@@ -422,7 +422,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	/**
-	 * Request an action from the {@link Client} that corresponds to the given {@code player}.
+	 * Request an action from the {@link Writer} that corresponds to the given {@code player}.
 	 *
 	 * @param player       The player to request from.
 	 * @param starterCards The cards the player started with.
@@ -502,15 +502,15 @@ public class ServerGameContext extends GameContext {
 		return gameId;
 	}
 
-	public Map<Player, Client> getListenerMap() {
+	public Map<Player, Writer> getListenerMap() {
 		return Collections.unmodifiableMap(listenerMap);
 	}
 
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	public void onPlayerReconnected(Player player, Client client) {
+	public void onPlayerReconnected(Player player, Writer writer) {
 		// Update the client
-		setUpdateListener(player, client);
+		setUpdateListener(player, writer);
 
 		// Don't replace the player object! We don't need it
 		// Resynchronize the game states

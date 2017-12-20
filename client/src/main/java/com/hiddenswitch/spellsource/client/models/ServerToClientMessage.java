@@ -82,10 +82,10 @@ public class ServerToClientMessage  implements Serializable {
   }
 
    /**
-   * An optional ID used to disambiguate multiple client replies. Include this ID in the repliesTo field of your ClientToServerMessage if this field is not null. 
+   * An optional ID used to disambiguate multiple writer replies. Include this ID in the repliesTo field of your ClientToServerMessage if this field is not null. 
    * @return id
   **/
-  @ApiModelProperty(example = "null", value = "An optional ID used to disambiguate multiple client replies. Include this ID in the repliesTo field of your ClientToServerMessage if this field is not null. ")
+  @ApiModelProperty(example = "null", value = "An optional ID used to disambiguate multiple writer replies. Include this ID in the repliesTo field of your ClientToServerMessage if this field is not null. ")
   public String getId() {
     return id;
   }

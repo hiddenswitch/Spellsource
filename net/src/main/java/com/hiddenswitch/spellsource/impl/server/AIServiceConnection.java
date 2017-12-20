@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.impl.server;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Bots;
 import com.hiddenswitch.spellsource.common.GameState;
-import com.hiddenswitch.spellsource.common.Client;
+import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Rpc;
@@ -24,11 +24,11 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
- * Handles the marshalling between a {@link Client} and the {@link Bots} service.
+ * Handles the marshalling between a {@link Writer} and the {@link Bots} service.
  *
  * This method should typically not be overridden.
  */
-public class AIServiceConnection implements Client {
+public class AIServiceConnection implements Writer {
 	final int playerId;
 	final RpcClient<Bots> bots;
 	final WeakReference<ServerGameContext> context;
@@ -118,5 +118,10 @@ public class AIServiceConnection implements Client {
 
 	@Override
 	public void lastEvent() {
+	}
+
+	@Override
+	public boolean isOpen() {
+		return true;
 	}
 }

@@ -8,6 +8,7 @@ import io.vertx.core.eventbus.Message;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
+import java.io.OptionalDataException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -27,9 +28,13 @@ class BufferEventBusHandler<T, R> implements Handler<Message<Buffer>> {
 		T request = null;
 		try {
 			request = Serialization.deserialize(inputStream);
+		} catch (OptionalDataException invalidMessageError) {
+			message.fail(1, "An invalid data exception occurred. This was the buffer:\n" + message.body().toString());
+			return;
 		} catch (IOException | ClassNotFoundException e) {
 			message.fail(1, e.getMessage());
 			return;
+
 		}
 
 		R response = null;
