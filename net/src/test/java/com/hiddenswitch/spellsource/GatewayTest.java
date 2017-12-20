@@ -211,7 +211,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		unwrap();
 	}
 
-	@Test(timeout = 130000L)
+	@Test(timeout = 180000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
@@ -240,7 +240,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(130L, TimeUnit.SECONDS);
+		latch.await(18L, TimeUnit.SECONDS);
 		getContext().assertEquals(latch.getCount(), 0L);
 		unwrap();
 	}
