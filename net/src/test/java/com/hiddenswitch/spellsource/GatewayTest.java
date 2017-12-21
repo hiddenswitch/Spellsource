@@ -215,14 +215,16 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
-		final int count = 10;
+		final int processorCount = Runtime.getRuntime().availableProcessors();
+		final int count = processorCount * 6;
 		CountDownLatch latch = new CountDownLatch(count);
-		CompositeFuture.join(Collections.nCopies(7, Arrays.asList(
+		CompositeFuture.join(Collections.nCopies(processorCount - 1, Arrays.asList(
 				new GatewayImpl(),
 				new CardsImpl(),
 				new DecksImpl(),
 				new LogicImpl(),
 				new AccountsImpl(),
+				new ClusteredGamesImpl(),
 				new InventoryImpl()))
 				.stream().flatMap(Collection::stream).map(v -> {
 					Future<String> future = Future.future();
