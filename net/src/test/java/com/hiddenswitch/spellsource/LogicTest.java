@@ -4,26 +4,23 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
-import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
-import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
-import com.hiddenswitch.spellsource.util.TwoClients;
 import com.hiddenswitch.spellsource.impl.*;
+import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.targeting.EntityReference;
-import org.junit.Ignore;
+import net.demilich.metastone.game.utils.Attribute;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -42,7 +39,8 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 	private CardsImpl cards;
 	private InventoryImpl inventory;
 	private DecksImpl decks;
-	private GamesImpl games;
+	private ClusteredGamesImpl games;
+	private GatewayImpl gateway;
 
 	@Test
 	@Suspendable
@@ -130,7 +128,6 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 	}
 
 	@Test
-	@Ignore
 	public void testAllianceCardExtensionsDontBreak(TestContext context) {
 		setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::allianceCardExtensionsDontBreak);
@@ -138,8 +135,10 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 	private void allianceCardExtensionsDontBreak() throws SuspendExecution, InterruptedException {
 		// Create the users
-		String userId1 = accounts.createAccount("a@b.com", "123567", "abfdsc").getUserId();
-		String userId2 = accounts.createAccount("a@c.com", "1235688", "abde").getUserId();
+		final CreateAccountResponse car1 = accounts.createAccount("a@b.com", "123567", "abfdsc");
+		String userId1 = car1.getUserId();
+		final CreateAccountResponse car2 = accounts.createAccount("a@c.com", "1235688", "abde");
+		String userId2 = car2.getUserId();
 
 		// Initialize them
 		InitializeUserResponse userResponse1 = service.initializeUser(new InitializeUserRequest(userId1));
@@ -189,19 +188,13 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 						()));
 
 		getContext().assertNotNull(cgsr.getGameId());
-		ServerGameContext context = games.getGameContext(cgsr.getGameId());
 
-		// Connect two players
-		TwoClients twoClients = new TwoClients().invoke(games, cgsr, sgr, userId1, userId2);
+		UnityClient client1 = new UnityClient(getContext(), car1.getLoginToken().getToken());
+		UnityClient client2 = new UnityClient(getContext(), car2.getLoginToken().getToken());
 
-		// Play them
-		twoClients.play();
-		float time = 0f;
-		while (time < 60f && !twoClients.gameDecided()) {
-			Strand.sleep(1000);
-			time += 1.0f;
-		}
-		twoClients.assertGameOver();
+		client1.play();
+		client2.play();
+		client2.waitUntilDone();
 
 		// Assert that there are minions who recorded some stats
 		getContext().assertTrue(inventory.getCollection(GetCollectionRequest.user(userId1)).getInventoryRecords()
@@ -392,7 +385,8 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		cards = new CardsImpl();
 		inventory = new InventoryImpl();
 		decks = new DecksImpl();
-		games = new GamesImpl();
+		games = new ClusteredGamesImpl();
+		gateway = new GatewayImpl();
 		LogicImpl instance = new LogicImpl();
 
 		vertx.deployVerticle(games, then -> {
@@ -400,7 +394,9 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 				vertx.deployVerticle(cards, then3 -> {
 					vertx.deployVerticle(inventory, then4 -> {
 						vertx.deployVerticle(decks, then5 -> {
-							vertx.deployVerticle(instance, then6 -> done.handle(Future.succeededFuture(instance)));
+							vertx.deployVerticle(gateway, then6 -> {
+								vertx.deployVerticle(instance, then7 -> done.handle(Future.succeededFuture(instance)));
+							});
 						});
 					});
 				});
