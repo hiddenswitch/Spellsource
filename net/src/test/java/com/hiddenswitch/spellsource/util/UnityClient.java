@@ -14,11 +14,10 @@ import io.vertx.core.Handler;
 import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.junit.Assert;
 
-import java.io.IOException;
-import java.net.URI;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -58,6 +57,11 @@ public class UnityClient {
 	public UnityClient(TestContext context, int turnsToPlay) {
 		this(context);
 		this.turnsToPlay = new AtomicInteger(turnsToPlay);
+	}
+
+	public UnityClient(TestContext context, String token) {
+		this(context);
+		this.loginToken = token;
 	}
 
 	public UnityClient createUserAccount() {
@@ -104,9 +108,9 @@ public class UnityClient {
 					.deckId(deckId));
 
 			final MatchmakingQueuePutResponseUnityConnection unityConnection = mqpr.getUnityConnection();
-			play(unityConnection);
+			play();
 
-		} catch (ApiException | URISyntaxException e) {
+		} catch (ApiException e) {
 			context.fail(e.getMessage());
 		}
 		return this;
@@ -127,8 +131,8 @@ public class UnityClient {
 				Thread.sleep(500);
 			}
 
-			play(unityConnection);
-		} catch (ApiException | URISyntaxException e) {
+			play();
+		} catch (ApiException e) {
 			context.fail(e.getMessage());
 		} catch (InterruptedException e) {
 			context.fail();
@@ -136,19 +140,15 @@ public class UnityClient {
 		return this;
 	}
 
-	public UnityClient contextPlay(IntegrationTestContext unityContext) {
-		return this;
-	}
-
-	private void play(MatchmakingQueuePutResponseUnityConnection unityConnection) throws URISyntaxException {
-		Assert.assertNotNull(unityConnection);
-		Assert.assertNotNull(unityConnection.getFirstMessage());
-
-		String url = unityConnection.getUrl();
-		Assert.assertNotNull(url);
-
+	public void play() {
 		// Get the port from the url
-		url = "ws://localhost:" + Integer.toString((new URI(url)).getPort()) + "/" + Games.WEBSOCKET_PATH + "-clustered";
+		final URL basePathUrl;
+		try {
+			basePathUrl = new URL(basePath);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+		String url = "ws://" + basePathUrl.getHost() + ":" + Integer.toString(basePathUrl.getPort()) + "/" + Games.WEBSOCKET_PATH + "-clustered";
 
 		endpoint = new WebsocketClientEndpoint(url, loginToken);
 		endpoint.addMessageHandler(h -> {
@@ -208,7 +208,8 @@ public class UnityClient {
 			}
 		});
 
-		endpoint.sendMessage(serialize(unityConnection.getFirstMessage()));
+		endpoint.sendMessage(serialize(new ClientToServerMessage()
+				.messageType(MessageType.FIRST_MESSAGE)));
 	}
 
 	protected void assertValidActions(ServerToClientMessage message) {
