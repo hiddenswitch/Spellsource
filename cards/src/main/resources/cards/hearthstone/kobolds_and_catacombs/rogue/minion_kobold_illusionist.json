@@ -1,0 +1,25 @@
+{
+  "name": "Mirage Caller",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Deathrattle: Summon a 1/1 copy of a minion from your hand.",
+  "deathrattle": {
+    "class": "SummonOneOneCopySpell",
+    "target": "FRIENDLY_HAND",
+    "randomTarget": true,
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

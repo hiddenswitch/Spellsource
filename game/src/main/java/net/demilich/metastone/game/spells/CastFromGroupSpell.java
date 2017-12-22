@@ -71,9 +71,9 @@ public class CastFromGroupSpell extends Spell {
 				// cast in on all targets
 
 				for (Entity target : validTargets) {
-					context.getEnvironment().put(Environment.SPELL_TARGET, target.getReference());
+					context.getSpellTargetStack().push(target.getReference());
 					onCast(context, player, spell, source, target);
-					context.getEnvironment().remove(Environment.SPELL_TARGET);
+					context.getSpellTargetStack().pop();
 				}
 			}
 		}

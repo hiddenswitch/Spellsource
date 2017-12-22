@@ -1324,6 +1324,14 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		return (Deque<Integer>) getEnvironment().get(Environment.EVENT_VALUE_STACK);
 	}
 
+	@SuppressWarnings("unchecked")
+	public Deque<EntityReference> getSpellTargetStack() {
+		if (!getEnvironment().containsKey(Environment.SPELL_TARGET)) {
+			getEnvironment().put(Environment.SPELL_TARGET, new EnvironmentDeque<>());
+		}
+		return (Deque<EntityReference>) getEnvironment().get(Environment.SPELL_TARGET);
+	}
+
 	/**
 	 * Resumes a game, playing it to completion.
 	 * <p>

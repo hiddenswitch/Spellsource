@@ -16,6 +16,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
+import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,7 +31,39 @@ import net.demilich.metastone.tests.util.TestBase;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+
 public class ClassicTests extends TestBase {
+	@Test
+	public void testMisdirection() {
+		// Opponent's face gets hit always by misdirection
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_misdirection");
+			context.endTurn();
+			int startingHp = opponent.getHero().getHp();
+			Minion boar = playMinionCard(context, player, "minion_stonetusk_boar");
+			attack(context, opponent, boar, player.getHero());
+			Assert.assertEquals(player.getSecrets().size(), 0);
+			Assert.assertEquals(opponent.getHero().getHp(), startingHp - 1);
+		});
+
+		// Adjacent minion can get hit by misdirection
+		runGym((context, player, opponent) -> {
+			context.setLogic(spy(context.getLogic()));
+
+			playCard(context, player, "secret_misdirection");
+			context.endTurn();
+			Minion boar = playMinionCard(context, player, "minion_stonetusk_boar");
+			Minion boar2 = playMinionCard(context, player, "minion_stonetusk_boar");
+			Mockito.doReturn(boar2)
+					.when(context.getLogic())
+					.getAnotherRandomTarget(any(), any(), any(), any());
+			attack(context, opponent, boar, player.getHero());
+			Assert.assertEquals(player.getSecrets().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+	}
 
 	@Test
 	public void testBlizzard() {

@@ -44,6 +44,7 @@ public class EntityReference implements Serializable {
 	public static final EntityReference TRANSFORM_REFERENCE = new EntityReference(-37);
 	public static final EntityReference RIGHTMOST_FRIENDLY_MINION = new EntityReference(-38);
 	public static final EntityReference RIGHTMOST_ENEMY_MINION = new EntityReference(-39);
+	public static final EntityReference ATTACKER_ADJACENT_MINIONS = new EntityReference(-40);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

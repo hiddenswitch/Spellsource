@@ -5,7 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 
-public class SummonEvent extends GameEvent {
+public class SummonEvent extends GameEvent implements HasCard {
 
 	private final Actor minion;
 	private final Card source;
@@ -15,7 +15,7 @@ public class SummonEvent extends GameEvent {
 		this.minion = minion;
 		this.source = source;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getMinion();
@@ -42,5 +42,10 @@ public class SummonEvent extends GameEvent {
 	@Override
 	public boolean isClientInterested() {
 		return true;
+	}
+
+	@Override
+	public Card getCard() {
+		return source;
 	}
 }

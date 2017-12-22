@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import org.slf4j.Logger;
@@ -28,7 +29,13 @@ public class CopyCardSpell extends Spell {
 		if (target != null) {
 			Card targetCard = target.getSourceCard();
 			for (int i = 0; i < numberOfCardsToCopy; i++) {
-				context.getLogic().receiveCard(player.getId(), targetCard.getCopy());
+				final Card clone = targetCard.getCopy();
+				context.getLogic().receiveCard(player.getId(), clone);
+				if (desc.containsKey(SpellArg.SPELL)) {
+					context.getSpellTargetStack().push(clone.getReference());
+					SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, clone);
+					context.getSpellTargetStack().pop();
+				}
 			}
 			return;
 		}

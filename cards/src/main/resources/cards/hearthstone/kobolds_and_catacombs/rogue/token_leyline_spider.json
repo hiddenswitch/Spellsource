@@ -1,0 +1,14 @@
+{
+  "name": "Leyline Spider",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "race": "BEAST",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

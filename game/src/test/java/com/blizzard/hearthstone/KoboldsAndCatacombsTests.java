@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -12,12 +13,74 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+
+	@Test
+	public void testSuddenBetrayal() {
+		// No adjacent minions: doesn't trigger
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_sudden_betrayal");
+			context.endTurn();
+			Minion boar = playMinionCard(context, opponent, "minion_stonetusk_boar");
+			attack(context, opponent, boar, player.getHero());
+			Assert.assertEquals(player.getSecrets().get(0).getSourceCard().getCardId(), "secret_sudden_betrayal");
+		});
+
+		// Has adjacent minions: does trigger!
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_sudden_betrayal");
+			context.endTurn();
+			Minion boar = playMinionCard(context, opponent, "minion_stonetusk_boar");
+			Minion boar2 = playMinionCard(context, opponent, "minion_stonetusk_boar");
+			attack(context, opponent, boar, player.getHero());
+			Assert.assertEquals(player.getSecrets().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		// Has adjacent minions but attacks opponent hero: doesn't trigger!
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_sudden_betrayal");
+			context.endTurn();
+			Minion boar = playMinionCard(context, opponent, "minion_stonetusk_boar");
+			Minion boar2 = playMinionCard(context, opponent, "minion_stonetusk_boar");
+			attack(context, opponent, boar, opponent.getHero());
+			Assert.assertEquals(player.getSecrets().get(0).getSourceCard().getCardId(), "secret_sudden_betrayal");
+		});
+
+		// Friendly has adjacent minions and attacks opponent hero: doesn't trigger!
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_sudden_betrayal");
+			Minion boar = playMinionCard(context, player, "minion_stonetusk_boar");
+			Minion boar2 = playMinionCard(context, player, "minion_stonetusk_boar");
+			attack(context, player, boar, opponent.getHero());
+			Assert.assertEquals(player.getSecrets().get(0).getSourceCard().getCardId(), "secret_sudden_betrayal");
+		});
+	}
+
+	@Test
+	public void testSonyaShadowdancer() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_sonya_shadowdancer");
+			playCardWithTarget(context, player, "spell_fireball", player.getMinions().get(0));
+			final Card card = player.getHand().get(0);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 1);
+			player.setMaxMana(10);
+			player.setMana(10);
+			Assert.assertEquals(((MinionCard) card).getBaseAttack(), 1);
+			Assert.assertEquals(((MinionCard) card).getBaseHp(), 1);
+			context.getLogic().performGameAction(player.getId(), card.play());
+			Assert.assertEquals(player.getMana(), 9);
+			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getMinions().get(1).getHp(), 1);
+			Assert.assertEquals(player.getMinions().get(1).getAttack(), 1);
+		});
+	}
+
 	@Test
 	public void testTemporus() {
 		runGym((context, player, opponent) -> {

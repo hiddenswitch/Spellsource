@@ -1,0 +1,25 @@
+{
+  "name": "Fal'dorei Strider",
+  "baseManaCost": 4,
+  "baseAttack": 4,
+  "baseHp": 4,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "rarity": "EPIC",
+  "description": "Battlecry: Shuffle 3 Ambushes into your deck. When drawn, summon a 4/4 Spider.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "spell_spider_ambush",
+      "howMany": 3,
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
