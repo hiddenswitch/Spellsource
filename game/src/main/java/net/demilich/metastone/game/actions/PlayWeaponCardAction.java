@@ -21,7 +21,7 @@ public class PlayWeaponCardAction extends PlayCardAction {
 	@Suspendable
 	public void play(GameContext context, int playerId) {
 		WeaponCard weaponCard = (WeaponCard) context.getPendingCard();
-		context.getLogic().equipWeapon(playerId, weaponCard.getWeapon(), true);
+		context.getLogic().equipWeapon(playerId, weaponCard.getWeapon(), weaponCard, true);
 	}
 
 }

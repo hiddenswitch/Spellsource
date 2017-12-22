@@ -24,10 +24,14 @@ public class MinionSummonedTrigger extends EventTrigger {
 		}
 
 		Attribute requiredAttribute = (Attribute) desc.get(EventTriggerArg.REQUIRED_ATTRIBUTE);
-		if (requiredAttribute != null && !summonEvent.getMinion().hasAttribute(requiredAttribute)) {
+		// Special case DEATHRATTLES
+		if (requiredAttribute == Attribute.DEATHRATTLES
+				&& !summonEvent.getMinion().getSourceCard().hasAttribute(requiredAttribute)) {
+			return false;
+		} else if (requiredAttribute != null && !summonEvent.getMinion().hasAttribute(requiredAttribute)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 

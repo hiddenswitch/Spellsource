@@ -1,0 +1,54 @@
+{
+  "name": "Sonya Shadowdancer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "After a friendly minion dies, add a 1/1 copy of it to your hand. It costs (1).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "EVENT_TARGET",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "SPELL_TARGET",
+        "spells": [
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "BASE_MANA_COST"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "BASE_ATTACK"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "ATTACK"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "BASE_HP"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "HP"
+          }
+        ]
+      }
+    }
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

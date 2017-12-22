@@ -1,0 +1,30 @@
+{
+  "name": "Elven Minstrel",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Combo: Draw 2 minions from your deck.",
+  "battlecry": {
+    "condition": {
+      "class": "ComboCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

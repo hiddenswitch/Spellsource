@@ -44,7 +44,7 @@ public class EquipWeaponSpell extends Spell {
 		String weaponCardName = (String) desc.get(SpellArg.CARD);
 		WeaponCard weaponCard = (WeaponCard) context.getCardById(weaponCardName);
 		Weapon weapon = weaponCard.getWeapon();
-		context.getLogic().equipWeapon(player.getId(), weapon, false);
+		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
 	}
 
 }

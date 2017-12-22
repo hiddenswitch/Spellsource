@@ -276,6 +276,8 @@ public class TargetLogic implements Serializable {
 			return targets;
 		} else if (targetKey.equals(EntityReference.ADJACENT_MINIONS)) {
 			return new ArrayList<>(context.getAdjacentMinions(source.getReference()));
+		} else if (targetKey.equals(EntityReference.ATTACKER_ADJACENT_MINIONS)) {
+			return new ArrayList<>(context.getAdjacentMinions(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.ATTACKER_REFERENCE)).getReference()));
 		} else if (targetKey.equals(EntityReference.OPPOSITE_MINIONS)) {
 			return new ArrayList<>(context.getOppositeMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_LEFT)) {
@@ -313,7 +315,7 @@ public class TargetLogic implements Serializable {
 		} else if (targetKey.equals(EntityReference.TARGET)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TARGET)));
 		} else if (targetKey.equals(EntityReference.SPELL_TARGET)) {
-			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.SPELL_TARGET)));
+			return singleTargetAsList(context.resolveSingleTarget(context.getSpellTargetStack().peek()));
 		} else if (targetKey.equals(EntityReference.KILLED_MINION)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.KILLED_MINION)));
 		} else if (targetKey.equals(EntityReference.ATTACKER_REFERENCE)) {

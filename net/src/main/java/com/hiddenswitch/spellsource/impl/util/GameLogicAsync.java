@@ -11,6 +11,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
@@ -122,18 +123,18 @@ public class GameLogicAsync extends GameLogic {
 
 	@Override
 	@Suspendable
-	public void equipWeapon(int playerId, Weapon weapon, boolean resolveBattlecry) {
+	public void equipWeapon(int playerId, Weapon weapon, WeaponCard weaponCard, boolean resolveBattlecry) {
 		logger.debug("AsyncDebug {} successfully called equipWeapon.", this.context);
 		if (!resolveBattlecry) {
-			super.equipWeapon(playerId, weapon, false);
+			super.equipWeapon(playerId, weapon, weaponCard, false);
 		} else {
-			Boolean result = Sync.awaitFiber(new EquipWeaponResult(playerId, weapon, resolveBattlecry));
+			Boolean result = Sync.awaitFiber(new EquipWeaponResult(playerId, weapon, weaponCard, resolveBattlecry));
 		}
 	}
 
 	@Override
 	@Suspendable
-	public void equipWeaponAsync(int playerId, Weapon weapon, boolean resolveBattlecry, Handler<AsyncResult<Boolean>> result) {
+	public void equipWeaponAsync(int playerId, Weapon weapon, WeaponCard weaponCard, Handler<AsyncResult<Boolean>> result, boolean resolveBattlecry) {
 		logger.debug("AsyncDebug {} successfully called equipWeaponAsync.", this.context);
 		PreEquipWeapon preEquipWeapon = new PreEquipWeapon(playerId, weapon).invoke();
 		Weapon currentWeapon = preEquipWeapon.getCurrentWeapon();
@@ -142,13 +143,13 @@ public class GameLogicAsync extends GameLogic {
 		if (resolveBattlecry
 				&& weapon.getBattlecry() != null) {
 			resolveBattlecryAsync(playerId, weapon, action -> {
-				postEquipWeapon(playerId, weapon, currentWeapon, player);
+				postEquipWeapon(playerId, weapon, currentWeapon, player, weaponCard);
 				if (result != null) {
 					result.handle(NullResult.SUCESSS);
 				}
 			});
 		} else {
-			postEquipWeapon(playerId, weapon, currentWeapon, player);
+			postEquipWeapon(playerId, weapon, currentWeapon, player, weaponCard);
 			if (result != null) {
 				result.handle(NullResult.SUCESSS);
 			}
@@ -200,11 +201,13 @@ public class GameLogicAsync extends GameLogic {
 	private class EquipWeaponResult implements Consumer<Handler<AsyncResult<Boolean>>> {
 		private final int playerId;
 		private final Weapon weapon;
+		private final WeaponCard weaponCard;
 		private final boolean resolveBattlecry;
 
-		public EquipWeaponResult(int playerId, Weapon weapon, boolean resolveBattlecry) {
+		public EquipWeaponResult(int playerId, Weapon weapon, WeaponCard weaponCard, boolean resolveBattlecry) {
 			this.playerId = playerId;
 			this.weapon = weapon;
+			this.weaponCard = weaponCard;
 			this.resolveBattlecry = resolveBattlecry;
 		}
 
@@ -214,7 +217,7 @@ public class GameLogicAsync extends GameLogic {
 			if (done == null) {
 				logger.error("A handler was null!");
 			}
-			GameLogicAsync.this.equipWeaponAsync(playerId, weapon, resolveBattlecry, done);
+			GameLogicAsync.this.equipWeaponAsync(playerId, weapon, weaponCard, done, resolveBattlecry);
 		}
 	}
 

@@ -1238,15 +1238,14 @@ public class GameLogic implements Cloneable, Serializable {
 	/**
 	 * Equips a {@link Weapon} for a {@link Hero}. Destroys the previous weapon if one was equipped and triggers its
 	 * deathrattle effect.
-	 *
-	 * @param playerId         The player whose hero should equip the weapon.
+	 *  @param playerId         The player whose hero should equip the weapon.
 	 * @param weapon           The weapon to equip.
+	 * @param weaponCard
 	 * @param resolveBattlecry If {@code true}, the weapon's battlecry {@link Spell} should be cast. This is {@code
 	 *                         false} if the weapon was equipped due to some other effect (typically a random weapon
-	 *                         that coincidentally has a battlecry).
 	 */
 	@Suspendable
-	public void equipWeapon(int playerId, Weapon weapon, boolean resolveBattlecry) {
+	public void equipWeapon(int playerId, Weapon weapon, WeaponCard weaponCard, boolean resolveBattlecry) {
 		PreEquipWeapon preEquipWeapon = new PreEquipWeapon(playerId, weapon).invoke();
 		Weapon currentWeapon = preEquipWeapon.getCurrentWeapon();
 		Player player = preEquipWeapon.getPlayer();
@@ -1256,11 +1255,11 @@ public class GameLogic implements Cloneable, Serializable {
 			resolveBattlecry(playerId, weapon);
 		}
 
-		postEquipWeapon(playerId, weapon, currentWeapon, player);
+		postEquipWeapon(playerId, weapon, currentWeapon, player, weaponCard);
 	}
 
 	@Suspendable
-	protected void postEquipWeapon(int playerId, Weapon newWeapon, Weapon currentWeapon, Player player) {
+	protected void postEquipWeapon(int playerId, Weapon newWeapon, Weapon currentWeapon, Player player, WeaponCard source) {
 		if (currentWeapon != null) {
 			log("{} discards currently equipped weapon {}", player.getHero(), currentWeapon);
 			destroy(currentWeapon);
@@ -1280,7 +1279,7 @@ public class GameLogic implements Cloneable, Serializable {
 			addManaModifier(player, newWeapon.getCardCostModifier(), newWeapon);
 		}
 		checkForDeadEntities();
-		context.fireGameEvent(new WeaponEquippedEvent(context, newWeapon));
+		context.fireGameEvent(new WeaponEquippedEvent(context, newWeapon, source));
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -1427,7 +1426,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @return The new target.
 	 */
 	public Actor getAnotherRandomTarget(Player player, Actor attacker, Actor originalTarget, EntityReference potentialTargets) {
-		List<Entity> validTargets = context.resolveTarget(player, null, potentialTargets);
+		List<Entity> validTargets = context.resolveTarget(player, attacker, potentialTargets);
 		// cannot redirect to attacker
 		validTargets.remove(attacker);
 		// cannot redirect to original target
@@ -3224,7 +3223,7 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	@Suspendable
-	public void equipWeaponAsync(int playerId, Weapon weapon, boolean resolveBattlecry, Handler<AsyncResult<Boolean>> result) {
+	public void equipWeaponAsync(int playerId, Weapon weapon, WeaponCard weaponCard, Handler<AsyncResult<Boolean>> result, boolean resolveBattlecry) {
 		throw new RecoverableGameException("Cannot call GameLogic::equipWeaponAsync from a non-async GameLogic instance.", context);
 	}
 

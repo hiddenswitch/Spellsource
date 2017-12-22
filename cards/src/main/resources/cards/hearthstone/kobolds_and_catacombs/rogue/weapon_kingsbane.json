@@ -1,0 +1,30 @@
+{
+  "name": "Kingsbane",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "BLACK",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
+  "onEquip": {
+    "class": "NullSpell"
+  },
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "NullSpell"
+      },
+      {
+        "class": "NullSpell"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
