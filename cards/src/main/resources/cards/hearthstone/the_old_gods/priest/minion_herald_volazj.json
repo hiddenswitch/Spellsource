@@ -8,8 +8,41 @@
   "rarity": "LEGENDARY",
   "description": "Battlecry: Summon a 1/1 copy of each of your other minions.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
-      "class": "custom.SummonOneOneCopiesSpell"
+      "class": "SummonSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "SPELL_TARGET",
+        "spells": [
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "BASE_MANA_COST"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "BASE_ATTACK"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "ATTACK"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "BASE_HP"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "HP"
+          }
+        ]
+      }
     }
   },
   "attributes": {

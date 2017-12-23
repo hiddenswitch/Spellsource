@@ -14,11 +14,46 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "SummonOneOneCopySpell",
+      "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
       "cardSource": {
         "class": "DeckSource",
         "targetPlayer": "OPPONENT"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "target": "SPELL_TARGET",
+        "spells": [
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "BASE_MANA_COST"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "BASE_ATTACK"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "ATTACK"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "BASE_HP"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "HP"
+          }
+        ]
       }
     }
   },

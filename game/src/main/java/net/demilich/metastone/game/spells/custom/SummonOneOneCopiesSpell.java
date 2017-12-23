@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+@Deprecated
 public class SummonOneOneCopiesSpell extends Spell {
 
 	public static SpellDesc create() {
