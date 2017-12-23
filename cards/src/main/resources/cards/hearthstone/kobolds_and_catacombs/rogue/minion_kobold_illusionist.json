@@ -8,12 +8,43 @@
   "rarity": "RARE",
   "description": "Deathrattle: Summon a 1/1 copy of a minion from your hand.",
   "deathrattle": {
-    "class": "SummonOneOneCopySpell",
+    "class": "SummonSpell",
     "target": "FRIENDLY_HAND",
     "randomTarget": true,
     "filter": {
       "class": "CardFilter",
       "cardType": "MINION"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "SPELL_TARGET",
+      "spells": [
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "BASE_MANA_COST"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "BASE_ATTACK"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "ATTACK"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "BASE_HP"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "HP"
+        }
+      ]
     }
   },
   "attributes": {
