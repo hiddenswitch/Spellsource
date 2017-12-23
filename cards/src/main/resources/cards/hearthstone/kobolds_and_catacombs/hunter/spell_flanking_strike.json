@@ -21,6 +21,7 @@
       },
       {
         "class": "SummonSpell",
+        "target": "NONE",
         "card": "token_wolf",
         "targetPlayer": "SELF"
       }

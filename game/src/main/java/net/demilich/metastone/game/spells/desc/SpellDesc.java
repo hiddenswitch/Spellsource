@@ -111,7 +111,7 @@ public class SpellDesc extends Desc<SpellArg> {
 		put(SpellArg.TARGET, target);
 	}
 
-	public Stream<SpellDesc> subSpells() {
+	public Stream<SpellDesc> subSpells(final int depth) {
 		Stream<SpellDesc> spells;
 		SpellDesc[] spellsArray = (SpellDesc[]) get(SpellArg.SPELLS);
 		if (spellsArray != null && spellsArray.length > 0) {
@@ -126,9 +126,18 @@ public class SpellDesc extends Desc<SpellArg> {
 				.filter(Objects::nonNull)
 				.map(o -> (SpellDesc) o).collect(toList());
 
-		Stream<SpellDesc> unitSpells = Stream.concat(units.stream(), units.stream().flatMap(SpellDesc::subSpells));
+		Stream<SpellDesc> unitSpells;
+		if (depth == 0) {
+			unitSpells = units.stream();
+		} else {
+			unitSpells = Stream.concat(units.stream(), units.stream().flatMap(u -> u.subSpells(depth - 1)));
+		}
 
 		return Stream.concat(spells, unitSpells);
+	}
+
+	public Stream<SpellDesc> subSpells() {
+		return subSpells(20);
 	}
 
 	/**
