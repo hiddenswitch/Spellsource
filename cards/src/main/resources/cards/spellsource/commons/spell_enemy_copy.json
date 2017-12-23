@@ -24,11 +24,6 @@
         {
           "class": "SetAttributeSpell",
           "value": 1,
-          "attribute": "BASE_MANA_COST"
-        },
-        {
-          "class": "SetAttributeSpell",
-          "value": 1,
           "attribute": "BASE_ATTACK"
         },
         {
