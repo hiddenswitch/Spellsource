@@ -13,7 +13,8 @@
       "sourcePlayer": "SELF"
     },
     "spell": {
-      "class": "SummonRandomSpell",
+      "class": "SummonSpell",
+      "randomTarget": true,
       "cards": [
         "token_searing_totem",
         "token_healing_totem",
