@@ -40,6 +40,18 @@ import static net.demilich.metastone.game.targeting.EntityReference.EVENT_TARGET
 
 public class TheOldGodsTests extends TestBase {
 	@Test
+	public void testHeraldVolazj() {
+		runGym((context, player, opponent) -> {
+			playCard(context,player,"minion_bloodfen_raptor");
+			playCard(context,player,"minion_water_elemental");
+			playCard(context,player,"minion_herald_volazj");
+			Assert.assertEquals(player.getMinions().size(), 5);
+			Assert.assertEquals(player.getMinions().stream().filter(m -> m.getBaseAttack() == 1).count(), 2L);
+			Assert.assertEquals(player.getMinions().stream().filter(m -> m.getBaseHp() == 1).count(), 2L);
+		});
+	}
+
+	@Test
 	public void testYoggSaronHopesEnd() {
 		// Test that yogg casts the expected number of spells.
 		runGym((context, player, opponent) -> {
