@@ -7,7 +7,7 @@
   "description": "Summon a 5/5 copy of a random minion in your deck.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonCopySpell",
+    "class": "SummonSpell",
     "target": "FRIENDLY_DECK",
     "spell": {
       "class": "MetaSpell",

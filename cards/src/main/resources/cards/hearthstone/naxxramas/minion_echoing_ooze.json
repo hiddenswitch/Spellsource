@@ -16,7 +16,7 @@
           "class": "TurnEndTrigger"
         },
         "spell": {
-          "class": "SummonCopySpell",
+          "class": "SummonSpell",
           "target": "SELF"
         },
         "oneTurn": true

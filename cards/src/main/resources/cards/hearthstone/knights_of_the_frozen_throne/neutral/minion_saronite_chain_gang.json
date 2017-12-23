@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "SummonCopySpell",
+      "class": "SummonSpell",
       "target": "SELF",
       "boardPositionRelative": "RIGHT"
     }

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "After you play a minion, deal 1 damage to it.",
+  "description": "After you play a minion, summon a copy of it.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

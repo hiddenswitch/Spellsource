@@ -7,6 +7,7 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+@Deprecated
 public class SummonRandomMinionFromSpell extends Spell {
 
 	@Override
