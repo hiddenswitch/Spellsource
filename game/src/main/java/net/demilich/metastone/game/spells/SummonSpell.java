@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 import co.paralleluniverse.fibers.Suspendable;
@@ -70,14 +67,18 @@ public class SummonSpell extends Spell {
 		List<Minion> summonedMinions = new ArrayList<>();
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
-		Card[] cards;
+		List<Card> cards = new ArrayList<>();
 		if (desc.containsKey(SpellArg.SUMMON_BASE_HP)) {
-			cards = new Card[]{SpellUtils.getMinionCardFromSummonSpell(context, player, source, desc)};
+			cards.add(SpellUtils.getMinionCardFromSummonSpell(context, player, source, desc));
 		} else {
-			cards = SpellUtils.getCards(context, desc);
+			cards.addAll(Arrays.asList(SpellUtils.getCards(context, desc)));
 		}
 
-		if (cards.length > 0) {
+		if (desc.getCardFilter() != null || desc.getCardSource() != null) {
+			cards.addAll(desc.getFilteredCards(context, player, source));
+		}
+
+		if (cards.size() > 0) {
 			for (Card card : cards) {
 				for (int i = 0; i < count; i++) {
 					MinionCard minionCard = count == 1 ? (MinionCard) card : (MinionCard) card.clone();
@@ -97,7 +98,6 @@ public class SummonSpell extends Spell {
 				template = (Minion) target;
 			}
 			for (int i = 0; i < count; i++) {
-
 				Minion clone = template.getCopy();
 				clone.clearEnchantments();
 
@@ -120,7 +120,9 @@ public class SummonSpell extends Spell {
 			}
 
 			desc.subSpells(0).forEach(subSpell -> {
+				context.getSpellTargetStack().push(summoned.getReference());
 				SpellUtils.castChildSpell(context, player, subSpell, source, summoned);
+				context.getSpellTargetStack().pop();
 			});
 		});
 	}
