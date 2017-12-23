@@ -7,7 +7,8 @@
   "description": "Summon a random Horde Warrior.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonRandomSpell",
+    "class": "SummonSpell",
+    "randomTarget": true,
     "cards": [
       "minion_frostwolf_grunt",
       "minion_tauren_warrior",

@@ -9,7 +9,8 @@
   "description": "Battlecry: Summon an AWESOME invention.",
   "battlecry": {
     "spell": {
-      "class": "SummonRandomSpell",
+      "class": "SummonSpell",
+      "randomTarget": "true",
       "cards": [
         "token_emboldener_3000",
         "token_homing_chicken",

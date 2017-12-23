@@ -79,13 +79,25 @@ public class SummonSpell extends Spell {
 		}
 
 		if (cards.size() > 0) {
-			for (Card card : cards) {
+			if (desc.getBool(SpellArg.RANDOM_TARGET)) {
 				for (int i = 0; i < count; i++) {
-					MinionCard minionCard = count == 1 ? (MinionCard) card : (MinionCard) card.clone();
-					final Minion minion = minionCard.summon();
+					MinionCard card = (MinionCard) context.getLogic().getRandom(cards);
+					final Minion minion = card.summon();
 
 					if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false)) {
 						summonedMinions.add(minion);
+						cards.remove(card);
+					}
+				}
+			} else {
+				for (Card card : cards) {
+					for (int i = 0; i < count; i++) {
+						MinionCard minionCard = count == 1 ? (MinionCard) card : (MinionCard) card.clone();
+						final Minion minion = minionCard.summon();
+
+						if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false)) {
+							summonedMinions.add(minion);
+						}
 					}
 				}
 			}
