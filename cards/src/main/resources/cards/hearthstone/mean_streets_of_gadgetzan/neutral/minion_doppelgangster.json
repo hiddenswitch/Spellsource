@@ -9,7 +9,7 @@
   "description": "Battlecry: Summon 2 copies of this minion.",
   "battlecry": {
     "spell": {
-      "class": "SummonCopySpell",
+      "class": "SummonSpell",
       "target": "SELF",
       "value": 2
     }

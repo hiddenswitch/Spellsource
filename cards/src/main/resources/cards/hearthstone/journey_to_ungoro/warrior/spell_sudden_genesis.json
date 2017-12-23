@@ -7,7 +7,7 @@
   "description": "Summon a copy of each friendly damaged minion.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonCopySpell",
+    "class": "SummonSpell",
     "target": "FRIENDLY_MINIONS",
     "filter": {
       "class": "DamagedFilter"
