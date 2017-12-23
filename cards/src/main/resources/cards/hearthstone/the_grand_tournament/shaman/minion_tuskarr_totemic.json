@@ -9,8 +9,9 @@
   "description": "Battlecry: Summon a random basic Totem.",
   "battlecry": {
     "spell": {
-      "class": "SummonRandomSpell",
+      "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
+      "randomTarget": true,
       "cards": [
         "token_searing_totem",
         "token_healing_totem",

@@ -7,7 +7,8 @@
   "description": "Summon a random Beast Companion.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonRandomSpell",
+    "class": "SummonSpell",
+    "randomTarget": true,
     "cards": [
       "token_huffer",
       "token_misha",
