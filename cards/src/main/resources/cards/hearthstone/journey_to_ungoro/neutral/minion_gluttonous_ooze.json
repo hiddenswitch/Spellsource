@@ -12,7 +12,7 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "BuffHeroSpell",
+          "class": "BuffSpell",
           "armorBonus": {
             "class": "AttributeValueProvider",
             "target": "ENEMY_WEAPON",

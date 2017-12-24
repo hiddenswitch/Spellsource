@@ -7,7 +7,7 @@
   "description": "Gain 8 Armor and 4 Attack.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffHeroSpell",
+    "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
     "armorBonus": 8,
     "attackBonus": 4

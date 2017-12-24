@@ -17,7 +17,7 @@
       "attackBonus": 1
     },
     {
-      "class": "BuffHeroSpell",
+      "class": "BuffSpell",
       "name": "Loot the Chest",
       "description": "Gain 6 Armor.",
       "hpBonus": 6

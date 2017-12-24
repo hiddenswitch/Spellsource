@@ -82,7 +82,7 @@
               "hpBonus": 2
             },
             {
-              "class": "BuffHeroSpell",
+              "class": "BuffSpell",
               "target": "FRIENDLY_HERO",
               "name": "Stonescale Oil",
               "description": "Gain 4 Armor.",
@@ -186,7 +186,7 @@
               "hpBonus": 4
             },
             {
-              "class": "BuffHeroSpell",
+              "class": "BuffSpell",
               "target": "FRIENDLY_HERO",
               "name": "Stonescale Oil",
               "description": "Gain 7 Armor.",
@@ -290,7 +290,7 @@
               "hpBonus": 6
             },
             {
-              "class": "BuffHeroSpell",
+              "class": "BuffSpell",
               "target": "FRIENDLY_HERO",
               "name": "Stonescale Oil",
               "description": "Gain 10 Armor.",

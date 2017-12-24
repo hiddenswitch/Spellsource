@@ -7,7 +7,7 @@
   "description": "Give your hero +4 Attack this turn and 4 Armor.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffHeroSpell",
+    "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
     "armorBonus": 4,
     "attackBonus": 4

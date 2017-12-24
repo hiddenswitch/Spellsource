@@ -15,7 +15,7 @@
         "value": 4
       },
       {
-        "class": "BuffHeroSpell",
+        "class": "BuffSpell",
         "attackBonus": 2
       }
     ]

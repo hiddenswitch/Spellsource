@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import java.util.Map;
 
+import net.demilich.metastone.game.entities.heroes.Hero;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,18 +37,27 @@ public class BuffSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		int hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
+		int armorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-		
+
 		if (value != 0) {
 			attackBonus = hpBonus = value;
 		}
+
 		logger.debug("{} gains ({})", target, attackBonus + "/" + hpBonus);
 
 		if (attackBonus != 0) {
-			target.modifyAttribute(Attribute.ATTACK_BONUS, attackBonus);
+			if (target instanceof Hero) {
+				target.modifyAttribute(Attribute.TEMPORARY_ATTACK_BONUS, attackBonus);
+			} else {
+				target.modifyAttribute(Attribute.ATTACK_BONUS, attackBonus);
+			}
 		}
 		if (hpBonus != 0) {
 			target.modifyHpBonus(hpBonus);
+		}
+		if (armorBonus != 0) {
+			context.getLogic().gainArmor(player, armorBonus);
 		}
 	}
 
