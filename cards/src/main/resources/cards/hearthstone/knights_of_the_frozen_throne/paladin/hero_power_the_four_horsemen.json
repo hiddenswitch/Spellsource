@@ -86,13 +86,14 @@
       ]
     },
     "spell1": {
-      "class": "SummonRandomNotOnBoardSpell",
+      "class": "SummonSpell",
       "cards": [
         "token_deathlord_nazgrim",
         "token_darion_mograine",
         "token_inquisitor_whitemane",
         "token_thoras_trollbane"
       ],
+      "randomTarget": true,
       "exclusive": true
     },
     "spell2": {

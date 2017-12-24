@@ -51,13 +51,14 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonRandomNotOnBoardSpell",
+    "class": "SummonSpell",
     "cards": [
       "token_searing_totem",
       "token_healing_totem",
       "token_wrath_of_air_totem",
       "token_stoneclaw_totem"
     ],
+    "randomTarget": true,
     "exclusive": true
   },
   "collectible": true,

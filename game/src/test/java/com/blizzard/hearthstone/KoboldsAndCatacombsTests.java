@@ -18,6 +18,21 @@ import org.testng.annotations.Test;
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+	@Test
+	public void testToMySide() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_to_my_side");
+			Assert.assertEquals(player.getMinions().size(), 2);
+			Assert.assertEquals(player.getMinions().stream().map(Minion::getSourceCard).map(Card::getCardId).distinct().count(), 2L);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			playCard(context, player, "spell_to_my_side");
+			Assert.assertEquals(player.getMinions().size(), 1);
+			Assert.assertEquals(player.getMinions().stream().map(Minion::getSourceCard).map(Card::getCardId).distinct().count(), 1L);
+		});
+	}
 
 	@Test
 	public void testSuddenBetrayal() {

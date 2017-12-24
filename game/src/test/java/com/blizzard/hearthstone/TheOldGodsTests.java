@@ -26,6 +26,7 @@ import net.demilich.metastone.game.spells.desc.source.SourceDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.CardRevealedTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
@@ -42,9 +43,9 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testHeraldVolazj() {
 		runGym((context, player, opponent) -> {
-			playCard(context,player,"minion_bloodfen_raptor");
-			playCard(context,player,"minion_water_elemental");
-			playCard(context,player,"minion_herald_volazj");
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_water_elemental");
+			playCard(context, player, "minion_herald_volazj");
 			Assert.assertEquals(player.getMinions().size(), 5);
 			Assert.assertEquals(player.getMinions().stream().filter(m -> m.getBaseAttack() == 1).count(), 2L);
 			Assert.assertEquals(player.getMinions().stream().filter(m -> m.getBaseHp() == 1).count(), 2L);
@@ -178,10 +179,16 @@ public class TheOldGodsTests extends TestBase {
 			public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 				if (first) {
 					Assert.assertTrue(validActions.stream().allMatch(ga -> ga.getActionType() == ActionType.DISCOVER));
-					action[0] = (DiscoverAction) validActions.get(0);
+					final DiscoverAction discoverAction = (DiscoverAction) validActions.get(0);
+					action[0] = discoverAction;
 					MinionCard original = (MinionCard) action[0].getCard();
 					originalMinion[0] = original.summon();
 					handSize[0] = player.getHand().size();
+					final Card minionOverride = CardCatalogue.getCardById("minion_bloodfen_raptor");
+					minionOverride.setId(context.getLogic().getIdFactory().generateId());
+					minionOverride.setOwner(player.getId());
+					minionOverride.moveOrAddTo(context, Zones.DISCOVER);
+					discoverAction.setCard(minionOverride);
 				}
 				first = false;
 				return super.requestAction(context, player, validActions);

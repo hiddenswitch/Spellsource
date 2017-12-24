@@ -9,5 +9,6 @@ public class StealCardSpell extends CopyCardSpell {
 	@Override
 	protected void peek(Card random, GameContext context, Player player) {
 		random.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		context.getLogic().removeCard(random);
 	}
 }
