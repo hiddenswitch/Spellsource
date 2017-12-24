@@ -21,6 +21,14 @@ import org.testng.annotations.Test;
 
 public class BlackrockMountainTests extends TestBase {
 
+	@Test
+	public void testHungryDragon() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_hungry_dragon");
+			Assert.assertEquals(opponent.getMinions().size(), 1);
+		});
+	}
+
 	/**
 	 * You play a Grim Patron. Your opponent has a Knife Juggler and plays an Imp Gang Boss (the knife hits face). On
 	 * your turn, your Grim Patron attacks their Imp Gang Boss. The simultaneous damage triggers are queued in the order

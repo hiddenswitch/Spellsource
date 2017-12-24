@@ -28,6 +28,52 @@ import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
 	@Test
+	public void testStubbornGatropodFlesheatingGhoulInteraction() {
+		// Tests that a mysterious exception due to a minion already being dead doesn't occur
+		runGym((context, player, opponent) -> {
+			Minion flesheatingGhoul = playMinionCard(context, player, "minion_flesheating_ghoul");
+			context.endTurn();
+			Minion stubbornGastropod = playMinionCard(context, opponent, "minion_stubborn_gastropod");
+			context.endTurn();
+			attack(context, player, flesheatingGhoul, stubbornGastropod);
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion flesheatingGhoul = playMinionCard(context, player, "minion_flesheating_ghoul");
+			flesheatingGhoul.setHp(1);
+			context.endTurn();
+			Minion stubbornGastropod = playMinionCard(context, opponent, "minion_stubborn_gastropod");
+			context.endTurn();
+			attack(context, player, flesheatingGhoul, stubbornGastropod);
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion stubbornGastropod = playMinionCard(context, player, "minion_stubborn_gastropod");
+			context.endTurn();
+			Minion flesheatingGhoul = playMinionCard(context, opponent, "minion_flesheating_ghoul");
+			context.endTurn();
+			attack(context, player, stubbornGastropod, flesheatingGhoul);
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion stubbornGastropod = playMinionCard(context, player, "minion_stubborn_gastropod");
+			context.endTurn();
+			Minion flesheatingGhoul = playMinionCard(context, opponent, "minion_flesheating_ghoul");
+			flesheatingGhoul.setHp(1);
+			context.endTurn();
+			attack(context, player, stubbornGastropod, flesheatingGhoul);
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+	}
+
+	@Test
 	public void testCuriousGlimmerroot() {
 		// Right choice
 		runGym((context, player, opponent) -> {

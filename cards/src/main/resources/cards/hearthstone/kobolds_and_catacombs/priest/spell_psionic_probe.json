@@ -9,13 +9,13 @@
   "spell": {
     "class": "CopyCardSpell",
     "value": 1,
-    "cardSource": {
-      "class": "DeckSource",
-      "targetPlayer": "OPPONENT"
-    },
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "SPELL"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "OPPONENT"
     }
   },
   "collectible": true,

@@ -9,9 +9,10 @@
   "rarity": "COMMON",
   "description": "Deathrattle: Summon a random 3-Cost minion.",
   "deathrattle": {
-    "class": "SummonRandomMinionFilteredSpell",
+    "class": "SummonSpell",
     "cardFilter": {
       "class": "CardFilter",
+      "cardType": "MINION",
       "manaCost": 3
     }
   },

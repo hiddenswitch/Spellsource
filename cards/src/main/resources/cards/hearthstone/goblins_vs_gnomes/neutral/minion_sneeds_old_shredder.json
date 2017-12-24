@@ -9,10 +9,11 @@
   "race": "MECH",
   "description": "Deathrattle: Summon a random legendary minion.",
   "deathrattle": {
-    "class": "SummonRandomMinionFilteredSpell",
+    "class": "SummonSpell",
     "cardFilter": {
       "class": "CardFilter",
-      "rarity": "LEGENDARY"
+      "rarity": "LEGENDARY",
+      "cardType": "MINION"
     }
   },
   "attributes": {

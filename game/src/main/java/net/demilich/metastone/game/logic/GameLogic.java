@@ -62,7 +62,8 @@ import static java.util.stream.Collectors.toList;
  * GameContext#clone()} to create an "immutable" equivalent behaviour.
  * <p>
  * Most effects are encoded in {@link Spell} classes, which subsequently call functions in this class. However, a few
- * key functions are called by {@link GameAction#execute(GameContext, int)} calls directly, like {@link #summon(int, Minion, Card, int, boolean)} and {@link #fight(Player, Actor, Actor)}.
+ * key functions are called by {@link GameAction#execute(GameContext, int)} calls directly, like {@link #summon(int,
+ * Minion, Card, int, boolean)} and {@link #fight(Player, Actor, Actor)}.
  */
 public class GameLogic implements Cloneable, Serializable {
 	protected static Logger logger = LoggerFactory.getLogger(GameLogic.class);
@@ -1181,7 +1182,7 @@ public class GameLogic implements Cloneable, Serializable {
 	public Card drawCard(int playerId, Card card, Entity source) {
 		Player player = context.getPlayer(playerId);
 		player.getStatistics().cardDrawn();
-		receiveCard(playerId, card, source, true);
+		card = receiveCard(playerId, card, source, true);
 		return card;
 	}
 
@@ -1238,7 +1239,8 @@ public class GameLogic implements Cloneable, Serializable {
 	/**
 	 * Equips a {@link Weapon} for a {@link Hero}. Destroys the previous weapon if one was equipped and triggers its
 	 * deathrattle effect.
-	 *  @param playerId         The player whose hero should equip the weapon.
+	 *
+	 * @param playerId         The player whose hero should equip the weapon.
 	 * @param weapon           The weapon to equip.
 	 * @param weaponCard
 	 * @param resolveBattlecry If {@code true}, the weapon's battlecry {@link Spell} should be cast. This is {@code
@@ -2453,10 +2455,11 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param playerId
 	 * @param card
 	 * @param source
-	 * @param drawn
+	 * @param drawn    {@code true} if the card was drawn by a deck-drawing process, otherwise {@code false}.
+	 * @return The card that was received (the card may have been transformed after it was received).
 	 */
 	@Suspendable
-	public void receiveCard(int playerId, Card card, Entity source, boolean drawn) {
+	public Card receiveCard(int playerId, Card card, Entity source, boolean drawn) {
 		Player player = context.getPlayer(playerId);
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(getIdFactory().generateId());
@@ -2483,6 +2486,7 @@ public class GameLogic implements Cloneable, Serializable {
 			log("{} has too many cards on his hand, card destroyed: {}", player.getName(), card);
 			discardCard(player, card);
 		}
+		return (Card) card.transformResolved(context);
 	}
 
 	/**
@@ -2678,6 +2682,7 @@ public class GameLogic implements Cloneable, Serializable {
 		transferKeptEnchantments(oldCard, newCard);
 		removeEnchantments(oldCard);
 		oldCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		oldCard.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newCard.getReference());
 		processPassiveTriggers(player, newCard);
 		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, null, false));
 		return newCard;
@@ -3133,6 +3138,7 @@ public class GameLogic implements Cloneable, Serializable {
 			newMinion.setId(getIdFactory().generateId());
 			newMinion.setOwner(owner.getId());
 
+			minion.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newMinion.getReference());
 			// If the minion being transforms is being summoned, replace the old
 			// minion on the stack.
 			// Otherwise, summon the add the new minion.

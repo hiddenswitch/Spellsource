@@ -58,8 +58,8 @@
       "token_wrath_of_air_totem",
       "token_stoneclaw_totem"
     ],
-    "randomTarget": true,
-    "exclusive": true
+    "exclusive": true,
+    "randomTarget": true
   },
   "collectible": true,
   "set": "BASIC",

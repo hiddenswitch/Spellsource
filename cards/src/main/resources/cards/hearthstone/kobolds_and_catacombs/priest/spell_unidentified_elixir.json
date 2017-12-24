@@ -5,11 +5,6 @@
   "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Give a minion +2/+2. Gains a bonus effect in your hand.",
-  "targetSelection": "MINIONS",
-  "spell": {
-    "class": "BuffSpell",
-    "value": 2
-  },
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
@@ -25,6 +20,11 @@
         "spell_elixir_of_shadows"
       ]
     }
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "value": 2
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",

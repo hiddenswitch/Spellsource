@@ -116,6 +116,15 @@ public class TargetLogic implements Serializable {
 					return entity;
 				}
 			}
+
+			// Better handle transformed entities
+			for (Entity entity : player.getRemovedFromPlay()) {
+				final Entity transformed = entity.transformResolved(context);
+				if (entity.getId() == targetId
+						&& !transformed.equals(entity)) {
+					return transformed;
+				}
+			}
 		}
 
 		Entity cardResult = findInCards(context.getPlayer1(), targetId);

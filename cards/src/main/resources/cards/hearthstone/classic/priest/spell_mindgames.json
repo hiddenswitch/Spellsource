@@ -7,8 +7,12 @@
   "description": "Put a copy of a random minion from your opponent's deck into the battlefield.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonRandomMinionFilteredSpell",
+    "class": "SummonSpell",
     "card": "token_shadow_of_nothing",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
     "cardSource": {
       "class": "DeckSource",
       "targetPlayer": "OPPONENT"

@@ -9,15 +9,6 @@
   "spell": {
     "class": "ResurrectSpell",
     "value": 2,
-    "cardFilter": {
-      "class": "CardFilter",
-      "attribute": "DEATHRATTLES",
-      "operation": "HAS"
-    },
-    "cardSource": {
-      "class": "GraveyardMinionsSource",
-      "targetPlayer": "SELF"
-    },
     "spell": {
       "class": "MetaSpell",
       "spells": [
@@ -30,6 +21,15 @@
           "value": 1
         }
       ]
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "DEATHRATTLES",
+      "operation": "HAS"
+    },
+    "cardSource": {
+      "class": "GraveyardMinionsSource",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": false,
