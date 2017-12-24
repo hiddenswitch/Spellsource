@@ -23,7 +23,7 @@
         "value": 1
       },
       {
-        "class": "BuffHeroSpell",
+        "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
         "armorBonus": {
           "class": "GameValueProvider",

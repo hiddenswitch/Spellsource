@@ -15,10 +15,8 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class BuffHeroSpell extends Spell {
-
-	private static Logger logger = LoggerFactory.getLogger(BuffHeroSpell.class);
-
+@Deprecated
+public class BuffHeroSpell extends BuffSpell {
 	public static SpellDesc create(int attackBonus, int armorBonus) {
 		return create(EntityReference.FRIENDLY_HERO, attackBonus, armorBonus);
 	}
@@ -30,20 +28,4 @@ public class BuffHeroSpell extends Spell {
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}
-
-	@Override
-	@Suspendable
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Hero hero = (Hero) target;
-		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
-		int armorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
-
-		if (attackBonus != 0) {
-			hero.modifyAttribute(Attribute.TEMPORARY_ATTACK_BONUS, attackBonus);
-		}
-		if (armorBonus != 0) {
-			context.getLogic().gainArmor(player, armorBonus);
-		}
-	}
-
 }

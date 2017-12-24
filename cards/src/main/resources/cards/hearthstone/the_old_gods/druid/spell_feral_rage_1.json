@@ -7,7 +7,7 @@
   "description": "Gain +4 Attack this turn.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffHeroSpell",
+    "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
     "attackBonus": 4
   },

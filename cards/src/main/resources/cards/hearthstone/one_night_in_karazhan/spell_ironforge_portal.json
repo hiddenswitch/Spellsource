@@ -10,7 +10,7 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "BuffHeroSpell",
+        "class": "BuffSpell",
         "armorBonus": 4
       },
       {
