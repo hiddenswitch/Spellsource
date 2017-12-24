@@ -8,7 +8,7 @@
   "rarity": "EPIC",
   "description": "Deathrattle: Summon a minion from your deck with less Attack than this minion.",
   "deathrattle": {
-    "class": "SummonRandomMinionFilteredSpell",
+    "class": "SummonSpell",
     "cardFilter": {
       "class": "CardFilter",
       "target": "SELF",

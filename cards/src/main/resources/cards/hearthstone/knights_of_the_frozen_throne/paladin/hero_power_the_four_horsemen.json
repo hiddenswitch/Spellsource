@@ -93,8 +93,8 @@
         "token_inquisitor_whitemane",
         "token_thoras_trollbane"
       ],
-      "randomTarget": true,
-      "exclusive": true
+      "exclusive": true,
+      "randomTarget": true
     },
     "spell2": {
       "class": "DestroySpell",

@@ -8,12 +8,12 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "randomTarget": "true",
     "cards": [
       "token_steel_reel",
       "token_wally",
       "token_CO"
-    ]
+    ],
+    "randomTarget": "true"
   },
   "collectible": true,
   "set": "SPELLSOURCE",

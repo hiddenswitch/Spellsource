@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -997,7 +998,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		if (targetKey == null) {
 			return null;
 		}
-		return targetLogic.findEntity(this, targetKey);
+		return targetLogic.findEntity(this, targetKey).transformResolved(this);
 	}
 
 	/**
@@ -1012,7 +1013,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 * resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
-		return targetLogic.resolveTargetKey(this, player, source, targetKey);
+		final List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
+		if (entities == null) {
+			return null;
+		}
+		return entities.stream().map(e -> e.transformResolved(this)).collect(Collectors.toList());
 	}
 
 	/**

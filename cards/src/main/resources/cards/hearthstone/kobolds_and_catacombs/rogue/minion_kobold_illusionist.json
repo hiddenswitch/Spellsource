@@ -10,11 +10,6 @@
   "deathrattle": {
     "class": "SummonSpell",
     "target": "FRIENDLY_HAND",
-    "randomTarget": true,
-    "filter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
     "spell": {
       "class": "MetaSpell",
       "target": "SPELL_TARGET",
@@ -40,7 +35,12 @@
           "attribute": "HP"
         }
       ]
-    }
+    },
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "randomTarget": true
   },
   "attributes": {
     "DEATHRATTLES": true

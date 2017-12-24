@@ -8,11 +8,12 @@
   "rarity": "EPIC",
   "description": "Deathrattle: Summon a random friendly Beast that died this game.",
   "deathrattle": {
-    "class": "SummonRandomMinionFilteredSpell",
+    "class": "SummonSpell",
     "boardPositionRelative": "RIGHT",
     "cardFilter": {
       "class": "RaceFilter",
-      "race": "BEAST"
+      "race": "BEAST",
+      "cardType": "MINION"
     },
     "cardSource": {
       "class": "GraveyardMinionsSource",

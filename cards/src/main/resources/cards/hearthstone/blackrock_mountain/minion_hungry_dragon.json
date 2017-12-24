@@ -10,7 +10,7 @@
   "description": "Battlecry: Summon a random 1-Cost minion for your opponent.",
   "battlecry": {
     "spell": {
-      "class": "SummonRandomMinionFilteredSpell",
+      "class": "SummonSpell",
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION",

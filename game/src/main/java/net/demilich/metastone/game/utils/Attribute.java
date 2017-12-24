@@ -662,6 +662,11 @@ public enum Attribute {
 	 */
 	GAME_STARTED,
 	/**
+	 * For entities that are in the {@link Zones#REMOVED_FROM_PLAY} zone due to a transform effect, this attribute
+	 * points to the entity that replaced this one.
+	 */
+	TRANSFORM_REFERENCE,
+	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>
 	 */

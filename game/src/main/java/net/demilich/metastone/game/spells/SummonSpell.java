@@ -69,15 +69,15 @@ public class SummonSpell extends Spell {
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		List<Card> cards = new ArrayList<>();
-		if (desc.containsKey(SpellArg.SUMMON_BASE_HP)) {
-			cards.add(SpellUtils.getMinionCardFromSummonSpell(context, player, source, desc));
+
+		final boolean hasFilter = desc.getCardFilter() != null || desc.getCardSource() != null;
+		if (hasFilter) {
+			cards.addAll(desc.getFilteredCards(context, player, source));
+			// The SpellArg.CARD field should be interpreted as a replacement card in this scenario.
 		} else {
 			cards.addAll(Arrays.asList(SpellUtils.getCards(context, desc)));
 		}
 
-		if (desc.getCardFilter() != null || desc.getCardSource() != null) {
-			cards.addAll(desc.getFilteredCards(context, player, source));
-		}
 
 		if (desc.getBool(SpellArg.EXCLUSIVE)) {
 			Set<String> existingCardIds = player.getMinions().stream()
@@ -89,9 +89,19 @@ public class SummonSpell extends Spell {
 		}
 
 		if (cards.size() > 0) {
-			if (desc.getBool(SpellArg.RANDOM_TARGET)) {
+			if (desc.getBool(SpellArg.RANDOM_TARGET)
+					|| hasFilter) {
 				for (int i = 0; i < count; i++) {
 					MinionCard card = (MinionCard) context.getLogic().getRandom(cards);
+					if (card == null) {
+						if (desc.containsKey(SpellArg.CARD)) {
+							String replacementCard = desc.getString(SpellArg.CARD);
+							card = (MinionCard) context.getCardById(replacementCard);
+						} else {
+							// No card or replacement found.
+							continue;
+						}
+					}
 					final Minion minion = card.summon();
 
 					if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false)) {

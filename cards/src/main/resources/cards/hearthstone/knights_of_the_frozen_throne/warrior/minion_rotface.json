@@ -17,11 +17,12 @@
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
-      "class": "SummonRandomMinionFilteredSpell",
+      "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
       "cardFilter": {
         "class": "CardFilter",
-        "rarity": "LEGENDARY"
+        "rarity": "LEGENDARY",
+        "cardType": "MINION"
       }
     }
   },

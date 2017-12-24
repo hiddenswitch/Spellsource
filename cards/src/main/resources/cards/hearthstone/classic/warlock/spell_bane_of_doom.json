@@ -16,10 +16,11 @@
       "value": 2
     },
     "spell2": {
-      "class": "SummonRandomMinionFilteredSpell",
+      "class": "SummonSpell",
       "cardFilter": {
         "class": "RaceFilter",
-        "race": "DEMON"
+        "race": "DEMON",
+        "cardType": "MINION"
       }
     }
   },

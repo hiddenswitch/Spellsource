@@ -15,9 +15,9 @@
       },
       "spell": {
         "class": "SetAttributeSpell",
-        "attribute": "RESERVED_INTEGER_1",
+        "target": "SELF",
         "value": 0,
-        "target": "SELF"
+        "attribute": "RESERVED_INTEGER_1"
       }
     },
     {
@@ -28,6 +28,20 @@
       "spell": {
         "class": "ConditionalEffectSpell",
         "target": "SELF",
+        "condition": {
+          "class": "ComparisonCondition",
+          "operation": "EQUAL",
+          "value1": {
+            "class": "AlgebraicValueProvider",
+            "operation": "MODULO",
+            "value1": {
+              "class": "AttributeValueProvider",
+              "attribute": "RESERVED_INTEGER_1"
+            },
+            "value2": 3
+          },
+          "value2": 0
+        },
         "spell1": {
           "class": "ModifyAttributeSpell",
           "target": "SELF",
@@ -37,20 +51,6 @@
         "spell2": {
           "class": "SummonSpell",
           "card": "token_dragon_spirit"
-        },
-        "condition": {
-          "class": "ComparisonCondition",
-          "value1": {
-            "class": "AlgebraicValueProvider",
-            "value1": {
-              "class": "AttributeValueProvider",
-              "attribute": "RESERVED_INTEGER_1"
-            },
-            "value2": 3,
-            "operation": "MODULO"
-          },
-          "value2": 0,
-          "operation": "EQUAL"
         }
       }
     }

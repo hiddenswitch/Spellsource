@@ -34,6 +34,52 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testStubbornGatropodObsidianStatueInteraction() {
+		// Tests that a mysterious exception due to a minion already being dead doesn't occur
+		runGym((context, player, opponent) -> {
+			Minion obsidianStatue = playMinionCard(context, player, "minion_obsidian_statue");
+			context.endTurn();
+			Minion stubbornGastropod = playMinionCard(context, opponent, "minion_stubborn_gastropod");
+			context.endTurn();
+			attack(context, player, obsidianStatue, stubbornGastropod);
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion obsidianStatue = playMinionCard(context, player, "minion_obsidian_statue");
+			obsidianStatue.setHp(1);
+			context.endTurn();
+			Minion stubbornGastropod = playMinionCard(context, opponent, "minion_stubborn_gastropod");
+			context.endTurn();
+			attack(context, player, obsidianStatue, stubbornGastropod);
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion stubbornGastropod = playMinionCard(context, player, "minion_stubborn_gastropod");
+			context.endTurn();
+			Minion obsidianStatue = playMinionCard(context, opponent, "minion_obsidian_statue");
+			context.endTurn();
+			attack(context, player, stubbornGastropod, obsidianStatue);
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion stubbornGastropod = playMinionCard(context, player, "minion_stubborn_gastropod");
+			context.endTurn();
+			Minion obsidianStatue = playMinionCard(context, opponent, "minion_obsidian_statue");
+			obsidianStatue.setHp(1);
+			context.endTurn();
+			attack(context, player, stubbornGastropod, obsidianStatue);
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+	}
+
+	@Test
 	@SuppressWarnings("unchecked")
 	public void testDeathstalkerRexxar() {
 		runGym((GameContext context, Player player, Player opponent) -> {

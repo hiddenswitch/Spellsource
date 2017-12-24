@@ -9,14 +9,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "cardSource": {
-      "class": "DeckSource",
-      "targetPlayer": "OPPONENT"
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
     "spell": {
       "class": "MetaSpell",
       "target": "SPELL_TARGET",
@@ -42,6 +34,14 @@
           "attribute": "HP"
         }
       ]
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "OPPONENT"
     }
   },
   "collectible": true,

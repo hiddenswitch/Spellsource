@@ -11,15 +11,6 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "boardPositionRelative": "RIGHT",
-      "cardSource": {
-        "class": "DeckSource",
-        "targetPlayer": "SELF"
-      },
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION"
-      },
       "spell": {
         "class": "MetaSpell",
         "target": "SPELL_TARGET",
@@ -45,6 +36,15 @@
             "attribute": "HP"
           }
         ]
+      },
+      "boardPositionRelative": "RIGHT",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "DeckSource",
+        "targetPlayer": "SELF"
       }
     }
   },

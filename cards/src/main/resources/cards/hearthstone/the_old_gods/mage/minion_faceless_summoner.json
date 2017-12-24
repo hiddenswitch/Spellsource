@@ -9,10 +9,11 @@
   "description": "Battlecry: Summon a random 3-Cost minion.",
   "battlecry": {
     "spell": {
-      "class": "SummonRandomMinionFilteredSpell",
+      "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
       "cardFilter": {
         "class": "CardFilter",
+        "cardType": "MINION",
         "manaCost": 3
       }
     }

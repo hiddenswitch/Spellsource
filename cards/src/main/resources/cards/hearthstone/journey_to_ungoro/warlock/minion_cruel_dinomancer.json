@@ -8,10 +8,11 @@
   "rarity": "RARE",
   "description": "Deathrattle: Summon a random minion you discarded this game.",
   "deathrattle": {
-    "class": "SummonRandomMinionFilteredSpell",
+    "class": "SummonSpell",
     "cardFilter": {
       "class": "CardFilter",
       "attribute": "DISCARDED",
+      "cardType": "MINION",
       "operation": "HAS"
     },
     "cardSource": {

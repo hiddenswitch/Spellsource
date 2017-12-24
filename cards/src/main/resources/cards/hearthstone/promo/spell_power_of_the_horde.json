@@ -8,7 +8,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "randomTarget": true,
     "cards": [
       "minion_frostwolf_grunt",
       "minion_tauren_warrior",
@@ -16,7 +15,8 @@
       "minion_thrallmar_farseer",
       "minion_silvermoon_guardian",
       "minion_cairne_bloodhoof"
-    ]
+    ],
+    "randomTarget": true
   },
   "collectible": false,
   "set": "HALL_OF_FAME",
