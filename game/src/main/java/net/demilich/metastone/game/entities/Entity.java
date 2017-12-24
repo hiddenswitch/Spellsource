@@ -414,11 +414,12 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 			return this;
 		}
 
-		EntityReference reference = (EntityReference) getAttributes().get(Attribute.TRANSFORM_REFERENCE);
-		Entity entity = context.getEntities().filter(e -> e.getId() == reference.getId()).findFirst().orElseThrow(RuntimeException::new);
+		Entity entity = context.getEntities().filter(e -> e.getId() == ((EntityReference) getAttributes().get(Attribute.TRANSFORM_REFERENCE)).getId()).findFirst().orElseThrow(RuntimeException::new);
 		int i = 16;
-		while (!entity.transformResolved(context).equals(entity)) {
-			entity = entity.transformResolved(context);
+		while (entity.getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)
+				&& getAttributes().get(Attribute.TRANSFORM_REFERENCE) != null) {
+			final EntityReference reference = (EntityReference) entity.getAttributes().get(Attribute.TRANSFORM_REFERENCE);
+			entity = context.getEntities().filter(e -> e.getId() == reference.getId()).findFirst().orElseThrow(RuntimeException::new);
 			i--;
 			if (i == -1) {
 				throw new RuntimeException("Cycle likely in entity transformation chain.");
