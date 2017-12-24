@@ -16,11 +16,12 @@
       }
     },
     "spell": {
-      "class": "SummonRandomMinionFilteredSpell",
+      "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
       "cardFilter": {
         "class": "RaceFilter",
-        "race": "BEAST"
+        "race": "BEAST",
+        "cardType": "MINION"
       }
     }
   },

@@ -19,6 +19,15 @@ import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
+	public void testCallPetUnidentifiedElixirInteraction() {
+		runGym((context, player, opponent) -> {
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_unidentified_elixir"));
+			playCard(context, player, "spell_call_pet");
+			Assert.assertEquals(player.getHand().size(), 1);
+		});
+	}
+
+	@Test
 	public void testToMySide() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_to_my_side");

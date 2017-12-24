@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,7 @@ public class TransformCardSpell extends Spell {
 		String cardId = (String) desc.get(SpellArg.CARD);
 		Card newCard = context.getCardById(cardId);
 		context.getLogic().receiveCard(player.getId(), newCard);
+		card.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newCard.getReference());
 	}
 
 }

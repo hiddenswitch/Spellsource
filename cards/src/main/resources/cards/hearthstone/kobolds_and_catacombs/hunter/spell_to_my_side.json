@@ -21,8 +21,9 @@
       },
       "value2": 0
     },
-    "spell2": {
+    "spell1": {
       "class": "SummonSpell",
+      "value": 2,
       "cards": [
         "token_huffer",
         "token_misha",
@@ -30,9 +31,8 @@
       ],
       "randomTarget": true
     },
-    "spell1": {
+    "spell2": {
       "class": "SummonSpell",
-      "value": 2,
       "cards": [
         "token_huffer",
         "token_misha",

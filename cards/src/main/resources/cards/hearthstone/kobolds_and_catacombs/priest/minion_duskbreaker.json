@@ -18,8 +18,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "DamageSpell",
-      "value": 3,
-      "target": "ALL_OTHER_MINIONS"
+      "target": "ALL_OTHER_MINIONS",
+      "value": 3
     }
   },
   "attributes": {

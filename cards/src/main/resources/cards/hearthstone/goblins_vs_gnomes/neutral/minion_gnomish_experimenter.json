@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Battlecry: Draw a card, if it is a minion turn it into a chicken.",
+  "description": "Battlecry: Draw a card. If it's a minion, transform it into a Chicken.",
   "battlecry": {
     "spell": {
       "class": "DrawCardAndDoSomethingSpell",

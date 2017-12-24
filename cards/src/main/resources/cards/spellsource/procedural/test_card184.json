@@ -15,11 +15,12 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "SummonRandomMinionFilteredSpell",
+      "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
       "cardFilter": {
         "class": "CardFilter",
-        "race": "MURLOC"
+        "race": "MURLOC",
+        "cardType": "MINION"
       }
     }
   },

@@ -8,12 +8,12 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "randomTarget": true,
     "cards": [
       "token_huffer",
       "token_misha",
       "token_leokk"
-    ]
+    ],
+    "randomTarget": true
   },
   "attributes": {
     "NAME": "Aid of Shiramba"

@@ -126,8 +126,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * The entity's ID in the match.
 	 * <p>
 	 * IDs are set by default to {@link IdFactory#UNASSIGNED}. This means entity IDs are mutable; entity IDs must be
-	 * mutable because entities can be cloned with {@link #clone()}. In practice, once an entity's ID is set, it is
-	 * not set again.
+	 * mutable because entities can be cloned with {@link #clone()}. In practice, once an entity's ID is set, it is not
+	 * set again.
 	 *
 	 * @return The entity's ID, or {@link IdFactory#UNASSIGNED} if it is unassigned.
 	 * @see IdFactory for the class that generates IDs.
@@ -397,5 +397,34 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public Zones getZone() {
 		return entityLocation.getZone();
+	}
+
+	/**
+	 * Follows {@link Attribute#TRANSFORM_REFERENCE} until the resolved entity is found.
+	 * <p>
+	 * Limits the number of transformations to follow to 16.
+	 *
+	 * @param context A {@link GameContext} to perform lookups in.
+	 * @return This entity if no transform is found, otherwise follows the chain of resolved entities until no
+	 * transformed entity is found.
+	 */
+	public Entity transformResolved(GameContext context) {
+		if (!getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)
+				|| getAttributes().get(Attribute.TRANSFORM_REFERENCE) == null) {
+			return this;
+		}
+
+		EntityReference reference = (EntityReference) getAttributes().get(Attribute.TRANSFORM_REFERENCE);
+		Entity entity = context.getEntities().filter(e -> e.getId() == reference.getId()).findFirst().orElseThrow(RuntimeException::new);
+		int i = 16;
+		while (!entity.transformResolved(context).equals(entity)) {
+			entity = entity.transformResolved(context);
+			i--;
+			if (i == -1) {
+				throw new RuntimeException("Cycle likely in entity transformation chain.");
+			}
+		}
+
+		return entity;
 	}
 }

@@ -10,13 +10,13 @@
   "battlecry": {
     "spell": {
       "class": "SummonSpell",
-      "randomTarget": "true",
       "cards": [
         "token_emboldener_3000",
         "token_homing_chicken",
         "token_poultryizer",
         "token_repair_bot"
-      ]
+      ],
+      "randomTarget": "true"
     }
   },
   "attributes": {

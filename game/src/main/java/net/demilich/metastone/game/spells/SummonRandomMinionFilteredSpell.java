@@ -10,47 +10,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 
-public class SummonRandomMinionFilteredSpell extends Spell {
-
-	protected static MinionCard getRandomMatchingMinionCard(GameContext context, Player player, EntityFilter cardFilter, CardSource cardSource, Entity source) {
-		CardList relevantMinions = null;
-		if (cardSource != null) {
-			CardList allCards = cardSource.getCards(context, player);
-			relevantMinions = new CardArrayList();
-			for (Card card : allCards) {
-				if (card.getCardType().isCardType(CardType.MINION) && (cardFilter == null || cardFilter.matches(context, player, card, source))) {
-					relevantMinions.addCard(card);
-				}
-			}
-		} else {
-			CardList allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
-			relevantMinions = new CardArrayList();
-			for (Card card : allMinions) {
-				if (cardFilter == null || cardFilter.matches(context, player, card, source)) {
-					relevantMinions.addCard(card);
-				}
-			}
-		}
-		
-		return (MinionCard) relevantMinions.getRandom();
-	}
-
-
-	@Override
-	@Suspendable
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-		String replacementCard = (String) desc.get(SpellArg.CARD);
-		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
-
-		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
-		MinionCard minionCard = getRandomMatchingMinionCard(context, player, cardFilter, cardSource, source);
-		if (minionCard == null && replacementCard != null) {
-			minionCard = (MinionCard) context.getCardById(replacementCard);
-		}
-		if (minionCard != null) {
-			context.getLogic().summon(player.getId(), minionCard.summon(), null, boardPosition, false);
-		}
-	}
-
+@Deprecated
+public class SummonRandomMinionFilteredSpell extends SummonSpell {
 }
