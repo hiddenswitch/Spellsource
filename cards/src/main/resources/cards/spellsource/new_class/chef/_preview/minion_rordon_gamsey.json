@@ -29,7 +29,7 @@
     {
       "description": "Gain 10 Armor",
       "spell": {
-        "class": "BuffHeroSpell",
+        "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
         "armorBonus": 10
       }
@@ -41,7 +41,7 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "BuffHeroSpell",
+          "class": "BuffSpell",
           "target": "FRIENDLY_HERO",
           "armorBonus": 10
         },

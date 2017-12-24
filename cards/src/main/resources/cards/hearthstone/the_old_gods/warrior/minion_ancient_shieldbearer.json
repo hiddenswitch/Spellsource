@@ -52,7 +52,7 @@
       ]
     },
     "spell": {
-      "class": "BuffHeroSpell",
+      "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
       "armorBonus": 10
     }

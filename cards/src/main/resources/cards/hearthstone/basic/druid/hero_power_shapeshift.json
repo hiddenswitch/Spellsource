@@ -7,7 +7,7 @@
   "description": "+1 Attack this turn. +1 Armor.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffHeroSpell",
+    "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
     "armorBonus": 1,
     "attackBonus": 1
