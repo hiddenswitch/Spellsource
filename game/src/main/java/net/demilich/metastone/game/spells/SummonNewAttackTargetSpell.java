@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -19,6 +19,28 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import static java.util.stream.Collectors.toList;
 
 public class SummonNewAttackTargetSpell extends Spell {
+	protected static MinionCard getRandomMatchingMinionCard(GameContext context, Player player, EntityFilter cardFilter, CardSource cardSource, Entity source) {
+		CardList relevantMinions = null;
+		if (cardSource != null) {
+			CardList allCards = cardSource.getCards(context, player);
+			relevantMinions = new CardArrayList();
+			for (Card card : allCards) {
+				if (card.getCardType().isCardType(CardType.MINION) && (cardFilter == null || cardFilter.matches(context, player, card, source))) {
+					relevantMinions.addCard(card);
+				}
+			}
+		} else {
+			CardList allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
+			relevantMinions = new CardArrayList();
+			for (Card card : allMinions) {
+				if (cardFilter == null || cardFilter.matches(context, player, card, source)) {
+					relevantMinions.addCard(card);
+				}
+			}
+		}
+
+		return (MinionCard) relevantMinions.getRandom();
+	}
 
 	public static SpellDesc create(MinionCard minionCard) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(SummonNewAttackTargetSpell.class);
@@ -34,7 +56,7 @@ public class SummonNewAttackTargetSpell extends Spell {
 		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
 		MinionCard minionCard = (MinionCard) SpellUtils.getCard(context, desc);
 		if (minionCard == null) {
-			minionCard = SummonRandomMinionFilteredSpell.getRandomMatchingMinionCard(context, player, cardFilter, cardSource, source);
+			minionCard = getRandomMatchingMinionCard(context, player, cardFilter, cardSource, source);
 		}
 
 		Minion targetMinion = minionCard.summon();
