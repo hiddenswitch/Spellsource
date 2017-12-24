@@ -46,6 +46,7 @@ public class RandomCardTargetSpell extends Spell {
 		if (spellCard.getTargetRequirement() == TargetSelection.NONE) {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
 			spellCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			context.getLogic().removeCard(spellCard);
 			return;
 		}
 
@@ -58,6 +59,7 @@ public class RandomCardTargetSpell extends Spell {
 		}
 
 		spellCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		context.getLogic().removeCard(spellCard);
 	}
 
 }

@@ -13,37 +13,6 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
-public class SummonRandomNotOnBoardSpell extends Spell {
-	private static boolean alreadyOnBoard(List<Minion> minions, String id) {
-		for (Minion minion : minions) {
-			if (minion.getSourceCard().getCardId().equals(id)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	@Suspendable
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		String[] minionCardsId = (String[]) desc.get(SpellArg.CARDS);
-		List<String> eligibleMinions = new ArrayList<String>();
-		for (String minion : minionCardsId) {
-			if (!alreadyOnBoard(player.getMinions(), minion)) {
-				eligibleMinions.add(minion);
-			}
-		}
-		if (eligibleMinions.isEmpty()) {
-			if (desc.getBool(SpellArg.EXCLUSIVE)) {
-				return;
-			} else {
-				eligibleMinions.addAll(Arrays.asList(minionCardsId));
-			}
-		}
-
-		String randomMinionId = context.getLogic().getRandom(eligibleMinions);
-		MinionCard randomMinionCard = (MinionCard) context.getCardById(randomMinionId);
-		context.getLogic().summon(player.getId(), randomMinionCard.summon(), null, -1, false);
-	}
-
+@Deprecated
+public class SummonRandomNotOnBoardSpell extends SummonSpell {
 }

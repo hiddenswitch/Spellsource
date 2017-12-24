@@ -30,6 +30,7 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 				context.getLogic().summon(player.getId(), minionCard.summon(), minionCard, -1, false);
 			}
 			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			context.getLogic().removeCard(card);
 			i++;
 		}
 

@@ -7,7 +7,7 @@
   "description": "Summon an Animal Companion, or 2 if your deck has no minions.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ConditionalEffectSpell",
+    "class": "EitherOrSpell",
     "condition": {
       "class": "ComparisonCondition",
       "operation": "EQUAL",
@@ -21,22 +21,24 @@
       },
       "value2": 0
     },
-    "spell1": {
-      "class": "SummonRandomNotOnBoardSpell",
-      "cards": [
-        "token_huffer",
-        "token_misha",
-        "token_leokk"
-      ]
-    },
     "spell2": {
-      "class": "SummonRandomNotOnBoardSpell",
+      "class": "SummonSpell",
       "cards": [
         "token_huffer",
         "token_misha",
         "token_leokk"
       ],
-      "exclusive": false
+      "randomTarget": true
+    },
+    "spell1": {
+      "class": "SummonSpell",
+      "value": 2,
+      "cards": [
+        "token_huffer",
+        "token_misha",
+        "token_leokk"
+      ],
+      "randomTarget": true
     }
   },
   "collectible": true,

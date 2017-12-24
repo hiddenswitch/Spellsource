@@ -76,6 +76,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 				context.getLogic().removeCardFromDeck(player.getId(), secretCard);
 			} else {
 				secretCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+				context.getLogic().removeCard(secretCard);
 			}
 
 

@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import co.paralleluniverse.fibers.Suspendable;
@@ -76,6 +77,15 @@ public class SummonSpell extends Spell {
 
 		if (desc.getCardFilter() != null || desc.getCardSource() != null) {
 			cards.addAll(desc.getFilteredCards(context, player, source));
+		}
+
+		if (desc.getBool(SpellArg.EXCLUSIVE)) {
+			Set<String> existingCardIds = player.getMinions().stream()
+					.map(Minion::getSourceCard)
+					.map(Card::getCardId)
+					.distinct()
+					.collect(Collectors.toSet());
+			cards.removeIf(c -> existingCardIds.contains(c.getCardId()));
 		}
 
 		if (cards.size() > 0) {

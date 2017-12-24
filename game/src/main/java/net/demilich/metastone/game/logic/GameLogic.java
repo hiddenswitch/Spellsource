@@ -2563,12 +2563,10 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void removeCard(Card card) {
 		log("Card {} has been moved from the {} to the GRAVEYARD", card, card.getEntityLocation().getZone().toString());
-		if (card.getPassiveTriggers() != null && card.getPassiveTriggers().length == 2) {
-			log("break");
-		}
 		removeEnchantments(card);
-		// If it's already in the graveyard, do nothing
-		if (card.getEntityLocation().getZone() == Zones.GRAVEYARD) {
+		// If it's already in the graveyard, do nothing more
+		if (card.getEntityLocation().getZone() == Zones.GRAVEYARD
+				|| card.getEntityLocation().getZone() == Zones.REMOVED_FROM_PLAY) {
 			return;
 		}
 		// TODO: It's not necessarily in the hand when it's removed!
