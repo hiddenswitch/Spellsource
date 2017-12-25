@@ -219,7 +219,7 @@ public enum Attribute {
 	 * <p>
 	 * This implements Baron Rivendare's text.
 	 *
-	 * @see GameLogic#resolveDeathrattles(Player, Actor, int) to see the complete rules for deathrattles.
+	 * @see GameLogic#resolveDeathrattles(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the complete rules for deathrattles.
 	 */
 	DOUBLE_DEATHRATTLES,
 	/**
