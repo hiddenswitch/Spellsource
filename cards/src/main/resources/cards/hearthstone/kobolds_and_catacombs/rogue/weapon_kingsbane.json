@@ -7,22 +7,13 @@
   "durability": 3,
   "rarity": "LEGENDARY",
   "description": "Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
-  "onEquip": {
-    "class": "NullSpell"
-  },
   "deathrattle": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "NullSpell"
-      },
-      {
-        "class": "NullSpell"
-      }
-    ]
+    "class": "ShuffleToDeckSpell",
+    "target": "SELF"
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "KEEPS_ENCHANTMENTS": true
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",

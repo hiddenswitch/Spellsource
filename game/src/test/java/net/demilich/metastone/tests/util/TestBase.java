@@ -278,7 +278,9 @@ public class TestBase {
 	}
 
 	protected static void playCard(GameContext context, Player player, Card card) {
-		context.getLogic().receiveCard(player.getId(), card);
+		if  (card.getZone() != Zones.HAND) {
+			context.getLogic().receiveCard(player.getId(), card);
+		}
 		context.getLogic().performGameAction(player.getId(), card.play());
 	}
 
