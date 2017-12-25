@@ -14,8 +14,8 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class BuffWeaponSpell extends Spell {
-
+@Deprecated
+public class BuffWeaponSpell extends BuffSpell {
 	private static Logger logger = LoggerFactory.getLogger(BuffWeaponSpell.class);
 
 	public static SpellDesc create(int attackBonus, int durabilityBonus) {
@@ -29,24 +29,4 @@ public class BuffWeaponSpell extends Spell {
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}
-
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		int damageBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
-		int durabilityBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
-
-		Weapon weapon = (Weapon) target;
-		if (weapon == null) {
-			return;
-		}
-
-		logger.debug("{} gains ({})", weapon, damageBonus + "/" + durabilityBonus);
-		if (damageBonus != 0) {
-			weapon.modifyAttribute(Attribute.ATTACK, damageBonus);
-		}
-		if (durabilityBonus != 0) {
-			context.getLogic().modifyDurability(weapon, durabilityBonus);
-		}
-	}
-
 }

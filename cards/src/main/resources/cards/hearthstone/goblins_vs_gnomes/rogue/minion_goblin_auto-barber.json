@@ -10,7 +10,7 @@
   "description": "Battlecry: Give your weapon +1 Attack.",
   "battlecry": {
     "spell": {
-      "class": "BuffWeaponSpell",
+      "class": "BuffSpell",
       "target": "FRIENDLY_WEAPON",
       "attackBonus": 1
     }

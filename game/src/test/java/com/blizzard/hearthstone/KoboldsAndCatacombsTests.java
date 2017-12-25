@@ -2,6 +2,7 @@ package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
@@ -214,6 +215,24 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			// Note the silver hand recruit is in index 0 in the hand
 			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(1)),
 					CardCatalogue.getCardById("minion_lynessa_sunsorrow").getBaseManaCost() - 2);
+		});
+
+		// Confirm that hero powers don't count
+		runGym((context, player, opponent) -> {
+			Minion silverHand1 = playMinionCard(context, player, "token_silver_hand_recruit");
+
+			Stream.of("spell_divine_strength").forEach(cardId -> {
+				playCardWithTarget(context, player, cardId, silverHand1);
+			});
+
+			GameAction heroPowerAction = player.getHeroPowerZone().get(0).play();
+			heroPowerAction.setTarget(silverHand1);
+			context.getLogic().performGameAction(player.getId(), heroPowerAction);
+			context.endTurn();
+
+			Minion lynessaSunsorrow = playMinionCard(context, player, "minion_lynessa_sunsorrow");
+			Assert.assertEquals(lynessaSunsorrow.getAttack(), 1 + 1);
+			Assert.assertEquals(lynessaSunsorrow.getHp(), 1 + 2);
 		});
 	}
 
