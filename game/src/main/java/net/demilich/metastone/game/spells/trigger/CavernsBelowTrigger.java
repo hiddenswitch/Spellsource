@@ -34,7 +34,7 @@ public class CavernsBelowTrigger extends MinionPlayedTrigger {
 		list.add(host, summonEvent.getSource());
 		// We're going to store the most recent max in the conditional attack bonus attribute
 		// on our enchantment
-		int max = (int) host.getAttributes().getOrDefault(Attribute.CONDITIONAL_ATTACK_BONUS, 0);
+		int max = (int) host.getAttributes().getOrDefault(Attribute.RESERVED_INTEGER_1, 0);
 		Map<String, Long> counts = list.getCards(context, host)
 				.stream()
 				.collect(groupingBy(Card::getName, Collectors.counting()));
@@ -42,7 +42,7 @@ public class CavernsBelowTrigger extends MinionPlayedTrigger {
 				.max(Comparator.comparingLong(Map.Entry::getValue))
 				.orElseThrow(RuntimeException::new).getValue().intValue();
 		if (newMax > max) {
-			host.getAttributes().put(Attribute.CONDITIONAL_ATTACK_BONUS, newMax);
+			host.getAttributes().put(Attribute.RESERVED_INTEGER_1, newMax);
 			return true;
 		} else {
 			return false;

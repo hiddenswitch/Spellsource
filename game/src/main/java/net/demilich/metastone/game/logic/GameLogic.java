@@ -671,6 +671,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 		// This implements Lynessa Sunsorrow
 		if (sourceCard != null
+				&& sourceCard.getCardType() == CardType.SPELL
 				&& targetSelection != TargetSelection.NONE
 				&& targets.size() == 1
 				&& targets.get(0).getOwner() == playerId
@@ -812,6 +813,16 @@ public class GameLogic implements Cloneable, Serializable {
 					destroyList.add(minion);
 				}
 			}
+
+			for (Entity entity : player.getSetAsideZone()) {
+				if (!(entity instanceof Actor)) {
+					continue;
+				}
+				if (entity.isDestroyed()) {
+					destroyList.add((Actor) entity);
+				}
+			}
+
 			if (player.getHero().getWeapon() != null && player.getHero().getWeapon().isDestroyed()) {
 				destroyList.add(player.getHero().getWeapon());
 			}
@@ -908,7 +919,7 @@ public class GameLogic implements Cloneable, Serializable {
 			// Dominant Player. However, Acidmaw can never stop Grim Patron spawning.
 			if (source.hasAttribute(Attribute.POISONOUS)
 					&& target.getEntityType() == EntityType.MINION) {
-				destroy(target);
+				markAsDestroyed(target);
 			}
 
 			// Implement lifesteal
@@ -1187,23 +1198,6 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Draws a virtual card into {@link Zones#SET_ASIDE_ZONE}.
-	 * <p>
-	 * Implements Yogg Sauron, Hope's End "spell drawing" mechanism.
-	 *
-	 * @param playerId The player who should draw this set aside card.
-	 * @param card     The card to draw.
-	 */
-	public void drawSetAsideCard(int playerId, Card card) {
-		if (card.getId() == IdFactory.UNASSIGNED) {
-			card.setId(getIdFactory().generateId());
-		}
-		card.setOwner(playerId);
-		Player player = context.getPlayer(playerId);
-		player.getSetAsideZone().add(card);
-	}
-
-	/**
 	 * Ends the player's turn, triggering {@link net.demilich.metastone.game.spells.trigger.TurnEndTrigger} triggers,
 	 * clearing one-turn attributes and effects, and removing dead entities.
 	 *
@@ -1255,6 +1249,7 @@ public class GameLogic implements Cloneable, Serializable {
 		if (resolveBattlecry
 				&& weapon.getBattlecry() != null) {
 			resolveBattlecry(playerId, weapon);
+			checkForDeadEntities();
 		}
 
 		postEquipWeapon(playerId, weapon, currentWeapon, player, weaponCard);
@@ -1264,8 +1259,7 @@ public class GameLogic implements Cloneable, Serializable {
 	protected void postEquipWeapon(int playerId, Weapon newWeapon, Weapon currentWeapon, Player player, WeaponCard source) {
 		if (currentWeapon != null) {
 			log("{} discards currently equipped weapon {}", player.getHero(), currentWeapon);
-			destroy(currentWeapon);
-			player.getSetAsideZone().remove(currentWeapon);
+			markAsDestroyed(currentWeapon);
 		}
 
 		player.getStatistics().equipWeapon(newWeapon);
@@ -1280,7 +1274,6 @@ public class GameLogic implements Cloneable, Serializable {
 		if (newWeapon.getCardCostModifier() != null) {
 			addManaModifier(player, newWeapon.getCardCostModifier(), newWeapon);
 		}
-		checkForDeadEntities();
 		context.fireGameEvent(new WeaponEquippedEvent(context, newWeapon, source));
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
@@ -3420,8 +3413,7 @@ public class GameLogic implements Cloneable, Serializable {
 			currentWeapon = player.getHero().getWeapon();
 
 			if (currentWeapon != null) {
-				player.getWeaponZone().remove(currentWeapon);
-				player.getSetAsideZone().add(currentWeapon);
+				currentWeapon.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			}
 
 			log("{} equips weapon {}", player.getHero(), weapon);

@@ -998,7 +998,14 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		if (targetKey == null) {
 			return null;
 		}
-		return targetLogic.findEntity(this, targetKey).transformResolved(this);
+
+		final Entity entity = targetLogic.findEntity(this, targetKey).transformResolved(this);
+
+		if (entity.getZone() == Zones.REMOVED_FROM_PLAY) {
+			throw new RuntimeException("Invalid reference.");
+		}
+
+		return entity;
 	}
 
 	/**

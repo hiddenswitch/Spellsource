@@ -10,7 +10,7 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffWeaponSpell",
+    "class": "BuffSpell",
     "target": "FRIENDLY_WEAPON",
     "attackBonus": 2
   },

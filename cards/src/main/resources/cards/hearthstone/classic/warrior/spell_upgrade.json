@@ -12,7 +12,7 @@
       "class": "HasWeaponCondition"
     },
     "spell1": {
-      "class": "BuffWeaponSpell",
+      "class": "BuffSpell",
       "target": "FRIENDLY_WEAPON",
       "attackBonus": 1,
       "hpBonus": 1

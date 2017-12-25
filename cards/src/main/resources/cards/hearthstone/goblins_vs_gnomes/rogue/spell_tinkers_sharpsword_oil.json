@@ -9,7 +9,7 @@
   "spell": {
     "class": "ComboSpell",
     "spell1": {
-      "class": "BuffWeaponSpell",
+      "class": "BuffSpell",
       "target": "FRIENDLY_WEAPON",
       "attackBonus": 3
     },
