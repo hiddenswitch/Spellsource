@@ -20,6 +20,23 @@ import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
+	public void testKingsbane() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_kingsbane");
+			playCard(context, player, "spell_envenom_weapon");
+			for (int i = 0; i < 3; i++) {
+				attack(context, player, player.getHero(), opponent.getHero());
+				context.endTurn();
+				context.endTurn();
+			}
+			context.endTurn();
+			context.endTurn();
+			playCard(context, player, player.getHand().get(0));
+			Assert.assertTrue(player.getHero().getWeapon().hasAttribute(Attribute.POISONOUS));
+		});
+	}
+
+	@Test
 	public void testCallPetUnidentifiedElixirInteraction() {
 		runGym((context, player, opponent) -> {
 			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_unidentified_elixir"));
