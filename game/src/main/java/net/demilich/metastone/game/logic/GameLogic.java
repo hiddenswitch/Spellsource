@@ -1050,7 +1050,6 @@ public class GameLogic implements Cloneable, Serializable {
 					KillEvent killEvent = new KillEvent(context, target);
 					context.fireGameEvent(killEvent);
 					context.getEnvironment().remove(Environment.KILLED_MINION);
-
 					applyAttribute(target, Attribute.DESTROYED);
 					target.setAttribute(Attribute.DIED_ON_TURN, context.getTurn());
 					break;
@@ -1063,7 +1062,7 @@ public class GameLogic implements Cloneable, Serializable {
 					break;
 			}
 
-			resolveDeathrattles(owner, target, previousLocation.get(target).getIndex());
+			resolveDeathrattles(owner, target, previousLocation.get(target));
 		}
 		for (Actor target : targets) {
 			removeEnchantments(target, true);
@@ -2606,8 +2605,14 @@ public class GameLogic implements Cloneable, Serializable {
 	public void removeActor(Actor actor, boolean peacefully) {
 		removeEnchantments(actor);
 		log("{} was removed", actor);
-		actor.setAttribute(Attribute.DESTROYED);
-		actor.moveOrAddTo(context, peacefully ? Zones.SET_ASIDE_ZONE : Zones.GRAVEYARD);
+		if (actor instanceof Weapon
+				&& peacefully) {
+			// Move the weapon directly to the graveyard and don't trigger its deathrattle.
+			actor.moveOrAddTo(context, Zones.GRAVEYARD);
+		} else {
+			actor.setAttribute(Attribute.DESTROYED);
+			actor.moveOrAddTo(context, peacefully ? Zones.SET_ASIDE_ZONE : Zones.GRAVEYARD);
+		}
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -2790,25 +2795,29 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void resolveDeathrattles(Player player, Actor actor) {
-		resolveDeathrattles(player, actor, -1);
+		resolveDeathrattles(player, actor, actor.getEntityLocation());
 	}
 
 	/**
 	 * Executes the deathrattle effect written on this {@link Actor}.
 	 *
-	 * @param player        The player that owns the actor.
-	 * @param actor         The actor.
-	 * @param boardPosition The position on the board the actor used to have. Important for adjacency deathrattle
-	 *                      effects.
+	 * @param player           The player that owns the actor.
+	 * @param actor            The actor.
+	 * @param previousLocation The position on the board the actor used to have. Important for adjacency deathrattle
 	 */
 	@Suspendable
-	public void resolveDeathrattles(Player player, Actor actor, int boardPosition) {
+	public void resolveDeathrattles(Player player, Actor actor, EntityLocation previousLocation) {
+		int boardPosition = previousLocation.getIndex();
 		if (!actor.hasAttribute(Attribute.DEATHRATTLES)) {
 			return;
 		}
-		if (boardPosition == -1) {
-			boardPosition = actor.getEntityLocation().getIndex();
+
+		// Don't trigger deathrattles for entities in the set aside zone... unless it's a weapon
+		if (previousLocation.getZone() == Zones.SET_ASIDE_ZONE
+				&& !(actor instanceof Weapon)) {
+			return;
 		}
+
 		boolean doubleDeathrattles = hasAttribute(player, Attribute.DOUBLE_DEATHRATTLES);
 		EntityReference sourceReference = actor.getReference();
 		for (SpellDesc deathrattleTemplate : actor.getDeathrattles()) {
