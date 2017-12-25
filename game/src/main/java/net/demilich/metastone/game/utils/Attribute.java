@@ -667,6 +667,13 @@ public enum Attribute {
 	 */
 	TRANSFORM_REFERENCE,
 	/**
+	 * Remembers the {@link #ATTACK_BONUS}, {@link #HP_BONUS}, {@link #LIFESTEAL}, {@link #WINDFURY}, {@link #POISONOUS}
+	 * that was applied to the {@link Actor} that gets subjected to a {@link net.demilich.metastone.game.spells.ShuffleToDeckSpell}.
+	 * <p>
+	 * Implements Kingsbane.
+	 */
+	KEEPS_ENCHANTMENTS,
+	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>
 	 */
