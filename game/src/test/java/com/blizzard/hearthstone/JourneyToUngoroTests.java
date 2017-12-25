@@ -1,6 +1,8 @@
 package com.blizzard.hearthstone;
 
 
+import net.demilich.metastone.game.cards.desc.SpellCardDesc;
+import net.demilich.metastone.game.spells.AddAttributeSpell;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -27,6 +29,63 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
+	@Test
+	public void testGastropodTirionFordringInteraction() {
+		// Bug happened due to postEquipWeapon performing a checkForDeadEntities in the middle of
+		runGym((context, player, opponent) -> {
+			Minion tirionFordring = playMinionCard(context, player, "minion_tirion_fordring");
+			context.endTurn();
+			Minion stubbornGastropod = playMinionCard(context, opponent, "minion_stubborn_gastropod");
+			context.endTurn();
+			tirionFordring.setAttribute(Attribute.POISONOUS);
+			stubbornGastropod.setAttack(10);
+			tirionFordring.setAttack(10);
+			// Clear Tirion's divine shield and equip a weapon with deathrattle
+			playCardWithTarget(context, player, "spell_fireball", tirionFordring);
+			Assert.assertFalse(tirionFordring.hasAttribute(Attribute.DIVINE_SHIELD));
+			playCard(context, player, "weapon_tentacles_for_arms");
+			attack(context, player, tirionFordring, stubbornGastropod);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion stubbornGastropod = playMinionCard(context, player, "minion_stubborn_gastropod");
+			context.endTurn();
+			Minion tirionFordring = playMinionCard(context, opponent, "minion_tirion_fordring");
+			tirionFordring.setAttribute(Attribute.POISONOUS);
+			stubbornGastropod.setAttack(10);
+			tirionFordring.setAttack(10);
+			playCard(context, opponent, "weapon_tentacles_for_arms");
+			context.endTurn();
+			// Clear Tirion's divine shield and equip a weapon with deathrattle
+			playCardWithTarget(context, player, "spell_fireball", tirionFordring);
+			Assert.assertFalse(tirionFordring.hasAttribute(Attribute.DIVINE_SHIELD));
+			attack(context, player, stubbornGastropod, tirionFordring);
+		});
+	}
+
+	@Test
+	public void testTwoPoisonousMinionsKillingEachOther() {
+		runGym((context, player, opponent) -> {
+			Minion stubbornGastropod1 = playMinionCard(context, player, "minion_stubborn_gastropod");
+			context.endTurn();
+			Minion stubbornGastropod2 = playMinionCard(context, opponent, "minion_stubborn_gastropod");
+			context.endTurn();
+			attack(context, player, stubbornGastropod1, stubbornGastropod2);
+			Assert.assertEquals(player.getMinions().size() + opponent.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion stubbornGastropod1 = playMinionCard(context, player, "minion_stubborn_gastropod");
+			context.endTurn();
+			Minion stubbornGastropod2 = playMinionCard(context, opponent, "minion_stubborn_gastropod");
+			context.endTurn();
+			stubbornGastropod1.setAttack(3);
+			stubbornGastropod2.setAttack(3);
+			attack(context, player, stubbornGastropod1, stubbornGastropod2);
+			Assert.assertEquals(player.getMinions().size() + opponent.getMinions().size(), 0);
+		});
+	}
+
 	@Test
 	public void testStubbornGatropodFlesheatingGhoulInteraction() {
 		// Tests that a mysterious exception due to a minion already being dead doesn't occur

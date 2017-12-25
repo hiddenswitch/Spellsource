@@ -402,29 +402,28 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	/**
 	 * Follows {@link Attribute#TRANSFORM_REFERENCE} until the resolved entity is found.
 	 * <p>
-	 * Limits the number of transformations to follow to 16.
+	 * Limits the number of transformations to follow to 89.
 	 *
 	 * @param context A {@link GameContext} to perform lookups in.
 	 * @return This entity if no transform is found, otherwise follows the chain of resolved entities until no
 	 * transformed entity is found.
 	 */
 	public Entity transformResolved(GameContext context) {
+		return transformResolved(context, 89);
+	}
+
+	protected Entity transformResolved(GameContext context, int depth) {
+		if (depth < 0) {
+			throw new RuntimeException("Cycle likely in transformation references.");
+		}
 		if (!getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)
 				|| getAttributes().get(Attribute.TRANSFORM_REFERENCE) == null) {
 			return this;
 		}
 
-		Entity entity = context.getEntities().filter(e -> e.getId() == ((EntityReference) getAttributes().get(Attribute.TRANSFORM_REFERENCE)).getId()).findFirst().orElseThrow(RuntimeException::new);
-		int i = 16;
-		while (entity.getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)
-				&& getAttributes().get(Attribute.TRANSFORM_REFERENCE) != null) {
-			final EntityReference reference = (EntityReference) entity.getAttributes().get(Attribute.TRANSFORM_REFERENCE);
-			entity = context.getEntities().filter(e -> e.getId() == reference.getId()).findFirst().orElseThrow(RuntimeException::new);
-			i--;
-			if (i == -1) {
-				throw new RuntimeException("Cycle likely in entity transformation chain.");
-			}
-		}
+		EntityReference reference = (EntityReference) getAttributes().get(Attribute.TRANSFORM_REFERENCE);
+		Entity entity = context.getEntities().filter(e -> e.getId() == reference.getId()).findFirst().orElseThrow(RuntimeException::new);
+		entity = entity.transformResolved(context, depth - 1);
 
 		return entity;
 	}
