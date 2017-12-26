@@ -29,7 +29,6 @@ import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.InventoryCollection;
-import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponseUnityConnection;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -56,8 +55,8 @@ public class Account  implements Serializable {
   @SerializedName("decks")
   private List<InventoryCollection> decks = new ArrayList<InventoryCollection>();
 
-  @SerializedName("connection")
-  private MatchmakingQueuePutResponseUnityConnection connection = null;
+  @SerializedName("inMatch")
+  private Boolean inMatch = null;
 
   @SerializedName("personalCollection")
   private InventoryCollection personalCollection = null;
@@ -162,22 +161,22 @@ public class Account  implements Serializable {
     this.decks = decks;
   }
 
-  public Account connection(MatchmakingQueuePutResponseUnityConnection connection) {
-    this.connection = connection;
+  public Account inMatch(Boolean inMatch) {
+    this.inMatch = inMatch;
     return this;
   }
 
    /**
-   * Get connection
-   * @return connection
+   * True if the client should attempt to connect to a match with its token. 
+   * @return inMatch
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public MatchmakingQueuePutResponseUnityConnection getConnection() {
-    return connection;
+  @ApiModelProperty(example = "null", value = "True if the client should attempt to connect to a match with its token. ")
+  public Boolean getInMatch() {
+    return inMatch;
   }
 
-  public void setConnection(MatchmakingQueuePutResponseUnityConnection connection) {
-    this.connection = connection;
+  public void setInMatch(Boolean inMatch) {
+    this.inMatch = inMatch;
   }
 
   public Account personalCollection(InventoryCollection personalCollection) {
@@ -213,13 +212,13 @@ public class Account  implements Serializable {
         Objects.equals(this.email, account.email) &&
         Objects.equals(this.friends, account.friends) &&
         Objects.equals(this.decks, account.decks) &&
-        Objects.equals(this.connection, account.connection) &&
+        Objects.equals(this.inMatch, account.inMatch) &&
         Objects.equals(this.personalCollection, account.personalCollection);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, email, friends, decks, connection, personalCollection);
+    return Objects.hash(id, name, email, friends, decks, inMatch, personalCollection);
   }
 
   @Override
@@ -232,7 +231,7 @@ public class Account  implements Serializable {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    friends: ").append(toIndentedString(friends)).append("\n");
     sb.append("    decks: ").append(toIndentedString(decks)).append("\n");
-    sb.append("    connection: ").append(toIndentedString(connection)).append("\n");
+    sb.append("    inMatch: ").append(toIndentedString(inMatch)).append("\n");
     sb.append("    personalCollection: ").append(toIndentedString(personalCollection)).append("\n");
     sb.append("}");
     return sb.toString();

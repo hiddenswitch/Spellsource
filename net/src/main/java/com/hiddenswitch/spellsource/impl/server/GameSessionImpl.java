@@ -43,7 +43,7 @@ public class GameSessionImpl implements GameSession {
 	private PregamePlayerConfiguration pregamePlayerConfiguration2;
 	private ServerGameContext gameContext;
 	private final String gameId;
-	private final Map<String, String> secretForUserId = new HashMap<>();
+	//	private final Map<String, String> secretForUserId = new HashMap<>();
 	private Logger logger = LoggerFactory.getLogger(GameSessionImpl.class);
 	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
 	private final HashSet<Handler<GameSessionImpl>> gameOverHandlers = new HashSet<>();
@@ -59,23 +59,23 @@ public class GameSessionImpl implements GameSession {
 		if (p1.getUserId().equals(p2.getUserId())) {
 			throw new RuntimeException();
 		}
-		for (String userId : new String[]{p1.getUserId(), p2.getUserId()}) {
-			if (userId == null) {
-				throw new RuntimeException();
-			}
-			this.secretForUserId.put(userId, RandomStringUtils.randomAlphanumeric(40));
-		}
+//		for (String userId : new String[]{p1.getUserId(), p2.getUserId()}) {
+//			if (userId == null) {
+//				throw new RuntimeException();
+//			}
+//			this.secretForUserId.put(userId, RandomStringUtils.randomAlphanumeric(40));
+//		}
 		this.noActivityTimeout = noActivityTimeout;
 	}
 
 	private ClientConnectionConfiguration getConfigurationFor(PregamePlayerConfiguration player, int id) {
 		return new ClientConnectionConfiguration(
-				getUrl(), player.getUserId(), getSecret(player.getUserId()));
+				getUrl(), player.getUserId(), /*getSecret(player.getUserId())*/ null);
 	}
 
-	public String getSecret(String userId) {
-		return secretForUserId.getOrDefault(userId, null);
-	}
+//	public String getSecret(String userId) {
+//		return secretForUserId.getOrDefault(userId, null);
+//	}
 
 	@Override
 	@Suspendable
@@ -382,7 +382,7 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	public String getUrl() {
-		return "ws://" + getHost() + ":" + Integer.toString(websocketPort) + "/" + Games.WEBSOCKET_PATH;
+		return "ws://" + getHost() + ":" + Integer.toString(websocketPort) + "/" + Games.WEBSOCKET_PATH + "-clustered";
 	}
 
 	private int getOpponent(int playerId) {

@@ -2,20 +2,30 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.client.models.Entity;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
+import com.hiddenswitch.spellsource.impl.GameId;
+import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.models.*;
-import io.vertx.core.Verticle;
-import net.demilich.metastone.game.events.HasCard;
-import net.demilich.metastone.game.utils.Attribute;
+import com.hiddenswitch.spellsource.util.SharedData;
+import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.streams.Pump;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.AuthHandler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
-import net.demilich.metastone.game.entities.*;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityLocation;
+import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -28,6 +38,7 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -524,19 +535,29 @@ public interface Games {
 				.damageDealt(damageDealt);
 	}
 
-	/**
-	 * Requests if this particular game service contains the game session.
-	 * <p>
-	 * In the future, it should punt the request to the next Games service instance if it doesn't have the requested
-	 * session.
-	 *
-	 * @param request Information to help query for game sessions.
-	 * @return A reference to the game session and useful information about it.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	@Suspendable
-	ContainsGameSessionResponse containsGameSession(ContainsGameSessionRequest request) throws SuspendExecution, InterruptedException;
+	static void configureWebsocketHandler(Router router, EventBus bus, AuthHandler authHandler) {
+		router.route("/" + WEBSOCKET_PATH + "-clustered")
+				.method(HttpMethod.GET)
+				.handler(authHandler);
+
+		router.route("/" + WEBSOCKET_PATH + "-clustered")
+				.method(HttpMethod.GET)
+				.handler(context -> {
+					final ServerWebSocket socket = context.request().upgrade();
+					final String userId = context.user().principal().getString("_id");
+					final MessageConsumer<Buffer> consumer = bus.<Buffer>consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
+					final Pump pump1 = Pump.pump(socket, bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId)).start();
+					Pump.pump(consumer.bodyStream(), socket).start();
+					socket.closeHandler(disconnected -> {
+						pump1.stop();
+						consumer.unregister();
+					});
+				});
+	}
+
+	static Map<GameId, CreateGameSessionResponse> getConnections(Vertx vertx) {
+		return SharedData.getClusterWideMap("ClusteredGamesImpl/connections", vertx);
+	}
 
 	/**
 	 * Creates a game session on this instance.

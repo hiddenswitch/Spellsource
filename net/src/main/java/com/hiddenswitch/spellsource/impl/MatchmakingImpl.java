@@ -19,6 +19,7 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
@@ -31,11 +32,13 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	private Map<String, ClientConnectionConfiguration> connections = new HashMap<>();
 	private Registration registration;
 	private Set<String> processing = Collections.synchronizedSet(new HashSet<>());
+	private Map<GameId, CreateGameSessionResponse> responses;
 
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
 
+		responses = Games.getConnections(vertx);
 		gameSessions = Rpc.connect(Games.class, vertx.eventBus());
 		logic = Rpc.connect(Logic.class, vertx.eventBus());
 		bots = Rpc.connect(Bots.class, vertx.eventBus());
@@ -79,7 +82,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		final Deck deck1 = startGameResponse.getPlayers().get(0).getDeck();
 		final Deck deck2 = startGameResponse.getPlayers().get(1).getDeck();
 
-		final CreateGameSessionRequest request2 = new CreateGameSessionRequest()
+		final CreateGameSessionRequest createGameSessionRequest = new CreateGameSessionRequest()
 				.withPregame1(new PregamePlayerConfiguration(deck1, userId1)
 						.withAI(request.isBot1())
 						.withAttributes(startGameResponse.getPregamePlayerConfiguration1().getAttributes()))
@@ -87,12 +90,9 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 						.withAI(request.isBot2())
 						.withAttributes(startGameResponse.getPregamePlayerConfiguration2().getAttributes()))
 				.withGameId(gameId);
-		CreateGameSessionResponse createGameSessionResponse = gameSessions.sync().createGameSession(request2);
+		CreateGameSessionResponse createGameSessionResponse = gameSessions.sync().createGameSession(createGameSessionRequest);
 		connections.put(userId1, createGameSessionResponse.getConfigurationForPlayer1());
 		connections.put(userId2, createGameSessionResponse.getConfigurationForPlayer2());
-		// Save the connections to the user documents
-		Accounts.update(userId1, QuickJson.json("$set", QuickJson.json("connection", json(createGameSessionResponse.getConfigurationForPlayer1().toUnityConnection()))));
-		Accounts.update(userId2, QuickJson.json("$set", QuickJson.json("connection", json(createGameSessionResponse.getConfigurationForPlayer2().toUnityConnection()))));
 		return new MatchCreateResponse(createGameSessionResponse);
 	}
 
@@ -131,7 +131,6 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			matchmaker.match(response1.getGameId(), matchmakingRequest.getUserId(), response1.getBotUserId(), matchmakingRequest.getDeckId(), response1.getBotDeckId());
 			final ClientConnectionConfiguration connection = response1.getPlayerConnection();
 			connections.put(userId, connection);
-			Accounts.update(userId, QuickJson.json("$set", QuickJson.json("connection", json(connection.toUnityConnection()))));
 			response.setConnection(connection);
 			processing.remove(userId);
 			return response;
@@ -162,18 +161,28 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 		processing.add(match.entry1.userId);
 		processing.add(match.entry2.userId);
-		final ContainsGameSessionResponse contains = gameSessions.sync().containsGameSession(new ContainsGameSessionRequest(match.gameId));
+		final GameId key = new GameId(match.gameId);
+		final CreateGameSessionResponse existingGame = responses.get(key);
 
-		if (!contains.result) {
+		if (existingGame == null) {
 			// Create a game session.
-			Deck deck1 = match.entry1.deck;
-			Deck deck2 = match.entry2.deck;
+			MatchCreateResponse createMatchResponse = createMatch(new MatchCreateRequest(match));
+			if (createMatchResponse.getCreateGameSessionResponse().isPending()) {
+				// Wait 500ms up to 4 times to see if the match successfully deployed
+				int i = 0;
+				final int retries = 4;
+				final int retryDelay = 500;
+				for (; i < retries; i++) {
+					Strand.sleep(retryDelay);
 
-			// To run in alliance mode, both decks need to be references
-			if (match.isAllianceMatch()) {
-				createMatch(new MatchCreateRequest(match));
-			} else {
-				legacyCreateGame(match, deck1, deck2);
+					if (!responses.get(key).isPending()) {
+						break;
+					}
+				}
+
+				if (i >= retries) {
+					throw new NullPointerException("Timed out while waiting for a match to be created for this user.");
+				}
 			}
 		}
 
@@ -183,22 +192,11 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		return response;
 	}
 
-	private void legacyCreateGame(Matchmaker.Match match, Deck deck1, Deck deck2) throws SuspendExecution, InterruptedException {
-		final String userId1 = match.entry1.userId;
-		final String userId2 = match.entry2.userId;
-		final CreateGameSessionRequest request = new CreateGameSessionRequest()
-				.withPregame1(new PregamePlayerConfiguration(deck1, userId1))
-				.withPregame2(new PregamePlayerConfiguration(deck2, userId2))
-				.withGameId(match.gameId);
-		CreateGameSessionResponse createGameSessionResponse = gameSessions.sync().createGameSession(request);
-		connections.put(userId1, createGameSessionResponse.getConfigurationForPlayer1());
-		connections.put(userId2, createGameSessionResponse.getConfigurationForPlayer2());
-	}
-
 	@Override
 	public CurrentMatchResponse getCurrentMatch(CurrentMatchRequest request) throws SuspendExecution, InterruptedException {
 		if (matchmaker.indexedByUserIds().containsKey(request.getUserId())) {
-			return new CurrentMatchResponse(matchmaker.indexedByUserIds().get(request.getUserId()).gameId);
+			final String gameId = matchmaker.indexedByUserIds().get(request.getUserId()).gameId;
+			return new CurrentMatchResponse(gameId);
 		} else {
 			return new CurrentMatchResponse(null);
 		}
@@ -219,7 +217,6 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		final String userId2 = match.entry2.userId;
 		connections.remove(userId1);
 		connections.remove(userId2);
-		Accounts.update(QuickJson.json("_id", QuickJson.json("$in", Arrays.asList(userId1, userId2))), QuickJson.json("$unset", QuickJson.json("connection", true)));
 
 		response.expired = matchmaker.expire(request.gameId);
 
@@ -239,13 +236,6 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Suspendable
 	public void stop() throws Exception {
 		super.stop();
-
-		// Wipe all connections this matchmaking was managing
-		Mongo.mongo()
-				.updateCollectionWithOptions(Accounts.USERS,
-						QuickJson.json("_id", QuickJson.json("$in", Arrays.asList(connections.keySet().toArray()))),
-						QuickJson.json("$unset", QuickJson.json("connection", true)),
-						new UpdateOptions().setMulti(true));
 
 		if (registration != null) {
 			Rpc.unregister(registration);

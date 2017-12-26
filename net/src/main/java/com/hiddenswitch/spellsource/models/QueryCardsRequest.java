@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * Created by bberman on 1/19/17.
  */
-public class QueryCardsRequest implements Serializable {
+public final class QueryCardsRequest implements Serializable {
 	private List<QueryCardsRequest> requests;
 	private CardSet[] sets;
 	private Set<CardFields> fields;

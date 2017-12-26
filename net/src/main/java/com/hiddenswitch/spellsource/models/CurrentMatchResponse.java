@@ -1,5 +1,7 @@
 package com.hiddenswitch.spellsource.models;
 
+import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponseUnityConnection;
+
 import java.io.Serializable;
 
 /**
