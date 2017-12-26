@@ -982,7 +982,7 @@ Name | Type | Description  | Notes
 
 
 
-Removes your writer from the matchmaking queue.
+Removes your client from the matchmaking queue.
 
 ### Example
 ```java
@@ -1033,7 +1033,7 @@ This endpoint does not need any parameter.
 
 
 
-Enters your writer into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
 
 ### Example
 ```java

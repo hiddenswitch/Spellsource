@@ -2026,7 +2026,7 @@ public class DefaultApi {
 
     /**
      * 
-     * Removes your writer from the matchmaking queue.
+     * Removes your client from the matchmaking queue.
      * @return MatchCancelResponse
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -2037,7 +2037,7 @@ public class DefaultApi {
 
     /**
      * 
-     * Removes your writer from the matchmaking queue.
+     * Removes your client from the matchmaking queue.
      * @return ApiResponse&lt;MatchCancelResponse&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -2049,7 +2049,7 @@ public class DefaultApi {
 
     /**
      *  (asynchronously)
-     * Removes your writer from the matchmaking queue.
+     * Removes your client from the matchmaking queue.
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -2135,7 +2135,7 @@ public class DefaultApi {
 
     /**
      * 
-     * Enters your writer into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
      * @param queueId The ID of the queue to enter. (required)
      * @param request The matchmaking queue entry. Contains the deck.  (required)
      * @return MatchmakingQueuePutResponse
@@ -2148,7 +2148,7 @@ public class DefaultApi {
 
     /**
      * 
-     * Enters your writer into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
      * @param queueId The ID of the queue to enter. (required)
      * @param request The matchmaking queue entry. Contains the deck.  (required)
      * @return ApiResponse&lt;MatchmakingQueuePutResponse&gt;
@@ -2162,7 +2162,7 @@ public class DefaultApi {
 
     /**
      *  (asynchronously)
-     * Enters your writer into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
      * @param queueId The ID of the queue to enter. (required)
      * @param request The matchmaking queue entry. Contains the deck.  (required)
      * @param callback The callback to be executed when the API call finishes

@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Integer** | An integer ID corresponding to the order of this event from the writer&#39;s point of view.  |  [optional]
+**id** | **Integer** | An integer ID corresponding to the order of this event from the client&#39;s point of view.  |  [optional]
 **description** | **String** | A plaintext description of this event.  |  [optional]
 **isPowerHistory** | **Boolean** | Should this event be rendered in the power history?  |  [optional]
 **eventType** | [**EventTypeEnum**](#EventTypeEnum) | The game event type corresponding to this game event.  |  [optional]

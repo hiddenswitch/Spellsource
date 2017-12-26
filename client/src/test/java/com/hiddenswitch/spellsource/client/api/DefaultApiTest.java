@@ -357,7 +357,7 @@ public class DefaultApiTest {
     /**
      * 
      *
-     * Removes your writer from the matchmaking queue.
+     * Removes your client from the matchmaking queue.
      *
      * @throws ApiException
      *          if the Api call fails
@@ -372,7 +372,7 @@ public class DefaultApiTest {
     /**
      * 
      *
-     * Enters your writer into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
+     * Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
      *
      * @throws ApiException
      *          if the Api call fails
