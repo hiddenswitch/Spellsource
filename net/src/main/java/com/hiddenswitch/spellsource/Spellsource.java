@@ -247,7 +247,7 @@ public class Spellsource {
 		return new SyncVerticle[]{
 				new CardsImpl(),
 				new AccountsImpl(),
-				new GamesImpl(),
+				new ClusteredGamesImpl(),
 				new MatchmakingImpl(),
 				new BotsImpl(),
 				new LogicImpl(),

@@ -10,6 +10,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
 import java.io.IOException;
+import java.io.OptionalDataException;
 
 class ReplyHandler implements Handler<AsyncResult<Message<Object>>> {
 	static Logger logger = LoggerFactory.getLogger(ReplyHandler.class);
@@ -26,6 +27,8 @@ class ReplyHandler implements Handler<AsyncResult<Message<Object>>> {
 			try {
 				Object body = Serialization.deserialize(new VertxBufferInputStream((Buffer) reply.result().body()));
 				next.handle(Future.succeededFuture(body));
+			} catch (OptionalDataException dataException) {
+				next.handle(Future.failedFuture(dataException));
 			} catch (IOException | ClassNotFoundException e) {
 				next.handle(Future.failedFuture(e));
 			}

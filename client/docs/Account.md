@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **email** | **String** |  |  [optional]
 **friends** | [**List&lt;Friend&gt;**](Friend.md) |  |  [optional]
 **decks** | [**List&lt;InventoryCollection&gt;**](InventoryCollection.md) |  |  [optional]
-**connection** | [**MatchmakingQueuePutResponseUnityConnection**](MatchmakingQueuePutResponseUnityConnection.md) |  |  [optional]
+**inMatch** | **Boolean** | True if the client should attempt to connect to a match with its token.  |  [optional]
 **personalCollection** | [**InventoryCollection**](InventoryCollection.md) |  |  [optional]
 
 

@@ -10,7 +10,7 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
-public class EventTriggerDesc extends Desc<EventTriggerArg> {
+public final class EventTriggerDesc extends Desc<EventTriggerArg> {
 
 	public static Map<EventTriggerArg, Object> build(Class<? extends EventTrigger> triggerClass) {
 		final Map<EventTriggerArg, Object> arguments = new EnumMap<>(EventTriggerArg.class);

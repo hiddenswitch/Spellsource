@@ -2,14 +2,28 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.Games;
+import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
+import com.hiddenswitch.spellsource.models.CreateGameSessionResponse;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import com.hiddenswitch.spellsource.util.SharedData;
 import com.hiddenswitch.spellsource.util.SuspendableMap;
+import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.streams.Pump;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.sync.SyncVerticle;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.AuthHandler;
+
+import java.util.Map;
 
 /**
  * An abstract class providing common backend features for microservices in Spellsource.
@@ -65,9 +79,8 @@ public abstract class AbstractService<T extends AbstractService<T>> extends Sync
 		// Check if we already have a matchmaking service online. If so, we shouldn't start.
 		Class<?> thisClass = ((T) this).getClass();
 		if (vertx.isClustered()) {
-			SuspendableMap<String, Boolean> matchmakingMap = SharedData.sharedData()
-					.connect(vertx)
-					.getClusterWideMap(thisClass.getCanonicalName());
+			Map<String, Boolean> matchmakingMap = SharedData
+					.getClusterWideMap(thisClass.getCanonicalName(), vertx);
 
 			if (null != matchmakingMap.putIfAbsent("singleton", true)) {
 				return false;
@@ -83,9 +96,8 @@ public abstract class AbstractService<T extends AbstractService<T>> extends Sync
 		if (vertx.isClustered()) {
 			Class<?> thisClass = ((T) this).getClass();
 
-			SuspendableMap<String, Boolean> matchmakingMap = SharedData.sharedData()
-					.connect(vertx)
-					.getClusterWideMap(thisClass.getCanonicalName());
+			Map<String, Boolean> matchmakingMap = SharedData
+					.getClusterWideMap(thisClass.getCanonicalName(), vertx);
 
 			matchmakingMap.remove("singleton");
 		}

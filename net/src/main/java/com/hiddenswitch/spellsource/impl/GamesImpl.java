@@ -25,7 +25,6 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 
-import java.net.SocketException;
 import java.util.*;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
@@ -124,12 +123,6 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 
 	@Override
 	@Suspendable
-	public ContainsGameSessionResponse containsGameSession(ContainsGameSessionRequest request) throws SuspendExecution, InterruptedException {
-		return new ContainsGameSessionResponse(this.getGames().containsKey(request.gameId));
-	}
-
-	@Override
-	@Suspendable
 	public CreateGameSessionResponse createGameSession(CreateGameSessionRequest request) throws SuspendExecution, InterruptedException {
 		if (request.getGameId() == null) {
 			throw new RuntimeException("Game ID cannot be null in a create game session request.");
@@ -150,7 +143,7 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 				throw new RuntimeException("The player cannot be in two games at once.");
 			}
 			gameForUserId.put(userId, session);
-			keyToSecret.put(userId, session.getSecret(userId));
+			keyToSecret.put(userId, /*session.getSecret(userId)*/  null);
 		}
 
 		// If the game has no activity after a certain amount of time, kill it automatically.

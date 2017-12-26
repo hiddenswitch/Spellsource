@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * Created by bberman on 1/19/17.
  */
-public class QueryCardsResponse implements Serializable {
+public final class QueryCardsResponse implements Serializable {
 	private List<CardCatalogueRecord> records;
 
 	public List<String> getCardIds() {

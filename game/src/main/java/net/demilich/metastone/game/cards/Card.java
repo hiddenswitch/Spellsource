@@ -35,8 +35,6 @@ import java.util.List;
  * @see CardParser#parseCard(JsonObject) to see how cards are deserialized from their JSON representation.
  */
 public abstract class Card extends Entity {
-	private static final long serialVersionUID = 1L;
-
 	private String description = "";
 	@SerializedName("cardType2")
 	private CardType cardType;
