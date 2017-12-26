@@ -275,7 +275,6 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	private String userIdDisconnecting;
 
 	@Test
-	@Ignore
 	public void testDisconnectingUnityClient(TestContext context) {
 		wrap(context);
 		setLoggingLevel(Level.ERROR);
