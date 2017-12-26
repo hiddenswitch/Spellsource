@@ -33,9 +33,9 @@ import java.util.List;
 
 import java.io.Serializable;
 /**
- * An abbreviated description of changes since the last change set this writer received. 
+ * An abbreviated description of changes since the last change set this client received. 
  */
-@ApiModel(description = "An abbreviated description of changes since the last change set this writer received. ")
+@ApiModel(description = "An abbreviated description of changes since the last change set this client received. ")
 
 public class EntityChangeSet extends ArrayList<EntityChangeSetInner> implements Serializable {
 

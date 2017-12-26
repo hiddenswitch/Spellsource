@@ -88,10 +88,10 @@ public class GameActions  implements Serializable {
   }
 
    /**
-   * An array of game action indices. Choose one at random for compatibility purposes until the writer can support all actions 
+   * An array of game action indices. Choose one at random for compatibility purposes until the client can support all actions 
    * @return compatibility
   **/
-  @ApiModelProperty(example = "null", value = "An array of game action indices. Choose one at random for compatibility purposes until the writer can support all actions ")
+  @ApiModelProperty(example = "null", value = "An array of game action indices. Choose one at random for compatibility purposes until the client can support all actions ")
   public List<Integer> getCompatibility() {
     return compatibility;
   }
