@@ -61,8 +61,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			}
 		};
 
-		ClusteredGamesImpl.configureWebsocketHandler(router, vertx.eventBus());
-
+		Games.configureWebsocketHandler(router, vertx.eventBus(), authHandler);
 		// Health check comes first
 		router.route("/")
 				.handler(routingContext -> {
@@ -658,7 +657,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()))
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getProfile().getEmailAddress())
-				.connection(record.getConnection())
+				.inMatch(getMatchmaking().getCurrentMatch(new CurrentMatchRequest(userId)).getGameId() != null)
 				.name(displayName);
 	}
 

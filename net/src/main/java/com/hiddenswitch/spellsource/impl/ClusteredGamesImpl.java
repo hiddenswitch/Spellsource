@@ -6,22 +6,19 @@ import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Gateway;
 import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Port;
-import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
 import com.hiddenswitch.spellsource.impl.server.GameSessionImpl;
 import com.hiddenswitch.spellsource.impl.server.SessionWriter;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.*;
+import com.hiddenswitch.spellsource.util.Registration;
+import com.hiddenswitch.spellsource.util.Rpc;
+import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.streams.Pump;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.AuthHandler;
 import net.demilich.metastone.game.cards.CardCatalogue;
 
 import java.util.ArrayList;
@@ -32,35 +29,18 @@ import java.util.Map;
 public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> implements Games {
 	public static final String READER_ADDRESS_PREFIX = "ClusteredGamesImpl/";
 	private Registration registration;
-	private Map<String, CreateGameSessionResponse> connections;
-	private Map<String, GameSession> sessions = new HashMap<>();
-	private Map<String, List<MessageConsumer<Buffer>>> pipes = new HashMap<>();
+	private Map<GameId, CreateGameSessionResponse> connections;
+	private Map<GameId, GameSession> sessions = new HashMap<>();
+	private Map<GameId, List<MessageConsumer<Buffer>>> pipes = new HashMap<>();
+	private Map<GameId, ActivityMonitor> gameActivityMonitors = new HashMap<>();
 
 	@Override
 	public void start() throws SuspendExecution {
 		super.start();
-
 		CardCatalogue.loadCardsFromPackage();
 
-		if (vertx.isClustered()) {
-			connections = SharedData.getClusterWideMap("ClusteredGamesImpl/connections", vertx.sharedData());
-		} else {
-			connections = vertx.sharedData().getLocalMap("ClusteredGamesImpl/connections");
-		}
-
+		connections = Games.getConnections(vertx);
 		registration = Rpc.register(this, Games.class, vertx.eventBus());
-	}
-
-	@Override
-	@Suspendable
-	public ContainsGameSessionResponse containsGameSession(ContainsGameSessionRequest request) throws SuspendExecution, InterruptedException {
-		final String gameId = request.gameId;
-		CreateGameSessionResponse response = connections.getOrDefault(gameId, null);
-		if (response != null && response.getDeploymentId().equals(deploymentID())) {
-			return new ContainsGameSessionResponse(true);
-		} else {
-			return new ContainsGameSessionResponse(false);
-		}
 	}
 
 	@Override
@@ -71,7 +51,9 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			throw new IllegalArgumentException("Cannot create a game session without specifying a gameId.");
 		}
 
-		CreateGameSessionResponse connection = connections.putIfAbsent(gameId, CreateGameSessionResponse.pending(deploymentID()));
+		final GameId key = new GameId(gameId);
+		CreateGameSessionResponse connection = connections.putIfAbsent(key, CreateGameSessionResponse.pending(deploymentID()));
+		// If we're the ones deploying this match...
 		if (connection == null) {
 			GameSession session = new GameSessionImpl(Gateway.getHostAddress(),
 					Port.port(),
@@ -90,14 +72,14 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			final ArrayList<MessageConsumer<Buffer>> pipeList = new ArrayList<>();
 			pipeList.add(connect(session, 0, request.getPregame1().getUserId(), eventBus, activityMonitor));
 			pipeList.add(connect(session, 1, request.getPregame2().getUserId(), eventBus, activityMonitor));
-			pipes.put(gameId, pipeList);
-			Map<String, ActivityMonitor> gameActivityMonitors = new HashMap<>();
-			gameActivityMonitors.put(gameId, activityMonitor);
+			pipes.put(key, pipeList);
+			gameActivityMonitors.put(key, activityMonitor);
 			final CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), session);
-			connections.put(session.getGameId(), response);
-			sessions.put(session.getGameId(), session);
+			connections.put(key, response);
+			sessions.put(key, session);
 			return response;
 		} else {
+			// Otherwise, return its state, whatever it is
 			return connection;
 		}
 	}
@@ -122,21 +104,24 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		} catch (VertxException noHandler) {
 			// TODO: What would be the most sensible solution here?
 		}
-		GameSession session = sessions.get(gameId);
-		session.kill();
-		connections.remove(gameId);
-		if (pipes.containsKey(gameId)) {
-			for (MessageConsumer<Buffer> consumer : pipes.get(gameId)) {
+		final GameId key = new GameId(gameId);
+		GameSession session = sessions.get(key);
+		if (session != null) {
+			session.kill();
+		}
+		connections.remove(key);
+		if (pipes.containsKey(key)) {
+			for (MessageConsumer<Buffer> consumer : pipes.get(key)) {
 				consumer.unregister();
 			}
-			pipes.remove(gameId);
+			pipes.remove(key);
 		}
 
 	}
 
 	@Override
 	public DescribeGameSessionResponse describeGameSession(DescribeGameSessionRequest request) {
-		return null;
+		return new DescribeGameSessionResponse();
 	}
 
 	@Override
@@ -157,7 +142,8 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 
 	@Override
 	public ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution {
-		throw new UnsupportedOperationException();
+		kill(request.getGameId());
+		return new ConcedeGameSessionResponse();
 	}
 
 	@Override
@@ -165,30 +151,12 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 	public void stop() throws Exception {
 		super.stop();
 		Rpc.unregister(registration);
-		for (String gameId : sessions.keySet()) {
-			kill(gameId);
+		for (ActivityMonitor monitor : gameActivityMonitors.values()) {
+			monitor.cancel();
 		}
-	}
-
-	public static void configureWebsocketHandler(Router router, EventBus bus) {
-		final AuthHandler authHandler = new SpellsourceAuthHandler(bus);
-
-		router.route("/" + Games.WEBSOCKET_PATH + "-clustered")
-				.method(HttpMethod.GET)
-				.handler(authHandler);
-
-		router.route("/" + Games.WEBSOCKET_PATH + "-clustered")
-				.method(HttpMethod.GET)
-				.handler(context -> {
-					final ServerWebSocket socket = context.request().upgrade();
-					final String userId = context.user().principal().getString("_id");
-					final MessageConsumer<Buffer> consumer = bus.<Buffer>consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
-					final Pump pump1 = Pump.pump(socket, bus.publisher(READER_ADDRESS_PREFIX + userId)).start();
-					Pump.pump(consumer.bodyStream(), socket).start();
-					socket.closeHandler(disconnected -> {
-						pump1.stop();
-						consumer.unregister();
-					});
-				});
+		gameActivityMonitors.clear();
+		for (GameId gameId : sessions.keySet()) {
+			kill(gameId.toString());
+		}
 	}
 }

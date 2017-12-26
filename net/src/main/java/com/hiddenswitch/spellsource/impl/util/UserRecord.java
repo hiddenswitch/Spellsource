@@ -27,7 +27,6 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	private AuthorizationRecord auth;
 	private List<String> decks;
 	private List<FriendRecord> friends;
-	private MatchmakingQueuePutResponseUnityConnection connection;
 	private boolean bot;
 
 	/**
@@ -187,14 +186,6 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	 */
 	public FriendRecord getFriendById(String friendId) {
 		return this.friends.stream().filter(friend -> friend.getFriendId().equals(friendId)).findFirst().orElse(null);
-	}
-
-	public MatchmakingQueuePutResponseUnityConnection getConnection() {
-		return connection;
-	}
-
-	public void setConnection(MatchmakingQueuePutResponseUnityConnection connection) {
-		this.connection = connection;
 	}
 
 	@Override

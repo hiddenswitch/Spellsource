@@ -71,8 +71,10 @@ definitions:
         type: 'array'
         items:
           $ref: '#/definitions/InventoryCollection'
-      connection:
-        $ref: '#/definitions/MatchmakingQueuePutResponseUnityConnection'
+      inMatch:
+        type: 'boolean'
+        description: |
+          True if the client should attempt to connect to a match with its token.
       personalCollection:
         $ref: '#/definitions/InventoryCollection'
   SendMessageRequest:

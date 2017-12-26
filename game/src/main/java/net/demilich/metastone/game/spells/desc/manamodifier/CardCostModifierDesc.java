@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class CardCostModifierDesc extends Desc<CardCostModifierArg> {
+public final class CardCostModifierDesc extends Desc<CardCostModifierArg> {
 
 	public static Map<CardCostModifierArg, Object> build(Class<? extends CardCostModifier> manaModifierClass) {
 		final Map<CardCostModifierArg, Object> arguments = new EnumMap<>(CardCostModifierArg.class);

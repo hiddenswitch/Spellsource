@@ -107,7 +107,6 @@ public class UnityClient {
 					.casual(true)
 					.deckId(deckId));
 
-			final MatchmakingQueuePutResponseUnityConnection unityConnection = mqpr.getUnityConnection();
 			play();
 
 		} catch (ApiException e) {
