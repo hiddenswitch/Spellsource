@@ -172,13 +172,15 @@ public interface Gateway {
 		final NetworkInterface networkInterface = interfaces.stream().filter(ni -> {
 			boolean isLoopback = false;
 			boolean supportsMulticast = false;
+			boolean isVirtualbox = false;
 			try {
 				isLoopback = ni.isLoopback();
 				supportsMulticast = ni.supportsMulticast();
+				isVirtualbox = ni.getDisplayName().contains("VirtualBox") || ni.getDisplayName().contains("Host-Only");
 			} catch (IOException loopbackTestFailure) {
 			}
 			final boolean hasIPv4 = ni.getInterfaceAddresses().stream().anyMatch(ia -> ia.getAddress() instanceof Inet4Address);
-			return supportsMulticast && !isLoopback && !ni.isVirtual() && hasIPv4;
+			return supportsMulticast && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox;
 		}).sorted(Comparator.comparing(NetworkInterface::getName)).findFirst().orElse(null);
 		return networkInterface;
 	}

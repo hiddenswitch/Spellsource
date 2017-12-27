@@ -53,7 +53,7 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 
 		CardCatalogue.loadCardsFromPackage();
 
-		Mongo.mongo().startEmbedded().connect(vertx);
+		Mongo.mongo().connectWithEnvironment(vertx);
 
 		deployServices(vertx, context.asyncAssertSuccess(i -> {
 			service = i;
