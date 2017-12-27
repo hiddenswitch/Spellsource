@@ -8,6 +8,8 @@ import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.datagram.DatagramSocket;
 import io.vertx.core.datagram.DatagramSocketOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -16,6 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
+	private final Logger logger = LoggerFactory.getLogger(Broadcaster.class.getName());
 	private final String multicastAddress = "230.0.0.1";
 	private final String clientCall = "LOXX";
 	private final String responsePrefix = "SPLL";
@@ -28,6 +31,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 			startFuture.fail("No valid network interface found.");
 			return;
 		}
+		logger.debug("Broadcasting " + networkInterface.toString());
 		hostSockets.put(networkInterface, createDatagramSocket(networkInterface, startFuture));
 	}
 
@@ -49,8 +53,9 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 								return;
 							}
 
+							logger.debug("Replying to datagram received from " + packet.sender().toString());
 							// Reply with the local base path
-							socket.send(getResponsePrefix() + "http://" + host + ":" + Integer.toString(Port.port()), getMulticastPort(), getMulticastAddress(), Future.future());
+							socket.send(getResponsePrefix() + "http://" + host + ":" + Integer.toString(Port.port()) + "/", getMulticastPort(), getMulticastAddress(), Future.future());
 						});
 
 						isListening.complete();

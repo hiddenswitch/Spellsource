@@ -48,7 +48,7 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-web', version: '3.5.0'
     compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.5.0'
     compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.5.0'
-    compile group: 'com.github.flapdoodle-oss', name: 'de.flapdoodle.embed.mongo', version: 'ec05f8fa35'
+    compile group: 'com.github.flapdoodle-oss', name: 'de.flapdoodle.embed.mongo', version: 'e5232204c2'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
 
     compile project(':game')

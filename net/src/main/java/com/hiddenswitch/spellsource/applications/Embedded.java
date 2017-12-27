@@ -14,6 +14,7 @@ import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 public class Embedded {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
+		System.setProperty("vertx.disableDnsResolver", "true");
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
 				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
 		root.setLevel(Level.ERROR);
