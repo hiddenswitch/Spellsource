@@ -1,0 +1,14 @@
+{
+  "name": "Felhunter",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "DEMON",
+  "description": "",
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

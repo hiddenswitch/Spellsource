@@ -1,0 +1,38 @@
+{
+  "name": "Amethyst Spellstone",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "RARE",
+  "description": "Lifesteal. Deal 5 damage to a minion. (Take damage from your cards to upgrade.)",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "SELF",
+      "targetEntityType": "HERO",
+      "queueCondition": {
+        "class": "CardPropertyCondition",
+        "cardType": "HERO_POWER",
+        "invert": true
+      }
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_greater_amethyst_spellstone"
+    },
+    "keepAfterTransform": false
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 5
+  },
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

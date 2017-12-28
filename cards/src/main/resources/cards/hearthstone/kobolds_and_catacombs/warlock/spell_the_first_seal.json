@@ -1,0 +1,25 @@
+{
+  "name": "The First Seal",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "EPIC",
+  "description": "Summon a 2/2 Demon. Add 'The Second Seal' to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "card": "token_felhunter_first_seal"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_the_second_seal"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

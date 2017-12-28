@@ -53,7 +53,7 @@ public enum Zones {
 	 */
 	DECK,
 	/**
-	 * The graveyard is where a {@link Card} has been played with {@link GameLogic#playCard(int, CardReference)} goes;
+	 * The graveyard is where a {@link Card} has been played with {@link GameLogic#playCard(int, EntityReference)} goes;
 	 * and where an {@link Actor} that has been destroyed with {@link GameLogic#destroy(Actor...)} goes. A {@link
 	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} and other entities subclassing {@link Enchantment} go
 	 * to {@link #REMOVED_FROM_PLAY}.

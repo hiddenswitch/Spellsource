@@ -1,0 +1,25 @@
+{
+  "name": "The Final Seal",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "EPIC",
+  "description": "Summon a 6/6 Demon. Add 'Azari, the Devourer' to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "card": "token_felhunter_final_seal"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "minion_azari_the_devourer"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

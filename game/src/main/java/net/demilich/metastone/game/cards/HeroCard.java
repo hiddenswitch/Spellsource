@@ -41,7 +41,7 @@ public class HeroCard extends ActorCard {
 
 	@Override
 	public PlayCardAction play() {
-		return new PlayHeroCardAction(getCardReference());
+		return new PlayHeroCardAction(getEntityReference());
 	}
 
 	/**

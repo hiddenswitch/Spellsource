@@ -3,7 +3,6 @@ package net.demilich.metastone.game.actions;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.WeaponCard;
-import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class PlayWeaponCardAction extends PlayCardAction {
@@ -12,8 +11,8 @@ public class PlayWeaponCardAction extends PlayCardAction {
 		setActionType(ActionType.EQUIP_WEAPON);
 	}
 
-	public PlayWeaponCardAction(CardReference cardReference) {
-		super(cardReference);
+	public PlayWeaponCardAction(EntityReference EntityReference) {
+		super(EntityReference);
 		setActionType(ActionType.EQUIP_WEAPON);
 	}
 

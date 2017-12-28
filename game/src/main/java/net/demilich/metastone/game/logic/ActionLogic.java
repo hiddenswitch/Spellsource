@@ -19,8 +19,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
-import net.demilich.metastone.game.targeting.CardReference;
-import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class ActionLogic implements Serializable {
@@ -48,8 +47,8 @@ public class ActionLogic implements Serializable {
 		List<GameAction> heroPowerActions = new ArrayList<GameAction>();
 		HeroPowerCard heroPower = player.getHero().getHeroPower();
 		heroPower.onWillUse(context, player);
-		CardReference heroPowerReference = new CardReference(player.getId(), Zones.HERO_POWER, heroPower.getId(),
-				heroPower.getName());
+		EntityReference heroPowerReference = new EntityReference(heroPower.getId()
+		);
 		if (!context.getLogic().canPlayCard(player.getId(), heroPowerReference)) {
 			return heroPowerActions;
 		}
@@ -85,8 +84,8 @@ public class ActionLogic implements Serializable {
 		playCardActions.addAll(getHeroPowerActions(context, player));
 
 		for (Card card : player.getHand()) {
-			CardReference cardReference = new CardReference(player.getId(), Zones.HAND, card.getId(), card.getName());
-			if (!context.getLogic().canPlayCard(player.getId(), cardReference)) {
+			EntityReference EntityReference = new EntityReference(card.getId());
+			if (!context.getLogic().canPlayCard(player.getId(), EntityReference)) {
 				continue;
 			}
 
@@ -131,8 +130,8 @@ public class ActionLogic implements Serializable {
 	public boolean hasAutoHeroPower(GameContext context, Player player) {
 		HeroPowerCard heroPower = player.getHero().getHeroPower();
 		heroPower.onWillUse(context, player);
-		CardReference heroPowerReference = new CardReference(player.getId(), Zones.HERO_POWER, heroPower.getId(),
-				heroPower.getName());
+		EntityReference heroPowerReference = new EntityReference(heroPower.getId()
+		);
 		return (context.getLogic().canPlayCard(player.getId(), heroPowerReference) && heroPower.getTargetRequirement() == TargetSelection.AUTO);
 	}
 

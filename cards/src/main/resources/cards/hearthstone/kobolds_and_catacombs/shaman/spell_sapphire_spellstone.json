@@ -14,7 +14,7 @@
     "spell": {
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
-      "card": "spell_sapphire_spellstone"
+      "card": "spell_greater_sapphire_spellstone"
     },
     "countByValue": true,
     "keepAfterTransform": false

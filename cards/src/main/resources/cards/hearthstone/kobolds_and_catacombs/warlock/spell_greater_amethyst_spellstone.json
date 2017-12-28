@@ -1,0 +1,19 @@
+{
+  "name": "Greater Amethyst Spellstone",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "RARE",
+  "description": "Lifesteal. Deal 7 damage to a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 7
+  },
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

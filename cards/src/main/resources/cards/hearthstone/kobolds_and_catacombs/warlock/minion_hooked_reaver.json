@@ -1,0 +1,42 @@
+{
+  "name": "Hooked Reaver",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "DEMON",
+  "description": "Battlecry: If you have 15 or less Health, gain +3/+3 and Taunt.",
+  "battlecry": {
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "ENEMY_HERO",
+      "value": 15,
+      "attribute": "HP",
+      "operation": "LESS_OR_EQUAL"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 3,
+          "hpBonus": 3
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "TAUNT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

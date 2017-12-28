@@ -1,0 +1,43 @@
+{
+  "name": "Skull of the Man'ari",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "VIOLET",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "At the start of your turn, summon a Demon from your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_HAND",
+          "filter": {
+            "class": "CardFilter",
+            "race": "DEMON",
+            "cardType": "MINION"
+          }
+        },
+        "value2": 0,
+        "operation": "GREATER"
+      }
+    },
+    "spell": {
+      "class": "RecruitSpell",
+      "cardLocation": "HAND",
+      "targetPlayer": "SELF",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DEMON",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -28,7 +28,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
-import net.demilich.metastone.game.targeting.CardReference;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
@@ -946,44 +945,44 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 * <p>
 	 * This method allows lookups by entity ID or card ID.
 	 *
-	 * @param cardReference The {@link CardReference} with which to search the entities in this game context.
+	 * @param EntityReference The {@link EntityReference} with which to search the entities in this game context.
 	 * @return A {@link Card} that was references.
 	 * @throws NullPointerException when the card reference could not be resolved. Game rules should generally never
 	 *                              search for a card that doesn't exist.
 	 */
 	@SuppressWarnings("unchecked")
-	public Card resolveCardReference(CardReference cardReference) throws NullPointerException {
-		Player player = getPlayer(cardReference.getPlayerId());
-		Card card = null;
-		if (getPendingCard() != null && getPendingCard().getCardReference().equals(cardReference)) {
-			card = getPendingCard();
+	public Card resolveEntityReference(EntityReference EntityReference) throws NullPointerException {
+		if (getPendingCard() != null && getPendingCard().getEntityReference().equals(EntityReference)) {
+			return getPendingCard();
 		} else {
-			switch (cardReference.getZone()) {
-				case SET_ASIDE_ZONE:
-				case DISCOVER:
-					final Optional<Entity> first = ((EntityZone<Entity>) player.getZone(cardReference.getZone())).stream().filter(e -> e.getId() == cardReference.getEntityId()).findFirst();
-					if (first.isPresent()
-							&& Card.class.isAssignableFrom(first.get().getClass())) {
-						card = (Card) first.get();
-					}
-					break;
-				case DECK:
-					card = findCardinCollection(player.getDeck(), cardReference.getEntityId());
-					break;
-				case HAND:
-					card = findCardinCollection(player.getHand(), cardReference.getEntityId());
-					break;
-				case HERO_POWER:
-					card = player.getHero().getHeroPower();
-				default:
-					break;
-			}
+			return (Card) resolveSingleTarget(new EntityReference(EntityReference.getId()));
 		}
-		if (card == null) {
-			throw new NullPointerException("Could not resolve cardReference " + cardReference.toString());
-		} else {
-			return card;
-		}
+//			switch (EntityReference.getZone()) {
+//				case SET_ASIDE_ZONE:
+//				case DISCOVER:
+//					final Optional<Entity> first = ((EntityZone<Entity>) player.getZone(EntityReference.getZone())).stream().filter(e -> e.getId() == EntityReference.getEntityId()).findFirst();
+//					if (first.isPresent()
+//							&& Card.class.isAssignableFrom(first.get().getClass())) {
+//						card = (Card) first.get();
+//					}
+//					break;
+//				case DECK:
+//					card = findCardinCollection(player.getDeck(), EntityReference.getEntityId());
+//					break;
+//				case HAND:
+//					card = findCardinCollection(player.getHand(), EntityReference.getEntityId());
+//					break;
+//				case HERO_POWER:
+//					card = player.getHero().getHeroPower();
+//				default:
+//					break;
+//			}
+//		}
+//		if (card == null) {
+//			throw new NullPointerException("Could not resolve EntityReference " + EntityReference.toString());
+//		} else {
+//			return card;
+//		}
 	}
 
 	/**

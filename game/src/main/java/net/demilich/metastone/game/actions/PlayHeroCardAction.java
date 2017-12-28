@@ -3,19 +3,19 @@ package net.demilich.metastone.game.actions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.targeting.CardReference;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 public class PlayHeroCardAction extends PlayCardAction {
 	private final BattlecryAction battlecryAction;
 
-	public PlayHeroCardAction(CardReference cardReference) {
-		super(cardReference);
+	public PlayHeroCardAction(EntityReference EntityReference) {
+		super(EntityReference);
 		setActionType(ActionType.HERO);
 		battlecryAction = null;
 	}
 
-	public PlayHeroCardAction(CardReference cardReference, BattlecryAction battlecryAction) {
-		super(cardReference);
+	public PlayHeroCardAction(EntityReference EntityReference, BattlecryAction battlecryAction) {
+		super(EntityReference);
 		setActionType(ActionType.HERO);
 		this.battlecryAction = battlecryAction;
 	}

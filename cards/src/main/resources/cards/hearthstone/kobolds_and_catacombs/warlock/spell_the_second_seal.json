@@ -1,0 +1,25 @@
+{
+  "name": "The Second Seal",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "EPIC",
+  "description": "Summon a 3/3 Demon. Add 'The Third Seal' to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "card": "token_felhunter_second_seal"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_the_third_seal"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

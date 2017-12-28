@@ -15,13 +15,7 @@ public class CardPropertyCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		Card card = null;
-		if (target instanceof Card) {
-			card = (Card) target;
-		} else if (target instanceof Actor) {
-			Actor actor = (Actor) target;
-			card = actor.getSourceCard();
-		}
+		Card card = target.getSourceCard();
 
 		if (card == null) {
 			return false;

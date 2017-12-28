@@ -39,7 +39,7 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 	@Override
 	@Suspendable
 	public void play(GameContext context, int playerId) {
-		context.getLogic().castSpell(playerId, getSpell(), cardReference, getTargetReference(), getTargetRequirement(), false);
+		context.getLogic().castSpell(playerId, getSpell(), EntityReference, getTargetReference(), getTargetRequirement(), false);
 	}
 
 	@Override

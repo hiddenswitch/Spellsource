@@ -57,7 +57,7 @@ public class WeaponCard extends ActorCard {
 
 	@Override
 	public PlayCardAction play() {
-		return new PlayWeaponCardAction(getCardReference());
+		return new PlayWeaponCardAction(getEntityReference());
 	}
 
 	public int getDamage() {

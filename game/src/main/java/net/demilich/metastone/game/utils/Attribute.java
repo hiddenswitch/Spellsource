@@ -13,7 +13,7 @@ import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.targeting.CardReference;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.List;
@@ -266,7 +266,7 @@ public enum Attribute {
 	 * When a combo {@link Card} is played after another card, an effect is triggered.
 	 *
 	 * @see net.demilich.metastone.game.spells.ComboSpell for the actual implementation of combo effects.
-	 * @see GameLogic#playCard(int, CardReference) for the control of the combo attribute.
+	 * @see GameLogic#playCard(int, EntityReference) for the control of the combo attribute.
 	 */
 	COMBO,
 	/**
@@ -378,7 +378,7 @@ public enum Attribute {
 	 * When a {@link Card} is played and countered (by e.g. Counterspell), it is marked with this attribute and its text
 	 * is not executed.
 	 *
-	 * @see GameLogic#playCard(int, CardReference) for the complete card playing implementation.
+	 * @see GameLogic#playCard(int, EntityReference) for the complete card playing implementation.
 	 */
 	COUNTERED,
 	/**
@@ -433,7 +433,7 @@ public enum Attribute {
 	/**
 	 * This attribute keeps track of how many times the hero power was used this turn.
 	 *
-	 * @see GameLogic#canPlayCard(int, CardReference) for the implementation that determines whether or not a card, like
+	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card, like
 	 * a hero power card, can be played.
 	 */
 	HERO_POWER_USAGES,
@@ -615,7 +615,8 @@ public enum Attribute {
 	POISONOUS,
 	/**
 	 * A shorthand implementation of the Lifesteal keyword. Indicates that the {@link Hero} of the owner of the {@link
-	 * Minion} should be healed by the amount of damage dealt by that minion.
+	 * Minion}, {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} or {@link
+	 * net.demilich.metastone.game.cards.SpellCard} should be healed by the amount of damage dealt by that minion.
 	 */
 	LIFESTEAL,
 	/**
