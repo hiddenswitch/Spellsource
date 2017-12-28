@@ -1,0 +1,18 @@
+{
+  "name": "Healing Rain",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "COMMON",
+  "description": "Restore 12 Health divided randomly among all friendly characters.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HealingMissilesSpell",
+    "target": "FRIENDLY_CHARACTERS",
+    "value": 1,
+    "howMany": 12
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

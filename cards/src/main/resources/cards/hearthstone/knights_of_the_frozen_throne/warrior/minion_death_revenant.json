@@ -21,6 +21,9 @@
       }
     }
   },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
   "fileFormatVersion": 1

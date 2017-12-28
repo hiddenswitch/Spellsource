@@ -278,7 +278,7 @@ public class TestBase {
 	}
 
 	protected static void playCard(GameContext context, Player player, Card card) {
-		if  (card.getZone() != Zones.HAND) {
+		if (card.getZone() != Zones.HAND) {
 			context.getLogic().receiveCard(player.getId(), card);
 		}
 		context.getLogic().performGameAction(player.getId(), card.play());
@@ -289,7 +289,9 @@ public class TestBase {
 	}
 
 	protected static void playCardWithTarget(GameContext context, Player player, Card card, Entity target) {
-		context.getLogic().receiveCard(player.getId(), card);
+		if (card.getZone() != Zones.HAND) {
+			context.getLogic().receiveCard(player.getId(), card);
+		}
 		GameAction action = card.play();
 		action.setTarget(target);
 		context.getLogic().performGameAction(player.getId(), action);

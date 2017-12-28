@@ -9,12 +9,7 @@
   "spell": {
     "class": "DiscoverRandomCardSpell",
     "spell": {
-      "class": "ReceiveCardAndDoSomethingSpell",
-      "spell": {
-        "class": "PutMinionOnBoardSpell",
-        "card": "EVENT_CARD"
-      },
-      "targetPlayer": "SELF"
+      "class": "SummonSpell"
     },
     "cardFilter": {
       "class": "CardFilter",

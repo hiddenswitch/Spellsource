@@ -1,10 +1,13 @@
 package com.blizzard.hearthstone;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.hiddenswitch.spellsource.util.Serialization;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.io.IOUtils;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -12,6 +15,8 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -63,9 +68,10 @@ public class CatalogueTests {
 		Assert.assertNotNull(card);
 	}
 
-	@Ignore
 	@Test(dataProvider = "HearthstoneCards")
 	public void testAttributes(JsonObject cardObject) {
+		Type listType = new TypeToken<List<String>>() {
+		}.getType();
 		final Card card = CardCatalogue.getCardByName(cardObject.get("name").getAsString());
 		String name = cardObject.get("name").getAsString();
 //		String text = cardObject.has("text") ? cardObject.get("text").getAsString() : "";
@@ -81,6 +87,14 @@ public class CatalogueTests {
 			MinionCard minionCard = (MinionCard) card;
 			Assert.assertEquals(minionCard.getBaseAttack(), cardObject.get("attack").getAsInt(), "Wrong attack for " + name);
 			Assert.assertEquals(minionCard.getBaseHp(), cardObject.get("health").getAsInt(), "Wrong health for " + name);
+
+			if (cardObject.has("mechanics")) {
+				List<String> mechanics = Serialization.getGson().fromJson(cardObject.get("mechanics"), listType);
+				final boolean battlecry = mechanics.stream().anyMatch(m -> m.equals("BATTLECRY"));
+				final boolean combos = mechanics.stream().anyMatch(m -> m.equals("COMBO"));
+				Assert.assertEquals(minionCard.hasBattlecry(), battlecry || combos, name + " is missing a combos or battlecry attribute.");
+				Assert.assertEquals(minionCard.hasAttribute(Attribute.BATTLECRY), battlecry && !combos, name + " is missing battlecry attribute.");
+			}
 		}
 	}
 }

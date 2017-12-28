@@ -80,6 +80,10 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.RESERVED_INTEGER_2, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.RESERVED_INTEGER_3, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.RESERVED_INTEGER_4, jsonData, map, ParseValueType.INTEGER);
+		parseAttribute(Attribute.RESERVED_BOOLEAN_1, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.RESERVED_BOOLEAN_2, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.RESERVED_BOOLEAN_3, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.RESERVED_BOOLEAN_4, jsonData, map, ParseValueType.BOOLEAN);
 
 		return map;
 	}

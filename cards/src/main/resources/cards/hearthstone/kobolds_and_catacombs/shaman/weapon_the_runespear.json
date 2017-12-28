@@ -1,0 +1,41 @@
+{
+  "name": "The Runespear",
+  "baseManaCost": 8,
+  "type": "WEAPON",
+  "heroClass": "SILVER",
+  "damage": 3,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "After your hero attacks, Discover a spell and cast it with random targets.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "DiscoverRandomCardSpell",
+      "spell": {
+        "class": "RandomCardTargetSpell"
+      },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          }
+        ]
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

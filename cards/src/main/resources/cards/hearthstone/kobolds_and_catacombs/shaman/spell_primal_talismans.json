@@ -1,0 +1,26 @@
+{
+  "name": "Primal Talismans",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Give your minions \"Deathrattle: Summon a random basic Totem.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "SummonSpell",
+      "randomTarget": true,
+      "cards": [
+        "token_searing_totem",
+        "token_healing_totem",
+        "token_wrath_of_air_totem",
+        "token_stoneclaw_totem"
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

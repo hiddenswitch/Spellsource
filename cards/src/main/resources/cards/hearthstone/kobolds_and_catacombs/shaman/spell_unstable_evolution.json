@@ -1,0 +1,46 @@
+{
+  "name": "Unstable Evolution",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "EPIC",
+  "description": "Transform a friendly minion into one that costs (1) more. Repeatable this turn.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "TransformToRandomMinionSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "manaCost": {
+            "class": "AttributeValueProvider",
+            "target": "SPELL_TARGET",
+            "attribute": "BASE_MANA_COST",
+            "offset": 1
+          }
+        }
+      },
+      {
+        "class": "ReceiveCardAndDoSomethingSpell",
+        "card": "spell_unstable_evolution",
+        "spell": {
+          "class": "AddEnchantmentSpell",
+          "target": "EVENT_CARD",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnEndTrigger"
+            },
+            "spell": {
+              "class": "RemoveCardSpell",
+              "target": "SELF"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

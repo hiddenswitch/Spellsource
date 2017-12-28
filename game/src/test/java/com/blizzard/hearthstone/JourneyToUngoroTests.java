@@ -607,7 +607,7 @@ public class JourneyToUngoroTests extends TestBase {
 		Assert.assertEquals(player.getHand().size(), handSize[0]);
 		Assert.assertEquals(player.getDiscoverZone().size(), 0);
 		// TODO: Should the player really receive the card and then summon it?
-		Assert.assertEquals(player.getGraveyard().size(), 2, "The graveyard should only contain Free From Amber and the summoned card");
+		Assert.assertEquals(player.getGraveyard().size(), 1, "The graveyard should only contain Free From Amber");
 		Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), originalMinion[0].getSourceCard().getCardId());
 	}
 }

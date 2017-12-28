@@ -1,0 +1,16 @@
+{
+  "name": "Greater Sapphire Spellstone",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Summon 3 copies of a friendly minion.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

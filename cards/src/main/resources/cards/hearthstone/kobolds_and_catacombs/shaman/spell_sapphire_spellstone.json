@@ -1,29 +1,28 @@
 {
-  "name": "Emerald Spellstone",
-  "baseManaCost": 5,
+  "name": "Sapphire Spellstone",
+  "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "GREEN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
-  "description": "Summon three 3/3 Wolves. (Play a Secret to upgrade.)",
+  "description": "Summon 2 copies of a friendly minion. (Overload 3 Mana Crystals to upgrade.)",
   "passiveTrigger": {
-    "countUntilCast": 1,
+    "countUntilCast": 3,
     "eventTrigger": {
-      "class": "SecretPlayedTrigger",
+      "class": "OverloadTrigger",
       "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
-      "card": "spell_greater_emerald_spellstone"
+      "card": "spell_sapphire_spellstone"
     },
-    "countByValue": false,
+    "countByValue": true,
     "keepAfterTransform": false
   },
-  "targetSelection": "NONE",
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "SummonSpell",
-    "value": 3,
-    "card": "token_wolf"
+    "value": 2
   },
   "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",

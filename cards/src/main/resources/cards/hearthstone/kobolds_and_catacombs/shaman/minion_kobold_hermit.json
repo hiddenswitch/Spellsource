@@ -1,0 +1,31 @@
+{
+  "name": "Kobold Hermit",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "heroClass": "SILVER",
+  "rarity": "COMMON",
+  "description": "Battlecry: Choose a basic Totem. Summon it.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverCardSpell",
+      "spell": {
+        "class": "SummonSpell"
+      },
+      "cards": [
+        "token_searing_totem",
+        "token_healing_totem",
+        "token_wrath_of_air_totem",
+        "token_stoneclaw_totem"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
