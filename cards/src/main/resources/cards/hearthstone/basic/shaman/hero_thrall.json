@@ -6,7 +6,7 @@
   "type": "HERO",
   "heroClass": "SILVER",
   "rarity": "FREE",
-  "description": "Hero Power: Summon a random supporting creature",
+  "description": "Hero Power: Summon a random Basic Totem",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30,

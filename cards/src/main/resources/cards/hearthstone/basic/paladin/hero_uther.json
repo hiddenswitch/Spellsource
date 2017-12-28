@@ -1,12 +1,12 @@
 {
   "id": "hero_uther",
-  "name": "Yunkai",
+  "name": "Uther",
   "heroPower": "hero_power_reinforce",
   "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "GOLD",
   "rarity": "FREE",
-  "description": "Hero Power: Summon a 1/1 creature",
+  "description": "Hero Power: Summon a 1/1 Silver Hand Recruit",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30
