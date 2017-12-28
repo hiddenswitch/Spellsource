@@ -1,0 +1,38 @@
+{
+  "name": "Murmuring Elemental",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Your next Battlecry this turn triggers twice.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "DOUBLE_BATTLECRIES",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "secondRevertTrigger": {
+        "class": "AfterMinionPlayedTrigger",
+        "requiredAttribute": "BATTLECRY",
+        "queueCondition": {
+          "class": "AttributeCondition",
+          "attribute": "RESERVED_BOOLEAN_1",
+          "invert": true
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RESERVED_BOOLEAN_1": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

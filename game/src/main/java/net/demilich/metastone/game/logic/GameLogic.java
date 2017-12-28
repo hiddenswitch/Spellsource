@@ -1711,6 +1711,12 @@ public class GameLogic implements Cloneable, Serializable {
 		return Stream.concat(player.getHand().stream(), player.getHeroPowerZone().stream()).anyMatch(c -> c.getCardId().equals(card.getCardId()));
 	}
 
+
+	@Suspendable
+	public void heal(Player player, Actor target, int healing, Entity source) {
+		heal(player, target, healing, source, true);
+	}
+
 	/**
 	 * Heals (restores hitpoints to) a target.
 	 * <p>
@@ -1733,21 +1739,25 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Healing a character to full hitpoints will remove its damaged status and thus any {@link Attribute#ENRAGED}
 	 * effect currently active, which can be very useful for denying enemy minions' Enrage effects.
 	 *
-	 * @param player  The player who chose the target of the healing.
-	 * @param target  The target of the healing.
-	 * @param healing The amount of healing.
-	 * @param source  The {@link Entity}, typically a {@link SpellCard} or {@link Minion} with battlecry, that is the
-	 *                source of the healing.
+	 * @param player                    The player who chose the target of the healing.
+	 * @param target                    The target of the healing.
+	 * @param healing                   The amount of healing.
+	 * @param source                    The {@link Entity}, typically a {@link SpellCard} or {@link Minion} with
+	 *                                  battlecry, that is the source of the healing.
+	 * @param applyHealingAmplification Whether or not to compute the effects of {@link Attribute#HEAL_AMPLIFY_MULTIPLIER}
+	 *                                  on this card.
 	 * @see Attribute#ENRAGED for more about enrage.
 	 */
 	@Suspendable
-	public void heal(Player player, Actor target, int healing, Entity source) {
+	public void heal(Player player, Actor target, int healing, Entity source, boolean applyHealingAmplification) {
 		if (hasAttribute(player, Attribute.INVERT_HEALING)) {
 			log("All healing inverted, deal damage instead!");
 			damage(player, target, healing, source);
 			return;
 		}
-		if (source != null && source instanceof Card
+		if (applyHealingAmplification
+				&& source != null
+				&& source instanceof Card
 				&& (((Card) source).getCardType().isCardType(CardType.SPELL)
 				|| ((Card) source).getCardType().isCardType(CardType.HERO_POWER))) {
 			healing = applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
@@ -2258,7 +2268,7 @@ public class GameLogic implements Cloneable, Serializable {
 		context.fireGameEvent(cardPlayedEvent);
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
-			context.fireGameEvent(new OverloadEvent(context, playerId, card));
+			context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
 		}
 
 		removeCard(card);

@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.List;
-
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -14,8 +11,20 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.filter.FilterDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 
-public class MissilesSpell extends DamageSpell {
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
+public class HealingMissilesSpell extends HealSpell {
+
+	public static SpellDesc create(int healing) {
+		return create(null, healing);
+	}
 
 	@Override
 	@Suspendable
@@ -25,10 +34,10 @@ public class MissilesSpell extends DamageSpell {
 
 		if (healing == 1 && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			missiles = context.getLogic().applySpellpower(player, source, missiles);
-			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.SPELL_AMPLIFY_MULTIPLIER);
+			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.HEAL_AMPLIFY_MULTIPLIER);
 		} else if (source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			healing = context.getLogic().applySpellpower(player, source, healing);
-			healing = context.getLogic().applyAmplify(player, healing, Attribute.SPELL_AMPLIFY_MULTIPLIER);
+			healing = context.getLogic().applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
 		}
 		for (int i = 0; i < missiles; i++) {
 			List<Actor> validTargets;
@@ -37,14 +46,22 @@ public class MissilesSpell extends DamageSpell {
 				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
 				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			} else {
-				validTargets = SpellUtils.getValidRandomTargets(targets);
+				EntityFilter targetFilter = new EntityFilter(new FilterDesc(new HashMap<>())) {
+					@Override
+					protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
+						return ((Actor) entity).isWounded();
+					}
+				};
+				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			}
 
 			if (validTargets.isEmpty()) {
 				return;
 			}
+
 			Actor randomTarget = SpellUtils.getRandomTarget(validTargets);
-			context.getLogic().damage(player, randomTarget, healing, source, true);
+			context.getLogic().heal(player, randomTarget, healing, source, false);
 		}
 	}
 

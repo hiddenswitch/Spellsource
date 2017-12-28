@@ -20,7 +20,7 @@
     }
   },
   "attributes": {
-    "COMBO": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

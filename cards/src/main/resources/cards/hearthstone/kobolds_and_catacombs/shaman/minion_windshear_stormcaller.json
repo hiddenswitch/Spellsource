@@ -1,0 +1,56 @@
+{
+  "name": "Windshear Stormcaller",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "SILVER",
+  "rarity": "EPIC",
+  "description": "Battlecry: If you control all 4 basic Totems, summon Al'Akir the Windlord.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "cardId": "token_searing_totem"
+          }
+        },
+        {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "cardId": "token_healing_totem"
+          }
+        },
+        {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "cardId": "token_wrath_of_air_totem"
+          }
+        },
+        {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "cardId": "token_stoneclaw_totem"
+          }
+        }
+      ]
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_al_akir_the_windlord"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Grumble, Worldshaker",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Return your other minions to your hand. They cost (1).",
+  "battlecry": {
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+      "target": "FRIENDLY_MINIONS",
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "EVENT_CARD",
+          "value": 1,
+          "operation": "SET"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

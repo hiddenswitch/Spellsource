@@ -219,7 +219,8 @@ public enum Attribute {
 	 * <p>
 	 * This implements Baron Rivendare's text.
 	 *
-	 * @see GameLogic#resolveDeathrattles(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the complete rules for deathrattles.
+	 * @see GameLogic#resolveDeathrattles(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the
+	 * complete rules for deathrattles.
 	 */
 	DOUBLE_DEATHRATTLES,
 	/**
@@ -680,7 +681,14 @@ public enum Attribute {
 	RESERVED_INTEGER_1,
 	RESERVED_INTEGER_2,
 	RESERVED_INTEGER_3,
-	RESERVED_INTEGER_4;
+	RESERVED_INTEGER_4,
+	/**
+	 * Allows spell effects to mark  things, interpreted however they'd like.
+	 */
+	RESERVED_BOOLEAN_1,
+	RESERVED_BOOLEAN_2,
+	RESERVED_BOOLEAN_3,
+	RESERVED_BOOLEAN_4;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

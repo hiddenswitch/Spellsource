@@ -10,6 +10,7 @@ import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
@@ -19,6 +20,60 @@ import org.testng.annotations.Test;
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+	@Test
+	public void testUnstableEvolution() {
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCardWithTarget(context, player, "spell_unstable_evolution", minion);
+			Assert.assertEquals(player.getHand().size(), 1);
+			for (int i = 0; i < 5; i++) {
+				playCardWithTarget(context, player, player.getHand().get(0), minion.transformResolved(context));
+			}
+			Assert.assertEquals(minion.transformResolved(context).getSourceCard().getBaseManaCost(), 8);
+			context.endTurn();
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
+	public void testMurmuringElemental() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_murmuring_elemental");
+			playCard(context, player, "minion_kobold_hermit");
+			Assert.assertEquals(player.getMinions().size(), 4);
+			playCard(context, player, "minion_kobold_hermit");
+			Assert.assertEquals(player.getMinions().size(), 6);
+		});
+	}
+
+	@Test
+	public void testKoboldHermit() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_kobold_hermit");
+			Assert.assertEquals(player.getMinions().size(), 2);
+			Assert.assertEquals(player.getMinions().get(1).getRace(), Race.TOTEM);
+		});
+	}
+
+	@Test
+	public void testHealingRainLightwardenInteraction() {
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(15);
+			Minion lightwarden = playMinionCard(context, player, "minion_lightwarden");
+			playCard(context, player, "spell_healing_rain");
+			Assert.assertEquals(lightwarden.getAttack(), 1 + 2 * 12);
+		});
+	}
+
+	@Test
+	public void testCollectibilityOfSpellstoneCards() {
+		CardCatalogue.getRecords().values().forEach(ccr -> {
+			if (ccr.getDesc().name.contains("Spellstone")) {
+				Assert.assertEquals(ccr.getDesc().collectible, ccr.getDesc().name.contains("Lesser"), "Invalid collectibility for spellstone " + ccr.getDesc().name);
+			}
+		});
+	}
+
 	@Test
 	public void testKingsbane() {
 		runGym((context, player, opponent) -> {
