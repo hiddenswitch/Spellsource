@@ -86,7 +86,7 @@ public class MinionCard extends ActorCard {
 
 	@Override
 	public PlayCardAction play() {
-		return new PlayMinionCardAction(getCardReference());
+		return new PlayMinionCardAction(getEntityReference());
 	}
 
 	public void setRace(Race race) {

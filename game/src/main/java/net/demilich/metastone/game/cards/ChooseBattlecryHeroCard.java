@@ -32,7 +32,7 @@ public class ChooseBattlecryHeroCard extends HeroCard implements HasChooseOneAct
 	public PlayCardAction[] playOptions() {
 		PlayCardAction[] actions = new PlayCardAction[battlecryOptions.length];
 		for (int i = 0; i < battlecryOptions.length; i++) {
-			PlayCardAction option = new PlayHeroCardAction(getCardReference(), battlecryOptions[i].toBattlecryAction());
+			PlayCardAction option = new PlayHeroCardAction(getEntityReference(), battlecryOptions[i].toBattlecryAction());
 			option.setChooseOneOptionIndex(i);
 			actions[i] = option;
 		}
@@ -41,7 +41,7 @@ public class ChooseBattlecryHeroCard extends HeroCard implements HasChooseOneAct
 
 	@Override
 	public PlayCardAction playBothOptions() {
-		return new PlayHeroCardAction(getCardReference(), battlecryBothOptions.toBattlecryAction());
+		return new PlayHeroCardAction(getEntityReference(), battlecryBothOptions.toBattlecryAction());
 	}
 
 	@Override

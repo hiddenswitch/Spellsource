@@ -235,14 +235,14 @@ public class GameLogic implements Cloneable, Serializable {
 	 * PlayCardAction#execute(GameContext, int)} method. Can probably be inlined.
 	 *
 	 * @param playerId      The player index
-	 * @param cardReference A reference to the card.
+	 * @param EntityReference A reference to the card.
 	 */
 	@Suspendable
-	public void afterCardPlayed(int playerId, CardReference cardReference) {
+	public void afterCardPlayed(int playerId, EntityReference EntityReference) {
 		Player player = context.getPlayer(playerId);
 
 		player.modifyAttribute(Attribute.COMBO, +1);
-		Card card = context.resolveCardReference(cardReference);
+		Card card = context.resolveEntityReference(EntityReference);
 
 		card.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
 	}
@@ -366,13 +366,13 @@ public class GameLogic implements Cloneable, Serializable {
 	 * requires targets has possible targets in the game.
 	 *
 	 * @param playerId      The player whose point of view should be considered for this method.
-	 * @param cardReference A reference to the card.
+	 * @param EntityReference A reference to the card.
 	 * @return {@code true} if the card can be played.
 	 */
 	@Suspendable
-	public boolean canPlayCard(int playerId, CardReference cardReference) {
+	public boolean canPlayCard(int playerId, EntityReference EntityReference) {
 		Player player = context.getPlayer(playerId);
-		Card card = context.resolveCardReference(cardReference);
+		Card card = context.resolveEntityReference(EntityReference);
 		// A player cannot play a card the player does not own.
 		if (card.getOwner() != player.getId()
 				&& card.getOwner() != Entity.NO_OWNER) {
@@ -2232,7 +2232,7 @@ public class GameLogic implements Cloneable, Serializable {
 	/**
 	 * Plays a card.
 	 * <p>
-	 * {@link #playCard(int, CardReference)} is always initiated by an action, like a {@link PlayCardAction}. It
+	 * {@link #playCard(int, EntityReference)} is always initiated by an action, like a {@link PlayCardAction}. It
 	 * represents playing a card from the hand. This method then deducts the appropriate amount of mana (or health,
 	 * depending on the card). Then, it will check if the {@link SpellCard} was countered by Counter Spell (a {@link
 	 * Secret} which adds a {@link Attribute#COUNTERED} attribute to the card that was raised in the {@link
@@ -2240,12 +2240,12 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Finally, it removes the card from the player's {@link Zones#HAND} and puts it in the {@link Zones#GRAVEYARD}.
 	 *
 	 * @param playerId      The player that is playing the card.
-	 * @param cardReference The card that got played.
+	 * @param EntityReference The card that got played.
 	 */
 	@Suspendable
-	public void playCard(int playerId, CardReference cardReference) {
+	public void playCard(int playerId, EntityReference EntityReference) {
 		Player player = context.getPlayer(playerId);
-		Card card = context.resolveCardReference(cardReference);
+		Card card = context.resolveEntityReference(EntityReference);
 
 		int modifiedManaCost = getModifiedManaCost(player, card);
 		if (card.getCardType().isCardType(CardType.SPELL)

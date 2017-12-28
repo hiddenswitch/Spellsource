@@ -11,7 +11,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.targeting.CardReference;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,19 +20,19 @@ public abstract class PlayCardAction extends GameAction {
 
 	public static Logger logger = LoggerFactory.getLogger(PlayCardAction.class);
 
-	protected CardReference cardReference;
+	protected EntityReference EntityReference;
 	private Integer chooseOneOptionIndex = null;
 
 	protected PlayCardAction() {
 	}
 
-	public PlayCardAction(CardReference cardReference) {
-		this.cardReference = cardReference;
+	public PlayCardAction(EntityReference EntityReference) {
+		this.EntityReference = EntityReference;
 	}
 
 	@Override
 	public boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
-		Card card = context.resolveCardReference(getCardReference());
+		Card card = context.resolveEntityReference(getEntityReference());
 		if (card instanceof SpellCard) {
 			SpellCard spellCard = (SpellCard) card;
 			return spellCard.canBeCastOn(context, player, entity);
@@ -44,21 +44,21 @@ public abstract class PlayCardAction extends GameAction {
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		Card card = context.resolveCardReference(getCardReference());
+		Card card = context.resolveEntityReference(getEntityReference());
 		context.setPendingCard(card);
 
-		context.getLogic().playCard(playerId, getCardReference());
+		context.getLogic().playCard(playerId, getEntityReference());
 		// card was countered, do not actually resolve its effects
 		if (!card.hasAttribute(Attribute.COUNTERED)) {
 			play(context, playerId);
 		}
 
-		context.getLogic().afterCardPlayed(playerId, getCardReference());
+		context.getLogic().afterCardPlayed(playerId, getEntityReference());
 		context.setPendingCard(null);
 	}
 
-	public CardReference getCardReference() {
-		return cardReference;
+	public EntityReference getEntityReference() {
+		return EntityReference;
 	}
 
 	public Integer getChooseOneOptionIndex() {
@@ -74,12 +74,12 @@ public abstract class PlayCardAction extends GameAction {
 
 	@Override
 	public String toString() {
-		return String.format("%s Card: %s Target: %s", getActionType(), cardReference, getTargetReference());
+		return String.format("%s Card: %s Target: %s", getActionType(), EntityReference, getTargetReference());
 	}
 
 	@Override
 	public Entity getSource(GameContext context) {
-		return context.resolveCardReference(getCardReference());
+		return context.resolveEntityReference(getEntityReference());
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public abstract class PlayCardAction extends GameAction {
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
-		Card playedCard = context.resolveCardReference(getCardReference());
+		Card playedCard = context.resolveEntityReference(getEntityReference());
 		String cardName = playedCard != null ? playedCard.getName() : "an unknown card";
 		if (playedCard.getCardType() == CardType.SPELL
 				&& playedCard.hasAttribute(Attribute.SECRET)) {

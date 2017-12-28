@@ -139,7 +139,7 @@ public interface Games {
 				.filter(ga -> ga.getActionType() == ActionType.SPELL
 						&& ga instanceof PlayChooseOneCardAction)
 				.map(ga -> (PlayChooseOneCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addSpellsItem))
@@ -151,7 +151,7 @@ public interface Games {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
 				.map(ga -> (PlayMinionCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
@@ -195,7 +195,7 @@ public interface Games {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
 				.map(ga -> (PlayMinionCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
@@ -205,7 +205,7 @@ public interface Games {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.HERO)
 				.map(ga -> (PlayHeroCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
@@ -216,7 +216,7 @@ public interface Games {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.HERO)
 				.map(ga -> (PlayHeroCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
@@ -268,7 +268,7 @@ public interface Games {
 				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
 				.map(ga -> (HeroPowerAction) ga)
 				.filter(ga -> ga.getChooseOneOptionIndex() == null)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> getSpellAction(kv.getKey(), kv.getValue())).findFirst();
@@ -280,7 +280,7 @@ public interface Games {
 				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
 				.map(ga -> (HeroPowerAction) ga)
 				.filter(ga -> ga.getChooseOneOptionIndex() != null)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addHeroPowersItem))
@@ -290,7 +290,7 @@ public interface Games {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.EQUIP_WEAPON)
 				.map(ga -> (PlayWeaponCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getCardReference().getEntityId()))
+				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId))
@@ -338,7 +338,7 @@ public interface Games {
 	 */
 	static <T extends PlayCardAction & HasChoiceCard> ChooseOneOptions buildChooseOneOptions(GameContext workingContext, int playerId, int[] chooseOneVirtualEntitiesId, int sourceId, List<T> choices, BiConsumer<ChooseOneOptions, SpellAction> adder) {
 		ChooseOneOptions spell = new ChooseOneOptions();
-		EntityLocation sourceCardLocation = workingContext.resolveCardReference(choices.get(0).getCardReference()).getEntityLocation();
+		EntityLocation sourceCardLocation = workingContext.resolveEntityReference(choices.get(0).getEntityReference()).getEntityLocation();
 		spell.cardInHandId(sourceId);
 
 		Map<String, List<T>> intermediate = choices.stream()
@@ -934,7 +934,7 @@ public interface Games {
 		int owner = card.getOwner();
 		Player owningPlayer;
 		if (owner != -1) {
-			final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getCardReference())
+			final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getEntityReference())
 					&& card.getOwner() == workingContext.getActivePlayerId()
 					&& localPlayerId == card.getOwner();
 			entityState.playable(playable);

@@ -68,6 +68,7 @@ public class CatalogueTests {
 		Assert.assertNotNull(card);
 	}
 
+	@Ignore
 	@Test(dataProvider = "HearthstoneCards")
 	public void testAttributes(JsonObject cardObject) {
 		Type listType = new TypeToken<List<String>>() {

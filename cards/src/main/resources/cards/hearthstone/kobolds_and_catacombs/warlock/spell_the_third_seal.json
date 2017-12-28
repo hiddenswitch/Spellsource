@@ -1,0 +1,25 @@
+{
+  "name": "The Third Seal",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "EPIC",
+  "description": "Summon a 4/4 Demon. Add 'The Fourth Seal' to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "card": "token_felhunter_third_seal"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_the_fourth_seal"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

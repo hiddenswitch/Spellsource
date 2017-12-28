@@ -97,9 +97,9 @@ public class SerializationTest extends TestBase {
 		PlaySpellCardAction playSpellCardAction = new PlaySpellCardAction(fireball.getSpell(), fireball, TargetSelection.ENEMY_CHARACTERS);
 		playSpellCardAction.setTargetReference(new EntityReference(3));
 		BattlecryAction elvenArcherAction = elven_archer.summon().getBattlecry();
-		PlayMinionCardAction playMinionCardAction = new PlayMinionCardAction(elven_archer.getCardReference(), elvenArcherAction);
+		PlayMinionCardAction playMinionCardAction = new PlayMinionCardAction(elven_archer.getEntityReference(), elvenArcherAction);
 		HeroPowerAction heroPowerAction = new HeroPowerAction(heroPowerFireblast.getSpell(), heroPowerFireblast.getCopy(), TargetSelection.ENEMY_CHARACTERS);
-		PlayWeaponCardAction playWeaponCardAction = new PlayWeaponCardAction(assassinsBlade.getCardReference());
+		PlayWeaponCardAction playWeaponCardAction = new PlayWeaponCardAction(assassinsBlade.getEntityReference());
 
 		// 0
 		gameActions.add(endTurnAction);
@@ -142,7 +142,6 @@ public class SerializationTest extends TestBase {
 		PlayMinionCardAction playMinionCardAction1 = (PlayMinionCardAction) deserializedGameActions.get(3);
 		assertNotNull(playMinionCardAction1);
 		assertEquals(playMinionCardAction1.getActionType(), ActionType.SUMMON);
-		assertEquals(playMinionCardAction1.getCardReference().getCardName(), playMinionCardAction.getCardReference().getCardName());
 
 		BattlecryAction battlecryAction1 = (BattlecryAction) deserializedGameActions.get(4);
 		assertNotNull(battlecryAction1);
@@ -156,7 +155,6 @@ public class SerializationTest extends TestBase {
 		PlayWeaponCardAction playWeaponCardAction1 = (PlayWeaponCardAction) deserializedGameActions.get(6);
 		assertNotNull(playWeaponCardAction1);
 		assertEquals(playWeaponCardAction1.getActionType(), ActionType.EQUIP_WEAPON);
-		assertEquals(playWeaponCardAction1.getCardReference().getCardName(), playWeaponCardAction.getCardReference().getCardName());
 
 		DiscoverAction discoverAction1 = (DiscoverAction) deserializedGameActions.get(7);
 		assertNotNull(discoverAction1);

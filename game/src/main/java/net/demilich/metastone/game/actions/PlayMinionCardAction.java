@@ -6,7 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.targeting.CardReference;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class PlayMinionCardAction extends PlayCardAction {
@@ -19,12 +19,12 @@ public class PlayMinionCardAction extends PlayCardAction {
 		setActionType(ActionType.SUMMON);
 	}
 
-	public PlayMinionCardAction(CardReference cardReference) {
-		this(cardReference, null);
+	public PlayMinionCardAction(EntityReference EntityReference) {
+		this(EntityReference, null);
 	}
 
-	public PlayMinionCardAction(CardReference cardReference, BattlecryAction battlecry) {
-		super(cardReference);
+	public PlayMinionCardAction(EntityReference EntityReference, BattlecryAction battlecry) {
+		super(EntityReference);
 		this.battlecry = battlecry;
 		setTargetRequirement(TargetSelection.FRIENDLY_MINIONS);
 		setActionType(ActionType.SUMMON);

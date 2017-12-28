@@ -15,7 +15,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
-import net.demilich.metastone.game.targeting.CardReference;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.AttributeMap;
 
@@ -165,8 +165,8 @@ public abstract class Card extends Entity {
 	 *
 	 * @return A reference to the card.
 	 */
-	public CardReference getCardReference() {
-		return new CardReference(getOwner(), getZone(), getId(), getName());
+	public EntityReference getEntityReference() {
+		return new EntityReference(getId());
 	}
 
 	/**

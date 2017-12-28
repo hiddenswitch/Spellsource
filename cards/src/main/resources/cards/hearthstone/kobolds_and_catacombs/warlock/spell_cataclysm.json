@@ -1,0 +1,25 @@
+{
+  "name": "Cataclysm",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "EPIC",
+  "description": "Destroy all minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell",
+        "target": "ALL_MINIONS"
+      },
+      {
+        "class": "DiscardSpell",
+        "value": -1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

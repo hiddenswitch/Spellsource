@@ -1,0 +1,22 @@
+{
+  "name": "Azari, the Devourer",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "description": "Battlecry: Destroy your opponent's deck.",
+  "battlecry": {
+    "spell": {
+      "class": "RemoveCardSpell",
+      "target": "ENEMY_DECK"
+    }
+  },
+  "collectible": false,
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -58,7 +58,7 @@ public class ChooseBattlecryMinionCard extends MinionCard implements HasChooseOn
 		PlayCardAction[] actions = new PlayCardAction[battlecryOptions.length];
 		for (int i = 0; i < battlecryOptions.length; i++) {
 			BattlecryAction battlecry = battlecryOptions[i].toBattlecryAction();
-			PlayCardAction option = new PlayMinionCardAction(getCardReference(), battlecry);
+			PlayCardAction option = new PlayMinionCardAction(getEntityReference(), battlecry);
 			option.setChooseOneOptionIndex(i);
 			actions[i] = option;
 		}
@@ -69,7 +69,7 @@ public class ChooseBattlecryMinionCard extends MinionCard implements HasChooseOn
 	public PlayCardAction playBothOptions() {
 		BattlecryDesc battlecryOption = battlecryBothOptions;
 		BattlecryAction battlecry = BattlecryAction.createBattlecry(battlecryOption.spell, battlecryOption.getTargetSelection());
-		PlayCardAction option = new PlayMinionCardAction(getCardReference(), battlecry);
+		PlayCardAction option = new PlayMinionCardAction(getEntityReference(), battlecry);
 		return option;
 	}
 }

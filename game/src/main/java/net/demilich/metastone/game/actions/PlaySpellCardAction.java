@@ -14,8 +14,8 @@ import java.util.List;
 public class PlaySpellCardAction extends PlayCardAction {
 
 	private SpellDesc spell;
-	@SerializedName("cardReference2")
-	protected EntityReference cardReference;
+	@SerializedName("EntityReference2")
+	protected EntityReference EntityReference;
 
 	protected PlaySpellCardAction() {
 		super();
@@ -23,17 +23,17 @@ public class PlaySpellCardAction extends PlayCardAction {
 	}
 
 	public PlaySpellCardAction(SpellDesc spell, Card card, TargetSelection targetSelection) {
-		super(card.getCardReference());
+		super(card.getEntityReference());
 		setActionType(ActionType.SPELL);
 		setTargetRequirement(targetSelection);
 		this.setSpell(spell);
-		this.cardReference = card.getReference();
+		this.EntityReference = card.getReference();
 	}
 
 	@Override
 	@Suspendable
 	public void play(GameContext context, int playerId) {
-		context.getLogic().castSpell(playerId, spell, cardReference, getTargetReference(), getTargetRequirement(), false);
+		context.getLogic().castSpell(playerId, spell, EntityReference, getTargetReference(), getTargetRequirement(), false);
 	}
 
 	public SpellDesc getSpell() {
@@ -45,7 +45,7 @@ public class PlaySpellCardAction extends PlayCardAction {
 	}
 
 	public EntityReference getSourceCardEntityId() {
-		return cardReference;
+		return EntityReference;
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class PlaySpellCardAction extends PlayCardAction {
 			return super.getDescription(context, playerId);
 		}
 
-		final Card source = context.resolveCardReference(getCardReference());
+		final Card source = context.resolveEntityReference(getEntityReference());
 		final Entity target = context.resolveSingleTarget(getTargetReference());
 		return String.format("%s played %s on %s", context.getActivePlayer().getName(), source.getName(), target.getName());
 	}

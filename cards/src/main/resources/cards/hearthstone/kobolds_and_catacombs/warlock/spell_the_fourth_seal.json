@@ -1,0 +1,25 @@
+{
+  "name": "The Fourth Seal",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "EPIC",
+  "description": "Summon a 5/5 Demon. Add 'The Final Seal' to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "card": "token_felhunter_fourth_seal"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_the_final_seal"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
