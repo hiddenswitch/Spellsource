@@ -38,9 +38,9 @@ public class BroadcastTest {
 									if (packetData.equals(verticle.getClientCall())) {
 										return;
 									}
-									context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Integer.toString(Port.port()));
-									context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Integer.toString(Port.port()));
-									context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Integer.toString(Port.port()));
+									context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Integer.toString(Port.port()) + "/");
+									context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Integer.toString(Port.port()) + "/");
+									context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Integer.toString(Port.port()) + "/");
 									async.complete();
 								});
 								socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), context.asyncAssertSuccess());
