@@ -1,0 +1,26 @@
+{
+  "name": "Runed Shield",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RED",
+  "rarity": "COMMON",
+  "description": "Gain 5 Armor. Summon a 5/5 Golem.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "armorBonus": 5,
+        "target": "FRIENDLY_HERO"
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_mithril_golem"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

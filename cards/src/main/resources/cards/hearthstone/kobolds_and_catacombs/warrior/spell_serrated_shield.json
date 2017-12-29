@@ -1,0 +1,26 @@
+{
+  "name": "Serrated Shield",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RED",
+  "rarity": "COMMON",
+  "description": "Gain 5 Armor. Deal 5 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "armorBonus": 5,
+        "target": "FRIENDLY_HERO"
+      },
+      {
+        "class": "DamageSpell",
+        "value": 5
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Geosculptor Yip",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "At the end of your turn, summon a random minion with Cost equal to your Armor (up to 10).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "manaCost": {
+              "class": "AttributeValueProvider",
+              "attribute": "ARMOR",
+              "target": "FRIENDLY_HERO"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

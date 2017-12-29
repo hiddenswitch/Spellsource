@@ -1,12 +1,12 @@
 {
-  "name": "Ironwood Golem",
-  "baseManaCost": 4,
+  "name": "Gemstudded Golem",
+  "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "BROWN",
-  "baseAttack": 3,
-  "baseHp": 6,
+  "heroClass": "RED",
+  "baseAttack": 5,
+  "baseHp": 9,
   "rarity": "COMMON",
-  "description": "Taunt. Can only attack if you have 3 or more Armor.",
+  "description": "Taunt. Can only attack if you have 5 or more Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "ArmorChangedTrigger",
@@ -17,7 +17,7 @@
       "condition": {
         "class": "AttributeCondition",
         "target": "FRIENDLY_HERO",
-        "value": 3,
+        "value": 5,
         "attribute": "ARMOR",
         "operation": "GREATER_OR_EQUAL"
       },
@@ -34,8 +34,8 @@
     }
   },
   "attributes": {
-    "CANNOT_ATTACK": true,
-    "TAUNT": true
+    "TAUNT": true,
+    "CANNOT_ATTACK": true
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",

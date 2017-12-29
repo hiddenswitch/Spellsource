@@ -1,0 +1,27 @@
+{
+  "name": "Kobold Barbarian",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "At the start of your turn, attack a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "queueCondition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      }
+    },
+    "spell": {
+      "class": "FightSpell",
+      "target": "ENEMY_CHARACTERS",
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

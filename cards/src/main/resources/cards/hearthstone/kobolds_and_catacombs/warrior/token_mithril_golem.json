@@ -1,0 +1,13 @@
+{
+  "name": "Iron Golem",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
