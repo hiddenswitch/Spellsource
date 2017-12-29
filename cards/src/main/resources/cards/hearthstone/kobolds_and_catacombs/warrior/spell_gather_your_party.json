@@ -1,0 +1,19 @@
+{
+  "name": "Gather Your Party",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RED",
+  "rarity": "RARE",
+  "description": "Recruit a minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

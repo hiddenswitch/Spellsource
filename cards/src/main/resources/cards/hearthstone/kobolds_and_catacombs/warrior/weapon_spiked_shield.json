@@ -1,0 +1,13 @@
+{
+  "name": "Spiked Shield",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "RED",
+  "damage": 5,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

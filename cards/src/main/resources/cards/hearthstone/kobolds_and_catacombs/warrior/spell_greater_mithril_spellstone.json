@@ -1,0 +1,17 @@
+{
+  "name": "Greater Mithril Spellstone",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "RED",
+  "rarity": "RARE",
+  "description": "Summon three 5/5 Mithril Golems.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 3,
+    "card": "token_mithril_golem"
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

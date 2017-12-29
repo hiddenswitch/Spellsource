@@ -1,0 +1,24 @@
+{
+  "name": "Drywhisker Armorer",
+  "baseManaCost": 2,
+  "baseHp": 2,
+  "baseAttack": 2,
+  "type": "MINION",
+  "heroClass": "RED",
+  "rarity": "RARE",
+  "description": "Battlecry: For each enemy minion, gain 2 Armor.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "armorBonus": {
+        "class": "EntityCounter",
+        "target": "ENEMY_MINIONS"
+      },
+      "target": "FRIENDLY_HERO"
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

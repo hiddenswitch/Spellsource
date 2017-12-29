@@ -2,6 +2,7 @@ package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -15,12 +16,26 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
+	public void testKoboldBarbarian() {
+		runGym((context, player, opponent) -> {
+			Minion kobold = playMinionCard(context, player, "minion_kobold_barbarian");
+			context.endTurn();
+			int opponentHp = opponent.getHero().getHp();
+			context.endTurn();
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - kobold.getAttack());
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK));
+		});
+	}
+
+	@Test
+	@Ignore
 	public void testUnstableEvolution() {
 		runGym((context, player, opponent) -> {
 			Minion minion = playMinionCard(context, player, "minion_bloodfen_raptor");

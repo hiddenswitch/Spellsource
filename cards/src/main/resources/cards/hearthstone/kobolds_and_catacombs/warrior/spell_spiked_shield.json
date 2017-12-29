@@ -1,0 +1,26 @@
+{
+  "name": "Spiked Shield",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RED",
+  "rarity": "COMMON",
+  "description": "Gain 5 Armor. Equip a 5/2 weapon.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "armorBonus": 5,
+        "target": "FRIENDLY_HERO"
+      },
+      {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_spiked_shield"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
