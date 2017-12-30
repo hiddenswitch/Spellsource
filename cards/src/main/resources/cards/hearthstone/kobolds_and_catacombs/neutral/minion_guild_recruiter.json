@@ -1,0 +1,37 @@
+{
+  "name": "Guild Recruiter",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Recruit a minion that costs (4) or less.",
+  "targetSelection": "NONE",
+  "battlecry": {
+    "spell": {
+      "class": "RecruitSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "ManaCostFilter",
+            "value": 4,
+            "operation": "LESS_OR_EQUAL"
+          }
+        ]
+      },
+      "cardLocation": "DECK",
+      "targetPlayer": "SELF"
+    },
+    "targetSelection": "NONE"
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

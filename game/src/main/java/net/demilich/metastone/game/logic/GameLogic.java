@@ -663,7 +663,7 @@ public class GameLogic implements Cloneable, Serializable {
 				&& sourceCard instanceof SpellCard
 				&& !sourceCard.getCardType().isCardType(CardType.HERO_POWER)
 				&& !childSpell) {
-			sourceCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK);
+			sourceCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK, context.getTurn());
 		}
 
 		Spell spell = spellFactory.getSpell(spellDesc);
@@ -1144,7 +1144,7 @@ public class GameLogic implements Cloneable, Serializable {
 			return null;
 		}
 
-		Card card = deck.getRandom();
+		Card card = getRandom(deck);
 		return drawCard(playerId, card, source);
 	}
 

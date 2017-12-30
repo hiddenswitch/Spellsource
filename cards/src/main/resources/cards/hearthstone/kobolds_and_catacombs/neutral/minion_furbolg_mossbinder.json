@@ -1,0 +1,23 @@
+{
+  "name": "Furbolg Mossbinder",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Battlecry: Transform a friendly minion into a 6/6 Elemental.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "TransformMinionSpell",
+      "card": "token_moss_elemental"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

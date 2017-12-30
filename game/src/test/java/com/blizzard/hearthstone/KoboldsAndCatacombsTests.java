@@ -4,10 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -15,13 +12,90 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+	@Test
+	public void testKingTogwaggle() {
+		runGym((context, player, opponent) -> {
+			final Card card1a = CardCatalogue.getCardById("spell_mirror_image");
+			final Card card1b = CardCatalogue.getCardById("spell_fireball");
+			final Card card2a = CardCatalogue.getCardById("minion_bloodfen_raptor");
+			final Card card2b = CardCatalogue.getCardById("minion_acidic_swap_ooze");
+			Stream.of(card1a, card1b).forEach(c -> context.getLogic().shuffleToDeck(player, c));
+			Stream.of(card2a, card2b).forEach(c -> context.getLogic().shuffleToDeck(opponent, c));
+			playCard(context, player, "minion_king_togwaggle");
+			Assert.assertTrue(opponent.getDeck().containsAll(Arrays.asList(card1a, card1b)));
+			Assert.assertTrue(opponent.getDeck().containsCard("spell_ransom"));
+			Assert.assertTrue(player.getDeck().containsAll(Arrays.asList(card2a, card2b)));
+			GameLogic spyLogic = Mockito.spy(context.getLogic());
+			context.setLogic(spyLogic);
+			Mockito.doReturn(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_ransom")).findFirst().orElseThrow(AssertionError::new))
+					.when(spyLogic).getRandom(Mockito.any(CardList.class));
+			context.endTurn();
+			Assert.assertTrue(opponent.getHand().containsCard("spell_ransom"));
+			playCard(context, opponent, opponent.getHand().get(0));
+			Assert.assertTrue(opponent.getDeck().containsAll(Arrays.asList(card2a, card2b)));
+			Assert.assertTrue(player.getDeck().containsAll(Arrays.asList(card1a, card1b)));
+		});
+	}
+
+	@Test
+	public void testGrandArchivist() {
+		runGym((context, player, opponent) -> {
+			final Card card = CardCatalogue.getCardById("spell_mirror_image");
+			context.getLogic().shuffleToDeck(player, card);
+			Assert.assertEquals(player.getDeck().size(), 1);
+			playCard(context, player, "minion_grand_archivist");
+			context.endTurn();
+			Assert.assertEquals(player.getDeck().size(), 0);
+			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_mirror_image");
+			Assert.assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "token_mirror_image");
+		});
+	}
+
+	@Test
+	public void testEbonDragonsmith() {
+		runGym((context, player, opponent) -> {
+			final Card card = CardCatalogue.getCardById("weapon_arcanite_reaper");
+			context.getLogic().receiveCard(player.getId(), card);
+			int initialCost = context.getLogic().getModifiedManaCost(player, card);
+			playCard(context, player, "minion_ebon_dragonsmith");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), initialCost - 2);
+		});
+	}
+
+	@Test
+	public void testArcaneTyrant() {
+		runGym((context, player, opponent) -> {
+			final Card card = CardCatalogue.getCardById("minion_arcane_tyrant");
+			context.getLogic().receiveCard(player.getId(), card);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			context.endTurn();
+			playCard(context, opponent, "spell_mirror_image");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			playCard(context, opponent, "spell_doom");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			context.endTurn();
+			playCard(context, player, "spell_doom");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 0);
+			context.endTurn();
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			context.endTurn();
+			playCard(context, player, "spell_mirror_image");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			playCard(context, player, "spell_doom");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 0);
+		});
+	}
+
 	@Test
 	public void testKoboldBarbarian() {
 		runGym((context, player, opponent) -> {

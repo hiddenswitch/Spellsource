@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.custom;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -30,7 +31,9 @@ public class JailMinionSpell extends Spell {
 		SpellDesc addDeathrattleSpell = AddDeathrattleSpell.create(deathrattle);
 		SpellDesc destroySpell = DestroySpell.create(target.getReference());
 		SpellUtils.castChildSpell(context, player, destroySpell, source, target);
-		SpellUtils.castChildSpell(context, player, addDeathrattleSpell, source, source);
+		for (int i = 0; i < desc.getValue(SpellArg.VALUE, context, player, target, source, 1); i++) {
+			SpellUtils.castChildSpell(context, player, addDeathrattleSpell.clone(), source, source);
+		}
 	}
 
 }

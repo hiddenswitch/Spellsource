@@ -1,0 +1,23 @@
+{
+  "name": "Fungalmancer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give adjacent minions +2/+2.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "ADJACENT_MINIONS",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

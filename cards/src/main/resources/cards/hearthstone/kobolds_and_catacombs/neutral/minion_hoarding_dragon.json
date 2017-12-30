@@ -1,0 +1,32 @@
+{
+  "name": "Hoarding Dragon",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Deathrattle: Give your opponent two Coins.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_the_coin",
+        "targetPlayer": "OPPONENT"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_the_coin",
+        "targetPlayer": "OPPONENT"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
