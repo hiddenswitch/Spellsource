@@ -1,0 +1,48 @@
+{
+  "name": "Arcane Tyrant",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Costs (0) if you've cast a spell that costs (5) or more this turn.",
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "AttributeFilter",
+              "attribute": "CAST_FROM_HAND_OR_DECK",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              },
+              "operation": "EQUAL"
+            },
+            {
+              "class": "ManaCostFilter",
+              "value": 5,
+              "operation": "GREATER_OR_EQUAL"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "GraveyardSpellsSource",
+          "targetPlayer": "SELF"
+        }
+      },
+      "value2": 0,
+      "operation": "GREATER"
+    },
+    "ifTrue": 5,
+    "ifFalse": 0
+  }
+}

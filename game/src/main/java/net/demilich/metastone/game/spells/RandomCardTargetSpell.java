@@ -21,6 +21,11 @@ public class RandomCardTargetSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = SpellUtils.getCard(context, desc);
+		if (card == null
+				&& target != null
+				&& target instanceof Card) {
+			card = (Card) target;
+		}
 		castCardWithRandomTargets(context, player, source, card);
 	}
 
@@ -37,6 +42,12 @@ public class RandomCardTargetSpell extends Spell {
 			throw new RuntimeException("A non-spell card was passed into a RandomCardTargetSpell");
 		}
 
+		Zones destination = Zones.REMOVED_FROM_PLAY;
+		if (spellCard.getZone() == Zones.DECK
+				|| spellCard.getZone() == Zones.HAND) {
+			destination = Zones.GRAVEYARD;
+		}
+
 		spellCard.setOwner(player.getId());
 		spellCard.setId(context.getLogic().getIdFactory().generateId());
 		spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
@@ -45,7 +56,7 @@ public class RandomCardTargetSpell extends Spell {
 
 		if (spellCard.getTargetRequirement() == TargetSelection.NONE) {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
-			spellCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			spellCard.moveOrAddTo(context, destination);
 			context.getLogic().removeCard(spellCard);
 			return;
 		}
@@ -58,7 +69,7 @@ public class RandomCardTargetSpell extends Spell {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, context.resolveSingleTarget(randomTarget));
 		}
 
-		spellCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		spellCard.moveOrAddTo(context, destination);
 		context.getLogic().removeCard(spellCard);
 	}
 

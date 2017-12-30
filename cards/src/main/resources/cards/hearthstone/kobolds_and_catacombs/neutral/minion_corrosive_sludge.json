@@ -1,0 +1,22 @@
+{
+  "name": "Corrosive Sludgee",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Battlecry: Destroy your opponent's weapon.",
+  "battlecry": {
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_WEAPON"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
