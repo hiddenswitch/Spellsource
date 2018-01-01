@@ -684,7 +684,7 @@ public enum Attribute {
 	RESERVED_INTEGER_3,
 	RESERVED_INTEGER_4,
 	/**
-	 * Allows spell effects to mark  things, interpreted however they'd like.
+	 * Allows spell effects to mark things, interpreted however they'd like.
 	 */
 	RESERVED_BOOLEAN_1,
 	RESERVED_BOOLEAN_2,

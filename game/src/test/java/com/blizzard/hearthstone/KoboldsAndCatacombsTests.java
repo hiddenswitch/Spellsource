@@ -28,7 +28,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			final Card card1a = CardCatalogue.getCardById("spell_mirror_image");
 			final Card card1b = CardCatalogue.getCardById("spell_fireball");
 			final Card card2a = CardCatalogue.getCardById("minion_bloodfen_raptor");
-			final Card card2b = CardCatalogue.getCardById("minion_acidic_swap_ooze");
+			final Card card2b = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
 			Stream.of(card1a, card1b).forEach(c -> context.getLogic().shuffleToDeck(player, c));
 			Stream.of(card2a, card2b).forEach(c -> context.getLogic().shuffleToDeck(opponent, c));
 			playCard(context, player, "minion_king_togwaggle");

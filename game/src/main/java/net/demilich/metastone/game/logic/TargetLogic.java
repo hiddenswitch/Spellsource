@@ -305,6 +305,10 @@ public class TargetLogic implements Serializable {
 			return friendly;
 		} else if (targetKey.equals(EntityReference.TRANSFORM_REFERENCE)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TRANSFORM_REFERENCE)));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_SET_ASIDE)) {
+			return new ArrayList<>(player.getSetAsideZone());
+		} else if (targetKey.equals(EntityReference.ENEMY_SET_ASIDE)) {
+			return new ArrayList<>(context.getOpponent(player).getSetAsideZone());
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}
