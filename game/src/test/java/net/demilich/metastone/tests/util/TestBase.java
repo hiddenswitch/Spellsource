@@ -302,7 +302,10 @@ public class TestBase {
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, MinionCard minionCard) {
-		context.getLogic().receiveCard(player.getId(), minionCard);
+		if (minionCard.getZone() != Zones.HAND) {
+			context.getLogic().receiveCard(player.getId(), minionCard);
+		}
+
 		context.getLogic().performGameAction(player.getId(), minionCard.play());
 		return getSummonedMinion(player.getMinions());
 	}

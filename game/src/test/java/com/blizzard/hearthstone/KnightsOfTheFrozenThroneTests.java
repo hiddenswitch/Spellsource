@@ -34,6 +34,19 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testDeathGrip() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			context.getLogic().shuffleToDeck(opponent, CardCatalogue.getCardById("minion_acolyte_of_pain"));
+			playCard(context, opponent, "minion_prince_keleseth");
+			context.endTurn();
+			playCard(context, player, "spell_death_grip");
+			Minion acolyte = playMinionCard(context, player, (MinionCard) player.getHand().get(0));
+			Assert.assertEquals(acolyte.getAttack(), 2, "The stolen Acolyte should still have the Prince Keleseth buff applied to it.");
+		});
+	}
+
+	@Test
 	public void testStubbornGatropodObsidianStatueInteraction() {
 		// Tests that a mysterious exception due to a minion already being dead doesn't occur
 		runGym((context, player, opponent) -> {

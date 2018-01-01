@@ -15,7 +15,7 @@
     "spell": {
       "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
-      "card": "token_ooze"
+      "card": "token_green_ooze"
     }
   },
   "collectible": true,

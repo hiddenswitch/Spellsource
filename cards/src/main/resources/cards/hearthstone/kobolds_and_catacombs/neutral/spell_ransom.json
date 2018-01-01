@@ -1,0 +1,41 @@
+{
+  "name": "King's Ransom",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Swap decks with your opponent.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "StealCardSpell",
+        "targetPlayer": "SELF",
+        "target": "ENEMY_DECK",
+        "cardLocation": "SET_ASIDE_ZONE"
+      },
+      {
+        "class": "StealCardSpell",
+        "targetPlayer": "OPPONENT",
+        "target": "FRIENDLY_DECK",
+        "cardLocation": "SET_ASIDE_ZONE"
+      },
+      {
+        "class": "StealCardSpell",
+        "targetPlayer": "SELF",
+        "target": "FRIENDLY_SET_ASIDE",
+        "cardLocation": "DECK"
+      },
+      {
+        "class": "StealCardSpell",
+        "targetPlayer": "OPPONENT",
+        "target": "ENEMY_SET_ASIDE",
+        "cardLocation": "DECK"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
