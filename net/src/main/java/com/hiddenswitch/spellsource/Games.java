@@ -12,6 +12,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.streams.Pump;
@@ -533,26 +534,6 @@ public interface Games {
 				.attacker(getEntity(workingContext, attacker, playerId))
 				.defender(getEntity(workingContext, defender, playerId))
 				.damageDealt(damageDealt);
-	}
-
-	static void configureWebsocketHandler(Router router, EventBus bus, AuthHandler authHandler) {
-		router.route("/" + WEBSOCKET_PATH + "-clustered")
-				.method(HttpMethod.GET)
-				.handler(authHandler);
-
-		router.route("/" + WEBSOCKET_PATH + "-clustered")
-				.method(HttpMethod.GET)
-				.handler(context -> {
-					final ServerWebSocket socket = context.request().upgrade();
-					final String userId = context.user().principal().getString("_id");
-					final MessageConsumer<Buffer> consumer = bus.<Buffer>consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
-					final Pump pump1 = Pump.pump(socket, bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId)).start();
-					Pump.pump(consumer.bodyStream(), socket).start();
-					socket.closeHandler(disconnected -> {
-						pump1.stop();
-						consumer.unregister();
-					});
-				});
 	}
 
 	static Map<GameId, CreateGameSessionResponse> getConnections(Vertx vertx) {

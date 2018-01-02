@@ -31,7 +31,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 	private Registration registration;
 	private Map<GameId, CreateGameSessionResponse> connections;
 	private Map<GameId, GameSession> sessions = new HashMap<>();
-	private Map<GameId, List<MessageConsumer<Buffer>>> pipes = new HashMap<>();
+	private Map<GameId, List<Runnable>> pipeClosers = new HashMap<>();
 	private Map<GameId, ActivityMonitor> gameActivityMonitors = new HashMap<>();
 
 	@Override
@@ -69,10 +69,10 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			// Listen for messages from the clients
 			final EventBus eventBus = vertx.eventBus();
 			final ActivityMonitor activityMonitor = new ActivityMonitor(vertx, gameId, request.getNoActivityTimeout(), this::kill);
-			final ArrayList<MessageConsumer<Buffer>> pipeList = new ArrayList<>();
-			pipeList.add(connect(session, 0, request.getPregame1().getUserId(), eventBus, activityMonitor));
-			pipeList.add(connect(session, 1, request.getPregame2().getUserId(), eventBus, activityMonitor));
-			pipes.put(key, pipeList);
+			final ArrayList<Runnable> closers = new ArrayList<>();
+			closers.add(connect(session, 0, request.getPregame1().getUserId(), eventBus, activityMonitor));
+			closers.add(connect(session, 1, request.getPregame2().getUserId(), eventBus, activityMonitor));
+			pipeClosers.put(key, closers);
 			gameActivityMonitors.put(key, activityMonitor);
 			final CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), session);
 			connections.put(key, response);
@@ -90,32 +90,59 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		vertx.setTimer(500L, Sync.suspendableHandler(t -> kill(gameOverId)));
 	}
 
-	private MessageConsumer<Buffer> connect(GameSession session, int playerId, String userId, EventBus eventBus, ActivityMonitor activityMonitor) {
-		SessionWriter writer1 = new SessionWriter(userId, playerId, eventBus, session, activityMonitor);
-		MessageConsumer<Buffer> reader1 = eventBus.consumer(READER_ADDRESS_PREFIX + userId);
-		Pump.pump(reader1.bodyStream(), writer1).start();
-		return reader1;
+	/**
+	 * Connects the given session. Returns a function used to close the connections.
+	 *
+	 * @param session
+	 * @param playerId
+	 * @param userId
+	 * @param eventBus
+	 * @param activityMonitor
+	 * @return A function that when called closes all the created pipes.
+	 */
+	private Runnable connect(GameSession session, int playerId, String userId, EventBus eventBus, ActivityMonitor activityMonitor) {
+		final SessionWriter writer = new SessionWriter(userId, playerId, eventBus, session, activityMonitor);
+		final MessageConsumer<Buffer> reader = eventBus.consumer(READER_ADDRESS_PREFIX + userId);
+		final Pump pipe = Pump.pump(reader.bodyStream(), writer).start();
+		return () -> {
+			pipe.stop();
+			writer.end();
+			reader.unregister();
+		};
 	}
 
 	@Suspendable
 	private void kill(String gameId) throws InterruptedException, SuspendExecution {
+		logger.debug("Calling kill for gameId " + gameId);
+		final GameId key = new GameId(gameId);
+		GameSession session = sessions.get(key);
+		if (session != null) {
+			session.kill();
+			sessions.remove(key);
+		}
 		try {
 			Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(new MatchExpireRequest(gameId));
 		} catch (VertxException noHandler) {
 			// TODO: What would be the most sensible solution here?
 		}
-		final GameId key = new GameId(gameId);
-		GameSession session = sessions.get(key);
-		if (session != null) {
-			session.kill();
-		}
-		connections.remove(key);
-		if (pipes.containsKey(key)) {
-			for (MessageConsumer<Buffer> consumer : pipes.get(key)) {
-				consumer.unregister();
+		if (gameActivityMonitors.containsKey(key)) {
+			try {
+				gameActivityMonitors.get(key).cancel();
+			} catch (Throwable ignored) {
 			}
-			pipes.remove(key);
+
+			gameActivityMonitors.remove(key);
 		}
+		if (pipeClosers.containsKey(key)) {
+			for (Runnable runnable : pipeClosers.get(key)) {
+				runnable.run();
+			}
+			pipeClosers.remove(key);
+		} else {
+			throw new RuntimeException("Closer was not found for gameId " + gameId);
+		}
+
+		connections.remove(key);
 
 	}
 

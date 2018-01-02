@@ -50,6 +50,11 @@ public abstract class StringEx implements Serializable,
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		return id.equals(((StringEx) obj).id);
+	}
+
+	@Override
 	public void writeToBuffer(Buffer buffer) {
 		byte[] bytes = id.getBytes();
 		buffer.appendInt(bytes.length);
