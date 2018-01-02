@@ -48,6 +48,20 @@ public class TriggerManager implements Cloneable, Serializable {
 	public void fireGameEvent(GameEvent event, List<Trigger> gameTriggers) {
 		if (event instanceof HasValue) {
 			event.getGameContext().getEventValueStack().push(((HasValue) event).getValue());
+		} else {
+			event.getGameContext().getEventValueStack().push(0);
+		}
+
+		if (event.getEventTarget() != null) {
+			event.getGameContext().getEventTargetStack().push(event.getEventTarget().getReference());
+		} else {
+			event.getGameContext().getEventTargetStack().push(EntityReference.NONE);
+		}
+
+		if (event.getEventSource() != null) {
+			event.getGameContext().getEventSourceStack().push(event.getEventSource().getReference());
+		} else {
+			event.getGameContext().getEventSourceStack().push(EntityReference.NONE);
 		}
 
 		List<Trigger> triggers = new ArrayList<>(this.triggers);
@@ -97,9 +111,9 @@ public class TriggerManager implements Cloneable, Serializable {
 
 		triggers.removeAll(removeTriggers);
 
-		if (event instanceof HasValue) {
-			event.getGameContext().getEventValueStack().pop();
-		}
+		event.getGameContext().getEventValueStack().pop();
+		event.getGameContext().getEventSourceStack().pop();
+		event.getGameContext().getEventTargetStack().pop();
 	}
 
 	@Suspendable

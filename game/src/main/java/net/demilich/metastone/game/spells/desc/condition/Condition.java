@@ -5,6 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.ConditionDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;

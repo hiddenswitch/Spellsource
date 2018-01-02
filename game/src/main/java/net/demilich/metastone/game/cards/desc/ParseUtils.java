@@ -281,6 +281,8 @@ public class ParseUtils {
 				return EntityReference.ALL_OTHER_MINIONS;
 			case "event_target":
 				return EntityReference.EVENT_TARGET;
+			case "event_source":
+				return EntityReference.EVENT_SOURCE;
 			case "target":
 				return EntityReference.TARGET;
 			case "spell_target":

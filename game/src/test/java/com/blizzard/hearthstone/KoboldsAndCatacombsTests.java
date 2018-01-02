@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.ActorCardDesc;
 import net.demilich.metastone.game.entities.Entity;
@@ -20,9 +21,39 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+
+	@Test
+	public void testAmethystSpellstone() {
+		runGym((context, player, opponent) -> {
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_lesser_amethyst_spellstone"));
+			playCard(context, player, "minion_flame_imp");
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_amethyst_spellstone");
+		}, HeroClass.VIOLET, HeroClass.VIOLET);
+
+		// Amethyst should not trigger on warlock hero power
+		// Also tests that amethyst doesn't trigger on fatigue
+		runGym((context, player, opponent) -> {
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_lesser_amethyst_spellstone"));
+			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_amethyst_spellstone");
+		}, HeroClass.VIOLET, HeroClass.VIOLET);
+	}
+
+	@Test
+	public void testBranchingPaths() {
+		runGym((context, player, opponent) -> {
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_mirror_image"));
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_mirror_image"));
+			overrideDiscover(player, discoveries -> discoveries.stream().filter(c -> c.getCard().getName().equals("Eat the Mushroom")).findFirst().orElseThrow(AssertionError::new));
+			playCard(context, player, "spell_branching_paths");
+			Assert.assertEquals(player.getHand().stream().filter(c -> c.getCardId().equals("spell_mirror_image")).count(), 2L, "Should have drawn cards twice.");
+		});
+	}
+
 	@Test
 	public void testTheDarkness() {
 		final String regularDescription = "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens.";
@@ -634,10 +665,8 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
 	public void testJasperSpellstone() {
+		// Spellstones should accumulate progress
 		runGym((context, player, opponent) -> {
-			/*
-			Spellstones accumulate progress...
-			 */
 			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_lesser_jasper_spellstone"));
 			playCard(context, player, "spell_claw");
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_jasper_spellstone");
@@ -647,6 +676,16 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_greater_jasper_spellstone");
 			playCard(context, player, "spell_shield_block");
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_greater_jasper_spellstone");
+		});
+
+		// Losing three armor shouldn't trigger Jasper Spellstone
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_shield_block");
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_lesser_jasper_spellstone"));
+			context.endTurn();
+			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
+			attack(context, opponent, wolfrider, player.getHero());
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_jasper_spellstone");
 		});
 	}
 

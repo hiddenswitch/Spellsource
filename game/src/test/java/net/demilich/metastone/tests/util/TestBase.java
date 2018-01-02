@@ -2,14 +2,18 @@ package net.demilich.metastone.tests.util;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import net.demilich.metastone.game.actions.DiscoverAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.Zones;
+import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
@@ -35,6 +39,9 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.testng.annotations.BeforeMethod;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+
 public class TestBase {
 	protected static void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
 		Enchantment enchantment = (Enchantment) context.getTriggersAssociatedWith(source.getReference()).get(0);
@@ -42,6 +49,21 @@ public class TestBase {
 		spell.remove(SpellArg.RANDOM_TARGET);
 		spell.setTarget(target.getReference());
 		enchantment.setSpell(spell);
+	}
+
+	protected static void overrideDiscover(Player player, Function<List<DiscoverAction>, GameAction> discovery) {
+		Behaviour overriden = Mockito.spy(player.getBehaviour());
+		player.setBehaviour(overriden);
+		Mockito.doAnswer(invocation -> {
+			List<GameAction> actions = invocation.getArgument(2);
+			if (actions.stream().allMatch(a -> a instanceof DiscoverAction)) {
+				List<DiscoverAction> discoveries = new ArrayList<>();
+				actions.forEach(a -> discoveries.add((DiscoverAction) a));
+				return discovery.apply(discoveries);
+			} else {
+				return invocation.callRealMethod();
+			}
+		}).when(overriden).requestAction(any(), any(), anyList());
 	}
 
 	@FunctionalInterface
