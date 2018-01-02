@@ -1,0 +1,88 @@
+{
+  "name": "Master Oakheart",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Recruit a 1, 2, and 3-Attack minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RecruitSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              },
+              {
+                "class": "AttributeFilter",
+                "value": 1,
+                "attribute": "ATTACK",
+                "operation": "EQUAL"
+              }
+            ]
+          },
+          "cardLocation": "DECK",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "RecruitSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              },
+              {
+                "class": "AttributeFilter",
+                "value": 2,
+                "attribute": "ATTACK",
+                "operation": "EQUAL"
+              }
+            ]
+          },
+          "cardLocation": "DECK",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "RecruitSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              },
+              {
+                "class": "AttributeFilter",
+                "value": 3,
+                "attribute": "ATTACK",
+                "operation": "EQUAL"
+              }
+            ]
+          },
+          "cardLocation": "DECK",
+          "targetPlayer": "SELF"
+        }
+      ]
+    }
+  },
+  "targetSelection": "NONE",
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

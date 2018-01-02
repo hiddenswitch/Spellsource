@@ -33,8 +33,7 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true,
-    "TAUNT": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",

@@ -1,0 +1,29 @@
+{
+  "name": "Dragonhatcher",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "At the end of your turn, Recruit a Dragon.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RecruitSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON",
+        "cardType": "MINION"
+      },
+      "cardLocation": "DECK",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

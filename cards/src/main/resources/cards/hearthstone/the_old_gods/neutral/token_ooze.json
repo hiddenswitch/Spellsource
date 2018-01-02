@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
-  "rarity": "COMMON",
+  "rarity": "FREE",
   "description": "Taunt.",
   "attributes": {
     "TAUNT": true

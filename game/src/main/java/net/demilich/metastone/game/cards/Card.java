@@ -240,6 +240,7 @@ public abstract class Card extends Entity {
 	 */
 	public String getDescription() {
 		// Cleanup the html tags that appear in the description
+		final String description = hasAttribute(Attribute.DESCRIPTION) ? (String) getAttribute(Attribute.DESCRIPTION) : this.description;
 		if (description == null || description.isEmpty()) {
 			return description;
 		}

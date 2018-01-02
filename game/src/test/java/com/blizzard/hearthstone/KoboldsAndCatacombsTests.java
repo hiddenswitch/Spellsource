@@ -4,10 +4,8 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.ActorCardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -15,13 +13,179 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+	@Test
+	public void testTheDarkness() {
+		final String regularDescription = "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens.";
+		final String permanentDescription = "When your opponent draws 3 Candles, this awakens!";
+		runGym((context, player, opponent) -> {
+			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
+			Assert.assertTrue(theDarkness.hasAttribute(Attribute.PERMANENT), "Comes into play permanent.");
+			Assert.assertEquals(theDarkness.getDescription(), permanentDescription, "Should have different description.");
+		});
+
+		// Dirty rat play
+		// When The Darkness is summoned by any means other than being played, it will start dormant but no Darkness
+		// Candles are generated. When copied while on the board as a minion, the copy will not start dormant.
+		runGym((context, player, opponent) -> {
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_the_darkness"));
+			context.endTurn();
+			playCard(context, opponent, "minion_dirty_rat");
+			Assert.assertTrue(player.getMinions().get(0).hasAttribute(Attribute.PERMANENT), "Comes into play permanent.");
+		});
+
+		// Test that drawing candles removes the permanent attribute
+		runGym((context, player, opponent) -> {
+			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 3L);
+			for (int i = 0; i < 3; i++) {
+				context.endTurn();
+				// Opponent's turn
+				context.endTurn();
+			}
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
+			Assert.assertFalse(theDarkness.hasAttribute(Attribute.PERMANENT));
+			Assert.assertEquals(theDarkness.getDescription(), regularDescription, "Should have different description.");
+		});
+
+		// Test that milling a candle does not trigger The Darkness
+		runGym((context, player, opponent) -> {
+			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 3L);
+			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("spell_mirror_image"), 10);
+			for (int i = 0; i < 3; i++) {
+				context.endTurn();
+				// Opponent's turn
+				context.endTurn();
+			}
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
+			Assert.assertTrue(theDarkness.hasAttribute(Attribute.PERMANENT));
+			Assert.assertEquals(theDarkness.getDescription(), permanentDescription, "Should have different description.");
+		});
+
+		// When copied while on the board as a minion, the copy will not start dormant
+		// Test that drawing candles removes the permanent attribute
+		runGym((context, player, opponent) -> {
+			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 3L);
+			for (int i = 0; i < 3; i++) {
+				context.endTurn();
+				// Opponent's turn
+				context.endTurn();
+			}
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
+			Assert.assertFalse(theDarkness.hasAttribute(Attribute.PERMANENT));
+			Assert.assertEquals(theDarkness.getDescription(), regularDescription, "Should have different description.");
+			Minion faceless = (Minion) playMinionCard(context, player, "minion_faceless_manipulator").transformResolved(context);
+			Assert.assertEquals(faceless.getSourceCard().getCardId(), "minion_the_darkness");
+			Assert.assertFalse(faceless.hasAttribute(Attribute.PERMANENT));
+		});
+	}
+
+	@Test
+	public void testKoboldMonk() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("spell_fireball"));
+			opponent.setMaxMana(4);
+			opponent.setMana(4);
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
+			context.endTurn();
+			Minion kobold = playMinionCard(context, player, "minion_kobold_monk");
+			context.endTurn();
+			opponent.setMaxMana(4);
+			opponent.setMana(4);
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
+			playCardWithTarget(context, opponent, "spell_fireball", kobold);
+			opponent.setMaxMana(4);
+			opponent.setMana(4);
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
+		});
+	}
+
+	@Test
+	public void testKingTogwaggle() {
+		runGym((context, player, opponent) -> {
+			final Card card1a = CardCatalogue.getCardById("spell_mirror_image");
+			final Card card1b = CardCatalogue.getCardById("spell_fireball");
+			final Card card2a = CardCatalogue.getCardById("minion_bloodfen_raptor");
+			final Card card2b = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
+			Stream.of(card1a, card1b).forEach(c -> context.getLogic().shuffleToDeck(player, c));
+			Stream.of(card2a, card2b).forEach(c -> context.getLogic().shuffleToDeck(opponent, c));
+			playCard(context, player, "minion_king_togwaggle");
+			Assert.assertTrue(opponent.getDeck().containsAll(Arrays.asList(card1a, card1b)));
+			Assert.assertTrue(opponent.getDeck().containsCard("spell_ransom"));
+			Assert.assertTrue(player.getDeck().containsAll(Arrays.asList(card2a, card2b)));
+			GameLogic spyLogic = Mockito.spy(context.getLogic());
+			context.setLogic(spyLogic);
+			Mockito.doReturn(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_ransom")).findFirst().orElseThrow(AssertionError::new))
+					.when(spyLogic).getRandom(Mockito.any(CardList.class));
+			context.endTurn();
+			Assert.assertTrue(opponent.getHand().containsCard("spell_ransom"));
+			playCard(context, opponent, opponent.getHand().get(0));
+			Assert.assertTrue(opponent.getDeck().containsAll(Arrays.asList(card2a, card2b)));
+			Assert.assertTrue(player.getDeck().containsAll(Arrays.asList(card1a, card1b)));
+		});
+	}
+
+	@Test
+	public void testGrandArchivist() {
+		runGym((context, player, opponent) -> {
+			final Card card = CardCatalogue.getCardById("spell_mirror_image");
+			context.getLogic().shuffleToDeck(player, card);
+			Assert.assertEquals(player.getDeck().size(), 1);
+			playCard(context, player, "minion_grand_archivist");
+			context.endTurn();
+			Assert.assertEquals(player.getDeck().size(), 0);
+			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_mirror_image");
+			Assert.assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "token_mirror_image");
+		});
+	}
+
+	@Test
+	public void testEbonDragonsmith() {
+		runGym((context, player, opponent) -> {
+			final Card card = CardCatalogue.getCardById("weapon_arcanite_reaper");
+			context.getLogic().receiveCard(player.getId(), card);
+			int initialCost = context.getLogic().getModifiedManaCost(player, card);
+			playCard(context, player, "minion_ebon_dragonsmith");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), initialCost - 2);
+		});
+	}
+
+	@Test
+	public void testArcaneTyrant() {
+		runGym((context, player, opponent) -> {
+			final Card card = CardCatalogue.getCardById("minion_arcane_tyrant");
+			context.getLogic().receiveCard(player.getId(), card);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			context.endTurn();
+			playCard(context, opponent, "spell_mirror_image");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			playCard(context, opponent, "spell_doom");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			context.endTurn();
+			playCard(context, player, "spell_doom");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 0);
+			context.endTurn();
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			context.endTurn();
+			playCard(context, player, "spell_mirror_image");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 5);
+			playCard(context, player, "spell_doom");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 0);
+		});
+	}
+
 	@Test
 	public void testKoboldBarbarian() {
 		runGym((context, player, opponent) -> {

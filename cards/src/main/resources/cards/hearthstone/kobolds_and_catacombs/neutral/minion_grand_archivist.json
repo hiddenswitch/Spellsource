@@ -1,0 +1,28 @@
+{
+  "name": "Grand Archivist",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "description": "At the end of your turn, cast a spell from your deck (targets chosen randomly).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RandomCardTargetSpell",
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

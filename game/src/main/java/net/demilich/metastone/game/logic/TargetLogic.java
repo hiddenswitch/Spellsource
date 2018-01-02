@@ -57,6 +57,12 @@ public class TargetLogic implements Serializable {
 				continue;
 			}
 
+			// Implements Shimmering Courser
+			if ((action.getActionType() == ActionType.SPELL || action.getActionType() == ActionType.HERO_POWER)
+					&& (entity.hasAttribute(Attribute.UNTARGETABLE_BY_OPPONENT_SPELLS) && player.getId() != entity.getOwner())) {
+				continue;
+			}
+
 			// You can summon next to permanents but not anything else.
 			if (action.getActionType() != ActionType.SUMMON && entity.hasAttribute(Attribute.PERMANENT)) {
 				continue;
@@ -231,25 +237,25 @@ public class TargetLogic implements Serializable {
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_RIGHT)) {
 			return new ArrayList<>(context.getRightMinions(player, source.getReference()));
 		} else if (targetKey.equals(EntityReference.LEFTMOST_ENEMY_MINION)) {
-			final EntityZone<Minion> minions = context.getOpponent(player).getMinions();
+			final List<Entity> minions = this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
 			if (minions.size() == 0) {
 				return new ArrayList<>();
 			}
 			return singleTargetAsList(minions.get(0));
 		} else if (targetKey.equals(EntityReference.LEFTMOST_FRIENDLY_MINION)) {
-			final EntityZone<Minion> minions = player.getMinions();
+			final List<Entity> minions = this.getEntities(context, player, TargetSelection.FRIENDLY_MINIONS);
 			if (minions.size() == 0) {
 				return new ArrayList<>();
 			}
 			return singleTargetAsList(minions.get(0));
 		} else if (targetKey.equals(EntityReference.RIGHTMOST_ENEMY_MINION)) {
-			final EntityZone<Minion> minions = context.getOpponent(player).getMinions();
+			final List<Entity> minions = this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
 			if (minions.size() == 0) {
 				return new ArrayList<>();
 			}
 			return singleTargetAsList(minions.get(minions.size() - 1));
 		} else if (targetKey.equals(EntityReference.RIGHTMOST_FRIENDLY_MINION)) {
-			final EntityZone<Minion> minions = player.getMinions();
+			final List<Entity> minions = this.getEntities(context, player, TargetSelection.FRIENDLY_MINIONS);
 			if (minions.size() == 0) {
 				return new ArrayList<>();
 			}
@@ -305,6 +311,16 @@ public class TargetLogic implements Serializable {
 			return friendly;
 		} else if (targetKey.equals(EntityReference.TRANSFORM_REFERENCE)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TRANSFORM_REFERENCE)));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_SET_ASIDE)) {
+			return new ArrayList<>(player.getSetAsideZone());
+		} else if (targetKey.equals(EntityReference.ENEMY_SET_ASIDE)) {
+			return new ArrayList<>(context.getOpponent(player).getSetAsideZone());
+		} else if (targetKey.equals(EntityReference.FRIENDLY_GRAVEYARD)) {
+			return new ArrayList<>(player.getGraveyard());
+		} else if (targetKey.equals(EntityReference.ENEMY_GRAVEYARD)) {
+			return new ArrayList<>(context.getOpponent(player).getGraveyard());
+		} else if (targetKey.equals(EntityReference.ALL_ENTITIES)) {
+			return context.getEntities().collect(Collectors.toList());
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

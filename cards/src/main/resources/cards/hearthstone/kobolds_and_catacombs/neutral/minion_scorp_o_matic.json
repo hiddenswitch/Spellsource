@@ -1,0 +1,29 @@
+{
+  "name": "Scorp-o-matic",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Battlecry: Destroy a minion with 1 or less Attack.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 1,
+        "attribute": "ATTACK",
+        "operation": "LESS_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

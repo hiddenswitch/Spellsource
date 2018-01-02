@@ -21,7 +21,7 @@
       "spell": {
         "class": "AddAttributeSpell",
         "target": "SELF",
-        "group": "group_adapt"
+        "attribute": "TAUNT"
       }
     }
   },

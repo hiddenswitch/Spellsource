@@ -312,6 +312,13 @@ public enum Attribute {
 	 */
 	UNTARGETABLE_BY_SPELLS,
 	/**
+	 * Marks an {@link Actor} to be untargetable by an <b>opponent's</b> spells or hero powers.
+	 *
+	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
+	 * complete target selection logic.
+	 */
+	UNTARGETABLE_BY_OPPONENT_SPELLS,
+	/**
 	 * An {@link Actor} with this attribute is untargetable by spells or hero powers due to an aura.
 	 *
 	 * @see #UNTARGETABLE_BY_SPELLS for more information.
@@ -433,8 +440,8 @@ public enum Attribute {
 	/**
 	 * This attribute keeps track of how many times the hero power was used this turn.
 	 *
-	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card, like
-	 * a hero power card, can be played.
+	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card,
+	 * like a hero power card, can be played.
 	 */
 	HERO_POWER_USAGES,
 	/**
@@ -684,7 +691,7 @@ public enum Attribute {
 	RESERVED_INTEGER_3,
 	RESERVED_INTEGER_4,
 	/**
-	 * Allows spell effects to mark  things, interpreted however they'd like.
+	 * Allows spell effects to mark things, interpreted however they'd like.
 	 */
 	RESERVED_BOOLEAN_1,
 	RESERVED_BOOLEAN_2,

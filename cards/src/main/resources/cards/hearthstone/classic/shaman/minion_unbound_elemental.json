@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",
+  "race": "ELEMENTAL",
   "description": "Whenever you play a card with Overload, gain +1/+1.",
   "trigger": {
     "eventTrigger": {

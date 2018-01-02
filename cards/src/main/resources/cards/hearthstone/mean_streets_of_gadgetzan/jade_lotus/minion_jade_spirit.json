@@ -11,6 +11,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
+  "race": "ELEMENTAL",
   "description": "Battlecry: Summon a Jade Golem.",
   "battlecry": {
     "targetSelection": "NONE",

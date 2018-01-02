@@ -11,8 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "armorBonus": 5,
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 5
       },
       {
         "class": "EquipWeaponSpell",

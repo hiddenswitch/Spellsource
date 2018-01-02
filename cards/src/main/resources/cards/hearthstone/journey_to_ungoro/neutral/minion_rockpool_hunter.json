@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
+  "race": "MURLOC",
   "description": "Battlecry: Give a friendly Murloc +1/+1",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",

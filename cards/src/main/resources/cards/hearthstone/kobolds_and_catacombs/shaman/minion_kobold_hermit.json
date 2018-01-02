@@ -2,9 +2,9 @@
   "name": "Kobold Hermit",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "SILVER",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Battlecry: Choose a basic Totem. Summon it.",
   "battlecry": {

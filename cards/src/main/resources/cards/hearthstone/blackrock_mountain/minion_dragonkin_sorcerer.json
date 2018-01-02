@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 5,
-  "rarity": "RARE",
+  "rarity": "COMMON",
   "race": "DRAGON",
   "description": "Whenever you target this minion with a spell, gain +1/+1.",
   "trigger": {

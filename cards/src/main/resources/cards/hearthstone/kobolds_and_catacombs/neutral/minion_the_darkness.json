@@ -1,0 +1,63 @@
+{
+  "name": "The Darkness",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 20,
+  "baseHp": 20,
+  "rarity": "LEGENDARY",
+  "description": "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens.",
+  "aura": {
+    "class": "Aura",
+    "target": "SELF",
+    "applyEffect": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "attribute": "PERMANENT",
+        "operation": "HAS"
+      },
+      "exclusive": true,
+      "spell1": {
+        "class": "SetDescriptionSpell"
+      },
+      "spell2": {
+        "class": "SetDescriptionSpell",
+        "description": "When your opponent draws 3 Candles, this awakens!"
+      }
+    },
+    "removeEffect": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "attribute": "PERMANENT",
+        "operation": "HAS"
+      },
+      "exclusive": true,
+      "spell1": {
+        "class": "SetDescriptionSpell",
+        "description": "When your opponent draws 3 Candles, this awakens!"
+      },
+      "spell2": {
+        "class": "SetDescriptionSpell"
+      }
+    }
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "spell_candle",
+      "howMany": 3,
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "PERMANENT": true,
+    "RESERVED_INTEGER_1": 0
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
