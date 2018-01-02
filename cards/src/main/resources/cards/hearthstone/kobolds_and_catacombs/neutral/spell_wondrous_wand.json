@@ -1,0 +1,26 @@
+{
+  "name": "Wondrous Wand",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Draw 3 cards. Reduce their Costs to (0).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardAndDoSomethingSpell",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "EVENT_CARD",
+        "value": 0,
+        "operation": "SET"
+      }
+    },
+    "value": 3
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

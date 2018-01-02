@@ -1,0 +1,43 @@
+{
+  "name": "Lone Champion",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: If you control no other minions, gain Taunt and Divine Shield.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "MinionCountCondition",
+        "value": 0,
+        "operation": "EQUAL",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "TAUNT"
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "DIVINE_SHIELD"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
