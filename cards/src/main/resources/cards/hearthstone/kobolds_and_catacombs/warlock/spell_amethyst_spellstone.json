@@ -9,9 +9,24 @@
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
       "queueCondition": {
-        "class": "CardPropertyCondition",
-        "cardType": "HERO_POWER",
-        "invert": true
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "MINION"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "WEAPON"
+          }
+        ]
       },
       "sourcePlayer": "SELF",
       "targetEntityType": "HERO",

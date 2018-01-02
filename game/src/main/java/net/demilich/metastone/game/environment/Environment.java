@@ -31,7 +31,8 @@ public enum Environment {
 	 * This variable stores a stack of event targets, as events are executed one after another until all events are
 	 * processed.
 	 * <p>
-	 * This implements card texts that read, "take double damage."
+	 * This implements card texts that read, "take double damage," and implements {@link
+	 * net.demilich.metastone.game.targeting.EntityReference#EVENT_TARGET}.
 	 */
 	EVENT_TARGET_REFERENCE_STACK,
 	/**
@@ -96,5 +97,9 @@ public enum Environment {
 	 * This entity list implements Lynessa Sunsorrow, keeping track of each spell cast a player cast on his own
 	 * minions.
 	 */
-	LYNESSA_SUNSORROW_ENTITY_LIST;
+	LYNESSA_SUNSORROW_ENTITY_LIST,
+	/**
+	 * Stores a stack of event sources.
+	 */
+	EVENT_SOURCE_REFERENCE_STACK;
 }

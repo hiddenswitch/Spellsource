@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 public class CardPropertyCondition extends Condition {
 
@@ -15,6 +16,8 @@ public class CardPropertyCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+		target = desc.containsKey(ConditionArg.TARGET) ? context.resolveTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)).get(0) : target;
+
 		Card card = target.getSourceCard();
 
 		if (card == null) {

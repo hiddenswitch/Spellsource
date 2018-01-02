@@ -1360,4 +1360,17 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		}
 		endGame();
 	}
+
+	/**
+	 * Retrieves the stack of event sources.
+	 *
+	 * @return A stack of event source {@link EntityReference} objects.
+	 */
+	@SuppressWarnings("unchecked")
+	public Deque<EntityReference> getEventSourceStack() {
+		if (!getEnvironment().containsKey(Environment.EVENT_SOURCE_REFERENCE_STACK)) {
+			getEnvironment().put(Environment.EVENT_SOURCE_REFERENCE_STACK, new EnvironmentDeque<EntityReference>());
+		}
+		return (Deque<EntityReference>) getEnvironment().get(Environment.EVENT_SOURCE_REFERENCE_STACK);
+	}
 }

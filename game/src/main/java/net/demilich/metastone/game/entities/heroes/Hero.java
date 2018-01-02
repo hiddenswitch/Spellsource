@@ -96,7 +96,7 @@ public class Hero extends Actor {
 		final int originalArmor = getArmor();
 		int newArmor = Math.max(originalArmor + armor, 0);
 		setAttribute(Attribute.ARMOR, newArmor);
-		return originalArmor - newArmor;
+		return newArmor - originalArmor;
 	}
 
 	public void setHeroClass(HeroClass heroClass) {

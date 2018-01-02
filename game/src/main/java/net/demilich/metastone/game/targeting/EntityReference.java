@@ -50,6 +50,7 @@ public class EntityReference implements Serializable {
 	public static final EntityReference FRIENDLY_GRAVEYARD = new EntityReference(-43);
 	public static final EntityReference ENEMY_GRAVEYARD = new EntityReference(-44);
 	public static final EntityReference ALL_ENTITIES = new EntityReference(-45);
+	public static final EntityReference EVENT_SOURCE = new EntityReference(-46);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

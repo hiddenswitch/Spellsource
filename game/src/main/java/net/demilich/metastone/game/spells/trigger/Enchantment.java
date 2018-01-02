@@ -157,11 +157,6 @@ public class Enchantment extends Entity implements Trigger {
 			expire();
 		}
 
-		if (event.getEventTarget() != null) {
-			event.getGameContext().getEventTargetStack().push(event.getEventTarget().getReference());
-		} else {
-			event.getGameContext().getEventTargetStack().push(EntityReference.NONE);
-		}
 		// Notify the game context that a spell trigger was successfully fired, as long as it wasn't due to a
 		// board changed event.
 		if (event.getEventType() != GameEventType.BOARD_CHANGED
@@ -171,7 +166,6 @@ public class Enchantment extends Entity implements Trigger {
 			event.getGameContext().onEnchantmentFired(this);
 		}
 		onFire(ownerId, getSpell(), event);
-		event.getGameContext().getEventTargetStack().pop();
 	}
 
 	@Override

@@ -25,12 +25,13 @@ public class CastFromGroupSpell extends Spell {
 	}
 
 	@Suspendable
-	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
-		// no target specified, cast the spell once with target NULL
-		if (targets == null) {
-			return;
+	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, final List<Entity> originalTargets) {
+		final List<Entity> targets;
+		if (originalTargets == null) {
+			targets = Collections.emptyList();
+		} else {
+			targets = originalTargets;
 		}
-
 		EntityFilter targetFilter = desc.getEntityFilter();
 		List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
 		Entity randomTarget = null;
@@ -40,39 +41,39 @@ public class CastFromGroupSpell extends Spell {
 		SpellDesc[] group = SpellUtils.getGroup(context, desc);
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 3);
 		int count = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
-		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, true);
-		List<SpellDesc> spellList = new ArrayList<SpellDesc>();
-		Collections.addAll(spellList, group);
+		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false);
+		List<SpellDesc> allChoices = new ArrayList<SpellDesc>();
+		Collections.addAll(allChoices, group);
 
 		for (int j = 0; j < count; j++) {
-			List<SpellDesc> adaptions = new ArrayList<SpellDesc>(spellList);
-			List<SpellDesc> spells = new ArrayList<SpellDesc>();
+			List<SpellDesc> thisRoundsPossibleChoices = new ArrayList<SpellDesc>(allChoices);
+			List<SpellDesc> thisRoundsChoices = new ArrayList<SpellDesc>();
 			for (int i = 0; i < howMany; i++) {
 				SpellDesc spell;
-				if (exclusive) {
-					spell = context.getLogic().removeRandom(adaptions);
-				} else {
-					spell = context.getLogic().getRandom(adaptions);
-				}
-
-				spells.add(spell);
+				spell = context.getLogic().removeRandom(thisRoundsPossibleChoices);
+				thisRoundsChoices.add(spell);
 			}
 
-			if (spells.isEmpty()) {
+			if (thisRoundsChoices.isEmpty()) {
 				return;
 			}
-			SpellDesc spell = SpellUtils.getSpellDiscover(context, player, desc, spells, source).getSpell();
-			spellList.remove(spell);
+
+			SpellDesc chosen = SpellUtils.getSpellDiscover(context, player, desc, thisRoundsChoices, source).getSpell();
+
+			if (exclusive) {
+				allChoices.remove(chosen);
+			}
 
 			if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
-				onCast(context, player, spell, source, randomTarget);
+				onCast(context, player, chosen, source, randomTarget);
+			} else if (validTargets.size() == 0 && originalTargets == null) {
+				onCast(context, player, chosen, source, null);
 			} else {
 				// there is at least one target and RANDOM_TARGET flag is not set,
 				// cast in on all targets
-
 				for (Entity target : validTargets) {
 					context.getSpellTargetStack().push(target.getReference());
-					onCast(context, player, spell, source, target);
+					onCast(context, player, chosen, source, target);
 					context.getSpellTargetStack().pop();
 				}
 			}

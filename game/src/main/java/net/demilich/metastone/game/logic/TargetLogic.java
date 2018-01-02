@@ -107,6 +107,9 @@ public class TargetLogic implements Serializable {
 		if (!context.getEventTargetStack().isEmpty() && targetKey.equals(EntityReference.EVENT_TARGET)) {
 			return context.resolveSingleTarget(context.getEventTargetStack().peek());
 		}
+		if (!context.getEventSourceStack().isEmpty() && targetKey.equals(EntityReference.EVENT_TARGET)) {
+			return context.resolveSingleTarget(context.getEventSourceStack().peek());
+		}
 		return null;
 	}
 
@@ -264,6 +267,8 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(source);
 		} else if (targetKey.equals(EntityReference.EVENT_TARGET)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getEventTargetStack().peek()));
+		} else if (targetKey.equals(EntityReference.EVENT_SOURCE)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getEventSourceStack().peek()));
 		} else if (targetKey.equals(EntityReference.TARGET)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TARGET)));
 		} else if (targetKey.equals(EntityReference.SPELL_TARGET)) {

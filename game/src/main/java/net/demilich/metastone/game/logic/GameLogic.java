@@ -1159,6 +1159,8 @@ public class GameLogic implements Cloneable, Serializable {
 	 * <p>
 	 * If both heroes take measures to survive for this long, the game ends in an unconditional draw at the start of the
 	 * 90th turn, even if both players are Immune.
+	 * <p>
+	 * Fatigue shouldn't count as having originated from anything.
 	 *
 	 * @param player The {@link Player}  whose fatigue should be checked and dealt to.
 	 * @return {@code true} if fatigue damage was dealt.
