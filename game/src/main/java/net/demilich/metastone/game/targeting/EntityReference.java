@@ -45,6 +45,11 @@ public class EntityReference implements Serializable {
 	public static final EntityReference RIGHTMOST_FRIENDLY_MINION = new EntityReference(-38);
 	public static final EntityReference RIGHTMOST_ENEMY_MINION = new EntityReference(-39);
 	public static final EntityReference ATTACKER_ADJACENT_MINIONS = new EntityReference(-40);
+	public static final EntityReference FRIENDLY_SET_ASIDE = new EntityReference(-41);
+	public static final EntityReference ENEMY_SET_ASIDE = new EntityReference(-42);
+	public static final EntityReference FRIENDLY_GRAVEYARD = new EntityReference(-43);
+	public static final EntityReference ENEMY_GRAVEYARD = new EntityReference(-44);
+	public static final EntityReference ALL_ENTITIES = new EntityReference(-45);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

@@ -1,0 +1,20 @@
+{
+  "name": "Cursed Disciple",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Summon a 5/1 Revenant.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_revenant"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

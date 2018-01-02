@@ -1,0 +1,17 @@
+{
+  "name": "Shimmering Courser",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Only you can target this with spells and Hero Powers.",
+  "attributes": {
+    "UNTARGETABLE_BY_OPPONENT_SPELLS": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

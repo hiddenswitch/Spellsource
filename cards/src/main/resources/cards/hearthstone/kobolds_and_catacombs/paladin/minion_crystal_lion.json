@@ -7,6 +7,9 @@
   "baseHp": 5,
   "rarity": "RARE",
   "description": "Divine Shield. Costs (1) less for each Silver Hand Recruit you control.",
+  "attributes": {
+    "DIVINE_SHIELD": true
+  },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1,

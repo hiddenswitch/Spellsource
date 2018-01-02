@@ -6,6 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "EPIC",
+  "race": "ELEMENTAL",
   "description": "Costs (1) less for each Mana Crystal you've Overloaded this game.",
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

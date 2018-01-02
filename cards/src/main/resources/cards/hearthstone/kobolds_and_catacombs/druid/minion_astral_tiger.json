@@ -11,6 +11,9 @@
     "class": "ShuffleToDeckSpell",
     "target": "SELF"
   },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1

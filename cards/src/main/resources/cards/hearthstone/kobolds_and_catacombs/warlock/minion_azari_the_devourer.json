@@ -13,10 +13,10 @@
       "target": "ENEMY_DECK"
     }
   },
-  "collectible": false,
   "attributes": {
     "BATTLECRY": true
   },
+  "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1
 }

@@ -119,6 +119,7 @@ public interface CardList extends Iterable<Card>, List<Card> {
 	 *
 	 * @return A randomly selected card (not cloned or copied).
 	 */
+	@Deprecated
 	default Card getRandom() {
 		if (isEmpty()) {
 			return null;

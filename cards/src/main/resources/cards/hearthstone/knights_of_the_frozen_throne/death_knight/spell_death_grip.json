@@ -8,14 +8,10 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "StealCardSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
-    "cardSource": {
-      "class": "DeckSource",
-      "targetPlayer": "OPPONENT"
-    }
+    "target": "ENEMY_DECK",
+    "cardLocation": "HAND",
+    "randomTarget": true,
+    "targetPlayer": "SELF"
   },
   "collectible": false,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

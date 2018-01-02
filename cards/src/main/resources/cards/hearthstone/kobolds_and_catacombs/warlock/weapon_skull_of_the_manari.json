@@ -10,9 +10,9 @@
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",
-      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "ComparisonCondition",
+        "operation": "GREATER",
         "value1": {
           "class": "EntityCounter",
           "target": "FRIENDLY_HAND",
@@ -22,19 +22,19 @@
             "cardType": "MINION"
           }
         },
-        "value2": 0,
-        "operation": "GREATER"
-      }
+        "value2": 0
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "RecruitSpell",
-      "cardLocation": "HAND",
-      "targetPlayer": "SELF",
       "cardFilter": {
         "class": "CardFilter",
         "race": "DEMON",
         "cardType": "MINION"
-      }
+      },
+      "cardLocation": "HAND",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

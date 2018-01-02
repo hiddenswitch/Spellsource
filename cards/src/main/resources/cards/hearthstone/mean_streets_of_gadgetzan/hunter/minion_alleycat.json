@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Battlecry: Summon a 1/1 Cat.",
   "battlecry": {
     "targetSelection": "NONE",

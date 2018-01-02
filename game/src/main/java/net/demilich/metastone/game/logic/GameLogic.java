@@ -234,7 +234,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * Handles combo and mana cost modifier removal for the card played in the {@link
 	 * PlayCardAction#execute(GameContext, int)} method. Can probably be inlined.
 	 *
-	 * @param playerId      The player index
+	 * @param playerId        The player index
 	 * @param EntityReference A reference to the card.
 	 */
 	@Suspendable
@@ -365,7 +365,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * signal to an end user that they can play a particular card. Takes into account whether or not a spell that
 	 * requires targets has possible targets in the game.
 	 *
-	 * @param playerId      The player whose point of view should be considered for this method.
+	 * @param playerId        The player whose point of view should be considered for this method.
 	 * @param EntityReference A reference to the card.
 	 * @return {@code true} if the card can be played.
 	 */
@@ -663,7 +663,7 @@ public class GameLogic implements Cloneable, Serializable {
 				&& sourceCard instanceof SpellCard
 				&& !sourceCard.getCardType().isCardType(CardType.HERO_POWER)
 				&& !childSpell) {
-			sourceCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK);
+			sourceCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK, context.getTurn());
 		}
 
 		Spell spell = spellFactory.getSpell(spellDesc);
@@ -1144,7 +1144,7 @@ public class GameLogic implements Cloneable, Serializable {
 			return null;
 		}
 
-		Card card = deck.getRandom();
+		Card card = getRandom(deck);
 		return drawCard(playerId, card, source);
 	}
 
@@ -2040,22 +2040,82 @@ public class GameLogic implements Cloneable, Serializable {
 		if (canSummonMoreMinions(player)) {
 			context.getOpponent(player).getMinions().remove(minion);
 			player.getMinions().add(minion);
-			minion.setOwner(player.getId());
 			applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
 			refreshAttacksPerRound(minion);
-			List<Trigger> triggers = context.getTriggersAssociatedWith(minion.getReference())
-					.stream().map(Trigger::clone).collect(toList());
-			removeEnchantments(minion);
-			for (Trigger trigger : triggers) {
-				if (!trigger.hasPersistentOwner()) {
-					trigger.setOwner(player.getId());
-				}
-				addGameEventListener(player, trigger, minion);
-			}
-			context.fireGameEvent(new BoardChangedEvent(context));
+			changeOwner(minion, player.getId());
 		} else {
 			markAsDestroyed(minion);
 		}
+	}
+
+	/**
+	 * Steals the card, transferring its owner and moving its current zones. Keeps all associated {@link Trigger}
+	 * objects and changes all trigger owners whose {@link Trigger#hasPersistentOwner()} property is {@code false}.
+	 * <p>
+	 * Similar to {@link #mindControl(Player, Minion)} but for {@link Card} entities.
+	 * <p>
+	 * To implement King Togwaggle, stealing to the {@link Zones#SET_ASIDE_ZONE} first is supported.
+	 *
+	 * @param newOwner    The new owner's player ID.
+	 * @param source      The source of the card theft (typically the card that is casting the stealing spell).
+	 *                    Corresponds to the {@link #drawCard(int, Card, Entity)} {@code source} argument.
+	 * @param card        The {@link Card} to steal
+	 * @param destination The destination {@link Zones}. Only {@link Zones#DECK}, {@link Zones#HAND} and {@link
+	 *                    Zones#SET_ASIDE_ZONE} are currently valid.
+	 * @throws IllegalArgumentException if the destination is invalid (not {@link Zones#HAND}, {@link Zones#DECK} and
+	 *                                  {@link Zones#SET_ASIDE_ZONE}.
+	 */
+	@Suspendable
+	public void stealCard(Player newOwner, Entity source, Card card, Zones destination) throws IllegalArgumentException {
+
+		// If the card isn't already in the SET_ASIDE_ZONE, move it
+		if (card.getZone() != Zones.SET_ASIDE_ZONE
+				&& card.getEntityLocation().getPlayer() != newOwner.getId()) {
+			// Move to set aside zone first.
+			context.getPlayer(card.getOwner()).getZone(card.getZone()).remove(card);
+			newOwner.getSetAsideZone().add(card);
+		}
+
+		// Only change the owner if necessary
+		if (card.getOwner() != newOwner.getId()) {
+			changeOwner(card, newOwner.getId());
+		}
+
+		// Move to the destination
+		if (destination == Zones.HAND) {
+			receiveCard(newOwner.getId(), card, source, false);
+		} else if (destination == Zones.DECK) {
+			// Remove again to make shuffling to deck valid.
+			context.getPlayer(card.getOwner()).getZone(card.getZone()).remove(card);
+			shuffleToDeck(newOwner, card);
+		} else if (destination != Zones.SET_ASIDE_ZONE) {
+			throw new IllegalArgumentException(String.format("Invalid destination %s for card %s", destination.name(), card.getName()));
+		}
+	}
+
+	/**
+	 * Changes the owner of a target. Does not move its zones.
+	 *
+	 * @param target     The {@link Entity} whose ownership should change.
+	 * @param newOwnerId The player ID of the new owner.
+	 * @throws ArrayStoreException if the target is in a zone that does not match the new owner.
+	 */
+	@Suspendable
+	public void changeOwner(Entity target, int newOwnerId) throws ArrayStoreException {
+		if (target.getEntityLocation().getPlayer() != newOwnerId) {
+			throw new ArrayStoreException("Cannot change the owner of an entity that is located in a zone not owned by the new owner.");
+		}
+		target.setOwner(newOwnerId);
+		List<Trigger> triggers = context.getTriggersAssociatedWith(target.getReference())
+				.stream().map(Trigger::clone).collect(toList());
+		removeEnchantments(target);
+		for (Trigger trigger : triggers) {
+			if (!trigger.hasPersistentOwner()) {
+				trigger.setOwner(newOwnerId);
+			}
+			addGameEventListener(context.getPlayer(newOwnerId), trigger, target);
+		}
+		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
 	/**
@@ -2239,7 +2299,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 * CardPlayedEvent}). It applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked next turn.
 	 * Finally, it removes the card from the player's {@link Zones#HAND} and puts it in the {@link Zones#GRAVEYARD}.
 	 *
-	 * @param playerId      The player that is playing the card.
+	 * @param playerId        The player that is playing the card.
 	 * @param EntityReference The card that got played.
 	 */
 	@Suspendable
@@ -3134,6 +3194,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 		Player owner = context.getPlayer(minion.getOwner());
 		int index = -1;
+		// Tracking of old zone implements Sherazin, Seed
 		Zones oldZone = minion.getZone();
 		if (!minion.getEntityLocation().equals(EntityLocation.UNASSIGNED)
 				&& owner != null) {
@@ -3196,9 +3257,14 @@ public class GameLogic implements Cloneable, Serializable {
 
 		}
 
+		// Special case for Sherazin, Seed
 		if (oldZone == Zones.GRAVEYARD) {
 			minion.moveOrAddTo(context, Zones.GRAVEYARD);
+		} else if (minion.transformResolved(context).equals(newMinion)) {
+			// The old minion should always be removed from play, because it has transformed.
+			minion.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		} else {
+			// Something else happened and the source minion was not successfully transformed.
 			minion.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 		}
 

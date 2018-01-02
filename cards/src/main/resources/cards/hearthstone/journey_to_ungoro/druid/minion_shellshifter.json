@@ -9,6 +9,7 @@
   "description": "Choose One - Transform into a 5/3 with Stealth; or a 3/5 with Taunt.",
   "options": [
     {
+      "name": "Raptor Form",
       "description": "5/3 with Stealth",
       "spell": {
         "class": "TransformMinionSpell",
@@ -17,6 +18,7 @@
       }
     },
     {
+      "name": "Direhorn Form",
       "description": "3/5 with Taunt",
       "spell": {
         "class": "TransformMinionSpell",

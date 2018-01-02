@@ -5,7 +5,7 @@
   "heroClass": "WHITE",
   "baseAttack": 4,
   "baseHp": 6,
-  "rarity": "COMMON",
+  "rarity": "LEGENDARY",
   "description": "Battlecry: Shuffle a copy of your opponent's deck into your deck.",
   "battlecry": {
     "targetSelection": "NONE",

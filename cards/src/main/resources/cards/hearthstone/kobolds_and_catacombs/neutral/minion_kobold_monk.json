@@ -1,0 +1,18 @@
+{
+  "name": "Kobold Monk",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Your hero can't be targeted by spells or Hero Powers.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_HERO",
+    "attribute": "AURA_UNTARGETABLE_BY_SPELLS"
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

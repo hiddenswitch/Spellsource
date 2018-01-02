@@ -6,6 +6,7 @@
   "baseAttack": 7,
   "baseHp": 9,
   "rarity": "LEGENDARY",
+  "race": "DEMON",
   "description": "Battlecry: If your deck contains no duplicates, summon all Demons from your hand.",
   "battlecry": {
     "condition": {

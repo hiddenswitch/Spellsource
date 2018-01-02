@@ -49,7 +49,7 @@ public enum CardSet {
 			HALL_OF_FAME);
 
 	public static CardSet latest() {
-		return KNIGHTS_OF_THE_FROZEN_THRONE;
+		return KOBOLDS_AND_CATACOMBS;
 	}
 
 	public static Set<CardSet> hearthstone() {

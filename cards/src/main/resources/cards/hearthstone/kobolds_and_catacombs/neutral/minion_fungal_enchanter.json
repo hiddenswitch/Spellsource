@@ -1,0 +1,24 @@
+{
+  "name": "Fungal Enchanter",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Restore 2 Health to all friendly characters.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

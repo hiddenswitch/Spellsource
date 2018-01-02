@@ -8,14 +8,14 @@
   "passiveTrigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
-      "sourcePlayer": "SELF",
-      "targetPlayer": "SELF",
-      "targetEntityType": "HERO",
       "queueCondition": {
         "class": "CardPropertyCondition",
         "cardType": "HERO_POWER",
         "invert": true
-      }
+      },
+      "sourcePlayer": "SELF",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",

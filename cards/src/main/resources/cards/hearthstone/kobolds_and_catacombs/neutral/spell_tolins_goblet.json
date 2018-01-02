@@ -1,0 +1,20 @@
+{
+  "name": "Tolin's Goblet",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Draw a card. Fill your hand with copies of it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardAndDoSomethingSpell",
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "EVENT_CARD",
+      "value": 9
+    }
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

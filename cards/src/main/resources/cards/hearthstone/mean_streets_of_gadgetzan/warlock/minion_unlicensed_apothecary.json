@@ -6,6 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
+  "race": "DEMON",
   "description": "After you summon a minion, deal 5 damage to your Hero.",
   "trigger": {
     "eventTrigger": {

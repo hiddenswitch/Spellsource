@@ -5,13 +5,13 @@
   "heroClass": "VIOLET",
   "rarity": "COMMON",
   "description": "Destroy a friendly minion. Restore 8 Health to your hero.",
-  "targetSelection": "FRIENDLY_MINIONS",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,
     "operation": "GREATER",
     "targetPlayer": "SELF"
   },
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
@@ -20,8 +20,8 @@
       },
       {
         "class": "HealSpell",
-        "value": 8,
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "value": 8
       }
     ]
   },

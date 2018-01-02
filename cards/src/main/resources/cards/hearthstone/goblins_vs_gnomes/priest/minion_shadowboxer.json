@@ -5,7 +5,7 @@
   "heroClass": "WHITE",
   "baseAttack": 2,
   "baseHp": 3,
-  "rarity": "COMMON",
+  "rarity": "RARE",
   "race": "MECH",
   "description": "Whenever a character is healed, deal 1 damage to a random enemy.",
   "trigger": {

@@ -9,8 +9,8 @@
   "spell": {
     "class": "ShuffleToDeckSpell",
     "target": "NONE",
-    "value": 3,
-    "card": "spell_jade_idol"
+    "card": "spell_jade_idol",
+    "howMany": 3
   },
   "collectible": false,
   "set": "MEAN_STREETS_OF_GADGETZAN",

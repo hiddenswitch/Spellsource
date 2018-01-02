@@ -1,0 +1,27 @@
+{
+  "name": "Master Chest",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "description": "Deathrattle: Give your opponent a fantastic treasure!",
+  "deathrattle": {
+    "class": "ReceiveRandomCardSpell",
+    "value": 1,
+    "cards": [
+      "token_golden_kobold",
+      "spell_tolins_goblet",
+      "spell_wondrous_wand",
+      "spell_zarogs_crown"
+    ],
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

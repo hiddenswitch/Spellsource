@@ -17,9 +17,6 @@
       "race": "BEAST"
     }
   },
-  "attributes": {
-    "CHARGE": true
-  },
   "collectible": true,
   "set": "BASIC",
   "fileFormatVersion": 1
