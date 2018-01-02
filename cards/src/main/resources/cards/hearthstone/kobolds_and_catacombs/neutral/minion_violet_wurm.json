@@ -1,0 +1,52 @@
+{
+  "name": "Violet Wurm",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Deathrattle: Summon seven 1/1 Grubs.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "card": "token_grub"
+      },
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "LEFT",
+        "card": "token_grub"
+      },
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "card": "token_grub"
+      },
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "LEFT",
+        "card": "token_grub"
+      },
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "card": "token_grub"
+      },
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "LEFT",
+        "card": "token_grub"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

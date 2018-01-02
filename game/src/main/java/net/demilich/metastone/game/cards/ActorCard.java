@@ -70,4 +70,28 @@ public abstract class ActorCard extends Card {
 
 		return instance;
 	}
+
+	public int getAttack() {
+		return getAttributeValue(Attribute.ATTACK);
+	}
+
+	public int getBonusAttack() {
+		return getAttributeValue(Attribute.ATTACK_BONUS);
+	}
+
+	public int getHp() {
+		return getAttributeValue(Attribute.HP);
+	}
+
+	public int getBonusHp() {
+		return getAttributeValue(Attribute.HP_BONUS);
+	}
+
+	public int getBaseAttack() {
+		return getAttributeValue(Attribute.BASE_ATTACK);
+	}
+
+	public int getBaseHp() {
+		return getAttributeValue(Attribute.BASE_HP);
+	}
 }

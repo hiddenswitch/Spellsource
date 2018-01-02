@@ -1,0 +1,22 @@
+{
+  "name": "Plated Beetle",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "race": "BEAST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Gain 3 Armor.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 3
+  },
+  "collectible": true,
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

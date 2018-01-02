@@ -1,0 +1,110 @@
+{
+  "name": "Darkness Candle",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Snuff out a candle. Draw a card. Cast this when drawn.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "ALL_ENTITIES",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "cardId": "minion_the_darkness"
+      },
+      "spells": [
+        {
+          "class": "ModifyAttributeSpell",
+          "attribute": "RESERVED_INTEGER_1",
+          "value": 1
+        },
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "ComparisonCondition",
+            "value1": {
+              "class": "AttributeValueProvider",
+              "attribute": "RESERVED_INTEGER_1"
+            },
+            "value2": 3,
+            "operation": "GREATER_OR_EQUAL"
+          },
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "RemoveAttributeSpell",
+                "attribute": "PERMANENT"
+              },
+              {
+                "class": "SetDescriptionSpell",
+                "description": "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens."
+              }
+            ]
+          }
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "EVENT_TARGET"
+        },
+        {
+          "class": "DrawCardSpell",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "ALL_ENTITIES",
+    "filter": {
+      "class": "SpecificCardFilter",
+      "cardId": "minion_the_darkness"
+    },
+    "spells": [
+      {
+        "class": "ModifyAttributeSpell",
+        "attribute": "RESERVED_INTEGER_1",
+        "value": 1
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "ComparisonCondition",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "attribute": "RESERVED_INTEGER_1"
+          },
+          "value2": 3,
+          "operation": "GREATER_OR_EQUAL"
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "RemoveAttributeSpell",
+              "attribute": "PERMANENT"
+            },
+            {
+              "class": "SetDescriptionSpell",
+              "description": "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens."
+            }
+          ]
+        }
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

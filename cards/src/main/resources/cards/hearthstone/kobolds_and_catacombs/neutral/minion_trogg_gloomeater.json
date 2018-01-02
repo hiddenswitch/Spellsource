@@ -1,0 +1,17 @@
+{
+  "name": "Trogg Gloomeater",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Taunt. Poisonous.",
+  "attributes": {
+    "POISONOUS": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

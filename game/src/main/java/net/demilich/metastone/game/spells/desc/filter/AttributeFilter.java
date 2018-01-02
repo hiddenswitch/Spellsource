@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
+import net.demilich.metastone.game.cards.ActorCard;
+import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -39,16 +41,22 @@ public class AttributeFilter extends EntityFilter {
 
 		int actualValue = -1;
 		if (attribute == Attribute.ATTACK) {
-			if (entity instanceof Weapon) {
-				actualValue = ((Weapon) entity).getWeaponDamage();
-			} else {
+			if (entity instanceof ActorCard) {
+				final ActorCard actorCard = (ActorCard) entity;
+				actualValue = actorCard.getBaseAttack() + actorCard.getBonusAttack();
+			} else if (entity instanceof Actor) {
 				actualValue = ((Actor) entity).getAttack();
+			} else {
+				actualValue = entity.getAttributeValue(attribute);
 			}
 		} else if (attribute == Attribute.HP) {
-			if (entity instanceof Weapon) {
-				actualValue = ((Weapon) entity).getDurability();
-			} else {
+			if (entity instanceof ActorCard) {
+				final ActorCard actorCard = (ActorCard) entity;
+				actualValue = actorCard.getBaseHp() + actorCard.getBonusHp();
+			} else if (entity instanceof Actor) {
 				actualValue = ((Actor) entity).getHp();
+			} else {
+				actualValue = entity.getAttributeValue(attribute);
 			}
 		} else {
 			actualValue = entity.getAttributeValue(attribute);
