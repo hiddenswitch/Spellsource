@@ -12,7 +12,8 @@
     "card": "spell_the_first_seal"
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",

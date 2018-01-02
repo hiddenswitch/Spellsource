@@ -8,6 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardAndDoSomethingSpell",
+    "value": 3,
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "FRIENDLY_PLAYER",
@@ -17,8 +18,7 @@
         "value": 0,
         "operation": "SET"
       }
-    },
-    "value": 3
+    }
   },
   "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",

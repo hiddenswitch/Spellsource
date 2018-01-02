@@ -13,32 +13,32 @@
       "spells": [
         {
           "class": "StealCardSpell",
-          "targetPlayer": "SELF",
           "target": "ENEMY_DECK",
-          "cardLocation": "SET_ASIDE_ZONE"
+          "cardLocation": "SET_ASIDE_ZONE",
+          "targetPlayer": "SELF"
         },
         {
           "class": "StealCardSpell",
-          "targetPlayer": "OPPONENT",
           "target": "FRIENDLY_DECK",
-          "cardLocation": "SET_ASIDE_ZONE"
+          "cardLocation": "SET_ASIDE_ZONE",
+          "targetPlayer": "OPPONENT"
         },
         {
           "class": "StealCardSpell",
-          "targetPlayer": "SELF",
           "target": "FRIENDLY_SET_ASIDE",
-          "cardLocation": "DECK"
+          "cardLocation": "DECK",
+          "targetPlayer": "SELF"
         },
         {
           "class": "StealCardSpell",
-          "targetPlayer": "OPPONENT",
           "target": "ENEMY_SET_ASIDE",
-          "cardLocation": "DECK"
+          "cardLocation": "DECK",
+          "targetPlayer": "OPPONENT"
         },
         {
           "class": "ShuffleToDeckSpell",
-          "targetPlayer": "OPPONENT",
-          "card": "spell_ransom"
+          "card": "spell_ransom",
+          "targetPlayer": "OPPONENT"
         }
       ]
     }

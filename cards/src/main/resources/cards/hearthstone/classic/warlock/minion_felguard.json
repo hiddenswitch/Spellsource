@@ -5,7 +5,7 @@
   "heroClass": "VIOLET",
   "baseAttack": 3,
   "baseHp": 5,
-  "rarity": "FREE",
+  "rarity": "RARE",
   "race": "DEMON",
   "description": "Taunt. Battlecry: Destroy one of your Mana.",
   "battlecry": {

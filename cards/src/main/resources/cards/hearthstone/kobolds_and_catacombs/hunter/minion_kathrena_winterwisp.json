@@ -6,7 +6,6 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "race": "BEAST",
   "description": "Battlecry and Deathrattle: Recruit a Beast.",
   "battlecry": {
     "targetSelection": "NONE",

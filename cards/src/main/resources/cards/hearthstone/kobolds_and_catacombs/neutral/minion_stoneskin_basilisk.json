@@ -9,8 +9,8 @@
   "race": "BEAST",
   "description": "Divine Shield. Poisonous",
   "attributes": {
-    "POISONOUS": true,
-    "DIVINE_SHIELD": true
+    "DIVINE_SHIELD": true,
+    "POISONOUS": true
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",

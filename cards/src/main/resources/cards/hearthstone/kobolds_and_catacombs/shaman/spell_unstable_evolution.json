@@ -23,7 +23,6 @@
       },
       {
         "class": "ReceiveCardAndDoSomethingSpell",
-        "card": "spell_unstable_evolution",
         "spell": {
           "class": "AddEnchantmentSpell",
           "target": "EVENT_CARD",
@@ -36,7 +35,8 @@
               "target": "SELF"
             }
           }
-        }
+        },
+        "card": "spell_unstable_evolution"
       }
     ]
   },

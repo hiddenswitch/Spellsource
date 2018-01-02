@@ -17,8 +17,8 @@
       "boardPositionRelative": "RIGHT",
       "cardFilter": {
         "class": "CardFilter",
-        "manaCost": 1,
-        "cardType": "MINION"
+        "cardType": "MINION",
+        "manaCost": 1
       }
     }
   },

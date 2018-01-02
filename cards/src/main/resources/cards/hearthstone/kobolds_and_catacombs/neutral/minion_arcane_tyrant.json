@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
+  "race": "ELEMENTAL",
   "description": "Costs (0) if you've cast a spell that costs (5) or more this turn.",
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
@@ -14,6 +15,7 @@
     "class": "ConditionalValueProvider",
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER",
       "value1": {
         "class": "CardCountValueProvider",
         "cardFilter": {
@@ -21,10 +23,10 @@
           "filters": [
             {
               "class": "AttributeFilter",
-              "attribute": "CAST_FROM_HAND_OR_DECK",
               "value": {
                 "class": "CurrentTurnValueProvider"
               },
+              "attribute": "CAST_FROM_HAND_OR_DECK",
               "operation": "EQUAL"
             },
             {
@@ -39,10 +41,9 @@
           "targetPlayer": "SELF"
         }
       },
-      "value2": 0,
-      "operation": "GREATER"
+      "value2": 0
     },
-    "ifTrue": 5,
-    "ifFalse": 0
+    "ifFalse": 0,
+    "ifTrue": 5
   }
 }

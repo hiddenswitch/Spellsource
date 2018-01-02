@@ -2,13 +2,12 @@
   "name": "Windshear Stormcaller",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "SILVER",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "SILVER",
   "rarity": "EPIC",
   "description": "Battlecry: If you control all 4 basic Totems, summon Al'Akir the Windlord.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "AndCondition",
       "conditions": [
@@ -42,6 +41,7 @@
         }
       ]
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
       "card": "minion_al_akir_the_windlord"

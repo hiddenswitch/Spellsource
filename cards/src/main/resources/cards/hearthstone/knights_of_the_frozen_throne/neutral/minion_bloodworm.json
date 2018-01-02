@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Lifesteal.",
   "attributes": {
     "LIFESTEAL": true

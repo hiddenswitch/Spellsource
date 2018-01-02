@@ -5,7 +5,8 @@
   "heroClass": "WHITE",
   "baseAttack": 3,
   "baseHp": 3,
-  "rarity": "COMMON",
+  "rarity": "RARE",
+  "race": "DRAGON",
   "description": "Battlecry: If you're holding a Dragon, deal 3 damage to all other minions.",
   "battlecry": {
     "condition": {

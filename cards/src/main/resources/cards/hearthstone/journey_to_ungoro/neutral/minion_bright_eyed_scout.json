@@ -23,10 +23,10 @@
       }
     }
   },
+  "targetSelection": "NONE",
   "attributes": {
     "BATTLECRY": true
   },
-  "targetSelection": "NONE",
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1

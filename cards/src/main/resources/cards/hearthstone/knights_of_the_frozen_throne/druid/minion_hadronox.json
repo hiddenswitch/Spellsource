@@ -18,7 +18,7 @@
     }
   },
   "attributes": {
-    "DEATHRATTLE": true
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

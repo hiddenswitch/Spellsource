@@ -15,8 +15,8 @@
     "spell": {
       "class": "ModifyAttributeSpell",
       "target": "SELF",
-      "attribute": "RESERVED_INTEGER_1",
-      "value": 1
+      "value": 1,
+      "attribute": "RESERVED_INTEGER_1"
     }
   },
   "collectible": true,

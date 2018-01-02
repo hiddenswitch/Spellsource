@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "EPIC",
+  "race": "ELEMENTAL",
   "description": "Whenever this minion is healed, summon a 2/2 Crystal.",
   "trigger": {
     "eventTrigger": {

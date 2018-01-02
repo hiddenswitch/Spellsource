@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "RARE",
+  "race": "ELEMENTAL",
   "description": "Your Hero Power also Freezes the target.",
   "attributes": {
     "HERO_POWER_FREEZES_TARGET": true

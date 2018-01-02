@@ -6,6 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
   "description": "Windfury, Charge, Divine Shield, Taunt",
   "attributes": {
     "CHARGE": true,

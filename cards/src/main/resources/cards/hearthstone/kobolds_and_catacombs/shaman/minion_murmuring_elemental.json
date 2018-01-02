@@ -19,12 +19,12 @@
       },
       "secondRevertTrigger": {
         "class": "AfterMinionPlayedTrigger",
-        "requiredAttribute": "BATTLECRY",
         "queueCondition": {
           "class": "AttributeCondition",
           "attribute": "RESERVED_BOOLEAN_1",
           "invert": true
-        }
+        },
+        "requiredAttribute": "BATTLECRY"
       }
     }
   },

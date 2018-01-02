@@ -22,8 +22,8 @@
             "cardType": "MINION",
             "manaCost": {
               "class": "AttributeValueProvider",
-              "attribute": "ARMOR",
-              "target": "FRIENDLY_HERO"
+              "target": "FRIENDLY_HERO",
+              "attribute": "ARMOR"
             }
           }
         ]

@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "EPIC",
+  "race": "MECH",
   "description": "Deathrattle: Summon a minion from your deck with less Attack than this minion.",
   "deathrattle": {
     "class": "SummonSpell",
@@ -25,6 +26,9 @@
       "targetPlayer": "SELF"
     },
     "targetPlayer": "SELF"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

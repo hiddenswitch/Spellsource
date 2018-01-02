@@ -5,7 +5,7 @@
   "heroClass": "BLUE",
   "baseAttack": 2,
   "baseHp": 2,
-  "rarity": "RARE",
+  "rarity": "COMMON",
   "race": "BEAST",
   "description": "Battlecry: Reveal a spell in each deck. If yours costs more, draw it.",
   "battlecry": {
