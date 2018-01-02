@@ -1,0 +1,24 @@
+{
+  "name": "Toothy Chest",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "At the start of your turn, set this minion's Attack to 4.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SetAttackSpell",
+      "target": "SELF",
+      "value": 4
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

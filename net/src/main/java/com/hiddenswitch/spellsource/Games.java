@@ -795,8 +795,8 @@ public interface Games {
 		final Card card = actor.getSourceCard();
 		final EntityState entityState = new EntityState();
 		final com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
-				.description(card.getDescription())
-				.name(card.getName())
+				.description(actor.getDescription())
+				.name(actor.getName())
 				.id(actor.getId())
 				.cardId(card.getCardId());
 

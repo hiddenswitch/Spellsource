@@ -1,0 +1,23 @@
+{
+  "name": "Sewer Crawler",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Summon a 2/3 Giant Rat.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_giant_rat"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Shroom Brewer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Restore 4 Health.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "HealSpell",
+      "value": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

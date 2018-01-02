@@ -61,27 +61,27 @@ public class WeaponCard extends ActorCard {
 	}
 
 	public int getDamage() {
-		return getAttributeValue(Attribute.ATTACK);
+		return getAttack();
 	}
 
 	public int getBonusDamage() {
-		return getAttributeValue(Attribute.ATTACK_BONUS);
+		return getBonusAttack();
 	}
 
 	public int getDurability() {
-		return getAttributeValue(Attribute.HP);
+		return getHp();
 	}
 
 	public int getBonusDurability() {
-		return getAttributeValue(Attribute.HP_BONUS);
+		return getBonusHp();
 	}
 
 	public int getBaseDamage() {
-		return getAttributeValue(Attribute.BASE_ATTACK);
+		return getBaseAttack();
 	}
 
 	public int getBaseDurability() {
-		return getAttributeValue(Attribute.BASE_HP);
+		return getBaseHp();
 	}
 
 }

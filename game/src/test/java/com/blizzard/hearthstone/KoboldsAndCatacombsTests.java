@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.ActorCardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -22,6 +23,74 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+	@Test
+	public void testTheDarkness() {
+		final String regularDescription = "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens.";
+		final String permanentDescription = "When your opponent draws 3 Candles, this awakens!";
+		runGym((context, player, opponent) -> {
+			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
+			Assert.assertTrue(theDarkness.hasAttribute(Attribute.PERMANENT), "Comes into play permanent.");
+			Assert.assertEquals(theDarkness.getDescription(), permanentDescription, "Should have different description.");
+		});
+
+		// Dirty rat play
+		// When The Darkness is summoned by any means other than being played, it will start dormant but no Darkness
+		// Candles are generated. When copied while on the board as a minion, the copy will not start dormant.
+		runGym((context, player, opponent) -> {
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_the_darkness"));
+			context.endTurn();
+			playCard(context, opponent, "minion_dirty_rat");
+			Assert.assertTrue(player.getMinions().get(0).hasAttribute(Attribute.PERMANENT), "Comes into play permanent.");
+		});
+
+		// Test that drawing candles removes the permanent attribute
+		runGym((context, player, opponent) -> {
+			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 3L);
+			for (int i = 0; i < 3; i++) {
+				context.endTurn();
+				// Opponent's turn
+				context.endTurn();
+			}
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
+			Assert.assertFalse(theDarkness.hasAttribute(Attribute.PERMANENT));
+			Assert.assertEquals(theDarkness.getDescription(), regularDescription, "Should have different description.");
+		});
+
+		// Test that milling a candle does not trigger The Darkness
+		runGym((context, player, opponent) -> {
+			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 3L);
+			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("spell_mirror_image"), 10);
+			for (int i = 0; i < 3; i++) {
+				context.endTurn();
+				// Opponent's turn
+				context.endTurn();
+			}
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
+			Assert.assertTrue(theDarkness.hasAttribute(Attribute.PERMANENT));
+			Assert.assertEquals(theDarkness.getDescription(), permanentDescription, "Should have different description.");
+		});
+
+		// When copied while on the board as a minion, the copy will not start dormant
+		// Test that drawing candles removes the permanent attribute
+		runGym((context, player, opponent) -> {
+			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 3L);
+			for (int i = 0; i < 3; i++) {
+				context.endTurn();
+				// Opponent's turn
+				context.endTurn();
+			}
+			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
+			Assert.assertFalse(theDarkness.hasAttribute(Attribute.PERMANENT));
+			Assert.assertEquals(theDarkness.getDescription(), regularDescription, "Should have different description.");
+			Minion faceless = (Minion) playMinionCard(context, player, "minion_faceless_manipulator").transformResolved(context);
+			Assert.assertEquals(faceless.getSourceCard().getCardId(), "minion_the_darkness");
+			Assert.assertFalse(faceless.hasAttribute(Attribute.PERMANENT));
+		});
+	}
+
 	@Test
 	public void testKoboldMonk() {
 		runGym((context, player, opponent) -> {

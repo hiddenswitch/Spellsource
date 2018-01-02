@@ -9,7 +9,7 @@
   "spell": {
     "class": "ShuffleToDeckSpell",
     "target": "NONE",
-    "value": 3,
+    "howMany": 3,
     "card": "spell_jade_idol"
   },
   "collectible": false,
