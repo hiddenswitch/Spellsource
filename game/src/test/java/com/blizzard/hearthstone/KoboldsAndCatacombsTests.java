@@ -23,6 +23,27 @@ import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
+	public void testKoboldMonk() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("spell_fireball"));
+			opponent.setMaxMana(4);
+			opponent.setMana(4);
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
+			context.endTurn();
+			Minion kobold = playMinionCard(context, player, "minion_kobold_monk");
+			context.endTurn();
+			opponent.setMaxMana(4);
+			opponent.setMana(4);
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
+			playCardWithTarget(context, opponent, "spell_fireball", kobold);
+			opponent.setMaxMana(4);
+			opponent.setMana(4);
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
+		});
+	}
+
+	@Test
 	public void testKingTogwaggle() {
 		runGym((context, player, opponent) -> {
 			final Card card1a = CardCatalogue.getCardById("spell_mirror_image");
