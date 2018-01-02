@@ -8,24 +8,44 @@
   "rarity": "COMMON",
   "race": "ELEMENTAL",
   "description": "Taunt. Has +2 Attack during your opponent's turn.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "BoardChangedTrigger"
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnStartTrigger"
+      },
+      "spell": {
+        "class": "ConditionalAttackBonusSpell",
+        "target": "SELF",
+        "value": {
+          "class": "ConditionalValueProvider",
+          "condition": {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "ACTIVE"
+          },
+          "ifFalse": 2,
+          "ifTrue": 0
+        }
+      }
     },
-    "spell": {
-      "class": "ConditionalAttackBonusSpell",
-      "target": "SELF",
-      "value": {
-        "class": "ConditionalValueProvider",
-        "condition": {
-          "class": "OwnedByPlayerCondition",
-          "targetPlayer": "ACTIVE"
-        },
-        "ifFalse": 2,
-        "ifTrue": 0
+    {
+      "eventTrigger": {
+        "class": "BoardChangedTrigger"
+      },
+      "spell": {
+        "class": "ConditionalAttackBonusSpell",
+        "target": "SELF",
+        "value": {
+          "class": "ConditionalValueProvider",
+          "condition": {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "ACTIVE"
+          },
+          "ifFalse": 2,
+          "ifTrue": 0
+        }
       }
     }
-  },
+  ],
   "attributes": {
     "TAUNT": true
   },

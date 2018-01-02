@@ -30,6 +30,28 @@ import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
 	@Test
+	public void testTarCreeper() {
+		runGym((context, player, opponent) -> {
+			Minion tarCreeper = playMinionCard(context, player, "minion_tar_creeper");
+			Assert.assertEquals(tarCreeper.getAttack(), 1);
+			context.endTurn();
+			Assert.assertEquals(tarCreeper.getAttack(), 3);
+			context.endTurn();
+			Assert.assertEquals(tarCreeper.getAttack(), 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_tar_creeper"));
+			context.endTurn();
+			playCard(context, opponent, "minion_dirty_rat");
+			Minion tarCreeper = player.getMinions().get(0);
+			Assert.assertEquals(tarCreeper.getAttack(), 3);
+			context.endTurn();
+			Assert.assertEquals(tarCreeper.getAttack(), 1);
+		});
+	}
+
+	@Test
 	public void testGastropodTirionFordringInteraction() {
 		// Bug happened due to postEquipWeapon performing a checkForDeadEntities in the middle of
 		runGym((context, player, opponent) -> {

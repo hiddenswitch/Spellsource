@@ -298,7 +298,7 @@ public class WebSocketWriter implements Writer {
 		}
 	}
 
-	private void setPrivateSocket(WriteStream<Buffer> privateSocket) {
+	protected void setPrivateSocket(WriteStream<Buffer> privateSocket) {
 		this.privateSocket = privateSocket;
 	}
 

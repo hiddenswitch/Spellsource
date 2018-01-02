@@ -19,6 +19,10 @@ public class EventBusWriter extends WebSocketWriter {
 	@Override
 	protected void onSocketClosed(Void ignored) {
 		super.onSocketClosed(ignored);
+		try {
+			getPrivateSocket().end();
+		} catch (Throwable ignore) {
+		}
 		pump.stop();
 		pump = null;
 	}

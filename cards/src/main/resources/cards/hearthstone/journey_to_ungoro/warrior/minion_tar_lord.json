@@ -7,25 +7,45 @@
   "baseHp": 11,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Taunt. This minion has +4 Attack on your opponent's turn.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "BoardChangedTrigger"
+  "description": "Taunt. Has +4 Attack on your opponent's turn.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnStartTrigger"
+      },
+      "spell": {
+        "class": "ConditionalAttackBonusSpell",
+        "target": "SELF",
+        "value": {
+          "class": "ConditionalValueProvider",
+          "condition": {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "ACTIVE"
+          },
+          "ifFalse": 4,
+          "ifTrue": 0
+        }
+      }
     },
-    "spell": {
-      "class": "ConditionalAttackBonusSpell",
-      "target": "SELF",
-      "value": {
-        "class": "ConditionalValueProvider",
-        "condition": {
-          "class": "OwnedByPlayerCondition",
-          "targetPlayer": "ACTIVE"
-        },
-        "ifFalse": 4,
-        "ifTrue": 0
+    {
+      "eventTrigger": {
+        "class": "BoardChangedTrigger"
+      },
+      "spell": {
+        "class": "ConditionalAttackBonusSpell",
+        "target": "SELF",
+        "value": {
+          "class": "ConditionalValueProvider",
+          "condition": {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "ACTIVE"
+          },
+          "ifFalse": 4,
+          "ifTrue": 0
+        }
       }
     }
-  },
+  ],
   "attributes": {
     "TAUNT": true
   },

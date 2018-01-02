@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
+import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
@@ -14,9 +15,15 @@ import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.streams.Pump;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
@@ -26,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -39,12 +47,15 @@ import static java.util.stream.Collectors.toList;
  */
 public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway {
 	static Logger logger = LoggerFactory.getLogger(GatewayImpl.class);
+	protected Map<UserId, Boolean> pipes;
 
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
 		super.start();
 		Router router = Spellsource.spellsource().router(vertx);
+
+		pipes = SharedData.getClusterWideMap("GatewayImpl/pipes", vertx);
 
 		logger.info("Configuring router...");
 
@@ -61,7 +72,46 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			}
 		};
 
-		Games.configureWebsocketHandler(router, vertx.eventBus(), authHandler);
+		EventBus bus = vertx.eventBus();
+		router.route("/" + Games.WEBSOCKET_PATH + "-clustered")
+				.method(HttpMethod.GET)
+				.handler(authHandler);
+
+		router.route("/" + Games.WEBSOCKET_PATH + "-clustered")
+				.method(HttpMethod.GET)
+				.handler(Sync.suspendableHandler(context1 -> {
+					final String userId = context1.user().principal().getString("_id");
+					Boolean handled = pipes.putIfAbsent(new UserId(userId), true);
+					// Check if we already set up a consumer/publisher for this user
+					if (handled == null) {
+						final ServerWebSocket socket = context1.request().upgrade();
+						final MessageConsumer<Buffer> consumer = bus.<Buffer>consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
+						final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
+						final Pump pump1 = Pump.pump(socket, publisher).start();
+						final Pump pump2 = Pump.pump(consumer.bodyStream(), socket).start();
+						socket.closeHandler(disconnected -> {
+							try {
+								publisher.close();
+							} catch (Throwable ignored) {
+							}
+							try {
+								consumer.unregister();
+							} catch (Throwable ignored) {
+							}
+							try {
+								pump1.stop();
+							} catch (Throwable ignored) {
+							}
+							try {
+								pump2.stop();
+							} catch (Throwable ignored) {
+							}
+							pipes.remove(new UserId(userId));
+						});
+					}
+
+				}));
+
 		// Health check comes first
 		router.route("/")
 				.handler(routingContext -> {
@@ -437,8 +487,9 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	@Override
 	public WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException {
 		com.hiddenswitch.spellsource.models.MatchCancelResponse response = getMatchmaking().cancel(new MatchCancelRequest(userId));
-		if (response == null) {
-			return WebResult.failed(new RuntimeException());
+		if (response == null
+				|| response.getGameId() == null) {
+			return WebResult.failed(new RuntimeException("Could not concede the requested game."));
 		}
 		getGames().concedeGameSession(new ConcedeGameSessionRequest(response.getGameId(), response.getPlayerId()));
 		return WebResult.succeeded(new MatchConcedeResponse().isConceded(true));
