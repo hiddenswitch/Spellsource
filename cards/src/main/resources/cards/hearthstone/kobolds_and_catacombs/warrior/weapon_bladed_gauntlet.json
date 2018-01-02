@@ -7,7 +7,6 @@
   "durability": 2,
   "rarity": "EPIC",
   "description": "Has Attack equal to your Armor. Can't attack heroes.",
-  "collectible": true,
   "trigger": {
     "eventTrigger": {
       "class": "ArmorChangedTrigger",
@@ -52,6 +51,7 @@
       }
     ]
   },
+  "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1
 }

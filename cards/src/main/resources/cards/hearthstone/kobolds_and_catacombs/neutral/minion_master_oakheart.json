@@ -2,13 +2,13 @@
   "name": "Master Oakheart",
   "baseManaCost": 9,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Recruit a 1, 2, and 3-Attack minion.",
-  "targetSelection": "NONE",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "MetaSpell",
       "spells": [
@@ -24,8 +24,8 @@
               },
               {
                 "class": "AttributeFilter",
-                "attribute": "ATTACK",
                 "value": 1,
+                "attribute": "ATTACK",
                 "operation": "EQUAL"
               }
             ]
@@ -45,8 +45,8 @@
               },
               {
                 "class": "AttributeFilter",
-                "attribute": "ATTACK",
                 "value": 2,
+                "attribute": "ATTACK",
                 "operation": "EQUAL"
               }
             ]
@@ -66,8 +66,8 @@
               },
               {
                 "class": "AttributeFilter",
-                "attribute": "ATTACK",
                 "value": 3,
+                "attribute": "ATTACK",
                 "operation": "EQUAL"
               }
             ]
@@ -76,9 +76,9 @@
           "targetPlayer": "SELF"
         }
       ]
-    },
-    "targetSelection": "NONE"
+    }
   },
+  "targetSelection": "NONE",
   "attributes": {
     "BATTLECRY": true
   },

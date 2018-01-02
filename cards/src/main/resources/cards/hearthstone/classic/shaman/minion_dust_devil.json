@@ -6,6 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
+  "race": "ELEMENTAL",
   "description": "Windfury. Overload: (2)",
   "attributes": {
     "OVERLOAD": 2,

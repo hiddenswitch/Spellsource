@@ -86,7 +86,8 @@ public class DraftLogic {
 				CardSet.REWARD,
 				CardSet.THE_GRAND_TOURNAMENT,
 				CardSet.THE_OLD_GODS,
-				CardSet.JOURNEY_TO_UNGORO
+				CardSet.JOURNEY_TO_UNGORO,
+				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE
 		);
 
 		// Until we have enough mean streets cards, don't use it

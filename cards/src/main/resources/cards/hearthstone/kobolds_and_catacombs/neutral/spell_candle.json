@@ -20,19 +20,19 @@
       "spells": [
         {
           "class": "ModifyAttributeSpell",
-          "attribute": "RESERVED_INTEGER_1",
-          "value": 1
+          "value": 1,
+          "attribute": "RESERVED_INTEGER_1"
         },
         {
           "class": "ConditionalSpell",
           "condition": {
             "class": "ComparisonCondition",
+            "operation": "GREATER_OR_EQUAL",
             "value1": {
               "class": "AttributeValueProvider",
               "attribute": "RESERVED_INTEGER_1"
             },
-            "value2": 3,
-            "operation": "GREATER_OR_EQUAL"
+            "value2": 3
           },
           "spell": {
             "class": "MetaSpell",
@@ -70,19 +70,19 @@
     "spells": [
       {
         "class": "ModifyAttributeSpell",
-        "attribute": "RESERVED_INTEGER_1",
-        "value": 1
+        "value": 1,
+        "attribute": "RESERVED_INTEGER_1"
       },
       {
         "class": "ConditionalSpell",
         "condition": {
           "class": "ComparisonCondition",
+          "operation": "GREATER_OR_EQUAL",
           "value1": {
             "class": "AttributeValueProvider",
             "attribute": "RESERVED_INTEGER_1"
           },
-          "value2": 3,
-          "operation": "GREATER_OR_EQUAL"
+          "value2": 3
         },
         "spell": {
           "class": "MetaSpell",

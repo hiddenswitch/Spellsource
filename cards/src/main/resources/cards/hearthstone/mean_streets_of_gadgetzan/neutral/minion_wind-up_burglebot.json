@@ -6,6 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
+  "race": "MECH",
   "description": "Whenever this attacks a minion and survives, draw a card.",
   "trigger": {
     "eventTrigger": {

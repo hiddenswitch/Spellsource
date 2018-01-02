@@ -162,7 +162,8 @@ public class GameSessionImpl implements GameSession {
 				CardSet.THE_GRAND_TOURNAMENT,
 				CardSet.THE_OLD_GODS,
 				CardSet.JOURNEY_TO_UNGORO,
-				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE);
+				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
+				CardSet.KOBOLDS_AND_CATACOMBS);
 
 		// Configure the network behaviours on the players
 		Player player1 = getPlayer(pregamePlayerConfiguration1.getUserId());

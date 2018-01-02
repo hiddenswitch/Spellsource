@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 3,
-  "rarity": "RARE",
+  "rarity": "COMMON",
   "description": "During your turn, your Hero is immune.",
   "trigger": {
     "eventTrigger": {

@@ -6,6 +6,7 @@
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "COMMON",
+  "race": "DEMON",
   "description": "Taunt. Battlecry: Discard two random cards.",
   "battlecry": {
     "spell": {

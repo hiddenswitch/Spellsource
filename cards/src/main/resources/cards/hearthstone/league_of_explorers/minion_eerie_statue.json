@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "baseAttack": 7,
   "baseHp": 7,
-  "rarity": "COMMON",
+  "rarity": "RARE",
   "description": "Can't attack unless it's the only minion on the battlefield.",
   "trigger": {
     "eventTrigger": {

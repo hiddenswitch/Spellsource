@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hiddenswitch.spellsource.util.Serialization;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.io.IOUtils;
 import org.testng.Assert;
@@ -27,7 +28,7 @@ public class CatalogueTests {
 	static Gson gson = new Gson();
 
 	private static String getCurrentCards() {
-		String testedUrl = "https://api.hearthstonejson.com/v1/21517/enUS/cards.json";
+		String testedUrl = "https://api.hearthstonejson.com/v1/22611/enUS/cards.json";
 		String overrideUrl = System.getProperty("spellsource.cards.url", System.getenv("SPELLSOURCE_CARDS_URL"));
 		if (overrideUrl != null && !overrideUrl.equals("")) {
 			testedUrl = overrideUrl;
@@ -68,7 +69,6 @@ public class CatalogueTests {
 		Assert.assertNotNull(card);
 	}
 
-	@Ignore
 	@Test(dataProvider = "HearthstoneCards")
 	public void testAttributes(JsonObject cardObject) {
 		Type listType = new TypeToken<List<String>>() {
@@ -84,7 +84,8 @@ public class CatalogueTests {
 //		description = description.replaceAll("[\\s.,:;]", "");
 //		Assert.assertEquals(description, text, "Wrong description for " + name);
 		Assert.assertEquals(card.getBaseManaCost(), cardObject.get("cost").getAsInt(), "Wrong cost for " + name);
-		if (card.getCardType() == CardType.MINION) {
+		if (card.getCardType() == CardType.MINION
+				&& !(card instanceof HasChooseOneActions)) {
 			MinionCard minionCard = (MinionCard) card;
 			Assert.assertEquals(minionCard.getBaseAttack(), cardObject.get("attack").getAsInt(), "Wrong attack for " + name);
 			Assert.assertEquals(minionCard.getBaseHp(), cardObject.get("health").getAsInt(), "Wrong health for " + name);
@@ -95,6 +96,33 @@ public class CatalogueTests {
 				final boolean combos = mechanics.stream().anyMatch(m -> m.equals("COMBO"));
 				Assert.assertEquals(minionCard.hasBattlecry(), battlecry || combos, name + " is missing a combos or battlecry attribute.");
 				Assert.assertEquals(minionCard.hasAttribute(Attribute.BATTLECRY), battlecry && !combos, name + " is missing battlecry attribute.");
+				final boolean deathrattles = mechanics.stream().anyMatch(m -> m.equals("DEATHRATTLE"));
+				Assert.assertEquals(minionCard.hasAttribute(Attribute.DEATHRATTLES), deathrattles, name + " is missing deathrattle attribute.");
+				final boolean taunt = mechanics.stream().anyMatch(m -> m.equals("TAUNT"));
+				Assert.assertEquals(minionCard.hasAttribute(Attribute.TAUNT), taunt, name + " is missing taunt attribute.");
+				final boolean stealth = mechanics.stream().anyMatch(m -> m.equals("STEALTH"));
+				Assert.assertEquals(minionCard.hasAttribute(Attribute.STEALTH), stealth, name + " is missing stealth attribute.");
+				final boolean charge = mechanics.stream().anyMatch(m -> m.equals("CHARGE"));
+				Assert.assertEquals(minionCard.hasAttribute(Attribute.CHARGE), charge, name + " is missing charge attribute.");
+				final boolean divineShield = mechanics.stream().anyMatch(m -> m.equals("DIVINE_SHIELD"));
+				Assert.assertEquals(minionCard.hasAttribute(Attribute.DIVINE_SHIELD), divineShield, name + " is missing divine shield attribute.");
+			}
+
+			if (cardObject.has("race")) {
+				String race = cardObject.get("race").getAsString();
+				if (race.equals("MECHANICAL")) {
+					race = "MECH";
+				}
+				final String actual = minionCard.getRace().toString();
+				Assert.assertEquals(actual, race, name + " should have race " + race + " but has " + actual);
+			} else {
+				Assert.assertEquals(minionCard.getRace(), Race.NONE, name + " should not have race but has " + minionCard.getRace().toString());
+			}
+
+			if (cardObject.has("rarity")) {
+				String rarity = cardObject.get("rarity").getAsString();
+				final String actual = minionCard.getRarity().toString();
+				Assert.assertEquals(actual, rarity, name + " should have rarity " + rarity + " but has " + actual);
 			}
 		}
 	}

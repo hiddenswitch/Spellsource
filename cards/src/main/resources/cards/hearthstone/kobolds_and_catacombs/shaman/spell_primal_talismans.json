@@ -1,6 +1,6 @@
 {
   "name": "Primal Talismans",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "RARE",
@@ -11,13 +11,13 @@
     "target": "FRIENDLY_MINIONS",
     "spell": {
       "class": "SummonSpell",
-      "randomTarget": true,
       "cards": [
         "token_searing_totem",
         "token_healing_totem",
         "token_wrath_of_air_totem",
         "token_stoneclaw_totem"
-      ]
+      ],
+      "randomTarget": true
     }
   },
   "collectible": true,

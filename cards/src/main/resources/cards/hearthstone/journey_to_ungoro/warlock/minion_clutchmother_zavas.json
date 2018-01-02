@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
+  "race": "BEAST",
   "description": "Whenever you discard this, give it +2/+2 and return it to your hand.",
   "passiveTrigger": {
     "eventTrigger": {

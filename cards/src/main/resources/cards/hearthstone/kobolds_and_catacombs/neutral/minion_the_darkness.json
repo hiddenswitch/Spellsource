@@ -7,20 +7,16 @@
   "baseHp": 20,
   "rarity": "LEGENDARY",
   "description": "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens.",
-  "battlecry": {
-    "targetSelection": "NONE",
-    "spell": {
-      "class": "ShuffleToDeckSpell",
-      "howMany": 3,
-      "card": "spell_candle",
-      "targetPlayer": "OPPONENT"
-    }
-  },
   "aura": {
     "class": "Aura",
     "target": "SELF",
     "applyEffect": {
       "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "attribute": "PERMANENT",
+        "operation": "HAS"
+      },
       "exclusive": true,
       "spell1": {
         "class": "SetDescriptionSpell"
@@ -28,15 +24,15 @@
       "spell2": {
         "class": "SetDescriptionSpell",
         "description": "When your opponent draws 3 Candles, this awakens!"
-      },
-      "condition": {
-        "class": "AttributeCondition",
-        "attribute": "PERMANENT",
-        "operation": "HAS"
       }
     },
     "removeEffect": {
       "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "attribute": "PERMANENT",
+        "operation": "HAS"
+      },
       "exclusive": true,
       "spell1": {
         "class": "SetDescriptionSpell",
@@ -44,12 +40,16 @@
       },
       "spell2": {
         "class": "SetDescriptionSpell"
-      },
-      "condition": {
-        "class": "AttributeCondition",
-        "attribute": "PERMANENT",
-        "operation": "HAS"
       }
+    }
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "spell_candle",
+      "howMany": 3,
+      "targetPlayer": "OPPONENT"
     }
   },
   "attributes": {

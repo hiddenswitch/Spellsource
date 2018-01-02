@@ -12,7 +12,6 @@
     "spell": {
       "class": "ReturnTargetToHandSpell",
       "target": "FRIENDLY_GRAVEYARD",
-      "randomTarget": true,
       "filter": {
         "class": "AndFilter",
         "filters": [
@@ -26,7 +25,8 @@
             "operation": "HAS"
           }
         ]
-      }
+      },
+      "randomTarget": true
     }
   },
   "attributes": {
