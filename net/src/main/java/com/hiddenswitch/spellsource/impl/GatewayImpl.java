@@ -702,10 +702,11 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		GetCollectionResponse deckCollections = getInventory().getCollection(GetCollectionRequest.decks(userId, record.getDecks()));
 
 		final String displayName = record.getProfile().getDisplayName();
+		final List<GetCollectionResponse> responses = deckCollections.getResponses();
 		return new Account()
 				.id(record.getId())
-				.decks(deckCollections.getResponses().stream()
-						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()))
+				.decks((responses != null && responses.size() > 0) ? responses.stream()
+						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getProfile().getEmailAddress())
 				.inMatch(getMatchmaking().getCurrentMatch(new CurrentMatchRequest(userId)).getGameId() != null)
