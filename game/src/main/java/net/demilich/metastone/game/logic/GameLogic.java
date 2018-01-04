@@ -2844,12 +2844,19 @@ public class GameLogic implements Cloneable, Serializable {
 	protected void performBattlecryAction(int playerId, Actor actor, Player player, BattlecryAction battlecryAction) {
 		if (hasAttribute(player, Attribute.DOUBLE_BATTLECRIES) && actor.getSourceCard().hasAttribute(Attribute.BATTLECRY)) {
 			// You need DOUBLE_BATTLECRIES before your battlecry action, not after.
+			EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
 			performGameAction(playerId, battlecryAction);
 			// Make sure the battlecry is still targetable
-			final EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
+			// The target may have transformed
+			if (target != null
+					&& !target.isTargetGroup()) {
+				target = context.resolveSingleTarget(target).transformResolved(context).getReference();
+				battlecryAction.setTargetReference(target);
+			}
+			final EntityReference target1 = target;
 			final boolean targetable = target == null
 					|| target.isTargetGroup()
-					|| getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target));
+					|| getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target1));
 			if (!battlecryAction.canBeExecuted(context, player) || !targetable) {
 				return;
 			}
