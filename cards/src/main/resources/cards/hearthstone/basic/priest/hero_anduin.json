@@ -1,6 +1,6 @@
 {
   "id": "hero_anduin",
-  "name": "Anduin",
+  "name": "Anduin Wrynn",
   "heroPower": "hero_power_lesser_heal",
   "baseManaCost": 0,
   "type": "HERO",
