@@ -15,7 +15,11 @@
     "spell": {
       "class": "RecruitSpell",
       "cardLocation": "DECK",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
     }
   },
   "collectible": true,
