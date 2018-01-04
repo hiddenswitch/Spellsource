@@ -9,6 +9,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -123,24 +124,25 @@ public class SummonSpell extends Spell {
 			}
 		} else if (target != null
 				&& !(target.getReference().equals(EntityReference.NONE))) {
-			Minion template;
-			if (target.getEntityType() == EntityType.CARD) {
-				template = ((MinionCard) target.getSourceCard()).summon();
-			} else {
-				template = (Minion) target;
-			}
 			for (int i = 0; i < count; i++) {
-				Minion clone = template.getCopy();
-				clone.clearEnchantments();
+				Minion minion;
+				if (target.getEntityType() == EntityType.CARD) {
+					minion = ((MinionCard) target.getSourceCard()).summon();
+				} else {
+					minion = ((Minion) target).getCopy();
+					minion.clearEnchantments();
+				}
 
-				boolean summoned = context.getLogic().summon(player.getId(), clone, null, boardPosition, false);
+				boolean summoned = context.getLogic().summon(player.getId(), minion, null, boardPosition, false);
 				if (!summoned) {
 					return;
 				}
-				summonedMinions.add(clone);
-				for (Trigger trigger : context.getTriggersAssociatedWith(template.getReference())) {
-					Trigger triggerClone = trigger.clone();
-					context.getLogic().addGameEventListener(player, triggerClone, clone);
+				summonedMinions.add(minion);
+				if (target instanceof Actor) {
+					for (Trigger trigger : context.getTriggersAssociatedWith(target.getReference())) {
+						Trigger triggerClone = trigger.clone();
+						context.getLogic().addGameEventListener(player, triggerClone, minion);
+					}
 				}
 			}
 		}

@@ -41,6 +41,26 @@ import static net.demilich.metastone.game.targeting.EntityReference.EVENT_TARGET
 
 public class TheOldGodsTests extends TestBase {
 	@Test
+	public void testYshaarjRageUnboundShadowEssence() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_yshaarj_rage_unbound");
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			context.endTurn();
+			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");
+		});
+
+		runGym((context, player, opponent) -> {
+			Card rageUnboundCard = CardCatalogue.getCardById("minion_yshaarj_rage_unbound");
+			context.getLogic().shuffleToDeck(player, rageUnboundCard);
+			playCard(context, player, "spell_shadow_essence");
+			context.getLogic().removeCardFromDeck(player.getId(), rageUnboundCard);
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			context.endTurn();
+			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");
+		});
+	}
+
+	@Test
 	public void testMasterOfEvolutionBrann() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
