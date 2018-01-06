@@ -4,20 +4,19 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
-import com.hiddenswitch.spellsource.util.Rpc;
-import com.hiddenswitch.spellsource.util.Registration;
-import com.hiddenswitch.spellsource.util.RpcClient;
+import com.hiddenswitch.spellsource.util.*;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.QuickJson;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.logic.GameLogic;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -30,12 +29,13 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * Created by bberman on 12/7/16.
  */
 public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
+	private static Logger logger = LoggerFactory.getLogger(Bots.class);
 	private RpcClient<Accounts> accounts;
 	private RpcClient<Logic> logic;
 	private RpcClient<Matchmaking> matchmaking;
 	private List<UserRecord> bots = new ArrayList<>();
 	private Queue<UserRecord> unusedBots = new ConcurrentLinkedQueue<>();
-	private Map<String, UserRecord> botToGame = new HashMap<>();
+	private Map<GameId, UserId> botGames;
 	private Supplier<? extends Behaviour> botBehaviour = GameStateValueBehaviour::new;
 	private Registration registration;
 
@@ -43,6 +43,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
+		botGames = SharedData.getClusterWideMap("BotsImpl/gametoBot", vertx);
 		accounts = Rpc.connect(Accounts.class, vertx.eventBus());
 		logic = Rpc.connect(Logic.class, vertx.eventBus());
 		matchmaking = Rpc.connect(Matchmaking.class, vertx.eventBus());
@@ -65,6 +66,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 
 		// Use execute blocking to improve throughput
 		response.gameAction = awaitResult(callback -> vertx.executeBlocking(done -> {
+			logger.debug("requestAction: Requesting action from behaviour.");
 			final Behaviour behaviour = botBehaviour.get();
 
 			final GameContext context = new GameContext();
@@ -74,8 +76,17 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 			context.setActivePlayerId(request.playerId);
 			context.getLogic().setLoggingEnabled(false);
 
-			done.handle(Future.succeededFuture(
-					behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions)));
+			try {
+				final GameAction result = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
+				logger.debug("requestAction: Bot successfully chose action");
+				done.handle(Future.succeededFuture(
+						result));
+
+			} catch (Throwable t) {
+				logger.error("requestAction: Bot failed to choose an action due to an exception", t);
+				done.handle(Future.failedFuture(t));
+			}
+
 		}, false, callback));
 
 
@@ -84,16 +95,15 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 
 	@Override
 	public BotsStartGameResponse startGame(BotsStartGameRequest request) throws SuspendExecution, InterruptedException {
+		logger.debug("startGame: Starting a bot game for userId " + request.getUserId());
 		// The player has been waiting too long. Match to an AI.
 		// Retrieve a bot and use it to play against the opponent
 		BotsStartGameResponse response = new BotsStartGameResponse();
 		UserRecord bot = pollBot();
-		String gameId = RandomStringUtils.randomAlphanumeric(10).toLowerCase();
+		GameId gameId = new GameId();
 		String botDeckId = getRandomDeck(bot);
-
-		botToGame.put(gameId, bot);
-
-		MatchCreateResponse matchCreateResponse = matchmaking.sync().createMatch(new MatchCreateRequest(gameId, request.getUserId(), bot.getId(), true, request.getDeckId(), botDeckId));
+		botGames.put(gameId, new UserId(bot.getId()));
+		MatchCreateResponse matchCreateResponse = matchmaking.sync().createMatch(MatchCreateRequest.botMatch(gameId, new UserId(request.getUserId()), new UserId(bot.getId()), new DeckId(request.getDeckId()), new DeckId(botDeckId)));
 		response.setPlayerConnection(matchCreateResponse.getCreateGameSessionResponse().getConfigurationForPlayer1());
 		response.setGameId(matchCreateResponse.getCreateGameSessionResponse().getGameId());
 		response.setBotUserId(bot.getId());
@@ -119,10 +129,10 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	}
 
 	@Override
-	public NotifyGameOverResponse notifyGameOver(NotifyGameOverRequest request) {
+	public NotifyGameOverResponse notifyGameOver(NotifyGameOverRequest request) throws InterruptedException, SuspendExecution {
 		// Return the bot servicing this game to the pool.
-		UserRecord bot = botToGame.remove(request.getGameId());
-		unusedBots.add(bot);
+		UserId bot = botGames.remove(new GameId(request.getGameId()));
+		unusedBots.add(Accounts.findOne(bot.toString()));
 		return new NotifyGameOverResponse();
 	}
 

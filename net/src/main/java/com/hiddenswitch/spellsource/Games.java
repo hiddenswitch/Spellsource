@@ -536,6 +536,14 @@ public interface Games {
 				.damageDealt(damageDealt);
 	}
 
+	/**
+	 * Retrieves the current connections by Game ID
+	 *
+	 * @param vertx The {@link Vertx} that the verticle should use to connect for {@link SharedData}
+	 * @return A {@link io.vertx.core.shareddata.LocalMap} or a {@link com.hiddenswitch.spellsource.util.SuspendableMap},
+	 * depending on whether or not the underlying {@link SharedData} is operating on a {@link Vertx#isClustered()}
+	 * instance.
+	 */
 	static Map<GameId, CreateGameSessionResponse> getConnections(Vertx vertx) {
 		return SharedData.getClusterWideMap("ClusteredGamesImpl/connections", vertx);
 	}

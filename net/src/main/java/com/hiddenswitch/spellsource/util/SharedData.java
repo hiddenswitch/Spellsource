@@ -5,6 +5,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 
 import java.util.Map;
+import java.util.Set;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 

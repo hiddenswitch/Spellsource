@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.impl.util;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.common.*;
+import com.hiddenswitch.spellsource.impl.TimerId;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -49,7 +50,7 @@ public class ServerGameContext extends GameContext {
 	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
 	private final List<Trigger> gameTriggers = new ArrayList<>();
 	private final transient RpcClient<Logic> logic;
-	private final Timers timers;
+	private final Scheduler scheduler;
 	private AtomicInteger eventCounter = new AtomicInteger(0);
 	private int timerElapsedForPlayerId;
 
@@ -63,9 +64,9 @@ public class ServerGameContext extends GameContext {
 	 * @param deckFormat The legal cards that can be played.
 	 * @param gameId     The game ID that corresponds to this game context.
 	 * @param logic      The {@link RpcClient} on which this trigger will make {@link Logic} requests.
-	 * @param timers     The {@link Timers} instance to use for scheduling game events.
+	 * @param scheduler     The {@link Scheduler} instance to use for scheduling game events.
 	 */
-	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, RpcClient<Logic> logic, Timers timers) {
+	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, RpcClient<Logic> logic, Scheduler scheduler) {
 		// The player's IDs are set here
 		super(player1, player2, new GameLogicAsync(), deckFormat);
 		if (player1.getId() == player2.getId()
@@ -77,7 +78,7 @@ public class ServerGameContext extends GameContext {
 		NotificationProxy.init(new NullNotifier());
 		this.gameId = gameId;
 		this.logic = logic;
-		this.timers = timers;
+		this.scheduler = scheduler;
 
 		enablePersistenceEffects();
 	}
@@ -176,20 +177,20 @@ public class ServerGameContext extends GameContext {
 		Future<Void> init2 = Future.future();
 
 		// Set the mulligan timer
-		final Long mulliganTimerId = timers.setTimer(getLogic().getMulliganTimeMillis(), Sync.fiberHandler(this::endMulligans));
+		final TimerId mulliganTimerId = scheduler.setTimer(getLogic().getMulliganTimeMillis(), Sync.fiberHandler(this::endMulligans));
 
 		getNetworkGameLogic().initAsync(getActivePlayerId(), true, p -> init1.complete());
 		getNetworkGameLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, p -> init2.complete());
 
 		// Mulligan simultaneously now
 		CompositeFuture.all(init1, init2).setHandler(cf -> {
-			timers.cancelTimer(mulliganTimerId);
-			final Long[] turnTimerId = {null};
+			scheduler.cancelTimer(mulliganTimerId);
+			final TimerId[] turnTimerId = {null};
 			Recursive<Runnable> playTurnLoop = new Recursive<>();
 			playTurnLoop.func = () -> {
 				// End the existing turn timer, if it's set
 				if (turnTimerId[0] != null) {
-					timers.cancelTimer(turnTimerId[0]);
+					scheduler.cancelTimer(turnTimerId[0]);
 				}
 
 				if (!isRunning) {
@@ -208,7 +209,7 @@ public class ServerGameContext extends GameContext {
 
 				// Start the turn timer
 				timerElapsedForPlayerId = -1;
-				turnTimerId[0] = timers.setTimer(getTurnTimeForPlayer(activePlayerId), Sync.fiberHandler(this::elapseTurn));
+				turnTimerId[0] = scheduler.setTimer(getTurnTimeForPlayer(activePlayerId), Sync.fiberHandler(this::elapseTurn));
 
 				Recursive<Handler<Boolean>> actionLoop = new Recursive<>();
 

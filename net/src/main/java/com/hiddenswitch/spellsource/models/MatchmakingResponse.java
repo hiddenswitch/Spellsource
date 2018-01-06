@@ -7,17 +7,8 @@ import java.io.Serializable;
 
 public class MatchmakingResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private ClientConnectionConfiguration connection;
-
 	private MatchmakingRequest retry;
-
-	public ClientConnectionConfiguration getConnection() {
-		return connection;
-	}
-
-	public void setConnection(ClientConnectionConfiguration connection) {
-		this.connection = connection;
-	}
+	private String gameId;
 
 	public MatchmakingRequest getRetry() {
 		return retry;
@@ -27,12 +18,34 @@ public class MatchmakingResponse implements Serializable {
 		this.retry = retry;
 	}
 
-	public MatchmakingQueuePutResponseUnityConnection getUnityConnection() {
-		return getConnection().toUnityConnection();
-	}
-
 	public MatchmakingResponse withRetry(MatchmakingRequest matchmakingRequest) {
 		this.retry = matchmakingRequest;
+		return this;
+	}
+
+	public static MatchmakingResponse notReady(String userId, String deckId) {
+		return new MatchmakingResponse()
+				.withRetry(new MatchmakingRequest()
+						.withUserId(userId)
+						.withDeckId(deckId));
+	}
+
+	public static MatchmakingResponse ready(String gameId) {
+		return new MatchmakingResponse()
+				.withRetry(null)
+				.withGameId(gameId);
+	}
+
+	public String getGameId() {
+		return gameId;
+	}
+
+	public void setGameId(String gameId) {
+		this.gameId = gameId;
+	}
+
+	public MatchmakingResponse withGameId(final String gameId) {
+		this.gameId = gameId;
 		return this;
 	}
 }

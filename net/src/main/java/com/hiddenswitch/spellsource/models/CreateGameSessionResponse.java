@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.models;
 
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
 import com.hiddenswitch.spellsource.util.DefaultClusterSerializable;
 import com.hiddenswitch.spellsource.util.Serialization;
@@ -12,6 +13,8 @@ import io.vertx.core.shareddata.impl.ClusterSerializable;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public final class CreateGameSessionResponse implements Shareable, Serializable, DefaultClusterSerializable {
 	private static final long serialVersionUID = 1L;
@@ -56,6 +59,10 @@ public final class CreateGameSessionResponse implements Shareable, Serializable,
 
 	public ClientConnectionConfiguration getConfigurationForPlayer2() {
 		return player2;
+	}
+
+	public List<UserId> getUserIds() {
+		return Arrays.asList(new UserId(player1.getUserId()), new UserId(player2.getUserId()));
 	}
 
 	public String getGameId() {

@@ -17,7 +17,6 @@ public class Embedded {
 		System.setProperty("vertx.disableDnsResolver", "true");
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
 				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.ERROR);
 
 		final Vertx vertx = Vertx.vertx();
 		mongo().connectWithEnvironment(vertx);
