@@ -448,18 +448,8 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 		// Compute the appropriate response
 		MatchmakingQueuePutResponse userResponse = new MatchmakingQueuePutResponse();
-		if (internalResponse.getConnection() != null) {
-			final JavaSerializationObject connection;
-			try {
-				connection = new JavaSerializationObject()
-						.javaSerialized(Serialization.serializeBase64(internalResponse.getConnection()));
-			} catch (IOException e) {
-				routingContext.fail(e);
-
-				return WebResult.failed(e);
-			}
-			userResponse.connection(connection);
-			userResponse.unityConnection(internalResponse.getUnityConnection());
+		if (internalResponse.getRetry() == null) {
+			userResponse.unityConnection(new MatchmakingQueuePutResponseUnityConnection());
 		}
 
 		// Determine status code

@@ -24,9 +24,7 @@ import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
-import org.apache.commons.lang3.RandomStringUtils;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -170,7 +168,7 @@ public class GameSessionImpl implements GameSession {
 		Player player2 = getPlayer(pregamePlayerConfiguration2.getUserId());
 		player1.setBehaviour(new NetworkBehaviour());
 		player2.setBehaviour(new NetworkBehaviour());
-		this.gameContext = new ServerGameContext(player1, player2, simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()), new VertxTimers(vertx));
+		this.gameContext = new ServerGameContext(player1, player2, simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()), new VertxScheduler(vertx));
 		final Writer listener1;
 		final Writer listener2;
 

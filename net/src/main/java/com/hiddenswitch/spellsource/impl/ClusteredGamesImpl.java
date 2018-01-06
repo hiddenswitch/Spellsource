@@ -21,10 +21,7 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.Pump;
 import net.demilich.metastone.game.cards.CardCatalogue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> implements Games {
 	public static final String READER_ADDRESS_PREFIX = "ClusteredGamesImpl/";
@@ -119,26 +116,36 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		if (session != null) {
 			session.kill();
 			sessions.remove(key);
+		} else {
+			logger.error("kill: GameSession not found for gameId " + gameId + " but kill was requested.");
 		}
+
 		try {
-			Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(new MatchExpireRequest(gameId));
+			final MatchExpireRequest request = new MatchExpireRequest(gameId);
+			request.users = Arrays.asList(new UserId(session.getConfigurationForPlayer1().getUserId()), new UserId(session.getConfigurationForPlayer2().getUserId()));
+			Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(request);
 		} catch (VertxException noHandler) {
 			// TODO: What would be the most sensible solution here?
+			logger.warn("kill: Failed to expire or end match for gameId " + gameId);
 		}
+
 		if (gameActivityMonitors.containsKey(key)) {
 			try {
 				gameActivityMonitors.get(key).cancel();
 			} catch (Throwable ignored) {
+				logger.warn("kill: Failed to kill gameActivityMonitors for " + key.toString());
 			}
 
 			gameActivityMonitors.remove(key);
 		}
+
 		if (pipeClosers.containsKey(key)) {
 			for (Runnable runnable : pipeClosers.get(key)) {
 				runnable.run();
 			}
 			pipeClosers.remove(key);
 		} else {
+			logger.error("kill: Closer was not found for gameId " + gameId);
 			throw new RuntimeException("Closer was not found for gameId " + gameId);
 		}
 

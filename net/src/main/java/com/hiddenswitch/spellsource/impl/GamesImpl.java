@@ -342,8 +342,8 @@ public class GamesImpl extends AbstractService<GamesImpl> implements Games {
 			return;
 		}
 
-		String userId1 = session.getConfigurationForPlayer1().getPlayerKey();
-		String userId2 = session.getConfigurationForPlayer2().getPlayerKey();
+		String userId1 = session.getConfigurationForPlayer1().getUserId();
+		String userId2 = session.getConfigurationForPlayer2().getUserId();
 		keyToSecret.remove(userId1);
 		keyToSecret.remove(userId2);
 		gameForUserId.remove(userId1);

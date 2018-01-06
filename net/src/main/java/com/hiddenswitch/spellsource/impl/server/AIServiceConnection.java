@@ -50,11 +50,10 @@ public class AIServiceConnection implements Writer {
 	}
 
 	@Override
+	@Suspendable
 	public void onGameEnd(Player winner) {
 		final ServerGameContext gc = context.get();
-		bots.async((AsyncResult<NotifyGameOverResponse> result) -> {
-			// Do nothing
-		}).notifyGameOver(new NotifyGameOverRequest(gc.getGameId()));
+		bots.promise(service -> service.notifyGameOver(new NotifyGameOverRequest(gc.getGameId())));
 	}
 
 	@Override

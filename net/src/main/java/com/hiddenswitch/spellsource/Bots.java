@@ -41,5 +41,5 @@ public interface Bots {
 	 * @return Any additional information about the bot's handling of a game over notification.
 	 */
 	@Suspendable
-	NotifyGameOverResponse notifyGameOver(NotifyGameOverRequest request);
+	NotifyGameOverResponse notifyGameOver(NotifyGameOverRequest request) throws InterruptedException, SuspendExecution;
 }

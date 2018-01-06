@@ -51,7 +51,14 @@ public abstract class StringEx implements Serializable,
 
 	@Override
 	public boolean equals(Object obj) {
-		return id.equals(((StringEx) obj).id);
+		if (obj instanceof StringEx) {
+			return id.equals(((StringEx) obj).id);
+		} else if (obj instanceof CharSequence) {
+			return id.equals(obj);
+		} else {
+			return false;
+		}
+
 	}
 
 	@Override

@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
+import io.vertx.core.shareddata.Shareable;
 import io.vertx.core.shareddata.impl.ClusterSerializable;
 
 import java.io.IOException;
 
-public interface DefaultClusterSerializable extends ClusterSerializable {
+public interface DefaultClusterSerializable extends ClusterSerializable, Shareable {
 	default void writeToBuffer(Buffer buffer) {
 		try {
 			Json.mapper.writer().writeValue(new VertxBufferOutputStream(buffer), this);
