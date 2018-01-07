@@ -4,8 +4,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.Emote;
+import com.hiddenswitch.spellsource.common.ClientConnectionConfigurationImpl;
 import com.hiddenswitch.spellsource.common.Writer;
-import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.util.Rpc;
@@ -66,9 +66,9 @@ public class GameSessionImpl implements GameSession {
 		this.noActivityTimeout = noActivityTimeout;
 	}
 
-	private ClientConnectionConfiguration getConfigurationFor(PregamePlayerConfiguration player, int id) {
-		return new ClientConnectionConfiguration(
-				getUrl(), player.getUserId(), /*getSecret(player.getUserId())*/ null);
+	private ClientConnectionConfigurationImpl getConfigurationFor(PregamePlayerConfiguration player, int id) {
+		return new ClientConnectionConfigurationImpl(
+				getUrl(), player.getUserId() /*getSecret(player.getUserId())*/);
 	}
 
 //	public String getSecret(String userId) {
@@ -213,12 +213,12 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	@Override
-	public ClientConnectionConfiguration getConfigurationForPlayer1() {
+	public ClientConnectionConfigurationImpl getConfigurationForPlayer1() {
 		return getConfigurationFor(pregamePlayerConfiguration1, PLAYER_1);
 	}
 
 	@Override
-	public ClientConnectionConfiguration getConfigurationForPlayer2() {
+	public ClientConnectionConfigurationImpl getConfigurationForPlayer2() {
 		return getConfigurationFor(pregamePlayerConfiguration2, PLAYER_2);
 	}
 

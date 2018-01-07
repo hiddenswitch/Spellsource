@@ -12,59 +12,78 @@ public abstract class NumberEx extends Number implements Serializable,
 		ClusterSerializable,
 		Shareable,
 		Cloneable {
-	protected volatile long id;
 
+	@Deprecated
+	public long id;
+
+	@SuppressWarnings("deprecation")
+	@Deprecated
+	public NumberEx() {
+		this.id = 0;
+	}
+
+	@SuppressWarnings("deprecation")
 	public NumberEx(long id) {
 		this.id = id;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void writeToBuffer(Buffer buffer) {
 		buffer.appendLong(id);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int readFromBuffer(int pos, Buffer buffer) {
 		id = buffer.getLong(pos);
 		return pos + 8;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int compareTo(Long o) {
 		return Long.compare(id, o);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int intValue() {
 		return ((Long) id).intValue();
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public long longValue() {
 		return id;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public float floatValue() {
 		return ((Long) id).floatValue();
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public double doubleValue() {
 		return ((Long) id).doubleValue();
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public String toString() {
 		return Long.toString(id);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int hashCode() {
 		return Long.hashCode(id);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;

@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hiddenswitch.spellsource.util.DefaultClusterSerializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -7,8 +8,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.Serializable;
 
 public final class QueueEntry implements Serializable, DefaultClusterSerializable {
-	private GameId gameId;
-	private DeckId deckId;
+	public GameId gameId;
+	public DeckId deckId;
+
+	public QueueEntry() {
+	}
 
 	private QueueEntry(GameId gameId, DeckId deckId) {
 		this.gameId = gameId;
@@ -44,14 +48,7 @@ public final class QueueEntry implements Serializable, DefaultClusterSerializabl
 				.toHashCode();
 	}
 
-	public GameId getGameId() {
-		return gameId;
-	}
-
-	public DeckId getDeckId() {
-		return deckId;
-	}
-
+	@JsonIgnore
 	public boolean isPending() {
 		return gameId.equals(GameId.PENDING);
 	}

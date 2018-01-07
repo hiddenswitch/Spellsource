@@ -1,105 +1,84 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import io.vertx.core.Future;
-import io.vertx.core.shareddata.AsyncMap;
+import io.vertx.core.shareddata.LocalMap;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
-import static io.vertx.ext.sync.Sync.awaitResult;
-
-public class SuspendableMap<K, V> implements Map<K, V> {
-	private final AsyncMap<K, V> map;
-
-	SuspendableMap(AsyncMap<K, V> map) {
-		this.map = map;
-	}
-
-	@Override
+public interface SuspendableMap<K, V> {
 	@Suspendable
-	public int size() {
-		return awaitResult(map::size);
-	}
+	int size();
 
-	@Override
 	@Suspendable
-	public boolean isEmpty() {
-		return size() == 0;
-	}
+	boolean isEmpty();
 
-	@Override
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	public boolean containsKey(Object key) {
-		return awaitResult(done -> {
-			map.get((K) key, then -> {
-				done.handle(Future.succeededFuture(then.succeeded()));
-			});
-		});
+	boolean containsKey(Object key);
 
-
-	}
-
-	@Override
 	@Suspendable
-	public boolean containsValue(Object value) {
-		throw new UnsupportedOperationException("Cannot check if a value is contained by this map.");
-	}
+	boolean containsValue(Object value);
 
-	@Override
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	public V get(Object key) {
-		return awaitResult(h -> map.get((K)key, h));
-	}
+	V get(Object key);
 
-	@Override
 	@Suspendable
-	public V put(K key, V value) {
-		return awaitResult(h -> map.put(key, value, then -> h.handle(Future.succeededFuture(value))));
-	}
+	V put(K key, V value);
 
-	@Override
 	@Suspendable
-	public V putIfAbsent(K key, V value) {
-		return awaitResult(h -> map.putIfAbsent(key, value, then -> h.handle(Future.succeededFuture(then.result()))));
-	}
+	V putIfAbsent(K key, V value);
 
-	@Override
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	public V remove(Object key) {
-		return awaitResult(h -> map.remove((K)key, h));
-	}
+	V remove(Object key);
 
-	@Override
 	@Suspendable
-	public void putAll(Map<? extends K, ? extends V> m) {
-		for (Entry<? extends K, ? extends V> entry : m.entrySet()) {
-			put(entry.getKey(), entry.getValue());
+	void putAll(Map<? extends K, ? extends V> m);
+
+	@Suspendable
+	void clear();
+
+	@Suspendable
+	Set<K> keySet();
+
+	@Suspendable
+	Collection<V> values();
+
+	@Suspendable
+	Set<Map.Entry<K, V>> entrySet();
+
+	@Suspendable
+	default V replace(K key, V value) {
+		V curValue;
+		if (((curValue = get(key)) != null) || containsKey(key)) {
+			curValue = put(key, value);
 		}
+		return curValue;
 	}
 
-	@Override
 	@Suspendable
-	public void clear() {
-		awaitResult(map::clear);
+	default boolean replace(K key, V oldValue, V newValue) {
+		Object curValue = get(key);
+		if (!Objects.equals(curValue, oldValue) ||
+				(curValue == null && !containsKey(key))) {
+			return false;
+		}
+		put(key, newValue);
+		return true;
 	}
 
-	@Override
-	public Set<K> keySet() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Collection<V> values() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Set<Entry<K, V>> entrySet() {
-		throw new UnsupportedOperationException();
+	@Suspendable
+	default boolean remove(Object key, Object value) {
+		Object curValue = get(key);
+		if (!Objects.equals(curValue, value) ||
+				(curValue == null && !containsKey(key))) {
+			return false;
+		}
+		remove(key);
+		return true;
 	}
 }

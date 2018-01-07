@@ -5,19 +5,11 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
 import com.hiddenswitch.spellsource.impl.GameId;
-import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.SharedData;
+import com.hiddenswitch.spellsource.util.SuspendableAsyncMap;
+import com.hiddenswitch.spellsource.util.SuspendableMap;
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.eventbus.MessageProducer;
-import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.ServerWebSocket;
-import io.vertx.core.streams.Pump;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.AuthHandler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -536,15 +528,16 @@ public interface Games {
 				.damageDealt(damageDealt);
 	}
 
+	@Suspendable
 	/**
 	 * Retrieves the current connections by Game ID
 	 *
 	 * @param vertx The {@link Vertx} that the verticle should use to connect for {@link SharedData}
-	 * @return A {@link io.vertx.core.shareddata.LocalMap} or a {@link com.hiddenswitch.spellsource.util.SuspendableMap},
+	 * @return A {@link io.vertx.core.shareddata.LocalMap} or a {@link SuspendableAsyncMap},
 	 * depending on whether or not the underlying {@link SharedData} is operating on a {@link Vertx#isClustered()}
 	 * instance.
 	 */
-	static Map<GameId, CreateGameSessionResponse> getConnections(Vertx vertx) {
+	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections(Vertx vertx) throws SuspendExecution {
 		return SharedData.getClusterWideMap("ClusteredGamesImpl/connections", vertx);
 	}
 

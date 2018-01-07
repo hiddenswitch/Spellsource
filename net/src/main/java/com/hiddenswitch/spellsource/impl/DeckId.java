@@ -1,8 +1,11 @@
 package com.hiddenswitch.spellsource.impl;
 
-import net.demilich.metastone.game.decks.DeckWithId;
+public final class DeckId extends StringEx {
+	@Deprecated
+	public DeckId() {
+		super();
+	}
 
-public class DeckId extends StringEx {
 	public DeckId(String id) {
 		super(id);
 	}

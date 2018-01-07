@@ -187,7 +187,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 				.withPregame1(sgr.getPregamePlayerConfiguration1()).withPregame2(sgr.getPregamePlayerConfiguration2
 						()));
 
-		getContext().assertNotNull(cgsr.getGameId());
+		getContext().assertNotNull(cgsr.gameId);
 
 		UnityClient client1 = new UnityClient(getContext(), car1.getLoginToken().getToken());
 		UnityClient client2 = new UnityClient(getContext(), car2.getLoginToken().getToken());

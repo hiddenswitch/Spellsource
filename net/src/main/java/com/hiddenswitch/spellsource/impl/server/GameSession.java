@@ -2,14 +2,17 @@ package com.hiddenswitch.spellsource.impl.server;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
+import com.hiddenswitch.spellsource.common.ClientConnectionConfigurationImpl;
 import com.hiddenswitch.spellsource.common.Server;
 import com.hiddenswitch.spellsource.common.Writer;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -82,4 +85,8 @@ public interface GameSession extends Server {
 	int getPlayerIdForSocket(Object socket);
 
 	void handleGameOver(Handler<GameSessionImpl> handler);
+
+	default List<UserId> getUserIds() {
+		return Arrays.asList(new UserId(getConfigurationForPlayer1().getUserId()), new UserId(getConfigurationForPlayer2().getUserId()));
+	}
 }

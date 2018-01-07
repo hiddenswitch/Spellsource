@@ -8,18 +8,9 @@ import java.io.Serializable;
  * Created by bberman on 4/2/17.
  */
 public class BotsStartGameResponse implements Serializable {
-	private ClientConnectionConfiguration playerConnection;
 	private String gameId;
 	private String botUserId;
 	private String botDeckId;
-
-	public ClientConnectionConfiguration getPlayerConnection() {
-		return playerConnection;
-	}
-
-	public void setPlayerConnection(ClientConnectionConfiguration playerConnection) {
-		this.playerConnection = playerConnection;
-	}
 
 	public String getGameId() {
 		return gameId;

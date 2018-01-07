@@ -13,43 +13,57 @@ public abstract class StringEx implements Serializable,
 		ClusterSerializable,
 		Shareable,
 		Cloneable {
-	private volatile String id;
+	@Deprecated
+	public String id;
 
+	@Deprecated
+	public StringEx() {
+		id = null;
+	}
+
+	@SuppressWarnings("deprecation")
 	public StringEx(String id) {
 		this.id = id;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int length() {
 		return id.length();
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public char charAt(int index) {
 		return id.charAt(index);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public CharSequence subSequence(int start, int end) {
 		return id.subSequence(start, end);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int compareTo(String o) {
 		return id.compareTo(o);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public String toString() {
 		return Objects.toString(id);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int hashCode() {
 		return id.hashCode();
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean equals(Object obj) {
 		if (obj instanceof StringEx) {
 			return id.equals(((StringEx) obj).id);
@@ -62,6 +76,7 @@ public abstract class StringEx implements Serializable,
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void writeToBuffer(Buffer buffer) {
 		byte[] bytes = id.getBytes();
 		buffer.appendInt(bytes.length);
@@ -69,6 +84,7 @@ public abstract class StringEx implements Serializable,
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int readFromBuffer(int pos, Buffer buffer) {
 		int length = buffer.getInt(pos);
 		final int start = pos + 4;
