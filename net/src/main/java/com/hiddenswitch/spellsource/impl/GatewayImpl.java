@@ -37,6 +37,7 @@ import java.util.Map;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.fiberHandler;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -47,7 +48,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway {
 	static Logger logger = LoggerFactory.getLogger(GatewayImpl.class);
-	protected Map<UserId, Boolean> pipes;
+	private SuspendableMap<UserId, Boolean> pipes;
 
 	@Override
 	@Suspendable
@@ -89,7 +90,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 						final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
 						final Pump pump1 = Pump.pump(socket, publisher).start();
 						final Pump pump2 = Pump.pump(consumer.bodyStream(), socket).start();
-						socket.closeHandler(disconnected -> {
+						socket.closeHandler(fiberHandler(disconnected -> {
 							try {
 								publisher.close();
 							} catch (Throwable ignored) {
@@ -107,7 +108,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 							} catch (Throwable ignored) {
 							}
 							pipes.remove(new UserId(userId));
-						});
+						}));
 					}
 
 				}));

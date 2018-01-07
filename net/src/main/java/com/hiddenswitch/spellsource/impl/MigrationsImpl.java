@@ -62,9 +62,8 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 			}
 		}
 
-		if (noInstancesYet()) {
-			registration = Rpc.register(this, Migrations.class, vertx.eventBus());
-		}
+
+		registration = Rpc.register(this, Migrations.class, vertx.eventBus());
 	}
 
 	@Override
@@ -73,7 +72,6 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 
 		if (registration != null) {
 			Rpc.unregister(registration);
-			freeSingleton();
 		}
 	}
 

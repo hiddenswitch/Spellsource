@@ -26,13 +26,14 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	private RpcClient<Logic> logic;
 	private RpcClient<Bots> bots;
 	private Scheduler scheduler;
-	private Map<UserId, InvocationId> locks;
-	private Map<UserId, QueueEntry> queue;
+	private SuspendableMap<UserId, InvocationId> locks;
+	private SuspendableMap<UserId, QueueEntry> queue;
 	private Map<UserId, TimerId> timers;
-	private Map<GameId, CreateGameSessionResponse> connections;
+	private SuspendableMap<GameId, CreateGameSessionResponse> connections;
 	private Registration registration;
 
 	@Override
+	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
 
@@ -85,7 +86,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 						.withAttributes(startGameResponse.getPregamePlayerConfiguration2().getAttributes()))
 				.withGameId(gameId);
 		CreateGameSessionResponse createGameSessionResponse = games.sync().createGameSession(createGameSessionRequest);
-		final GameId finalGameId = new GameId(createGameSessionResponse.getGameId());
+		final GameId finalGameId = new GameId(createGameSessionResponse.gameId);
 		final UserId key1 = new UserId(userId1);
 		final UserId key2 = new UserId(userId2);
 		queue.replace(key1, QueueEntry.ready(finalGameId, new DeckId(deckId1)));
@@ -105,7 +106,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	@Suspendable
 	public MatchmakingResponse matchmakeAndJoin(MatchmakingRequest matchmakingRequest) throws SuspendExecution, InterruptedException {
-		final InvocationId invocationId = new InvocationId();
+		final InvocationId invocationId = InvocationId.create();
 		RuntimeException ex = null;
 
 		final UserId userId = new UserId(matchmakingRequest.getUserId());
@@ -137,7 +138,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 					// We already have a game
 					logger.debug("matchmakeAndJoin: User " + userId + " already has a game with gameId " + status);
-					response = MatchmakingResponse.ready(status.getGameId().toString());
+					response = MatchmakingResponse.ready(status.gameId.toString());
 				}
 				logger.debug("matchmakeAndJoin: User " + userId + " is unlocked by the refresh path.");
 				return response;
@@ -177,10 +178,10 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 						continue;
 					}
 
-					final GameId gameId = new GameId();
+					final GameId gameId = GameId.create();
 					logger.debug("matchmakeAndJoin: Matching users " + otherUserId + " and " + userId + " into gameId " + gameId);
 
-					final DeckId otherDeckId = entry.getValue().getDeckId();
+					final DeckId otherDeckId = entry.getValue().deckId;
 
 					MatchCreateResponse createMatchResponse = createMatch(new MatchCreateRequest()
 							.withDeckId1(deckId)
@@ -191,7 +192,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 					CreateGameSessionResponse createGameSessionResponse = createMatchResponse.getCreateGameSessionResponse();
 
-					if (createGameSessionResponse.isPending()) {
+					if (createGameSessionResponse.pending) {
 						logger.debug("matchmakeAndJoin: Retrying createMatch... ");
 						int i = 0;
 						final int retries = 4;
@@ -201,7 +202,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 							logger.debug("matchmakeAndJoin: Checking if the Games service has created a game for gameId " + gameId);
 							createGameSessionResponse = connections.get(gameId);
-							if (!createGameSessionResponse.isPending()) {
+							if (!createGameSessionResponse.pending) {
 								break;
 							}
 						}
@@ -256,8 +257,8 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		logger.debug("getCurrentMatch: Retrieving information for userId " + request.getUserId());
 		final QueueEntry queueEntry = queue.get(new UserId(request.getUserId()));
 		if (queueEntry != null) {
-			logger.debug("getCurrentMatch: User " + request.getUserId() + " has match " + queueEntry.getGameId());
-			return new CurrentMatchResponse(queueEntry.getGameId().toString());
+			logger.debug("getCurrentMatch: User " + request.getUserId() + " has match " + queueEntry.gameId);
+			return new CurrentMatchResponse(queueEntry.gameId.toString());
 		} else {
 			logger.debug("getCurrentMatch: User " + request.getUserId() + " does not have match.");
 			return new CurrentMatchResponse(null);
@@ -272,7 +273,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			throw new RuntimeException("Failed to expire game because users " + String.join(", ", request.users.stream().map(UserId::toString).collect(Collectors.toList())) + " had no queue entries");
 		}
 
-		List<DeckId> decks = request.users.stream().map(queue::remove).map(QueueEntry::getDeckId).collect(Collectors.toList());
+		List<DeckId> decks = request.users.stream().map(queue::remove).map(queueEntry -> queueEntry.deckId).collect(Collectors.toList());
 		logger.debug("expireOrEndMatch: Calling Logic::endGame");
 		// End the game in alliance mode
 		logic.sync().endGame(new EndGameRequest()

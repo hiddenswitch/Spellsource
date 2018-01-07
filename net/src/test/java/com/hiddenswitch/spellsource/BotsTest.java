@@ -2,17 +2,17 @@ package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.impl.BotsImpl;
-import com.hiddenswitch.spellsource.impl.GamesImpl;
+import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
 import com.hiddenswitch.spellsource.impl.ServiceTest;
 import com.hiddenswitch.spellsource.models.MulliganRequest;
 import com.hiddenswitch.spellsource.models.MulliganResponse;
 import com.hiddenswitch.spellsource.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.models.RequestActionResponse;
+import com.hiddenswitch.spellsource.util.DebugContext;
 import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.RpcClient;
-import com.hiddenswitch.spellsource.util.TwoClients;
+import com.hiddenswitch.spellsource.util.TestBase;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -24,9 +24,6 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import com.hiddenswitch.spellsource.util.DebugContext;
-import com.hiddenswitch.spellsource.util.TestBase;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,14 +31,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
-import static net.demilich.metastone.game.GameContext.PLAYER_1;
-
 /**
  * Created by bberman on 12/7/16.
  */
 @RunWith(VertxUnitRunner.class)
 public class BotsTest extends ServiceTest<BotsImpl> {
-	private GamesImpl games;
+	private ClusteredGamesImpl games;
 
 	@Test
 	public void testMulligan(TestContext context) throws Exception {
@@ -101,35 +96,9 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 		});
 	}
 
-	@Test
-	@Ignore
-	public void testPlaysGameAgainstAI(TestContext context) throws CardParseException, IOException, URISyntaxException, SuspendExecution {
-		setLoggingLevel(Level.ERROR);
-		wrapSync(context, this::playAgainstAI);
-	}
-
-	private void playAgainstAI() throws SuspendExecution, InterruptedException {
-		TwoClients twoClients = null;
-
-		try {
-			twoClients = new TwoClients().invoke(games, true);
-		} catch (IOException | URISyntaxException | CardParseException e) {
-			throw new AssertionError();
-		}
-
-		twoClients.play(PLAYER_1);
-		float time = 0f;
-		while (time < 120f && !twoClients.gameDecided()) {
-			Strand.sleep(1000);
-			time += 1.0f;
-		}
-		twoClients.assertGameOver();
-
-	}
-
 	@Override
 	public void deployServices(Vertx vertx, Handler<AsyncResult<BotsImpl>> done) {
-		games = new GamesImpl();
+		games = new ClusteredGamesImpl();
 		BotsImpl instance = new BotsImpl();
 
 		vertx.deployVerticle(games, then1 -> {

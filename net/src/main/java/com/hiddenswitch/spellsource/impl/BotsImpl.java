@@ -35,7 +35,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	private RpcClient<Matchmaking> matchmaking;
 	private List<UserRecord> bots = new ArrayList<>();
 	private Queue<UserRecord> unusedBots = new ConcurrentLinkedQueue<>();
-	private Map<GameId, UserId> botGames;
+	private SuspendableMap<GameId, UserId> botGames;
 	private Supplier<? extends Behaviour> botBehaviour = GameStateValueBehaviour::new;
 	private Registration registration;
 
@@ -100,12 +100,11 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 		// Retrieve a bot and use it to play against the opponent
 		BotsStartGameResponse response = new BotsStartGameResponse();
 		UserRecord bot = pollBot();
-		GameId gameId = new GameId();
+		GameId gameId = GameId.create();
 		String botDeckId = getRandomDeck(bot);
 		botGames.put(gameId, new UserId(bot.getId()));
 		MatchCreateResponse matchCreateResponse = matchmaking.sync().createMatch(MatchCreateRequest.botMatch(gameId, new UserId(request.getUserId()), new UserId(bot.getId()), new DeckId(request.getDeckId()), new DeckId(botDeckId)));
-		response.setPlayerConnection(matchCreateResponse.getCreateGameSessionResponse().getConfigurationForPlayer1());
-		response.setGameId(matchCreateResponse.getCreateGameSessionResponse().getGameId());
+		response.setGameId(matchCreateResponse.getCreateGameSessionResponse().gameId);
 		response.setBotUserId(bot.getId());
 		response.setBotDeckId(botDeckId);
 		return response;

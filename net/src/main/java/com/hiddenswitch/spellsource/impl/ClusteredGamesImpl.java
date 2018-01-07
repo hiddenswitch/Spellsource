@@ -13,6 +13,7 @@ import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.Rpc;
+import com.hiddenswitch.spellsource.util.SuspendableMap;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
@@ -26,7 +27,7 @@ import java.util.*;
 public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> implements Games {
 	public static final String READER_ADDRESS_PREFIX = "ClusteredGamesImpl/";
 	private Registration registration;
-	private Map<GameId, CreateGameSessionResponse> connections;
+	private SuspendableMap<GameId, CreateGameSessionResponse> connections;
 	private Map<GameId, GameSession> sessions = new HashMap<>();
 	private Map<GameId, List<Runnable>> pipeClosers = new HashMap<>();
 	private Map<GameId, ActivityMonitor> gameActivityMonitors = new HashMap<>();
@@ -49,7 +50,8 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		}
 
 		final GameId key = new GameId(gameId);
-		CreateGameSessionResponse connection = connections.putIfAbsent(key, CreateGameSessionResponse.pending(deploymentID()));
+		final CreateGameSessionResponse pending = CreateGameSessionResponse.pending(deploymentID());
+		CreateGameSessionResponse connection = connections.putIfAbsent(key, pending);
 		// If we're the ones deploying this match...
 		if (connection == null) {
 			GameSession session = new GameSessionImpl(Gateway.getHostAddress(),
@@ -72,7 +74,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			pipeClosers.put(key, closers);
 			gameActivityMonitors.put(key, activityMonitor);
 			final CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), session);
-			connections.put(key, response);
+			connections.replace(key, response);
 			sessions.put(key, session);
 			return response;
 		} else {
@@ -112,21 +114,23 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 	private void kill(String gameId) throws InterruptedException, SuspendExecution {
 		logger.debug("Calling kill for gameId " + gameId);
 		final GameId key = new GameId(gameId);
-		GameSession session = sessions.get(key);
+		GameSession session = sessions.remove(key);
+
+		try {
+			final MatchExpireRequest request = new MatchExpireRequest(gameId);
+			request.users = session.getUserIds();
+			Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(request);
+		} catch (VertxException noHandler) {
+			// TODO: What would be the most sensible solution here?
+			logger.warn("kill: Failed to expire or end match for gameId " + gameId);
+		}
+
 		if (session != null) {
 			session.kill();
 			sessions.remove(key);
 		} else {
 			logger.error("kill: GameSession not found for gameId " + gameId + " but kill was requested.");
-		}
-
-		try {
-			final MatchExpireRequest request = new MatchExpireRequest(gameId);
-			request.users = Arrays.asList(new UserId(session.getConfigurationForPlayer1().getUserId()), new UserId(session.getConfigurationForPlayer2().getUserId()));
-			Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(request);
-		} catch (VertxException noHandler) {
-			// TODO: What would be the most sensible solution here?
-			logger.warn("kill: Failed to expire or end match for gameId " + gameId);
+			return;
 		}
 
 		if (gameActivityMonitors.containsKey(key)) {

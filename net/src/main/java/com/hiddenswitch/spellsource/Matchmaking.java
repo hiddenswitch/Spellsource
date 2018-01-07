@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.QueueEntry;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.SharedData;
+import com.hiddenswitch.spellsource.util.SuspendableMap;
 import io.vertx.core.Vertx;
 
 import java.util.Map;
@@ -76,11 +77,11 @@ public interface Matchmaking {
 	 */
 	MatchCreateResponse createMatch(MatchCreateRequest request) throws SuspendExecution, InterruptedException;
 
-	static Map<UserId, QueueEntry> getQueue(Vertx vertx) {
+	static SuspendableMap<UserId, QueueEntry> getQueue(Vertx vertx) throws SuspendExecution {
 		return SharedData.getClusterWideMap("MatchmakingImpl/queue", vertx);
 	}
 
-	static Map<UserId, InvocationId> getLocks(Vertx vertx) {
+	static SuspendableMap<UserId, InvocationId> getLocks(Vertx vertx) throws SuspendExecution {
 		return SharedData.getClusterWideMap("MatchmakingImpl/locks", vertx);
 	}
 }

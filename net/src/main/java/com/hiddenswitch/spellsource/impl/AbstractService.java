@@ -2,26 +2,13 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.Games;
-import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
-import com.hiddenswitch.spellsource.models.CreateGameSessionResponse;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import com.hiddenswitch.spellsource.util.SharedData;
-import com.hiddenswitch.spellsource.util.SuspendableMap;
-import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.core.streams.Pump;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.sync.SyncVerticle;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.AuthHandler;
 
 import java.util.Map;
 
@@ -71,35 +58,5 @@ public abstract class AbstractService<T extends AbstractService<T>> extends Sync
 		T service = (T) this;
 		Class<?> thisClass = ((T) this).getClass();
 		return new LocalRpcClient<>(thisClass, service);
-	}
-
-	@Suspendable
-	@SuppressWarnings("unchecked")
-	public boolean noInstancesYet() {
-		// Check if we already have a matchmaking service online. If so, we shouldn't start.
-		Class<?> thisClass = ((T) this).getClass();
-		if (vertx.isClustered()) {
-			Map<String, Boolean> matchmakingMap = SharedData
-					.getClusterWideMap(thisClass.getCanonicalName(), vertx);
-
-			if (null != matchmakingMap.putIfAbsent("singleton", true)) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	@Suspendable
-	@SuppressWarnings("unchecked")
-	public void freeSingleton() {
-		if (vertx.isClustered()) {
-			Class<?> thisClass = ((T) this).getClass();
-
-			Map<String, Boolean> matchmakingMap = SharedData
-					.getClusterWideMap(thisClass.getCanonicalName(), vertx);
-
-			matchmakingMap.remove("singleton");
-		}
 	}
 }
