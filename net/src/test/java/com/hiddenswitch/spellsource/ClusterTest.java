@@ -132,38 +132,10 @@ public class ClusterTest {
 	@Before
 	public void startServices() throws Exception {
 		verticies.clear();
-		final Properties properties = new Properties();
-		properties.setProperty("hazelcast.shutdownhook.enabled", "false");
-		properties.setProperty("hazelcast.logging.type", "slf4j");
 		// From http://vertx.io/docs/vertx-hazelcast/java/
 		for (int i = 0; i < 2; i++) {
-			hazelcastInstances.add(Hazelcast.newHazelcastInstance(new Config()
-					.setClassLoader(getClass().getClassLoader())
-					.setNetworkConfig(new NetworkConfig()
-							.setPort(5701 + i)
-							.setJoin(new JoinConfig()
-									.setMulticastConfig(new MulticastConfig()
-											.setEnabled(false))
-									.setTcpIpConfig(new TcpIpConfig()
-											.setEnabled(true)
-											.setMembers(Arrays.asList("localhost:5701", "localhost:5702")))))
-					.setProperties(properties)
-					.addMultiMapConfig(new MultiMapConfig()
-							.setBackupCount(1)
-							.setName("__vertx.subs"))
-					.addMapConfig(new MapConfig()
-							.setName("__vertx.haInfo")
-							.setTimeToLiveSeconds(0)
-							.setMaxIdleSeconds(0)
-							.setEvictionPolicy(EvictionPolicy.NONE)
-							.setMaxSizeConfig(new MaxSizeConfig().setMaxSizePolicy(MaxSizeConfig.MaxSizePolicy.PER_NODE).setSize(0))
-							.setEvictionPercentage(25)
-							.setMergePolicy("com.hazelcast.map.merge.LatestUpdateMapMergePolicy"))
-					.addSemaphoreConfig(new SemaphoreConfig()
-							.setName("__vertx.*")
-							.setInitialPermits(1))));
+			hazelcastInstances.add(Hazelcast.newHazelcastInstance(Cluster.getConfig(5701 + i)));
 		}
-
 
 		Mongo.mongo().startEmbedded();
 		System.getProperties().put("mongo.url", "mongodb://localhost:27017");
