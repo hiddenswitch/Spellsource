@@ -6,6 +6,10 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class AndFilter extends EntityFilter {
 
+	public static AndFilter create() {
+		return new AndFilter(new FilterDesc(FilterDesc.build(AndFilter.class)));
+	}
+
 	public AndFilter(FilterDesc desc) {
 		super(desc);
 	}

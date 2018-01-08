@@ -637,6 +637,11 @@ public enum Attribute {
 	 */
 	CAST_FROM_HAND_OR_DECK,
 	/**
+	 * An {@link EntityReference} that, when set, indicates which entity this copied, if the entity copied with {@link
+	 * Entity#getCopy}.
+	 */
+	COPIED_FROM,
+	/**
 	 * Overrides the name of the {@link Entity}
 	 */
 	NAME,

@@ -5,7 +5,14 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 
-public class CatalogueSource extends CardSource {
+import java.util.Map;
+
+public class CatalogueSource extends CardSource implements HasCardCreationSideEffects, HasWeights {
+
+	public static CatalogueSource create() {
+		Map<SourceArg, Object> args = SourceDesc.build(CatalogueSource.class);
+		return new CatalogueSource(new SourceDesc(args));
+	}
 
 	public CatalogueSource(SourceDesc desc) {
 		super(desc);

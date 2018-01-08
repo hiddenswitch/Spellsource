@@ -57,11 +57,8 @@ public class Minion extends Actor {
 		return this.getId() == rhs.getId();
 	}
 
+	@Override
 	public Minion getCopy() {
-		Minion clone = this.clone();
-		clone.setEntityLocation(EntityLocation.UNASSIGNED);
-		clone.setId(IdFactory.UNASSIGNED);
-		clone.setOwner(IdFactory.UNASSIGNED);
-		return clone;
+		return (Minion) super.getCopy();
 	}
 }

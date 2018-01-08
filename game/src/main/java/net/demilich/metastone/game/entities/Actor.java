@@ -3,6 +3,8 @@ package net.demilich.metastone.game.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
@@ -284,5 +286,15 @@ public abstract class Actor extends Entity {
 		}
 
 		return null;
+	}
+
+	@Override
+	public Actor getCopy() {
+		Actor clone = this.clone();
+		clone.setEntityLocation(EntityLocation.UNASSIGNED);
+		clone.setId(IdFactory.UNASSIGNED);
+		clone.setOwner(IdFactory.UNASSIGNED);
+		clone.getAttributes().put(Attribute.COPIED_FROM, this.getReference());
+		return clone;
 	}
 }

@@ -18,7 +18,7 @@
     },
     "spells": [
       {
-        "class": "DiscoverFilteredCardSpell",
+        "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell",
           "targetPlayer": "SELF"
@@ -32,7 +32,7 @@
         }
       },
       {
-        "class": "DiscoverFilteredCardSpell",
+        "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell",
           "targetPlayer": "SELF"

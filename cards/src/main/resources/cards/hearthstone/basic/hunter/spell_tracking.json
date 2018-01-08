@@ -7,9 +7,16 @@
   "description": "Look at the top three cards of your deck. Draw one and discard the others.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverDrawSpell",
-    "spell": {
+    "class": "DiscoverSpell",
+    "cardSource": {
+      "class": "DeckSource"
+    },
+    "exclusive": true,
+    "spell1": {
       "class": "ReceiveCardSpell"
+    },
+    "spell2": {
+      "class": "RemoveCardSpell"
     }
   },
   "collectible": true,

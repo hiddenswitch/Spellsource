@@ -19,7 +19,7 @@
         }
       },
       "spell": {
-        "class": "DiscoverCardSpell",
+        "class": "DiscoverSpell",
         "spell": {
           "class": "RecastSpell"
         },

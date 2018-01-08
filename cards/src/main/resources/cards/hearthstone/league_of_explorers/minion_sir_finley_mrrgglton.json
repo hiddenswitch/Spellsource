@@ -11,7 +11,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverCardSpell",
+      "class": "DiscoverSpell",
       "spell": {
         "class": "ChangeHeroPowerSpell",
         "targetPlayer": "SELF"

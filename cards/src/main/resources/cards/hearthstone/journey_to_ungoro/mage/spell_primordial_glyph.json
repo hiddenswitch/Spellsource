@@ -7,9 +7,9 @@
   "description": "Discover a spell. Reduce its Cost by (2).",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverRandomCardSpell",
+    "class": "DiscoverSpell",
     "spell": {
-      "class": "ReceiveCardAndDoSomethingSpell",
+      "class": "ReceiveCardSpell",
       "spell": {
         "class": "CardCostModifierSpell",
         "cardCostModifier": {
@@ -26,7 +26,7 @@
       "filters": [
         {
           "class": "CardFilter",
-          "heroClass": "BLUE",
+          "heroClass": "SELF",
           "cardType": "SPELL"
         },
         {

@@ -40,10 +40,7 @@ public class DiscoverAction extends GameAction {
 	}
 
 	private SpellDesc spell;
-	private Condition condition;
 	private Card card;
-	private String name = "";
-	private String description = "";
 
 	private DiscoverAction() {
 		setActionType(ActionType.DISCOVER);
@@ -66,30 +63,22 @@ public class DiscoverAction extends GameAction {
 	 */
 	@Override
 	public final boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
-		if (!super.canBeExecutedOn(context, player, entity)) {
-			return false;
-		}
-		if (getSourceReference().getId() == entity.getId()) {
-			return false;
-		}
-		if (getEntityFilter() == null) {
-			return true;
-		}
-		return getEntityFilter().matches(context, player, entity, getSource(context));
+		throw new UnsupportedOperationException("Discover actions should never be unrolled.");
 	}
 
 	@Override
 	public DiscoverAction clone() {
 		DiscoverAction clone = DiscoverAction.createDiscover(getSpell().clone());
 		clone.setSource(getSourceReference());
+		clone.setCard(card);
 		return clone;
 	}
 
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		EntityReference target = getSpell().hasPredefinedTarget() ? getSpell().getTarget() : getTargetReference();
-		context.getLogic().castSpell(playerId, getSpell(), getSourceReference(), target, false);
+		// Discover actions should never be executed, we only use them nowadays to store a card
+		throw new UnsupportedOperationException("Discover actions should never be executed.");
 	}
 
 	/**
@@ -126,19 +115,6 @@ public class DiscoverAction extends GameAction {
 		}
 	}
 
-	/**
-	 * Unused.
-	 *
-	 * @return An entity filter.
-	 */
-	public EntityFilter getEntityFilter() {
-		return spell.getEntityFilter();
-	}
-
-	public String getName() {
-		return name;
-	}
-
 	public SpellDesc getSpell() {
 		return spell;
 	}
@@ -147,21 +123,9 @@ public class DiscoverAction extends GameAction {
 		this.card = card;
 	}
 
-	public void setCondition(Condition condition) {
-		this.condition = condition;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	@Override
 	public String toString() {
-		return String.format("[%s '%s' %s]", getActionType(), getSpell().getSpellClass().getSimpleName(), "Test");
+		return String.format("[%s '%s' %s]", getActionType(), getSpell().getSpellClass().getSimpleName(), card.getCardId());
 	}
 
 	@Override
@@ -169,7 +133,6 @@ public class DiscoverAction extends GameAction {
 		return new HashCodeBuilder()
 				.appendSuper(super.hashCode())
 				.append(spell)
-				.append(condition)
 				.append(card)
 				.toHashCode();
 	}

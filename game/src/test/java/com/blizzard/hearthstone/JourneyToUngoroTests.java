@@ -673,7 +673,7 @@ public class JourneyToUngoroTests extends TestBase {
 			Assert.assertEquals(copiedFireball.getCardId(), "spell_fireball");
 			SpellCard graveyardFireball = (SpellCard) opponent.getGraveyard().get(opponent.getGraveyard().size() - 1);
 			Assert.assertEquals(graveyardFireball.getCardId(), "spell_fireball");
-			Assert.assertNotEquals(copiedFireball.getId(), graveyardFireball);
+			Assert.assertNotEquals(copiedFireball.getId(), graveyardFireball.getId());
 			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, copiedFireball), 0);
 		});
 	}
@@ -696,6 +696,7 @@ public class JourneyToUngoroTests extends TestBase {
 					MinionCard original = (MinionCard) action[0].getCard();
 					originalMinion[0] = original.summon();
 					handSize[0] = player.getHand().size();
+					return action[0];
 				}
 				first = false;
 				return super.requestAction(context, player, validActions);

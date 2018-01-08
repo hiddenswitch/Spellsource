@@ -2,16 +2,20 @@ package net.demilich.metastone.game.spells.desc;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
-import net.demilich.metastone.game.spells.desc.filter.CardFilter;
-import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.*;
@@ -150,6 +154,21 @@ public class SpellDesc extends Desc<SpellArg> {
 	 * @return A new {@link SpellDesc}.
 	 */
 	public static SpellDesc join(SpellDesc masterSpell, SpellDesc... childSpells) {
+		// Remove nulls
+		childSpells = Arrays.stream(childSpells).filter(Objects::nonNull).toArray(SpellDesc[]::new);
+
+		if (masterSpell == null) {
+			if (childSpells == null || childSpells.length == 0) {
+				return null;
+			} else if (childSpells.length == 1) {
+				return childSpells[0].clone();
+			} else {
+				return SpellDesc.join(childSpells[0], Arrays.copyOfRange(childSpells, 1, childSpells.length));
+			}
+		} else if (childSpells == null || childSpells.length == 0) {
+			return masterSpell.clone();
+		}
+
 		SpellDesc[] descs = new SpellDesc[childSpells.length + 1];
 		descs[0] = masterSpell;
 		System.arraycopy(childSpells, 0, descs, 1, childSpells.length);
@@ -179,12 +198,12 @@ public class SpellDesc extends Desc<SpellArg> {
 		CardSource source = getCardSource();
 		final EntityFilter filter;
 		if (source == null) {
-			source = CardSource.all();
+			source = CatalogueSource.create();
 		}
 		if (containsKey(SpellArg.CARD_FILTER)) {
 			filter = getCardFilter();
 		} else {
-			filter = CardFilter.all();
+			filter = AndFilter.create();
 		}
 		return source.getCards(context, player).filtered(c -> filter.matches(context, player, c, host));
 	}

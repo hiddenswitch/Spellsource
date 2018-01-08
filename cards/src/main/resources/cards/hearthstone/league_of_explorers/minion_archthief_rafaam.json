@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverCardSpell",
+      "class": "DiscoverSpell",
       "spell": {
         "class": "ReceiveCardSpell"
       },

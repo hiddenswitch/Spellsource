@@ -22,7 +22,7 @@
         }
       },
       {
-        "class": "ReceiveCardAndDoSomethingSpell",
+        "class": "ReceiveCardSpell",
         "spell": {
           "class": "AddEnchantmentSpell",
           "target": "EVENT_CARD",

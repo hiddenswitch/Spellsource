@@ -7,9 +7,9 @@
   "description": "Discover a minion. Give it +1/+1.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverRandomCardSpell",
+    "class": "DiscoverSpell",
     "spell": {
-      "class": "ReceiveCardAndDoSomethingSpell",
+      "class": "ReceiveCardSpell",
       "spell": {
         "class": "BuffSpell",
         "value": 1

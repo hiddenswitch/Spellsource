@@ -10,9 +10,9 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverRandomCardSpell",
+      "class": "DiscoverSpell",
       "spell": {
-        "class": "ReceiveCardAndDoSomethingSpell",
+        "class": "ReceiveCardSpell",
         "spell": {
           "class": "HealSpell",
           "target": "FRIENDLY_HERO",

@@ -292,6 +292,11 @@ public class Player extends Entity implements Serializable {
 		quests.setPlayer(id);
 	}
 
+	@Override
+	public Player getCopy() {
+		return this.clone();
+	}
+
 	public EntityZone getZone(Zones zone) {
 		switch (zone) {
 			case PLAYER:

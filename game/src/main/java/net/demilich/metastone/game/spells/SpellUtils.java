@@ -206,7 +206,7 @@ public class SpellUtils {
 	}
 
 	@Suspendable
-	private static DiscoverAction postDiscover(GameContext context, Player player, Iterable<? extends Card> cards, List<GameAction> discoverActions) {
+	public static DiscoverAction postDiscover(GameContext context, Player player, Iterable<? extends Card> cards, List<GameAction> discoverActions) {
 		if (discoverActions.size() == 0) {
 			return null;
 		}
@@ -217,6 +217,8 @@ public class SpellUtils {
 		} else {
 			discoverAction = (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
 		}
+
+		// We do not perform the game action here
 
 		// Move the cards back
 		for (Card card : cards) {
@@ -278,8 +280,6 @@ public class SpellUtils {
 			DiscoverAction discover = DiscoverAction.createDiscover(spell);
 			discover.setId(i);
 			discover.setCard(card);
-			discover.setName(name);
-			discover.setDescription(description);
 			discoverActions.add(discover);
 		}
 

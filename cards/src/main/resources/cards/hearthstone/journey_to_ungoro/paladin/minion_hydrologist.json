@@ -11,16 +11,13 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverRandomCardSpell",
+      "class": "DiscoverSpell",
       "spell": {
         "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"
       },
-      "cardFilter": {
-        "class": "AttributeFilter",
-        "heroClass": "GOLD",
-        "attribute": "SECRET",
-        "operation": "HAS"
+      "cardSource": {
+        "class": "SecretSource"
       }
     }
   },

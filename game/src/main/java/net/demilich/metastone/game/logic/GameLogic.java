@@ -39,6 +39,7 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.game.shared.utils.MathUtils;
 import net.demilich.metastone.game.utils.Attribute;
+import org.apache.commons.collections4.Bag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -2439,11 +2440,42 @@ public class GameLogic implements Cloneable, Serializable {
 		return options.get(getRandom().nextInt(options.size()));
 	}
 
+	/**
+	 * Choose and remove a random item from a list of options
+	 *
+	 * @param options A list of items / options  to choose from
+	 * @param <T>     The item type
+	 * @return An item returned from the options, or {@code null} if there were no options.
+	 */
 	public <T> T removeRandom(List<T> options) {
 		if (options.size() == 0) {
 			return null;
 		}
 		return options.remove(getRandom().nextInt(options.size()));
+	}
+
+	/**
+	 * Choose and remove a random item from a weighted list of options
+	 *
+	 * @param weightedOptions A map of weights to items to choose from
+	 * @param <T>             The item type
+	 * @return An item returned from the weighted options, or {@code null} if there were no options.
+	 */
+	public <T> T removeRandom(Bag<T> weightedOptions) {
+		if (weightedOptions.size() == 0) {
+			return null;
+		}
+
+		// Still faster than creating and removing copies from a list
+		int index = getRandom().nextInt(weightedOptions.size());
+		Iterator<T> iterator = weightedOptions.iterator();
+		while (index > 0) {
+			iterator.next();
+			index--;
+		}
+		T item = iterator.next();
+		weightedOptions.remove(item);
+		return item;
 	}
 
 	/**

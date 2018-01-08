@@ -101,8 +101,18 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 	}
 
 	@Override
+	public boolean remove(Object o) {
+		return cards.remove(o);
+	}
+
+	@Override
 	public boolean remove(Card card) {
 		return cards.remove(card);
+	}
+
+	@Override
+	public Card remove(int index) {
+		return cards.remove(index);
 	}
 
 	@Override

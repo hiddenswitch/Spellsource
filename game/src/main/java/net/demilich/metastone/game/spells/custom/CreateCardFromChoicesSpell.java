@@ -58,9 +58,9 @@ public class CreateCardFromChoicesSpell extends Spell {
 					.forEach(options[i]::addCard);
 		}
 
-		SpellDesc nullSpell = new SpellDesc(SpellDesc.build(NullSpell.class));
+		SpellDesc nullSpell = NullSpell.create();
 		// Eyeroll emoji.
-		nullSpell.put(SpellArg.SPELL, new SpellDesc(SpellDesc.build(NullSpell.class)));
+		nullSpell.put(SpellArg.SPELL, NullSpell.create());
 
 		DiscoverAction[] chosen = new DiscoverAction[2];
 		for (int i = 0; i < 2; i++) {
