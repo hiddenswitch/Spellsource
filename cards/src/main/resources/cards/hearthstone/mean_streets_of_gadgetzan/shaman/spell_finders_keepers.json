@@ -7,7 +7,7 @@
   "description": "Discover a card with Overload. Overload: (1)",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverRandomCardSpell",
+    "class": "DiscoverSpell",
     "spell": {
       "class": "ReceiveCardSpell",
       "targetPlayer": "SELF"

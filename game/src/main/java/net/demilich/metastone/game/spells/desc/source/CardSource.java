@@ -7,9 +7,9 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public abstract class CardSource implements Serializable {
-
 	protected final SourceDesc desc;
 
 	public CardSource(SourceDesc desc) {
@@ -57,7 +57,7 @@ public abstract class CardSource implements Serializable {
 
 	protected abstract CardList match(GameContext context, Player player);
 
-	public static CardSource all() {
-		return new CatalogueSource(new SourceDesc(SourceDesc.build(CatalogueSource.class)));
+	public TargetPlayer getTargetPlayer() {
+		return (TargetPlayer) desc.getOrDefault(SourceArg.TARGET_PLAYER, TargetPlayer.SELF);
 	}
 }

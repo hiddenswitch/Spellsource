@@ -10,29 +10,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
-public class DiscoverDrawSpell extends Spell {
-
-	@Override
-	@Suspendable
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardList cards = new CardArrayList();
-
-		if (player.getDeck().isEmpty()) {
-			return;
-		}
-
-		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
-		for (int i = 0; i < count; i++) {
-			if (!player.getDeck().isEmpty()) {
-				Card card = player.getDeck().peekFirst();
-				context.getLogic().removeCardFromDeck(player.getId(), card);
-				cards.addCard(card);
-			}
-		}
-
-		if (!cards.isEmpty()) {
-			SpellUtils.castChildSpell(context, player, SpellUtils.discoverCard(context, player, desc, cards).getSpell(), source, target);
-		}
-	}
-
+@Deprecated
+public class DiscoverDrawSpell extends DiscoverSpell {
 }

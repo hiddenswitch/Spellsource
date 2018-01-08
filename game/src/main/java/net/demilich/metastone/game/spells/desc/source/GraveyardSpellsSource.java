@@ -27,7 +27,7 @@ public class GraveyardSpellsSource extends CardSource implements Serializable {
 				.filter(Objects::nonNull)
 				.filter(c -> c.getCardType() == CardType.SPELL)
 				.forEach(graveyardSpells::addCard);
-		return graveyardSpells.getCopy();
+		return graveyardSpells;
 	}
 
 }

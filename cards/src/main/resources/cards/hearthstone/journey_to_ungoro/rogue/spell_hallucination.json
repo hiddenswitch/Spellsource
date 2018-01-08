@@ -7,7 +7,7 @@
   "description": "Discover a card from your opponent's class'.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverRandomCardSpell",
+    "class": "DiscoverSpell",
     "spell": {
       "class": "ReceiveCardSpell",
       "targetPlayer": "SELF"
@@ -15,6 +15,10 @@
     "cardFilter": {
       "class": "CardFilter",
       "heroClass": "OPPONENT"
+    },
+    "cardSource": {
+      "class": "CatalogueSource",
+      "targetPlayer": "OPPONENT"
     }
   },
   "collectible": true,

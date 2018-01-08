@@ -18,7 +18,7 @@
     },
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverFilteredCardSpell",
+      "class": "DiscoverSpell",
       "spell": {
         "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"

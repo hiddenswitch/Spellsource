@@ -187,6 +187,11 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
+	public Enchantment getCopy() {
+		return this.clone();
+	}
+
+	@Override
 	public String toString() {
 		return "[Enchantment primaryTrigger=" + primaryTrigger + ", secondaryTrigger=" + secondaryTrigger + ", spell=" + getSpell()
 				+ ", hostReference=" + hostReference + ", oneTurn=" + oneTurn + ", expired=" + expired + ", persistentOwner="

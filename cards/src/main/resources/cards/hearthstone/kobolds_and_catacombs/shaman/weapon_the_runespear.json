@@ -15,7 +15,7 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "DiscoverRandomCardSpell",
+      "class": "DiscoverSpell",
       "spell": {
         "class": "RandomCardTargetSpell"
       },

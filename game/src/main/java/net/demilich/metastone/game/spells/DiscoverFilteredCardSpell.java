@@ -16,6 +16,10 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * This class is currently only used for tri-class ard discoveries.
+ */
+@Deprecated
 public class DiscoverFilteredCardSpell extends Spell {
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(DiscoverFilteredCardSpell.class);

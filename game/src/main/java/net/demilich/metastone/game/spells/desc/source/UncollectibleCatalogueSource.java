@@ -5,7 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 
-public class UncollectibleCatalogueSource extends CardSource {
+public class UncollectibleCatalogueSource extends CardSource implements HasCardCreationSideEffects {
 
 	public UncollectibleCatalogueSource(SourceDesc desc) {
 		super(desc);

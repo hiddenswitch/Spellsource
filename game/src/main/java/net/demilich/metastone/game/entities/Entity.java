@@ -433,4 +433,10 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 				(String) getAttribute(Attribute.DESCRIPTION)
 				: (getSourceCard() != null ? getSourceCard().getDescription() : "");
 	}
+
+	public abstract Entity getCopy();
+
+	public EntityReference getCopySource() {
+		return (EntityReference) getAttributes().get(Attribute.COPIED_FROM);
+	}
 }

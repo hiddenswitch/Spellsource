@@ -221,6 +221,7 @@ public abstract class Card extends Entity {
 	 *
 	 * @return A copy of the card with no ID or owner (and therefore no location).
 	 */
+	@Override
 	public Card getCopy() {
 		Card copy = clone();
 		copy.setId(IdFactory.UNASSIGNED);
@@ -228,6 +229,9 @@ public abstract class Card extends Entity {
 		copy.getAttributes().remove(Attribute.ATTACK_BONUS);
 		copy.getAttributes().remove(Attribute.HP_BONUS);
 		copy.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
+		// Always use the origin copy
+		copy.getAttributes().put(Attribute.COPIED_FROM,
+				hasAttribute(Attribute.COPIED_FROM) ? getAttribute(Attribute.COPIED_FROM) : this.getReference());
 		copy.resetEntityLocations();
 		return copy;
 	}
@@ -309,6 +313,8 @@ public abstract class Card extends Entity {
 			}
 		} else if (heroClass == getHeroClass()) {
 			return true;
+		} else if (heroClass == HeroClass.INHERIT) {
+			return true;
 		}
 		return false;
 	}
@@ -365,22 +371,5 @@ public abstract class Card extends Entity {
 
 	public TriggerDesc[] getPassiveTriggers() {
 		return (TriggerDesc[]) getAttribute(Attribute.PASSIVE_TRIGGERS);
-	}
-
-	/**
-	 * Sets the passive triggers, or triggers that are active in the hand or as the hero power, on this {@link Card}
-	 * entity.
-	 *
-	 * @param passiveTriggers An array of {@link TriggerDesc} objects from which the triggers will eventually be created
-	 *                        when this card enters the {@link net.demilich.metastone.game.targeting.Zones#HAND} or
-	 *                        {@link net.demilich.metastone.game.targeting.Zones#HERO_POWER}.
-	 */
-	public void setPassiveTriggers(List<TriggerDesc> passiveTriggers) {
-		TriggerDesc[] triggers = new TriggerDesc[passiveTriggers.size()];
-		for (int i = 0; i < passiveTriggers.size(); i++) {
-			triggers[i] = passiveTriggers.get(i);
-		}
-
-		setAttribute(Attribute.PASSIVE_TRIGGERS, triggers);
 	}
 }

@@ -7,7 +7,7 @@
   "description": "Add a random minion to your hand. It costs 3 less Mana.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardAndDoSomethingSpell",
+    "class": "ReceiveCardSpell",
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "FRIENDLY_PLAYER",

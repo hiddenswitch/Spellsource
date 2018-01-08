@@ -19,7 +19,7 @@
         }
       },
       "spell": {
-        "class": "DiscoverRandomCardSpell",
+        "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell",
           "targetPlayer": "SELF"
