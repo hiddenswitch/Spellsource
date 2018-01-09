@@ -33,12 +33,11 @@ public class SessionWriter implements WriteStream<Buffer> {
 				Configuration.getDefaultApiClient().getJSON().deserialize(messageBuffer.toString(),
 						com.hiddenswitch.spellsource.client.models.ClientToServerMessage.class);
 
-		activityMonitor.activity();
-
 		switch (message.getMessageType()) {
 			case FIRST_MESSAGE:
 				EventBusWriter writer = new EventBusWriter(eventBus, userId, playerId);
 				writers.add(writer);
+				activityMonitor.activity();
 
 				if (session.isGameReady()) {
 					// TODO: Remove references to the old socket
@@ -52,6 +51,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 				if (session == null) {
 					throw new RuntimeException();
 				}
+				activityMonitor.activity();
 				final String messageId = message.getRepliesTo();
 				session.onActionReceived(messageId, message.getActionIndex());
 				break;
@@ -59,6 +59,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 				if (session == null) {
 					throw new RuntimeException();
 				}
+				activityMonitor.activity();
 				final String messageId2 = message.getRepliesTo();
 				session.onMulliganReceived(messageId2, message.getDiscardedCardIndices());
 				break;
@@ -72,6 +73,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 				if (session == null) {
 					break;
 				}
+				activityMonitor.activity();
 				if (null != message.getEntityTouch()) {
 					session.onTouch(playerId, message.getEntityTouch());
 				} else if (null != message.getEntityUntouch()) {
@@ -109,7 +111,6 @@ public class SessionWriter implements WriteStream<Buffer> {
 
 	@Override
 	public void end() {
-		session.kill();
 		writers.forEach(Writer::close);
 	}
 

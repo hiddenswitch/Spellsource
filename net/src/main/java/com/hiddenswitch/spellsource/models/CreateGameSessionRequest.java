@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.models;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.impl.server.PregamePlayerConfiguration;
 import net.demilich.metastone.game.spells.trigger.Trigger;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
@@ -94,5 +95,15 @@ public class CreateGameSessionRequest implements Serializable {
 	public CreateGameSessionRequest withCustomTriggers(final Trigger customTriggers) {
 		this.customTriggers = customTriggers;
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("gameId", gameId)
+				.append("pregame1", pregame1)
+				.append("pregame2", pregame2)
+				.append("customTrigger", customTriggers)
+				.toString();
 	}
 }

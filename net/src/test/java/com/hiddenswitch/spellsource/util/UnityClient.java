@@ -62,6 +62,7 @@ public class UnityClient {
 	public UnityClient(TestContext context, String token) {
 		this(context);
 		this.loginToken = token;
+		api.getApiClient().setApiKey(loginToken);
 	}
 
 	public UnityClient createUserAccount() {
@@ -324,5 +325,9 @@ public class UnityClient {
 			context.fail(e.getMessage());
 		}
 		return this;
+	}
+
+	public String getToken() {
+		return loginToken;
 	}
 }

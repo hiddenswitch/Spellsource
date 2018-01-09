@@ -110,14 +110,15 @@ public class Deck implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("[Deck]\n");
-		builder.append("name:\n");
+		builder.append("[Deck - ");
+		builder.append("name: ");
 		builder.append(name);
-		builder.append("\ncards: ");
+		builder.append("; cards: ");
 		for (Card card : cards) {
 			builder.append(card.getCardId());
 			builder.append(", ");
 		}
+		builder.append("]");
 		return builder.toString();
 	}
 

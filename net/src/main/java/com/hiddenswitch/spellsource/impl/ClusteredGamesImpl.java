@@ -43,6 +43,9 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 
 	@Override
 	public CreateGameSessionResponse createGameSession(CreateGameSessionRequest request) throws SuspendExecution, InterruptedException {
+		if (logger.isDebugEnabled()) {
+			logger.debug("createGameSession: Creating game session for request " + request.toString());
+		}
 		final String gameId = request.getGameId();
 
 		if (gameId == null) {
@@ -54,13 +57,13 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		CreateGameSessionResponse connection = connections.putIfAbsent(key, pending);
 		// If we're the ones deploying this match...
 		if (connection == null) {
+			logger.debug("createGameSession: DeploymentId " + deploymentID() + " is responsible for deploying this match.");
 			GameSession session = new GameSessionImpl(Gateway.getHostAddress(),
 					Port.port(),
 					request.getPregame1(),
 					request.getPregame2(),
 					gameId,
-					vertx,
-					Games.getDefaultNoActivityTimeout());
+					vertx);
 
 			// Deal with ending the game
 			session.handleGameOver(this::onGameOver);
@@ -78,6 +81,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			sessions.put(key, session);
 			return response;
 		} else {
+			logger.debug("createGameSession: Repeat createGameSessionRequest suspected because actually deploymentId " + connection.deploymentId + " is responsible for deploying this match.");
 			// Otherwise, return its state, whatever it is
 			return connection;
 		}
@@ -85,6 +89,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 
 	@Suspendable
 	private void onGameOver(GameSessionImpl session) {
+		logger.debug("onGameOver: Handling on game over for session " + session.getGameId());
 		final String gameOverId = session.getGameId();
 		vertx.setTimer(500L, Sync.suspendableHandler(t -> kill(gameOverId)));
 	}
@@ -100,6 +105,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 	 * @return A function that when called closes all the created pipes.
 	 */
 	private Runnable connect(GameSession session, int playerId, String userId, EventBus eventBus, ActivityMonitor activityMonitor) {
+		logger.debug("connect: Connecting userId " + userId + " with gameId " + session.getGameId());
 		final SessionWriter writer = new SessionWriter(userId, playerId, eventBus, session, activityMonitor);
 		final MessageConsumer<Buffer> reader = eventBus.consumer(READER_ADDRESS_PREFIX + userId);
 		final Pump pipe = Pump.pump(reader.bodyStream(), writer).start();
@@ -115,46 +121,29 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		logger.debug("Calling kill for gameId " + gameId);
 		final GameId key = new GameId(gameId);
 		GameSession session = sessions.remove(key);
+		CreateGameSessionResponse connection = connections.remove(key);
 
-		try {
-			final MatchExpireRequest request = new MatchExpireRequest(gameId);
-			request.users = session.getUserIds();
-			Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(request);
-		} catch (VertxException noHandler) {
-			// TODO: What would be the most sensible solution here?
-			logger.warn("kill: Failed to expire or end match for gameId " + gameId);
+		final MatchExpireRequest request = new MatchExpireRequest(gameId);
+		request.users = Arrays.asList(connection.userId1, connection.userId2);
+		if (request.users.size() < 2
+				|| request.users.get(0) == null
+				|| request.users.get(1) == null) {
+			throw new IllegalArgumentException("No users were returned correctly by the session.");
 		}
 
-		if (session != null) {
-			session.kill();
-			sessions.remove(key);
-		} else {
-			logger.error("kill: GameSession not found for gameId " + gameId + " but kill was requested.");
-			return;
-		}
+		Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(request);
+		session.kill();
 
 		if (gameActivityMonitors.containsKey(key)) {
-			try {
-				gameActivityMonitors.get(key).cancel();
-			} catch (Throwable ignored) {
-				logger.warn("kill: Failed to kill gameActivityMonitors for " + key.toString());
-			}
-
+			gameActivityMonitors.get(key).cancel();
 			gameActivityMonitors.remove(key);
 		}
 
-		if (pipeClosers.containsKey(key)) {
-			for (Runnable runnable : pipeClosers.get(key)) {
-				runnable.run();
-			}
-			pipeClosers.remove(key);
-		} else {
-			logger.error("kill: Closer was not found for gameId " + gameId);
-			throw new RuntimeException("Closer was not found for gameId " + gameId);
+		for (Runnable runnable : pipeClosers.get(key)) {
+			runnable.run();
 		}
 
-		connections.remove(key);
-
+		pipeClosers.remove(key);
 	}
 
 	@Override

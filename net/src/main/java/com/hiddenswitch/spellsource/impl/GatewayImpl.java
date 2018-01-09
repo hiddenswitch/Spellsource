@@ -86,7 +86,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 					// Check if we already set up a consumer/publisher for this user
 					if (handled == null) {
 						final ServerWebSocket socket = context1.request().upgrade();
-						final MessageConsumer<Buffer> consumer = bus.<Buffer>consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
+						final MessageConsumer<Buffer> consumer = bus.consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
 						final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
 						final Pump pump1 = Pump.pump(socket, publisher).start();
 						final Pump pump2 = Pump.pump(consumer.bodyStream(), socket).start();
@@ -110,7 +110,6 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 							pipes.remove(new UserId(userId));
 						}));
 					}
-
 				}));
 
 		// Health check comes first

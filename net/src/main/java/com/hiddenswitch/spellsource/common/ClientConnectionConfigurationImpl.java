@@ -14,7 +14,7 @@ public class ClientConnectionConfigurationImpl implements DefaultClusterSerializ
 	 * Create a new client connection configuration. This will be returned to the client from the matchmaking service
 	 * and helps the client connect to the correct host and identify itself to the server.
 	 */
-	public ClientConnectionConfigurationImpl(String url, String userId) {
+	public ClientConnectionConfigurationImpl(String userId) {
 		this.userId = userId;
 	}
 

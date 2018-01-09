@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.Emote;
+import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfigurationImpl;
 import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
@@ -43,11 +44,10 @@ public class GameSessionImpl implements GameSession {
 	private final String gameId;
 	//	private final Map<String, String> secretForUserId = new HashMap<>();
 	private Logger logger = LoggerFactory.getLogger(GameSessionImpl.class);
-	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
 	private final HashSet<Handler<GameSessionImpl>> gameOverHandlers = new HashSet<>();
 	private final Vertx vertx;
 
-	public GameSessionImpl(String host, int websocketPort, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx, long noActivityTimeout) {
+	public GameSessionImpl(String host, int websocketPort, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx) {
 		setHost(host);
 		this.pregamePlayerConfiguration1 = p1;
 		this.pregamePlayerConfiguration2 = p2;
@@ -57,23 +57,11 @@ public class GameSessionImpl implements GameSession {
 		if (p1.getUserId().equals(p2.getUserId())) {
 			throw new RuntimeException();
 		}
-//		for (String userId : new String[]{p1.getUserId(), p2.getUserId()}) {
-//			if (userId == null) {
-//				throw new RuntimeException();
-//			}
-//			this.secretForUserId.put(userId, RandomStringUtils.randomAlphanumeric(40));
-//		}
-		this.noActivityTimeout = noActivityTimeout;
 	}
 
-	private ClientConnectionConfigurationImpl getConfigurationFor(PregamePlayerConfiguration player, int id) {
-		return new ClientConnectionConfigurationImpl(
-				getUrl(), player.getUserId() /*getSecret(player.getUserId())*/);
+	private ClientConnectionConfiguration getConfigurationFor(PregamePlayerConfiguration player) {
+		return new ClientConnectionConfigurationImpl(player.getUserId());
 	}
-
-//	public String getSecret(String userId) {
-//		return secretForUserId.getOrDefault(userId, null);
-//	}
 
 	@Override
 	@Suspendable
@@ -213,13 +201,13 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	@Override
-	public ClientConnectionConfigurationImpl getConfigurationForPlayer1() {
-		return getConfigurationFor(pregamePlayerConfiguration1, PLAYER_1);
+	public ClientConnectionConfiguration getConfigurationForPlayer1() {
+		return getConfigurationFor(pregamePlayerConfiguration1);
 	}
 
 	@Override
-	public ClientConnectionConfigurationImpl getConfigurationForPlayer2() {
-		return getConfigurationFor(pregamePlayerConfiguration2, PLAYER_2);
+	public ClientConnectionConfiguration getConfigurationForPlayer2() {
+		return getConfigurationFor(pregamePlayerConfiguration2);
 	}
 
 	private Writer getPlayerListener(int player) {
@@ -368,11 +356,6 @@ public class GameSessionImpl implements GameSession {
 
 	public String getGameId() {
 		return gameId;
-	}
-
-	@Override
-	public long getNoActivityTimeout() {
-		return noActivityTimeout;
 	}
 
 	@Override

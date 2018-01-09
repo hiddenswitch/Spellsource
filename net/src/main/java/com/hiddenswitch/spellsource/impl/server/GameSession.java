@@ -48,13 +48,6 @@ public interface GameSession extends Server {
 	String getGameId();
 
 	/**
-	 * How long should this session last before it is closed due to inactivity?
-	 *
-	 * @return The timeout, in milliseconds.
-	 */
-	long getNoActivityTimeout();
-
-	/**
 	 * Gets a reference to the {@link ServerGameContext} hosted by this session.
 	 *
 	 * @return A {@link ServerGameContext}
