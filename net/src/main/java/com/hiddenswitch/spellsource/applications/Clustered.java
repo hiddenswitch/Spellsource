@@ -21,10 +21,11 @@ public class Clustered {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("org.mongodb.async.type", "netty");
+		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
 				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.ERROR);
+		root.setLevel(Level.INFO);
 
 		// Set significantly longer timeouts
 		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();
@@ -50,8 +51,6 @@ public class Clustered {
 				}
 			});
 		});
-
-
 	}
-
 }
+

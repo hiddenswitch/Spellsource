@@ -15,6 +15,7 @@ import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import com.hiddenswitch.spellsource.models.*;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -25,10 +26,6 @@ import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
-import net.demilich.metastone.game.events.BeforeSummonEvent;
-import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -57,6 +54,33 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 				GameEventType.BEFORE_SUMMON,
 				this::beforeSummon,
 				PersistenceTrigger::beforeSummon));
+
+		/*
+		Spellsource.spellsource().persistAttribute(
+				"unique-champion-ids-1",
+				GameEventType.AFTER_SUMMON,
+				Attribute.UNIQUE_CHAMPION_IDS,
+				(PersistenceContext<AfterSummonEvent> context) -> {
+					if (context.event().getMinion() == null) {
+						return;
+					}
+
+					if (context.event().getMinion().getSourceCard() == null) {
+						return;
+					}
+
+					// Only count summons from the hand
+					if (context.event().getSource() == null) {
+						return;
+					}
+
+					String inventoryIds
+
+					int attackerDamage = context.event().getDamageDealt();
+					context.update(context.event().getAttacker().getReference(),
+							context.event().getAttacker().getAttributeValue(Attribute.TOTAL_DAMAGE_DEALT) + attackerDamage);
+				});
+				*/
 
 		Spellsource.spellsource().persistAttribute(LegacyPersistenceHandler.create(
 				"last-minion-destroyed-1",

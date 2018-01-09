@@ -7,12 +7,11 @@ import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.models.CreateGameSessionRequest;
-import com.hiddenswitch.spellsource.models.CurrentMatchRequest;
 import com.hiddenswitch.spellsource.models.DeckCreateRequest;
 import com.hiddenswitch.spellsource.models.DeckCreateResponse;
-import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
@@ -20,17 +19,19 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.SendContext;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * Created by bberman on 2/18/17.
@@ -55,48 +58,6 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		defaultApi.getApiClient().setBasePath(UnityClient.basePath);
 	}
 
-
-	@Test(timeout = 120000L)
-	@Ignore
-	public void testShutdownAndRestartServer(TestContext context) throws InterruptedException, SuspendExecution {
-		setLoggingLevel(Level.ERROR);
-		wrap(context);
-		final Async async = context.async();
-
-		getContext().assertNotNull(logic.deploymentID());
-		getContext().assertNotNull(games.deploymentID());
-
-		vertx.executeBlocking(done -> {
-			UnityClient client = new UnityClient(getContext());
-			client.createUserAccount("testaccount23");
-			client.matchmakeAndPlayAgainstAI(null);
-			client.waitUntilDone();
-			getContext().assertTrue(client.isGameOver());
-			done.complete(true);
-		}, true, then -> {
-			vertx.undeploy(deploymentId, then2 -> {
-				service = null;
-				deployServices(vertx, then3 -> {
-					service = then3.result();
-					getContext().assertNotNull(logic.deploymentID());
-					getContext().assertNotNull(games.deploymentID());
-					vertx.executeBlocking(done2 -> {
-						UnityClient client2 = new UnityClient(getContext());
-						client2.loginWithUserAccount("testaccount23");
-						client2.matchmakeAndPlayAgainstAI(null);
-						client2.waitUntilDone();
-						getContext().assertTrue(client2.isGameOver());
-						done2.complete(true);
-					}, true, then4 -> {
-						getContext().assertTrue(then4.succeeded());
-						async.complete();
-						unwrap();
-					});
-				});
-			});
-		});
-
-	}
 
 	@Test(timeout = 100000L)
 	public void testAccountFlow(TestContext context) throws InterruptedException {
@@ -211,7 +172,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		unwrap();
 	}
 
-	@Test(timeout = 180000L)
+	@Test(timeout = 200000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
@@ -242,7 +203,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(60L, TimeUnit.SECONDS);
+		latch.await(80L, TimeUnit.SECONDS);
 		getContext().assertEquals(latch.getCount(), 0L);
 		unwrap();
 	}
@@ -272,32 +233,36 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		unwrap();
 	}
 
-	private String userIdDisconnecting;
-
-	@Test
+	@Test(timeout = 25000L)
 	public void testDisconnectingUnityClient(TestContext context) {
 		wrap(context);
 		setLoggingLevel(Level.ERROR);
 		getContext().assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
 
-		UnityClient client = new UnityClient(getContext(), 5);
+		UnityClient client = new UnityClient(getContext(), 1);
 		client.createUserAccount(null);
-		Thread clientThread = new Thread(() -> {
-			client.matchmakeAndPlayAgainstAI(null);
-		});
-		userIdDisconnecting = client.getAccount().getId();
-		clientThread.start();
+		final String token =  client.getToken();
+		final String userId = client.getAccount().getId();
+		client.matchmakeAndPlayAgainstAI(null);
 
 		// Assert that session was closed
-		wrapSync(context, this::disconnectingUnityClientAssert);
-	}
+		wrapSync(context, () -> {
+			// wait 10 seconds
+			Strand.sleep(10000L);
+			getContext().assertEquals(null, Matchmaking.getQueue(vertx).get(new UserId(userId)));
 
-	private void disconnectingUnityClientAssert() throws SuspendExecution, InterruptedException {
-		// wait 18 seconds
-		Strand.sleep(18000);
-		final Matchmaking matchmaking = Rpc.connect(Matchmaking.class, vertx.eventBus()).sync();
+			Boolean done = awaitResult(h -> vertx.executeBlocking((then) -> {
+				UnityClient client2 = new UnityClient(context, token);
+				try {
+					boolean isInMatch = client2.getApi().getAccount(userId).getAccounts().get(0).getInMatch();
+					then.complete(isInMatch);
+				} catch (ApiException e) {
+					then.fail(new AssertionError());
+				}
+			}, h));
 
-		getContext().assertEquals(null, matchmaking.getCurrentMatch(new CurrentMatchRequest(userIdDisconnecting)).getGameId());
+			getContext().assertEquals(false, done);
+		});
 	}
 
 	@Test

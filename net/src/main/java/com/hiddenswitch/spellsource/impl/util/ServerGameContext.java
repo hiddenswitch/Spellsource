@@ -64,7 +64,7 @@ public class ServerGameContext extends GameContext {
 	 * @param deckFormat The legal cards that can be played.
 	 * @param gameId     The game ID that corresponds to this game context.
 	 * @param logic      The {@link RpcClient} on which this trigger will make {@link Logic} requests.
-	 * @param scheduler     The {@link Scheduler} instance to use for scheduling game events.
+	 * @param scheduler  The {@link Scheduler} instance to use for scheduling game events.
 	 */
 	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, RpcClient<Logic> logic, Scheduler scheduler) {
 		// The player's IDs are set here
@@ -565,15 +565,11 @@ public class ServerGameContext extends GameContext {
 
 	@Suspendable
 	public void kill() {
-		try {
-			if (!updateAndGetGameOver()) {
-				endGame();
-			}
-			isRunning = false;
-			// Clear out even more stuff
-			dispose();
-		} catch (Exception ignored) {
-		}
+		super.endGame();
+		updateAndGetGameOver();
+		isRunning = false;
+		// Clear out even more stuff
+		dispose();
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
@@ -59,5 +60,15 @@ public class PregamePlayerConfiguration implements Serializable {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("deck", deck)
+				.append("name", name)
+				.append("attributes", attributes)
+				.append("isAi", isAI)
+				.toString();
 	}
 }

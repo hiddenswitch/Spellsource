@@ -90,3 +90,12 @@ task(local, dependsOn: 'classes', type: JavaExec) {
     jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
     classpath = sourceSets.main.runtimeClasspath
 }
+
+task(cluster, dependsOn: 'classes', type: JavaExec) {
+    systemProperty "spellsource.port", "8080"
+    systemProperty "mongo.url", "mongodb://localhost:27017"
+    systemProperty "games.defaultNoActivityTimeout", "8000"
+    main = 'com.hiddenswitch.spellsource.applications.TestClustered'
+    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
+    classpath = sourceSets.main.runtimeClasspath
+}

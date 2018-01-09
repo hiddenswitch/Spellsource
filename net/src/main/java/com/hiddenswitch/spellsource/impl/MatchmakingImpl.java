@@ -19,9 +19,8 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements Matchmaking {
-
-	public static final int DELAY = 4000;
-	Logger logger = LoggerFactory.getLogger(Matchmaking.class);
+	private static final Logger logger = LoggerFactory.getLogger(Matchmaking.class);
+	private static final int DELAY = 4000;
 	private RpcClient<Games> games;
 	private RpcClient<Logic> logic;
 	private RpcClient<Bots> bots;
@@ -57,6 +56,9 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 	@Override
 	public MatchCreateResponse createMatch(MatchCreateRequest request) throws SuspendExecution, InterruptedException {
+		if (logger.isDebugEnabled()) {
+			logger.debug("createMatch: Creating match for request " + request.toString());
+		}
 		final String deckId1 = request.getDeckId1().toString();
 		final String deckId2 = request.getDeckId2().toString();
 		final String userId1 = request.getUserId1().toString();
@@ -93,10 +95,12 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		queue.replace(key2, QueueEntry.ready(finalGameId, new DeckId(deckId2)));
 
 		if (timers.containsKey(key1)) {
+			logger.debug("createMatch: Canceling timer for userId " + key1);
 			scheduler.cancelTimer(timers.remove(key1));
 		}
 
 		if (timers.containsKey(key2)) {
+			logger.debug("createMatch: Canceling timer for userId " + key2);
 			scheduler.cancelTimer(timers.remove(key2));
 		}
 
@@ -106,6 +110,12 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	@Suspendable
 	public MatchmakingResponse matchmakeAndJoin(MatchmakingRequest matchmakingRequest) throws SuspendExecution, InterruptedException {
+		if (logger.isDebugEnabled()) {
+			logger.debug("matchmakeAndJoin: Starting request for user " + matchmakingRequest.getUserId());
+		}
+
+		logQueue();
+
 		final InvocationId invocationId = InvocationId.create();
 		RuntimeException ex = null;
 
@@ -151,8 +161,9 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 					logger.debug("matchmakeAndJoin: Matchmaker is creating an AI game for " + userId);
 					final BotsStartGameRequest request = new BotsStartGameRequest(matchmakingRequest.getUserId(), matchmakingRequest.getDeckId());
 					BotsStartGameResponse botGameStarted = bots.sync().startGame(request);
-					// Occupy a spot in the queue for this user
+					// Occupy a spot in the queue for this user and the bot
 					queue.put(userId, QueueEntry.ready(new GameId(botGameStarted.getGameId()), deckId));
+					queue.put(new UserId(botGameStarted.getBotUserId()), QueueEntry.ready(new GameId(botGameStarted.getGameId()), new DeckId(botGameStarted.getBotDeckId())));
 					logger.debug("matchmakeAndJoin: User " + userId + " is unlocked by the AI bot creation path.");
 					return MatchmakingResponse.ready(botGameStarted.getGameId());
 				}
@@ -255,6 +266,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	public CurrentMatchResponse getCurrentMatch(CurrentMatchRequest request) throws SuspendExecution, InterruptedException {
 		logger.debug("getCurrentMatch: Retrieving information for userId " + request.getUserId());
+		logQueue();
 		final QueueEntry queueEntry = queue.get(new UserId(request.getUserId()));
 		if (queueEntry != null) {
 			logger.debug("getCurrentMatch: User " + request.getUserId() + " has match " + queueEntry.gameId);
@@ -267,14 +279,36 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 	@Override
 	public MatchExpireResponse expireOrEndMatch(MatchExpireRequest request) throws SuspendExecution, InterruptedException {
-		logger.debug("expireOrEndMatch: Expiring match " + request.gameId);
-
-		if (request.users.stream().noneMatch(queue::containsKey)) {
-			throw new RuntimeException("Failed to expire game because users " + String.join(", ", request.users.stream().map(UserId::toString).collect(Collectors.toList())) + " had no queue entries");
+		if (logger.isDebugEnabled()) {
+			logger.debug("expireOrEndMatch: Expiring match " + request.gameId);
 		}
 
-		List<DeckId> decks = request.users.stream().map(queue::remove).map(queueEntry -> queueEntry.deckId).collect(Collectors.toList());
-		logger.debug("expireOrEndMatch: Calling Logic::endGame");
+		logQueue();
+		if (request.users == null) {
+			throw new NullPointerException("Request does not contain users specified");
+		}
+
+		for (UserId userId : request.users) {
+			if (!queue.containsKey(userId)) {
+				throw new RuntimeException("Failed to expire game because users " + String.join(", ", request.users.stream().map(UserId::toString).collect(Collectors.toList())) + " had no queue entries");
+			}
+		}
+
+		// Bots don't occupy queue positions
+		List<DeckId> decks = new ArrayList<>();
+		for (UserId user : request.users) {
+			QueueEntry queueEntry = queue.remove(user);
+			if (queueEntry != null) {
+				DeckId deckId = queueEntry.deckId;
+				decks.add(deckId);
+			}
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("expireOrEndMatch: Removed decks " + String.join(", ", decks.stream().map(DeckId::toString).collect(Collectors.toList())));
+		}
+
+
 		// End the game in alliance mode
 		logic.sync().endGame(new EndGameRequest()
 				.withPlayers(new EndGameRequest.Player()
@@ -282,8 +316,23 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 						new EndGameRequest.Player()
 								.withDeckId(decks.get(1).toString())));
 
+		if (logger.isDebugEnabled()) {
+			logger.debug("expireOrEndMatch: Called Logic::endGame");
+		}
 
 		return new MatchExpireResponse();
+	}
+
+
+	protected void logQueue() {
+		if (logger.isDebugEnabled()) {
+			List<String> list = new ArrayList<>();
+			for (Map.Entry<UserId, QueueEntry> e : queue.entrySet()) {
+				String format = String.format("(%s, %s)", e.getKey().toString(), e.getValue().gameId.toString());
+				list.add(format);
+			}
+			logger.debug("getCurrentMatch: queueContents=" + String.join(", ", list));
+		}
 	}
 
 	@Override
