@@ -139,13 +139,13 @@ public class ClusterTest {
 		context.assertTrue(client.isGameOver());
 	}
 
-	@Test(timeout = 98000L)
+	@Test(timeout = 300000L)
 	public void testMultiHostMultiClientCluster(TestContext context) throws InterruptedException {
 		setLoggingLevel(Level.ERROR);
 		startTwoUnitCluster(context);
 
 		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 2;
+		final int count = processorCount;
 		CountDownLatch latch = new CountDownLatch(count);
 
 		Stream.generate(() -> new Thread(() -> {
@@ -158,7 +158,7 @@ public class ClusterTest {
 		})).limit(count).forEach(Thread::start);
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(80L, TimeUnit.SECONDS);
+		latch.await(150L, TimeUnit.SECONDS);
 		context.assertEquals(0L, latch.getCount());
 	}
 
