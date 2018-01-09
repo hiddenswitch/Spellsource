@@ -33,7 +33,7 @@ public interface Cluster {
 
 
 		config.setNetworkConfig(new NetworkConfig()
-				.setOutboundPortDefinitions(Collections.singletonList("33000-35000"))
+				.setOutboundPortDefinitions(Collections.singletonList(System.getProperty("outbound.ephemeral.ports", "33000-35000")))
 				.setJoin(new JoinConfig()
 						.setTcpIpConfig(new TcpIpConfig()
 								.setEnabled(false))

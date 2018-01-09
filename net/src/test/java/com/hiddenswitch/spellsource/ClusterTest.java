@@ -26,10 +26,8 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,6 +37,8 @@ public class ClusterTest {
 	private Logger logger = LoggerFactory.getLogger(ClusterTest.class);
 	private List<Vertx> verticies = new ArrayList<>();
 	private List<HazelcastInstance> hazelcastInstances = new ArrayList<>();
+	private final int blockedThreadCheckInterval = (int) Duration.of(8, ChronoUnit.SECONDS).toMillis();
+	private final long timeoutMillis = Duration.of(150, ChronoUnit.SECONDS).toMillis();
 
 	public void setLoggingLevel(Level level) {
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
@@ -50,9 +50,6 @@ public class ClusterTest {
 	@SuppressWarnings("unchecked")
 	public void testClusteredDeploy(TestContext context) {
 		// For debug purposes
-		final int blockedThreadCheckInterval = (int) Duration.of(8, ChronoUnit.SECONDS).toMillis();
-		final long timeoutMillis = Duration.of(150, ChronoUnit.SECONDS).toMillis();
-
 		Async async = context.async(5);
 		final Handler<AsyncResult<CompositeFuture>> handler1 = asyncAssertSuccess(context, async);
 
@@ -129,9 +126,70 @@ public class ClusterTest {
 		async.awaitSuccess(timeoutMillis);
 	}
 
+	@Test
+	public void testMultiHostCluster(TestContext context) {
+		setLoggingLevel(Level.ERROR);
+		startTwoUnitCluster(context);
+
+		// Connect and assert the game ended
+		UnityClient client = new UnityClient(context);
+		client.createUserAccount(null);
+		client.matchmakeAndPlayAgainstAI(null);
+		client.waitUntilDone();
+		context.assertTrue(client.isGameOver());
+	}
+
+	@Test(timeout = 98000L)
+	public void testMultiHostMultiClientCluster(TestContext context) throws InterruptedException {
+		setLoggingLevel(Level.ERROR);
+		startTwoUnitCluster(context);
+
+		final int processorCount = Runtime.getRuntime().availableProcessors();
+		final int count = processorCount * 2;
+		CountDownLatch latch = new CountDownLatch(count);
+
+		Stream.generate(() -> new Thread(() -> {
+			UnityClient client = new UnityClient(context);
+			client.createUserAccount(null);
+			client.matchmakeAndPlay(null);
+			client.waitUntilDone();
+			context.assertTrue(client.isGameOver());
+			latch.countDown();
+		})).limit(count).forEach(Thread::start);
+
+		// Random games can take quite a long time to finish so be patient...
+		latch.await(80L, TimeUnit.SECONDS);
+		context.assertEquals(0L, latch.getCount());
+	}
+
+	private void startTwoUnitCluster(TestContext context) {
+		List<Future> clusterVerticiesStarts = new ArrayList<>();
+		Async async = context.async(3);
+		final Handler<AsyncResult<CompositeFuture>> handler = asyncAssertSuccess(context, async);
+		for (int i = 0; i < 2; i++) {
+			final Future<CompositeFuture> future = Future.future();
+			clusterVerticiesStarts.add(future);
+			ClusterManager clusterManager = new HazelcastClusterManager(hazelcastInstances.get(i));
+
+			VertxOptions options = new VertxOptions()
+					.setClusterManager(clusterManager)
+					.setBlockedThreadCheckInterval(blockedThreadCheckInterval);
+
+			Vertx.clusteredVertx(options, asyncAssertSuccess(context, async, result -> {
+				verticies.add(result);
+				result.exceptionHandler(context.exceptionHandler());
+				Spellsource.spellsource().deployAll(result, future);
+			}));
+		}
+
+		CompositeFuture.all(clusterVerticiesStarts).setHandler(handler);
+
+		// Wait to deploy the clustered vertices with all services
+		async.awaitSuccess(timeoutMillis);
+	}
+
 	@Before
 	public void startServices() throws Exception {
-		verticies.clear();
 		// From http://vertx.io/docs/vertx-hazelcast/java/
 		for (int i = 0; i < 2; i++) {
 			hazelcastInstances.add(Hazelcast.newHazelcastInstance(Cluster.getConfig(5701 + i)));
@@ -149,6 +207,8 @@ public class ClusterTest {
 			return future;
 		}).collect(Collectors.toList())).setHandler(context.asyncAssertSuccess(then -> {
 			hazelcastInstances.forEach(HazelcastInstance::shutdown);
+			hazelcastInstances.clear();
+			verticies.clear();
 			Mongo.mongo().stopEmbedded();
 			System.getProperties().remove("mongo.url");
 		}));

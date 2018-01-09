@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ -z "${SPELLSOURCE_APPLICATION}" ]]; then
-  APPLICATION="Remote"
+  APPLICATION="Clustered"
 else
   APPLICATION="${SPELLSOURCE_APPLICATION}"
 fi
