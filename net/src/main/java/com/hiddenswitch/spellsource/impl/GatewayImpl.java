@@ -92,10 +92,11 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 						socket.closeHandler(fiberHandler(disconnected -> {
 							try {
+								// Include a reference in this lambda to ensure the pump lasts
+								pump2.numberPumped();
 								publisher.close();
 								consumer.unregister();
 								pump1.stop();
-								pump2.stop();
 							} catch (Throwable throwable) {
 								logger.warn("socket closeHandler: Failed to clean up resources from a user socket due to an exception: ", throwable);
 							} finally {
