@@ -29,12 +29,34 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 
 public class ClassicTests extends TestBase {
+	@Test
+	public void testTracking() {
+		for (int i = 0; i <= 3; i++) {
+			final int i1 = i;
+			runGym((context, player, opponent) -> {
+				Collections.nCopies(i1, "minion_bloodfen_raptor")
+						.forEach(cid -> context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById(cid)));
+
+				playCard(context, player, "spell_tracking");
+				Assert.assertEquals(player.getDeck().size(), 0);
+				if (i1 > 0) {
+					Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
+				} else {
+					Assert.assertEquals(player.getHand().size(), 0);
+				}
+
+			});
+		}
+	}
+
 	@Test
 	public void testMisdirection() {
 		// Opponent's face gets hit always by misdirection

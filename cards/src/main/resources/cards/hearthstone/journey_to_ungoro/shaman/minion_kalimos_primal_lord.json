@@ -23,6 +23,7 @@
         "spell": {
           "class": "RecastSpell"
         },
+        "howMany": 4,
         "cards": [
           "spell_invocation_of_air",
           "spell_invocation_of_earth",

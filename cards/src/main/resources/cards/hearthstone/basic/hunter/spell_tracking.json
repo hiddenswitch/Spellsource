@@ -13,7 +13,7 @@
     },
     "exclusive": true,
     "spell1": {
-      "class": "ReceiveCardSpell"
+      "class": "FromDeckToHandSpell"
     },
     "spell2": {
       "class": "RemoveCardSpell"
