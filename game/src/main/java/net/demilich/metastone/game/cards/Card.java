@@ -229,9 +229,13 @@ public abstract class Card extends Entity {
 		copy.getAttributes().remove(Attribute.ATTACK_BONUS);
 		copy.getAttributes().remove(Attribute.HP_BONUS);
 		copy.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
-		// Always use the origin copy
-		copy.getAttributes().put(Attribute.COPIED_FROM,
-				hasAttribute(Attribute.COPIED_FROM) ? getAttribute(Attribute.COPIED_FROM) : this.getReference());
+		// Always use the origin copy if it isn't none
+		if (hasAttribute(Attribute.COPIED_FROM)) {
+			copy.getAttributes().put(Attribute.COPIED_FROM, getAttribute(Attribute.COPIED_FROM));
+		} else if (!getReference().equals(EntityReference.NONE)) {
+			copy.getAttributes().put(Attribute.COPIED_FROM, getReference());
+		}
+
 		copy.resetEntityLocations();
 		return copy;
 	}
