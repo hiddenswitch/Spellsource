@@ -15,6 +15,7 @@ import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -23,6 +24,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.shareddata.Lock;
 import io.vertx.core.streams.Pump;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -47,8 +49,7 @@ import static java.util.stream.Collectors.toList;
  * @see Gateway for a detailed description on how to add methods to the API gateway.
  */
 public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway {
-	static Logger logger = LoggerFactory.getLogger(GatewayImpl.class);
-	private SuspendableMap<UserId, Boolean> pipes;
+	private static Logger logger = LoggerFactory.getLogger(Gateway.class);
 
 	@Override
 	@Suspendable
@@ -56,9 +57,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		super.start();
 		Router router = Spellsource.spellsource().router(vertx);
 
-		pipes = SharedData.getClusterWideMap("GatewayImpl/pipes", vertx);
-
-		logger.info("Configuring router...");
+		logger.info("start: Configuring router...");
 
 		final AuthHandler authHandler = new SpellsourceAuthHandler(vertx.eventBus());
 		final BodyHandler bodyHandlerInternal = BodyHandler.create();
@@ -80,35 +79,31 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 		router.route("/" + Games.WEBSOCKET_PATH + "-clustered")
 				.method(HttpMethod.GET)
-				.handler(Sync.suspendableHandler(context1 -> {
-					final String userId = context1.user().principal().getString("_id");
-					Boolean handled = pipes.putIfAbsent(new UserId(userId), true);
-					// Check if we already set up a consumer/publisher for this user
-					if (handled == null) {
-						final ServerWebSocket socket = context1.request().upgrade();
+				.handler(Sync.suspendableHandler(context -> {
+					final String userId = context.user().principal().getString("_id");
+
+					try {
+						Lock lock = awaitResult(h -> vertx.sharedData().getLockWithTimeout("pipes-userId-" + userId, 200L, h));
+						final ServerWebSocket socket = context.request().upgrade();
 						final MessageConsumer<Buffer> consumer = bus.consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
 						final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
 						final Pump pump1 = Pump.pump(socket, publisher).start();
 						final Pump pump2 = Pump.pump(consumer.bodyStream(), socket).start();
+
 						socket.closeHandler(fiberHandler(disconnected -> {
 							try {
 								publisher.close();
-							} catch (Throwable ignored) {
-							}
-							try {
 								consumer.unregister();
-							} catch (Throwable ignored) {
-							}
-							try {
 								pump1.stop();
-							} catch (Throwable ignored) {
-							}
-							try {
 								pump2.stop();
-							} catch (Throwable ignored) {
+							} catch (Throwable throwable) {
+								logger.warn("socket closeHandler: Failed to clean up resources from a user socket due to an exception: ", throwable);
+							} finally {
+								lock.release();
 							}
-							pipes.remove(new UserId(userId));
 						}));
+					} catch (VertxException timeout) {
+						context.response().end();
 					}
 				}));
 
@@ -304,7 +299,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			}
 		});
 
-		logger.info("Router configured.");
+		logger.info("start: Router configured.");
 	}
 
 	@Override
@@ -506,7 +501,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 						.addQueuesItem(new MatchmakingQueueItem()
 								.name("Constructed")
 								.description("An unranked constructed with meta decks in Wild and Standard from Hearthstone.")
-								.tooltip("Play online unranked in Standard!")
+								.tooltip("Play online unranked in Wild!")
 								.queueId("constructed")
 								.requires(new MatchmakingQueueItemRequires()
 										.deckIdChoices(getAccounts().get(userId).getDecks()))));
