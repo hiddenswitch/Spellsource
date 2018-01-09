@@ -49,6 +49,9 @@ public class ClusterTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testClusteredDeploy(TestContext context) {
+		if (isCI()) {
+			return;
+		}
 		// For debug purposes
 		Async async = context.async(5);
 		final Handler<AsyncResult<CompositeFuture>> handler1 = asyncAssertSuccess(context, async);
@@ -128,6 +131,10 @@ public class ClusterTest {
 
 	@Test
 	public void testMultiHostCluster(TestContext context) {
+		if (isCI()) {
+			return;
+		}
+		
 		setLoggingLevel(Level.ERROR);
 		startTwoUnitCluster(context);
 
@@ -141,6 +148,10 @@ public class ClusterTest {
 
 	@Test(timeout = 300000L)
 	public void testMultiHostMultiClientCluster(TestContext context) throws InterruptedException {
+		if (isCI()) {
+			return;
+		}
+
 		setLoggingLevel(Level.ERROR);
 		startTwoUnitCluster(context);
 
@@ -190,6 +201,10 @@ public class ClusterTest {
 
 	@Before
 	public void startServices() throws Exception {
+		if (isCI()) {
+			return;
+		}
+
 		// From http://vertx.io/docs/vertx-hazelcast/java/
 		for (int i = 0; i < 2; i++) {
 			hazelcastInstances.add(Hazelcast.newHazelcastInstance(Cluster.getConfig(5701 + i)));
@@ -201,6 +216,10 @@ public class ClusterTest {
 
 	@After
 	public void stopServices(TestContext context) throws IOException {
+		if (isCI()) {
+			return;
+		}
+
 		CompositeFuture.join(verticies.stream().map(v -> {
 			Future<Void> future = Future.future();
 			v.close(future);
@@ -212,6 +231,10 @@ public class ClusterTest {
 			Mongo.mongo().stopEmbedded();
 			System.getProperties().remove("mongo.url");
 		}));
+	}
+
+	protected static boolean isCI() {
+		return Boolean.parseBoolean(System.getenv("CI"));
 	}
 
 	@Suspendable
