@@ -1,0 +1,32 @@
+{
+  "name": "Mystic Skull",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Return a friendly minion to your hand. Change its attack to 5.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SetAttributeSpell",
+          "target": "EVENT_CARD",
+          "value": 5,
+          "attribute": "BASE_ATTACK"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "target": "EVENT_CARD",
+          "value": 5,
+          "attribute": "ATTACK"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

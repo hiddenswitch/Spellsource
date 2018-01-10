@@ -1,0 +1,31 @@
+{
+  "name": "Jek, the All-Seeing",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "race": "MURLOC",
+  "description": "Taunt. Deathrattle: Discard a random card. Add 'Mystic Skull' to your hand.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscardSpell",
+        "value": 1
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_mystic_skull"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

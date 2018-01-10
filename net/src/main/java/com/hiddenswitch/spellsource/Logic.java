@@ -72,7 +72,8 @@ public interface Logic {
 		// Hearthstone cards are read directly from the database, since they do not support any mutability  rules.
 		CardDesc desc = cardRecord.getCardDesc();
 		if (desc.set != null
-				&& desc.set.isHearthstoneSet()) {
+				&& desc.set.isHearthstoneSet()
+				|| (desc.legacy == null || !desc.legacy)) {
 			desc = CardCatalogue.getCardById(desc.id).getDesc();
 		}
 

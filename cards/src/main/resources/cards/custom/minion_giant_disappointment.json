@@ -1,0 +1,19 @@
+{
+  "name": "Giant Disappointment",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Costs (1) less",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "AlgebraicValueProvider",
+    "value1": 1,
+    "value2": 0,
+    "operation": "ADD"
+  }
+}
