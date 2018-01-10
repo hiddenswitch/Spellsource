@@ -132,6 +132,9 @@ public class GameEvent  implements Serializable {
     @SerializedName("MILL")
     MILL("MILL"),
     
+    @SerializedName("MAX_MANA")
+    MAX_MANA("MAX_MANA"),
+    
     @SerializedName("OVERLOAD")
     OVERLOAD("OVERLOAD"),
     
