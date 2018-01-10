@@ -49,7 +49,7 @@ public class Aura extends Enchantment {
 		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, target, context.resolveSingleTarget(getHostReference()))) {
 			return false;
 		}
-		
+
 		return resolvedTargets.contains(target);
 	}
 
@@ -73,10 +73,10 @@ public class Aura extends Enchantment {
 	public void onGameEvent(GameEvent event) {
 		GameContext context = event.getGameContext();
 		Player owner = context.getPlayer(getOwner());
-		Actor sourceActor = (Actor) context.resolveSingleTarget(getHostReference());
-		List<Entity> resolvedTargets = context.resolveTarget(owner, sourceActor, targets);
+		Entity source = context.resolveSingleTarget(getHostReference());
+		List<Entity> resolvedTargets = context.resolveTarget(owner, source, targets);
 		List<Entity> relevantTargets = new ArrayList<Entity>(resolvedTargets);
-		for (Iterator<Integer> iterator = affectedEntities.iterator(); iterator.hasNext();) {
+		for (Iterator<Integer> iterator = affectedEntities.iterator(); iterator.hasNext(); ) {
 			int entityId = iterator.next();
 
 			EntityReference entityReference = new EntityReference(entityId);

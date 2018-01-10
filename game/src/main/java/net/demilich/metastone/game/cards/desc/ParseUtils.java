@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.spells.GameValue;
@@ -41,6 +42,7 @@ public class ParseUtils {
 	private static SpellDescSerializer spellParser = new SpellDescSerializer();
 	private static ValueProviderDescSerializer valueProviderParser = new ValueProviderDescSerializer();
 	private static FilterDescSerializer filterParser = new FilterDescSerializer();
+	private static AuraDescSerializer auraParser = new AuraDescSerializer();
 	private static SourceDescSerializer sourceParser = new SourceDescSerializer();
 	private static ConditionDescSerializer conditionParser = new ConditionDescSerializer();
 	private static EventTriggerDescSerializer triggerParser = new EventTriggerDescSerializer();
@@ -156,6 +158,13 @@ public class ParseUtils {
 				}
 				SourceDesc sourceDesc = sourceParser.deserialize(entry, SourceDesc.class, null);
 				return sourceDesc.create();
+			}
+			case AURA: {
+				if (entry.getAsJsonObject().has("desc")) {
+					entry = entry.getAsJsonObject().get("desc");
+				}
+				AuraDesc auraDesc = auraParser.deserialize(entry, AuraDesc.class, null);
+				return auraDesc.create();
 			}
 			case ENTITY_FILTER_ARRAY: {
 				JsonArray jsonArray = entry.getAsJsonArray();
