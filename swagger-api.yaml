@@ -500,6 +500,7 @@ definitions:
           - 'KILL'
           - 'LOSE_DIVINE_SHIELD'
           - 'MILL'
+          - 'MAX_MANA'
           - 'OVERLOAD'
           - 'PERFORMED_GAME_ACTION'
           - 'PHYSICAL_ATTACK'

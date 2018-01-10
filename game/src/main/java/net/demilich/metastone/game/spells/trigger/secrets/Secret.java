@@ -11,18 +11,10 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 public class Secret extends Enchantment {
-
-	private Card source;
-
 	public Secret(EventTrigger trigger, SpellDesc spell, Card source) {
 		super(trigger, spell);
-		this.source = source;
+		setSourceCard(source);
 		setAttributes((AttributeMap) source.getAttributes().clone());
-	}
-
-	@Override
-	public Card getSourceCard() {
-		return source;
 	}
 
 	@Override
@@ -57,7 +49,7 @@ public class Secret extends Enchantment {
 	@Override
 	public Secret clone() {
 		Secret clone = (Secret) super.clone();
-		clone.source = source;
+		clone.setSourceCard(getSourceCard());
 		return clone;
 	}
 }

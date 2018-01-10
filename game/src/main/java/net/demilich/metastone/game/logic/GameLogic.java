@@ -2171,11 +2171,16 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	public void modifyMaxMana(Player player, int delta) {
 		log("Maximum mana was changed by {} for {}", delta, player.getName());
-		int maxMana = MathUtils.clamp(player.getMaxMana() + delta, 0, GameLogic.MAX_MANA);
-		player.setMaxMana(maxMana);
-		if (delta < 0 && player.getMana() > player.getMaxMana()) {
+		final int maxMana = MathUtils.clamp(player.getMaxMana() + delta, 0, GameLogic.MAX_MANA);
+		final int initialMaxMana = player.getMaxMana();
+		final int change = maxMana - initialMaxMana;
+        player.setMaxMana(maxMana);
+        if (delta < 0 && player.getMana() > player.getMaxMana()) {
 			modifyCurrentMana(player.getId(), delta);
 		}
+        if (change != 0) {
+            context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), change));
+        }
 	}
 
 	@Suspendable
@@ -3042,6 +3047,8 @@ public class GameLogic implements Cloneable, Serializable {
 		player.setLockedMana(player.getAttributeValue(Attribute.OVERLOAD));
 		int mana = Math.min(player.getMaxMana() - player.getLockedMana(), MAX_MANA);
 		player.setMana(mana);
+        context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), 1));
+
 		String manaString = player.getMana() + "/" + player.getMaxMana();
 		if (player.getLockedMana() > 0) {
 			manaString += " (" + player.getLockedMana() + " locked by overload)";
@@ -3381,7 +3388,7 @@ public class GameLogic implements Cloneable, Serializable {
 		addGameEventListener(player, quest, player.getHero());
 		player.getQuests().add(quest);
 		if (fromHand) {
-			context.fireGameEvent(new QuestPlayedEvent(context, player.getId(), (QuestCard) quest.getSourceCard()));
+ 			context.fireGameEvent(new QuestPlayedEvent(context, player.getId(), quest.getSourceCard()));
 		}
 	}
 
@@ -3394,7 +3401,7 @@ public class GameLogic implements Cloneable, Serializable {
 	public void questTriggered(Player player, Quest quest) {
 		log("Quest was trigged: {}", quest.getSourceCard());
 		quest.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		context.fireGameEvent(new QuestSuccessfulEvent(context, (QuestCard) quest.getSourceCard(), player.getId()));
+		context.fireGameEvent(new QuestSuccessfulEvent(context, quest.getSourceCard(), player.getId()));
 	}
 
 	/**

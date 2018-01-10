@@ -1,0 +1,33 @@
+{
+  "name": "Survival Pack",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "description": "Restore 2 Health. Equip 1/1 Knife. Get a Banana. Draw a card.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": 2
+      },
+      {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_survival_knife"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_bananas"
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

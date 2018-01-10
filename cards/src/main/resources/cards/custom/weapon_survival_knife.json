@@ -1,0 +1,13 @@
+{
+  "name": "Survival Knife",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "GREEN",
+  "damage": 1,
+  "durability": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

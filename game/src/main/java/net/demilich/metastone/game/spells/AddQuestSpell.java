@@ -8,6 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -28,6 +29,9 @@ public class AddQuestSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Quest quest = (Quest) desc.get(SpellArg.QUEST);
+		if (quest.getSourceCard() == null) {
+		    quest.setSourceCard(source.getSourceCard());
+        }
 		context.getLogic().playQuest(player, quest);
 	}
 

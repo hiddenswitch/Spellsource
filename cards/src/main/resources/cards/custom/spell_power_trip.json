@@ -1,0 +1,64 @@
+{
+  "name": "Power Trip",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PURPLE",
+  "rarity": "LEGENDARY",
+  "description": "All your minions have +1/1. Quest: Reach 10 mana crystals. Reward: Die. Horribly.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 1,
+        "hpBonus": 1
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "AfterMinionSummonedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "BuffSpell",
+            "target": "FRIENDLY_MINIONS",
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        }
+      },
+      {
+        "class": "AddQuestSpell",
+        "quest": {
+          "eventTrigger": {
+            "class": "MaxManaChangedTrigger",
+            "targetPlayer": "SELF",
+            "fireCondition": {
+              "class": "ComparisonCondition",
+              "value1": {
+                "class": "PlayerAttributeValueProvider",
+                "targetPlayer": "SELF",
+                "playerAttribute": "MAX_MANA"
+              },
+              "value2": 10,
+              "operation": "EQUAL"
+            }
+          },
+          "spell": {
+            "class": "DestroySpell",
+            "target": "FRIENDLY_HERO"
+          },
+          "maxFires": 1,
+          "countUntilCast": 1
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

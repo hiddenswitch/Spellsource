@@ -15,6 +15,7 @@ public abstract class CardDesc implements Serializable, Cloneable {
 	public String id;
 	public String name;
 	public String description;
+	public Boolean legacy;
 	public CardType type;
 	public HeroClass heroClass;
 	public HeroClass[] heroClasses;

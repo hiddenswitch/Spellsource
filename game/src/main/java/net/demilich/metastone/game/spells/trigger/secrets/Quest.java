@@ -10,17 +10,11 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 
 public class Quest extends Enchantment {
-	private Card source;
 
 	public Quest(EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast) {
 		super(trigger, spell);
-		this.source = source;
+		this.setSourceCard(source);
 		this.setCountUntilCast(countUntilCast);
-	}
-
-	@Override
-	public Card getSourceCard() {
-		return source;
 	}
 
 	@Override
@@ -48,7 +42,7 @@ public class Quest extends Enchantment {
 	@Override
 	public Quest clone() {
 		Quest clone = (Quest) super.clone();
-		clone.source = source;
+		clone.setSourceCard(getSourceCard());
 		return clone;
 	}
 }
