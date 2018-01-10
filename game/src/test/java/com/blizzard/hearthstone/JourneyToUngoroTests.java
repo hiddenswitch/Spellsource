@@ -1,9 +1,6 @@
 package com.blizzard.hearthstone;
 
 
-import net.demilich.metastone.game.cards.desc.SpellCardDesc;
-import net.demilich.metastone.game.spells.AddAttributeSpell;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
@@ -18,17 +15,97 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
+	@Test
+	public void testCrystalCore() {
+		Consumer<Minion> checkMinion = (Minion minion) -> {
+			Assert.assertEquals(minion.getBaseAttack(), 5);
+			Assert.assertEquals(minion.getBaseHp(), 5);
+		};
+
+		// Check regular summoning from hand and mind control
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_crystal_core");
+			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			checkMinion.accept(minion1);
+			context.endTurn();
+			Minion minion2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_mind_control", minion2);
+			checkMinion.accept(minion2);
+		});
+
+		// Check resurrection
+		runGym((context, player, opponent) -> {
+			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_fireball", minion1);
+			context.endTurn();
+			playCard(context, player, "spell_crystal_core");
+			playCard(context, player, "spell_diamond_spellstone");
+			checkMinion.accept(player.getMinions().get(0));
+		});
+	}
+
+	@Test
+	public void testTheCavernsBelow() {
+		// Plain test
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_the_caverns_below");
+			Stream.of("minion_bloodfen_raptor", "minion_bloodfen_raptor", "minion_bloodfen_raptor", "minion_bloodfen_raptor",
+					"spell_mirror_image", "spell_mirror_image", "spell_mirror_image", "spell_mirror_image")
+					.peek(cid -> playCard(context, player, cid)).peek(ignored -> Assert.assertEquals(player.getHand().size(), 0))
+					.collect(Collectors.toList());
+
+			playCard(context, player, "spell_mirror_image");
+			// Mirror image should not count
+			Assert.assertEquals(player.getHand().size(), 0);
+
+			playCard(context, player, "spell_twisting_nether");
+			playCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_crystal_core");
+		});
+
+		// Tokens summoned by other cards shouldn't count
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_the_caverns_below");
+			playCard(context, player, "minion_moroes");
+			for (int i = 0; i < 5; i++) {
+				context.endTurn();
+				context.endTurn();
+			}
+			Assert.assertEquals(player.getMinions().size(), 6);
+			Assert.assertEquals(player.getMinions().stream()
+					.map(Minion::getSourceCard)
+					.map(Card::getCardId)
+					.filter(cid -> cid.equals("token_steward")).count(), 5L);
+
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+
+		// Cards of the same name but different source card should count
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_the_caverns_below");
+			for (int i = 0; i < 3; i++) {
+				playCard(context, player, "token_treant_taunt");
+				playCard(context, player, "token_treant");
+			}
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_crystal_core");
+		});
+	}
+
 	@Test
 	public void testTarCreeper() {
 		runGym((context, player, opponent) -> {

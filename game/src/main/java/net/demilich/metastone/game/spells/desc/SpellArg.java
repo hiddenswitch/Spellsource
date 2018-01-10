@@ -2,10 +2,10 @@ package net.demilich.metastone.game.spells.desc;
 
 public enum SpellArg {
 	CLASS,
-
 	ARMOR_BONUS,
 	ATTACK_BONUS,
 	ATTRIBUTE,
+	AURA,
 	BOARD_POSITION_ABSOLUTE,
 	BOARD_POSITION_RELATIVE,
 	CANNOT_RECEIVE_OWNED,
@@ -48,7 +48,6 @@ public enum SpellArg {
 	SPELL,
 	SPELL_1,
 	SPELL_2,
-	SPELL_SOURCE,
 	SPELLS,
 	SUMMON_BASE_HP,
 	SUMMON_BASE_ATTACK,

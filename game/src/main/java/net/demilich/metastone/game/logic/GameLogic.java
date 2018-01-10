@@ -206,14 +206,18 @@ public class GameLogic implements Cloneable, Serializable {
 			gameEventListener.setOwner(player.getId());
 		}
 
-		gameEventListener.onAdd(context);
-		context.addTrigger(gameEventListener);
-		if (Enchantment.class.isAssignableFrom(gameEventListener.getClass())) {
+		if (gameEventListener instanceof Enchantment) {
+			// Start assigning IDs to these things
 			Enchantment enchantment = (Enchantment) gameEventListener;
+			enchantment.setId(getIdFactory().generateId());
 			if (enchantment.getSourceCard() == null) {
 				enchantment.setSourceCard(host.getSourceCard());
 			}
 		}
+
+		gameEventListener.onAdd(context);
+		context.addTrigger(gameEventListener);
+
 		log("New enchantment was added for {} on {}: {}", player.getName(), host, gameEventListener);
 	}
 
@@ -2174,13 +2178,13 @@ public class GameLogic implements Cloneable, Serializable {
 		final int maxMana = MathUtils.clamp(player.getMaxMana() + delta, 0, GameLogic.MAX_MANA);
 		final int initialMaxMana = player.getMaxMana();
 		final int change = maxMana - initialMaxMana;
-        player.setMaxMana(maxMana);
-        if (delta < 0 && player.getMana() > player.getMaxMana()) {
+		player.setMaxMana(maxMana);
+		if (delta < 0 && player.getMana() > player.getMaxMana()) {
 			modifyCurrentMana(player.getId(), delta);
 		}
-        if (change != 0) {
-            context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), change));
-        }
+		if (change != 0) {
+			context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), change));
+		}
 	}
 
 	@Suspendable
@@ -3047,7 +3051,7 @@ public class GameLogic implements Cloneable, Serializable {
 		player.setLockedMana(player.getAttributeValue(Attribute.OVERLOAD));
 		int mana = Math.min(player.getMaxMana() - player.getLockedMana(), MAX_MANA);
 		player.setMana(mana);
-        context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), 1));
+		context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), 1));
 
 		String manaString = player.getMana() + "/" + player.getMaxMana();
 		if (player.getLockedMana() > 0) {
@@ -3388,7 +3392,7 @@ public class GameLogic implements Cloneable, Serializable {
 		addGameEventListener(player, quest, player.getHero());
 		player.getQuests().add(quest);
 		if (fromHand) {
- 			context.fireGameEvent(new QuestPlayedEvent(context, player.getId(), quest.getSourceCard()));
+			context.fireGameEvent(new QuestPlayedEvent(context, player.getId(), quest.getSourceCard()));
 		}
 	}
 

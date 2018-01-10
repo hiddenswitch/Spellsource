@@ -18,17 +18,11 @@
       {
         "class": "AddEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
-        "trigger": {
-          "eventTrigger": {
-            "class": "AfterMinionSummonedTrigger",
-            "targetPlayer": "SELF"
-          },
-          "spell": {
-            "class": "BuffSpell",
-            "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1
-          }
+        "aura": {
+          "class": "BuffAura",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 1,
+          "hpBonus": 1
         }
       },
       {

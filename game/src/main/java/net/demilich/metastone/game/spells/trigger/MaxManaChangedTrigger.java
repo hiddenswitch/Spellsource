@@ -8,18 +8,18 @@ import net.demilich.metastone.game.events.MaxManaChangedEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class MaxManaChangedTrigger extends EventTrigger {
-    public MaxManaChangedTrigger(EventTriggerDesc desc) {
-        super(desc);
-    }
+	public MaxManaChangedTrigger(EventTriggerDesc desc) {
+		super(desc);
+	}
 
-    @Override
-    @Suspendable
-    protected boolean fire(GameEvent event, Entity host) {
-        return true;
-    }
+	@Override
+	@Suspendable
+	protected boolean fire(GameEvent event, Entity host) {
+		return true;
+	}
 
-    @Override
-    public GameEventType interestedIn() {
-        return GameEventType.MAX_MANA;
-    }
+	@Override
+	public GameEventType interestedIn() {
+		return GameEventType.MAX_MANA;
+	}
 }

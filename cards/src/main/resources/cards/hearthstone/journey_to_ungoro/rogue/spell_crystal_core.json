@@ -7,48 +7,72 @@
   "description": "For the rest of the game, your minions are 5/5.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "SetAttributeSpell",
-        "target": "FRIENDLY_MINIONS",
-        "value": 5,
-        "attribute": "HP"
-      },
-      {
-        "class": "SetAttributeSpell",
-        "target": "FRIENDLY_MINIONS",
-        "value": 5,
-        "attribute": "ATTACK"
-      },
-      {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "trigger": {
-          "eventTrigger": {
-            "class": "AfterMinionSummonedTrigger",
-            "targetPlayer": "SELF"
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "aura": {
+      "class": "Aura",
+      "target": "FRIENDLY_MINIONS",
+      "applyEffect": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SetAttributeSpell",
+            "attribute": "RESERVED_INTEGER_2",
+            "value": {
+              "class": "AttributeValueProvider",
+              "attribute": "BASE_ATTACK"
+            }
           },
-          "spell": {
-            "class": "MetaSpell",
-            "spells": [
-              {
-                "class": "SetAttributeSpell",
-                "target": "EVENT_TARGET",
-                "value": 5,
-                "attribute": "HP"
-              },
-              {
-                "class": "SetAttributeSpell",
-                "target": "EVENT_TARGET",
-                "value": 5,
-                "attribute": "ATTACK"
-              }
-            ]
+          {
+            "class": "SetAttributeSpell",
+            "attribute": "BASE_ATTACK",
+            "value": 5
+          },
+          {
+            "class": "SetAttributeSpell",
+            "attribute": "RESERVED_INTEGER_3",
+            "value": {
+              "class": "AttributeValueProvider",
+              "attribute": "BASE_HP"
+            }
+          },
+          {
+            "class": "SetAttributeSpell",
+            "attribute": "BASE_HP",
+            "value": 5
           }
-        }
+        ]
+      },
+      "removeEffect": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SetAttributeSpell",
+            "attribute": "BASE_ATTACK",
+            "value": {
+              "class": "AttributeValueProvider",
+              "attribute": "RESERVED_INTEGER_2"
+            }
+          },
+          {
+            "class": "RemoveAttributeSpell",
+            "attribute": "RESERVED_INTEGER_2"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "attribute": "BASE_HP",
+            "value": {
+              "class": "AttributeValueProvider",
+              "attribute": "RESERVED_INTEGER_3"
+            }
+          },
+          {
+            "class": "RemoveAttributeSpell",
+            "attribute": "RESERVED_INTEGER_3"
+          }
+        ]
       }
-    ]
+    }
   },
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",
