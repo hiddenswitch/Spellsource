@@ -34,26 +34,26 @@
       {
         "class": "AddQuestSpell",
         "quest": {
+          "countUntilCast": 1,
           "eventTrigger": {
             "class": "MaxManaChangedTrigger",
-            "targetPlayer": "SELF",
             "fireCondition": {
               "class": "ComparisonCondition",
+              "operation": "EQUAL",
               "value1": {
                 "class": "PlayerAttributeValueProvider",
-                "targetPlayer": "SELF",
-                "playerAttribute": "MAX_MANA"
+                "playerAttribute": "MAX_MANA",
+                "targetPlayer": "SELF"
               },
-              "value2": 10,
-              "operation": "EQUAL"
-            }
+              "value2": 10
+            },
+            "targetPlayer": "SELF"
           },
           "spell": {
             "class": "DestroySpell",
             "target": "FRIENDLY_HERO"
           },
-          "maxFires": 1,
-          "countUntilCast": 1
+          "maxFires": 1
         }
       }
     ]

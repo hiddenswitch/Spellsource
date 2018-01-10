@@ -14,12 +14,12 @@
     },
     "spell": {
       "class": "RecruitSpell",
-      "cardLocation": "DECK",
-      "targetPlayer": "SELF",
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION"
-      }
+      },
+      "cardLocation": "DECK",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

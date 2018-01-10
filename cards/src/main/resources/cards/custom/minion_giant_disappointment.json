@@ -12,8 +12,8 @@
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "AlgebraicValueProvider",
+    "operation": "ADD",
     "value1": 1,
-    "value2": 0,
-    "operation": "ADD"
+    "value2": 0
   }
 }
