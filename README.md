@@ -51,14 +51,14 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
    2. Hit `Start`, type `PowerShell`, right click on the `Windows PowerShell` result and choose `Run as Administrator`.
    3. From the `chocolatey` docs, we'll run the following commands:
       ```
-      Set-ExecutionPolicy AllSigned
-      Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-      choco feature enable -n allowGlobalConfirmation
+      Set-ExecutionPolicy AllSigned;
+      Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'));
+      choco feature enable -n allowGlobalConfirmation;
       ```
       This installs `chocolatey`, the Windows development package manager.
    4. We'll now install basic development packages. This includes the MongoDB, Java 8 SDK, `git` and `ConEmu`, a great Windows terminal emulator.
       ```
-      choco install mongodb.install chocolatey-core.extension git.install git-credential-manager-for-windows jdk8 conemu.install
+      choco install mongodb.install chocolatey-core.extension git.install git-credential-manager-for-windows jdk8 conemu
       ```
       Then, install [IntelliJ Idea Community Edition](https://www.jetbrains.com/idea/download/#section=windows) to edit the `Spellsource-Server` Java project. Since sometimes `choco` packages fail to install, you might need to manually install [MongoDB](https://www.mongodb.com/download-center#community), [JDK8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html), and [git](https://git-scm.com/download/win).  
    5. Exit `Windows PowerShell`
