@@ -74,11 +74,15 @@ public class CreateCardFromChoicesSpell extends Spell {
 		MinionCard other = (MinionCard) chosen[1].getCard().getCopy();
 		card.setName(desc.getString(SpellArg.NAME));
 		card.setDescription(card.getDescription() + "\n" + other.getDescription());
+		card.getAttributes().put(Attribute.ATTACK, card.getAttack() + other.getAttack());
 		card.getAttributes().put(Attribute.BASE_ATTACK, card.getBaseAttack() + other.getBaseAttack());
+		card.getAttributes().put(Attribute.HP, card.getHp() + other.getHp());
 		card.getAttributes().put(Attribute.BASE_HP, card.getBaseHp() + other.getBaseHp());
 		card.getAttributes().put(Attribute.BASE_MANA_COST, card.getBaseManaCost() + other.getBaseManaCost());
 		for (Attribute attribute : other.getAttributes().keySet()) {
-			if (attribute == Attribute.BASE_ATTACK
+			if (attribute == Attribute.ATTACK
+					|| attribute == Attribute.HP
+					|| attribute == Attribute.BASE_ATTACK
 					|| attribute == Attribute.BASE_HP
 					|| attribute == Attribute.BASE_MANA_COST) {
 				continue;

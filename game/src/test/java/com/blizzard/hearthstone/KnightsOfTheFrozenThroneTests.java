@@ -117,6 +117,9 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			Assert.assertEquals(cardInHand.getBaseHp(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseHp)).getSum());
 			Assert.assertEquals(cardInHand.getBaseAttack(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseAttack)).getSum());
 			Assert.assertEquals(cardInHand.getBaseManaCost(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseManaCost)).getSum());
+			Minion playedCard = playMinionCard(context, player, cardInHand);
+			Assert.assertEquals(playedCard.getAttack(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseAttack)).getSum());
+			Assert.assertEquals(playedCard.getHp(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseHp)).getSum());
 		});
 	}
 
