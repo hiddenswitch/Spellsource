@@ -37,6 +37,22 @@ public class CustomHearthstoneTests extends TestBase {
 	}
 
 	@Test
+	public void testQuestGiver() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			playMinionCard(context, player, "minion_quest_giver");
+			Assert.assertEquals(player.getDeck().get(0).getCardId(), "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getMinions().size(), 1);
+			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_quest_giver");
+			context.endTurn();
+			context.endTurn();
+			Minion newBloodfen = playMinionCard(context, player, (MinionCard) player.getHand().get(0));
+			Assert.assertEquals(newBloodfen.getAttack(), 6);
+			Assert.assertEquals(newBloodfen.getHp(), 5);
+		});
+	}
+
+	@Test
 	public void testPowerTrip() {
 		// We reach turn 10 so we have 10 mana, we die
 		runGym((context, player, opponent) -> {

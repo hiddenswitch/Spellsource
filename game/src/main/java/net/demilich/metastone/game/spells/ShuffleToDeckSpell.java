@@ -23,6 +23,7 @@ public class ShuffleToDeckSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = null;
 		AttributeMap map = new AttributeMap();
+		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
 		if (target != null) {
 			// Implements Kingsbane in a very basic way, since weapons pretty much only get enchanted for attack,
 			// durability, windfury, lifesteal and poisonous bonuses.
@@ -52,6 +53,9 @@ public class ShuffleToDeckSpell extends Spell {
 				final Card copy = card.getCopy();
 				copy.getAttributes().putAll(map);
 				context.getLogic().shuffleToDeck(player, copy);
+				context.setEventCard(copy);
+				SpellUtils.castChildSpell(context, player, subSpell, source, copy);
+				context.setEventCard(null);
 			}
 		}
 	}
