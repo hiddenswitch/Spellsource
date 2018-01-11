@@ -7,7 +7,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Call to Arms: Summon the last minion Sourcing Specialist destroyed.",
+  "description": "Battlecry: Summon the last minion Sourcing Specialist destroyed.",
   "battlecry": {
     "spell": {
       "class": "SummonCardFromAttributeSpell",
