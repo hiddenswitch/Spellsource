@@ -35,6 +35,31 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testFrostLichJaina() {
+		runGym((context, player, opponent) -> {
+			Minion tarCreeper = playMinionCard(context, player, "minion_tar_creeper");
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertFalse(tarCreeper.hasAttribute(Attribute.LIFESTEAL));
+			Assert.assertFalse(bloodfen.hasAttribute(Attribute.LIFESTEAL));
+			playCard(context, player, "hero_frost_lich_jaina");
+			Assert.assertTrue(tarCreeper.hasAttribute(Attribute.LIFESTEAL));
+			Assert.assertFalse(bloodfen.hasAttribute(Attribute.LIFESTEAL));
+			bloodfen.setHp(1);
+			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(bloodfen.getReference()));
+			Assert.assertTrue(bloodfen.isDestroyed());
+			final Minion waterElemental = player.getMinions().get(1);
+			Assert.assertEquals(waterElemental.getSourceCard().getCardId(), "minion_water_elemental");
+			Assert.assertTrue(waterElemental.hasAttribute(Attribute.LIFESTEAL));
+			context.endTurn();
+			Minion toSteal = playMinionCard(context, opponent, "minion_tar_creeper");
+			Assert.assertFalse(toSteal.hasAttribute(Attribute.LIFESTEAL));
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_mind_control", toSteal);
+			Assert.assertTrue(toSteal.hasAttribute(Attribute.LIFESTEAL));
+		});
+	}
+
+	@Test
 	public void testDeathGrip() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
@@ -93,7 +118,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		});
 	}
 
-	@Test(invocationCount = 100)
+	@Test
 	@SuppressWarnings("unchecked")
 	public void testDeathstalkerRexxar() {
 		runGym((GameContext context, Player player, Player opponent) -> {

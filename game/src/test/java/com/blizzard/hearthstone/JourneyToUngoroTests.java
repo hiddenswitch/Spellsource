@@ -25,9 +25,27 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
+	@Test
+	public void testMeteor() {
+		for (int j0 = 0; j0 < 3; j0++) {
+			final int j = j0;
+			runGym((context, player, opponent) -> {
+				context.endTurn();
+				List<Minion> minions = IntStream.range(0, 3).mapToObj(i -> playMinionCard(context, opponent, "minion_argent_squire")).collect(Collectors.toList());
+				context.endTurn();
+				playCardWithTarget(context, player, "spell_meteor", minions.get(j));
+				for (int k = 0; k < 3; k++) {
+					Assert.assertFalse(opponent.getMinions().get(k).isDestroyed());
+					Assert.assertEquals(opponent.getMinions().get(k).hasAttribute(Attribute.DIVINE_SHIELD), k < j - 1 || k > j + 1);
+				}
+			});
+		}
+	}
+
 	@Test
 	public void testCrystalCore() {
 		Consumer<Minion> checkMinion = (Minion minion) -> {
