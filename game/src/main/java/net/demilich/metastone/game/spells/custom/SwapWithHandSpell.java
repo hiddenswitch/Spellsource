@@ -22,11 +22,13 @@ public class SwapWithHandSpell extends ReturnTargetToHandSpell {
 		// Summon a random minion and remove the corresponding card
 		// before adding Alarm-o-bot to your hand!
 		MinionCard randomMinionCard = (MinionCard) context.getLogic().getRandom(player.getDeck().filtered(c -> c.getCardType() == CardType.MINION));
-		context.getLogic().removeCard(randomMinionCard);
-		// return Alarm-o-bot to hand (Now it's safe and won't destroy itself!)
-		super.onCast(context, player, desc, source, target);
-		// Summon the minion, which ALSO won't destroy itself...
-		context.getLogic().summon(player.getId(), randomMinionCard.summon(), null, -1, false);
+		if (randomMinionCard != null) {
+			context.getLogic().removeCard(randomMinionCard);
+			// return Alarm-o-bot to hand (Now it's safe and won't destroy itself!)
+			super.onCast(context, player, desc, source, target);
+			// Summon the minion, which ALSO won't destroy itself...
+			context.getLogic().summon(player.getId(), randomMinionCard.summon(), null, -1, false);
+		}
 	}
 
 }

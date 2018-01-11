@@ -2695,7 +2695,9 @@ public class GameLogic implements Cloneable, Serializable {
 		Player player = context.getPlayer(playerId);
 		log("Card {} has been moved from the DECK to the GRAVEYARD", card);
 		removeEnchantments(card);
-		player.getDeck().move(card, player.getGraveyard());
+		if (card.getZone() != Zones.GRAVEYARD) {
+			player.getDeck().move(card, player.getGraveyard());
+		}
 	}
 
 	/**

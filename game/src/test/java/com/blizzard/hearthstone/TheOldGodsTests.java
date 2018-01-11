@@ -41,6 +41,29 @@ import static net.demilich.metastone.game.targeting.EntityReference.EVENT_TARGET
 
 public class TheOldGodsTests extends TestBase {
 	@Test
+	public void testMarkOfYshaarj() {
+		// Test with beast
+		runGym((context, player, opponent) -> {
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_mirror_image"));
+			Minion raven = playMinionCard(context, player, "minion_enchanted_raven");
+			playCardWithTarget(context, player, "spell_mark_of_yshaarj", raven);
+			Assert.assertEquals(raven.getAttack(), 4);
+			Assert.assertEquals(raven.getHp(), 4);
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_mirror_image");
+		});
+
+		// Test with beast
+		runGym((context, player, opponent) -> {
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_mirror_image"));
+			Minion notBeast = playMinionCard(context, player, "token_steward");
+			playCardWithTarget(context, player, "spell_mark_of_yshaarj", notBeast);
+			Assert.assertEquals(notBeast.getAttack(), 3);
+			Assert.assertEquals(notBeast.getHp(), 3);
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
 	public void testYshaarjRageUnboundShadowEssence() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_yshaarj_rage_unbound");
