@@ -1,0 +1,29 @@
+{
+  "name": "Quest Giver",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Battlecry: Shuffle a friendly minion into your deck and give it +3/+3.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "howMany": 1,
+      "spell": {
+        "class": "BuffSpell",
+        "target": "EVENT_CARD",
+        "attackBonus": 3,
+        "hpBonus": 3
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

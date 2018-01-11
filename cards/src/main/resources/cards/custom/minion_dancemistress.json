@@ -1,0 +1,24 @@
+{
+  "name": "Dancemistress",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Whenever this minion is healed, summon a 2/2 Crazed Dancer.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "hostEntityType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "minion_crazed_dancer"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

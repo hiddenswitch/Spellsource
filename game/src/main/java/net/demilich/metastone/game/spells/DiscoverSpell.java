@@ -18,11 +18,11 @@ import net.demilich.metastone.game.spells.desc.source.HasWeights;
 import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
-import org.apache.commons.collections4.bag.TreeBag;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;

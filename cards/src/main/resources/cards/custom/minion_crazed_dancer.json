@@ -1,0 +1,14 @@
+{
+  "name": "Crazed Dancer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
