@@ -17,6 +17,7 @@ import net.demilich.metastone.game.spells.SetAttributeSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,10 +79,12 @@ public class Persistence {
 				}
 
 				for (Map.Entry<Attribute, Object> kv : entry.getValue().entrySet()) {
-					SpellDesc spell = SetAttributeSpell.create(target, kv.getKey(), kv.getValue());
-					// By setting childSpell to true, additional spell casting triggers don't get called
-					// But target overriding effects apply, as they should.
-					context.getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), target, true);
+					if (!kv.getValue().getClass().isPrimitive()
+							|| !(kv.getValue() instanceof Serializable)) {
+						continue;
+					}
+
+					entity.setAttribute(kv.getKey(), kv.getValue());
 				}
 			}
 		}
