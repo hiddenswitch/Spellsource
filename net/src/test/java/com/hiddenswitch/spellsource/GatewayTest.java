@@ -241,7 +241,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 		UnityClient client = new UnityClient(getContext(), 1);
 		client.createUserAccount(null);
-		final String token =  client.getToken();
+		final String token = client.getToken();
 		final String userId = client.getAccount().getId();
 		client.matchmakeAndPlayAgainstAI(null);
 
@@ -346,7 +346,19 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		vertx.executeBlocking(done -> {
 			UnityClient client = new UnityClient(context);
 			client.createUserAccount();
-			client.matchmakeAndPlayAgainstAI();
+			// The user needs a deck of persistent effect cards
+			final DecksPutResponse decksPutResponse;
+			try {
+
+				decksPutResponse = client.getApi().decksPut(new DecksPutRequest()
+						.deckList("### Persistence Test Deck\n" +
+								"Hero Class: Violet\n" +
+								"30x Persistence Test Minion"));
+			} catch (ApiException e) {
+				getContext().fail(e);
+				return;
+			}
+			client.matchmakeAndPlayAgainstAI(decksPutResponse.getDeckId());
 			client.waitUntilDone();
 			getContext().assertTrue(client.isGameOver());
 			done.complete();
