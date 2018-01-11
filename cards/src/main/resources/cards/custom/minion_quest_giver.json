@@ -11,13 +11,13 @@
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
       "class": "ShuffleToDeckSpell",
-      "howMany": 1,
       "spell": {
         "class": "BuffSpell",
         "target": "EVENT_CARD",
         "attackBonus": 3,
         "hpBonus": 3
-      }
+      },
+      "howMany": 1
     }
   },
   "attributes": {
