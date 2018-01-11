@@ -9,8 +9,7 @@
   "description": "Hero Power: Equip a 1/2 weapon",
   "attributes": {
     "HP": 30,
-    "MAX_HP": 30,
-    "NAME": "Faloran"
+    "MAX_HP": 30
   },
   "collectible": false,
   "set": "BASIC",

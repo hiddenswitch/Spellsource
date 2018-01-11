@@ -44,6 +44,7 @@ public abstract class Card extends Entity {
 	private HeroClass[] heroClasses;
 	private boolean collectible = true;
 	private ValueProvider manaCostModifier;
+	private boolean hasPersistentEffects = false;
 	/**
 	 * @see #getCardId()
 	 */
@@ -70,6 +71,7 @@ public abstract class Card extends Entity {
 		cardSet = desc.set;
 		rarity = desc.rarity;
 		heroClass = desc.heroClass;
+		hasPersistentEffects = desc.legacy != null && desc.legacy;
 		if (desc.heroClasses != null) {
 			heroClasses = desc.heroClasses;
 		}
@@ -375,5 +377,10 @@ public abstract class Card extends Entity {
 
 	public TriggerDesc[] getPassiveTriggers() {
 		return (TriggerDesc[]) getAttribute(Attribute.PASSIVE_TRIGGERS);
+	}
+
+	@Override
+	public boolean hasPersistentEffects() {
+		return hasPersistentEffects;
 	}
 }

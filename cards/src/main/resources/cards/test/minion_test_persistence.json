@@ -1,0 +1,14 @@
+{
+  "name": "Persistence Test Minion",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "legacy": true,
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

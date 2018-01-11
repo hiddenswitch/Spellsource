@@ -305,7 +305,10 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public boolean hasPersistentEffects() {
 		// TODO: look through the card description to see if it uses any network attributes or effects.
-		return true;
+		if (getSourceCard() != null) {
+			return getSourceCard().hasPersistentEffects();
+		}
+		return false;
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class CavernsBelowTrigger extends MinionPlayedTrigger {
+public class CavernsBelowTrigger extends BeforeMinionPlayedTrigger {
 
 	public CavernsBelowTrigger(EventTriggerDesc desc) {
 		super(desc);
@@ -28,7 +29,7 @@ public class CavernsBelowTrigger extends MinionPlayedTrigger {
 			return false;
 		}
 
-		SummonEvent summonEvent = (SummonEvent) event;
+		BeforeSummonEvent summonEvent = (BeforeSummonEvent) event;
 		GameContext context = event.getGameContext();
 		EnvironmentEntityList list = EnvironmentEntityList.getList(context);
 		list.add(host, summonEvent.getSource());

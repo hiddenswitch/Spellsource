@@ -15,6 +15,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +50,8 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 		List<String> inventoryIds = entities.stream()
 				.filter(Entity::hasPersistentEffects)
 				.map(Entity::getCardInventoryId)
-				.filter(ci -> ci != null).collect(Collectors.toList());
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
 
 		if (inventoryIds.isEmpty()) {
 			return 0L;
