@@ -24,6 +24,7 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -92,19 +93,23 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		});
 	}
 
-	@Test
+	@Test(invocationCount = 100)
 	@SuppressWarnings("unchecked")
 	public void testDeathstalkerRexxar() {
 		runGym((GameContext context, Player player, Player opponent) -> {
 			Behaviour spiedBehavior = Mockito.spy(player.getBehaviour());
 			player.setBehaviour(spiedBehavior);
 			List<MinionCard> minionCards = new ArrayList<>();
-
+			AtomicBoolean isBuildingBeast = new AtomicBoolean(false);
 			final Answer<GameAction> answer = invocation -> {
-				final List<GameAction> gameActions = (List<GameAction>) invocation.getArguments()[2];
-				final DiscoverAction discoverAction = (DiscoverAction) gameActions.get(0);
-				minionCards.add((MinionCard) discoverAction.getCard());
-				return discoverAction;
+
+				if (isBuildingBeast.get()) {
+					final List<GameAction> gameActions = (List<GameAction>) invocation.getArguments()[2];
+					final DiscoverAction discoverAction = (DiscoverAction) gameActions.get(0);
+					minionCards.add((MinionCard) discoverAction.getCard());
+					return discoverAction;
+				}
+				return (GameAction) invocation.callRealMethod();
 			};
 
 			Mockito.doAnswer(answer)
@@ -112,14 +117,17 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 					.requestAction(Mockito.any(), Mockito.any(), Mockito.anyList());
 
 			playCard(context, player, "hero_deathstalker_rexxar");
+			isBuildingBeast.set(true);
 			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play());
+			isBuildingBeast.set(false);
 			MinionCard cardInHand = (MinionCard) player.getHand().get(0);
 			Assert.assertEquals(cardInHand.getBaseHp(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseHp)).getSum());
 			Assert.assertEquals(cardInHand.getBaseAttack(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseAttack)).getSum());
 			Assert.assertEquals(cardInHand.getBaseManaCost(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseManaCost)).getSum());
-			Minion playedCard = playMinionCard(context, player, cardInHand);
-			Assert.assertEquals(playedCard.getAttack(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseAttack)).getSum());
-			Assert.assertEquals(playedCard.getHp(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseHp)).getSum());
+			playMinionCard(context, player, cardInHand);
+			Minion playedCard = player.getMinions().get(0);
+			Assert.assertEquals(playedCard.getBaseAttack(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseAttack)).getSum());
+			Assert.assertEquals(playedCard.getBaseHp(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseHp)).getSum());
 		});
 	}
 
