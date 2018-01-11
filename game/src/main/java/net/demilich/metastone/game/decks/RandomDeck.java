@@ -33,7 +33,9 @@ public class RandomDeck extends Deck {
 			// random deck consists of roughly 50% class cards and 50% neutral
 			// cards
 
-			Card randomCard = ThreadLocalRandom.current().nextBoolean() ? classCards.getRandom() : neutralCards.getRandom();
+			Card randomCard = ThreadLocalRandom.current().nextBoolean()
+					? classCards.get(ThreadLocalRandom.current().nextInt(classCards.size()))
+					: neutralCards.get(ThreadLocalRandom.current().nextInt(neutralCards.size()));
 			if (deckValidator.canAddCardToDeck(randomCard, this)) {
 				this.getCards().addCard(randomCard.clone());
 			}

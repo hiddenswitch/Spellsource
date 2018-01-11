@@ -23,10 +23,6 @@ public interface Writer {
 	void onGameEnd(Player winner);
 
 	@Suspendable
-	@Deprecated
-	void setPlayers(Player localPlayer, Player remotePlayer);
-
-	@Suspendable
 	void onActivePlayer(Player activePlayer);
 
 	@Suspendable

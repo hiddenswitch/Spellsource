@@ -33,9 +33,9 @@ public class RecruitSpell extends Spell {
 		MinionCard minionCard = null;
 		CardList collection = cardLocation == Zones.HAND ? player.getHand() : player.getDeck();
 		if (cardFilter == null) {
-			minionCard = (MinionCard) collection.getRandomOfType(CardType.MINION);
+			minionCard = (MinionCard) context.getLogic().getRandom(collection.filtered(f -> f.getCardType() == CardType.MINION));
 		} else {
-			minionCard = (MinionCard) SpellUtils.getRandomCard(collection, card -> cardFilter.matches(context, player, card, source));
+			minionCard = (MinionCard) context.getLogic().getRandom(collection.filtered(card -> cardFilter.matches(context, player, card, source)));
 		}
 
 		if (minionCard == null) {

@@ -23,7 +23,7 @@ public class SummonRandomMinionFromSpell extends Spell {
 		}
 		
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
-		MinionCard minionCard = (MinionCard) relevantMinions.getRandom();
+		MinionCard minionCard = (MinionCard) context.getLogic().getRandom(relevantMinions);
 		context.getLogic().summon(player.getId(), minionCard.summon(), null, boardPosition, false);
 	}
 

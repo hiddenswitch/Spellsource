@@ -40,7 +40,6 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	private ClientCommunicationSend ccs;
 	private ClientCommunicationReceive ccr;
 	public boolean ignoreEventOverride = false;
-	private final SocketClientConnection socketClientConnection;
 	private final PriorityBlockingQueue<RequestedAction> actionQueue = new PriorityBlockingQueue<>(2, (o1, o2) -> Long.compare(o1.state.timestamp, o2.state.timestamp));
 	private long lastUpdatedAt = Long.MIN_VALUE;
 	private long serverTimeDiff = 0;
@@ -68,7 +67,6 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	@Override
 	public synchronized void dispose() {
 		actionQueue.clear();
-		socketClientConnection.kill();
 	}
 
 	@Override
@@ -327,15 +325,6 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 		logger.debug("End active player {}", ap.getId());
 	}
 
-	@Override
-	public void setPlayers(Player localPlayer, Player remotePlayer) {
-		this.setLocalPlayer(localPlayer);
-		this.setPlayer(localPlayer.getId(), localPlayer);
-		this.setPlayer(remotePlayer.getId(), remotePlayer);
-
-		hideCards();
-	}
-
 	protected void hideCards() {
 		getLocalPlayer().setHideCards(false);
 		getOpponent(getLocalPlayer()).setHideCards(true);
@@ -406,7 +395,7 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 
 	@Override
 	public Object getPrivateSocket() {
-		return socketClientConnection;
+		return null;
 	}
 
 	@Override

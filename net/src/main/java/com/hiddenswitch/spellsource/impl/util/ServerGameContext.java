@@ -169,8 +169,6 @@ public class ServerGameContext extends GameContext {
 		getNetworkGameLogic().initializePlayer(IdFactory.PLAYER_1);
 		getNetworkGameLogic().initializePlayer(IdFactory.PLAYER_2);
 
-		setLocalPlayer1();
-		setLocalPlayer2();
 		updateClientsWithGameState();
 
 		Future<Void> init1 = Future.future();
@@ -261,14 +259,6 @@ public class ServerGameContext extends GameContext {
 
 	private int getTurnTimeForPlayer(int activePlayerId) {
 		return getLogic().getTurnTimeMillis(activePlayerId);
-	}
-
-	protected void setLocalPlayer2() {
-		getListenerMap().get(getPlayer2()).setPlayers(getPlayer2(), getPlayer1());
-	}
-
-	protected void setLocalPlayer1() {
-		getListenerMap().get(getPlayer1()).setPlayers(getPlayer1(), getPlayer2());
 	}
 
 	protected void updateActivePlayers() {
@@ -516,9 +506,9 @@ public class ServerGameContext extends GameContext {
 		// Don't replace the player object! We don't need it
 		// Resynchronize the game states
 		if (player.getId() == PLAYER_1) {
-			setLocalPlayer1();
+
 		} else if (player.getId() == PLAYER_2) {
-			setLocalPlayer2();
+
 		}
 
 		updateActivePlayers();

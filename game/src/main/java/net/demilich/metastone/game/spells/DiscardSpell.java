@@ -45,7 +45,7 @@ public class DiscardSpell extends Spell {
 		int cardCount = numberOfCards == ALL_CARDS ? discardableCards.getCount() : numberOfCards;
 
 		for (int i = 0; i < cardCount; i++) {
-			Card randomHandCard = discardableCards.getRandom();
+			Card randomHandCard = context.getLogic().getRandom(discardableCards);
 			if (randomHandCard == null) {
 				return;
 			}

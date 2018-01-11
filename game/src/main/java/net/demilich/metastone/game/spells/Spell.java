@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -48,7 +47,7 @@ public abstract class Spell implements Serializable {
 		// there is at least one valid target and the RANDOM_TARGET flag is set,
 		// pick one randomly
 		if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
-			Entity target = SpellUtils.getRandomTarget(validTargets);
+			Entity target = context.getLogic().getRandom(validTargets);
 			castForPlayer(context, player, desc, source, target);
 		} else {
 			// there is at least one target and RANDOM_TARGET flag is not set,

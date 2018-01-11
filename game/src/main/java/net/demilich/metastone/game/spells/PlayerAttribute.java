@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-@Deprecated
 public enum PlayerAttribute {
 	MANA,
 	MAX_MANA,

@@ -1436,7 +1436,7 @@ public class GameLogic implements Cloneable, Serializable {
 			return originalTarget;
 		}
 
-		return (Actor) SpellUtils.getRandomTarget(validTargets);
+		return (Actor) context.getLogic().getRandom(validTargets);
 	}
 
 	/**
@@ -2216,7 +2216,7 @@ public class GameLogic implements Cloneable, Serializable {
 		// draw random cards from deck until required starter card count is
 		// reached
 		while (starterCards.size() < numberOfStarterCards) {
-			Card randomCard = player.getDeck().getRandom();
+			Card randomCard = getRandom(player.getDeck());
 			player.getDeck().move(randomCard, player.getSetAsideZone());
 			starterCards.add(randomCard);
 		}
@@ -3342,28 +3342,28 @@ public class GameLogic implements Cloneable, Serializable {
 
 	@Suspendable
 	protected void mulliganAsync(Player player, boolean begins, Handler<Object> callback) {
-		throw new RecoverableGameException("Cannot call GameLogic::mulliganAsync from a non-async GameLogic instance.", context);
+		throw new RuntimeException("Cannot call GameLogic::mulliganAsync from a non-async GameLogic instance.");
 	}
 
 	@Suspendable
 	public void initAsync(int playerId, boolean begins, Handler<Player> callback) {
-		throw new RecoverableGameException("Cannot call GameLogic::initAsync from a non-async GameLogic instance.", context);
+		throw new RuntimeException("Cannot call GameLogic::initAsync from a non-async GameLogic instance.");
 	}
 
 	@Suspendable
 	protected void resolveBattlecryAsync(int playerId, Actor actor, Handler<AsyncResult<Boolean>> result) {
-		throw new RecoverableGameException("Cannot call GameLogic::resolveBattlecryAsync from a non-async GameLogic instance.", context);
+		throw new RuntimeException("Cannot call GameLogic::resolveBattlecryAsync from a non-async GameLogic instance.");
 
 	}
 
 	@Suspendable
 	public void equipWeaponAsync(int playerId, Weapon weapon, WeaponCard weaponCard, Handler<AsyncResult<Boolean>> result, boolean resolveBattlecry) {
-		throw new RecoverableGameException("Cannot call GameLogic::equipWeaponAsync from a non-async GameLogic instance.", context);
+		throw new RuntimeException("Cannot call GameLogic::equipWeaponAsync from a non-async GameLogic instance.");
 	}
 
 	@Suspendable
 	protected void summonAsync(int playerId, Minion minion, Card source, int index, boolean resolveBattlecry, Handler<AsyncResult<Boolean>> summoned) {
-		throw new RecoverableGameException("Cannot call GameLogic::summonAsync from a non-async GameLogic instance.", context);
+		throw new RuntimeException("Cannot call GameLogic::summonAsync from a non-async GameLogic instance.");
 	}
 
 	public Random getRandom() {
@@ -3513,7 +3513,7 @@ public class GameLogic implements Cloneable, Serializable {
 			starterCards.forEach(card -> player.getDeck().move(card, player.getSetAsideZone()));
 
 			for (int j = starterCards.size(); j < numberOfStarterCards; j++) {
-				Card randomCard = player.getDeck().getRandom();
+				Card randomCard = getRandom(player.getDeck());
 				if (randomCard != null) {
 					player.getDeck().move(randomCard, player.getSetAsideZone());
 					log("Player {} been offered card {} for networkRequestMulligan", player.getName(), randomCard);

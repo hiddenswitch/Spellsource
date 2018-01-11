@@ -38,7 +38,7 @@ public class FromDeckToHandSpell extends Spell {
 		for (int i = 0; i < value; i++) {
 			Card card = null;
 			if (!relevantCards.isEmpty()) {
-				card = relevantCards.getRandom();
+				card = context.getLogic().getRandom(relevantCards);
 				relevantCards.remove(card);
 				context.getLogic().removeCardFromDeck(player.getId(), card);
 			} else if (replacementCard != null) {

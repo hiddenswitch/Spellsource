@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -36,7 +35,7 @@ public class CastFromGroupSpell extends Spell {
 		List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
 		Entity randomTarget = null;
 		if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
-			randomTarget = SpellUtils.getRandomTarget(validTargets);
+			randomTarget = context.getLogic().getRandom(validTargets);
 		}
 		SpellDesc[] group = SpellUtils.getGroup(context, desc);
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 3);

@@ -280,7 +280,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	/**
 	 * Clears state to ensure this context isn't referencing it anymore.
 	 */
-	@Deprecated
 	public synchronized void dispose() {
 		this.disposed = true;
 		this.players = null;
