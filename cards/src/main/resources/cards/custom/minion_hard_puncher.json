@@ -1,0 +1,13 @@
+{
+  "name": "Hard Puncher",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

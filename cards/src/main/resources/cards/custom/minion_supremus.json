@@ -1,0 +1,25 @@
+{
+  "name": "Supremus",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Battlecry: Deal 6 damage to all other characters.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_OTHER_CHARACTERS",
+      "value": 6
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
