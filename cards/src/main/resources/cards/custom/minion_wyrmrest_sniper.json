@@ -1,0 +1,44 @@
+{
+  "name": "Wyrmrest Sniper",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Stealth. Whenever a friendly Dragon survives damage, deal 3 damage to the enemy hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "target": "EVENT_TARGET",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "invert": true
+          },
+          {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "RaceCondition",
+            "race": "DRAGON"
+          }
+        ]
+      }
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

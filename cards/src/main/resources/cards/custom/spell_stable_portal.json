@@ -1,0 +1,29 @@
+{
+  "name": "Stable Portal",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "description": "Add a random Beast to your hand. It costs (2) less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "EVENT_CARD",
+        "value": 2,
+        "operation": "SUBTRACT"
+      }
+    },
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
