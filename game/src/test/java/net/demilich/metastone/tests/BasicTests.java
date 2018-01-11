@@ -1,11 +1,5 @@
 package net.demilich.metastone.tests;
 
-import net.demilich.metastone.game.spells.BuffSpell;
-import net.demilich.metastone.tests.util.TestBase;
-import net.demilich.metastone.tests.util.TestMinionCard;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
@@ -16,10 +10,14 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.spells.BuffHeroSpell;
+import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestMinionCard;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public class BasicTests extends TestBase {
 	private Card getTheCoin(CardList cards) {
