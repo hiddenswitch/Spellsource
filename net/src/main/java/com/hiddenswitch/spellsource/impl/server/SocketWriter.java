@@ -79,12 +79,6 @@ public class SocketWriter implements Writer {
 	}
 
 	@Override
-	public void setPlayers(Player localPlayer, Player remotePlayer) {
-		flushEvents();
-		sendMessage(new ServerToClientMessage(localPlayer, remotePlayer));
-	}
-
-	@Override
 	public void onActivePlayer(Player activePlayer) {
 		flushEvents();
 		sendMessage(new ServerToClientMessage(activePlayer, false));

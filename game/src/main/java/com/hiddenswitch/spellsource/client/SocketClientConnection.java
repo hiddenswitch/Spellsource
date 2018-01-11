@@ -17,6 +17,7 @@ import net.demilich.metastone.game.cards.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class SocketClientConnection implements ClientCommunicationReceive, ClientCommunicationSend, SendToServer, Runnable {
 	private final String host;
 	private final int port;
@@ -92,7 +93,6 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 								updateListener.onGameEnd(message.winner);
 								break;
 							case SET_PLAYERS:
-								updateListener.setPlayers(message.localPlayer, message.remotePlayer);
 								break;
 							case ON_ACTIVE_PLAYER:
 								updateListener.onActivePlayer(message.activePlayer);

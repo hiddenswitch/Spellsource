@@ -38,7 +38,7 @@ public class TransformInHandSpell extends Spell {
 
 		Card newCard = null;
 		if (cardFilter != null) {
-			newCard = SpellUtils.getRandomCard(CardCatalogue.query(context.getDeckFormat()), filterCard -> cardFilter.matches(context, player, filterCard, source));
+			newCard = context.getLogic().getRandom(desc.getFilteredCards(context, player, source));
 		} else if (secondaryTarget != null) {
 			newCard = ((Card) context.resolveSingleTarget(secondaryTarget)).getCopy();
 		} else if (replacementCard.size() > 0) {

@@ -39,7 +39,7 @@ public class CastRepeatedlySpell extends Spell {
 				if (targets.isEmpty()) {
 					return;
 				}
-				Entity randomTarget = SpellUtils.getRandomTarget(targets);
+				Entity randomTarget = context.getLogic().getRandom(targets);
 				SpellUtils.castChildSpell(context, player, spell, source, randomTarget);
 				if (condition != null && condition.isFulfilled(context, player, source, randomTarget)) {
 					return;

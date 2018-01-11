@@ -1,5 +1,6 @@
 package net.demilich.metastone.tests;
 
+import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
@@ -61,7 +62,7 @@ public class BasicTests extends TestBase {
 		TestMinionCard devMonsterCard = new TestMinionCard(damage, 2);
 		playCard(context, mage, devMonsterCard);
 
-		SpellDesc heroBuffSpell = BuffHeroSpell.create(EntityReference.FRIENDLY_HERO, damage, 0);
+		SpellDesc heroBuffSpell = BuffSpell.create(EntityReference.FRIENDLY_HERO, damage, 0);
 		context.getLogic().castSpell(druid.getId(), heroBuffSpell, druid.getHero().getReference(), null, false);
 		context.getLogic().endTurn(druid.getId());
 

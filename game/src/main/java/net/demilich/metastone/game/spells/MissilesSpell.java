@@ -43,7 +43,7 @@ public class MissilesSpell extends DamageSpell {
 			if (validTargets.isEmpty()) {
 				return;
 			}
-			Actor randomTarget = SpellUtils.getRandomTarget(validTargets);
+			Actor randomTarget = context.getLogic().getRandom(validTargets);
 			context.getLogic().damage(player, randomTarget, healing, source, true);
 		}
 	}

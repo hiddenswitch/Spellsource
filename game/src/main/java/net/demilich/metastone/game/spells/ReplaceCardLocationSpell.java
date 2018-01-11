@@ -45,7 +45,7 @@ public class ReplaceCardLocationSpell extends Spell {
 			for (int i = 0; i < count; i++) {
 				Card card = null;
 				if (!result.isEmpty()) {
-					card = result.getRandom();
+					card = context.getLogic().getRandom(result);
 				} else if (replacementCard != null) {
 					card = context.getCardById(replacementCard);
 				}
@@ -64,7 +64,7 @@ public class ReplaceCardLocationSpell extends Spell {
 			for (int i = 0; i < count; i++) {
 				Card card = null;
 				if (!result.isEmpty()) {
-					card = result.getRandom();
+					card = context.getLogic().getRandom(result);
 				} else if (replacementCard != null) {
 					card = context.getCardById(replacementCard);
 				}

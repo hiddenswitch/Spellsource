@@ -82,7 +82,7 @@ public class TheOldGodsTests extends TestBase {
 		});
 	}
 
-	@Test
+	@Test()
 	public void testYoggSaronHopesEnd() {
 		// Test that yogg casts the expected number of spells.
 		runGym((context, player, opponent) -> {
@@ -123,8 +123,11 @@ public class TheOldGodsTests extends TestBase {
 			Mockito.when(spyLogic.getRandom(Mockito.anyList()))
 					.thenAnswer(invocation -> {
 						List<Entity> targets = invocation.getArgument(0);
-						Assert.assertTrue(targets.stream().anyMatch(e -> e.getSourceCard().getCardId().equals("minion_yogg_saron_hopes_end")));
-						return targets.stream().filter(e -> e.getSourceCard().getCardId().equals("minion_yogg_saron_hopes_end")).findFirst().orElseThrow(AssertionError::new);
+						if (targets.stream().anyMatch(e -> e.getSourceCard().getCardId().equals("minion_yogg_saron_hopes_end"))) {
+							return targets.stream().filter(e -> e.getSourceCard().getCardId().equals("minion_yogg_saron_hopes_end")).findFirst().orElseThrow(AssertionError::new);
+						} else {
+							return invocation.callRealMethod();
+						}
 					});
 
 			final Map<SpellArg, Object> build = SpellDesc.build(YoggTestSpell2.class);

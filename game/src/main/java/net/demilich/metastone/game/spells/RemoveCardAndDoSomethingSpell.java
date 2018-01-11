@@ -15,7 +15,7 @@ public class RemoveCardAndDoSomethingSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int amount = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < amount; i++) {
-			Card card = player.getDeck().getRandom();
+			Card card = context.getLogic().getRandom(player.getDeck());
 
 			if (card != null) {
 				card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);

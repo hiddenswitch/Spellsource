@@ -51,7 +51,7 @@ public class DiscoverFilteredCardSpell extends Spell {
 				}
 
 				if (!result.isEmpty()) {
-					discoverCards.addCard(result.getRandom());
+					discoverCards.addCard(context.getLogic().getRandom(result));
 				}
 			}
 		} else {
@@ -67,7 +67,7 @@ public class DiscoverFilteredCardSpell extends Spell {
 				if (!result.isEmpty()) {
 					Card card = null;
 					do {
-						card = result.getRandom();
+						card = context.getLogic().getRandom(result);
 						result.remove(card);
 					} while (discoverCards.containsCard(card));
 					if (card != null) {

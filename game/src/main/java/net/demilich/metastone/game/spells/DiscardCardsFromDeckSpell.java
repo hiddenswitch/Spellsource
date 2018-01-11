@@ -33,7 +33,7 @@ public class DiscardCardsFromDeckSpell extends Spell {
 			if (player.getDeck().isEmpty()) {
 				return;
 			}
-			Card card = player.getDeck().getRandom();
+			Card card = context.getLogic().getRandom(player.getDeck());
 			context.getLogic().removeCardFromDeck(player.getId(), card);
 		}
 	}

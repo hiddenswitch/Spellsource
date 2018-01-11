@@ -7,7 +7,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -41,7 +40,7 @@ public class ShuffleToDeckSpell extends Spell {
 					result.addCard(cardResult);
 				}
 			}
-			card = result.getRandom();
+			card = context.getLogic().getRandom(result);
 		} else {
 			String cardId = (String) desc.get(SpellArg.CARD);
 			card = context.getCardById(cardId);

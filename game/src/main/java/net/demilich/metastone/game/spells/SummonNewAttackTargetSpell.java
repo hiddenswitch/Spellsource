@@ -39,7 +39,7 @@ public class SummonNewAttackTargetSpell extends Spell {
 			}
 		}
 
-		return (MinionCard) relevantMinions.getRandom();
+		return (MinionCard) context.getLogic().getRandom(relevantMinions);
 	}
 
 	public static SpellDesc create(MinionCard minionCard) {

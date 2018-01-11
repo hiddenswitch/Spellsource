@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.spells;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
@@ -33,7 +35,16 @@ public class RenounceClassSpell extends Spell {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 
 		HeroClass renouncedClass = (HeroClass) cardFilter.getArg(FilterArg.HERO_CLASS);
-		HeroClass rebornClass = SpellUtils.getRandomHeroClassExcept(renouncedClass);
+		HeroClass[] values = HeroClass.values();
+		List<HeroClass> heroClasses = new ArrayList<>();
+		for (HeroClass heroClass : values) {
+			if (heroClass.isBaseClass()) {
+				heroClasses.add(heroClass);
+			}
+		}
+		heroClasses.remove(renouncedClass);
+
+		HeroClass rebornClass = context.getLogic().getRandom(heroClasses);
 		CardList cards = CardCatalogue.query(context.getDeckFormat());
 		CardList result = new CardArrayList();
 		for (Card card : cards) {
@@ -64,7 +75,7 @@ public class RenounceClassSpell extends Spell {
 			}
 		}
 		for (Card card : replacedCards) {
-			Card replacement = result.getRandom().getCopy();
+			Card replacement = context.getLogic().getRandom(result).getCopy();
 			context.getLogic().replaceCardInDeck(player.getId(), card, replacement);
 		}
 		Map<EventTriggerArg, Object> eventTriggerMap = EventTriggerDesc.build(CardDrawnTrigger.class);
@@ -85,7 +96,7 @@ public class RenounceClassSpell extends Spell {
 			}
 		}
 		for (Card card : replacedCards) {
-			Card replacement = result.getRandom().getCopy();
+			Card replacement = context.getLogic().getRandom(result).getCopy();
 			context.getLogic().replaceCardInHand(player.getId(), card, replacement);
 			SpellUtils.castChildSpell(context, player, CardCostModifierSpell.create(replacement.getReference(), AlgebraicOperation.ADD, manaCostModifier), source, null);
 		}

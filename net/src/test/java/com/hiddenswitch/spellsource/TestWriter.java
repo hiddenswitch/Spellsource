@@ -22,11 +22,6 @@ public class TestWriter implements Writer {
 	}
 
 	@Override
-	public void setPlayers(Player localPlayer, Player remotePlayer) {
-
-	}
-
-	@Override
 	public void onActivePlayer(Player activePlayer) {
 
 	}

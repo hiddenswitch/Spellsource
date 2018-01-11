@@ -26,7 +26,7 @@
       ]
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1
 }

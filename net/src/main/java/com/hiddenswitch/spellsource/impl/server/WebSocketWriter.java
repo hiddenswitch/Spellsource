@@ -197,11 +197,6 @@ public class WebSocketWriter implements Writer {
 	}
 
 	@Override
-	public void setPlayers(Player localPlayer, Player remotePlayer) {
-		// Skip this for websocket clients. It's deprecated.
-	}
-
-	@Override
 	public void onActivePlayer(Player activePlayer) {
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.ON_ACTIVE_PLAYER));

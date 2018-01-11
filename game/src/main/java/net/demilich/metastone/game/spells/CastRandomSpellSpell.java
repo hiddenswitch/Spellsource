@@ -61,7 +61,7 @@ public class CastRandomSpellSpell extends Spell {
 				break;
 			}
 			// Must retrieve a copy because castWithRandomTargets mutates the incoming spell card
-			Card randomCard = filteredSpells.getRandom().getCopy();
+			Card randomCard = context.getLogic().getRandom(filteredSpells).getCopy();
 			logger.debug("Yogg-Saron chooses to play " + randomCard.getName());
 			RandomCardTargetSpell.castCardWithRandomTargets(context, owner, source, randomCard);
 			context.getLogic().checkForDeadEntities();

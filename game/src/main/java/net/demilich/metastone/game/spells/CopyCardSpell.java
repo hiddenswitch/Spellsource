@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import org.slf4j.Logger;
@@ -12,8 +11,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
@@ -66,7 +63,7 @@ public class CopyCardSpell extends Spell {
 			if (sourceCollection.isEmpty()) {
 				return;
 			}
-			Card random = sourceCollection.getRandom();
+			Card random = context.getLogic().getRandom(sourceCollection);
 
 			peek(random, context, player);
 

@@ -27,7 +27,7 @@ public class DestroyAllExceptOneSpell extends DestroySpell {
 		List<Entity> destroyedTargets = new ArrayList<Entity>(targets);
 		List<Entity> potentialSurvivors = SpellUtils.getValidTargets(context, player, destroyedTargets, filter);
 		if (!potentialSurvivors.isEmpty()) {
-			Entity randomTarget = SpellUtils.getRandomTarget(potentialSurvivors);
+			Entity randomTarget = context.getLogic().getRandom(potentialSurvivors);
 			destroyedTargets.remove(randomTarget);	
 		}
 		

@@ -32,7 +32,7 @@ public class MultiTargetSpell extends Spell {
 			if (validTargets.isEmpty()) {
 				return;
 			}
-			Actor randomTarget = SpellUtils.getRandomTarget(validTargets);
+			Actor randomTarget = context.getLogic().getRandom(validTargets);
 			validTargets.remove(randomTarget);
 			SpellUtils.castChildSpell(context, player, spell, source, randomTarget);
 		}

@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.IdFactory;
@@ -107,28 +108,10 @@ public interface CardList extends Iterable<Card>, List<Card> {
 	int getCount();
 
 	/**
-	 * Gets a random {@link Card} in this instance. Uses Apache's {@link RandomUtils} internally, though it should
-	 * probably use a random value provider from a {@link net.demilich.metastone.game.logic.GameLogic} instance.
-	 * <p>
-	 * If you plan to use a copy of this card, make sure to call {@link Card#getCopy()} and assign its ID to {@link
-	 * IdFactory#generateId()}. and owner to the appropriate owner.
-	 *
-	 * @return A randomly selected card (not cloned or copied).
-	 */
-	@Deprecated
-	default Card getRandom() {
-		if (isEmpty()) {
-			return null;
-		}
-		return get(RandomUtils.nextInt(0, getCount()));
-	}
-
-	/**
 	 * Gets a random {@link Card} in this instance of the specified type.
 	 *
 	 * @param cardType The {@link CardType} to filter with.
 	 * @return A card, or {@code null} if none is found.
-	 * @see #getRandom() for a complete usage description.
 	 * @deprecated Use {@link GameLogic#getRandom(List)} to choose a random card.
 	 */
 	@Deprecated

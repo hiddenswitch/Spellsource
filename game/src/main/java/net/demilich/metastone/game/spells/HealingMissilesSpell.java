@@ -12,13 +12,10 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.FilterDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 
 public class HealingMissilesSpell extends HealSpell {
 
@@ -60,7 +57,7 @@ public class HealingMissilesSpell extends HealSpell {
 				return;
 			}
 
-			Actor randomTarget = SpellUtils.getRandomTarget(validTargets);
+			Actor randomTarget = context.getLogic().getRandom(validTargets);
 			context.getLogic().heal(player, randomTarget, healing, source, false);
 		}
 	}

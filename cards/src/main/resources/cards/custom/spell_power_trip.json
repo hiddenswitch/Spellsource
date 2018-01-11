@@ -2,7 +2,7 @@
   "name": "Power Trip",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PURPLE",
+  "heroClass": "VIOLET",
   "rarity": "LEGENDARY",
   "description": "All your minions have +1/1. Quest: Reach 10 mana crystals. Reward: Die. Horribly.",
   "targetSelection": "NONE",
