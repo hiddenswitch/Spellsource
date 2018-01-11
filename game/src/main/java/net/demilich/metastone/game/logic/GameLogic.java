@@ -778,6 +778,7 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		processPassiveTriggers(player, hero.getHeroPower());
+		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
 	/**
