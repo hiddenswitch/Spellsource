@@ -83,13 +83,13 @@ public class CustomHearthstoneTests extends TestBase {
 	}
 
 	@Test
-	public void testDanceMistress() {
+	public void testDancemistress() {
 		// When this minion is healed, check if Crazed Dancer is summoned
 		runGym((context, player, opponent) -> {
 			Minion dancemistress = playMinionCard(context, player, "minion_dancemistress");
 			context.endTurn();
 			// Damages minions by 1
-			playCard(context, opponent, "spell_spirit_lash");
+			playCard(context, opponent, "spell_arcane_explosion");
 			context.endTurn();
 			// Heals the dancemistress Minion
 			playCardWithTarget(context, player, "spell_ancestral_healing", dancemistress);
@@ -99,6 +99,18 @@ public class CustomHearthstoneTests extends TestBase {
 			Assert.assertEquals(player.getMinions().get(1).getBaseHp(), 2);
 		});
 
+		// When a different minion is healed, Crazed Dancer is NOT summoned
+		runGym((context, player, opponent) -> {
+			Minion dancemistress = playMinionCard(context, player, "minion_dancemistress");
+			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			// Damages minions by 1
+			playCard(context, opponent, "spell_arcane_explosion");
+			context.endTurn();
+			// Heals the dancemistress Minion
+			playCardWithTarget(context, player, "spell_ancestral_healing", bloodfenRaptor);
+			Assert.assertFalse(player.getMinions().stream().anyMatch(m -> m.getSourceCard().getCardId().equals("minion_crazed_dancer")));
+		});
 	}
 
 	@Test

@@ -10,7 +10,7 @@
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",
-      "hostEntityType": "IGNORE_OTHER_TARGETS"
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
       "class": "SummonSpell",
