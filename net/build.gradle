@@ -92,6 +92,28 @@ task(local, dependsOn: 'classes', type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task(localWindows, dependsOn: 'classes', type: JavaExec) {
+    doFirst {
+        println "Local Windows Server Command"
+        println ""
+        println "Exiting batch scripts in Windows command line is very finicky. Never end execution by closing the console tab or Window. Instead, use ConEmu, and configure a hotkey to send the Break key. In ConEmu, you can do this by clicking the Hamburger menu in the upper right corner, choosing settings, and then configuring a break command as documented in  https://stackoverflow.com/questions/41074403/conemusend-sigint-to-running-application"
+        println "MongoDB must be running before you start this command. If it's not installed, visit the Windows Development guide install for more details. You can install it with chocolatey using the command:"
+        println "  choco install mongodb.install"
+        println "Then, start mongodb with the commands:"
+        println "  cd .\\Spellsource-Server"
+        println "  md -Force .\\net\\.mongo\\db"
+        println "  & \"C:\\Program Files\\MongoDB\\Server\\3.6\\bin\\mongod\" --dbpath .\\net\\.mongo\\db"
+        println "When the server is ready, you'll see the text:"
+        println "  Server is ready."
+        println "Otherwise, you will see an error. Make sure mongod is running, as this is the most common mistake you will make."
+    }
+    systemProperty "spellsource.port", "8080"
+    systemProperty "mongo.url", "mongodb://localhost:27017"
+    main = 'com.hiddenswitch.spellsource.applications.Embedded'
+    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task(localCluster, dependsOn: 'classes', type: JavaExec) {
     doFirst {
         println "mongod must be running for this task."

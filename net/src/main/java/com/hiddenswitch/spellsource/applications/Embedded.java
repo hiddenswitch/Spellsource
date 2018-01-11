@@ -5,6 +5,7 @@ import com.hiddenswitch.spellsource.Broadcaster;
 import com.hiddenswitch.spellsource.Spellsource;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 
@@ -25,10 +26,18 @@ public class Embedded {
 			if (then.succeeded()) {
 				Spellsource.spellsource().deployAll(vertx, deployed -> {
 					if (deployed.failed()) {
-						root.error("Failed to deploy: " + deployed.cause().getMessage());
+						System.err.println("Failed to deploy due to an error: " + deployed.cause().getMessage());
+						System.err.println("Stacktrace:");
+						ExceptionUtils.printRootCauseStackTrace(deployed.cause());
 					} else {
 						// Deploy the broadcaster so that the client knows we're running local.
-						vertx.deployVerticle(Broadcaster.create(), Future.future());
+						vertx.deployVerticle(Broadcaster.create(), thenFinally -> {
+							if (thenFinally.succeeded()) {
+								System.out.println("Server is ready.");
+							} else {
+								System.err.println("The broadcasting agent failed to start. You will not be able to connect with a local client.");
+							}
+						});
 					}
 				});
 			} else {
