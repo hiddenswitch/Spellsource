@@ -17,29 +17,29 @@
         "spells": [
           {
             "class": "SetAttributeSpell",
-            "attribute": "RESERVED_INTEGER_2",
             "value": {
               "class": "AttributeValueProvider",
               "attribute": "BASE_ATTACK"
-            }
+            },
+            "attribute": "RESERVED_INTEGER_2"
           },
           {
             "class": "SetAttributeSpell",
-            "attribute": "BASE_ATTACK",
-            "value": 5
+            "value": 5,
+            "attribute": "BASE_ATTACK"
           },
           {
             "class": "SetAttributeSpell",
-            "attribute": "RESERVED_INTEGER_3",
             "value": {
               "class": "AttributeValueProvider",
               "attribute": "BASE_HP"
-            }
+            },
+            "attribute": "RESERVED_INTEGER_3"
           },
           {
             "class": "SetAttributeSpell",
-            "attribute": "BASE_HP",
-            "value": 5
+            "value": 5,
+            "attribute": "BASE_HP"
           }
         ]
       },
@@ -48,11 +48,11 @@
         "spells": [
           {
             "class": "SetAttributeSpell",
-            "attribute": "BASE_ATTACK",
             "value": {
               "class": "AttributeValueProvider",
               "attribute": "RESERVED_INTEGER_2"
-            }
+            },
+            "attribute": "BASE_ATTACK"
           },
           {
             "class": "RemoveAttributeSpell",
@@ -60,11 +60,11 @@
           },
           {
             "class": "SetAttributeSpell",
-            "attribute": "BASE_HP",
             "value": {
               "class": "AttributeValueProvider",
               "attribute": "RESERVED_INTEGER_3"
-            }
+            },
+            "attribute": "BASE_HP"
           },
           {
             "class": "RemoveAttributeSpell",
