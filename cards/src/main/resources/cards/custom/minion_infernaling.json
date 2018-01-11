@@ -1,0 +1,25 @@
+{
+  "name": "Infernaling",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Battlecry: Deal 1 damage to all other characters.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_OTHER_CHARACTERS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
