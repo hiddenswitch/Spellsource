@@ -37,20 +37,55 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
  3. Clone this repository.
  4. To run the server locally, execute the following on a command prompt:
     * Linux/Mac OS X: Run `./gradlew net:local`.
-    * Windows:
-      1. Install [MongoDB for Windows](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/).
-      2. Disable all Windows Firewall protection.
-      3. If you are on a wireless network, click your Wifi icon in the System Tray, choose `Network & Internet Settings`, then click `Change Connection Properties`, and then make sure `Make this PC discoverable` is selected to On.
-      4. Starting the database:
-        1. Open a PowerShell prompt in your `Spellsource-Server` directory.
-        2. Execute `md -Force net\.mongo\db; & "C:\Program Files\MongoDB\Server\3.6\bin\mongod" --dbpath .\net\.mongo\db`
-      5. Starting the server:
-        1. Open a PowerShell prompt in your `Spellsource-Server` directory.
-        2. Execute `[System.Environment]::SetEnvironmentVariable("PORT", "8080"); [System.Environment]::SetEnvironmentVariable("MONGO_URL", "mongodb://localhost:27017"); & ".\gradlew.bat" net:run`.
-        3. Close the server by repeatedly entering `Ctrl+Shift+C` until you are prompted by `gradle` to `Terminate the batch job?` and choosing `Y`.
+    * Windows: See the **Windows Installation Guide** below.
  5. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
  6. Download the Spellsource Client from within the launcher and start it.
  7. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
+
+ ### Getting started with Development on Windows
+
+   1. Windows Defender significantly slows down or fails install processes. To temporarily turn off Windows Defender, hit the `Windows` key, type `Windows Defender` and open the `Windows Defender Security Center`.
+     1. Then, visit the `Virus & threat protection` page, then `Virus & threat protection settings`, and turn off all protection modes.
+     2. Go back to the home page by clicking the `Home` icon on the left. Visit `Firewall & network protection`, then turn off firewall for both `Private` and `Public` networks.
+     3. You will be reminded to re-enable real-time protection at the end of this document.
+   2. Hit `Start`, type `PowerShell`, right click on the `Windows PowerShell` result and choose `Run as Administrator`.
+   3. From the `chocolatey` docs, we'll run the following commands:
+     ```
+     Set-ExecutionPolicy AllSigned
+     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+     choco feature enable -n allowGlobalConfirmation
+     ```
+     This installs `chocolatey`, the Windows development package manager.
+   4. We'll now install basic development packages. This includes the MongoDB, Java 8 SDK, `git` and `ConEmu`, a great Windows terminal emulator.
+     ```
+     choco install mongodb.install chocolatey-core.extension git.install git-credential-manager-for-windows jdk8 conemu.install
+     ```
+     Then, install [IntelliJ Idea Community Edition](https://www.jetbrains.com/idea/download/#section=windows) to edit the `Spellsource-Server` Java project. Since sometimes `choco` packages fail to install, you might need to manually install [MongoDB](https://www.mongodb.com/download-center#community), [JDK8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html), and [git](https://git-scm.com/download/win).  
+   5. Exit `Windows PowerShell`
+   6. Start `ConEmu`. If you're starting it for the first time, observe you can specify a startup task. Choose `{Shells::PowerShell (Admin)}`.
+   7. Navigate to your preferred directory for cloning the GitHub repository using `cd path\to\directory`. In this example, we'll use your user's `Documents` folder. Then, clone the repository. It is strongly recommended to clone in order to get the latest updates, instead of using `Download as zip...` from the GitHub.com interface.
+     ```
+     cd Documents
+     git clone https://github.com/hiddenswitch/Spellsource-Server.git
+     ```
+   8. Start by running the tests that don't require networking behavior to verify your installation worked. To do this, execute the following command:
+     ```
+     ./gradlew game:test
+     ```
+     A lot of packages should install. You should observe no errors.
+   9. If the tests pass, you're now ready to start the server.
+     1. In one tab in `ConEmu`, `cd` into your `Spellsource-Server` directory. You'll see an example of this below. Then, start MongoDB with the commands:
+       ```
+       cd .\Spellsource-Server
+       md -Force .\net\.mongo\db
+       & "C:\Program Files\MongoDB\Server\3.6\bin\mongod" --dbpath .\net\.mongo\db
+       ```
+     2. Then, in another tab, start the server. `cd` into your `Spellsource-Server` directory and run the command:
+       ```
+       ./gradlew net:localWindows
+       ```
+   10. When making changes to the files in the `cards` directory, you will need to restart the server. To restart it, you need to send the correct command to shut down the server. Unfortunately, batch files do not generally support this command correctly. To shut down correctly, you must configure the `SIGINT` command in `ConEmu`. **Never end execution by closing the console tab or Window.** Instead, use ConEmu, and configure a hotkey to send the Break key. In ConEmu, you can do this by clicking the Hamburger menu in the upper right corner, choosing settings, and then configuring a break command as documented in  https://stackoverflow.com/questions/41074403/conemusend-sigint-to-running-application.
+   11. Install the `Hidden Switch Launcher`, start it, `Download` the latest client in it and start the client. It will automatically connect to the local server.
 
 ### Troubleshooting
 
