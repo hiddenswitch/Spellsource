@@ -44,6 +44,7 @@ public interface Cluster {
 		return config;
 	}
 
+	@SuppressWarnings("deprecation")
 	static void appendVertxConfig(Config config) {
 		final Properties properties = new Properties();
 		properties.setProperty("hazelcast.shutdownhook.enabled", "false");

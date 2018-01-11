@@ -567,12 +567,10 @@ public enum Attribute {
 	/**
 	 * This {@link String} is the user ID of the player who opened the card pack that contained this card.
 	 */
-	@Deprecated
 	DONOR_ID,
 	/**
 	 * This {@link String} is the user ID of the player who is currently using a card that belongs to someone else.
 	 */
-	@Deprecated
 	CHAMPION_ID,
 	/**
 	 * This {@link String[]} are the collections this card belongs to, like the deck, user and alliances.
