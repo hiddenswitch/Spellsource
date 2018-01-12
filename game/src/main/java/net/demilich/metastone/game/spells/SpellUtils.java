@@ -24,11 +24,13 @@ import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * A set of utilities to help write spells.
@@ -401,5 +403,13 @@ public class SpellUtils {
 			return groupCard.getGroup();
 		}
 		return null;
+	}
+
+	static AttributeMap processKeptEnchantments(Entity target, AttributeMap map) {
+		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+			Stream.of(Attribute.POISONOUS, Attribute.LIFESTEAL, Attribute.WINDFURY, Attribute.ATTACK_BONUS, Attribute.HP_BONUS)
+					.filter(target::hasAttribute).forEach(k -> map.put(k, target.getAttributes().get(k)));
+		}
+		return map;
 	}
 }

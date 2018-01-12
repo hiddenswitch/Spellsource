@@ -777,6 +777,8 @@ public class GameLogic implements Cloneable, Serializable {
 			}
 		}
 
+		processGameTriggers(player, hero);
+		processGameTriggers(player, hero.getHeroPower());
 		processPassiveTriggers(player, hero.getHeroPower());
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
@@ -924,12 +926,18 @@ public class GameLogic implements Cloneable, Serializable {
 			// Poisonous resolves in a queue with higher priority, and it stops Grim Patron spawning regardless of
 			// Dominant Player. However, Acidmaw can never stop Grim Patron spawning.
 			if (source.hasAttribute(Attribute.POISONOUS)
-					&& target.getEntityType() == EntityType.MINION) {
+					|| (source instanceof Hero
+							&& ((Hero) source).getWeapon() != null
+							&& ((Hero) source).getWeapon().hasAttribute(Attribute.POISONOUS))
+							&& target.getEntityType() == EntityType.MINION) {
 				markAsDestroyed(target);
 			}
 
 			// Implement lifesteal
-			if (source.hasAttribute(Attribute.LIFESTEAL)) {
+			if (source.hasAttribute(Attribute.LIFESTEAL)
+					|| (source instanceof Hero
+					&& ((Hero) source).getWeapon() != null
+					&& ((Hero) source).getWeapon().hasAttribute(Attribute.LIFESTEAL))) {
 				Player sourceOwner = context.getPlayer(source.getOwner());
 				heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
 			}
@@ -1836,16 +1844,12 @@ public class GameLogic implements Cloneable, Serializable {
 	protected void startGameForPlayer(Player player) {
 		player.setAttribute(Attribute.GAME_STARTED);
 		for (Card card : player.getDeck()) {
-			if (card.getAttribute(Attribute.DECK_TRIGGER) != null) {
-				TriggerDesc triggerDesc = (TriggerDesc) card.getAttribute(Attribute.DECK_TRIGGER);
-				addGameEventListener(player, triggerDesc.create(), card);
-			}
+			processGameTriggers(player, card);
+			processDeckTriggers(player, card);
 		}
 		for (Card card : player.getHand()) {
-			if (card.getAttribute(Attribute.DECK_TRIGGER) != null) {
-				TriggerDesc triggerDesc = (TriggerDesc) card.getAttribute(Attribute.DECK_TRIGGER);
-				addGameEventListener(player, triggerDesc.create(), card);
-			}
+			processGameTriggers(player, card);
+			processPassiveTriggers(player, card);
 		}
 
 		GameStartEvent gameStartEvent = new GameStartEvent(context, player.getId());
@@ -1883,6 +1887,7 @@ public class GameLogic implements Cloneable, Serializable {
 				addGameEventListener(player, trigger, player.getHero());
 			}
 		}
+		processGameTriggers(player, hero.getHeroPower());
 		processPassiveTriggers(player, hero.getHeroPower());
 		return player;
 	}
@@ -2578,6 +2583,7 @@ public class GameLogic implements Cloneable, Serializable {
 		CardZone hand = player.getHand();
 
 		if (hand.getCount() < MAX_HAND_CARDS) {
+			processGameTriggers(player, card);
 			processPassiveTriggers(player, card);
 
 			log("{} receives card {}", player.getName(), card);
@@ -2606,21 +2612,36 @@ public class GameLogic implements Cloneable, Serializable {
 		if (card.getPassiveTriggers() != null
 				&& card.getPassiveTriggers().length > 0) {
 			for (TriggerDesc triggerDesc : card.getPassiveTriggers()) {
-				Stream<Enchantment> existingTriggers = context.getTriggersAssociatedWith(card.getReference())
-						.stream()
-						.filter(t -> Enchantment.class.isAssignableFrom(t.getClass()))
-						.map(t -> (Enchantment) t);
-
-				if (existingTriggers.anyMatch(t -> t.getSourceCard().getCardId().equals(card.getCardId())
-						&& t.getSpell().getSpellClass().equals(triggerDesc.spell.getSpellClass()))) {
-					continue;
-				}
-
-				Enchantment enchantment = triggerDesc.create();
-				enchantment.setSourceCard(card);
-				addGameEventListener(player, enchantment, card);
+				processTriggerDesc(player, card, triggerDesc);
 			}
 		}
+	}
+
+	@Suspendable
+	public void processGameTriggers(Player player, Entity entity) {
+		if (entity.getGameTriggers() != null
+				&& entity.getGameTriggers().length > 0) {
+			for (TriggerDesc triggerDesc : entity.getGameTriggers()) {
+				processTriggerDesc(player, entity, triggerDesc);
+			}
+		}
+	}
+
+	@Suspendable
+	protected void processTriggerDesc(Player player, Entity entity, TriggerDesc triggerDesc) {
+		Stream<Enchantment> existingTriggers = context.getTriggersAssociatedWith(entity.getReference())
+				.stream()
+				.filter(t -> Enchantment.class.isAssignableFrom(t.getClass()))
+				.map(t -> (Enchantment) t);
+
+		if (existingTriggers.anyMatch(t -> t.getSourceCard().getCardId().equals(entity.getSourceCard() != null ? entity.getSourceCard().getCardId() : null)
+				&& t.getSpell().getSpellClass().equals(triggerDesc.spell.getSpellClass()))) {
+			return;
+		}
+
+		Enchantment enchantment = triggerDesc.create();
+		enchantment.setSourceCard(entity.getSourceCard());
+		addGameEventListener(player, enchantment, entity);
 	}
 
 	/**
@@ -2797,6 +2818,7 @@ public class GameLogic implements Cloneable, Serializable {
 		removeEnchantments(oldCard);
 		oldCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		oldCard.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newCard.getReference());
+		processGameTriggers(player, newCard);
 		processPassiveTriggers(player, newCard);
 		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, null, false));
 		return newCard;
@@ -2833,10 +2855,7 @@ public class GameLogic implements Cloneable, Serializable {
 		newCard.setOwner(playerId);
 		CardList deck = player.getDeck();
 
-		if (newCard.getAttribute(Attribute.DECK_TRIGGER) != null) {
-			TriggerDesc triggerDesc = (TriggerDesc) newCard.getAttribute(Attribute.DECK_TRIGGER);
-			addGameEventListener(player, triggerDesc.create(), newCard);
-		}
+		processDeckTriggers(player, newCard);
 
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
 		deck.replace(oldCard, newCard);
@@ -3002,12 +3021,18 @@ public class GameLogic implements Cloneable, Serializable {
 			} else {
 				player.getDeck().add(getRandom().nextInt(count), card);
 			}
-
-			if (card.getAttribute(Attribute.DECK_TRIGGER) != null) {
-				TriggerDesc triggerDesc = (TriggerDesc) card.getAttribute(Attribute.DECK_TRIGGER);
-				addGameEventListener(player, triggerDesc.create(), card);
-			}
+			processDeckTriggers(player, card);
 			log("Card {} has been shuffled to {}'s deck", card, player.getName());
+		}
+	}
+
+	@Suspendable
+	private void processDeckTriggers(Player player, Card card) {
+		if (card.getDeckTriggers() != null
+				&& card.getDeckTriggers().length > 0) {
+			for (TriggerDesc triggerDesc : card.getDeckTriggers()) {
+				processTriggerDesc(player, card, triggerDesc);
+			}
 		}
 	}
 

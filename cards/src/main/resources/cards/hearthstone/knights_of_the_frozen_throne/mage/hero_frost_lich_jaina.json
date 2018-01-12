@@ -9,11 +9,11 @@
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",
+    "attribute": "LIFESTEAL",
     "filter": {
       "class": "RaceFilter",
       "race": "ELEMENTAL"
-    },
-    "attribute": "LIFESTEAL"
+    }
   },
   "attributes": {
     "ARMOR": 5,

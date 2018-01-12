@@ -347,16 +347,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	}
 
 
-	@Deprecated
-	private Card findCardinCollection(Iterable<Card> cardCollection, int cardId) {
-		for (Card card : cardCollection) {
-			if (card.getId() == cardId) {
-				return card;
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * Fires a game event.
 	 *

@@ -224,6 +224,10 @@ public class TestBase {
 	}
 
 	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2) {
+		return createContext(hero1, hero2, true);
+	}
+
+	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit) {
 		DeckFormat deckFormat = new DeckFormat().withCardSets(
 				CardSet.BASIC,
 				CardSet.CLASSIC,
@@ -254,7 +258,9 @@ public class TestBase {
 		GameLogic logic = new GameLogic();
 		DebugContext context = new DebugContext(player1, player2, logic, deckFormat);
 		logic.setContext(context);
-		context.init();
+		if (shouldInit) {
+			context.init();
+		}
 		return context;
 	}
 

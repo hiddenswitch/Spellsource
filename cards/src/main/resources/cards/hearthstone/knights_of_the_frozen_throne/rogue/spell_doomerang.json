@@ -14,6 +14,34 @@
     "class": "MetaSpell",
     "spells": [
       {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_WEAPON",
+          "attribute": "POISONOUS",
+          "operation": "HAS"
+        },
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "PENDING_CARD",
+          "attribute": "POISONOUS"
+        }
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_WEAPON",
+          "attribute": "LIFESTEAL",
+          "operation": "HAS"
+        },
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "PENDING_CARD",
+          "attribute": "LIFESTEAL"
+        }
+      },
+      {
         "class": "DamageSpell",
         "value": {
           "class": "AttributeValueProvider",
@@ -24,6 +52,16 @@
       {
         "class": "ReturnTargetToHandSpell",
         "target": "FRIENDLY_WEAPON"
+      },
+      {
+        "class": "RemoveAttributeSpell",
+        "target": "PENDING_CARD",
+        "attribute": "POISONOUS"
+      },
+      {
+        "class": "RemoveAttributeSpell",
+        "target": "PENDING_CARD",
+        "attribute": "LIFESTEAL"
       }
     ]
   },

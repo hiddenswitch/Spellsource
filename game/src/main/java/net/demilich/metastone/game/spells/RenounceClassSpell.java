@@ -63,6 +63,7 @@ public class RenounceClassSpell extends Spell {
 				newHeroPower.setOwner(player.getHero().getOwner());
 				context.getLogic().removeCard(player.getHero().getHeroPower());
 				player.getHero().setHeroPower(newHeroPower);
+				context.getLogic().processGameTriggers(player, newHeroPower);
 				context.getLogic().processPassiveTriggers(player, newHeroPower);
 				break;
 			}

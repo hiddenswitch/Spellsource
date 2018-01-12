@@ -177,9 +177,9 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
 		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 4;
+		final int count = processorCount * 2;
 		CountDownLatch latch = new CountDownLatch(count);
-		CompositeFuture.join(Collections.nCopies(processorCount - 1, Arrays.asList(
+		CompositeFuture.join(Collections.nCopies(2, Arrays.asList(
 				new GatewayImpl(),
 				new CardsImpl(),
 				new DecksImpl(),

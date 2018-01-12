@@ -2,6 +2,7 @@ package net.demilich.metastone.game.entities;
 
 import java.io.Serializable;
 
+import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -431,6 +432,12 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		return entity;
 	}
 
+	/**
+	 * Gets the possibly modified description of the entity to render to the end user.
+	 *
+	 * @return The {@link #getSourceCard()}'s {@link Card#description} field, or the value specified in {@link
+	 * Attribute#DESCRIPTION}.
+	 */
 	public String getDescription() {
 		return (hasAttribute(Attribute.DESCRIPTION) && getAttribute(Attribute.DESCRIPTION) != null) ?
 				(String) getAttribute(Attribute.DESCRIPTION)
@@ -439,7 +446,23 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 
 	public abstract Entity getCopy();
 
+	/**
+	 * Gets a reference to the entity that this entity was potentially copied from.
+	 *
+	 * @return {@code null} if this entity was not copied from another entity in the game, or an {@link EntityReference}
+	 * of another entity.
+	 */
 	public EntityReference getCopySource() {
 		return (EntityReference) getAttributes().get(Attribute.COPIED_FROM);
+	}
+
+	/**
+	 * Gets a list of triggers that are active as soon as the game starts.
+	 *
+	 * @return The entity's defined game triggers
+	 * @see GameLogic#processGameTriggers(Player, Entity) for the place to activate these triggers.
+	 */
+	public TriggerDesc[] getGameTriggers() {
+		return (TriggerDesc[]) getAttributes().getOrDefault(Attribute.GAME_TRIGGERS, new TriggerDesc[0]);
 	}
 }

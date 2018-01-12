@@ -11,10 +11,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
-
-import java.util.stream.Stream;
 
 public class ShuffleToDeckSpell extends Spell {
 
@@ -27,10 +24,7 @@ public class ShuffleToDeckSpell extends Spell {
 		if (target != null) {
 			// Implements Kingsbane in a very basic way, since weapons pretty much only get enchanted for attack,
 			// durability, windfury, lifesteal and poisonous bonuses.
-			if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-				Stream.of(Attribute.POISONOUS, Attribute.LIFESTEAL, Attribute.WINDFURY, Attribute.ATTACK_BONUS, Attribute.HP_BONUS)
-						.filter(target::hasAttribute).forEach(k -> map.put(k, target.getAttributes().get(k)));
-			}
+			map = SpellUtils.processKeptEnchantments(target, map);
 			card = target.getSourceCard().getCopy();
 		} else if (desc.containsKey(SpellArg.CARD_FILTER)) {
 			EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
@@ -59,5 +53,4 @@ public class ShuffleToDeckSpell extends Spell {
 			}
 		}
 	}
-
 }
