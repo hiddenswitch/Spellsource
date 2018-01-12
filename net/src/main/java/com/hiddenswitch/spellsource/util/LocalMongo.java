@@ -1,11 +1,13 @@
 package com.hiddenswitch.spellsource.util;
 
+import ch.qos.logback.classic.Level;
 import de.flapdoodle.embed.mongo.Command;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.*;
 import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.mongo.runtime.Mongod;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.extract.UUIDTempNaming;
 import de.flapdoodle.embed.process.extract.UserTempNaming;
@@ -14,6 +16,8 @@ import de.flapdoodle.embed.process.io.directories.IDirectory;
 import de.flapdoodle.embed.process.runtime.Network;
 import de.flapdoodle.embed.process.store.Downloader;
 import de.flapdoodle.embed.process.store.ExtractedArtifactStoreBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -36,7 +40,8 @@ public class LocalMongo {
 		final String path = System.getProperty("user.dir") + "/.mongo";
 		final FixedPath fixedPath = new FixedPath(path);
 		replication = new Storage(path + "/db", null, 0);
-		System.out.println("Mongo db saved to: " + replication.getDatabaseDir());
+		System.out.println("An embedded mongod was successfully started.");
+		System.out.println("Path to database: " + replication.getDatabaseDir());
 		command = Command.MongoD;
 		artifactStoreBuilder = new ExtractedArtifactStoreBuilder()
 				.extractDir(fixedPath)
@@ -49,8 +54,11 @@ public class LocalMongo {
 						.artifactStorePath(fixedPath)
 						.build());
 
+		ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Mongod.class);
+		logger.setLevel(Level.ERROR);
+
 		IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
-				.defaults(command)
+				.defaultsWithLogger(command, logger)
 				.artifactStore(artifactStoreBuilder)
 				.build();
 
