@@ -1,0 +1,71 @@
+{
+	"name": "Doomsday Attendant",
+	"baseManaCost": 5,
+	"type": "BROWN",
+	"baseAttack": 4,
+	"baseHp":5,
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Choose One - Discover a 10-Cost minion; or draw one from your deck.",
+	"options": [
+		{
+			"description": "Discover a 10-Cost minion",
+			"spell": {
+			"class": "DiscoverRandomCardSpell",
+			"spell": {
+				"class": "ReceiveCardSpell",
+				"targetPlayer": "SELF"
+			},
+			"cardFilter": {
+				"class": "CardFilter",
+				"manaCost": 10
+			}
+			}
+		},
+		{
+			"description": "Draw a 10-Cost minion from your deck",
+			"spell": {
+			"class": "FromDeckToHandSpell",
+			"targetPlayer": "SELF",
+			"value": 1,
+			"cardFilter": {
+				"class": "CardFilter",
+				"cardType": "MINION",
+				"manaCost": 10
+				}
+			}
+		}
+	],
+	"bothOptions": {
+		"description": "Discover and draw a 10-Cost minion.",
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+		{
+			"class": "DiscoverRandomCardSpell",
+			"spell": {
+				"class": "ReceiveCardSpell",
+				"targetPlayer": "SELF"
+			},
+			"cardFilter": {
+				"class": "CardFilter",
+				"manaCost": 10
+			}
+		},
+		{
+			"class": "FromDeckToHandSpell",
+			"targetPlayer": "SELF",
+			"value": 1,
+			"cardFilter": {
+				"class": "CardFilter",
+				"cardType": "MINION",
+				"manaCost": 10
+				}
+			}
+			]
+			}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

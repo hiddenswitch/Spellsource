@@ -1,0 +1,23 @@
+{
+  "name": "Think Again!",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "COMMON",
+  "description": "Return a friendly minion to your hand and get another a copy of it",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "PutCopyInHandSpell"
+      },
+      {
+        "class": "ReturnTargetToHandSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
