@@ -1,0 +1,27 @@
+{
+  "name": "Revitalizer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Fully heal a friendly minion.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "HealSpell",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "TARGET",
+        "attribute": "MAX_HP"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
