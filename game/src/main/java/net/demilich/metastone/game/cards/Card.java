@@ -96,6 +96,10 @@ public abstract class Card extends Entity {
 		if (desc.deckTrigger != null) {
 			getAttributes().put(Attribute.DECK_TRIGGER, desc.deckTrigger);
 		}
+
+		if (desc.gameTriggers != null) {
+			getAttributes().put(Attribute.GAME_TRIGGERS, desc.gameTriggers);
+		}
 	}
 
 	/**
@@ -383,4 +387,18 @@ public abstract class Card extends Entity {
 	public boolean hasPersistentEffects() {
 		return hasPersistentEffects;
 	}
+
+	/**
+	 * Returns the triggers that are active when the card is in the deck.
+	 *
+	 * @return A list of {@link TriggerDesc} objects.
+	 */
+	public TriggerDesc[] getDeckTriggers() {
+		final TriggerDesc triggerDesc = (TriggerDesc) getAttribute(Attribute.DECK_TRIGGER);
+		if (triggerDesc == null) {
+			return new TriggerDesc[0];
+		}
+		return new TriggerDesc[]{triggerDesc};
+	}
+
 }

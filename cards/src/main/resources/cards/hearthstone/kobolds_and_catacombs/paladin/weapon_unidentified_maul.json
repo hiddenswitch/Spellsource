@@ -9,7 +9,7 @@
   "description": "Gains a bonus effect in your hand.",
   "passiveTrigger": {
     "eventTrigger": {
-      "class": "CardDrawnTrigger",
+      "class": "CardReceivedTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {

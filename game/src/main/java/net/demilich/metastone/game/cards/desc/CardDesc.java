@@ -29,6 +29,7 @@ public abstract class CardDesc implements Serializable, Cloneable {
 	public TriggerDesc passiveTrigger;
 	public TriggerDesc[] passiveTriggers;
 	public TriggerDesc deckTrigger;
+	public TriggerDesc[] gameTriggers;
 
 	public abstract Card createInstance();
 }

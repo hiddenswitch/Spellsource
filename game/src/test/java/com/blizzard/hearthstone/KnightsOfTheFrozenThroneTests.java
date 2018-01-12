@@ -35,6 +35,21 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testLeechingPoison() {
+		runGym((context, player, opponent) -> {
+			playCardWithTarget(context, player, "spell_fireball", player.getHero());
+			int startHp = player.getHero().getHp();
+			playCard(context, player, "weapon_wicked_knife");
+			playCard(context, player, "spell_leeching_poison");
+			context.endTurn();
+			Minion cho = playMinionCard(context, player, "minion_lorewalker_cho");
+			context.endTurn();
+			attack(context, player, player.getHero(), cho);
+			Assert.assertEquals(player.getHero().getHp(), startHp + player.getHero().getWeapon().getAttack());
+		});
+	}
+
+	@Test
 	public void testFrostLichJaina() {
 		runGym((context, player, opponent) -> {
 			Minion tarCreeper = playMinionCard(context, player, "minion_tar_creeper");

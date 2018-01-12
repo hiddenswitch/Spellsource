@@ -7,7 +7,7 @@
   "description": "Give a minion +2/+2. Gains a bonus effect in your hand.",
   "passiveTrigger": {
     "eventTrigger": {
-      "class": "CardDrawnTrigger",
+      "class": "CardReceivedTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {

@@ -7,12 +7,15 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.ActorCardDesc;
+import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -25,6 +28,19 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+	@Test
+	public void testUnidentifiedElixirStartsInHand() {
+		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false);
+		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+		context.getPlayers().stream().map(Player::getDeck).forEach(deck ->
+				Stream.generate(() -> "spell_unidentified_elixir")
+						.map(CardCatalogue::getCardById)
+						.limit(30)
+						.forEach(deck::addCard));
+		context.init();
+		Assert.assertTrue(context.getPlayers().stream().flatMap(p -> p.getHand().stream()).noneMatch(c -> c.getCardId().equals("spell_unidentified_elixir")));
+	}
+
 
 	@Test
 	public void testAmethystSpellstone() {
@@ -300,6 +316,22 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Assert.assertTrue(player.getHero().getWeapon().hasAttribute(Attribute.POISONOUS));
 		});
 	}
+
+	@Test
+	public void testKingsbaneDoomerangInteraction() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCard(context, player, "weapon_kingsbane");
+			playCard(context, player, "spell_envenom_weapon");
+			playCardWithTarget(context, player, "spell_doomerang", bloodfen);
+			Assert.assertTrue(bloodfen.isDestroyed(), "The raptor should be destroyed because the Kingsbane had poisonous.");
+			playCard(context, player, player.getHand().get(0));
+			Assert.assertTrue(player.getHero().getWeapon().hasAttribute(Attribute.POISONOUS));
+		});
+	}
+
 
 	@Test
 	public void testCallPetUnidentifiedElixirInteraction() {

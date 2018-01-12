@@ -438,6 +438,10 @@ public enum Attribute {
 	 */
 	DECK_TRIGGER,
 	/**
+	 * Marks that this {@link Card} has a trigger (this attribute) that should be active throughout the game.
+	 */
+	GAME_TRIGGERS,
+	/**
 	 * This attribute keeps track of how many times the hero power was used this turn.
 	 *
 	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card,

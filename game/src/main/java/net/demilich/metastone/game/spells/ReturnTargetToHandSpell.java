@@ -6,6 +6,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,21 +47,24 @@ public class ReturnTargetToHandSpell extends Spell {
 		} else {
 			logger.debug("{} is returned to {}'s hand", target, owner.getName());
 			// The minion might be destroyed or already returned to hand due to Baron Rivendare at this point.
+			// Doomerang may have returned Kingsbane
+			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());
 			if (target.getZone() == Zones.BATTLEFIELD
 					|| target.getZone() == Zones.WEAPON) {
 				context.getLogic().removeActor((Actor) target, true);
 			}
 			// The source card may be in the graveyard.
-			Card sourceCard = target.getSourceCard();
-			if (sourceCard.getZone() != Zones.GRAVEYARD
-					|| sourceCard.getZone() != Zones.REMOVED_FROM_PLAY
-					|| !sourceCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-				sourceCard = sourceCard.getCopy();
+			Card returnedCard = target.getSourceCard();
+			if (returnedCard.getZone() != Zones.GRAVEYARD
+					|| returnedCard.getZone() != Zones.REMOVED_FROM_PLAY
+					|| !returnedCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+				returnedCard = returnedCard.getCopy();
 			}
-			context.getLogic().receiveCard(target.getOwner(), sourceCard);
+			returnedCard.getAttributes().putAll(map);
+			context.getLogic().receiveCard(target.getOwner(), returnedCard);
 			if (cardSpell != null) {
-				context.setEventCard(sourceCard);
-				SpellUtils.castChildSpell(context, player, cardSpell, source, sourceCard);
+				context.setEventCard(returnedCard);
+				SpellUtils.castChildSpell(context, player, cardSpell, source, returnedCard);
 				context.setEventCard(null);
 			}
 		}

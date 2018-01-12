@@ -146,7 +146,7 @@ public class ClusterTest {
 		context.assertTrue(client.isGameOver());
 	}
 
-	@Test(timeout = 300000L)
+	@Test(timeout = 400000L)
 	public void testMultiHostMultiClientCluster(TestContext context) throws InterruptedException {
 		if (isCI()) {
 			return;
@@ -169,7 +169,7 @@ public class ClusterTest {
 		})).limit(count).forEach(Thread::start);
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(150L, TimeUnit.SECONDS);
+		latch.await(250L, TimeUnit.SECONDS);
 		context.assertEquals(0L, latch.getCount());
 	}
 
