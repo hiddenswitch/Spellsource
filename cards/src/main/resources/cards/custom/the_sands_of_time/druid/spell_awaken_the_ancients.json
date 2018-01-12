@@ -1,0 +1,27 @@
+{
+	"name": "Awaken the Ancients",
+	"baseManaCost": 6,
+	"type": "SPELL",
+	"heroClass": "BROWN",
+	"rarity": "EPIC",
+	"description": "The next minion you play this turn costs (0).",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "CardCostModifierSpell",
+		"target": "FRIENDLY_PLAYER",
+		"cardCostModifier": {
+			"class": "OneTurnCostModifier",
+			"cardType": "MINION",
+			"operation": "SUBTRACT",
+			"value": 60,
+			"expirationTrigger": {
+				"class": "CardPlayedTrigger",
+				"cardType": "MINION",
+				"targetPlayer": "SELF"
+			}
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}
