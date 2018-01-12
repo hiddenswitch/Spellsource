@@ -1,0 +1,39 @@
+{
+  "name": "Think Fast!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROGUE",
+  "rarity": "RARE",
+  "description": "Discover a Combo card. Combo: It costs (1) less this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ComboSpell",
+    "spell1": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "COMBO",
+      "operation": "HAS"
+		}
+    },
+    "spell2": {
+        "class": "CardCostModifierSpell",
+        "cardCostModifier": {
+      "class": "OneTurnCostModifier",
+          "target": "EVENT_CARD",
+          "value": 1,
+          "operation": "SUBTRACT"
+		}
+	  }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

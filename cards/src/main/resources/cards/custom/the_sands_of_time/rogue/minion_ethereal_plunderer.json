@@ -1,0 +1,32 @@
+{
+  "name": "Ethereal Plunderer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Deal 2 damage. Combo: Draw a card.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "ComboSpell",
+      "exclusive": true,
+      "spell1": {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      "spell2": {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
