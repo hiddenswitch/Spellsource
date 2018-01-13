@@ -17,6 +17,83 @@ import java.util.List;
 
 public class CustomHearthstoneTests extends TestBase {
 	@Test
+	public void testThinkFast() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_mirror_image");
+			GameLogic spyLogic = Mockito.spy(context.getLogic());
+			context.setLogic(spyLogic);
+			Mockito.doAnswer(invocation -> CardCatalogue.getCardById("minion_bladed_cultist")).when(spyLogic).getRandom(Mockito.anyList());
+			playCard(context, player, "spell_think_fast");
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_bladed_cultist");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), 0);
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), 1);
+		});
+	}
+
+	@Test
+	public void testDejaVu() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_deja_vu");
+			Assert.assertTrue(player.getHand().stream().allMatch(c -> context.getLogic().getModifiedManaCost(player, c) == 0));
+		});
+	}
+
+	@Test
+	public void testForeverAStudent() {
+		runGym((context, player, opponent) -> {
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCardWithTarget(context, player, "spell_forever_a_student", bloodfen);
+			Minion bloodfen2 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack() + 1);
+			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp() + 1);
+			Assert.assertEquals(bloodfen2.getAttack(), bloodfen2.getBaseAttack(), "The newly summoned minion should not be the benefit of the buff.");
+			Assert.assertEquals(bloodfen2.getHp(), bloodfen2.getBaseHp());
+			context.endTurn();
+			playCard(context, opponent, "minion_bloodfen_raptor");
+			Assert.assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack() + 1, "Opponent summoning a minion should not affect the stats of the enchanted minion.");
+			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp() + 1);
+		});
+	}
+
+	@Test
+	public void testNickOfTime() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_nick_of_time"));
+			context.endTurn();
+			Assert.assertEquals(player.getMinions().stream().map(Minion::getSourceCard).map(Card::getCardId).filter(cid -> cid.equals("token_silver_hand_recruit")).count(), 2L);
+		});
+	}
+
+	@Test
+	public void testAwakenTheAncients() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_awaken_the_ancients");
+			player.setMaxMana(10);
+			player.setMana(10);
+			playCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getMana(), 10);
+			playCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getMana(), 8);
+		});
+	}
+
+	@Test
+	public void testAcceleratedGrowth() {
+		runGym((context, player, opponent) -> {
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			context.getLogic().shuffleToDeck(opponent, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			playCard(context, player, "spell_accelerated_growth");
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
+			Assert.assertEquals(opponent.getHand().get(0).getCardId(), "minion_bloodfen_raptor", "Testing the TargetPlayer.BOTH attribute on DrawCardSpell");
+		});
+	}
+
+	@Test
 	public void testMysticSkull() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");

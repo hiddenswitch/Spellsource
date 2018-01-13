@@ -7,7 +7,7 @@
   "description": "Draw a card. Add two extra copies of it to your hand.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardAndDoSomethingSpell",
+    "class": "DrawCardSpell",
     "value": 1,
     "spell": {
       "class": "CopyCardSpell",

@@ -9,16 +9,16 @@
   "spell": {
     "class": "AddEnchantmentSpell",
     "trigger": {
-    "eventTrigger": {
-      "class": "MinionSummonedTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "BuffSpell",
-      "target": "SELF",
-      "value": 1
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "value": 1
+      }
     }
-  }
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -14,14 +14,14 @@
     },
     "spell": {
       "class": "SummonSpell",
-        "cards": [
-          "token_silver_hand_recruit",
-          "token_silver_hand_recruit"
-        ]
+      "cards": [
+        "token_silver_hand_recruit",
+        "token_silver_hand_recruit"
+      ]
     }
   },
   "attributes": {
-  "DIVINE_SHIELD": true
+    "DIVINE_SHIELD": true
   },
   "collectible": true,
   "set": "CUSTOM",
