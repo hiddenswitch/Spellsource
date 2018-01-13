@@ -28,7 +28,6 @@ import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -115,8 +114,8 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Consider the {@link Environment#PENDING_CARD} and {@link Environment#EVENT_CARD}, and the {@link Zones#DISCOVER}
-	 * zone for the specified card
+	 * Consider the {@link Environment#PENDING_CARD} and {@link Environment#OUTPUTS}, and the {@link
+	 * Zones#DISCOVER} zone for the specified card
 	 *
 	 * @param context
 	 * @param cardId
@@ -129,8 +128,8 @@ public class SpellUtils {
 		Card card;
 		if (cardId.toUpperCase().equals("PENDING_CARD")) {
 			card = context.getPendingCard();
-		} else if (cardId.toUpperCase().equals("EVENT_CARD")) {
-			card = context.getEventCard();
+		} else if (cardId.toUpperCase().equals("OUTPUT")) {
+			card = context.getOutputCard();
 		} else {
 			card = getCardFromContextOrDiscover(context, cardId);
 		}
@@ -411,5 +410,34 @@ public class SpellUtils {
 					.filter(target::hasAttribute).forEach(k -> map.put(k, target.getAttributes().get(k)));
 		}
 		return map;
+	}
+
+	/**
+	 * Casts a subspell on a card that was returned by {@link net.demilich.metastone.game.logic.GameLogic#receiveCard(int,
+	 * Card)}. Will not execute if the output is null or in the {@link Zones#GRAVEYARD}.
+	 *
+	 * @param context The {@link GameContext} to operate on.
+	 * @param player  The player from whose point of view we are casting this sub spell. This should be passed down from
+	 *                the {@link Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} {@code player} argument.
+	 * @param spell   The sub spell, typically from the {@code desc} argument's {@link SpellArg#SPELL} key.
+	 * @param source  The source entity.
+	 * @param target
+	 * @param output  The card. When {@code null} or the card is located in the {@link Zones#GRAVEYARD}.
+	 */
+	@Suspendable
+	public static void castChildSpell(GameContext context, Player player, SpellDesc spell, Entity source, Entity target, Entity output) {
+		// card may be null (i.e. try to draw from deck, but already in
+		// fatigue)
+		if (output == null
+				|| output.getZone() == Zones.GRAVEYARD) {
+			return;
+		}
+		if (spell == null) {
+			return;
+		}
+
+		context.getOutputStack().push(output.getReference());
+		castChildSpell(context, player, spell, source, target);
+		context.getOutputStack().pop();
 	}
 }

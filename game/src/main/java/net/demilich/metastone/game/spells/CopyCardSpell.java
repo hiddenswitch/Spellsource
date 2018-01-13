@@ -28,11 +28,8 @@ public class CopyCardSpell extends Spell {
 			for (int i = 0; i < numberOfCardsToCopy; i++) {
 				final Card clone = targetCard.getCopy();
 				context.getLogic().receiveCard(player.getId(), clone);
-				if (desc.containsKey(SpellArg.SPELL)) {
-					context.getSpellTargetStack().push(clone.getReference());
-					SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, clone);
-					context.getSpellTargetStack().pop();
-				}
+				final SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, clone);
 			}
 			return;
 		}

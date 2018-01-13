@@ -7,14 +7,14 @@
   "description": "Draw a card. That card costs (3) less.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardAndDoSomethingSpell",
+    "class": "DrawCardSpell",
     "value": 1,
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "FRIENDLY_PLAYER",
       "cardCostModifier": {
         "class": "CardCostModifier",
-        "target": "EVENT_CARD",
+        "target": "OUTPUT",
         "value": 3,
         "operation": "SUBTRACT"
       }

@@ -73,7 +73,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 			Secret secret = (Secret) secretSpellDesc.get(SpellArg.SECRET);
 			context.getLogic().playSecret(player, secret, false);
 			if (secretCard.getZone() == Zones.DECK) {
-				context.getLogic().removeCardFromDeck(player.getId(), secretCard);
+				context.getLogic().removeCard(secretCard);
 			} else {
 				secretCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 				context.getLogic().removeCard(secretCard);

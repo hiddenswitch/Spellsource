@@ -4,12 +4,13 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "description": "Draw a card, if it's a Beast it costs (4) less.",
+  "description": "Draw a card. If it's a Beast, it costs (4) less.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardAndDoSomethingSpell",
+    "class": "DrawCardSpell",
     "spell": {
       "class": "ConditionalSpell",
+      "target": "OUTPUT",
       "condition": {
         "class": "RaceCondition",
         "race": "BEAST"
@@ -19,7 +20,7 @@
         "target": "FRIENDLY_PLAYER",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "EVENT_CARD",
+          "target": "OUTPUT",
           "value": 4,
           "operation": "SUBTRACT"
         }

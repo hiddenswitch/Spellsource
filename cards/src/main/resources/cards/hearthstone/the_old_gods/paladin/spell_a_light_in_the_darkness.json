@@ -12,6 +12,7 @@
       "class": "ReceiveCardSpell",
       "spell": {
         "class": "BuffSpell",
+        "target": "OUTPUT",
         "value": 1
       },
       "targetPlayer": "SELF"

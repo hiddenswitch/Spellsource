@@ -7,14 +7,14 @@
   "description": "Draw 3 cards. Reduce their Costs to (0).",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardAndDoSomethingSpell",
+    "class": "DrawCardSpell",
     "value": 3,
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "FRIENDLY_PLAYER",
       "cardCostModifier": {
         "class": "CardCostModifier",
-        "target": "EVENT_CARD",
+        "target": "OUTPUT",
         "value": 0,
         "operation": "SET"
       }

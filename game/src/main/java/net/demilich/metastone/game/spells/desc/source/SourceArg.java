@@ -5,4 +5,6 @@ public enum SourceArg {
 	TARGET_PLAYER,
 	SOURCE,
 	INVERT,
+//	BACKUP_HERO_CLASS,
+//	VALID_HERO_CLASSES
 }

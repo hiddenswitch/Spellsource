@@ -36,7 +36,7 @@ public class EntityReference implements Serializable {
 	public static final EntityReference KILLED_MINION = new EntityReference(-29);
 	public static final EntityReference ATTACKER_REFERENCE = new EntityReference(-30);
 	public static final EntityReference PENDING_CARD = new EntityReference(-31);
-	public static final EntityReference EVENT_CARD = new EntityReference(-32);
+	public static final EntityReference OUTPUT = new EntityReference(-32);
 	public static final EntityReference FRIENDLY_DECK = new EntityReference(-33);
 	public static final EntityReference ENEMY_DECK = new EntityReference(-34);
 	public static final EntityReference BOTH_DECKS = new EntityReference(-35);
@@ -51,6 +51,8 @@ public class EntityReference implements Serializable {
 	public static final EntityReference ENEMY_GRAVEYARD = new EntityReference(-44);
 	public static final EntityReference ALL_ENTITIES = new EntityReference(-45);
 	public static final EntityReference EVENT_SOURCE = new EntityReference(-46);
+	public static final EntityReference FRIENDLY_TOP_CARD = new EntityReference(-47);
+	public static final EntityReference ENEMY_TOP_CARD = new EntityReference(-48);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

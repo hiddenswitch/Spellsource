@@ -13,7 +13,7 @@
       "class": "SummonSpell",
       "spell": {
         "class": "MetaSpell",
-        "target": "SPELL_TARGET",
+        "target": "OUTPUT",
         "spells": [
           {
             "class": "SetAttributeSpell",

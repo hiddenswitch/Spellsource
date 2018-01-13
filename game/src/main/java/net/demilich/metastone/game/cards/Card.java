@@ -164,18 +164,6 @@ public abstract class Card extends Entity {
 	}
 
 	/**
-	 * Gets an object which refers to the card's location, owner, and ID. Used for lookups.
-	 * <p>
-	 * Unusually, card references include the card name. Some cards, like the Rogue Quest, interact with card names
-	 * instead of their IDs.
-	 *
-	 * @return A reference to the card.
-	 */
-	public EntityReference getEntityReference() {
-		return new EntityReference(getId());
-	}
-
-	/**
 	 * Gets the set that the card belongs to.
 	 *
 	 * @return

@@ -2705,24 +2705,6 @@ public class GameLogic implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Moves the specified card from the player's {@link Zones#DECK} to their {@link Zones#GRAVEYARD}. Removes each
-	 * {@link Enchantment} associated with the card, if any. Does not raise any events.
-	 *
-	 * @param playerId The player whose deck to check for this card
-	 * @param card     The card to remove from this player's deck.
-	 * @see #discardCard(Player, Card) for when cards are discarded from the hand or should otherwise raise events.
-	 */
-	@Suspendable
-	public void removeCardFromDeck(int playerId, Card card) {
-		Player player = context.getPlayer(playerId);
-		log("Card {} has been moved from the DECK to the GRAVEYARD", card);
-		removeEnchantments(card);
-		if (card.getZone() != Zones.GRAVEYARD) {
-			player.getDeck().move(card, player.getGraveyard());
-		}
-	}
-
-	/**
 	 * Removes an actor by moving it to...
 	 * <p>
 	 * <ul> <li>The {@link Zones#GRAVEYARD} if the actor is being removed {@code peacefully == false}. Also marks it
@@ -2859,7 +2841,7 @@ public class GameLogic implements Cloneable, Serializable {
 
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
 		deck.replace(oldCard, newCard);
-		removeCardFromDeck(playerId, oldCard);
+		removeCard(oldCard);
 	}
 
 	@Suspendable

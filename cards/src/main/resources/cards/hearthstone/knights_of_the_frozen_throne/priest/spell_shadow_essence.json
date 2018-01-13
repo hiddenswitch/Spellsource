@@ -11,6 +11,7 @@
     "target": "FRIENDLY_DECK",
     "spell": {
       "class": "MetaSpell",
+      "target": "OUTPUT",
       "spells": [
         {
           "class": "SetAttackSpell",

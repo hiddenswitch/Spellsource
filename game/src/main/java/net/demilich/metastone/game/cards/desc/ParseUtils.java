@@ -302,8 +302,8 @@ public class ParseUtils {
 				return EntityReference.SPELL_TARGET;
 			case "pending_card":
 				return EntityReference.PENDING_CARD;
-			case "event_card":
-				return EntityReference.EVENT_CARD;
+			case "output":
+				return EntityReference.OUTPUT;
 			case "self":
 				return EntityReference.SELF;
 			case "attacker":
@@ -330,8 +330,12 @@ public class ParseUtils {
 				return EntityReference.MINIONS_TO_RIGHT;
 			case "friendly_deck":
 				return EntityReference.FRIENDLY_DECK;
+			case "friendly_top_card":
+				return EntityReference.FRIENDLY_TOP_CARD;
 			case "enemy_deck":
 				return EntityReference.ENEMY_DECK;
+			case "enemy_top_card":
+				return EntityReference.ENEMY_TOP_CARD;
 			case "both_decks":
 				return EntityReference.BOTH_DECKS;
 			case "both_hands":

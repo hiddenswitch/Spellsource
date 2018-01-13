@@ -1,0 +1,70 @@
+{
+  "name": "Oasis Spirit",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Draw a card and give your opponent a 'Naturalize'; or vice versa.",
+  "options": [
+    {
+      "name": "You Draw, Give Naturalize",
+      "description": "Draw a card, give your opponent a 'Naturalize' ",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "ReceiveCardSpell",
+            "card": "spell_naturalize",
+            "targetPlayer": "OPPONENT"
+          },
+          {
+            "class": "DrawCardSpell",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "Opponent Draws, Gain Naturalize",
+      "description": "Add a 'Naturalize' to your hand, your opponent draws a card.",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "ReceiveCardSpell",
+            "card": "spell_naturalize"
+          },
+          {
+            "class": "DrawCardSpell",
+            "value": 1,
+            "targetPlayer": "OPPONENT"
+          }
+        ]
+      }
+    }
+  ],
+  "bothOptions": {
+    "name": "Both Draw and Gain Naturalize",
+    "description": "Both players draw a card. Add a 'Naturalize' to both players' hands.",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReceiveCardSpell",
+          "card": "spell_naturalize",
+          "targetPlayer": "BOTH"
+        },
+        {
+          "class": "DrawCardSpell",
+          "value": 1,
+          "targetPlayer": "BOTH"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -14,11 +14,18 @@ import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.stream.Stream;
 
 public class OneNightInKarazhanTests extends TestBase {
+	@Test
+	@Ignore
+	public void testIvoryKnight() {
+		Assert.fail("Needs test.");
+	}
+
 	@Test
 	public void testPrinceMalchezaar() {
 		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false);

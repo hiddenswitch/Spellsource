@@ -1,0 +1,32 @@
+{
+  "name": "Late Reinforcements",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "RARE",
+  "description": "At the start of your next turn, summon four 1/1 Silver Hand Recruits.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "cards": [
+          "token_silver_hand_recruit",
+          "token_silver_hand_recruit",
+          "token_silver_hand_recruit",
+          "token_silver_hand_recruit"
+        ]
+      },
+      "oneTurn": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

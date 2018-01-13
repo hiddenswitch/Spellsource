@@ -11,7 +11,6 @@ import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.EquipWeaponSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 
 public class HeroCard extends ActorCard {
 	private static final long serialVersionUID = 1L;
@@ -41,7 +40,7 @@ public class HeroCard extends ActorCard {
 
 	@Override
 	public PlayCardAction play() {
-		return new PlayHeroCardAction(getEntityReference());
+		return new PlayHeroCardAction(getReference());
 	}
 
 	/**

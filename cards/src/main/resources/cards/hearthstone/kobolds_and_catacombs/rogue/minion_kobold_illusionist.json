@@ -12,7 +12,7 @@
     "target": "FRIENDLY_HAND",
     "spell": {
       "class": "MetaSpell",
-      "target": "SPELL_TARGET",
+      "target": "OUTPUT",
       "spells": [
         {
           "class": "SetAttributeSpell",

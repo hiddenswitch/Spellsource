@@ -1,0 +1,25 @@
+{
+  "name": "Final Stand",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "COMMON",
+  "description": "Set a minion's Health to 1 and give it Divine Shield.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SetHpSpell",
+        "value": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DIVINE_SHIELD"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
