@@ -941,7 +941,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 */
 	@SuppressWarnings("unchecked")
 	public Card resolveEntityReference(EntityReference EntityReference) throws NullPointerException {
-		if (getPendingCard() != null && getPendingCard().getEntityReference().equals(EntityReference)) {
+		if (getPendingCard() != null && getPendingCard().getReference().equals(EntityReference)) {
 			return getPendingCard();
 		} else {
 			return (Card) resolveSingleTarget(new EntityReference(EntityReference.getId()));

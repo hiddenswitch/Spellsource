@@ -13,7 +13,7 @@ public class PlayChooseOneCardAction extends PlayCardAction implements HasChoice
 	protected final String chosenCard;
 
 	public PlayChooseOneCardAction(SpellDesc spell, Card chooseOneCard, String chosenCard, TargetSelection targetSelection) {
-		super(chooseOneCard.getEntityReference());
+		super(chooseOneCard.getReference());
 		setActionType(ActionType.SPELL);
 		setTargetRequirement(targetSelection);
 		this.setSpell(spell);

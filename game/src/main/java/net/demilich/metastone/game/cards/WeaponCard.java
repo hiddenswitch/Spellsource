@@ -4,13 +4,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gson.annotations.SerializedName;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.actions.PlayWeaponCardAction;
 import net.demilich.metastone.game.cards.desc.WeaponCardDesc;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 
 public class WeaponCard extends ActorCard {
 
@@ -57,7 +55,7 @@ public class WeaponCard extends ActorCard {
 
 	@Override
 	public PlayCardAction play() {
-		return new PlayWeaponCardAction(getEntityReference());
+		return new PlayWeaponCardAction(getReference());
 	}
 
 	public int getDamage() {
