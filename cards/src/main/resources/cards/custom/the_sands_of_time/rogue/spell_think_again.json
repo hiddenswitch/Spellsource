@@ -13,7 +13,7 @@
         "class": "ReturnTargetToHandSpell",
         "spell": {
           "class": "PutCopyInHandSpell",
-          "target": "EVENT_CARD"
+          "target": "OUTPUT"
         }
       }
     ]

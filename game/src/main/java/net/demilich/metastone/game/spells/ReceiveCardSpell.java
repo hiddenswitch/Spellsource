@@ -47,7 +47,7 @@ public class ReceiveCardSpell extends Spell {
 				}
 				if (card != null) {
 					context.getLogic().receiveCard(player.getId(), card);
-					SpellUtils.castSubSpellOnCard(context, player, subSpell, source, card);
+					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 				}
 			}
 		} else if (desc.containsKey(SpellArg.CARD) || desc.containsKey(SpellArg.CARDS)) {
@@ -58,7 +58,7 @@ public class ReceiveCardSpell extends Spell {
 				for (int i = 0; i < count; i++) {
 					card = card.getCopy();
 					context.getLogic().receiveCard(player.getId(), card);
-					SpellUtils.castSubSpellOnCard(context, player, subSpell, source, card);
+					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 
 				}
 			}
@@ -66,7 +66,7 @@ public class ReceiveCardSpell extends Spell {
 			// The card is being moved into the hand from somewhere
 			final Card card = (Card) target;
 			context.getLogic().receiveCard(player.getId(), card);
-			SpellUtils.castSubSpellOnCard(context, player, subSpell, source, card);
+			SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 		}
 	}
 

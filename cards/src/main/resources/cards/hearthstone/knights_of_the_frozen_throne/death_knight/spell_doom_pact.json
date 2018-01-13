@@ -18,13 +18,14 @@
         "target": "ALL_MINIONS"
       },
       {
-        "class": "RemoveCardAndDoSomethingSpell",
-        "value": {
+        "class": "CastRepeatedlySpell",
+        "spell": {
+          "class": "RemoveCardSpell",
+          "target": "FRIENDLY_TOP_CARD"
+        },
+        "howMany": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
-        },
-        "spell": {
-          "class": "NullSpell"
         }
       }
     ]

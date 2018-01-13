@@ -62,11 +62,12 @@ public enum Environment {
 	 */
 	PENDING_CARD,
 	/**
-	 * This variable stores a card for effects to reference with {@link net.demilich.metastone.game.targeting.EntityReference#EVENT_CARD}.
+	 * This variable stores a stack of entities that were output by spells. The variable can be referenced with {@link
+	 * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
 	 * <p>
 	 * This implements Ivory Knight.
 	 */
-	EVENT_CARD,
+	OUTPUTS,
 	/**
 	 * This variable stores the parent {@link net.demilich.metastone.game.cards.ChooseOneCard}.
 	 */

@@ -63,9 +63,7 @@ public class ReturnTargetToHandSpell extends Spell {
 			returnedCard.getAttributes().putAll(map);
 			context.getLogic().receiveCard(target.getOwner(), returnedCard);
 			if (cardSpell != null) {
-				context.setEventCard(returnedCard);
-				SpellUtils.castChildSpell(context, player, cardSpell, source, returnedCard);
-				context.setEventCard(null);
+				SpellUtils.castChildSpell(context, player, cardSpell, source, target, returnedCard);
 			}
 		}
 	}

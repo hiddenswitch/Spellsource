@@ -527,13 +527,13 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	}
 
 	/**
-	 * Gets the current event card.
+	 * Gets the current output card.
 	 *
 	 * @return The event card.
-	 * @see Environment#EVENT_CARD for more.
+	 * @see Environment#OUTPUTS for more.
 	 */
-	public Card getEventCard() {
-		return (Card) resolveSingleTarget((EntityReference) getEnvironment().get(Environment.EVENT_CARD));
+	public Card getOutputCard() {
+		return (Card) resolveSingleTarget(getOutputStack().peek()).getSourceCard();
 	}
 
 	/**
@@ -946,32 +946,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		} else {
 			return (Card) resolveSingleTarget(new EntityReference(EntityReference.getId()));
 		}
-//			switch (EntityReference.getZone()) {
-//				case SET_ASIDE_ZONE:
-//				case DISCOVER:
-//					final Optional<Entity> first = ((EntityZone<Entity>) player.getZone(EntityReference.getZone())).stream().filter(e -> e.getId() == EntityReference.getEntityId()).findFirst();
-//					if (first.isPresent()
-//							&& Card.class.isAssignableFrom(first.get().getClass())) {
-//						card = (Card) first.get();
-//					}
-//					break;
-//				case DECK:
-//					card = findCardinCollection(player.getDeck(), EntityReference.getEntityId());
-//					break;
-//				case HAND:
-//					card = findCardinCollection(player.getHand(), EntityReference.getEntityId());
-//					break;
-//				case HERO_POWER:
-//					card = player.getHero().getHeroPower();
-//				default:
-//					break;
-//			}
-//		}
-//		if (card == null) {
-//			throw new NullPointerException("Could not resolve EntityReference " + EntityReference.toString());
-//		} else {
-//			return card;
-//		}
 	}
 
 	/**
@@ -1013,19 +987,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 			return null;
 		}
 		return entities.stream().map(e -> e.transformResolved(this)).collect(Collectors.toList());
-	}
-
-	/**
-	 * Sets the environment variable {@link Environment#EVENT_CARD}.
-	 *
-	 * @param eventCard The card to set.
-	 */
-	public void setEventCard(Card eventCard) {
-		if (eventCard != null) {
-			getEnvironment().put(Environment.EVENT_CARD, eventCard.getReference());
-		} else {
-			getEnvironment().put(Environment.EVENT_CARD, null);
-		}
 	}
 
 	public void setIgnoreEvents(boolean ignoreEvents) {
@@ -1330,6 +1291,14 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 			getEnvironment().put(Environment.SPELL_TARGET, new EnvironmentDeque<>());
 		}
 		return (Deque<EntityReference>) getEnvironment().get(Environment.SPELL_TARGET);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Deque<EntityReference> getOutputStack() {
+		if (!getEnvironment().containsKey(Environment.OUTPUTS)) {
+			getEnvironment().put(Environment.OUTPUTS, new EnvironmentDeque<>());
+		}
+		return (Deque<EntityReference>) getEnvironment().get(Environment.OUTPUTS);
 	}
 
 	/**

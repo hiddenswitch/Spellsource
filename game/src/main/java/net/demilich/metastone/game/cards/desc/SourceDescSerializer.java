@@ -34,8 +34,8 @@ public class SourceDescSerializer implements JsonDeserializer<SourceDesc>, JsonS
 //		parseArgument(SourceArg.OPERATION, jsonData, arguments, ParseValueType.OPERATION);
 		parseArgument(SourceArg.INVERT, jsonData, arguments, ParseValueType.BOOLEAN);
 //		parseArgument(SourceArg.CARD_TYPE, jsonData, arguments, ParseValueType.CARD_TYPE);
-//		parseArgument(SourceArg.HERO_CLASS, jsonData, arguments, ParseValueType.HERO_CLASS);
-//		parseArgument(SourceArg.HERO_CLASSES, jsonData, arguments, ParseValueType.HERO_CLASS_ARRAY);
+//		parseArgument(SourceArg.BACKUP_HERO_CLASS, jsonData, arguments, ParseValueType.HERO_CLASS);
+//		parseArgument(SourceArg.VALID_HERO_CLASSES, jsonData, arguments, ParseValueType.HERO_CLASS_ARRAY);
 //		parseArgument(SourceArg.RARITY, jsonData, arguments, ParseValueType.RARITY);
 //		parseArgument(SourceArg.MANA_COST, jsonData, arguments, ParseValueType.VALUE);
 //		parseArgument(SourceArg.CARD_ID, jsonData, arguments, ParseValueType.STRING);

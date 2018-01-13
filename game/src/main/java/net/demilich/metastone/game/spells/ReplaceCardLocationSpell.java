@@ -32,51 +32,51 @@ public class ReplaceCardLocationSpell extends Spell {
 				result.addCard(card);
 			}
 		}
-		
+
 		Zones location = (Zones) desc.get(SpellArg.CARD_LOCATION);
 		int count = 0;
-		switch(location) {
-		default:
-		case DECK:
-			count = player.getDeck().getCount();
-			for (Card card : player.getDeck().toList()) {
-				context.getLogic().removeCardFromDeck(player.getId(), card);
-			}
-			for (int i = 0; i < count; i++) {
-				Card card = null;
-				if (!result.isEmpty()) {
-					card = context.getLogic().getRandom(result);
-				} else if (replacementCard != null) {
-					card = context.getCardById(replacementCard);
+		switch (location) {
+			default:
+			case DECK:
+				count = player.getDeck().getCount();
+				for (Card card : player.getDeck().toList()) {
+					context.getLogic().removeCardFromDeck(player.getId(), card);
 				}
-				if (card != null) {
-					context.getLogic().shuffleToDeck(player, card.clone());
+				for (int i = 0; i < count; i++) {
+					Card card = null;
+					if (!result.isEmpty()) {
+						card = context.getLogic().getRandom(result);
+					} else if (replacementCard != null) {
+						card = context.getCardById(replacementCard);
+					}
+					if (card != null) {
+						context.getLogic().shuffleToDeck(player, card.clone());
+					}
 				}
-			}
-			break;
-		case HAND:
-			count = player.getHand().getCount();
-			for (Card card : player.getHand().toList()) {
-				context.getLogic().removeCard(card);
-			}
-			
-			int manaCostModifier = desc.getValue(SpellArg.MANA_MODIFIER, context, player, target, source, 0);
-			for (int i = 0; i < count; i++) {
-				Card card = null;
-				if (!result.isEmpty()) {
-					card = context.getLogic().getRandom(result);
-				} else if (replacementCard != null) {
-					card = context.getCardById(replacementCard);
+				break;
+			case HAND:
+				count = player.getHand().getCount();
+				for (Card card : player.getHand().toList()) {
+					context.getLogic().removeCard(card);
 				}
 
-				if (manaCostModifier != 0) {
-					card.setAttribute(Attribute.MANA_COST_MODIFIER, manaCostModifier);
+				int manaCostModifier = desc.getValue(SpellArg.MANA_MODIFIER, context, player, target, source, 0);
+				for (int i = 0; i < count; i++) {
+					Card card = null;
+					if (!result.isEmpty()) {
+						card = context.getLogic().getRandom(result);
+					} else if (replacementCard != null) {
+						card = context.getCardById(replacementCard);
+					}
+
+					if (manaCostModifier != 0) {
+						card.setAttribute(Attribute.MANA_COST_MODIFIER, manaCostModifier);
+					}
+					if (card != null) {
+						context.getLogic().receiveCard(player.getId(), card.clone());
+					}
 				}
-				if (card != null) {
-					context.getLogic().receiveCard(player.getId(), card.clone());
-				}
-			}
-			break;
+				break;
 		}
 	}
 

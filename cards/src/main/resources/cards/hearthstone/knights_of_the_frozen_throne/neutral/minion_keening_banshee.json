@@ -13,12 +13,13 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "RemoveCardAndDoSomethingSpell",
-      "value": 3,
+      "class": "CastRepeatedlySpell",
       "spell": {
-        "class": "NullSpell"
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_TOP_CARD",
+        "targetPlayer": "SELF"
       },
-      "targetPlayer": "SELF"
+      "howMany": 3
     }
   },
   "collectible": true,

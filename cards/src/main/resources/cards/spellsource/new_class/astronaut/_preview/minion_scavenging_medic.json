@@ -18,7 +18,7 @@
           "target": "FRIENDLY_HERO",
           "value": {
             "class": "AttributeValueProvider",
-            "target": "EVENT_CARD",
+            "target": "OUTPUT",
             "attribute": "BASE_MANA_COST"
           },
           "targetPlayer": "SELF"

@@ -2,7 +2,7 @@
   "name": "Forever a Student",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Give a friendly minion 'Whenever you summon a minion, gain +1/+1'.",
   "targetSelection": "FRIENDLY_MINIONS",

@@ -12,9 +12,16 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class TheGrandTournamentTests extends TestBase {
+	@Test
+	@Ignore
+	public void testVarianWrynn() {
+		Assert.fail("Varian Wrynn needs to be tested.");
+	}
+
 	@Test
 	public void testDefileDreadsteedInteraction() {
 		runGym((context, player, opponent) -> {
