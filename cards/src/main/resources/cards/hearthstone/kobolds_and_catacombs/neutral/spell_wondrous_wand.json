@@ -7,7 +7,7 @@
   "description": "Draw 3 cards. Reduce their Costs to (0).",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardAndDoSomethingSpell",
+    "class": "DrawCardSpell",
     "value": 3,
     "spell": {
       "class": "CardCostModifierSpell",

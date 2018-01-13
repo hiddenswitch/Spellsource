@@ -7,7 +7,7 @@
   "description": "Draw 2 cards. Minions drawn cost (2) less.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardAndDoSomethingSpell",
+    "class": "DrawCardSpell",
     "value": 2,
     "spell": {
       "class": "ConditionalSpell",

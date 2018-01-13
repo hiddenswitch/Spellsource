@@ -1,30 +1,31 @@
 {
-	"name": "Aging Treant",
-	"baseManaCost": 6,
-	"type": "BROWN",
-	"baseAttack": 3,
-	"baseHp": 6,
-	"heroClass": "DRUID",
-	"rarity": "",
-	"description": "Taunt. At the end of your turn, gain Deathrattle: Summon two 1/1 Saplings.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
+  "name": "Aging Treant",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Taunt. At the end of your turn, gain \"Deathrattle: Summon two 1/1 Saplings.\"",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
       "class": "AddDeathrattleSpell",
+      "target": "SELF",
       "spell": {
         "class": "SummonSpell",
         "value": 2,
         "card": "token_sapling"
-		}
-	  }
-	},
-	"attributes": {
+      }
+    }
+  },
+  "attributes": {
     "TAUNT": true
   },
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

@@ -10,17 +10,14 @@
     "class": "MetaSpell",
     "spells": [
       {
-    "class": "AddAttributeSpell",
-    "attribute": "DIVINE_SHIELD"
-      },
-      {
         "class": "SetHpSpell",
         "value": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DIVINE_SHIELD"
       }
     ]
-  },
-  "attributes": {
-    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",

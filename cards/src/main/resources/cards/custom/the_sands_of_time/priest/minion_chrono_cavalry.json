@@ -9,7 +9,7 @@
   "description": "Whenever this minion is healed, it may attack again.",
   "trigger": {
     "eventTrigger": {
-           "class": "HealingTrigger",
+      "class": "HealingTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
@@ -17,7 +17,7 @@
       "target": "SELF",
       "value": 1,
       "attribute": "EXTRA_ATTACKS"
-	}
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

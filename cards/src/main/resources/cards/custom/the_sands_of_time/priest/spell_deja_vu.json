@@ -1,5 +1,5 @@
 {
-  "name": "DÈj‡ Vu",
+  "name": "D√©j√† Vu",
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "WHITE",
@@ -7,40 +7,44 @@
   "description": "Add a 1/1 copy of each friendly minion into your hand. They cost (1).",
   "targetSelection": "NONE",
   "spell": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "CopyCardSpell",
-      "target": "EVENT_TARGET",
-      "spell": {
-        "class": "MetaSpell",
-        "target": "EVENT_CARD",
-        "spells": [
-          {
-            "class": "SetAttributeSpell",
+      "class": "MetaSpell",
+      "target": "EVENT_CARD",
+      "spells": [
+        {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "EVENT_CARD",
             "value": 1,
-            "attribute": "BASE_MANA_COST"
-          },
-          {
-            "class": "SetAttributeSpell",
-            "value": 1,
-            "attribute": "BASE_ATTACK"
-          },
-          {
-            "class": "SetAttributeSpell",
-            "value": 1,
-            "attribute": "ATTACK"
-          },
-          {
-            "class": "SetAttributeSpell",
-            "value": 1,
-            "attribute": "BASE_HP"
-          },
-          {
-            "class": "SetAttributeSpell",
-            "value": 1,
-            "attribute": "HP"
+            "operation": "SET"
           }
-        ]
-      }
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "BASE_ATTACK"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "ATTACK"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "BASE_HP"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "HP"
+        }
+      ]
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

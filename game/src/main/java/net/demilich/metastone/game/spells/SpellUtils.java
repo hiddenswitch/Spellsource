@@ -412,4 +412,31 @@ public class SpellUtils {
 		}
 		return map;
 	}
+
+	/**
+	 * Casts a subspell on a card that was returned by {@link net.demilich.metastone.game.logic.GameLogic#receiveCard(int,
+	 * Card)}.
+	 *
+	 * @param context The {@link GameContext} to operate on.
+	 * @param player  The player from whose point of view we are casting this sub spell. This should be passed down from
+	 *                the {@link Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} {@code player} argument.
+	 * @param spell   The sub spell, typically from the {@code desc} argument's {@link SpellArg#SPELL} key.
+	 * @param source  The source entity.
+	 * @param card    The card. When {@code null} or the card is located in the {@link Zones#GRAVEYARD} (due to an
+	 *                effect), no spell is cast.
+	 */
+	@Suspendable
+	public static void castSubSpellOnCard(GameContext context, Player player, SpellDesc spell, Entity source, Card card) {
+		// card may be null (i.e. try to draw from deck, but already in
+		// fatigue)
+		if (card == null || card.getZone() == Zones.GRAVEYARD) {
+			return;
+		}
+		if (spell == null) {
+			return;
+		}
+		context.setEventCard(card);
+		castChildSpell(context, player, spell, source, card);
+		context.setEventCard(null);
+	}
 }

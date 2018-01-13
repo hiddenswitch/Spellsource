@@ -9,7 +9,7 @@
   "description": "Battlecry: Draw 3 cards. Put any minions you drew directly into the battlefield.",
   "battlecry": {
     "spell": {
-      "class": "DrawCardAndDoSomethingSpell",
+      "class": "DrawCardSpell",
       "value": 3,
       "spell": {
         "class": "ConditionalSpell",
