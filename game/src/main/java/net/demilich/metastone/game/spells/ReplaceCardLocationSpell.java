@@ -40,7 +40,7 @@ public class ReplaceCardLocationSpell extends Spell {
 			case DECK:
 				count = player.getDeck().getCount();
 				for (Card card : player.getDeck().toList()) {
-					context.getLogic().removeCardFromDeck(player.getId(), card);
+					context.getLogic().removeCard(card);
 				}
 				for (int i = 0; i < count; i++) {
 					Card card = null;

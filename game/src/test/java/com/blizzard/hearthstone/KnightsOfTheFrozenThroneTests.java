@@ -241,10 +241,10 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			playCard(context, player, "hero_valeera_the_hollow");
 			Assert.assertTrue(player.getHand().containsCard("token_shadow_reflection"));
 			Assert.assertFalse(context.getLogic().canPlayCard(player.getId(),
-					player.getHand().get(0).getEntityReference()),
+					player.getHand().get(0).getReference()),
 					"You should not be able to play the Shadow Reflection because it doesn't do anything until a card is played.");
 			playCard(context, player, "minion_wisp");
-			Assert.assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getEntityReference()),
+			Assert.assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getReference()),
 					"Since you have 1 mana left and we last played a Wisp, the Shadow Reflection should have transformed into the Wisp and it should be playable.");
 			context.endTurn();
 			Assert.assertEquals(player.getHand().size(), 0, "The Shadow Reflection-as-Wisp should have removed itself from the player's hand");
