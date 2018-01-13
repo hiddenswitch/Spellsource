@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.demilich.metastone.game.entities.EntityZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +14,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -279,8 +277,8 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.ATTACKER_REFERENCE)));
 		} else if (targetKey.equals(EntityReference.PENDING_CARD)) {
 			return singleTargetAsList((Entity) context.getPendingCard());
-		} else if (targetKey.equals(EntityReference.EVENT_CARD)) {
-			return singleTargetAsList((Entity) context.getEventCard());
+		} else if (targetKey.equals(EntityReference.OUTPUT)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getOutputStack().peek()));
 		} else if (targetKey.equals(EntityReference.FRIENDLY_WEAPON)) {
 			if (player.getHero().getWeapon() != null) {
 				return singleTargetAsList(player.getHero().getWeapon());
@@ -306,6 +304,19 @@ public class TargetLogic implements Serializable {
 			return new ArrayList<>(player.getDeck().toList());
 		} else if (targetKey.equals(EntityReference.ENEMY_DECK)) {
 			return new ArrayList<>(context.getOpponent(player).getDeck().toList());
+		} else if (targetKey.equals(EntityReference.FRIENDLY_TOP_CARD)) {
+			if (player.getDeck().size() == 0) {
+				return new ArrayList<>();
+			} else {
+				return singleTargetAsList(player.getDeck().get(0));
+			}
+		} else if (targetKey.equals(EntityReference.ENEMY_TOP_CARD)) {
+			Player opponent = context.getOpponent(player);
+			if (opponent.getDeck().size() == 0) {
+				return new ArrayList<>();
+			} else {
+				return singleTargetAsList(opponent.getDeck().get(0));
+			}
 		} else if (targetKey.equals(EntityReference.BOTH_DECKS)) {
 			ArrayList<Entity> friendly = new ArrayList<>(player.getDeck().toList());
 			friendly.addAll(context.getOpponent(player).getDeck().toList());

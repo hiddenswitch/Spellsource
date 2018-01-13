@@ -12,6 +12,7 @@
       "class": "DrawCardSpell",
       "spell": {
         "class": "ConditionalSpell",
+        "target": "OUTPUT",
         "condition": {
           "class": "CardPropertyCondition",
           "cardType": "MINION"

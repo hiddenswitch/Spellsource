@@ -13,6 +13,7 @@
       "value": 3,
       "spell": {
         "class": "ConditionalSpell",
+        "target": "OUTPUT",
         "condition": {
           "class": "AndCondition",
           "conditions": [

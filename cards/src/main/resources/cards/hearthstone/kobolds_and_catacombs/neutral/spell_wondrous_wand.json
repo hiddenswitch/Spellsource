@@ -14,7 +14,7 @@
       "target": "FRIENDLY_PLAYER",
       "cardCostModifier": {
         "class": "CardCostModifier",
-        "target": "EVENT_CARD",
+        "target": "OUTPUT",
         "value": 0,
         "operation": "SET"
       }

@@ -35,6 +35,20 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testArmyOfTheDead() {
+		// 4 cards, no exception
+		runGym((context, player, opponent) -> {
+			int hp = player.getHero().getHp();
+			Stream.generate(() -> "minion_bloodfen_raptor").map(CardCatalogue::getCardById).limit(4)
+					.forEach(card -> context.getLogic().shuffleToDeck(player, card));
+			playCard(context, player, "spell_army_of_the_dead");
+			Assert.assertEquals(player.getMinions().size(), 4);
+			Assert.assertEquals(player.getDeck().size(), 0, "All cards should have been put into play.");
+			Assert.assertEquals(player.getHero().getHp(), hp, "Player should not have taken fatigue damage.");
+		});
+	}
+
+	@Test
 	public void testLeechingPoison() {
 		runGym((context, player, opponent) -> {
 			playCardWithTarget(context, player, "spell_fireball", player.getHero());

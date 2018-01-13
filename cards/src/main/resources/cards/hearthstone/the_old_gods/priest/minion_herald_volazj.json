@@ -14,7 +14,7 @@
       "target": "OTHER_FRIENDLY_MINIONS",
       "spell": {
         "class": "MetaSpell",
-        "target": "SPELL_TARGET",
+        "target": "OUTPUT",
         "spells": [
           {
             "class": "SetAttributeSpell",

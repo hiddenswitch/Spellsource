@@ -7,29 +7,34 @@
   "description": "Remove the top 5 cards of your deck. Summon any minions removed.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "RemoveCardAndDoSomethingSpell",
-    "value": 5,
+    "class": "CastRepeatedlySpell",
     "spell": {
-      "class": "ConditionalSpell",
-      "condition": {
-        "class": "AndCondition",
-        "conditions": [
-          {
-            "class": "CardPropertyCondition",
-            "cardType": "MINION"
-          },
-          {
-            "class": "MinionCountCondition",
-            "value": 7,
-            "operation": "LESS",
-            "targetPlayer": "SELF"
-          }
-        ]
-      },
+      "class": "RemoveCardSpell",
+      "target": "FRIENDLY_TOP_CARD",
       "spell": {
-        "class": "PutMinionOnBoardSpell"
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "CardPropertyCondition",
+              "cardType": "MINION"
+            },
+            {
+              "class": "MinionCountCondition",
+              "value": 7,
+              "operation": "LESS",
+              "targetPlayer": "SELF"
+            }
+          ]
+        },
+        "spell": {
+          "class": "PutMinionOnBoardSpell",
+          "target": "OUTPUT"
+        }
       }
-    }
+    },
+    "howMany": 5
   },
   "collectible": false,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

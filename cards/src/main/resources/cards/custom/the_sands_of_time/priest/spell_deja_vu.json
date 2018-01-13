@@ -1,5 +1,5 @@
 {
-  "name": "Déjà Vu",
+  "name": "D\u00e9j\u00e0 Vu",
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "WHITE",
@@ -11,14 +11,14 @@
     "target": "FRIENDLY_MINIONS",
     "spell": {
       "class": "MetaSpell",
-      "target": "EVENT_CARD",
+      "target": "OUTPUT",
       "spells": [
         {
           "class": "CardCostModifierSpell",
           "target": "FRIENDLY_PLAYER",
           "cardCostModifier": {
             "class": "CardCostModifier",
-            "target": "EVENT_CARD",
+            "target": "OUTPUT",
             "value": 1,
             "operation": "SET"
           }

@@ -18,7 +18,7 @@ public class DrawCardSpell extends Spell {
 			Card card = context.getLogic().drawCard(player.getId(), source);
 
 			SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
-			SpellUtils.castSubSpellOnCard(context, player, subSpell, source, card);
+			SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 		}
 	}
 }

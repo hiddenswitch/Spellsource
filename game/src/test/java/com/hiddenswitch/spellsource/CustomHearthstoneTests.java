@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -19,17 +20,19 @@ public class CustomHearthstoneTests extends TestBase {
 	@Test
 	public void testThinkFast() {
 		runGym((context, player, opponent) -> {
+			// TODO: This should still work if it's a different class
 			playCard(context, player, "spell_mirror_image");
-			GameLogic spyLogic = Mockito.spy(context.getLogic());
-			context.setLogic(spyLogic);
-			Mockito.doAnswer(invocation -> CardCatalogue.getCardById("minion_bladed_cultist")).when(spyLogic).getRandom(Mockito.anyList());
+			int[] cost = new int[1];
+			overrideDiscover(player, actions -> {
+				cost[0] = actions.get(0).getCard().getBaseManaCost();
+				return actions.get(0);
+			});
 			playCard(context, player, "spell_think_fast");
-			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_bladed_cultist");
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), 0);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), cost[0] - 1);
 			context.endTurn();
 			context.endTurn();
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), 1);
-		});
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), cost[0]);
+		}, HeroClass.BLACK, HeroClass.BLACK);
 	}
 
 	@Test
@@ -38,7 +41,14 @@ public class CustomHearthstoneTests extends TestBase {
 			playCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_deja_vu");
-			Assert.assertTrue(player.getHand().stream().allMatch(c -> context.getLogic().getModifiedManaCost(player, c) == 0));
+			Assert.assertEquals(player.getMinions().size(), 2);
+			Assert.assertTrue(player.getHand().stream().allMatch(c -> context.getLogic().getModifiedManaCost(player, c) == 1));
+			playCard(context, player, player.getHand().get(1));
+			playCard(context, player, player.getHand().get(0));
+			for (int i = 2; i < 4; i++) {
+				Assert.assertEquals(player.getMinions().get(i).getAttack(), 1);
+				Assert.assertEquals(player.getMinions().get(i).getHp(), 1);
+			}
 		});
 	}
 

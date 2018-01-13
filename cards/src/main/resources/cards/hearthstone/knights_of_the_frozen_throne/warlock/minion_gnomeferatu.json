@@ -10,12 +10,8 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "RemoveCardAndDoSomethingSpell",
-      "value": 1,
-      "spell": {
-        "class": "NullSpell"
-      },
-      "targetPlayer": "OPPONENT"
+      "class": "RemoveCardSpell",
+      "target": "ENEMY_TOP_CARD"
     }
   },
   "attributes": {

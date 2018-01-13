@@ -154,9 +154,7 @@ public class SummonSpell extends Spell {
 			}
 
 			desc.subSpells(0).forEach(subSpell -> {
-				context.getSpellTargetStack().push(summoned.getReference());
-				SpellUtils.castChildSpell(context, player, subSpell, source, summoned);
-				context.getSpellTargetStack().pop();
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, summoned);
 			});
 		});
 	}

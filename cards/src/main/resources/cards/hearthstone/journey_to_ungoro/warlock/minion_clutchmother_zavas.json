@@ -18,7 +18,7 @@
       "target": "EVENT_TARGET",
       "spell": {
         "class": "BuffSpell",
-        "target": "EVENT_CARD",
+        "target": "OUTPUT",
         "value": 2
       }
     }
