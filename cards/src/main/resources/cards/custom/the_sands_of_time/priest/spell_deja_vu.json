@@ -1,0 +1,52 @@
+{
+  "name": "D\u00e9j\u00e0 Vu",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "RARE",
+  "description": "Add a 1/1 copy of each friendly minion into your hand. They cost (1).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OUTPUT",
+      "spells": [
+        {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "OUTPUT",
+            "value": 1,
+            "operation": "SET"
+          }
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "BASE_ATTACK"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "ATTACK"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "BASE_HP"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "value": 1,
+          "attribute": "HP"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

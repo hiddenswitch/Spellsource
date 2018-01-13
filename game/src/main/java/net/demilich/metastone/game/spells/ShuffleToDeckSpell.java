@@ -47,9 +47,7 @@ public class ShuffleToDeckSpell extends Spell {
 				final Card copy = card.getCopy();
 				copy.getAttributes().putAll(map);
 				context.getLogic().shuffleToDeck(player, copy);
-				context.setEventCard(copy);
-				SpellUtils.castChildSpell(context, player, subSpell, source, copy);
-				context.setEventCard(null);
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
 			}
 		}
 	}

@@ -590,7 +590,7 @@ public class JourneyToUngoroTests extends TestBase {
 			player.setMaxMana(10);
 			player.setMana(10);
 			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("quest_jungle_giants"));
-			Assert.assertFalse(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getEntityReference()),
+			Assert.assertFalse(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getReference()),
 					"Since we already have a quest in play, we should not be able to play another quest.");
 
 			// Play 5 minions with 5 or more attack.
@@ -601,7 +601,7 @@ public class JourneyToUngoroTests extends TestBase {
 			Assert.assertTrue(player.getHand().containsCard("token_barnabus_the_stomper"));
 			Assert.assertEquals(player.getQuests().size(), 0);
 			player.setMana(1);
-			Assert.assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getEntityReference()));
+			Assert.assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getReference()));
 		}));
 	}
 

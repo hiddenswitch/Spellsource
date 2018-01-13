@@ -76,7 +76,7 @@ public class TheOldGodsTests extends TestBase {
 			Card rageUnboundCard = CardCatalogue.getCardById("minion_yshaarj_rage_unbound");
 			context.getLogic().shuffleToDeck(player, rageUnboundCard);
 			playCard(context, player, "spell_shadow_essence");
-			context.getLogic().removeCardFromDeck(player.getId(), rageUnboundCard);
+			context.getLogic().removeCard(rageUnboundCard);
 			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
 			context.endTurn();
 			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");

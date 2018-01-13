@@ -9,14 +9,14 @@
   "description": "Battlecry: Draw a card and set its cost to (5).",
   "battlecry": {
     "spell": {
-      "class": "DrawCardAndDoSomethingSpell",
+      "class": "DrawCardSpell",
       "value": 1,
       "spell": {
         "class": "CardCostModifierSpell",
         "target": "FRIENDLY_PLAYER",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "EVENT_CARD",
+          "target": "OUTPUT",
           "value": 5,
           "operation": "SET"
         }

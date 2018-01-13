@@ -1,0 +1,25 @@
+{
+  "name": "Chrono Cavalry",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Whenever this minion is healed, it may attack again.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "EXTRA_ATTACKS"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

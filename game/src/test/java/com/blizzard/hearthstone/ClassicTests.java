@@ -52,7 +52,6 @@ public class ClassicTests extends TestBase {
 				} else {
 					Assert.assertEquals(player.getHand().size(), 0);
 				}
-
 			});
 		}
 	}

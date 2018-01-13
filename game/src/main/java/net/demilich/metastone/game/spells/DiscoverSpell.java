@@ -170,7 +170,7 @@ public class DiscoverSpell extends Spell {
 			discoverActions.add(discover);
 		}
 
-		// Execute the discovery
+		// Execute the discovery (the target is the both the output and the discovery)
 		final DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, choices, discoverActions);
 		SpellUtils.castChildSpell(context, player, chosenAction.getSpell(), source, target);
 	}

@@ -1,0 +1,24 @@
+{
+  "name": "Tireless Crusader",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "At the end of your turn, gain Divine Shield.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

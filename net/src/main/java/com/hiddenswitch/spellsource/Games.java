@@ -916,7 +916,7 @@ public interface Games {
 		int owner = card.getOwner();
 		Player owningPlayer;
 		if (owner != -1) {
-			final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getEntityReference())
+			final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
 					&& card.getOwner() == workingContext.getActivePlayerId()
 					&& localPlayerId == card.getOwner();
 			entityState.playable(playable);

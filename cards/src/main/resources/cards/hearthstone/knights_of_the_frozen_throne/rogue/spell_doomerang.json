@@ -23,7 +23,7 @@
         },
         "spell": {
           "class": "AddAttributeSpell",
-          "target": "PENDING_CARD",
+          "target": "SELF",
           "attribute": "POISONOUS"
         }
       },
@@ -37,7 +37,7 @@
         },
         "spell": {
           "class": "AddAttributeSpell",
-          "target": "PENDING_CARD",
+          "target": "SELF",
           "attribute": "LIFESTEAL"
         }
       },
@@ -55,12 +55,12 @@
       },
       {
         "class": "RemoveAttributeSpell",
-        "target": "PENDING_CARD",
+        "target": "SELF",
         "attribute": "POISONOUS"
       },
       {
         "class": "RemoveAttributeSpell",
-        "target": "PENDING_CARD",
+        "target": "SELF",
         "attribute": "LIFESTEAL"
       }
     ]

@@ -9,9 +9,10 @@
   "description": "Battlecry: Draw a card. If it's a minion, transform it into a Chicken.",
   "battlecry": {
     "spell": {
-      "class": "DrawCardAndDoSomethingSpell",
+      "class": "DrawCardSpell",
       "spell": {
         "class": "ConditionalSpell",
+        "target": "OUTPUT",
         "condition": {
           "class": "CardPropertyCondition",
           "cardType": "MINION"

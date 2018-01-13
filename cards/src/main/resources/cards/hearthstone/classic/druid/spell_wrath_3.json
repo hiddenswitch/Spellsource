@@ -1,10 +1,10 @@
 {
-  "name": "4 damage and draw a card",
+  "name": "Wrath",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "COMMON",
-  "description": "Deal 3 damage to a minion",
+  "description": "Deal 4 damage to a minion and draw a card.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

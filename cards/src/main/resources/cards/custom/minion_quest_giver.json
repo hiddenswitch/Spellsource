@@ -13,7 +13,7 @@
       "class": "ShuffleMinionToDeckSpell",
       "spell": {
         "class": "BuffSpell",
-        "target": "EVENT_CARD",
+        "target": "OUTPUT",
         "attackBonus": 3,
         "hpBonus": 3
       },

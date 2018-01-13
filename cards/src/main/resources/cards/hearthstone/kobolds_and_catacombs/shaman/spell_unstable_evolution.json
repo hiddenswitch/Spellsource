@@ -25,7 +25,7 @@
         "class": "ReceiveCardSpell",
         "spell": {
           "class": "AddEnchantmentSpell",
-          "target": "EVENT_CARD",
+          "target": "OUTPUT",
           "trigger": {
             "eventTrigger": {
               "class": "TurnEndTrigger"

@@ -7,10 +7,10 @@
   "description": "Draw a card. Fill your hand with copies of it.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardAndDoSomethingSpell",
+    "class": "DrawCardSpell",
     "spell": {
       "class": "CopyCardSpell",
-      "target": "EVENT_CARD",
+      "target": "OUTPUT",
       "value": 9
     }
   },

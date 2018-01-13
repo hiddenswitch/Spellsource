@@ -24,7 +24,7 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 		player.getSetAsideZone().move(minionCard, player.getDeck());
 		
 		if (summonSuccess) {
-			context.getLogic().removeCardFromDeck(player.getId(), minionCard);
+			context.getLogic().removeCard(minionCard);
 		}
 	}
 

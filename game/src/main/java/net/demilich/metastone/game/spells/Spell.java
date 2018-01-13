@@ -10,6 +10,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * The base class for "spells," or collections of effects in the engine.
@@ -54,7 +55,8 @@ public abstract class Spell implements Serializable {
 			// cast in on all targets
 
 			for (Entity target : validTargets) {
-				context.getSpellTargetStack().push(target.getReference());
+				final EntityReference reference = target == null ? EntityReference.NONE : target.getReference();
+				context.getSpellTargetStack().push(reference);
 				castForPlayer(context, player, desc, source, target);
 				context.getSpellTargetStack().pop();
 			}

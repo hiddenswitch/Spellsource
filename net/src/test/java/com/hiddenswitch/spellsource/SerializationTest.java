@@ -97,9 +97,9 @@ public class SerializationTest extends TestBase {
 		PlaySpellCardAction playSpellCardAction = new PlaySpellCardAction(fireball.getSpell(), fireball, TargetSelection.ENEMY_CHARACTERS);
 		playSpellCardAction.setTargetReference(new EntityReference(3));
 		BattlecryAction elvenArcherAction = elven_archer.summon().getBattlecry();
-		PlayMinionCardAction playMinionCardAction = new PlayMinionCardAction(elven_archer.getEntityReference(), elvenArcherAction);
+		PlayMinionCardAction playMinionCardAction = new PlayMinionCardAction(elven_archer.getReference(), elvenArcherAction);
 		HeroPowerAction heroPowerAction = new HeroPowerAction(heroPowerFireblast.getSpell(), heroPowerFireblast.getCopy(), TargetSelection.ENEMY_CHARACTERS);
-		PlayWeaponCardAction playWeaponCardAction = new PlayWeaponCardAction(assassinsBlade.getEntityReference());
+		PlayWeaponCardAction playWeaponCardAction = new PlayWeaponCardAction(assassinsBlade.getReference());
 
 		// 0
 		gameActions.add(endTurnAction);

@@ -13,13 +13,13 @@
       "spells": [
         {
           "class": "SetAttributeSpell",
-          "target": "EVENT_CARD",
+          "target": "OUTPUT",
           "value": 5,
           "attribute": "BASE_ATTACK"
         },
         {
           "class": "SetAttributeSpell",
-          "target": "EVENT_CARD",
+          "target": "OUTPUT",
           "value": 5,
           "attribute": "ATTACK"
         }
