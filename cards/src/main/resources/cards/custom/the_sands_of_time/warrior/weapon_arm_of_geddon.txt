@@ -1,0 +1,27 @@
+{
+  "name": "Arm of Geddon",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "heroClass": "RED",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "After your Hero attacks, deal 2 damage to all characters.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "DamageSpell",
+    "target": "ALL_OTHER_CHARACTERS",
+    "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
