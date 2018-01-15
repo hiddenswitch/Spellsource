@@ -1,0 +1,25 @@
+{
+	"name": "Running on Empty",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "VIOLET",
+	"rarity": "COMMON",
+	"description": "Give a minion +2/+2. Discard a random card.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "BuffSpell",
+				"value": 2
+			},
+			{
+				"class": "DiscardSpell",
+				"value": 1
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

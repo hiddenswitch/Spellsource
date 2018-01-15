@@ -1,0 +1,29 @@
+{
+  "name": "Taunka Frostcaller",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Choose a minion. Freeze the minions adjacent to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AdjacentEffectSpell",
+        "spell1": {
+          "class": "NullSpell"
+        },
+        "spell2": {
+          "class": "AddAttributeSpell",
+          "attribute": "FROZEN"
+        }
+	   }
+      ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

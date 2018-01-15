@@ -1,0 +1,33 @@
+{
+  "name": "Ethereal Swindler",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Battlecry: Choose a rarity. Discover a card of that rarity from your opponent's class.",
+  "battlecry": {
+  "targetSelection": "NONE",
+      "spell": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "RecastSpell"
+        },
+        "cards": [
+          "spell_common",
+          "spell_rare",
+          "spell_epic",
+          "spell_legendary"
+        ],
+        "howMany": 4
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
