@@ -1,0 +1,39 @@
+{
+  "name": "Space Moorine",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "description": "Has Taunt while you have armor.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "ArmorChangedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_HERO",
+        "value": 1,
+        "attribute": "ARMOR",
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "spell1": {
+        "class": "RemoveAttributeSpell",
+        "target": "SELF",
+        "attribute": "TAUNT"
+      },
+      "spell2": {
+        "class": "AddAttributeSpell",
+        "target": "SELF",
+        "attribute": "TAUNT"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

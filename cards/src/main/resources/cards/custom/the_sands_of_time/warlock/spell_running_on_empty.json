@@ -1,6 +1,6 @@
 {
 	"name": "Running on Empty",
-	"baseManaCost": 1,
+	"baseManaCost": 0,
 	"type": "SPELL",
 	"heroClass": "VIOLET",
 	"rarity": "COMMON",
