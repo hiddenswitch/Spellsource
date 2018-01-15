@@ -1,0 +1,42 @@
+{
+  "name": "Armed and Ready",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "rarity": "COMMON",
+  "description": "Deal 3 damage. Discover a spell.",
+    "targetSelection": "MINIONS",
+    "spell": {
+    "class": "MetaSpell",
+    "spells": [
+	{
+	"class": "DamageSpell",
+	"value": 3
+	}
+	{
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+            }
+		  ]
+        }
+      }
+	]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

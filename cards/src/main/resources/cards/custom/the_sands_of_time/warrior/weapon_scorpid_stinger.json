@@ -1,0 +1,28 @@
+{
+  "name": "Scorpid Stinger",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "RED",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "COMMON",
+  "description": "When this kills a minion, add a 'Inner Rage' to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_inner_rage",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

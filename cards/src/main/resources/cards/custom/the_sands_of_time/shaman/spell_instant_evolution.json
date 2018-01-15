@@ -1,0 +1,24 @@
+{
+  "name": "Instant Evolution",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Transform a friendly minion into a random one that costs (7) more.",
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "TransformToRandomMinionSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": {
+          "class": "AttributeValueProvider",
+          "target": "TARGET",
+          "attribute": "BASE_MANA_COST",
+          "offset": 7
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

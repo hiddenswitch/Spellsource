@@ -1,0 +1,24 @@
+{
+  "name": "Shivarra Warden",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 9,
+  "baseHp": 9,
+  "rarity": "COMMON",
+  "description": "At the end of your turn, deal 3 damage to your Hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
