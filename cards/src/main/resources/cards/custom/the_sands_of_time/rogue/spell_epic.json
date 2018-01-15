@@ -1,0 +1,38 @@
+{
+  "name": "Epic",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "FREE",
+  "description": "Discover a Epic card from your opponent's class'.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+    "class": "AndFilter",
+    "filters": [
+	{
+      "class": "CardFilter",
+      "heroClass": "OPPONENT"
+    },
+    "cardSource": {
+      "class": "CatalogueSource",
+      "targetPlayer": "OPPONENT"
+    },
+	{
+	"cardFilter": {
+        "class": "CardFilter",
+        "rarity": "EPIC"
+       }
+	  }
+     ]
+	}
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
