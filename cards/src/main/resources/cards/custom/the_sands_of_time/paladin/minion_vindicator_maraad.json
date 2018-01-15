@@ -10,20 +10,20 @@
   "trigger": {
     "eventTrigger": {
       "class": "MinionPlayedTrigger",
-       "cardFilter": {
-      "class": "AndFilter",
-      "filters": [
-        {
-          "class": "CardFilter",
-          "cardType": "MINION"
-        },
-        {
-          "class": "ManaCostFilter",
-          "value": 1,
-          "operation": "EQUAL"
-        }
-      ]
-    },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "ManaCostFilter",
+            "value": 1,
+            "operation": "EQUAL"
+          }
+        ]
+      },
       "targetPlayer": "SELF"
     },
     "spell": {

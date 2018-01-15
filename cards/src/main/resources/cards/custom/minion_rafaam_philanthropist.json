@@ -16,7 +16,7 @@
         "targetPlayer": "OPPONENT"
       },
       "cardFilter": {
-       "class": "AndFilter",
+        "class": "AndFilter",
         "filters": [
           {
             "class": "CardFilter",
@@ -27,13 +27,13 @@
             "rarity": "LEGENDARY",
             "invert": true
           },
-		  {
-        "class": "CardFilter",
-        "manaCost": 1
-		  }
-	   ]
-     }
-	}
+          {
+            "class": "CardFilter",
+            "manaCost": 1
+          }
+        ]
+      }
+    }
   },
   "attributes": {
     "BATTLECRY": true

@@ -9,7 +9,7 @@
   "race": "TOTEM",
   "description": "At the end of your turn, freeze a random enemy minion.",
   "trigger": {
-      "eventTrigger": {
+    "eventTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
