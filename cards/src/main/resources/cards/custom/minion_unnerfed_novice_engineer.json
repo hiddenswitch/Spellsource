@@ -1,0 +1,21 @@
+{
+	"name": "Unnerfed Novice Engineer",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Battlecry: Draw a card.",
+	"battlecry": {
+		"spell": {
+			"class": "DrawCardSpell"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "BASIC",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+	"name": "Unnerfed Frost Nova",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "FREE",
+	"description": "Freeze all enemy minions.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "AddAttributeSpell",
+		"target": "ENEMY_MINIONS",
+		"attribute": "FROZEN"
+	},
+	"collectible": true,
+	"set": "BASIC",
+	"fileFormatVersion": 1
+}

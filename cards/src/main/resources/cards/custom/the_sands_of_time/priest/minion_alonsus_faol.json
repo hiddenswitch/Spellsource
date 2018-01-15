@@ -1,0 +1,27 @@
+{
+  "name": "Alonsus Faol",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 8,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Add the three Priest artifacts to your hand.",
+  "battlecry": {
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "spell_tuure",
+      "spell_xal_atath",
+      "spell_light_wrath"
+    ]
+	}
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
