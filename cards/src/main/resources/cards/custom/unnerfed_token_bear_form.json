@@ -1,0 +1,17 @@
+{
+	"name": "Unnerfed Druid of the Claw (Bear)",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 7,
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"race": "BEAST",
+	"description": "Taunt",
+	"attributes": {
+		"TAUNT": true
+	},
+	"collectible": false,
+	"set": "CLASSIC",
+	"fileFormatVersion": 1
+}

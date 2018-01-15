@@ -27,13 +27,14 @@
 	"cardFilter": {
         "class": "CardFilter",
         "rarity": "LEGENDARY",
+		"cardType": "SPELL",
 		"invert": true
        }
 	  }
      ]
 	}
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

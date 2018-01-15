@@ -1,0 +1,18 @@
+{
+	"name": "Druid of the Claw (CatBear)",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 7,
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"race": "BEAST",
+	"description": "Charge. Taunt",
+	"attributes": {
+		"CHARGE": true,
+		"TAUNT": true
+	},
+	"collectible": false,
+	"set": "CLASSIC",
+	"fileFormatVersion": 1
+}

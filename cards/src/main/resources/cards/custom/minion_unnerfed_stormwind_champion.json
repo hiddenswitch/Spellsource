@@ -1,0 +1,19 @@
+{
+	"name": "Unnerfed Stormwind Champion",
+	"baseManaCost": 6,
+	"type": "MINION",
+	"baseAttack": 6,
+	"baseHp": 6,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Your other minions have +1/+1.",
+	"aura": {
+		"class": "BuffAura",
+		"target": "OTHER_FRIENDLY_MINIONS",
+		"attackBonus": 1,
+		"hpBonus": 1
+	},
+	"collectible": true,
+	"set": "BASIC",
+	"fileFormatVersion": 1
+}
