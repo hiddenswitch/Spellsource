@@ -15,10 +15,16 @@
       "targetPlayer": "SELF"
     },
     "cardFilter": {
-      "class": "CardFilter",
+      "class": "AndFilter",
+      "filters": [
+	  {
       "attribute": "COMBO",
       "operation": "HAS"
-		}
+	  },
+        "class": "CardFilter",
+        "heroClass": "BLACK"
+      }
+	             ]
     },
     "spell2": {
         "class": "CardCostModifierSpell",
