@@ -1,0 +1,42 @@
+{
+	"name": "Devour",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "VIOLET",
+	"rarity": "FREE",
+	"description": "Discard a card. Restore 5 Health to your Hero.",
+	"targetSelection": "NONE",
+	"spell": {
+        "condition": {
+      "class": "CardCountCondition",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+                 },
+ 		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "HealSpell",
+				"target": "FRIENDLY_HERO",
+				"value": 5
+			},
+			{
+				"class": "DiscardSpell",
+				"value": 1
+			},
+			{
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "RecastSpell"
+        },
+        "cards": [
+          "spell_stop",
+          "spell_discard"
+        ],
+        "howMany": 2
+    }
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}
