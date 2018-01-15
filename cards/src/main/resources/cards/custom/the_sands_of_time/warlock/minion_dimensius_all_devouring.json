@@ -9,17 +9,17 @@
   "race": "DEMON",
   "description": "Battlecry: Discard as many cards as you want. Restore 5 Health to your Hero for each.",
   "battlecry": {
-  "targetSelection": "NONE",
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
       "spell": {
-        "class": "DiscoverSpell",
-        "spell": {
-          "class": "RecastSpell"
-        },
-        "cards": [
-          "spell_stop",
-          "spell_discard"
-        ],
-        "howMany": 2
+        "class": "RecastSpell"
+      },
+      "cards": [
+        "spell_stop",
+        "spell_discard"
+      ],
+      "howMany": 2
     }
   },
   "attributes": {

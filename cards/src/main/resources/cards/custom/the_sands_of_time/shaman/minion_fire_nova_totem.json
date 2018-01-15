@@ -9,7 +9,7 @@
   "race": "TOTEM",
   "description": "At the end of your turn, deal 1 damage to all enemies.",
   "trigger": {
-      "eventTrigger": {
+    "eventTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },

@@ -9,7 +9,7 @@
   "race": "DEMON",
   "description": "Lifesteal. Battlecry: Deal 4 damage to a friendly character.",
   "battlecry": {
-  "targetSelection": "FRIENDLY_CHARACTERS",
+    "targetSelection": "FRIENDLY_CHARACTERS",
     "spell": {
       "class": "DamageSpell",
       "value": 4

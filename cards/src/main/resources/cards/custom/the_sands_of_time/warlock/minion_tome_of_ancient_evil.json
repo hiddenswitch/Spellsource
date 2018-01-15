@@ -8,9 +8,9 @@
   "rarity": "RARE",
   "description": "Deathrattle: Add a 'Power Overwhelming' to your hand.",
   "deathrattle": {
-      "class": "ReceiveCardSpell",
-      "card": "spell_power_overwhelming",
-      "targetPlayer": "SELF"
+    "class": "ReceiveCardSpell",
+    "card": "spell_power_overwhelming",
+    "targetPlayer": "SELF"
   },
   "attributes": {
     "DEATHRATTLES": true
