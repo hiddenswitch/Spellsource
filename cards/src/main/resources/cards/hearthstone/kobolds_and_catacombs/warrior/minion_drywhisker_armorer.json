@@ -14,7 +14,8 @@
       "target": "FRIENDLY_HERO",
       "armorBonus": {
         "class": "EntityCounter",
-        "target": "ENEMY_MINIONS"
+        "target": "ENEMY_MINIONS",
+        "multiplier": 2
       }
     }
   },
