@@ -9,8 +9,16 @@
   "description": "Your cards cost (5).",
   "cardCostModifier": {
     "class": "CardCostModifier",
-    "value": 5,
-    "operation": "SET"
+    "value": {
+      "class": "AlgebraicValueProvider",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "attribute": "BASE_MANA_COST"
+      },
+      "value2": 5,
+      "operation": "SUBTRACT"
+    },
+    "operation": "SUBTRACT"
   },
   "collectible": true,
   "set": "LEAGUE_OF_EXPLORERS",
