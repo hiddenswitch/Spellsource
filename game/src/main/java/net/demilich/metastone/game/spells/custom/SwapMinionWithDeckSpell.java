@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell;
+import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class SwapMinionWithDeckSpell extends ShuffleMinionToDeckSpell {

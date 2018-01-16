@@ -342,6 +342,10 @@ public class ParseUtils {
 				return EntityReference.BOTH_HANDS;
 			case "transform_reference":
 				return EntityReference.TRANSFORM_REFERENCE;
+			case "friendly_hero_power":
+				return EntityReference.FRIENDLY_HERO_POWER;
+			case "enemy_hero_power":
+				return EntityReference.ENEMY_HERO_POWER;
 			default:
 				return null;
 		}

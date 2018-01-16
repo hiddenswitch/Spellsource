@@ -7,12 +7,72 @@
   "description": "Replace your Hero Power and Warlock Cards with another class's. The cards cost (1) less.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "RenounceClassSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "heroClass": "VIOLET"
-    },
-    "manaModifier": -1
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ChangeHeroPowerSpell",
+        "cards": [
+          "hero_power_shapeshift",
+          "hero_power_steady_shot",
+          "hero_power_fireblast",
+          "hero_power_reinforce",
+          "hero_power_lesser_heal",
+          "hero_power_dagger_mastery",
+          "hero_power_totemic_call",
+          "hero_power_armor_up"
+        ]
+      },
+      {
+        "class": "ReplaceCardsSpell",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "heroClass": "VIOLET"
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
+        },
+        "cardFilter": {
+          "class": "SameHeroClassFilter",
+          "target": "FRIENDLY_HERO_POWER"
+        },
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "OUTPUT",
+            "value": 1,
+            "operation": "SUBTRACT"
+          }
+        }
+      },
+      {
+        "class": "ReplaceCardsSpell",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "CardFilter",
+          "heroClass": "VIOLET"
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
+        },
+        "cardFilter": {
+          "class": "SameHeroClassFilter",
+          "target": "FRIENDLY_HERO_POWER"
+        },
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "OUTPUT",
+            "value": 1,
+            "operation": "SUBTRACT"
+          }
+        }
+      }
+    ]
   },
   "collectible": true,
   "set": "THE_OLD_GODS",

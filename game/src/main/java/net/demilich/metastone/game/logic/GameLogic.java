@@ -2837,6 +2837,7 @@ public class GameLogic implements Cloneable, Serializable {
 		newCard.setOwner(playerId);
 		CardList deck = player.getDeck();
 
+		processGameTriggers(player, newCard);
 		processDeckTriggers(player, newCard);
 
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
