@@ -13,6 +13,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.Spell;
@@ -33,13 +34,70 @@ import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.demilich.metastone.game.targeting.EntityReference.EVENT_TARGET;
 
 public class TheOldGodsTests extends TestBase {
+	@Test
+	public void testRenounceDarkness() {
+		runGym((context, player, opponent) -> {
+			Map<HeroClass, Card> testCard = Stream.of(
+					"minion_black_test",
+					"minion_blue_test",
+					"minion_brown_test",
+					"minion_gold_test",
+					"minion_green_test",
+					"minion_red_test",
+					"minion_silver_test",
+					"minion_violet_test",
+					"minion_white_test")
+					.map(CardCatalogue::getCardById)
+					.collect(Collectors.toMap(Card::getHeroClass, Function.identity()));
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_voidwalker"));
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_voidwalker"));
+			GameLogic spyLogic = Mockito.spy(context.getLogic());
+			context.setLogic(spyLogic);
+			AtomicInteger invocationCount = new AtomicInteger(0);
+			AtomicReference<HeroClass> chosenHeroClass = new AtomicReference<>(HeroClass.VIOLET);
+			Mockito.doAnswer(invocation -> {
+				if (invocationCount.getAndIncrement() == 0) {
+					// We're choosing the hero power
+					HeroPowerCard chosen = (HeroPowerCard) invocation.callRealMethod();
+					chosenHeroClass.set(chosen.getHeroClass());
+					return chosen;
+				}
+
+				final List<Card> replacementCards = new ArrayList<>(invocation.getArgument(0));
+				Assert.assertTrue(replacementCards.stream().allMatch(card -> card.hasHeroClass(chosenHeroClass.get())));
+				// Return a test card with the appropriate hero class to validate the card cost modification
+				return testCard.get(chosenHeroClass.get()).clone();
+
+			}).when(spyLogic).getRandom(Mockito.anyList());
+			playCard(context, player, "spell_renounce_darkness");
+
+			Assert.assertTrue(player.getDeck().containsCard("minion_bloodfen_raptor"));
+			Assert.assertTrue(player.getHand().containsCard("minion_bloodfen_raptor"));
+			Assert.assertFalse(player.getHero().getHeroPower().hasHeroClass(HeroClass.VIOLET));
+			Assert.assertEquals(Stream.concat(player.getHand().stream(), player.getDeck().stream())
+					.filter(card -> !card.hasHeroClass(HeroClass.ANY))
+					.filter(card -> !card.hasHeroClass(HeroClass.VIOLET))
+					.filter(card -> context.getLogic().getModifiedManaCost(player, card) == 1)
+					.count(), 2L);
+		}, HeroClass.VIOLET, HeroClass.VIOLET);
+	}
+
 	@Test
 	public void testMarkOfYshaarj() {
 		// Test with beast

@@ -335,6 +335,10 @@ public class TargetLogic implements Serializable {
 			return new ArrayList<>(player.getGraveyard());
 		} else if (targetKey.equals(EntityReference.ENEMY_GRAVEYARD)) {
 			return new ArrayList<>(context.getOpponent(player).getGraveyard());
+		} else if (targetKey.equals(EntityReference.FRIENDLY_HERO_POWER)) {
+			return singleTargetAsList(player.getHeroPowerZone().get(0));
+		} else if (targetKey.equals(EntityReference.ENEMY_HERO_POWER)) {
+			return singleTargetAsList(context.getOpponent(player).getHeroPowerZone().get(0));
 		} else if (targetKey.equals(EntityReference.ALL_ENTITIES)) {
 			return context.getEntities().collect(Collectors.toList());
 		}

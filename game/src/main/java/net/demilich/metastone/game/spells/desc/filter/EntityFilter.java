@@ -5,8 +5,10 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class EntityFilter implements Serializable {
@@ -83,4 +85,12 @@ public abstract class EntityFilter implements Serializable {
 		return desc == null || desc.equals(rhs.desc);
 	}
 
+	protected List<Entity> getTargetedEntities(GameContext context, Player player, Entity host) {
+		EntityReference targetReference = (EntityReference) desc.get(FilterArg.TARGET);
+		List<Entity> entities = null;
+		if (targetReference != null) {
+			entities = context.resolveTarget(player, host, targetReference);
+		}
+		return entities;
+	}
 }

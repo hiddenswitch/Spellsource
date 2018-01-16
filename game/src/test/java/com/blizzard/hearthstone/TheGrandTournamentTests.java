@@ -17,6 +17,14 @@ import org.testng.annotations.Test;
 
 public class TheGrandTournamentTests extends TestBase {
 	@Test
+	public void testSideshowSpelleater() {
+		runGym((context, player, opponent) -> {
+			playCard(context,player,"minion_sideshow_spelleater");
+			Assert.assertEquals(player.getHero().getHeroPower().getHeroClass(), opponent.getHero().getHeroPower().getHeroClass());
+		}, HeroClass.BLACK, HeroClass.VIOLET);
+	}
+
+	@Test
 	@Ignore
 	public void testVarianWrynn() {
 		Assert.fail("Varian Wrynn needs to be tested.");

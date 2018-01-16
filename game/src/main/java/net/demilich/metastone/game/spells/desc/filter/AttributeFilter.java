@@ -21,11 +21,7 @@ public class AttributeFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		EntityReference targetReference = (EntityReference) desc.get(FilterArg.TARGET);
-		List<Entity> entities = null;
-		if (targetReference != null) {
-			entities = context.resolveTarget(player, host, targetReference);
-		}
+		List<Entity> entities = getTargetedEntities(context, player, host);
 		Attribute attribute = (Attribute) desc.get(FilterArg.ATTRIBUTE);
 		Operation operation = (Operation) desc.get(FilterArg.OPERATION);
 		if (operation == Operation.HAS) {

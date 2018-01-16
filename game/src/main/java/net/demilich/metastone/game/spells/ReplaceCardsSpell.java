@@ -11,15 +11,16 @@ public class ReplaceCardsSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Card replacement = desc.getCardSource().getCards(context, player)
-				.filtered(desc.getCardFilter()
-						.matcher(context, player, source))
-				.shuffle().get(0);
+		Card replacement = context.getLogic().getRandom(desc.getFilteredCards(context, player, source));
 
 		if (target.getZone() == Zones.HAND) {
 			context.getLogic().replaceCardInHand(player.getId(), (Card) target, replacement);
 		} else if (target.getZone() == Zones.DECK) {
 			context.getLogic().replaceCardInDeck(player.getId(), (Card) target, replacement);
 		}
+
+		desc.subSpells(0).forEach(subSpell -> {
+			SpellUtils.castChildSpell(context, player, subSpell, source, target, replacement);
+		});
 	}
 }

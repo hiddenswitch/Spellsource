@@ -10,7 +10,7 @@
   "battlecry": {
     "spell": {
       "class": "CopyHeroPower",
-      "target": "FRIENDLY_HERO"
+      "target": "ENEMY_HERO_POWER"
     }
   },
   "attributes": {
