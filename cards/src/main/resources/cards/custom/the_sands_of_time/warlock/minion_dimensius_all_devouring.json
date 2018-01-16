@@ -1,0 +1,31 @@
+{
+  "name": "Dimensius, All-Devouring",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Battlecry: Discard as many cards as you want. Restore 5 Health to your Hero for each.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "RecastSpell"
+      },
+      "cards": [
+        "spell_stop",
+        "spell_discard"
+      ],
+      "howMany": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

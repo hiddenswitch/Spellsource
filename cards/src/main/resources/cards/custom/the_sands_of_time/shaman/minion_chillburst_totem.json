@@ -1,0 +1,32 @@
+{
+  "name": "Chillburst Totem",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "TOTEM",
+  "description": "At the end of your turn, freeze a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ENEMY_MINIONS",
+      "attribute": "FROZEN",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "FROZEN",
+        "invert": true,
+        "operation": "HAS"
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

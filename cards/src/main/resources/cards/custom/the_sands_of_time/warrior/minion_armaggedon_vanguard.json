@@ -1,0 +1,25 @@
+{
+  "name": "Armaggedon Vanguard",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Whenever a friendly minion takes damage, deal 1 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 1,
+      "randomTarget": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

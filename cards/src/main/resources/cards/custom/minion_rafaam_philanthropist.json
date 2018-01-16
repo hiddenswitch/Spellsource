@@ -1,0 +1,44 @@
+{
+  "name": "Rafaam, Philanthropist",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Discover a 1-Cost spell for your opponent.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "OPPONENT"
+      },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          },
+          {
+            "class": "CardFilter",
+            "manaCost": 1
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

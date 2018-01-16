@@ -1,0 +1,31 @@
+{
+  "name": "Blink Dog",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Deathrattle: Give a random friendly Beast "\Deathrattle: Summon a Blink Dog\"",
+  "deathrattle": {
+    "class": "AddDeathrattleSpell",
+	"target": "FRIENDLY_MINIONS",
+        "spell": {
+          "class": "SummonSpell",
+          "card": "minion_blink_dog"
+    "filter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    },
+    "hpBonus": 2,
+    "randomTarget": true
+	}
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
