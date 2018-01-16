@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
@@ -171,9 +172,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		expired = true;
 	}
 
-	public int process(Card card, int currentManaCost) {
+	public int process(GameContext context, Entity host, Card card, int currentManaCost, Player player) {
 		AlgebraicOperation operation = (AlgebraicOperation) desc.get(CardCostModifierArg.OPERATION);
-		int value = desc.getInt(CardCostModifierArg.VALUE);
+		int value = desc.getValue(CardCostModifierArg.VALUE, context, player, card, host, 0);
 		if (operation != null) {
 			return operation.performOperation(currentManaCost, value);
 		}

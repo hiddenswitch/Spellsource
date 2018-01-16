@@ -17,8 +17,81 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LeagueOfExplorersTests extends TestBase {
+	@Test
+	public void testNagaSeaWitch() {
+		// Test basic cards
+		runGym((context, player, opponent) -> {
+			Stream.of("minion_bloodfen_raptor", "minion_chillwind_yeti")
+					.map(CardCatalogue::getCardById)
+					.forEach(card -> context.getLogic().receiveCard(player.getId(), card));
+
+			Stream.of("minion_bloodfen_raptor", "minion_chillwind_yeti")
+					.map(CardCatalogue::getCardById)
+					.forEach(card -> context.getLogic().receiveCard(opponent.getId(), card));
+
+			Minion nagaSeaWitch = playMinionCard(context, player, "minion_naga_sea_witch");
+			Assert.assertTrue(player.getHand().stream().allMatch(c -> context.getLogic().getModifiedManaCost(player, c) == 5));
+			context.endTurn();
+			Assert.assertFalse(opponent.getHand().stream().anyMatch(c -> context.getLogic().getModifiedManaCost(opponent, c) == 5));
+			playCardWithTarget(context, opponent, "spell_fireball", nagaSeaWitch);
+			context.endTurn();
+			Assert.assertFalse(player.getHand().stream().anyMatch(c -> context.getLogic().getModifiedManaCost(player, c) == 5));
+		});
+
+		// Test cards with their own modifiers
+		runGym((context, player, opponent) -> {
+			Map<String, Card> cards = Stream.of("minion_arcane_giant", /*Costs (1) less for each spell you've cast this game.*/
+					"minion_clockwork_giant", /*Costs (1) less Mana for each card in your opponent's hand.*/
+					"minion_frost_giant", /*Costs (1) less for each time you used your Hero Power this game.*/
+					"minion_molten_giant",/*Costs (1) less for each damage your hero has taken.*/
+					"minion_mountain_giant", /*Costs (1) less for each other card in your hand."*/
+					"minion_sea_giant", /*Costs (1) less for each other minion on the battlefield.*/
+					"minion_snowfury_giant" /*Costs (1) less for each Mana Crystal you've Overloaded this game.*/)
+					.map(CardCatalogue::getCardById)
+					.peek(card -> context.getLogic().receiveCard(player.getId(), card))
+					.collect(Collectors.toMap(Card::getCardId, Function.identity()));
+			int numberOfSpellsPlayed = 0;
+			playCard(context, player, "spell_the_coin");
+			numberOfSpellsPlayed++;
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_arcane_giant")), 12 - numberOfSpellsPlayed);
+
+			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("spell_the_coin"));
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_clockwork_giant")), 12 - 1);
+
+			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play().withTargetReference(opponent.getHero().getReference()));
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_frost_giant")), 10 - 1);
+
+			playCardWithTarget(context, player, "spell_fireball", player.getHero());
+			numberOfSpellsPlayed++;
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_molten_giant")), 25 - 6);
+
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_mountain_giant")), 12 - player.getHand().size() + 1);
+
+			playCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_sea_giant")), 10 - 1);
+
+			playCard(context, player, "spell_lightning_storm" /*Overloads 2*/);
+			numberOfSpellsPlayed++;
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_snowfury_giant")), 11 - 2);
+
+			playCard(context, player, "minion_naga_sea_witch");
+
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_arcane_giant")), 5 - numberOfSpellsPlayed);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_clockwork_giant")), 5 - 1);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_frost_giant")), 5 - 1);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_molten_giant")), Math.max(5 - 6, 0));
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_mountain_giant")), Math.max(5 - player.getHand().size() + 1, 0));
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_sea_giant")), 5 - 2);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_snowfury_giant")), 5 - 2);
+		});
+	}
+
 	@Test(description =
 			"Tests Sir Finley Mrrgglton and also confirms that players can do stuff to discovered cards besides receive them.")
 	public void testSirFinleyMrrgglton() {

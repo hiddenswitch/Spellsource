@@ -29,7 +29,7 @@ public class CardCostModifierDescSerializer implements JsonDeserializer<CardCost
 		Map<CardCostModifierArg, Object> arguments = CardCostModifierDesc.build(cardCostModifierClass);
 		parseArgument(CardCostModifierArg.TARGET_PLAYER, jsonData, arguments, ParseValueType.TARGET_PLAYER);
 		parseArgument(CardCostModifierArg.RACE, jsonData, arguments, ParseValueType.RACE);
-		parseArgument(CardCostModifierArg.VALUE, jsonData, arguments, ParseValueType.INTEGER);
+		parseArgument(CardCostModifierArg.VALUE, jsonData, arguments, ParseValueType.VALUE);
 		parseArgument(CardCostModifierArg.MIN_VALUE, jsonData, arguments, ParseValueType.INTEGER);
 		parseArgument(CardCostModifierArg.CARD_TYPE, jsonData, arguments, ParseValueType.CARD_TYPE);
 		parseArgument(CardCostModifierArg.REQUIRED_ATTRIBUTE, jsonData, arguments, ParseValueType.ATTRIBUTE);
@@ -44,7 +44,7 @@ public class CardCostModifierDescSerializer implements JsonDeserializer<CardCost
 	}
 
 	private void parseArgument(CardCostModifierArg arg, JsonObject jsonData, Map<CardCostModifierArg, Object> arguments,
-			ParseValueType valueType) {
+	                           ParseValueType valueType) {
 		String argName = ParseUtils.toCamelCase(arg.toString());
 		if (!jsonData.has(argName)) {
 			return;
