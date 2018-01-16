@@ -24,30 +24,31 @@
       }
 	},
 	{
-      "class": "AddEnchantmentSpell",
-      "target": "FRIENDLY_PLAYER",
-      "trigger": {
-        "eventTrigger": {
-          "class": "SpellCastedTrigger",
-          "targetPlayer": "SELF"
-        },
-		"spell": {
-        "class": "CardCostModifierSpell",
-    "target": "FRIENDLY_PLAYER",
-    "cardCostModifier": {
-      "class": "CardCostModifier",
-      "value": 4,
-      "cardType": "SPELL",
-      "expirationTrigger": {
-        "class": "CardPlayedTrigger",
-        "cardType": "SPELL",
-        "targetPlayer": "SELF"
-        },
-      "operation": "SUBTRACT"
-		}
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "maxFires": 1,
+        "trigger": {
+          "eventTrigger": {
+            "class": "SpellCastedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "FRIENDLY_PLAYER",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "value": 4,
+              "cardType": "SPELL",
+              "expirationTrigger": {
+                "class": "CardPlayedTrigger",
+                "cardType": "SPELL",
+                "targetPlayer": "SELF"
+              },
+              "operation": "SUBTRACT"
+            }
+          }
+        }
       }
-	  }
-    }
 	  ]
   },
   "collectible": true,
