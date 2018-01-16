@@ -927,9 +927,9 @@ public class GameLogic implements Cloneable, Serializable {
 			// Dominant Player. However, Acidmaw can never stop Grim Patron spawning.
 			if (source.hasAttribute(Attribute.POISONOUS)
 					|| (source instanceof Hero
-							&& ((Hero) source).getWeapon() != null
-							&& ((Hero) source).getWeapon().hasAttribute(Attribute.POISONOUS))
-							&& target.getEntityType() == EntityType.MINION) {
+					&& ((Hero) source).getWeapon() != null
+					&& ((Hero) source).getWeapon().hasAttribute(Attribute.POISONOUS))
+					&& target.getEntityType() == EntityType.MINION) {
 				markAsDestroyed(target);
 			}
 
@@ -2944,7 +2944,10 @@ public class GameLogic implements Cloneable, Serializable {
 
 		boolean doubleDeathrattles = hasAttribute(player, Attribute.DOUBLE_DEATHRATTLES);
 		EntityReference sourceReference = actor.getReference();
-		for (SpellDesc deathrattleTemplate : actor.getDeathrattles()) {
+		// TODO: What happens if a deathrattle modifies another deathrattle?
+		// Make the list of deathrattles immutable
+		final List<SpellDesc> deathrattles = new ArrayList<>(actor.getDeathrattles());
+		for (SpellDesc deathrattleTemplate : deathrattles) {
 			SpellDesc deathrattle = deathrattleTemplate.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, boardPosition);
 			castSpell(player.getId(), deathrattle, sourceReference, EntityReference.NONE, false);
 			if (doubleDeathrattles) {

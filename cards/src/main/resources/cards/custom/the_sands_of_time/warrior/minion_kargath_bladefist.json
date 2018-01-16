@@ -6,21 +6,21 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn,give your damaged minions +2/+2.",
+  "description": "At the end of your turn, give your damaged minions +2/+2.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-    "class": "BuffSpell",
-	"target": "FRIENDLY_MINIONS"
-    "attackBonus": 2,
-    "filter": {
-      "class": "DamagedFilter"
-    },
-    "hpBonus": 2
-  }
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 2,
+      "filter": {
+        "class": "DamagedFilter"
+      },
+      "hpBonus": 2
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

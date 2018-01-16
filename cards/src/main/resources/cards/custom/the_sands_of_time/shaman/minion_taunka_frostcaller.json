@@ -6,22 +6,27 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Choose a minion. Freeze the minions adjacent to it.",
-  "targetSelection": "MINIONS",
-  "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "AdjacentEffectSpell",
-        "spell1": {
-          "class": "NullSpell"
-        },
-        "spell2": {
-          "class": "AddAttributeSpell",
-          "attribute": "FROZEN"
+  "description": "Battlecry: Choose a minion. Freeze the minions adjacent to it.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AdjacentEffectSpell",
+          "spell1": {
+            "class": "NullSpell"
+          },
+          "spell2": {
+            "class": "AddAttributeSpell",
+            "attribute": "FROZEN"
+          }
         }
-      }
-    ]
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",
