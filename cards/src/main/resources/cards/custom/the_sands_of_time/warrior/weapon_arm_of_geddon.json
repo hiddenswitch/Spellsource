@@ -17,8 +17,8 @@
     },
     "spell": {
       "class": "DamageSpell",
-    "target": "ALL_OTHER_CHARACTERS",
-    "value": 2
+      "target": "ALL_CHARACTERS",
+      "value": 2
     }
   },
   "collectible": true,

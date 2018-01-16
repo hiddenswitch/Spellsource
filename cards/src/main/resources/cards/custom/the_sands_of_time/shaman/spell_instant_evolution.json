@@ -12,7 +12,7 @@
       "class": "CardFilter",
       "manaCost": {
         "class": "AttributeValueProvider",
-        "target": "TARGET",
+        "target": "SPELL_TARGET",
         "attribute": "BASE_MANA_COST",
         "offset": 7
       }
