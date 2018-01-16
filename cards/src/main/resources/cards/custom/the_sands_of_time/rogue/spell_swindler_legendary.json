@@ -22,6 +22,12 @@
         {
           "class": "CardFilter",
           "rarity": "LEGENDARY"
+        },
+        {
+          "class": "CardFilter",
+          "rarity": "LEGENDARY",
+          "cardType": "SPELL",
+          "invert": true
         }
       ]
     },

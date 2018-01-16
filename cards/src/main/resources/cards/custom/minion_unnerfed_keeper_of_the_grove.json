@@ -1,0 +1,53 @@
+{
+  "name": "Unnerfed Keeper of the Grove",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Choose One - Deal 2 damage; or Silence a minion.",
+  "options": [
+    {
+      "description": "2 damage",
+      "targetSelection": "ANY",
+      "spell": {
+        "class": "DamageSpell",
+        "value": 2
+      }
+    },
+    {
+      "description": "Silence",
+      "targetSelection": "MINIONS",
+      "spell": {
+        "class": "SilenceSpell"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Silence and deal 2 damage",
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "CardPropertyCondition",
+            "cardType": "MINION"
+          },
+          "spell": {
+            "class": "SilenceSpell"
+          }
+        },
+        {
+          "class": "DamageSpell",
+          "value": 2
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Xal'atath",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "LEGENDARY",
+  "description": "Deal 3 damage for each Artifact you've played.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MissilesSpell",
+    "value": 3,
+    "howMany": {
+      "class": "CardCountValueProvider",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "attribute": "CAST_FROM_HAND_OR_DECK",
+            "operation": "HAS"
+          },
+          {
+            "class": "OrFilter",
+            "filters": [
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_light_wrath"
+              },
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_xal_atath"
+              },
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_tuure"
+              }
+            ]
+          }
+        ]
+      },
+      "cardSource": {
+        "class": "GraveyardSpellsSource",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

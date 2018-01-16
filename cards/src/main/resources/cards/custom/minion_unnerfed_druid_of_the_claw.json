@@ -1,0 +1,39 @@
+{
+  "name": "Unnerfed Druid of the Claw",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Choose One - Charge; or +3 Health and Taunt.",
+  "options": [
+    {
+      "description": "Charge",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_cat_form"
+      }
+    },
+    {
+      "description": "+3 Health and Taunt",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "unnerfed_token_bear_form"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Charge, +3 Health, and Taunt",
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "unnerfed_token_catbear_form"
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
