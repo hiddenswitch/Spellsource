@@ -39,6 +39,7 @@
       },
       "cardFilter": {
         "class": "CardFilter",
+        "heroClass": "BLACK",
         "attribute": "COMBO",
         "operation": "HAS"
       }
