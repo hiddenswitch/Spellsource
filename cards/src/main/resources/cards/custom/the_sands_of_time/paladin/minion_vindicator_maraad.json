@@ -30,9 +30,18 @@
       "class": "FromDeckToHandSpell",
       "value": 1,
       "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION",
-        "manaCost": 1
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "ManaCostFilter",
+            "value": 1,
+            "operation": "EQUAL"
+          }
+        ]
       }
     }
   },

@@ -4,12 +4,12 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "RARE",
-  "description": "Shuffle a "The Elements Respond" into your deck which draws four cards.",
-    "targetSelection": "NONE",
-    "spell": {
-      "class": "ShuffleToDeckSpell",
-      "card": "spell_the_elements_respond",
-      "targetPlayer": "SELF"
+  "description": "Shuffle a \"The Elements Respond\" into your deck which draws four cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "card": "spell_the_elements_respond",
+    "targetPlayer": "SELF"
   },
   "collectible": true,
   "set": "CUSTOM",

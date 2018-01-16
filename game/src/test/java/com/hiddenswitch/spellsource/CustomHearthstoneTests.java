@@ -18,6 +18,31 @@ import java.util.List;
 
 public class CustomHearthstoneTests extends TestBase {
 	@Test
+	public void testArmaggedonVanguardBolfRamshieldInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_armageddon_vanguard");
+			playCard(context, player, "minion_bolf_ramshield");
+			context.endTurn();
+			playCard(context, opponent, "minion_armageddon_vanguard");
+			playCard(context, opponent, "minion_bolf_ramshield");
+			context.endTurn();
+			playCard(context, player, "spell_arcane_missiles");
+		});
+	}
+
+	@Test
+	public void testTerrorscaleStalkerBlinkDogInteraction() {
+		runGym((context, player, opponent) -> {
+			// Deathrattle: Give a random friendly Beast \"Deathrattle: Summon a Blink Dog\"
+			Minion blinkDog = playMinionCard(context, player, "minion_blink_dog");
+			playCard(context, player, "minion_terrorscale_stalker");
+			// Now Blink Dog summons a blink dog and gives a randomly friendly beast an extra deathrattle
+			playCardWithTarget(context, player, "spell_fireball", blinkDog);
+			Assert.assertEquals(player.getMinions().stream().filter(m -> m.getSourceCard().getCardId().equals("minion_blink_dog")).count(), 1L);
+		});
+	}
+
+	@Test
 	public void testThinkFast() {
 		runGym((context, player, opponent) -> {
 			// TODO: This should still work if it's a different class

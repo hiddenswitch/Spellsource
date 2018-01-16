@@ -1,10 +1,10 @@
 {
-  "name": "Common",
+  "name": "Discover an Epic",
   "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "FREE",
-  "description": "Discover a Common card from your opponent's class'.",
+  "description": "Discover an Epic card from your opponent's class.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
@@ -13,26 +13,24 @@
       "targetPlayer": "SELF"
     },
     "cardFilter": {
-    "class": "AndFilter",
-    "filters": [
-	{
-      "class": "CardFilter",
-      "heroClass": "OPPONENT"
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "heroClass": "OPPONENT"
+        },
+        {
+          "class": "CardFilter",
+          "rarity": "EPIC"
+        }
+      ]
     },
     "cardSource": {
       "class": "CatalogueSource",
       "targetPlayer": "OPPONENT"
-    },
-	{
-	"cardFilter": {
-        "class": "CardFilter",
-        "rarity": "COMMON"
-       }
-	  }
-     ]
-	}
+    }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

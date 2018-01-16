@@ -5,7 +5,7 @@
   "heroClass": "VIOLET",
   "rarity": "COMMON",
   "description": "Deal 3 damage. Take 3 damage.",
-  "targetSelection": "MINIONS",
+  "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
     "spells": [

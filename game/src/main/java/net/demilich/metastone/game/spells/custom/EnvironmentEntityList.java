@@ -47,6 +47,10 @@ public class EnvironmentEntityList implements EnvironmentValue, Serializable {
 		data.remove(source.getReference());
 	}
 
+	public List<EntityReference> getReferences(GameContext context, Entity source) {
+		return new ArrayList<>(data.getOrDefault(source.getReference(), new ArrayList<>()));
+	}
+
 	public CardList getCards(GameContext context, Entity source) {
 		CardArrayList cards = new CardArrayList();
 		if (!data.containsKey(source.getReference())) {
