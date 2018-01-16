@@ -1,0 +1,13 @@
+{
+  "name": "Image of T'uure",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

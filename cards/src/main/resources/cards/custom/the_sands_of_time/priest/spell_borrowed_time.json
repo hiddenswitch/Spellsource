@@ -1,0 +1,56 @@
+{
+  "name": "Borrowed Time",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "EPIC",
+  "description": "The next spell you cast costs (2) more. The one after costs (4) less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "value": 2,
+          "cardType": "SPELL",
+          "expirationTrigger": {
+            "class": "CardPlayedTrigger",
+            "cardType": "SPELL",
+            "targetPlayer": "SELF"
+          }
+        }
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "SpellCastedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "FRIENDLY_PLAYER",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "value": 4,
+              "cardType": "SPELL",
+              "expirationTrigger": {
+                "class": "CardPlayedTrigger",
+                "cardType": "SPELL",
+                "targetPlayer": "SELF"
+              },
+              "operation": "SUBTRACT"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

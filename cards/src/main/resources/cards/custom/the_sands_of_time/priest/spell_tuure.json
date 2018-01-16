@@ -1,0 +1,50 @@
+{
+  "name": "T'uure",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "LEGENDARY",
+  "targetSelection": "NONE",
+  "description": "Summon a 2/2 Image of T'uure for each Artifact you've played.",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "CardCountValueProvider",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "attribute": "CAST_FROM_HAND_OR_DECK",
+            "operation": "HAS"
+          },
+          {
+            "class": "OrFilter",
+            "filters": [
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_light_wrath"
+              },
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_xal_atath"
+              },
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_tuure"
+              }
+            ]
+          }
+        ]
+      },
+      "cardSource": {
+        "class": "GraveyardSpellsSource",
+        "targetPlayer": "SELF"
+      }
+    },
+    "card": "token_image_of_tuure"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

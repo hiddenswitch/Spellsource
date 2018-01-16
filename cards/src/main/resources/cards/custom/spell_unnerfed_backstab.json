@@ -1,0 +1,16 @@
+{
+  "name": "Unnerfed Backstab",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "FREE",
+  "description": "Deal 2 damage to a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

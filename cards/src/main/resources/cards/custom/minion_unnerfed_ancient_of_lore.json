@@ -1,0 +1,47 @@
+{
+  "name": "Unnerfed Ancient of Lore",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Choose One - Draw 2 cards; or Restore 8 Health.",
+  "options": [
+    {
+      "description": "Draw 2 cards",
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": 2
+      }
+    },
+    {
+      "description": "Heal for 8",
+      "targetSelection": "ANY",
+      "spell": {
+        "class": "HealSpell",
+        "value": 8
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Draw two cards and heal for 8",
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DrawCardSpell",
+          "value": 2
+        },
+        {
+          "class": "HealSpell",
+          "value": 8
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
