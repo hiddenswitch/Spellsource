@@ -1,0 +1,15 @@
+{
+  "name": "Full Belly",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "FREE",
+  "description": "Stop discarding.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

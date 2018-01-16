@@ -11,7 +11,7 @@
   "battlecry": {
     "condition": {
       "class": "AttributeCondition",
-      "target": "ENEMY_HERO",
+      "target": "FRIENDLY_HERO",
       "value": 15,
       "attribute": "HP",
       "operation": "LESS_OR_EQUAL"

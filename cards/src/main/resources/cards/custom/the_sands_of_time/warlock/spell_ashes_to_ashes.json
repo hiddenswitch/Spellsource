@@ -1,0 +1,26 @@
+{
+  "name": "Ashes to Ashes",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "COMMON",
+  "description": "Deal 3 damage. Take 3 damage.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

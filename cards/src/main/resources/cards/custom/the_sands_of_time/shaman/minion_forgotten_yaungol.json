@@ -1,0 +1,24 @@
+{
+  "name": "Forgotten Yaungol",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "At the end of your turn, add a 'Frost Shock' to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_frost_shock",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

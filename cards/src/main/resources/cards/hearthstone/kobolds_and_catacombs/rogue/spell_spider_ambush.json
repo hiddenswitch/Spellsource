@@ -16,7 +16,7 @@
         {
           "class": "SummonSpell",
           "card": "token_leyline_spider",
-          "targetPlayer": "OPPONENT"
+          "targetPlayer": "SELF"
         },
         {
           "class": "RemoveCardSpell",
