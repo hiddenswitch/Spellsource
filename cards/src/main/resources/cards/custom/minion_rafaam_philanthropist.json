@@ -20,16 +20,13 @@
         "filters": [
           {
             "class": "CardFilter",
-            "cardType": "SPELL"
+            "cardType": "SPELL",
+            "manaCost": 1
           },
           {
             "class": "CardFilter",
             "rarity": "LEGENDARY",
             "invert": true
-          },
-          {
-            "class": "CardFilter",
-            "manaCost": 1
           }
         ]
       }
