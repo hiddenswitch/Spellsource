@@ -1535,7 +1535,7 @@ public class GameLogic implements Cloneable, Serializable {
 		int manaCost = card.getManaCost(context, player);
 		int minValue = 0;
 		for (CardCostModifier costModifier : context.getCardCostModifiers()) {
-			if (!costModifier.appliesTo(card)) {
+			if (!costModifier.appliesTo(context, card, player)) {
 				continue;
 			}
 			Entity host = context.resolveSingleTarget(costModifier.getHostReference());
