@@ -24,12 +24,10 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class CardCostModifier extends CustomCloneable implements Trigger, Serializable {
-
 	private boolean expired;
 	private int owner;
 	private EntityReference hostReference;
 	private EventTrigger expirationTrigger;
-
 	private CardCostModifierDesc desc;
 
 	public CardCostModifier(CardCostModifierDesc desc) {
@@ -40,7 +38,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		}
 	}
 
-	public boolean appliesTo(Card card) {
+	public boolean appliesTo(GameContext context, Card card, Player player) {
 		if (expired) {
 			return false;
 		}
@@ -74,6 +72,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 				break;
 
 		}
+
 		if (getCardType() == null && !card.getCardType().isCardType(CardType.HERO_POWER)) {
 			return true;
 		}

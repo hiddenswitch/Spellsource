@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
@@ -25,11 +27,11 @@ public class ToggleCostModifier extends CardCostModifier {
 	}
 
 	@Override
-	public boolean appliesTo(Card card) {
+	public boolean appliesTo(GameContext context, Card card, Player player) {
 		if (!ready) {
 			return false;
 		}
-		return super.appliesTo(card);
+		return super.appliesTo(context, card, player);
 	}
 
 	@Override

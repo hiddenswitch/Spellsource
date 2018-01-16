@@ -11,12 +11,12 @@
     "class": "CardCostModifier",
     "value": {
       "class": "AlgebraicValueProvider",
+      "operation": "SUBTRACT",
       "value1": {
         "class": "AttributeValueProvider",
         "attribute": "BASE_MANA_COST"
       },
-      "value2": 5,
-      "operation": "SUBTRACT"
+      "value2": 5
     },
     "operation": "SUBTRACT"
   },

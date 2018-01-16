@@ -25,17 +25,6 @@
       {
         "class": "ReplaceCardsSpell",
         "target": "FRIENDLY_HAND",
-        "filter": {
-          "class": "CardFilter",
-          "heroClass": "VIOLET"
-        },
-        "cardSource": {
-          "class": "CatalogueSource"
-        },
-        "cardFilter": {
-          "class": "SameHeroClassFilter",
-          "target": "FRIENDLY_HERO_POWER"
-        },
         "spell": {
           "class": "CardCostModifierSpell",
           "target": "FRIENDLY_PLAYER",
@@ -45,22 +34,22 @@
             "value": 1,
             "operation": "SUBTRACT"
           }
+        },
+        "cardFilter": {
+          "class": "SameHeroClassFilter",
+          "target": "FRIENDLY_HERO_POWER"
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
+        },
+        "filter": {
+          "class": "CardFilter",
+          "heroClass": "VIOLET"
         }
       },
       {
         "class": "ReplaceCardsSpell",
         "target": "FRIENDLY_DECK",
-        "filter": {
-          "class": "CardFilter",
-          "heroClass": "VIOLET"
-        },
-        "cardSource": {
-          "class": "CatalogueSource"
-        },
-        "cardFilter": {
-          "class": "SameHeroClassFilter",
-          "target": "FRIENDLY_HERO_POWER"
-        },
         "spell": {
           "class": "CardCostModifierSpell",
           "target": "FRIENDLY_PLAYER",
@@ -70,6 +59,17 @@
             "value": 1,
             "operation": "SUBTRACT"
           }
+        },
+        "cardFilter": {
+          "class": "SameHeroClassFilter",
+          "target": "FRIENDLY_HERO_POWER"
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
+        },
+        "filter": {
+          "class": "CardFilter",
+          "heroClass": "VIOLET"
         }
       }
     ]
