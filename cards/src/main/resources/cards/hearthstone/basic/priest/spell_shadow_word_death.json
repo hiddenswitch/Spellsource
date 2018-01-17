@@ -5,6 +5,16 @@
   "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Destroy a minion with an Attack of 5 or more.",
+  "condition": {
+    "class": "HasEntityCondition",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 5,
+      "attribute": "ATTACK",
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DestroySpell",
