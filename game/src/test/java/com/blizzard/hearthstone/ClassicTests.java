@@ -2,6 +2,7 @@ package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -34,6 +35,44 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 
 public class ClassicTests extends TestBase {
+
+	@Test
+	public void testShadowWordConditions() {
+		runGym((context, player, opponent) -> {
+			final Card pain = CardCatalogue.getCardById("spell_shadow_word_pain");
+			context.getLogic().receiveCard(player.getId(), pain);
+			final Card death = CardCatalogue.getCardById("spell_shadow_word_death");
+			context.getLogic().receiveCard(player.getId(), death);
+			player.setMaxMana(5);
+			player.setMana(5);
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
+					ga instanceof PlaySpellCardAction
+							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(pain.getReference())));
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
+					ga instanceof PlaySpellCardAction
+							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(death.getReference())));
+
+			context.endTurn();
+			playCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
+					ga instanceof PlaySpellCardAction
+							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(pain.getReference())));
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
+					ga instanceof PlaySpellCardAction
+							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(death.getReference())));
+			context.endTurn();
+			playCard(context, opponent, "minion_sea_giant");
+			context.endTurn();
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
+					ga instanceof PlaySpellCardAction
+							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(pain.getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
+					ga instanceof PlaySpellCardAction
+							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(death.getReference())));
+		});
+	}
+
 	@Test
 	public void testNourish() {
 		runGym((context, player, opponent) -> {
