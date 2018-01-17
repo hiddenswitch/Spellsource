@@ -2,8 +2,7 @@ package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.SpellCard;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -23,8 +22,6 @@ import org.testng.annotations.Test;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
@@ -37,6 +34,44 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 
 public class ClassicTests extends TestBase {
+	@Test
+	public void testNourish() {
+		runGym((context, player, opponent) -> {
+			player.setMana(5);
+			player.setMaxMana(5);
+			ChooseOneCard nourish = (ChooseOneCard) CardCatalogue.getCardById("spell_nourish");
+			playCard(context, player, nourish.getChoiceCards()[0]);
+			Assert.assertEquals(player.getMaxMana(), 7);
+			Assert.assertEquals(player.getMana(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 3; i++) {
+				context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			}
+			player.setMana(5);
+			player.setMaxMana(5);
+			ChooseOneCard nourish = (ChooseOneCard) CardCatalogue.getCardById("spell_nourish");
+			playCard(context, player, nourish.getChoiceCards()[1]);
+			Assert.assertEquals(player.getMaxMana(), 5);
+			Assert.assertEquals(player.getMana(), 0);
+			Assert.assertEquals(player.getHand().size(), 3);
+		});
+
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 3; i++) {
+				context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			}
+			player.setMana(5);
+			player.setMaxMana(5);
+			ChooseOneCard nourish = (ChooseOneCard) CardCatalogue.getCardById("spell_nourish");
+			playCard(context, player, nourish.getBothChoicesCard());
+			Assert.assertEquals(player.getMaxMana(), 7);
+			Assert.assertEquals(player.getMana(), 2);
+			Assert.assertEquals(player.getHand().size(), 3);
+		});
+	}
+
 	@Test
 	public void testTracking() {
 		for (int i = 0; i <= 3; i++) {

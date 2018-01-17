@@ -1,10 +1,10 @@
 {
-  "name": "+2 Mana",
+  "name": "Nourish",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Gain 2 Mana",
+  "description": "Gain 2 Mana Crystals.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ModifyMaxManaSpell",

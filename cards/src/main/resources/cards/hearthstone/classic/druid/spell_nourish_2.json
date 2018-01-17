@@ -1,10 +1,10 @@
 {
-  "name": "Draw 3 cards",
+  "name": "Nourish",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Draw 3 cards",
+  "description": "Draw 3 cards.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",
