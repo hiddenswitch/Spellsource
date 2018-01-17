@@ -1,0 +1,24 @@
+{
+  "name": "Keeper of Balance",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give both players a 'Circle of Healing'.",
+  "battlecry": {
+  "targetSelection": "NONE",
+    "spell": {
+           "class": "ReceiveCardSpell",
+    "card": "spell_circle_of_healing",
+	"targetPlayer": "BOTH"
+	}
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
