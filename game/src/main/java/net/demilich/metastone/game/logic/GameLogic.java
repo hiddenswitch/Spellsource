@@ -2169,9 +2169,11 @@ public class GameLogic implements Cloneable, Serializable {
 	 * @param value The amount to increment or decrement the amount of hitpoints.
 	 */
 	@Suspendable
-	public void modifyMaxHp(Actor actor, int value) {
-		actor.setMaxHp(value);
-		actor.setHp(value);
+	public void setHpAndMaxHp(Actor actor, int value) {
+		// If there is an active aura, we must account for it here
+		int auraHp = actor.getAttributeValue(Attribute.AURA_HP_BONUS);
+		actor.setMaxHp(value + auraHp);
+		actor.setHp(value + auraHp);
 		handleEnrage(actor);
 	}
 

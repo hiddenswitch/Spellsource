@@ -158,8 +158,8 @@ public class TheOldGodsTests extends TestBase {
 			playCard(context, player, "minion_water_elemental");
 			playCard(context, player, "minion_herald_volazj");
 			Assert.assertEquals(player.getMinions().size(), 5);
-			Assert.assertEquals(player.getMinions().stream().filter(m -> m.getBaseAttack() == 1).count(), 2L);
-			Assert.assertEquals(player.getMinions().stream().filter(m -> m.getBaseHp() == 1).count(), 2L);
+			Assert.assertEquals(player.getMinions().stream().filter(m -> m.getAttack() == 1).count(), 2L);
+			Assert.assertEquals(player.getMinions().stream().filter(m -> m.getHp() == 1).count(), 2L);
 		});
 	}
 

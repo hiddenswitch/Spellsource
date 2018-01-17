@@ -21,6 +21,16 @@ import java.util.stream.Stream;
 
 public class OneNightInKarazhanTests extends TestBase {
 	@Test
+	public void testBarnesHealingInteraction() {
+		runGym((context, player, opponent) -> {
+			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			playCard(context, player, "minion_barnes");
+			playCard(context, player, "spell_circle_of_healing");
+			Assert.assertEquals(player.getMinions().get(1).getHp(), 1);
+		});
+	}
+
+	@Test
 	@Ignore
 	public void testIvoryKnight() {
 		Assert.fail("Needs test.");
