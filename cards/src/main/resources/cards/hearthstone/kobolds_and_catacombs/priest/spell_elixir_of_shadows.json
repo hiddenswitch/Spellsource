@@ -20,24 +20,12 @@
           "target": "OUTPUT",
           "spells": [
             {
-              "class": "SetAttributeSpell",
-              "value": 1,
-              "attribute": "BASE_ATTACK"
+              "class": "SetAttackSpell",
+              "value": 1
             },
             {
-              "class": "SetAttributeSpell",
-              "value": 1,
-              "attribute": "ATTACK"
-            },
-            {
-              "class": "SetAttributeSpell",
-              "value": 1,
-              "attribute": "BASE_HP"
-            },
-            {
-              "class": "SetAttributeSpell",
-              "value": 1,
-              "attribute": "HP"
+              "class": "SetHpSpell",
+              "value": 1
             }
           ]
         }

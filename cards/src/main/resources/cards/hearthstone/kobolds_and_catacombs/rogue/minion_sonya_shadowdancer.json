@@ -43,6 +43,11 @@
             "class": "SetAttributeSpell",
             "value": 1,
             "attribute": "HP"
+          },
+          {
+            "class": "SetAttributeSpell",
+            "value": 1,
+            "attribute": "MAX_HP"
           }
         ]
       }

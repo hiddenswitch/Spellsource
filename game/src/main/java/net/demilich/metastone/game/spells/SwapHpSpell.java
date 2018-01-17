@@ -29,9 +29,9 @@ public class SwapHpSpell extends Spell {
 		Actor targetActor = (Actor) target;
 		int sourceHp = sourceMinion.getHp();
 		int targetHp = targetActor.getHp();
-		context.getLogic().modifyMaxHp(sourceMinion, targetHp);
+		context.getLogic().setHpAndMaxHp(sourceMinion, targetHp);
 		sourceMinion.setAttribute(Attribute.HP_BONUS, 0);
-		context.getLogic().modifyMaxHp(targetActor, sourceHp);
+		context.getLogic().setHpAndMaxHp(targetActor, sourceHp);
 		targetActor.setAttribute(Attribute.HP_BONUS, 0);
 	}
 

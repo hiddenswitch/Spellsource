@@ -35,6 +35,18 @@ import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
+	public void testPrinceTaldaramMalganisInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion malganis = playMinionCard(context, player, "minion_malganis");
+			Minion princeTaldaram = playMinionCard(context, player, "minion_prince_taldaram");
+			Assert.assertEquals(malganis.getAttack(), malganis.getBaseAttack() + 2);
+			Assert.assertEquals(malganis.getHp(), malganis.getBaseHp() + 2);
+			Assert.assertEquals(princeTaldaram.getAttack(), 5);
+			Assert.assertEquals(princeTaldaram.getHp(), 5);
+		});
+	}
+
+	@Test
 	public void testBringItOn() {
 		runGym((context, player, opponent) -> {
 			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("minion_bloodfen_raptor"));

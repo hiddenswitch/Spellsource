@@ -31,7 +31,7 @@ public class SetHpSpell extends Spell {
 		int hp = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		Actor targetActor = (Actor) target;
 		targetActor.getAttributes().remove(Attribute.HP_BONUS);
-		context.getLogic().modifyMaxHp(targetActor, hp);
+		context.getLogic().setHpAndMaxHp(targetActor, hp);
 	}
 
 }
