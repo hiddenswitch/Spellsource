@@ -4,8 +4,8 @@
   "type": "SPELL",
   "heroClass": "WHITE",
   "rarity": "LEGENDARY",
-  "targetSelection": "NONE",
   "description": "Summon a 2/2 Image of T'uure for each Artifact you've played.",
+  "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
     "value": {
