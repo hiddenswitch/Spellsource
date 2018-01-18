@@ -19,6 +19,9 @@
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "MAX_MANA"
       }
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
     }
   },
   "collectible": false,

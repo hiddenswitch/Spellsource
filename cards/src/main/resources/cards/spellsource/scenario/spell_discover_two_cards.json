@@ -29,6 +29,9 @@
             "class": "GameValueProvider",
             "gameValue": "SPELL_VALUE"
           }
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
         }
       },
       {
@@ -51,6 +54,9 @@
               "gameValue": "SPELL_VALUE"
             }
           }
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
         }
       }
     ]
