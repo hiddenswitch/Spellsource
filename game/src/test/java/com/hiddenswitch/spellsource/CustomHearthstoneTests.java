@@ -18,6 +18,27 @@ import java.util.List;
 
 public class CustomHearthstoneTests extends TestBase {
 	@Test
+	public void testScorpidStinger() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_scorpid_stinger");
+			context.endTurn();
+			Minion flipper = playMinionCard(context, opponent, "minion_snowflipper_penguin");
+			context.endTurn();
+			attack(context, player, player.getHero(), flipper);
+			Assert.assertTrue(player.getHand().containsCard("spell_inner_rage"));
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_scorpid_stinger");
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			attack(context, player, player.getHero(), bloodfen);
+			Assert.assertFalse(player.getHand().containsCard("spell_inner_rage"));
+		});
+	}
+
+	@Test
 	public void testPulseBomb() {
 		// Test excess on adjacents
 		runGym((context, player, opponent) -> {
