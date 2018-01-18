@@ -1,0 +1,25 @@
+{
+  "name": "Primal Scorpid",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "After this minion Attacks, add a 'Bestial Wrath' to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_bestial_wrath",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

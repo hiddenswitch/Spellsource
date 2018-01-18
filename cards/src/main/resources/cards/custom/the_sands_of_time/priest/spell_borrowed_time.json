@@ -46,7 +46,8 @@
               "operation": "SUBTRACT"
             }
           }
-        }
+        },
+        "maxFires": 1
       }
     ]
   },
