@@ -427,12 +427,12 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	/**
 	 * Gets the minions adjacent to the given minion. Omits permanents.
 	 *
-	 * @param minionReference The minion whose adjacent minions we should get.
+	 * @param targetReference The minion whose adjacent minions we should get.
 	 * @return The adjacent minions.
 	 */
-	public List<Actor> getAdjacentMinions(EntityReference minionReference) {
+	public List<Actor> getAdjacentMinions(EntityReference targetReference) {
 		List<Actor> adjacentMinions = new ArrayList<>();
-		Actor minion = (Actor) resolveSingleTarget(minionReference);
+		Actor minion = (Actor) resolveSingleTarget(targetReference);
 		List<Minion> minions = getPlayer(minion.getOwner()).getMinions();
 		int index = minion.getEntityLocation().getIndex();
 		if (index == -1) {

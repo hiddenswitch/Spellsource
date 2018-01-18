@@ -18,6 +18,39 @@ import java.util.List;
 
 public class CustomHearthstoneTests extends TestBase {
 	@Test
+	public void testPulseBomb() {
+		// Test excess on adjacents
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion boulderfist1 = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion boulderfist2 = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_pulse_bomb", bloodfen);
+			Assert.assertTrue(bloodfen.isDestroyed());
+			// Up to 18 damage rule
+			Assert.assertEquals(boulderfist1.getHp(), boulderfist1.getBaseHp() - 10 + bloodfen.getBaseHp());
+			Assert.assertEquals(boulderfist2.getHp(), boulderfist2.getBaseHp() - 10 + bloodfen.getBaseHp());
+		});
+
+		// Test excess in event of divine shield using Explosive Runes rules
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion boulderfist1 = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion boulderfist2 = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			bloodfen.setAttribute(Attribute.DIVINE_SHIELD);
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_pulse_bomb", bloodfen);
+			Assert.assertFalse(bloodfen.isDestroyed());
+			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp());
+			// Up to 18 damage rule
+			Assert.assertEquals(boulderfist1.getHp(), boulderfist1.getBaseHp() - 10 + bloodfen.getBaseHp());
+			Assert.assertEquals(boulderfist2.getHp(), boulderfist2.getBaseHp() - 10 + bloodfen.getBaseHp());
+		});
+	}
+
+	@Test
 	public void testArmaggedonVanguardBolfRamshieldInteraction() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_armageddon_vanguard");
