@@ -31,8 +31,8 @@
             "class": "RecastSpell"
           },
           "cards": [
-            "spell_stop",
-            "spell_discard"
+            "spell_dimensius_stop",
+            "spell_dimensius_discard"
           ],
           "howMany": 2
         }
