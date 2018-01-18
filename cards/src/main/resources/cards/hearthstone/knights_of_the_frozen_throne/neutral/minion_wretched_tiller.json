@@ -10,8 +10,7 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES",
-      "targetEntityType": "MINION"
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
       "class": "DamageSpell",
