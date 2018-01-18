@@ -13,7 +13,8 @@
       "fireCondition": {
         "class": "IsDeadCondition"
       },
-      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
       "targetEntityType": "MINION"
     },
     "spell": {

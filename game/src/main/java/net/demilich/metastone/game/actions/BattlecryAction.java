@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class BattlecryAction extends GameAction {
-	private static final String BATTLECRY_NAME = "Call to Power";
+	private static final String BATTLECRY_NAME = "Battlecry";
 
 	public static BattlecryAction createBattlecry(SpellDesc spell) {
 		return createBattlecry(spell, TargetSelection.NONE);

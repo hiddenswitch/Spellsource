@@ -9,18 +9,8 @@ end in alphabetical order.
 This script requires the objdict package to help it serialize to JSON  in the appropriate key order.
 """
 from collections import Counter
-from json import dump, load
-from os import walk, path
-
-try:
-    import objdict
-except ImportError:
-    import pip
-
-    pip.main(['install', '--user', 'objdict'])
-
 from objdict import ObjDict as OrderedDict
-from objdict import JsonEncoder
+from utils import write_card, iter_cards
 
 ORDER = [
     'class',
@@ -71,26 +61,11 @@ ORDER = [
 def main():
     locations = Counter()
 
-    for root, dirnames, filenames in walk(path.join(path.dirname(__file__), 'src/main/resources/cards')):
-        for filename in filenames:
-            if '.json' not in filename:
-                continue
-            filepath = path.join(root, filename)
-            with open(filepath) as fp:
-                try:
-                    card = load(fp, object_pairs_hook=OrderedDict)
-                except ValueError as ex:
-                    print 'Parsing error in ', filepath
-                    continue
-                for i, (k, v) in enumerate(card.iteritems()):
-                    locations.update([(k, i)])
+    for (card, filepath) in iter_cards():
+        for i, (k, v) in enumerate(card.iteritems()):
+            locations.update([(k, i)])
 
-                fixed_card = fix_dict(card)
-            with open(filepath, 'w') as fp:
-                dump(fixed_card, fp, indent=2, separators=(',', ': '), cls=JsonEncoder)
-
-    print 'Frequencies observed:'
-    print locations.__repr__().replace(':', '\n')
+        write_card(fix_dict(card), filepath)
 
 
 def fix_list(v):
