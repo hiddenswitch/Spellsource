@@ -2790,22 +2790,26 @@ public class GameLogic implements Cloneable, Serializable {
 		if (newCard.getId() == IdFactory.UNASSIGNED) {
 			newCard.setId(getIdFactory().generateId());
 		}
+		if (newCard.getOwner() == Entity.NO_OWNER) {
+			newCard.setOwner(oldCard.getOwner());
+		}
 
-		if (!player.getHand().contains(oldCard)) {
-			return null;
+		if (player.getHand().stream().noneMatch(c -> c.getId() == oldCard.getId())) {
+			throw new IllegalArgumentException("Cannot replace a card in the hand that doesn't currently exist in the hand.");
 		}
 
 		newCard.setOwner(playerId);
 		CardList hand = player.getHand();
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
-		hand.replace(oldCard, newCard);
+		final int oldIndex = oldCard.getEntityLocation().getIndex();
 		transferKeptEnchantments(oldCard, newCard);
 		removeEnchantments(oldCard);
 		oldCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		oldCard.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newCard.getReference());
+		player.getHand().add(oldIndex, newCard);
 		processGameTriggers(player, newCard);
 		processPassiveTriggers(player, newCard);
-		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, null, false));
+		context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, newCard.getCardType(), false));
 		return newCard;
 	}
 
@@ -2838,13 +2842,16 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		newCard.setOwner(playerId);
-		CardList deck = player.getDeck();
+		CardZone deck = player.getDeck();
 
 		processGameTriggers(player, newCard);
 		processDeckTriggers(player, newCard);
 
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
-		deck.replace(oldCard, newCard);
+		int oldLocation = oldCard.getEntityLocation().getIndex();
+		oldCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		// Leaks information
+		deck.add(oldLocation, newCard);
 		removeCard(oldCard);
 	}
 
