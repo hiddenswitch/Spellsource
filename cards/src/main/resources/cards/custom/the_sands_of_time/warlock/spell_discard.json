@@ -9,8 +9,8 @@
 	"spell": {
         "condition": {
       "class": "CardCountCondition",
-      "value": 1,
-      "operation": "GREATER_OR_EQUAL"
+      "value": 0,
+      "operation": "GREATER"
                  },
  		"class": "MetaSpell",
 		"spells": [

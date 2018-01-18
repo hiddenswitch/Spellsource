@@ -1,0 +1,50 @@
+{
+  "name": "Mark of the Future",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "The next minion you play gains +2/+2 and Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+  "class": "MetaSpell",
+  "spells": [
+     {
+     "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "maxFires": 1,
+        "trigger": {
+          "eventTrigger": {
+            "class": "class": "AfterMinionPlayedTrigger",
+            "targetPlayer": "SELF"
+          },
+		  "spell": {
+    "class": "AddAttributepell",
+    "target": "EVENT_TARGET",
+	"attribute": "TAUNT"
+      }
+	},
+	{
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "maxFires": 1,
+        "trigger": {
+          "eventTrigger": {
+            "class": "class": "AfterMinionPlayedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+    "class": "BuffSpell",
+    "target": "EVENT_TARGET",
+    "attackBonus": 2,
+    "hpBonus": 2
+  }
+		}
+    }
+	  ]
+	  }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
