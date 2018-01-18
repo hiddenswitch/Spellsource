@@ -1,0 +1,55 @@
+{
+  "name": "Sage of Foursight",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: The next minion you play costs (4) more and has +4/+4.",
+  "battlecry": {
+  "targetSelection": "NONE",
+  "spell": {
+  "class": "MetaSpell",
+  "spells": [
+     {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "value": 4,
+      "cardType": "MINION",
+      "expirationTrigger": {
+        "class": "CardPlayedTrigger",
+        "cardType": "MINION",
+        "targetPlayer": "SELF"
+        }
+      }
+	},
+	{
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "maxFires": 1,
+        "trigger": {
+          "eventTrigger": {
+            "class": "class": "AfterMinionPlayedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+    "class": "BuffSpell",
+    "target": "EVENT_TARGET",
+    "attackBonus": 4,
+    "hpBonus": 4
+  }
+		}
+    }
+	  ]
+    }
+  },
+  "attributes": {
+  "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

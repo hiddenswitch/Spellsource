@@ -1,0 +1,62 @@
+{
+  "name": "Pulse Bomb",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "EPIC",
+  "description": "Deal 10 damage to a minion and excess damage to adjacent ones.",
+    "targetSelection": "MINIONS"
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "EVENT_TARGET",
+      "attribute": "HP"
+    },
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "MAXIMUM",
+          "value1": 0,
+          "value2": {
+            "class": "AlgebraicValueProvider",
+            "operation": "MINIMUM",
+            "value1": 10,
+            "value2": {
+              "class": "GameValueProvider",
+              "gameValue": "SPELL_VALUE"
+            }
+          }
+        }
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ADJACENT_MINIONS",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "MINIMUM",
+          "value1": 10,
+          "value2": {
+            "class": "AlgebraicValueProvider",
+            "operation": "MAXIMUM",
+            "value1": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 10,
+              "value2": {
+                "class": "GameValueProvider",
+                "gameValue": "SPELL_VALUE"
+              }
+            },
+            "value2": 0
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
