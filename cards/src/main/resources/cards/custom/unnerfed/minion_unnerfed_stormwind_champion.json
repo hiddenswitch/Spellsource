@@ -13,7 +13,7 @@
     "attackBonus": 1,
     "hpBonus": 1
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

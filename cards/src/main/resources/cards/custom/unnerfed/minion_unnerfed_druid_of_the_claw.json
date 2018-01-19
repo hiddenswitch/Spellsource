@@ -33,7 +33,7 @@
       "card": "unnerfed_token_catbear_form"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

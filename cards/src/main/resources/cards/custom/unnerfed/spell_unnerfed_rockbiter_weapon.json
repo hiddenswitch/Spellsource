@@ -10,7 +10,7 @@
     "class": "TemporaryAttackSpell",
     "value": 3
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
