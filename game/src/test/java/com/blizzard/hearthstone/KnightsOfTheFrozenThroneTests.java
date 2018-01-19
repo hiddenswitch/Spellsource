@@ -240,6 +240,35 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			playCard(context, player, "spell_defile");
 			Assert.assertEquals(opponent.getMinions().size(), 0);
 		});
+
+		// If a minion is summoned mid-Defile, the defile should still continue
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion possessedVillager = playMinionCard(context, player, "minion_possessed_villager");
+			context.endTurn();
+			playCard(context, player, "spell_defile");
+			Assert.assertTrue(possessedVillager.isDestroyed());
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		// If defile causes the number of minions on the board to INCREASE, it should still continue as long as minions died
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion oneTwo = playMinionCard(context, player, "token_silver_hand_recruit");
+			oneTwo.setHp(2);
+			Minion oneToThree = playMinionCard(context, player, "minion_sated_threshadon");
+			oneToThree.setHp(1);
+			context.endTurn();
+
+			// Starts with 2 minions, Thresh has 1 HP, SHR has 2 HP
+			// Threshadon dies, -1 minion + 3 = 4 total minions. SHR and 3 murlocs have 1HP.
+			// Should cast again, all minions should die
+
+			playCard(context, player, "spell_defile");
+			Assert.assertTrue(oneToThree.isDestroyed());
+			Assert.assertTrue(oneTwo.isDestroyed());
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+		});
 	}
 
 	@Test
