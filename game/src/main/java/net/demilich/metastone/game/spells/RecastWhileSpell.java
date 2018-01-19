@@ -20,6 +20,7 @@ public class RecastWhileSpell extends Spell {
 		do {
 			beforeCast(context, desc);
 			SpellUtils.castChildSpell(context, player, spell, source, target);
+			afterCast(context, desc);
 			context.getLogic().checkForDeadEntities();
 			limit--;
 			if (limit < 0) {
@@ -29,6 +30,9 @@ public class RecastWhileSpell extends Spell {
 	}
 
 	protected void beforeCast(GameContext context, SpellDesc desc) {
+	}
+
+	protected void afterCast(GameContext context, SpellDesc desc) {
 	}
 
 	@Suspendable
