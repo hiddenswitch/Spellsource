@@ -1,15 +1,13 @@
 {
-  "name": "Unnerfed Dalaran Mage",
+  "name": "Cybernetic Rager",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 2,
-  "baseHp": 4,
+  "baseAttack": 5,
+  "baseHp": 1,
   "rarity": "FREE",
-  "description": "Spell Damage +1",
-  "attributes": {
-    "SPELL_DAMAGE": 1
-  },
+  "race": "MECH",
+  "description": "",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

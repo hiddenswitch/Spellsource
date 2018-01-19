@@ -1,0 +1,28 @@
+{
+  "name": "Unnerfed Big Game Hunter",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Battlecry: Destroy a minion with an Attack of 7 or more.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 6,
+        "attribute": "ATTACK",
+        "operation": "GREATER"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

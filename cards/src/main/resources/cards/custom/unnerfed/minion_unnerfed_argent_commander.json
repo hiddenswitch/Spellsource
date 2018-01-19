@@ -1,0 +1,17 @@
+{
+  "name": "Unnerfed Argent Commander",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Charge, Divine Shield",
+  "attributes": {
+    "CHARGE": true,
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

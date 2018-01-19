@@ -1,5 +1,5 @@
 {
-  "name": "Unnerfed Keeper of the Grove",
+  "name": "Keeper of the Grove",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "BROWN",
@@ -48,6 +48,6 @@
     }
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

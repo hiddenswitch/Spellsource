@@ -1,0 +1,16 @@
+{
+  "name": "Unnerfed Pyroblast",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Deal 10 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 10
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
