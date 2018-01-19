@@ -11,7 +11,7 @@
     "target": "FRIENDLY_PLAYER",
     "trigger": {
       "eventTrigger": {
-        "class": "AfterMinionPlayedTrigger",
+        "class": "BeforeMinionPlayedTrigger",
         "targetPlayer": "SELF"
       },
       "spell": {
@@ -28,9 +28,9 @@
             "attribute": "TAUNT"
           }
         ]
-      }
-    },
-    "maxFires": 1
+      },
+      "maxFires": 1
+    }
   },
   "collectible": true,
   "set": "CUSTOM",
