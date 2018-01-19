@@ -1,0 +1,23 @@
+{
+  "name": "Unnerfed Abusive Sergeant",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a minion +2 Attack this turn.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

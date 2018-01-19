@@ -2,7 +2,7 @@
   "name": "Unnerfed Claw",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DRUID",
+  "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Give your hero +3 Attack this turn",
   "targetSelection": "NONE",
@@ -12,6 +12,6 @@
     "attackBonus": 3
   },
   "collectible": true,
-  "set": "BASIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

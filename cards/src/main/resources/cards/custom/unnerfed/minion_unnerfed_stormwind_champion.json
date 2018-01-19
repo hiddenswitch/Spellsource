@@ -14,6 +14,6 @@
     "hpBonus": 1
   },
   "collectible": true,
-  "set": "BASIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

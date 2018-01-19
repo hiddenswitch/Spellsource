@@ -1,0 +1,23 @@
+{
+  "name": "Unnerfed Dark Iron Dwarf",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a minion +2 Attack.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

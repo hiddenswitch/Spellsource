@@ -2,7 +2,7 @@
   "name": "Unnerfed Cenarius",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "BROWN",
+  "heroClass": "BROWWN",
   "baseAttack": 5,
   "baseHp": 8,
   "rarity": "LEGENDARY",
@@ -61,6 +61,6 @@
     }
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
