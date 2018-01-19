@@ -52,6 +52,9 @@
       }
     ]
   },
+  "attributes": {
+    "QUEST": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
