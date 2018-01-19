@@ -138,7 +138,7 @@ public interface Trigger extends Serializable {
 	void expire();
 
 	/**
-	 * Returns true if the trigger can fire in response to the given {@link GameEvent} given a possible {@link
+	 * Returns {@code true} if the trigger can fire in response to the given {@link GameEvent} given a possible {@link
 	 * net.demilich.metastone.game.spells.desc.condition.Condition}
 	 *
 	 * @param event The currently raised event.
@@ -146,5 +146,15 @@ public interface Trigger extends Serializable {
 	 */
 	default boolean canFireCondition(GameEvent event) {
 		return canFire(event);
+	}
+
+	/**
+	 * @return
+	 */
+	default boolean activatesImmediately() {
+		return true;
+	}
+
+	default void activate() {
 	}
 }

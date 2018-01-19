@@ -31,7 +31,7 @@
           "target": "FRIENDLY_PLAYER",
           "trigger": {
             "eventTrigger": {
-              "class": "AfterMinionPlayedTrigger",
+              "class": "BeforeMinionPlayedTrigger",
               "targetPlayer": "SELF"
             },
             "spell": {
@@ -39,9 +39,9 @@
               "target": "EVENT_TARGET",
               "attackBonus": 4,
               "hpBonus": 4
-            }
-          },
-          "maxFires": 1
+            },
+            "maxFires": 1
+          }
         }
       ]
     }

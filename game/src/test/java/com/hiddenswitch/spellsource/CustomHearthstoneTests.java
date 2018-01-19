@@ -17,7 +17,33 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 public class CustomHearthstoneTests extends TestBase {
+
 	@Test
+	public void testSageOfFoursight() {
+		runGym((context, player, opponent) -> {
+			Minion sage = playMinionCard(context, player, "minion_sage_of_foursight");
+			Assert.assertEquals(sage.getAttack(), sage.getBaseAttack(), "Sage should not buff itself.");
+			Assert.assertEquals(sage.getHp(), sage.getBaseHp(), "Sage should not buff itself.");
+			Card bloodfenCard = CardCatalogue.getCardById("minion_bloodfen_raptor");
+			context.getLogic().receiveCard(player.getId(), bloodfenCard);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, bloodfenCard), bloodfenCard.getBaseManaCost() + 4, "Bloodfen should cost more because it's the next card the player will play.");
+
+			// It should work with a one turn gap in the middle
+			context.endTurn();
+			context.endTurn();
+
+			Minion bloodfen = playMinionCard(context, player, (MinionCard) bloodfenCard);
+			Assert.assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack() + 4, "Bloodfen should be buffed.");
+			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp() + 4, "Bloodfen should be buffed.");
+			Card bloodfenCard2 = CardCatalogue.getCardById("minion_bloodfen_raptor");
+			context.getLogic().receiveCard(player.getId(), bloodfenCard2);
+			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, bloodfenCard), bloodfenCard.getBaseManaCost(), "Bloodfen 2 should not cost more.");
+			Minion bloodfen2 = playMinionCard(context, player, (MinionCard) bloodfenCard2);
+			Assert.assertEquals(bloodfen2.getAttack(), bloodfen2.getBaseAttack(), "The second bloodfen should not be buffed");
+			Assert.assertEquals(bloodfen2.getHp(), bloodfen2.getBaseHp(), "The second bloodfen should not be buffed");
+		});
+	}
+
 	public void testScorpidStinger() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "weapon_scorpid_stinger");
