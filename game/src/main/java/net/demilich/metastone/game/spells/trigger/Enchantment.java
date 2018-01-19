@@ -35,6 +35,7 @@ public class Enchantment extends Entity implements Trigger {
 	private Card sourceCard;
 	private Integer countUntilCast;
 	private boolean countByValue;
+	private boolean activatesImmediately = true;
 
 	protected Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
 		this.primaryTrigger = primaryTrigger;
@@ -293,5 +294,15 @@ public class Enchantment extends Entity implements Trigger {
 
 	public boolean isCountByValue() {
 		return countByValue;
+	}
+
+	@Override
+	public boolean activatesImmediately() {
+		return activatesImmediately;
+	}
+
+	@Override
+	public void activate() {
+		this.activatesImmediately = activatesImmediately;
 	}
 }
