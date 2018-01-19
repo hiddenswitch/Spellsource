@@ -10,7 +10,7 @@
   "attributes": {
     "SPELL_DAMAGE": 1
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -3,12 +3,12 @@
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 5,
+  "baseAttack": 15,
   "baseHp": 1,
   "rarity": "FREE",
   "race": "MECH",
   "description": "",
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
