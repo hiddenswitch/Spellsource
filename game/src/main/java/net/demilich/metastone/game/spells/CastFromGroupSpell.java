@@ -80,6 +80,7 @@ public class CastFromGroupSpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellUtils.castChildSpell(context, player, desc, source, target);
 	}

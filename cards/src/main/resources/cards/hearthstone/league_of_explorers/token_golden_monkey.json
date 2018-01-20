@@ -13,22 +13,22 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "ReplaceCardLocationSpell",
+          "class": "ReplaceCardsSpell",
+          "target": "FRIENDLY_HAND",
           "cardFilter": {
             "class": "CardFilter",
             "rarity": "LEGENDARY",
             "cardType": "MINION"
-          },
-          "cardLocation": "HAND"
+          }
         },
         {
-          "class": "ReplaceCardLocationSpell",
+          "class": "ReplaceCardsSpell",
+          "target": "FRIENDLY_DECK",
           "cardFilter": {
             "class": "CardFilter",
             "rarity": "LEGENDARY",
             "cardType": "MINION"
-          },
-          "cardLocation": "DECK"
+          }
         }
       ]
     }

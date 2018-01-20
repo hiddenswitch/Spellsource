@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import java.util.Map;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -18,12 +19,21 @@ public class SetAttackSpell extends Spell {
 	}
 
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+		// When exclusive, the set attack spell will overwrite bonuses. When not exclusive, the BASE attack will change
+		// (to protect it from silencing) and the changed attack will honor bonuses.
+		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, true);
+
 		target.setAttribute(Attribute.ATTACK, value);
-		target.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		target.getAttributes().remove(Attribute.ATTACK_BONUS);
-		target.getAttributes().remove(Attribute.CONDITIONAL_ATTACK_BONUS);
+		if (exclusive) {
+			target.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
+			target.getAttributes().remove(Attribute.CONDITIONAL_ATTACK_BONUS);
+		} else {
+			target.setAttribute(Attribute.BASE_ATTACK, value);
+		}
 	}
 
 }

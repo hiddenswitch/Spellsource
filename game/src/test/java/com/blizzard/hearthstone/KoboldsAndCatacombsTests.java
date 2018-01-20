@@ -4,11 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.desc.ActorCardDesc;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -17,17 +13,27 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+	@Test
+	public void testGoldenKobold() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "minion_bloodfen_raptor");
+			receiveCard(context, player, "minion_bloodfen_raptor");
+			receiveCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "token_golden_kobold");
+			Assert.assertEquals(player.getHand().stream().filter(c -> c.getRarity() == Rarity.LEGENDARY
+					&& c.getCardType() == CardType.MINION).count(), 3);
+		});
+	}
+
 	@Test
 	public void testUnidentifiedElixirStartsInHand() {
 		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false);
@@ -45,7 +51,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testAmethystSpellstone() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_lesser_amethyst_spellstone"));
+			receiveCard(context, player, "spell_lesser_amethyst_spellstone");
 			playCard(context, player, "minion_flame_imp");
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_amethyst_spellstone");
 		}, HeroClass.VIOLET, HeroClass.VIOLET);
@@ -53,7 +59,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		// Amethyst should not trigger on warlock hero power
 		// Also tests that amethyst doesn't trigger on fatigue
 		runGym((context, player, opponent) -> {
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_lesser_amethyst_spellstone"));
+			receiveCard(context, player, "spell_lesser_amethyst_spellstone");
 			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_amethyst_spellstone");
 		}, HeroClass.VIOLET, HeroClass.VIOLET);
@@ -84,7 +90,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		// When The Darkness is summoned by any means other than being played, it will start dormant but no Darkness
 		// Candles are generated. When copied while on the board as a minion, the copy will not start dormant.
 		runGym((context, player, opponent) -> {
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_the_darkness"));
+			receiveCard(context, player, "minion_the_darkness");
 			context.endTurn();
 			playCard(context, opponent, "minion_dirty_rat");
 			Assert.assertTrue(player.getMinions().get(0).hasAttribute(Attribute.PERMANENT), "Comes into play permanent.");
@@ -142,7 +148,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	public void testKoboldMonk() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("spell_fireball"));
+			receiveCard(context, opponent, "spell_fireball");
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			Assert.assertTrue(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
@@ -699,7 +705,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	public void testJasperSpellstone() {
 		// Spellstones should accumulate progress
 		runGym((context, player, opponent) -> {
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_lesser_jasper_spellstone"));
+			receiveCard(context, player, "spell_lesser_jasper_spellstone");
 			playCard(context, player, "spell_claw");
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_jasper_spellstone");
 			playCard(context, player, "spell_claw");
@@ -713,7 +719,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		// Losing three armor shouldn't trigger Jasper Spellstone
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_shield_block");
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_lesser_jasper_spellstone"));
+			receiveCard(context, player, "spell_lesser_jasper_spellstone");
 			context.endTurn();
 			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
 			attack(context, opponent, wolfrider, player.getHero());

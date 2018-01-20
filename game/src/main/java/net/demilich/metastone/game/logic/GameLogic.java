@@ -2799,7 +2799,6 @@ public class GameLogic implements Cloneable, Serializable {
 		}
 
 		newCard.setOwner(playerId);
-		CardList hand = player.getHand();
 		log("{} replaces card {} with card {}", player.getName(), oldCard, newCard);
 		final int oldIndex = oldCard.getEntityLocation().getIndex();
 		transferKeptEnchantments(oldCard, newCard);

@@ -16,61 +16,19 @@
         "class": "MetaSpell",
         "spells": [
           {
-            "class": "SetAttributeSpell",
-            "value": {
-              "class": "AttributeValueProvider",
-              "attribute": "BASE_ATTACK"
-            },
-            "attribute": "RESERVED_INTEGER_2"
-          },
-          {
-            "class": "SetAttributeSpell",
+            "class": "SetAttackSpell",
             "value": 5,
-            "attribute": "BASE_ATTACK"
+            "exclusive": false
           },
           {
-            "class": "SetAttributeSpell",
-            "value": {
-              "class": "AttributeValueProvider",
-              "attribute": "BASE_HP"
-            },
-            "attribute": "RESERVED_INTEGER_3"
-          },
-          {
-            "class": "SetAttributeSpell",
+            "class": "SetHpSpell",
             "value": 5,
-            "attribute": "BASE_HP"
+            "exclusive": false
           }
         ]
       },
       "removeEffect": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "SetAttributeSpell",
-            "value": {
-              "class": "AttributeValueProvider",
-              "attribute": "RESERVED_INTEGER_2"
-            },
-            "attribute": "BASE_ATTACK"
-          },
-          {
-            "class": "RemoveAttributeSpell",
-            "attribute": "RESERVED_INTEGER_2"
-          },
-          {
-            "class": "SetAttributeSpell",
-            "value": {
-              "class": "AttributeValueProvider",
-              "attribute": "RESERVED_INTEGER_3"
-            },
-            "attribute": "BASE_HP"
-          },
-          {
-            "class": "RemoveAttributeSpell",
-            "attribute": "RESERVED_INTEGER_3"
-          }
-        ]
+        "class": "NullSpell"
       }
     }
   },

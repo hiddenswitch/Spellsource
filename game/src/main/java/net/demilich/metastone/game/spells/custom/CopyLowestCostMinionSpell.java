@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -17,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 
 public class CopyLowestCostMinionSpell extends Spell {
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardSource sourceCards = desc.getCardSource();
 		List<Card> cards = sourceCards.getCards(context, player)

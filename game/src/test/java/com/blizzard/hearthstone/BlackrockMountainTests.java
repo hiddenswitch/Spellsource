@@ -89,7 +89,7 @@ public class BlackrockMountainTests extends TestBase {
 		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_blackwing_corruptor"));
 		Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp());
 
-		context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_azure_drake"));
+		receiveCard(context, player, "minion_azure_drake");
 		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_blackwing_corruptor"));
 		Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 3);
 	}
@@ -104,7 +104,7 @@ public class BlackrockMountainTests extends TestBase {
 		Assert.assertEquals(blackwingTechnician.getHp(), blackwingTechnician.getBaseHp());
 		Assert.assertEquals(blackwingTechnician.getAttack(), blackwingTechnician.getBaseAttack());
 
-		context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_azure_drake"));
+		receiveCard(context, player, "minion_azure_drake");
 		blackwingTechnician = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_blackwing_technician"));
 		Assert.assertEquals(blackwingTechnician.getHp(), blackwingTechnician.getBaseHp() + 1);
 		Assert.assertEquals(blackwingTechnician.getAttack(), blackwingTechnician.getBaseAttack() + 1);
@@ -285,7 +285,7 @@ public class BlackrockMountainTests extends TestBase {
 		Player opponent = context.getPlayer2();
 		Card assassinateCard = CardCatalogue.getCardById("spell_assassinate");
 		playCardWithTarget(context, opponent, assassinateCard, emperorThaurissan);
-		context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_chillwind_yeti"));
+		receiveCard(context, player, "minion_chillwind_yeti");
 		context.endTurn();
 
 		Card card = player.getHand().peekFirst();

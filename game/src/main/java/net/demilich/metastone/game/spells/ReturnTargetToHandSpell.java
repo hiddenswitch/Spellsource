@@ -35,8 +35,8 @@ public class ReturnTargetToHandSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	@Suspendable
 	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellDesc cardSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 		Player owner = context.getPlayer(target.getOwner());

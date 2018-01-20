@@ -65,8 +65,8 @@ public class TheOldGodsTests extends TestBase {
 					.collect(Collectors.toMap(Card::getHeroClass, Function.identity()));
 			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
 			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_voidwalker"));
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_bloodfen_raptor"));
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_voidwalker"));
+			receiveCard(context, player, "minion_bloodfen_raptor");
+			receiveCard(context, player, "minion_voidwalker");
 			GameLogic spyLogic = Mockito.spy(context.getLogic());
 			context.setLogic(spyLogic);
 			AtomicInteger invocationCount = new AtomicInteger(0);
