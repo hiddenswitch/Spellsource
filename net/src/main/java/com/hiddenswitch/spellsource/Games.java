@@ -933,7 +933,14 @@ public interface Games {
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
 		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
-		entityState.heroClass(card.getHeroClass().toString());
+		HeroClass heroClass = card.getHeroClass();
+
+		// Handles tri-class cards correctly
+		if (heroClass == null) {
+			heroClass = HeroClass.ANY;
+		}
+		
+		entityState.heroClass(heroClass.toString());
 		entityState.cardType(EntityState.CardTypeEnum.valueOf(card.getCardType().toString()));
 		final boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.util.List;
 
+import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
@@ -56,7 +57,8 @@ public class CardValidationTests {
 	@Test(dataProvider = "CardProvider")
 	public void validateCard(File cardFile) throws FileNotFoundException {
 		try {
-			CARD_PARSER.parseCard(new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true));
+			CardCatalogueRecord record = CARD_PARSER.parseCard(new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true));
+			Assert.assertFalse(record.getDesc().heroClass == null && (record.getDesc().heroClasses == null || record.getDesc().heroClasses.length == 0));
 		} catch (Exception ex) {
 			System.err.println(ex);
 			Assert.fail(cardFile.getName(), ex);
