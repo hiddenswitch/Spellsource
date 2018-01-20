@@ -7,9 +7,9 @@
   "description": "Replace your deck with copies of \"Discover a card.\"",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReplaceCardLocationSpell",
-    "card": "spell_choose_your_path",
-    "cardLocation": "DECK"
+    "class": "ReplaceCardsSpell",
+    "target": "FRIENDLY_DECK",
+    "card": "spell_choose_your_path"
   },
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",

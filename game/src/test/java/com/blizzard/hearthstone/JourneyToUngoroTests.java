@@ -49,8 +49,8 @@ public class JourneyToUngoroTests extends TestBase {
 	@Test
 	public void testCrystalCore() {
 		Consumer<Minion> checkMinion = (Minion minion) -> {
-			Assert.assertEquals(minion.getBaseAttack(), 5);
-			Assert.assertEquals(minion.getBaseHp(), 5);
+			Assert.assertEquals(minion.getAttack(), 5);
+			Assert.assertEquals(minion.getHp(), 5);
 		};
 
 		// Check regular summoning from hand and mind control
@@ -74,6 +74,17 @@ public class JourneyToUngoroTests extends TestBase {
 			playCard(context, player, "spell_crystal_core");
 			playCard(context, player, "spell_diamond_spellstone");
 			checkMinion.accept(player.getMinions().get(0));
+		});
+
+		// Check that silencing a minion doesn't remove the crystal core effect
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_crystal_core");
+			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			checkMinion.accept(minion1);
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_silence", minion1);
+			context.endTurn();
+			checkMinion.accept(minion1);
 		});
 	}
 
@@ -136,7 +147,7 @@ public class JourneyToUngoroTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_tar_creeper"));
+			receiveCard(context, player, "minion_tar_creeper");
 			context.endTurn();
 			playCard(context, opponent, "minion_dirty_rat");
 			Minion tarCreeper = player.getMinions().get(0);
@@ -292,7 +303,7 @@ public class JourneyToUngoroTests extends TestBase {
 	@Test
 	public void testClutchmotherZavas() {
 		runGym((c, p, o) -> {
-			c.getLogic().receiveCard(p.getId(), CardCatalogue.getCardById("minion_clutchmother_zavas"));
+			receiveCard(c, p, "minion_clutchmother_zavas");
 			playMinionCard(c, p, "minion_succubus");
 			c.getLogic().performGameAction(p.getId(), p.getHand().get(0).play());
 
@@ -330,7 +341,7 @@ public class JourneyToUngoroTests extends TestBase {
 					"spell_swipe", // TargetSelection.ENEMY_CHARACTERS from the opponent's point of view
 					"spell_mind_control" // TargetSelection.ENEMY_MINIONS  from the opponent's point of view
 			).forEach(cId -> {
-				c.getLogic().receiveCard(o.getId(), CardCatalogue.getCardById(cId));
+				receiveCard(c, o, cId);
 			});
 
 			Assert.assertFalse(c.getValidActions().stream().anyMatch(ga -> ga.getTargetReference() != null
@@ -589,7 +600,7 @@ public class JourneyToUngoroTests extends TestBase {
 			Assert.assertEquals(player.getQuests().size(), 1);
 			player.setMaxMana(10);
 			player.setMana(10);
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("quest_jungle_giants"));
+			receiveCard(context, player, "quest_jungle_giants");
 			Assert.assertFalse(context.getLogic().canPlayCard(player.getId(), player.getHand().get(0).getReference()),
 					"Since we already have a quest in play, we should not be able to play another quest.");
 
@@ -637,7 +648,7 @@ public class JourneyToUngoroTests extends TestBase {
 			runGym((context, player, opponent) -> {
 				player.setMana(10);
 				player.setMaxMana(10);
-				context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById(cardId));
+				receiveCard(context, player, cardId);
 				int oldId = player.getHand().get(0).getId();
 				Assert.assertEquals(player.getHand().get(0).getCardId(), cardId, String.format("%s should not have transformed yet: ", cardId));
 				context.endTurn();

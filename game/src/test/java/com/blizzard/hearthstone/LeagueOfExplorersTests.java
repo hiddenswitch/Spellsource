@@ -61,7 +61,7 @@ public class LeagueOfExplorersTests extends TestBase {
 			numberOfSpellsPlayed++;
 			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_arcane_giant")), 12 - numberOfSpellsPlayed);
 
-			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("spell_the_coin"));
+			receiveCard(context, opponent, "spell_the_coin");
 			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, cards.get("minion_clockwork_giant")), 12 - 1);
 
 			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play().withTargetReference(opponent.getHero().getReference()));

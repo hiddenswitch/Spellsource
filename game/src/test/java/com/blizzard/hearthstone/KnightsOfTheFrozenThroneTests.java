@@ -49,14 +49,14 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
 	public void testBringItOn() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("minion_bloodfen_raptor"));
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			receiveCard(context, opponent, "minion_bloodfen_raptor");
+			receiveCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_bring_it_on");
 			Assert.assertEquals(player.getHero().getArmor(), 10);
 			context.endTurn();
 			Assert.assertEquals(opponent.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
 			Assert.assertEquals(context.getLogic().getModifiedManaCost(opponent, opponent.getHand().get(0)), 0);
-			context.getLogic().receiveCard(opponent.getId(), CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			receiveCard(context, opponent, "minion_bloodfen_raptor");
 			Assert.assertEquals(context.getLogic().getModifiedManaCost(opponent, opponent.getHand().get(1)), 2);
 			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), 2, "The player's copy of Bloodfen Raptor should not have reduced cost.");
 		});
@@ -519,7 +519,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			// Now the minions in the hand are 2, 1
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("minion_bloodfen_raptor" /*2*/));
+			receiveCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, CardCatalogue.getCardById("spell_simulacrum"));
 			Assert.assertEquals(player.getHand().stream().filter(c -> c.getCardId().equals("minion_acolyte_of_pain")).count(), 2L);
 		});

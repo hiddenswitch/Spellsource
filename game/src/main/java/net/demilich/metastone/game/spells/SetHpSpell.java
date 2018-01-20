@@ -31,7 +31,13 @@ public class SetHpSpell extends Spell {
 		int hp = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		Actor targetActor = (Actor) target;
 		targetActor.getAttributes().remove(Attribute.HP_BONUS);
+		// When exclusive, the set hp spell will overwrite bonuses. When not exclusive, the BASE HP will change
+		// (to protect it from silencing) and the changed HP will honor bonuses.
+		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, true);
 		context.getLogic().setHpAndMaxHp(targetActor, hp);
+		if (!exclusive) {
+			target.setAttribute(Attribute.BASE_HP, hp);
+		}
 	}
 
 }

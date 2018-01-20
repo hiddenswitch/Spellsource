@@ -66,6 +66,12 @@ public class TestBase {
 		}).when(overriden).requestAction(any(), any(), anyList());
 	}
 
+	public static Card receiveCard(GameContext context, Player player, String cardId) {
+		Card card = CardCatalogue.getCardById(cardId);
+		context.getLogic().receiveCard(player.getId(), card);
+		return card;
+	}
+
 	@FunctionalInterface
 	public interface GymConsumer {
 		void run(GameContext context, Player player, Player opponent);
