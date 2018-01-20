@@ -50,8 +50,8 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	public MatchCancelResponse cancel(MatchCancelRequest matchCancelRequest) throws SuspendExecution, InterruptedException {
 		final String userId = matchCancelRequest.getUserId();
-		queue.remove(new UserId(userId));
-		return new MatchCancelResponse(true, null, -1);
+		boolean removed = queue.remove(new UserId(userId), GameId.PENDING);
+		return new MatchCancelResponse(removed, null, -1);
 	}
 
 	@Override

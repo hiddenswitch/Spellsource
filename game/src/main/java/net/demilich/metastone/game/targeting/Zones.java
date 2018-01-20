@@ -17,6 +17,9 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 /**
  * Zones describe the different locations for entities in the game.
  * <p>
@@ -138,5 +141,14 @@ public enum Zones {
 	 *
 	 * @see Player for more about player entities.
 	 */
-	PLAYER
+	PLAYER;
+
+	/**
+	 * These zones are public for notification purposes: both players ought to see their contents.
+	 */
+	public static final Set<Zones> PUBLIC = EnumSet.of(Zones.BATTLEFIELD, Zones.PLAYER, Zones.HERO, Zones.HERO_POWER, Zones.WEAPON, Zones.QUEST, Zones.SECRET);
+	/**
+	 * These zones are private: only the player that owns the entity in the zone ought to see notifications originating from that zone.
+	 */
+	public static final Set<Zones> PRIVATE = EnumSet.of(Zones.DISCOVER, Zones.HAND, Zones.DECK, Zones.SET_ASIDE_ZONE, Zones.GRAVEYARD, Zones.REMOVED_FROM_PLAY);
 }

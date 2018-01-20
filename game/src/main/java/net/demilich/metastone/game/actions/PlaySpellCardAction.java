@@ -53,7 +53,7 @@ public class PlaySpellCardAction extends PlayCardAction {
 			return super.getDescription(context, playerId);
 		}
 
-		final Card source = context.resolveEntityReference(getEntityReference());
+		final Card source = (Card) context.resolveSingleTarget(getEntityReference());
 		final Entity target = context.resolveSingleTarget(getTargetReference());
 		return String.format("%s played %s on %s", context.getActivePlayer().getName(), source.getName(), target.getName());
 	}

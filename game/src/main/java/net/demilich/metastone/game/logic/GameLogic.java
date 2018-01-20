@@ -247,7 +247,7 @@ public class GameLogic implements Cloneable, Serializable {
 		Player player = context.getPlayer(playerId);
 
 		player.modifyAttribute(Attribute.COMBO, +1);
-		Card card = context.resolveEntityReference(EntityReference);
+		Card card = (Card) context.resolveSingleTarget(EntityReference);
 
 		card.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
 	}
@@ -377,7 +377,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public boolean canPlayCard(int playerId, EntityReference EntityReference) {
 		Player player = context.getPlayer(playerId);
-		Card card = context.resolveEntityReference(EntityReference);
+		Card card = (Card) context.resolveSingleTarget(EntityReference);
 		// A player cannot play a card the player does not own.
 		if (card.getOwner() != player.getId()
 				&& card.getOwner() != Entity.NO_OWNER) {
@@ -2326,7 +2326,7 @@ public class GameLogic implements Cloneable, Serializable {
 	@Suspendable
 	public void playCard(int playerId, EntityReference EntityReference) {
 		Player player = context.getPlayer(playerId);
-		Card card = context.resolveEntityReference(EntityReference);
+		Card card = (Card) context.resolveSingleTarget(EntityReference);
 
 		int modifiedManaCost = getModifiedManaCost(player, card);
 		if (card.getCardType().isCardType(CardType.SPELL)

@@ -930,25 +930,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	}
 
 	/**
-	 * Interprets a card reference and returns the appropriate card.
-	 * <p>
-	 * This method allows lookups by entity ID or card ID.
-	 *
-	 * @param EntityReference The {@link EntityReference} with which to search the entities in this game context.
-	 * @return A {@link Card} that was references.
-	 * @throws NullPointerException when the card reference could not be resolved. Game rules should generally never
-	 *                              search for a card that doesn't exist.
-	 */
-	@SuppressWarnings("unchecked")
-	public Card resolveEntityReference(EntityReference EntityReference) throws NullPointerException {
-		if (getPendingCard() != null && getPendingCard().getReference().equals(EntityReference)) {
-			return getPendingCard();
-		} else {
-			return (Card) resolveSingleTarget(new EntityReference(EntityReference.getId()));
-		}
-	}
-
-	/**
 	 * Tries to find the entity references by the {@link EntityReference}.
 	 *
 	 * @param targetKey The reference to find.
