@@ -331,7 +331,7 @@ public interface Games {
 	 */
 	static <T extends PlayCardAction & HasChoiceCard> ChooseOneOptions buildChooseOneOptions(GameContext workingContext, int playerId, int[] chooseOneVirtualEntitiesId, int sourceId, List<T> choices, BiConsumer<ChooseOneOptions, SpellAction> adder) {
 		ChooseOneOptions spell = new ChooseOneOptions();
-		EntityLocation sourceCardLocation = workingContext.resolveEntityReference(choices.get(0).getEntityReference()).getEntityLocation();
+		EntityLocation sourceCardLocation = ((Card) workingContext.resolveSingleTarget(choices.get(0).getEntityReference())).getEntityLocation();
 		spell.cardInHandId(sourceId);
 
 		Map<String, List<T>> intermediate = choices.stream()

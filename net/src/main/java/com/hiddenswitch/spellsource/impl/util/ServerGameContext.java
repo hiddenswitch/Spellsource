@@ -9,9 +9,11 @@ import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.NetworkDelegate;
 import net.demilich.metastone.game.utils.TurnState;
@@ -349,8 +351,23 @@ public class ServerGameContext extends GameContext {
 
 		TriggerFired triggerFired = new TriggerFired(this, trigger);
 		final GameState gameStateCopy = getGameStateCopy();
-		getListenerMap().get(getPlayer1()).onNotification(triggerFired, gameStateCopy);
+
+		// If the trigger is in a private place, do not fire it for the public player
+		if (trigger.getHostReference() != null) {
+			Entity host = getEntities()
+					.filter(e -> e.getId() == trigger.getHostReference().getId())
+					.findFirst()
+					.orElse(null);
+
+			if (host != null && Zones.PRIVATE.contains(host.getZone())) {
+				int owner = host.getOwner();
+				getListenerMap().get(getPlayer(owner)).onNotification(triggerFired, gameStateCopy);
+				return;
+			}
+		}
+
 		getListenerMap().get(getPlayer2()).onNotification(triggerFired, gameStateCopy);
+		getListenerMap().get(getPlayer1()).onNotification(triggerFired, gameStateCopy);
 	}
 
 	@Override

@@ -32,7 +32,7 @@ public abstract class PlayCardAction extends GameAction {
 
 	@Override
 	public boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
-		Card card = context.resolveEntityReference(getEntityReference());
+		Card card = (Card) context.resolveSingleTarget(getEntityReference());
 		if (card instanceof SpellCard) {
 			SpellCard spellCard = (SpellCard) card;
 			return spellCard.canBeCastOn(context, player, entity);
@@ -44,7 +44,7 @@ public abstract class PlayCardAction extends GameAction {
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		Card card = context.resolveEntityReference(getEntityReference());
+		Card card = (Card) context.resolveSingleTarget(getEntityReference());
 		context.setPendingCard(card);
 
 		context.getLogic().playCard(playerId, getEntityReference());
@@ -79,7 +79,7 @@ public abstract class PlayCardAction extends GameAction {
 
 	@Override
 	public Entity getSource(GameContext context) {
-		return context.resolveEntityReference(getEntityReference());
+		return (Card) context.resolveSingleTarget(getEntityReference());
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public abstract class PlayCardAction extends GameAction {
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
-		Card playedCard = context.resolveEntityReference(getEntityReference());
+		Card playedCard = (Card) context.resolveSingleTarget(getEntityReference());
 		String cardName = playedCard != null ? playedCard.getName() : "an unknown card";
 		if (playedCard.getCardType() == CardType.SPELL
 				&& playedCard.hasAttribute(Attribute.SECRET)) {
