@@ -63,8 +63,8 @@ public class TheOldGodsTests extends TestBase {
 					"minion_white_test")
 					.map(CardCatalogue::getCardById)
 					.collect(Collectors.toMap(Card::getHeroClass, Function.identity()));
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_voidwalker"));
+			shuffleToDeck(context,player,"minion_bloodfen_raptor");
+			shuffleToDeck(context,player,"minion_voidwalker");
 			receiveCard(context, player, "minion_bloodfen_raptor");
 			receiveCard(context, player, "minion_voidwalker");
 			GameLogic spyLogic = Mockito.spy(context.getLogic());
@@ -102,7 +102,7 @@ public class TheOldGodsTests extends TestBase {
 	public void testMarkOfYshaarj() {
 		// Test with beast
 		runGym((context, player, opponent) -> {
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_mirror_image"));
+			shuffleToDeck(context,player,"spell_mirror_image");
 			Minion raven = playMinionCard(context, player, "minion_enchanted_raven");
 			playCardWithTarget(context, player, "spell_mark_of_yshaarj", raven);
 			Assert.assertEquals(raven.getAttack(), 4);
@@ -112,7 +112,7 @@ public class TheOldGodsTests extends TestBase {
 
 		// Test with beast
 		runGym((context, player, opponent) -> {
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_mirror_image"));
+			shuffleToDeck(context,player,"spell_mirror_image");
 			Minion notBeast = playMinionCard(context, player, "token_steward");
 			playCardWithTarget(context, player, "spell_mark_of_yshaarj", notBeast);
 			Assert.assertEquals(notBeast.getAttack(), 3);
@@ -125,7 +125,7 @@ public class TheOldGodsTests extends TestBase {
 	public void testYshaarjRageUnboundShadowEssence() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_yshaarj_rage_unbound");
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			shuffleToDeck(context,player,"minion_bloodfen_raptor");
 			context.endTurn();
 			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");
 		});
@@ -135,7 +135,7 @@ public class TheOldGodsTests extends TestBase {
 			context.getLogic().shuffleToDeck(player, rageUnboundCard);
 			playCard(context, player, "spell_shadow_essence");
 			context.getLogic().removeCard(rageUnboundCard);
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			shuffleToDeck(context,player,"minion_bloodfen_raptor");
 			context.endTurn();
 			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");
 		});

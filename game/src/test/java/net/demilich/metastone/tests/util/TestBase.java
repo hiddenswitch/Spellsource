@@ -72,6 +72,10 @@ public class TestBase {
 		return card;
 	}
 
+	public static void shuffleToDeck(GameContext context, Player player, String cardId) {
+		context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById(cardId));
+	}
+
 	@FunctionalInterface
 	public interface GymConsumer {
 		void run(GameContext context, Player player, Player opponent);

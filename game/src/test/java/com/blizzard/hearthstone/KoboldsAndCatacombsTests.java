@@ -68,8 +68,8 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testBranchingPaths() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_mirror_image"));
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_mirror_image"));
+			shuffleToDeck(context,player,"spell_mirror_image");
+			shuffleToDeck(context,player,"spell_mirror_image");
 			overrideDiscover(player, discoveries -> discoveries.stream().filter(c -> c.getCard().getName().equals("Eat the Mushroom")).findFirst().orElseThrow(AssertionError::new));
 			playCard(context, player, "spell_branching_paths");
 			Assert.assertEquals(player.getHand().stream().filter(c -> c.getCardId().equals("spell_mirror_image")).count(), 2L, "Should have drawn cards twice.");
@@ -342,7 +342,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testCallPetUnidentifiedElixirInteraction() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_unidentified_elixir"));
+			shuffleToDeck(context,player,"spell_unidentified_elixir");
 			playCard(context, player, "spell_call_pet");
 			Assert.assertEquals(player.getHand().size(), 1);
 		});
@@ -357,7 +357,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			shuffleToDeck(context,player,"minion_bloodfen_raptor");
 			playCard(context, player, "spell_to_my_side");
 			Assert.assertEquals(player.getMinions().size(), 1);
 			Assert.assertEquals(player.getMinions().stream().map(Minion::getSourceCard).map(Card::getCardId).distinct().count(), 1L);
@@ -655,7 +655,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Minion waterElemental = playMinionCard(context, opponent, "minion_water_elemental");
 			context.endTurn();
 			// Cost 5 spell in deck
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("spell_deck_of_wonders"));
+			shuffleToDeck(context,player,"spell_deck_of_wonders");
 			playCard(context, player, "spell_dragons_fury");
 			Assert.assertEquals(waterElemental.getHp(), 1);
 		});
