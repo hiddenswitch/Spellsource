@@ -10,12 +10,6 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "BuffSpell",
-        "target": "FRIENDLY_MINIONS",
-        "attackBonus": 1,
-        "hpBonus": 1
-      },
-      {
         "class": "AddEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
         "aura": {

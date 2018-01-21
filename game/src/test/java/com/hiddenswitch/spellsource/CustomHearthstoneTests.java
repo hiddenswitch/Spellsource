@@ -178,7 +178,7 @@ public class CustomHearthstoneTests extends TestBase {
 	public void testNickOfTime() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			shuffleToDeck(context,player,"minion_nick_of_time");
+			shuffleToDeck(context, player, "minion_nick_of_time");
 			context.endTurn();
 			Assert.assertEquals(player.getMinions().stream().map(Minion::getSourceCard).map(Card::getCardId).filter(cid -> cid.equals("token_silver_hand_recruit")).count(), 2L);
 		});
@@ -200,8 +200,8 @@ public class CustomHearthstoneTests extends TestBase {
 	@Test
 	public void testAcceleratedGrowth() {
 		runGym((context, player, opponent) -> {
-			shuffleToDeck(context,player,"minion_bloodfen_raptor");
-			shuffleToDeck(context,opponent,"minion_bloodfen_raptor");
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			shuffleToDeck(context, opponent, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_accelerated_growth");
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
 			Assert.assertEquals(opponent.getHand().get(0).getCardId(), "minion_bloodfen_raptor", "Testing the TargetPlayer.BOTH attribute on DrawCardSpell");
