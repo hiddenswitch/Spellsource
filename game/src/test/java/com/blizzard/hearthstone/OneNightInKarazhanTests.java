@@ -8,11 +8,9 @@ import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
-import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -20,10 +18,24 @@ import org.testng.annotations.Test;
 import java.util.stream.Stream;
 
 public class OneNightInKarazhanTests extends TestBase {
+
+	@Test
+	public void testBarnesSilencingInteraction() {
+		runGym((context, player, opponent) -> {
+			String cardId = "minion_bloodfen_raptor";
+			shuffleToDeck(context, player, cardId);
+			playCard(context, player, "minion_barnes");
+			Minion raptor = player.getMinions().get(1);
+			playCardWithTarget(context, player, "spell_silence", raptor);
+			Assert.assertEquals(raptor.getAttack(), 3);
+			Assert.assertEquals(raptor.getHp(), 2);
+		});
+	}
+
 	@Test
 	public void testBarnesHealingInteraction() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_barnes");
 			playCard(context, player, "spell_circle_of_healing");
 			Assert.assertEquals(player.getMinions().get(1).getHp(), 1);

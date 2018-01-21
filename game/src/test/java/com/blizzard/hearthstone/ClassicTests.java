@@ -86,7 +86,7 @@ public class ClassicTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 3; i++) {
-				context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+				shuffleToDeck(context,player,"minion_bloodfen_raptor");
 			}
 			player.setMana(5);
 			player.setMaxMana(5);
@@ -99,7 +99,7 @@ public class ClassicTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 3; i++) {
-				context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+				shuffleToDeck(context,player,"minion_bloodfen_raptor");
 			}
 			player.setMana(5);
 			player.setMaxMana(5);

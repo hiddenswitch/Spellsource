@@ -266,7 +266,7 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
 			String rightCardId = "minion_shade_of_naxxramas";
-			context.getLogic().shuffleToDeck(opponent, CardCatalogue.getCardById(rightCardId));
+			shuffleToDeck(context, opponent, rightCardId);
 			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
 			OverrideDiscoverBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
 					choices.stream()
@@ -283,7 +283,7 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
 			String rightCardId = "minion_shade_of_naxxramas";
-			context.getLogic().shuffleToDeck(opponent, CardCatalogue.getCardById(rightCardId));
+			shuffleToDeck(context, opponent, rightCardId);
 			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
 			OverrideDiscoverBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
 					choices.stream()
@@ -683,7 +683,7 @@ public class JourneyToUngoroTests extends TestBase {
 	@Test
 	public void testBarnabusTheStomper() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("token_sapling"));
+			shuffleToDeck(context,player,"token_sapling");
 			playCard(context, player, CardCatalogue.getCardById("token_barnabus_the_stomper"));
 			context.getLogic().drawCard(player.getId(), null);
 			Card sapling = player.getHand().get(0);

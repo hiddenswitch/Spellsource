@@ -25,7 +25,7 @@ public class NaxxramasTests extends TestBase {
 	public void testMadScientist() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			context.getLogic().shuffleToDeck(opponent, CardCatalogue.getCardById("secret_mirror_entity"));
+			shuffleToDeck(context,opponent,"secret_mirror_entity");
 			playMinionCard(context, opponent, "minion_mad_scientist");
 			context.endTurn();
 			playMinionCard(context, player, "minion_stampeding_kodo");
@@ -41,7 +41,7 @@ public class NaxxramasTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			context.getLogic().shuffleToDeck(opponent, CardCatalogue.getCardById("secret_mirror_entity"));
+			shuffleToDeck(context,opponent,"secret_mirror_entity");
 			Minion madScientist = playMinionCard(context, opponent, "minion_mad_scientist");
 			madScientist.setHp(1);
 			context.endTurn();

@@ -120,7 +120,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	public void testDeathGrip() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			context.getLogic().shuffleToDeck(opponent, CardCatalogue.getCardById("minion_acolyte_of_pain"));
+			shuffleToDeck(context,opponent,"minion_acolyte_of_pain");
 			playCard(context, opponent, "minion_prince_keleseth");
 			context.endTurn();
 			playCard(context, player, "spell_death_grip");
@@ -379,7 +379,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
 	public void testShadowEssence() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			shuffleToDeck(context,player,"minion_bloodfen_raptor");
 
 			playCard(context, player, CardCatalogue.getCardById("spell_shadow_essence"));
 
