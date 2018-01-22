@@ -56,7 +56,7 @@ public class AuraTests extends TestBase {
 		Assert.assertEquals(direWolf.getAttack(), 2);
 		Assert.assertEquals(testMinion3.getAttack(), 6);
 
-		playCard(context, player, CardCatalogue.getCardById("spell_hellfire"));
+		playCard(context, player, "spell_hellfire");
 		Assert.assertEquals(direWolf.getAttack(), 2);
 		Assert.assertEquals(testMinion3.getAttack(), 5);
 	}

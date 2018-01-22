@@ -16,8 +16,8 @@
       "target": "FRIENDLY_PLAYER",
       "cardCostModifier": {
         "class": "CardCostModifier",
+        "target": "FRIENDLY_HERO_POWER",
         "value": 0,
-        "cardType": "HERO_POWER",
         "operation": "SET",
         "targetPlayer": "SELF"
       }

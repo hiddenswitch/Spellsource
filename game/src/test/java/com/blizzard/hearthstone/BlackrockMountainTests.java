@@ -22,6 +22,26 @@ import org.testng.annotations.Test;
 public class BlackrockMountainTests extends TestBase {
 
 	@Test
+	public void testEmperorThaurissen() {
+		runGym((context, player, opponent) -> {
+			Card deckCard = shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			Card handCard = receiveCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_emperor_thaurissan");
+			Assert.assertEquals(costOf(context, player, deckCard), 2);
+			Assert.assertEquals(costOf(context, player, handCard), 2);
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(costOf(context, player, deckCard), 2);
+			Assert.assertEquals(costOf(context, player, handCard), 1);
+			context.endTurn();
+			context.endTurn();
+			// Deck card is now in the hand at the end of the turn
+			Assert.assertEquals(costOf(context, player, deckCard), 1);
+			Assert.assertEquals(costOf(context, player, handCard), 0);
+		});
+	}
+
+	@Test
 	public void testHungryDragon() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_hungry_dragon");
@@ -191,7 +211,7 @@ public class BlackrockMountainTests extends TestBase {
 		Assert.assertEquals(dragonConsort.getManaCost(context, player), dragonConsort.getBaseManaCost());
 
 		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_dragon_consort"));
-		Assert.assertEquals(context.getLogic().getModifiedManaCost(player, dragonConsort), dragonConsort.getBaseManaCost() - MANA_REDUCTION);
+		Assert.assertEquals(costOf(context, player, dragonConsort), dragonConsort.getBaseManaCost() - MANA_REDUCTION);
 	}
 
 	@Test
@@ -289,7 +309,7 @@ public class BlackrockMountainTests extends TestBase {
 		context.endTurn();
 
 		Card card = player.getHand().peekFirst();
-		int modifiedCost = context.getLogic().getModifiedManaCost(player, card);
+		int modifiedCost = costOf(context, player, card);
 		Assert.assertEquals(card.getBaseManaCost(), modifiedCost);
 
 	}

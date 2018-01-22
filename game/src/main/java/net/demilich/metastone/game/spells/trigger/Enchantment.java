@@ -295,14 +295,4 @@ public class Enchantment extends Entity implements Trigger {
 	public boolean isCountByValue() {
 		return countByValue;
 	}
-
-	@Override
-	public boolean activatesImmediately() {
-		return activatesImmediately;
-	}
-
-	@Override
-	public void activate() {
-		this.activatesImmediately = activatesImmediately;
-	}
 }

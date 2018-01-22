@@ -17,10 +17,9 @@
       },
       "spell": {
         "class": "CardCostModifierSpell",
-        "target": "FRIENDLY_PLAYER",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "OUTPUT",
+          "target": "SELF",
           "value": 4,
           "operation": "SUBTRACT"
         }
