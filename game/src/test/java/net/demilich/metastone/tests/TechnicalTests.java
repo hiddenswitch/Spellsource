@@ -61,7 +61,7 @@ public class TechnicalTests extends TestBase {
 		player1.setMana(10);
 
 		for (int i = 0; i < 3; i++) {
-			playCard(context, player1, CardCatalogue.getCardById("minion_wild_pyromancer"));
+			playCard(context, player1, "minion_wild_pyromancer");
 		}
 
 		List<Minion> copyOfMinionList = new ArrayList<Minion>();

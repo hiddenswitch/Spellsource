@@ -20,6 +20,19 @@ import java.util.stream.Stream;
 public class OneNightInKarazhanTests extends TestBase {
 
 	@Test
+	public void testEtherealPeddler() {
+		runGym((context, player, opponent) -> {
+			Card bloodfen = receiveCard(context, player, "minion_bloodfen_raptor");
+			Card rogueCard = receiveCard(context, player, "minion_tomb_pillager");
+			Card mageCard = receiveCard(context, player, "minion_water_elemental");
+			playCard(context, player, "minion_ethereal_peddler");
+			Assert.assertEquals(costOf(context, player, bloodfen), bloodfen.getBaseManaCost());
+			Assert.assertEquals(costOf(context, player, rogueCard), rogueCard.getBaseManaCost());
+			Assert.assertEquals(costOf(context, player, mageCard), mageCard.getBaseManaCost() - 2);
+		}, HeroClass.BLACK, HeroClass.BLACK);
+	}
+
+	@Test
 	public void testBarnesSilencingInteraction() {
 		runGym((context, player, opponent) -> {
 			String cardId = "minion_bloodfen_raptor";

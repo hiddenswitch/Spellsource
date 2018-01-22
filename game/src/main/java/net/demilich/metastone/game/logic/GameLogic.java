@@ -153,7 +153,7 @@ public class GameLogic implements Cloneable, Serializable {
 	private Random random = new Random();
 	protected transient GameContext context;
 	private boolean loggingEnabled = false;
-	private final int MAX_HISTORY_ENTRIES = 100;
+	private final int MAX_HISTORY_ENTRIES = 10;
 	private ArrayDeque<String> debugHistory = new ArrayDeque<>();
 
 	static {
@@ -248,8 +248,6 @@ public class GameLogic implements Cloneable, Serializable {
 
 		player.modifyAttribute(Attribute.COMBO, +1);
 		Card card = (Card) context.resolveSingleTarget(EntityReference);
-
-		card.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
 	}
 
 	/**
@@ -1544,9 +1542,7 @@ public class GameLogic implements Cloneable, Serializable {
 				minValue = costModifier.getMinValue();
 			}
 		}
-		if (card.hasAttribute(Attribute.MANA_COST_MODIFIER)) {
-			manaCost += card.getAttributeValue(Attribute.MANA_COST_MODIFIER);
-		}
+
 		manaCost = MathUtils.clamp(manaCost, minValue, Integer.MAX_VALUE);
 		return manaCost;
 	}
@@ -1561,12 +1557,7 @@ public class GameLogic implements Cloneable, Serializable {
 	 */
 	private List<Trigger> getSecrets(Player player) {
 		List<Trigger> secrets = context.getTriggersAssociatedWith(player.getHero().getReference());
-		for (Iterator<Trigger> iterator = secrets.iterator(); iterator.hasNext(); ) {
-			Trigger trigger = iterator.next();
-			if (!(trigger instanceof Secret)) {
-				iterator.remove();
-			}
-		}
+		secrets.removeIf(trigger -> !(trigger instanceof Secret));
 		return secrets;
 	}
 
@@ -1982,7 +1973,7 @@ public class GameLogic implements Cloneable, Serializable {
 		if (!isLoggingEnabled()) {
 			return;
 		}
-		if (debugHistory.size() == MAX_HISTORY_ENTRIES) {
+		if (debugHistory.size() > MAX_HISTORY_ENTRIES) {
 			debugHistory.poll();
 		}
 		if (params != null && params.length > 0) {

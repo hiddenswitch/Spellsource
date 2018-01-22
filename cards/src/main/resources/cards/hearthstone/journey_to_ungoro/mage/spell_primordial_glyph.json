@@ -12,9 +12,10 @@
       "class": "ReceiveCardSpell",
       "spell": {
         "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "OUTPUT",
+          "target": "SELF",
           "value": 2,
           "operation": "SUBTRACT"
         }

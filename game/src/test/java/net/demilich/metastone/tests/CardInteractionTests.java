@@ -83,7 +83,7 @@ public class CardInteractionTests extends TestBase {
 		Player player = context.getPlayer1();
 
 		Minion knifeJuggler = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_knife_juggler"));
-		playCard(context, player, CardCatalogue.getCardById("spell_conceal"));
+		playCard(context, player, "spell_conceal");
 		// knife juggler should be stealthed
 		Assert.assertTrue(knifeJuggler.hasAttribute(Attribute.STEALTH));
 		// knife juggler should be unstealthed as soon as another minion is
@@ -182,7 +182,7 @@ public class CardInteractionTests extends TestBase {
 		runGym((context, warrior, opponent) -> {
 			warrior.setMana(10);
 
-			playCard(context, warrior, CardCatalogue.getCardById("weapon_arcanite_reaper"));
+			playCard(context, warrior, "weapon_arcanite_reaper");
 			playCard(context, warrior, new TestMinionCard(2, 1, 0));
 
 			Minion bloodsailRaider = playMinionCard(context, warrior, (MinionCard) CardCatalogue.getCardById("minion_bloodsail_raider"));
@@ -208,8 +208,8 @@ public class CardInteractionTests extends TestBase {
 		Assert.assertEquals(paladin.getMinions().size(), 2);
 		Assert.assertEquals(warrior.getMinions().size(), 4);
 
-		playCard(context, paladin, CardCatalogue.getCardById("minion_wild_pyromancer"));
-		playCard(context, paladin, CardCatalogue.getCardById("spell_equality"));
+		playCard(context, paladin, "minion_wild_pyromancer");
+		playCard(context, paladin, "spell_equality");
 
 		// wild pyromancer + equality should wipe the board if there no
 		// deathrattles
@@ -282,7 +282,7 @@ public class CardInteractionTests extends TestBase {
 		Assert.assertEquals(opponent.getMinions().size(), GameLogic.MAX_MINIONS);
 		context.endTurn();
 
-		playCard(context, player, CardCatalogue.getCardById("spell_flamestrike"));
+		playCard(context, player, "spell_flamestrike");
 		Assert.assertEquals(opponent.getMinions().size(), 0);
 	}
 
@@ -300,7 +300,7 @@ public class CardInteractionTests extends TestBase {
 		Assert.assertEquals(opponent.getMinions().size(), GameLogic.MAX_MINIONS);
 		context.endTurn();
 
-		playCard(context, player, CardCatalogue.getCardById("spell_flamestrike"));
+		playCard(context, player, "spell_flamestrike");
 		Assert.assertEquals(opponent.getMinions().size(), 7);
 
 	}
@@ -317,11 +317,11 @@ public class CardInteractionTests extends TestBase {
 		}
 
 		Assert.assertEquals(opponent.getMinions().size(), 4);
-		playCard(context, opponent, CardCatalogue.getCardById("spell_whirlwind"));
+		playCard(context, opponent, "spell_whirlwind");
 		Assert.assertEquals(opponent.getMinions().size(), 7);
 		context.endTurn();
 
-		playCard(context, player, CardCatalogue.getCardById("spell_consecration"));
+		playCard(context, player, "spell_consecration");
 		Assert.assertEquals(opponent.getMinions().size(), 3);
 
 	}
@@ -341,8 +341,8 @@ public class CardInteractionTests extends TestBase {
 		Assert.assertEquals(opponent.getMinions().size(), GameLogic.MAX_MINIONS);
 		context.endTurn();
 
-		playCard(context, player, CardCatalogue.getCardById("minion_malygos"));
-		playCard(context, player, CardCatalogue.getCardById("spell_flamestrike"));
+		playCard(context, player, "minion_malygos");
+		playCard(context, player, "spell_flamestrike");
 		Assert.assertEquals(opponent.getMinions().size(), 3);
 
 	}

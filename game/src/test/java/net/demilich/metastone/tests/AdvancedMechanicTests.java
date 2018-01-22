@@ -125,7 +125,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 		final int BASE_ATTACK = 2;
 		final int ENRAGE_ATTACK_BONUS = 3;
-		playCard(context, priest, CardCatalogue.getCardById("minion_test_enrage"));
+		playCard(context, priest, "minion_test_enrage");
 
 		playCard(context, mage, new TestMinionCard(1, 10));
 
@@ -253,7 +253,7 @@ public class AdvancedMechanicTests extends TestBase {
 		Actor testSubject = getSingleMinion(mage.getMinions());
 		Assert.assertEquals(testSubject.getAttack(), baseAttack);
 
-		playCard(context, mage, CardCatalogue.getCardById("minion_test_buffs"));
+		playCard(context, mage, "minion_test_buffs");
 		Assert.assertEquals(testSubject.getAttack(), baseAttack + 2);
 		context.getLogic().endTurn(mage.getId());
 		Assert.assertEquals(testSubject.getAttack(), baseAttack);

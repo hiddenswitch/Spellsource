@@ -15,33 +15,22 @@
       "spells": [
         {
           "class": "CardCostModifierSpell",
-          "target": "FRIENDLY_PLAYER",
           "cardCostModifier": {
             "class": "CardCostModifier",
-            "target": "OUTPUT",
+            "target": "SELF",
             "value": 1,
             "operation": "SET"
           }
         },
         {
-          "class": "SetAttributeSpell",
+          "class": "SetAttackSpell",
           "value": 1,
-          "attribute": "BASE_ATTACK"
+          "exclusive": true
         },
         {
-          "class": "SetAttributeSpell",
+          "class": "SetHpSpell",
           "value": 1,
-          "attribute": "ATTACK"
-        },
-        {
-          "class": "SetAttributeSpell",
-          "value": 1,
-          "attribute": "BASE_HP"
-        },
-        {
-          "class": "SetAttributeSpell",
-          "value": 1,
-          "attribute": "HP"
+          "exclusive": true
         }
       ]
     }

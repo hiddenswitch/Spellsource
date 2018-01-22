@@ -147,14 +147,4 @@ public interface Trigger extends Serializable {
 	default boolean canFireCondition(GameEvent event) {
 		return canFire(event);
 	}
-
-	/**
-	 * @return
-	 */
-	default boolean activatesImmediately() {
-		return true;
-	}
-
-	default void activate() {
-	}
 }

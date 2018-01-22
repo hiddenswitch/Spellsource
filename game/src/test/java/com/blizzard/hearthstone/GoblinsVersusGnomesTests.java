@@ -15,6 +15,30 @@ import org.testng.annotations.Test;
 
 public class GoblinsVersusGnomesTests extends TestBase {
 	@Test
+	public void testUnstablePortal() {
+		runGym((context, player, opponent) -> {
+			Card yeti = overrideRandomCard(context, "minion_chillwind_yeti");
+			playCard(context, player, "spell_unstable_portal");
+			Assert.assertEquals(costOf(context, player, yeti), yeti.getBaseManaCost() - 3);
+		});
+	}
+
+	@Test
+	public void testCallPet() {
+		runGym((context, player, opponent) -> {
+			Card dred = shuffleToDeck(context, player, "minion_swamp_king_dred");
+			playCard(context, player, "spell_call_pet");
+			Assert.assertEquals(costOf(context, player, dred), dred.getBaseManaCost() - 4);
+		});
+
+		runGym((context, player, opponent) -> {
+			Card yeti = shuffleToDeck(context, player, "minion_chillwind_yeti");
+			playCard(context, player, "spell_call_pet");
+			Assert.assertEquals(costOf(context, player, yeti), yeti.getBaseManaCost());
+		});
+	}
+
+	@Test
 	public void testBetrayalOnBurlyRockjawTroggDeals5Damage() {
 		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player paladin = context.getPlayer1();

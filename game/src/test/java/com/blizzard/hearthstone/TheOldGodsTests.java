@@ -93,7 +93,7 @@ public class TheOldGodsTests extends TestBase {
 			Assert.assertEquals(Stream.concat(player.getHand().stream(), player.getDeck().stream())
 					.filter(card -> !card.hasHeroClass(HeroClass.ANY))
 					.filter(card -> !card.hasHeroClass(HeroClass.VIOLET))
-					.filter(card -> context.getLogic().getModifiedManaCost(player, card) == 1)
+					.filter(card -> costOf(context, player, card) == 1)
 					.count(), 2L);
 		}, HeroClass.VIOLET, HeroClass.VIOLET);
 	}
@@ -243,7 +243,7 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testVilefinInquisitor() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, CardCatalogue.getCardById("minion_vilefin_inquisitor"));
+			playCard(context, player, "minion_vilefin_inquisitor");
 			Assert.assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_the_tidal_hand");
 		});
 	}
@@ -252,7 +252,7 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testCallInTheFinishers() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, CardCatalogue.getCardById("spell_call_in_the_finishers"));
+			playCard(context, player, "spell_call_in_the_finishers");
 
 			for (Minion minion : player.getMinions()) {
 				Assert.assertEquals(minion.getSourceCard().getCardId(), "token_murloc_razorgill");
@@ -325,12 +325,12 @@ public class TheOldGodsTests extends TestBase {
 		Player player = context.getPlayer1();
 		Hero hero = player.getHero();
 
-		playCard(context, player, CardCatalogue.getCardById("weapon_deaths_bite"));
+		playCard(context, player, "weapon_deaths_bite");
 		Assert.assertEquals(hero.getWeapon().getAttack(), 4);
 		Assert.assertEquals(hero.getWeapon().getDurability(), 2);
-		playCard(context, player, CardCatalogue.getCardById("minion_hogger_doom_of_elwynn"));
+		playCard(context, player, "minion_hogger_doom_of_elwynn");
 		Assert.assertEquals(player.getMinions().size(), 1);
-		playCard(context, player, CardCatalogue.getCardById("weapon_kings_defender"));
+		playCard(context, player, "weapon_kings_defender");
 		Assert.assertEquals(hero.getWeapon().getAttack(), 3);
 		Assert.assertEquals(hero.getWeapon().getDurability(), 2);
 		Assert.assertEquals(player.getMinions().size(), 2);
