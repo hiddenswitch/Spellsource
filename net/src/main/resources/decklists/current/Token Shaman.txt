@@ -3,25 +3,22 @@
 # Format: Standard
 # Year of the Mammoth
 #
-# 2x (1) Bloodsail Corsair
-# 2x (1) Evolve
-# 2x (1) Fire Fly
+# 2x (1) Unstable Evolution
 # 1x (1) Patches the Pirate
-# 2x (2) Devolve
-# 2x (2) Flametongue Totem
-# 2x (2) Jade Claws
+# 1x (1) Fire Fly
+# 2x (1) Evolve
+# 2x (1) Bloodsail Corsair
 # 2x (2) Maelstrom Portal
-# 2x (2) Primalfin Totem
+# 2x (2) Jade Claws
+# 2x (2) Flametongue Totem
+# 1x (2) Devolve
 # 2x (3) Mana Tide Totem
-# 1x (4) Barnes
+# 2x (4) Jade Spirit
 # 2x (4) Jade Lightning
-# 1x (5) Bloodlust
-# 2x (5) Doppelgangster
+# 1x (4) Hex
 # 1x (5) Thrall, Deathseer
-# 1x (6) Aya Blackpaw
+# 2x (5) Doppelgangster
 # 2x (6) Thing from Below
-# 1x (10) Sea Giant
+# 1x (6) Aya Blackpaw
+# 2x (7) Corridor Creeper
 #
-AAECAaoIBpG8AoW4ApMJ688ClL0C0wEM5Qf6qgLrwgL2vQLwB9G8AqC2ApHBAoEEh7wC+b8C+6oCAA==
-#
-# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

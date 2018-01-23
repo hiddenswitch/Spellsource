@@ -10,6 +10,7 @@ import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -21,6 +22,8 @@ import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.environment.EnvironmentDeque;
 import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.gameconfig.GameConfig;
+import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
@@ -28,18 +31,23 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
+import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.NetworkDelegate;
 import net.demilich.metastone.game.utils.TurnState;
+import org.apache.commons.math3.util.Combinations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -206,6 +214,26 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 
 		this.setLogic(logic);
 		this.setDeckFormat(deckFormat);
+	}
+
+	/**
+	 * Creates all the possible combinations of decks given a list of decks
+	 *
+	 * @param decks An input list of deck names
+	 * @return A list of 2-tuples of deck names.
+	 */
+	public static List<String[]> getDeckCombinations(List<String> decks) {
+		// Create deck combinations
+		Combinations combinations = new Combinations(decks.size(), 2);
+		List<String[]> deckPairs = new ArrayList<>();
+		for (int[] combination : combinations) {
+			deckPairs.add(new String[]{decks.get(combination[0]), decks.get(combination[1])});
+		}
+		// Include same deck matchups
+		for (String deck : decks) {
+			deckPairs.add(new String[]{deck, deck});
+		}
+		return deckPairs;
 	}
 
 	protected boolean acceptAction(GameAction nextAction) {
@@ -944,9 +972,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 
 		final Entity entity = targetLogic.findEntity(this, targetKey).transformResolved(this);
 
+		/* TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
 		if (entity.getZone() == Zones.REMOVED_FROM_PLAY) {
 			throw new RuntimeException("Invalid reference.");
 		}
+		*/
 
 		return entity;
 	}
@@ -1311,5 +1341,74 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 			getEnvironment().put(Environment.EVENT_SOURCE_REFERENCE_STACK, new EnvironmentDeque<EntityReference>());
 		}
 		return (Deque<EntityReference>) getEnvironment().get(Environment.EVENT_SOURCE_REFERENCE_STACK);
+	}
+
+	/**
+	 * Runs a simulation of the decks with the default {@link net.demilich.metastone.game.shared.threat.GameStateValueBehaviour} AI.
+	 *
+	 * @param deckPair        A pair of decks to run a match with.
+	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
+	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
+	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation on this JVM instance.
+	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is completed.
+	 */
+	public static SimulationResult simulate(List<Deck> deckPair, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter) {
+		// Actually run the computation
+		Stream<Integer> stream = IntStream.range(0, numberOfGamesInBatch).boxed();
+
+		if (useJavaParallel) {
+			stream = stream.parallel();
+		}
+
+		return stream.map(i -> {
+			final GameConfig config = new GameConfig();
+
+			List<PlayerConfig> playerConfigs = deckPair.stream()
+					.map(deck -> {
+						PlayerConfig playerConfig = new PlayerConfig();
+						playerConfig.setDeck(deck);
+						playerConfig.setHeroCard(deck.getHeroCard());
+						playerConfig.setName(deck.getName());
+						return playerConfig;
+					})
+					.collect(Collectors.toList());
+
+			playerConfigs.get(0).setBehaviour(player1.get());
+			playerConfigs.get(1).setBehaviour(player2.get());
+			config.setNumberOfGames(1);
+			config.setPlayerConfig1(playerConfigs.get(0));
+			config.setPlayerConfig2(playerConfigs.get(1));
+			DeckFormat impliedFormat =
+					deckPair.get(0).getFormat().equals(deckPair.get(1).getFormat())
+							? deckPair.get(0).getFormat()
+							: DeckFormat.getSmallestSupersetFormat(deckPair.stream().flatMap(deck -> deck.getCards().stream())
+							.map(Card::getCardSet).collect(Collectors.toSet()));
+
+			config.setDeckFormat(impliedFormat);
+
+			final GameLogic logic = new GameLogic();
+			logic.setLoggingEnabled(false);
+
+			Player playerContext1 = new Player(playerConfigs.get(0));
+			Player playerContext2 = new Player(playerConfigs.get(1));
+			GameContext newGame = new GameContext(playerContext1, playerContext2, new GameLogic(), impliedFormat);
+			SimulationResult innerResult = new SimulationResult(config);
+
+			try {
+				newGame.play();
+
+				innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
+				innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
+				innerResult.calculateMetaStatistics();
+			} finally {
+				newGame.dispose();
+			}
+
+			if (matchCounter != null) {
+				matchCounter.incrementAndGet();
+			}
+
+			return innerResult;
+		}).reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
 	}
 }

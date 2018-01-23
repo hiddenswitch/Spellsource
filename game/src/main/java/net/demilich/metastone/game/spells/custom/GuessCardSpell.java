@@ -52,7 +52,7 @@ public class GuessCardSpell extends Spell {
 			correctClass = HeroClass.ANY;
 		}
 
-		List<Card> others = CardCatalogue.query(new DeckFormat().withCardSets(CardSet.latest(), CardSet.BASIC, CardSet.CLASSIC)/*prefer the latest expansion*/)
+		List<Card> others = CardCatalogue.query(new DeckFormat().withCardSets(CardSet.latestHearthstoneExpansion(), CardSet.BASIC, CardSet.CLASSIC)/*prefer the latest expansion*/)
 				.shuffle(context.getLogic().getRandom())
 				.stream()
 				.filter(c -> c.getHeroClass() == correctClass)

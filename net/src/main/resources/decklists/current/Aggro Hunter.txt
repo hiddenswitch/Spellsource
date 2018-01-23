@@ -1,0 +1,22 @@
+### Aggro Hunter
+# Class: Green
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Southsea Deckhand
+# 1x (1) Patches the Pirate
+# 2x (1) Dire Mole
+# 2x (1) Candleshot
+# 2x (1) Alleycat
+# 2x (2) Crackling Razormaw
+# 2x (3) Southsea Captain
+# 2x (3) Kill Command
+# 2x (3) Eaglehorn Bow
+# 2x (3) Animal Companion
+# 2x (4) Spellbreaker
+# 2x (4) Houndmaster
+# 2x (5) Tundra Rhino
+# 1x (5) Leeroy Jenkins
+# 2x (5) Bittertide Hydra
+# 2x (7) Corridor Creeper
+#

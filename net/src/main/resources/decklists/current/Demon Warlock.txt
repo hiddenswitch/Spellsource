@@ -1,0 +1,24 @@
+### Demon Warlock
+# Class: Violet
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Mortal Coil
+# 2x (1) Mistress of Mixtures
+# 2x (1) Kobold Librarian
+# 1x (1) Dark Pact
+# 2x (2) Dirty Rat
+# 2x (2) Defile
+# 2x (3) Stonehill Defender
+# 1x (4) Spellbreaker
+# 2x (4) Lesser Amethyst Spellstone
+# 2x (4) Hellfire
+# 2x (5) Possessed Lackey
+# 1x (6) Skulking Geist
+# 2x (6) Siphon Soul
+# 1x (6) Rin, the First Disciple
+# 2x (8) Twisting Nether
+# 2x (9) Voidlord
+# 1x (10) N'Zoth, the Corruptor
+# 1x (10) Bloodreaver Gul'dan
+#

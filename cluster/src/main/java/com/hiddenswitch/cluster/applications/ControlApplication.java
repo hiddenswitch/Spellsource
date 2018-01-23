@@ -48,7 +48,7 @@ public class ControlApplication {
 						"chunk of games to execute.", Integer.toString(batches)))
 				.addOption(OUTPUT, true, defaultsTo("The output file to save the training data to.", output));
 
-		CommandLineParser parser = new GnuParser();
+		CommandLineParser parser = new DefaultParser();
 		CommandLine cmd = parser.parse(options, args);
 
 		if (cmd.hasOption(DECKS_FILE)) {

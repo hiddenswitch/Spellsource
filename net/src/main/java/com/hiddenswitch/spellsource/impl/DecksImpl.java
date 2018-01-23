@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Accounts;
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.Decks;
 import com.hiddenswitch.spellsource.Inventory;
@@ -17,10 +18,7 @@ import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardParseException;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -98,7 +96,8 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		final String userId = request.getUserId();
 		CreateCollectionResponse createCollectionResponse = inventory.sync()
 				.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft())
-						.withHeroCardId(request.getHeroCardId()));
+						.withHeroCardId(request.getHeroCardId())
+						.withFormat(request.getFormat()));
 
 		// Update the user document with this deck ID
 		final String deckId = createCollectionResponse.getCollectionId();

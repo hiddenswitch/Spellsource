@@ -111,6 +111,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 			case DECK:
 				CollectionRecord record1 = CollectionRecord.deck(userId, request.getName(), request.getHeroClass(), request.isDraft());
 				record1.setHeroCardId(request.getHeroCardId());
+				record1.setFormat(request.getFormat());
 				final String deckId = mongo().insert(COLLECTIONS, QuickJson.toJson(record1));
 
 				if (request.getInventoryIds() != null

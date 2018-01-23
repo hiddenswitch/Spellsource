@@ -10,7 +10,7 @@ import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.models.CreateGameSessionRequest;
-import com.hiddenswitch.spellsource.models.DeckCreateRequest;
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.models.DeckCreateResponse;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;

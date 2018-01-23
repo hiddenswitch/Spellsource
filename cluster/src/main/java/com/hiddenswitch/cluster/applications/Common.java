@@ -7,11 +7,11 @@ import com.hiddenswitch.cluster.functions.GenerateConfigsForDecks;
 import com.hiddenswitch.cluster.functions.MergeSimulationResults;
 import com.hiddenswitch.cluster.functions.Simulator;
 import com.hiddenswitch.cluster.models.TestConfig;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.gameconfig.GameConfig;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.math3.util.Combinations;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
@@ -83,36 +83,8 @@ public class Common {
 		return simulations.reduceByKey(new MergeSimulationResults());
 	}
 
-	public static List<String[]> getDeckCombinations(List<String> decks) {
-		// Create deck combinations
-		Combinations combinations = new Combinations(decks.size(), 2);
-		List<String[]> deckPairs = new ArrayList<>();
-		for (int[] combination : combinations) {
-			deckPairs.add(new String[]{decks.get(combination[0]), decks.get(combination[1])});
-		}
-		// Include same deck matchups
-		for (String deck : decks) {
-			deckPairs.add(new String[]{deck, deck});
-		}
-		return deckPairs;
-	}
-
-	public static List<String[]> getDeckCombinations(List<String> decks, boolean complete) {
-		if (complete) {
-			List<String[]> deckPairs = new ArrayList<>();
-			for (String deck1 : decks) {
-				for (String deck2 : decks) {
-					deckPairs.add(new String[]{deck1, deck2});
-				}
-			}
-			return deckPairs;
-		} else {
-			return getDeckCombinations(decks);
-		}
-	}
-
 	public static JavaPairRDD<TestConfig, GameConfig> getConfigsForDecks(JavaSparkContext sc, List<String> decks, int gamesPerBatch, int batches) throws IOException, URISyntaxException, CardParseException {
-		List<String[]> deckPairs = getDeckCombinations(decks);
+		List<String[]> deckPairs = GameContext.getDeckCombinations(decks);
 
 
 		JavaRDD<String[]> pairs = sc.parallelize(deckPairs);

@@ -1,0 +1,23 @@
+### Zoo Warlock
+# Class: Violet
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Voidwalker
+# 2x (1) Soulfire
+# 1x (1) Patches the Pirate
+# 2x (1) Malchezaar's Imp
+# 2x (1) Kobold Librarian
+# 1x (1) Glacial Shard
+# 2x (1) Flame Imp
+# 2x (1) Fire Fly
+# 1x (2) Prince Keleseth
+# 2x (3) Southsea Captain
+# 2x (3) Darkshire Councilman
+# 2x (4) Saronite Chain Gang
+# 2x (5) Doomguard
+# 2x (5) Despicable Dreadlord
+# 2x (7) Corridor Creeper
+# 2x (7) Bonemare
+# 1x (10) Bloodreaver Gul'dan
+#

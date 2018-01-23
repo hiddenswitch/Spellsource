@@ -1,4 +1,4 @@
-package com.hiddenswitch.spellsource.models;
+package com.hiddenswitch.spellsource.common;
 
 import java.util.List;
 import java.util.stream.Collectors;

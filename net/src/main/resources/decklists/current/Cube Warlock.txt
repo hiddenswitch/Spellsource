@@ -1,0 +1,23 @@
+### Cube Warlock
+# Class: Violet
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Mortal Coil
+# 2x (1) Mistress of Mixtures
+# 2x (1) Kobold Librarian
+# 2x (1) Dark Pact
+# 2x (2) Defile
+# 1x (3) Prince Taldaram
+# 1x (4) Spiritsinger Umbra
+# 2x (4) Lesser Amethyst Spellstone
+# 2x (4) Hellfire
+# 1x (5) Skull of the Man'ari
+# 2x (5) Possessed Lackey
+# 2x (5) Faceless Manipulator
+# 2x (5) Doomguard
+# 2x (5) Carnivorous Cube
+# 2x (9) Voidlord
+# 1x (10) Bloodreaver Gul'dan
+# 2x (12) Mountain Giant
+#

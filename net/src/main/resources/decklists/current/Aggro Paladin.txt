@@ -3,24 +3,21 @@
 # Format: Standard
 # Year of the Mammoth
 #
-# 2x (1) Abusive Sergeant
-# 2x (1) Acherus Veteran
-# 2x (1) Argent Squire
-# 2x (1) Blessing of Might
-# 2x (1) Fire Fly
-# 1x (1) Patches the Pirate
-# 2x (1) Righteous Protector
 # 2x (1) Southsea Deckhand
-# 1x (2) Prince Keleseth
-# 2x (3) Divine Favor
+# 2x (1) Righteous Protector
+# 1x (1) Patches the Pirate
+# 2x (1) Lost in the Jungle
+# 2x (1) Argent Squire
+# 2x (1) Acherus Veteran
+# 2x (2) Knife Juggler
+# 2x (2) Dire Wolf Alpha
+# 2x (3) Unidentified Maul
 # 2x (3) Rallying Blade
-# 2x (3) Small-Time Recruits
-# 1x (3) Wickerflame Burnbristle
+# 2x (3) Divine Favor
+# 2x (4) Call to Arms
 # 2x (4) Blessing of Kings
-# 2x (4) Dread Corsair
-# 2x (4) Truesilver Champion
+# 1x (5) Leeroy Jenkins
+# 1x (6) Val'anyr
 # 1x (6) Sunkeeper Tarim
+# 2x (7) Corridor Creeper
 #
-AAECAZ8FBJG8ApziAry9ArnBAg3yAZXOAvUFRuvCAuPLAtQFpwXZrgK6vQKvB+4GzwYA
-#
-# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

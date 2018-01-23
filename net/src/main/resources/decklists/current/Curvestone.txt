@@ -1,6 +1,6 @@
 ### Curvestone (Tavern Brawl)
 # Class: Violet
-# Format: Standard
+# Format: Wild
 # Year of the Mammoth
 #
 # 10x (0) Minion on Curve

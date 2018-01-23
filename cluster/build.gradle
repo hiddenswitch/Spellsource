@@ -37,6 +37,8 @@ configurations.all {
 
 dependencies {
     compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.0.2'
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.52'
     compile group: 'com.amazonaws', name: 'aws-java-sdk-ec2', version: '1.11.52'
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.52'

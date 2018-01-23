@@ -1,0 +1,25 @@
+### Mill Rogue
+# Class: Black
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (0) Shadowstep
+# 2x (0) Preparation
+# 2x (0) Backstab
+# 1x (1) Kingsbane
+# 1x (1) Doomerang
+# 2x (1) Deadly Poison
+# 2x (2) Sap
+# 1x (2) Leeching Poison
+# 1x (2) Evasion
+# 2x (2) Doomsayer
+# 1x (2) Cheat Death
+# 2x (2) Cavern Shinyfinder
+# 1x (3) Edwin VanCleef
+# 2x (3) Coldlight Oracle
+# 2x (4) Southsea Squidface
+# 2x (4) Elven Minstrel
+# 1x (4) Blade Flurry
+# 2x (6) Vanish
+# 1x (9) Valeera the Hollow
+#

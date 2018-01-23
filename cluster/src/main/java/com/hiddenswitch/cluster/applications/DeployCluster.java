@@ -65,7 +65,7 @@ public class DeployCluster {
 				.addOption(KEY_PAIR, true, defaultsTo("The name of the keypair to use for the master node.", "clusterpair"))
 				.addOption(INSTANCE_TYPE, true, defaultsTo("The type of the instance to use for spot pricing.", instanceType));
 
-		CommandLineParser parser = new GnuParser();
+		CommandLineParser parser = new DefaultParser();
 		CommandLine cmd = parser.parse(options, args, false);
 
 		if (cmd.hasOption(JAR)) {

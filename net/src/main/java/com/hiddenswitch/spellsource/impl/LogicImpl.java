@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Decks;
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.LegacyPersistenceHandler;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.impl.util.PersistenceContext;

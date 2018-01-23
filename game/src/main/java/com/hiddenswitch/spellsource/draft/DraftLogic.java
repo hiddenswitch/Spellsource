@@ -91,7 +91,7 @@ public class DraftLogic {
 		);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.latest();
+		CardSet latestExpansion = CardSet.latestHearthstoneExpansion();
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(CardType.values()));
 
