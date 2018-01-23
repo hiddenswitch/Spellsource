@@ -9,6 +9,7 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -91,7 +92,9 @@ public class BattlecryAction extends GameAction {
 
 	@Override
 	public String toString() {
-		return String.format("[%s '%s']", getActionType(), getSpell().getSpellClass().getSimpleName());
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.toString();
 	}
 
 	@Override

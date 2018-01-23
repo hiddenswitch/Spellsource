@@ -13,6 +13,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.NetworkDelegate;
@@ -25,7 +26,6 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.visuals.TriggerFired;
 import org.apache.commons.lang3.RandomStringUtils;
 

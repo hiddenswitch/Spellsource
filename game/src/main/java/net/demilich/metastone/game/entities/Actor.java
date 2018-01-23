@@ -3,7 +3,6 @@ package net.demilich.metastone.game.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.BattlecryAction;

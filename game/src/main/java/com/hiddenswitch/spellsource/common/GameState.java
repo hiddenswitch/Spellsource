@@ -5,9 +5,10 @@ import com.google.common.collect.Maps;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
@@ -55,10 +56,6 @@ public class GameState implements Serializable {
 	 */
 	public final Map<Environment, Object> environment;
 	/**
-	 * A list of {@link CardCostModifier} objects that change the costs of cards in the game.
-	 */
-	public final List<CardCostModifier> cardCostModifiers;
-	/**
 	 * An instance of the class that manages and stores the state for {@link Trigger}
 	 * objects.
 	 *
@@ -67,7 +64,7 @@ public class GameState implements Serializable {
 	 */
 	public final TriggerManager triggerManager;
 	/**
-	 * The next ID to generate in an {@link net.demilich.metastone.game.targeting.IdFactory}/
+	 * The next ID to generate in an {@link IdFactoryImpl}/
 	 */
 	public final int currentId;
 	/**
@@ -106,9 +103,8 @@ public class GameState implements Serializable {
 		player2 = clone.getPlayer2();
 		tempCards = clone.getTempCards();
 		environment = clone.getEnvironment();
-		currentId = clone.getLogic().getIdFactory().getInternalId();
+		currentId = clone.getLogic().getInternalId();
 		triggerManager = clone.getTriggerManager();
-		cardCostModifiers = clone.getCardCostModifiers();
 		activePlayerId = clone.getActivePlayerId();
 		turnNumber = clone.getTurn();
 		this.turnState = turnState;

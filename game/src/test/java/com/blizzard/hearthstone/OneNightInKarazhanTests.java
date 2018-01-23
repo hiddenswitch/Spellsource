@@ -104,7 +104,7 @@ public class OneNightInKarazhanTests extends TestBase {
 			clearZone(context, player.getDeck());
 			final Card acidicSwampOoze = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
 			acidicSwampOoze.setOwner(player.getId());
-			acidicSwampOoze.setId(context.getLogic().getIdFactory().generateId());
+			acidicSwampOoze.setId(context.getLogic().generateId());
 			player.getDeck().addCard(acidicSwampOoze);
 			final Card minionNoviceEngineer = CardCatalogue.getCardById("minion_novice_engineer");
 			context.getLogic().receiveCard(player.getId(), minionNoviceEngineer);

@@ -31,13 +31,14 @@ public class ChangeHeroPowerSpell extends Spell {
 			cards.add(CardCatalogue.getCardById(heroPowerCardId));
 		}
 		HeroPowerCard heroPower = (HeroPowerCard) context.getLogic().getRandom(cards);
-		heroPower.setId(context.getLogic().getIdFactory().generateId());
+		heroPower.setId(context.getLogic().generateId());
 		heroPower.setOwner(hero.getOwner());
 		logger.debug("{}'s hero power was changed to {}", hero.getName(), heroPower);
 		// The old hero power should be removed from play.
 		HeroPowerCard oldHeroPower = hero.getHeroPower();
 		context.removeTriggersAssociatedWith(oldHeroPower.getReference(), true);
 		oldHeroPower.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		context.getLogic().removeCard(oldHeroPower);
 		if (heroPower.getHeroClass() == HeroClass.INHERIT) {
 			heroPower.setHeroClass(hero.getHeroClass());
 		}

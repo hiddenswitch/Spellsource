@@ -1,12 +1,9 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.utils.Attribute;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
@@ -22,8 +19,12 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.io.Serializable;
 
 public class CardCostModifier extends CustomCloneable implements Trigger, Serializable {
+	private static Logger logger = LoggerFactory.getLogger(CardCostModifier.class);
 	private boolean expired;
 	private int owner;
 	private EntityReference hostReference;
@@ -51,15 +52,29 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		// Is it expired?
 		applies &= !expired;
 
+		// If it's expired, don't continue evaluating
+		if (!applies) {
+			return false;
+		}
+
 		// If a target reference is specified, does the target match?
 		applies &= !(targetReference != null
 				&& !targetReference.isTargetGroup()
 				&& !targetReference.equals(card.transformResolved(context).getReference()));
 
 		// If a target reference is a group reference, is the target in the valid list?
+		final Entity host;
+		try {
+			host = context.resolveSingleTarget(hostReference);
+		} catch (NullPointerException notFound) {
+			logger.error("The card cost modifier's reference is not found.", hostReference);
+			expire();
+			return false;
+		}
+
 		applies &= !(targetReference != null
 				&& targetReference.isTargetGroup()
-				&& context.resolveTarget(player, context.resolveSingleTarget(hostReference), targetReference)
+				&& context.resolveTarget(player, host, targetReference)
 				.stream().map(Entity::getId).noneMatch(eid -> eid == card.getId()));
 
 

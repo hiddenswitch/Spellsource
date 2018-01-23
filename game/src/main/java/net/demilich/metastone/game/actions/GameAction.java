@@ -12,6 +12,7 @@ import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * An action a player can take in the game.
@@ -152,5 +153,15 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	@Override
 	public boolean isClientInterested() {
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("id", id)
+				.append("actionType", actionType)
+				.append("source", source)
+				.append("target", targetKey)
+				.toString();
 	}
 }

@@ -4,6 +4,7 @@ import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -55,7 +56,7 @@ public final class EntityLocation implements Serializable {
 	/**
 	 * Create the location with the specified zone, player and index.
 	 * @param zone The zone in the game.
-	 * @param player The player's index, or {@link net.demilich.metastone.game.targeting.IdFactory#UNASSIGNED} if the
+	 * @param player The player's index, or {@link IdFactoryImpl#UNASSIGNED} if the
 	 *               owner is not yet known.
 	 * @param index The index of the object, or {@code -1} if it is not yet known.
 	 */
