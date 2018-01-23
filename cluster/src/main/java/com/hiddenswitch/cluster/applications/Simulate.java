@@ -35,7 +35,7 @@ public class Simulate {
 		root.setLevel(Level.ERROR);
 	}
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) {
 		setLogLevelToError();
 
 		// Configure the simulation from the command line
