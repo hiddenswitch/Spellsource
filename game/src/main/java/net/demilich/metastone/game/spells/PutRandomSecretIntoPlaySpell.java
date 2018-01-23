@@ -64,7 +64,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 			}
 
 			if (secretCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-				secretCard.setId(context.getLogic().getIdFactory().generateId());
+				secretCard.setId(context.getLogic().generateId());
 				secretCard.setOwner(player.getId());
 				secretCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			}
