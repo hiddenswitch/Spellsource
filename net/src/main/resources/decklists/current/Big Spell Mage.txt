@@ -1,0 +1,24 @@
+### Big Spell Mage
+# Class: Blue
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Arcane Artificer
+# 2x (2) Raven Familiar
+# 2x (2) Doomsayer
+# 2x (2) Dirty Rat
+# 2x (3) Tar Creeper
+# 2x (3) Acolyte of Pain
+# 2x (4) Polymorph
+# 2x (5) Dragon's Fury
+# 2x (5) Arcane Tyrant
+# 1x (6) Skulking Geist
+# 2x (6) Meteor
+# 2x (6) Blizzard
+# 1x (7) Flamestrike
+# 2x (7) Firelands Portal
+# 1x (8) Medivh, the Guardian
+# 1x (9) Frost Lich Jaina
+# 1x (9) Dragoncaller Alanna
+# 1x (9) Alexstrasza
+#

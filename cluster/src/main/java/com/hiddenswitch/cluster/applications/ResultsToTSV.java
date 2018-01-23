@@ -31,7 +31,7 @@ public class ResultsToTSV {
 				.addOption(OUTPUT, true, Common.defaultsTo("The output file to write a TSV to.", "build/{random}/output.tsv"))
 				.addOption(PROFILE, true, Common.defaultsTo("The AWS profile to login with.", "default"));
 
-		CommandLineParser parser = new GnuParser();
+		CommandLineParser parser = new DefaultParser();
 		CommandLine cmd = parser.parse(options, args);
 
 		if (options.hasOption(INPUT)) {

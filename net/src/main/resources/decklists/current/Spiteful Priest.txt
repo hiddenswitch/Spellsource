@@ -1,0 +1,22 @@
+### Spiteful Priest
+# Class: White
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Northshire Cleric
+# 2x (2) Shadow Ascendant
+# 2x (2) Netherspite Historian
+# 2x (3) Tar Creeper
+# 2x (3) Kabal Talonpriest
+# 2x (3) Curious Glimmerroot
+# 1x (4) Twilight Drake
+# 2x (4) Duskbreaker
+# 2x (5) Drakonid Operative
+# 2x (5) Cobalt Scalebane
+# 2x (6) Spiteful Summoner
+# 2x (7) Corridor Creeper
+# 2x (7) Bonemare
+# 1x (8) Grand Archivist
+# 2x (8) Free From Amber
+# 2x (10) Mind Control
+#

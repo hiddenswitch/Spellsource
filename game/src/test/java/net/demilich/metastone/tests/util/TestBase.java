@@ -255,12 +255,16 @@ public class TestBase {
 				CardSet.THE_OLD_GODS
 		);
 
-		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(hero1, DeckFormat.basicFormat()), new TestBehaviour());
+		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(
+				CardSet.BASIC,
+				CardSet.CLASSIC)), new TestBehaviour());
 		player1Config.setName("Player 1");
 		player1Config.setHeroCard(getHeroCardForClass(hero1));
 		Player player1 = new Player(player1Config);
 
-		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(hero2, DeckFormat.basicFormat()), new TestBehaviour());
+		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(hero2, new DeckFormat().withCardSets(
+				CardSet.BASIC,
+				CardSet.CLASSIC)), new TestBehaviour());
 		player2Config.setName("Player 2");
 		player2Config.setHeroCard(getHeroCardForClass(hero2));
 		Player player2 = new Player(player2Config);

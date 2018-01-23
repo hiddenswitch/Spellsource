@@ -1,13 +1,14 @@
 package net.demilich.metastone.game.decks;
 
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.HeroCard;
+import com.google.common.collect.Sets;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 
 import java.io.Serializable;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Deck implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -16,6 +17,7 @@ public class Deck implements Serializable {
 	private String name = "";
 	private HeroClass heroClass;
 	private HeroCard heroCard;
+	private DeckFormat format;
 	protected CardList cards = new CardArrayList();
 	private String description;
 	private String filename;
@@ -128,5 +130,19 @@ public class Deck implements Serializable {
 
 	public void setHeroCard(HeroCard heroCard) {
 		this.heroCard = heroCard;
+	}
+
+	public DeckFormat getFormat() {
+		if (format == null) {
+			// Retrieve the format that is implied by the cards inside this deck.
+			Set<CardSet> cardSets = getCards().stream().map(Card::getCardSet).collect(Collectors.toSet());
+			return DeckFormat.getSmallestSupersetFormat(cardSets);
+		}
+
+		return format;
+	}
+
+	public void setFormat(DeckFormat format) {
+		this.format = format;
 	}
 }

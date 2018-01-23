@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.cards;
 
-import com.google.common.collect.Sets;
+import net.demilich.metastone.game.decks.DeckFormat;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -31,32 +31,11 @@ public enum CardSet {
 	TEST,
 	SPELLSOURCE;
 
-	static final Set<CardSet> hearthstoneSets = EnumSet.of(BASIC,
-			CLASSIC,
-			REWARD,
-			PROMO,
-			NAXXRAMAS,
-			GOBLINS_VS_GNOMES,
-			BLACKROCK_MOUNTAIN,
-			THE_GRAND_TOURNAMENT,
-			LEAGUE_OF_EXPLORERS,
-			THE_OLD_GODS,
-			ONE_NIGHT_IN_KARAZHAN,
-			MEAN_STREETS_OF_GADGETZHAN,
-			JOURNEY_TO_UNGORO,
-			KNIGHTS_OF_THE_FROZEN_THRONE,
-			KOBOLDS_AND_CATACOMBS,
-			HALL_OF_FAME);
-
-	public static CardSet latest() {
+	public static CardSet latestHearthstoneExpansion() {
 		return KOBOLDS_AND_CATACOMBS;
 	}
 
-	public static Set<CardSet> hearthstone() {
-		return hearthstoneSets;
-	}
-
 	public boolean isHearthstoneSet() {
-		return hearthstoneSets.contains(this);
+		return DeckFormat.WILD.isInFormat(this);
 	}
 }

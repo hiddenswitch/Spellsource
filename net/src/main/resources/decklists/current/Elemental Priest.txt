@@ -1,4 +1,4 @@
-### Highlander Priest
+### Elemental Priest
 # Class: White
 # Format: Standard
 # Year of the Mammoth
@@ -19,8 +19,8 @@
 # 1x (2) Mind Blast
 # 1x (2) Loot Hoarder
 # 1x (2) Bloodmage Thalnos
-# 1x (3) Tar Creeper
 # 1x (3) Shadow Word: Death
+# 1x (3) Kabal Talonpriest
 # 1x (3) Curious Glimmerroot
 # 1x (3) Acolyte of Pain
 # 1x (4) Priest of the Feast
@@ -28,7 +28,7 @@
 # 1x (4) Kazakus
 # 1x (4) Auchenai Soulpriest
 # 1x (5) Raza the Chained
-# 1x (6) Gadgetzan Auctioneer
+# 1x (5) Lyra the Sunshard
 # 1x (6) Dragonfire Potion
 # 1x (7) Psychic Scream
 # 1x (7) Prophet Velen

@@ -1,0 +1,23 @@
+### Midrange Hunter
+# Class: Green
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Southsea Deckhand
+# 1x (1) Patches the Pirate
+# 2x (1) Dire Mole
+# 2x (1) Candleshot
+# 2x (1) Alleycat
+# 2x (2) Dire Wolf Alpha
+# 2x (2) Crackling Razormaw
+# 2x (3) Southsea Captain
+# 2x (3) Eaglehorn Bow
+# 2x (3) Bearshark
+# 2x (4) Houndmaster
+# 1x (5) Tundra Rhino
+# 1x (5) Cobalt Scalebane
+# 2x (6) Spiteful Summoner
+# 2x (7) Corridor Creeper
+# 1x (8) Grand Archivist
+# 2x (9) Call of the Wild
+#

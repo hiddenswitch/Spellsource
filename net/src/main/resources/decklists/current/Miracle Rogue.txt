@@ -3,26 +3,22 @@
 # Format: Standard
 # Year of the Mammoth
 #
-# 2x (0) Backstab
-# 2x (0) Counterfeit Coin
+# 1x (0) Shadowstep
 # 2x (0) Preparation
-# 2x (1) Hallucination
-# 1x (1) Patches the Pirate
+# 2x (0) Counterfeit Coin
+# 2x (0) Backstab
 # 2x (1) Swashburglar
-# 1x (2) Bloodmage Thalnos
+# 1x (1) Patches the Pirate
+# 2x (1) Cold Blood
+# 2x (2) Shiv
+# 2x (2) Sap
 # 2x (2) Eviscerate
-# 1x (2) Sap
-# 1x (3) Edwin VanCleef
+# 1x (2) Bloodmage Thalnos
 # 2x (3) Fan of Knives
-# 1x (3) Mimic Pod
-# 2x (3) Questing Adventurer
-# 1x (4) Sherazin, Corpse Flower
-# 2x (5) Vilespine Slayer
+# 1x (3) Edwin VanCleef
+# 2x (4) Fal'dorei Strider
+# 2x (4) Elven Minstrel
+# 1x (5) Vilespine Slayer
+# 1x (5) Leeroy Jenkins
 # 2x (6) Gadgetzan Auctioneer
-# 1x (6) Vanish
-# 1x (9) Valeera the Hollow
-# 2x (12) Arcane Giant
 #
-AAECAaIHCJG8Au0FzQOyAvzBAoLCAsQBgNMCC7QB9bsChgmbyAKStgKIB5sFlwaBwgKkB4K0AgA=
-#
-# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

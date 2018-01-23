@@ -38,7 +38,7 @@ public class ClusterTest {
 	private List<Vertx> verticies = new ArrayList<>();
 	private List<HazelcastInstance> hazelcastInstances = new ArrayList<>();
 	private final int blockedThreadCheckInterval = (int) Duration.of(8, ChronoUnit.SECONDS).toMillis();
-	private final long timeoutMillis = Duration.of(150, ChronoUnit.SECONDS).toMillis();
+	private final long timeoutMillis = Duration.of(200, ChronoUnit.SECONDS).toMillis();
 
 	public void setLoggingLevel(Level level) {
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
@@ -46,7 +46,7 @@ public class ClusterTest {
 		root.setLevel(level);
 	}
 
-	@Test
+	@Test(timeout = 400000L)
 	@SuppressWarnings("unchecked")
 	public void testClusteredDeploy(TestContext context) {
 		if (isCI()) {
@@ -129,12 +129,12 @@ public class ClusterTest {
 		async.awaitSuccess(timeoutMillis);
 	}
 
-	@Test
+	@Test(timeout = 400000L)
 	public void testMultiHostCluster(TestContext context) {
 		if (isCI()) {
 			return;
 		}
-		
+
 		setLoggingLevel(Level.ERROR);
 		startTwoUnitCluster(context);
 
@@ -169,7 +169,7 @@ public class ClusterTest {
 		})).limit(count).forEach(Thread::start);
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(250L, TimeUnit.SECONDS);
+		latch.await(timeoutMillis * 2, TimeUnit.MILLISECONDS);
 		context.assertEquals(0L, latch.getCount());
 	}
 

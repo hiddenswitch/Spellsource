@@ -3,26 +3,21 @@
 # Format: Standard
 # Year of the Mammoth
 #
+# 2x (1) Lesser Jasper Spellstone
 # 2x (1) Jade Idol
-# 1x (2) Doomsayer
-# 1x (2) Golakka Crawler
 # 2x (2) Wild Growth
-# 2x (2) Wrath
 # 2x (3) Jade Blossom
-# 2x (3) Mind Control Tech
-# 1x (4) Fandral Staghelm
-# 2x (4) Jade Spirit
-# 1x (4) Mire Keeper
-# 1x (4) Spellbreaker
 # 2x (4) Swipe
+# 1x (4) Spellbreaker
+# 2x (4) Oaken Summons
+# 2x (4) Ironwood Golem
+# 1x (4) Fandral Staghelm
+# 2x (4) Branching Paths
 # 2x (5) Nourish
-# 1x (6) Aya Blackpaw
-# 2x (6) Jade Behemoth
+# 2x (5) Arcane Tyrant
 # 2x (6) Spreading Plague
+# 2x (6) Jade Behemoth
+# 1x (6) Aya Blackpaw
 # 1x (7) Malfurion the Pestilent
-# 1x (10) Kun the Forgotten King
 # 2x (10) Ultimate Infestation
 #
-AAECAZICCIoB5MICrqsCvq4C8gWUvQKZ0wLguwILtLsC5AjEBsu8At4Fz7wCQF/dvgKgzQKHzgIA
-#
-# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

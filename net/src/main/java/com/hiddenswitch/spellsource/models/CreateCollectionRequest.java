@@ -23,6 +23,7 @@ public class CreateCollectionRequest implements Serializable {
 	private boolean draft;
 	private int copies = 1;
 	private String heroCardId;
+	private String format;
 
 	protected CreateCollectionRequest() {
 	}
@@ -34,6 +35,7 @@ public class CreateCollectionRequest implements Serializable {
 				.withUserId(userId)
 				.withHeroClass(heroClass)
 				.withInventoryIds(inventoryIds)
+				.withFormat("Standard")
 				.withDraft(draft);
 	}
 
@@ -225,5 +227,18 @@ public class CreateCollectionRequest implements Serializable {
 
 	public void setHeroCardId(String heroCardId) {
 		this.heroCardId = heroCardId;
+	}
+
+	public CreateCollectionRequest withFormat(String format) {
+		this.format = format;
+		return this;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}
 }

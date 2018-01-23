@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.google.common.io.Resources;
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
@@ -148,7 +149,23 @@ public class Spellsource {
 							// Remove all inventory records that are in just one collection, the user collection
 							Mongo.mongo().removeDocuments(Inventory.INVENTORY, json("collectionIds", json("$size", 1)));
 						}))
-				.migrateTo(3, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(4)
+						.withUp(thisVertx -> {
+							// Set all existing decks to standard.
+							Mongo.mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+									json("format", json("$exists", false)),
+									json("$set", json("format", "Standard")),
+									new UpdateOptions().setMulti(true));
+						})
+						.withDown(thisVertx -> {
+							// Remove format field
+							Mongo.mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+									json("format", json("$exists", true)),
+									json("$unset", json("format", null)),
+									new UpdateOptions().setMulti(true));
+						}))
+				.migrateTo(4, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -161,9 +178,6 @@ public class Spellsource {
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
 			cachedStandardDecks = new ArrayList<>();
-//			cachedStandardDecks = Stream.of("Basic Biologist", "Basic Cyborg", "Basic Gamer", "Basic Octopod Demo", "Basic Resurrector")
-//					.map(DeckCreateRequest::fromDeckCatalogue).collect(Collectors.toList());
-
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
 			Set<URL> resourceList = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(toSet());
 			cachedStandardDecks.addAll(resourceList.stream().map(c -> {

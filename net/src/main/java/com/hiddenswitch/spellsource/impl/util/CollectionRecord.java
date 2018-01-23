@@ -29,6 +29,7 @@ public class CollectionRecord extends MongoRecord {
 	 */
 	private String name;
 	private String heroCardId;
+	private String format;
 
 	protected CollectionRecord() {
 	}
@@ -173,6 +174,14 @@ public class CollectionRecord extends MongoRecord {
 
 	public String getHeroCardId() {
 		return heroCardId;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public String getFormat() {
+		return format;
 	}
 }
 
