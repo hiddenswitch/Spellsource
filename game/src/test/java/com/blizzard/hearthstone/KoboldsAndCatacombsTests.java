@@ -23,6 +23,23 @@ import java.util.stream.Stream;
 
 public class KoboldsAndCatacombsTests extends TestBase {
 
+	@Test(invocationCount = 6)
+	public void testGrandArchivistRenounceDarknessInteraction() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "minion_voidwalker");
+			}
+			shuffleToDeck(context, player, "spell_renounce_darkness");
+			playCard(context, player, "minion_grand_archivist");
+			context.endTurn();
+			shuffleToDeck(context, player, "spell_simulacrum");
+			for (int i = 0; i < 10; i++) {
+				context.endTurn();
+				context.endTurn();
+			}
+		});
+	}
+
 	@Test
 	public void testCheatDeath() {
 		runGym((context, player, opponent) -> {
