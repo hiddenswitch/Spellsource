@@ -18,6 +18,7 @@ import net.demilich.metastone.game.spells.desc.source.HasWeights;
 import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.bag.TreeBag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +88,8 @@ public class DiscoverSpell extends Spell {
 			}
 
 			final HasWeights weightedSource = (HasWeights) cardSource;
-			final Bag<Card> weightedOptions = new HashBag<>();
+			final Bag<Card> weightedOptions = new TreeBag<>();
+
 			final TargetPlayer targetPlayer = cardSource.getTargetPlayer();
 
 			allCards.forEach((final Card card) -> {

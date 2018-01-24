@@ -26,6 +26,7 @@ import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
+import net.demilich.metastone.game.logic.Trace;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
@@ -155,6 +156,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
 	private CardList tempCards = new CardArrayList();
+	private transient Trace trace = new Trace();
 
 	/**
 	 * Creates a game context with no valid start state.
@@ -823,15 +825,27 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 * their mulligans using {@link GameLogic#init(int, boolean)}.
 	 */
 	@Suspendable
-	protected void init() {
+	public void init() {
+		getLogic().contextReady();
+		startTrace();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
 		logger.debug(getActivePlayer().getName() + " begins");
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 		getLogic().initializePlayer(PLAYER_1);
 		getLogic().initializePlayer(PLAYER_2);
-		getLogic().init(getActivePlayerId(), true);
-		getLogic().init(getOpponent(getActivePlayer()).getId(), false);
+		List<Card> mulligans1 = getLogic().init(getActivePlayerId(), true);
+		List<Card> mulligans2 = getLogic().init(getOpponent(getActivePlayer()).getId(), false);
+		int[][] tracedMulligans = new int[2][];
+		tracedMulligans[getActivePlayerId()] = mulligans1.stream().mapToInt(Card::getId).toArray();
+		tracedMulligans[getOpponent(getActivePlayer()).getId()] = mulligans2.stream().mapToInt(Card::getId).toArray();
+		trace.setMulligans(tracedMulligans);
+	}
+
+	private void startTrace() {
+		trace.setStartState(getGameStateCopy());
+		trace.setSeed(getLogic().getSeed());
+		trace.setCatalogueVersion(CardCatalogue.getVersion());
 	}
 
 	protected void onGameStateChanged() {
@@ -907,17 +921,10 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 			throw new RuntimeException("Behaviour " + getActivePlayer().getBehaviour().getName() + " selected NULL action while "
 					+ getValidActions().size() + " actions were available");
 		}
+		trace.addAction(nextAction.getId(), nextAction);
 		performAction(getActivePlayerId(), nextAction);
 
 		return nextAction.getActionType() != ActionType.END_TURN;
-	}
-
-	/**
-	 * Prints to the {@link #logger} the currently active triggers.
-	 */
-	public void printCurrentTriggers() {
-		logger.info("Active enchantments:");
-		getTriggerManager().printCurrentTriggers();
 	}
 
 	/**
@@ -1154,14 +1161,12 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		if (getLogic() == null) {
 			setLogic(new GameLogic());
 		}
-		if (getDeckFormat() == null) {
-			setDeckFormat(new DeckFormat().withCardSets(CardSet.values()));
-		}
 		this.getLogic().setIdFactory(new IdFactoryImpl(state.currentId));
 		this.getLogic().setContext(this);
 		this.setTurnState(state.turnState);
 		this.setTurn(state.turnNumber);
 		this.setActivePlayerId(state.activePlayerId);
+		this.setDeckFormat(state.deckFormat);
 	}
 
 	public void setPlayer(int index, Player player) {
@@ -1385,5 +1390,9 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 
 			return innerResult;
 		}).reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
+	}
+
+	public Trace getTrace() {
+		return trace;
 	}
 }

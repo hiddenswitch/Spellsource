@@ -116,11 +116,6 @@ public class TriggerManager implements Cloneable, Serializable {
 		event.getGameContext().getEventTargetStack().pop();
 	}
 
-	@Suspendable
-	public void fireGameEvent(GameEvent event) {
-		fireGameEvent(event, null);
-	}
-
 	private List<Trigger> getListSnapshot(List<Trigger> triggerList) {
 		return new ArrayList<>(triggerList);
 	}
@@ -135,18 +130,12 @@ public class TriggerManager implements Cloneable, Serializable {
 		return relevantTriggers;
 	}
 
-	public void printCurrentTriggers() {
-		for (Trigger trigger : triggers) {
-			System.out.println();
-			System.out.println(trigger.toString());
-			System.out.println();
-		}
-	}
-
 	public void removeTrigger(Trigger trigger) {
 		if (!triggers.remove(trigger)) {
-			System.out.println("Failed to remove trigger " + trigger);
+			throw new RuntimeException("Trigger unexpectedly was unable to be removed.");
 		}
+
+		trigger.expire();
 	}
 
 	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras) {

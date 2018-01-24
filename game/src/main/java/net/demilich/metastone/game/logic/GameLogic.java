@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,16 +145,42 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @see GameLogic#generateCardId() for the situation where card IDs need to be generated.
 	 */
-	public static final String TEMP_CARD_LABEL = "temp_card_id_";
+	private static final String TEMP_CARD_LABEL = "temp_card_id_";
 	private static final int INFINITE = -1;
-	protected final TargetLogic targetLogic = new TargetLogic();
+	private static final AtomicLong seedUniquifier = new AtomicLong(8682522807148012L);
+	private final TargetLogic targetLogic = new TargetLogic();
 	private final ActionLogic actionLogic = new ActionLogic();
 	private final SpellFactory spellFactory = new SpellFactory();
 	private IdFactoryImpl idFactory;
-	private Random random = new Random();
+	private long seed = createSeed();
+	private Random random = new Random(seed);
+
+	/**
+	 * Ensures {@link GameLogic} has a valid, unique seed in this JVM instance.
+	 * <p>
+	 * Adapted from the JVM's implementation of {@link Random}
+	 *
+	 * @return A {@link Long} corresponding to a unique value useful for "oring" to the {@link System#nanoTime()}.
+	 */
+	private static long seedUniquifier() {
+		for (; ; ) {
+			long current = seedUniquifier.get();
+			long next = current * 181783497276652981L;
+			if (seedUniquifier.compareAndSet(current, next))
+				return next;
+		}
+	}
+
+	/**
+	 * Creates a valid, highly probably unique seed.
+	 *
+	 * @return A {@link Long} seed that can be passed to a constructor of {@link Random}
+	 */
+	private static long createSeed() {
+		return seedUniquifier() ^ System.nanoTime();
+	}
+
 	protected transient GameContext context;
-	private final int MAX_HISTORY_ENTRIES = 1000;
-	private ArrayDeque<String> debugHistory = new ArrayDeque<>();
 
 	static {
 		immuneToSilence.add(Attribute.HP);
@@ -186,6 +213,28 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	private GameLogic(IdFactoryImpl idFactory) {
 		this.idFactory = idFactory;
+	}
+
+	/**
+	 * Creates a game logic instance with the specified seed.
+	 *
+	 * @param seed A random seed.
+	 */
+	public GameLogic(long seed) {
+		this.seed = seed;
+		random = new Random(seed);
+	}
+
+	/**
+	 * Create a game logic instance with the specified seed and ID factory.
+	 *
+	 * @param idFactory
+	 * @param seed
+	 */
+	public GameLogic(IdFactoryImpl idFactory, long seed) {
+		this(idFactory);
+		this.seed = seed;
+		random = new Random(seed);
 	}
 
 	/**
@@ -233,7 +282,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Player player = context.getPlayer(playerId);
 
 		player.modifyAttribute(Attribute.COMBO, +1);
-		Card card = (Card) context.resolveSingleTarget(EntityReference);
 	}
 
 	/**
@@ -1767,10 +1815,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                 #STARTER_CARDS} + 1 cards.
 	 */
 	@Suspendable
-	public void init(int playerId, boolean begins) {
-		mulligan(context.getPlayer(playerId), begins);
+	public List<Card> init(int playerId, boolean begins) {
+		List<Card> discardedCards = mulligan(context.getPlayer(playerId), begins);
 
 		startGameForPlayer(context.getPlayer(playerId));
+		return discardedCards;
 	}
 
 	@Suspendable
@@ -1813,7 +1862,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Stream.concat(player.getDeck().stream(),
 				player.getHand().stream()).forEach(c -> c.getAttributes().put(Attribute.STARTED_IN_DECK, true));
 
-		player.getDeck().shuffle();
+		player.getDeck().shuffle(getRandom());
 		if (player.getHero().hasEnchantment()) {
 			for (Enchantment trigger : player.getHero().getEnchantments()) {
 				addGameEventListener(player, trigger, player.getHero());
@@ -2068,12 +2117,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected void mulligan(Player player, boolean begins) {
+	protected List<Card> mulligan(Player player, boolean begins) {
 		FirstHand firstHand = new FirstHand(player, begins).invoke();
 
 		List<Card> discardedCards = player.getBehaviour().mulligan(context, player, firstHand.getStarterCards());
 
 		handleMulligan(player, begins, firstHand, discardedCards);
+		return discardedCards;
 	}
 
 	@Suspendable
@@ -2110,7 +2160,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		player.getDeck().shuffle();
+		player.getDeck().shuffle(getRandom());
 
 		// second player gets the coin additionally
 		if (!begins) {
@@ -2162,7 +2212,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		// Calculate how all the entities changed.
-
 		context.onDidPerformGameAction(playerId, action);
 	}
 
@@ -2689,11 +2738,28 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				return;
 			}
 
-			BattlecryAction targetedBattlecry = (BattlecryAction) player.getBehaviour().requestAction(context, player, battlecryActions);
+			BattlecryAction targetedBattlecry = (BattlecryAction) requestAction(player, battlecryActions);
 			performBattlecryAction(playerId, actor, player, targetedBattlecry);
 		} else {
 			performBattlecryAction(playerId, actor, player, battlecry);
 		}
+	}
+
+	/**
+	 * Requests an action internally, allowing special request logic to be executed.
+	 *
+	 * @param player  The player whose {@link net.demilich.metastone.game.behaviour.Behaviour} will be queried for an action.
+	 * @param actions The possible actions.
+	 * @return The chosen action
+	 */
+	@Suspendable
+	public GameAction requestAction(Player player, List<GameAction> actions) {
+		for (int i = 0; i < actions.size(); i++) {
+			actions.get(i).setId(i);
+		}
+		GameAction action = player.getBehaviour().requestAction(context, player, actions);
+		context.getTrace().addAction(action.getId(), action);
+		return action;
 	}
 
 	protected List<GameAction> getTargetedBattlecryGameActions(BattlecryAction battlecry, Player player) {
@@ -3310,6 +3376,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	public int getInternalId() {
 		return idFactory.getInternalId();
+	}
+
+	/**
+	 * Indicates that the {@link GameContext} references in this instance is ready.
+	 */
+	public void contextReady() {
+	}
+
+	public long getSeed() {
+		return seed;
 	}
 
 	protected class FirstHand {

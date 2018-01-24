@@ -116,6 +116,10 @@ public class Player extends Entity implements Serializable {
 		this.playerZone.add(this);
 	}
 
+	public Player(Deck deck) {
+		this(PlayerConfig.fromDeck(deck));
+	}
+
 	public Player(PlayerConfig config) {
 		this();
 		buildFromConfig(config);

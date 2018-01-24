@@ -16,7 +16,7 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardList resurrect = EnvironmentEntityList.getList(context).getCards(context, source).shuffle();
+		CardList resurrect = EnvironmentEntityList.getList(context).getCards(context, source).shuffle(context.getLogic().getRandom());
 		int i = 0;
 
 		while (context.getLogic().canSummonMoreMinions(player)

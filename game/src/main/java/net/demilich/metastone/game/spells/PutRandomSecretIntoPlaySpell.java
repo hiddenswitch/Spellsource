@@ -47,7 +47,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 				return;
 			}
 
-			secretCards.shuffle();
+			secretCards.shuffle(context.getLogic().getRandom());
 
 			SecretCard secretCard = (SecretCard) secretCards.removeFirst();
 

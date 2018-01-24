@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about game actions.
  */
 public abstract class GameAction implements Cloneable, Serializable, Notification {
-	private int id;
+	private int id = -1;
 	private TargetSelection targetRequirement = TargetSelection.NONE;
 	private ActionType actionType = ActionType.SYSTEM;
 	private EntityReference source;

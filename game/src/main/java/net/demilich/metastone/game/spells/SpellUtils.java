@@ -216,7 +216,7 @@ public class SpellUtils {
 		if (context.getLogic().attributeExists(Attribute.RANDOM_CHOICES)) {
 			discoverAction = (DiscoverAction) context.getLogic().getRandom(discoverActions);
 		} else {
-			discoverAction = (DiscoverAction) player.getBehaviour().requestAction(context, player, discoverActions);
+			discoverAction = (DiscoverAction) context.getLogic().requestAction(player, discoverActions);
 		}
 
 		// We do not perform the game action here

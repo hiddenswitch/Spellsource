@@ -36,7 +36,6 @@ public class Enchantment extends Entity implements Trigger {
 	private Card sourceCard;
 	private Integer countUntilCast;
 	private boolean countByValue;
-	private boolean activatesImmediately = true;
 
 	protected Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
 		this.primaryTrigger = primaryTrigger;
