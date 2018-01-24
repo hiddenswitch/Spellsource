@@ -22,10 +22,10 @@ public class ManaTests extends TestBase {
 		player.setMaxMana(4);
 		Assert.assertEquals(player.getMana(), 4);
 		Assert.assertEquals(player.getMaxMana(), 4);
-		playCard(context, player, CardCatalogue.getCardById("minion_darnassus_aspirant"));
+		playCard(context, player, "minion_darnassus_aspirant");
 		Assert.assertEquals(player.getMana(), 2);
 		Assert.assertEquals(player.getMaxMana(), 5);
-		playCard(context, player, CardCatalogue.getCardById("minion_doomsayer"));
+		playCard(context, player, "minion_doomsayer");
 		Assert.assertEquals(player.getMana(), 0);
 		Assert.assertEquals(player.getMaxMana(), 5);
 		context.getLogic().endTurn(playerId);

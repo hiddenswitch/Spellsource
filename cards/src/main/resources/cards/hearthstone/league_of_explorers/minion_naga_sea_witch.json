@@ -9,6 +9,7 @@
   "description": "Your cards cost (5).",
   "cardCostModifier": {
     "class": "CardCostModifier",
+    "target": "FRIENDLY_HAND",
     "value": {
       "class": "AlgebraicValueProvider",
       "operation": "SUBTRACT",

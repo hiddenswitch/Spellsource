@@ -15,10 +15,10 @@
     },
     "spell": {
       "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER",
+      "target": "EVENT_TARGET",
       "cardCostModifier": {
         "class": "CardCostModifier",
-        "target": "EVENT_TARGET",
+        "target": "SELF",
         "value": 0,
         "operation": "SET"
       }

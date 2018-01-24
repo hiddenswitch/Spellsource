@@ -16,10 +16,10 @@
       },
       {
         "class": "CardCostModifierSpell",
-        "target": "FRIENDLY_PLAYER",
+        "target": "ENEMY_HAND",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "ENEMY_HAND",
+          "target": "SELF",
           "value": 2,
           "cardType": "MINION",
           "operation": "SUBTRACT",

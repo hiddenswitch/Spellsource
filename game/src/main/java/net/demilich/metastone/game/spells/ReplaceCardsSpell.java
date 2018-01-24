@@ -21,11 +21,7 @@ public class ReplaceCardsSpell extends Spell {
 			replacement = specificCard;
 		}
 
-		if (target.getZone() == Zones.HAND) {
-			context.getLogic().replaceCardInHand(player.getId(), (Card) target, replacement);
-		} else if (target.getZone() == Zones.DECK) {
-			context.getLogic().replaceCardInDeck(player.getId(), (Card) target, replacement);
-		}
+		context.getLogic().replaceCard(player.getId(), (Card) target, replacement);
 
 		desc.subSpells(0).forEach(subSpell -> {
 			SpellUtils.castChildSpell(context, player, subSpell, source, target, replacement);

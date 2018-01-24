@@ -13,7 +13,9 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.Zones;
+import org.mockito.MockingDetails;
 import org.mockito.Mockito;
+import org.mockito.internal.util.MockUtil;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
@@ -51,6 +53,16 @@ public class TestBase {
 		enchantment.setSpell(spell);
 	}
 
+	protected static Card overrideRandomCard(GameContext context, String cardId) {
+		Card card = CardCatalogue.getCardById(cardId);
+		MockingDetails mockingDetails = Mockito.mockingDetails(context.getLogic());
+		GameLogic spyLogic = mockingDetails.isSpy() ? context.getLogic() : Mockito.spy(context.getLogic());
+		context.setLogic(spyLogic);
+		Mockito.doAnswer(invocation -> card).when(spyLogic).getRandom(Mockito.anyList());
+		Mockito.doAnswer(invocation -> card).when(spyLogic).removeRandom(Mockito.anyList());
+		return card;
+	}
+
 	protected static void overrideDiscover(Player player, Function<List<DiscoverAction>, GameAction> discovery) {
 		Behaviour overriden = Mockito.spy(player.getBehaviour());
 		player.setBehaviour(overriden);
@@ -72,8 +84,14 @@ public class TestBase {
 		return card;
 	}
 
-	public static void shuffleToDeck(GameContext context, Player player, String cardId) {
-		context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById(cardId));
+	public static Card shuffleToDeck(GameContext context, Player player, String cardId) {
+		Card card = CardCatalogue.getCardById(cardId);
+		context.getLogic().shuffleToDeck(player, card);
+		return card;
+	}
+
+	public static int costOf(GameContext context, Player player, Card deckCard) {
+		return context.getLogic().getModifiedManaCost(player, deckCard);
 	}
 
 	@FunctionalInterface

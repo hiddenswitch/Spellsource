@@ -8,27 +8,18 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "description": "If you control at least 3 minions, this card's Cost is 0.",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "AfterMinionPlayedTrigger",
-      "fireCondition": {
-        "class": "MinionOnBoardCondition",
-        "value": 3
-      },
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "target": "SELF",
-        "value": 2,
-        "operation": "SUBTRACT"
-      }
-    }
-  },
   "collectible": false,
   "set": "SPELLSOURCE",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 2,
+      "operation": "GREATER",
+      "targetPlayer": "SELF"
+    },
+    "ifFalse": 0,
+    "ifTrue": 2
+  }
 }

@@ -13,8 +13,8 @@
       "target": "FRIENDLY_PLAYER",
       "cardCostModifier": {
         "class": "CardCostModifier",
+        "target": "FRIENDLY_HERO_POWER",
         "value": 2,
-        "cardType": "HERO_POWER",
         "expirationTrigger": {
           "class": "InspireTrigger",
           "targetPlayer": "SELF"

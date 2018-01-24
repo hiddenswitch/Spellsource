@@ -3,6 +3,8 @@ package net.demilich.metastone.game.entities;
 import java.io.Serializable;
 
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -12,7 +14,6 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
 
@@ -126,12 +127,12 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	/**
 	 * The entity's ID in the match.
 	 * <p>
-	 * IDs are set by default to {@link IdFactory#UNASSIGNED}. This means entity IDs are mutable; entity IDs must be
+	 * IDs are set by default to {@link IdFactoryImpl#UNASSIGNED}. This means entity IDs are mutable; entity IDs must be
 	 * mutable because entities can be cloned with {@link #clone()}. In practice, once an entity's ID is set, it is not
 	 * set again.
 	 *
-	 * @return The entity's ID, or {@link IdFactory#UNASSIGNED} if it is unassigned.
-	 * @see IdFactory for the class that generates IDs.
+	 * @return The entity's ID, or {@link IdFactoryImpl#UNASSIGNED} if it is unassigned.
+	 * @see IdFactoryImpl for the class that generates IDs.
 	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the place where minion IDs are set.
 	 * @see GameLogic#assignCardIds(CardList, int) for the place where IDs are set for all the cards that start in the
 	 * game.
@@ -160,14 +161,14 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Gets the owner of this entity, or {@link IdFactory#UNASSIGNED} if it has no owner.
+	 * Gets the owner of this entity, or {@link IdFactoryImpl#UNASSIGNED} if it has no owner.
 	 * <p>
 	 * Owners are mutable because the owner of an entity, especially minions, can change.
 	 * <p>
 	 * The owner should match the {@link #getEntityLocation()}'s owner. The minion's location should be changed first,
 	 * then its owner.
 	 *
-	 * @return {@link GameContext#PLAYER_1}, {@link GameContext#PLAYER_2}, or {@link IdFactory#UNASSIGNED}.
+	 * @return {@link GameContext#PLAYER_1}, {@link GameContext#PLAYER_2}, or {@link IdFactoryImpl#UNASSIGNED}.
 	 */
 	public int getOwner() {
 		return ownerIndex;

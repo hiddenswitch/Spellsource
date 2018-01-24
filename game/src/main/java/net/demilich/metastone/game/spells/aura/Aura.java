@@ -15,6 +15,7 @@ import net.demilich.metastone.game.spells.trigger.BoardChangedTrigger;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class Aura extends Enchantment {
 	private EntityReference targets;
@@ -90,12 +91,15 @@ public class Aura extends Enchantment {
 
 		for (Entity target : relevantTargets) {
 			if (affects(context, owner, target, resolvedTargets) && !affectedEntities.contains(target.getId())) {
-				context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
 				affectedEntities.add(target.getId());
+				context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
 				// target is not affected anymore, remove effect
 			} else if (!affects(context, owner, target, resolvedTargets) && affectedEntities.contains(target.getId())) {
-				context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
 				affectedEntities.remove(target.getId());
+				if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
+					continue;
+				}
+				context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
 			}
 		}
 	}

@@ -10,13 +10,13 @@
   "battlecry": {
     "spell": {
       "class": "ReturnTargetToHandSpell",
-      "target": "FRIENDLY_MINIONS",
+      "target": "OTHER_FRIENDLY_MINIONS",
       "spell": {
         "class": "CardCostModifierSpell",
-        "target": "FRIENDLY_PLAYER",
+        "target": "OUTPUT",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "OUTPUT",
+          "target": "SELF",
           "value": 1,
           "operation": "SET"
         }

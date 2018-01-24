@@ -37,6 +37,62 @@ import static org.mockito.Mockito.spy;
 public class ClassicTests extends TestBase {
 
 	@Test
+	public void testShadowstep() {
+		runGym((context, player, opponent) -> {
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCardWithTarget(context, player, "spell_shadowstep", bloodfen);
+			Assert.assertEquals(costOf(context, player, player.getHand().get(0)), 0);
+		});
+	}
+
+	@Test
+	public void testPreparation() {
+		runGym((context, player, opponent) -> {
+			Card inHand1 = receiveCard(context, player, "spell_fireball");
+			Card inHand2 = receiveCard(context, player, "spell_fireball");
+			playCard(context, player, "spell_preparation");
+			Assert.assertEquals(costOf(context, player, inHand1), 1);
+			Assert.assertEquals(costOf(context, player, inHand2), 1);
+			playCardWithTarget(context, player, inHand1, opponent.getHero());
+			Assert.assertEquals(costOf(context, player, inHand2), 4);
+		});
+	}
+
+	@Test
+	public void testMillhouseManastorm() {
+		runGym((context, player, opponent) -> {
+			Card inHand = receiveCard(context, opponent, "spell_fireball");
+			playCard(context, player, "minion_millhouse_manastorm");
+			context.endTurn();
+			Card fireball = receiveCard(context, opponent, "spell_fireball");
+			Assert.assertEquals(costOf(context, opponent, inHand), 0);
+			Assert.assertEquals(costOf(context, opponent, fireball), 0);
+			context.endTurn();
+			Assert.assertEquals(costOf(context, opponent, inHand), 4);
+			Assert.assertEquals(costOf(context, opponent, fireball), 4);
+			context.endTurn();
+			Assert.assertEquals(costOf(context, opponent, inHand), 4);
+			Assert.assertEquals(costOf(context, opponent, fireball), 4);
+		});
+	}
+
+	@Test
+	public void testFreezingTrap() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_freezing_trap");
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			context.endTurn();
+			int startHp = player.getHero().getHp();
+			attack(context, opponent, bloodfen, player.getHero());
+			Assert.assertEquals(player.getHero().getHp(), startHp);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+			Assert.assertEquals(costOf(context, opponent, opponent.getHand().get(0)), 4);
+		});
+	}
+
+	@Test
 	public void testShadowWordConditions() {
 		runGym((context, player, opponent) -> {
 			final Card pain = CardCatalogue.getCardById("spell_shadow_word_pain");
@@ -86,7 +142,7 @@ public class ClassicTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 3; i++) {
-				shuffleToDeck(context,player,"minion_bloodfen_raptor");
+				shuffleToDeck(context, player, "minion_bloodfen_raptor");
 			}
 			player.setMana(5);
 			player.setMaxMana(5);
@@ -99,7 +155,7 @@ public class ClassicTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 3; i++) {
-				shuffleToDeck(context,player,"minion_bloodfen_raptor");
+				shuffleToDeck(context, player, "minion_bloodfen_raptor");
 			}
 			player.setMana(5);
 			player.setMaxMana(5);
@@ -170,7 +226,7 @@ public class ClassicTests extends TestBase {
 		Minion impGangBoss = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_imp_gang_boss"));
 		context.endTurn();
 
-		playCard(context, player, CardCatalogue.getCardById("spell_blizzard"));
+		playCard(context, player, "spell_blizzard");
 
 		Assert.assertEquals(impGangBoss.getHp(), impGangBoss.getMaxHp() - 2);
 		for (Minion minion : opponent.getMinions()) {
@@ -190,7 +246,7 @@ public class ClassicTests extends TestBase {
 		Assert.assertEquals(opponent.getMinions().size(), 2);
 		context.endTurn();
 
-		playCard(context, player, CardCatalogue.getCardById("spell_flamestrike"));
+		playCard(context, player, "spell_flamestrike");
 		Assert.assertEquals(opponent.getMinions().size(), 3);
 		final int HARVEST_GOLEM = 1;
 		for (int i = 0; i < opponent.getMinions().size(); i++) {
@@ -238,14 +294,14 @@ public class ClassicTests extends TestBase {
 		Player opponent = context.getPlayer2();
 
 		Assert.assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
-		playCard(context, player, CardCatalogue.getCardById("spell_arcane_missiles"));
+		playCard(context, player, "spell_arcane_missiles");
 		Assert.assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3);
 		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_fireball"), opponent.getHero());
 		Assert.assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6);
 
-		playCard(context, player, CardCatalogue.getCardById("minion_kobold_geomancer"));
+		playCard(context, player, "minion_kobold_geomancer");
 
-		playCard(context, player, CardCatalogue.getCardById("spell_arcane_missiles"));
+		playCard(context, player, "spell_arcane_missiles");
 		Assert.assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4);
 		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_fireball"), opponent.getHero());
 		Assert.assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4 - 7);
@@ -258,11 +314,11 @@ public class ClassicTests extends TestBase {
 		Player opponent = context.getPlayer2();
 
 		context.endTurn();
-		playCard(context, opponent, CardCatalogue.getCardById("weapon_fiery_war_axe"));
+		playCard(context, opponent, "weapon_fiery_war_axe");
 		Assert.assertNotNull(opponent.getHero().getWeapon());
 		context.endTurn();
 
-		playCard(context, player, CardCatalogue.getCardById("minion_acidic_swamp_ooze"));
+		playCard(context, player, "minion_acidic_swamp_ooze");
 		Assert.assertNull(opponent.getHero().getWeapon());
 	}
 

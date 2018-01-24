@@ -9,18 +9,29 @@
   "description": "Battlecry: Your opponent's Hero Power costs (5) more next turn.",
   "battlecry": {
     "spell": {
-      "class": "CardCostModifierSpell",
+      "class": "AddEnchantmentSpell",
       "target": "FRIENDLY_PLAYER",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "value": 5,
-        "cardType": "HERO_POWER",
-        "expirationTrigger": {
-          "class": "TurnEndTrigger",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnStartTrigger",
           "targetPlayer": "OPPONENT"
         },
-        "operation": "ADD",
-        "targetPlayer": "OPPONENT"
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "FRIENDLY_HERO_POWER",
+            "targetPlayer": "OPPONENT",
+            "value": 5,
+            "expirationTrigger": {
+              "class": "TurnEndTrigger",
+              "targetPlayer": "OPPONENT"
+            },
+            "operation": "ADD"
+          }
+        },
+        "maxFires": 1
       }
     }
   },

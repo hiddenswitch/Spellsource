@@ -15,6 +15,19 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class NaxxramasTests extends TestBase {
+	@Test
+	public void testLoatheb() {
+		runGym((context, player, opponent) -> {
+			Card fireball = receiveCard(context, opponent, "spell_fireball");
+			playCard(context, player, "minion_loatheb");
+			context.endTurn();
+			Assert.assertEquals(costOf(context, player, fireball), fireball.getBaseManaCost() + 5);
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(costOf(context, player, fireball), fireball.getBaseManaCost());
+		});
+	}
+
 	/**
 	 * Your opponent plays a Mad Scientist then you play Stampeding Kodo. First, the Kodo enters the board, then during
 	 * its Battlecry Phase the Mad Scientist is marked pending destroy. After the Battlecry Phase ends, a Death Phase
@@ -25,7 +38,7 @@ public class NaxxramasTests extends TestBase {
 	public void testMadScientist() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			shuffleToDeck(context,opponent,"secret_mirror_entity");
+			shuffleToDeck(context, opponent, "secret_mirror_entity");
 			playMinionCard(context, opponent, "minion_mad_scientist");
 			context.endTurn();
 			playMinionCard(context, player, "minion_stampeding_kodo");
@@ -41,7 +54,7 @@ public class NaxxramasTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			shuffleToDeck(context,opponent,"secret_mirror_entity");
+			shuffleToDeck(context, opponent, "secret_mirror_entity");
 			Minion madScientist = playMinionCard(context, opponent, "minion_mad_scientist");
 			madScientist.setHp(1);
 			context.endTurn();

@@ -34,7 +34,7 @@ public class EntityReference implements Serializable {
 	public static final EntityReference EVENT_TARGET = new EntityReference(-27);
 	public static final EntityReference SELF = new EntityReference(-28);
 	public static final EntityReference KILLED_MINION = new EntityReference(-29);
-	public static final EntityReference ATTACKER_REFERENCE = new EntityReference(-30);
+	public static final EntityReference ATTACKER = new EntityReference(-30);
 	public static final EntityReference PENDING_CARD = new EntityReference(-31);
 	public static final EntityReference OUTPUT = new EntityReference(-32);
 	public static final EntityReference FRIENDLY_DECK = new EntityReference(-33);

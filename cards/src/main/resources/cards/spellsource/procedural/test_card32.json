@@ -15,7 +15,7 @@
     },
     "spell": {
       "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER",
+      "target": "SELF",
       "cardCostModifier": {
         "class": "CardCostModifier",
         "target": "SELF",

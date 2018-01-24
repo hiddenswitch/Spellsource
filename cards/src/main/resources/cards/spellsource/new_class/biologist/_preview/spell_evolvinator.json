@@ -10,10 +10,10 @@
     "class": "ReturnTargetToHandSpell",
     "spell": {
       "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER",
+      "target": "OUTPUT",
       "cardCostModifier": {
         "class": "CardCostModifier",
-        "target": "OUTPUT",
+        "target": "SELF",
         "value": 2,
         "operation": "SUBTRACT"
       }

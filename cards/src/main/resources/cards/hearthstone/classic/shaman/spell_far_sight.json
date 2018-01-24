@@ -11,10 +11,10 @@
     "value": 1,
     "spell": {
       "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER",
+      "target": "OUTPUT",
       "cardCostModifier": {
         "class": "CardCostModifier",
-        "target": "OUTPUT",
+        "target": "SELF",
         "value": 3,
         "operation": "SUBTRACT"
       }

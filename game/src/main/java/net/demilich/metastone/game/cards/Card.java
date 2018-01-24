@@ -3,6 +3,7 @@ package net.demilich.metastone.game.cards;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.annotations.SerializedName;
 import io.vertx.core.json.JsonObject;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -16,10 +17,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.AttributeMap;
-
-import java.util.List;
 
 /**
  * The Card class is an entity that contains card information.
@@ -222,7 +220,6 @@ public abstract class Card extends Entity {
 		copy.setOwner(IdFactory.UNASSIGNED);
 		copy.getAttributes().remove(Attribute.ATTACK_BONUS);
 		copy.getAttributes().remove(Attribute.HP_BONUS);
-		copy.getAttributes().remove(Attribute.MANA_COST_MODIFIER);
 		// Always use the origin copy if it isn't none
 		if (hasAttribute(Attribute.COPIED_FROM)) {
 			copy.getAttributes().put(Attribute.COPIED_FROM, getAttribute(Attribute.COPIED_FROM));

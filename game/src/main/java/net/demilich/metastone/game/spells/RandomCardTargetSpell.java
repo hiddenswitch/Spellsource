@@ -49,7 +49,7 @@ public class RandomCardTargetSpell extends Spell {
 		}
 
 		spellCard.setOwner(player.getId());
-		spellCard.setId(context.getLogic().getIdFactory().generateId());
+		spellCard.setId(context.getLogic().generateId());
 		spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 
 		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), spellCard, 1.2));

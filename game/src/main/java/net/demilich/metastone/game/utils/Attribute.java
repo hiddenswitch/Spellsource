@@ -348,16 +348,6 @@ public enum Attribute {
 	 */
 	HEAL_AMPLIFY_MULTIPLIER,
 	/**
-	 * Stores an adjustment to the cost of this {@link Card}, typically due to changes to deck or hand cards from
-	 * various spells.
-	 * <p>
-	 * The value accumulated in this attribute is permanent, in the sense that the effect that changed it did not intend
-	 * the changes to be reversible.
-	 *
-	 * @see GameLogic#getModifiedManaCost(Player, Card) for a complete calculation of spell damage.
-	 */
-	MANA_COST_MODIFIER,
-	/**
 	 * An attribute that specifies that the attack of this {@link Minion} is equal to its hitpoints.
 	 */
 	ATTACK_EQUALS_HP,

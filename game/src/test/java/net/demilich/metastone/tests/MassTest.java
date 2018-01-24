@@ -52,10 +52,7 @@ public class MassTest extends TestBase {
 	}
 
 	private void oneGame() {
-		DeckFormat deckFormat = new DeckFormat();
-		for (CardSet set : CardSet.values()) {
-			deckFormat.addSet(set);
-		}
+		DeckFormat deckFormat = DeckFormat.CUSTOM;
 		HeroClass heroClass1 = getRandomClass();
 		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass1, deckFormat), new PlayRandomBehaviour());
 		player1Config.setName("Player 1");

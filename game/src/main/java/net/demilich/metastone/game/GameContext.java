@@ -9,7 +9,6 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
@@ -34,6 +33,7 @@ import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.NetworkDelegate;
@@ -146,7 +146,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	private TargetLogic targetLogic = new TargetLogic();
 	private TriggerManager triggerManager = new TriggerManager();
 	private Map<Environment, Object> environment = new HashMap<>();
-	private List<CardCostModifier> cardCostModifiers = new ArrayList<>();
 	private int activePlayerId = -1;
 	private Player winner;
 	private GameStatus result;
@@ -285,11 +284,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		clone.setResult(getStatus());
 		clone.setTurnState(getTurnState());
 		clone.setWinner(logicClone.getWinner(player1Clone, player2Clone));
-		clone.getCardCostModifiers().clear();
-
-		for (CardCostModifier cardCostModifier : getCardCostModifiers()) {
-			clone.getCardCostModifiers().add(cardCostModifier.clone());
-		}
 
 		for (Map.Entry<Environment, Object> entry : getEnvironment().entrySet()) {
 			Object value1 = entry.getValue();
@@ -311,7 +305,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	public synchronized void dispose() {
 		this.disposed = true;
 		this.players = null;
-		getCardCostModifiers().clear();
 		getTriggerManager().dispose();
 		getEnvironment().clear();
 	}
@@ -506,15 +499,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 			}
 		}
 		return card;
-	}
-
-	/**
-	 * Gets the current card cost modifiers in play.
-	 *
-	 * @return A list of {@link CardCostModifier} objects.
-	 */
-	public List<CardCostModifier> getCardCostModifiers() {
-		return cardCostModifiers;
 	}
 
 	/**
@@ -972,11 +956,10 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 
 		final Entity entity = targetLogic.findEntity(this, targetKey).transformResolved(this);
 
-		/* TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
+		// TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
 		if (entity.getZone() == Zones.REMOVED_FROM_PLAY) {
 			throw new RuntimeException("Invalid reference.");
 		}
-		*/
 
 		return entity;
 	}
@@ -1065,10 +1048,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 
 	public void setEnvironment(Map<Environment, Object> environment) {
 		this.environment = environment;
-	}
-
-	public void setCardCostModifiers(List<CardCostModifier> cardCostModifiers) {
-		this.cardCostModifiers = cardCostModifiers;
 	}
 
 	public Player getWinner() {
@@ -1170,7 +1149,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		this.setPlayer(GameContext.PLAYER_1, state.player1);
 		this.setPlayer(GameContext.PLAYER_2, state.player2);
 		this.setTempCards(state.tempCards);
-		this.setCardCostModifiers(state.cardCostModifiers);
 		this.setEnvironment(state.environment);
 		this.setTriggerManager(state.triggerManager);
 		if (getLogic() == null) {
@@ -1179,7 +1157,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		if (getDeckFormat() == null) {
 			setDeckFormat(new DeckFormat().withCardSets(CardSet.values()));
 		}
-		this.getLogic().setIdFactory(new IdFactory(state.currentId));
+		this.getLogic().setIdFactory(new IdFactoryImpl(state.currentId));
 		this.getLogic().setContext(this);
 		this.setTurnState(state.turnState);
 		this.setTurn(state.turnNumber);

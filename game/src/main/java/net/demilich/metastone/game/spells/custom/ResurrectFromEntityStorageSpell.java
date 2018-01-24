@@ -22,7 +22,7 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 		while (context.getLogic().canSummonMoreMinions(player)
 				&& i < resurrect.getCount()) {
 			Card card = resurrect.get(i).getCopy();
-			card.setId(context.getLogic().getIdFactory().generateId());
+			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			if (card.getCardType() == CardType.MINION) {
