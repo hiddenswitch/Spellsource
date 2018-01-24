@@ -24,7 +24,7 @@ public class RandomCardTargetSpell extends Spell {
 		if (card == null
 				&& target != null
 				&& target instanceof Card) {
-			card = (Card) target;
+			card = (Card) target.getCopy();
 		}
 		castCardWithRandomTargets(context, player, source, card);
 	}
