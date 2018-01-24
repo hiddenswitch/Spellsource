@@ -19,10 +19,9 @@ import java.util.stream.Stream;
  * A place that stores {@link CardCatalogueRecord} records that were generated from the "cards" Java package.
  */
 public class CardCatalogue {
-
 	public static final String CARDS_FOLDER = "cards";
-
 	private static Logger logger = LoggerFactory.getLogger(CardCatalogue.class);
+	private static int version = 1;
 
 	private final static Map<String, Card> cards = new HashMap<>();
 	private final static Map<String, CardCatalogueRecord> records = new HashMap<>();
@@ -44,6 +43,9 @@ public class CardCatalogue {
 		Card card = cards.getOrDefault(id.toLowerCase(), null);
 		if (card != null) {
 			card = card.getCopy();
+		}
+		if (card.getDesc().fileFormatVersion > version) {
+			return null;
 		}
 		return card;
 	}
@@ -95,6 +97,10 @@ public class CardCatalogue {
 	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass, Attribute tag, HeroClass actualHeroClass) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
+			if (card.getDesc().fileFormatVersion > version) {
+				continue;
+			}
+
 			if (!deckFormat.isInFormat(card)) {
 				continue;
 			}
@@ -138,21 +144,20 @@ public class CardCatalogue {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-//			try {
-
-//			} catch (CardParseException e) {
-//				logger.error(e.getMessage());
-////				throw e;
-//			}
 		}
 	}
 
 	public static CardList query(DeckFormat deckFormat, Predicate<Card> filter) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
+			if (card.getDesc().fileFormatVersion > version) {
+				continue;
+			}
+
 			if (deckFormat != null && !deckFormat.isInFormat(card)) {
 				continue;
 			}
+
 			if (filter.test(card)) {
 				result.addCard(card.clone());
 			}
@@ -178,27 +183,28 @@ public class CardCatalogue {
 				recordsByName.putIfAbsent(desc.name, new ArrayList<>());
 				recordsByName.get(desc.name).add(record);
 			} catch (Exception e) {
-				//logger.error("Error parsing card '{}'", resourceInputStream.fileName);
 				logger.error(e.toString());
 				badCards.add(resourceInputStream.fileName);
-//				throw e;
 			}
 		}
 
 		for (CardDesc desc : cardDesc.values()) {
 			Card instance = desc.createInstance();
 			CardCatalogue.add(instance);
-
 		}
 
 		logger.debug("{} cards loaded.", CardCatalogue.cards.size());
-
-//		if (!badCards.isEmpty()) {
-//			throw new CardParseException(badCards);
-//		}
 	}
 
 	public static Stream<Card> stream() {
-		return cards.values().stream();
+		return cards.values().stream().filter(card -> card.getDesc().fileFormatVersion <= version);
+	}
+
+	public static int getVersion() {
+		return version;
+	}
+
+	public static void setVersion(int version) {
+		CardCatalogue.version = version;
 	}
 }

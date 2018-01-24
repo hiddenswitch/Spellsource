@@ -22,13 +22,13 @@
           "cardCostModifier": {
             "class": "CardCostModifier",
             "target": "FRIENDLY_HERO_POWER",
-            "targetPlayer": "OPPONENT",
             "value": 5,
             "expirationTrigger": {
               "class": "TurnEndTrigger",
               "targetPlayer": "OPPONENT"
             },
-            "operation": "ADD"
+            "operation": "ADD",
+            "targetPlayer": "OPPONENT"
           }
         },
         "maxFires": 1

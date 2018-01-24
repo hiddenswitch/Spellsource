@@ -16,7 +16,7 @@ public class ReceiveCardsInStorageSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardList cards = EnvironmentEntityList.getList(context).getCards(context, source).shuffle();
+		CardList cards = EnvironmentEntityList.getList(context).getCards(context, source).shuffle(context.getLogic().getRandom());
 		cards.forEach(c -> context.getLogic().receiveCard(player.getId(), c, source));
 		EnvironmentEntityList.getList(context).clear(source);
 	}

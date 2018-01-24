@@ -12,6 +12,7 @@ dependencies {
     testCompile group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
     testCompile group: 'org.testng', name: 'testng', version: '6.+'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.+'
+    testCompile group: 'org.reflections', name: 'reflections', version: '0.9.11'
 }
 
 test {

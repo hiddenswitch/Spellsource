@@ -14,14 +14,14 @@
       "cardCostModifier": {
         "class": "CardCostModifier",
         "target": "ENEMY_HAND",
-        "targetPlayer": "OPPONENT",
         "value": 5,
         "cardType": "SPELL",
         "expirationTrigger": {
           "class": "TurnEndTrigger",
           "targetPlayer": "OPPONENT"
         },
-        "operation": "ADD"
+        "operation": "ADD",
+        "targetPlayer": "OPPONENT"
       }
     }
   },

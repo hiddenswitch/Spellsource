@@ -11,6 +11,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
@@ -48,7 +49,7 @@ public class MassTest extends TestBase {
 	@Test
 	public void testRandomMassPlay() {
 		loggerSetup();
-		IntStream.range(0, 100000).parallel().forEach(i -> oneGame());
+		IntStream.range(0, 10000).parallel().forEach(i -> oneGame());
 	}
 
 	private void oneGame() {
@@ -64,7 +65,21 @@ public class MassTest extends TestBase {
 		player2Config.setName("Player 2");
 		player2Config.setHeroCard(getHeroCardForClass(heroClass2));
 		Player player2 = new Player(player2Config);
-		GameContext context = new GameContext(player1, player2, new GameLogic(), deckFormat) {
+		GameLogic logic = new GameLogic();
+		GameContext context = new GameContext(player1, player2, logic, deckFormat) {
+			@Override
+			public void play() {
+				try {
+					super.play();
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+					logger.error(ExceptionUtils.getStackTrace(e));
+					logger.error("Trace:");
+					logger.error(getTrace().dump());
+					Assert.fail();
+				}
+			}
+
 			protected void assertValidEntities() {
 				getEntities().forEach(e -> {
 							final boolean isValid = e.getEntityLocation().getIndex() >= 0
@@ -76,13 +91,19 @@ public class MassTest extends TestBase {
 												+ e.toString()
 												+ "\nLocation:\n"
 												+ e.getEntityLocation().toString();
-								Assert.fail(message);
+								logger.error(message);
+								logger.error("Trace:");
+								logger.error(getTrace().dump());
+								Assert.fail();
 							}
 						}
 				);
 				boolean distinctLocations = getEntities().map(Entity::getEntityLocation).distinct().count() == getEntities().count();
 				if (!distinctLocations) {
-					Assert.fail("Entities do not have distinct locations.");
+					logger.error("Entities do not have distinct locations.");
+					logger.error("Trace:");
+					logger.error(getTrace().dump());
+					Assert.fail();
 				}
 			}
 
@@ -103,7 +124,6 @@ public class MassTest extends TestBase {
 		};
 		context.play();
 		context.dispose();
-
 	}
 
 }

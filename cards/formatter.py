@@ -12,6 +12,8 @@ from collections import Counter
 from objdict import ObjDict as OrderedDict
 from utils import write_card, iter_cards
 
+VERSION = 1
+
 ORDER = [
     'class',
     'target',
@@ -59,13 +61,11 @@ ORDER = [
 
 
 def main():
-    locations = Counter()
-
     for (card, filepath) in iter_cards():
-        for i, (k, v) in enumerate(card.iteritems()):
-            locations.update([(k, i)])
-
-        write_card(fix_dict(card), filepath)
+        fixed_card = fix_dict(card)
+        if u'fileFormatVersion' not in fixed_card:
+            fixed_card[u'fileFormatVersion'] = 1
+        write_card(fixed_card, filepath)
 
 
 def fix_list(v):

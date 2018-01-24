@@ -39,7 +39,7 @@ import net.demilich.metastone.game.utils.AttributeMap;
  * net.demilich.metastone.game.spells.trigger.secrets.Secret} entities should have their description or card IDs visible
  * to their opponents.
  */
-public abstract class Entity extends CustomCloneable implements Serializable, HasCard {
+public abstract class Entity extends CustomCloneable implements Serializable, HasCard, Comparable<Entity> {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The value for the {@link #ownerIndex} when no owner has been assigned.
@@ -465,5 +465,13 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public TriggerDesc[] getGameTriggers() {
 		return (TriggerDesc[]) getAttributes().getOrDefault(Attribute.GAME_TRIGGERS, new TriggerDesc[0]);
+	}
+
+	@Override
+	public int compareTo(Entity o) {
+		if (o == null) {
+			return 1;
+		}
+		return Integer.compare(this.getId(), o.getId());
 	}
 }

@@ -160,6 +160,7 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	public void networkPlay() {
 		logger.debug("Game starts: " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
+		getNetworkGameLogic().contextReady();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
 		logger.debug(getActivePlayer().getName() + " begins");

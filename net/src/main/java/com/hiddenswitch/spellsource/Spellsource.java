@@ -17,6 +17,7 @@ import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.events.GameEvent;
@@ -177,6 +178,7 @@ public class Spellsource {
 	 */
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
+			CardCatalogue.loadCardsFromPackage();
 			cachedStandardDecks = new ArrayList<>();
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
 			Set<URL> resourceList = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(toSet());

@@ -1,9 +1,12 @@
 package net.demilich.metastone.game.gameconfig;
 
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
+import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.MetaDeck;
+import net.demilich.metastone.game.decks.RandomDeck;
 import net.demilich.metastone.game.entities.heroes.MetaHero;
 
 import java.io.Serializable;
@@ -104,4 +107,12 @@ public class PlayerConfig implements Cloneable, Serializable {
 		return builder.toString();
 	}
 
+	public static PlayerConfig fromDeck(Deck deck) {
+		PlayerConfig config = new PlayerConfig();
+		config.setBehaviour(new DoNothingBehaviour());
+		config.setName(deck.getName());
+		config.setHeroCard(deck.getHeroCard());
+		config.setDeck(deck);
+		return config;
+	}
 }

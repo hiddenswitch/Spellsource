@@ -198,6 +198,7 @@ public interface CardList extends Iterable<Card>, List<Card> {
 	/**
 	 * Shuffles the instance.
 	 */
+	@Deprecated
 	CardList shuffle();
 
 	/**

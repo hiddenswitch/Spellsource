@@ -58,7 +58,7 @@ public class GameLogicAsync extends GameLogic {
 
 	@Override
 	@Suspendable
-	public void init(int playerId, boolean begins) throws UnsupportedOperationException {
+	public List<Card> init(int playerId, boolean begins) throws UnsupportedOperationException {
 		Player ignored = Sync.awaitFiber(r -> initAsync(playerId, begins, r1 -> r.handle(Future.succeededFuture(r1))));
 	}
 

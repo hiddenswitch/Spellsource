@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.common;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -83,6 +84,10 @@ public class GameState implements Serializable {
 	 * The current turn number.
 	 */
 	public final int turnNumber;
+	/**
+	 * The deck format of this game.
+	 */
+	public final DeckFormat deckFormat;
 
 	public GameState(GameContext fromContext) {
 		this(fromContext, fromContext.getTurnState(), false);
@@ -108,6 +113,7 @@ public class GameState implements Serializable {
 		activePlayerId = clone.getActivePlayerId();
 		turnNumber = clone.getTurn();
 		this.turnState = turnState;
+		this.deckFormat = fromContext.getDeckFormat();
 	}
 
 	@SuppressWarnings("unchecked")

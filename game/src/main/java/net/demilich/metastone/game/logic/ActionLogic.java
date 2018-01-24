@@ -130,8 +130,7 @@ public class ActionLogic implements Serializable {
 	public boolean hasAutoHeroPower(GameContext context, Player player) {
 		HeroPowerCard heroPower = player.getHero().getHeroPower();
 		heroPower.onWillUse(context, player);
-		EntityReference heroPowerReference = new EntityReference(heroPower.getId()
-		);
+		EntityReference heroPowerReference = new EntityReference(heroPower.getId());
 		return (context.getLogic().canPlayCard(player.getId(), heroPowerReference) && heroPower.getTargetRequirement() == TargetSelection.AUTO);
 	}
 
