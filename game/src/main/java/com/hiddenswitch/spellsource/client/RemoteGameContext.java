@@ -4,7 +4,6 @@ import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
-import com.hiddenswitch.spellsource.util.LoggerUtils;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -206,10 +205,6 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 				choice = getGameAction();
 			} else {
 				choice = getGameActionSync();
-			}
-
-			if (choice == null) {
-				LoggerUtils.log(this, this, new RuntimeException("Requested local action failed."));
 			}
 
 			ccs.getSendToServer().sendAction(action.id, choice);

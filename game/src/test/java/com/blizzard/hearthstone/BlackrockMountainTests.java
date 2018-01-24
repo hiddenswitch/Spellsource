@@ -59,7 +59,6 @@ public class BlackrockMountainTests extends TestBase {
 	@Test
 	public void testGrimPatron() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().setLoggingEnabled(true);
 			Minion grimPatron = playMinionCard(context, player, "minion_grim_patron");
 			context.endTurn();
 			Minion knifeJuggler = playMinionCard(context, opponent, "minion_knife_juggler");
@@ -79,7 +78,6 @@ public class BlackrockMountainTests extends TestBase {
 	@Test()
 	public void testAxeFlinger() {
 		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
-		context.getLogic().setLoggingEnabled(true);
 		Player player = context.getPlayer1();
 		int playerStartingHp = player.getHero().getHp();
 		int opponentStartingHp = context.getPlayer2().getHero().getHp();

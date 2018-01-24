@@ -17,7 +17,6 @@ public class ScenarioTests extends TestBase {
 	@Test
 	void testNecromancer() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().setLoggingEnabled(true);
 			context.getLogic().changeHero(player, ((HeroCard) CardCatalogue.getCardById("hero_necromancer")).createHero(), true);
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor") /*Cost 2*/;
 			Minion bearshark = playMinionCard(context, player, "minion_bearshark") /*Cost 3*/;

@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.HasValue;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,6 +173,7 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	@Suspendable
 	public void onRemove(GameContext context) {
+		expire();
 	}
 
 	@Override
@@ -194,9 +196,11 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public String toString() {
-		return "[Enchantment primaryTrigger=" + primaryTrigger + ", secondaryTrigger=" + secondaryTrigger + ", spell=" + getSpell()
-				+ ", hostReference=" + hostReference + ", oneTurn=" + oneTurn + ", expired=" + expired + ", persistentOwner="
-				+ persistentOwner + ", turnDelay=" + turnDelay + "]";
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("id", getId())
+				.append("sourceCard", getSourceCard() == null ? null : getSourceCard().getCardId())
+				.toString();
 	}
 
 	@Override
