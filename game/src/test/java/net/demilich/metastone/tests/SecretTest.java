@@ -61,7 +61,7 @@ public class SecretTest extends TestBase {
 		context.getLogic().endTurn(mage.getId());
 
 		for (int i = 0; i < 2; i++) {
-			playCard(context, mage, CardCatalogue.getCardById("secret_spellbender"));
+			playCard(context, mage, "secret_spellbender");
 			Assert.assertEquals(mage.getSecrets().size(), 1);
 
 			Card testSpellCard = CardCatalogue.getCardById("spell_frostbolt");
@@ -108,15 +108,15 @@ public class SecretTest extends TestBase {
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
 
-		playCard(context, player, CardCatalogue.getCardById("secret_duplicate"));
+		playCard(context, player, "secret_duplicate");
 
 		Minion novice = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_novice_engineer"));
 		while (player.getHand().getCount() < GameLogic.MAX_HAND_CARDS) {
-			playCard(context, player, CardCatalogue.getCardById("minion_novice_engineer"));
+			playCard(context, player, "minion_novice_engineer");
 		}
 		Assert.assertEquals(player.getHand().getCount(), GameLogic.MAX_HAND_CARDS);
 		context.endTurn();
-		playCard(context, opponent, CardCatalogue.getCardById("weapon_fiery_war_axe"));
+		playCard(context, opponent, "weapon_fiery_war_axe");
 
 		attack(context, opponent, opponent.getHero(), novice);
 		// player has full hand, therefor Duplicate should not have triggered
@@ -188,7 +188,7 @@ public class SecretTest extends TestBase {
 
 		player.getHero().setHp(3);
 		player.getHero().setAttribute(Attribute.ARMOR, 10);
-		playCard(context, player, CardCatalogue.getCardById("secret_ice_block"));
+		playCard(context, player, "secret_ice_block");
 		context.endTurn();
 
 		playCardWithTarget(context, opponent, CardCatalogue.getCardById("spell_bash"), player.getHero());
@@ -204,8 +204,8 @@ public class SecretTest extends TestBase {
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
-		playCard(context, player, CardCatalogue.getCardById("secret_avenge"));
-		playCard(context, player, CardCatalogue.getCardById("minion_murloc_raider"));
+		playCard(context, player, "secret_avenge");
+		playCard(context, player, "minion_murloc_raider");
 		Minion minion = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_murloc_raider"));
 		Assert.assertEquals(player.getSecrets().size(), 1);
 		context.endTurn();

@@ -11,14 +11,14 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER",
+      "target": "FRIENDLY_HAND",
       "cardCostModifier": {
         "class": "CardCostModifier",
-        "target": "FRIENDLY_HAND",
+        "target": "SELF",
         "value": 2,
         "operation": "SUBTRACT"
       },
-      "cardFilter": {
+      "filter": {
         "class": "CardFilter",
         "heroClasses": [
           "BLACK",

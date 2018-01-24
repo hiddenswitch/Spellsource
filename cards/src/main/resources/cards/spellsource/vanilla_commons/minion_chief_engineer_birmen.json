@@ -14,10 +14,10 @@
     },
     "spell": {
       "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER",
+      "target": "FRIENDLY_HAND",
       "cardCostModifier": {
         "class": "CardCostModifier",
-        "target": "FRIENDLY_HAND",
+        "target": "SELF",
         "value": 1,
         "operation": "SUBTRACT"
       }

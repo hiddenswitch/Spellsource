@@ -33,7 +33,6 @@ public class CopyMinionSpell extends Spell {
 		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
 		clone.clearEnchantments();
-		clone.setCardCostModifier(null);
 
 		Minion sourceActor = (Minion) context.resolveSingleTarget(context.getSummonReferenceStack().peek());
 		SpellDesc transformSpell = TransformMinionSpell.create(clone);
@@ -45,12 +44,7 @@ public class CopyMinionSpell extends Spell {
 
 		for (Trigger trigger : context.getTriggersAssociatedWith(template.getReference())) {
 			Trigger triggerClone = trigger.clone();
-			if (triggerClone instanceof CardCostModifier) {
-				context.getLogic().addManaModifier(player, (CardCostModifier) triggerClone, clone);
-			} else {
-				context.getLogic().addGameEventListener(player, triggerClone, clone);
-			}
-
+			context.getLogic().addGameEventListener(player, triggerClone, clone);
 		}
 	}
 }

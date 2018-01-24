@@ -19,6 +19,7 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -29,6 +30,23 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
+
+	@Test
+	public void testNestingRoc() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_bloodfen_raptor");
+			Minion nestingRoc = playMinionCard(context, player, "minion_nesting_roc");
+			Assert.assertTrue(nestingRoc.hasAttribute(Attribute.TAUNT));
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			Minion nestingRoc = playMinionCard(context, player, "minion_nesting_roc");
+			Assert.assertFalse(nestingRoc.hasAttribute(Attribute.TAUNT));
+		});
+	}
+
 	@Test
 	public void testMeteor() {
 		for (int j0 = 0; j0 < 3; j0++) {
@@ -672,7 +690,7 @@ public class JourneyToUngoroTests extends TestBase {
 	@Test
 	public void testEarthenScales() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, CardCatalogue.getCardById("token_sapling"));
+			playCard(context, player, "token_sapling");
 			Minion sapling = player.getMinions().get(0);
 			Assert.assertEquals(sapling.getAttack(), 1);
 			playCardWithTarget(context, player, CardCatalogue.getCardById("spell_earthen_scales"), sapling);
@@ -683,27 +701,39 @@ public class JourneyToUngoroTests extends TestBase {
 	@Test
 	public void testBarnabusTheStomper() {
 		runGym((context, player, opponent) -> {
-			shuffleToDeck(context,player,"token_sapling");
-			playCard(context, player, CardCatalogue.getCardById("token_barnabus_the_stomper"));
+			shuffleToDeck(context, player, "token_sapling");
+			playCard(context, player, "token_barnabus_the_stomper");
 			context.getLogic().drawCard(player.getId(), null);
 			Card sapling = player.getHand().get(0);
 			Assert.assertEquals(sapling.getCardId(), "token_sapling");
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, sapling), 0);
+			Assert.assertEquals(costOf(context, player, sapling), 0);
+		});
+	}
+
+	@Test
+	@Ignore
+	public void testBarnabusTheStomperTolinsGobletInteraction() {
+		// Tolin's Goblet interaction
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "token_sapling");
+			playCard(context, player, "token_barnabus_the_stomper");
+			playCard(context, player, "spell_tolins_goblet");
+			Assert.assertTrue(player.getHand().stream().allMatch(card -> costOf(context, player, card) == 0));
 		});
 	}
 
 	@Test
 	public void testManaBind() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, CardCatalogue.getCardById("secret_mana_bind"));
+			playCard(context, player, "secret_mana_bind");
 			context.endTurn();
-			playCardWithTarget(context, opponent, CardCatalogue.getCardById("spell_fireball"), player.getHero());
+			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
 			Card copiedFireball = player.getHand().get(0);
 			Assert.assertEquals(copiedFireball.getCardId(), "spell_fireball");
 			SpellCard graveyardFireball = (SpellCard) opponent.getGraveyard().get(opponent.getGraveyard().size() - 1);
 			Assert.assertEquals(graveyardFireball.getCardId(), "spell_fireball");
 			Assert.assertNotEquals(copiedFireball.getId(), graveyardFireball.getId());
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, copiedFireball), 0);
+			Assert.assertEquals(costOf(context, player, copiedFireball), 0);
 		});
 	}
 

@@ -9,6 +9,7 @@ import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -16,10 +17,36 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class TheGrandTournamentTests extends TestBase {
+
+	@Test
+	public void testSaboteur() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_saboteur");
+			HeroPowerCard heroPower = opponent.getHeroPowerZone().get(0);
+			Assert.assertEquals(costOf(context, opponent, heroPower), 2);
+			context.endTurn();
+			Assert.assertEquals(costOf(context, opponent, heroPower), 7);
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(costOf(context, opponent, heroPower), 2);
+		});
+	}
+
+	@Test
+	public void testKnightOfTheWild() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			Card knight = receiveCard(context, player, "minion_knight_of_the_wild");
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(costOf(context, player, knight), knight.getBaseManaCost() - 2);
+		});
+	}
+
 	@Test
 	public void testSideshowSpelleater() {
 		runGym((context, player, opponent) -> {
-			playCard(context,player,"minion_sideshow_spelleater");
+			playCard(context, player, "minion_sideshow_spelleater");
 			Assert.assertEquals(player.getHero().getHeroPower().getHeroClass(), opponent.getHero().getHeroPower().getHeroClass());
 		}, HeroClass.BLACK, HeroClass.VIOLET);
 	}
@@ -48,12 +75,12 @@ public class TheGrandTournamentTests extends TestBase {
 		Player player = context.getPlayer1();
 		Hero hero = player.getHero();
 
-		playCard(context, player, CardCatalogue.getCardById("weapon_deaths_bite"));
+		playCard(context, player, "weapon_deaths_bite");
 		Assert.assertEquals(hero.getWeapon().getAttack(), 4);
 		Assert.assertEquals(hero.getWeapon().getDurability(), 2);
-		playCard(context, player, CardCatalogue.getCardById("minion_tournament_attendee"));
+		playCard(context, player, "minion_tournament_attendee");
 		Assert.assertEquals(player.getMinions().size(), 1);
-		playCard(context, player, CardCatalogue.getCardById("weapon_kings_defender"));
+		playCard(context, player, "weapon_kings_defender");
 		Assert.assertEquals(hero.getWeapon().getAttack(), 3);
 		Assert.assertEquals(hero.getWeapon().getDurability(), 3);
 		Assert.assertEquals(player.getMinions().size(), 0);

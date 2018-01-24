@@ -139,7 +139,7 @@ public class DiscoverSpell extends Spell {
 		List<GameAction> discoverActions = new ArrayList<>();
 		for (int i = 0; i < choices.size(); i++) {
 			Card card = choices.get(i);
-			card.setId(context.getLogic().getIdFactory().generateId());
+			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.DISCOVER);
 

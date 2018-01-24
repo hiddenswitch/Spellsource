@@ -160,4 +160,8 @@ public class TriggerManager implements Cloneable, Serializable {
 			}
 		}
 	}
+
+	public List<Trigger> getTriggers() {
+		return triggers;
+	}
 }

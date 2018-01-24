@@ -192,7 +192,7 @@ public class SpellUtils {
 		List<GameAction> discoverActions = new ArrayList<>();
 		for (int i = 0; i < cards.getCount(); i++) {
 			Card card = cards.get(i);
-			card.setId(context.getLogic().getIdFactory().generateId());
+			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.DISCOVER);
 
@@ -225,6 +225,7 @@ public class SpellUtils {
 		for (Card card : cards) {
 			// Cards that are being discovered are always copies, so they are always removed from play afterwards.
 			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			context.getLogic().removeCard(card);
 		}
 
 		return discoverAction;
@@ -273,7 +274,7 @@ public class SpellUtils {
 			spellCardDesc.collectible = false;
 
 			Card card = spellCardDesc.createInstance();
-			card.setId(context.getLogic().getIdFactory().generateId());
+			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.DISCOVER);
 			cards.add(card);

@@ -35,7 +35,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -48,6 +47,7 @@ import java.util.stream.Stream;
 import static net.demilich.metastone.game.targeting.EntityReference.EVENT_TARGET;
 
 public class TheOldGodsTests extends TestBase {
+
 	@Test
 	public void testRenounceDarkness() {
 		runGym((context, player, opponent) -> {
@@ -63,8 +63,15 @@ public class TheOldGodsTests extends TestBase {
 					"minion_white_test")
 					.map(CardCatalogue::getCardById)
 					.collect(Collectors.toMap(Card::getHeroClass, Function.identity()));
-			shuffleToDeck(context,player,"minion_bloodfen_raptor");
-			shuffleToDeck(context,player,"minion_voidwalker");
+
+			final int count = 29;
+
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+
+			for (int i = 0; i < count; i++) {
+				shuffleToDeck(context, player, "minion_voidwalker");
+			}
+
 			receiveCard(context, player, "minion_bloodfen_raptor");
 			receiveCard(context, player, "minion_voidwalker");
 			GameLogic spyLogic = Mockito.spy(context.getLogic());
@@ -93,8 +100,8 @@ public class TheOldGodsTests extends TestBase {
 			Assert.assertEquals(Stream.concat(player.getHand().stream(), player.getDeck().stream())
 					.filter(card -> !card.hasHeroClass(HeroClass.ANY))
 					.filter(card -> !card.hasHeroClass(HeroClass.VIOLET))
-					.filter(card -> context.getLogic().getModifiedManaCost(player, card) == 1)
-					.count(), 2L);
+					.filter(card -> costOf(context, player, card) == 1)
+					.count(), count + 1);
 		}, HeroClass.VIOLET, HeroClass.VIOLET);
 	}
 
@@ -102,7 +109,7 @@ public class TheOldGodsTests extends TestBase {
 	public void testMarkOfYshaarj() {
 		// Test with beast
 		runGym((context, player, opponent) -> {
-			shuffleToDeck(context,player,"spell_mirror_image");
+			shuffleToDeck(context, player, "spell_mirror_image");
 			Minion raven = playMinionCard(context, player, "minion_enchanted_raven");
 			playCardWithTarget(context, player, "spell_mark_of_yshaarj", raven);
 			Assert.assertEquals(raven.getAttack(), 4);
@@ -112,7 +119,7 @@ public class TheOldGodsTests extends TestBase {
 
 		// Test with beast
 		runGym((context, player, opponent) -> {
-			shuffleToDeck(context,player,"spell_mirror_image");
+			shuffleToDeck(context, player, "spell_mirror_image");
 			Minion notBeast = playMinionCard(context, player, "token_steward");
 			playCardWithTarget(context, player, "spell_mark_of_yshaarj", notBeast);
 			Assert.assertEquals(notBeast.getAttack(), 3);
@@ -125,7 +132,7 @@ public class TheOldGodsTests extends TestBase {
 	public void testYshaarjRageUnboundShadowEssence() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_yshaarj_rage_unbound");
-			shuffleToDeck(context,player,"minion_bloodfen_raptor");
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
 			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");
 		});
@@ -135,7 +142,7 @@ public class TheOldGodsTests extends TestBase {
 			context.getLogic().shuffleToDeck(player, rageUnboundCard);
 			playCard(context, player, "spell_shadow_essence");
 			context.getLogic().removeCard(rageUnboundCard);
-			shuffleToDeck(context,player,"minion_bloodfen_raptor");
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
 			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");
 		});
@@ -243,7 +250,7 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testVilefinInquisitor() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, CardCatalogue.getCardById("minion_vilefin_inquisitor"));
+			playCard(context, player, "minion_vilefin_inquisitor");
 			Assert.assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_the_tidal_hand");
 		});
 	}
@@ -252,7 +259,7 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testCallInTheFinishers() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, CardCatalogue.getCardById("spell_call_in_the_finishers"));
+			playCard(context, player, "spell_call_in_the_finishers");
 
 			for (Minion minion : player.getMinions()) {
 				Assert.assertEquals(minion.getSourceCard().getCardId(), "token_murloc_razorgill");
@@ -299,7 +306,7 @@ public class TheOldGodsTests extends TestBase {
 					originalMinion[0] = original.summon();
 					handSize[0] = player.getHand().size();
 					final Card minionOverride = CardCatalogue.getCardById("minion_bloodfen_raptor");
-					minionOverride.setId(context.getLogic().getIdFactory().generateId());
+					minionOverride.setId(context.getLogic().generateId());
 					minionOverride.setOwner(player.getId());
 					minionOverride.moveOrAddTo(context, Zones.DISCOVER);
 					discoverAction.setCard(minionOverride);
@@ -325,12 +332,12 @@ public class TheOldGodsTests extends TestBase {
 		Player player = context.getPlayer1();
 		Hero hero = player.getHero();
 
-		playCard(context, player, CardCatalogue.getCardById("weapon_deaths_bite"));
+		playCard(context, player, "weapon_deaths_bite");
 		Assert.assertEquals(hero.getWeapon().getAttack(), 4);
 		Assert.assertEquals(hero.getWeapon().getDurability(), 2);
-		playCard(context, player, CardCatalogue.getCardById("minion_hogger_doom_of_elwynn"));
+		playCard(context, player, "minion_hogger_doom_of_elwynn");
 		Assert.assertEquals(player.getMinions().size(), 1);
-		playCard(context, player, CardCatalogue.getCardById("weapon_kings_defender"));
+		playCard(context, player, "weapon_kings_defender");
 		Assert.assertEquals(hero.getWeapon().getAttack(), 3);
 		Assert.assertEquals(hero.getWeapon().getDurability(), 2);
 		Assert.assertEquals(player.getMinions().size(), 2);

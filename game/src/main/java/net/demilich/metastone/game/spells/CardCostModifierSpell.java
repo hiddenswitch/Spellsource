@@ -1,16 +1,12 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -49,34 +45,8 @@ public class CardCostModifierSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardCostModifierDesc manaModifierDesc = (CardCostModifierDesc) desc.get(SpellArg.CARD_COST_MODIFIER);
-		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-		if (manaModifierDesc.get(CardCostModifierArg.TARGET) != null) {
-			// First, resolve the targets, so that you can get the current cards this affects.
-			// This spell SPECIFICALLY targets cards, even if those cards would change. So,
-			// targeting FRIENDLY_HAND would pull cards in the hand NOW, as opposed to cards
-			// that will be added next turn.
-			List<Entity> cards = context.resolveTarget(player, source, (EntityReference) manaModifierDesc.get(CardCostModifierArg.TARGET));
-			List<Integer> cardIds = new ArrayList<Integer>();
-			for (Entity card : cards) {
-				if (cardFilter == null || cardFilter.matches(context, player, card, source)) {
-					cardIds.add(card.getId());
-				}
-			}
-			
-			if (cardIds.isEmpty()) {
-				return;
-			}
-			manaModifierDesc = manaModifierDesc.removeArg(CardCostModifierArg.TARGET);
-			manaModifierDesc = manaModifierDesc.addArg(CardCostModifierArg.CARD_IDS, cardIds);
-		} else if (target != null && target instanceof Card) {
-			List<Integer> cardIds = new ArrayList<Integer>();
-			cardIds.add(target.getId());
-			manaModifierDesc = manaModifierDesc.addArg(CardCostModifierArg.CARD_IDS, cardIds);
-		}
-		if (target == null) {
-			target = player;
-		}
-		context.getLogic().addManaModifier(player, manaModifierDesc.create(), target);
+		// The target is the host of the mana cost modifier.
+		context.getLogic().addGameEventListener(player, manaModifierDesc.create(), target == null ? player : target);
 	}
 
 }

@@ -13,7 +13,7 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 public class WeaponCard extends ActorCard {
 
 	private static final Set<Attribute> ignoredAttributes = new HashSet<Attribute>(
-			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGER, Attribute.MANA_COST_MODIFIER, Attribute.BASE_ATTACK,
+			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGER, Attribute.BASE_ATTACK,
 					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO));
 
 	public WeaponCard(WeaponCardDesc desc) {

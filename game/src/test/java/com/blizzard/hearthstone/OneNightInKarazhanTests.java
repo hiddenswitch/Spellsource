@@ -20,6 +20,19 @@ import java.util.stream.Stream;
 public class OneNightInKarazhanTests extends TestBase {
 
 	@Test
+	public void testEtherealPeddler() {
+		runGym((context, player, opponent) -> {
+			Card bloodfen = receiveCard(context, player, "minion_bloodfen_raptor");
+			Card rogueCard = receiveCard(context, player, "minion_tomb_pillager");
+			Card mageCard = receiveCard(context, player, "minion_water_elemental");
+			playCard(context, player, "minion_ethereal_peddler");
+			Assert.assertEquals(costOf(context, player, bloodfen), bloodfen.getBaseManaCost());
+			Assert.assertEquals(costOf(context, player, rogueCard), rogueCard.getBaseManaCost());
+			Assert.assertEquals(costOf(context, player, mageCard), mageCard.getBaseManaCost() - 2);
+		}, HeroClass.BLACK, HeroClass.BLACK);
+	}
+
+	@Test
 	public void testBarnesSilencingInteraction() {
 		runGym((context, player, opponent) -> {
 			String cardId = "minion_bloodfen_raptor";
@@ -91,7 +104,7 @@ public class OneNightInKarazhanTests extends TestBase {
 			clearZone(context, player.getDeck());
 			final Card acidicSwampOoze = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
 			acidicSwampOoze.setOwner(player.getId());
-			acidicSwampOoze.setId(context.getLogic().getIdFactory().generateId());
+			acidicSwampOoze.setId(context.getLogic().generateId());
 			player.getDeck().addCard(acidicSwampOoze);
 			final Card minionNoviceEngineer = CardCatalogue.getCardById("minion_novice_engineer");
 			context.getLogic().receiveCard(player.getId(), minionNoviceEngineer);

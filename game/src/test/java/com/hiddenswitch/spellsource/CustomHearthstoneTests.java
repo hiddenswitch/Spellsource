@@ -14,9 +14,18 @@ import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
 public class CustomHearthstoneTests extends TestBase {
+
+	@Test
+	public void testNexusKingSalhadaar() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_nexus_king_salhadaar");
+			Assert.assertEquals(player.getMinions().size(), 1);
+			Assert.assertTrue(player.getHand().stream().allMatch(c -> costOf(context, player, c) == 1));
+		});
+	}
 
 	@Test
 	public void testSageOfFoursight() {
@@ -26,7 +35,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Assert.assertEquals(sage.getHp(), sage.getBaseHp(), "Sage should not buff itself.");
 			Card bloodfenCard = CardCatalogue.getCardById("minion_bloodfen_raptor");
 			context.getLogic().receiveCard(player.getId(), bloodfenCard);
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, bloodfenCard), bloodfenCard.getBaseManaCost() + 4, "Bloodfen should cost more because it's the next card the player will play.");
+			Assert.assertEquals(costOf(context, player, bloodfenCard), bloodfenCard.getBaseManaCost() + 4, "Bloodfen should cost more because it's the next card the player will play.");
 
 			// It should work with a one turn gap in the middle
 			context.endTurn();
@@ -37,7 +46,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp() + 4, "Bloodfen should be buffed.");
 			Card bloodfenCard2 = CardCatalogue.getCardById("minion_bloodfen_raptor");
 			context.getLogic().receiveCard(player.getId(), bloodfenCard2);
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, bloodfenCard), bloodfenCard.getBaseManaCost(), "Bloodfen 2 should not cost more.");
+			Assert.assertEquals(costOf(context, player, bloodfenCard), bloodfenCard.getBaseManaCost(), "Bloodfen 2 should not cost more.");
 			Minion bloodfen2 = playMinionCard(context, player, (MinionCard) bloodfenCard2);
 			Assert.assertEquals(bloodfen2.getAttack(), bloodfen2.getBaseAttack(), "The second bloodfen should not be buffed");
 			Assert.assertEquals(bloodfen2.getHp(), bloodfen2.getBaseHp(), "The second bloodfen should not be buffed");
@@ -133,10 +142,10 @@ public class CustomHearthstoneTests extends TestBase {
 				return actions.get(0);
 			});
 			playCard(context, player, "spell_think_fast");
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), cost[0] - 1);
+			Assert.assertEquals(costOf(context, player, player.getHand().get(0)), cost[0] - 1);
 			context.endTurn();
 			context.endTurn();
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), cost[0]);
+			Assert.assertEquals(costOf(context, player, player.getHand().get(0)), cost[0]);
 		}, HeroClass.BLACK, HeroClass.BLACK);
 	}
 
@@ -147,7 +156,7 @@ public class CustomHearthstoneTests extends TestBase {
 			playCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_deja_vu");
 			Assert.assertEquals(player.getMinions().size(), 2);
-			Assert.assertTrue(player.getHand().stream().allMatch(c -> context.getLogic().getModifiedManaCost(player, c) == 1));
+			Assert.assertTrue(player.getHand().stream().allMatch(c -> costOf(context, player, c) == 1));
 			playCard(context, player, player.getHand().get(1));
 			playCard(context, player, player.getHand().get(0));
 			for (int i = 2; i < 4; i++) {
@@ -224,7 +233,7 @@ public class CustomHearthstoneTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card card = CardCatalogue.getCardById("minion_giant_disappointment");
 			context.getLogic().receiveCard(player.getId(), card);
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), 8);
+			Assert.assertEquals(costOf(context, player, card), 8);
 		});
 	}
 
@@ -374,7 +383,7 @@ public class CustomHearthstoneTests extends TestBase {
 			int baseMana = card.getBaseManaCost();
 			Assert.assertEquals(baseMana, 7);
 			Assert.assertEquals(card.getRace(), Race.BEAST);
-			Assert.assertEquals(context.getLogic().getModifiedManaCost(player, card), baseMana - 2);
+			Assert.assertEquals(costOf(context, player, card), baseMana - 2);
 		});
 	}
 
