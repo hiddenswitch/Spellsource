@@ -1364,9 +1364,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 
 			config.setDeckFormat(impliedFormat);
 
-			final GameLogic logic = new GameLogic();
-			logic.setLoggingEnabled(false);
-
 			Player playerContext1 = new Player(playerConfigs.get(0));
 			Player playerContext2 = new Player(playerConfigs.get(1));
 			GameContext newGame = new GameContext(playerContext1, playerContext2, new GameLogic(), impliedFormat);

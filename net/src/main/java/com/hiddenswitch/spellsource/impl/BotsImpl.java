@@ -74,7 +74,6 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 			context.setDeckFormat(request.format);
 			context.setGameState(request.gameState);
 			context.setActivePlayerId(request.playerId);
-			context.getLogic().setLoggingEnabled(false);
 
 			try {
 				final GameAction result = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
