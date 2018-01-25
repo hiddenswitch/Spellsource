@@ -1,0 +1,30 @@
+{
+  "name": "Pocket Sand",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "COMMON",
+  "description": "Deal 3 damage to a minion. Give it Stealth until your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+  "class": "MetaSpell",
+  "spells": [
+	{
+    "class": "AddAttributeSpell",
+    "attribute": "STEALTH",
+    "revertTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+      }
+	},
+	{
+
+	"class": "DamageSpell",
+	"value": 3
+	}
+	]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

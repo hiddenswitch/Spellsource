@@ -1,0 +1,28 @@
+{
+  "name": "Unbounded",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Deals 1 damage to all enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "maxFires": 1,
+        "trigger": {
+          "eventTrigger": {
+            "class": "SpellCastedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 1
+          }
+      }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Kobold Chronomancer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Your next Spell has Spell Damage +1.",
+  "battlecry": {
+    "targetSelection": "NONE",
+        {
+      "class": "AddAttributeSpell",
+           "target": "FRIENDLY_PLAYER",
+      "value": 2,
+      "attribute": "SPELL_DAMAGE"
+      "revertTrigger": {
+               "class": "CardPlayedTrigger",
+        "cardType": "SPELL",
+        "targetPlayer": "SELF"
+      }
+	}
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
