@@ -1,0 +1,36 @@
+{
+  "name": "Chilled",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Freezes two random enemies.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true,
+    "spells": [
+      {"spell": {
+    "class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+      },
+      {"class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      }
+	}
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

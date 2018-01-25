@@ -1,0 +1,27 @@
+{
+  "name": "Metamagic",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Discover an extra effect for your next spell.",
+  "battlecry": {
+      "spell": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "RecastSpell"
+        },
+        "cards": [
+          "spell_quickened",
+          "spell_unbounded",
+          "spell_memorized",
+          "spell_chilled",
+	  "spell_enhanced",
+	  "spell_empowered"
+        ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

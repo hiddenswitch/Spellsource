@@ -1,0 +1,42 @@
+{
+  "name": "Enhanced",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "The next spell you cast costs (2) more and has Spell Damage +2.",
+  "targetSelection": "NONE",
+  "spell": {
+  "class": "MetaSpell",
+  "spells": [
+          {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "value": 2,
+      "cardType": "SPELL",
+      "expirationTrigger": {
+        "class": "CardPlayedTrigger",
+        "cardType": "SPELL",
+        "targetPlayer": "SELF"
+        }
+      }
+	},
+    {
+      "class": "AddAttributeSpell",
+           "target": "FRIENDLY_PLAYER",
+      "value": 2,
+      "attribute": "SPELL_DAMAGE"
+      "revertTrigger": {
+               "class": "CardPlayedTrigger",
+        "cardType": "SPELL",
+        "targetPlayer": "SELF"
+      }
+	}
+	  ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

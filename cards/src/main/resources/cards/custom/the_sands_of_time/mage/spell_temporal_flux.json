@@ -1,0 +1,29 @@
+{
+  "name": "Temporal Flux",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "RARE",
+  "rarity": "EPIC",
+  "description": "Deal 1 damage. Draw a card for each damage dealt.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "DrawSpell",
+          "value": {
+        "class": "AttributeValueProvider",
+        "target": "EVENT_TARGET",
+        "attribute": "LAST_HIT"
+      }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Quickened",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Costs (2) less.",
+  "targetSelection": "NONE",
+    "spell": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "value": 2,
+      "cardType": "SPELL",
+      "expirationTrigger": {
+        "class": "CardPlayedTrigger",
+        "cardType": "SPELL",
+        "targetPlayer": "SELF"
+      },
+      "operation": "SUBTRACT"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

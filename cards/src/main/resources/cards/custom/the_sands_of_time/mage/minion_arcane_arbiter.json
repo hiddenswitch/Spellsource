@@ -1,0 +1,28 @@
+{
+  "name": "Arcane Arbiter",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 6,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Add two copies of 'Arcane Explosion' to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+      "spell_arcane_explosion",
+      "spell_arcane_explosion"
+	]
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

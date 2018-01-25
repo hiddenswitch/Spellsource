@@ -1,0 +1,27 @@
+{
+  "name": "Memorized",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Returns to your deck after you cast it.",
+  "targetSelection": "NONE",
+  "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "maxFires": 1,
+        "trigger": {
+          "eventTrigger": {
+            "class": "SpellCastedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+    "class": "ShuffleToDeckSpell",
+    "target": "EVENT_CARD"
+  }
+      }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
