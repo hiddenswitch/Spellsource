@@ -43,6 +43,8 @@ public class CardCatalogue {
 		Card card = cards.getOrDefault(id.toLowerCase(), null);
 		if (card != null) {
 			card = card.getCopy();
+		} else {
+			return null;
 		}
 		if (card.getDesc().fileFormatVersion > version) {
 			return null;

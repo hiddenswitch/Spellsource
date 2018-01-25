@@ -2754,6 +2754,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public GameAction requestAction(Player player, List<GameAction> actions) {
+		if (actions == null
+				|| actions.size() == 0) {
+			return null;
+		}
 		for (int i = 0; i < actions.size(); i++) {
 			actions.get(i).setId(i);
 		}
@@ -3237,12 +3241,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected void mulliganAsync(Player player, boolean begins, Handler<Object> callback) {
+	protected void mulliganAsync(Player player, boolean begins, Handler<List<Card>> callback) {
 		throw new RuntimeException("Cannot call GameLogic::mulliganAsync from a non-async GameLogic instance.");
 	}
 
 	@Suspendable
-	public void initAsync(int playerId, boolean begins, Handler<Player> callback) {
+	public void initAsync(int playerId, boolean begins, Handler<List<Card>> callback) {
 		throw new RuntimeException("Cannot call GameLogic::initAsync from a non-async GameLogic instance.");
 	}
 

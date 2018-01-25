@@ -71,7 +71,6 @@ public class CloningTest extends TestBase {
 			player2Config.setHeroCard(getHeroCardForClass(HeroClass.RED));
 			Player player2 = new Player(player2Config);
 
-			
 
 			GameContext original = new GameContext(player1, player2, new GameLogic(), deckFormat);
 			TestMinionCard minionCard = new TestMinionCard(3, 3);

@@ -38,7 +38,7 @@ public class ClusterTest {
 	private List<Vertx> verticies = new ArrayList<>();
 	private List<HazelcastInstance> hazelcastInstances = new ArrayList<>();
 	private final int blockedThreadCheckInterval = (int) Duration.of(8, ChronoUnit.SECONDS).toMillis();
-	private final long timeoutMillis = Duration.of(200, ChronoUnit.SECONDS).toMillis();
+	private final long timeoutMillis = Duration.of(55, ChronoUnit.SECONDS).toMillis();
 
 	public void setLoggingLevel(Level level) {
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
@@ -46,7 +46,7 @@ public class ClusterTest {
 		root.setLevel(level);
 	}
 
-	@Test(timeout = 400000L)
+	@Test(timeout = 80000L)
 	@SuppressWarnings("unchecked")
 	public void testClusteredDeploy(TestContext context) {
 		if (isCI()) {
@@ -129,7 +129,7 @@ public class ClusterTest {
 		async.awaitSuccess(timeoutMillis);
 	}
 
-	@Test(timeout = 400000L)
+	@Test(timeout = 155000L)
 	public void testMultiHostCluster(TestContext context) {
 		if (isCI()) {
 			return;
@@ -146,7 +146,7 @@ public class ClusterTest {
 		context.assertTrue(client.isGameOver());
 	}
 
-	@Test(timeout = 400000L)
+	@Test(timeout = 155000L)
 	public void testMultiHostMultiClientCluster(TestContext context) throws InterruptedException {
 		if (isCI()) {
 			return;
@@ -155,8 +155,7 @@ public class ClusterTest {
 		setLoggingLevel(Level.ERROR);
 		startTwoUnitCluster(context);
 
-		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount;
+		final int count = 8;
 		CountDownLatch latch = new CountDownLatch(count);
 
 		Stream.generate(() -> new Thread(() -> {
@@ -169,7 +168,7 @@ public class ClusterTest {
 		})).limit(count).forEach(Thread::start);
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(timeoutMillis * 2, TimeUnit.MILLISECONDS);
+		latch.await(timeoutMillis + timeoutMillis / 2, TimeUnit.MILLISECONDS);
 		context.assertEquals(0L, latch.getCount());
 	}
 
@@ -196,7 +195,7 @@ public class ClusterTest {
 		CompositeFuture.all(clusterVerticiesStarts).setHandler(handler);
 
 		// Wait to deploy the clustered vertices with all services
-		async.awaitSuccess(timeoutMillis);
+		async.awaitSuccess(timeoutMillis * 2);
 	}
 
 	@Before
