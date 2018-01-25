@@ -172,12 +172,12 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		unwrap();
 	}
 
-	@Test(timeout = 200000L)
+	@Test(timeout = 400000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		setLoggingLevel(Level.ERROR);
 		wrap(context);
 		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 2;
+		final int count = processorCount * 3;
 		CountDownLatch latch = new CountDownLatch(count);
 		CompositeFuture.join(Collections.nCopies(2, Arrays.asList(
 				new GatewayImpl(),
@@ -203,7 +203,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(80L, TimeUnit.SECONDS);
+		latch.await(160L, TimeUnit.SECONDS);
 		getContext().assertEquals(latch.getCount(), 0L);
 		unwrap();
 	}

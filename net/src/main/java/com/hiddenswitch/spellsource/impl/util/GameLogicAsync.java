@@ -33,13 +33,13 @@ public class GameLogicAsync extends GameLogic {
 
 	@Override
 	@Suspendable
-	protected void mulligan(Player player, boolean begins) throws UnsupportedOperationException {
-		Object ignored = Sync.awaitFiber(r -> mulliganAsync(player, begins, r1 -> r.handle(Future.succeededFuture(r1))));
+	protected List<Card> mulligan(Player player, boolean begins) throws UnsupportedOperationException {
+		return Sync.awaitFiber(r -> mulliganAsync(player, begins, r1 -> r.handle(Future.succeededFuture(r1))));
 	}
 
 	@Override
 	@Suspendable
-	protected void mulliganAsync(Player player, boolean begins, Handler<Object> callback) {
+	protected void mulliganAsync(Player player, boolean begins, Handler<List<Card>> callback) {
 		FirstHand firstHand = new FirstHand(player, begins).invoke();
 
 		NetworkBehaviour networkBehaviour = (NetworkBehaviour) player.getBehaviour();
@@ -59,17 +59,17 @@ public class GameLogicAsync extends GameLogic {
 	@Override
 	@Suspendable
 	public List<Card> init(int playerId, boolean begins) throws UnsupportedOperationException {
-		Player ignored = Sync.awaitFiber(r -> initAsync(playerId, begins, r1 -> r.handle(Future.succeededFuture(r1))));
+		return Sync.awaitFiber(r -> initAsync(playerId, begins, r1 -> r.handle(Future.succeededFuture(r1))));
 	}
 
 	@Override
 	@Suspendable
-	public void initAsync(int playerId, boolean begins, Handler<Player> callback) {
+	public void initAsync(int playerId, boolean begins, Handler<List<Card>> callback) {
 		Player player = context.getPlayer(playerId);
 
 		mulliganAsync(player, begins, fiberHandler(o -> {
 			startGameForPlayer(player);
-			callback.handle(player);
+			callback.handle(o);
 		}));
 	}
 

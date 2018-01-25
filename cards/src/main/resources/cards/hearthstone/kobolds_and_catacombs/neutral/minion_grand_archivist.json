@@ -13,7 +13,15 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "RandomCardTargetSpell",
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RandomCardTargetSpell"
+        },
+        {
+          "class": "RemoveCardSpell"
+        }
+      ],
       "target": "FRIENDLY_DECK",
       "filter": {
         "class": "CardFilter",
