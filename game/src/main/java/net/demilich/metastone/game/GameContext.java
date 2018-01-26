@@ -964,6 +964,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		final Entity entity = targetLogic.findEntity(this, targetKey).transformResolved(this);
 
 		// TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
+
 		if (entity.getZone() == Zones.REMOVED_FROM_PLAY) {
 			throw new RuntimeException("Invalid reference.");
 		}

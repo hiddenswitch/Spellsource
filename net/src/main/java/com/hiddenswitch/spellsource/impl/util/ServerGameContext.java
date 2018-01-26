@@ -159,11 +159,11 @@ public class ServerGameContext extends GameContext {
 	 */
 	@Suspendable
 	public void networkPlay() {
-		logger.debug("Game starts: " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
+		logger.debug("networkPlay: Starting game between " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
 		getNetworkGameLogic().contextReady();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
-		logger.debug(getActivePlayer().getName() + " begins");
+		logger.debug("networkPlay: " + getActivePlayer().getName() + " begins");
 
 		updateActivePlayers();
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
