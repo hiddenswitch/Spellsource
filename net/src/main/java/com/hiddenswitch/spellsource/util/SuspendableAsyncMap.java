@@ -75,6 +75,25 @@ public final class SuspendableAsyncMap<K, V> implements SuspendableMap<K, V> {
 
 	@Override
 	@Suspendable
+	@SuppressWarnings("unchecked")
+	public boolean remove(Object key, Object value) {
+		return awaitResult(h -> map.removeIfPresent((K) key, (V) value, h));
+	}
+
+	@Override
+	@Suspendable
+	public boolean replace(K key, V oldValue, V newValue) {
+		return awaitResult(h -> map.replaceIfPresent(key, oldValue, newValue, h));
+	}
+
+	@Override
+	@Suspendable
+	public V replace(K key, V value) {
+		return awaitResult(h -> map.replace(key, value, h));
+	}
+
+	@Override
+	@Suspendable
 	public void putAll(Map<? extends K, ? extends V> m) {
 		for (Map.Entry<? extends K, ? extends V> entry : m.entrySet()) {
 			put(entry.getKey(), entry.getValue());

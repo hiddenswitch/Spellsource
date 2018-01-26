@@ -54,6 +54,11 @@ public class SuspendableWrappedMap<K, V> implements SuspendableMap<K, V> {
 	}
 
 	@Override
+	public boolean remove(Object key, Object value) {
+		return localMap.remove(key, value);
+	}
+
+	@Override
 	public void putAll(Map<? extends K, ? extends V> m) {
 		localMap.putAll(m);
 	}

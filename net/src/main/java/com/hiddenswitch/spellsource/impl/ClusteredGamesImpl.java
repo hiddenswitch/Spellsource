@@ -113,12 +113,13 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			pipe.stop();
 			writer.end();
 			reader.unregister();
+			logger.debug("connect: Closing writing pipe for userId " + userId);
 		};
 	}
 
 	@Suspendable
 	private void kill(String gameId) throws InterruptedException, SuspendExecution {
-		logger.debug("Calling kill for gameId " + gameId);
+		logger.debug("kill: Calling kill for gameId " + gameId);
 		final GameId key = new GameId(gameId);
 		GameSession session = sessions.remove(key);
 		CreateGameSessionResponse connection = connections.remove(key);
@@ -131,7 +132,12 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			throw new IllegalArgumentException("No users were returned correctly by the session.");
 		}
 
-		Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(request);
+		try {
+			Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(request);
+		} catch (VertxException noHandlerFound) {
+			logger.error("kill: For gameId " + gameId + ", an error occurred trying to expireOrEndMatch: " + noHandlerFound.getMessage());
+		}
+
 		session.kill();
 
 		if (gameActivityMonitors.containsKey(key)) {
@@ -169,6 +175,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 
 	@Override
 	public ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution {
+		logger.debug("concedeGameSession: Conceding game for gameId " + request.getGameId());
 		kill(request.getGameId());
 		return new ConcedeGameSessionResponse();
 	}
@@ -176,14 +183,17 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 	@Override
 	@Suspendable
 	public void stop() throws Exception {
+		logger.debug("stop: Stopping the ClusteredGamesImpl.");
 		super.stop();
 		Rpc.unregister(registration);
 		for (ActivityMonitor monitor : gameActivityMonitors.values()) {
 			monitor.cancel();
 		}
 		gameActivityMonitors.clear();
+		logger.debug("stop: Activity monitors unregistered");
 		for (GameId gameId : sessions.keySet()) {
 			kill(gameId.toString());
 		}
+		logger.debug("stop: Sessions killed");
 	}
 }

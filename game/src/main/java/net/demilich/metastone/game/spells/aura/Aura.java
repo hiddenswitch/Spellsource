@@ -109,8 +109,10 @@ public class Aura extends Enchantment {
 	public void onRemove(GameContext context) {
 		for (int targetId : affectedEntities) {
 			EntityReference targetKey = new EntityReference(targetId);
-			Entity target = context.resolveSingleTarget(targetKey);
-			context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+			Entity target = context.tryFind(targetKey);
+			if (target != null) {
+				context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+			}
 		}
 		affectedEntities.clear();
 	}
