@@ -123,7 +123,7 @@ public class UnityClient {
 
 		try {
 			MatchmakingQueuePutResponseUnityConnection unityConnection = null;
-			logger.debug("matchmakeAndPlay: Queueing userId " + getAccount().getId());
+			logger.debug("matchmakeAndPlay: Queueing userId " + getUserId());
 			while (unityConnection == null) {
 				MatchmakingQueuePutResponse mqpr = api.matchmakingConstructedQueuePut("constructed", new MatchmakingQueuePutRequest()
 						.casual(false)
@@ -142,7 +142,7 @@ public class UnityClient {
 	}
 
 	public void play() {
-		logger.debug("play: Playing userId " + getAccount().getId());
+		logger.debug("play: Playing userId " + getUserId());
 		// Get the port from the url
 		final URL basePathUrl;
 		try {
@@ -154,7 +154,7 @@ public class UnityClient {
 
 		endpoint = new WebsocketClientEndpoint(url, loginToken);
 		endpoint.addMessageHandler(h -> {
-			logger.debug("play: Handing message for userId " + getAccount().getId());
+			logger.debug("play: Handing message for userId " + getUserId());
 			ServerToClientMessage message = apiClient.getJSON().deserialize(h, ServerToClientMessage.class);
 
 			for (java.util.function.Consumer<ServerToClientMessage> handler : handlers) {
@@ -163,7 +163,7 @@ public class UnityClient {
 				}
 			}
 
-			logger.debug("play: Starting to handle message for userId " + getAccount().getId() + " of type " + message.getMessageType().toString());
+			logger.debug("play: Starting to handle message for userId " + getUserId() + " of type " + message.getMessageType().toString());
 			switch (message.getMessageType()) {
 				case ON_TURN_END:
 					if (turnsToPlay.getAndDecrement() <= 0) {
@@ -200,7 +200,7 @@ public class UnityClient {
 							.messageType(MessageType.UPDATE_ACTION)
 							.repliesTo(message.getId())
 							.actionIndex(random)));
-					logger.debug("play: UserId " + getAccount().getId() + " sent action with ID " + Integer.toString(random));
+					logger.debug("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(random));
 					break;
 				case ON_GAME_END:
 					// The game has ended.
@@ -209,15 +209,22 @@ public class UnityClient {
 					if (onGameOver != null) {
 						onGameOver.handle(this);
 					}
-					logger.debug("play: UserId " + getAccount().getId() + " received game end message.");
+					logger.debug("play: UserId " + getUserId() + " received game end message.");
 					break;
 			}
-			logger.debug("play: Done handling message for userId " + getAccount().getId() + " of type " + message.getMessageType().toString());
+			logger.debug("play: Done handling message for userId " + getUserId() + " of type " + message.getMessageType().toString());
 		});
 
-		logger.debug("play: UserId " + getAccount().getId() + " sent first message.");
+		logger.debug("play: UserId " + getUserId() + " sent first message.");
 		endpoint.sendMessage(serialize(new ClientToServerMessage()
 				.messageType(MessageType.FIRST_MESSAGE)));
+	}
+
+	protected String getUserId() {
+		if (getAccount() == null) {
+			return "(token=" + getToken() + ")";
+		}
+		return getAccount().getId();
 	}
 
 	protected void assertValidActions(ServerToClientMessage message) {
@@ -308,7 +315,7 @@ public class UnityClient {
 
 	@Suspendable
 	public UnityClient waitUntilDone() {
-		logger.debug("waitUntilDone: UserId " + getAccount().getId() + " is waiting");
+		logger.debug("waitUntilDone: UserId " + getUserId() + " is waiting");
 		float time = 0f;
 		while (!(time > 52f || this.isGameOver())) {
 			try {
