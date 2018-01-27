@@ -14,6 +14,12 @@
     },
     "spell": {
       "class": "MetaSpell",
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+      "randomTarget": true,
       "spells": [
         {
           "class": "RandomCardTargetSpell"
@@ -21,13 +27,7 @@
         {
           "class": "RemoveCardSpell"
         }
-      ],
-      "target": "FRIENDLY_DECK",
-      "filter": {
-        "class": "CardFilter",
-        "cardType": "SPELL"
-      },
-      "randomTarget": true
+      ]
     }
   },
   "collectible": true,
