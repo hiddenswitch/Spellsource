@@ -19,7 +19,7 @@ public class ForceDeathPhaseSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		context.getLogic().checkForDeadEntities();
+		context.getLogic().endOfSequence();
 	}
 
 }

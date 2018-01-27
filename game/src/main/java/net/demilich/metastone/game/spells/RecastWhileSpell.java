@@ -27,7 +27,7 @@ public class RecastWhileSpell extends Spell {
 			beforeCast(context, desc);
 			SpellUtils.castChildSpell(context, player, spell, source, target);
 			afterCast(context, desc);
-			context.getLogic().checkForDeadEntities();
+			context.getLogic().endOfSequence();
 			limit--;
 			if (limit < 0) {
 				return;

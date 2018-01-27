@@ -68,6 +68,7 @@ import static java.util.stream.Collectors.toList;
  * Minion, Card, int, boolean)} and {@link #fight(Player, Actor, Actor)}.
  */
 public class GameLogic implements Cloneable, Serializable, IdFactory {
+	public static final int END_OF_SEQUENCE_MAX_DEPTH = 14;
 	protected static Logger logger = LoggerFactory.getLogger(GameLogic.class);
 	/**
 	 * The maximum number of {@link Minion} entities that can be on a {@link Zones#BATTLEFIELD}.
@@ -261,6 +262,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				enchantment.setSourceCard(host.getSourceCard());
 			}
 		}
+
 
 		gameEventListener.onAdd(context);
 		context.addTrigger(gameEventListener);
@@ -560,7 +562,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
 		context.getEnvironment().remove(Environment.CHOOSE_ONE_CARD);
 
-		checkForDeadEntities();
+		endOfSequence();
 		if (targets == null || targets.size() != 1) {
 			context.fireGameEvent(new AfterSpellCastedEvent(context, playerId, sourceCard, null));
 		} else {
@@ -700,7 +702,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (sourceCard != null && sourceCard.getCardType().isCardType(CardType.SPELL) && !childSpell) {
 			context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
 
-			checkForDeadEntities();
+			endOfSequence();
 			if (targets == null || targets.size() != 1) {
 				context.fireGameEvent(new AfterSpellCastedEvent(context, playerId, sourceCard, null));
 			} else {
@@ -778,7 +780,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (resolveBattlecry && hero.getBattlecry() != null) {
 			resolveBattlecry(player.getId(), hero);
-			checkForDeadEntities();
+			endOfSequence();
 		}
 
 		if (hero.hasEnchantment()) {
@@ -801,19 +803,23 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * itself recursively until there are no more dead entities on the board.
 	 */
 	@Suspendable
-	public void checkForDeadEntities() {
-		checkForDeadEntities(0);
+	public void endOfSequence() {
+		endOfSequence(0);
 	}
 
 	/**
 	 * Checks all player minions and weapons for destroyed actors and proceeds with the removal in correct order.
 	 *
-	 * @param i The number of times this method has been called to avoid infinite death checking.
+	 * @param sequenceDepth The number of times this method has been called to avoid infinite death checking.
 	 */
 	@Suspendable
-	private void checkForDeadEntities(int i) {
-		// sanity check, this method should never call itself that often
-		if (i > 20) {
+	private void endOfSequence(int sequenceDepth) {
+		if (sequenceDepth == 0) {
+			context.fireGameEvent(new WillEndSequenceEvent(context));
+		}
+
+		// Only perfor at most END_OF_SEQUENCE_MAX_DEPTH times. This limits the number of deathrattles to evaluate.
+		if (sequenceDepth > END_OF_SEQUENCE_MAX_DEPTH) {
 			throw new RuntimeException("Infinite death checking loop");
 		}
 
@@ -846,6 +852,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		if (destroyList.isEmpty()) {
+			// This is the end of the sequence, call board changed event at most once even if no minions died.
+			if (sequenceDepth == 0) {
+				context.fireGameEvent(new BoardChangedEvent(context));
+			}
 			return;
 		}
 
@@ -856,8 +866,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (context.updateAndGetGameOver()) {
 			return;
 		}
+
+
 		// deathrattles have been resolved, which may lead to other actors being destroyed now, so we need to check again
-		checkForDeadEntities(i + 1);
+		endOfSequence(sequenceDepth + 1);
 	}
 
 	/**
@@ -1032,7 +1044,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Destroys the given targets, triggering their deathrattles if necessary.
 	 *
 	 * @param targets A list of {@link Actor} targets that should be destroyed.
-	 * @see #checkForDeadEntities() for the code that actually finds dead entities as a result of effects and eventually
+	 * @see #endOfSequence() for the code that actually finds dead entities as a result of effects and eventually
 	 * destroys them.
 	 */
 	@Suspendable
@@ -1237,7 +1249,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			context.fireGameEvent(new TurnEndEvent(context, playerId));
 		}
 
-		checkForDeadEntities();
+		endOfSequence();
 	}
 
 	/**
@@ -1259,7 +1271,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (resolveBattlecry
 				&& weapon.getBattlecry() != null) {
 			resolveBattlecry(playerId, weapon);
-			checkForDeadEntities();
+			endOfSequence();
 		}
 
 		postEquipWeapon(playerId, weapon, currentWeapon, player, weaponCard);
@@ -1919,7 +1931,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Marks an {@link Actor} as destroyed. Used for "Destroy" effects.
 	 * <p>
-	 * An actor marked this way gets moved to the {@link Zones#GRAVEYARD} by a {@link #checkForDeadEntities()} call.
+	 * An actor marked this way gets moved to the {@link Zones#GRAVEYARD} by a {@link #endOfSequence()} call.
 	 *
 	 * @param target The {@link Actor} to mark as destroyed.
 	 */
@@ -2208,7 +2220,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		context.getEnvironment().remove(Environment.TARGET);
 		if (action.getActionType() != ActionType.BATTLECRY) {
-			checkForDeadEntities();
+			endOfSequence();
 		}
 
 		// Calculate how all the entities changed.
@@ -2617,7 +2629,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param actor      The actor to remove.
 	 * @param peacefully If {@code true}, remove the card typically due to a {@link ReturnTargetToHandSpell}--that is,
 	 *                   not due to a destruction of the minion. Otherwise, move the {@link Minion} to the {@link
-	 *                   Zones#SET_ASIDE_ZONE} where it will be found by {@link #checkForDeadEntities()}.
+	 *                   Zones#SET_ASIDE_ZONE} where it will be found by {@link #endOfSequence()}.
 	 * @see ReturnTargetToHandSpell for usage of {@link #removeActor(Actor, boolean)}. Note, this and {@link
 	 * net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell} appear to be the only two users of this function.
 	 */
@@ -3008,7 +3020,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));
 		drawCard(playerId, null);
-		checkForDeadEntities();
+		endOfSequence();
 	}
 
 	/**
@@ -3056,7 +3068,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (resolveBattlecry && minion.getBattlecry() != null) {
 			resolveBattlecry(player.getId(), minion);
-			checkForDeadEntities();
+			endOfSequence();
 		}
 
 		postSummon(minion, source, player, false);
@@ -3375,7 +3387,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public void revealCard(Player player, Card cardToReveal) {
 		// For now, just trigger a reveal card event.
-		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), cardToReveal, 1.0));
+		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), cardToReveal));
 	}
 
 	public int getInternalId() {

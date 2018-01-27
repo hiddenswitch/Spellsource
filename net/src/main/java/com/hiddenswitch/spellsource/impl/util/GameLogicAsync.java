@@ -181,7 +181,7 @@ public class GameLogicAsync extends GameLogic {
 		Player player = preSummon.getPlayer();
 
 		Handler<AsyncResult<Boolean>> postSummonHandler = result -> {
-			checkForDeadEntities();
+			endOfSequence();
 
 			postSummon(minion, source, player, false);
 			if (summoned != null) {

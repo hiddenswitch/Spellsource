@@ -190,7 +190,10 @@ public class GameEvent  implements Serializable {
     WEAPON_DESTROYED("WEAPON_DESTROYED"),
     
     @SerializedName("WEAPON_EQUIPPED")
-    WEAPON_EQUIPPED("WEAPON_EQUIPPED");
+    WEAPON_EQUIPPED("WEAPON_EQUIPPED"),
+    
+    @SerializedName("WILL_END_SEQUENCE")
+    WILL_END_SEQUENCE("WILL_END_SEQUENCE");
 
     private String value;
 

@@ -93,7 +93,7 @@ public enum Attribute {
 	 * Zones#REMOVED_FROM_PLAY} zones.
 	 * <p>
 	 * At the end of {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)} in {@link
-	 * GameLogic#checkForDeadEntities()}, all entities with {@link #DESTROYED} will be sent to the {@link
+	 * GameLogic#endOfSequence()}, all entities with {@link #DESTROYED} will be sent to the {@link
 	 * Zones#GRAVEYARD}.
 	 *
 	 * @see Actor#isDestroyed() for a complete list of situations where an {@link Actor} is destroyed.
