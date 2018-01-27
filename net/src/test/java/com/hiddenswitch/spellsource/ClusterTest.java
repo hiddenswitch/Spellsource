@@ -12,6 +12,7 @@ import io.vertx.core.*;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.unit.junit.Repeat;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import org.junit.After;
@@ -37,8 +38,8 @@ public class ClusterTest {
 	private Logger logger = LoggerFactory.getLogger(ClusterTest.class);
 	private List<Vertx> verticies = new ArrayList<>();
 	private List<HazelcastInstance> hazelcastInstances = new ArrayList<>();
-	private final int blockedThreadCheckInterval = (int) Duration.of(8, ChronoUnit.SECONDS).toMillis();
-	private final long timeoutMillis = Duration.of(55, ChronoUnit.SECONDS).toMillis();
+	private static final int blockedThreadCheckInterval = (int) Duration.of(8, ChronoUnit.SECONDS).toMillis();
+	private static final long timeoutMillis = Duration.of(55, ChronoUnit.SECONDS).toMillis();
 
 	public void setLoggingLevel(Level level) {
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
@@ -46,7 +47,7 @@ public class ClusterTest {
 		root.setLevel(level);
 	}
 
-	@Test(timeout = 80000L)
+	@Test(timeout = 155000L)
 	@SuppressWarnings("unchecked")
 	public void testClusteredDeploy(TestContext context) {
 		if (isCI()) {
@@ -152,10 +153,10 @@ public class ClusterTest {
 			return;
 		}
 
-		setLoggingLevel(Level.DEBUG);
+		setLoggingLevel(Level.ERROR);
 		startTwoUnitCluster(context);
 
-		final int count = 8;
+		final int count = (Runtime.getRuntime().availableProcessors() / 2 + 1) * 2;
 		CountDownLatch latch = new CountDownLatch(count);
 
 		Stream.generate(() -> new Thread(() -> {
@@ -221,7 +222,11 @@ public class ClusterTest {
 
 		CompositeFuture.join(verticies.stream().map(v -> {
 			Future<Void> future = Future.future();
-			v.close(future);
+			if (v != null) {
+				v.close(future);
+			} else {
+				future.complete();
+			}
 			return future;
 		}).collect(Collectors.toList())).setHandler(context.asyncAssertSuccess(then -> {
 			hazelcastInstances.forEach(HazelcastInstance::shutdown);

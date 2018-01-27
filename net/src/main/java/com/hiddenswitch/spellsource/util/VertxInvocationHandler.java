@@ -28,13 +28,15 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  * @see java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler) for more about proxies.
  */
 class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
+	final String deploymentId;
 	final String name;
 	final EventBus eb;
 	final boolean sync;
 	final Handler<AsyncResult<Object>> next;
 	long timeout;
 
-	VertxInvocationHandler(String name, EventBus eb, boolean sync, Handler<AsyncResult<Object>> next) {
+	VertxInvocationHandler(String deploymentId, EventBus eb, boolean sync, Handler<AsyncResult<Object>> next, String name) {
+		this.deploymentId = deploymentId;
 		this.name = name;
 		this.eb = eb;
 		this.sync = sync;
@@ -110,6 +112,10 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 		}
 
 
-		eb.send(name + "::" + methodName, message, deliveryOptions, Sync.fiberHandler(new ReplyHandler(next)));
+		String address = name + "::" + methodName;
+		if (deploymentId != null) {
+			address = deploymentId + "::" + address;
+		}
+		eb.send(address, message, deliveryOptions, Sync.fiberHandler(new ReplyHandler(next)));
 	}
 }

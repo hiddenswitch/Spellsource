@@ -34,11 +34,11 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 	}
 
 	static TestContext wrappedContext;
-	Logger logger = LoggerFactory.getLogger(ServiceTest.class);
 	protected Vertx vertx;
 	protected T service;
 
 	public void setLoggingLevel(Level level) {
+		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
 				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
 		root.setLevel(level);

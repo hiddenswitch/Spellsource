@@ -1,6 +1,10 @@
 package com.hiddenswitch.spellsource.util;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.glassfish.tyrus.client.ClientManager;
+import org.glassfish.tyrus.client.ClientProperties;
+import org.glassfish.tyrus.client.ThreadPoolConfig;
+import org.glassfish.tyrus.container.grizzly.client.GrizzlyClientProperties;
 import org.junit.Assert;
 
 import javax.websocket.*;
@@ -8,11 +12,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 
-/**
- * ChatServer Client
- *
- * @author Jiji_Sasidharan
- */
 @ClientEndpoint
 public class WebsocketClientEndpoint {
 	private Session userSession = null;
@@ -21,8 +20,11 @@ public class WebsocketClientEndpoint {
 	public WebsocketClientEndpoint(String endpoint, String auth) {
 		try {
 			URI endpointURI = new URI(endpoint + "?X-Auth-Token=" + auth);
-			WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-			container.connectToServer(this, endpointURI);
+			ClientManager client = ClientManager.createClient();
+			client.getProperties().put(ClientProperties.SHARED_CONTAINER, true);
+			client.getProperties().put(GrizzlyClientProperties.SELECTOR_THREAD_POOL_CONFIG, ThreadPoolConfig.defaultConfig().setMaxPoolSize(256));
+			client.getProperties().put(GrizzlyClientProperties.WORKER_THREAD_POOL_CONFIG, ThreadPoolConfig.defaultConfig().setMaxPoolSize(256));
+			client.connectToServer(this, endpointURI);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

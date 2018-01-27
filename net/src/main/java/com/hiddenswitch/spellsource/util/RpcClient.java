@@ -8,6 +8,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.NoSuchElementException;
 
 /**
  * A remote procedure call client. Its methods, {@link #sync()}, {@link #uncheckedSync()} and {@link #async(Handler)}
@@ -105,6 +106,23 @@ public interface RpcClient<T> {
 	 */
 	@Suspendable
 	T sync() throws SuspendExecution, InterruptedException;
+
+	/**
+	 * Gets ready to make an idiomatically synchronous (in the sense of {@link co.paralleluniverse.fibers.Fiber}) call
+	 * to an API as served by a specific instance.
+	 * <p>
+	 * Internally, retrieves a proxy of the service configured for Fibers "sync" calls. You must be inside a Fiber
+	 * (e.g., a handler wrapped in {@link Sync#suspendableHandler(SuspendableAction1)}) to use this proxy. The methods
+	 * called on the proxy will return their values, even though the call with go across the event bus.
+	 * <p>
+	 * You <b>can</b> reuse this proxy for more than one sync method call.
+	 * <p>
+	 * The function throws a checked exception if the specified deployment is not found.
+	 *
+	 * @param deploymentId The deployment ID of the instance to try to navigate this request to.
+	 * @return {T} A proxy whose methods will return the actual values.
+	 */
+	T sync(String deploymentId) throws SuspendExecution, InterruptedException, NoSuchElementException;
 
 	/**
 	 * Gets ready to make an idiomatically synchronous (in the sense of {@link co.paralleluniverse.fibers.Fiber}) call
