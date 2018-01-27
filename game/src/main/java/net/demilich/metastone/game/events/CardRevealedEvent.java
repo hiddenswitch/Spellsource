@@ -26,4 +26,9 @@ public final class CardRevealedEvent extends GameEvent implements HasCard {
 	public GameEventType getEventType() {
 		return GameEventType.REVEAL_CARD;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
 }

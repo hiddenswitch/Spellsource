@@ -471,7 +471,8 @@ public interface Games {
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
 			if (card.getCardType() == CardType.SPELL
 					&& card instanceof SecretCard
-					&& card.getOwner() != playerId) {
+					&& card.getOwner() != playerId
+					&& event instanceof CardPlayedEvent) {
 				entity = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 			}
 
@@ -516,6 +517,12 @@ public interface Games {
 			final QuestSuccessfulEvent questSuccessfulEvent = (QuestSuccessfulEvent) event;
 			clientEvent.questSuccessful(new GameEventQuestSuccessful()
 					.quest(getEntity(workingContext, questSuccessfulEvent.getQuest(), playerId)));
+		} else if (event instanceof JoustEvent) {
+			final JoustEvent joustEvent = (JoustEvent) event;
+			clientEvent.joust(new GameEventJoust()
+					.ownCard(getEntity(workingContext, joustEvent.getOwnCard(), playerId))
+					.opponentCard(getEntity(workingContext, joustEvent.getOpponentCard(), playerId))
+					.won(joustEvent.isWon()));
 		}
 
 		return clientEvent;
@@ -939,7 +946,7 @@ public interface Games {
 		if (heroClass == null) {
 			heroClass = HeroClass.ANY;
 		}
-		
+
 		entityState.heroClass(heroClass.toString());
 		entityState.cardType(EntityState.CardTypeEnum.valueOf(card.getCardType().toString()));
 		final boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
