@@ -30,12 +30,13 @@ public class DeployCluster {
 	private static final String INSTANCE_COUNT = "instancecount";
 	private static final String KEY_PAIR = "keypair";
 	private static final String INSTANCE_TYPE = "instancetype";
+	private static final String HELP = "help";
 
 	public static void main(String[] args) throws ParseException, SdkClientException {
 		Logger logger = Common.getLogger(DeployCluster.class);
 
 		String appArgs = "";
-		String jar = "cluster/build/libs/cluster-1.2.0-all.jar";
+		String jar = "cluster/build/libs/cluster-1.3.0-all.jar";
 		String mainClass = ControlApplication.class.getName();
 		String bucketName = "clustercode";
 		String jobId = RandomStringUtils.randomAlphanumeric(8);
@@ -52,7 +53,7 @@ public class DeployCluster {
 		// Parse all the options
 		Options options = new Options()
 				.addOption(APP_ARGS, true, "Application arguments to pass.")
-				.addOption(JAR, true, defaultsTo("The jar built with shadow:shadowJar containing the code to execute.", jar))
+				.addOption(JAR, true, defaultsTo("The jar built with cluster:shadowJar containing the code to execute.", jar))
 				.addOption(MAIN_CLASS, true, defaultsTo("The main class to execute with Spark.", mainClass))
 				.addOption(CODE_BUCKET_NAME, true, defaultsTo("The bucket name to upload code to.", bucketName))
 				.addOption(JOB_ID, true, defaultsTo("An ID for the specific cluster job.", jobId))
@@ -66,7 +67,21 @@ public class DeployCluster {
 				.addOption(INSTANCE_TYPE, true, defaultsTo("The type of the instance to use for spot pricing.", instanceType));
 
 		CommandLineParser parser = new DefaultParser();
-		CommandLine cmd = parser.parse(options, args, false);
+		CommandLine cmd;
+		try {
+			cmd = parser.parse(options, args, false);
+		} catch (ParseException e) {
+			System.err.println(e.getMessage());
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp("java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.DeployCluster --help", options);
+			return;
+		}
+
+		if (cmd.hasOption(HELP)) {
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp("java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.DeployCluster --help", options);
+			return;
+		}
 
 		if (cmd.hasOption(JAR)) {
 			jar = cmd.getOptionValue(JAR);
