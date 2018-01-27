@@ -297,6 +297,21 @@ public class CustomHearthstoneTests extends TestBase {
 			Assert.assertEquals(opponentMinion.getAttack(), opponentMinion.getBaseAttack() + 1);
 			Assert.assertEquals(opponentMinion.getHp(), opponentMinion.getBaseHp() + 1);
 		});
+
+		// Check that Saronite Chain Gang has correct stats
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_power_trip");
+			playCard(context, player, "minion_saronite_chain_gang");
+			player.getMinions().forEach(m -> Assert.assertEquals(m.getAttack(), 3));
+			player.getMinions().forEach(m -> Assert.assertEquals(m.getHp(), 4));
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_saronite_chain_gang");
+			playCard(context, player, "spell_power_trip");
+			player.getMinions().forEach(m -> Assert.assertEquals(m.getAttack(), 3));
+			player.getMinions().forEach(m -> Assert.assertEquals(m.getHp(), 4));
+		});
 	}
 
 	@Test

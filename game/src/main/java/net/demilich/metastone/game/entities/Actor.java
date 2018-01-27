@@ -294,6 +294,11 @@ public abstract class Actor extends Entity {
 		clone.setId(IdFactory.UNASSIGNED);
 		clone.setOwner(IdFactory.UNASSIGNED);
 		clone.getAttributes().put(Attribute.COPIED_FROM, this.getReference());
+		// Clear aura buffs when copying an actor
+		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
+		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);
+		clone.getAttributes().remove(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
+		// TODO: When auras put attributes on minions that aren't attack or hp bonuses, they must be removed here
 		return clone;
 	}
 }
