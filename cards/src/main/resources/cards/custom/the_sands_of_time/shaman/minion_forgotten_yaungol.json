@@ -1,6 +1,6 @@
 {
   "name": "Forgotten Yaungol",
-  "baseManaCost": 3,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "SILVER",
   "baseAttack": 3,
