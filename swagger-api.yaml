@@ -520,6 +520,7 @@ definitions:
           - 'SILENCE'
           - 'WEAPON_DESTROYED'
           - 'WEAPON_EQUIPPED'
+          - 'WILL_END_SEQUENCE'
       afterPhysicalAttack:
         $ref: '#/definitions/PhysicalAttackEvent'
       drawCard:

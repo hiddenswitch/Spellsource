@@ -15,6 +15,53 @@ import org.testng.annotations.Test;
 
 public class GoblinsVersusGnomesTests extends TestBase {
 	@Test
+	public void testMalganisVoidcallerVoidwalkerSheepInteraction() {
+		/*
+		From https://www.youtube.com/watch?v=lm1t1FU-ftc
+		If you kill a minion with an aura and a minion with a Deathrattle simultaneously, non-Health effects of the aura
+		are not active during the following Death Phase because the minion is removed from play. However, Health effects
+		of the aura will be active, because Hearthstone does not recalculate Health changes after the minions are
+		killed, unless a new minion is summoned.[261][262][263] However, a health-granting aura such as Mal'Ganis can
+		save a minion from dying, even if it enters play the same Phase the other minion was mortally wounded, because
+		the aura recalculation is done before the Death Creation Step.
+		 */
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion voidwalker = playMinionCard(context, opponent, "minion_voidwalker");
+			Minion voidcaller = playMinionCard(context, opponent, "minion_voidcaller");
+			voidcaller.setHp(2);
+			playCard(context, opponent, "minion_explosive_sheep");
+			receiveCard(context, opponent, "minion_malganis");
+			context.endTurn();
+			playCard(context, player, "spell_holy_nova");
+			Assert.assertEquals(voidwalker.getAttack(), 3);
+			Assert.assertEquals(voidwalker.getHp(), 1);
+			Minion malganis = opponent.getMinions().get(1);
+			Assert.assertEquals(malganis.getAttack(), 9);
+			Assert.assertEquals(malganis.getHp(), 5);
+			Assert.assertEquals(opponent.getMinions().size(), 2);
+		});
+	}
+
+	@Test
+	public void testGahzrillaEnchantmentInteractions() {
+		runGym((context, player, opponent) -> {
+			Minion gahzrilla = playMinionCard(context, player, "minion_gahzrilla");
+			playCard(context, player, "minion_lance_carrier");
+			Assert.assertEquals(gahzrilla.getAttack(), 8);
+			Assert.assertEquals(gahzrilla.getHp(), 9);
+			playCard(context, player, "minion_cruel_taskmaster");
+			Assert.assertEquals(gahzrilla.getAttack(), 20);
+			Assert.assertEquals(gahzrilla.getHp(), 8);
+			playCard(context, player, "minion_abusive_sergeant");
+			Assert.assertEquals(gahzrilla.getAttack(), 22);
+			context.endTurn();
+			Assert.assertEquals(gahzrilla.getAttack(), 20);
+		});
+	}
+
+	@Test
 	public void testUnstablePortal() {
 		runGym((context, player, opponent) -> {
 			Card yeti = overrideRandomCard(context, "minion_chillwind_yeti");

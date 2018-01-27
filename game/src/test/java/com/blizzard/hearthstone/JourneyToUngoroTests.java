@@ -107,6 +107,21 @@ public class JourneyToUngoroTests extends TestBase {
 	}
 
 	@Test
+	public void testCrystalCoreExistingMinionsInteraction() {
+		Consumer<Minion> checkMinion = (Minion minion) -> {
+			Assert.assertEquals(minion.getAttack(), 5);
+			Assert.assertEquals(minion.getHp(), 5);
+		};
+
+		// Check that existing minions on the board get buffed
+		runGym((context, player, opponent) -> {
+			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_crystal_core");
+			checkMinion.accept(minion1);
+		});
+	}
+
+	@Test
 	public void testTheCavernsBelow() {
 		// Plain test
 		runGym((context, player, opponent) -> {

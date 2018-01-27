@@ -7,20 +7,14 @@ import net.demilich.metastone.game.entities.Entity;
 public final class CardRevealedEvent extends GameEvent implements HasCard {
 
 	private final Card card;
-	private final double delay;
 
-	public CardRevealedEvent(GameContext context, int playerId, Card card, double delay) {
+	public CardRevealedEvent(GameContext context, int playerId, Card card) {
 		super(context, playerId, -1);
 		this.card = card;
-		this.delay = delay;
 	}
 
 	public Card getCard() {
 		return card;
-	}
-
-	public double getDelay() {
-		return delay;
 	}
 
 	@Override

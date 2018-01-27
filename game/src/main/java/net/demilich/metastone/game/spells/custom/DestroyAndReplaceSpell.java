@@ -41,7 +41,7 @@ public class DestroyAndReplaceSpell extends Spell {
 
 		SpellDesc destroySpell = DestroySpell.create(EntityReference.FRIENDLY_MINIONS);
 		context.getLogic().castSpell(player.getId(), destroySpell, source, null, true);
-		context.getLogic().checkForDeadEntities();
+		context.getLogic().endOfSequence();
 
 		String[] treants = new String[minionCount];
 		for (int i = 0; i < minionCount; i++) {

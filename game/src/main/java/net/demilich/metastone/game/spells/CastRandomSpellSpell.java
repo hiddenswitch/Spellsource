@@ -64,7 +64,7 @@ public class CastRandomSpellSpell extends Spell {
 			Card randomCard = context.getLogic().getRandom(filteredSpells).getCopy();
 			logger.debug("Yogg-Saron chooses to play " + randomCard.getName());
 			RandomCardTargetSpell.castCardWithRandomTargets(context, owner, source, randomCard);
-			context.getLogic().checkForDeadEntities();
+			context.getLogic().endOfSequence();
 		}
 
 		player.getAttributes().remove(Attribute.RANDOM_CHOICES);

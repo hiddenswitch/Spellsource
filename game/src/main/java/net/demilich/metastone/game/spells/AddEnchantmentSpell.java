@@ -48,6 +48,7 @@ public class AddEnchantmentSpell extends Spell {
 		if (aura != null) {
 			aura = aura.clone();
 			aura.setOwner(player.getId());
+			// Enchantments added this way should trigger a board changed event.
 			context.getLogic().addGameEventListener(player, aura, target);
 		}
 	}
