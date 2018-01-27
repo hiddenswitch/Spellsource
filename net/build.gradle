@@ -72,6 +72,7 @@ tasks.withType(JavaExec) {
 test {
     jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
     systemProperty "spellsource.port", "8080"
+    systemProperty "vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory"
     useJUnit()
     testLogging {
         events "failed"

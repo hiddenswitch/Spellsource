@@ -5,10 +5,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.models.CreateAccountRequest;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
+import io.vertx.core.*;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.ext.sync.Sync;
@@ -102,7 +100,7 @@ public class Rpc {
 
 		Registration registration = new Registration();
 
-		registration.setMessageConsumers(Stream.of(serviceInterface.getDeclaredMethods()).map(method -> {
+		registration.setMessageConsumers(Stream.of(serviceInterface.getDeclaredMethods()).flatMap(method -> {
 			String methodName = name + "::" + method.getName();
 
 			SuspendableFunction<Object, Object> method1 = arg -> method.invoke(instance, arg);
@@ -114,9 +112,18 @@ public class Rpc {
 				serialization = rpcOptions.serialization();
 			}
 			if (serialization == RpcOptions.Serialization.JAVA) {
-				return eb.consumer(methodName, Sync.fiberHandler(new BufferEventBusHandler<>(method1)));
+				MessageConsumer<Buffer> consumer = eb.consumer(methodName, Sync.fiberHandler(new BufferEventBusHandler<>(method1)));
+				// If the instance we are consuming supports deployment IDs, register a function prefixed with the
+				// deployment ID in order to support stateful message consumers.
+				if (instance instanceof AbstractVerticle) {
+					AbstractVerticle deployedInstance = (AbstractVerticle) instance;
+					return Stream.of(consumer,
+							// Specific deployment instance ID consumer.
+							eb.consumer(deployedInstance + "::" + methodName, Sync.fiberHandler(new BufferEventBusHandler<>(method1))));
+				}
+				return Stream.of(consumer);
 			} else if (serialization == RpcOptions.Serialization.JSON) {
-				return eb.consumer(methodName, Sync.fiberHandler(new JsonEventBusHandler<>(method1, method.getParameterTypes()[0])));
+				return Stream.of(eb.consumer(methodName, Sync.fiberHandler(new JsonEventBusHandler<>(method1, method.getParameterTypes()[0]))));
 			}
 
 			throw new RuntimeException("Not reachable.");

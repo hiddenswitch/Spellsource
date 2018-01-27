@@ -11,10 +11,7 @@ import com.hiddenswitch.spellsource.impl.server.GameSessionImpl;
 import com.hiddenswitch.spellsource.impl.server.SessionWriter;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Registration;
-import com.hiddenswitch.spellsource.util.Rpc;
-import com.hiddenswitch.spellsource.util.SuspendableMap;
-import com.hiddenswitch.spellsource.util.Sync;
+import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
@@ -23,14 +20,15 @@ import io.vertx.core.streams.Pump;
 import net.demilich.metastone.game.cards.CardCatalogue;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> implements Games {
 	public static final String READER_ADDRESS_PREFIX = "ClusteredGamesImpl/";
 	private Registration registration;
 	private SuspendableMap<GameId, CreateGameSessionResponse> connections;
-	private Map<GameId, GameSession> sessions = new HashMap<>();
-	private Map<GameId, List<Runnable>> pipeClosers = new HashMap<>();
-	private Map<GameId, ActivityMonitor> gameActivityMonitors = new HashMap<>();
+	private Map<GameId, GameSession> sessions = new ConcurrentHashMap<>();
+	private Map<GameId, List<Runnable>> pipeClosers = new ConcurrentHashMap<>();
+	private Map<GameId, ActivityMonitor> gameActivityMonitors = new ConcurrentHashMap<>();
 
 	@Override
 	public void start() throws SuspendExecution {
@@ -119,8 +117,13 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 
 	@Suspendable
 	private void kill(String gameId) throws InterruptedException, SuspendExecution {
-		logger.debug("kill: Calling kill for gameId " + gameId);
 		final GameId key = new GameId(gameId);
+		if (!sessions.containsKey(key)) {
+			logger.debug("kill: This deployment with deploymentId " + deploymentID() + " does not contain the gameId "
+					+ gameId);
+			return;
+		}
+		logger.debug("kill: Calling kill for gameId " + gameId);
 		GameSession session = sessions.remove(key);
 		CreateGameSessionResponse connection = connections.remove(key);
 
@@ -154,12 +157,33 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 
 	@Override
 	public DescribeGameSessionResponse describeGameSession(DescribeGameSessionRequest request) {
-		return new DescribeGameSessionResponse();
+		GameId key = new GameId(request.getGameId());
+		if (sessions.containsKey(key)) {
+			logger.debug("describeGameSession: Describing gameId " + request.getGameId());
+			return DescribeGameSessionResponse.fromGameContext(sessions.get(key).getGameContext());
+		} else {
+			logger.debug("describeGameSession: This game session does not contain the gameId " + request.getGameId());
+			return new DescribeGameSessionResponse();
+		}
 	}
 
 	@Override
 	public EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution {
-		kill(request.getGameId());
+		final GameId key = new GameId(request.getGameId());
+		if (sessions.containsKey(key)) {
+			logger.debug("endGameSession: Ending the game session for gameId " + request.getGameId());
+			kill(request.getGameId());
+		} else {
+			logger.debug("endGameSession: This instance does not contain the gameId " + request.getGameId()
+					+ ". Redirecting your request to the correct deployment.");
+			CreateGameSessionResponse connection = connections.get(key);
+			if (connection == null) {
+				logger.error("endGameSession: No gameId " + key.toString() + " was found to be ended. Aborting.");
+				return new EndGameSessionResponse();
+			}
+
+			Rpc.connect(Games.class, vertx.eventBus()).sync(connection.deploymentId).endGameSession(request);
+		}
 		return new EndGameSessionResponse();
 	}
 
@@ -175,8 +199,21 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 
 	@Override
 	public ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution {
-		logger.debug("concedeGameSession: Conceding game for gameId " + request.getGameId());
-		kill(request.getGameId());
+		final GameId key = new GameId(request.getGameId());
+		if (sessions.containsKey(key)) {
+			logger.debug("concedeGameSession: Conceding game for gameId " + request.getGameId());
+			kill(request.getGameId());
+		} else {
+			logger.debug("concedeGameSession: This instance does not contain the gameId " + request.getGameId()
+					+ ". Redirecting your request to the correct deployment.");
+			CreateGameSessionResponse connection = connections.get(key);
+			if (connection == null) {
+				logger.error("concedeGameSession: No gameId " + key.toString() + " was found to be ended. Aborting.");
+				return new ConcedeGameSessionResponse();
+			}
+
+			Rpc.connect(Games.class, vertx.eventBus()).sync(connection.deploymentId).concedeGameSession(request);
+		}
 		return new ConcedeGameSessionResponse();
 	}
 

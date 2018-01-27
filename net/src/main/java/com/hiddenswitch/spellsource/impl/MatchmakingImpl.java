@@ -50,8 +50,12 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	public MatchCancelResponse cancel(MatchCancelRequest matchCancelRequest) throws SuspendExecution, InterruptedException {
 		final String userId = matchCancelRequest.getUserId();
-		boolean removed = queue.remove(new UserId(userId), GameId.PENDING);
-		return new MatchCancelResponse(removed, null, -1);
+		UserId key = new UserId(userId);
+		boolean removed = queue.remove(key, GameId.PENDING);
+		if (timers.containsKey(key)) {
+			scheduler.cancelTimer(timers.get(key));
+		}
+		return new MatchCancelResponse(removed, removed ? GameId.PENDING.toString() : null, -1);
 	}
 
 	@Override
@@ -136,101 +140,94 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			final QueueEntry status = queue.putIfAbsent(userId, QueueEntry.pending(deckId));
 
 			if (status != null) {
-				// If we're pending, this is a retry
-				final MatchmakingResponse response;
-				if (status.isPending()) {
-					// Refresh the queue entry
-					refreshQueueTimer(userId);
-
-					logger.debug("matchmakeAndJoin: User " + userId + " is pending, refreshing the timer.");
-					response = MatchmakingResponse.notReady(matchmakingRequest.getUserId(), matchmakingRequest.getDeckId());
-				} else {
-
+				if (!status.isPending()) {
 					// We already have a game
 					logger.debug("matchmakeAndJoin: User " + userId + " already has a game with gameId " + status);
-					response = MatchmakingResponse.ready(status.gameId.toString());
+					return MatchmakingResponse.ready(status.gameId.toString());
 				}
-				logger.debug("matchmakeAndJoin: User " + userId + " is unlocked by the refresh path.");
-				return response;
+				logger.debug("matchmakeAndJoin: User " + userId + " refreshing an existing queue entry and is still pending.");
+				// Refresh the queue entry
+				refreshQueueTimer(userId);
 			} else {
 				// We're coming into the queue for the first time.
 				logger.debug("matchmakeAndJoin: User " + userId + " is now in the queue for the first time.");
-
-				// If this is a bot request, create a bot game.
-				if (matchmakingRequest.isBotMatch()) {
-					logger.debug("matchmakeAndJoin: Matchmaker is creating an AI game for " + userId);
-					final BotsStartGameRequest request = new BotsStartGameRequest(matchmakingRequest.getUserId(), matchmakingRequest.getDeckId());
-					BotsStartGameResponse botGameStarted = bots.sync().startGame(request);
-					// Occupy a spot in the queue for this user and the bot
-					queue.put(userId, QueueEntry.ready(new GameId(botGameStarted.getGameId()), deckId));
-					queue.put(new UserId(botGameStarted.getBotUserId()), QueueEntry.ready(new GameId(botGameStarted.getGameId()), new DeckId(botGameStarted.getBotDeckId())));
-					logger.debug("matchmakeAndJoin: User " + userId + " is unlocked by the AI bot creation path.");
-					return MatchmakingResponse.ready(botGameStarted.getGameId());
-				}
-
-				// Otherwise, if there is another user in the queue, create a game for us
-				Iterator<Map.Entry<UserId, QueueEntry>> queueIterator = queue.entrySet().iterator();
-
-				// TODO: It probably makes more sense to keep the pending users in a separate set.
-				while (queueIterator.hasNext()) {
-					final Map.Entry<UserId, QueueEntry> entry = queueIterator.next();
-					otherUserId = entry.getKey();
-					if (otherUserId.equals(userId)
-							|| !entry.getValue().isPending()) {
-						logger.debug("matchmakeAndJoin: User " + otherUserId + " is already in a match, checking next queue entry to match " + userId);
-						continue;
-					}
-
-					logger.debug("matchmakeAndJoin: User " + userId + " is locked by the pairing path.");
-					InvocationId otherUserLock = locks.putIfAbsent(otherUserId, invocationId);
-
-					if (otherUserLock != null) {
-						logger.debug("matchmakeAndJoin: Matcher wants to pair " + userId + " with " + otherUserId + " but this second user is currently processing their own queue situation.");
-						continue;
-					}
-
-					final GameId gameId = GameId.create();
-					logger.debug("matchmakeAndJoin: Matching users " + otherUserId + " and " + userId + " into gameId " + gameId);
-
-					final DeckId otherDeckId = entry.getValue().deckId;
-
-					MatchCreateResponse createMatchResponse = createMatch(new MatchCreateRequest()
-							.withDeckId1(deckId)
-							.withDeckId2(otherDeckId)
-							.withUserId1(userId)
-							.withUserId2(otherUserId)
-							.withGameId(gameId));
-
-					CreateGameSessionResponse createGameSessionResponse = createMatchResponse.getCreateGameSessionResponse();
-
-					if (createGameSessionResponse.pending) {
-						logger.debug("matchmakeAndJoin: Retrying createMatch... ");
-						int i = 0;
-						final int retries = 4;
-						final int retryDelay = 500;
-						for (; i < retries; i++) {
-							Strand.sleep(retryDelay);
-
-							logger.debug("matchmakeAndJoin: Checking if the Games service has created a game for gameId " + gameId);
-							createGameSessionResponse = connections.get(gameId);
-							if (!createGameSessionResponse.pending) {
-								break;
-							}
-						}
-
-						if (i >= retries) {
-							throw new NullPointerException("Timed out while waiting for a match to be created for users " + userId + " and " + otherUserId);
-						}
-					}
-
-					logger.debug("matchmakeAndJoin: Users " + userId + " and " + otherUserId + " are unlocked because a game has been successfully created for them with gameId " + gameId);
-					return MatchmakingResponse.ready(gameId.toString());
-
-				}
-
-				logger.debug("matchamkeAndJoin: All users currently in games. Waiting and going into queue.");
 			}
 
+			// If this is a bot request, create a bot game.
+			if (matchmakingRequest.isBotMatch()) {
+				logger.debug("matchmakeAndJoin: Matchmaker is creating an AI game for " + userId);
+				final BotsStartGameRequest request = new BotsStartGameRequest(matchmakingRequest.getUserId(), matchmakingRequest.getDeckId());
+				BotsStartGameResponse botGameStarted = bots.sync().startGame(request);
+				// Occupy a spot in the queue for this user and the bot
+				queue.put(userId, QueueEntry.ready(new GameId(botGameStarted.getGameId()), deckId));
+				queue.put(new UserId(botGameStarted.getBotUserId()), QueueEntry.ready(new GameId(botGameStarted.getGameId()), new DeckId(botGameStarted.getBotDeckId())));
+				logger.debug("matchmakeAndJoin: User " + userId + " is unlocked by the AI bot creation path.");
+				return MatchmakingResponse.ready(botGameStarted.getGameId());
+			}
+
+			// Otherwise, if there is another user in the queue, create a game for us
+			Iterator<Map.Entry<UserId, QueueEntry>> queueIterator = queue.entrySet().iterator();
+
+			logger.debug("matchmakeAndJoin: User " + userId + " is now inspecting the queue.");
+			// TODO: It probably makes more sense to keep the pending users in a separate set.
+			while (queueIterator.hasNext()) {
+				final Map.Entry<UserId, QueueEntry> entry = queueIterator.next();
+				otherUserId = entry.getKey();
+				if (otherUserId.equals(userId)
+						|| !entry.getValue().isPending()) {
+					logger.debug("matchmakeAndJoin: User " + otherUserId + " is already in a match, checking next queue entry to match " + userId);
+					continue;
+				}
+
+				logger.debug("matchmakeAndJoin: User " + userId + " is locked by the pairing path.");
+				InvocationId otherUserLock = locks.putIfAbsent(otherUserId, invocationId);
+
+				if (otherUserLock != null) {
+					logger.debug("matchmakeAndJoin: Matcher wants to pair " + userId + " with " + otherUserId + " but " +
+							"this second user is currently processing their own queue situation, or is currently being " +
+							"matched by a different queue inspection while we were iterating through the queue.");
+					continue;
+				}
+
+				final GameId gameId = GameId.create();
+				logger.debug("matchmakeAndJoin: Matching users " + otherUserId + " and " + userId + " into gameId " + gameId);
+
+				final DeckId otherDeckId = entry.getValue().deckId;
+
+				MatchCreateResponse createMatchResponse = createMatch(new MatchCreateRequest()
+						.withDeckId1(deckId)
+						.withDeckId2(otherDeckId)
+						.withUserId1(userId)
+						.withUserId2(otherUserId)
+						.withGameId(gameId));
+
+				CreateGameSessionResponse createGameSessionResponse = createMatchResponse.getCreateGameSessionResponse();
+
+				if (createGameSessionResponse.pending) {
+					logger.debug("matchmakeAndJoin: Retrying createMatch... ");
+					int i = 0;
+					final int retries = 4;
+					final int retryDelay = 500;
+					for (; i < retries; i++) {
+						Strand.sleep(retryDelay);
+
+						logger.debug("matchmakeAndJoin: Checking if the Games service has created a game for gameId " + gameId);
+						createGameSessionResponse = connections.get(gameId);
+						if (!createGameSessionResponse.pending) {
+							break;
+						}
+					}
+
+					if (i >= retries) {
+						throw new NullPointerException("Timed out while waiting for a match to be created for users " + userId + " and " + otherUserId);
+					}
+				}
+
+				logger.debug("matchmakeAndJoin: Users " + userId + " and " + otherUserId + " are unlocked because a game has been successfully created for them with gameId " + gameId);
+				return MatchmakingResponse.ready(gameId.toString());
+			}
+
+			logger.debug("matchamkeAndJoin: All users currently in games. Waiting and going into queue.");
 		} catch (RuntimeException re) {
 			ex = re;
 		} finally {
@@ -239,6 +236,8 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			locks.remove(userId, invocationId);
 
 			if (otherUserId != null) {
+				logger.debug("matchmakeAndJoin: Releasing lock for userId " + otherUserId + ", a user who was locked by " +
+						"the queue inspection for " + userId);
 				locks.remove(otherUserId, invocationId);
 			}
 
@@ -249,6 +248,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		return MatchmakingResponse.notReady(userId.toString(), deckId.toString());
 	}
 
+	@Suspendable
 	public void refreshQueueTimer(UserId userId) {
 		logger.debug("refreshQueueTimer: for userId " + userId);
 		final TimerId id = timers.remove(userId);
@@ -324,6 +324,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	}
 
 
+	@Suspendable
 	protected void logQueue() {
 		if (logger.isDebugEnabled()) {
 			List<String> list = new ArrayList<>();
