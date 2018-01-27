@@ -11,11 +11,17 @@
     "eventTrigger": {
       "class": "DamageCausedTrigger",
       "sourceEntityType": "HERO",
-      "targetPlayer": "SELF"
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "DestroySpell",
-      "target": "EVENT_TARGET"
+      "target": "EVENT_TARGET",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "FROZEN",
+        "operation": "HAS"
+      }
     }
   },
   "collectible": true,

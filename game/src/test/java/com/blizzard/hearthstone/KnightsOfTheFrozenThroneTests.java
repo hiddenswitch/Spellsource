@@ -34,6 +34,29 @@ import static java.util.stream.Collectors.summarizingInt;
 import static java.util.stream.Collectors.toList;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
+
+	@Test
+	public void testIceBreaker() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCard(context, player, "weapon_ice_breaker");
+			attack(context, player, player.getHero(), bloodfen);
+			Assert.assertFalse(bloodfen.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_ice_lance", bloodfen);
+			playCard(context, player, "weapon_ice_breaker");
+			attack(context, player, player.getHero(), bloodfen);
+			Assert.assertTrue(bloodfen.isDestroyed());
+		});
+	}
+
 	@Test
 	public void testPrinceTaldaramMalganisInteraction() {
 		runGym((context, player, opponent) -> {
@@ -120,7 +143,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	public void testDeathGrip() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			shuffleToDeck(context,opponent,"minion_acolyte_of_pain");
+			shuffleToDeck(context, opponent, "minion_acolyte_of_pain");
 			playCard(context, opponent, "minion_prince_keleseth");
 			context.endTurn();
 			playCard(context, player, "spell_death_grip");
@@ -379,7 +402,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
 	public void testShadowEssence() {
 		runGym((context, player, opponent) -> {
-			shuffleToDeck(context,player,"minion_bloodfen_raptor");
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
 
 			playCard(context, player, "spell_shadow_essence");
 
