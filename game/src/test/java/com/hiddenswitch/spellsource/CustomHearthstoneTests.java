@@ -286,8 +286,8 @@ public class CustomHearthstoneTests extends TestBase {
 
 		// Check that minions have +1/+1
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "spell_power_trip");
 			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_power_trip");
 			Assert.assertEquals(bloodfenRaptor.getAttack(), bloodfenRaptor.getBaseAttack() + 1);
 			Assert.assertEquals(bloodfenRaptor.getHp(), bloodfenRaptor.getBaseHp() + 1);
 			context.endTurn();

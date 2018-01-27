@@ -7,7 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 /**
  * A joust event describes which cards were drawn and who won a joust from a point of view of a particular player.
  */
-public class JoustEvent extends GameEvent {
+public class JoustEvent extends GameEvent implements HasCard {
 
 	private final boolean won;
 	private final Card ownCard;
@@ -19,7 +19,7 @@ public class JoustEvent extends GameEvent {
 		this.ownCard = ownCard;
 		this.opponentCard = opponentCard;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getOwnCard();
@@ -42,4 +42,13 @@ public class JoustEvent extends GameEvent {
 		return opponentCard;
 	}
 
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
+
+	@Override
+	public Card getCard() {
+		return ownCard;
+	}
 }
