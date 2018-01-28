@@ -726,7 +726,6 @@ public class JourneyToUngoroTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
 	public void testBarnabusTheStomperTolinsGobletInteraction() {
 		// Tolin's Goblet interaction
 		runGym((context, player, opponent) -> {
