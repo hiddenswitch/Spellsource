@@ -36,6 +36,21 @@ import static java.util.stream.Collectors.toList;
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 	@Test
+	public void testObsidianStatueAOEInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion obsidian = playMinionCard(context, player, "minion_obsidian_statue");
+			obsidian.setHp(1);
+			Minion other = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			Minion shouldBeDestroyed = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			playCardWithTarget(context, opponent, "spell_swipe", other);
+			Assert.assertTrue(obsidian.isDestroyed());
+			Assert.assertTrue(other.isDestroyed());
+			Assert.assertTrue(shouldBeDestroyed.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testIceBreaker() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
