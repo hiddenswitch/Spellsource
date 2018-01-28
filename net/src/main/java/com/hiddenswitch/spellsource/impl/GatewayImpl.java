@@ -228,6 +228,12 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 		router.route("/matchmaking/:queueId")
 				.method(HttpMethod.DELETE)
+				.handler(HandlerFactory.handler("queueId", this::matchmakingConstructedDelete));
+
+		router.route("/matchmaking")
+				.handler(authHandler);
+		router.route("/matchmaking")
+				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("queueId", this::matchmakingConstructedQueueDelete));
 
 		router.route("/friends")

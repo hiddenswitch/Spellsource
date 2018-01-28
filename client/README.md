@@ -107,8 +107,9 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getFriendConversation**](docs/DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
+*DefaultApi* | [**matchmakingConstructedDelete**](docs/DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/{queueId} | 
 *DefaultApi* | [**matchmakingConstructedGet**](docs/DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/{queueId} | 
-*DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/{queueId} | 
+*DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking | 
 *DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
 *DefaultApi* | [**matchmakingGet**](docs/DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 *DefaultApi* | [**sendFriendMessage**](docs/DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
