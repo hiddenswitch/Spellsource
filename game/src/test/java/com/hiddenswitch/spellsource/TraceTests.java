@@ -8,36 +8,23 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.RandomDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.Trace;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TraceTests {
-	private static Reflections reflections = new Reflections("traces", new ResourcesScanner());
-	private static Map<String, Trace> traces = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(
-			Collectors.toMap(
-					c -> Paths.get(c.getPath()).getFileName().toString(),
-					c -> {
-						try {
-							return Trace.load(Resources.toString(c, Charset.defaultCharset()));
-						} catch (IOException e) {
-							return null;
-						}
-					})
-	);
+	private static Map<String, Trace> traces;
 
 	@BeforeClass
 	public static void before() {
@@ -45,6 +32,19 @@ public class TraceTests {
 	}
 
 	private static Trace getTrace(String traceName) {
+		if (traces == null) {
+			traces = new Reflections("traces", new ResourcesScanner()).getResources(x -> true).stream().map(Resources::getResource).collect(
+					Collectors.toMap(
+							c -> Paths.get(c.getPath()).getFileName().toString(),
+							c -> {
+								try {
+									return Trace.load(Resources.toString(c, Charset.defaultCharset()));
+								} catch (IOException e) {
+									return null;
+								}
+							})
+			);
+		}
 		return traces.get(traceName + ".txt");
 	}
 
@@ -62,6 +62,7 @@ public class TraceTests {
 	}
 
 	@Test
+	@Ignore
 	public void testTraceCardCostModifierReferenceNotFound() {
 		Trace trace = getTrace("cardCostModifier");
 		GameContext context = trace.replayContext(false);
