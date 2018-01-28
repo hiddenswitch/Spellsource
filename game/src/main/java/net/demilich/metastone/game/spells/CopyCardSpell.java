@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import org.slf4j.Logger;
@@ -26,8 +27,7 @@ public class CopyCardSpell extends Spell {
 		if (target != null) {
 			Card targetCard = target.getSourceCard();
 			for (int i = 0; i < numberOfCardsToCopy; i++) {
-				final Card clone = targetCard.getCopy();
-				context.getLogic().receiveCard(player.getId(), clone);
+				final Card clone = copyAndReceiveCard(context, player, targetCard);
 				final SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, clone);
 			}
@@ -61,12 +61,27 @@ public class CopyCardSpell extends Spell {
 				return;
 			}
 			Card random = context.getLogic().getRandom(sourceCollection);
-
 			peek(random, context, player);
-
-			Card clone = random.getCopy();
-			context.getLogic().receiveCard(player.getId(), clone);
+			copyAndReceiveCard(context, player, random);
 		}
+	}
+
+	@Suspendable
+	private static Card copyAndReceiveCard(GameContext context, Player player, Card inCard) {
+		Card clone = inCard.getCopy();
+		context.getLogic().receiveCard(player.getId(), clone);
+		// Add copies of the card cost modifiers that are associated with this card here
+		// TODO: What about Val'anyr buffed cards?
+		context.getTriggersAssociatedWith(inCard.getReference())
+				.stream()
+				.filter(e -> e instanceof CardCostModifier)
+				.map(e -> (CardCostModifier) e)
+				.filter(CardCostModifier::targetsSelf)
+				.map(CardCostModifier::clone)
+				.peek(c -> c.setHost(clone))
+				.forEach(c -> context.getLogic().addGameEventListener(player, c, clone));
+
+		return clone;
 	}
 
 	protected void peek(final Card random, GameContext context, Player player) {

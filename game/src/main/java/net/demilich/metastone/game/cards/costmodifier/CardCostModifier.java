@@ -250,4 +250,10 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		}
 		return true;
 	}
+
+	public boolean targetsSelf() {
+		return targetReference != null
+				&& (targetReference.equals(EntityReference.SELF)
+				|| targetReference.equals(hostReference));
+	}
 }
