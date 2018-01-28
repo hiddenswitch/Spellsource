@@ -13,9 +13,23 @@
         "class": "ReceiveCardSpell",
         "value": 1,
         "cardFilter": {
-          "class": "CardFilter",
-          "rarity": "EPIC",
-          "cardSet": "JOURNEY_TO_UNGORO"
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "rarity": "EPIC",
+              "cardSet": "JOURNEY_TO_UNGORO"
+            },
+            {
+              "class": "CardFilter",
+              "rarity": "LEGENDARY",
+              "cardType": "SPELL",
+              "invert": true
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "UngoroPackRarityWeightedCardSource"
         },
         "targetPlayer": "SELF"
       },
@@ -24,7 +38,12 @@
         "value": 4,
         "cardFilter": {
           "class": "CardFilter",
-          "cardSet": "JOURNEY_TO_UNGORO"
+          "rarity": "LEGENDARY",
+          "cardType": "SPELL",
+          "invert": true
+        },
+        "cardSource": {
+          "class": "UngoroPackRarityWeightedCardSource"
         },
         "targetPlayer": "SELF"
       }
