@@ -21,8 +21,9 @@ Method | HTTP request | Description
 [**getFriendConversation**](DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 [**healthCheck**](DefaultApi.md#healthCheck) | **GET** / | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
+[**matchmakingConstructedDelete**](DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/{queueId} | 
 [**matchmakingConstructedGet**](DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/{queueId} | 
-[**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking/{queueId} | 
+[**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking | 
 [**matchmakingConstructedQueuePut**](DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
 [**matchmakingGet**](DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 [**sendFriendMessage**](DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
@@ -921,6 +922,61 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
+<a name="matchmakingConstructedDelete"></a>
+# **matchmakingConstructedDelete**
+> MatchConcedeResponse matchmakingConstructedDelete(queueId)
+
+
+
+Concedes the player&#39;s current game in this queue, or cancels their place in it. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+String queueId = "queueId_example"; // String | The ID of the queue to enter.
+try {
+    MatchConcedeResponse result = apiInstance.matchmakingConstructedDelete(queueId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#matchmakingConstructedDelete");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **queueId** | **String**| The ID of the queue to enter. |
+
+### Return type
+
+[**MatchConcedeResponse**](MatchConcedeResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
 <a name="matchmakingConstructedGet"></a>
 # **matchmakingConstructedGet**
 > GameState matchmakingConstructedGet(queueId)
@@ -982,7 +1038,7 @@ Name | Type | Description  | Notes
 
 
 
-Removes your client from the matchmaking queue.
+Removes your client from the matchmaking queue, regardless of which queue it is in.
 
 ### Example
 ```java

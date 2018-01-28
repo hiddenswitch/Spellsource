@@ -46,6 +46,7 @@ import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetConversationResponse;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
+import com.hiddenswitch.spellsource.client.models.MatchConcedeResponse;
 import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.MatchCancelResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponse;
@@ -341,6 +342,22 @@ public class DefaultApiTest {
     /**
      * 
      *
+     * Concedes the player&#39;s current game in this queue, or cancels their place in it. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void matchmakingConstructedDeleteTest() throws ApiException {
+        String queueId = null;
+        // MatchConcedeResponse response = api.matchmakingConstructedDelete(queueId);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * Gets a renderable gamestate representing this player&#39;s current game in this queue. 
      *
      * @throws ApiException
@@ -357,7 +374,7 @@ public class DefaultApiTest {
     /**
      * 
      *
-     * Removes your client from the matchmaking queue.
+     * Removes your client from the matchmaking queue, regardless of which queue it is in.
      *
      * @throws ApiException
      *          if the Api call fails

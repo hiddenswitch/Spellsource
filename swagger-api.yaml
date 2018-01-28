@@ -1535,6 +1535,19 @@ paths:
             $ref: '#/definitions/MatchmakingQueuesResponse'
         default:
           $ref: '#/responses/InternalServerError'
+    delete:
+      description: Removes your client from the matchmaking queue, regardless of which queue it is in.
+      operationId: matchmakingConstructedQueueDelete
+      security:
+        - TokenSecurity: []
+      responses:
+        "200":
+          description: |
+            The client's cancel request has been processed. The result can be found in the body's MatchCancelResponse.
+          schema:
+            $ref: '#/definitions/MatchCancelResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
   /matchmaking/{queueId}:
     get:
       description: |
@@ -1561,7 +1574,7 @@ paths:
           $ref: '#/responses/InternalServerError'
     delete:
       description: |
-        Concedes the player's current game in this queue.
+        Concedes the player's current game in this queue, or cancels their place in it.
       operationId: matchmakingConstructedDelete
       parameters:
         - name: queueId
@@ -1612,19 +1625,6 @@ paths:
             in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
           schema:
             $ref: '#/definitions/MatchmakingQueuePutResponse'
-        default:
-          $ref: '#/responses/InternalServerError'
-    delete:
-      description: Removes your client from the matchmaking queue.
-      operationId: matchmakingConstructedQueueDelete
-      security:
-        - TokenSecurity: []
-      responses:
-        "200":
-          description: |
-            The client's cancel request has been processed. The result can be found in the body's MatchCancelResponse.
-          schema:
-            $ref: '#/definitions/MatchCancelResponse'
         default:
           $ref: '#/responses/InternalServerError'
   /friends:
