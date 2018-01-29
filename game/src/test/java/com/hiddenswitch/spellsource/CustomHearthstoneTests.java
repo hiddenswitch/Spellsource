@@ -116,6 +116,9 @@ public class CustomHearthstoneTests extends TestBase {
 			opponentHp = opponent.getHero().getHp();
 			playCardWithTarget(context, player, fireball, opponent.getHero());
 			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 6, "The 2nd spell should not have gotten spell damage +2.");
+			opponentHp = opponent.getHero().getHp();
+			playCardWithTarget(context, player, fireball, opponent.getHero());
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 6, "The 3nd spell should not have gotten spell damage -2.");
 		});
 
 		// Deals 3 damage to a random enemy minion.

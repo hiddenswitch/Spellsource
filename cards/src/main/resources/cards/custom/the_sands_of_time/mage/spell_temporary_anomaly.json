@@ -15,6 +15,7 @@
       },
       {
         "class": "SummonSpell",
+        "target": "NONE",
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "MINION",

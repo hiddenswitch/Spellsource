@@ -29,8 +29,9 @@ import java.util.stream.Stream;
  * Notably, this class contains {@link Player} objects, whose {@link net.demilich.metastone.game.behaviour.Behaviour}
  * fields are not strictly state. These can be safely serialized since behaviours generally do not contain any state.
  */
-public class GameState implements Serializable {
+public class GameState implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
+
 	/**
 	 * A player object corresponding to the arbitrarily-decided first player of the game.
 	 *
@@ -116,6 +117,30 @@ public class GameState implements Serializable {
 		this.deckFormat = fromContext.getDeckFormat();
 	}
 
+	private GameState(Player player1,
+	                  Player player2,
+	                  CardList tempCards,
+	                  Map<Environment, Object> environment,
+	                  TriggerManager triggerManager,
+	                  int currentId, int activePlayerId,
+	                  TurnState turnState,
+	                  long timestamp,
+	                  int turnNumber,
+	                  DeckFormat deckFormat) {
+		this.player1 = player1;
+		this.player2 = player2;
+		this.tempCards = tempCards;
+		this.environment = environment;
+		this.triggerManager = triggerManager;
+		this.currentId = currentId;
+		this.activePlayerId = activePlayerId;
+		this.turnState = turnState;
+		this.timestamp = timestamp;
+		this.turnNumber = turnNumber;
+		this.deckFormat = deckFormat;
+	}
+
+
 	@SuppressWarnings("unchecked")
 	protected Stream<Entity> getEntities() {
 		return Stream.of(player1, player2).flatMap(p -> Stream.of(Zones.values()).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
@@ -148,5 +173,22 @@ public class GameState implements Serializable {
 	 */
 	public MapDifference<Integer, EntityLocation> start() {
 		return Maps.difference(Collections.emptyMap(), getMap());
+	}
+
+	@Override
+	public GameState clone() {
+		return new GameState(
+				player1,
+				player2,
+				tempCards,
+				environment,
+				triggerManager,
+				currentId,
+				activePlayerId,
+				turnState,
+				timestamp,
+				turnNumber,
+				deckFormat
+		);
 	}
 }

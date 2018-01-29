@@ -6,49 +6,35 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.Serializable;
 
 public class TestConfig implements Serializable {
-	private String cardId;
-	private String deckIdTest;
-	private String deckIdOpponent;
+	private String deckId1;
+	private String deckId2;
 
-	public boolean isControl() {
-		return cardId == null || cardId.isEmpty();
+	public String getDeckId1() {
+		return deckId1;
 	}
 
-	public String getCardId() {
-		return cardId;
+	public void setDeckId1(String deckId1) {
+		this.deckId1 = deckId1;
 	}
 
-	public void setCardId(String cardId) {
-		this.cardId = cardId;
+	public String getDeckId2() {
+		return deckId2;
 	}
 
-	public String getDeckIdTest() {
-		return deckIdTest;
-	}
-
-	public void setDeckIdTest(String deckIdTest) {
-		this.deckIdTest = deckIdTest;
-	}
-
-	public String getDeckIdOpponent() {
-		return deckIdOpponent;
-	}
-
-	public void setDeckIdOpponent(String deckIdOpponent) {
-		this.deckIdOpponent = deckIdOpponent;
+	public void setDeckId2(String deckId2) {
+		this.deckId2 = deckId2;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("[TestConfig cardId = %s, deckIdToTest = %s, deckIdOpponent = %s]\n", cardId, deckIdTest, deckIdOpponent);
+		return String.format("[TestConfig deckIdToTest = %s, deckId2 = %s]\n", deckId1, deckId2);
 	}
 
 	@Override
 	public int hashCode() {
 		HashCodeBuilder builder = new HashCodeBuilder();
-		builder.append(cardId);
-		builder.append(deckIdTest);
-		builder.append(deckIdOpponent);
+		builder.append(deckId1);
+		builder.append(deckId2);
 		return builder.toHashCode();
 	}
 
@@ -65,9 +51,9 @@ public class TestConfig implements Serializable {
 		}
 		TestConfig rhs = (TestConfig) obj;
 		EqualsBuilder builder = new EqualsBuilder();
-		return builder.append(cardId, rhs.cardId)
-				.append(deckIdTest, rhs.deckIdTest)
-				.append(deckIdOpponent, rhs.deckIdOpponent)
+		return builder
+				.append(deckId1, rhs.deckId1)
+				.append(deckId2, rhs.deckId2)
 				.isEquals();
 	}
 }
