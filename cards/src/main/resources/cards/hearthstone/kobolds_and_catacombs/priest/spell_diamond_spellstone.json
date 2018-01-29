@@ -22,7 +22,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ResurrectSpell",
-    "value": 3
+    "value": 3,
+    "exclusive": true
   },
   "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",

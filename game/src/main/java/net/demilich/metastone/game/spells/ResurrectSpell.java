@@ -1,7 +1,10 @@
 package net.demilich.metastone.game.spells;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
@@ -13,7 +16,9 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 
 public class ResurrectSpell extends Spell {
 	@Override
@@ -31,6 +36,13 @@ public class ResurrectSpell extends Spell {
 			}
 		}
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+		// Implements unusual Diamond Spellstone unique minions behaviour
+		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
+		if (exclusive) {
+			Set<EntityReference> references = deadMinions.stream().map(Entity::getReference).collect(Collectors.toSet());
+			deadMinions.removeIf(deadMinion -> deadMinion.hasAttribute(Attribute.COPIED_FROM)
+					&& references.contains((EntityReference) deadMinion.getAttribute(Attribute.COPIED_FROM)));
+		}
 		for (int i = 0; i < count; i++) {
 			if (deadMinions.isEmpty()) {
 				return;
