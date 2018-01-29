@@ -13,21 +13,13 @@ import org.apache.spark.api.java.function.Function;
 
 public class Simulator implements Function<GameConfig, SimulationResult> {
 	@Override
-	public SimulationResult call(GameConfig gameConfig) throws Exception {
+	public SimulationResult call(GameConfig gameConfig) {
 		CardCatalogue.loadCardsFromPackage();
-
 		SimulationResult result = new SimulationResult(gameConfig);
 
-		PlayerConfig playerConfig1 = gameConfig.getPlayerConfig1();
-		PlayerConfig playerConfig2 = gameConfig.getPlayerConfig2();
-
-		DeckFormat deckFormat = gameConfig.getDeckFormat();
-
 		for (int i = 0; i < gameConfig.getNumberOfGames(); i++) {
-			Player player1 = new Player(playerConfig1);
-			Player player2 = new Player(playerConfig2);
-			final GameLogic logic = new GameLogic();
-			GameContext newGame = new GameContext(player1, player2, logic, deckFormat);
+			GameContext newGame = GameContext.fromConfig(gameConfig);
+
 			try {
 				newGame.play();
 

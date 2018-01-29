@@ -10,6 +10,7 @@ import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -61,7 +62,7 @@ public class Trace implements Serializable, Cloneable {
 		AtomicInteger nextAction = new AtomicInteger();
 		int originalCatalogueVersion = CardCatalogue.getVersion();
 		CardCatalogue.setVersion(1);
-		GameContext stateRestored = new GameContext(gameState);
+		GameContext stateRestored = GameContext.fromState(gameState);
 		List<Integer> behaviourActions = actions;
 		if (skipLastAction) {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
@@ -72,7 +73,8 @@ public class Trace implements Serializable, Cloneable {
 		stateRestored.init();
 		try {
 			stateRestored.resume();
-		} catch (CancellationException ex) {}
+		} catch (CancellationException ex) {
+		}
 		CardCatalogue.setVersion(originalCatalogueVersion);
 		return stateRestored;
 	}
@@ -91,5 +93,26 @@ public class Trace implements Serializable, Cloneable {
 
 	public void setMulligans(int[][] mulligans) {
 		this.mulligans = mulligans;
+	}
+
+	@Override
+	public Trace clone() {
+		try {
+			Trace clone = (Trace) super.clone();
+			if (gameState != null) {
+				clone.gameState = gameState.clone();
+			}
+			if (mulligans != null) {
+				int[][] mulliganCopy = new int[mulligans.length][];
+				for (int i = 0; i < mulligans.length; i++) {
+					mulliganCopy[i] = Arrays.copyOf(mulligans[i], mulligans[i].length);
+				}
+				clone.mulligans = mulliganCopy;
+			}
+			clone.actions = new ArrayList<>(actions);
+			return clone;
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 }

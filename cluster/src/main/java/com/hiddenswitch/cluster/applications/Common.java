@@ -3,7 +3,7 @@ package com.hiddenswitch.cluster.applications;
 import com.amazonaws.auth.*;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.util.EC2MetadataUtils;
-import com.hiddenswitch.cluster.functions.GenerateConfigsForDecks;
+import com.hiddenswitch.cluster.functions.DecksToGameConfigs;
 import com.hiddenswitch.cluster.functions.MergeSimulationResults;
 import com.hiddenswitch.cluster.functions.Simulator;
 import com.hiddenswitch.cluster.models.TestConfig;
@@ -30,7 +30,6 @@ import java.net.URISyntaxException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -90,7 +89,7 @@ public class Common {
 		JavaRDD<String[]> pairs = sc.parallelize(deckPairs);
 
 		// Create game configs to simulate
-		return pairs.flatMapToPair(new GenerateConfigsForDecks(batches, gamesPerBatch));
+		return pairs.flatMapToPair(new DecksToGameConfigs(batches, gamesPerBatch));
 	}
 
 	public static List<String> getDefaultDecks() throws IOException {

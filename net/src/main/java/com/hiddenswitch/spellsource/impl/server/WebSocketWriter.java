@@ -122,7 +122,7 @@ public class WebSocketWriter implements Writer {
 		}
 
 		final com.hiddenswitch.spellsource.common.GameState state = gameState;
-		GameContext workingContext = new GameContext(state);
+		GameContext workingContext = GameContext.fromState(state);
 		ServerToClientMessage message = new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
@@ -250,7 +250,7 @@ public class WebSocketWriter implements Writer {
 				.messageType(MessageType.ON_REQUEST_ACTION)
 				.changes(getChangeSet(state))
 				.gameState(getClientGameState(state))
-				.actions(Games.getClientActions(new GameContext(state), availableActions, playerId)));
+				.actions(Games.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
 
 	@Override

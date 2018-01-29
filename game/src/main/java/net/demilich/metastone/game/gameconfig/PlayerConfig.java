@@ -115,4 +115,19 @@ public class PlayerConfig implements Cloneable, Serializable {
 		config.setDeck(deck);
 		return config;
 	}
+
+	@Override
+	protected PlayerConfig clone() throws CloneNotSupportedException {
+		PlayerConfig clone = (PlayerConfig) super.clone();
+		if (deck != null) {
+			clone.setDeck(deck.clone());
+		}
+		if (behaviour != null) {
+			clone.setBehaviour(behaviour.clone());
+		}
+		if (heroCard != null) {
+			clone.setHeroCard((HeroCard) heroCard.clone());
+		}
+		return clone;
+	}
 }

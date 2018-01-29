@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.common;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DeckListParsingException extends Exception {
+public class DeckListParsingException extends RuntimeException {
 	private List<Throwable> innerExceptions;
 
 	public DeckListParsingException(List<Throwable> innerExceptions) {

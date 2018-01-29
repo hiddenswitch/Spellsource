@@ -16,7 +16,7 @@ import java.util.*;
 
 import static com.hiddenswitch.cluster.applications.Common.defaultsTo;
 
-public class DeployCluster {
+public class Deploy {
 	private static final String JAR = "jar";
 	private static final String MAIN_CLASS = "mainclass";
 	private static final String CODE_BUCKET_NAME = "bucketname";
@@ -33,11 +33,11 @@ public class DeployCluster {
 	private static final String HELP = "help";
 
 	public static void main(String[] args) throws ParseException, SdkClientException {
-		Logger logger = Common.getLogger(DeployCluster.class);
+		Logger logger = Common.getLogger(Deploy.class);
 
 		String appArgs = "";
 		String jar = "cluster/build/libs/cluster-1.3.0-all.jar";
-		String mainClass = ControlApplication.class.getName();
+		String mainClass = LegacyDeckTester.class.getName();
 		String bucketName = "clustercode";
 		String jobId = RandomStringUtils.randomAlphanumeric(8);
 		String subnetId = "subnet-c2e425ab";
@@ -73,13 +73,13 @@ public class DeployCluster {
 		} catch (ParseException e) {
 			System.err.println(e.getMessage());
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.DeployCluster --help", options);
+			formatter.printHelp("java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.Deploy --help", options);
 			return;
 		}
 
 		if (cmd.hasOption(HELP)) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.DeployCluster --help", options);
+			formatter.printHelp("java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.Deploy --help", options);
 			return;
 		}
 

@@ -65,17 +65,14 @@ public class ResultsToTSV {
 
 		logger.info(String.format("Number of records loaded: %d", results.count()));
 		results.map((Tuple2<TestConfig, SimulationResult> record) -> {
-			String id = record._1.getCardId();
-			if (id == null) {
-				id = "CONTROL_DECK";
-			}
+			String id = "CONTROL_DECK";
 			Object player1Stats = record._2.getPlayer1Stats().get(Statistic.GAMES_WON);
 			if (player1Stats == null) {
 				player1Stats = 0;
 			}
 			return Arrays.asList(id,
-					record._1.getDeckIdTest(),
-					record._1.getDeckIdOpponent(),
+					record._1.getDeckId1(),
+					record._1.getDeckId2(),
 					player1Stats.toString(),
 					Integer.toString(record._2.getNumberOfGames()));
 		}).map((List<String> row) -> String.join("\t", row))

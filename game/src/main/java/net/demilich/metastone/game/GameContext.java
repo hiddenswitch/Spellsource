@@ -8,6 +8,7 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -22,7 +23,6 @@ import net.demilich.metastone.game.environment.EnvironmentDeque;
 import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.gameconfig.GameConfig;
-import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
@@ -180,16 +180,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	}
 
 	/**
-	 * Creates a game context from the given state.
-	 *
-	 * @param state A {@link GameState} object.
-	 */
-	public GameContext(GameState state) {
-		this();
-		setGameState(state);
-	}
-
-	/**
 	 * Creates a game context from the given players, logic and deck format.
 	 *
 	 * @param player1    The first {@link Player} with a valid {@link Behaviour}. This is not necessarily the player who
@@ -215,26 +205,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 
 		this.setLogic(logic);
 		this.setDeckFormat(deckFormat);
-	}
-
-	/**
-	 * Creates all the possible combinations of decks given a list of decks
-	 *
-	 * @param decks An input list of deck names
-	 * @return A list of 2-tuples of deck names.
-	 */
-	public static List<String[]> getDeckCombinations(List<String> decks) {
-		// Create deck combinations
-		Combinations combinations = new Combinations(decks.size(), 2);
-		List<String[]> deckPairs = new ArrayList<>();
-		for (int[] combination : combinations) {
-			deckPairs.add(new String[]{decks.get(combination[0]), decks.get(combination[1])});
-		}
-		// Include same deck matchups
-		for (String deck : decks) {
-			deckPairs.add(new String[]{deck, deck});
-		}
-		return deckPairs;
 	}
 
 	protected boolean acceptAction(GameAction nextAction) {
@@ -1345,34 +1315,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		}
 
 		return stream.map(i -> {
-			final GameConfig config = new GameConfig();
+			final GameConfig config = GameConfig.fromDecks(deckPair, player1, player2);
 
-			List<PlayerConfig> playerConfigs = deckPair.stream()
-					.map(deck -> {
-						PlayerConfig playerConfig = new PlayerConfig();
-						playerConfig.setDeck(deck);
-						playerConfig.setHeroCard(deck.getHeroCard());
-						playerConfig.setName(deck.getName());
-						return playerConfig;
-					})
-					.collect(Collectors.toList());
-
-			playerConfigs.get(0).setBehaviour(player1.get());
-			playerConfigs.get(1).setBehaviour(player2.get());
-			config.setNumberOfGames(1);
-			config.setPlayerConfig1(playerConfigs.get(0));
-			config.setPlayerConfig2(playerConfigs.get(1));
-			DeckFormat impliedFormat =
-					deckPair.get(0).getFormat().equals(deckPair.get(1).getFormat())
-							? deckPair.get(0).getFormat()
-							: DeckFormat.getSmallestSupersetFormat(deckPair.stream().flatMap(deck -> deck.getCards().stream())
-							.map(Card::getCardSet).collect(Collectors.toSet()));
-
-			config.setDeckFormat(impliedFormat);
-
-			Player playerContext1 = new Player(playerConfigs.get(0));
-			Player playerContext2 = new Player(playerConfigs.get(1));
-			GameContext newGame = new GameContext(playerContext1, playerContext2, new GameLogic(), impliedFormat);
+			Player playerContext1 = new Player(config.getPlayerConfig1());
+			Player playerContext2 = new Player(config.getPlayerConfig2());
+			GameContext newGame = new GameContext(playerContext1, playerContext2, new GameLogic(), config.getDeckFormat());
 			SimulationResult innerResult = new SimulationResult(config);
 
 			try {
@@ -1393,6 +1340,78 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		}).reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
 	}
 
+	/**
+	 * Retrieves a game context from a {@link GameConfig}. Does not mutate the contents of the {@link GameConfig}.
+	 *
+	 * @param config The {@link GameConfig} specifying the decks.
+	 * @return A {@link GameContext}.
+	 * @see GameConfig#fromDecks(List) to get a game config from a pair of decks.
+	 */
+	public static GameContext fromConfig(GameConfig config) {
+		try {
+			config = config.clone();
+		} catch (CloneNotSupportedException ex) {
+			return null;
+		}
+
+		Player playerContext1 = new Player(config.getPlayerConfig1());
+		Player playerContext2 = new Player(config.getPlayerConfig2());
+		return new GameContext(playerContext1, playerContext2, new GameLogic(), config.getDeckFormat());
+	}
+
+	/**
+	 * Gets a game context that's ready to play from two {@link Deck} objects. Uses the {@link PlayRandomBehaviour} for
+	 * both players.
+	 *
+	 * @param decks The {@link Deck}s to use for the players.
+	 * @return A {@link GameContext} for which {@link #play()} will immediately work.
+	 * @see #getTrace() to get the log of actions that were taken in the game.
+	 * @see #play() to actually execute the game.
+	 */
+	public static GameContext fromDecks(List<Deck> decks) {
+		return fromConfig(GameConfig.fromDecks(decks));
+	}
+
+
+	/**
+	 * Creates a game context from the given state.
+	 *
+	 * @param state A {@link GameState} object.
+	 */
+	public static GameContext fromState(GameState state) {
+		GameContext context = new GameContext();
+		context.setGameState(state);
+		return context;
+	}
+
+
+	/**
+	 * Creates all the possible combinations of decks given a list of decks
+	 *
+	 * @param decks An input list of deck names
+	 * @return A list of 2-tuples of deck names.
+	 */
+	public static List<String[]> getDeckCombinations(List<String> decks) {
+		// Create deck combinations
+		Combinations combinations = new Combinations(decks.size(), 2);
+		List<String[]> deckPairs = new ArrayList<>();
+		for (int[] combination : combinations) {
+			deckPairs.add(new String[]{decks.get(combination[0]), decks.get(combination[1])});
+		}
+		// Include same deck matchups
+		for (String deck : decks) {
+			deckPairs.add(new String[]{deck, deck});
+		}
+		return deckPairs;
+	}
+
+	/**
+	 * Retrieves a trace of this game's actions.
+	 * <p>
+	 * Serialization is not guaranteed to work on later versions of the codebase.
+	 *
+	 * @return A {@link Trace} containing all the actions that were performed in this game and its initial state.
+	 */
 	public Trace getTrace() {
 		return trace;
 	}

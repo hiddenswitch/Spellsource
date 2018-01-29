@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TraceTests {
@@ -33,17 +34,23 @@ public class TraceTests {
 
 	private static Trace getTrace(String traceName) {
 		if (traces == null) {
-			traces = new Reflections("traces", new ResourcesScanner()).getResources(x -> true).stream().map(Resources::getResource).collect(
-					Collectors.toMap(
-							c -> Paths.get(c.getPath()).getFileName().toString(),
-							c -> {
-								try {
-									return Trace.load(Resources.toString(c, Charset.defaultCharset()));
-								} catch (IOException e) {
-									return null;
-								}
-							})
-			);
+			traces = new Reflections("traces", new ResourcesScanner())
+					.getResources(x -> true)
+					.stream()
+					.filter(Objects::nonNull)
+					.map(Resources::getResource)
+					.filter(Objects::nonNull)
+					.collect(
+							Collectors.toMap(
+									c -> Paths.get(c.getPath()).getFileName().toString(),
+									c -> {
+										try {
+											return Trace.load(Resources.toString(c, Charset.defaultCharset()));
+										} catch (IOException e) {
+											return new Trace();
+										}
+									})
+					);
 		}
 		return traces.get(traceName + ".txt");
 	}
@@ -63,8 +70,8 @@ public class TraceTests {
 
 	@Test
 	@Ignore
-	public void testTraceCardCostModifierReferenceNotFound() {
-		Trace trace = getTrace("cardCostModifier");
+	public void testTraceTemporalAnomalyNegativeLastHit() {
+		Trace trace = getTrace("negativeLastHit");
 		GameContext context = trace.replayContext(false);
 	}
 }

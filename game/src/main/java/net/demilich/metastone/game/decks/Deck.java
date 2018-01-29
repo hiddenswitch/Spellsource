@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Deck implements Serializable {
+public class Deck implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 
 	public static final Deck EMPTY;
@@ -144,5 +144,14 @@ public class Deck implements Serializable {
 
 	public void setFormat(DeckFormat format) {
 		this.format = format;
+	}
+
+	@Override
+	public Deck clone() throws CloneNotSupportedException {
+		Deck clone = (Deck) super.clone();
+		clone.cards = cards.getCopy();
+		clone.heroCard = heroCard == null ? null : (HeroCard) heroCard.clone();
+		clone.format = format == null ? null : format.clone();
+		return clone;
 	}
 }

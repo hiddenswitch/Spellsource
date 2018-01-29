@@ -21,7 +21,7 @@ import static com.hiddenswitch.cluster.applications.Common.setLogLevelToError;
 /**
  * Calculates control statistics for all the decks.
  */
-public class ControlApplication {
+public class LegacyDeckTester {
 	private static final String DECKS_FILE = "decksfile";
 	private static final String GAMES_PER_BATCH = "gamesperbatch";
 	private static final String BATCHES = "batches";
@@ -29,7 +29,7 @@ public class ControlApplication {
 	private static final String INPUT = "input";
 
 	public static void main(String[] args) throws ParseException, CardParseException, IOException, URISyntaxException {
-		Logger logger = Logger.getLogger(ControlApplication.class);
+		Logger logger = Logger.getLogger(LegacyDeckTester.class);
 		setLogLevelToError();
 
 		String decksFile = null;

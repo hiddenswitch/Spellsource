@@ -41,8 +41,8 @@
           "spell": {
             "class": "AddEnchantmentSpell",
             "target": "FRIENDLY_PLAYER",
-            "maxFires": 1,
             "trigger": {
+              "maxFires": 1,
               "eventTrigger": {
                 "class": "AfterSpellCastedTrigger",
                 "sourcePlayer": "SELF"

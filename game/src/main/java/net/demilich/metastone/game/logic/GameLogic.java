@@ -966,7 +966,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected int applyDamageToActor(Actor target, int baseDamage, Player player, Entity source, boolean ignoreSpellDamage) {
+	protected int applyDamageToActor(Actor target, final int baseDamage, Player player, Entity source, boolean ignoreSpellDamage) {
 		if (target.getHp() < -100) {
 			return 0;
 		}
@@ -1007,7 +1007,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return damageDealt;
 	}
 
-	private int damageHero(Hero hero, int damage) {
+	private int damageHero(Hero hero, final int damage) {
 		if (hero.hasAttribute(Attribute.IMMUNE) || hasAttribute(context.getPlayer(hero.getOwner()), Attribute.IMMUNE_HERO)) {
 			return 0;
 		}

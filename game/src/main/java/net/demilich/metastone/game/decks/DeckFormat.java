@@ -12,7 +12,7 @@ import net.demilich.metastone.game.cards.CardSet;
 
 import static net.demilich.metastone.game.cards.CardSet.*;
 
-public class DeckFormat implements Serializable {
+public class DeckFormat implements Serializable, Cloneable {
 	private String name = "";
 	private Set<CardSet> sets;
 
@@ -208,5 +208,10 @@ public class DeckFormat implements Serializable {
 
 		DeckFormat rhs = (DeckFormat) obj;
 		return this.getCardSets().equals(rhs.getCardSets());
+	}
+
+	@Override
+	public DeckFormat clone() throws CloneNotSupportedException {
+		return (DeckFormat) super.clone();
 	}
 }
