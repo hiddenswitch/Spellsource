@@ -36,6 +36,7 @@ import net.demilich.metastone.game.utils.Attribute;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -701,6 +702,13 @@ public interface Games {
 
 		entities.addAll(opposingSecrets);
 
+		// Get all quest information
+		entities.addAll(
+				Stream.concat(local.getQuests().stream(), opponent.getQuests().stream())
+						.map(e -> getEntity(workingContext, e, localPlayerId))
+						.collect(Collectors.toList())
+		);
+
 		List<com.hiddenswitch.spellsource.client.models.Entity> playerEntities = new ArrayList<>();
 		// Create the heroes
 		for (final Player player : Arrays.asList(local, opponent)) {
@@ -777,6 +785,8 @@ public interface Games {
 			return getEntity(workingContext, (Card) entity, localPlayerId);
 		} else if (entity instanceof Secret) {
 			return getEntity(workingContext, (Secret) entity, localPlayerId);
+		} else if (entity instanceof Quest) {
+			return getEntity(workingContext, (Quest) entity, localPlayerId);
 		}
 
 		return null;
@@ -864,7 +874,7 @@ public interface Games {
 	}
 
 	/**
-	 * A view of a secret or quest. Censors information from opposing players if it's a quest.
+	 * A view of a secret or quest. Censors information from opposing players if it's a secret.
 	 *
 	 * @param workingContext The context to generate the client view for.
 	 * @param enchantment    The secret or quest entity. Any entity backed by a {@link Enchantment} is valid here.
@@ -876,11 +886,11 @@ public interface Games {
 			return null;
 		}
 
-		com.hiddenswitch.spellsource.client.models.Entity cardEntity = getEntity(workingContext, enchantment.getSourceCard(), localPlayerId);
+		com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, enchantment.getSourceCard(), localPlayerId);
 		if (enchantment instanceof Secret
 				&& localPlayerId != enchantment.getOwner()) {
 			// Censor information about the secret if it does not belong to the player.
-			cardEntity
+			entity
 					.name("Secret")
 					.description("Secret")
 					.cardId("hidden");
@@ -890,13 +900,17 @@ public interface Games {
 			entityType = Entity.EntityTypeEnum.QUEST;
 		}
 
-		cardEntity.id(enchantment.getId())
+		entity.getState()
+				.fires(enchantment.getFires())
+				.countUntilCast(enchantment.getCountUntilCast());
+
+		entity.id(enchantment.getId())
 				.entityType(entityType)
 				.getState()
 				.location(Games.toClientLocation(enchantment.getEntityLocation()))
 				.owner(enchantment.getOwner())
 				.playable(false);
-		return cardEntity;
+		return entity;
 	}
 
 	/**

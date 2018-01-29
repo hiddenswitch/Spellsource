@@ -51,6 +51,8 @@ Name | Type | Description | Notes
 **note** | **String** | A renderable note attached to this entity. |  [optional]
 **cardType** | [**CardTypeEnum**](#CardTypeEnum) | When not null, indicates this card entity has a specified type. |  [optional]
 **tribe** | **String** | When not null, indicates the card&#39;s tribe/race. Typically only minions have this field set. |  [optional]
+**fires** | **Integer** | The number of times this enchantment (secret, quest or trigger on card) has fired. |  [optional]
+**countUntilCast** | **Integer** | The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is triggered.  |  [optional]
 
 
 <a name="CardTypeEnum"></a>
