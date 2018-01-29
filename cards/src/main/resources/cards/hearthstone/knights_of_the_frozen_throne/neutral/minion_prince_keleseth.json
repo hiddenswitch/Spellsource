@@ -11,8 +11,9 @@
     "condition": {
       "class": "DeckContainsCondition",
       "cardFilter": {
-        "class": "CardFilter",
-        "manaCost": 2
+        "class": "ManaCostFilter",
+        "value": 2,
+        "operation": "EQUAL"
       },
       "invert": true
     },

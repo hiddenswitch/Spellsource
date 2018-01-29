@@ -460,6 +460,30 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	}
 
 	@Test
+	public void testPrinceKeleseth() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_prince_keleseth");
+			context.endTurn();
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, player, (MinionCard) player.getHand().get(0));
+			Assert.assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack());
+			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "token_barnabus_the_stomper");
+			playCard(context, player, "minion_prince_keleseth");
+			context.endTurn();
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, player, (MinionCard) player.getHand().get(0));
+			Assert.assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack() + 1);
+			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp() + 1);
+		});
+	}
+
+	@Test
 	public void testPrinceTaldaram() {
 		runGym((context, player, opponent) -> {
 			Minion waterElemental = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_water_elemental"));

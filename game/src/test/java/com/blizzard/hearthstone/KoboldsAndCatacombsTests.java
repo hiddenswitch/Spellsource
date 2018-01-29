@@ -32,7 +32,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Assert.assertEquals(player.getMinions().size(), 1);
 			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");
 		});
-		
+
 		/**
 		 * Diamond Spellstone will only resurrect a distinct minion, meaning if you have multiple versions of the same
 		 * minion die, you'll only get one copy of it back. For example, if you have multiple dead Saronite Chain Gangs,
