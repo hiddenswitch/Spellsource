@@ -12,23 +12,15 @@
     "spell": {
       "class": "RevealCardSpell",
       "spell": {
-        "class": "MetaSpell",
-        "value": {
-          "class": "ManaCostProvider"
-        },
-        "spells": [
-          {
-            "class": "SummonSpell",
-            "cardFilter": {
-              "class": "CardFilter",
-              "cardType": "MINION",
-              "manaCost": {
-                "class": "GameValueProvider",
-                "gameValue": "SPELL_VALUE"
-              }
-            }
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": {
+            "class": "ManaCostProvider",
+            "target": "OUTPUT"
           }
-        ]
+        }
       },
       "cardFilter": {
         "class": "CardFilter",

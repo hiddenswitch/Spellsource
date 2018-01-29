@@ -9,20 +9,12 @@
   "spell": {
     "class": "RevealCardSpell",
     "spell": {
-      "class": "MetaSpell",
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
       "value": {
-        "class": "ManaCostProvider"
-      },
-      "spells": [
-        {
-          "class": "DamageSpell",
-          "target": "ALL_MINIONS",
-          "value": {
-            "class": "GameValueProvider",
-            "gameValue": "SPELL_VALUE"
-          }
-        }
-      ]
+        "class": "ManaCostProvider",
+        "target": "OUTPUT"
+      }
     },
     "cardFilter": {
       "class": "CardFilter",
