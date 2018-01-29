@@ -9,9 +9,29 @@
   "description": "Battlecry: Summon 2 copies of this minion.",
   "battlecry": {
     "spell": {
-      "class": "SummonSpell",
-      "target": "SELF",
-      "value": 2
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "target": "SELF",
+          "boardPositionRelative": "LEFT",
+          "spell": {
+            "class": "RemoveAttributeSpell",
+            "target": "OUTPUT",
+            "attribute": "COPIED_FROM"
+          }
+        },
+        {
+          "class": "SummonSpell",
+          "target": "SELF",
+          "boardPositionRelative": "RIGHT",
+          "spell": {
+            "class": "RemoveAttributeSpell",
+            "target": "OUTPUT",
+            "attribute": "COPIED_FROM"
+          }
+        }
+      ]
     }
   },
   "attributes": {
