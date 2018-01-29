@@ -1,0 +1,29 @@
+{
+    "name": "Emissary of the End",
+    "baseManaCost": 6,
+    "type": "MINION",
+    "baseAttack": 0,
+    "baseHp": 6,
+    "heroClass": "ANY",
+    "rarity": "RARE",
+    "race": "NONE",
+    "description": "Battlecry: Gain attack equal to the highest Cost in your hand.",
+    "battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "BuffSpell",
+			"target": "SELF",
+			"attackBonus": {
+				"class": "HighestAttributeValueProvider",
+				"target": "FRIENDLY_HAND",
+				"attribute": "ACTUAL_MANA_COST"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

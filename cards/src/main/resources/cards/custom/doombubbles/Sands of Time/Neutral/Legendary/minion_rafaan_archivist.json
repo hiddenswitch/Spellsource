@@ -1,0 +1,38 @@
+{
+	"name": "Rafaam, Archivist",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 5,
+	"heroClass": "ANY",
+	"rarity": "LEGENDARY",
+	"description": "Battlecry: Discover a card from a valid deck named 'The Supreme Archive' in your collection.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "DiscoverFilteredCardSpell",
+			"cardSource": {
+				"class": "SupremeArchiveSource",
+				"targetPlayer": "SELF"
+			},
+			"spell": {
+				"class": "ReceiveCardSpell",
+				"targetPlayer": "SELF"
+			}
+		},
+		"condition": {
+			"class": "custom.ArchiveAvailableCondition",
+			"targetPlayer": "SELF"
+		}
+	},
+	"glow": {
+		"class": "custom.ArchiveAvailableCondition",
+		"targetPlayer": "SELF"
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CLASSIC",
+	"fileFormatVersion": 1
+}

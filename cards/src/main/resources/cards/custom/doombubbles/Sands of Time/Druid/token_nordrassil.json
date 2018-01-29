@@ -1,0 +1,30 @@
+{
+    "name": "Nordrassil",
+    "baseManaCost": 10,
+    "type": "MINION",
+    "baseAttack": 10,
+    "baseHp": 10,
+    "heroClass": "DRUID",
+    "rarity": "LEGENDARY",
+    "description": "Taunt. Can't attack. At the end of your turn, give another random friendly minion +10/+10.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TurnEndTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "BuffSpell",
+			"target": "OTHER_FRIENDLY_MINIONS",
+			"attackBonus": 10,
+			"hpBonus": 10,
+			"randomTarget": true
+		}
+	},
+	"attributes": {
+		"TAUNT": true,
+		"CANNOT_ATTACK": true
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

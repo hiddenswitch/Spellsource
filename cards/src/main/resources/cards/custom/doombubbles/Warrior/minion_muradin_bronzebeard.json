@@ -1,0 +1,49 @@
+{
+	"name": "Muradin Bronzebeard",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 4,
+	"heroClass": "WARRIOR",
+	"rarity": "LEGENDARY",
+	"description": "Battlecry: If your deck contains no duplicates, replace your health above 1 with armor.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "BuffHeroSpell",
+					"target": "FRIENDLY_HERO",
+					"armorBonus": {
+						"class": "AlgebraicValueProvider",
+						"operation": "SUBTRACT",
+						"value1": {
+							"class": "AttributeValueProvider",
+							"target": "FRIENDLY_HERO",
+							"attribute": "HP"
+						},
+						"value2": 1
+					}
+				},
+				{
+					"class": "SetHeroHpSpell",
+					"target": "FRIENDLY_HERO",
+					"value": 1
+				}
+			]
+		},
+		"condition": {
+			"class": "HighlanderDeckCondition"
+		}
+	},
+	"glow": {
+		"class": "HighlanderDeckCondition"
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

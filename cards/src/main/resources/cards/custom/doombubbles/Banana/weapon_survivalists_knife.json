@@ -1,0 +1,27 @@
+{
+	"name": "Survivalist's Knife",
+	"baseManaCost": 2,
+	"type": "WEAPON",
+	"damage": 1,
+	"durability": 2,
+	"heroClass": "HUNTER",
+	"rarity": "RARE",
+	"description": "After your Hero attacks, add a Banana to your hand.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "AfterPhysicalAttackTrigger",
+			"sourcePlayer": "SELF",
+			"targetPlayer": "BOTH",
+			"sourceEntityType": "HERO"
+		},
+		"spell": {
+			"class": "ReceiveRandomCardSpell",
+			"cards": [
+				"spell_bananas"
+			]
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOm",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,24 @@
+{
+    "name": "Blood of Mannoroth",
+    "baseManaCost": 3,
+    "type": "RIFT",
+    "duration": 4,
+    "heroClass": "WARRIOR",
+    "rarity": "RARE",
+    "description": "Whenever a minion takes damage, give it +2 attack.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "DamageReceivedTrigger",
+			"targetPlayer": "BOTH",
+			"targetEntityType": "MINION"
+		},
+		"spell": {
+			"class": "BuffSpell",
+			"target": "EVENT_TARGET",
+			"attackBonus": 2
+		}
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

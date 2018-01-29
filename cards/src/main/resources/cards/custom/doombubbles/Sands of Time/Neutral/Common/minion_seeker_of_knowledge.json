@@ -1,0 +1,29 @@
+{
+	"name": "Seeker of Knowledge",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Battlecry: Draw a card. If it's a spell, draw again.",
+	"battlecry": {
+		"spell": {
+			"class": "DrawCardAndDoSomethingSpell",
+			"spell": {
+				"class": "DrawCardSpell",
+				"value": 1,
+				"condition": {
+					"class": "CardPropertyCondition",
+					"cardType": "SPELL"
+				}
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

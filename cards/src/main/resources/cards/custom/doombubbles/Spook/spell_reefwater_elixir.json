@@ -1,0 +1,30 @@
+{
+	"name": "Reefwater Elixir",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "PRIEST",
+	"rarity": "COMMON",
+	"description": "Restore a minion to full Health and give it Spell Damage +2.",
+	"targetSelection": "MINIONS",
+	"race": "POTION",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "HealSpell",
+				"value": {
+					"class": "AttributeValueProvider",
+					"attribute": "MAX_HP"
+				}
+			},
+			{
+				"class": "ModifyAttributeSpell",
+				"attribute": "SPELL_DAMAGE",
+				"value": 2
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

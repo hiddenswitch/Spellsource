@@ -1,0 +1,20 @@
+{
+	"name": "Tome of Ancient Evil",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 0,
+	"baseHp": 2,
+	"heroClass": "WARLOCK",
+	"rarity": "RARE",
+	"description": "Deathrattle: Add a 'Power Overwhelming' to your hand.",
+	"deathrattle": {
+		"class": "ReceiveCardSpell",
+		"card": "spell_power_overwhelming"
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,66 @@
+{
+    "name": "The Big Game Hunt",
+    "baseManaCost": 3,
+    "type": "RIFT",
+    "duration": 4,
+    "heroClass": "HUNTER",
+    "rarity": "LEGENDARY",
+    "description": "Players gain Points by killing opposing minions. Deathrattle: Summon a 7/7 King Bangalash.",
+	"triggers": [
+		{
+			"eventTrigger": {
+				"class": "MinionDeathTrigger",
+				"sourcePlayer": "SELF",
+				"fireCondition": {
+					"class": "OwnedByPlayerCondition",
+					"targetPlayer": "INACTIVE"
+				}
+			},
+			"spell": {
+				"class": "ModifyAttributeSpell",
+				"target": "SELF",
+				"attribute": "CUSTOM_6",
+				"value": -1
+			}
+		},
+		{
+			"eventTrigger": {
+				"class": "MinionDeathTrigger",
+				"sourcePlayer": "OPPONENT",
+				"fireCondition": {
+					"class": "OwnedByPlayerCondition",
+					"targetPlayer": "ACTIVE"
+				}
+			},
+			"spell": {
+				"class": "ModifyAttributeSpell",
+				"target": "SELF",
+				"attribute": "CUSTOM_6",
+				"value": 1
+			}
+		}
+	],
+	"deathrattle": {
+		"class": "CreateSummonSpell",
+		"name": "King Bangalsh",
+		"description": "Has +1/+1 for each Point you had, and -1/-1 for each Point your Opponent had.",
+		"race": "BEAST",
+		"attackBonus": {
+			"class": "AttributeValueProvider",
+			"target": "SELF",
+			"attribute": "CUSTOM_6"
+		},
+		"hpBonus": {
+			"class": "AttributeValueProvider",
+			"target": "SELF",
+			"attribute": "CUSTOM_6"
+		}
+	},
+	"attributes": {
+		"DEATHRATTLES": true,
+		"CUSTOM_6": 7
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

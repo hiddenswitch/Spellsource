@@ -1,0 +1,29 @@
+{
+	"name": "Arcane Barrage",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "RARE",
+	"description": "Deal *3* damage. If you've already casted an Arcane spell this turn, deal 5 instead.",
+	"targetSelection": "ANY",
+	"race": "ARCANE",
+	"spell": {
+		"class": "DamageSpell",
+		"value": {
+			"class": "ConditionalValueProvider",
+			"ifTrue": 5,
+			"ifFalse": 3,
+			"condition": {
+				"class": "PlayedThisTurnCondition",
+				"filter": {
+					"class": "CardFilter",
+					"race": "ARCANE",
+					"cardType": "SPELL"
+				}
+			}
+		}
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

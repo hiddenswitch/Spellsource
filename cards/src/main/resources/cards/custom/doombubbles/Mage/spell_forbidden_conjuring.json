@@ -1,0 +1,33 @@
+{
+	"name": "Forbidden Conjuring",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "EPIC",
+	"description": "Spend all your mana. Summon that many 0/2 Mirror Images with Taunt.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "SummonSpell",
+				"value": {
+					"class": "PlayerAttributeValueProvider",
+					"playerAttribute": "MANA"
+				},
+				"card": "token_mirror_image"
+			},
+			{
+				"class": "GainManaSpell",
+				"value": {
+					"class": "PlayerAttributeValueProvider",
+					"playerAttribute": "MANA",
+					"multiplier": -1
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

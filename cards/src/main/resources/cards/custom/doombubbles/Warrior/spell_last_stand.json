@@ -1,0 +1,31 @@
+{
+	"name": "Last Stand",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "WARRIOR",
+	"rarity": "RARE",
+	"description": "Gain 6 Armor. Add a random Protection spell to your hand.",
+	"targetSelection": "NONE",
+	"race": "PROTECTION",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "BuffHeroSpell",
+				"target": "FRIENDLY_HERO",
+				"armorBonus": 4
+			},
+			{
+				"class": "ReceiveCardSpell",
+				"cardFilter": {
+					"class": "CardFilter",
+					"race": "PROTECTION",
+					"cardType": "SPELL"
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

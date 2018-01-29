@@ -1,0 +1,21 @@
+{
+    "name": "Alpha Monkey",
+    "baseManaCost": 3,
+    "type": "MINION",
+    "baseAttack": 3,
+    "baseHp": 4,
+    "heroClass": "ANY",
+    "rarity": "RARE",
+    "race": "Beast",
+    "description": "Battlecry: Steal a Banana from your opponent.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "custom.StealBananaSpell"
+
+		}
+	},
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+}

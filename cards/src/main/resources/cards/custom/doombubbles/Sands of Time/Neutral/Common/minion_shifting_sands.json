@@ -1,0 +1,23 @@
+{
+    "name": "Shifting Sands",
+    "baseManaCost": 3,
+    "type": "MINION",
+    "baseAttack": 5,
+    "baseHp": 2,
+    "heroClass": "ANY",
+    "rarity": "COMMON",
+    "race": "ELEMENTAL",
+    "description": "At the end of each turn, swap this minion's Attack and Health.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TurnEndTrigger"
+		},
+		"spell": {
+			"class": "SwapAttackAndHpSpell",
+			"target": "SELF"
+		}
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

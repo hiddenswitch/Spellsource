@@ -1,0 +1,35 @@
+{
+	"name": "Blunderblaster",
+	"baseManaCost": 1,
+	"type": "WEAPON",
+	"damage": 1,
+	"durability": 3,
+	"heroClass": "HUNTER",
+	"rarity": "COMMON",
+	"description": "Cleave",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TargetAcquisitionTrigger",
+			"actionType": "PHYSICAL_ATTACK",
+			"sourcePlayer": "SELF",
+			"targetPlayer": "BOTH",
+			"sourceEntityType": "HERO",
+			"targetEntityType": "MINION"
+		},
+		"spell": {
+			"class": "AdjacentEffectSpell",
+			"target": "EVENT_TARGET",
+			"spell2": {
+				"class": "DamageSpell",
+				"value": {
+					"class": "AttributeValueProvider",
+					"target": "FRIENDLY_WEAPON",
+					"attribute": "ATTACK"
+				}
+			}
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

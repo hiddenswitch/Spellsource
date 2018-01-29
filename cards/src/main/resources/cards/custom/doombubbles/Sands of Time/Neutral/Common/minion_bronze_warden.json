@@ -1,0 +1,48 @@
+{
+	"name": "Bronze Warden",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 4,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "DRAGON",
+	"description": "Battlecry: If you're holding a Dragon, give a friendly minion +3/+3.",
+	"battlecry": {
+		"targetSelection": "FRIENDLY_MINIONS",
+		"spell": {
+			"class": "BuffSpell",
+			"attackBonus": 3,
+			"hpBonus": 3
+		},
+		"condition": {
+			"class": "HoldsCardCondition",
+			"cardFilter": {
+				"class": "CardFilter",
+				"race": "DRAGON"
+			}
+		}
+	},
+	"glow": {
+		"class": "AndCondition",
+		"conditions": [
+			{
+				"class": "HoldsCardCondition",
+				"cardFilter": {
+					"class": "CardFilter",
+					"race": "DRAGON"
+				}
+			},
+			{
+				"class": "MinionOnBoardCondition"
+			}
+		]
+		
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

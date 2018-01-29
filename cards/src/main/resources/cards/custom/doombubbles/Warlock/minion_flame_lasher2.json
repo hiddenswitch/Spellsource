@@ -1,0 +1,30 @@
+{
+	"name": "Flame Lasher",
+	"baseManaCost": 6,
+	"type": "MINION",
+	"baseAttack": 7,
+	"baseHp": 6,
+	"heroClass": "WARLOCK",
+	"rarity": "EPIC",
+	"race": "ELEMENTAL",
+	"description": "Immune to Destruction spells.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "SpellCastedTrigger",
+			"targetPlayer": "SELF",
+			"race": "DESTRUCTION"
+		},
+		"spell": {
+			"class": "AddAttributeSpell",
+			"target": "SELF",
+			"attribute": "IMMUNE",
+			"revertTrigger": {
+				"class": "AfterSpellCastedTrigger",
+				"targetPlayer": "SELF"
+			}
+		}
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

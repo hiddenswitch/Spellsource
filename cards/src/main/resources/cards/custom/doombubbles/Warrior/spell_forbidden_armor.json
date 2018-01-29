@@ -1,0 +1,35 @@
+{
+	"name": "Forbidden Armor",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "WARRIOR",
+	"rarity": "EPIC",
+	"description": "Spend all your mana. Gain Armor for double the mana spent.",
+	"targetSelection": "ANY",
+	"race": "PROTECTION",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "BuffHeroSpell",
+				"target": "FRIENDLY_HERO",
+				"armorBonus": {
+					"class": "PlayerAttributeValueProvider",
+					"playerAttribute": "MANA",
+					"multiplier": 2
+				}
+			},
+			{
+				"class": "GainManaSpell",
+				"value": {
+					"class": "PlayerAttributeValueProvider",
+					"playerAttribute": "MANA",
+					"multiplier": -1
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

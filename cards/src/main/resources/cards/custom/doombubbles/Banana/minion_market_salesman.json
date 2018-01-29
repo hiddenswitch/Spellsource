@@ -1,0 +1,33 @@
+{
+    "name": "Market Salesman",
+    "baseManaCost": 2,
+    "type": "MINION",
+    "baseAttack": 2,
+    "baseHp": 3,
+    "heroClass": "ANY",
+    "rarity": "RARE",
+    "description": "Battlecry: Discard a Coin to add two Bananas to your hand.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "custom.DiscardToDoSpell",
+			"card": "spell_the_coin",
+			"spell": {
+				"class": "MetaSpell",
+				"spells": [
+					{
+						"class": "ReceiveCardSpell",
+						"card": "spell_bananas"
+					},
+					{
+						"class": "ReceiveCardSpell",
+						"card": "spell_bananas"
+					}
+				]
+			}
+		}
+	},
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+}

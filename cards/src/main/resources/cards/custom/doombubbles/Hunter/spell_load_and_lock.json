@@ -1,0 +1,32 @@
+{
+	"name": "Load and Lock",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "HUNTER",
+	"rarity": "EPIC",
+	"description": "Each time you cast a spell this turn, add a random Marksman spell to your hand.",
+	"targetSelection": "NONE",
+	"race": "MARKSMAN",
+	"spell": {
+		"class": "AddSpellTriggerSpell",
+		"target": "FRIENDLY_PLAYER",
+		"trigger": {
+			"eventTrigger": {
+				"class": "SpellCastedTrigger",
+				"sourcePlayer": "SELF"
+			},
+			"spell": {
+				"class": "ReceiveCardSpell",
+				"cardFilter": {
+					"class": "CardFilter",
+					"cardType": "SPELL",
+					"race": "MARKSMAN"
+				}
+			},
+			"oneTurn": true
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

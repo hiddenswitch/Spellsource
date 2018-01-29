@@ -1,0 +1,40 @@
+{
+    "name": "Echo of Rexxar",
+    "baseManaCost": 6,
+    "type": "MINION",
+    "baseAttack": 4,
+    "baseHp": 4,
+    "heroClass": "HUNTER",
+    "rarity": "LEGENDARY",
+    "description": "Battlecry and Deathrattle: Summon two random Animal Companions.",
+    "battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "SummonRandomSpell",
+			"cards": [
+				"token_huffer",
+				"token_misha",
+				"token_leokk"
+			],
+			"value": 2,
+			"exclusive": true
+		}
+	},
+	"deathrattle": {
+		"class": "SummonRandomSpell",
+		"cards": [
+			"token_huffer",
+			"token_misha",
+			"token_leokk"
+		],
+		"value": 2,
+		"exclusive": true
+	},
+	"attributes": {
+		"BATTLECRY": true,
+		"DEATHRATTLES": true
+	},
+    "collectible": false,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

@@ -1,0 +1,38 @@
+{
+    "name": "Echo of Garrosh",
+    "baseManaCost": 6,
+    "type": "MINION",
+    "baseAttack": 4,
+    "baseHp": 4,
+    "heroClass": "WARRIOR",
+    "rarity": "LEGENDARY",
+    "description": "Battlecry: Gain 6 Armor. Then double your armor.",
+    "battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "BuffHeroSpell",
+					"target": "FRIENDLY_HERO",
+					"armorBonus": 6
+				},
+				{
+					"class": "BuffHeroSpell",
+					"target": "FRIENDLY_HERO",
+					"armorBonus": {
+						 "class": "AttributeValueProvider",
+						"target": "FRIENDLY_HERO",
+						"attribute": "ARMOR"
+					}
+				}
+			]
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+    "collectible": false,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}
