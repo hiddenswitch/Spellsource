@@ -213,6 +213,12 @@ public class EntityState  implements Serializable {
   @SerializedName("tribe")
   private String tribe = null;
 
+  @SerializedName("fires")
+  private Integer fires = null;
+
+  @SerializedName("countUntilCast")
+  private Integer countUntilCast = null;
+
   public EntityState location(EntityLocation location) {
     this.location = location;
     return this;
@@ -1059,6 +1065,42 @@ public class EntityState  implements Serializable {
     this.tribe = tribe;
   }
 
+  public EntityState fires(Integer fires) {
+    this.fires = fires;
+    return this;
+  }
+
+   /**
+   * The number of times this enchantment (secret, quest or trigger on card) has fired.
+   * @return fires
+  **/
+  @ApiModelProperty(example = "null", value = "The number of times this enchantment (secret, quest or trigger on card) has fired.")
+  public Integer getFires() {
+    return fires;
+  }
+
+  public void setFires(Integer fires) {
+    this.fires = fires;
+  }
+
+  public EntityState countUntilCast(Integer countUntilCast) {
+    this.countUntilCast = countUntilCast;
+    return this;
+  }
+
+   /**
+   * The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is triggered. 
+   * @return countUntilCast
+  **/
+  @ApiModelProperty(example = "null", value = "The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is triggered. ")
+  public Integer getCountUntilCast() {
+    return countUntilCast;
+  }
+
+  public void setCountUntilCast(Integer countUntilCast) {
+    this.countUntilCast = countUntilCast;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1115,12 +1157,14 @@ public class EntityState  implements Serializable {
         Objects.equals(this.hostsTrigger, entityState.hostsTrigger) &&
         Objects.equals(this.note, entityState.note) &&
         Objects.equals(this.cardType, entityState.cardType) &&
-        Objects.equals(this.tribe, entityState.tribe);
+        Objects.equals(this.tribe, entityState.tribe) &&
+        Objects.equals(this.fires, entityState.fires) &&
+        Objects.equals(this.countUntilCast, entityState.countUntilCast);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast);
   }
 
   @Override
@@ -1175,6 +1219,8 @@ public class EntityState  implements Serializable {
     sb.append("    note: ").append(toIndentedString(note)).append("\n");
     sb.append("    cardType: ").append(toIndentedString(cardType)).append("\n");
     sb.append("    tribe: ").append(toIndentedString(tribe)).append("\n");
+    sb.append("    fires: ").append(toIndentedString(fires)).append("\n");
+    sb.append("    countUntilCast: ").append(toIndentedString(countUntilCast)).append("\n");
     sb.append("}");
     return sb.toString();
   }
