@@ -856,6 +856,7 @@ public interface Games {
 		entityState.windfury(actor.hasAttribute(Attribute.WINDFURY));
 		entityState.summoningSickness(actor.hasAttribute(Attribute.SUMMONING_SICKNESS));
 		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+		entityState.tribe(actor.getRace() != null ? actor.getRace().name() : null);
 		final List<Trigger> triggers = workingContext.getTriggerManager().getTriggersAssociatedWith(actor.getReference());
 		entityState.hostsTrigger(triggers.size() > 0);
 		entity.state(entityState);
@@ -972,6 +973,7 @@ public interface Games {
 				entityState.underAura(minionCard.getBonusAttack() > 0
 						|| minionCard.getBonusAttack() > 0
 						|| hostsTrigger);
+				entityState.tribe(minionCard.getRace() != null ? minionCard.getRace().name() : null);
 				break;
 			case WEAPON:
 				WeaponCard weaponCard = (WeaponCard) card;

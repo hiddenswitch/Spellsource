@@ -50,6 +50,7 @@ Name | Type | Description | Notes
 **hostsTrigger** | **Boolean** | When true, indicates this entity has an effect that triggers on game events. |  [optional]
 **note** | **String** | A renderable note attached to this entity. |  [optional]
 **cardType** | [**CardTypeEnum**](#CardTypeEnum) | When not null, indicates this card entity has a specified type. |  [optional]
+**tribe** | **String** | When not null, indicates the card&#39;s tribe/race. Typically only minions have this field set. |  [optional]
 
 
 <a name="CardTypeEnum"></a>

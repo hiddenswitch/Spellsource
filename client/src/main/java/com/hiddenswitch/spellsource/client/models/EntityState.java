@@ -210,6 +210,9 @@ public class EntityState  implements Serializable {
   @SerializedName("cardType")
   private CardTypeEnum cardType = null;
 
+  @SerializedName("tribe")
+  private String tribe = null;
+
   public EntityState location(EntityLocation location) {
     this.location = location;
     return this;
@@ -1038,6 +1041,24 @@ public class EntityState  implements Serializable {
     this.cardType = cardType;
   }
 
+  public EntityState tribe(String tribe) {
+    this.tribe = tribe;
+    return this;
+  }
+
+   /**
+   * When not null, indicates the card's tribe/race. Typically only minions have this field set.
+   * @return tribe
+  **/
+  @ApiModelProperty(example = "null", value = "When not null, indicates the card's tribe/race. Typically only minions have this field set.")
+  public String getTribe() {
+    return tribe;
+  }
+
+  public void setTribe(String tribe) {
+    this.tribe = tribe;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1093,12 +1114,13 @@ public class EntityState  implements Serializable {
         Objects.equals(this.lockedMana, entityState.lockedMana) &&
         Objects.equals(this.hostsTrigger, entityState.hostsTrigger) &&
         Objects.equals(this.note, entityState.note) &&
-        Objects.equals(this.cardType, entityState.cardType);
+        Objects.equals(this.cardType, entityState.cardType) &&
+        Objects.equals(this.tribe, entityState.tribe);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe);
   }
 
   @Override
@@ -1152,6 +1174,7 @@ public class EntityState  implements Serializable {
     sb.append("    hostsTrigger: ").append(toIndentedString(hostsTrigger)).append("\n");
     sb.append("    note: ").append(toIndentedString(note)).append("\n");
     sb.append("    cardType: ").append(toIndentedString(cardType)).append("\n");
+    sb.append("    tribe: ").append(toIndentedString(tribe)).append("\n");
     sb.append("}");
     return sb.toString();
   }
