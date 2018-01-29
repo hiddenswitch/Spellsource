@@ -1,0 +1,19 @@
+{
+  "name": "Hurried Defenses",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "EPIC",
+  "description": "Summon two 2/3 Darnassus Aspirants.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "minion_darnassus_aspirant",
+      "minion_darnassus_aspirant"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

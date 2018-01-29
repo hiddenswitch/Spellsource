@@ -1,0 +1,29 @@
+{
+  "name": "Empowered",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Deals 3 damage to a random enemy minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 3,
+        "randomTarget": true
+      },
+      "maxFires": 1
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

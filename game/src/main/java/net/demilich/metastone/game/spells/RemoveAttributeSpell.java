@@ -24,7 +24,7 @@ public class RemoveAttributeSpell extends RevertableSpell {
 	}
 
 	@Override
-	protected SpellDesc getReverseSpell(SpellDesc desc, EntityReference target) {
+	protected SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target) {
 		return AddAttributeSpell.create(target, (Attribute) desc.get(SpellArg.ATTRIBUTE));
 	}
 

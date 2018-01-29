@@ -1,0 +1,36 @@
+{
+  "name": "Horace Shadowfall",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Destroy your Mana Crystals. Your cards cost (1) this game.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ModifyMaxManaSpell",
+          "value": -10
+        },
+        {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "value": 1,
+            "operation": "SET"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

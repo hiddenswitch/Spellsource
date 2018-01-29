@@ -1,6 +1,7 @@
 package net.demilich.metastone.tests.util;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -15,7 +16,7 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.Zones;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
-import org.mockito.internal.util.MockUtil;
+import org.mockito.stubbing.Answer;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
@@ -45,6 +46,23 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 
 public class TestBase {
+	public static class OverrideHandle<T extends Entity> {
+		private T object;
+		private AtomicBoolean stopped = new AtomicBoolean(false);
+
+		private void set(T object) {
+			this.object = object;
+		}
+
+		public T get() {
+			return object;
+		}
+
+		public void stop() {
+			stopped.set(true);
+		}
+	}
+
 	protected static void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
 		Enchantment enchantment = (Enchantment) context.getTriggersAssociatedWith(source.getReference()).get(0);
 		SpellDesc spell = enchantment.getSpell().clone();
@@ -53,29 +71,53 @@ public class TestBase {
 		enchantment.setSpell(spell);
 	}
 
-	protected static Card overrideRandomCard(GameContext context, String cardId) {
+	protected static OverrideHandle<Card> overrideRandomCard(GameContext context, String cardId) {
+		OverrideHandle<Card> handle = new OverrideHandle<>();
 		Card card = CardCatalogue.getCardById(cardId);
 		MockingDetails mockingDetails = Mockito.mockingDetails(context.getLogic());
 		GameLogic spyLogic = mockingDetails.isSpy() ? context.getLogic() : Mockito.spy(context.getLogic());
 		context.setLogic(spyLogic);
-		Mockito.doAnswer(invocation -> card).when(spyLogic).getRandom(Mockito.anyList());
-		Mockito.doAnswer(invocation -> card).when(spyLogic).removeRandom(Mockito.anyList());
-		return card;
+		Answer answer = invocation -> {
+			if (!handle.stopped.get()) {
+				return card;
+			} else {
+				return invocation.callRealMethod();
+			}
+		};
+
+		Mockito.doAnswer(answer).when(spyLogic).getRandom(Mockito.anyList());
+		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.anyList());
+		handle.set(card);
+		return handle;
 	}
 
-	protected static void overrideDiscover(Player player, Function<List<DiscoverAction>, GameAction> discovery) {
+	protected static OverrideHandle<Card> overrideDiscover(Player player, Function<List<DiscoverAction>, GameAction> discovery) {
 		Behaviour overriden = Mockito.spy(player.getBehaviour());
 		player.setBehaviour(overriden);
+		OverrideHandle<Card> handle = new OverrideHandle<>();
 		Mockito.doAnswer(invocation -> {
 			List<GameAction> actions = invocation.getArgument(2);
-			if (actions.stream().allMatch(a -> a instanceof DiscoverAction)) {
+			if (actions.stream().allMatch(a -> a instanceof DiscoverAction)
+					&& !handle.stopped.get()) {
 				List<DiscoverAction> discoveries = new ArrayList<>();
 				actions.forEach(a -> discoveries.add((DiscoverAction) a));
-				return discovery.apply(discoveries);
+				DiscoverAction result = (DiscoverAction) discovery.apply(discoveries);
+				handle.set(result.getCard());
+				return result;
 			} else {
 				return invocation.callRealMethod();
 			}
 		}).when(overriden).requestAction(any(), any(), anyList());
+		return handle;
+	}
+
+	protected static void overrideDiscover(GameContext context, String cardId, Player player) {
+		OverrideHandle<Card> handle = overrideRandomCard(context, cardId);
+		overrideDiscover(player, discovers -> {
+			DiscoverAction action = discovers.stream().filter(da -> da.getCard().getCardId().equals(cardId)).findFirst().orElseThrow(AssertionError::new);
+			handle.stop();
+			return action;
+		});
 	}
 
 	public static Card receiveCard(GameContext context, Player player, String cardId) {
@@ -270,7 +312,8 @@ public class TestBase {
 				CardSet.THE_GRAND_TOURNAMENT,
 				CardSet.JOURNEY_TO_UNGORO,
 				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
-				CardSet.THE_OLD_GODS
+				CardSet.THE_OLD_GODS,
+				CardSet.CUSTOM
 		);
 
 		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(

@@ -64,7 +64,7 @@ public class GoblinsVersusGnomesTests extends TestBase {
 	@Test
 	public void testUnstablePortal() {
 		runGym((context, player, opponent) -> {
-			Card yeti = overrideRandomCard(context, "minion_chillwind_yeti");
+			Card yeti = overrideRandomCard(context, "minion_chillwind_yeti").get();
 			playCard(context, player, "spell_unstable_portal");
 			Assert.assertEquals(costOf(context, player, yeti), yeti.getBaseManaCost() - 3);
 		});

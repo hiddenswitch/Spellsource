@@ -4,7 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
-public class SpellCastedEvent extends GameEvent {
+public class SpellCastedEvent extends GameEvent implements HasCard {
 
 	private final Card sourceCard;
 
@@ -12,7 +12,7 @@ public class SpellCastedEvent extends GameEvent {
 		super(context, playerId, playerId);
 		this.sourceCard = sourceCard;
 	}
-	
+
 	@Override
 	public Entity getEventSource() {
 		return getSourceCard();
@@ -32,4 +32,8 @@ public class SpellCastedEvent extends GameEvent {
 		return sourceCard;
 	}
 
+	@Override
+	public Card getCard() {
+		return sourceCard;
+	}
 }

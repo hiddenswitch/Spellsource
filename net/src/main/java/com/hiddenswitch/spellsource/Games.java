@@ -498,7 +498,7 @@ public interface Games {
 					.victim(getEntity(workingContext, damageEvent.getVictim(), playerId)));
 		} else if (event instanceof AfterSpellCastedEvent) {
 			final AfterSpellCastedEvent afterSpellCastedEvent = (AfterSpellCastedEvent) event;
-			final Card card = afterSpellCastedEvent.getSourceCard();
+			final Card card = afterSpellCastedEvent.getCard();
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
 			if (card.getCardType() == CardType.SPELL
 					&& card instanceof SecretCard

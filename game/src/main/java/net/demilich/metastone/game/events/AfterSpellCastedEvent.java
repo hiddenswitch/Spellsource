@@ -4,7 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
-public class AfterSpellCastedEvent extends GameEvent {
+public class AfterSpellCastedEvent extends GameEvent implements HasCard {
 
 	private final Card sourceCard;
 	private final Entity spellTarget;
@@ -17,7 +17,7 @@ public class AfterSpellCastedEvent extends GameEvent {
 	
 	@Override
 	public Entity getEventSource() {
-		return getSourceCard();
+		return getCard();
 	}
 
 	@Override
@@ -30,8 +30,8 @@ public class AfterSpellCastedEvent extends GameEvent {
 		return GameEventType.AFTER_SPELL_CASTED;
 	}
 
-	public Card getSourceCard() {
+	@Override
+	public Card getCard() {
 		return sourceCard;
 	}
-
 }
