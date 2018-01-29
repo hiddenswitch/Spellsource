@@ -17,6 +17,123 @@ import org.testng.annotations.Test;
 public class CustomHearthstoneTests extends TestBase {
 
 	@Test
+	public void testMetamagicTemporalFluxInteraction() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 3; i++) {
+				shuffleToDeck(context, player, "spell_the_coin");
+			}
+			overrideDiscover(context, "spell_enhanced", player);
+			playCard(context, player, "spell_metamagic");
+			int opponentHp = opponent.getHero().getHp();
+			playCardWithTarget(context, player, "spell_temporal_flux", opponent.getHero());
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 3);
+			Assert.assertEquals(player.getHand().size(), 3);
+		});
+	}
+
+	@Test
+	public void testMetamagic() {
+		// Costs (2) less.
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context, "spell_quickened", player);
+			playCard(context, player, "spell_metamagic");
+			player.setMaxMana(10);
+			player.setMana(10);
+			Card explosion = receiveCard(context, player, "spell_arcane_explosion");
+			Assert.assertEquals(costOf(context, player, explosion), explosion.getBaseManaCost() - 2);
+			playCard(context, player, explosion);
+			explosion = receiveCard(context, player, "spell_arcane_explosion");
+			Assert.assertEquals(costOf(context, player, explosion), explosion.getBaseManaCost());
+		});
+
+		// Deals 1 damage to all enemy minions.
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion villager = playMinionCard(context, opponent, "minion_possessed_villager");
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			overrideDiscover(context, "spell_unbounded", player);
+			playCard(context, player, "spell_metamagic");
+			Assert.assertFalse(villager.isDestroyed());
+			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp(), "Metamagic should not have triggered its own effect.");
+			playCard(context, player, "spell_arcane_explosion");
+			Assert.assertTrue(villager.isDestroyed());
+			Assert.assertTrue(bloodfen.isDestroyed(), "Two damage should have been dealt in this sequence.");
+			Assert.assertEquals(opponent.getMinions().size(), 1, "There should just be a shadowbeast, because the additional spell effect does not happen in its own sequence.");
+			context.endTurn();
+			bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			Assert.assertEquals(opponent.getMinions().size(), 2, "There should be a shadowbeast and a bloodfen.");
+			playCard(context, player, "spell_arcane_explosion");
+			Assert.assertFalse(bloodfen.isDestroyed(), "The next arcane explosion should not have destroyed the bloodfen since it only dealt 1 damage");
+			Assert.assertEquals(opponent.getMinions().size(), 1, "But the Shadowbeast should have been destroyed.");
+		});
+
+		// Returns to your deck after you cast it.
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context, "spell_memorized", player);
+			playCard(context, player, "spell_metamagic");
+			playCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getDeck().size(), 0, "We should not have shuffled a minion card into the deck.");
+			context.endTurn();
+			// We should still apply the effect to the next spell the player cast
+			playCard(context, opponent, "spell_the_coin");
+			Assert.assertEquals(player.getDeck().size(), 0, "The opponent's spell should not have been shuffled.");
+			context.endTurn();
+			playCard(context, player, "spell_arcane_explosion");
+			Assert.assertEquals(player.getDeck().get(0).getCardId(), "spell_arcane_explosion");
+			playCard(context, player, "spell_arcane_explosion");
+			Assert.assertEquals(player.getDeck().size(), 1, "Only one copy of the card should have been shuffled.");
+		});
+
+		// Freezes two random enemies.
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context, "spell_chilled", player);
+			playCard(context, player, "spell_metamagic");
+			context.endTurn();
+			Minion minion1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion minion2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCard(context, player, "spell_arcane_explosion");
+			Assert.assertTrue(minion1.hasAttribute(Attribute.FROZEN));
+			Assert.assertTrue(minion2.hasAttribute(Attribute.FROZEN));
+			Assert.assertEquals(minion1.getHp(), minion1.getBaseHp() - 1);
+			Assert.assertEquals(minion2.getHp(), minion1.getBaseHp() - 1);
+		});
+
+		// The next spell you cast costs (2) more and has Spell Damage +2.
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context, "spell_enhanced", player);
+			playCard(context, player, "spell_metamagic");
+			Card fireball = receiveCard(context, player, "spell_fireball");
+			Assert.assertEquals(costOf(context, player, fireball), fireball.getBaseManaCost() + 2);
+			Assert.assertEquals(player.getAttributeValue(Attribute.SPELL_DAMAGE), 2);
+			int opponentHp = opponent.getHero().getHp();
+			playCardWithTarget(context, player, fireball, opponent.getHero());
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 8);
+			fireball = receiveCard(context, player, "spell_fireball");
+			Assert.assertEquals(costOf(context, player, fireball), fireball.getBaseManaCost(), "The 2nd spell should not be more expensive");
+			opponentHp = opponent.getHero().getHp();
+			playCardWithTarget(context, player, fireball, opponent.getHero());
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 6, "The 2nd spell should not have gotten spell damage +2.");
+		});
+
+		// Deals 3 damage to a random enemy minion.
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion chillwind = playMinionCard(context, opponent, "minion_chillwind_yeti");
+			context.endTurn();
+			overrideDiscover(context, "spell_empowered", player);
+			playCard(context, player, "spell_metamagic");
+			Assert.assertEquals(chillwind.getHp(), chillwind.getBaseHp(), "Metamagic should not have triggered its own effect.");
+			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			Assert.assertEquals(chillwind.getHp(), chillwind.getBaseHp() - 3);
+			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			Assert.assertEquals(chillwind.getHp(), chillwind.getBaseHp() - 3, "The empowered effect should have expired");
+		});
+	}
+
+	@Test
 	public void testNexusKingSalhadaar() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_bloodfen_raptor");
