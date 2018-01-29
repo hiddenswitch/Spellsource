@@ -1,0 +1,25 @@
+{
+	"name": "The Black Harvest",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "LEGENDARY",
+	"description": "Quest: Summon 4 Demons. Reward: The Codex of Xerrath.",
+	"targetSelection": "NONE",
+	"quest": {
+		"class": "MinionSummonedTrigger",
+		"targetPlayer": "SELF",
+		"race": "DEMON",
+		"value": 4
+	},
+	"spell": {
+		"class": "ReceiveCardSpell",
+		"card": "spell_the_codex_of_xerrath"
+	},
+	"attributes": {
+		"QUEST": 4
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

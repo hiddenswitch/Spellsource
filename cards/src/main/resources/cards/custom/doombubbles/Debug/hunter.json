@@ -1,0 +1,15 @@
+{
+	"name": "Hunter",
+	"description": "Receive a random Hunter secret.",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "HUNTER",
+	"rarity": "FREE",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "NullSpell"
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

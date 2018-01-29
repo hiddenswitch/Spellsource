@@ -1,0 +1,59 @@
+{
+	"name": "Bloodthirst",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "WARRIOR",
+	"rarity": "RARE",
+	"description": "Give your minions 'Enrage: +3 Attack'.",
+	"targetSelection": "NONE",
+	"race": "FURY",
+	"spell": {
+		"class": "MetaSpell",
+		"target": "FRIENDLY_MINIONS",
+		"spells": [
+			{
+				"class": "AddSpellTriggerSpell",
+				"trigger": {
+					"eventTrigger": {
+						"class": "EnrageChangedTrigger"
+					},
+					"spell": {
+						"class": "EnrageSpell",
+						"target": "SELF"
+					}
+				}
+			},
+			{
+				"class": "AddAttributeSpell",
+				"attribute": "ENRAGABLE"
+			},
+			{
+				"class": "ModifyAttributeSpell",
+				"attribute": "ENRAGED_ATTACK",
+				"value": 3,
+				"operation": "ADD"
+			},
+			{
+				"class": "ConditionalSpell",
+				"spell": {
+					"class": "MetaSpell",
+					"spells": [
+						{
+							"class": "AddAttributeSpell",
+							"attribute": "ENRAGED"
+						},
+						{
+							"class": "EnrageSpell"
+						}
+					]
+				},
+				"condition": {
+					"class": "IsDamagedCondition"
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

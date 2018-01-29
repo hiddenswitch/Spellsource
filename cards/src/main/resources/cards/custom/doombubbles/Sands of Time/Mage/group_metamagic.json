@@ -1,0 +1,151 @@
+{
+	"name": "Metamagic",
+	"baseManaCost": 0,
+	"type": "GROUP",
+	"heroClass": "MAGE",
+	"rarity": "EPIC",
+	"group": [
+		{
+			"name": "Chilled",
+			"description": "Freezes two random enemies",
+			"class": "AddSpellTriggerSpell",
+			"trigger": {
+				"eventTrigger": {
+					"class": "AfterSpellCastedTrigger",
+					"sourcePlayer": "SELF"
+				},
+				"oneTime": true,
+				"spell": {
+					"class": "MultiTargetSpell",
+					"target": "ENEMY_MINIONS",
+					"value": 2,
+					"spell": {
+						"class": "AddAttributeSpell",
+						"attribute": "FROZEN"
+					},
+					"filter": {
+						"class": "AttributeFilter",
+						"attribute": "FROZEN",
+						"operation": "HAS",
+						"invert": true
+					}
+				}
+			}
+		},
+		{
+			"name": "Empowered",
+			"description": "Deals 3 damage to a random enemy minion.",
+			"class": "AddSpellTriggerSpell",
+			"trigger": {
+				"eventTrigger": {
+					"class": "AfterSpellCastedTrigger",
+					"sourcePlayer": "SELF"
+				},
+				"oneTime": true,
+				"spell": {
+					"class": "DamageSpell",
+					"target": "ENEMY_MINIONS",
+					"value": 3,
+					"randomTarget": true
+				}
+			}
+		},
+		{
+			"name": "Enhanced",
+			"description": "Costs (2) more and has Spell Damage +2.",
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "ModifyAttributeSpell",
+					"target": "FRIENDLY_PLAYER",
+					"attribute": "SPELL_DAMAGE",
+					"value": 2
+				},
+				{
+					"class": "AddSpellTriggerSpell",
+					"target": "FRIENDLY_PLAYER",
+					"trigger": {
+						"eventTrigger": {
+							"class": "AfterSpellCastedTrigger",
+							"sourcePlayer": "SELF"
+						},
+						"oneTime": true,
+						"spell": {
+							"class": "ModifyAttributeSpell",
+							"target": "FRIENDLY_PLAYER",
+							"attribute": "SPELL_DAMAGE",
+							"value": -2
+						}
+					}
+				},
+				{
+					"class": "CardCostModifierSpell",
+					"target": "FRIENDLY_PLAYER",
+					"cardCostModifier": {
+						"class": "CardCostModifier",
+						"cardType": "SPELL",
+						"operation": "ADD",
+						"value": "2",
+						"expirationTrigger": {
+							"class": "CardPlayedTrigger",
+							"cardType": "SPELL",
+							"targetPlayer": "SELF"
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Memorized",
+			"description": "Returns to your deck after you cast it.",
+			"class": "AddSpellTriggerSpell",
+			"trigger": {
+				"eventTrigger": {
+					"class": "AfterSpellCastedTrigger",
+					"sourcePlayer": "SELF"
+				},
+				"oneTime": true,
+				"spell": {
+					"class": "ShuffleToDeckSpell",
+					"target": "EVENT_SOURCE"
+				}
+			}
+		},
+		{
+			"name": "Quickened",
+			"description": "Costs (2) less.",
+			"class": "CardCostModifierSpell",
+			"cardCostModifier": {
+				"class": "CardCostModifier",
+				"cardType": "SPELL",
+				"operation": "SUBTRACT",
+				"value": "2",
+				"expirationTrigger": {
+					"class": "CardPlayedTrigger",
+					"cardType": "SPELL",
+					"targetPlayer": "SELF"
+				}
+			}
+		},
+		{
+			"name": "Unbounded",
+			"description": "Deals 1 damage to all enemy minions",
+			"class": "AddSpellTriggerSpell",
+			"trigger": {
+				"eventTrigger": {
+					"class": "AfterSpellCastedTrigger",
+					"sourcePlayer": "SELF"
+				},
+				"oneTime": true,
+				"spell": {
+					"class": "DamageSpell",
+					"target": "ENEMY_MINIONS",
+					"value": 1
+				}
+			}
+		}
+	],
+	"collectible": false,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

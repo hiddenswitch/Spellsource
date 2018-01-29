@@ -1,0 +1,27 @@
+{
+    "name": "Infinite Behemoth",
+    "baseManaCost": 5,
+    "type": "MINION",
+    "baseAttack": 10,
+    "baseHp": 10,
+    "heroClass": "ANY",
+    "rarity": "EPIC",
+    "race": "DRAGON",
+    "description": "Taunt. Battlecry: Your opponent takes two turns.",
+    "battlecry": {
+        "targetSelection": "NONE",
+        "spell": {
+			"class": "ModifyAttributeSpell",
+			"target": "ENEMY_PLAYER",
+			"attribute": "EXTRA_TURNS",
+			"value": 1
+		}
+    },
+    "attributes": {
+        "BATTLECRY": true,
+		"TAUNT": true
+    },
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

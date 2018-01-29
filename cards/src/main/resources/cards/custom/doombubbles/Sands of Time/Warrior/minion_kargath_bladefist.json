@@ -1,0 +1,27 @@
+{
+    "name": "Kargath Bladefist",
+    "baseManaCost": 5,
+    "type": "MINION",
+    "baseAttack": 2,
+    "baseHp": 5,
+    "heroClass": "WARRIOR",
+    "rarity": "LEGENDARY",
+    "description": "At the end of your turn, give your damaged minions +2/+2.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TurnEndTrigger",
+			"targetPlyaer": "SELF"
+		},
+		"spell": {
+			"class": "BuffSpell",
+			"target": "FRIENDLY_MINIONS",
+			"filter": {
+				"class": "DamagedFilter"
+			},
+			"value": 2
+		}
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

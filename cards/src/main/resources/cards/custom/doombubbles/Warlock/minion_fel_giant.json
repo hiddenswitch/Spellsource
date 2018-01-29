@@ -1,0 +1,28 @@
+{
+	"name": "Fel Giant",
+	"baseManaCost": 20,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 8,
+	"heroClass": "WARLOCK",
+	"rarity": "EPIC",
+	"race": "DEMON",
+	"description": "Costs (1) less for each damage your hero has taken.",
+	"manaCostModifier": {
+		"class": "AlgebraicValueProvider",
+		"operation": "SUBTRACT",
+		"value1": {
+			"class": "AttributeValueProvider",
+			"target": "FRIENDLY_HERO",
+			"attribute": "MAX_HP"
+		},
+		"value2": {
+			"class": "AttributeValueProvider",
+			"target": "FRIENDLY_HERO",
+			"attribute": "HP"
+		}
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

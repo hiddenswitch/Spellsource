@@ -1,0 +1,29 @@
+{
+	"name": "Shadowglen Vagrant",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "HUNTER",
+	"rarity": "RARE",
+	"description": "Whenever you cast a Survival Spell, add a random Hunter Secret to your hand.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "SpellCastedTrigger",
+			"race": "SURVIVAL",
+			"sourcePlayer": "SELF"
+		},
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"cardFilter": {
+				"class": "CardFilter",
+				"operation": "HAS",
+				"attribute": "SECRET",
+				"heroClass": "HUNTER"
+			}
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

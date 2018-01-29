@@ -1,0 +1,34 @@
+{
+	"name": "Dread Captain Bones",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "ROGUE",
+	"rarity": "LEGENDARY",
+	"race": "PIRATE",
+	"description": "Battlecry: For the rest of the game, your weapons have +1 Durability.",
+	"battlecry": {
+		"spell": {
+			"class": "AddSpellTriggerSpell",
+			"target": "FRIENDLY_PLAYER",
+			"trigger": {
+				"eventTrigger": {
+					"class": "WeaponEquippedTrigger",
+					"targetPlayer": "SELF"
+				},
+				"spell": {
+					"class": "BuffWeaponSpell",
+					"target": "FRIENDLY_WEAPON",
+					"hpBonus": 1
+				}
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

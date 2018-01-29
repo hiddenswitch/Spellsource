@@ -1,0 +1,16 @@
+{
+	"name": "The Elements Respond",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "SHAMAN",
+	"rarity": "FREE",
+	"description": "Draw 4 cards.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DrawCardSpell",
+		"value": 4
+	},
+	"collectible": false,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

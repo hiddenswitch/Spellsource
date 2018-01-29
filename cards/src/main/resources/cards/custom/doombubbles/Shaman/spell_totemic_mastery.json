@@ -1,0 +1,76 @@
+{
+	"name": "Totem Mastery",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "SHAMAN",
+	"rarity": "RARE",
+	"description": "Summon the basic totems you don't already control. Overload: (1)",
+	"targetSelection": "NONE",
+	"race": "ENHANCEMENT",
+	"spell": {
+		"class": "ConditionalSpell",
+		"targetPlayer": "SELF",
+		"spells": [
+			{
+				"class": "SummonSpell",
+				"card": "token_healing_totem"
+			},
+			{
+				"class": "SummonSpell",
+				"card": "token_searing_totem"
+			},
+			{
+				"class": "SummonSpell",
+				"card": "token_stoneclaw_totem"
+			},
+			{
+				"class": "SummonSpell",
+				"card": "token_wrath_of_air_totem"
+			}
+		],
+		"conditions": [
+			{
+				"class": "HasEntityCondition",
+				"target": "FRIENDLY_MINIONS",
+				"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_healing_totem"
+				},
+				"invert": true
+			},
+			{
+				"class": "HasEntityCondition",
+				"target": "FRIENDLY_MINIONS",
+				"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_searing_totem"
+				},
+				"invert": true
+			},
+			{
+				"class": "HasEntityCondition",
+				"target": "FRIENDLY_MINIONS",
+				"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_stoneclaw_totem"
+				},
+				"invert": true
+			},
+			{
+				"class": "HasEntityCondition",
+				"target": "FRIENDLY_MINIONS",
+				"filter": {
+					"class": "SpecificCardFilter",
+					"cardId": "token_wrath_of_air_totem"
+				},
+				"invert": true
+			}
+		]
+	},
+	"attributes": {
+		"OVERLOAD": 1
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,15 @@
+{
+	"name": "Paladin",
+	"description": "Receive a random Paladin secret.",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "FREE",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "NullSpell"
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,24 @@
+{
+    "name": "Consortium Smuggler",
+    "baseManaCost": 1,
+    "type": "MINION",
+    "baseAttack": 2,
+    "baseHp": 2,
+    "heroClass": "ROGUE",
+    "rarity": "COMMON",
+    "race": "NONE",
+    "description": "Battlecry: Put a Coin on top of your deck",
+    "battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "PutDeckTopSpell",
+			"card": "spell_the_coin"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

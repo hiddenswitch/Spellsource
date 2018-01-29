@@ -1,0 +1,35 @@
+{
+    "name": "Jungle's Entrance",
+    "baseManaCost": 3,
+    "type": "SPELL",
+    "heroClass": "HUNTER",
+    "rarity": "EPIC",
+    "description": "Discover a beast. Reduce its Cost by (3).",
+    "targetSelection": "NONE",
+	"race": "BEAST_MASTERY",
+    "spell": {
+        "class": "DiscoverRandomCardSpell",
+		"spell": {
+			"class": "ReceiveCardAndDoSomethingSpell",
+			"targetPlayer": "SELF",
+			"spell": {
+				"class": "CardCostModifierSpell",
+				"target": "FRIENDLY_PLAYER",
+				"cardCostModifier": {
+					"class": "CardCostModifier",
+					"target": "EVENT_CARD",
+					"operation": "SUBTRACT",
+					"value": 3
+				}
+			}
+		},
+		"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "MINION",
+			"race": "BEAST"
+		}
+    },
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+}

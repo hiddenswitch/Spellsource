@@ -1,0 +1,16 @@
+{
+	"name": "Power Word: Fortitude",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "PRIEST",
+	"rarity": "RARE",
+	"description": "Give a character +5 health.",
+	"targetSelection": "ANY",
+	"spell": {
+		"class": "BuffSpell",
+		"hpBonus": 5
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

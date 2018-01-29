@@ -1,0 +1,24 @@
+{
+	"name": "Seek the Signal",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "LEGENDARY",
+	"description": "Quest: Cast 3 Spells. Reward: The Black Harvest.",
+	"targetSelection": "NONE",
+	"quest": {
+		"class": "SpellCastedTrigger",
+		"sourcePlayer": "SELF",
+		"value": 3
+	},
+	"spell": {
+		"class": "ReceiveCardSpell",
+		"card": "quest_the_black_harvest"
+	},
+	"attributes": {
+		"QUEST": 3
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

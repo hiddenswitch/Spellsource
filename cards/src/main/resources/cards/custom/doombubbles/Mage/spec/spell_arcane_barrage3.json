@@ -1,0 +1,25 @@
+{
+	"name": "Arcane Barrage",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "RARE",
+	"description": "Deal *4* damage. Costs (1) less for each Arcane spell you've cast this turn.",
+	"targetSelection": "ANY",
+	"race": "ARCANE",
+	"spell": {
+		"class": "DamageSpell",
+		"value": 4
+	},
+	"manaCostModifier": {
+		"class": "PlayedThisTurnValueProvider",
+		"filter": {
+			"class": "CardFilter",
+			"race": "ARCANE",
+			"cardType": "SPELL"
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

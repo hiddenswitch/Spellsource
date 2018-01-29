@@ -1,0 +1,38 @@
+{
+	"name": "Mrrine",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "MURLOC",
+	"description": "Battlecry: If you control another Murloc, deal 2 damage.",
+	"battlecry": {
+		"targetSelection": "ANY",
+		"spell": {
+			"class": "DamageSpell",
+			"value": 2
+		},
+		"condition": {
+			"class": "MinionOnBoardCondition",
+			"cardFilter": {
+				"class": "RaceFilter",
+				"race": "MURLOC"
+			}
+		}
+	},
+	"glow": {
+		"class": "MinionOnBoardCondition",
+		"cardFilter": {
+			"class": "RaceFilter",
+			"race": "MURLOC"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

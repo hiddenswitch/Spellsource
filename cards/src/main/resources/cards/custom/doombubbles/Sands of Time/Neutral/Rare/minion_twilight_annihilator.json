@@ -1,0 +1,25 @@
+{
+	"name": "Twilight Annihilator",
+	"baseManaCost": 10,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 6,
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"race": "DRAGON",
+	"description": "Battlecry: Deal 8 damage to the leftmost enemy minion.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "DamageSpell",
+			"value": 3,
+			"target": "LEFTMOST_ENEMY_MINION"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

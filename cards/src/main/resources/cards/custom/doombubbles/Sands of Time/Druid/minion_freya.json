@@ -1,0 +1,23 @@
+{
+    "name": "Freya",
+    "baseManaCost": 10,
+    "type": "MINION",
+    "baseAttack": 10,
+    "baseHp": 10,
+    "heroClass": "DRUID",
+    "rarity": "LEGENDARY",
+    "description": "Battlecry: Plant the Seed of Nordrassil. Play minions with a total of 40 stats to awaken it.",
+    "battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "SummonSpell",
+			"card": "permanent_seed_of_nordrassil"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

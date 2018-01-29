@@ -1,0 +1,33 @@
+{
+	"name": "Twilight Trogg",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 3,
+	"heroClass": "WARLOCK",
+	"rarity": "COMMON",
+	"description": "Whenever you take damage on your turn, gain that much attack.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "DamageReceivedTrigger",
+			"targetPlayer": "SELF",
+			"targetEntityType": "HERO",
+			"fireCondition": {
+				"class": "OwnedByPlayerCondition",
+				"targetPlayer": "ACTIVE"
+			}
+		},
+		"spell": {
+			"class": "BuffSpell",
+			"target": "SELF",
+			"attackBonus": {
+				"class": "AttributeValueProvider",
+				"target": "FRIENDLY_HERO",
+				"attribute": "LAST_HIT"
+			}
+		}
+	},
+	"collectible": true,
+	"set": "LEAGUE_OF_EXPLORERS",
+	"fileFormatVersion": 1
+}

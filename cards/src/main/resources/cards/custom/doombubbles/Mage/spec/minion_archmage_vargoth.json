@@ -1,0 +1,61 @@
+{
+	"name": "Archmage Vargoth",
+	"baseManaCost": 7,
+	"type": "MINION",
+	"baseAttack": 7,
+	"baseHp": 5,
+	"heroClass": "MAGE",
+	"rarity": "LEGENDARY",
+	"description": "Whenever you cast a spell, add a random spell from of same Specialization to your hand.",
+	"triggers": [
+		{
+			"eventTrigger": {
+				"class": "SpellCastedTrigger",
+				"race": "ARCANE",
+				"sourcePlayer": "SELF"
+			},
+			"spell": {
+				"class": "ReceiveCardSpell",
+				"cardFilter": {
+					"class": "CardFilter",
+					"race": "ARCANE",
+					"cardType": "SPELL"
+				}
+			}
+		},
+		{
+			"eventTrigger": {
+				"class": "SpellCastedTrigger",
+				"race": "FROST",
+				"sourcePlayer": "SELF"
+			},
+			"spell": {
+				"class": "ReceiveCardSpell",
+				"cardFilter": {
+					"class": "CardFilter",
+					"race": "FROST",
+					"cardType": "SPELL",
+					"heroClass": "MAGE"
+				}
+			}
+		},
+		{
+			"eventTrigger": {
+				"class": "SpellCastedTrigger",
+				"race": "FIRE",
+				"sourcePlayer": "SELF"
+			},
+			"spell": {
+				"class": "ReceiveCardSpell",
+				"cardFilter": {
+					"class": "CardFilter",
+					"race": "FIRE",
+					"cardType": "SPELL"
+				}
+			}
+		}
+	],
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

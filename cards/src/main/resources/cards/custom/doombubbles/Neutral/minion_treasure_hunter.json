@@ -1,0 +1,29 @@
+{
+	"name": "Treasure Hunter",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 4,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "PIRATE",
+	"description": "Battlecry: Draw a 0-Cost card from your deck.",
+	"battlecry": {
+		"spell": {
+			"class": "FromDeckToHandSpell",
+			"value": 1,
+			"cardFilter": {
+				"class": "CardFilter",
+				"attribute": "BASE_MANA_COST",
+				"operation": "EQUAL",
+				"value": 0
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,35 @@
+{
+    "name": "The Dark Portal Opens",
+    "baseManaCost": 4,
+    "type": "RIFT",
+    "duration": 3,
+    "heroClass": "WARLOCK",
+    "rarity": "EPIC",
+    "description": "Whenever your hero takes damage on your turn, summon a random Demon costing that much.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "DamageReceivedTrigger",
+			"targetPlayer": "SELF",
+			"targetEntityType": "HERO",
+			"fireCondition": {
+				"class": "OwnedByPlayerCondition",
+				"targetPlayer": "ACTIVE"
+			}
+		},
+		"spell": {
+			"class": "SummonRandomMinionFilteredSpell",
+			"cardFilter": {
+				"class": "CardFilter",
+				"manaCost": {
+					"class": "AttributeValueProvider",
+					"target": "FRIENDLY_HERO",
+					"attribute": "LAST_HIT"
+				},
+				"race": "DEMON"
+			}
+		}
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

@@ -1,0 +1,31 @@
+{
+	"name": "Scorch",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "EPIC",
+	"description": "Deal *1* damage. Give your minions +1 Attack this turn for each damage dealt.",
+	"targetSelection": "ANY",
+	"race": "FIRE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"value": 1
+			},
+			{
+				"class": "TemporaryAttackSpell",
+				"target": "FRIENDLY_MINIONS",
+				"value": {
+					"class": "AttributeValueProvider",
+					"attribute": "LAST_HIT",
+					"target": "TARGET"
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

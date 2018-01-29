@@ -1,0 +1,17 @@
+{
+	"name": "Doomlord",
+	"baseManaCost": 10,
+	"type": "MINION",
+	"baseAttack": 10,
+	"baseHp": 10,
+	"heroClass": "WARLOCK",
+	"rarity": "RARE",
+	"description": "Costs (1) less for each damage your hero has taken this turn.",
+	"manaCostModifier": {
+		"class": "PlayerAttributeValueProvider",
+		"playerAttribute": "DAMAGE_THIS_TURN"
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

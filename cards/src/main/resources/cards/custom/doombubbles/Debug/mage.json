@@ -1,0 +1,15 @@
+{
+	"name": "Mage",
+	"description": "Receive a random Mage secret.",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "FREE",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "NullSpell"
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

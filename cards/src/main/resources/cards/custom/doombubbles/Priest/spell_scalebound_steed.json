@@ -1,0 +1,32 @@
+{
+    "name": "Scalebound Steed",
+    "baseManaCost": 5,
+    "type": "SPELL",
+    "heroClass": "PRIEST",
+    "rarity": "RARE",
+    "description": "Give a minion +3/+3. When it dies, summon a Bronze Drake. Draw a card.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "BuffSpell",
+				"attackBonus": 3,
+				"hpBonus": 3
+			},
+			{
+				"class": "DrawCardSpell"
+			},
+			{
+				"class": "AddDeathrattleSpell",
+				"spell": {
+					"class": "SummonSpell",
+					"card": "minion_bronze_drake"
+				}
+			}
+		]
+	},
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+}

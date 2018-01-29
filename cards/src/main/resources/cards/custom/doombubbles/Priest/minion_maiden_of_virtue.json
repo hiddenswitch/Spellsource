@@ -1,0 +1,26 @@
+{
+	"name": "Maiden of Virtue",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 7,
+	"heroClass": "PRIEST",
+	"rarity": "RARE",
+	"description": "Battlecry: Cast a random Discipline spell on this minion.",
+	"battlecry": {
+		"spell": {
+			"class": "CastSemiRandomSpellSpell",
+			"target": "SELF",
+			"cardFilter": {
+				"class": "CardFilter",
+				"race": "DISCIPLINE"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

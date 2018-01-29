@@ -1,0 +1,35 @@
+{
+  "name": "Unleash the Hounds",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "COMMON",
+  "description": "Give your Beasts +1 Attack and Charge.",
+  "targetSelection": "NONE",
+  "spell": {
+	"class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 1,
+        "filter": {
+          "class": "RaceFilter",
+          "race": "BEAST"
+        }
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "CHARGE",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "BEAST"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

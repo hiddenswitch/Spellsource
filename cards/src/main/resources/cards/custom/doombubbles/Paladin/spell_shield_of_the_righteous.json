@@ -1,0 +1,23 @@
+{
+	"name": "Shield of the Righteous",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "EPIC",
+	"description": "Deal *8* damage to a minion with 1 Attack.",
+	"targetSelection": "MINIONS",
+	"race": "PROTECTION",
+	"spell": {
+		"class": "DamageSpell",
+		"value": 8,
+		"filter": {
+			"class": "AttributeFilter",
+			"attribute": "ATTACK",
+			"operation": "EQUAL",
+			"value": 1
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

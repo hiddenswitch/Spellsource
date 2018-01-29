@@ -1,0 +1,22 @@
+{
+	"name": "Chromie",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "LEGENDARY",
+	"description": "Battlecry: Swap your hand with your deck",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "custom.SwapHandWithDeckSpell"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

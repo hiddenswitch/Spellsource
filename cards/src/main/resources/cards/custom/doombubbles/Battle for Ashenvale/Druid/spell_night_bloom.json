@@ -1,0 +1,29 @@
+{
+	"name": "Nightbloom",
+	"baseManaCost": 5,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "EPIC",
+	"description": "Deal *4* damage. Takedown: Deal 4 damage to a random enemy character.",
+	"targetSelection": "ANY",
+	"race": "DEMONOLOGY",
+	"spell": {
+		"class": "ConditionalEffectSpell",
+		"spell1": {
+			"class": "DamageSpell",
+			"value": 4
+		},
+		"spell2": {
+			"class": "DamageSpell",
+			"value": 4,
+			"target": "ENEMY_CHARACTERS",
+			"randomTarget": true
+		},
+		"condition": {
+			"class": "IsDeadCondition"
+		}
+	},
+	"collectible": true,
+	"set": "BATTLE_FOR_ASHENVALE",
+	"fileFormatVersion": 1
+}

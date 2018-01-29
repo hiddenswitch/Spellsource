@@ -1,0 +1,28 @@
+{
+	"name": "Dragon Roar",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "WARRIOR",
+	"rarity": "RARE",
+	"description": "Give your minions +2 Health then deal *1* damage to ALL minions.",
+	"targetSelection": "NONE",
+	"race": "FURY",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"target": "ALL_MINIONS",
+				"value": 1
+			},
+			{
+				"class": "BuffSpell",
+				"target": "FRIENDLY_MINIONS",
+				"hpBonus": 2
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

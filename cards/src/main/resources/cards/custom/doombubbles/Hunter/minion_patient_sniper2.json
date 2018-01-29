@@ -1,0 +1,17 @@
+{
+	"name": "Patient Sniper",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "HUNTER",
+	"rarity": "EPIC",
+	"description": "Stealth. Spell Damage +1",
+	"attributes": {
+		"STEALTH": true,
+		"SPELL_DAMAGE": 1
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

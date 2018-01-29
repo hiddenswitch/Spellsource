@@ -1,0 +1,33 @@
+{
+	"name": "Temporal Anamoly",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "EPIC",
+	"description": "Deal *1* damage. Summon a random minion with cost equal to the damage dealt.",
+	"targetSelection": "ANY",
+	"race": "ARCANE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"value": 1
+			},
+			{
+				"class": "SummonRandomMinionFilteredSpell",
+				"cardFilter": {
+					"class": "CardFilter",
+					"manaCost": {
+						"class": "AttributeValueProvider",
+						"attribute": "LAST_HIT",
+						"target": "TARGET"
+					}
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,30 @@
+{
+	"name": "Soulstone",
+	"baseManaCost": 20,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "EPIC",
+	"description": "Restore 8 Health. Costs (1) less for each damage your hero has taken.",
+	"targetSelection": "ANY",
+	"manaCostModifier": {
+		"class": "AlgebraicValueProvider",
+		"operation": "SUBTRACT",
+		"value1": {
+			"class": "AttributeValueProvider",
+			"target": "FRIENDLY_HERO",
+			"attribute": "MAX_HP"
+		},
+		"value2": {
+			"class": "AttributeValueProvider",
+			"target": "FRIENDLY_HERO",
+			"attribute": "HP"
+		}
+	},
+	"spell": {
+		"class": "HealSpell",
+		"value": 8
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

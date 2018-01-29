@@ -1,0 +1,35 @@
+{
+	"name": "Discover",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "RARE",
+	"description": "Discover a Balance spell. It costs (2) less.",
+	"targetSelection": "NONE",
+	"race": "BALANCE",
+	"spell": {
+		"class": "DiscoverRandomCardSpell",
+		"spell": {
+			"class": "ReceiveCardAndDoSomethingSpell",
+			"targetPlayer": "SELF",
+			"spell": {
+				"class": "CardCostModifierSpell",
+				"target": "FRIENDLY_PLAYER",
+				"cardCostModifier": {
+					"class": "CardCostModifier",
+					"target": "EVENT_CARD",
+					"operation": "SUBTRACT",
+					"value": 2
+				}
+			}
+		},
+		"cardFilter": {
+			"class": "CardFilter",
+			"race": "BALANCE",
+			"heroClass": "DRUID"
+		}
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}
