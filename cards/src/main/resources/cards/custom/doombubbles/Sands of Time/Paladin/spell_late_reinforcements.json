@@ -1,0 +1,41 @@
+{
+	"name": "Late Reinforcements",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "RARE",
+	"description": "At the end of your next turn, summon four 1/1 Silver Hand Recruits.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "AddSpellTriggerSpell",
+		"trigger": {
+			"eventTrigger": {
+				"class": "TurnEndTrigger",
+				"targetPlayer": "SELF"
+			},
+			"oneTime": true,
+			"spell": {
+				"class": "AddSpellTriggerSpell",
+				"trigger": {
+					"eventTrigger": {
+						"class": "TurnEndTrigger",
+						"targetPlayer": "SELF"
+					},
+					"oneTime": true,
+					"spell": {
+						"class": "SummonSpell",
+						"cards": [
+							"token_silver_hand_recruit",
+							"token_silver_hand_recruit",
+							"token_silver_hand_recruit",
+							"token_silver_hand_recruit"
+						]
+					}
+				}
+			}
+		}
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

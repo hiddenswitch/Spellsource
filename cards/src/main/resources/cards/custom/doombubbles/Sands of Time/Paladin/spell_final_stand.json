@@ -1,0 +1,25 @@
+{
+	"name": "Final Stand",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "FREE",
+	"description": "Change a minion's Health to 1 and give it Divine Shield",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "SetHpSpell",
+				"value": 1
+			},
+			{
+				"class": "AddAttributeSpell",
+				"attribute": "DIVINE_SHIELD"
+			}
+		]
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

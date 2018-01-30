@@ -1,0 +1,26 @@
+{
+	"name": "Gigantic Owlbeast",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 4,
+	"heroClass": "DRUID",
+	"rarity": "RARE",
+	"description": "Whenever you cast a Guardian spell, gain +1/+1.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "SpellCastedTrigger",
+			"sourcePlayer": "SELF",
+			"race": "GUARDIAN"
+		},
+		"spell": {
+			"class": "BuffSpell",
+			"target": "SELF",
+			"attackBonus": 1,
+			"hpBonus": 1
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

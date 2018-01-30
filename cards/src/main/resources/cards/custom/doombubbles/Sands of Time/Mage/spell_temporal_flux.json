@@ -1,0 +1,30 @@
+{
+	"name": "Temporal Flux",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "RARE",
+	"description": "Deal *1* damage. Draw cards equal to the damage dealt.",
+	"targetSelection": "ANY",
+	"race": "ARCANE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"value": 1
+			},
+			{
+				"class": "DrawCardSpell",
+				"value": {
+					"class": "AttributeValueProvider",
+					"attribute": "LAST_HIT",
+					"target": "TARGET"
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

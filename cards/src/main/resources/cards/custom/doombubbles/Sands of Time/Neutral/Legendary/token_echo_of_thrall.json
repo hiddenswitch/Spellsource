@@ -1,0 +1,24 @@
+{
+    "name": "Echo of Thrall",
+    "baseManaCost": 6,
+    "type": "MINION",
+    "baseAttack": 4,
+    "baseHp": 4,
+    "heroClass": "SHAMAN",
+    "rarity": "LEGENDARY",
+    "description": "After you summon a minion, give your minions +1/+1",
+	"trigger": {
+		"eventTrigger": {
+			"class": "AfterMinionSummonedTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "BuffSpell",
+			"value": 1,
+			"target": "FRIENDLY_MINIONS"
+		}
+	},
+    "collectible": false,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

@@ -1,0 +1,22 @@
+{
+	"name": "Antique Collector",
+	"baseManaCost": 6,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 5,
+	"heroClass": "ANY",
+	"rarity": "EPIC",
+	"description": "Battlecry: Reduce the cost of the leftmost card in your hand by (2).",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "custom.LeftmostReductionSpell"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

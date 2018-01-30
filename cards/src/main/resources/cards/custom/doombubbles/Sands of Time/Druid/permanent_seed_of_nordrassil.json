@@ -1,0 +1,30 @@
+{
+	"name": "Seed of Nordrassil",
+	"type": "PERMANENT",
+	"heroClass": "DRUID",
+	"rarity": "FREE",
+	"description": "When you've played minions with a total of 40 stats, transform into Nordrassil.{ ($1 more)}",
+	"trigger": {
+		"eventTrigger": {
+			"class": "MinionPlayedTrigger",
+			"targetPlayer": "SELF",
+			"value": 40,
+			"total": true
+		},
+		"spell": {
+			"class": "TransformMinionSpell",
+			"target": "SELF",
+			"card": "token_nordrassil"
+		}
+	},
+	"descValues": [
+		{
+			"class": "TriggerValueProvider",
+			"target": "SELF",
+			"custom": "SUMMON"
+		}
+	],
+	"collectible": false,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

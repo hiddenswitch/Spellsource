@@ -1,0 +1,35 @@
+{
+    "name": "Desolation of K'aresh",
+    "baseManaCost": 2,
+    "type": "RIFT",
+    "duration": 1,
+    "heroClass": "ROGUE",
+    "rarity": "EPIC",
+    "description": "At the start of your turn, draw a card. Whenever you activate a Combo, gain +1 Duration.",
+	"triggers": [
+		{
+			"eventTrigger": {
+				"class": "TurnStartTrigger",
+				"targetPlayer": "SELF"
+			},
+			"spell": {
+				"class": "DrawCardSpell"
+			}
+		},
+		{
+			"eventTrigger": {
+				"class": "CardPlayedTrigger",
+				"targetPlayer": "SELF",
+				"requiredAttribute": "COMBO"
+			},
+			"spell": {
+				"class": "RiftDurationSpell",
+				"target": "SELF",
+				"value": 1
+			}
+		}
+	],
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

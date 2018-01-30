@@ -1,0 +1,21 @@
+{
+	"name": "Muster for the Wild",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "HUNTER",
+	"rarity": "RARE",
+	"description": "Summon a Stonetusk Boar, Frog and Timer Wolf.",
+	"targetSelection": "NONE",
+	"race": "BEAST_MASTERY",
+	"spell": {
+		"class": "SummonSpell",
+		"cards": [
+			"minion_stonetusk_boar",
+			"token_frog",
+			"minion_timber_wolf"
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,48 @@
+{
+	"name": "Wavecrasher",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 7,
+	"heroClass": "MAGE",
+	"rarity": "RARE",
+	"description": "Battlecry: If you played an Elemental last turn, gain Taunt and Elusive.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "AddAttributeSpell",
+					"target": "SELF",
+					"attribute": "TAUNT"
+				},
+				{
+					"class": "AddAttributeSpell",
+					"target": "SELF",
+					"attribute": "UNTARGETABLE_BY_SPELLS"
+				}
+			]
+		},
+		"condition": {
+			"class": "PlayedLastTurnCondition",
+			"filter": {
+				"class": "CardFilter",
+				"race": "ELEMENTAL"
+			}
+		}
+	},
+	"glow": {
+		"class": "PlayedLastTurnCondition",
+		"filter": {
+			"class": "CardFilter",
+			"race": "ELEMENTAL"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,25 @@
+{
+    "name": "Vile Temptress",
+    "baseManaCost": 2,
+    "type": "MINION",
+    "baseAttack": 2,
+    "baseHp": 3,
+    "heroClass": "WARLOCK",
+    "rarity": "RARE",
+    "race": "DEMON",
+    "description": "Lifesteal. Battlecry: Deal 4 damage to a friendly character.",
+    "battlecry": {
+        "targetSelection": "FRIENDLY_CHARACTERS",
+        "spell": {
+			"class": "DamageSpell",
+			"value": 4
+		}
+    },
+    "attributes": {
+        "BATTLECRY": true,
+		"LIFESTEAL": true
+    },
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

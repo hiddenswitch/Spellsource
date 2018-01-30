@@ -1,0 +1,17 @@
+{
+    "name": "Call of the Crusade",
+    "baseManaCost": 1,
+    "type": "RIFT",
+    "duration": 3,
+    "heroClass": "ANY",
+    "rarity": "COMMON",
+    "description": "Adjacent minions have +1 attack",
+	"aura": {
+		"class": "BuffAura",
+		"target": "ADJACENT_MINIONS",
+		"attackBonus": 1
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

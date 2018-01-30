@@ -1,0 +1,26 @@
+{
+    "name": "Mukla's Big Brother",
+    "baseManaCost": 6,
+    "type": "MINION",
+    "baseAttack": 6,
+    "baseHp": 6,
+    "heroClass": "ANY",
+    "rarity": "LEGENDARY",
+	"race": "BEAST",
+    "description": "Battlecry: Discard ALL Bananas and gain +2/+2 for each.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "custom.MuklaSpell",
+			"spell": {
+				"class": "BuffSpell",
+				"attackBonus": 2,
+				"hpBonus": 2,
+				"target": "SELF"
+			}
+		}
+	},
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+}

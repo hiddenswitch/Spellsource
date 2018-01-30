@@ -1,0 +1,27 @@
+{
+	"name": "Novice Time Traveler",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 3,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Battlecry: Shuffle a random Legendary minion into your deck.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "ShuffleToDeckSpell",
+			"cardFilter": {
+				"class": "CardFilter",	
+				"cardType": "MINION",
+				"rarity": "LEGENDARY"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

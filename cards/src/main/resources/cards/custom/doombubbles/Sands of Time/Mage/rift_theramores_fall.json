@@ -1,0 +1,22 @@
+{
+    "name": "Theramore's Fall",
+    "baseManaCost": 2,
+    "type": "RIFT",
+    "duration": 2,
+    "heroClass": "MAGE",
+    "rarity": "RARE",
+    "description": "Whenever you cast a spell, summon a Mana Wraith.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "SpellCastedTrigger",
+			"sourcePlayer": "SELF"
+		},
+		"spell": {
+			"class": "SummonSpell",
+			"card": "minion_mana_wraith"
+		}
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

@@ -1,0 +1,25 @@
+{
+	"name": "Forever a Student",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "RARE",
+	"description": "Give a friendly minion 'Whenever you summon a minion, gain +1/+1'",
+	"targetSelection": "FRIENDLY_MINIONS",
+	"spell": {
+		"class": "AddSpellTriggerSpell",
+		"trigger": {
+			"eventTrigger": {
+				"class": "MinionSummonedTrigger",
+				"targetPlayer": "SELF"
+			},
+			"spell": {
+				"class": "BuffSpell",
+				"value": 1
+			}
+		}
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

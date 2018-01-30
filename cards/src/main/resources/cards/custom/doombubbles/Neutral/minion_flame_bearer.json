@@ -1,0 +1,27 @@
+{
+	"name": "Flame Bearer",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 4,
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"race": "ELEMENTAL",
+	"description": "Whenever you summon an Elemental, deal 2 damage to a random enemy.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "MinionSummonedTrigger",
+			"targetPlayer": "SELF",
+			"race": "ELEMENTAL"
+		},
+		"spell": {
+			"class": "MissilesSpell",
+			"target": "ENEMY_CHARACTERS",
+			"value": 2,
+			"howMany": 1
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

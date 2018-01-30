@@ -1,0 +1,27 @@
+{
+    "name": "Escape from Durnholde",
+    "baseManaCost": 2,
+    "type": "RIFT",
+    "duration": 3,
+    "heroClass": "ANY",
+    "rarity": "RARE",
+    "description": "At the start of your turn, if you control any minions, draw a card.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TurnStartTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "DrawCardSpell",
+			"condition": {
+				"class": "MinionCountCondition",
+				"targetPlayer": "SELF",
+				"operation": "GREATER_OR_EQUAL",
+				"value": 1
+			}
+		}
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

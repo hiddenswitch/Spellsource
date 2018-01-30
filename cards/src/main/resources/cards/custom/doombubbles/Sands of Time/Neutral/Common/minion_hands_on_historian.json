@@ -1,0 +1,54 @@
+{
+	"name": "Hands-On Historian",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "NEUTRAL",
+	"rarity": "COMMON",
+	"description": "Battlecry: If the total cost of your hand is less than (5), draw a card.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "ConditionalSpell",
+			"spell": {
+				"class": "DrawCardSpell"
+			},
+			"condition": {
+				"class": "ComparisonCondition",
+				"value1": {
+					"class": "AttributeValueProvider",
+					"target": "FRIENDLY_HAND",
+					"attribute": "ACTUAL_MANA_COST"
+				},
+				"value2": 5,
+				"operation": "LESS_OR_EQUAL"
+			}
+		}
+	},
+	"glow": {
+		"class": "ComparisonCondition",
+		"value1": {
+			"class": "AttributeValueProvider",
+			"target": "FRIENDLY_HAND",
+			"attribute": "ACTUAL_MANA_COST"
+		},
+		"value2": {
+			"class": "AlgebraicValueProvider",
+			"value1": 5,
+			"value2": {
+				"class": "AttributeValueProvider",
+				"target": "SELF",
+				"attribute": "ACTUAL_MANA_COST"
+			},
+			"operation": "ADD"
+		},
+		"operation": "LESS_OR_EQUAL"
+	},
+	"attribute": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,54 @@
+{
+	"name": "Jade Tracking",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "HUNTER",
+	"rarity": "COMMON",
+	"description": "Summon a Jade Golem. Draw 2 cards.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "CreateSummonSpell",
+				"name": "Jade Golem",
+				"attackBonus": {
+					"class": "AttributeValueProvider",
+					"target": "FRIENDLY_PLAYER",
+					"attribute": "JADE_BUFF",
+					"offset": 1
+				},
+				"hpBonus": {
+					"class": "AttributeValueProvider",
+					"target": "FRIENDLY_PLAYER",
+					"attribute": "JADE_BUFF",
+					"offset": 1
+				},
+				"mana": {
+					"class": "AlgebraicValueProvider",
+					"operation": "MAXIMUM",
+					"value1": {
+						"class": "AttributeValueProvider",
+						"target": "FRIENDLY_PLAYER",
+						"attribute": "JADE_BUFF",
+						"offset": 1
+					},
+					"value2": 10
+				},
+				"spell": {
+					"class": "ModifyAttributeSpell",
+					"target": "FRIENDLY_PLAYER",
+					"attribute": "JADE_BUFF",
+					"value": 1
+				}
+			},
+			{
+				"class": "DrawCardSpell",
+				"value": 2
+			}
+		]
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

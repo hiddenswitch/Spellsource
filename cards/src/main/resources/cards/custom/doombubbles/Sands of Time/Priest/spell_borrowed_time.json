@@ -1,0 +1,80 @@
+{
+    "name": "Borrowed Time",
+    "baseManaCost": 0,
+    "type": "SPELL",
+    "heroClass": "PRIEST",
+    "rarity": "EPIC",
+    "description": "Your next spell costs (2) more. The one after costs (4) less.",
+    "targetSelection": "NONE",
+    "spell": {
+        "class": "AddSpellTriggerSpell",
+		"target": "FRIENDLY_PLAYER",
+		"trigger": {
+			"eventTrigger": {
+				"class": "GameStateChangedTrigger"
+			},
+			"oneTime": true,
+			"spell": {
+				"class": "MetaSpell",
+				"spells": [
+					{
+						"class": "CardCostModifierSpell",
+						"target": "FRIENDLY_PLAYER",
+						"cardCostModifier": {
+							"class": "CardCostModifier",
+							"cardType": "SPELL",
+							"operation": "ADD",
+							"value": "2",
+							"expirationTrigger": {
+								"class": "CardPlayedTrigger",
+								"cardType": "SPELL",
+								"sourcePlayer": "SELF"
+							}
+						}
+					},
+					{
+						"class": "AddSpellTriggerSpell",
+						"target": "FRIENDLY_PLAYER",
+						"trigger": {
+							"eventTrigger": {
+								"class": "CardPlayedTrigger",
+								"cardType": "SPELL",
+								"sourcePlayer": "SELF"
+							},
+							"oneTime": true,
+							"spell": {
+								"class": "AddSpellTriggerSpell",
+								"target": "FRIENDLY_PLAYER",
+								"trigger": {
+									"eventTrigger": {
+										"class": "GameStateChangedTrigger"
+									},
+									"oneTime": true,
+									"spell": {
+										"class": "CardCostModifierSpell",
+										"target": "FRIENDLY_PLAYER",
+										"cardCostModifier": {
+											"class": "CardCostModifier",
+											"cardType": "SPELL",
+											"operation": "SUBTRACT",
+											"value": "4",
+											"expirationTrigger": {
+												"class": "CardPlayedTrigger",
+												"cardType": "SPELL",
+												"sourcePlayer": "SELF"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					
+				]
+			}
+		}
+    },
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

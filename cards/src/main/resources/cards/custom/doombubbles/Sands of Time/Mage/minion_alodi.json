@@ -1,0 +1,25 @@
+{
+	"name": "Alodi",
+	"baseManaCost": 4,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 5,
+	"heroClass": "MAGE",
+	"rarity": "LEGENDARY",
+	"description": "After you cast a spell, gain Spell Damage +1.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "AfterSpellCastedTrigger",
+			"sourcePlayer": "SELF"
+		},
+		"spell": {
+			"class": "ModifyAttributeSpell",
+			"target": "SELF",
+			"attribute": "SPELL_DAMAGE",
+			"value": 1
+		}
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

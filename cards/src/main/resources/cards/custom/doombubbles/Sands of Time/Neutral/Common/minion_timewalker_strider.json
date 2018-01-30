@@ -1,0 +1,24 @@
+{
+	"name": "Timewalker Stirder",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"description": "Whenever this minion attacks, it gains +2 Attack",
+	"trigger": {
+		"eventTrigger": {
+			"class": "PhysicalAttackTrigger",
+			"hostTargetType": "IGNORE_OTHER_SOURCES"
+		},
+		"spell": {
+			"class": "BuffSpell",
+			"target": "SELF",
+			"attackBonus": 2
+		}
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

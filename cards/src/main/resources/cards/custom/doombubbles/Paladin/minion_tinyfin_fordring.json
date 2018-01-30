@@ -1,0 +1,23 @@
+{
+	"name": "Tinyfin Fordring",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "PALADIN",
+	"rarity": "LEGENDARY",
+	"race": "MURLOC",
+	"description": "Divine Shield. Taunt. Deathrattle: Equip a 1/4 Light's Justice.",
+	"deathrattle": {
+		"class": "EquipWeaponSpell",
+		"card": "weapon_lights_justice"
+	},
+	"attributes": {
+		"DEATHRATTLES": true,
+		"DIVINE_SHIELD": true,
+		"TAUNT": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

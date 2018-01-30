@@ -1,0 +1,18 @@
+{
+	"name": "You From the Future",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "WARRIOR",
+	"rarity": "EPIC",
+	"description": "Summon a copy of a friendly minion. Then, it attacks the original.",
+	"targetSelection": "FRIENDLY_MINIONS",
+	"spell": {
+		"class": "SummonAndDoSomethingSpell",
+		"spell": {
+			"class": "AttackSpell"
+		}
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,28 @@
+{
+	"name": "Void Cleric",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 4,
+	"baseHp": 2,
+	"heroClass": "PRIEST",
+	"rarity": "EPIC",
+	"description": "Battlecry: Draw a random Shadow spell from your deck.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "FromDeckToHandSpell",
+			"value": 1,
+			"cardFilter": {
+				"class": "CardFilter",
+				"race": "SHADOW",
+				"cardType": "SPELL"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

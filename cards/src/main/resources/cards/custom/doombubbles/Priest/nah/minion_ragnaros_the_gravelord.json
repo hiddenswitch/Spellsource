@@ -1,0 +1,28 @@
+{
+	"name": "Ragnaros the Gravelord",
+	"baseManaCost": 8,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 8,
+	"heroClass": "PRIEST",
+	"rarity": "LEGENDARY",
+	"race": "ELEMENTAL",
+	"description": "At the end of your turn, summon a random friendly minion that died this game.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "TurnEndTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "ResurrectSpell"
+		},
+		"condition": {
+			"class": "GraveyardCountCondition",
+			"operation": "GREATER",
+			"value": 0
+		}
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

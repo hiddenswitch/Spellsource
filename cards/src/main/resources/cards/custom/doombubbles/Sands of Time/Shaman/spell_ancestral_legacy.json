@@ -1,0 +1,26 @@
+{
+	"name": "Ancestral Legacy",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "SHAMAN",
+	"rarity": "RARE",
+	"description": "Discover a Minion you played this game. Overload: (1)",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DiscoverRandomCardSpell",
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"targetPlayer": "SELF"
+		},
+		"cardSource": {
+			"class": "PlayedThisGameSource",
+			"targetPlayer": "SELF"
+		}
+	},
+	"attributes": {
+		"OVERLOAD": 1
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

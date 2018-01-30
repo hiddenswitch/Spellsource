@@ -1,0 +1,21 @@
+{
+    "name": "Culling of Stratholme",
+    "baseManaCost": 3,
+    "type": "RIFT",
+    "duration": 3,
+    "heroClass": "PALADIN",
+    "rarity": "EPIC",
+    "description": "Whenever a minion dies, the current turn player draws a card.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "MinionDeathTrigger"
+		},
+		"spell": {
+			"class": "DrawCardSpell",
+			"targetPlayer": "ACTIVE"
+		}
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

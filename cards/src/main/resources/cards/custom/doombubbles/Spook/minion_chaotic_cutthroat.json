@@ -1,0 +1,32 @@
+{
+	"name": "Chaotic Cutthroat",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "PIRATE",
+	"description": "Battlecry and Deathrattle: Deal 1 damage to a random enemy.",
+	"battlecry": {
+		"spell": {
+			"class": "MissilesSpell",
+			"target": "ENEMY_CHARACTERS",
+			"value": 1,
+			"howMany": 1
+		}
+	},
+	"deathrattle": {
+		"class": "MissilesSpell",
+		"target": "ENEMY_CHARACTERS",
+		"value": 1,
+		"howMany": 1
+	},
+	"attributes": {
+		"BATTLECRY": true,
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}
