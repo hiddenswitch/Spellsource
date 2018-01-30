@@ -1,0 +1,23 @@
+{
+  "name": "Sapling Planter",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Summon two 1/1 Saplings.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_sapling",
+      "token_sapling"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

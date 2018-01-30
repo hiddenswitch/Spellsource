@@ -1,52 +1,52 @@
 {
-    "name": "Infinite Timereaver",
-    "baseManaCost": 5,
-    "type": "MINION",
-    "baseAttack": 3,
-    "baseHp": 7,
-    "heroClass": "MAGE",
-    "rarity": "COMMON",
-	"race": "DRAGON",
-    "description": "Battlecry: Your next spell also draws a card if it kills a minion.",
-    "battlecry": {
-        "targetSelection": "NONE",
+  "name": "Infinite Timereaver",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Battlecry: Your next spell also draws a card if it kills a minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "SpellCastedTrigger",
+          "sourcePlayer": "SELF"
+        },
         "spell": {
-			"class": "AddSpellTriggerSpell",
-			"target": "FRIENDLY_PLAYER",
-			"trigger": {
-				"eventTrigger": {
-					"class": "SpellCastedTrigger",
-					"sourcePlayer": "SELF"
-				},
-				"oneTime": true,
-				"spell": {
-					"class": "AddSpellTriggerSpell",
-					"target": "FRIENDLY_PLAYER",
-					"trigger": {
-						"eventTrigger": {
-							"class": "MinionDeathTrigger"
-						},
-						"oneTime": true,
-						"spell": {
-							"class": "DrawCardSpell",
-							"condition": {
-								"class": "IsDeadCondition",
-								"target": "SPELL_TARGET"
-							}
-						}
-					},
-					"revertTrigger": {
-						"class": "AfterSpellCastedTrigger",
-						"sourcePlayer": "SELF"
-					}
-				}
-			}
-		}
-    },
-    "attributes": {
-        "BATTLECRY": true
-    },
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "MinionDeathTrigger"
+            },
+            "spell": {
+              "class": "DrawCardSpell",
+              "condition": {
+                "class": "IsDeadCondition",
+                "target": "SPELL_TARGET"
+              }
+            },
+            "oneTime": true
+          },
+          "revertTrigger": {
+            "class": "AfterSpellCastedTrigger",
+            "sourcePlayer": "SELF"
+          }
+        },
+        "oneTime": true
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

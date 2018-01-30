@@ -1,27 +1,27 @@
 {
-	"name": "Hammer of the Naaru",
-	"baseManaCost": 5,
-	"type": "WEAPON",
-	"damage": 2,
-	"durability": 3,
-	"heroClass": "PALADIN",
-	"rarity": "RARE",
-	"description": "Whenever you attack a minion, set its Attack to 1.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TargetAcquisitionTrigger",
-			"actionType": "PHYSICAL_ATTACK",
-			"sourcePlayer": "SELF",
-			"targetEntityType": "MINION",
-			"sourceEntityType": "HERO"
-		},
-		"spell": {
-			"class": "SetAttackSpell",
-			"target": "EVENT_TARGET",
-			"value": 1
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Hammer of the Naaru",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "PALADIN",
+  "damage": 2,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "Whenever you attack a minion, set its Attack to 1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "SetAttackSpell",
+      "target": "EVENT_TARGET",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

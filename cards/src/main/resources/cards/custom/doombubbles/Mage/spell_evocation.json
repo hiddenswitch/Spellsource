@@ -1,17 +1,17 @@
 {
-	"name": "Evocation",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "RARE",
-	"description": "Gain 4 Mana Crystals this turn only.",
-	"targetSelection": "NONE",
-	"race": "ARCANE",
-	"spell": {
-		"class": "GainManaSpell",
-		"value": 4
-	},
-	"collectible": false,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Evocation",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "RARE",
+  "race": "ARCANE",
+  "description": "Gain 4 Mana Crystals this turn only.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "GainManaSpell",
+    "value": 4
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

@@ -1,0 +1,40 @@
+{
+  "name": "Magic Monkey",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: Discard a Banana to deal 3 damage to an enemy minion.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "cardId": "spell_bananas"
+      }
+    },
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscardSpell",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "cardId": "spell_bananas"
+          }
+        },
+        {
+          "class": "DamageSpell",
+          "value": 3
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

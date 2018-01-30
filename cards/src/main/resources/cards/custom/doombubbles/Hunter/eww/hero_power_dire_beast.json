@@ -1,21 +1,21 @@
 {
-	"name": "Dire Beast",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "HUNTER",
-	"rarity": "FREE",
-	"description": "Summon a 1/1 Beast.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"card": "token_mastiff"
-	},
-	"condition": {
-		"class": "MinionCountCondition",
-		"operation": "LESS",
-		"value": 7
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Dire Beast",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "Summon a 1/1 Beast.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_mastiff"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

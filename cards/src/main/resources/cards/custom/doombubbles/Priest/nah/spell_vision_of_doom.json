@@ -1,16 +1,16 @@
 {
-	"name": "Vision of Doom",
-	"baseManaCost": 7,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "EPIC",
-	"description": "Transform a minion into a Doomsayer",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "TransformMinionSpell",
-		"card": "minion_doomsayer"
-	},
-	"collectible": false,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Vision of Doom",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "EPIC",
+  "description": "Transform a minion into a Doomsayer",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "TransformMinionSpell",
+    "card": "minion_doomsayer"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

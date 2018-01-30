@@ -1,28 +1,28 @@
 {
-	"name": "Dead Horse",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"race": "BEAST",
-	"description": "Enrage: +7 Attack",
-	"trigger": {
-		"eventTrigger": {
-			"class": "EnrageChangedTrigger"
-		},
-		"spell": {
-			"class": "EnrageSpell",
-			"target": "SELF",
-			"attackBonus": 7
-		}
-	},
-	"attributes": {
-		"ENRAGABLE": true,
-		"ENRAGED_ATTACK": 7
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Dead Horse",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Enrage: +7 Attack",
+  "trigger": {
+    "eventTrigger": {
+      "class": "EnrageChangedTrigger"
+    },
+    "spell": {
+      "class": "EnrageSpell",
+      "target": "SELF",
+      "attackBonus": 7
+    }
+  },
+  "attributes": {
+    "ENRAGABLE": true,
+    "ENRAGED_ATTACK": 7
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

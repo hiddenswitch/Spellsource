@@ -1,41 +1,41 @@
 {
-	"name": "Guardian of Elune",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 6,
-	"heroClass": "DRUID",
-	"rarity": "EPIC",
-	"race": "BEAST",
-	"description": "Battlecry: Discover a Balance spell.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "DiscoverRandomCardSpell",
-			"spell": {
-				"class": "ReceiveCardSpell",
-				"targetPlayer": "SELF"
-			},
-			"cardFilter": {
-				"class": "AndFilter",
-				"filters": [
-					{
-						"class": "CardFilter",
-						"race": "BALANCE"
-					},
-					{
-						"class": "CardFilter",
-						"cardType": "MINION",
-						"invert": true
-					}
-				]
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Guardian of Elune",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: Discover a Balance spell.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverRandomCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "race": "BALANCE"
+          },
+          {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "invert": true
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

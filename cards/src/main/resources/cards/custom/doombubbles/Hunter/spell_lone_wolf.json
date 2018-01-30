@@ -1,70 +1,70 @@
 {
-	"name": "Lone Wolf",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "HUNTER",
-	"rarity": "EPIC",
-	"race": "BEAST",
-	"description": "Battlecry: If your deck contains no Beasts or Beast Mastery spells, your Hero Power can target minions this game.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ConditionalSpell",
-			"spell": {
-				"class": "AddAttributeSpell",
-				"target": "FRIENDLY_HERO",
-				"attribute": "HERO_POWER_CAN_TARGET_MINIONS"
-			},
-			"condition": {
-				"class": "AndCondition",
-				"conditions": [
-					{
-						"class": "DeckContainsCondition",
-						"cardFilter": {
-							"class": "CardFilter",
-							"race": "BEAST"
-						},
-						"invert": true
-					},
-					{
-						"class": "DeckContainsCondition",
-						"cardFilter": {
-							"class": "CardFilter",
-							"race": "BEAST_MASTERY"
-						},
-						"invert": true
-					}
-				]
-			}
-		}
-	},
-	"glow": {
-		"class": "AndCondition",
-		"conditions": [
-			{
-				"class": "DeckContainsCondition",
-				"cardFilter": {
-					"class": "CardFilter",
-					"race": "BEAST"
-				},
-				"invert": true
-			},
-			{
-				"class": "DeckContainsCondition",
-				"cardFilter": {
-					"class": "CardFilter",
-					"race": "BEAST_MASTERY"
-				},
-				"invert": true
-			}
-		]
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Lone Wolf",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: If your deck contains no Beasts or Beast Mastery spells, your Hero Power can target minions this game.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "DeckContainsCondition",
+            "cardFilter": {
+              "class": "CardFilter",
+              "race": "BEAST"
+            },
+            "invert": true
+          },
+          {
+            "class": "DeckContainsCondition",
+            "cardFilter": {
+              "class": "CardFilter",
+              "race": "BEAST_MASTERY"
+            },
+            "invert": true
+          }
+        ]
+      },
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_HERO",
+        "attribute": "HERO_POWER_CAN_TARGET_MINIONS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "glow": {
+    "class": "AndCondition",
+    "conditions": [
+      {
+        "class": "DeckContainsCondition",
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST"
+        },
+        "invert": true
+      },
+      {
+        "class": "DeckContainsCondition",
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST_MASTERY"
+        },
+        "invert": true
+      }
+    ]
+  }
 }

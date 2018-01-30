@@ -1,16 +1,16 @@
 {
-	"name": "Deja Vu",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "RARE",
-	"description": "Add a 1/1 copy of each friendly minion to your hand. They cost (1).",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "custom.PutMiniCopyInHandSpell",
-		"target": "FRIENDLY_MINIONS"
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Deja Vu",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "RARE",
+  "description": "Add a 1/1 copy of each friendly minion to your hand. They cost (1).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.PutMiniCopyInHandSpell",
+    "target": "FRIENDLY_MINIONS"
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

@@ -1,30 +1,30 @@
 {
-	"name": "Bronze Drake",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "PRIEST",
-	"rarity": "RARE",
-	"race": "DRAGON",
-	"description": "Deathrattle: If you're holding a Dragon, draw a card.",
-	"deathrattle": {
-		"class": "ConditionalSpell",
-		"spell": {
-			"class": "DrawCardSpell"
-		},
-		"condition": {
-			"class": "HoldsCardCondition",
-			"cardFilter": {
-				"class": "CardFilter",
-				"race": "DRAGON"
-			}
-		}
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Bronze Drake",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Deathrattle: If you're holding a Dragon, draw a card.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

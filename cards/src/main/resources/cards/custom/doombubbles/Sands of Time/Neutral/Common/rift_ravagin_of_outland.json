@@ -1,23 +1,23 @@
 {
-    "name": "Ravaging of Outland",
-    "baseManaCost": 4,
-    "type": "RIFT",
-    "duration": 3,
-    "heroClass": "ANY",
-    "rarity": "COMMON",
-    "description": "At the end of your turn, deal 1 damage to all minions.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "DamageSpell",
-			"value": 1,
-			"target": "ALL_MINIONS"
-		}
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Ravaging of Outland",
+  "baseManaCost": 4,
+  "type": "RIFT",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "At the end of your turn, deal 1 damage to all minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "duration": 3
 }

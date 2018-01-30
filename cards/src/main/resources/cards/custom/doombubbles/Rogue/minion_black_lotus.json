@@ -1,28 +1,28 @@
 {
-	"name": "Black Lotus",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Your Razorpetals are Poisonous",
-	"trigger": {
-		"eventTrigger": {
-			"class": "SpellCastedTrigger",
-			"sourcePlayer": "SELF",
-			"queueCondition": {
-				"class": "CardPropertyCondition",
-				"cardId": "spell_razorpetal"
-			}
-		},
-		"spell": {
-			"class": "AddAttributeSpell",
-			"target": "EVENT_CARD",
-			"attribute": "POISONOUS"
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOm",
-	"fileFormatVersion": 1
+  "name": "Black Lotus",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Your Razorpetals are Poisonous",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "queueCondition": {
+        "class": "CardPropertyCondition",
+        "cardId": "spell_razorpetal"
+      },
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "EVENT_CARD",
+      "attribute": "POISONOUS"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOm",
+  "fileFormatVersion": 1
 }

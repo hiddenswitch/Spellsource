@@ -1,26 +1,26 @@
 {
-	"name": "Xal'atath",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "LEGENDARY",
-	"description": "Deal *3* damage to a minion for each Priest Artifact you've played",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "DamageSpell",
-		"value": {
-			"class": "CardsPlayedValueProvider",
-			"filter": {
-				"class": "CardFilter",
-				"attribute": "CUSTOM_8"
-			},
-			"multiplier": 3
-		}
-	},
-	"attributes": {
-		"class": "CUSTOM_8"
-	},
-	"collectible": false,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Xal'atath",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "LEGENDARY",
+  "description": "Deal *3* damage to a minion for each Priest Artifact you've played",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": {
+      "class": "CardsPlayedValueProvider",
+      "filter": {
+        "class": "CardFilter",
+        "attribute": "CUSTOM_8"
+      },
+      "multiplier": 3
+    }
+  },
+  "attributes": {
+    "class": "CUSTOM_8"
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

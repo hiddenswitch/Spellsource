@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
+import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.spells.PlayerAttribute;
@@ -215,7 +216,10 @@ public class ParseUtils {
 				return triggerParser.deserialize(entry, EventTriggerDesc.class, null);
 			case QUEST:
 				TriggerDesc questTriggerDesc = deserializeTriggerDesc(entry);
-				return new Quest(questTriggerDesc.eventTrigger.create(), questTriggerDesc.spell, null, questTriggerDesc.countUntilCast);
+				return new Quest(questTriggerDesc, null);
+			case SECRET:
+				TriggerDesc secretTriggerDesc = deserializeTriggerDesc(entry);
+				return new Secret(secretTriggerDesc, null);
 			case CARD_COST_MODIFIER:
 				if (entry.getAsJsonObject().has("desc")) {
 					entry = entry.getAsJsonObject().get("desc");

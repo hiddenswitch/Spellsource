@@ -1,57 +1,57 @@
 {
-	"name": "Defender of Tomorrow",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "NEUTRAL",
-	"rarity": "RARE",
-	"description": "Taunt. Battlecry: If the total cost of your hand is more than (20), gain +4 Health.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ConditionalSpell",
-			"spell": {
-				"class": "BuffSpell",
-				"target": "SELF",
-				"hpBonus": 4
-			},
-			"condition": {
-				"class": "ComparisonCondition",
-				"value1": {
-					"class": "AttributeValueProvider",
-					"target": "FRIENDLY_HAND",
-					"attribute": "ACTUAL_MANA_COST"
-				},
-				"value2": 20,
-				"operation": "GREATER_OR_EQUAL"
-			}
-		}
-	},
-	"glow": {
-		"class": "ComparisonCondition",
-		"value1": {
-			"class": "AttributeValueProvider",
-			"target": "FRIENDLY_HAND",
-			"attribute": "ACTUAL_MANA_COST"
-		},
-		"value2": {
-			"class": "AlgebraicValueProvider",
-			"value1": 20,
-			"value2": {
-				"class": "AttributeValueProvider",
-				"target": "SELF",
-				"attribute": "ACTUAL_MANA_COST"
-			},
-			"operation": "ADD"
-		},
-		"operation": "GREATER_OR_EQUAL"
-	},
-	"attribute": {
-		"BATTLECRY": true,
-		"TAUNT": true
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Defender of Tomorrow",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NEUTRAL",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Taunt. Battlecry: If the total cost of your hand is more than (20), gain +4 Health.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HAND",
+          "attribute": "ACTUAL_MANA_COST"
+        },
+        "value2": 20
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "hpBonus": 4
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "attribute": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "glow": {
+    "class": "ComparisonCondition",
+    "operation": "GREATER_OR_EQUAL",
+    "value1": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_HAND",
+      "attribute": "ACTUAL_MANA_COST"
+    },
+    "value2": {
+      "class": "AlgebraicValueProvider",
+      "operation": "ADD",
+      "value1": 20,
+      "value2": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "ACTUAL_MANA_COST"
+      }
+    }
+  }
 }

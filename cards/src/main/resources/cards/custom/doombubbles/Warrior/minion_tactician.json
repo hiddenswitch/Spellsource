@@ -1,27 +1,27 @@
 {
-	"name": "Tactician",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "WARRIOR",
-	"rarity": "RARE",
-	"description": "Whenever this minion attacks, add a Arms spell to your hand.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterPhysicalAttackTrigger",
-			"hostTargetType": "IGNORE_OTHER_SOURCES"
-		},
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"cardFilter": {
-				"class": "CardFilter",
-				"cardType": "SPELL",
-				"race": "ARMS"
-			}
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Tactician",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Whenever this minion attacks, add a Arms spell to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "ARMS",
+        "cardType": "SPELL"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

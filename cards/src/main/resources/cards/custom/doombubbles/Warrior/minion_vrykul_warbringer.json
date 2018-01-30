@@ -1,40 +1,39 @@
 {
-	"name": "Vrykul Warbringer",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "WARRIOR",
-	"rarity": "EPIC",
-	"description": "Your Fury spells can't reduce your minions below 1 health.",
-	"triggers": [
-		{
-			"eventTrigger": {
-				"class": "SpellCastedTrigger",
-				"sourcePlayer": "SELF",
-				"race": "FURY"
-			},
-			"spell": {
-				"class": "AddAttributeSpell",
-				"target": "FRIENDLY_MINIONS",
-				"attribute": "CANNOT_REDUCE_HP_BELOW_1"
-			}
-		},
-		{
-			"eventTrigger": {
-				"class": "AfterSpellCastedTrigger",
-				"sourcePlayer": "SELF",
-				"race": "FURY"
-			},
-			"spell": {
-				"class": "RemoveAttributeSpell",
-				"target": "FRIENDLY_MINIONS",
-				"attribute": "CANNOT_REDUCE_HP_BELOW_1"
-			}
-		}
-		
-	],
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Vrykul Warbringer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Your Fury spells can't reduce your minions below 1 health.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "race": "FURY",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "CANNOT_REDUCE_HP_BELOW_1"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "AfterSpellCastedTrigger",
+        "race": "FURY",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "CANNOT_REDUCE_HP_BELOW_1"
+      }
+    }
+  ],
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

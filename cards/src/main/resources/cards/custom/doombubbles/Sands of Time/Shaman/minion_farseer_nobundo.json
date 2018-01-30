@@ -1,27 +1,27 @@
 {
-    "name": "Farsser Nobundo",
-    "baseManaCost": 8,
-    "type": "MINION",
-    "baseAttack": 3,
-    "baseHp": 8,
-    "heroClass": "SHAMAN",
-    "rarity": "LEGENDARY",
-    "description": "Battlecry: Choose a friendly minion. Your totems now have that minion's effect.",
-    "battlecry": {
-		"targetSelection": "FRIENDLY_MINIONS",
-		"spell": {
-			"class": "TransferEffectsSpell",
-			"secondaryTarget": "FRIENDLY_MINIONS",
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "TOTEM"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Farsser Nobundo",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 3,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Choose a friendly minion. Your totems now have that minion's effect.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "TransferEffectsSpell",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "TOTEM"
+      },
+      "secondaryTarget": "FRIENDLY_MINIONS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

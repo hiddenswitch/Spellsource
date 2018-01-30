@@ -1,34 +1,34 @@
 {
-	"name": "Glacial Spike",
-	"baseManaCost": 7,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "EPIC",
-	"description": "Freeze a character and deal 1 damage for each Frost spell you've cast this game.",
-	"targetSelection": "ANY",
-	"race": "FROST",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": {
-					"class": "CardsPlayedValueProvider",
-					"filter": {
-						"class": "CardFilter",
-						"race": "FROST",
-						"cardType": "SPELL"
-					},
-					"offset": -1
-				}
-			},
-			{
-				"class": "AddAttributeSpell",
-				"attribute": "FROZEN"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Glacial Spike",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "race": "FROST",
+  "description": "Freeze a character and deal 1 damage for each Frost spell you've cast this game.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": {
+          "class": "CardsPlayedValueProvider",
+          "filter": {
+            "class": "CardFilter",
+            "race": "FROST",
+            "cardType": "SPELL"
+          },
+          "offset": -1
+        }
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

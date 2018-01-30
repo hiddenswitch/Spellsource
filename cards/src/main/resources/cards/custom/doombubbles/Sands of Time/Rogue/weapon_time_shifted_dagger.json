@@ -1,27 +1,27 @@
 {
-	"name": "Time Shifted Dagger",
-	"baseManaCost": 3,
-	"type": "WEAPON",
-	"damage": 3,
-	"durability": 2,
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "Combo: Gain +1 Attack",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "BuffSpell",
-			"target": "SELF",
-			"attackBonus": 1
-		},
-		"condition": {
-			"class": "ComboCondition"
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Time Shifted Dagger",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "BLACK",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "Combo: Gain +1 Attack",
+  "battlecry": {
+    "condition": {
+      "class": "ComboCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 1
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

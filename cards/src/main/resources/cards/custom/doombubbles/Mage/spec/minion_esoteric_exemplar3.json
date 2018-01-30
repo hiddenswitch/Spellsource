@@ -1,27 +1,27 @@
 {
-	"name": "Esotaric Exemplar",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "MAGE",
-	"rarity": "EPIC",
-	"description": "After you cast an Arcane spell, give another random friendly minion +1/+1.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterSpellCastedTrigger",
-			"sourcePlayer": "SELF",
-			"race": "ARCANE"
-		},
-		"spell": {
-			"class": "BuffSpell",
-			"target": "OTHER_FRIENDLY_MINIONS",
-			"attackBonus": 1,
-			"hpBonus": 1,
-			"randomTarget": true
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Esotaric Exemplar",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "After you cast an Arcane spell, give another random friendly minion +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "race": "ARCANE",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 1,
+      "hpBonus": 1,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

@@ -1,15 +1,15 @@
 {
-	"name": "Crypt Virus",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "DEATH_KNIGHT",
-	"rarity": "FREE",
-	"description": "Deathrattle: Summon a 3/3 Crypt Fiend for your opponent.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "NullSpell"
-	},
-	"collectible": false,
-	"set": "MEAN_STEETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Crypt Virus",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "DEATH_KNIGHT",
+  "rarity": "FREE",
+  "description": "Deathrattle: Summon a 3/3 Crypt Fiend for your opponent.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "MEAN_STEETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

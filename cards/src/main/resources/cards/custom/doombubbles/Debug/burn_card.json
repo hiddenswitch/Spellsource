@@ -1,15 +1,15 @@
 {
-	"name": "Your Hand is Too Full!",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"description": "The card you burned was:",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "NullSpell"
-	},
-	"collectible": false,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Your Hand is Too Full!",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "The card you burned was:",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

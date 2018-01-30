@@ -1,35 +1,35 @@
 {
-	"name": "Discover",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Discover a Balance spell. It costs (2) less.",
-	"targetSelection": "NONE",
-	"race": "BALANCE",
-	"spell": {
-		"class": "DiscoverRandomCardSpell",
-		"spell": {
-			"class": "ReceiveCardAndDoSomethingSpell",
-			"targetPlayer": "SELF",
-			"spell": {
-				"class": "CardCostModifierSpell",
-				"target": "FRIENDLY_PLAYER",
-				"cardCostModifier": {
-					"class": "CardCostModifier",
-					"target": "EVENT_CARD",
-					"operation": "SUBTRACT",
-					"value": 2
-				}
-			}
-		},
-		"cardFilter": {
-			"class": "CardFilter",
-			"race": "BALANCE",
-			"heroClass": "DRUID"
-		}
-	},
-	"collectible": false,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Discover",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "race": "BALANCE",
+  "description": "Discover a Balance spell. It costs (2) less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverRandomCardSpell",
+    "spell": {
+      "class": "ReceiveCardAndDoSomethingSpell",
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "EVENT_CARD",
+          "value": 2,
+          "operation": "SUBTRACT"
+        }
+      },
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "heroClass": "BROWN",
+      "race": "BALANCE"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

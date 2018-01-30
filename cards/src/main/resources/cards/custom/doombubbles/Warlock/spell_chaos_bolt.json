@@ -1,26 +1,26 @@
 {
-	"name": "Chaos Bolt",
-	"baseManaCost": 7,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "EPIC",
-	"description": "Deal *8* damage. Destroy one of your Mana crystals.",
-	"targetSelection": "ANY",
-	"race": "DESTRUCTION",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": 8
-			},
-			{
-				"class": "ModifyMaxManaSpell",
-				"value": -1
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Chaos Bolt",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "EPIC",
+  "race": "DESTRUCTION",
+  "description": "Deal *8* damage. Destroy one of your Mana crystals.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 8
+      },
+      {
+        "class": "ModifyMaxManaSpell",
+        "value": -1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

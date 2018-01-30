@@ -1,80 +1,80 @@
 {
-	"name": "Etheral Swindler",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 5,
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Battlecry: Choose a Rarity. Discover a card of that Rarity from your opponent's class.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "DiscoverOptionSpell",
-			"spells": [
-				{
-					"name": "Common",
-					"description": "Discover a Common card from your opponent's class",
-					"class": "DiscoverRandomCardSpell",
-					"spell": {
-						"class": "ReceiveCardSpell",
-						"targetPlayer": "SELF"
-					},
-					"cardFilter": {
-						"class": "CardFilter",
-						"heroClass": "OPPONENT",
-						"rarity": "COMMON"
-					}
-				},
-				{
-					"name": "Rare",
-					"description": "Discover a Rare card from your opponent's class",
-					"class": "DiscoverRandomCardSpell",
-					"spell": {
-						"class": "ReceiveCardSpell",
-						"targetPlayer": "SELF"
-					},
-					"cardFilter": {
-						"class": "CardFilter",
-						"heroClass": "OPPONENT",
-						"rarity": "RARE"
-					}
-				},
-				{
-					"name": "Epic",
-					"description": "Discover a Epic card from your opponent's class",
-					"class": "DiscoverRandomCardSpell",
-					"spell": {
-						"class": "ReceiveCardSpell",
-						"targetPlayer": "SELF"
-					},
-					"cardFilter": {
-						"class": "CardFilter",
-						"heroClass": "OPPONENT",
-						"rarity": "EPIC"
-					}
-				},
-				{
-					"name": "Lengedary",
-					"description": "Discover a Legendary card from your opponent's class",
-					"class": "DiscoverRandomCardSpell",
-					"spell": {
-						"class": "ReceiveCardSpell",
-						"targetPlayer": "SELF"
-					},
-					"cardFilter": {
-						"class": "CardFilter",
-						"heroClass": "OPPONENT",
-						"rarity": "LEGENDARY"
-					}
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Etheral Swindler",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Battlecry: Choose a Rarity. Discover a card of that Rarity from your opponent's class.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverOptionSpell",
+      "spells": [
+        {
+          "class": "DiscoverRandomCardSpell",
+          "name": "Common",
+          "description": "Discover a Common card from your opponent's class",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "OPPONENT",
+            "rarity": "COMMON"
+          }
+        },
+        {
+          "class": "DiscoverRandomCardSpell",
+          "name": "Rare",
+          "description": "Discover a Rare card from your opponent's class",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "OPPONENT",
+            "rarity": "RARE"
+          }
+        },
+        {
+          "class": "DiscoverRandomCardSpell",
+          "name": "Epic",
+          "description": "Discover a Epic card from your opponent's class",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "OPPONENT",
+            "rarity": "EPIC"
+          }
+        },
+        {
+          "class": "DiscoverRandomCardSpell",
+          "name": "Lengedary",
+          "description": "Discover a Legendary card from your opponent's class",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "OPPONENT",
+            "rarity": "LEGENDARY"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

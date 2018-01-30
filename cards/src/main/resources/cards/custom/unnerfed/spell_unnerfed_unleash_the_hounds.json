@@ -7,7 +7,7 @@
   "description": "Give your Beasts +1 Attack and Charge.",
   "targetSelection": "NONE",
   "spell": {
-	"class": "MetaSpell",
+    "class": "MetaSpell",
     "spells": [
       {
         "class": "BuffSpell",

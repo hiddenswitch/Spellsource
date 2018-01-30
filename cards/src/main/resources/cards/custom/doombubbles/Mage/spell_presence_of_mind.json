@@ -1,27 +1,27 @@
 {
-    "name": "Presence of Mind",
-    "baseManaCost": 3,
-    "type": "SPELL",
-    "heroClass": "MAGE",
-    "rarity": "EPIC",
-    "description": "Discover a spell. Draw any copies of it from your deck.",
-    "targetSelection": "NONE",
-	"race": "ARCANE",
+  "name": "Presence of Mind",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "race": "ARCANE",
+  "description": "Discover a spell. Draw any copies of it from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverRandomCardSpell",
     "spell": {
-        "class": "DiscoverRandomCardSpell",
-		"spell": {
-			"class": "ReceiveCardAndDoSomethingSpell",
-			"targetPlayer": "SELF",
-			"spell": {
-				"class": "custom.PoMSpell"
-			}
-		},
-		"cardFilter": {
-			"class": "CardFilter",
-			"cardType": "SPELL"
-		}
+      "class": "ReceiveCardAndDoSomethingSpell",
+      "spell": {
+        "class": "custom.PoMSpell"
+      },
+      "targetPlayer": "SELF"
     },
-    "collectible": true,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

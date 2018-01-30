@@ -1,19 +1,19 @@
 {
-	"name": "Sunfire",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "COMMON",
-	"description": "Deal 1 damage to an enemy and 0 damage to all other enemies.",
-	"targetSelection": "ENEMY_CHARACTERS",
-	"race": "BALANCE",
-	"spell": {
-		"class": "SwipeSpell",
-		"secondaryTarget": "ENEMY_CHARACTERS",
-		"value": 1,
-		"secondaryValue": 0
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Sunfire",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "COMMON",
+  "race": "BALANCE",
+  "description": "Deal 1 damage to an enemy and 0 damage to all other enemies.",
+  "targetSelection": "ENEMY_CHARACTERS",
+  "spell": {
+    "class": "SwipeSpell",
+    "value": 1,
+    "secondaryTarget": "ENEMY_CHARACTERS",
+    "secondaryValue": 0
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

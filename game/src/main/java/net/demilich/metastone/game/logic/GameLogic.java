@@ -2502,7 +2502,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (hand.getCount() < MAX_HAND_CARDS) {
 			processGameTriggers(player, card);
 			processPassiveTriggers(player, card);
-
+			card.getAttributes().put(Attribute.RECEIVED_ON_TURN, context.getTurn());
 			card.moveOrAddTo(context, Zones.HAND);
 			CardType sourceType = null;
 			if (source instanceof Card) {

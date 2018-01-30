@@ -1,35 +1,35 @@
 {
-	"name": "Frenzied Diabolist",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"description": "Battlecry: Discover another card you've discarded this game.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "DiscoverFilteredCardSpell",
-			"cardFilter": {
-				"class": "SpecificCardFilter",
-				"cardId": "minion_diabologist",
-				"invert": true
-			},
-			"cardSource": {
-				"class": "DiscardSource",
-				"targetPlayer": "SELF"
-			},
-			"spell": {
-				"class": "ReceiveCardSpell",
-				"targetPlayer": "SELF"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Frenzied Diabolist",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Discover another card you've discarded this game.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverFilteredCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "cardId": "minion_diabologist",
+        "invert": true
+      },
+      "cardSource": {
+        "class": "DiscardSource",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

@@ -1,0 +1,40 @@
+{
+  "name": "Master Sorcerer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: The next spell you cast this turn has 'If the target dies, return this to your hand.'",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "AfterSpellCastedTrigger",
+          "sourcePlayer": "SELF"
+        },
+        "spell": {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "IsDeadCondition",
+            "target": "EVENT_TARGET"
+          },
+          "spell": {
+            "class": "DrawCardSpell"
+          }
+        },
+        "maxFires": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

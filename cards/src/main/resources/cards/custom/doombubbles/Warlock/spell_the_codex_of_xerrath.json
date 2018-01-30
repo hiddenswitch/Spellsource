@@ -1,46 +1,46 @@
 {
-    "name": "The Codex of Xerrath",
-    "baseManaCost": 5,
-    "type": "SPELL",
-    "heroClass": "WARLOCK",
-    "rarity": "LEGENDARY",
-    "description": "For the rest of the game, friendly characters are immune during your turn. Summon a Doomguard.",
-    "targetSelection": "NONE",
-    "spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "AddSpellTriggerSpell",
-				"target": "FRIENDLY_PLAYER",
-				"trigger": {
-					"eventTrigger": {
-						"class": "GameStateChangedTrigger"
-					},
-					"spell": {
-						"class": "EitherOrSpell",
-						"target": "FRIENDLY_CHARACTERS",
-						"spell1": {
-							"class": "AddAttributeSpell",
-							"attribute": "IMMUNE"
-						},
-						"spell2": {
-							"class": "RemoveAttributeSpell",
-							"attribute": "IMMUNE"
-						},
-						"condition": {
-							"class": "OwnedByPlayerCondition",
-							"targetPlayer": "ACTIVE"
-						}
-					}
-				}
-			},
-			{
-				"class": "SummonSpell",
-				"card": "minion_doomguard"
-			}
-		]
-	},
-    "collectible": false,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
+  "name": "The Codex of Xerrath",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "LEGENDARY",
+  "description": "For the rest of the game, friendly characters are immune during your turn. Summon a Doomguard.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "GameStateChangedTrigger"
+          },
+          "spell": {
+            "class": "EitherOrSpell",
+            "target": "FRIENDLY_CHARACTERS",
+            "condition": {
+              "class": "OwnedByPlayerCondition",
+              "targetPlayer": "ACTIVE"
+            },
+            "spell1": {
+              "class": "AddAttributeSpell",
+              "attribute": "IMMUNE"
+            },
+            "spell2": {
+              "class": "RemoveAttributeSpell",
+              "attribute": "IMMUNE"
+            }
+          }
+        }
+      },
+      {
+        "class": "SummonSpell",
+        "card": "minion_doomguard"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

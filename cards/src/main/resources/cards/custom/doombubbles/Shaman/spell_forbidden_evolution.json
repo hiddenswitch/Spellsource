@@ -1,43 +1,43 @@
 {
-	"name": "Forbidden Evolution",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "SHAMAN",
-	"rarity": "EPIC",
-	"description": "Spend all your mana. Transform a friendly minion into a random one that costs that much more.",
-	"targetSelection": "FRIENDLY_MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "TransformToRandomMinionSpell",
-				"cardFilter": {
-					"class": "CardFilter",
-					"manaCost": {
-						"class": "AttributeValueProvider",
-						"target": "SPELL_TARGET",
-						"attribute": "BASE_MANA_COST",
-						"offset": {
-							"class": "PlayerAttributeValueProvider",
-							"playerAttribute": "MANA"
-						}
-					}
-				}
-			},
-			{
-				"class": "GainManaSpell",
-				"value": {
-					"class": "AlgebraicValueProvider",
-					"operation": "NEGATE",
-					"value1": {
-						"class": "PlayerAttributeValueProvider",
-						"playerAttribute": "MANA"
-					}
-				}
-			}
-		]
-	},
-	"collectible": true,
-	"set": "THE_OLD_GODS",
-	"fileFormatVersion": 1
+  "name": "Forbidden Evolution",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "SHAMAN",
+  "rarity": "EPIC",
+  "description": "Spend all your mana. Transform a friendly minion into a random one that costs that much more.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "TransformToRandomMinionSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "manaCost": {
+            "class": "AttributeValueProvider",
+            "target": "SPELL_TARGET",
+            "attribute": "BASE_MANA_COST",
+            "offset": {
+              "class": "PlayerAttributeValueProvider",
+              "playerAttribute": "MANA"
+            }
+          }
+        }
+      },
+      {
+        "class": "GainManaSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "NEGATE",
+          "value1": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
 }

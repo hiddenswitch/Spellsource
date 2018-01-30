@@ -1,24 +1,24 @@
 {
-	"name": "Alemental",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Whenever a friendly Elemental dies, return it to your hand instead.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "MinionDeathTrigger",
-			"targetPlayer": "SELF",
-			"race": "ELEMENTAL"
-		},
-		"spell": {
-			"class": "ReturnMinionToHandSpell",
-			"target": "EVENT_TARGET"
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Alemental",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Whenever a friendly Elemental dies, return it to your hand instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "race": "ELEMENTAL",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReturnMinionToHandSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

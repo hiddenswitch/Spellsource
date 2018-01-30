@@ -1,34 +1,34 @@
 {
-	"name": "Smolderon the Firelord",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 6,
-	"heroClass": "SHAMAN",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Replace all Flame Elementals in your hand with Lava Bursts. Overload: (2).",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ReplaceCardSpell",
-			"target": "FRIENDLY_HAND",
-			"cardFilters": [
-				{
-					"class": "SpecificCardFilter",
-					"cardId": "token_flame_elemental"
-				},
-				{
-					"class": "SpecificCardFilter",
-					"cardId": "spell_lava_burst"
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"OVERLOAD": 2
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Smolderon the Firelord",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Replace all Flame Elementals in your hand with Lava Bursts. Overload: (2).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReplaceCardSpell",
+      "target": "FRIENDLY_HAND",
+      "cardFilters": [
+        {
+          "class": "SpecificCardFilter",
+          "cardId": "token_flame_elemental"
+        },
+        {
+          "class": "SpecificCardFilter",
+          "cardId": "spell_lava_burst"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "OVERLOAD": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

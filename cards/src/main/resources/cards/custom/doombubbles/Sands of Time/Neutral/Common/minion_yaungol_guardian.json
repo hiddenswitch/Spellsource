@@ -1,30 +1,29 @@
 {
-    "name": "Yaungol Guardian",
-    "baseManaCost": 3,
-    "type": "MINION",
-    "baseAttack": 1,
-    "baseHp": 5,
-    "heroClass": "ANY",
-    "rarity": "COMMON",
-    "description": "Taunt. Battlecry: Destroy a 1-Cost minion",
-    "battlecry": {
-        "targetSelection": "MINIONS",
-        "spell": {
-			"class": "DestroySpell",
-			"filter": {
-				"class": "AttributeFilter",
-				"attribute": "BASE_MANA_COST",
-				"operation": "EQUAL",
-				"value": 1
-			}
-			
-		}
-    },
-    "attributes": {
-        "BATTLECRY": true,
-		"TAUNT": true
-    },
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Yaungol Guardian",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Taunt. Battlecry: Destroy a 1-Cost minion",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 1,
+        "attribute": "BASE_MANA_COST",
+        "operation": "EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

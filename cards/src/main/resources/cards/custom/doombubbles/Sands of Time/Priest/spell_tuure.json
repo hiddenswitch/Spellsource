@@ -1,26 +1,26 @@
 {
-	"name": "T'uure",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "LEGENDARY",
-	"description": "Summon a 2/2 Image of T'uure for each Priest Artifact you've played",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"card": "token_image_of_tuure",
-		"value": {
-			"class": "CardsPlayedValueProvider",
-			"filter": {
-				"class": "CardFilter",
-				"attribute": "CUSTOM_8"
-			}
-		}
-	},
-	"attributes": {
-		"class": "CUSTOM_8"
-	},
-	"collectible": false,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "T'uure",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "LEGENDARY",
+  "description": "Summon a 2/2 Image of T'uure for each Priest Artifact you've played",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "CardsPlayedValueProvider",
+      "filter": {
+        "class": "CardFilter",
+        "attribute": "CUSTOM_8"
+      }
+    },
+    "card": "token_image_of_tuure"
+  },
+  "attributes": {
+    "class": "CUSTOM_8"
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

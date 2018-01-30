@@ -1,28 +1,28 @@
 {
-    "name": "Metamagic",
-    "baseManaCost": 1,
-    "type": "SPELL",
-    "heroClass": "MAGE",
-    "rarity": "EPIC",
-    "description": "Discover an extra effect for your next spell.",
-    "targetSelection": "NONE",
-    "spell": {
-		"class": "AddSpellTriggerSpell",
-		"target": "FRIENDLY_PLAYER",
-		"trigger": {
-			"eventTrigger": {
-				"class": "AfterSpellCastedTrigger"
-			},
-			"oneTime": true,
-			"spell": {
-				"class": "AdaptSpell",
-				"value": 1,
-				"target": "FRIENDLY_PLAYER",
-				"group": "group_metamagic"
-			}
-		}
-    },
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Metamagic",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Discover an extra effect for your next spell.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "AfterSpellCastedTrigger"
+      },
+      "spell": {
+        "class": "AdaptSpell",
+        "target": "FRIENDLY_PLAYER",
+        "value": 1,
+        "group": "group_metamagic"
+      },
+      "oneTime": true
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

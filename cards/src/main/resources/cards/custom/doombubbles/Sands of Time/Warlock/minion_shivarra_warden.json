@@ -1,25 +1,25 @@
 {
-    "name": "Shivarra Warden",
-    "baseManaCost": 7,
-    "type": "MINION",
-    "baseAttack": 9,
-    "baseHp": 9,
-    "heroClass": "WARLOCK",
-    "rarity": "COMMON",
-    "race": "DEMON",
-    "description": "At the end of your turn, deal 3 damage to your hero.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "DamageSpell",
-			"target": "FRIENDLY_HERO",
-			"value": 3
-		}
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Shivarra Warden",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 9,
+  "baseHp": 9,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "At the end of your turn, deal 3 damage to your hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

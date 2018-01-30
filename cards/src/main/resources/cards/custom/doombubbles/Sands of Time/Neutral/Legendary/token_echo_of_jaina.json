@@ -1,23 +1,23 @@
 {
-    "name": "Echo of Jaina",
-    "baseManaCost": 6,
-    "type": "MINION",
-    "baseAttack": 4,
-    "baseHp": 4,
-    "heroClass": "MAGE",
-    "rarity": "LEGENDARY",
-    "description": "Whenever you cast a spell, summon a 3/6 Water Elemental",
-	"trigger": {
-		"eventTrigger": {
-			"class": "SpellCastedTrigger",
-			"sourcePlayer": "SELF"
-		},
-		"spell": {
-			"class": "SummonSpell",
-			"card": "minion_water_elemental"
-		}
-	},
-    "collectible": false,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Echo of Jaina",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you cast a spell, summon a 3/6 Water Elemental",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_water_elemental"
+    }
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

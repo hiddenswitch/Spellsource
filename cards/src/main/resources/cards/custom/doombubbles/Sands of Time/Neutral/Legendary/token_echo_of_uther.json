@@ -1,36 +1,36 @@
 {
-    "name": "Echo of Uther",
-    "baseManaCost": 6,
-    "type": "MINION",
-    "baseAttack": 4,
-    "baseHp": 4,
-    "heroClass": "PALADIN",
-    "rarity": "LEGENDARY",
-    "description": "Battlecry: Give a minion +4/+4 and Divine Shield. If it already had it, +8/+8 instead.",
-    "battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "ConditionalEffectSpell",
-			"spell1": {
-				"class": "BuffSpell",
-				"value": 4,
-				"attribute": "DIVINE_SHIELD"
-			},
-			"spell2": {
-				"class": "BuffSpell",
-				"value": 8
-			},
-			"condition": {
-				"class": "AttributeCondition",
-				"attribute": "DIVINE_SHIELD"
-			},
-			"exclusive": true
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-    "collectible": false,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Echo of Uther",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "PALADIN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Give a minion +4/+4 and Divine Shield. If it already had it, +8/+8 instead.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "attribute": "DIVINE_SHIELD"
+      },
+      "exclusive": true,
+      "spell1": {
+        "class": "BuffSpell",
+        "value": 4,
+        "attribute": "DIVINE_SHIELD"
+      },
+      "spell2": {
+        "class": "BuffSpell",
+        "value": 8
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

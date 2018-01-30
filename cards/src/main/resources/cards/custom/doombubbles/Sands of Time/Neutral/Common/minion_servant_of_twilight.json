@@ -1,38 +1,38 @@
 {
-    "name": "Servant of Twilight",
-    "baseManaCost": 3,
-    "type": "MINION",
-    "baseAttack": 2,
-    "baseHp": 3,
-    "heroClass": "ANY",
-    "rarity": "COMMON",
-    "description": "Battlecry: If you're holding a Dragon, deal 1 damage to all enemy minions.",
-    "battlecry": {
-        "targetSelection": "NONE",
-        "spell": {
-			"class": "DamageSpell",
-			"target": "ENEMY_MINIONS",
-			"value": 1
-		},
-		"condition": {
-			"class": "HoldsCardCondition",
-			"cardFilter": {
-				"class": "CardFilter",
-				"race": "DRAGON"
-			}
-		}
-	},
-	"glow": {
-		"class": "HoldsCardCondition",
-		"cardFilter": {
-			"class": "CardFilter",
-			"race": "DRAGON"
-		}
-	},
-    "attributes": {
-        "BATTLECRY": true
+  "name": "Servant of Twilight",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: If you're holding a Dragon, deal 1 damage to all enemy minions.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
     },
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "glow": {
+    "class": "HoldsCardCondition",
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "DRAGON"
+    }
+  }
 }

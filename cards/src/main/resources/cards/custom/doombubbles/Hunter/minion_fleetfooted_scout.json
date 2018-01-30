@@ -1,19 +1,19 @@
 {
-	"name": "Fleetfooted Scout",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 3,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "Your Marksman spells cost (1) less.",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"cardType": "SPELL",
-		"value": -1,
-		"race": "MARKSMAN"
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Fleetfooted Scout",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Your Marksman spells cost (1) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -1,
+    "race": "MARKSMAN",
+    "cardType": "SPELL"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

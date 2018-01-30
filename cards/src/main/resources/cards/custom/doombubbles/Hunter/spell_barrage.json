@@ -1,28 +1,28 @@
 {
-	"name": "Barrage",
-	"baseManaCost": 4,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"description": "Deal *1* damage to all enemy minions twice. ",
-	"targetSelection": "NONE",
-	"race": "MARKSMAN",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"target": "ENEMY_CHARACTERS",
-				"value": 1
-			},
-			{
-				"class": "DamageSpell",
-				"target": "ENEMY_CHARACTERS",
-				"value": 1
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Barrage",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "race": "MARKSMAN",
+  "description": "Deal *1* damage to all enemy minions twice. ",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

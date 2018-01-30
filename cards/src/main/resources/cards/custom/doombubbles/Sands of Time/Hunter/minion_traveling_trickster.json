@@ -1,22 +1,22 @@
 {
-    "name": "Traveling Trickster",
-    "baseManaCost": 4,
-    "type": "MINION",
-    "baseAttack": 6,
-    "baseHp": 3,
-    "heroClass": "HUNTER",
-    "rarity": "RARE",
-    "description": "Battlecry: Discover a Secret. Your opponent can see your options.",
-    "battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "custom.TravelingTricksterSpell"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Traveling Trickster",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Discover a Secret. Your opponent can see your options.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.TravelingTricksterSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

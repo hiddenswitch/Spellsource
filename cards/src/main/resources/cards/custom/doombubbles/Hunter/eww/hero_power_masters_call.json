@@ -1,21 +1,21 @@
 {
-	"name": "Master's Call",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "HUNTER",
-	"rarity": "FREE",
-	"description": "Summon a 1/1 Beast with Charge.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-		"card": "token_hound"
-	},
-	"condition": {
-		"class": "MinionCountCondition",
-		"operation": "LESS",
-		"value": 7
-	},
-	"collectible": false,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Master's Call",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "Summon a 1/1 Beast with Charge.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_hound"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

@@ -1,15 +1,15 @@
 {
-	"name": "Frost Fever",
-	"description": "Frozen. -3 Attack.",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "DEATH_KNIGHT",
-	"rarity": "FREE",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "NullSpell"
-	},
-	"collectible": false,
-	"set": "MEAN_STEETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Frost Fever",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "DEATH_KNIGHT",
+  "rarity": "FREE",
+  "description": "Frozen. -3 Attack.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "MEAN_STEETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

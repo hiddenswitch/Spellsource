@@ -1,22 +1,22 @@
 {
-	"name": "Mineral Masher",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack":3,
-	"baseHp": 3,
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"description": "Battlecry: Draw a card. Overload: (1)",
-	"battlecry": {
-		"spell": {
-			"class": "DrawCardSpell"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"OVERLOAD": 1
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Mineral Masher",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Draw a card. Overload: (1)",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "OVERLOAD": 1
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

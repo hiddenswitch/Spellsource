@@ -1,37 +1,37 @@
 {
-	"name": "Frostbomb",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "MAGE",
-	"rarity": "COMMON",
-	"description": "Freeze an enemy minion. At the start of your next turn, it freezes all other enemy minions.",
-	"targetSelection": "ENEMY_MINIONS",
-	"race": "FROST",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "AddSpellTriggerSpell",
-				"trigger": {
-					"eventTrigger": {
-						"class": "TurnStartTrigger",
-						"targetPlayer": "SELF"
-					},
-					"spell": {
-						"class": "AddAttributeSpell",
-						"attribute": "FROZEN",
-						"target": "OTHER_ENEMY_MINIONS"
-					},
-					"oneTurn": true
-				} 
-			},
-			{
-				"class": "AddAttributeSpell",
-				"attribute": "FROZEN"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Frostbomb",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "COMMON",
+  "race": "FROST",
+  "description": "Freeze an enemy minion. At the start of your next turn, it freezes all other enemy minions.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "target": "OTHER_ENEMY_MINIONS",
+            "attribute": "FROZEN"
+          },
+          "oneTurn": true
+        }
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

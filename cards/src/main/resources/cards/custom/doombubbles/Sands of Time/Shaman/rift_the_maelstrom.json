@@ -1,23 +1,23 @@
 {
-    "name": "The Maelstrom",
-    "baseManaCost": 5,
-    "type": "RIFT",
-    "duration": 3,
-    "heroClass": "SHAMAN",
-    "rarity": "EPIC",
-    "description": "Whenever a player casts a spell, cast a copy of it for them with random targets.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "SpellCastedTrigger",
-			"sourcePlayer": "BOTH"
-		},
-		"spell": {
-			"class": "CastRandomSpellSpell",
-			"targetPlayer": "ACTIVE",
-			"target": "EVENT_TARGET"
-		}
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "The Maelstrom",
+  "baseManaCost": 5,
+  "type": "RIFT",
+  "heroClass": "SHAMAN",
+  "rarity": "EPIC",
+  "description": "Whenever a player casts a spell, cast a copy of it for them with random targets.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "BOTH"
+    },
+    "spell": {
+      "class": "CastRandomSpellSpell",
+      "target": "EVENT_TARGET",
+      "targetPlayer": "ACTIVE"
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "duration": 3
 }

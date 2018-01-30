@@ -1,25 +1,25 @@
 {
-	"name": "Timewalker Stormlord",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 6,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Whenever you draw a card, deal 3 damage to a random enemy.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "CardDrawnTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "DamageSpell",
-			"value": 3,
-			"target": "ALL_ENEMIES",
-			"randomTarget": true
-		}
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Timewalker Stormlord",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Whenever you draw a card, deal 3 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_ENEMIES",
+      "value": 3,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

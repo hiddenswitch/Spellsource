@@ -1,39 +1,39 @@
 {
-    "name": "Kairozdormu",
-    "baseManaCost": 7,
-    "type": "MINION",
-    "baseAttack": 7,
-    "baseHp": 7,
-    "heroClass": "ANY",
-    "rarity": "LEGENDARY",
-    "race": "NONE",
-    "description": "Battlecry: Replace your deck with 7 random 7-Cost minions.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-			"spells":[
-				{
-					"class": "DiscardCardsFromDeckSpell",
-					"targetPlayer": "SELF",
-					"value": 60
-				},
-				{
-					"class": "ShuffleToDeckSpell",
-					"howMany": 7,
-					"cardFilter": {
-						"class": "CardFilter",	
-						"cardType": "MINION",
-						"manaCost": 7
-					}
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": "true"
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Kairozdormu",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "NONE",
+  "description": "Battlecry: Replace your deck with 7 random 7-Cost minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscardCardsFromDeckSpell",
+          "value": 60,
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "ShuffleToDeckSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "manaCost": 7
+          },
+          "howMany": 7
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": "true"
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

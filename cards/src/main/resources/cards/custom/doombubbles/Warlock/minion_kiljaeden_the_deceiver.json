@@ -1,26 +1,26 @@
 {
-    "name": "Kil'Jaeden the Deceiver",
-    "baseManaCost": 6,
-    "type": "MINION",
-    "baseAttack": 4,
-    "baseHp": 7,
-    "heroClass": "WARLOCK",
-    "rarity": "LEGENDARY",
-    "race": "DEMON",
-    "description": "Taunt. Deathrattle: Shuffle one copy of each card you've discarded this game into your deck.",
-    "deathrattle": {
-		"class": "ShuffleToDeckSpell",
-		"cardSource": {
-			"class": "DiscardSource",
-			"targetPlayer": "SELF"
-		},
-		"howMany": 1
+  "name": "Kil'Jaeden the Deceiver",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Taunt. Deathrattle: Shuffle one copy of each card you've discarded this game into your deck.",
+  "deathrattle": {
+    "class": "ShuffleToDeckSpell",
+    "cardSource": {
+      "class": "DiscardSource",
+      "targetPlayer": "SELF"
     },
-    "attributes": {
-        "DEATHRATTLES": true,
-		"TAUNT": true
-    },
-    "collectible": true,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
+    "howMany": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

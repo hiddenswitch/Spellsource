@@ -1,0 +1,34 @@
+{
+  "name": "Knowledgeable Caster",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: The next spell you cast costs (1) less.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": "1",
+        "cardType": "SPELL",
+        "expirationTrigger": {
+          "class": "AfterSpellCastedTrigger",
+          "cardType": "SPELL",
+          "sourcePlayer": "SELF"
+        },
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

@@ -1,24 +1,24 @@
 {
-    "name": "Birth of the Naaru",
-    "baseManaCost": 2,
-    "type": "RIFT",
-    "duration": 2,
-    "heroClass": "PRIEST",
-    "rarity": "RARE",
-    "description": "Whenever a friendly minion is healed, summon a Lightwarden",
-	"trigger": {
-		"eventTrigger": {
-			"class": "HealingTrigger",
-			"targetPlayer": "SELF",
-			"targetEntityType": "MINION"
-		},
-		"spell": {
-			"class": "SummonSpell",
-			"card": "minion_lightwarden",
-			"boardPositionRelative": "RIGHT"
-		}
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Birth of the Naaru",
+  "baseManaCost": 2,
+  "type": "RIFT",
+  "heroClass": "PRIEST",
+  "rarity": "RARE",
+  "description": "Whenever a friendly minion is healed, summon a Lightwarden",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "minion_lightwarden"
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "duration": 2
 }

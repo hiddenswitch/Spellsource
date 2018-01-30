@@ -1,0 +1,30 @@
+{
+  "name": "Longbow Archer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: If you control a Beast, deal 3 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

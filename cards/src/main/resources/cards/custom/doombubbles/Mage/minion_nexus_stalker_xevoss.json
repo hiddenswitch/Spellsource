@@ -1,26 +1,26 @@
 {
-	"name": "Nexus Stalker Xevoss",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "MAGE",
-	"rarity": "LEGENDARY",
-	"description": "If you control a Secret at the end of your turn, summon a copy of this minion.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF",
-			"queueCondition": {
-				"class": "ControlsSecretCondition"
-			}
-		},
-		"spell": {
-			"class": "SummonCopySpell",
-			"target": "SELF"
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Nexus Stalker Xevoss",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "If you control a Secret at the end of your turn, summon a copy of this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "queueCondition": {
+        "class": "ControlsSecretCondition"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonCopySpell",
+      "target": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

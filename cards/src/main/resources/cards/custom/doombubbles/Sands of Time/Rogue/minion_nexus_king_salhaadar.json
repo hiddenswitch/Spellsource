@@ -1,33 +1,33 @@
 {
-    "name": "Nexus-King Salhaadar",
-    "baseManaCost": 7,
-    "type": "MINION",
-    "baseAttack": 7,
-    "baseHp": 7,
-    "heroClass": "ROGUE",
-    "rarity": "LEGENDARY",
-    "description": "Battlecry: Return your other minions to your hand. They cost (1).",
-    "battlecry": {
-        "targetSelection": "NONE",
-        "spell": {
-			"class": "ReturnMinionToHandSpell",
-			"target": "OTHER_FRIENDLY_MINIONS",
-			"spell": {
-				"class": "CardCostModifierSpell",
-				"target": "FRIENDLY_PLAYER",
-				"cardCostModifier": {
-					"class": "CardCostModifier",
-					"target": "EVENT_CARD",
-					"operation": "SET",
-					"value": 1
-				}
-			}
-		}
-    },
-    "attributes": {
-        "BATTLECRY": true
-    },
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Nexus-King Salhaadar",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Return your other minions to your hand. They cost (1).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReturnMinionToHandSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "EVENT_CARD",
+          "value": 1,
+          "operation": "SET"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

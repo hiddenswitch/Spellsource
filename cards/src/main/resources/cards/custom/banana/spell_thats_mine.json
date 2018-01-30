@@ -1,0 +1,45 @@
+{
+  "name": "That's Mine!",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "COMMON",
+  "description": "Deal 2 damage to a minion and get a Coin. If it's a Beast, get a Banana instead.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "RaceCondition",
+      "race": "BEAST"
+    },
+    "spell1": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 2
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "card": "spell_bananas"
+        }
+      ]
+    },
+    "spell2": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 2
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "card": "spell_the_coin"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,29 +1,29 @@
 {
-    "name": "The End Time",
-    "baseManaCost": 6,
-    "type": "RIFT",
-    "duration": 20,
-    "heroClass": "ANY",
-    "rarity": "LEGENDARY",
-    "description": "At the end of the turn, summon a 2/2 Infinite Warden. Deathrattle: Destroy all enemies.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "SummonSpell",
-			"card": "token_infinite_warden"
-		}
-	},
-	"deathrattle": {
-		"class": "DestroySpell",
-		"target": "ALL_ENEMIES"
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "The End Time",
+  "baseManaCost": 6,
+  "type": "RIFT",
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "At the end of the turn, summon a 2/2 Infinite Warden. Deathrattle: Destroy all enemies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_infinite_warden"
+    }
+  },
+  "deathrattle": {
+    "class": "DestroySpell",
+    "target": "ALL_ENEMIES"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "duration": 20
 }
