@@ -1,70 +1,70 @@
 {
-	"name": "Oasis Spirit",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"race": "ELEMENTAL",
-	"description": "Choose One - Draw a card and give your opponent a 'Naturalize', or Vice versa.",
-	"options": [
-		{
-			"description": "",
-			"targetSelection": "NONE",
-			"spell": {
-				"class": "MetaSpell",
-				"spells": [
-					{
-						"class": "DrawCardSpell",
-						"targetPlayer": "SELF"
-					},
-					{
-						"class": "ReceiveCardSpell",
-						"card": "spell_naturalize",
-						"targetPlayer": "OPPONENT"
-					}
-				]
-			}
-		},
-		{
-			"description": "Vice versa",
-			"targetSelection": "NONE",
-			"spell": {
-				"class": "MetaSpell",
-				"spells": [
-					{
-						"class": "DrawCardSpell",
-						"targetPlayer": "SELF"
-					},
-					{
-						"class": "ReceiveCardSpell",
-						"card": "spell_naturalize",
-						"targetPlayer": "OPPONENT"
-					}
-				]
-			}
-		}
-	],
-	"bothOptions": {
-		"description": "Both baby!",
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-				"spells": [
-					{
-						"class": "DrawCardSpell",
-						"targetPlayer": "BOTH"
-					},
-					{
-						"class": "ReceiveCardSpell",
-						"card": "spell_naturalize",
-						"targetPlayer": "BOTH"
-					}
-				]
-		}
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Oasis Spirit",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Choose One - Draw a card and give your opponent a 'Naturalize', or Vice versa.",
+  "options": [
+    {
+      "description": "",
+      "targetSelection": "NONE",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DrawCardSpell",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "ReceiveCardSpell",
+            "card": "spell_naturalize",
+            "targetPlayer": "OPPONENT"
+          }
+        ]
+      }
+    },
+    {
+      "description": "Vice versa",
+      "targetSelection": "NONE",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DrawCardSpell",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "ReceiveCardSpell",
+            "card": "spell_naturalize",
+            "targetPlayer": "OPPONENT"
+          }
+        ]
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Both baby!",
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DrawCardSpell",
+          "targetPlayer": "BOTH"
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "card": "spell_naturalize",
+          "targetPlayer": "BOTH"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

@@ -1,24 +1,24 @@
 {
-    "name": "Realmwalker",
-    "baseManaCost": 8,
-    "type": "MINION",
-    "baseAttack": 6,
-    "baseHp": 8,
-    "heroClass": "MAGE",
-    "rarity": "COMMON",
-    "description": "Battlecry: Add two copies of 'Arcane Explosion' to your hand.",
-    "battlecry": {
-        "targetSelection": "NONE",
-        "spell": {
-			"class": "ReceiveCardSpell",
-			"value": 2,
-			"card": "spell_arcane_explosion"
-		}
-    },
-    "attributes": {
-        "BATTLECRY": true
-    },
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Realmwalker",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 6,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "description": "Battlecry: Add two copies of 'Arcane Explosion' to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 2,
+      "card": "spell_arcane_explosion"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

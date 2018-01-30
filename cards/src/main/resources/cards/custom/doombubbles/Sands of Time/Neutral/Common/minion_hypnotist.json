@@ -1,38 +1,38 @@
 {
-	"name": "Hypnotist",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "NEUTRAL",
-	"rarity": "COMMON",
-	"description": "Battlecry: Change a minion's stats to be equal to it's cost.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "SetAttackSpell",
-					"value": {
-						"class": "AttributeValueProvider",
-						"attribute": "BASE_MANA_COST"
-					}
-				},
-				{
-					"class": "SetHpSpell",
-					"value": {
-						"class": "AttributeValueProvider",
-						"attribute": "BASE_MANA_COST"
-					}
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Hypnotist",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NEUTRAL",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Change a minion's stats to be equal to it's cost.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": {
+            "class": "AttributeValueProvider",
+            "attribute": "BASE_MANA_COST"
+          }
+        },
+        {
+          "class": "SetHpSpell",
+          "value": {
+            "class": "AttributeValueProvider",
+            "attribute": "BASE_MANA_COST"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

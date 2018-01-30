@@ -1,29 +1,29 @@
 {
-	"name": "Scorpid Stinger",
-	"baseManaCost": 1,
-	"type": "WEAPON",
-	"damage": 1,
-	"durability": 3,
-	"heroClass": "WARRIOR",
-	"rarity": "COMMON",
-	"description": "Whenever this kills a minion, add an 'Inner Rage' spell to your hand.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "AfterPhysicalAttackTrigger",
-			"sourcePlayer": "SELF",
-			"targetPlayer": "BOTH",
-			"sourceEntityType": "HERO",
-			"targetEntityType": "MINION",
-			"fireCondition": {
-				"class": "IsDeadCondition"
-			}
-		},
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"card": "spell_inner_rage"
-		}
-	},
-	"collectible": false,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Scorpid Stinger",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "WARRIOR",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "COMMON",
+  "description": "Whenever this kills a minion, add an 'Inner Rage' spell to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_inner_rage"
+    }
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

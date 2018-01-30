@@ -1,0 +1,48 @@
+{
+  "name": "Exiled Herbalist",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "Taunt. Choose One - Gain Lifesteal; or draw a card.",
+  "options": [
+    {
+      "description": "Gain Lifesteal.",
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "SELF",
+        "attribute": "LIFESTEAL"
+      }
+    },
+    {
+      "description": "Draw a card.",
+      "spell": {
+        "class": "DrawCardSpell"
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Gain Lifesteal and draw a card",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "LIFESTEAL"
+        },
+        {
+          "class": "DrawCardSpell"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

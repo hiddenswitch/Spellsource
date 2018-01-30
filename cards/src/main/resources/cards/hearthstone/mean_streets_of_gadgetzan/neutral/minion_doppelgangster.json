@@ -14,22 +14,22 @@
         {
           "class": "SummonSpell",
           "target": "SELF",
-          "boardPositionRelative": "LEFT",
           "spell": {
             "class": "RemoveAttributeSpell",
             "target": "OUTPUT",
             "attribute": "COPIED_FROM"
-          }
+          },
+          "boardPositionRelative": "LEFT"
         },
         {
           "class": "SummonSpell",
           "target": "SELF",
-          "boardPositionRelative": "RIGHT",
           "spell": {
             "class": "RemoveAttributeSpell",
             "target": "OUTPUT",
             "attribute": "COPIED_FROM"
-          }
+          },
+          "boardPositionRelative": "RIGHT"
         }
       ]
     }

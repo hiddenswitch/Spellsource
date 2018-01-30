@@ -1,0 +1,65 @@
+{
+  "name": "Spearman Ambusher",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Choose One - Deal 3 damage; or Gain +3 Attack and Stealth.",
+  "options": [
+    {
+      "description": "Deal 3 damage",
+      "targetSelection": "ANY",
+      "spell": {
+        "class": "DamageSpell",
+        "value": 3
+      }
+    },
+    {
+      "description": "Gain +3 Attack and Stealth",
+      "targetSelection": "NONE",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "target": "SELF",
+            "attackBonus": 3
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "STEALTH"
+          }
+        ]
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "Deal 3 damage and Gain +3 Attack and Stealth",
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 3
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 3
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "STEALTH"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

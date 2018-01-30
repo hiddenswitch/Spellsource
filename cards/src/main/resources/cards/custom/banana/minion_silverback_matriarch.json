@@ -1,0 +1,30 @@
+{
+  "name": "Silverback Matriarch",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Bananas are cast twice on this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "cardId": "spell_bananas"
+      },
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": "BOTH"
+    },
+    "spell": {
+      "class": "RecastSpell",
+      "target": "SELF",
+      "card": "PENDING_CARD"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

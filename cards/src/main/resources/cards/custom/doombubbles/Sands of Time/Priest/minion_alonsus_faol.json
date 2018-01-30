@@ -1,25 +1,25 @@
 {
-    "name": "Alonsus Faol",
-    "baseManaCost": 8,
-    "type": "MINION",
-    "baseAttack": 8,
-    "baseHp": 5,
-    "heroClass": "PRIEST",
-    "rarity": "LEGENDARY",
-    "race": "NONE",
-    "description": "Deathrattle: Add the three Priest Artifacts to your hand.",
-    "deathrattle": {
-		"class": "ReceiveCardSpell",
-		"cards": [
-			"spell_lights_wrath",
-			"spell_xalatath",
-			"spell_tuure"
-		]
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-    "collectible": true,
-    "set": "KOBOLDS_AND_CATACOMBS",
-    "fileFormatVersion": 1
+  "name": "Alonsus Faol",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 8,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "NONE",
+  "description": "Deathrattle: Add the three Priest Artifacts to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "spell_lights_wrath",
+      "spell_xalatath",
+      "spell_tuure"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
 }

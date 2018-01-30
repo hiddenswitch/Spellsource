@@ -1,28 +1,28 @@
 {
-    "name": "Beholder of the Beginning",
-    "baseManaCost": 5,
-    "type": "MINION",
-    "baseAttack": 4,
-    "baseHp": 4,
-    "heroClass": "ANY",
-    "rarity": "RARE",
-    "race": "NONE",
-    "description": "Battlecry: Deal damage equal to the lowest Cost in your hand.",
-    "battlecry": {
-		"targetSelection": "ANY",
-		"spell": {
-			"class": "DamageSpell",
-			"value": {
-				"class": "LowestAttributeValueProvider",
-				"target": "FRIENDLY_HAND",
-				"attribute": "ACTUAL_MANA_COST"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Beholder of the Beginning",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "NONE",
+  "description": "Battlecry: Deal damage equal to the lowest Cost in your hand.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "LowestAttributeValueProvider",
+        "target": "FRIENDLY_HAND",
+        "attribute": "ACTUAL_MANA_COST"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

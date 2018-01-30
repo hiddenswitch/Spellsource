@@ -1,0 +1,30 @@
+{
+  "name": "Shady Nook Bear",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Taunt. Deathrattle: Give a random friendly Beast +1/+1.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "filter": {
+      "class": "CardFilter",
+      "race": "BEAST",
+      "cardType": "MINION"
+    },
+    "hpBonus": 1,
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

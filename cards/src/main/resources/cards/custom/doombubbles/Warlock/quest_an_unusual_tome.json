@@ -1,24 +1,24 @@
 {
-	"name": "An Unusual Tome",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "LEGENDARY",
-	"description": "Quest: Use your Hero Power twice. Reward: Seek the Signal.",
-	"targetSelection": "NONE",
-	"quest": {
-		"class": "InspireTrigger",
-		"targetPlayer": "SELF",
-		"value": 2
-	},
-	"spell": {
-		"class": "ReceiveCardSpell",
-		"card": "quest_seek_the_signal"
-	},
-	"attributes": {
-		"QUEST": 2
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "An Unusual Tome",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Use your Hero Power twice. Reward: Seek the Signal.",
+  "quest": {
+    "class": "InspireTrigger",
+    "value": 2,
+    "targetPlayer": "SELF"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_seek_the_signal"
+  },
+  "attributes": {
+    "QUEST": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

@@ -1,39 +1,39 @@
 {
-	"name": "Forbidden Wilds",
-	"baseManaCost": 0,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "EPIC",
-	"description": "Spend all your mana. Summon a random Beast that costs that much.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "SummonRandomMinionFilteredSpell",
-				"cardFilter": {
-					"class": "CardFilter",
-					"manaCost": {
-						"class": "PlayerAttributeValueProvider",
-						"playerAttribute": "MANA"
-					},
-					"race": "BEAST"
-				}
-			},
-			{
-				"class": "GainManaSpell",
-				"value": {
-					"class": "AlgebraicValueProvider",
-					"operation": "NEGATE",
-					"value1": {
-						"class": "PlayerAttributeValueProvider",
-						"playerAttribute": "MANA"
-					}
-				}
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Forbidden Wilds",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "EPIC",
+  "description": "Spend all your mana. Summon a random Beast that costs that much.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonRandomMinionFilteredSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST",
+          "manaCost": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA"
+          }
+        }
+      },
+      {
+        "class": "GainManaSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "NEGATE",
+          "value1": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

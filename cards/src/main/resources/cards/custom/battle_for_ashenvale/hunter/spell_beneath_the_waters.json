@@ -1,0 +1,37 @@
+{
+  "name": "Beneath the Waters",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "description": "Deal damage to a minion equal to its health. Summon that many 1/1 Piranhas.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    },
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        }
+      },
+      {
+        "class": "SummonSpell",
+        "target": "NONE",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        },
+        "card": "token_piranha"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

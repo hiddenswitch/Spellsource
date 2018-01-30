@@ -1,24 +1,24 @@
 {
-    "name": "Keeper of Balance",
-    "baseManaCost": 1,
-    "type": "MINION",
-    "baseAttack": 2,
-    "baseHp": 2,
-    "heroClass": "PRIEST",
-    "rarity": "COMMON",
-    "description": "Battlecry: Give each player a 'Circle of Healing'",
-    "battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"targetPlayer": "BOTH",
-			"card": "spell_circle_of_healing"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Keeper of Balance",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give each player a 'Circle of Healing'",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_circle_of_healing",
+      "targetPlayer": "BOTH"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

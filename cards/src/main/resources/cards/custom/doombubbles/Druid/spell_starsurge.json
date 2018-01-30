@@ -1,18 +1,18 @@
 {
-	"name": "Starsurge",
-	"baseManaCost": 3,
-	"type": "CHOOSE_ONE",
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Choose One - Deal 3 damage; or Discover a Balance spell. It costs (2) less.",
-	"targetSelection": "NONE",
-	"race": "BALANCE",
-	"options": [
-		"spell_starsurge_1",
-		"spell_starsurge_2"
-	],
-	"bothOptions": "spell_starsurge_3",
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Starsurge",
+  "baseManaCost": 3,
+  "type": "CHOOSE_ONE",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "race": "BALANCE",
+  "description": "Choose One - Deal 3 damage; or Discover a Balance spell. It costs (2) less.",
+  "targetSelection": "NONE",
+  "options": [
+    "spell_starsurge_1",
+    "spell_starsurge_2"
+  ],
+  "bothOptions": "spell_starsurge_3",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

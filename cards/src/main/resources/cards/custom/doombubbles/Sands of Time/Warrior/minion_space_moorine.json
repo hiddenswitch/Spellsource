@@ -1,38 +1,38 @@
 {
-    "name": "Space Moorine",
-    "baseManaCost": 6,
-    "type": "MINION",
-    "baseAttack": 5,
-    "baseHp": 8,
-    "heroClass": "WARRIOR",
-    "rarity": "RARE",
-    "race": "NONE",
-    "description": "Has Taunt while you have Armor.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "GameStateChangedTrigger"
-		},
-		"spell": {
-			"class": "EitherOrSpell",
-			"target": "SELF",
-			"spell1": {
-				"class": "RemoveAttributeSpell",
-				"attribute": "TAUNT"
-			},
-			"spell2": {
-				"class": "AddAttributeSpell",
-				"attribute": "TAUNT"
-			},
-			"condition": {
-				"class": "AttributeCondition",
-				"target": "FRIENDLY_HERO",
-				"attribute": "ARMOR",
-				"operation": "GREATER_OR_EQUAL",
-				"value": 1
-			}
-		}
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Space Moorine",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "WARRIOR",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "race": "NONE",
+  "description": "Has Taunt while you have Armor.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "GameStateChangedTrigger"
+    },
+    "spell": {
+      "class": "EitherOrSpell",
+      "target": "SELF",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_HERO",
+        "value": 1,
+        "attribute": "ARMOR",
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "spell1": {
+        "class": "RemoveAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      "spell2": {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

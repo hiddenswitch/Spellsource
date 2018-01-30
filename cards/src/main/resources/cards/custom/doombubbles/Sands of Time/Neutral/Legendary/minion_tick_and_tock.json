@@ -1,44 +1,44 @@
 {
-	"name": "Tick and Tock",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: If you're holding two Dragons, deal 5 damage to two random enemy minions.",
-	"battlecry": {
-		"targetSelection": "ANY",
-		"spell": {
-			"class": "MultiTargetSpell",
-			"target": "ENEMY_MINIONS",
-			"value": 2,
-			"spell": {
-				"class": "DamageSpell",
-				"value": 5
-			}
-		},
-		"condition": {
-			"class": "HoldsCardCondition",
-			"value": 2,
-			"cardFilter": {
-				"class": "CardFilter",
-				"race": "DRAGON"
-			}
-		}
-	},
-	"glow": {
-		"class": "HoldsCardCondition",
-		"value": 2,
-		"cardFilter": {
-			"class": "CardFilter",
-			"race": "DRAGON"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Tick and Tock",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If you're holding two Dragons, deal 5 damage to two random enemy minions.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "MultiTargetSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 2,
+      "spell": {
+        "class": "DamageSpell",
+        "value": 5
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "glow": {
+    "class": "HoldsCardCondition",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "DRAGON"
+    }
+  }
 }

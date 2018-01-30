@@ -1,34 +1,34 @@
 {
-    "name": "Silverback Steed",
-    "baseManaCost": 4,
-    "type": "SPELL",
-    "heroClass": "HUNTER",
-    "rarity": "RARE",
-    "description": "Give a minion +1/+4 and Taunt. When it dies, summon a Silverback Patriarch.",
-	"targetSelection": "MINIONS",
-	"race": "BEAST_MASTERY",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "BuffSpell",
-				"attackBonus": 1,
-				"hpBonus": 4
-			},
-			{
-				"class": "AddAttributeSpell",
-				"attribute": "TAUNT"
-			},
-			{
-				"class": "AddDeathrattleSpell",
-				"spell": {
-					"class": "SummonSpell",
-					"card": "minion_silverback_patriarch"
-				}
-			}
-		]
-	},
-    "collectible": true,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
+  "name": "Silverback Steed",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "race": "BEAST_MASTERY",
+  "description": "Give a minion +1/+4 and Taunt. When it dies, summon a Silverback Patriarch.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 4
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "AddDeathrattleSpell",
+        "spell": {
+          "class": "SummonSpell",
+          "card": "minion_silverback_patriarch"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

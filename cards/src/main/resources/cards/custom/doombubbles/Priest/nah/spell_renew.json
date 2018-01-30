@@ -1,38 +1,38 @@
 {
-	"name": "Renew",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "COMMON",
-	"description": "Restore a friendly minion to full Health. Discover a healing spell.",
-	"targetSelection": "FRIENDLY_MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "HealSpell",
-				"value": {
-					"class": "AttributeValueProvider",
-					"attribute": "MAX_HP"
-				}
-			},
-			{
-				"class": "DiscoverCardSpell",
-				"cards": [
-					"spell_circle_of_healing",
-					"spell_flash_heal",
-					"spell_greater_healing_potion",
-					"spell_holy_fire",
-					"spell_power_word_glory",
-					"spell_holy_nova"
-				],
-				"spell": {
-					"class": "ReceiveCardSpell"
-				}
-			}
-		]
-	},
-	"collectible": false,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Renew",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "COMMON",
+  "description": "Restore a friendly minion to full Health. Discover a healing spell.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "MAX_HP"
+        }
+      },
+      {
+        "class": "DiscoverCardSpell",
+        "spell": {
+          "class": "ReceiveCardSpell"
+        },
+        "cards": [
+          "spell_circle_of_healing",
+          "spell_flash_heal",
+          "spell_greater_healing_potion",
+          "spell_holy_fire",
+          "spell_power_word_glory",
+          "spell_holy_nova"
+        ]
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

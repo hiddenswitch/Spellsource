@@ -1,34 +1,34 @@
 {
-	"name": "Deathwhelp",
-	"baseManaCost": 0,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"race": "DRAGON",
-	"description": "Battlecry: Deal 1 damage to all other minions and discard a random card.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "DamageSpell",
-					"target": "ALL_OTHER_MINIONS",
-					"value": 1
-				},
-				{
-					"class": "DiscardSpell",
-					"value": 1
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": false,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Deathwhelp",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Battlecry: Deal 1 damage to all other minions and discard a random card.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "ALL_OTHER_MINIONS",
+          "value": 1
+        },
+        {
+          "class": "DiscardSpell",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

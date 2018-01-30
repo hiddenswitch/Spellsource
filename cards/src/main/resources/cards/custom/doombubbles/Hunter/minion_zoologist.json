@@ -1,37 +1,37 @@
 {
-	"name": "Zoologist",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "Battlecry: If you control another Beast, put a Secret from your deck into the battlefield.",
-	"race": "BEAST",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "PutRandomSecretIntoPlaySpell"
-		},
-		"condition": {
-			"class": "MinionOnBoardCondition",
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "BEAST"
-			}
-		}
-	},
-	"glow": {
-		"class": "MinionOnBoardCondition",
-		"cardFilter": {
-			"class": "RaceFilter",
-			"race": "BEAST"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Zoologist",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: If you control another Beast, put a Secret from your deck into the battlefield.",
+  "battlecry": {
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "PutRandomSecretIntoPlaySpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "glow": {
+    "class": "MinionOnBoardCondition",
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    }
+  }
 }

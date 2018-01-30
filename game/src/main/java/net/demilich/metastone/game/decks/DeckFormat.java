@@ -72,6 +72,8 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							BATTLE_FOR_ASHENVALE,
+							SANDS_OF_TIME,
 							HALL_OF_FAME,
 							CardSet.CUSTOM
 					))

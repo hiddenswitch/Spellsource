@@ -1,36 +1,36 @@
 {
-	"name": "Vindicator Maraad",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "Whenever you play a 1-Cost card, draw one from your deck.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "CardPlayedTrigger",
-			"targetPlayer": "SELF",
-			"queueCondition": {
-				"class": "ComparisonCondition",
-				"value1": {
-					"class": "AttributeValueProvider",
-					"target": "EVENT_TARGET",
-					"attribute": "BASE_MANA_COST"
-				},
-				"value2": 1,
-				"operation": "EQUAL"
-			}
-		},
-		"spell": {
-			"class": "FromDeckToHandSpell",
-			"cardFilter": {
-				"class": "CardFilter",
-				"manaCost": 1
-			}
-		}
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Vindicator Maraad",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you play a 1-Cost card, draw one from your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "queueCondition": {
+        "class": "ComparisonCondition",
+        "operation": "EQUAL",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "BASE_MANA_COST"
+        },
+        "value2": 1
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": 1
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

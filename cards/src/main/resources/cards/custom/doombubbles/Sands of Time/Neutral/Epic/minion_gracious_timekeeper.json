@@ -1,25 +1,25 @@
 {
-	"name": "Gracious Timekeeper",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "Your 1-Cost cards cost (0).",
-	"cardCostModifier": {
-		"class": "CardCostModifier",
-		"targetPlayer": "SELF",
-		"operation": "SET",
-		"value": 0,
-		"cardFilter": {
-			"class": "CardFilter",
-			"attribute": "BASE_MANA_COST",
-			"operation": "EQUAL",
-			"value": 1
-		}
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Gracious Timekeeper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Your 1-Cost cards cost (0).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 0,
+    "cardFilter": {
+      "class": "CardFilter",
+      "value": 1,
+      "attribute": "BASE_MANA_COST",
+      "operation": "EQUAL"
+    },
+    "operation": "SET",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

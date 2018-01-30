@@ -1,28 +1,28 @@
 {
-	"name": "End of the Line",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "RARE",
-	"description": "Give the last minion in your deck +5/+5 and Taunt. Draw a card.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "custom.LastStandSpell",
-				"spell": {
-					"class": "BuffSpell",
-					"value": 5,
-					"attribute": "TAUNT"
-				}
-			},
-			{
-				"class": "DrawCardSpell"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "End of the Line",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "RARE",
+  "description": "Give the last minion in your deck +5/+5 and Taunt. Draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "custom.LastStandSpell",
+        "spell": {
+          "class": "BuffSpell",
+          "value": 5,
+          "attribute": "TAUNT"
+        }
+      },
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

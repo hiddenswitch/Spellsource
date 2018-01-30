@@ -1,16 +1,16 @@
 {
-	"name": "Ogre Arcanist",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 4,
-	"baseHp": 4,
-	"heroClass": "MAGE",
-	"rarity": "RARE",
-	"description": "Your Arcane spells get double bonus from Spell Damage.",
-	"attributes": {
-		"DOUBLE_RACE_SPELL_DAMAGE": "ARCANE"
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Ogre Arcanist",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Your Arcane spells get double bonus from Spell Damage.",
+  "attributes": {
+    "DOUBLE_RACE_SPELL_DAMAGE": "ARCANE"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

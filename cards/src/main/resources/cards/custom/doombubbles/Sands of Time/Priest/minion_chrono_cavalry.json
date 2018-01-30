@@ -1,25 +1,25 @@
 {
-	"name": "Chrono Cavalier",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "PRIEST",
-	"rarity": "EPIC",
-	"description": "Whenever this minion is healed, it may attack again.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "HealingTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS"
-		},
-		"spell": {
-			"class": "SetAttributeSpell",
-			"target": "SELF",
-			"attribute": "NUMBER_OF_ATTACKS",
-			"value": 1
-		}
-	},
-	"collectible": true,
-	"set": "MEAN_STREETS_OF_GADGETZAN",
-	"fileFormatVersion": 1
+  "name": "Chrono Cavalier",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Whenever this minion is healed, it may attack again.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "SetAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "NUMBER_OF_ATTACKS"
+    }
+  },
+  "collectible": true,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
 }

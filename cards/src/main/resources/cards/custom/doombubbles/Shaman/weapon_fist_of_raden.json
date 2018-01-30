@@ -1,96 +1,96 @@
 {
-	"name": "Fist of Ra'Den",
-	"baseManaCost": 4,
-	"type": "WEAPON",
-	"damage": 2,
-	"durability": 2,
-	"heroClass": "SHAMAN",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: The next 3 Elemental spells you cast cost (1) less.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "CardCostModifierSpell",
-					"target": "FRIENDLY_PLAYER",
-					"cardCostModifier": {
-						"class": "CardCostModifier",
-						"cardType": "SPELL",
-						"race": "ELEMENTAL",
-						"operation": "SUBTRACT",
-						"value": "1",
-						"expirationTrigger": {
-							"class": "CardPlayedTrigger",
-							"sourcePlayer": "SELF",
-							"race": "ELEMENTAL",
-							"cardType": "SPELL"
-						}
-					}
-				},
-				{
-					"class": "SetAttributeSpell",
-					"target": "FRIENDLY_HERO",
-					"attribute": "CUSTOM_3",
-					"value": 1
-				},
-				{
-					"class": "AddSpellTriggerSpell",
-					"target": "FRIENDLY_PLAYER",
-					"trigger": {
-						"eventTrigger": {
-							"class": "AfterSpellCastedTrigger",
-							"sourcePlayer": "SELF",
-							"race": "ELEMENTAL"
-						},
-						"spell": {
-							"class": "ConditionalSpell",
-							"spell": {
-								"class": "MetaSpell",
-								"spells": [
-									{
-										"class": "CardCostModifierSpell",
-										"target": "FRIENDLY_PLAYER",
-										"cardCostModifier": {
-											"class": "CardCostModifier",
-											"cardType": "SPELL",
-											"race": "ELEMENTAL",
-											"operation": "SUBTRACT",
-											"value": "1",
-											"expirationTrigger": {
-												"class": "CardPlayedTrigger",
-												"sourcePlayer": "SELF",
-												"race": "ELEMENTAL",
-												"cardType": "SPELL"
-											}
-										}
-									},
-									{
-										"class": "ModifyAttributeSpell",
-										"target": "FRIENDLY_HERO",
-										"value": 1,
-										"attribute": "CUSTOM_3"
-									}
-								]
-							},
-							"condition": {
-								"class": "AttributeCondition",
-								"target": "FRIENDLY_HERO",
-								"attribute": "CUSTOM_3",
-								"operation": "LESS",
-								"value": 3
-							}
-						}
-					}
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRIES": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Fist of Ra'Den",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "SHAMAN",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: The next 3 Elemental spells you cast cost (1) less.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "value": "1",
+            "race": "ELEMENTAL",
+            "cardType": "SPELL",
+            "expirationTrigger": {
+              "class": "CardPlayedTrigger",
+              "race": "ELEMENTAL",
+              "cardType": "SPELL",
+              "sourcePlayer": "SELF"
+            },
+            "operation": "SUBTRACT"
+          }
+        },
+        {
+          "class": "SetAttributeSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 1,
+          "attribute": "CUSTOM_3"
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "AfterSpellCastedTrigger",
+              "race": "ELEMENTAL",
+              "sourcePlayer": "SELF"
+            },
+            "spell": {
+              "class": "ConditionalSpell",
+              "condition": {
+                "class": "AttributeCondition",
+                "target": "FRIENDLY_HERO",
+                "value": 3,
+                "attribute": "CUSTOM_3",
+                "operation": "LESS"
+              },
+              "spell": {
+                "class": "MetaSpell",
+                "spells": [
+                  {
+                    "class": "CardCostModifierSpell",
+                    "target": "FRIENDLY_PLAYER",
+                    "cardCostModifier": {
+                      "class": "CardCostModifier",
+                      "value": "1",
+                      "race": "ELEMENTAL",
+                      "cardType": "SPELL",
+                      "expirationTrigger": {
+                        "class": "CardPlayedTrigger",
+                        "race": "ELEMENTAL",
+                        "cardType": "SPELL",
+                        "sourcePlayer": "SELF"
+                      },
+                      "operation": "SUBTRACT"
+                    }
+                  },
+                  {
+                    "class": "ModifyAttributeSpell",
+                    "target": "FRIENDLY_HERO",
+                    "value": 1,
+                    "attribute": "CUSTOM_3"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRIES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

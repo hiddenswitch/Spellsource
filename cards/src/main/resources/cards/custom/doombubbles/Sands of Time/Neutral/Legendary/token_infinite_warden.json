@@ -1,29 +1,29 @@
 {
-	"name": "Infinite Warden",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "FREE",
-	"race": "DRAGON",
-	"description": "At the end of your turn, give your End Time -1 Duration.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "RiftDurationSpell",
-			"target": "FRIENDLY_RIFTS",
-			"value": -1,
-			"filter": {
-				"class": "SpecificCardFilter",
-				"cardId": "rift_the_end_time"
-			}
-		}
-	},
-	"collectible": false,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Infinite Warden",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "At the end of your turn, give your End Time -1 Duration.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RiftDurationSpell",
+      "target": "FRIENDLY_RIFTS",
+      "value": -1,
+      "filter": {
+        "class": "SpecificCardFilter",
+        "cardId": "rift_the_end_time"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

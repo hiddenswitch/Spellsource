@@ -1,32 +1,32 @@
 {
-	"name": "Armed and Ready",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "Deal *3* damage to a minion. Discover a spell.",
-	"targetSelection": "MINIONS",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": 3
-			},
-			{
-				"class": "DiscoverRandomCardSpell",
-				"spell": {
-					"class": "ReceiveCardSpell",
-					"targetPlayer": "SELF"
-				},
-				"cardFilter": {
-					"class": "CardFilter",
-					"cardType": "SPELL"
-				}
-			}
-		]
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Armed and Ready",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "COMMON",
+  "description": "Deal *3* damage to a minion. Discover a spell.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "DiscoverRandomCardSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

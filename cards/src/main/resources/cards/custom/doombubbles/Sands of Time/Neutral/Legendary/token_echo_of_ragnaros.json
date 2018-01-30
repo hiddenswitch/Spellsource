@@ -1,25 +1,25 @@
 {
-    "name": "Echo of Ragnaros",
-    "baseManaCost": 6,
-    "type": "MINION",
-    "baseAttack": 4,
-    "baseHp": 4,
-    "heroClass": "BOSS",
-    "rarity": "LEGENDARY",
-    "description": "Battlecry: Shoot three fireballs at random enemies that deal 8 damage each.",
-    "battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MissilesSpell",
-			"target": "ENEMY_CHARACTERS",
-			"value": 8,
-			"howMany": 3
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-    "collectible": false,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Echo of Ragnaros",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BOSS",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Shoot three fireballs at random enemies that deal 8 damage each.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 8,
+      "howMany": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

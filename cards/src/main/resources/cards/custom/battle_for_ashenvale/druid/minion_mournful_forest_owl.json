@@ -1,0 +1,43 @@
+{
+  "name": "Mournful Forest Owl",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Choose One - Give your hero +1 Attack this turn; or gain 3 Armor.",
+  "options": [
+    {
+      "description": "+1 Attack",
+      "targetSelection": "NONE",
+      "spell": {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "attackBonus": 1
+      }
+    },
+    {
+      "description": "Gain 3 Armor.",
+      "targetSelection": "NONE",
+      "spell": {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 3
+      }
+    }
+  ],
+  "bothOptions": {
+    "description": "+1 Attack this turn and 3 Armor",
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 3,
+      "attackBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

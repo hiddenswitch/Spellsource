@@ -1,30 +1,30 @@
 {
-	"name": "Taunka Frostcaller",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "SHAMAN",
-	"rarity": "RARE",
-	"description": "Battlecry: Choose a minion. Freeze the minions adjacent to it.",
-	"battlecry": {
-		"targetSelection": "MINIONS",
-		"spell": {
-			"class": "AdjacentEffectSpell",
-			"spell1": {
-				"class": "NullSpell"
-			},
-			"spell2": {
-				"class": "AddAttributeSpell",
-				"attribute": "FROZEN",
-				"target": "ADJACENT_MINIONS"
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Taunka Frostcaller",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Choose a minion. Freeze the minions adjacent to it.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "spell1": {
+        "class": "NullSpell"
+      },
+      "spell2": {
+        "class": "AddAttributeSpell",
+        "target": "ADJACENT_MINIONS",
+        "attribute": "FROZEN"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

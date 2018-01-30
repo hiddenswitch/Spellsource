@@ -1,22 +1,22 @@
 {
-	"name": "Collosus Smash",
-	"baseManaCost": 8,
-	"type": "SPELL",
-	"heroClass": "WARRIOR",
-	"rarity": "EPIC",
-	"description": "Destroy a minion and the minions next to it.",
-	"targetSelection": "MINIONS",
-	"race": "ARMS",
-	"spell": {
-		"class": "AdjacentEffectSpell",
-		"spell1": {
-			"class": "DestroySpell"
-		},
-		"spell2": {
-			"class": "DestroySpell"
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Collosus Smash",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "WARRIOR",
+  "rarity": "EPIC",
+  "race": "ARMS",
+  "description": "Destroy a minion and the minions next to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "DestroySpell"
+    },
+    "spell2": {
+      "class": "DestroySpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

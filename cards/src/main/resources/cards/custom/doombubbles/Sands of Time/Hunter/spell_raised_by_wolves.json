@@ -1,19 +1,19 @@
 {
-	"name": "Raised by Wolves",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"description": "Give a friendly minion 'Deathrattle: Summon a Dire Wolf Alpha'",
-	"targetSelection": "FRIENDLY_MINIONS",
-	"spell": {
-		"class": "AddDeathrattleSpell",
-		"spell": {
-			"class": "SummonSpell",
-			"card": "minion_dire_wolf_alpha"
-		}
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Raised by Wolves",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "description": "Give a friendly minion 'Deathrattle: Summon a Dire Wolf Alpha'",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_dire_wolf_alpha"
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

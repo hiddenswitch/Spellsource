@@ -1,37 +1,37 @@
 {
-    "name": "Aeonus",
-    "baseManaCost": 6,
-    "type": "MINION",
-    "baseAttack": 6,
-    "baseHp": 6,
-    "heroClass": "ANY",
-    "rarity": "LEGENDARY",
-    "race": "DRAGON",
-    "description": "Battlecry: Destroy all minions in your deck. Start an invasion that lasts for 4 turns.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "MetaSpell",
-			"spells":[
-				{
-					"class": "RemoveCardSpell",
-					"target": "FRIENDLY_DECK",
-					"filter": {
-						"class": "CardFilter",
-						"cardType": "MINION"
-					}
-				},
-				{
-					"class": "SummonSpell",
-					"card": "rift_invasion"
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": "true"
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Aeonus",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Battlecry: Destroy all minions in your deck. Start an invasion that lasts for 4 turns.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveCardSpell",
+          "target": "FRIENDLY_DECK",
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
+        },
+        {
+          "class": "SummonSpell",
+          "card": "rift_invasion"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": "true"
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

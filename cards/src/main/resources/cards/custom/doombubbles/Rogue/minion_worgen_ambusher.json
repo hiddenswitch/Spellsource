@@ -1,41 +1,41 @@
 {
-    "name": "Worgen Ambusher",
-    "baseManaCost": 2,
-    "type": "MINION",
-    "baseAttack": 1,
-    "baseHp": 1,
-    "heroClass": "ROGUE",
-    "rarity": "COMMON",
-    "race": "NONE",
-    "description": "Stealth. Battlecry: Gain +1/+1 for each Worgen Ambusher you've played this game.",
-	"battlecry": {
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"target": "SELF",
-					"value": {
-						"class": "AttributeValueProvider",
-						"target": "FRIENDLY_PLAYER",
-						"attribute": "CUSTOM_2",
-						"multiplier": 1
-					}
-				},
-				{
-					"class": "ModifyAttributeSpell",
-					"target": "FRIENDLY_PLAYER",
-					"attribute": "CUSTOM_2",
-					"value": 1
-				}
-			]
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"STEALTH": true
-	},
-    "collectible": true,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
+  "name": "Worgen Ambusher",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "NONE",
+  "description": "Stealth. Battlecry: Gain +1/+1 for each Worgen Ambusher you've played this game.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "CUSTOM_2",
+            "multiplier": 1
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 1,
+          "attribute": "CUSTOM_2"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

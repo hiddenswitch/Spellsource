@@ -1,35 +1,35 @@
 {
-    "name": "Jungle's Entrance",
-    "baseManaCost": 3,
-    "type": "SPELL",
-    "heroClass": "HUNTER",
-    "rarity": "EPIC",
-    "description": "Discover a beast. Reduce its Cost by (3).",
-    "targetSelection": "NONE",
-	"race": "BEAST_MASTERY",
+  "name": "Jungle's Entrance",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "EPIC",
+  "race": "BEAST_MASTERY",
+  "description": "Discover a beast. Reduce its Cost by (3).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverRandomCardSpell",
     "spell": {
-        "class": "DiscoverRandomCardSpell",
-		"spell": {
-			"class": "ReceiveCardAndDoSomethingSpell",
-			"targetPlayer": "SELF",
-			"spell": {
-				"class": "CardCostModifierSpell",
-				"target": "FRIENDLY_PLAYER",
-				"cardCostModifier": {
-					"class": "CardCostModifier",
-					"target": "EVENT_CARD",
-					"operation": "SUBTRACT",
-					"value": 3
-				}
-			}
-		},
-		"cardFilter": {
-			"class": "CardFilter",
-			"cardType": "MINION",
-			"race": "BEAST"
-		}
+      "class": "ReceiveCardAndDoSomethingSpell",
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "EVENT_CARD",
+          "value": 3,
+          "operation": "SUBTRACT"
+        }
+      },
+      "targetPlayer": "SELF"
     },
-    "collectible": true,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "BEAST",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

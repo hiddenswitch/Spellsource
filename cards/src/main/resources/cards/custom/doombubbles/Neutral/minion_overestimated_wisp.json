@@ -1,19 +1,19 @@
 {
-	"name": "Overestimated Wisp",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Gain 2 Mana Crystals this turn only.",
-	"battlecry": {
-		"spell": {
-			"class": "GainManaSpell",
-			"value": 2
-		}
-	},
-	"collectible": true,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "Overestimated Wisp",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Gain 2 Mana Crystals this turn only.",
+  "battlecry": {
+    "spell": {
+      "class": "GainManaSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

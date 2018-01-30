@@ -1,23 +1,23 @@
 {
-	"name": "Forgotten Yaungol",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "SHAMAN",
-	"rarity": "COMMON",
-	"description": "At the end of your turn, add a 'Frost Shock' to your hand.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"card": "spell_frost_shock"
-		}
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Forgotten Yaungol",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "At the end of your turn, add a 'Frost Shock' to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_frost_shock"
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

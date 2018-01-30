@@ -1,39 +1,39 @@
 {
-	"name": "Bag of Tricks",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "ROGUE",
-	"rarity": "EPIC",
-	"description": "Battlecry: Discover a Mage, Hunter, or Paladin secret.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DiscoverFilteredCardSpell",
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"targetPlayer": "SELF"
-		},
-		"cardFilters": [
-			{
-				"class": "CardFilter",
-				"heroClass": "MAGE",
-				"operation": "HAS",
-				"attribute": "SECRET"
-			},
-			{
-				"class": "CardFilter",
-				"heroClass": "HUNTER",
-				"operation": "HAS",
-				"attribute": "SECRET"
-			},
-			{
-				"class": "CardFilter",
-				"heroClass": "PALADIN",
-				"operation": "HAS",
-				"attribute": "SECRET"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Bag of Tricks",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "EPIC",
+  "description": "Battlecry: Discover a Mage, Hunter, or Paladin secret.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverFilteredCardSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilters": [
+      {
+        "class": "CardFilter",
+        "heroClass": "BLUE",
+        "attribute": "SECRET",
+        "operation": "HAS"
+      },
+      {
+        "class": "CardFilter",
+        "heroClass": "GREEN",
+        "attribute": "SECRET",
+        "operation": "HAS"
+      },
+      {
+        "class": "CardFilter",
+        "heroClass": "PALADIN",
+        "attribute": "SECRET",
+        "operation": "HAS"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

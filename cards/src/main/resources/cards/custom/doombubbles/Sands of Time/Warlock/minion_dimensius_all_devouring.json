@@ -1,28 +1,28 @@
 {
-	"name": "Dimensius, All-Devouring",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "WARLOCK",
-	"rarity": "LEGENDARY",
-	"race": "DEMON",
-	"description": "Battlecry: Discard as many cards as you want. Restore 5 health to your hero for each.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "custom.DimensiusSpell",
-			"spell": {
-				"class": "HealSpell",
-				"target": "FRIENDLY_HERO",
-				"value": 5
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Dimensius, All-Devouring",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "WARLOCK",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Battlecry: Discard as many cards as you want. Restore 5 health to your hero for each.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.DimensiusSpell",
+      "spell": {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 5
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

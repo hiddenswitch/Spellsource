@@ -1,0 +1,30 @@
+{
+  "name": "Mist Howler",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Charge. Whenever this attacks and kills a minion, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

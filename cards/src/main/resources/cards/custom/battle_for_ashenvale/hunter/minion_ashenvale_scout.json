@@ -1,0 +1,30 @@
+{
+  "name": "Ashenvale Scout",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Discover a 1-Cost Hunter card.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "GREEN",
+        "manaCost": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

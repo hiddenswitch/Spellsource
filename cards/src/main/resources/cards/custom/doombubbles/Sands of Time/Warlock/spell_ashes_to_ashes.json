@@ -1,27 +1,27 @@
 {
-	"name": "Ashes to Ashes",
-	"baseManaCost": 1,
-	"type": "SPELL",
-	"heroClass": "WARLOCK",
-	"rarity": "COMMON",
-	"description": "Deal *3* damage. Take *3* damage.",
-	"targetSelection": "ANY",
-	"race": "DESTRUCTION",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": 3
-			},
-			{
-				"class": "DamageSpell",
-				"value": 3,
-				"target": "FRIENDLY_HERO"
-			}
-		]
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Ashes to Ashes",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "WARLOCK",
+  "rarity": "COMMON",
+  "race": "DESTRUCTION",
+  "description": "Deal *3* damage. Take *3* damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

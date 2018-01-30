@@ -673,6 +673,11 @@ public enum Attribute {
 	 */
 	TRANSFORM_REFERENCE,
 	/**
+	 * Whenever a {@link Card} is received into the hand, this attribute indicates on which turn (typically
+	 * {@link GameContext#getTurn()} the card was received.
+	 */
+	RECEIVED_ON_TURN,
+	/**
 	 * Remembers the {@link #ATTACK_BONUS}, {@link #HP_BONUS}, {@link #LIFESTEAL}, {@link #WINDFURY}, {@link #POISONOUS}
 	 * that was applied to the {@link Actor} that gets subjected to a {@link net.demilich.metastone.game.spells.ShuffleToDeckSpell}.
 	 * <p>

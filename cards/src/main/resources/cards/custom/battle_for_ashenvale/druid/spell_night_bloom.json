@@ -1,0 +1,28 @@
+{
+  "name": "Nightbloom",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "EPIC",
+  "description": "Deal 4 damage. If the target dies, deal 4 damage to a random enemy character.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 4
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 4,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

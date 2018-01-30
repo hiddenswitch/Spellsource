@@ -1,0 +1,39 @@
+{
+  "name": "Night Run Bow",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "HUNTER",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "EPIC",
+  "description": "Battlecry: Your hero is Immune this turn. Costs (1) less if you have a Beast.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_HERO",
+      "attribute": "IMMUNE",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    },
+    "ifFalse": 0,
+    "ifTrue": 1
+  }
+}

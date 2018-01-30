@@ -1,32 +1,32 @@
 {
-    "name": "Chillburst Totem",
-    "baseManaCost": 2,
-    "type": "MINION",
-    "baseAttack": 0,
-    "baseHp": 3,
-    "heroClass": "SHAMAN",
-    "rarity": "COMMON",
-    "race": "TOTEM",
-    "description": "At the end of your turn, Freeze a random enemy minion.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "AddAttributeSpell",
-			"attribute": "FROZEN",
-			"target": "ENEMY_MINIONS",
-			"randomTarget": true,
-			"filter": {
-				"class": "AttributeFilter",
-				"attribute": "FROZEN",
-				"operation": "HAS",
-				"invert": true
-			}
-		}
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Chillburst Totem",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "TOTEM",
+  "description": "At the end of your turn, Freeze a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ENEMY_MINIONS",
+      "attribute": "FROZEN",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "FROZEN",
+        "invert": true,
+        "operation": "HAS"
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

@@ -1,24 +1,24 @@
 {
-	"name": "Timewalker Mistweaver",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Whenever you play a card, restore 2 Health to your hero",
-	"trigger": {
-		"eventTrigger": {
-			"class": "CardPlayedTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "HealSpell",
-			"target": "FRIENDLY_HERO",
-			"value": 2
-		}
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Timewalker Mistweaver",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Whenever you play a card, restore 2 Health to your hero",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

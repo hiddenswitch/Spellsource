@@ -1,50 +1,50 @@
 {
-	"name": "Disengage",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "HUNTER",
-	"rarity": "RARE",
-	"description": "Draw a card. Your Hero can only take 1 damage at a time next turn.",
-	"targetSelection": "NONE",
-	"race": "SURVIVAL",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DrawCardSpell"
-			},
-			{
-				"class": "AddSpellTriggerSpell",
-				"target": "FRIENDLY_PLAYER",
-				"trigger": {
-					"eventTrigger": {
-						"class": "TurnEndTrigger",
-						"targetPlayer": "SELF"
-					},
-					"spell": {
-						"class": "AddSpellTriggerSpell",
-						"target": "FRIENDLY_PLAYER",
-						"trigger": {
-							"eventTrigger": {
-								"class": "PreDamageTrigger",
-								"sourcePlayer": "BOTH",
-								"targetPlayer": "SELF",
-								"targetEntityType": "HERO"
-							},
-							"spell": {
-								"class": "ModifyDamageSpell",
-								"operation": "SET",
-								"value": 1
-							},
-							"oneTurn": true
-						}
-					},
-					"oneTurn": true
-				}
-			}
-		]
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Disengage",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "race": "SURVIVAL",
+  "description": "Draw a card. Your Hero can only take 1 damage at a time next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "trigger": {
+              "eventTrigger": {
+                "class": "PreDamageTrigger",
+                "sourcePlayer": "BOTH",
+                "targetEntityType": "HERO",
+                "targetPlayer": "SELF"
+              },
+              "spell": {
+                "class": "ModifyDamageSpell",
+                "value": 1,
+                "operation": "SET"
+              },
+              "oneTurn": true
+            }
+          },
+          "oneTurn": true
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

@@ -27,7 +27,10 @@ public class AddSecretSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Secret secret = ((Secret) desc.get(SpellArg.SECRET)).clone();
+		Secret secret = (Secret) desc.get(SpellArg.SECRET);
+		if (secret.getSourceCard() == null) {
+			secret.setSourceCard(source.getSourceCard());
+		}
 		context.getLogic().playSecret(player, secret);
 	}
 }

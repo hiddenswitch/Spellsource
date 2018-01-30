@@ -1,44 +1,44 @@
 {
-	"name": "3 damage and Discover",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Deal *3* damage to and Discover a Balance spell. It costs (2) less.",
-	"targetSelection": "ANY",
-	"race": "BALANCE",
-	"spell": {
-		"class": "MetaSpell",
-		"spells": [
-			{
-				"class": "DamageSpell",
-				"value": 3
-			},
-			{
-				"class": "DiscoverRandomCardSpell",
-				"spell": {
-					"class": "ReceiveCardAndDoSomethingSpell",
-					"targetPlayer": "SELF",
-					"spell": {
-						"class": "CardCostModifierSpell",
-						"target": "FRIENDLY_PLAYER",
-						"cardCostModifier": {
-							"class": "CardCostModifier",
-							"target": "EVENT_CARD",
-							"operation": "SUBTRACT",
-							"value": 2
-						}
-					}
-				},
-				"cardFilter": {
-					"class": "CardFilter",
-					"cardType": "SPELL",
-					"race": "BALANCE"
-				}
-			}
-		]
-	},
-	"collectible": false,
-	"set": "CLASSIC",
-	"fileFormatVersion": 1
+  "name": "3 damage and Discover",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "race": "BALANCE",
+  "description": "Deal *3* damage to and Discover a Balance spell. It costs (2) less.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "DiscoverRandomCardSpell",
+        "spell": {
+          "class": "ReceiveCardAndDoSomethingSpell",
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "FRIENDLY_PLAYER",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "EVENT_CARD",
+              "value": 2,
+              "operation": "SUBTRACT"
+            }
+          },
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BALANCE",
+          "cardType": "SPELL"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

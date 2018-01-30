@@ -1,33 +1,33 @@
 {
-	"name": "Froststeed",
-	"baseManaCost": 6,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 6,
-	"heroClass": "MAGE",
-	"rarity": "RARE",
-	"description": "Battlecry: Freeze all enemy minions. Deathrattle: Destroy all frozen minions.",
-	"battlecry": {
-		"spell": {
-			"class": "AddAttributeSpell",
-			"target": "ENEMY_MINIONS",
-			"attribute": "FROZEN"
-		}
-	},
-	"deathrattle": {
-		"class": "DestroySpell",
-		"target": "ALL_MINIONS",
-		"filter": {
-			"class": "AttributeFilter",
-			"attribute": "FROZEN",
-			"operation": "HAS"
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true,
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Froststeed",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Battlecry: Freeze all enemy minions. Deathrattle: Destroy all frozen minions.",
+  "battlecry": {
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ENEMY_MINIONS",
+      "attribute": "FROZEN"
+    }
+  },
+  "deathrattle": {
+    "class": "DestroySpell",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

@@ -1,52 +1,52 @@
 {
-	"name": "Seadevil Totem",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 0,
-	"baseHp": 3,
-	"heroClass": "SHAMAN",
-	"rarity": "EPIC",
-	"race": "TOTEM",
-	"description": "At the end of your turn, destroy another random Totem to summon a random Murloc.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "ConditionalSpell",
-			"spell": {
-				"class": "MetaSpell",
-				"spells": [
-					{
-						"class": "DestroySpell",
-						"target": "OTHER_MINIONS",
-						"randomTarget": true,
-						"filter": {
-							"class": "RaceFilter",
-							"race": "TOTEM"
-						}
-					},
-					{
-						"class": "SummonRandomMinionFilteredSpell",
-						"boardPositionRelative": "RIGHT",
-						"cardFilter": {
-							"class": "CardFilter",
-							"race": "MURLOC"
-						}
-					}
-				]
-			},
-			"condition": {
-				"class": "MinionOnBoardCondition",
-				"cardFilter": {
-					"class": "RaceFilter",
-					"race": "TOTEM"
-				}
-			}
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Seadevil Totem",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SHAMAN",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "TOTEM",
+  "description": "At the end of your turn, destroy another random Totem to summon a random Murloc.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "MinionOnBoardCondition",
+        "cardFilter": {
+          "class": "RaceFilter",
+          "race": "TOTEM"
+        }
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DestroySpell",
+            "target": "OTHER_MINIONS",
+            "filter": {
+              "class": "RaceFilter",
+              "race": "TOTEM"
+            },
+            "randomTarget": true
+          },
+          {
+            "class": "SummonRandomMinionFilteredSpell",
+            "boardPositionRelative": "RIGHT",
+            "cardFilter": {
+              "class": "CardFilter",
+              "race": "MURLOC"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

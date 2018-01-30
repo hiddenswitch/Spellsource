@@ -1,17 +1,17 @@
 {
-	"name": "3 damage",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "DRUID",
-	"rarity": "RARE",
-	"description": "Deal *3* damage",
-	"targetSelection": "ANY",
-	"race": "BALANCE",
-	"spell": {
-		"class": "DamageSpell",
-		"value": 3
-	},
-	"collectible": false,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "3 damage",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "race": "BALANCE",
+  "description": "Deal *3* damage",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

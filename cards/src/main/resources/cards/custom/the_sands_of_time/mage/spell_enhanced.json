@@ -33,7 +33,6 @@
         "class": "AddEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
         "trigger": {
-          "maxFires": 1,
           "eventTrigger": {
             "class": "AfterSpellCastedTrigger",
             "sourcePlayer": "SELF"
@@ -42,7 +41,6 @@
             "class": "AddEnchantmentSpell",
             "target": "FRIENDLY_PLAYER",
             "trigger": {
-              "maxFires": 1,
               "eventTrigger": {
                 "class": "AfterSpellCastedTrigger",
                 "sourcePlayer": "SELF"
@@ -52,9 +50,11 @@
                 "target": "FRIENDLY_PLAYER",
                 "value": -2,
                 "attribute": "SPELL_DAMAGE"
-              }
+              },
+              "maxFires": 1
             }
-          }
+          },
+          "maxFires": 1
         }
       }
     ]

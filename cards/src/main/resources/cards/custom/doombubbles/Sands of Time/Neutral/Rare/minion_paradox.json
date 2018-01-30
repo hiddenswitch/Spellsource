@@ -1,23 +1,23 @@
 {
-	"name": "Paradox",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 3,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"description": "After you play a card, return this minion to your hand.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "CardPlayedTrigger",
-			"sourcePlayer": "SELF"
-		},
-		"spell": {
-			"class": "ReturnMinionToHandSpell",
-			"target": "SELF"
-		}
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Paradox",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "After you play a card, return this minion to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReturnMinionToHandSpell",
+      "target": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

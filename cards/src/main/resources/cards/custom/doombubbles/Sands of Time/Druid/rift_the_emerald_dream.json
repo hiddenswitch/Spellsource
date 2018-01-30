@@ -1,41 +1,41 @@
 {
-    "name": "The Emereald Dream",
-    "baseManaCost": 3,
-    "type": "RIFT",
-    "duration": 2,
-    "heroClass": "DRUID",
-    "rarity": "EPIC",
-    "description": "Whenever a minion is played, give it +1/+1 and increase this bonus by +1/+1.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "MinionPlayedTrigger"
-		},
-		"spell": {
-			"class": "MetaSpell",
-			"spells": [
-				{
-					"class": "BuffSpell",
-					"target": "EVENT_TARGET",
-					"value": 1
-				},
-				{
-					"class": "AddSpellTriggerSpell",
-					"target": "SELF",
-					"trigger": {
-						"eventTrigger": {
-							"class": "MinionPlayedTrigger"
-						},
-						"spell": {
-							"class": "BuffSpell",
-							"target": "EVENT_TARGET",
-							"value": 1
-						}
-					}
-				}
-			]
-		}
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "The Emereald Dream",
+  "baseManaCost": 3,
+  "type": "RIFT",
+  "heroClass": "BROWN",
+  "rarity": "EPIC",
+  "description": "Whenever a minion is played, give it +1/+1 and increase this bonus by +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionPlayedTrigger"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "EVENT_TARGET",
+          "value": 1
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "SELF",
+          "trigger": {
+            "eventTrigger": {
+              "class": "MinionPlayedTrigger"
+            },
+            "spell": {
+              "class": "BuffSpell",
+              "target": "EVENT_TARGET",
+              "value": 1
+            }
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "duration": 2
 }

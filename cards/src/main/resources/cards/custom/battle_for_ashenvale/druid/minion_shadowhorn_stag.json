@@ -1,0 +1,45 @@
+{
+  "name": "Shadowhorn Stag",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Whenever this attacks and kills a minion, it may attack again. Deathrattle: Give a random friendly Beast +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "EXTRA_ATTACKS"
+    }
+  },
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "filter": {
+      "class": "CardFilter",
+      "race": "BEAST",
+      "cardType": "MINION"
+    },
+    "hpBonus": 1,
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BATTLE_FOR_ASHENVALE",
+  "fileFormatVersion": 1
+}

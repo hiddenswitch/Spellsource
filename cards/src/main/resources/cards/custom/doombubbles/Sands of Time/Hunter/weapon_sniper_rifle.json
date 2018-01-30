@@ -1,24 +1,24 @@
 {
-	"name": "Sniper Rifle",
-	"baseManaCost": 4,
-	"type": "WEAPON",
-	"damage": 3,
-	"durability": 2,
-	"heroClass": "HUNTER",
-	"rarity": "COMMON",
-	"description": "At the start of your turn, set this weapon's Attack to 5.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnStartTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "SetAttackSpell",
-			"target": "FRIENDLY_WEAPON",
-			"value": 5
-		}
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Sniper Rifle",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "GREEN",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "At the start of your turn, set this weapon's Attack to 5.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SetAttackSpell",
+      "target": "FRIENDLY_WEAPON",
+      "value": 5
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

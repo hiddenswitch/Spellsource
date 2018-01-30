@@ -1,29 +1,29 @@
 {
-    "name": "Battle for Mount Hyjal",
-    "baseManaCost": 3,
-    "type": "RIFT",
-    "duration": 3,
-    "heroClass": "ANY",
-    "rarity": "RARE",
-    "description": "Your minions have +2/+2. Battlecry: Summon an 8/8 Demon for your opponent.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "SummonSpell",
-			"targetPlayer": "OPPONENT",
-			"card": "token_superior_demon"
-		}
-	},
-	"aura": {
-		"class": "BuffAura",
-		"target": "FRIENDLY_MINIONS",
-		"attackBonus": 2,
-		"hpBonus": 2
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Battle for Mount Hyjal",
+  "baseManaCost": 3,
+  "type": "RIFT",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Your minions have +2/+2. Battlecry: Summon an 8/8 Demon for your opponent.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 2,
+    "hpBonus": 2
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_superior_demon",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "duration": 3
 }

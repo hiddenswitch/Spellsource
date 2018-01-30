@@ -1,90 +1,90 @@
 {
-	"name": "Criminologist",
-	"baseManaCost": 2,
-	"type": "MINION",
-	"baseAttack": 2,
-	"baseHp": 2,
-	"heroClass": "ROGUE",
-	"rarity": "COMMON",
-	"description": "Battlecry: Add a random secret to your hand. Combo: Discover the class.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ComboSpell",
-			"exclusive": true,
-			"spell1": {
-				"class": "ReceiveCardSpell",
-				"value": 1,
-				"card": "spell_the_coin",
-				"cardFilter": {
-					"class": "CardFilter",
-					"attribute": "SECRET",
-					"operation": "HAS"
-				}
-			},
-			"spell2": {
-				"class": "DiscoverOptionSpell",
-				"spells": [
-					{
-						"name": "Mage",
-						"description": "Receive a random Mage Secret.",
-						"class": "ReceiveCardSpell",
-						"value": 1,
-						"card": "spell_the_coin",
-						"cardFilter": {
-							"class": "CardFilter",
-							"attribute": "SECRET",
-							"operation": "HAS",
-							"heroClass": "MAGE"
-						}
-					},
-					{
-						"name": "Hunter",
-						"description": "Receive a random Hunter secret.",
-						"class": "ReceiveCardSpell",
-						"value": 1,
-						"card": "spell_the_coin",
-						"cardFilter": {
-							"class": "CardFilter",
-							"attribute": "SECRET",
-							"operation": "HAS",
-							"heroClass": "HUNTER"
-						}
-					},
-					{
-						"name": "Paladin",
-						"description": "Receive a random Paladin secret.",
-						"class": "ReceiveCardSpell",
-						"value": 1,
-						"card": "spell_the_coin",
-						"cardFilter": {
-							"class": "CardFilter",
-							"attribute": "SECRET",
-							"operation": "HAS",
-							"heroClass": "PALADIN"
-						}
-					},
-					{
-						"name": "Rogue",
-						"description": "Receive a random Rogue secret.",
-						"class": "ReceiveCardSpell",
-						"value": 1,
-						"card": "spell_the_coin",
-						"cardFilter": {
-							"class": "CardFilter",
-							"attribute": "SECRET",
-							"operation": "HAS",
-							"heroClass": "ROGUE"
-						}
-					}
-				]
-			}
-		}
-	},
-	"attributes": {
-		"COMBO": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Criminologist",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Add a random secret to your hand. Combo: Discover the class.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ComboSpell",
+      "exclusive": true,
+      "spell1": {
+        "class": "ReceiveCardSpell",
+        "value": 1,
+        "card": "spell_the_coin",
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "SECRET",
+          "operation": "HAS"
+        }
+      },
+      "spell2": {
+        "class": "DiscoverOptionSpell",
+        "spells": [
+          {
+            "class": "ReceiveCardSpell",
+            "value": 1,
+            "name": "BLUE",
+            "description": "Receive a random Mage Secret.",
+            "card": "spell_the_coin",
+            "cardFilter": {
+              "class": "CardFilter",
+              "heroClass": "BLUE",
+              "attribute": "SECRET",
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "ReceiveCardSpell",
+            "value": 1,
+            "name": "GREEN",
+            "description": "Receive a random Hunter secret.",
+            "card": "spell_the_coin",
+            "cardFilter": {
+              "class": "CardFilter",
+              "heroClass": "GREEN",
+              "attribute": "SECRET",
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "ReceiveCardSpell",
+            "value": 1,
+            "name": "Paladin",
+            "description": "Receive a random Paladin secret.",
+            "card": "spell_the_coin",
+            "cardFilter": {
+              "class": "CardFilter",
+              "heroClass": "PALADIN",
+              "attribute": "SECRET",
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "ReceiveCardSpell",
+            "value": 1,
+            "name": "BLACK",
+            "description": "Receive a random Rogue secret.",
+            "card": "spell_the_coin",
+            "cardFilter": {
+              "class": "CardFilter",
+              "heroClass": "BLACK",
+              "attribute": "SECRET",
+              "operation": "HAS"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

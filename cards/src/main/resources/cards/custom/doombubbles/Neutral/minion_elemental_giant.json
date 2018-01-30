@@ -1,29 +1,29 @@
 {
-	"name": "Gemstone Giant",
-	"baseManaCost": 12,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "ANY",
-	"race": "ELEMENTAL",
-	"rarity": "EPIC",
-	"description": "Costs (2) less for each Elemental you played last turn.",
-	"manaCostModifier": {
-		"class": "PlayedLastTurnValueProvider",
-		"filter": {
-			"class": "CardFilter",
-			"race": "ELEMENTAL"
-		},
-		"multiplier": 2
-	},
-	"glow": {
-		"class": "PlayedLastTurnCondition",
-		"filter": {
-			"class": "CardFilter",
-			"race": "ELEMENTAL"
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Gemstone Giant",
+  "baseManaCost": 12,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Costs (2) less for each Elemental you played last turn.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "glow": {
+    "class": "PlayedLastTurnCondition",
+    "filter": {
+      "class": "CardFilter",
+      "race": "ELEMENTAL"
+    }
+  },
+  "manaCostModifier": {
+    "class": "PlayedLastTurnValueProvider",
+    "filter": {
+      "class": "CardFilter",
+      "race": "ELEMENTAL"
+    },
+    "multiplier": 2
+  }
 }

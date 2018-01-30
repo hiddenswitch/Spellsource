@@ -1,25 +1,25 @@
 {
-	"name": "Light's Wrath",
-	"baseManaCost": 2,
-	"type": "SPELL",
-	"heroClass": "PRIEST",
-	"rarity": "LEGENDARY",
-	"description": "Draw a card for each Priest Artifact you've played",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DrawCardSpell",
-		"value": {
-			"class": "CardsPlayedValueProvider",
-			"filter": {
-				"class": "CardFilter",
-				"attribute": "CUSTOM_8"
-			}
-		}
-	},
-	"attributes": {
-		"class": "CUSTOM_8"
-	},
-	"collectible": false,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Light's Wrath",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PRIEST",
+  "rarity": "LEGENDARY",
+  "description": "Draw a card for each Priest Artifact you've played",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": {
+      "class": "CardsPlayedValueProvider",
+      "filter": {
+        "class": "CardFilter",
+        "attribute": "CUSTOM_8"
+      }
+    }
+  },
+  "attributes": {
+    "class": "CUSTOM_8"
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

@@ -1,19 +1,19 @@
 {
-	"name": "Shadow of the Past",
-	"baseManaCost": 5,
-	"type": "MINION",
-	"baseAttack": 6,
-	"baseHp": 4,
-	"heroClass": "PRIEST",
-	"rarity": "COMMON",
-	"description": "Deathrattle: Get a copy of the last card your opponent played.",
-	"deathrattle": {
-		"class": "custom.ReceiveLastCardPlayedSpell"
-	},
-	"attributes": {
-		"DEATHRATTLES": true
-	},
-	"collectible": true,
-	"set": "SANDS_OF_TIME",
-	"fileFormatVersion": 1
+  "name": "Shadow of the Past",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "PRIEST",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Get a copy of the last card your opponent played.",
+  "deathrattle": {
+    "class": "custom.ReceiveLastCardPlayedSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

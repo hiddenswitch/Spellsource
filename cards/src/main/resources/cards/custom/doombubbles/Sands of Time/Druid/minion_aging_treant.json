@@ -1,28 +1,28 @@
 {
-    "name": "Aging Treant",
-    "baseManaCost": 6,
-    "type": "MINION",
-    "baseAttack": 4,
-    "baseHp": 6,
-    "heroClass": "DRUID",
-    "rarity": "COMMON",
-    "description": "At the end of your turn, gain 'Deathrattle: Summon two 1/1 Saplings'.",
-	"trigger": {
-		"eventTrigger": {
-			"class": "TurnEndTrigger",
-			"targetPlayer": "SELF"
-		},
-		"spell": {
-			"class": "AddDeathrattleSpell",
-			"target": "SELF",
-			"spell": {
-				"class": "SummonSpell",
-				"value": 2,
-				"card": "token_sapling"
-			}
-		}
-	},
-    "collectible": true,
-    "set": "SANDS_OF_TIME",
-    "fileFormatVersion": 1
+  "name": "Aging Treant",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "At the end of your turn, gain 'Deathrattle: Summon two 1/1 Saplings'.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "SummonSpell",
+        "value": 2,
+        "card": "token_sapling"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }
