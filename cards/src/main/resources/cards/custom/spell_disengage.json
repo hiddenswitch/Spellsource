@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "race": "SURVIVAL",
   "description": "Draw a card. Your Hero can only take 1 damage at a time next turn.",
   "targetSelection": "NONE",
   "spell": {
@@ -36,10 +35,10 @@
                 "value": 1,
                 "operation": "SET"
               },
-              "oneTurn": true
+              "maxFires": 1
             }
           },
-          "oneTurn": true
+          "maxFires": 1
         }
       }
     ]

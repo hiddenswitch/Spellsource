@@ -4,8 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "race": "BALANCE",
-  "description": "Deal *2* damage to a minion and the minions next to it. This spell gets double bonus from Spell Damage.",
+  "description": "Deal 2 damage to a minion and the minions next to it. This spell gets double bonus from Spell Damage.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

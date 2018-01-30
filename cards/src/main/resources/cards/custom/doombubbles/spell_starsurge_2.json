@@ -1,33 +1,32 @@
 {
-  "name": "Discover",
+  "name": "Starsurge",
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "race": "BALANCE",
   "description": "Discover a Balance spell. It costs (2) less.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverRandomCardSpell",
+    "class": "DiscoverSpell",
     "spell": {
-      "class": "ReceiveCardAndDoSomethingSpell",
+      "class": "ReceiveCardSpell",
       "spell": {
         "class": "CardCostModifierSpell",
-        "target": "FRIENDLY_PLAYER",
+        "target": "OUTPUT",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "EVENT_CARD",
+          "target": "SELF",
           "value": 2,
           "operation": "SUBTRACT"
         }
       },
       "targetPlayer": "SELF"
     },
-    "cardFilter": {
-      "class": "CardFilter",
-      "heroClass": "BROWN",
-      "race": "BALANCE"
-    }
+    "cards": [
+      "spell_lunar_strike",
+      "spell_starsurge",
+      "spell_sunfire"
+    ]
   },
   "collectible": false,
   "set": "CUSTOM",

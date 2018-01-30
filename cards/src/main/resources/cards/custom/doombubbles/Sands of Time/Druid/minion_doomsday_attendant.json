@@ -12,7 +12,7 @@
       "description": "Discover",
       "targetSelection": "NONE",
       "spell": {
-        "class": "DiscoverRandomCardSpell",
+        "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell",
           "targetPlayer": "SELF"
@@ -42,7 +42,7 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "DiscoverRandomCardSpell",
+          "class": "DiscoverSpell",
           "spell": {
             "class": "ReceiveCardSpell",
             "targetPlayer": "SELF"

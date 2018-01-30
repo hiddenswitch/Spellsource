@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverRandomCardSpell",
+      "class": "DiscoverSpell",
       "spell": {
         "class": "PutDeckTopSpell",
         "targetPlayer": "SELF"

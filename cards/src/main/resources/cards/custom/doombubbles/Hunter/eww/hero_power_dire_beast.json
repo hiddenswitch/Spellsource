@@ -15,7 +15,7 @@
     "class": "SummonSpell",
     "card": "token_mastiff"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

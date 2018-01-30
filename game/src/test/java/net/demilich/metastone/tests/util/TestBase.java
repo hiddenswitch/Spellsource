@@ -151,15 +151,23 @@ public class TestBase {
 
 	public static class GymFactory {
 		GymConsumer first;
+		GymConsumer after = ((context, player, opponent) -> {
+		});
 
 		public void run(GymConsumer consumer) {
-			runGym(first.andThen(consumer));
+			runGym(first.andThen(consumer).andThen(after));
 		}
 	}
 
 	public static GymFactory getGymFactory(GymConsumer initializer) {
 		GymFactory factory = new GymFactory();
 		factory.first = initializer;
+		return factory;
+	}
+
+	public static GymFactory getGymFactory(GymConsumer initializer, GymConsumer after) {
+		GymFactory factory = getGymFactory(initializer);
+		factory.after = after;
 		return factory;
 	}
 

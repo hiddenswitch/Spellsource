@@ -4,6 +4,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -11,6 +12,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.DestroySpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -27,6 +29,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -35,6 +38,26 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 
 public class ClassicTests extends TestBase {
+
+	@Test
+	public void testYsera() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_ysera");
+			overrideRandomCard(context, "spell_dream");
+			context.endTurn();
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_dream");
+			Assert.assertEquals(player.getHand().size(), 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_ysera");
+			Stream<String> yseraCards = Arrays.stream((String[]) ((MinionCardDesc) CardCatalogue.getRecords().get("minion_ysera")
+					.getDesc()).trigger.spell.get(SpellArg.CARDS));
+			context.endTurn();
+			Assert.assertTrue(yseraCards.anyMatch(c -> c.equals(player.getHand().get(0).getCardId())));
+			Assert.assertEquals(player.getHand().size(), 1);
+		});
+	}
 
 	@Test
 	public void testShadowstep() {

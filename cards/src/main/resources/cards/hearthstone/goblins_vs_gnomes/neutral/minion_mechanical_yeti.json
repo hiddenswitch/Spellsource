@@ -9,7 +9,7 @@
   "race": "MECH",
   "description": "Deathrattle: Give each player a Spare Part.",
   "deathrattle": {
-    "class": "ReceiveRandomCardSpell",
+    "class": "ReceiveCardSpell",
     "cards": [
       "spell_armor_plating",
       "spell_emergency_coolant",
@@ -19,6 +19,7 @@
       "spell_time_rewinder",
       "spell_whirling_blades"
     ],
+    "randomTarget": true,
     "targetPlayer": "BOTH"
   },
   "attributes": {

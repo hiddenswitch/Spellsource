@@ -9,12 +9,13 @@
   "description": "Battlecry: Give both players the power to ROCK! (with a Power Chord card)",
   "battlecry": {
     "spell": {
-      "class": "ReceiveRandomCardSpell",
+      "class": "ReceiveCardSpell",
       "cards": [
         "spell_i_am_murloc",
         "spell_power_of_the_horde",
         "spell_rogues_do_it"
       ],
+      "randomTarget": true,
       "targetPlayer": "BOTH"
     }
   },

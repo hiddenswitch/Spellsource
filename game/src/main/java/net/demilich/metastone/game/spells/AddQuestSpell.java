@@ -28,11 +28,11 @@ public class AddQuestSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Quest quest = (Quest) desc.get(SpellArg.QUEST);
+		Quest quest = ((Quest) desc.get(SpellArg.QUEST)).clone();
 		if (quest.getSourceCard() == null) {
 		    quest.setSourceCard(source.getSourceCard());
         }
-		context.getLogic().playQuest(player, quest);
+		context.getLogic().playQuest(player, quest.clone());
 	}
 
 }

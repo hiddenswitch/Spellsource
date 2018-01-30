@@ -4,7 +4,6 @@
   "type": "CHOOSE_ONE",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "race": "BALANCE",
   "description": "Choose One - Deal 3 damage; or Discover a Balance spell. It costs (2) less.",
   "targetSelection": "NONE",
   "options": [

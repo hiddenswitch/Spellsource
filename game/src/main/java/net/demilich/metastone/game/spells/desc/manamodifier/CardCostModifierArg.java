@@ -12,5 +12,6 @@ public enum CardCostModifierArg {
 	TOGGLE_ON_TRIGGER,
 	TOGGLE_OFF_TRIGGER,
 	TARGET,
+	FILTER,
 	OPERATION
 }

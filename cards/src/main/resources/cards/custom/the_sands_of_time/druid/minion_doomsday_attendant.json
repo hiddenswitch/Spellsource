@@ -13,7 +13,7 @@
       "name": "Discover",
       "description": "Discover a 10-Cost minion",
       "spell": {
-        "class": "DiscoverRandomCardSpell",
+        "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell",
           "targetPlayer": "SELF"
@@ -46,7 +46,7 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "DiscoverRandomCardSpell",
+          "class": "DiscoverSpell",
           "spell": {
             "class": "ReceiveCardSpell",
             "targetPlayer": "SELF"

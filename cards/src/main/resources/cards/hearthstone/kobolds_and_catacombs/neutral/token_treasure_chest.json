@@ -8,7 +8,7 @@
   "rarity": "FREE",
   "description": "Deathrattle: Give your opponent a fantastic treasure!",
   "deathrattle": {
-    "class": "ReceiveRandomCardSpell",
+    "class": "ReceiveCardSpell",
     "value": 1,
     "cards": [
       "token_golden_kobold",
@@ -16,6 +16,7 @@
       "spell_wondrous_wand",
       "spell_zarogs_crown"
     ],
+    "randomTarget": true,
     "targetPlayer": "OPPONENT"
   },
   "attributes": {

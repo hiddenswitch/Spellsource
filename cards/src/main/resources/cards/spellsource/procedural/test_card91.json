@@ -10,25 +10,27 @@
   "description": "Battlecry and Deathrattle: Add a random Toxin card to your hand.",
   "battlecry": {
     "spell": {
-      "class": "ReceiveRandomCardSpell",
+      "class": "ReceiveCardSpell",
       "cards": [
         "spell_bloodthistle_toxin",
         "spell_briarthorn_toxin",
         "spell_fadeleaf_toxin",
         "spell_firebloom_toxin",
         "spell_kingsblood_toxin"
-      ]
+      ],
+      "randomTarget": true
     }
   },
   "deathrattle": {
-    "class": "ReceiveRandomCardSpell",
+    "class": "ReceiveCardSpell",
     "cards": [
       "spell_bloodthistle_toxin",
       "spell_briarthorn_toxin",
       "spell_fadeleaf_toxin",
       "spell_firebloom_toxin",
       "spell_kingsblood_toxin"
-    ]
+    ],
+    "randomTarget": true
   },
   "attributes": {
     "BATTLECRY": true,

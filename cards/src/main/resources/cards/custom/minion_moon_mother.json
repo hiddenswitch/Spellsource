@@ -1,0 +1,39 @@
+{
+  "name": "Moon Mother",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Whenever you cast a Balance spell, Draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF",
+      "fireCondition": {
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "cardId": "spell_lunar_strike"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "cardId": "spell_starsurge"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "cardId": "spell_sunfire"
+          }
+        ]
+      }
+    },
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

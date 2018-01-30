@@ -1,11 +1,10 @@
 {
-  "name": "3 damage",
+  "name": "Starsurge",
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "race": "BALANCE",
-  "description": "Deal *3* damage",
+  "description": "Deal 3 damage",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",

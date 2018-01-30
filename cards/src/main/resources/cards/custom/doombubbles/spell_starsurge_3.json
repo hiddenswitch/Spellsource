@@ -1,11 +1,11 @@
 {
-  "name": "3 damage and Discover",
+  "name": "Starsurge",
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
   "race": "BALANCE",
-  "description": "Deal *3* damage to and Discover a Balance spell. It costs (2) less.",
+  "description": "Deal *3* damage and discover a Balance spell. It costs (2) less.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -15,26 +15,26 @@
         "value": 3
       },
       {
-        "class": "DiscoverRandomCardSpell",
+        "class": "DiscoverSpell",
         "spell": {
-          "class": "ReceiveCardAndDoSomethingSpell",
+          "class": "ReceiveCardSpell",
           "spell": {
             "class": "CardCostModifierSpell",
-            "target": "FRIENDLY_PLAYER",
+            "target": "OUTPUT",
             "cardCostModifier": {
               "class": "CardCostModifier",
-              "target": "EVENT_CARD",
+              "target": "SELF",
               "value": 2,
               "operation": "SUBTRACT"
             }
           },
           "targetPlayer": "SELF"
         },
-        "cardFilter": {
-          "class": "CardFilter",
-          "race": "BALANCE",
-          "cardType": "SPELL"
-        }
+        "cards": [
+          "spell_lunar_strike",
+          "spell_starsurge",
+          "spell_sunfire"
+        ]
       }
     ]
   },

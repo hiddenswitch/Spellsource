@@ -12,8 +12,11 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DamageSpell extends Spell {
+	private static Logger logger = LoggerFactory.getLogger(DamageSpell.class);
 
 	public static SpellDesc create(EntityReference target, int damage) {
 		return create(target, damage, false);
@@ -52,8 +55,12 @@ public class DamageSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		if (!(target instanceof Actor)) {
+			logger.warn("onCast: Cannot deal damage to non-Actor target.");
+			return;
+		}
+
 		int damage = getDamage(context, player, desc, source, target);
-		
 		boolean ignoreSpellDamage = desc.getBool(SpellArg.IGNORE_SPELL_DAMAGE);
 		context.getLogic().damage(player, (Actor) target, damage, source, ignoreSpellDamage);
 	}

@@ -11,10 +11,8 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "ReceiveRandomCardSpell",
-        "cards": [
-          "spell_burning_ember"
-        ]
+        "class": "ReceiveCardSpell",
+        "card": "spell_burning_ember"
       },
       {
         "class": "AddEnchantmentSpell",

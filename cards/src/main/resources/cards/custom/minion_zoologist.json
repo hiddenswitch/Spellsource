@@ -18,7 +18,10 @@
     },
     "targetSelection": "NONE",
     "spell": {
-      "class": "PutRandomSecretIntoPlaySpell"
+      "class": "PutRandomSecretIntoPlaySpell",
+      "cardSource": {
+        "class": "DeckSource"
+      }
     }
   },
   "attributes": {
@@ -26,12 +29,5 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1,
-  "glow": {
-    "class": "MinionOnBoardCondition",
-    "cardFilter": {
-      "class": "RaceFilter",
-      "race": "BEAST"
-    }
-  }
+  "fileFormatVersion": 1
 }
