@@ -12,6 +12,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -111,6 +112,10 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		applies &= !(getCardType() != null
 				&& !card.getCardType().isCardType(getCardType()));
 
+		// If a filter is specified, does it satisfy the filter?
+		applies &= !(getFilter() != null
+				&& !getFilter().matches(context, player, card, host));
+
 		return applies;
 	}
 
@@ -132,6 +137,10 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 	protected Object get(CardCostModifierArg arg) {
 		return desc.get(arg);
+	}
+
+	protected EntityFilter getFilter() {
+		return (EntityFilter) desc.get(CardCostModifierArg.FILTER);
 	}
 
 	protected CardType getCardType() {

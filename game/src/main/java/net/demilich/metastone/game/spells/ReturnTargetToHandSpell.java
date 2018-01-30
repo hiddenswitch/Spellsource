@@ -38,14 +38,19 @@ public class ReturnTargetToHandSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		if (target == null) {
+			logger.warn("onCast: Could not return null target.");
+			return;
+		}
+
 		SpellDesc cardSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 		Player owner = context.getPlayer(target.getOwner());
 		if (owner.getHand().getCount() >= GameLogic.MAX_HAND_CARDS
 				&& Actor.class.isAssignableFrom(target.getClass())) {
-			logger.debug("{} is destroyed because {}'s hand is full", target, owner.getName());
+			logger.debug("onCast: {} is destroyed because {}'s hand is full", target, owner.getName());
 			context.getLogic().markAsDestroyed((Actor) target);
 		} else {
-			logger.debug("{} is returned to {}'s hand", target, owner.getName());
+			logger.debug("onCast: {} is returned to {}'s hand", target, owner.getName());
 			// The minion might be destroyed or already returned to hand due to Baron Rivendare at this point.
 			// Doomerang may have returned Kingsbane
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());

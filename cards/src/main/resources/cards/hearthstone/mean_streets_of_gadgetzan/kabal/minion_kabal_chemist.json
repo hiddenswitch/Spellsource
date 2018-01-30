@@ -15,7 +15,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReceiveRandomCardSpell",
+      "class": "ReceiveCardSpell",
       "cards": [
         "spell_volcanic_potion",
         "spell_dragonfire_potion",
@@ -27,7 +27,8 @@
         "spell_freezing_potion",
         "spell_greater_healing_potion",
         "spell_blastcrystal_potion"
-      ]
+      ],
+      "randomTarget": true
     }
   },
   "attributes": {

@@ -7,7 +7,7 @@
   "description": "Discover a Minion you played this game. Overload: (1)",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverRandomCardSpell",
+    "class": "DiscoverSpell",
     "spell": {
       "class": "ReceiveCardSpell",
       "targetPlayer": "SELF"

@@ -10,7 +10,7 @@
   "description": "Battlecry and Deathrattle: Add a Spare Part card to your hand.",
   "battlecry": {
     "spell": {
-      "class": "ReceiveRandomCardSpell",
+      "class": "ReceiveCardSpell",
       "cards": [
         "spell_armor_plating",
         "spell_emergency_coolant",
@@ -19,11 +19,12 @@
         "spell_rusty_horn",
         "spell_time_rewinder",
         "spell_whirling_blades"
-      ]
+      ],
+      "randomTarget": true
     }
   },
   "deathrattle": {
-    "class": "ReceiveRandomCardSpell",
+    "class": "ReceiveCardSpell",
     "cards": [
       "spell_armor_plating",
       "spell_emergency_coolant",
@@ -32,7 +33,8 @@
       "spell_rusty_horn",
       "spell_time_rewinder",
       "spell_whirling_blades"
-    ]
+    ],
+    "randomTarget": true
   },
   "attributes": {
     "BATTLECRY": true,

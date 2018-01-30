@@ -14,6 +14,9 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class ReceiveCardSpell extends Spell {
@@ -53,10 +56,21 @@ public class ReceiveCardSpell extends Spell {
 		} else if (desc.containsKey(SpellArg.CARD) || desc.containsKey(SpellArg.CARDS)) {
 			// If a card isn't received from a filter, it's coming from a description
 			// These cards should always be copies
-			for (Card card : SpellUtils.getCards(context, desc)) {
-				// Move at most one card from discover or create a card. Handled by get cards.
+			boolean chooseRandomly = (boolean) desc.getOrDefault(SpellArg.RANDOM_TARGET, false);
+			List<Card> receivableCards = new ArrayList<>(Arrays.asList(SpellUtils.getCards(context, desc)));
+			if (!chooseRandomly) {
+				for (Card card : receivableCards) {
+					// Move at most one card from discover or create a card. Handled by get cards.
+					for (int i = 0; i < count; i++) {
+						card = card.getCopy();
+						context.getLogic().receiveCard(player.getId(), card);
+						SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+
+					}
+				}
+			} else {
 				for (int i = 0; i < count; i++) {
-					card = card.getCopy();
+					final Card card = context.getLogic().removeRandom(receivableCards).getCopy();
 					context.getLogic().receiveCard(player.getId(), card);
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 

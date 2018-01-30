@@ -10,7 +10,7 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "SummonRandomMinionFilteredSpell",
+        "class": "SummonSpell",
         "cardFilter": {
           "class": "CardFilter",
           "race": "BEAST",

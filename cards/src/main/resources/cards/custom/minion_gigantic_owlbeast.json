@@ -6,11 +6,13 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever you cast a Guardian spell, gain +1/+1.",
+  "description": "(Disabled) Whenever you cast a Guardian spell, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "race": "GUARDIAN",
+      "fireCondition": {
+        "class": "OrCondition"
+      },
       "sourcePlayer": "SELF"
     },
     "spell": {
@@ -20,7 +22,7 @@
       "hpBonus": 1
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

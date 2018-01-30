@@ -10,7 +10,19 @@
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "race": "SURVIVAL",
+      "fireCondition": {
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "cardId": "secret_corpse_explosion"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "cardId": "spell_disengage"
+          }
+        ]
+      },
       "sourcePlayer": "SELF"
     },
     "spell": {

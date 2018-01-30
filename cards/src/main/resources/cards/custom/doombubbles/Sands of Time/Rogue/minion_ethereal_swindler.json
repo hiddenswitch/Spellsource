@@ -13,7 +13,7 @@
       "class": "DiscoverOptionSpell",
       "spells": [
         {
-          "class": "DiscoverRandomCardSpell",
+          "class": "DiscoverSpell",
           "name": "Common",
           "description": "Discover a Common card from your opponent's class",
           "spell": {
@@ -27,7 +27,7 @@
           }
         },
         {
-          "class": "DiscoverRandomCardSpell",
+          "class": "DiscoverSpell",
           "name": "Rare",
           "description": "Discover a Rare card from your opponent's class",
           "spell": {
@@ -41,7 +41,7 @@
           }
         },
         {
-          "class": "DiscoverRandomCardSpell",
+          "class": "DiscoverSpell",
           "name": "Epic",
           "description": "Discover a Epic card from your opponent's class",
           "spell": {
@@ -55,7 +55,7 @@
           }
         },
         {
-          "class": "DiscoverRandomCardSpell",
+          "class": "DiscoverSpell",
           "name": "Lengedary",
           "description": "Discover a Legendary card from your opponent's class",
           "spell": {

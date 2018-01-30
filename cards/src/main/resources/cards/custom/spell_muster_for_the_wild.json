@@ -4,8 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "race": "BEAST_MASTERY",
-  "description": "Summon a Stonetusk Boar, Frog and Timer Wolf.",
+  "description": "Summon a Stonetusk Boar, Frog and Timber Wolf.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

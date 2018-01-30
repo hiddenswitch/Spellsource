@@ -8,7 +8,7 @@
   "description": "Discover a spell. Draw any copies of it from your deck.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverRandomCardSpell",
+    "class": "DiscoverSpell",
     "spell": {
       "class": "ReceiveCardAndDoSomethingSpell",
       "spell": {

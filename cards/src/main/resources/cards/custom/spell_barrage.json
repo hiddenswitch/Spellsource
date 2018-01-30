@@ -4,20 +4,19 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "race": "MARKSMAN",
-  "description": "Deal *1* damage to all enemy minions twice. ",
+  "description": "Deal 1 damage to all enemy minions twice.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "target": "ENEMY_CHARACTERS",
+        "target": "ENEMY_MINIONS",
         "value": 1
       },
       {
         "class": "DamageSpell",
-        "target": "ENEMY_CHARACTERS",
+        "target": "ENEMY_MINIONS",
         "value": 1
       }
     ]

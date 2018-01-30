@@ -11,25 +11,16 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverRandomCardSpell",
+      "class": "DiscoverSpell",
       "spell": {
         "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"
       },
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "race": "BALANCE"
-          },
-          {
-            "class": "CardFilter",
-            "cardType": "MINION",
-            "invert": true
-          }
-        ]
-      }
+      "cards": [
+        "spell_lunar_strike",
+        "spell_starsurge",
+        "spell_sunfire"
+      ]
     }
   },
   "attributes": {

@@ -1,0 +1,49 @@
+{
+  "name": "Cenarion Hyppogryph",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Whenever you cast a Feral spell, give your hero +1 attack this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "fireCondition": {
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "cardId": "spell_feral_spirit"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "cardId": "spell_feral_rage_1"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "cardId": "spell_feral_rage_2"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "cardId": "spell_feral_rage_3"
+          }
+        ]
+      },
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "attackBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -9,7 +9,7 @@
   "race": "MECH",
   "description": "Deathrattle: Put a Spare Part card in your hand.",
   "deathrattle": {
-    "class": "ReceiveRandomCardSpell",
+    "class": "ReceiveCardSpell",
     "cards": [
       "spell_armor_plating",
       "spell_emergency_coolant",
@@ -18,7 +18,8 @@
       "spell_rusty_horn",
       "spell_time_rewinder",
       "spell_whirling_blades"
-    ]
+    ],
+    "randomTarget": true
   },
   "attributes": {
     "DEATHRATTLES": true

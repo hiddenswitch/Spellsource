@@ -14,7 +14,83 @@ import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.stream.Stream;
+
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testVereesaWindrunner() {
+		GymFactory vareesaFactory = getGymFactory((context, player, opponent) -> {
+			playCard(context, player, "minion_vereesa_windrunner");
+		}, (context, player, opponent) -> {
+			Assert.assertEquals(player.getSecrets().size(), 0);
+		});
+
+		GymFactory eaglehornBowFactory = getGymFactory((context, player, opponent) -> {
+			playCard(context, player, "minion_vereesa_windrunner");
+			playCard(context, player, "weapon_eaglehorn_bow");
+		}, (context, player, opponent) -> {
+			Assert.assertEquals(player.getSecrets().size(), 0);
+			Assert.assertEquals(player.getWeaponZone().get(0).getDurability(), player.getWeaponZone().get(0).getBaseDurability() + 1);
+		});
+
+		Stream.of(vareesaFactory, eaglehornBowFactory).forEach(factory -> {
+			Stream.of(
+					"secret_freezing_trap",
+					"secret_snipe",
+					"secret_misdirection",
+					"secret_corpse_explosion"
+			).forEach(noEffectCardId -> {
+				factory.run((context, player, opponent) -> {
+					playCard(context, player, noEffectCardId);
+				});
+			});
+
+			factory.run((context, player, opponent) -> {
+				int opponentHp = opponent.getHero().getHp();
+				playCard(context, player, "secret_explosive_trap");
+				Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 2);
+			});
+
+			factory.run((context, player, opponent) -> {
+				playCard(context, player, "secret_cat_trick");
+				Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_cat_in_a_hat");
+			});
+
+			factory.run((context, player, opponent) -> {
+				MinionCard raptor = (MinionCard) receiveCard(context, player, "minion_bloodfen_raptor");
+				playCard(context, player, "secret_hidden_cache");
+				Minion raptorOnBoard = playMinionCard(context, player, raptor);
+				Assert.assertEquals(raptorOnBoard.getAttack(), raptor.getBaseAttack() + 2);
+				Assert.assertEquals(raptorOnBoard.getHp(), raptor.getBaseHp() + 2);
+			});
+
+			factory.run((context, player, opponent) -> {
+				playCard(context, player, "secret_venomstrike_trap");
+				Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_emperor_cobra");
+			});
+
+			factory.run((context, player, opponent) -> {
+				playCard(context, player, "secret_wandering_monster");
+				Assert.assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), 3);
+			});
+		});
+	}
+
+	@Test
+	public void testFleetfootedScout() {
+		runGym((context, player, opponent) -> {
+			Card card1 = receiveCard(context, player, "spell_barrage");
+			Minion fleetfooted = playMinionCard(context, player, "minion_fleetfooted_scout");
+			Card card2 = receiveCard(context, player, "spell_load_and_lock");
+			Card card3 = receiveCard(context, player, "spell_mirror_image");
+			Stream.of(card1, card2).forEach(c -> Assert.assertEquals(costOf(context, player, c), c.getBaseManaCost() - 1));
+			Assert.assertEquals(costOf(context, player, card3), card3.getBaseManaCost());
+			playCardWithTarget(context, player, "spell_fireball", fleetfooted);
+			Stream.of(card1, card2).forEach(c -> Assert.assertEquals(costOf(context, player, c), c.getBaseManaCost()));
+			Assert.assertEquals(costOf(context, player, card3), card3.getBaseManaCost());
+		});
+	}
 
 	@Test
 	public void testSecretGarden() {

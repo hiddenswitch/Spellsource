@@ -9,9 +9,21 @@
   "description": "Your Marksman spells cost (1) less.",
   "cardCostModifier": {
     "class": "CardCostModifier",
-    "value": -1,
-    "race": "MARKSMAN",
-    "cardType": "SPELL"
+    "value": 1,
+    "operation": "SUBTRACT",
+    "filter": {
+      "class": "OrFilter",
+      "filters": [
+        {
+          "class": "SpecificCardFilter",
+          "cardId": "spell_barrage"
+        },
+        {
+          "class": "SpecificCardFilter",
+          "cardId": "spell_load_and_lock"
+        }
+      ]
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

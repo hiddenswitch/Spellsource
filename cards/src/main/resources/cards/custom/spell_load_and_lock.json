@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "EPIC",
-  "race": "MARKSMAN",
   "description": "Each time you cast a spell this turn, add a random Marksman spell to your hand.",
   "targetSelection": "NONE",
   "spell": {
@@ -17,11 +16,11 @@
       },
       "spell": {
         "class": "ReceiveCardSpell",
-        "cardFilter": {
-          "class": "CardFilter",
-          "race": "MARKSMAN",
-          "cardType": "SPELL"
-        }
+        "randomTarget": true,
+        "cards": [
+          "spell_barrage",
+          "spell_load_and_lock"
+        ]
       },
       "oneTurn": true
     }

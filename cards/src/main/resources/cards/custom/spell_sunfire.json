@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "COMMON",
-  "race": "BALANCE",
   "description": "Deal 1 damage to an enemy and 0 damage to all other enemies.",
   "targetSelection": "ENEMY_CHARACTERS",
   "spell": {

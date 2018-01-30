@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "race": "BEAST_MASTERY",
   "description": "Give a minion +1/+4 and Taunt. When it dies, summon a Silverback Patriarch.",
   "targetSelection": "MINIONS",
   "spell": {
