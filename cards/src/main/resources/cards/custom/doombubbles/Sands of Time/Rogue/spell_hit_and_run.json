@@ -1,0 +1,27 @@
+{
+	"name": "Hit and Run",
+	"baseManaCost": 5,
+	"type": "SPELL",
+	"heroClass": "ROGUE",
+	"rarity": "COMMON",
+	"description": "Deal *5* damage. Add a 'Shadowstep'to your hand.",
+	"targetSelection": "ANY",
+	"race": "SUBTLETY",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"value": 2
+			},
+			{
+				"class": "ReceiveCardSpell",
+				"targetPlayer": "SELF",
+				"card": "spell_shadowstep"
+			}
+		]
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

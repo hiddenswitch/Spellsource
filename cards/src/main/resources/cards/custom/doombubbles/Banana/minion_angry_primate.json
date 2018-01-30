@@ -1,0 +1,25 @@
+{
+	"name": "Angry Primate",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "BEAST",
+	"description": "Battlecry: Add a Banana to your hand.",
+	"battlecry": {
+		"spell": {
+			"class": "ReceiveRandomCardSpell",
+			"cards": [
+				"spell_bananas"
+			]
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

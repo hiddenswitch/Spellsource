@@ -1,0 +1,30 @@
+{
+	"name": "Communion of DOOM!",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "EPIC",
+	"description": "Destroy all minions. Discard a card for each enemy.",
+	"targetSelection": "NONE",
+	"race": "DESTRUCTION",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DestroySpell",
+				"target": "ALL_MINIONS"
+				
+			},
+			{
+				"class": "DiscardSpell",
+				"value": {
+					"class": "EntityCounter",
+					"target": "ENEMY_MINIONS"
+				}
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

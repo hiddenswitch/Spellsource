@@ -1,0 +1,15 @@
+{
+	"name": "Blood Plague",
+	"description": "At the end of each turn, take 2 damage.",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "DEATH_KNIGHT",
+	"rarity": "FREE",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "NullSpell"
+	},
+	"collectible": false,
+	"set": "MEAN_STEETS_OF_GADGETZAN",
+	"fileFormatVersion": 1
+}

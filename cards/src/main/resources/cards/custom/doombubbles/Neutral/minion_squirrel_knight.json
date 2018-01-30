@@ -1,0 +1,22 @@
+{
+	"name": "Squirrel Knight",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "BEAST",
+	"description": "Charge. Deathrattle: Summon a 0/1 Frog with Taunt.",
+	"deathrattle": {
+		"class": "SummonSpell",
+		"card": "token_frog"
+	},
+	"attributes": {
+		"DEATHRATTLES": true,
+		"CHARGE": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

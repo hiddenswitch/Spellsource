@@ -1,0 +1,27 @@
+{
+	"name": "Riverside Bowman",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "HUNTER",
+	"rarity": "COMMON",
+	"description": "Battlecry: Your Hero Power can target minions this turn.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "AddAttributeSpell",
+			"target": "FRIENDLY_PLAYER",
+			"attribute": "HERO_POWER_CAN_TARGET_MINIONS",
+			"revertTrigger": {
+				"class": "TurnEndTrigger"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "BATTLE_FOR_ASHENVALE",
+	"fileFormatVersion": 1
+}

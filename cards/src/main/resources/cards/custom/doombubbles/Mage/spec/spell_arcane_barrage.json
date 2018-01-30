@@ -1,0 +1,42 @@
+{
+	"name": "Arcane Barrage",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "MAGE",
+	"rarity": "RARE",
+	"description": "Deal *3* damage. If you're not holding any Fire or Frost spells, deal *5* instead.",
+	"targetSelection": "ANY",
+	"race": "ARCANE",
+	"spell": {
+		"class": "DamageSpell",
+		"value": {
+			"class": "ConditionalValueProvider",
+			"ifTrue": 5,
+			"ifFalse": 3,
+			"condition": {
+				"class": "AndCondition",
+				"conditions": [
+					{
+						"class": "HoldsCardCondition",
+						"cardFilter": {
+							"class": "CardFilter",
+							"race": "FIRE"
+						},
+						"invert": true
+					},
+					{
+						"class": "HoldsCardCondition",
+						"cardFilter": {
+							"class": "CardFilter",
+							"race": "FROST"
+						},
+						"invert": true
+					}
+				]
+			}
+		}
+	},
+	"collectible": false,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

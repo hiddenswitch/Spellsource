@@ -1,0 +1,25 @@
+{
+	"name": "Running on Empty",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "COMMON",
+	"description": "Give a minion +2/+2. Discard a random card.",
+	"targetSelection": "MINIONS",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "BuffSpell",
+				"attackBonus": 2,
+				"hpBonus": 2
+			},
+			{
+				"class": "DiscardSpell"
+			}
+		]
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,28 @@
+{
+	"name": "Instant Evolution",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "SHAMAN",
+	"rarity": "RARE",
+	"description": "Transform a friendly minion into a random one that costs at least (7) more.",
+	"targetSelection": "NONE",
+	"race": "ENHANCEMENT",
+	"spell": {
+		"class": "TransformToRandomMinionSpell",
+		"target": "FRIENDLY_MINIONS",
+		"cardFilter": {
+			"class": "CardFilter",
+			"attribute": "BASE_MANA_COST",
+			"value": {
+				"class": "AttributeValueProvider",
+				"target": "SPELL_TARGET",
+				"attribute": "BASE_MANA_COST",
+				"offset": 7
+			},
+			"operation": "GREATER_OR_EQUAL"
+		}
+	},
+	"collectible": true,
+	"set": "THE_OLD_GODS",
+	"fileFormatVersion": 1
+}

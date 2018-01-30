@@ -1,0 +1,37 @@
+{
+	"name": "Judgement Day",
+	"baseManaCost": 5,
+	"type": "SPELL",
+	"heroClass": "PALADIN",
+	"rarity": "FREE",
+	"description": "Deal *{$1}[1]* damage to all minions. Deals 1 more damage for each turn it spends in your hand.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DamageSpell",
+		"value": 1,
+		"target": "ALL_MINIONS"
+	},
+	"passiveTrigger": {
+		"eventTrigger": {
+			"class": "TurnStartTrigger",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "ModifyAttributeSpell",
+			"target": "SELF",
+			"attribute": "SPELL_DAMAGE",
+			"value": 1
+		}
+	},
+	"descValues": [
+		{
+			"class": "AttributeValueProvider",
+			"target": "SELF",
+			"attribute": "SPELL_DAMAGE",
+			"offset": 1
+		}
+	],
+	"collectible": false,
+	"set": "KOBOLDS_AND_CATACOMBS",
+	"fileFormatVersion": 1
+}

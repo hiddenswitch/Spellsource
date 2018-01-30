@@ -1,0 +1,239 @@
+{
+	"name": "Murozond",
+	"baseManaCost": 10,
+	"type": "MINION",
+	"baseAttack": 8,
+	"baseHp": 8,
+	"heroClass": "ANY",
+	"rarity": "LEGENDARY",
+	"race": "DRAGON",
+	"description": "Battlecry: Add an Echo of your hero and the enemy hero to your hand.",
+	"battlecry": {
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "ConditionalSpell",
+					"spells": [
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_malfurion"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_rexxar"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_jaina"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_uther"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_anduin"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_valeera"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_thrall"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_guldan"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_garrosh"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_ragnaros"
+						}
+					],
+					"conditions": [
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "DRUID"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "HUNTER"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "MAGE"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "PALADIN"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "PRIEST"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "ROGUE"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "SHAMAN"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "WARLOCK"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "WARRIOR"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "SELF",
+							"heroClass": "BOSS"
+						}
+					]
+				},
+				{
+					"class": "ConditionalSpell",
+					"spells": [
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_malfurion"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_rexxar"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_jaina"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_uther"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_anduin"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_valeera"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_thrall"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_guldan"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_garrosh"
+						},
+						{
+							"class": "ReceiveCardSpell",
+							"targetPlayer": "SELF",
+							"card": "token_echo_of_ragnaros"
+						}
+					],
+					"conditions": [
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "DRUID"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "HUNTER"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "MAGE"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "PALADIN"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "PRIEST"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "ROGUE"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "SHAMAN"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "WARLOCK"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "WARRIOR"
+						},
+						{
+							"class": "HeroClassCondition",
+							"targetPlayer": "OPPONENT",
+							"heroClass": "BOSS"
+						}
+					]
+				}
+				
+			]
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

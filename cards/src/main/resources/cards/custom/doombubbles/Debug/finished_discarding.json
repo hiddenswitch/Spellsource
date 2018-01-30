@@ -1,0 +1,15 @@
+{
+	"name": "Finished Discarding",
+	"description": "Put an end to this madnesss",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "FREE",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "NullSpell"
+	},
+	"collectible": false,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

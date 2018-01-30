@@ -1,0 +1,32 @@
+{
+    "name": "Echo of Valeera",
+    "baseManaCost": 6,
+    "type": "MINION",
+    "baseAttack": 4,
+    "baseHp": 4,
+    "heroClass": "ROGUE",
+    "rarity": "LEGENDARY",
+    "description": "Combo: Deal 4 damage to a random enemy for each other card you've played this turn.",
+    "battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "MissilesSpell",
+			"target": "ENEMY_CHARACTERS",
+			"value": 4,
+			"howMany": {
+				"class": "AttributeValueProvider",
+				"target": "FRIENDLY_PLAYER",
+				"attribute": "COMBO"
+			}
+		},
+		"condition": {
+			"class": "ComboCondition"
+		}
+	},
+	"attributes": {
+		"COMBO": true
+	},
+    "collectible": false,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

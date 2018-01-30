@@ -1,0 +1,68 @@
+{
+	"name": "Doomsday Attendant",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 4,
+	"heroClass": "DRUID",
+	"rarity": "COMMON",
+	"description": "Choose One - Discover a 10-Cost minion; or Draw one from your deck.",
+	"options": [
+		{
+			"description": "Discover",
+			"targetSelection": "NONE",
+			"spell": {
+				"class": "DiscoverRandomCardSpell",
+				"spell": {
+					"class": "ReceiveCardSpell",
+					"targetPlayer": "SELF"
+				},
+				"cardFilter": {
+					"class": "CardFilter",
+					"manaCost": 10
+				}
+			}
+		},
+		{
+			"description": "Draw",
+			"targetSelection": "NONE",
+			"spell": {
+				"class": "FromDeckToHandSpell",
+				"cardFilter": {
+					"class": "CardFilter",
+					"manaCost": 10
+				}
+			}
+		}
+	],
+	"bothOptions": {
+		"description": "Discover and Draw",
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "DiscoverRandomCardSpell",
+					"spell": {
+						"class": "ReceiveCardSpell",
+						"targetPlayer": "SELF"
+					},
+					"cardFilter": {
+						"class": "CardFilter",
+						"manaCost": 10
+					}
+				},
+				{
+					"class": "FromDeckToHandSpell",
+					"cardFilter": {
+						"class": "CardFilter",
+						"manaCost": 10
+					}
+				}
+			]
+		}
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

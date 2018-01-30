@@ -1,0 +1,32 @@
+{
+    "name": "Chronocaller",
+    "baseManaCost": 8,
+    "type": "MINION",
+    "baseAttack": 6,
+    "baseHp": 6,
+    "heroClass": "ANY",
+    "rarity": "RARE",
+    "race": "NONE",
+    "description": "Battlecry: Recruit two minions that costs (2).",
+    "battlecry": {
+        "targetSelection": "NONE",
+        "spell": {
+			"class": "PutRandomMinionOnBoardSpell",
+			"value": 2,
+			"cardLocation": "DECK",
+			"cardFilter": {
+				"class": "CardFilter",
+				"attribute": "BASE_MANA_COST",
+				"operation": "EQUAL",
+				"cardType": "MINION",
+				"value": 2
+			}
+		}
+    },
+    "attributes": {
+        "BATTLECRY": true
+    },
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

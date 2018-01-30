@@ -1,0 +1,13 @@
+{
+	"name": "Image of T'uure",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "LEGENDARY",
+	"description": "",
+	"collectible": false,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,27 @@
+{
+	"name": "Awaken the Ancients",
+	"baseManaCost": 6,
+	"type": "SPELL",
+	"heroClass": "DRUID",
+	"rarity": "EPIC",
+	"description": "The next minion you play this turn costs 0.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "CardCostModifierSpell",
+		"target": "FRIENDLY_PLAYER",
+		"cardCostModifier": {
+			"class": "OneTurnCostModifier",
+			"cardType": "MINION",
+			"operation": "SET",
+			"value": 0,
+			"expirationTrigger": {
+				"class": "CardPlayedTrigger",
+				"cardType": "MINION",
+				"targetPlayer": "SELF"
+			}
+		}
+	},
+	"collectible": true,
+	"set": "SANDS_OF_TIME",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,34 @@
+{
+    "name": "Gorilla Trader",
+    "baseManaCost": 4,
+    "type": "MINION",
+    "baseAttack": 4,
+    "baseHp": 4,
+    "heroClass": "ANY",
+    "rarity": "RARE",
+    "race": "Beast",
+    "description": "Battlecry: Discard a Banana to add two Coins to your hand.",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "custom.DiscardToDoSpell",
+			"card": "spell_bananas",
+			"spell": {
+				"class": "MetaSpell",
+				"spells": [
+					{
+						"class": "ReceiveCardSpell",
+						"card": "spell_the_coin"
+					},
+					{
+						"class": "ReceiveCardSpell",
+						"card": "spell_the_coin"
+					}
+				]
+			}
+		}
+	},
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+    "name": "Aspiring Paladin",
+    "baseManaCost": 1,
+    "type": "MINION",
+    "baseAttack": 0,
+    "baseHp": 2,
+    "heroClass": "PALADIN",
+    "rarity": "COMMON",
+    "description": "Battlecry: Add a 'Blessing of Might' to your hand.",
+    "battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"card": "spell_blessing_of_might"
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+    "collectible": true,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

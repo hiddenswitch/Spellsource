@@ -1,0 +1,31 @@
+{
+	"name": "Hatches the Dragon",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "LEGENDARY",
+	"race": "DRAGON",
+	"description": "Taunt. After you play a dragon, summon this minion from your deck.",
+	"deckTrigger": {
+		"eventTrigger": {
+			"class": "AfterMinionPlayedTrigger",
+			"targetPlayer": "SELF",
+			"queueCondition": {
+				"class": "RaceCondition",
+				"race": "DRAGON"
+			}
+		},
+		"spell": {
+			"class": "PutMinionOnBoardFromDeckSpell",
+			"target": "SELF"
+		}
+	},
+	"attributes": {
+		"TAUNT": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

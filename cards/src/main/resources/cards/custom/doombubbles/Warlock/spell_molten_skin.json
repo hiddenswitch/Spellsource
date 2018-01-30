@@ -1,0 +1,28 @@
+{
+	"name": "Molten Skin",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "WARLOCK",
+	"rarity": "EPIC",
+	"description": "Deal *3* damage to yourself and gain 9 armor.",
+	"targetSelection": "NONE",
+	"race": "DESTRUCTION",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"target": "FRIENDLY_HERO",
+				"value": 3
+			},
+			{
+				"class": "BuffHeroSpell",
+				"target": "FRIENDLY_HERO",
+				"armorBonus": 9
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,53 @@
+{
+    "name": "Echo of Malfurion",
+    "baseManaCost": 6,
+    "type": "MINION",
+    "baseAttack": 4,
+    "baseHp": 4,
+    "heroClass": "DRUID",
+    "rarity": "LEGENDARY",
+    "description": "Battlecry: Gain the stats of the highest Cost minion in your hand.",
+    "battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "BuffSpell",
+			"target": "SELF",
+			"attackBonus": {
+				"class": "AttributeValueProvider",
+				"target": "FRIENDLY_HAND",
+				"filter": {
+					"class": "CardFilter",
+					"cardType": "MINION",
+					"manaCost": {
+						"class": "HighestAttributeValueProvider",
+						"target": "FRIENDLY_HAND",
+						"attribute": "ACTUAL_MANA_COST"
+					}
+				},
+				"CUSTOM": "HIGHLANDER",
+				"attribute": "ATTACK"
+			},
+			"hpBonus": {
+				"class": "AttributeValueProvider",
+				"target": "FRIENDLY_HAND",
+				"filter": {
+					"class": "CardFilter",
+					"cardType": "MINION",
+					"manaCost": {
+						"class": "HighestAttributeValueProvider",
+						"target": "FRIENDLY_HAND",
+						"attribute": "ACTUAL_MANA_COST"
+					}
+				},
+				"CUSTOM": "HIGHLANDER",
+				"attribute": "HP"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+    "collectible": false,
+    "set": "SANDS_OF_TIME",
+    "fileFormatVersion": 1
+}

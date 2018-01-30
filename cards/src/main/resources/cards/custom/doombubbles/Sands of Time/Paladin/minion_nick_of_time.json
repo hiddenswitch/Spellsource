@@ -1,0 +1,29 @@
+{
+	"name": "Nick of Time",
+	"baseManaCost": 7,
+	"type": "MINION",
+	"baseAttack": 6,
+	"baseHp": 6,
+	"heroClass": "PALADIN",
+	"rarity": "RARE",
+	"description": "Divine Shield. When you draw this, summon two 1/1 Silver Hand Recruits.",
+	"passiveTrigger": {
+		"eventTrigger": {
+			"class": "CardDrawnTrigger",
+			"hostTargetType": "IGNORE_OTHER_TARGETS"
+		},
+		"spell": {
+			"class": "SummonSpell",
+			"cards": [
+				"token_silver_hand_recruit",
+				"token_silver_hand_recruit"
+			]
+		}
+	},
+	"attributes": {
+		"DIVINE_SHIELD": true
+	},
+	"collectible": true,
+	"set": "GOBLINS_VS_GNOMES",
+	"fileFormatVersion": 1
+}
