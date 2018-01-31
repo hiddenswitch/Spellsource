@@ -11,7 +11,7 @@
     "class": "ModifyMaxManaSpell",
     "value": 1
   },
-  "attribute": {
+  "attributes": {
     "DEATHRATTLES": true
   },
   "collectible": false,
