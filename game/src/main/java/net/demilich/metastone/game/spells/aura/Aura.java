@@ -125,3 +125,4 @@ public class Aura extends Enchantment {
 		this.entityFilter = entityFilter;
 	}
 }
+

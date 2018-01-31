@@ -1,0 +1,105 @@
+{
+  "name": "Archmage Vargoth",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you cast a spell, add a random spell from of same Specialization to your hand.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "fireCondition": {
+          "class": "OrCondition",
+          "conditions": [
+            {
+              "class": "CardPropertyCondition",
+              "cardId": "spell_arcane_barrage"
+            },
+            {
+              "class": "CardPropertyCondition",
+              "cardId": "spell_temporal_flux"
+            },
+            {
+              "class": "CardPropertyCondition",
+              "cardId": "spell_evocation"
+            },
+            {
+              "class": "CardPropertyCondition",
+              "cardId": "spell_presence_of_mind"
+            }
+          ]
+        },
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_arcane_barrage",
+          "spell_temporal_flux",
+          "spell_evocation",
+          "spell_presence_of_mind"
+        ],
+        "randomTarget": true
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "fireCondition": {
+          "class": "OrCondition",
+          "conditions": [
+            {
+              "class": "CardPropertyCondition",
+              "cardId": "spell_glacial_spike"
+            },
+            {
+              "class": "CardPropertyCondition",
+              "cardId": "spell_frost_bomb"
+            }
+          ]
+        },
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_glacial_spike"
+        ],
+        "randomTarget": true
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "fireCondition": {
+          "class": "OrCondition",
+          "conditions": [
+            {
+              "class": "CardPropertyCondition",
+              "cardId": "secret_surprise_insect"
+            },
+            {
+              "class": "CardPropertyCondition",
+              "cardId": "spell_scorch"
+            }
+          ]
+        },
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "secret_surprise_insect",
+          "spell_scorch"
+        ],
+        "randomTarget": true
+      }
+    }
+  ],
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

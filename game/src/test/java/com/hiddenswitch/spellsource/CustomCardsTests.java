@@ -19,6 +19,49 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testFrostBomb() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion other = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			Minion friendly = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCardWithTarget(context, player, "spell_frost_bomb", target);
+			Assert.assertTrue(target.hasAttribute(Attribute.FROZEN));
+			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
+			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
+			context.endTurn();
+			Assert.assertTrue(target.hasAttribute(Attribute.FROZEN));
+			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
+			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
+			context.endTurn();
+			Assert.assertFalse(target.hasAttribute(Attribute.FROZEN));
+			Assert.assertTrue(other.hasAttribute(Attribute.FROZEN));
+			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion other = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			Minion friendly = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCardWithTarget(context, player, "spell_frost_bomb", target);
+			Assert.assertTrue(target.hasAttribute(Attribute.FROZEN));
+			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
+			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
+			context.endTurn();
+			playCardWithTarget(context,opponent,"spell_fireball",target);
+			Assert.assertTrue(target.isDestroyed());
+			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
+			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
+			context.endTurn();
+			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
+			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
+		});
+	}
+
+	@Test
 	public void testJadeAmbush() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_jade_idol_1");

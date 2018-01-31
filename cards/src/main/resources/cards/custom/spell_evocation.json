@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "RARE",
-  "race": "ARCANE",
   "description": "Gain 4 Mana Crystals this turn only.",
   "targetSelection": "NONE",
   "spell": {

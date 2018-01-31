@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "COMMON",
-  "race": "FROST",
   "description": "Freeze an enemy minion. At the start of your next turn, it freezes all other enemy minions.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
@@ -13,6 +12,7 @@
       {
         "class": "AddEnchantmentSpell",
         "trigger": {
+          "persistentOwner": true,
           "eventTrigger": {
             "class": "TurnStartTrigger",
             "targetPlayer": "SELF"
@@ -22,7 +22,7 @@
             "target": "OTHER_ENEMY_MINIONS",
             "attribute": "FROZEN"
           },
-          "oneTurn": true
+          "maxFires": 1
         }
       },
       {
