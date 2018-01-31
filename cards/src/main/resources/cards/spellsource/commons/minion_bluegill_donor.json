@@ -16,6 +16,9 @@
       "targetPlayer": "OPPONENT"
     }
   },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
   "set": "SPELLSOURCE",
   "fileFormatVersion": 1
