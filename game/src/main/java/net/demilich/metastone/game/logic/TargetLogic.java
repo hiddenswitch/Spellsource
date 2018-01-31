@@ -2,6 +2,7 @@ package net.demilich.metastone.game.logic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -264,9 +265,17 @@ public class TargetLogic implements Serializable {
 		} else if (targetKey.equals(EntityReference.SELF)) {
 			return singleTargetAsList(source);
 		} else if (targetKey.equals(EntityReference.EVENT_TARGET)) {
-			return singleTargetAsList(context.resolveSingleTarget(context.getEventTargetStack().peek()));
+			EntityReference target = context.getEventTargetStack().peek();
+			if (target.equals(EntityReference.NONE)) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(context.resolveSingleTarget(target));
 		} else if (targetKey.equals(EntityReference.EVENT_SOURCE)) {
-			return singleTargetAsList(context.resolveSingleTarget(context.getEventSourceStack().peek()));
+			EntityReference target = context.getEventSourceStack().peek();
+			if (target.equals(EntityReference.NONE)) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(context.resolveSingleTarget(target));
 		} else if (targetKey.equals(EntityReference.TARGET)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TARGET)));
 		} else if (targetKey.equals(EntityReference.SPELL_TARGET)) {

@@ -19,6 +19,25 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testJadeAmbush() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_jade_idol_1");
+			Minion originalJade = player.getMinions().get(0);
+			playCard(context, player, "secret_jade_ambush");
+			context.endTurn();
+			Minion hound = playMinionCard(context, opponent, "token_hound");
+			attack(context, opponent, hound, originalJade);
+			Assert.assertEquals(player.getSecrets().size(), 0, "Jade Ambush should have triggered.");
+			Assert.assertEquals(player.getMinions().size(), 2, "The player should have two jade golems");
+			Minion newJade = player.getMinions().get(1);
+			Assert.assertEquals(newJade.getHp(), 1, "The second jade should have 1 HP left.");
+			Assert.assertEquals(newJade.getAttributeValue(Attribute.LAST_HIT), 1, "The second jade should have taken 1 damage");
+			Assert.assertTrue(hound.isDestroyed());
+			Assert.assertFalse(originalJade.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testVereesaWindrunner() {
 		GymFactory vareesaFactory = getGymFactory((context, player, opponent) -> {
 			playCard(context, player, "minion_vereesa_windrunner");

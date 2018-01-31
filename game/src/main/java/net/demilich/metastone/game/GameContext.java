@@ -922,7 +922,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 * Tries to find the entity references by the {@link EntityReference}.
 	 *
 	 * @param targetKey The reference to find.
-	 * @return The {@link Entity} pointed to by the {@link EntityReference}.
+	 * @return The {@link Entity} pointed to by the {@link EntityReference}, or {@code null} if the provided entity
+	 * reference was {@code null} or {@link EntityReference#NONE}
 	 * @throws NullPointerException if the reference could not be found. Game rules shouldn't be looking for references
 	 *                              that cannot be found.
 	 */

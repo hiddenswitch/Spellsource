@@ -1,12 +1,14 @@
 package net.demilich.metastone.game.spells;
 
 import java.util.Map;
+import java.util.stream.Stream;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
@@ -22,6 +24,11 @@ public class ChangeHeroSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String heroCardId = (String) desc.get(SpellArg.CARD);
 		HeroCard heroCard = (HeroCard) context.getCardById(heroCardId);
-		context.getLogic().changeHero(player, heroCard.createHero());
+		Hero hero = heroCard.createHero();
+		context.getLogic().changeHero(player, hero);
+
+		desc.subSpells(0).forEach(subSpell -> {
+			SpellUtils.castChildSpell(context, player, subSpell, source, target, hero);
+		});
 	}
 }
