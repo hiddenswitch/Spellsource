@@ -14,6 +14,9 @@
       "card": "hero_power_die_insect"
     }
   },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
