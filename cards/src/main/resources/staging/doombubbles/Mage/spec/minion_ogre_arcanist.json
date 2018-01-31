@@ -7,8 +7,9 @@
   "baseHp": 4,
   "rarity": "RARE",
   "description": "Your Arcane spells get double bonus from Spell Damage.",
-  "attributes": {
-    "DOUBLE_RACE_SPELL_DAMAGE": "ARCANE"
+  "aura": {
+    "class": "CardAura",
+    "applyEffect":
   },
   "collectible": true,
   "set": "CUSTOM",

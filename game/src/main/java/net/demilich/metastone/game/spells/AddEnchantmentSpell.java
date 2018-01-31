@@ -42,6 +42,7 @@ public class AddEnchantmentSpell extends Spell {
 
 		if (triggerDesc != null) {
 			Enchantment enchantment = triggerDesc.create();
+			enchantment.setOwner(player.getId());
 			context.getLogic().addGameEventListener(player, enchantment, target);
 		}
 

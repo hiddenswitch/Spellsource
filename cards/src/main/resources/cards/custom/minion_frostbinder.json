@@ -10,7 +10,19 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
-      "race": "FROST",
+      "fireCondition": {
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "cardId": "spell_glacial_spike"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "cardId": "spell_frost_bomb"
+          }
+        ]
+      },
       "sourcePlayer": "SELF"
     },
     "spell": {

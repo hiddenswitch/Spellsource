@@ -8,6 +8,7 @@
   "rarity": "RARE",
   "description": "Battlecry: Freeze all enemy minions. Deathrattle: Destroy all frozen minions.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
       "target": "ENEMY_MINIONS",

@@ -16,7 +16,7 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "SummonCopySpell",
+      "class": "SummonSpell",
       "target": "SELF"
     }
   },

@@ -220,6 +220,10 @@ public class TargetLogic implements Serializable {
 			List<Entity> targets = this.getEntities(context, player, TargetSelection.FRIENDLY_MINIONS);
 			targets.remove(source);
 			return targets;
+		} else if (targetKey.equals(EntityReference.OTHER_ENEMY_MINIONS)) {
+			List<Entity> targets = this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
+			targets.remove(source);
+			return targets;
 		} else if (targetKey.equals(EntityReference.ALL_OTHER_CHARACTERS)) {
 			List<Entity> targets = this.getEntities(context, player, TargetSelection.ANY);
 			targets.remove(source);
