@@ -7,6 +7,8 @@ import java.lang.reflect.Array;
 import java.util.List;
 
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
@@ -59,6 +61,18 @@ public class CardValidationTests {
 		try {
 			CardCatalogueRecord record = CARD_PARSER.parseCard(new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true));
 			Assert.assertFalse(record.getDesc().heroClass == null && (record.getDesc().heroClasses == null || record.getDesc().heroClasses.length == 0));
+			String description = record.getDesc().description;
+			if (description != null) {
+				AttributeMap attributes = record.getDesc().attributes;
+				if (description.startsWith("Battlecry:")) {
+					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY), "A Battlecry card is missing a battlecry attribute.");
+				}
+
+				if (description.startsWith("Deathrattle:")) {
+					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.DEATHRATTLES));
+				}
+
+			}
 		} catch (Exception ex) {
 			System.err.println(ex);
 			Assert.fail(cardFile.getName(), ex);

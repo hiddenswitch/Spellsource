@@ -11,6 +11,9 @@
     "class": "ModifyMaxManaSpell",
     "value": 1
   },
+  "attribute": {
+    "DEATHRATTLES": true
+  },
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
