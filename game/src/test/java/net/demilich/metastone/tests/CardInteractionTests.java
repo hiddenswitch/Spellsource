@@ -236,10 +236,7 @@ public class CardInteractionTests extends TestBase {
 		context.endTurn();
 		Card repentance = CardCatalogue.getCardById("secret_repentance");
 		playCard(context, paladin, repentance);
-
 		context.endTurn();
-		;
-
 		jaraxxus = CardCatalogue.getCardById("minion_lord_jaraxxus");
 		playCard(context, warlock, jaraxxus);
 		Assert.assertEquals(warlock.getHero().getRace(), Race.DEMON);

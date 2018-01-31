@@ -2,7 +2,7 @@
   "name": "Night Run Bow",
   "baseManaCost": 5,
   "type": "WEAPON",
-  "heroClass": "HUNTER",
+  "heroClass": "GREEN",
   "damage": 4,
   "durability": 2,
   "rarity": "EPIC",

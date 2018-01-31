@@ -48,6 +48,7 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 		}
 
 		List<String> inventoryIds = entities.stream()
+				.filter(Objects::nonNull)
 				.filter(Entity::hasPersistentEffects)
 				.map(Entity::getCardInventoryId)
 				.filter(Objects::nonNull)

@@ -40,6 +40,27 @@ import static org.mockito.Mockito.spy;
 public class ClassicTests extends TestBase {
 
 	@Test
+	public void testSpellbender() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_spellbender");
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
+			Assert.assertEquals(player.getSecrets().size(), 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_spellbender");
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_fireball", bloodfen);
+			Assert.assertEquals(player.getSecrets().size(), 0);
+			Assert.assertEquals(player.getMinions().size(), 1);
+			Assert.assertFalse(bloodfen.isDestroyed());
+			Assert.assertTrue(player.getGraveyard().stream().anyMatch(e -> e.getSourceCard().getCardId().equals("token_spellbender")));
+		});
+	}
+
+	@Test
 	public void testYsera() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_ysera");

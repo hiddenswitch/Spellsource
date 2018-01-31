@@ -15,9 +15,10 @@
       "sourcePlayer": "SELF"
     },
     "spell": {
-      "class": "SummonNewAttackTargetSpell",
+      "class": "SummonSpell",
       "spell": {
         "class": "RecastSpell",
+        "target": "OUTPUT",
         "card": "PENDING_CARD"
       },
       "boardPositionRelative": "RIGHT",
