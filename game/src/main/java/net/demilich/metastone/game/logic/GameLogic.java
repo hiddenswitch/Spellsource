@@ -942,11 +942,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// Keyword effects for lifesteal and poisonous will come BEFORE all other events
 			// Poisonous resolves in a queue with higher priority, and it stops Grim Patron spawning regardless of
 			// Dominant Player. However, Acidmaw can never stop Grim Patron spawning.
-			if (source.hasAttribute(Attribute.POISONOUS)
+			if (target.getEntityType() == EntityType.MINION
+					&& (source.hasAttribute(Attribute.POISONOUS)
 					|| (source instanceof Hero
 					&& ((Hero) source).getWeapon() != null
-					&& ((Hero) source).getWeapon().hasAttribute(Attribute.POISONOUS))
-					&& target.getEntityType() == EntityType.MINION) {
+					&& ((Hero) source).getWeapon().hasAttribute(Attribute.POISONOUS)))) {
 				markAsDestroyed(target);
 			}
 
