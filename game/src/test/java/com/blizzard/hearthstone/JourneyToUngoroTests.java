@@ -32,6 +32,17 @@ import java.util.stream.Stream;
 public class JourneyToUngoroTests extends TestBase {
 
 	@Test
+	public void testPoisonousKillsHeroes() {
+		runGym((context, player, opponent) -> {
+			Minion cobra = playMinionCard(context, player, "minion_emperor_cobra");
+			int opponentHp = opponent.getHero().getHp();
+			attack(context, player, cobra, opponent.getHero());
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - cobra.getAttack());
+			Assert.assertFalse(opponent.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testNestingRoc() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_bloodfen_raptor");
