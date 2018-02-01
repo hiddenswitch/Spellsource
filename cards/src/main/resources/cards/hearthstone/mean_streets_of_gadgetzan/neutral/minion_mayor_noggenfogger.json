@@ -33,9 +33,6 @@
       }
     }
   ],
-  "attributes": {
-    "RANDOM_TARGETS": true
-  },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",
   "fileFormatVersion": 1

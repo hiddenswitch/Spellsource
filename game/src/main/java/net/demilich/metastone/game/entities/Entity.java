@@ -149,15 +149,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The name.
 	 */
 	public String getName() {
-		if (hasAttribute(Attribute.NAME)) {
-			final String attributeName = (String) getAttribute(Attribute.NAME);
-			if (attributeName == null) {
-				return name;
-			}
-			return attributeName;
-		}
-
-		return name;
+		return getAttributes().getOrDefault(Attribute.NAME, name);
 	}
 
 	/**
@@ -192,14 +184,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return {@code true} if it has the attribute.
 	 */
 	public boolean hasAttribute(Attribute attribute) {
-		Object value = getAttributes().get(attribute);
-		if (value == null) {
-			return false;
-		}
-		if (value instanceof Integer) {
-			return ((int) value) != 0;
-		}
-		return true;
+		return getAttributes().has(attribute);
 	}
 
 	/**
@@ -243,11 +228,14 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public void setAttribute(Attribute attribute) {
 		clearSilence(attribute);
-		getAttributes().put(attribute, 1);
+		if (attribute == Attribute.SPELL_DAMAGE) {
+			throw new RuntimeException();
+		}
+		getAttributes().put(attribute, true);
 	}
 
 	private void clearSilence(Attribute attribute) {
-		if (!GameLogic.immuneToSilence.contains(attribute)) {
+		if (!GameLogic.IMMUNE_TO_SILENCE.contains(attribute)) {
 			getAttributes().remove(Attribute.SILENCED);
 		}
 	}
