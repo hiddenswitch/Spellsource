@@ -24,6 +24,22 @@ import java.util.stream.Stream;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	public void testGeosculptorYip() {
+		for (int j = 0; j <= 20; j++) {
+			final int i = j;
+			final int expectedCost = Math.min(10, i);
+			runGym((context, player, opponent) -> {
+				context.getLogic().gainArmor(player, i);
+				playCard(context, player, "minion_geosculptor_yip");
+				context.endTurn();
+				Assert.assertEquals(player.getMinions().size(), 2);
+				Assert.assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), expectedCost);
+			});
+		}
+
+	}
+
+	@Test
 	public void testDiamondSpellstone() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
