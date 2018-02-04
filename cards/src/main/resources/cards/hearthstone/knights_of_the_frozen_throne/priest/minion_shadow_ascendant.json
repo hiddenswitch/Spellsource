@@ -15,8 +15,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_MINIONS",
-      "attackBonus": 2,
-      "hpBonus": 2,
+      "attackBonus": 1,
+      "hpBonus": 1,
       "randomTarget": true
     }
   },
