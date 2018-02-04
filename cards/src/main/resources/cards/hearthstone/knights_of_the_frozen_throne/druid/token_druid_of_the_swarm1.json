@@ -7,9 +7,9 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "",
+  "description": "Poisonous.",
   "attributes": {
-    "POISONOUUS": true
+    "POISONOUS": true
   },
   "collectible": false,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
