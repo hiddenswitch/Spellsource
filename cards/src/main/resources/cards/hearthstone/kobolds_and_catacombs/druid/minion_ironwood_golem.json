@@ -7,34 +7,23 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "description": "Taunt. Can only attack if you have 3 or more Armor.",
-  "trigger": {
-    "eventTrigger": {
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "secondaryTrigger": {
       "class": "ArmorChangedTrigger",
       "targetPlayer": "SELF"
     },
-    "spell": {
-      "class": "EitherOrSpell",
-      "condition": {
-        "class": "AttributeCondition",
-        "target": "FRIENDLY_HERO",
-        "value": 3,
-        "attribute": "ARMOR",
-        "operation": "GREATER_OR_EQUAL"
-      },
-      "spell1": {
-        "class": "RemoveAttributeSpell",
-        "target": "SELF",
-        "attribute": "CANNOT_ATTACK"
-      },
-      "spell2": {
-        "class": "AddAttributeSpell",
-        "target": "SELF",
-        "attribute": "CANNOT_ATTACK"
-      }
-    }
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_HERO",
+      "value": 3,
+      "attribute": "ARMOR",
+      "operation": "LESS"
+    },
+    "attribute": "CANNOT_ATTACK"
   },
   "attributes": {
-    "CANNOT_ATTACK": true,
     "TAUNT": true
   },
   "collectible": true,

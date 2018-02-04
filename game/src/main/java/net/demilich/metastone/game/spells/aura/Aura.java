@@ -10,6 +10,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.BoardChangedTrigger;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
@@ -22,20 +23,27 @@ public class Aura extends Enchantment {
 	private SpellDesc applyAuraEffect;
 	private SpellDesc removeAuraEffect;
 	private EntityFilter entityFilter;
+	private Condition condition;
 
 	private SortedSet<Integer> affectedEntities = new TreeSet<>();
 
 	public Aura(AuraDesc desc) {
-		this(desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
+		this(desc.getSecondaryTrigger() == null ? null : desc.getSecondaryTrigger().create(), desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
 		setEntityFilter(desc.getFilter());
+		setCondition(desc.getCondition());
 	}
 
-	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection, EntityFilter entityFilter) {
+	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection, EntityFilter entityFilter, Condition condition) {
 		super(new BoardChangedTrigger(), secondaryTrigger, applyAuraEffect, false);
 		this.applyAuraEffect = applyAuraEffect;
 		this.removeAuraEffect = removeAuraEffect;
 		this.targets = targetSelection;
 		this.entityFilter = entityFilter;
+		this.condition = condition;
+	}
+
+	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection, EntityFilter entityFilter) {
+		this(secondaryTrigger, applyAuraEffect, removeAuraEffect, targetSelection, entityFilter, null);
 	}
 
 	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection) {
@@ -47,11 +55,13 @@ public class Aura extends Enchantment {
 	}
 
 	protected boolean affects(GameContext context, Player player, Entity target, List<Entity> resolvedTargets) {
-		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, target, context.resolveSingleTarget(getHostReference()))) {
+		Entity source = context.resolveSingleTarget(getHostReference());
+		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, target, source)) {
 			return false;
 		}
 
-		return resolvedTargets.contains(target);
+		boolean conditionFulfilled = getCondition() == null || getCondition().isFulfilled(context, player, target, source);
+		return conditionFulfilled && resolvedTargets.contains(target);
 	}
 
 	@Override
@@ -123,5 +133,13 @@ public class Aura extends Enchantment {
 
 	public void setEntityFilter(EntityFilter entityFilter) {
 		this.entityFilter = entityFilter;
+	}
+
+	public Condition getCondition() {
+		return condition;
+	}
+
+	private void setCondition(Condition condition) {
+		this.condition = condition;
 	}
 }

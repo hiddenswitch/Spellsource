@@ -766,6 +766,20 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	}
 
 	@Test
+	public void testOakenSummonsIronwoodGolemInteraction() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_ironwood_golem");
+			playCard(context, player, "spell_oaken_summons");
+			Minion ironwoodGolem = player.getMinions().get(0);
+			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
+			Assert.assertFalse(ironwoodGolem.hasAttribute(Attribute.CANNOT_ATTACK));
+			context.endTurn();
+			context.endTurn();
+			Assert.assertTrue(ironwoodGolem.canAttackThisTurn());
+		});
+	}
+
+	@Test
 	public void testIronwoodGolem() {
 		runGym((context, player, opponent) -> {
 			Minion ironwoodGolem = playMinionCard(context, player, "minion_ironwood_golem");
@@ -779,6 +793,16 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			context.endTurn();
 			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
 			context.endTurn();
+			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_oaken_summons");
+			Minion ironwoodGolem = playMinionCard(context, player, "minion_ironwood_golem");
+			context.endTurn();
+			context.endTurn();
+			Assert.assertTrue(ironwoodGolem.canAttackThisTurn());
+			playCardWithTarget(context, player, "spell_fireball", player.getHero());
 			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
 		});
 	}
