@@ -88,7 +88,7 @@ public class DiscoverSpell extends Spell {
 			}
 
 			final HasWeights weightedSource = (HasWeights) cardSource;
-			final Bag<Card> weightedOptions = new TreeBag<>();
+			final Bag<Card> weightedOptions = new HashBag<>();
 
 			final TargetPlayer targetPlayer = cardSource.getTargetPlayer();
 
