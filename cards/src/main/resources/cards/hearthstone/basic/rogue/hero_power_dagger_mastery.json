@@ -1,10 +1,10 @@
 {
-  "name": "The Blade",
+  "name": "Dagger Mastery",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BLACK",
   "rarity": "FREE",
-  "description": "Equip a 1/2 Blade.",
+  "description": "Equip a 1/2 Dagger.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalSpell",
