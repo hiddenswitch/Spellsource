@@ -15,22 +15,22 @@
         "conditions": [
           {
             "class": "CardPropertyCondition",
-            "target": "EVENT_TARGET",
+            "target": "EVENT_SOURCE",
             "cardId": "spell_feral_spirit"
           },
           {
             "class": "CardPropertyCondition",
-            "target": "EVENT_TARGET",
+            "target": "EVENT_SOURCE",
             "cardId": "spell_feral_rage_1"
           },
           {
             "class": "CardPropertyCondition",
-            "target": "EVENT_TARGET",
+            "target": "EVENT_SOURCE",
             "cardId": "spell_feral_rage_2"
           },
           {
             "class": "CardPropertyCondition",
-            "target": "EVENT_TARGET",
+            "target": "EVENT_SOURCE",
             "cardId": "spell_feral_rage_3"
           }
         ]

@@ -16,15 +16,18 @@
         "conditions": [
           {
             "class": "CardPropertyCondition",
-            "cardId": "spell_lunar_strike"
+            "cardId": "spell_lunar_strike",
+            "target": "EVENT_SOURCE"
           },
           {
             "class": "CardPropertyCondition",
-            "cardId": "spell_starsurge"
+            "cardId": "spell_starsurge",
+            "target": "EVENT_SOURCE"
           },
           {
             "class": "CardPropertyCondition",
-            "cardId": "spell_sunfire"
+            "cardId": "spell_sunfire",
+            "target": "EVENT_SOURCE"
           }
         ]
       }

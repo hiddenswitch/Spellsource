@@ -70,6 +70,10 @@ public class ReceiveCardSpell extends Spell {
 				}
 			} else {
 				for (int i = 0; i < count; i++) {
+					if (receivableCards.isEmpty()) {
+						continue;
+					}
+
 					final Card card = context.getLogic().removeRandom(receivableCards).getCopy();
 					context.getLogic().receiveCard(player.getId(), card);
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);

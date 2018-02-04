@@ -16,8 +16,18 @@
         "targetPlayer": "SELF"
       },
       "cardFilter": {
-        "class": "CardFilter",
-        "manaCost": 1
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "manaCost": 1
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          }
+        ]
       }
     }
   },

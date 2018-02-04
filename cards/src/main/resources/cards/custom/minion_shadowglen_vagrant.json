@@ -15,11 +15,13 @@
         "conditions": [
           {
             "class": "CardPropertyCondition",
-            "cardId": "secret_corpse_explosion"
+            "cardId": "secret_corpse_explosion",
+            "target": "EVENT_SOURCE"
           },
           {
             "class": "CardPropertyCondition",
-            "cardId": "spell_disengage"
+            "cardId": "spell_disengage",
+            "target": "EVENT_SOURCE"
           }
         ]
       },

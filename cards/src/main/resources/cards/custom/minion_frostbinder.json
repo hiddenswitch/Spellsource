@@ -15,11 +15,13 @@
         "conditions": [
           {
             "class": "CardPropertyCondition",
-            "cardId": "spell_glacial_spike"
+            "cardId": "spell_glacial_spike",
+            "target": "EVENT_SOURCE"
           },
           {
             "class": "CardPropertyCondition",
-            "cardId": "spell_frost_bomb"
+            "cardId": "spell_frost_bomb",
+            "target": "EVENT_SOURCE"
           }
         ]
       },

@@ -10,7 +10,7 @@
     "class": "DamageSpell",
     "value": 1
   },
-  "collectible": true,
+  "collectible": false,
   "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
 }

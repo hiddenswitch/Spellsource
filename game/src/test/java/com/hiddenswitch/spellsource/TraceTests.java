@@ -56,6 +56,7 @@ public class TraceTests {
 	}
 
 	@Test
+	@Ignore
 	public void testTraceValid() {
 		Player player1 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD));
 		player1.setBehaviour(new PlayRandomBehaviour());
@@ -70,8 +71,8 @@ public class TraceTests {
 
 	@Test
 	@Ignore
-	public void testTraceTemporalAnomalyNegativeLastHit() {
-		Trace trace = getTrace("negativeLastHit");
+	public void testTraceRemovingNullRandoms() {
+		Trace trace = getTrace("removingNullRandoms");
 		GameContext context = trace.replayContext(false);
 	}
 }

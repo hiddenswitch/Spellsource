@@ -36,6 +36,47 @@ import static java.util.stream.Collectors.toList;
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 	@Test
+	public void testCannotAttackTwiceWithHero() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_wicked_knife");
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
+					ga.getActionType().equals(ActionType.PHYSICAL_ATTACK)
+							&& ga.getSourceReference().equals(player.getHero().getReference())
+							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
+			attack(context, player, player.getHero(), opponent.getHero());
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
+					ga.getActionType().equals(ActionType.PHYSICAL_ATTACK)
+							&& ga.getSourceReference().equals(player.getHero().getReference())
+							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
+			playCard(context, player, "hero_scourgelord_garrosh");
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
+					ga.getActionType().equals(ActionType.PHYSICAL_ATTACK)
+							&& ga.getSourceReference().equals(player.getHero().getReference())
+							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
+		});
+	}
+
+	@Test
+	public void testSkelemancer() {
+		runGym((context, player, opponent) -> {
+			Minion skelemancer = playMinionCard(context, player, "minion_skelemancer");
+			playCardWithTarget(context, player, "spell_fireball", skelemancer);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+			Assert.assertEquals(player.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion skelemancer = playMinionCard(context, player, "minion_skelemancer");
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_fireball", skelemancer);
+			Assert.assertEquals(opponent.getMinions().size(), 0);
+			Assert.assertEquals(player.getMinions().size(), 1);
+			Assert.assertTrue(skelemancer.isDestroyed());
+			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_skeletal_flayer");
+		});
+	}
+
+	@Test
 	public void testObsidianStatueAOEInteraction() {
 		runGym((context, player, opponent) -> {
 			Minion obsidian = playMinionCard(context, player, "minion_obsidian_statue");

@@ -12,6 +12,7 @@ public class FeatureVector implements Cloneable, Serializable {
 		defaultVector.set(WeightedFeature.YELLOW_MODIFIER, -10);
 		defaultVector.set(WeightedFeature.OWN_HP_FACTOR, 1);
 		defaultVector.set(WeightedFeature.OPPONENT_HP_FACTOR, -1);
+		defaultVector.set(WeightedFeature.CURSED_FACTOR, -25);
 		defaultVector.set(WeightedFeature.OWN_CARD_COUNT, 3);
 		defaultVector.set(WeightedFeature.OPPONENT_CARD_COUNT, -3);
 		defaultVector.set(WeightedFeature.MINION_INTRINSIC_VALUE, 1);
@@ -34,6 +35,7 @@ public class FeatureVector implements Cloneable, Serializable {
 		defaultVector.set(WeightedFeature.RED_MODIFIER, -43);
 		defaultVector.set(WeightedFeature.YELLOW_MODIFIER, -17);
 		defaultVector.set(WeightedFeature.OWN_HP_FACTOR, 0.214);
+		defaultVector.set(WeightedFeature.CURSED_FACTOR, -11.912);
 		defaultVector.set(WeightedFeature.OPPONENT_HP_FACTOR, -1.115);
 		defaultVector.set(WeightedFeature.OWN_CARD_COUNT, 3.572);
 		defaultVector.set(WeightedFeature.OPPONENT_CARD_COUNT, 0);

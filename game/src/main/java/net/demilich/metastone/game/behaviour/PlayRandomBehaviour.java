@@ -1,12 +1,11 @@
 package net.demilich.metastone.game.behaviour;
 
-import java.util.*;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
-import org.apache.commons.lang3.RandomUtils;
+
+import java.util.*;
 
 public class PlayRandomBehaviour extends AbstractBehaviour {
 
@@ -19,7 +18,11 @@ public class PlayRandomBehaviour extends AbstractBehaviour {
 
 	@Override
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		return new ArrayList<>(randomSubset(cards, RandomUtils.nextInt(1, 4)));
+		return new ArrayList<>(randomSubset(cards, getRandom(context).nextInt(3) + 1, getRandom(context)));
+	}
+
+	protected Random getRandom(GameContext context) {
+		return random;
 	}
 
 	@Override
@@ -28,12 +31,11 @@ public class PlayRandomBehaviour extends AbstractBehaviour {
 			return validActions.get(0);
 		}
 
-		int randomIndex = random.nextInt(validActions.size());
-		GameAction randomAction = validActions.get(randomIndex);
-		return randomAction;
+		int randomIndex = getRandom(context).nextInt(validActions.size());
+		return validActions.get(randomIndex);
 	}
 
-	public <T> Set<T> randomSubset(List<T> items, int m) {
+	public <T> Set<T> randomSubset(List<T> items, int m, Random random) {
 		HashSet<T> res = new HashSet<T>(m);
 		int n = items.size();
 		for (int i = n - m; i < n; i++) {

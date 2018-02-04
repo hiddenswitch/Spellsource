@@ -13,7 +13,8 @@
       "class": "AfterSpellCastedTrigger",
       "fireCondition": {
         "class": "CardPropertyCondition",
-        "cardId": "spell_bananas"
+        "cardId": "spell_bananas",
+        "target": "EVENT_SOURCE"
       },
       "hostTargetType": "IGNORE_OTHER_TARGETS",
       "sourcePlayer": "BOTH"

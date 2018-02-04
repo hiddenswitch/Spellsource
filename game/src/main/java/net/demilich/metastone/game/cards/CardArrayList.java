@@ -135,7 +135,6 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 		return false;
 	}
 
-	@Override
 	@Deprecated
 	public CardList shuffle() {
 		Collections.shuffle(cards);
