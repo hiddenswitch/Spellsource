@@ -28,36 +28,38 @@ public class CuckooLearner {
 		for (WeightedFeature feature : values.keySet()) {
 			Double weight = values.get(feature);
 			switch (feature) {
-			case MINION_ATTACK_FACTOR:
-			case MINION_DEFAULT_TAUNT_MODIFIER:
-			case MINION_YELLOW_TAUNT_MODIFIER:
-			case MINION_RED_TAUNT_MODIFIER:
-			case MINION_DIVINE_SHIELD_MODIFIER:
-			case MINION_INTRINSIC_VALUE:
-				variant.set(feature, levyClamped(weight, -10, 100));
-				break;
-			case MINION_HP_FACTOR:
-			case MINION_SPELL_POWER_MODIFIER:
-			case MINION_STEALTHED_MODIFIER:
-			case MINION_UNTARGETABLE_BY_SPELLS_MODIFIER:
-			case MINION_WINDFURY_MODIFIER:
-			case HARD_REMOVAL_VALUE:
-				variant.set(feature, levyClamped(weight, 0, 100));
-				break;
-			case OWN_CARD_COUNT:
-			case OWN_HP_FACTOR:
-			case OPPONENT_HP_FACTOR:
-			case OPPONENT_CARD_COUNT:
-				variant.set(feature, levyClamped(weight, -100, 100));
-				break;
-			case RED_MODIFIER:
-				variant.set(feature, levyClamped(weight, -100, 0));
-				break;
-			case YELLOW_MODIFIER:
-				variant.set(feature, levyClamped(weight, -100, 10));
-				break;
-			default:
-				break;
+				case MINION_ATTACK_FACTOR:
+				case MINION_DEFAULT_TAUNT_MODIFIER:
+				case MINION_YELLOW_TAUNT_MODIFIER:
+				case MINION_RED_TAUNT_MODIFIER:
+				case MINION_DIVINE_SHIELD_MODIFIER:
+				case MINION_INTRINSIC_VALUE:
+					variant.set(feature, levyClamped(weight, -10, 100));
+					break;
+				case MINION_HP_FACTOR:
+				case MINION_SPELL_POWER_MODIFIER:
+				case MINION_STEALTHED_MODIFIER:
+				case MINION_UNTARGETABLE_BY_SPELLS_MODIFIER:
+				case MINION_WINDFURY_MODIFIER:
+				case HARD_REMOVAL_VALUE:
+					variant.set(feature, levyClamped(weight, 0, 100));
+					break;
+				case OWN_CARD_COUNT:
+				case OWN_HP_FACTOR:
+				case OPPONENT_HP_FACTOR:
+				case OPPONENT_CARD_COUNT:
+					variant.set(feature, levyClamped(weight, -100, 100));
+					break;
+				case RED_MODIFIER:
+					variant.set(feature, levyClamped(weight, -100, 0));
+					break;
+				case YELLOW_MODIFIER:
+					variant.set(feature, levyClamped(weight, -100, 10));
+					break;
+				case CURSED_FACTOR:
+					variant.set(feature, levyClamped(weight, -100, 0));
+				default:
+					break;
 			}
 		}
 		return variant;

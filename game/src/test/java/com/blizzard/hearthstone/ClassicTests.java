@@ -1,9 +1,6 @@
 package com.blizzard.hearthstone;
 
-import net.demilich.metastone.game.actions.ActionType;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.actions.PlaySpellCardAction;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -37,6 +34,70 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 
 public class ClassicTests extends TestBase {
+
+	@Test
+	public void testAIWillNeverPlayCursed() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			opponent.setMana(2);
+			opponent.setMaxMana(2);
+			receiveCard(context, opponent, "spell_cursed");
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
+			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			opponent.setMana(4);
+			opponent.setMaxMana(4);
+			Card cursed = receiveCard(context, opponent, "spell_cursed");
+			receiveCard(context, opponent, "spell_fireball");
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
+			context.getLogic().performGameAction(opponent.getId(), action);
+			action = behaviour.requestAction(context, opponent, context.getValidActions());
+			context.getLogic().performGameAction(opponent.getId(), action);
+			Assert.assertFalse(opponent.getHand().contains(cursed));
+		});
+	}
+
+	@Test
+	public void testAIWillPlayIntoDoomsayer() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_doomsayer");
+			context.endTurn();
+			receiveCard(context, opponent, "minion_snowflipper_penguin");
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
+			Assert.assertEquals(action.getActionType(), ActionType.END_TURN);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion doomsayer = playMinionCard(context, player, "minion_doomsayer");
+			context.endTurn();
+			for (int i = 0; i < 3; i++) {
+				playMinionCard(context, opponent, "minion_wolfrider");
+			}
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
+			Assert.assertEquals(action.getActionType(), ActionType.PHYSICAL_ATTACK);
+			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion doomsayer = playMinionCard(context, player, "minion_doomsayer");
+			context.endTurn();
+			playMinionCard(context, opponent, "minion_kobold_geomancer");
+			receiveCard(context, opponent, "spell_fireball");
+			opponent.setMaxMana(4);
+			opponent.setMana(4);
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
+			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
+			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());
+		});
+	}
 
 	@Test
 	public void testAIWillPlayIntoSnakeTrap() {

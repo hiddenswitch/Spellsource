@@ -54,6 +54,13 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			return Float.NEGATIVE_INFINITY;
 		}
 		simulation.getLogic().performGameAction(playerId, action);
+
+		// If a Doomsayer is on the board (i.e., not destroyed), don't count friendly minions
+		if (simulation.getPlayers().stream().flatMap(p -> p.getMinions().stream()).anyMatch(c -> c.getSourceCard().getCardId().equals("minion_doomsayer"))) {
+			simulation.getPlayer(playerId).getMinions().forEach(m -> simulation.getLogic().markAsDestroyed(m));
+			simulation.getLogic().endOfSequence();
+		}
+
 		if (timedOut || depth == 0 || simulation.getActivePlayerId() != playerId || simulation.updateAndGetGameOver()) {
 			return heuristic.getScore(simulation, playerId);
 		}
