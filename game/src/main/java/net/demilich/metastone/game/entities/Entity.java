@@ -154,7 +154,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 				&& getSourceCard() != null
 				&& getSourceCard().getCardSet() == CardSet.SPELLSOURCE)
 				|| getEntityType() == EntityType.PLAYER) {
-			return getAttributes().getOrDefault(Attribute.NAME, name);
+			return (String) getAttributes().getOrDefault(Attribute.NAME, name);
 		} else {
 			return name;
 		}
@@ -192,7 +192,14 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return {@code true} if it has the attribute.
 	 */
 	public boolean hasAttribute(Attribute attribute) {
-		return getAttributes().has(attribute);
+		Object value = getAttributes().get(attribute);
+		if (value == null) {
+			return false;
+		}
+		if (value instanceof Integer) {
+			return ((int) value) != 0;
+		}
+		return true;
 	}
 
 	/**
@@ -236,14 +243,11 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public void setAttribute(Attribute attribute) {
 		clearSilence(attribute);
-		if (attribute == Attribute.SPELL_DAMAGE) {
-			throw new RuntimeException();
-		}
-		getAttributes().put(attribute, true);
+		getAttributes().put(attribute, 1);
 	}
 
 	private void clearSilence(Attribute attribute) {
-		if (!GameLogic.IMMUNE_TO_SILENCE.contains(attribute)) {
+		if (!GameLogic.immuneToSilence.contains(attribute)) {
 			getAttributes().remove(Attribute.SILENCED);
 		}
 	}

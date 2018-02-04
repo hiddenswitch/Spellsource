@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "ModifyAttributeSpell",
+      "class": "AddAttributeSpell",
       "value": 1,
       "attribute": "SPELL_DAMAGE"
     }

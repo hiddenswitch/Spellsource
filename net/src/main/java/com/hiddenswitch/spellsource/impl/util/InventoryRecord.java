@@ -171,7 +171,6 @@ public class InventoryRecord extends MongoRecord {
 	}
 
 	@SuppressWarnings("unchecked")
-	@JsonIgnore
 	public <T> T getPersistentAttribute(Attribute attribute, T defaultValue) {
 		return (T) getFacts().getOrDefault(attribute.toKeyCase(), defaultValue);
 	}
@@ -180,12 +179,9 @@ public class InventoryRecord extends MongoRecord {
 		getFacts().put(CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, attribute.toString()), value);
 	}
 
-	@JsonIgnore
 	public AttributeMap getPersistentAttributes() {
-		AttributeMap map = new AttributeMap();
-		getFacts().entrySet().stream().forEach(kv -> map.put(Attribute.valueOf
-				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), kv.getValue()));
-		return map;
+		return new AttributeMap(getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
+				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue)));
 	}
 }
 
