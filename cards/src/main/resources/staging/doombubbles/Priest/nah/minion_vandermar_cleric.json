@@ -2,7 +2,7 @@
   "name": "Vandermar Cleric",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "EPIC",

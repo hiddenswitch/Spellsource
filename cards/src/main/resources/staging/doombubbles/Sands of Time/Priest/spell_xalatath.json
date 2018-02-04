@@ -2,7 +2,7 @@
   "name": "Xal'atath",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "LEGENDARY",
   "description": "Deal *3* damage to a minion for each Priest Artifact you've played",
   "targetSelection": "MINIONS",

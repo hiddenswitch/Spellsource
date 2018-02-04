@@ -2,7 +2,7 @@
   "name": "Late Reinforcements",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "At the end of your next turn, summon four 1/1 Silver Hand Recruits.",
   "targetSelection": "NONE",

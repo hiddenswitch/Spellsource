@@ -6,14 +6,17 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Gain 2 Mana Crystals this turn only.",
+  "description": "Battlecry: Gain 2 Mana Crystals this turn only.",
   "battlecry": {
     "spell": {
       "class": "GainManaSpell",
       "value": 2
     }
   },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

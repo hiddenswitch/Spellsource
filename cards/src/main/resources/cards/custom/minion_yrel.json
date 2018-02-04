@@ -2,11 +2,11 @@
   "name": "Exarch Yrel",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Whenver you cast a spell on this minion, refund the mana cost.",
+  "description": "After you cast a spell on this minion, refund the mana cost.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
@@ -18,9 +18,8 @@
     "spell": {
       "class": "GainManaSpell",
       "value": {
-        "class": "AttributeValueProvider",
-        "target": "PENDING_CARD",
-        "attribute": "BASE_MANA_COST"
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "LAST_MANA_COST"
       }
     }
   },

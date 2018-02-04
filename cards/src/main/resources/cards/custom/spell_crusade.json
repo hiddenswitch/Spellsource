@@ -2,9 +2,8 @@
   "name": "Crusade",
   "baseManaCost": 8,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "EPIC",
-  "race": "RETRIBUTION",
   "description": "Deal 1 damage to a random enemy for each Silver Hand Recruit you've summoned this game.",
   "targetSelection": "ANY",
   "spell": {

@@ -1,8 +1,8 @@
 {
-  "name": "Paladin",
+  "name": "GOLD",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Receive a random Paladin secret.",
   "targetSelection": "NONE",

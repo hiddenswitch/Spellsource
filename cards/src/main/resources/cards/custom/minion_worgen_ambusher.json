@@ -1,0 +1,33 @@
+{
+  "name": "Worgen Ambusher",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "NONE",
+  "description": "Stealth. Battlecry: Gain +1/+1 for each Worgen Ambusher you've played this game.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "value": {
+        "class": "CardsPlayedValueProvider",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cardId": "minion_worgen_ambusher"
+        },
+        "offset": -1,
+        "multiplier": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

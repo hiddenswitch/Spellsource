@@ -12,17 +12,18 @@
       "class": "SpellCastedTrigger",
       "queueCondition": {
         "class": "CardPropertyCondition",
-        "cardId": "spell_razorpetal"
+        "cardId": "spell_razorpetal",
+        "target": "EVENT_SOURCE"
       },
       "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "AddAttributeSpell",
-      "target": "EVENT_CARD",
+      "target": "EVENT_SOURCE",
       "attribute": "POISONOUS"
     }
   },
   "collectible": true,
-  "set": "CUSTOm",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

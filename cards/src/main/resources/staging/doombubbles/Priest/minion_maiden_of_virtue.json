@@ -2,7 +2,7 @@
   "name": "Maiden of Virtue",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 1,
   "baseHp": 7,
   "rarity": "RARE",

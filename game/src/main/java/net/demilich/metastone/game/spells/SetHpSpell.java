@@ -45,6 +45,11 @@ public class SetHpSpell extends Spell {
 		if (!exclusive) {
 			target.setAttribute(Attribute.BASE_HP, hp);
 		}
+
+		// We might be undestroying the minion
+		if (hp > 0) {
+			target.getAttributes().remove(Attribute.DESTROYED);
+		}
 	}
 
 }

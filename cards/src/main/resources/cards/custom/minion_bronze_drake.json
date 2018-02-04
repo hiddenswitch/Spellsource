@@ -2,7 +2,7 @@
   "name": "Bronze Drake",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
@@ -12,6 +12,7 @@
     "class": "ConditionalSpell",
     "condition": {
       "class": "HoldsCardCondition",
+      "targetPlayer": "SELF",
       "cardFilter": {
         "class": "CardFilter",
         "race": "DRAGON"
@@ -24,7 +25,7 @@
   "attributes": {
     "DEATHRATTLES": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

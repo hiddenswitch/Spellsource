@@ -15,7 +15,9 @@
       "spell1": {
         "class": "ReceiveCardSpell",
         "value": 1,
-        "card": "spell_the_coin",
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        },
         "cardFilter": {
           "class": "CardFilter",
           "attribute": "SECRET",
@@ -24,13 +26,16 @@
       },
       "spell2": {
         "class": "DiscoverOptionSpell",
+        "howMany": 4,
         "spells": [
           {
             "class": "ReceiveCardSpell",
             "value": 1,
             "name": "BLUE",
             "description": "Receive a random Mage Secret.",
-            "card": "spell_the_coin",
+            "cardSource": {
+              "class": "UnweightedCatalogueSource"
+            },
             "cardFilter": {
               "class": "CardFilter",
               "heroClass": "BLUE",
@@ -43,7 +48,9 @@
             "value": 1,
             "name": "GREEN",
             "description": "Receive a random Hunter secret.",
-            "card": "spell_the_coin",
+            "cardSource": {
+              "class": "UnweightedCatalogueSource"
+            },
             "cardFilter": {
               "class": "CardFilter",
               "heroClass": "GREEN",
@@ -54,12 +61,14 @@
           {
             "class": "ReceiveCardSpell",
             "value": 1,
-            "name": "Paladin",
+            "name": "GOLD",
             "description": "Receive a random Paladin secret.",
-            "card": "spell_the_coin",
+            "cardSource": {
+              "class": "UnweightedCatalogueSource"
+            },
             "cardFilter": {
               "class": "CardFilter",
-              "heroClass": "PALADIN",
+              "heroClass": "GOLD",
               "attribute": "SECRET",
               "operation": "HAS"
             }
@@ -69,7 +78,9 @@
             "value": 1,
             "name": "BLACK",
             "description": "Receive a random Rogue secret.",
-            "card": "spell_the_coin",
+            "cardSource": {
+              "class": "UnweightedCatalogueSource"
+            },
             "cardFilter": {
               "class": "CardFilter",
               "heroClass": "BLACK",
@@ -82,7 +93,8 @@
     }
   },
   "attributes": {
-    "COMBO": true
+    "COMBO": true,
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",

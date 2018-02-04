@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "EPIC",
-  "description": "Battlecry: Discover a Mage, Hunter, or Paladin secret.",
+  "description": "Discover a Mage, Hunter, or Paladin secret.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverFilteredCardSpell",
@@ -27,7 +27,7 @@
       },
       {
         "class": "CardFilter",
-        "heroClass": "PALADIN",
+        "heroClass": "GOLD",
         "attribute": "SECRET",
         "operation": "HAS"
       }

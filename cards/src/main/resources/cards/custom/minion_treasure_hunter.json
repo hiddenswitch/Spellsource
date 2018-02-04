@@ -14,16 +14,14 @@
       "value": 1,
       "cardFilter": {
         "class": "CardFilter",
-        "value": 0,
-        "attribute": "BASE_MANA_COST",
-        "operation": "EQUAL"
+        "manaCost": 0
       }
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

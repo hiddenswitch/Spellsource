@@ -18,6 +18,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class SummonSpell extends Spell {
 
@@ -135,6 +136,7 @@ public class SummonSpell extends Spell {
 
 				boolean summoned = context.getLogic().summon(player.getId(), minion, null, boardPosition, false);
 				if (!summoned) {
+					// It's still possible that, even if a minion was successfully summoned, a subspell later destroys it
 					return;
 				}
 				summonedMinions.add(minion);
@@ -149,7 +151,10 @@ public class SummonSpell extends Spell {
 
 
 		summonedMinions.forEach(summoned -> {
-			if (summoned.isDestroyed()) {
+			// Shouldn't cast spells on minions that wound up in the graveyard somehow due to other subspells.
+			// This checks if a subspell has ended the sequence with {@link GameLogic#endOfSequence()}
+			if (summoned.isDestroyed()
+					&& summoned.getZone() == Zones.GRAVEYARD) {
 				return;
 			}
 

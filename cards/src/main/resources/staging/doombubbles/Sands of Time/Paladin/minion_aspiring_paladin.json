@@ -2,7 +2,7 @@
   "name": "Aspiring Paladin",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "COMMON",
