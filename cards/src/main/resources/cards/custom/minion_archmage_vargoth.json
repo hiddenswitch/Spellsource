@@ -16,24 +16,23 @@
           "conditions": [
             {
               "class": "CardPropertyCondition",
+              "target": "EVENT_SOURCE",
               "cardId": "spell_arcane_barrage"
-            ,
-              "target": "EVENT_SOURCE"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_temporal_flux",
-              "target": "EVENT_SOURCE"
+              "target": "EVENT_SOURCE",
+              "cardId": "spell_temporal_flux"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_evocation",
-              "target": "EVENT_SOURCE"
+              "target": "EVENT_SOURCE",
+              "cardId": "spell_evocation"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_presence_of_mind",
-              "target": "EVENT_SOURCE"
+              "target": "EVENT_SOURCE",
+              "cardId": "spell_presence_of_mind"
             }
           ]
         },
@@ -58,13 +57,13 @@
           "conditions": [
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_glacial_spike",
-              "target": "EVENT_SOURCE"
+              "target": "EVENT_SOURCE",
+              "cardId": "spell_glacial_spike"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_frost_bomb",
-              "target": "EVENT_SOURCE"
+              "target": "EVENT_SOURCE",
+              "cardId": "spell_frost_bomb"
             }
           ]
         },
@@ -87,13 +86,13 @@
           "conditions": [
             {
               "class": "CardPropertyCondition",
-              "cardId": "secret_surprise_insect",
-              "target": "EVENT_SOURCE"
+              "target": "EVENT_SOURCE",
+              "cardId": "secret_surprise_insect"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_scorch",
-              "target": "EVENT_SOURCE"
+              "target": "EVENT_SOURCE",
+              "cardId": "spell_scorch"
             }
           ]
         },

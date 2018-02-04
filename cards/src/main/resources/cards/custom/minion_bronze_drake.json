@@ -12,11 +12,11 @@
     "class": "ConditionalSpell",
     "condition": {
       "class": "HoldsCardCondition",
-      "targetPlayer": "SELF",
       "cardFilter": {
         "class": "CardFilter",
         "race": "DRAGON"
-      }
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "DrawCardSpell"

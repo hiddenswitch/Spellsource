@@ -10,7 +10,6 @@
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "sourcePlayer": "SELF",
       "fireCondition": {
         "class": "HasEntityCondition",
         "target": "EVENT_TARGET",
@@ -18,7 +17,8 @@
           "class": "CardFilter",
           "heroClass": "GREEN"
         }
-      }
+      },
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "MetaSpell",

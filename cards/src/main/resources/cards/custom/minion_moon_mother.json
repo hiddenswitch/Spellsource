@@ -10,27 +10,27 @@
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "sourcePlayer": "SELF",
       "fireCondition": {
         "class": "OrCondition",
         "conditions": [
           {
             "class": "CardPropertyCondition",
-            "cardId": "spell_lunar_strike",
-            "target": "EVENT_SOURCE"
+            "target": "EVENT_SOURCE",
+            "cardId": "spell_lunar_strike"
           },
           {
             "class": "CardPropertyCondition",
-            "cardId": "spell_starsurge",
-            "target": "EVENT_SOURCE"
+            "target": "EVENT_SOURCE",
+            "cardId": "spell_starsurge"
           },
           {
             "class": "CardPropertyCondition",
-            "cardId": "spell_sunfire",
-            "target": "EVENT_SOURCE"
+            "target": "EVENT_SOURCE",
+            "cardId": "spell_sunfire"
           }
         ]
-      }
+      },
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "DrawCardSpell"

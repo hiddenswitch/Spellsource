@@ -12,8 +12,8 @@
       "class": "SpellCastedTrigger",
       "queueCondition": {
         "class": "CardPropertyCondition",
-        "cardId": "spell_razorpetal",
-        "target": "EVENT_SOURCE"
+        "target": "EVENT_SOURCE",
+        "cardId": "spell_razorpetal"
       },
       "sourcePlayer": "SELF"
     },

@@ -19,13 +19,13 @@
         "cardType": "MINION",
         "manaCost": {
           "class": "AlgebraicValueProvider",
+          "operation": "MINIMUM",
           "value1": 10,
           "value2": {
             "class": "AttributeValueProvider",
             "target": "FRIENDLY_HERO",
             "attribute": "ARMOR"
-          },
-          "operation": "MINIMUM"
+          }
         }
       }
     }

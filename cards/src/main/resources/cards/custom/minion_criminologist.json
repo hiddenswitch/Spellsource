@@ -15,13 +15,13 @@
       "spell1": {
         "class": "ReceiveCardSpell",
         "value": 1,
-        "cardSource": {
-          "class": "UnweightedCatalogueSource"
-        },
         "cardFilter": {
           "class": "CardFilter",
           "attribute": "SECRET",
           "operation": "HAS"
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
         }
       },
       "spell2": {
@@ -33,14 +33,14 @@
             "value": 1,
             "name": "BLUE",
             "description": "Receive a random Mage Secret.",
-            "cardSource": {
-              "class": "UnweightedCatalogueSource"
-            },
             "cardFilter": {
               "class": "CardFilter",
               "heroClass": "BLUE",
               "attribute": "SECRET",
               "operation": "HAS"
+            },
+            "cardSource": {
+              "class": "UnweightedCatalogueSource"
             }
           },
           {
@@ -48,14 +48,14 @@
             "value": 1,
             "name": "GREEN",
             "description": "Receive a random Hunter secret.",
-            "cardSource": {
-              "class": "UnweightedCatalogueSource"
-            },
             "cardFilter": {
               "class": "CardFilter",
               "heroClass": "GREEN",
               "attribute": "SECRET",
               "operation": "HAS"
+            },
+            "cardSource": {
+              "class": "UnweightedCatalogueSource"
             }
           },
           {
@@ -63,14 +63,14 @@
             "value": 1,
             "name": "GOLD",
             "description": "Receive a random Paladin secret.",
-            "cardSource": {
-              "class": "UnweightedCatalogueSource"
-            },
             "cardFilter": {
               "class": "CardFilter",
               "heroClass": "GOLD",
               "attribute": "SECRET",
               "operation": "HAS"
+            },
+            "cardSource": {
+              "class": "UnweightedCatalogueSource"
             }
           },
           {
@@ -78,14 +78,14 @@
             "value": 1,
             "name": "BLACK",
             "description": "Receive a random Rogue secret.",
-            "cardSource": {
-              "class": "UnweightedCatalogueSource"
-            },
             "cardFilter": {
               "class": "CardFilter",
               "heroClass": "BLACK",
               "attribute": "SECRET",
               "operation": "HAS"
+            },
+            "cardSource": {
+              "class": "UnweightedCatalogueSource"
             }
           }
         ]
@@ -93,8 +93,8 @@
     }
   },
   "attributes": {
-    "COMBO": true,
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "COMBO": true
   },
   "collectible": true,
   "set": "CUSTOM",

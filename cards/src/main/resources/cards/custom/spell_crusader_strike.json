@@ -11,14 +11,14 @@
     "spells": [
       {
         "class": "ConditionalSpell",
+        "condition": {
+          "class": "HasWeaponCondition",
+          "targetPlayer": "SELF"
+        },
         "spell": {
           "class": "BuffSpell",
           "target": "FRIENDLY_WEAPON",
           "attackBonus": 2
-        },
-        "condition": {
-          "class": "HasWeaponCondition",
-          "targetPlayer": "SELF"
         }
       },
       {

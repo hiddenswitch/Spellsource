@@ -8,10 +8,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
-    "cardSource": {
-      "class": "DeckSource"
-    },
-    "exclusive": true,
     "spell": {
       "class": "ReceiveCardSpell",
       "spell": {
@@ -38,7 +34,11 @@
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "SPELL"
-    }
+    },
+    "cardSource": {
+      "class": "DeckSource"
+    },
+    "exclusive": true
   },
   "collectible": true,
   "set": "CUSTOM",
