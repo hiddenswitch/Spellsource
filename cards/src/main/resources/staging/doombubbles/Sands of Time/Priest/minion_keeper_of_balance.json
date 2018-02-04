@@ -2,7 +2,7 @@
   "name": "Keeper of Balance",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",

@@ -2,7 +2,7 @@
   "name": "Judgement Day",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Deal *{$1}[1]* damage to all minions. Deals 1 more damage for each turn it spends in your hand.",
   "passiveTrigger": {

@@ -2,7 +2,7 @@
   "name": "Hammer of the Naaru",
   "baseManaCost": 5,
   "type": "WEAPON",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "damage": 2,
   "durability": 3,
   "rarity": "RARE",

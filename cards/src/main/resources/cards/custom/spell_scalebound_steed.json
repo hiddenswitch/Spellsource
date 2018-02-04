@@ -2,7 +2,7 @@
   "name": "Scalebound Steed",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Give a minion +3/+3. When it dies, summon a Bronze Drake. Draw a card.",
   "targetSelection": "MINIONS",

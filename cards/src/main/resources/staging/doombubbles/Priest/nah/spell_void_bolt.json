@@ -2,7 +2,7 @@
   "name": "Void Bolt",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Enter Shadowform. If already in Shadowform, deal *5* damage instead.",
   "targetSelection": "ANY",

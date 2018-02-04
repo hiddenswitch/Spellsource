@@ -2,7 +2,7 @@
   "name": "Vision of Doom",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Transform a minion into a Doomsayer",
   "targetSelection": "MINIONS",

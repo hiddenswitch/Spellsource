@@ -2,7 +2,7 @@
   "name": "Borrowed Time",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Your next spell costs (2) more. The one after costs (4) less.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Ragnaros the Gravelord",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",

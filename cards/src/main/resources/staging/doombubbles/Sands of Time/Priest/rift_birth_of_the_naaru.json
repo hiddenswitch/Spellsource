@@ -2,7 +2,7 @@
   "name": "Birth of the Naaru",
   "baseManaCost": 2,
   "type": "RIFT",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Whenever a friendly minion is healed, summon a Lightwarden",
   "trigger": {

@@ -2,7 +2,7 @@
   "name": "Void Cleric",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "EPIC",

@@ -19,6 +19,136 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testVampiricTouch() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_vampiric_touch", wolfrider);
+			Assert.assertTrue(wolfrider.isDestroyed());
+			Assert.assertEquals(player.getMinions().get(0).getAttack(), 1);
+			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_wolfrider");
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion mindControlTech = playMinionCard(context, opponent, "minion_mind_control_tech");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_vampiric_touch", mindControlTech);
+			Assert.assertFalse(mindControlTech.isDestroyed());
+			Assert.assertEquals(player.getMinions().size(), 0);
+		});
+	}
+
+	@Test
+	public void testDivineIntervention() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_divine_intervention");
+			Minion lightwarden = playMinionCard(context, player, "minion_lightwarden");
+			player.getHero().setHp(5);
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
+			Assert.assertEquals(player.getSecrets().size(), 0);
+			Assert.assertEquals(player.getHero().getHp(), 11, "Should have healed for 6");
+			Assert.assertEquals(lightwarden.getAttack(), lightwarden.getBaseAttack() + 2, "Lightwarden should have buffed");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_divine_intervention");
+			Minion lightwarden = playMinionCard(context, player, "minion_lightwarden");
+			player.getHero().setHp(7);
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
+			Assert.assertEquals(player.getSecrets().size(), 1);
+			Assert.assertEquals(player.getHero().getHp(), 1, "Should not have healed.");
+			Assert.assertEquals(lightwarden.getAttack(), lightwarden.getBaseAttack(), "Lightwarden should not have buffed");
+		});
+	}
+
+	@Test
+	public void testYrel() {
+		runGym((context, player, opponent) -> {
+			Minion yrel = playMinionCard(context, player, "minion_yrel");
+			player.setMaxMana(4);
+			player.setMana(4);
+			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			Assert.assertEquals(player.getMana(), 0);
+			player.setMana(4);
+			playCardWithTarget(context, player, "spell_fireball", yrel);
+			Assert.assertEquals(player.getMana(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion yrel = playMinionCard(context, player, "minion_yrel");
+			player.setMaxMana(5);
+			player.setMana(5);
+			playCardWithTarget(context, player, "spell_power_word_tentacles", yrel);
+			Assert.assertEquals(player.getMana(), 5);
+		});
+	}
+
+	@Test
+	public void testWorgenAmbusher() {
+		runGym((context, player, opponent) -> {
+			Minion worgen1 = playMinionCard(context, player, "minion_worgen_ambusher");
+			Assert.assertEquals(worgen1.getAttack(), worgen1.getBaseAttack());
+			Minion worgen2 = playMinionCard(context, player, "minion_worgen_ambusher");
+			Assert.assertEquals(worgen2.getAttack(), worgen2.getBaseAttack() + 1);
+		});
+	}
+
+	@Test
+	public void testCriminologist() {
+		final int MAGE = 0;
+		final int HUNTER = 1;
+		final int PALADIN = 2;
+		final int ROGUE = 3;
+		Stream.of(MAGE, HUNTER, PALADIN, ROGUE).forEach(heroClass -> {
+			runGym((context, player, opponent) -> {
+				playCard(context, player, "spell_the_coin");
+				overrideDiscover(player, discoveries -> {
+					Assert.assertEquals(discoveries.size(), 4);
+					return discoveries.get(heroClass);
+				});
+				playCard(context, player, "minion_criminologist");
+				HeroClass secretClass = player.getHand().get(0).getHeroClass();
+				switch (heroClass) {
+					case MAGE:
+						Assert.assertEquals(secretClass, HeroClass.BLUE);
+						break;
+					case HUNTER:
+						Assert.assertEquals(secretClass, HeroClass.GREEN);
+						break;
+					case PALADIN:
+						Assert.assertEquals(secretClass, HeroClass.GOLD);
+						break;
+					case ROGUE:
+						Assert.assertEquals(secretClass, HeroClass.BLACK);
+						break;
+				}
+			});
+		});
+	}
+
+	@Test
+	public void testBlackLotus() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_black_lotus");
+			playCardWithTarget(context, player, "spell_razorpetal", opponent.getHero());
+			Assert.assertFalse(opponent.getHero().isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_black_lotus");
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_razorpetal", bloodfen);
+			Assert.assertTrue(bloodfen.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testFrostBomb() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
@@ -51,7 +181,7 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
 			context.endTurn();
-			playCardWithTarget(context,opponent,"spell_fireball",target);
+			playCardWithTarget(context, opponent, "spell_fireball", target);
 			Assert.assertTrue(target.isDestroyed());
 			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));

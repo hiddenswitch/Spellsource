@@ -14,7 +14,7 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "ReturnMinionToHandSpell",
+      "class": "ReturnTargetToHandSpell",
       "target": "EVENT_TARGET"
     }
   },

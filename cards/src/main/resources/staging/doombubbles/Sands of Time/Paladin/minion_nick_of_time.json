@@ -2,7 +2,7 @@
   "name": "Nick of Time",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "RARE",

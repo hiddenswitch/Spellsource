@@ -2,7 +2,7 @@
   "name": "Tinyfin Fordring",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "PALADIN",
+  "heroClass": "GOLD",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",

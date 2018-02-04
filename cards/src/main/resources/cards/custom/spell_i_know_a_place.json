@@ -7,7 +7,7 @@
   "description": "Discover a Portal card.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverCardSpell",
+    "class": "DiscoverSpell",
     "spell": {
       "class": "ReceiveCardSpell"
     },

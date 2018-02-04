@@ -2,7 +2,7 @@
   "name": "Renew",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "COMMON",
   "description": "Restore a friendly minion to full Health. Discover a healing spell.",
   "targetSelection": "FRIENDLY_MINIONS",
@@ -17,7 +17,7 @@
         }
       },
       {
-        "class": "DiscoverCardSpell",
+        "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell"
         },

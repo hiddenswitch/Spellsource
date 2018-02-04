@@ -2,7 +2,7 @@
   "name": "Light's Wrath",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "LEGENDARY",
   "description": "Draw a card for each Priest Artifact you've played",
   "targetSelection": "NONE",

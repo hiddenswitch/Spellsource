@@ -32,12 +32,12 @@
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "PALADIN",
+              "heroClass": "GOLD",
               "targetPlayer": "SELF"
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "PRIEST",
+              "heroClass": "WHITE",
               "targetPlayer": "SELF"
             },
             {
@@ -139,12 +139,12 @@
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "PALADIN",
+              "heroClass": "GOLD",
               "targetPlayer": "OPPONENT"
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "PRIEST",
+              "heroClass": "WHITE",
               "targetPlayer": "OPPONENT"
             },
             {

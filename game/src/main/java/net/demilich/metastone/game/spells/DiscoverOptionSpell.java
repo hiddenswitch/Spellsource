@@ -48,8 +48,15 @@ public class DiscoverOptionSpell extends Spell {
 		List<SpellDesc> shuffledSpells = new Vector<>(spells);
 
 		for (int i = 0; i < value; i++) {
-			Collections.shuffle(shuffledSpells, context.getLogic().getRandom());
-			List<SpellDesc> spellChoices = shuffledSpells.stream().limit(count).collect(Collectors.toList());
+			List<SpellDesc> spellChoices;
+			// Don't shuffle the spell choices unless we have to
+			if (shuffledSpells.size() > count) {
+				Collections.shuffle(shuffledSpells, context.getLogic().getRandom());
+				spellChoices = shuffledSpells.stream().limit(count).collect(Collectors.toList());
+			} else {
+				spellChoices = shuffledSpells;
+			}
+
 			if (spellChoices.isEmpty()) {
 				continue;
 			}

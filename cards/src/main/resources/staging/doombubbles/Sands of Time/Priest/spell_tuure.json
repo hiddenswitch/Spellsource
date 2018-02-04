@@ -2,7 +2,7 @@
   "name": "T'uure",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "PRIEST",
+  "heroClass": "WHITE",
   "rarity": "LEGENDARY",
   "description": "Summon a 2/2 Image of T'uure for each Priest Artifact you've played",
   "targetSelection": "NONE",
