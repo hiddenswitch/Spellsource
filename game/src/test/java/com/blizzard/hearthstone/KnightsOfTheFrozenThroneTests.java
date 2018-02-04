@@ -36,6 +36,27 @@ import static java.util.stream.Collectors.toList;
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 	@Test
+	public void testCannotAttackTwiceWithHero() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_wicked_knife");
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
+					ga.getActionType().equals(ActionType.PHYSICAL_ATTACK)
+							&& ga.getSourceReference().equals(player.getHero().getReference())
+							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
+			attack(context, player, player.getHero(), opponent.getHero());
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
+					ga.getActionType().equals(ActionType.PHYSICAL_ATTACK)
+							&& ga.getSourceReference().equals(player.getHero().getReference())
+							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
+			playCard(context, player, "hero_scourgelord_garrosh");
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
+					ga.getActionType().equals(ActionType.PHYSICAL_ATTACK)
+							&& ga.getSourceReference().equals(player.getHero().getReference())
+							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
+		});
+	}
+
+	@Test
 	public void testSkelemancer() {
 		runGym((context, player, opponent) -> {
 			Minion skelemancer = playMinionCard(context, player, "minion_skelemancer");
