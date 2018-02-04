@@ -74,11 +74,10 @@ public abstract class Card extends Entity {
 			heroClasses = desc.heroClasses;
 		}
 
+		setAttribute(Attribute.BASE_MANA_COST, desc.baseManaCost);
 		if (desc.attributes != null) {
-			setAttributes(desc.attributes.clone());
+			getAttributes().putAll(desc.attributes);
 		}
-
-		getAttributes().textSet(Attribute.BASE_MANA_COST, desc.baseManaCost);
 
 		if (desc.manaCostModifier != null) {
 			manaCostModifier = desc.manaCostModifier.createInstance();

@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource.models;
 
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.Serializable;
 import java.util.*;
@@ -11,7 +10,7 @@ import java.util.*;
  * Created by bberman on 2/19/17.
  */
 public class LogicResponse implements Serializable {
-	private Map<EntityReference, AttributeMap> modifiedAttributes = new HashMap<>();
+	private Map<EntityReference, Map<Attribute, Object>> modifiedAttributes = new HashMap<>();
 	private List<String> gameIdsAffected = new ArrayList<>();
 	private List<Integer> entityIdsAffected = new ArrayList<>();
 
@@ -41,15 +40,15 @@ public class LogicResponse implements Serializable {
 		return this;
 	}
 
-	public Map<EntityReference, AttributeMap> getModifiedAttributes() {
+	public Map<EntityReference, Map<Attribute, Object>> getModifiedAttributes() {
 		return modifiedAttributes;
 	}
 
-	public void setModifiedAttributes(Map<EntityReference, AttributeMap> modifiedAttributes) {
+	public void setModifiedAttributes(Map<EntityReference, Map<Attribute, Object>> modifiedAttributes) {
 		this.modifiedAttributes = modifiedAttributes;
 	}
 
-	public LogicResponse withModifiedAttributes(final Map<EntityReference, AttributeMap> modifiedAttributes) {
+	public LogicResponse withModifiedAttributes(final Map<EntityReference, Map<Attribute, Object>> modifiedAttributes) {
 		this.modifiedAttributes = modifiedAttributes;
 		return this;
 	}

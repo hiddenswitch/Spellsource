@@ -245,30 +245,6 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			opponent.setMana(4);
 			Assert.assertTrue(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
 		});
-
-		// Two Kobold Monks, one dies, the player shouldn't be targetable
-		runGym((context, player, opponent) -> {
-			context.endTurn();
-			receiveCard(context, opponent, "spell_fireball");
-			opponent.setMaxMana(4);
-			opponent.setMana(4);
-			Assert.assertTrue(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
-			context.endTurn();
-			Minion kobold1 = playMinionCard(context, player, "minion_kobold_monk");
-			Minion kobold2 = playMinionCard(context, player, "minion_kobold_monk");
-			context.endTurn();
-			opponent.setMaxMana(4);
-			opponent.setMana(4);
-			Assert.assertFalse(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
-			playCardWithTarget(context, opponent, "spell_fireball", kobold2);
-			opponent.setMaxMana(4);
-			opponent.setMana(4);
-			Assert.assertFalse(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
-			playCardWithTarget(context, opponent, "spell_fireball", kobold1);
-			opponent.setMaxMana(4);
-			opponent.setMana(4);
-			Assert.assertTrue(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
-		});
 	}
 
 	@Test
