@@ -12,7 +12,6 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ChangeHeroSpell",
-      "card": "hero_jaraxxus",
       "spell": {
         "class": "MetaSpell",
         "spells": [
@@ -25,7 +24,8 @@
             "target": "OUTPUT"
           }
         ]
-      }
+      },
+      "card": "hero_jaraxxus"
     }
   },
   "attributes": {

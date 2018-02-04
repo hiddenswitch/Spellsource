@@ -10,7 +10,6 @@
   "cardCostModifier": {
     "class": "CardCostModifier",
     "value": 1,
-    "operation": "SUBTRACT",
     "filter": {
       "class": "OrFilter",
       "filters": [
@@ -23,7 +22,8 @@
           "cardId": "spell_load_and_lock"
         }
       ]
-    }
+    },
+    "operation": "SUBTRACT"
   },
   "collectible": true,
   "set": "CUSTOM",

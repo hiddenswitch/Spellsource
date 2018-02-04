@@ -12,7 +12,6 @@
       {
         "class": "AddEnchantmentSpell",
         "trigger": {
-          "persistentOwner": true,
           "eventTrigger": {
             "class": "TurnStartTrigger",
             "targetPlayer": "SELF"
@@ -22,7 +21,8 @@
             "target": "OTHER_ENEMY_MINIONS",
             "attribute": "FROZEN"
           },
-          "maxFires": 1
+          "maxFires": 1,
+          "persistentOwner": true
         }
       },
       {

@@ -40,8 +40,8 @@
   },
   "attributes": {
     "ARMOR": 5,
-    "MAX_HP": 30,
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "MAX_HP": 30
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

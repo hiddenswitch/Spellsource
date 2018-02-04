@@ -9,7 +9,6 @@
   "race": "BEAST",
   "description": "Battlecry: If your deck contains no Beasts or Beast Mastery spells, your Hero Power can target minions this game.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "AndCondition",
       "conditions": [
@@ -44,6 +43,7 @@
         }
       ]
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
       "target": "FRIENDLY_PLAYER",

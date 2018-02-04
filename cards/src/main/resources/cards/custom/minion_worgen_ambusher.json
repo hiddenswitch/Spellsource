@@ -18,8 +18,8 @@
           "class": "SpecificCardFilter",
           "cardId": "minion_worgen_ambusher"
         },
-        "offset": -1,
-        "multiplier": 1
+        "multiplier": 1,
+        "offset": -1
       }
     }
   },

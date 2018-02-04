@@ -10,10 +10,6 @@
   "aura": {
     "class": "AttributeAura",
     "target": "SELF",
-    "secondaryTrigger": {
-      "class": "ArmorChangedTrigger",
-      "targetPlayer": "SELF"
-    },
     "condition": {
       "class": "AttributeCondition",
       "target": "FRIENDLY_HERO",
@@ -21,7 +17,11 @@
       "attribute": "ARMOR",
       "operation": "LESS"
     },
-    "attribute": "CANNOT_ATTACK"
+    "attribute": "CANNOT_ATTACK",
+    "secondaryTrigger": {
+      "class": "ArmorChangedTrigger",
+      "targetPlayer": "SELF"
+    }
   },
   "attributes": {
     "TAUNT": true

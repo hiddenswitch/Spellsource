@@ -5,7 +5,6 @@
   "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "Deal 8 damage to a minion with 1 Attack.",
-  "targetSelection": "MINIONS",
   "condition": {
     "class": "HasEntityCondition",
     "target": "ALL_MINIONS",
@@ -16,6 +15,7 @@
       "operation": "EQUAL"
     }
   },
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "DamageSpell",
     "value": 8,
