@@ -2,6 +2,7 @@ package net.demilich.metastone.game.entities;
 
 import java.io.Serializable;
 
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
@@ -149,7 +150,14 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The name.
 	 */
 	public String getName() {
-		return getAttributes().getOrDefault(Attribute.NAME, name);
+		if ((getEntityType() == EntityType.CARD
+				&& getSourceCard() != null
+				&& getSourceCard().getCardSet() == CardSet.SPELLSOURCE)
+				|| getEntityType() == EntityType.PLAYER) {
+			return getAttributes().getOrDefault(Attribute.NAME, name);
+		} else {
+			return name;
+		}
 	}
 
 	/**
