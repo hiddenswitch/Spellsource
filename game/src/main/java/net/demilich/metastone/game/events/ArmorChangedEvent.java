@@ -9,7 +9,7 @@ public final class ArmorChangedEvent extends GameEvent implements HasValue {
 	private final int armor;
 
 	public ArmorChangedEvent(GameContext context, Hero hero, int armor) {
-		super(context, hero.getOwner(), -1);
+		super(context, hero.getOwner(), hero.getOwner());
 		this.hero = hero;
 		this.armor = armor;
 	}
