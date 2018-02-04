@@ -300,6 +300,7 @@ public class TheOldGodsTests extends TestBase {
 			public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 				if (first) {
 					Assert.assertTrue(validActions.stream().allMatch(ga -> ga.getActionType() == ActionType.DISCOVER));
+					Assert.assertEquals(validActions.size(), 3);
 					final DiscoverAction discoverAction = (DiscoverAction) validActions.get(0);
 					action[0] = discoverAction;
 					MinionCard original = (MinionCard) action[0].getCard();

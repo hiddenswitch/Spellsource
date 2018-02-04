@@ -24,6 +24,22 @@ import java.util.stream.Stream;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	public void testGeosculptorYip() {
+		for (int j = 0; j <= 20; j++) {
+			final int i = j;
+			final int expectedCost = Math.min(10, i);
+			runGym((context, player, opponent) -> {
+				context.getLogic().gainArmor(player, i);
+				playCard(context, player, "minion_geosculptor_yip");
+				context.endTurn();
+				Assert.assertEquals(player.getMinions().size(), 2);
+				Assert.assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), expectedCost);
+			});
+		}
+
+	}
+
+	@Test
 	public void testDiamondSpellstone() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
@@ -750,6 +766,20 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	}
 
 	@Test
+	public void testOakenSummonsIronwoodGolemInteraction() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_ironwood_golem");
+			playCard(context, player, "spell_oaken_summons");
+			Minion ironwoodGolem = player.getMinions().get(0);
+			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
+			Assert.assertFalse(ironwoodGolem.hasAttribute(Attribute.CANNOT_ATTACK));
+			context.endTurn();
+			context.endTurn();
+			Assert.assertTrue(ironwoodGolem.canAttackThisTurn());
+		});
+	}
+
+	@Test
 	public void testIronwoodGolem() {
 		runGym((context, player, opponent) -> {
 			Minion ironwoodGolem = playMinionCard(context, player, "minion_ironwood_golem");
@@ -763,6 +793,16 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			context.endTurn();
 			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
 			context.endTurn();
+			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_oaken_summons");
+			Minion ironwoodGolem = playMinionCard(context, player, "minion_ironwood_golem");
+			context.endTurn();
+			context.endTurn();
+			Assert.assertTrue(ironwoodGolem.canAttackThisTurn());
+			playCardWithTarget(context, player, "spell_fireball", player.getHero());
 			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
 		});
 	}

@@ -4,8 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "race": "FIRE",
-  "description": "Deal *1* damage. Give your minions +1 Attack this turn for each damage dealt.",
+  "description": "Deal 1 damage. Give your minions +1 Attack this turn for each damage dealt.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -19,7 +18,7 @@
         "target": "FRIENDLY_MINIONS",
         "value": {
           "class": "AttributeValueProvider",
-          "target": "TARGET",
+          "target": "SPELL_TARGET",
           "attribute": "LAST_HIT"
         }
       }

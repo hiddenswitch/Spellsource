@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "race": "FROST",
   "description": "Freeze a character and deal 1 damage for each Frost spell you've cast this game.",
   "targetSelection": "ANY",
   "spell": {
@@ -15,9 +14,26 @@
         "value": {
           "class": "CardsPlayedValueProvider",
           "filter": {
-            "class": "CardFilter",
-            "race": "FROST",
-            "cardType": "SPELL"
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "CardFilter",
+                "cardType": "SPELL"
+              },
+              {
+                "class": "OrFilter",
+                "filters": [
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "spell_glacial_spike"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "spell_frost_bomb"
+                  }
+                ]
+              }
+            ]
           },
           "offset": -1
         }

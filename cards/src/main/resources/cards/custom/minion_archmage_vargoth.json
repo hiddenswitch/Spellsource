@@ -17,18 +17,23 @@
             {
               "class": "CardPropertyCondition",
               "cardId": "spell_arcane_barrage"
+            ,
+              "target": "EVENT_SOURCE"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_temporal_flux"
+              "cardId": "spell_temporal_flux",
+              "target": "EVENT_SOURCE"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_evocation"
+              "cardId": "spell_evocation",
+              "target": "EVENT_SOURCE"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_presence_of_mind"
+              "cardId": "spell_presence_of_mind",
+              "target": "EVENT_SOURCE"
             }
           ]
         },
@@ -53,11 +58,13 @@
           "conditions": [
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_glacial_spike"
+              "cardId": "spell_glacial_spike",
+              "target": "EVENT_SOURCE"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_frost_bomb"
+              "cardId": "spell_frost_bomb",
+              "target": "EVENT_SOURCE"
             }
           ]
         },
@@ -66,7 +73,8 @@
       "spell": {
         "class": "ReceiveCardSpell",
         "cards": [
-          "spell_glacial_spike"
+          "spell_glacial_spike",
+          "spell_frost_bomb"
         ],
         "randomTarget": true
       }
@@ -79,11 +87,13 @@
           "conditions": [
             {
               "class": "CardPropertyCondition",
-              "cardId": "secret_surprise_insect"
+              "cardId": "secret_surprise_insect",
+              "target": "EVENT_SOURCE"
             },
             {
               "class": "CardPropertyCondition",
-              "cardId": "spell_scorch"
+              "cardId": "spell_scorch",
+              "target": "EVENT_SOURCE"
             }
           ]
         },

@@ -16,7 +16,7 @@
     "spell": {
       "class": "SummonSpell",
       "card": "token_skeletal_flayer",
-      "targetPlayer": "ACTIVE"
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

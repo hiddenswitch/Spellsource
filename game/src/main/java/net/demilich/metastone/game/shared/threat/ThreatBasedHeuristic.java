@@ -89,15 +89,15 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 		if (minion.hasAttribute(Attribute.TAUNT)) {
 			switch (threatLevel) {
-			case RED:
-				minionScore += weights.get(WeightedFeature.MINION_RED_TAUNT_MODIFIER);
-				break;
-			case YELLOW:
-				minionScore += weights.get(WeightedFeature.MINION_YELLOW_TAUNT_MODIFIER);
-				break;
-			default:
-				minionScore += weights.get(WeightedFeature.MINION_DEFAULT_TAUNT_MODIFIER);
-				break;
+				case RED:
+					minionScore += weights.get(WeightedFeature.MINION_RED_TAUNT_MODIFIER);
+					break;
+				case YELLOW:
+					minionScore += weights.get(WeightedFeature.MINION_YELLOW_TAUNT_MODIFIER);
+					break;
+				default:
+					minionScore += weights.get(WeightedFeature.MINION_DEFAULT_TAUNT_MODIFIER);
+					break;
 			}
 		}
 
@@ -138,20 +138,24 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 		ThreatLevel threatLevel = calcuateThreatLevel(context, playerId);
 		switch (threatLevel) {
-		case RED:
-			score += weights.get(WeightedFeature.RED_MODIFIER);
-			break;
-		case YELLOW:
-			score += weights.get(WeightedFeature.YELLOW_MODIFIER);
-			break;
-		default:
-			break;
+			case RED:
+				score += weights.get(WeightedFeature.RED_MODIFIER);
+				break;
+			case YELLOW:
+				score += weights.get(WeightedFeature.YELLOW_MODIFIER);
+				break;
+			default:
+				break;
 		}
 		score += player.getHero().getEffectiveHp() * weights.get(WeightedFeature.OWN_HP_FACTOR);
 		score += opponent.getHero().getEffectiveHp() * weights.get(WeightedFeature.OPPONENT_HP_FACTOR);
 		for (Card card : player.getHand()) {
 			if (isHardRemoval(card)) {
 				score += weights.get(WeightedFeature.HARD_REMOVAL_VALUE);
+			}
+
+			if (card.getCardId().equals("spell_cursed")) {
+				score += weights.get(WeightedFeature.CURSED_FACTOR);
 			}
 		}
 

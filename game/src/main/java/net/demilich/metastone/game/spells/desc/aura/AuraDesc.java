@@ -1,5 +1,9 @@
 package net.demilich.metastone.game.spells.desc.aura;
 
+import net.demilich.metastone.game.spells.desc.condition.Condition;
+import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.spells.aura.Aura;
@@ -59,4 +63,11 @@ public class AuraDesc extends Desc<AuraArg> {
 		return (EntityReference) get(AuraArg.TARGET);
 	}
 
+	public Condition getCondition() {
+		return (Condition) get(AuraArg.CONDITION);
+	}
+
+	public EventTriggerDesc getSecondaryTrigger() {
+		return ((EventTriggerDesc) getOrDefault(AuraArg.SECONDARY_TRIGGER, null));
+	}
 }

@@ -1,13 +1,11 @@
 package net.demilich.metastone.game.cards;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
-import org.apache.commons.lang3.RandomUtils;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -17,7 +15,7 @@ import java.util.stream.Stream;
  * {@link net.demilich.metastone.game.entities.EntityZone}, which enforces that its containing {@link
  * net.demilich.metastone.game.entities.Entity} objects can only be in one {@link net.demilich.metastone.game.entities.EntityZone}
  * at a time, versus a plain {@link CardArrayList}, which is just an array of cards that various pieces of logic might
- * want to {@link #shuffle()} or {@link #addCard(Card)} to.
+ * want to {@link #addCard(Card)} to.
  * <p>
  * Use {@link CardZone} for the {@link Zones#HAND}, {@link Zones#DECK} and {@link Zones#DISCOVER} zones--when a card
  * should only be in one place at a time. Use a {@link CardArrayList} for situations where you need to e.g., get a list
@@ -107,26 +105,6 @@ public interface CardList extends Iterable<Card>, List<Card> {
 	 */
 	int getCount();
 
-	/**
-	 * Gets a random {@link Card} in this instance of the specified type.
-	 *
-	 * @param cardType The {@link CardType} to filter with.
-	 * @return A card, or {@code null} if none is found.
-	 * @deprecated Use {@link GameLogic#getRandom(List)} to choose a random card.
-	 */
-	@Deprecated
-	default Card getRandomOfType(CardType cardType) {
-		List<Card> relevantCards = new ArrayList<>();
-		for (Card card : this) {
-			if (card.getCardType().isCardType(cardType)) {
-				relevantCards.add(card);
-			}
-		}
-		if (relevantCards.isEmpty()) {
-			return null;
-		}
-		return relevantCards.get(RandomUtils.nextInt(0, relevantCards.size()));
-	}
 
 	/**
 	 * Checks if this instance contains a {@link Card} of the specified type.
@@ -194,12 +172,6 @@ public interface CardList extends Iterable<Card>, List<Card> {
 	 * @return {@code true} if the replacement was successful.
 	 */
 	boolean replace(Card oldCard, Card newCard);
-
-	/**
-	 * Shuffles the instance.
-	 */
-	@Deprecated
-	CardList shuffle();
 
 	/**
 	 * Shuffles the instance with the given random number generator.

@@ -113,13 +113,6 @@ public class CardZone extends EntityZone<Card> implements CardList {
 	}
 
 	@Override
-	@Deprecated
-	public CardList shuffle() {
-		shuffle(new Random());
-		return this;
-	}
-
-	@Override
 	public CardList shuffle(Random random) {
 		Collections.shuffle(internal, random);
 		for (int i = 0; i < internal.size(); i++) {

@@ -1,5 +1,5 @@
 {
-  "name": "Lesser Ruby Spellstone",
+  "name": "Ruby Spellstone",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "BLUE",
@@ -44,7 +44,7 @@
       ]
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1
 }

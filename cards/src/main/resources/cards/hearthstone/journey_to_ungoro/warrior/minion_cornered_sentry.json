@@ -11,6 +11,7 @@
     "spell": {
       "class": "SummonSpell",
       "card": "token_raptor",
+      "value": 3,
       "targetPlayer": "OPPONENT"
     }
   },

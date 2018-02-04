@@ -15,18 +15,18 @@
     "spell": {
       "class": "SummonSpell",
       "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "MINION",
-            "manaCost": {
-              "class": "AttributeValueProvider",
-              "target": "FRIENDLY_HERO",
-              "attribute": "ARMOR"
-            }
-          }
-        ]
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": {
+          "class": "AlgebraicValueProvider",
+          "value1": 10,
+          "value2": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_HERO",
+            "attribute": "ARMOR"
+          },
+          "operation": "MINIMUM"
+        }
       }
     }
   },

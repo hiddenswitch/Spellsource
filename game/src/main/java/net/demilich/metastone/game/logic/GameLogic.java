@@ -758,6 +758,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		hero.getHeroPower().setId(generateId());
 		hero.getHeroPower().setOwner(hero.getOwner());
 
+		// Set the new hero's number of attacks to the old hero's.
+		hero.getAttributes().put(Attribute.NUMBER_OF_ATTACKS, previousHero.getAttributes().get(Attribute.NUMBER_OF_ATTACKS));
+
 		// Remove the old hero from play
 		removeEnchantments(previousHero);
 		// This removes the hero power enchantments too
@@ -774,9 +777,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (!(hero.hasAttribute(Attribute.MAX_HP) && hero.hasAttribute(Attribute.HP))) {
 			hero.setHp(previousHp);
 		}
-
-
-		refreshAttacksPerRound(hero);
 
 		if (resolveBattlecry && hero.getBattlecry() != null) {
 			resolveBattlecry(player.getId(), hero);
