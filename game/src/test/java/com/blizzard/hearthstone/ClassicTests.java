@@ -1,5 +1,6 @@
 package com.blizzard.hearthstone;
 
+import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
@@ -9,6 +10,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.DestroySpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -35,6 +37,21 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 
 public class ClassicTests extends TestBase {
+
+	@Test
+	public void testAIWillPlayIntoSnakeTrap() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_snake_trap");
+			Minion targetDummy = playMinionCard(context, player, "minion_target_dummy");
+			context.endTurn();
+			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
+			Assert.assertEquals(action.getActionType(), ActionType.PHYSICAL_ATTACK);
+			Assert.assertEquals(action.getTargetReference(), targetDummy.getReference());
+			Assert.assertEquals(action.getSourceReference(), wolfrider.getReference());
+		});
+	}
 
 	@Test
 	public void testShadowstep() {
