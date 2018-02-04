@@ -16,6 +16,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.SetAttributeSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class Persistence {
 
 		for (LogicResponse response : responses) {
 			GameContext context = event.getGameContext();
-			for (Map.Entry<EntityReference, Map<Attribute, Object>> entry : response.getModifiedAttributes()
+			for (Map.Entry<EntityReference, AttributeMap> entry : response.getModifiedAttributes()
 					.entrySet()) {
 
 				EntityReference target = entry.getKey();
