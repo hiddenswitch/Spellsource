@@ -7,6 +7,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.shared.trainingmode.RequestTrainingDataNotification;
 import net.demilich.metastone.game.shared.trainingmode.TrainingData;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,10 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 		GameContext simulation = getClone(context);
 		double score = Float.NEGATIVE_INFINITY;
 		final boolean timedOut = System.currentTimeMillis() - startMillis > timeout;
+
+		// Don't simulate the opposing player's secrets
+		Player opponent = simulation.getOpponent(simulation.getPlayer(playerId));
+		simulation.getLogic().removeSecrets(opponent);
 
 		if (simulation.isDisposed()) {
 			return Float.NEGATIVE_INFINITY;

@@ -55,6 +55,11 @@ public class PhysicalAttackAction extends GameAction {
 	}
 
 	@Override
+	public EntityReference getSourceReference() {
+		return attackerReference;
+	}
+
+	@Override
 	public String toString() {
 		return String.format("%s Attacker: %s Defender: %s", getActionType(), attackerReference, getTargetReference());
 	}
