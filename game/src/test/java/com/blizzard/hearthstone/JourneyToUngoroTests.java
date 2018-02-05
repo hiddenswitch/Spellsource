@@ -32,6 +32,17 @@ import java.util.stream.Stream;
 public class JourneyToUngoroTests extends TestBase {
 
 	@Test
+	public void testChargedDevlisaur() {
+		runGym((context, player, opponent) -> {
+			Minion devilsaur = playMinionCard(context, player, "minion_charged_devilsaur");
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
+					ga.getActionType() == ActionType.PHYSICAL_ATTACK
+							&& ga.getSourceReference().equals(devilsaur.getReference())
+							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
+		});
+	}
+
+	@Test
 	public void testPoisonousKillsHeroes() {
 		runGym((context, player, opponent) -> {
 			Minion cobra = playMinionCard(context, player, "minion_emperor_cobra");
