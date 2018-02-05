@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import net.demilich.metastone.game.actions.DiscoverAction;
+import net.demilich.metastone.game.actions.PlayChooseOneCardAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -46,6 +47,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 
 public class TestBase {
+	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
+		Card baseCard =  receiveCard(context, player, baseCardId);
+		int cost = CardCatalogue.getCardById(chosenCardId).getManaCost(context, player);
+		player.setMana(cost);
+		context.getLogic().performGameAction(player.getId(), context.getValidActions()
+				.stream()
+				.filter(ga -> ga instanceof PlayChooseOneCardAction)
+				.map(ga -> (PlayChooseOneCardAction) ga)
+				.filter(coca -> coca.getChoiceCardId().equals(chosenCardId))
+				.findFirst()
+				.orElseThrow(AssertionError::new));
+		return baseCard;
+	}
+
 	public static class OverrideHandle<T extends Entity> {
 		private T object;
 		private AtomicBoolean stopped = new AtomicBoolean(false);
