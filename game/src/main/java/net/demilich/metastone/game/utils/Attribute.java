@@ -685,6 +685,10 @@ public enum Attribute {
 	 */
 	KEEPS_ENCHANTMENTS,
 	/**
+	 * When {@code true}, indicates this card never appears in a mulligan. Typically used to implement passives.
+	 */
+	NEVER_MULLIGANS,
+	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>
 	 */

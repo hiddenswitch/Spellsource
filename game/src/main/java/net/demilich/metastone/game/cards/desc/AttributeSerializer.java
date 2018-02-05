@@ -72,12 +72,12 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.TURN_TIME, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.UNTARGETABLE_BY_OPPONENT_SPELLS, jsonData, map, ParseValueType.BOOLEAN);
-		// TODO: Remove from Spellstopper
 		parseAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.TAUNT, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.WINDFURY, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.PERMANENT, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.QUEST, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.NEVER_MULLIGANS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.RESERVED_INTEGER_1, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.RESERVED_INTEGER_2, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.RESERVED_INTEGER_3, jsonData, map, ParseValueType.INTEGER);

@@ -27,12 +27,5 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1,
-  "glow": {
-    "class": "HoldsCardCondition",
-    "cardFilter": {
-      "class": "CardFilter",
-      "race": "DRAGON"
-    }
-  }
+  "fileFormatVersion": 1
 }

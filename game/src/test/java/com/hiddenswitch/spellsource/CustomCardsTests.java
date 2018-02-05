@@ -19,6 +19,44 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testPermanentCallOfTheCrusade() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "permanent_call_of_the_crusade");
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			for (int i = 0; i < 3; i++) {
+				Assert.assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack() + 1);
+				context.endTurn();
+				context.endTurn();
+			}
+			Assert.assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack());
+			Assert.assertEquals(player.getMinions().size(), 1);
+		});
+	}
+
+	@Test
+	public void testHandsOnHistorian() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			for (int i = 0; i < 3; i++) {
+				receiveCard(context, player, "minion_bloodfen_raptor");
+			}
+			int size = player.getHand().size();
+			playCard(context, player, "minion_hands_on_historian");
+			Assert.assertEquals(player.getHand().size(), size);
+		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			for (int i = 0; i < 2; i++) {
+				receiveCard(context, player, "minion_bloodfen_raptor");
+			}
+			int size = player.getHand().size();
+			playCard(context, player, "minion_hands_on_historian");
+			Assert.assertEquals(player.getHand().size(), size + 1);
+		});
+	}
+
+	@Test
 	public void testVampiricTouch() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();

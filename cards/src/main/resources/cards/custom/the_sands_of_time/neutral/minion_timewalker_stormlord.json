@@ -14,7 +14,7 @@
     },
     "spell": {
       "class": "DamageSpell",
-      "target": "ALL_ENEMIES",
+      "target": "ENEMY_CHARACTERS",
       "value": 3,
       "randomTarget": true
     }

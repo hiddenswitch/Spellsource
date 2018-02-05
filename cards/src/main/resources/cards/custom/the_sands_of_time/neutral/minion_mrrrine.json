@@ -27,12 +27,5 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1,
-  "glow": {
-    "class": "MinionOnBoardCondition",
-    "cardFilter": {
-      "class": "RaceFilter",
-      "race": "MURLOC"
-    }
-  }
+  "fileFormatVersion": 1
 }

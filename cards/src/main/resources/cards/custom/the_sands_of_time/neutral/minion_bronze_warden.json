@@ -28,20 +28,5 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1,
-  "glow": {
-    "class": "AndCondition",
-    "conditions": [
-      {
-        "class": "HoldsCardCondition",
-        "cardFilter": {
-          "class": "CardFilter",
-          "race": "DRAGON"
-        }
-      },
-      {
-        "class": "MinionOnBoardCondition"
-      }
-    ]
-  }
+  "fileFormatVersion": 1
 }

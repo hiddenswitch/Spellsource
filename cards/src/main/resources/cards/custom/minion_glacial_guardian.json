@@ -5,8 +5,8 @@
   "heroClass": "SILVER",
   "baseAttack": 6,
   "baseHp": 6,
-  "race": "ELEMENTAL",
   "rarity": "COMMON",
+  "race": "ELEMENTAL",
   "description": "Taunt. Battlecry: Freeze this minion.",
   "battlecry": {
     "targetSelection": "NONE",

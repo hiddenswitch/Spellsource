@@ -3440,6 +3440,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// all start here.
 			starterCards.addAll(player.getDeck().stream()
 					.filter(card -> card.hasAttribute(Attribute.QUEST))
+					.filter(card -> !card.hasAttribute(Attribute.NEVER_MULLIGANS))
 					.limit(numberOfStarterCards)
 					.collect(toList()));
 

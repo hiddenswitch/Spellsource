@@ -23,7 +23,7 @@
       },
       "spell2": {
         "class": "SetDescriptionSpell",
-        "description": "When your opponent draws 3 Candles, this awakens!"
+        "description": "Permanent. When your opponent draws 3 Candles, this awakens!"
       }
     },
     "removeEffect": {
@@ -36,7 +36,7 @@
       "exclusive": true,
       "spell1": {
         "class": "SetDescriptionSpell",
-        "description": "When your opponent draws 3 Candles, this awakens!"
+        "description": "Permanent. When your opponent draws 3 Candles, this awakens!"
       },
       "spell2": {
         "class": "SetDescriptionSpell"

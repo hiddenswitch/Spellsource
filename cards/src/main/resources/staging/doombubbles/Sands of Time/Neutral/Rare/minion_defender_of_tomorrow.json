@@ -2,7 +2,7 @@
   "name": "Defender of Tomorrow",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "NEUTRAL",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
