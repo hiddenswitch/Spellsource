@@ -8,6 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardUntilConditionSpell",
+    "value": 60,
     "condition": {
       "class": "AttributeCondition",
       "attribute": "DEATHRATTLES",

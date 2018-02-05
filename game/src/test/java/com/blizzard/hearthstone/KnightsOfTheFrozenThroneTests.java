@@ -13,11 +13,15 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.DrawCardUntilConditionSpell;
+import net.demilich.metastone.game.spells.desc.SpellFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -25,6 +29,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -32,8 +37,30 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.summarizingInt;
 import static java.util.stream.Collectors.toList;
+import static org.mockito.Mockito.*;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
+
+	@Test
+	public void testRollTheBones() {
+		runGym((context, player, opponent) -> {
+			GameLogic spyLogic = spy(context.getLogic());
+			context.setLogic(spyLogic);
+
+			AtomicInteger counter = new AtomicInteger(3);
+			doAnswer(invocation -> {
+				if (counter.getAndDecrement() > 0) {
+					shuffleToDeck(context, player, "minion_loot_hoarder");
+				} else {
+					shuffleToDeck(context, player, "spell_the_coin");
+				}
+				return invocation.callRealMethod();
+			}).when(spyLogic).drawCard(anyInt(), any());
+
+			playCard(context, player, "spell_roll_the_bones");
+			Assert.assertEquals(player.getHand().size(), 4);
+		});
+	}
 
 	@Test
 	public void testCannotAttackTwiceWithHero() {

@@ -151,7 +151,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	private static final AtomicLong seedUniquifier = new AtomicLong(8682522807148012L);
 	private final TargetLogic targetLogic = new TargetLogic();
 	private final ActionLogic actionLogic = new ActionLogic();
-	private final SpellFactory spellFactory = new SpellFactory();
+	private SpellFactory spellFactory = new SpellFactory();
 	private IdFactoryImpl idFactory;
 	private long seed = createSeed();
 	private Random random = new Random(seed);
@@ -556,7 +556,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		Spell spell = spellFactory.getSpell(spellDesc);
+		Spell spell = getSpellFactory().getSpell(spellDesc);
 		spell.cast(context, player, spellDesc, source, targets);
 
 		context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
@@ -685,7 +685,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			sourceCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK, context.getTurn());
 		}
 
-		Spell spell = spellFactory.getSpell(spellDesc);
+		Spell spell = getSpellFactory().getSpell(spellDesc);
 		spell.cast(context, player, spellDesc, source, targets);
 
 		// This implements Lynessa Sunsorrow
@@ -3402,6 +3402,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	public long getSeed() {
 		return seed;
+	}
+
+	public SpellFactory getSpellFactory() {
+		return spellFactory;
+	}
+
+	public void setSpellFactory(SpellFactory spellFactory) {
+		this.spellFactory = spellFactory;
 	}
 
 	protected class FirstHand {
