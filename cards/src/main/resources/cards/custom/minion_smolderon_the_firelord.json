@@ -2,26 +2,22 @@
   "name": "Smolderon the Firelord",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
   "description": "Battlecry: Replace all Flame Elementals in your hand with Lava Bursts. Overload: (2).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReplaceCardSpell",
+      "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
-      "cardFilters": [
-        {
-          "class": "SpecificCardFilter",
-          "cardId": "token_flame_elemental"
-        },
-        {
-          "class": "SpecificCardFilter",
-          "cardId": "spell_lava_burst"
-        }
-      ]
+      "filter": {
+        "class": "SpecificCardFilter",
+        "cardId": "token_flame_elemental"
+      },
+      "card": "spell_lava_burst"
     }
   },
   "attributes": {

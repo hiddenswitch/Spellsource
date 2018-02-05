@@ -2,7 +2,7 @@
   "name": "The Elements Respond",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "FREE",
   "description": "Draw 4 cards.",
   "targetSelection": "NONE",

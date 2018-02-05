@@ -2,7 +2,7 @@
   "name": "Mineral Masher",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",

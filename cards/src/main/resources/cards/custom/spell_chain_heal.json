@@ -2,23 +2,15 @@
   "name": "Chain Heal",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
-  "race": "RESTORATION",
   "description": "Restore 8 health randomly split amongst friendly characters.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "CastRepeatedlySpell",
+    "class": "HealingMissilesSpell",
     "target": "FRIENDLY_CHARACTERS",
-    "spell": {
-      "class": "HealSpell",
-      "value": 1
-    },
-    "filter": {
-      "class": "DamagedFilter"
-    },
-    "howMany": 8,
-    "randomTarget": true
+    "value": 1,
+    "howMany": 8
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -2,10 +2,11 @@
   "name": "Hydraxis the Waterlord",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
   "description": "Battlecry: Transform your Totems into Water Elementals. Overload: (1).",
   "battlecry": {
     "targetSelection": "NONE",

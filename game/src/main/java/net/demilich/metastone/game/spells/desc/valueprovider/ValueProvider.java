@@ -51,7 +51,7 @@ public abstract class ValueProvider implements Serializable {
 				break;
 		}
 		int multiplier = desc.containsKey(ValueProviderArg.MULTIPLIER) ? desc.getInt(ValueProviderArg.MULTIPLIER) : 1;
-		int offset = desc.containsKey(ValueProviderArg.OFFSET) ? desc.getInt(ValueProviderArg.OFFSET) : 0;
+		int offset = desc.getValue(ValueProviderArg.OFFSET, context, player, target, host, 0);
 		int value = provideValue(context, providingPlayer, target, host) * multiplier + offset;
 		return value;
 	}

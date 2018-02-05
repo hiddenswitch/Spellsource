@@ -2,7 +2,7 @@
   "name": "Ancestral Legacy",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Discover a Minion you played this game. Overload: (1)",
   "targetSelection": "NONE",
