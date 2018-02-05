@@ -166,6 +166,15 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
 			Assert.assertTrue(theDarkness.hasAttribute(Attribute.PERMANENT), "Comes into play permanent.");
 			Assert.assertEquals(theDarkness.getDescription(), permanentDescription, "Should have different description.");
+			// Note that the opponent is going to draw three cards next turn, so let's remove one
+			context.getLogic().removeCard(opponent.getDeck().get(0));
+			context.endTurn();
+			context.endTurn();
+			Assert.assertFalse(theDarkness.canAttackThisTurn());
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(
+					ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK
+							&& ga.getSourceReference().equals(theDarkness.getReference())
+			));
 		});
 
 		// Dirty rat play
@@ -182,14 +191,14 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
 			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 3L);
-			for (int i = 0; i < 3; i++) {
-				context.endTurn();
-				// Opponent's turn
-				context.endTurn();
-			}
+			context.endTurn();
+			// Opponent's turn, opponent will draw three candles immediately in one turn
+			context.endTurn();
+
 			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
 			Assert.assertFalse(theDarkness.hasAttribute(Attribute.PERMANENT));
 			Assert.assertEquals(theDarkness.getDescription(), regularDescription, "Should have different description.");
+			Assert.assertTrue(theDarkness.canAttackThisTurn());
 		});
 
 		// Test that milling a candle does not trigger The Darkness
@@ -212,11 +221,10 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
 			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 3L);
-			for (int i = 0; i < 3; i++) {
-				context.endTurn();
-				// Opponent's turn
-				context.endTurn();
-			}
+			context.endTurn();
+			// Opponent's turn
+			context.endTurn();
+
 			Assert.assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
 			Assert.assertFalse(theDarkness.hasAttribute(Attribute.PERMANENT));
 			Assert.assertEquals(theDarkness.getDescription(), regularDescription, "Should have different description.");
