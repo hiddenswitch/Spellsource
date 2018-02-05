@@ -2,7 +2,7 @@
   "name": "Seadevil Totem",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "EPIC",
@@ -16,11 +16,27 @@
     "spell": {
       "class": "ConditionalSpell",
       "condition": {
-        "class": "MinionOnBoardCondition",
-        "cardFilter": {
-          "class": "RaceFilter",
-          "race": "TOTEM"
-        }
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "MinionOnBoardCondition",
+            "targetPlayer": "SELF",
+            "value": 2,
+            "cardFilter": {
+              "class": "RaceFilter",
+              "race": "TOTEM"
+            }
+          },
+          {
+            "class": "MinionOnBoardCondition",
+            "targetPlayer": "OPPONENT",
+            "value": 2,
+            "cardFilter": {
+              "class": "RaceFilter",
+              "race": "TOTEM"
+            }
+          }
+        ]
       },
       "spell": {
         "class": "MetaSpell",
@@ -35,7 +51,7 @@
             "randomTarget": true
           },
           {
-            "class": "SummonRandomMinionFilteredSpell",
+            "class": "SummonSpell",
             "boardPositionRelative": "RIGHT",
             "cardFilter": {
               "class": "CardFilter",

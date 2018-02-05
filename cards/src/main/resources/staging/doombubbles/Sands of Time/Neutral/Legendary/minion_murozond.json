@@ -47,7 +47,7 @@
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "SHAMAN",
+              "heroClass": "SILVER",
               "targetPlayer": "SELF"
             },
             {
@@ -154,7 +154,7 @@
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "SHAMAN",
+              "heroClass": "SILVER",
               "targetPlayer": "OPPONENT"
             },
             {

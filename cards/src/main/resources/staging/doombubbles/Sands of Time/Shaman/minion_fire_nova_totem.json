@@ -2,7 +2,7 @@
   "name": "Fire Nova Totem",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "COMMON",

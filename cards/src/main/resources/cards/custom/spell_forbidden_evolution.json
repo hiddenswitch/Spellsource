@@ -2,7 +2,7 @@
   "name": "Forbidden Evolution",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "EPIC",
   "description": "Spend all your mana. Transform a friendly minion into a random one that costs that much more.",
   "targetSelection": "FRIENDLY_MINIONS",
@@ -38,6 +38,6 @@
     ]
   },
   "collectible": true,
-  "set": "THE_OLD_GODS",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

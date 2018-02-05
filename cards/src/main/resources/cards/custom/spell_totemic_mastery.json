@@ -2,9 +2,8 @@
   "name": "Totem Mastery",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
-  "race": "ENHANCEMENT",
   "description": "Summon the basic totems you don't already control. Overload: (1)",
   "targetSelection": "NONE",
   "spell": {

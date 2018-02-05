@@ -2,7 +2,7 @@
   "name": "Instant Evolution",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "race": "ENHANCEMENT",
   "description": "Transform a friendly minion into a random one that costs at least (7) more.",

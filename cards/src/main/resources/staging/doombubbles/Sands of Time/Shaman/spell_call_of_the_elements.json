@@ -2,7 +2,7 @@
   "name": "Call of the Elements",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Shuffle 'The Elements Respond' into your deck which draws 4 cards.",
   "targetSelection": "NONE",

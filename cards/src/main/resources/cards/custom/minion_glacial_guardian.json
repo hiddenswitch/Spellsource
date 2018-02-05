@@ -2,9 +2,10 @@
   "name": "Glacial Guardian",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SHAMAN",
+  "heroClass": "SILVER",
   "baseAttack": 6,
   "baseHp": 6,
+  "race": "ELEMENTAL",
   "rarity": "COMMON",
   "description": "Taunt. Battlecry: Freeze this minion.",
   "battlecry": {
@@ -20,6 +21,6 @@
     "TAUNT": true
   },
   "collectible": true,
-  "set": "FROZEN_THRONE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
