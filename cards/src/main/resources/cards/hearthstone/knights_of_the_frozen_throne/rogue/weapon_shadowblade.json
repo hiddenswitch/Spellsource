@@ -8,9 +8,10 @@
   "rarity": "RARE",
   "description": "Battlecry: Your hero is Immune this turn.",
   "battlecry": {
-    "targetSelection": "FRIENDLY_HERO",
+    "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
+      "target": "FRIENDLY_HERO",
       "attribute": "IMMUNE",
       "revertTrigger": {
         "class": "TurnEndTrigger"

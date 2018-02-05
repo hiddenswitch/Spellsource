@@ -14,10 +14,10 @@
       "value1": {
         "class": "ReduceValueProvider",
         "target": "FRIENDLY_HAND",
+        "operation": "ADD",
         "value1": {
           "class": "ManaCostProvider"
-        },
-        "operation": "ADD"
+        }
       },
       "value2": 5
     },
