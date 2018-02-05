@@ -8,6 +8,16 @@
   "rarity": "COMMON",
   "description": "Taunt. Battlecry: Destroy a 1-Cost minion",
   "battlecry": {
+    "condition": {
+      "class": "HasEntityCondition",
+      "target": "ALL_OTHER_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 1,
+        "attribute": "BASE_MANA_COST",
+        "operation": "EQUAL"
+      }
+    },
     "targetSelection": "MINIONS",
     "spell": {
       "class": "DestroySpell",

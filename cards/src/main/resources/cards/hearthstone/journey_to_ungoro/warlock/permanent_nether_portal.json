@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn, summon two 3/2 Imps.",
+  "description": "Permanent. At the end of your turn, summon two 3/2 Imps.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

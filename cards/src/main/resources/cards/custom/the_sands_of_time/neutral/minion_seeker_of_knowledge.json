@@ -9,13 +9,16 @@
   "description": "Battlecry: Draw a card. If it's a spell, draw again.",
   "battlecry": {
     "spell": {
-      "class": "DrawCardAndDoSomethingSpell",
+      "class": "DrawCardSpell",
       "spell": {
-        "class": "DrawCardSpell",
-        "value": 1,
+        "class": "ConditionalSpell",
         "condition": {
           "class": "CardPropertyCondition",
+          "target": "OUTPUT",
           "cardType": "SPELL"
+        },
+        "spell": {
+          "class": "DrawCardSpell"
         }
       }
     }

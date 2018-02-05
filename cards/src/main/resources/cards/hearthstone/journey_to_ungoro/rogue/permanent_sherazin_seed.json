@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "When you play 4 cards in a turn, revive this minion.",
+  "description": "Permanent. When you play 4 cards in a turn, revive this minion.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",

@@ -2,7 +2,7 @@
   "name": "Hypnotist",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "NEUTRAL",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
@@ -15,15 +15,13 @@
         {
           "class": "SetAttackSpell",
           "value": {
-            "class": "AttributeValueProvider",
-            "attribute": "BASE_MANA_COST"
+            "class": "ManaCostProvider"
           }
         },
         {
           "class": "SetHpSpell",
           "value": {
-            "class": "AttributeValueProvider",
-            "attribute": "BASE_MANA_COST"
+            "class": "ManaCostProvider"
           }
         }
       ]

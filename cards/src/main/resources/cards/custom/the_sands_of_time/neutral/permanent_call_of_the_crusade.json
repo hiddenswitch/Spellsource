@@ -1,0 +1,33 @@
+{
+  "name": "Call of the Crusade",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Permanent. Adjacent minions have +1 attack. (Dies at the end of your 3rd turn).",
+  "trigger": {
+    "countUntilCast": 3,
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "SELF"
+    },
+    "maxFires": 3
+  },
+  "aura": {
+    "class": "BuffAura",
+    "target": "ADJACENT_MINIONS",
+    "attackBonus": 1
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

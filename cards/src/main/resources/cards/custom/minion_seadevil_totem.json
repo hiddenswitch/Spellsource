@@ -20,21 +20,21 @@
         "conditions": [
           {
             "class": "MinionOnBoardCondition",
-            "targetPlayer": "SELF",
             "value": 2,
             "cardFilter": {
               "class": "RaceFilter",
               "race": "TOTEM"
-            }
+            },
+            "targetPlayer": "SELF"
           },
           {
             "class": "MinionOnBoardCondition",
-            "targetPlayer": "OPPONENT",
             "value": 2,
             "cardFilter": {
               "class": "RaceFilter",
               "race": "TOTEM"
-            }
+            },
+            "targetPlayer": "OPPONENT"
           }
         ]
       },

@@ -161,7 +161,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testTheDarkness() {
 		final String regularDescription = "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens.";
-		final String permanentDescription = "When your opponent draws 3 Candles, this awakens!";
+		final String permanentDescription = "Permanent. When your opponent draws 3 Candles, this awakens!";
 		runGym((context, player, opponent) -> {
 			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
 			Assert.assertTrue(theDarkness.hasAttribute(Attribute.PERMANENT), "Comes into play permanent.");

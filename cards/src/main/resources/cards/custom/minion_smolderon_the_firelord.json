@@ -13,11 +13,11 @@
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
+      "card": "spell_lava_burst",
       "filter": {
         "class": "SpecificCardFilter",
         "cardId": "token_flame_elemental"
-      },
-      "card": "spell_lava_burst"
+      }
     }
   },
   "attributes": {
