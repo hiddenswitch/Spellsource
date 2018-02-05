@@ -322,6 +322,15 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	}
 
 	@Test
+	public void testArcaneTyrantChooseOneInteraction() {
+		runGym((context, player, opponent) -> {
+			final Card card = receiveCard(context, player, "minion_arcane_tyrant");
+			playChooseOneCard(context, player, "spell_nourish", "spell_nourish_1");
+			Assert.assertEquals(costOf(context, player, card), 0);
+		});
+	}
+
+	@Test
 	public void testKoboldBarbarian() {
 		runGym((context, player, opponent) -> {
 			Minion kobold = playMinionCard(context, player, "minion_kobold_barbarian");

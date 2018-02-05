@@ -540,6 +540,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Card sourceCard = null;
 		SpellCard chosenCard = (SpellCard) context.getCardById(cardId);
 		sourceCard = source.getEntityType() == EntityType.CARD ? (Card) source : null;
+
+		if (sourceCard != null) {
+			if (sourceCard.hasAttribute(Attribute.STARTED_IN_DECK)) {
+				chosenCard.setAttribute(Attribute.STARTED_IN_DECK);
+			}
+
+			sourceCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK, context.getTurn());
+			chosenCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK, context.getTurn());
+		}
+
 		if (!spellDesc.hasPredefinedTarget() && targets != null && targets.size() == 1) {
 			if (chosenCard.getTargetRequirement() != TargetSelection.NONE) {
 				context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
