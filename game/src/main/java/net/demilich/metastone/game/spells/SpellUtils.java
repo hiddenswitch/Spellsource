@@ -27,6 +27,7 @@ import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -136,6 +137,16 @@ public class SpellUtils {
 		return card;
 	}
 
+	/**
+	 * Retrieves the cards specified inside the {@link SpellArg#CARD} and {@link SpellArg#CARDS} arguments.
+	 *
+	 * @param context The game context to use for {@link GameContext#getPendingCard()} or
+	 *                {@link GameContext#getOutputCard()} lookups.
+	 * @param spell   The spell description to retrieve the cards from.
+	 * @return A new array of {@link Card} entities.
+	 * @see #castChildSpell(GameContext, Player, SpellDesc, Entity, Entity, Entity) for a description of what an
+	 * {@code "OUTPUT_CARD"} value corresponds to.
+	 */
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
 		String[] cardIds;
 		if (spell.containsKey(SpellArg.CARDS)) {
@@ -440,5 +451,54 @@ public class SpellUtils {
 		context.getOutputStack().push(output.getReference());
 		castChildSpell(context, player, spell, source, target);
 		context.getOutputStack().pop();
+	}
+
+	/**
+	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link SpellArg#CARDS}
+	 * properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource} and {@link
+	 * net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the target's
+	 * {@link Entity#getSourceCard()} as the targeted card.
+	 * <p>
+	 * The number of cards randomly retrieved is equal to the {@link SpellArg#VALUE} specified in the {@code desc}
+	 * argument, defaulting to 1.
+	 *
+	 * @param context The game context
+	 * @param player  The player from whose point of view these cards should be retrieved
+	 * @param target  The target, which can be {@code null}
+	 * @param source  The source or host {@link Entity}, typically the origin of this spell cast.
+	 * @param desc    The {@link SpellDesc} typically of the calling spell.
+	 * @return A list of cards.
+	 */
+	public static CardList getCards(GameContext context, Player player, Entity target, Entity source, SpellDesc desc) {
+		return getCards(context, player, target, source, desc, desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
+	}
+
+	/**
+	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link SpellArg#CARDS}
+	 * properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource} and {@link
+	 * net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the target's
+	 * {@link Entity#getSourceCard()} as the targeted card.
+	 *
+	 * @param context The game context
+	 * @param player  The player from whose point of view these cards should be retrieved
+	 * @param target  The target, which can be {@code null}
+	 * @param source  The source or host {@link Entity}, typically the origin of this spell cast.
+	 * @param desc    The {@link SpellDesc} typically of the calling spell.
+	 * @param count   The number of cards to return, exclusively and randomly, from the generated card list.
+	 * @return A list of cards.
+	 */
+	public static CardList getCards(GameContext context, Player player, Entity target, Entity source, SpellDesc desc, int count) {
+		CardList cards = new CardArrayList(Arrays.asList(getCards(context, desc)));
+		boolean hasCardSourceOrFilter = desc.containsKey(SpellArg.CARD_SOURCE) || desc.containsKey(SpellArg.CARD_FILTER);
+		if (cards.isEmpty()
+				&& target != null) {
+			if (hasCardSourceOrFilter) {
+				cards.addAll(desc.getFilteredCards(context, player, source));
+			} else {
+				cards.add(target.getSourceCard());
+			}
+		}
+		CardList shuffled = cards.shuffle(context.getLogic().getRandom());
+		return new CardArrayList(shuffled.subList(0, count));
 	}
 }

@@ -1179,8 +1179,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return null;
 		}
 
-		Card card = getRandom(deck);
-		return drawCard(playerId, card, source);
+		return drawCard(playerId, deck.pop(), source);
 	}
 
 	/**
@@ -2895,6 +2894,33 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	// TODO: circular dependency. Very ugly, refactor!
 	public void setContext(GameContext context) {
 		this.context = context;
+	}
+
+	/**
+	 * Places a card at the top of a player's deck, indicating it will be the next card to be drawn.
+	 * <p>
+	 * The top of the deck is the last element in the deck array.
+	 *
+	 * @param player The {@link Player} whose deck should be used
+	 * @param card   The card to put at the top of the deck.
+	 */
+	@Suspendable
+	public void putOnTopOfDeck(Player player, Card card) {
+		if (card.getId() == IdFactory.UNASSIGNED) {
+			card.setId(generateId());
+		}
+
+		if (card.getOwner() == IdFactory.UNASSIGNED) {
+			card.setOwner(player.getId());
+		}
+
+		int count = player.getDeck().getCount();
+		if (count < MAX_DECK_SIZE) {
+			player.getDeck().add(card);
+
+			processGameTriggers(player, card);
+			processDeckTriggers(player, card);
+		}
 	}
 
 	/**

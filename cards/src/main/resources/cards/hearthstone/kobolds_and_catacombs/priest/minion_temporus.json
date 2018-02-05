@@ -11,37 +11,32 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "AddEnchantmentSpell",
-          "target": "FRIENDLY_PLAYER",
-          "trigger": {
-            "eventTrigger": {
-              "class": "TurnStartTrigger",
-              "targetPlayer": "OPPONENT"
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "ModifyAttributeSpell",
+              "target": "FRIENDLY_PLAYER",
+              "value": 2,
+              "attribute": "EXTRA_TURN"
             },
-            "spell": {
-              "class": "MetaSpell",
-              "spells": [
-                {
-                  "class": "ModifyAttributeSpell",
-                  "target": "FRIENDLY_PLAYER",
-                  "value": 2,
-                  "attribute": "EXTRA_TURN"
-                },
-                {
-                  "class": "ModifyAttributeSpell",
-                  "target": "ENEMY_PLAYER",
-                  "value": 1,
-                  "attribute": "EXTRA_TURN"
-                }
-              ]
-            },
-            "oneTurn": true
-          }
-        }
-      ]
+            {
+              "class": "ModifyAttributeSpell",
+              "target": "ENEMY_PLAYER",
+              "value": 1,
+              "attribute": "EXTRA_TURN"
+            }
+          ]
+        },
+        "oneTurn": true
+      }
     }
   },
   "attributes": {

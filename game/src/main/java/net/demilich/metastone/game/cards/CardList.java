@@ -222,7 +222,24 @@ public interface CardList extends Iterable<Card>, List<Card> {
 		return copiedCards;
 	}
 
+	/**
+	 * Gets the {@link Stream<Card>} API representation of this card list.
+	 *
+	 * @return The backing list's {@link List#stream()}.
+	 */
 	default Stream<Card> stream() {
 		return toList().stream();
+	}
+
+	/**
+	 * Removes and returns the last card in the card list.
+	 *
+	 * @return The last card, or null if the {@link #size()} is {@code 0}.
+	 */
+	default Card pop() {
+		if (size() == 0) {
+			return null;
+		}
+		return remove(size() - 1);
 	}
 }

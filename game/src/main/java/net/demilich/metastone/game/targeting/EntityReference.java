@@ -56,6 +56,7 @@ public class EntityReference implements Serializable {
 	public static final EntityReference FRIENDLY_HERO_POWER = new EntityReference(-49);
 	public static final EntityReference ENEMY_HERO_POWER = new EntityReference(-50);
 	public static final EntityReference OTHER_ENEMY_MINIONS = new EntityReference(-51);
+	public static final EntityReference LEFTMOST_FRIENDLY_CARD_HAND = new EntityReference(-52);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

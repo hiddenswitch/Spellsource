@@ -10,6 +10,7 @@
   "cardCostModifier": {
     "class": "CardCostModifier",
     "value": 0,
+    "target": "FRIENDLY_HAND",
     "cardFilter": {
       "class": "CardFilter",
       "value": 1,

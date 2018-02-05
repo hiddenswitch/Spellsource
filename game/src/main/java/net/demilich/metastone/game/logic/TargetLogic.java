@@ -224,6 +224,11 @@ public class TargetLogic implements Serializable {
 			List<Entity> targets = this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
 			targets.remove(source);
 			return targets;
+		} else if (targetKey.equals(EntityReference.LEFTMOST_FRIENDLY_CARD_HAND)) {
+			if (player.getHand().size() == 0) {
+				return new ArrayList<>();
+			}
+			return new ArrayList<>(player.getHand().subList(0, 1));
 		} else if (targetKey.equals(EntityReference.ALL_OTHER_CHARACTERS)) {
 			List<Entity> targets = this.getEntities(context, player, TargetSelection.ANY);
 			targets.remove(source);

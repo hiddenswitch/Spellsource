@@ -52,3 +52,4 @@ public class ShuffleToDeckSpell extends Spell {
 		}
 	}
 }
+

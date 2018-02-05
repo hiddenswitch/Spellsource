@@ -15,6 +15,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.Zones;
+import org.apache.commons.collections4.Bag;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
@@ -101,6 +102,7 @@ public class TestBase {
 		};
 
 		Mockito.doAnswer(answer).when(spyLogic).getRandom(Mockito.anyList());
+		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.any(Bag.class));
 		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.anyList());
 		handle.set(card);
 		return handle;
@@ -126,7 +128,7 @@ public class TestBase {
 		return handle;
 	}
 
-	protected static void overrideDiscover(GameContext context, String cardId, Player player) {
+	protected static void overrideDiscover(GameContext context, Player player, String cardId) {
 		OverrideHandle<Card> handle = overrideRandomCard(context, cardId);
 		overrideDiscover(player, discovers -> {
 			DiscoverAction action = discovers.stream().filter(da -> da.getCard().getCardId().equals(cardId)).findFirst().orElseThrow(AssertionError::new);

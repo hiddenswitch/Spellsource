@@ -11,10 +11,21 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ModifyAttributeSpell",
-      "target": "ENEMY_PLAYER",
-      "value": 1,
-      "attribute": "EXTRA_TURNS"
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell": {
+          "class": "ModifyAttributeSpell",
+          "target": "ENEMY_PLAYER",
+          "value": 1,
+          "attribute": "EXTRA_TURN"
+        },
+        "oneTurn": true
+      }
     }
   },
   "attributes": {
