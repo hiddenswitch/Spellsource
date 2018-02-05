@@ -256,6 +256,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	}
 
 	@Test
+	@Ignore
 	public void testKingTogwaggle() {
 		runGym((context, player, opponent) -> {
 			final Card card1a = CardCatalogue.getCardById("spell_mirror_image");

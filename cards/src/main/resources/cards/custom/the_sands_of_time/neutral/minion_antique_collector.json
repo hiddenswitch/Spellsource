@@ -10,7 +10,14 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "custom.LeftmostReductionSpell"
+      "class": "CardCostModifierSpell",
+      "target": "LEFTMOST_FRIENDLY_CARD_HAND",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 2,
+        "operation": "SUBTRACT"
+      }
     }
   },
   "attributes": {

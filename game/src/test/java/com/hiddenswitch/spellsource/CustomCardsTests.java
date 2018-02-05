@@ -19,6 +19,36 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testHighmountainPrimalist() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 29; i++) {
+				shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			}
+			overrideDiscover(context, player, "spell_mirror_image");
+			playCard(context, player, "minion_highmountain_primalist");
+			playCard(context, player, "minion_novice_engineer");
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_mirror_image");
+		});
+	}
+
+	@Test
+	public void testDimensionalCourier() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_dimensional_courier");
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
+		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_snowflipper_penguin");
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_dimensional_courier");
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
 	public void testPermanentCallOfTheCrusade() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "permanent_call_of_the_crusade");
@@ -399,7 +429,7 @@ public class CustomCardsTests extends TestBase {
 			for (int i = 0; i < 3; i++) {
 				shuffleToDeck(context, player, "spell_the_coin");
 			}
-			overrideDiscover(context, "spell_enhanced", player);
+			overrideDiscover(context, player, "spell_enhanced");
 			playCard(context, player, "spell_metamagic");
 			int opponentHp = opponent.getHero().getHp();
 			playCardWithTarget(context, player, "spell_temporal_flux", opponent.getHero());
@@ -412,7 +442,7 @@ public class CustomCardsTests extends TestBase {
 	public void testMetamagic() {
 		// Costs (2) less.
 		runGym((context, player, opponent) -> {
-			overrideDiscover(context, "spell_quickened", player);
+			overrideDiscover(context, player, "spell_quickened");
 			playCard(context, player, "spell_metamagic");
 			player.setMaxMana(10);
 			player.setMana(10);
@@ -429,7 +459,7 @@ public class CustomCardsTests extends TestBase {
 			Minion villager = playMinionCard(context, opponent, "minion_possessed_villager");
 			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
-			overrideDiscover(context, "spell_unbounded", player);
+			overrideDiscover(context, player, "spell_unbounded");
 			playCard(context, player, "spell_metamagic");
 			Assert.assertFalse(villager.isDestroyed());
 			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp(), "Metamagic should not have triggered its own effect.");
@@ -448,7 +478,7 @@ public class CustomCardsTests extends TestBase {
 
 		// Returns to your deck after you cast it.
 		runGym((context, player, opponent) -> {
-			overrideDiscover(context, "spell_memorized", player);
+			overrideDiscover(context, player, "spell_memorized");
 			playCard(context, player, "spell_metamagic");
 			playCard(context, player, "minion_bloodfen_raptor");
 			Assert.assertEquals(player.getDeck().size(), 0, "We should not have shuffled a minion card into the deck.");
@@ -465,7 +495,7 @@ public class CustomCardsTests extends TestBase {
 
 		// Freezes two random enemies.
 		runGym((context, player, opponent) -> {
-			overrideDiscover(context, "spell_chilled", player);
+			overrideDiscover(context, player, "spell_chilled");
 			playCard(context, player, "spell_metamagic");
 			context.endTurn();
 			Minion minion1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
@@ -480,7 +510,7 @@ public class CustomCardsTests extends TestBase {
 
 		// The next spell you cast costs (2) more and has Spell Damage +2.
 		runGym((context, player, opponent) -> {
-			overrideDiscover(context, "spell_enhanced", player);
+			overrideDiscover(context, player, "spell_enhanced");
 			playCard(context, player, "spell_metamagic");
 			Card fireball = receiveCard(context, player, "spell_fireball");
 			Assert.assertEquals(costOf(context, player, fireball), fireball.getBaseManaCost() + 2);
@@ -503,7 +533,7 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			Minion chillwind = playMinionCard(context, opponent, "minion_chillwind_yeti");
 			context.endTurn();
-			overrideDiscover(context, "spell_empowered", player);
+			overrideDiscover(context, player, "spell_empowered");
 			playCard(context, player, "spell_metamagic");
 			Assert.assertEquals(chillwind.getHp(), chillwind.getBaseHp(), "Metamagic should not have triggered its own effect.");
 			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
