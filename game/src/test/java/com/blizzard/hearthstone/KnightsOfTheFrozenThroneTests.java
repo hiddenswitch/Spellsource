@@ -42,6 +42,19 @@ import static org.mockito.Mockito.*;
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 	@Test
+	public void testShadowblade() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCard(context, player, "weapon_shadowblade");
+			int hp = player.getHero().getHp();
+			attack(context, player, player.getHero(), bloodfen);
+			Assert.assertEquals(player.getHero().getHp(), hp);
+		});
+	}
+
+	@Test
 	public void testRollTheBones() {
 		runGym((context, player, opponent) -> {
 			GameLogic spyLogic = spy(context.getLogic());
