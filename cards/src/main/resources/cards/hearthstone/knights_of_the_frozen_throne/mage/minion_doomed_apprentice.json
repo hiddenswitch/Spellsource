@@ -10,7 +10,8 @@
   "cardCostModifier": {
     "class": "CardCostModifier",
     "value": 1,
-    "cardType": "MINION",
+    "cardType": "SPELL",
+    "target": "ENEMY_HAND",
     "targetPlayer": "OPPONENT"
   },
   "collectible": true,

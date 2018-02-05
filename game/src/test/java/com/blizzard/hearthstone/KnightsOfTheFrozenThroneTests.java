@@ -42,6 +42,16 @@ import static org.mockito.Mockito.*;
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 	@Test
+	public void testDoomedApprentice() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_doomed_apprentice");
+			context.endTurn();
+			Card fireball = receiveCard(context, opponent, "spell_fireball");
+			Assert.assertEquals(costOf(context, player, fireball), fireball.getBaseManaCost() + 1);
+		});
+	}
+
+	@Test
 	public void testShadowblade() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
