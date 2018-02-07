@@ -2,6 +2,14 @@
 
 This module contains a card game engine.
 
+### Getting Started with the Spellsource Engine
+
+In Spellsource, the object model starts with the [GameContext](src/main/java/net/demilich/metastone/game/GameContext.java) class. It contains the ongoing data in the game, like the cards, heroes, minions and various variables; logic for how a player should behave; and logic for how the underlying rules of the game work.
+
+Start by visiting the [GameContext](src/main/java/net/demilich/metastone/game/GameContext.java) class and reading its documentation.
+
+For AI opponent-related work, start with the [GameStateValueBehaviour](src/main/java/net/demilich/metastone/game/shared/threat/GameStateValueBehaviour.java) to see an implementation of a one-turn horizon artificial intelligence opponent.
+
 ### What belongs in this module
 
  - **Engine interfaces and implementation**: [GameContext](src/main/java/net/demilich/metastone/game/GameContext.java) is the core object that executes a single match of Spellsource. The best AI is implemented by [GameStateValueBehaviour](src/main/java/net/demilich/metastone/game/shared/threat/GameStateValueBehaviour.java).

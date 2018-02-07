@@ -15,10 +15,12 @@ import net.demilich.metastone.game.logic.GameLogic;
  * <p>
  * Behaviours live inside {@link Player} objects, and they're used by the {@link GameContext} to determine what action
  * or mulligan a player chose to do. In this model, the game context is responsible for calling the methods in this
- * class.The {@link GameLogic} typically executes as many game rules as possible until it reaches the next point where
+ * class. The {@link GameLogic} typically executes as many game rules as possible until it reaches the next point where
  * an action is requested. The {@link GameContext} is then responsible for getting the next action.
  *
  * @see AbstractBehaviour for default implementations of some of these requests.
+ * @see net.demilich.metastone.game.shared.threat.GameStateValueBehaviour for an example of an artificial-intelligence
+ * based behaviour.
  */
 public interface Behaviour extends Cloneable {
 	/***
