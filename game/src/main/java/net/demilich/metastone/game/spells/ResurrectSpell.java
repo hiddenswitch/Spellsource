@@ -54,7 +54,7 @@ public class ResurrectSpell extends Spell {
 			if (summoned
 					&& desc.containsKey(SpellArg.SPELL)
 					&& summonedMinion.getZone() == Zones.BATTLEFIELD) {
-				SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, summonedMinion);
+				SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, summonedMinion, summonedMinion);
 			}
 			deadMinions.remove(resurrectedMinion);
 		}

@@ -5,12 +5,13 @@
   "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Summon 1/1 copies of 2 friendly Deathrattle minions that died this game.",
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
     "class": "ResurrectSpell",
     "value": 2,
     "spell": {
       "class": "MetaSpell",
+      "target": "OUTPUT",
       "spells": [
         {
           "class": "SetAttackSpell",
@@ -32,7 +33,7 @@
       "targetPlayer": "SELF"
     }
   },
-  "collectible": false,
+  "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1
 }
