@@ -103,4 +103,11 @@ public interface Behaviour extends Cloneable {
 	 */
 	@Suspendable
 	void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId);
+
+	/**
+	 * Determines whether this behaviour's actions were determined by a human.
+	 *
+	 * @return {@code true} if the actions are determined by a human, {@code false} otherwise.
+	 */
+	boolean isHuman();
 }

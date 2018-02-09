@@ -1299,13 +1299,18 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	}
 
 	/**
-	 * Runs a simulation of the decks with the default {@link net.demilich.metastone.game.shared.threat.GameStateValueBehaviour} AI.
+	 * Runs a simulation of the decks with the default {@link net.demilich.metastone.game.shared.threat.GameStateValueBehaviour}
+	 * AI.
 	 *
 	 * @param deckPair        A pair of decks to run a match with.
-	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
-	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
-	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation on this JVM instance.
-	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is completed.
+	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
+	 *                        corresponds to an AI to use for this player.
+	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
+	 *                        corresponds to an AI to use for this player.
+	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this
+	 *                        computation on this JVM instance.
+	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
+	 *                        completed.
 	 */
 	public static SimulationResult simulate(List<Deck> deckPair, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter) {
 		// Actually run the computation
@@ -1404,6 +1409,16 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 			deckPairs.add(new String[]{deck, deck});
 		}
 		return deckPairs;
+	}
+
+	/**
+	 * The number of milliseconds remaining until the active player is automatically changed.
+	 *
+	 * @return {@code null} if there are no turn/mulligan timers, otherwise the amount of time remaining in
+	 * milliseconds.
+	 */
+	public Long getMillisRemaining() {
+		return null;
 	}
 
 	/**

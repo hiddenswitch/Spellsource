@@ -75,4 +75,9 @@ public class NetworkBehaviour extends AbstractBehaviour implements Serializable 
 			context.sendGameOver(context.getPlayer(playerId), null);
 		}
 	}
+
+	@Override
+	public boolean isHuman() {
+		return true;
+	}
 }

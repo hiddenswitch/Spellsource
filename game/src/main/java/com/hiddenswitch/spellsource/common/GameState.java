@@ -6,7 +6,6 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.cards.CardList;
@@ -49,8 +48,8 @@ public class GameState implements Serializable, Cloneable {
 	 */
 	public final CardList tempCards;
 	/**
-	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions
-	 * are currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
+	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions are
+	 * currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
 	 * <p>
 	 * This helps implement a variety of complex rules in the game.
 	 *
@@ -58,8 +57,7 @@ public class GameState implements Serializable, Cloneable {
 	 */
 	public final Map<Environment, Object> environment;
 	/**
-	 * An instance of the class that manages and stores the state for {@link Trigger}
-	 * objects.
+	 * An instance of the class that manages and stores the state for {@link Trigger} objects.
 	 *
 	 * @see Trigger for more about triggers.
 	 * @see GameContext#fireGameEvent(GameEvent) for more about firing triggers and raising events.
@@ -89,6 +87,11 @@ public class GameState implements Serializable, Cloneable {
 	 * The deck format of this game.
 	 */
 	public final DeckFormat deckFormat;
+	/**
+	 * The amount of time left in a timer, such as an end of turn or mulligan timer, until the player's actions are
+	 * automatically terminated. When {@code null}, no timer is set.
+	 */
+	public final Long millisRemaining;
 
 	public GameState(GameContext fromContext) {
 		this(fromContext, fromContext.getTurnState(), false);
@@ -115,6 +118,7 @@ public class GameState implements Serializable, Cloneable {
 		turnNumber = clone.getTurn();
 		this.turnState = turnState;
 		this.deckFormat = fromContext.getDeckFormat();
+		this.millisRemaining = fromContext.getMillisRemaining();
 	}
 
 	private GameState(Player player1,
@@ -126,7 +130,8 @@ public class GameState implements Serializable, Cloneable {
 	                  TurnState turnState,
 	                  long timestamp,
 	                  int turnNumber,
-	                  DeckFormat deckFormat) {
+	                  DeckFormat deckFormat,
+	                  Long millisRemaining) {
 		this.player1 = player1;
 		this.player2 = player2;
 		this.tempCards = tempCards;
@@ -138,6 +143,7 @@ public class GameState implements Serializable, Cloneable {
 		this.timestamp = timestamp;
 		this.turnNumber = turnNumber;
 		this.deckFormat = deckFormat;
+		this.millisRemaining = millisRemaining;
 	}
 
 
@@ -188,7 +194,7 @@ public class GameState implements Serializable, Cloneable {
 				turnState,
 				timestamp,
 				turnNumber,
-				deckFormat
-		);
+				deckFormat,
+				millisRemaining);
 	}
 }

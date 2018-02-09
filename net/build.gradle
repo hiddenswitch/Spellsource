@@ -88,6 +88,7 @@ task(runDebug, dependsOn: 'classes', type: JavaExec) {
 
 task(local, dependsOn: 'classes', type: JavaExec) {
     systemProperty "spellsource.port", "8080"
+    systemProperty "spellsource.root.logger.level", "DEBUG"
     main = 'com.hiddenswitch.spellsource.applications.Embedded'
     jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
     classpath = sourceSets.main.runtimeClasspath
