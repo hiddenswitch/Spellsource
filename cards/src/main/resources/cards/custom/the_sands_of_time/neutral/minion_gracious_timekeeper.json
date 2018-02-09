@@ -9,8 +9,8 @@
   "description": "Your 1-Cost cards cost (0).",
   "cardCostModifier": {
     "class": "CardCostModifier",
-    "value": 0,
     "target": "FRIENDLY_HAND",
+    "value": 0,
     "cardFilter": {
       "class": "CardFilter",
       "value": 1,

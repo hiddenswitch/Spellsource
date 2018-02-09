@@ -11,7 +11,7 @@ public class AfterSummonEvent extends GameEvent {
 	private final Card source;
 
 	public AfterSummonEvent(GameContext context, Actor minion, Card source) {
-		super(context, minion.getOwner(), -1);
+		super(context, minion.getOwner(), minion.getOwner());
 		this.minion = minion;
 		this.source = source;
 	}

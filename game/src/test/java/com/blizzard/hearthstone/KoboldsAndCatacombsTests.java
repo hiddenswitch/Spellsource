@@ -24,6 +24,18 @@ import java.util.stream.Stream;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	public void testIxlidFungalLord() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_ixlid_fungal_lord");
+			playCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getMinions()
+					.stream()
+					.filter(c -> c.getSourceCard().getCardId().equals("minion_bloodfen_raptor"))
+					.count(), 2, "There should be two copies of the Bloodfen Raptor.");
+		});
+	}
+
+	@Test
 	public void testGeosculptorYip() {
 		for (int j = 0; j <= 20; j++) {
 			final int i = j;
