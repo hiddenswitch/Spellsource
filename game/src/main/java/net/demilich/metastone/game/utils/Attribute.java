@@ -93,8 +93,7 @@ public enum Attribute {
 	 * Zones#REMOVED_FROM_PLAY} zones.
 	 * <p>
 	 * At the end of {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)} in {@link
-	 * GameLogic#endOfSequence()}, all entities with {@link #DESTROYED} will be sent to the {@link
-	 * Zones#GRAVEYARD}.
+	 * GameLogic#endOfSequence()}, all entities with {@link #DESTROYED} will be sent to the {@link Zones#GRAVEYARD}.
 	 *
 	 * @see Actor#isDestroyed() for a complete list of situations where an {@link Actor} is destroyed.
 	 */
@@ -673,8 +672,8 @@ public enum Attribute {
 	 */
 	TRANSFORM_REFERENCE,
 	/**
-	 * Whenever a {@link Card} is received into the hand, this attribute indicates on which turn (typically
-	 * {@link GameContext#getTurn()} the card was received.
+	 * Whenever a {@link Card} is received into the hand, this attribute indicates on which turn (typically {@link
+	 * GameContext#getTurn()} the card was received.
 	 */
 	RECEIVED_ON_TURN,
 	/**
@@ -688,6 +687,12 @@ public enum Attribute {
 	 * When {@code true}, indicates this card never appears in a mulligan. Typically used to implement passives.
 	 */
 	NEVER_MULLIGANS,
+	/**
+	 * When {@code true}, indicates this {@link Player} entity is an AI opponent.
+	 * <p>
+	 * Implements AI-specific game logic like eliminating turn timers.
+	 */
+	AI_OPPONENT,
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>

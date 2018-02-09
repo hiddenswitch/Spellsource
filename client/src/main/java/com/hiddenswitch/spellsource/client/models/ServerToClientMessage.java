@@ -35,6 +35,7 @@ import com.hiddenswitch.spellsource.client.models.GameEvent;
 import com.hiddenswitch.spellsource.client.models.GameOver;
 import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.MessageType;
+import com.hiddenswitch.spellsource.client.models.Timers;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -51,6 +52,9 @@ public class ServerToClientMessage  implements Serializable {
 
   @SerializedName("localPlayerId")
   private Integer localPlayerId = null;
+
+  @SerializedName("timers")
+  private Timers timers = null;
 
   @SerializedName("messageType")
   private MessageType messageType = null;
@@ -110,6 +114,24 @@ public class ServerToClientMessage  implements Serializable {
 
   public void setLocalPlayerId(Integer localPlayerId) {
     this.localPlayerId = localPlayerId;
+  }
+
+  public ServerToClientMessage timers(Timers timers) {
+    this.timers = timers;
+    return this;
+  }
+
+   /**
+   * Get timers
+   * @return timers
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Timers getTimers() {
+    return timers;
+  }
+
+  public void setTimers(Timers timers) {
+    this.timers = timers;
   }
 
   public ServerToClientMessage messageType(MessageType messageType) {
@@ -273,6 +295,7 @@ public class ServerToClientMessage  implements Serializable {
     ServerToClientMessage serverToClientMessage = (ServerToClientMessage) o;
     return Objects.equals(this.id, serverToClientMessage.id) &&
         Objects.equals(this.localPlayerId, serverToClientMessage.localPlayerId) &&
+        Objects.equals(this.timers, serverToClientMessage.timers) &&
         Objects.equals(this.messageType, serverToClientMessage.messageType) &&
         Objects.equals(this.changes, serverToClientMessage.changes) &&
         Objects.equals(this.gameState, serverToClientMessage.gameState) &&
@@ -285,7 +308,7 @@ public class ServerToClientMessage  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, localPlayerId, messageType, changes, gameState, actions, emote, gameOver, startingCards, event);
+    return Objects.hash(id, localPlayerId, timers, messageType, changes, gameState, actions, emote, gameOver, startingCards, event);
   }
 
   @Override
@@ -295,6 +318,7 @@ public class ServerToClientMessage  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    localPlayerId: ").append(toIndentedString(localPlayerId)).append("\n");
+    sb.append("    timers: ").append(toIndentedString(timers)).append("\n");
     sb.append("    messageType: ").append(toIndentedString(messageType)).append("\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
     sb.append("    gameState: ").append(toIndentedString(gameState)).append("\n");

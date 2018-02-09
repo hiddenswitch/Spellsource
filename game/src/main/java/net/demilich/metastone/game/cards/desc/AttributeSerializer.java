@@ -15,6 +15,7 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 			throws JsonParseException {
 		AttributeMap map = new AttributeMap();
 		JsonObject jsonData = json.getAsJsonObject();
+		parseAttribute(Attribute.AI_OPPONENT, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.ARMOR, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.HP, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.HP_BONUS, jsonData, map, ParseValueType.INTEGER);

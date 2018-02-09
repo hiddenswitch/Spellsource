@@ -374,4 +374,14 @@ public class Player extends Entity implements Serializable {
 	public Stream<? extends Actor> getActors() {
 		return Stream.concat(Stream.concat(getHeroZone().stream(), getMinions().stream()), getWeaponZone().stream());
 	}
+
+	/**
+	 * Determines whether this player object is backed by a human player.
+	 *
+	 * @return True if the behaviour has a human making the {@link Behaviour#requestAction(GameContext, Player, List)}
+	 * decisions.
+	 */
+	public boolean isHuman() {
+		return !hasAttribute(Attribute.AI_OPPONENT) && getBehaviour().isHuman();
+	}
 }

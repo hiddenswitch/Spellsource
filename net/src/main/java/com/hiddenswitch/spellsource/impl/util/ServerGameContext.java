@@ -55,6 +55,8 @@ public class ServerGameContext extends GameContext {
 	private final Scheduler scheduler;
 	private AtomicInteger eventCounter = new AtomicInteger(0);
 	private int timerElapsedForPlayerId;
+	private Long timerStartTimeMillis;
+	private Long timerLengthMillis;
 
 	/**
 	 * {@inheritDoc}
@@ -118,10 +120,10 @@ public class ServerGameContext extends GameContext {
 
 	@Suspendable
 	public void endTurn() {
-		logger.debug("Ending turn: " + getActivePlayer().getId());
+		logger.debug("endTurn: Ending turn: " + getActivePlayer().getId());
 		super.endTurn();
 		this.onGameStateChanged();
-		logger.debug("Active player changed to: " + getActivePlayerId());
+		logger.debug("endTurn: Active player changed to: " + getActivePlayerId());
 		getListenerMap().get(getPlayer1()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 		getListenerMap().get(getPlayer2()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 	}
@@ -178,14 +180,24 @@ public class ServerGameContext extends GameContext {
 		Future<Void> init2 = Future.future();
 
 		// Set the mulligan timer
-		final TimerId mulliganTimerId = scheduler.setTimer(getLogic().getMulliganTimeMillis(), Sync.fiberHandler(this::endMulligans));
+		final TimerId mulliganTimerId;
+		if (getPlayers().stream().allMatch(Player::isHuman)) {
+			timerLengthMillis = getLogic().getMulliganTimeMillis();
+			timerStartTimeMillis = System.currentTimeMillis();
+			mulliganTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::endMulligans));
+		} else {
+			mulliganTimerId = null;
+		}
+
 
 		getNetworkGameLogic().initAsync(getActivePlayerId(), true, p -> init1.complete());
 		getNetworkGameLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, p -> init2.complete());
 
 		// Mulligan simultaneously now
 		CompositeFuture.all(init1, init2).setHandler(cf -> {
-			scheduler.cancelTimer(mulliganTimerId);
+			if (mulliganTimerId != null) {
+				scheduler.cancelTimer(mulliganTimerId);
+			}
 			final TimerId[] turnTimerId = {null};
 			Recursive<Runnable> playTurnLoop = new Recursive<>();
 			playTurnLoop.func = () -> {
@@ -210,7 +222,14 @@ public class ServerGameContext extends GameContext {
 
 				// Start the turn timer
 				timerElapsedForPlayerId = -1;
-				turnTimerId[0] = scheduler.setTimer(getTurnTimeForPlayer(activePlayerId), Sync.fiberHandler(this::elapseTurn));
+				if (getNonActivePlayer().isHuman()) {
+					timerLengthMillis = (long) getTurnTimeForPlayer(activePlayerId);
+					timerStartTimeMillis = System.currentTimeMillis();
+
+					turnTimerId[0] = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::elapseTurn));
+				} else {
+					logger.debug("networkedPlay: Not setting timer because opponent is not human.");
+				}
 
 				Recursive<Handler<Boolean>> actionLoop = new Recursive<>();
 
@@ -614,5 +633,15 @@ public class ServerGameContext extends GameContext {
 
 	public NetworkDelegate getNetworkDelegate() {
 		return this;
+	}
+
+	@Override
+	public Long getMillisRemaining() {
+		if (timerStartTimeMillis == null
+				|| timerLengthMillis == null) {
+			return null;
+		}
+
+		return Math.max(0, timerLengthMillis - (System.currentTimeMillis() - timerStartTimeMillis));
 	}
 }

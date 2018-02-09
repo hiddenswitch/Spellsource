@@ -196,6 +196,7 @@ Class | Method | HTTP request | Description
  - [SummonAction](docs/SummonAction.md)
  - [SummonActionIndexToActions](docs/SummonActionIndexToActions.md)
  - [TargetActionPair](docs/TargetActionPair.md)
+ - [Timers](docs/Timers.md)
  - [UnfriendResponse](docs/UnfriendResponse.md)
 
 

@@ -126,6 +126,8 @@ public class WebSocketWriter implements Writer {
 		ServerToClientMessage message = new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
+				.timers(new Timers()
+						.millisRemaining(state.millisRemaining))
 				.gameState(getClientGameState(state));
 
 		final Class<? extends Notification> eventClass = event.getClass();
@@ -215,6 +217,8 @@ public class WebSocketWriter implements Writer {
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.ON_UPDATE)
 				.changes(getChangeSet(state))
+				.timers(new Timers()
+						.millisRemaining(state.millisRemaining))
 				.gameState(gameState));
 	}
 
@@ -249,6 +253,8 @@ public class WebSocketWriter implements Writer {
 				.id(id)
 				.messageType(MessageType.ON_REQUEST_ACTION)
 				.changes(getChangeSet(state))
+				.timers(new Timers()
+						.millisRemaining(state.millisRemaining))
 				.gameState(getClientGameState(state))
 				.actions(Games.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
@@ -260,6 +266,8 @@ public class WebSocketWriter implements Writer {
 		simulatedContext.setGameState(state);
 		sendMessage(new ServerToClientMessage()
 				.id(id)
+				.timers(new Timers()
+						.millisRemaining(state.millisRemaining))
 				.messageType(MessageType.ON_MULLIGAN)
 				.startingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c, playerId)).collect(Collectors.toList())));
 	}

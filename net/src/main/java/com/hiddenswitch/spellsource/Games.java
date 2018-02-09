@@ -760,7 +760,8 @@ public interface Games {
 				.isLocalPlayerTurn(localPlayerId == workingContext.getActivePlayerId())
 				.entities(entities)
 				.turnNumber(workingContext.getTurn())
-				.timestamp(System.nanoTime())
+				// Always use millis consistently everywhere
+				.timestamp(System.currentTimeMillis())
 				.turnState(workingContext.getTurnState().toString());
 	}
 

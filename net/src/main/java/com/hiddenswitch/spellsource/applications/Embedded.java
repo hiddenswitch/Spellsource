@@ -19,7 +19,7 @@ public class Embedded {
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
 				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.ERROR);
+		root.setLevel(Level.toLevel(System.getProperty("spellsource.root.logger.level"), Level.ERROR));
 
 		final Vertx vertx = Vertx.vertx();
 		mongo().connectWithEnvironment(vertx);
