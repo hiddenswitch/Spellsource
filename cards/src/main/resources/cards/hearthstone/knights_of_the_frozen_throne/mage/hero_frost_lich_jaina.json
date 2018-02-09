@@ -15,6 +15,13 @@
       "race": "ELEMENTAL"
     }
   },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_water_elemental"
+    }
+  },
   "attributes": {
     "ARMOR": 5,
     "BATTLECRY": true,

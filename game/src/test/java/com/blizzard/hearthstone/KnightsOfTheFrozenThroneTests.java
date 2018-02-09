@@ -228,6 +228,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			Assert.assertFalse(tarCreeper.hasAttribute(Attribute.LIFESTEAL));
 			Assert.assertFalse(bloodfen.hasAttribute(Attribute.LIFESTEAL));
 			playCard(context, player, "hero_frost_lich_jaina");
+			Assert.assertTrue(player.getMinions().stream().anyMatch(c -> c.getSourceCard().getCardId().equals("minion_water_elemental")));
 			Assert.assertTrue(tarCreeper.hasAttribute(Attribute.LIFESTEAL));
 			Assert.assertFalse(bloodfen.hasAttribute(Attribute.LIFESTEAL));
 			bloodfen.setHp(1);
