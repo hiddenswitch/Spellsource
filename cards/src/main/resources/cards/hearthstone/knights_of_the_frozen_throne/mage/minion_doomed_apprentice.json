@@ -9,9 +9,9 @@
   "description": "Your opponent's spells cost (1) more.",
   "cardCostModifier": {
     "class": "CardCostModifier",
+    "target": "ENEMY_HAND",
     "value": 1,
     "cardType": "SPELL",
-    "target": "ENEMY_HAND",
     "targetPlayer": "OPPONENT"
   },
   "collectible": true,
