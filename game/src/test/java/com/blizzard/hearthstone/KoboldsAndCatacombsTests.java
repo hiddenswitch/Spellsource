@@ -24,6 +24,19 @@ import java.util.stream.Stream;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	public void testThirtyScrollsOfWonder() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 30; i++) {
+				shuffleToDeck(context, player, "spell_scroll_of_wonder");
+			}
+			context.endTurn();
+			int startingRemoved = player.getRemovedFromPlay().size();
+			context.endTurn();
+			Assert.assertTrue(player.getRemovedFromPlay().size() >= startingRemoved + 30);
+		});
+	}
+
+	@Test
 	public void testIxlidFungalLord() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_ixlid_fungal_lord");

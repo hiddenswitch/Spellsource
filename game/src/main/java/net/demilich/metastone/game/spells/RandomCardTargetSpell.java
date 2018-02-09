@@ -55,7 +55,7 @@ public class RandomCardTargetSpell extends Spell {
 		spellCard.setId(context.getLogic().generateId());
 		spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 
-		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), spellCard));
+		context.getLogic().revealCard(player, spellCard);
 
 		if (spellCard.getTargetRequirement() == TargetSelection.NONE) {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
