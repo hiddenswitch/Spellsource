@@ -21,7 +21,7 @@
       "target": "FRIENDLY_HERO",
       "name": "Loot the Chest",
       "description": "Gain 6 Armor.",
-      "hpBonus": 6
+      "armorBonus": 6
     }
   ],
   "rarity": "FREE",

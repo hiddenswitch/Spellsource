@@ -1,5 +1,6 @@
 from json import dump, load
 from os import walk, path
+from collections import deque
 
 try:
     import objdict
@@ -28,6 +29,26 @@ def iter_cards(start_path=None):
                 except ValueError as ex:
                     print 'Parsing error in ', filepath
                     continue
+
+
+def walk_card(card):
+    queue = deque([(card, {}, None, card)])
+
+    while len(queue) > 0:
+        (next_dict, parent, key, inherits) = queue.popleft()
+        yield (next_dict, parent, key, inherits)
+        for k, v in next_dict.iteritems():
+
+            if isinstance(v, dict) or isinstance(v, OrderedDict):
+                copy = inherits.copy()
+                copy.update(v)
+                queue.append((v, next_dict, k, copy))
+            elif isinstance(v, list):
+                for item in v:
+                    if isinstance(item, dict) or isinstance(item, OrderedDict):
+                        copy = inherits.copy()
+                        copy.update(item)
+                        queue.append((item, next_dict, k, copy))
 
 
 def write_card(card, filepath):
