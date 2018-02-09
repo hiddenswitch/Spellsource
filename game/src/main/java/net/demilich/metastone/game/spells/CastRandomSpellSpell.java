@@ -4,6 +4,7 @@ import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,9 @@ public class CastRandomSpellSpell extends Spell {
 			// In case Yogg changes sides, this should case who the spells are being cast for.
 			Player owner = context.getPlayer(source.getOwner());
 			// If Yogg is removed from the board, stop casting spells.
-			if (source.getZone() != Zones.BATTLEFIELD
+			if ((source.getEntityType() == EntityType.MINION
+					&& source.getZone()
+					!= Zones.BATTLEFIELD)
 					|| source.isDestroyed()) {
 				break;
 			}
