@@ -15,12 +15,12 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "value": 1,
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      },
       "cardFilter": {
         "class": "CardFilter",
         "heroClass": "OPPONENT"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
       }
     }
   },

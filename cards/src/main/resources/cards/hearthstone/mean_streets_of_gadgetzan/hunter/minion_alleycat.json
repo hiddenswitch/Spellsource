@@ -12,6 +12,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
       "card": "token_rat"
     }
   },
@@ -20,6 +21,6 @@
     "NAME": "Lovebirds"
   },
   "collectible": true,
-  "set": "SPELLSOURCE",
+  "set": "MEAN_STREETS_OF_GADGETZHAN",
   "fileFormatVersion": 1
 }
