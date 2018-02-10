@@ -79,7 +79,7 @@ public class DraftLogic {
 				CardSet.BLACKROCK_MOUNTAIN,
 				CardSet.GOBLINS_VS_GNOMES,
 				CardSet.LEAGUE_OF_EXPLORERS,
-				CardSet.MEAN_STREETS_OF_GADGETZHAN,
+				CardSet.MEAN_STREETS_OF_GADGETZAN,
 				CardSet.NAXXRAMAS,
 				CardSet.ONE_NIGHT_IN_KARAZHAN,
 				CardSet.PROMO,
