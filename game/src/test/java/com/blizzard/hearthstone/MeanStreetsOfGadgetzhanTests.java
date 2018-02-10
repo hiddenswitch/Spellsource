@@ -1,12 +1,27 @@
 package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class MeanStreetsOfGadgetzhanTests extends TestBase {
+
+	@Test
+	public void testLunarVisions() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			shuffleToDeck(context, player, "spell_lunar_visions");
+			playCard(context, player, "minion_grand_archivist");
+			context.endTurn();
+			Assert.assertEquals(player.getHand().size(), 2);
+			Assert.assertTrue(player.getHand().stream().allMatch(card -> costOf(context, player, card)
+					== card.getBaseManaCost() - 2));
+		});
+	}
 
 	@Test
 	public void testShakuTheCollector() {
