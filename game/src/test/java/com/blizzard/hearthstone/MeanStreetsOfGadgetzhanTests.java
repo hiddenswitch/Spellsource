@@ -10,6 +10,29 @@ import org.testng.annotations.Test;
 public class MeanStreetsOfGadgetzhanTests extends TestBase {
 
 	@Test
+	public void testWrathion() {
+		runGym((context, player, opponent) -> {
+			int preFatigue = player.getHero().getHp();
+			playCard(context, player, "minion_wrathion");
+			Assert.assertEquals(player.getHero().getHp(), preFatigue - 1, "Wrathion should successfully deal fatigue.");
+		});
+
+		runGym((context, player, opponent) -> {
+			int hp = player.getHero().getHp();
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_wrathion");
+			Assert.assertEquals(player.getHero().getHp(), hp, "Wrathion should not have dealt fatigue.");
+		});
+
+		runGym((context, player, opponent) -> {
+			int hp = player.getHero().getHp();
+			shuffleToDeck(context, player, "minion_ysera");
+			playCard(context, player, "minion_wrathion");
+			Assert.assertEquals(player.getHero().getHp(), hp - 1, "Wrathion should not have dealt fatigue.");
+		});
+	}
+
+	@Test
 	public void testLunarVisions() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_bloodfen_raptor");
