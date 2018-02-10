@@ -1,11 +1,23 @@
 package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class MeanStreetsOfGadgetzhanTests extends TestBase {
+
+	@Test
+	public void testShakuTheCollector() {
+		runGym((context, player, opponent) -> {
+			Minion shaku = playMinionCard(context, player, "minion_shaku_the_collector");
+			context.endTurn();
+			context.endTurn();
+			attack(context, player, shaku, opponent.getHero());
+			Assert.assertEquals(player.getHand().get(0).getHeroClass(), opponent.getHero().getHeroClass());
+		});
+	}
 
 	@Test
 	public void testRazaTheChained() {
