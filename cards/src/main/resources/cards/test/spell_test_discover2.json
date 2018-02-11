@@ -1,0 +1,24 @@
+{
+  "name": "",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "cards": [
+      "minion_black_test",
+      "minion_blue_test",
+      "minion_gold_test",
+      "minion_green_test"
+    ],
+    "spell": {
+      "class": "ReceiveCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

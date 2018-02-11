@@ -124,8 +124,14 @@ public class DiscoverSpell extends Spell {
 				choices.add(context.getLogic().removeRandom(weightedOptions));
 			}
 		} else {
-			for (int i = 0; i < count; i++) {
-				choices.add(context.getLogic().removeRandom(allCards));
+			// If the number of cards is greater than can be fit, do a random pick. Otherwise, keep it in the order
+			// that was specified
+			if (count == allCards.size()) {
+				choices.addAll(allCards);
+			} else {
+				for (int i = 0; i < count; i++) {
+					choices.add(context.getLogic().removeRandom(allCards));
+				}
 			}
 		}
 
