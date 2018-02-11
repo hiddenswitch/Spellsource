@@ -8,15 +8,15 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell"
+    },
     "cards": [
       "minion_black_test",
       "minion_blue_test",
       "minion_gold_test",
       "minion_green_test"
-    ],
-    "spell": {
-      "class": "ReceiveCardSpell"
-    }
+    ]
   },
   "collectible": true,
   "set": "TEST",

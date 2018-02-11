@@ -22,7 +22,8 @@
       "randomTarget": true,
       "spells": [
         {
-          "class": "RandomCardTargetSpell"
+          "class": "RandomCardTargetSpell",
+          "exclusive": true
         },
         {
           "class": "RemoveCardSpell"
