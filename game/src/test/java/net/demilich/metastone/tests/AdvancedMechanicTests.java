@@ -2,8 +2,10 @@ package net.demilich.metastone.tests;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.demilich.metastone.game.actions.PlayCardAction;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
@@ -30,7 +32,57 @@ import net.demilich.metastone.game.spells.SilenceSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.spy;
+
 public class AdvancedMechanicTests extends TestBase {
+
+	@Test
+	public void testDiscover() {
+		GymFactory factory = getGymFactory((context, player, opponent) -> {
+			player.getRemovedFromPlay().clear();
+			opponent.getRemovedFromPlay().clear();
+		});
+
+		// Test basic discover
+		// Black, blue, gold
+		HeroClass[] classes = new HeroClass[]{HeroClass.BLACK, HeroClass.BLUE, HeroClass.GOLD};
+
+		// Tests that the discover comes in the exact order the author requested when howMany == choices
+		for (int j = 0; j < 3; j++) {
+			final int i = j;
+			factory.run((context, player, opponent) -> {
+				overrideDiscover(player, discoverActions -> {
+					Assert.assertEquals(discoverActions.size(), 3);
+					Assert.assertEquals(player.getDiscoverZone().size(), 3);
+					return discoverActions.get(i);
+				});
+
+				playCard(context, player, "spell_test_discover1");
+				Assert.assertEquals(player.getHand().get(0).getHeroClass(), classes[i]);
+				Assert.assertEquals(player.getDiscoverZone().size(), 0);
+				Assert.assertEquals(player.getRemovedFromPlay().size(), 3);
+			});
+		}
+
+		// Chooses 3 of the four specified cards
+		// Assure that you were shown 3 choices but that all four were looked at
+		factory.run((context, player, opponent) -> {
+			GameLogic spyLogic = spy(context.getLogic());
+			context.setLogic(spyLogic);
+			AtomicInteger size = new AtomicInteger(4);
+			doAnswer(invocation -> {
+				List<Card> options = invocation.getArgument(0);
+				Assert.assertEquals(options.size(), size.getAndDecrement());
+				return invocation.callRealMethod();
+			}).when(spyLogic).removeRandom(anyList());
+			playCard(context, player, "spell_test_discover2");
+			Assert.assertEquals(size.get(), 4 - 3, "There should be one discover option left out");
+			Assert.assertEquals(player.getDiscoverZone().size(), 0);
+			Assert.assertEquals(player.getRemovedFromPlay().size(), 3, "Only generated cards should have been removed from play.");
+		});
+	}
 
 	@Test
 	public void testChooseOne() {

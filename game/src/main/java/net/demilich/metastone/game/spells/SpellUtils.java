@@ -235,7 +235,10 @@ public class SpellUtils {
 		// Move the cards back
 		for (Card card : cards) {
 			// Cards that are being discovered are always copies, so they are always removed from play afterwards.
-			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			if (card.getZone() == Zones.DISCOVER) {
+				card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			}
+
 			context.getLogic().removeCard(card);
 		}
 
