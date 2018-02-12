@@ -5,12 +5,14 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.ChooseOneCard;
+import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.events.CardRevealedEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 
@@ -57,8 +59,13 @@ public class RandomCardTargetSpell extends Spell {
 			destination = Zones.GRAVEYARD;
 		}
 
-		spellCard.setOwner(player.getId());
-		spellCard.setId(context.getLogic().generateId());
+		if (spellCard.getId() == IdFactory.UNASSIGNED) {
+			spellCard.setId(context.getLogic().generateId());
+		}
+		if (spellCard.getOwner() == IdFactory.UNASSIGNED) {
+			spellCard.setOwner(player.getId());
+		}
+
 		spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 
 		context.getLogic().revealCard(player, spellCard);

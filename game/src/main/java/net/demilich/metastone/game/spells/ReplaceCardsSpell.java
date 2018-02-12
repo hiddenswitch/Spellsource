@@ -14,17 +14,17 @@ public class ReplaceCardsSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card specificCard = SpellUtils.getCard(context, desc);
-		final Card replacement;
+		Card replacement;
 		if (specificCard == null) {
 			replacement = context.getLogic().getRandom(desc.getFilteredCards(context, player, source));
 		} else {
 			replacement = specificCard;
 		}
 
-		context.getLogic().replaceCard(player.getId(), (Card) target, replacement);
-
+		replacement = context.getLogic().replaceCard(player.getId(), (Card) target, replacement);
+		final Card output = replacement;
 		desc.subSpells(0).forEach(subSpell -> {
-			SpellUtils.castChildSpell(context, player, subSpell, source, target, replacement);
+			SpellUtils.castChildSpell(context, player, subSpell, source, target, output);
 		});
 	}
 }

@@ -13,22 +13,14 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MetaSpell",
+      "class": "RandomCardTargetSpell",
       "target": "FRIENDLY_DECK",
+      "exclusive": true,
       "filter": {
         "class": "CardFilter",
         "cardType": "SPELL"
       },
-      "randomTarget": true,
-      "spells": [
-        {
-          "class": "RandomCardTargetSpell",
-          "exclusive": true
-        },
-        {
-          "class": "RemoveCardSpell"
-        }
-      ]
+      "randomTarget": true
     }
   },
   "collectible": true,
