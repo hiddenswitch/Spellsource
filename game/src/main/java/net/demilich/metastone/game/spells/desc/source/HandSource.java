@@ -12,7 +12,7 @@ public class HandSource extends CardSource {
 
 	@Override
 	protected CardList match(GameContext context, Player player) {
-		return player.getHand().clone();
+		return player.getHand();
 	}
 
 }

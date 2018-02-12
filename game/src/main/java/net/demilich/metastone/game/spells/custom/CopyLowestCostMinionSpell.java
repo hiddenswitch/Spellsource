@@ -6,7 +6,9 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.CopyCardSpell;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 
@@ -25,20 +27,18 @@ public class CopyLowestCostMinionSpell extends Spell {
 				.stream()
 				.filter(c -> c.getCardType() == CardType.MINION)
 				.sorted(Comparator.comparingInt(c1 -> context.getLogic().getModifiedManaCost(player, c1)))
-				.filter(new Predicate<Card>() {
-					Integer first = null;
+				.collect(toList());
 
-					@Override
-					public boolean test(Card card) {
-						if (first == null) {
-							first = context.getLogic().getModifiedManaCost(player, card);
-						}
-						return context.getLogic().getModifiedManaCost(player, card) == first;
-					}
-				}).collect(toList());
+		if (cards.isEmpty()) {
+			return;
+		}
 
-		cards.stream().filter(new RandomSubsetSelector(cards.size(), 1, context.getLogic().getRandom()))
-				.findFirst()
-				.ifPresent(c -> context.getLogic().receiveCard(player.getId(), c.getCopy()));
+		Card first = cards.get(0);
+		int cost = context.getLogic().getModifiedManaCost(player, first);
+		cards = cards.stream().filter(c -> context.getLogic().getModifiedManaCost(player, c) == cost).collect(toList());
+
+		Card card = context.getLogic().getRandom(cards);
+		SpellDesc copyCard = CopyCardSpell.create(card);
+		SpellUtils.castChildSpell(context, player, copyCard, source, card, card);
 	}
 }

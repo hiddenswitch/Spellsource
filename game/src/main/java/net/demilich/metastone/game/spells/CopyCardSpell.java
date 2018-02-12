@@ -16,9 +16,17 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.Map;
+
 public class CopyCardSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(CopyCardSpell.class);
+
+	public static SpellDesc create(Card card) {
+		Map<SpellArg, Object> args = SpellDesc.build(CopyCardSpell.class);
+		args.put(SpellArg.TARGET, card.getReference());
+		return new SpellDesc(args);
+	}
 
 	@Override
 	@Suspendable
