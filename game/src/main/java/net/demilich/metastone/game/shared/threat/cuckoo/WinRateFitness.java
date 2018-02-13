@@ -21,7 +21,7 @@ import net.demilich.metastone.game.statistics.GameStatistics;
 import net.demilich.metastone.game.statistics.Statistic;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 
-public class WinRateFitness implements IFitnessFunction {
+public class WinRateFitness {
 
 	private class PlayGameTask implements Callable<Void> {
 
@@ -69,7 +69,6 @@ public class WinRateFitness implements IFitnessFunction {
 		this.decks = decks;
 	}
 
-	@Override
 	public double evaluate(FeatureVector solution) {
 		GameStatistics stats = new GameStatistics();
 		double earlyWinRate = launchGames(solution, stats, 10);

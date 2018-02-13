@@ -1,9 +1,9 @@
 package com.hiddenswitch.spellsource.client;
 
-import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
+import com.hiddenswitch.spellsource.common.Writer;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -12,19 +12,16 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.shared.GameNotification;
-import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.TurnState;
-import net.demilich.metastone.game.visuals.GameContextVisuals;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
 @Deprecated
-public class RemoteGameContext extends GameContext implements GameContextVisuals, Writer {
+public class RemoteGameContext extends GameContext implements Writer {
 	private final List<GameEvent> gameEvents = new ArrayList<>();
 	private boolean blockedByAnimation;
 	private int localPlayerId = -1;
@@ -235,7 +232,6 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 		}
 
 		setBlockedByAnimation(true);
-		NotificationProxy.sendNotification(GameNotification.GAME_STATE_UPDATE, this);
 
 		while (blockedByAnimation) {
 			try {
@@ -243,7 +239,6 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 			} catch (InterruptedException ignored) {
 			}
 		}
-		NotificationProxy.sendNotification(GameNotification.GAME_STATE_LATE_UPDATE, this);
 	}
 
 	@Override
@@ -405,7 +400,6 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 		super.setPlayer(index, player);
 	}
 
-	@Override
 	public int getLocalPlayerId() {
 		return localPlayerId;
 	}

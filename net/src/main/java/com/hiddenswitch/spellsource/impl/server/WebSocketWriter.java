@@ -21,7 +21,7 @@ import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.visuals.TriggerFired;
+import net.demilich.metastone.game.events.TriggerFired;
 
 import java.io.IOException;
 import java.util.*;

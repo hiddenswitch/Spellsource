@@ -3,8 +3,6 @@ package com.hiddenswitch.spellsource.draft;
 import com.hiddenswitch.spellsource.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import net.demilich.metastone.game.shared.GameNotification;
-import net.demilich.metastone.game.shared.NotificationProxy;
 import net.demilich.metastone.game.behaviour.human.DraftSelectionOptions;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -30,7 +28,6 @@ public class HumanDraftBehaviour implements DraftBehaviour {
 		this.cards = classes.stream().map(MetaHero::getHeroCard).collect(Collectors.toList());
 		this.chooseHeroHandler = result;
 		DraftSelectionOptions options = new DraftSelectionOptions(this, this.cards);
-		NotificationProxy.sendNotification(GameNotification.HUMAN_PROMPT_FOR_DRAFT, options);
 	}
 
 	@Override
@@ -38,17 +35,14 @@ public class HumanDraftBehaviour implements DraftBehaviour {
 		this.cards = cards.stream().map(CardCatalogue::getCardById).collect(Collectors.toList());
 		this.chooseCardHandler = selectedCardIndex;
 		DraftSelectionOptions options = new DraftSelectionOptions(this, this.cards);
-		NotificationProxy.sendNotification(GameNotification.HUMAN_PROMPT_FOR_DRAFT, options);
 	}
 
 	@Override
 	public void notifyDraftState(PublicDraftState state) {
-		NotificationProxy.sendNotification(GameNotification.DRAFT_STATE_UPDATE, state);
 	}
 
 	@Override
 	public void notifyDraftStateAsync(PublicDraftState state, Handler<AsyncResult<Void>> acknowledged) {
-		NotificationProxy.sendNotification(GameNotification.DRAFT_STATE_UPDATE, state);
 	}
 
 	public void putChosenCard(Card chosenCard) {

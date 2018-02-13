@@ -72,7 +72,7 @@ public class CuckooLearner {
 
 	private final List<CuckooAgent> nests;
 
-	private final IFitnessFunction fitnessFunction;
+	private final WinRateFitness fitnessFunction;
 
 	private CuckooAgent fittest;
 
