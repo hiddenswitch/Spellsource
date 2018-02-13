@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	@Ignore
 	public void testThirtyScrollsOfWonder() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 30; i++) {
@@ -31,6 +32,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			}
 			context.endTurn();
 			int startingRemoved = player.getRemovedFromPlay().size();
+			// A spell might be cast that shuffles a card into the player's deck, therefore interrupting this process.
 			context.endTurn();
 			Assert.assertTrue(player.getRemovedFromPlay().size() >= startingRemoved + 30);
 		});

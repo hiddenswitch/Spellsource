@@ -10,6 +10,9 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+/**
+ * A spell that puts a secret into play.
+ */
 public class SecretCard extends SpellCard {
 
 	public SecretCard(SecretCardDesc desc) {
