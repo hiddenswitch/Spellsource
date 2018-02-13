@@ -1,24 +1,6 @@
 package net.demilich.metastone.game.shared.threat;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.shared.NotificationProxy;
-import net.demilich.metastone.game.shared.trainingmode.RequestTrainingDataNotification;
-import net.demilich.metastone.game.shared.trainingmode.TrainingData;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.secrets.Secret;
-import org.apache.commons.collections4.ListValuedMap;
-import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
@@ -27,6 +9,12 @@ import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.shared.trainingmode.TrainingData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GameStateValueBehaviour is an implementation of a decent AI with the best-in-class performance among bots in the
@@ -335,8 +323,6 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			return;
 		}
 
-		RequestTrainingDataNotification request = new RequestTrainingDataNotification(player.getDeckName(), this::answerTrainingData);
-		NotificationProxy.notifyObservers(request);
 	}
 
 }
