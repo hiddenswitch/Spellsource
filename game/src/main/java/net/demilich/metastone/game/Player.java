@@ -10,6 +10,8 @@ import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
+import net.demilich.metastone.game.cards.SecretCard;
+import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -20,6 +22,7 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -38,6 +41,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Create an empty player instance.
+	 *
+	 * @return A player specified with an {@link Deck#EMPTY} and a {@link DoNothingBehaviour}.
+	 */
 	public static Player empty() {
 		Player player = new Player();
 		PlayerConfig config = new PlayerConfig(Deck.EMPTY, new DoNothingBehaviour());
@@ -45,6 +53,15 @@ public class Player extends Entity implements Serializable {
 		return player;
 	}
 
+	/**
+	 * Creates a player for the given integer id, userId and deck.
+	 *
+	 * @param userId The networked user ID of the player.
+	 * @param id     The player's ID, {@link net.demilich.metastone.game.targeting.IdFactory#PLAYER_1} or {@link
+	 *               net.demilich.metastone.game.targeting.IdFactory#PLAYER_2}
+	 * @param deck   The deck to initialize the player with.
+	 * @return A new player instance with the specified settings and a {@link DoNothingBehaviour}.
+	 */
 	public static Player forUser(String userId, int id, Deck deck) {
 		Player player = new Player();
 		PlayerConfig config = new PlayerConfig(deck, new DoNothingBehaviour());
@@ -80,8 +97,6 @@ public class Player extends Entity implements Serializable {
 	private int maxMana;
 	private int lockedMana;
 
-	private boolean hideCards;
-
 	@Expose(serialize = false, deserialize = false)
 	private Behaviour behaviour;
 
@@ -116,10 +131,23 @@ public class Player extends Entity implements Serializable {
 		this.playerZone.add(this);
 	}
 
+	/**
+	 * Creates a player from the specified deck.
+	 *
+	 * @param deck The deck instance to use.
+	 */
 	public Player(Deck deck) {
 		this(PlayerConfig.fromDeck(deck));
 	}
 
+	/**
+	 * Builds a player with the specified {@link PlayerConfig} object.
+	 * <p>
+	 * Since a player instance also contains match data, a {@link PlayerConfig} better models the idea of a template
+	 * from which player objects are created for possibly many games.
+	 *
+	 * @param config A {@link PlayerConfig} instance.
+	 */
 	public Player(PlayerConfig config) {
 		this();
 		buildFromConfig(config);
@@ -134,22 +162,40 @@ public class Player extends Entity implements Serializable {
 		this.setName(config.getName() + " - " + getHero().getName());
 		this.deckName = selectedDeck.getName();
 		setBehaviour(config.getBehaviour().clone());
-		setHideCards(config.hideCards());
 	}
 
+	/**
+	 * Clones the underlying data and behaviour of this player instance.
+	 *
+	 * @return A new clone.
+	 */
 	@Override
 	public Player clone() {
 		return new Player(this);
 	}
 
+	/**
+	 * The behaviour that specifies what actions are taken by the player who owns this hero, minions, deck, etc. It is a
+	 * delegate.
+	 *
+	 * @return The behaviour instance.
+	 * @see Behaviour for more about this object model.
+	 */
 	public Behaviour getBehaviour() {
 		return behaviour;
 	}
 
+	/**
+	 * Retrieves the deck for this player as it is in game. This {@link CardZone} is mutated over time. This is distinct
+	 * from a {@link Deck} object, which is better interpreted as the base deck from which this object was initialized.
+	 *
+	 * @return The player's deck in game.
+	 */
 	public CardZone getDeck() {
 		return deck;
 	}
 
+	@Deprecated
 	public String getDeckName() {
 		return deckName;
 	}
@@ -159,14 +205,34 @@ public class Player extends Entity implements Serializable {
 		return EntityType.PLAYER;
 	}
 
+	/**
+	 * Retrieves the player's graveyard.
+	 *
+	 * @return An {@link EntityZone} containing played cards and dead minions.
+	 * @see Zones#GRAVEYARD for more about the graveyard.
+	 */
 	public EntityZone<Entity> getGraveyard() {
 		return graveyard;
 	}
 
+	/**
+	 * Retrieves the player's hand.
+	 *
+	 * @return A {@link CardZone} containing the player's current hand.
+	 * @see Zones#HAND for more about the hand.
+	 */
 	public CardZone getHand() {
 		return hand;
 	}
 
+	/**
+	 * Retrieves the hero specified inside the {@link #heroZone} field, an {@link EntityZone} that typically holds just
+	 * one hero object for the player.
+	 *
+	 * @return A {@link Hero} instance.
+	 * @see #getHeroZone() for the one-item {@link EntityZone} that this field consults for the {@link Hero} entity.
+	 * @see Zones#HERO for more about the hero zone.
+	 */
 	public Hero getHero() {
 		if (getHeroZone().size() == 0) {
 			// Check the graveyard
@@ -183,10 +249,24 @@ public class Player extends Entity implements Serializable {
 
 	}
 
+	/**
+	 * Gets the player's mana locked by the Overload mechanic. The locked mana is set to the amount of mana overloaded
+	 * the previous turn.
+	 *
+	 * @return The amount of mana that is unusable this turn due to playing a card with {@link Attribute#OVERLOAD} last
+	 * turn.
+	 * @see Attribute#OVERLOAD for more about locking mana.
+	 */
 	public int getLockedMana() {
 		return lockedMana;
 	}
 
+	/**
+	 * Retrieves the current amount of mana the player has to spend this turn. This amount of mana is set to {@link
+	 * #getMaxMana()} minus the amount of {@link #getLockedMana()} at the start of the player's turn/
+	 *
+	 * @return The amount of mana available to spend.
+	 */
 	public int getMana() {
 		return mana;
 	}
@@ -201,34 +281,72 @@ public class Player extends Entity implements Serializable {
 		return maxMana;
 	}
 
+	/**
+	 * Gets the minions on this player's side of the battlefield.
+	 *
+	 * @return An {@link EntityZone} of minions.
+	 */
 	public EntityZone<Minion> getMinions() {
 		return minions;
 	}
 
+	/**
+	 * Retrieves the card IDs of the secrets owned by this player. Used to enforce that players can only have at most
+	 * one of each secret in their {@link #secretZone}.
+	 *
+	 * @return The set of secret card IDs.
+	 * @see net.demilich.metastone.game.logic.GameLogic#canPlaySecret(Player, SecretCard) to see how this method plays
+	 * into rules regarding the ability to play secrets.
+	 */
 	public Set<String> getSecretCardIds() {
 		return secretZone.stream().map(Secret::getSourceCard).map(Card::getCardId).collect(Collectors.toSet());
 	}
 
+	/**
+	 * Retrieves the secrets owned by this player.
+	 *
+	 * @return Secret entities.
+	 */
 	public EntityZone<Secret> getSecrets() {
 		return secretZone;
 	}
 
+	/**
+	 * Retrieves the set aside zone, or the location where cards are temporarily moved during complex interactions.
+	 *
+	 * @return The zone.
+	 * @see Zones#SET_ASIDE_ZONE for more about the set aside zone.
+	 */
 	public EntityZone<Entity> getSetAsideZone() {
 		return setAsideZone;
 	}
 
+	/**
+	 * Retrieves statistics collected about this player in the current game.
+	 *
+	 * @return A {@link GameStatistics} object.
+	 */
 	public GameStatistics getStatistics() {
 		return statistics;
 	}
 
-	public boolean hideCards() {
-		return hideCards;
-	}
-
+	/**
+	 * Sets the behaviour for this player.
+	 *
+	 * @param behaviour A behaviour.
+	 * @see Behaviour for more about behaviours.
+	 */
 	public void setBehaviour(Behaviour behaviour) {
 		this.behaviour = behaviour;
 	}
 
+	/**
+	 * Sets the player's current hero. If a {@link Hero} currently exists in the hero zone, it is removed.
+	 *
+	 * @param hero The hero entity.
+	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate hero changing
+	 * method for spells.
+	 */
 	public void setHero(Hero hero) {
 		if (heroZone.size() != 0) {
 			// Move the existing hero to the graveyard
@@ -237,18 +355,31 @@ public class Player extends Entity implements Serializable {
 		heroZone.add(hero);
 	}
 
-	public void setHideCards(boolean hideCards) {
-		this.hideCards = hideCards;
-	}
-
+	/**
+	 * Sets the amount of mana that was overloaded.
+	 *
+	 * @param lockedMana The amount of mana to lock this turn.
+	 * @see Attribute#OVERLOAD for more about overloading mana.
+	 */
 	public void setLockedMana(int lockedMana) {
 		this.lockedMana = lockedMana;
 	}
 
+	/**
+	 * Sets the current mana this player has. Usually invoked by spells that increase mana temporarily or when cards are
+	 * played.
+	 *
+	 * @param mana The amount of mana this player should now have.
+	 */
 	public void setMana(int mana) {
 		this.mana = mana;
 	}
 
+	/**
+	 * Gives the player this many "empty mana crystals."
+	 *
+	 * @param maxMana The maximum amount of mana a player can have. Increased by one each turn.
+	 */
 	public void setMaxMana(int maxMana) {
 		this.maxMana = maxMana;
 	}
@@ -266,6 +397,14 @@ public class Player extends Entity implements Serializable {
 				.toHashCode();
 	}
 
+	/**
+	 * Compares two player objects.
+	 * <p>
+	 * They are considered equal if their IDs and names match.
+	 *
+	 * @param other The other player object.
+	 * @return {@code true} if the other player object's ID and name matches this one's. Otherwise, {@code false}.
+	 */
 	@Override
 	public boolean equals(Object other) {
 		if (other == null
@@ -280,6 +419,12 @@ public class Player extends Entity implements Serializable {
 				.isEquals();
 	}
 
+	/**
+	 * Sets the player's ID. Can only be called once. Sets the owner fields on the zones stored in this player object.
+	 *
+	 * @param id The ID to set to, either {@link net.demilich.metastone.game.targeting.IdFactory#PLAYER_1} or {@link
+	 *           net.demilich.metastone.game.targeting.IdFactory#PLAYER_2}.
+	 */
 	@Override
 	public void setId(int id) {
 		super.setId(id);
@@ -296,11 +441,23 @@ public class Player extends Entity implements Serializable {
 		quests.setPlayer(id);
 	}
 
+	/**
+	 * Clones this player.
+	 *
+	 * @return A clone.
+	 */
 	@Override
 	public Player getCopy() {
 		return this.clone();
 	}
 
+	/**
+	 * Retrieves a zone by key.
+	 *
+	 * @param zone The key.
+	 * @return An {@link EntityZone} for the corresponding zone. For {@link Zones#PLAYER}, a new zone is created on the
+	 * fly containing this player entity. For {@link Zones#NONE}, an empty zone is returned.
+	 */
 	public EntityZone getZone(Zones zone) {
 		switch (zone) {
 			case PLAYER:
@@ -337,22 +494,56 @@ public class Player extends Entity implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Retrieves the hero zone.
+	 *
+	 * @return The zone that stores this player's hero entity.
+	 */
 	public EntityZone<Hero> getHeroZone() {
 		return heroZone;
 	}
 
+	/**
+	 * Retrieves the hero power zone stored inside the hero entity.
+	 *
+	 * @return The hero power stored by this hero.
+	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate way to change
+	 * heroes.
+	 */
 	public EntityZone<HeroPowerCard> getHeroPowerZone() {
 		return getHero().getHeroPowerZone();
 	}
 
+	/**
+	 * Retrieves the weapon zone belonging to this player's hero entity.
+	 *
+	 * @return A weapon zone.
+	 * @see net.demilich.metastone.game.logic.GameLogic#equipWeapon(int, Weapon, WeaponCard, boolean) for the
+	 * appropriate way to mutate this zone.
+	 */
 	public EntityZone<Weapon> getWeaponZone() {
 		return getHero().getWeaponZone();
 	}
 
+	/**
+	 * Retrieves the cards the player is currently discovering.
+	 *
+	 * @return A {@link CardZone} of cards.
+	 */
 	public CardZone getDiscoverZone() {
 		return discoverZone;
 	}
 
+	/**
+	 * Retrieves entities that are removed from play. Typically enchantments like {@link Quest} and {@link Secret} go
+	 * here, and cards created during a {@link net.demilich.metastone.game.spells.DiscoverSpell} go here.
+	 * <p>
+	 * Entities that are in {@link Zones#REMOVED_FROM_PLAY} should not be targetable, so it would be unusual to iterate
+	 * through this zone.
+	 *
+	 * @return Entities removed from play.
+	 * @see GameContext#resolveTarget(Player, Entity, EntityReference) for the  method that finds entities inside zones.
+	 */
 	public EntityZone<Entity> getRemovedFromPlay() {
 		return removedFromPlay;
 	}
@@ -362,17 +553,26 @@ public class Player extends Entity implements Serializable {
 		return getId();
 	}
 
+	/**
+	 * Gets the {@link Quest} entities that are in play from this player.
+	 *
+	 * @return An {@link EntityZone}.
+	 */
 	public EntityZone<Quest> getQuests() {
 		return quests;
 	}
 
+	/**
+	 * For a player entity, its source card corresponds to the hero's source card.
+	 *
+	 * @return The {@link Hero}'s source card, or {@code null} if no hero is set.
+	 */
 	@Override
 	public Card getSourceCard() {
+		if (getHero() == null) {
+			return null;
+		}
 		return getHero().getSourceCard();
-	}
-
-	public Stream<? extends Actor> getActors() {
-		return Stream.concat(Stream.concat(getHeroZone().stream(), getMinions().stream()), getWeaponZone().stream());
 	}
 
 	/**

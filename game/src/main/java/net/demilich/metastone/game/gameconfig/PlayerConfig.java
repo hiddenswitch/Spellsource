@@ -17,7 +17,6 @@ public class PlayerConfig implements Cloneable, Serializable {
 	private HeroCard heroCard;
 	private Deck deck;
 	private Behaviour behaviour;
-	private boolean hideCards;
 
 	private Deck deckForPlay;
 	private HeroCard heroForPlay;
@@ -72,10 +71,6 @@ public class PlayerConfig implements Cloneable, Serializable {
 		return name != null ? name : heroCard.getName();
 	}
 
-	public boolean hideCards() {
-		return hideCards;
-	}
-
 	public void setBehaviour(Behaviour behaviour) {
 		this.behaviour = behaviour;
 	}
@@ -86,10 +81,6 @@ public class PlayerConfig implements Cloneable, Serializable {
 
 	public void setHeroCard(HeroCard HeroCard) {
 		this.heroCard = HeroCard;
-	}
-
-	public void setHideCards(boolean hideCards) {
-		this.hideCards = hideCards;
 	}
 
 	public void setName(String name) {

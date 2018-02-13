@@ -321,8 +321,6 @@ public class RemoteGameContext extends GameContext implements GameContextVisuals
 	}
 
 	protected void hideCards() {
-		getLocalPlayer().setHideCards(false);
-		getOpponent(getLocalPlayer()).setHideCards(true);
 	}
 
 	@Override

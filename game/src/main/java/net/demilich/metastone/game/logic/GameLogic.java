@@ -2313,9 +2313,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Takes a {@link Secret} entity, assigns it an ID, configures its trigger listening and adds it to the player's
 	 * {@link Zones#SECRET} zone.
 	 * <p>
-	 * The caller is responsible for enforcing that fewer than {@link #MAX_SECRETS} are in play; and, that the {@link
-	 * SecretCard} is discarded. The {@link SecretPlayedEvent} is not censored here and has sensitive information that
-	 * cannot be shown to the opponent.
+	 * The caller is responsible for enforcing that fewer than {@link #MAX_SECRETS} are in play; that only distinct
+	 * secrets are active; and, that the {@link SecretCard} is discarded. The {@link SecretPlayedEvent} is not censored
+	 * here and has sensitive information that cannot be shown to the opponent.
 	 *
 	 * @param player   The player whose gaining the secret.
 	 * @param secret   The secret being played.
@@ -2770,7 +2770,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Requests an action internally, allowing special request logic to be executed.
 	 *
-	 * @param player  The player whose {@link net.demilich.metastone.game.behaviour.Behaviour} will be queried for an action.
+	 * @param player  The player whose {@link net.demilich.metastone.game.behaviour.Behaviour} will be queried for an
+	 *                action.
 	 * @param actions The possible actions.
 	 * @return The chosen action
 	 */
