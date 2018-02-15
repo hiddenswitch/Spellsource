@@ -152,6 +152,13 @@ public class DeckFormat implements Serializable, Cloneable {
 		return closestFormat;
 	}
 
+	public static DeckFormat getSmallestSupersetFormat(List<Deck> deckPair) {
+		return deckPair.get(0).getFormat().equals(deckPair.get(1).getFormat())
+				? deckPair.get(0).getFormat()
+				: DeckFormat.getSmallestSupersetFormat(deckPair.stream().flatMap(deck -> deck.getCards().stream())
+				.map(Card::getCardSet).collect(Collectors.toSet()));
+	}
+
 	public DeckFormat() {
 		sets = new HashSet<>();
 	}

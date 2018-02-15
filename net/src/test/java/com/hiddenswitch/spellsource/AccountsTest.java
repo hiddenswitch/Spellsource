@@ -8,6 +8,7 @@ import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.LoginRequest;
 import com.hiddenswitch.spellsource.models.LoginResponse;
 import com.hiddenswitch.spellsource.impl.ServiceTest;
+import com.hiddenswitch.spellsource.util.Logging;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -23,9 +24,9 @@ import static org.junit.Assert.*;
 public class AccountsTest extends ServiceTest<AccountsImpl> {
 	@Test
 	public void testCreateAccount(TestContext context) throws Exception {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
-			setLoggingLevel(Level.ERROR);
+			Logging.setLoggingLevel(Level.ERROR);
 			CreateAccountResponse response = service.createAccount("benjamin.s.berman@gmail.com", "destructoid", "doctorpangloss");
 			assertNotNull(response.getLoginToken());
 			assertFalse(response.isInvalidEmailAddress());
@@ -38,7 +39,7 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 
 	@Test
 	public void testLogin(TestContext context) throws Exception {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
 			LoginResponse loginResponse = service.login("test@test.com", "password");
@@ -65,7 +66,7 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 
 	@Test
 	public void testIsAuthorizedWithToken(TestContext context) throws Exception {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
 			final String secret = response.getLoginToken().getSecret();
@@ -81,7 +82,7 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 
 	@Test
 	public void testGet(TestContext context) throws Exception {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
 			UserRecord profile = service.get(response.getUserId());

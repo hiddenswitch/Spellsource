@@ -26,6 +26,7 @@ import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -134,29 +135,17 @@ public class GameSessionImpl implements GameSession {
 	 */
 	@Suspendable
 	private void startGame() {
-		logger.debug("Starting game...");
-		DeckFormat simpleFormat = new DeckFormat().withCardSets(CardSet.BASIC,
-				CardSet.CLASSIC,
-				CardSet.BLACKROCK_MOUNTAIN,
-				CardSet.GOBLINS_VS_GNOMES,
-				CardSet.LEAGUE_OF_EXPLORERS,
-				CardSet.MEAN_STREETS_OF_GADGETZAN,
-				CardSet.NAXXRAMAS,
-				CardSet.ONE_NIGHT_IN_KARAZHAN,
-				CardSet.PROMO,
-				CardSet.REWARD,
-				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.THE_OLD_GODS,
-				CardSet.JOURNEY_TO_UNGORO,
-				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
-				CardSet.KOBOLDS_AND_CATACOMBS);
+		logger.debug("startGame: Starting game {}", gameId);
+		DeckFormat deckFormat = DeckFormat.getSmallestSupersetFormat(
+				Arrays.asList(pregamePlayerConfiguration1.getDeck(), pregamePlayerConfiguration2.getDeck()));
+		logger.debug("startGame: Selected sets {} for play", deckFormat.getCardSets());
 
 		// Configure the network behaviours on the players
 		Player player1 = getPlayer(pregamePlayerConfiguration1.getUserId());
 		Player player2 = getPlayer(pregamePlayerConfiguration2.getUserId());
 		player1.setBehaviour(new NetworkBehaviour());
 		player2.setBehaviour(new NetworkBehaviour());
-		this.gameContext = new ServerGameContext(player1, player2, simpleFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()), new VertxScheduler(vertx));
+		this.gameContext = new ServerGameContext(player1, player2, deckFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()), new VertxScheduler(vertx));
 		final Writer listener1;
 		final Writer listener2;
 

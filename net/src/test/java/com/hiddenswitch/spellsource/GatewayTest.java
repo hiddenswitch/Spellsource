@@ -157,7 +157,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 	@Test
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrap(context);
 		final Async async = context.async();
 
@@ -174,7 +174,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 	@Test(timeout = 400000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.DEBUG);
 		wrap(context);
 		final int processorCount = Runtime.getRuntime().availableProcessors();
 		final int count = processorCount * 3;
@@ -211,7 +211,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testScenario(TestContext context) throws InterruptedException, SuspendExecution {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrap(context);
 		final Async async = context.async();
 
@@ -236,7 +236,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	@Test(timeout = 25000L)
 	public void testDisconnectingUnityClient(TestContext context) {
 		wrap(context);
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		getContext().assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
 
 		UnityClient client = new UnityClient(getContext(), 1);
@@ -268,7 +268,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testDistinctDecks(TestContext context) throws InterruptedException, SuspendExecution {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrap(context);
 
 		Handler<SendContext> interceptor = interceptGameCreate(request -> {
@@ -328,7 +328,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 	@Test
 	public void testMinionatePersistenceApi(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrap(context);
 		ConcurrentLinkedQueue<Long> queue = new ConcurrentLinkedQueue<Long>();
 
@@ -374,7 +374,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 	@Test
 	public void testWeaponActionReceived(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrap(context);
 		Async async = context.async();
 		vertx.runOnContext(ignored -> {

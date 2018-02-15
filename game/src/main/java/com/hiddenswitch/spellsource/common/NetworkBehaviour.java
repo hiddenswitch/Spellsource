@@ -36,28 +36,24 @@ public class NetworkBehaviour extends AbstractBehaviour implements Serializable 
 	@Override
 	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		logger.debug("Requesting mulligan from wrapped behaviour using blocking behaviour. Player: {}, cards: {}", player, cards);
 		return Sync.awaitFiber(done -> context.networkRequestMulligan(player, cards, result -> done.handle(Future.succeededFuture(result))));
 	}
 
 	@Override
 	@Suspendable
 	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler) {
-		logger.debug("Requesting mulligan from network. Player: {}, cards: {}", player, cards);
 		context.networkRequestMulligan(player, cards, handler);
 	}
 
 	@Override
 	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-		logger.debug("Requesting action from network using blocking behaviour.");
 		return Sync.awaitFiber(done -> requestActionAsync(context, player, validActions, result -> done.handle(Future.succeededFuture(result))));
 	}
 
 	@Suspendable
 	@Override
 	public void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler) {
-		logger.debug("Requesting action from network. Player: {}, validActions: {}", player, validActions);
 		context.networkRequestAction(context.getGameStateCopy(), player.getId(), validActions, handler);
 	}
 

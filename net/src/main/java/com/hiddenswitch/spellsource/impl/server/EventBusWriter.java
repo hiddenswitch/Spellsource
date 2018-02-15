@@ -5,7 +5,6 @@ import io.vertx.core.streams.Pump;
 
 public class EventBusWriter extends WebSocketWriter {
 	public static final String WRITER_ADDRESS_PREFIX = "EventBusClient/users/";
-	private Pump pump;
 
 
 	public EventBusWriter(EventBus bus, String userId, int playerId) {
@@ -23,8 +22,6 @@ public class EventBusWriter extends WebSocketWriter {
 			getPrivateSocket().end();
 		} catch (Throwable ignore) {
 		}
-		pump.stop();
-		pump = null;
 	}
 }
 
