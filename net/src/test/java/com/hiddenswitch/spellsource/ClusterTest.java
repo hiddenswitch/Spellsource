@@ -2,17 +2,18 @@ package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
+import io.netty.handler.codec.http.websocketx.WebSocket08FrameDecoder;
+import io.netty.handler.codec.http.websocketx.WebSocket08FrameEncoder;
+import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.vertx.core.*;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.Repeat;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import org.junit.After;
@@ -26,12 +27,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.hiddenswitch.spellsource.util.Logging.setLoggingLevel;
 
 @RunWith(VertxUnitRunner.class)
 public class ClusterTest {
@@ -41,13 +43,8 @@ public class ClusterTest {
 	private static final int blockedThreadCheckInterval = (int) Duration.of(8, ChronoUnit.SECONDS).toMillis();
 	private static final long timeoutMillis = Duration.of(55, ChronoUnit.SECONDS).toMillis();
 
-	public void setLoggingLevel(Level level) {
-		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
-				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-		root.setLevel(level);
-	}
-
 	@Test(timeout = 155000L)
+	@Ignore
 	@SuppressWarnings("unchecked")
 	public void testClusteredDeploy(TestContext context) {
 		if (isCI()) {
@@ -131,6 +128,7 @@ public class ClusterTest {
 	}
 
 	@Test(timeout = 155000L)
+	@Ignore
 	public void testMultiHostCluster(TestContext context) {
 		if (isCI()) {
 			return;

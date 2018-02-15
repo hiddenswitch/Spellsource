@@ -8,6 +8,7 @@ import com.hiddenswitch.spellsource.impl.InventoryImpl;
 import com.hiddenswitch.spellsource.impl.ServiceTest;
 import com.hiddenswitch.spellsource.models.CreateCollectionRequest;
 import com.hiddenswitch.spellsource.models.CreateCollectionResponse;
+import com.hiddenswitch.spellsource.util.Logging;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -24,7 +25,7 @@ import org.junit.runner.RunWith;
 public class InventoryTest extends ServiceTest<InventoryImpl> {
 	@Test
 	public void testCreateCollection(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::createCollectionSync);
 	}
 

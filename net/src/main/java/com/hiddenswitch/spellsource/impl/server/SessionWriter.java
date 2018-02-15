@@ -3,6 +3,8 @@ package com.hiddenswitch.spellsource.impl.server;
 import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
@@ -10,6 +12,8 @@ import io.vertx.core.streams.WriteStream;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class SessionWriter implements WriteStream<Buffer> {
 	private final String userId;
@@ -116,16 +120,29 @@ public class SessionWriter implements WriteStream<Buffer> {
 
 	@Override
 	public WriteStream<Buffer> setWriteQueueMaxSize(int maxSize) {
+		writers.stream().map(EventBusWriter::getPrivateSocket).forEach(w -> w.setWriteQueueMaxSize(maxSize));
 		return this;
 	}
 
 	@Override
 	public boolean writeQueueFull() {
-		return false;
+		return writers.stream().map(EventBusWriter::getPrivateSocket).anyMatch(WriteStream::writeQueueFull);
 	}
 
 	@Override
 	public WriteStream<Buffer> drainHandler(Handler<Void> handler) {
+		CompositeFuture all = CompositeFuture.all(writers.stream().map(EventBusWriter::getPrivateSocket).map(w -> {
+			Future<Void> future = Future.future();
+			w.drainHandler(ignored -> future.complete());
+			return future;
+		}).collect(toList()));
+
+		all.setHandler(then -> {
+			if (handler != null) {
+				handler.handle(null);
+			}
+		});
+
 		return this;
 	}
 }

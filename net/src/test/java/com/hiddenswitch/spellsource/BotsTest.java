@@ -9,10 +9,7 @@ import com.hiddenswitch.spellsource.models.MulliganRequest;
 import com.hiddenswitch.spellsource.models.MulliganResponse;
 import com.hiddenswitch.spellsource.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.models.RequestActionResponse;
-import com.hiddenswitch.spellsource.util.DebugContext;
-import com.hiddenswitch.spellsource.util.Rpc;
-import com.hiddenswitch.spellsource.util.RpcClient;
-import com.hiddenswitch.spellsource.util.TestBase;
+import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -40,7 +37,7 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 
 	@Test
 	public void testMulligan(TestContext context) throws Exception {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::mulligan);
 	}
 
@@ -55,7 +52,7 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 
 	@Test
 	public void testRequestAction(TestContext context) throws Exception {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::requestAction);
 	}
 
@@ -83,7 +80,7 @@ public class BotsTest extends ServiceTest<BotsImpl> {
 
 	@Test
 	public void testBroker(TestContext context) throws CardParseException, IOException, URISyntaxException {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			final RpcClient<Bots> bots = Rpc.connect(Bots.class, vertx.eventBus());
 			final MulliganRequest request = new MulliganRequest(

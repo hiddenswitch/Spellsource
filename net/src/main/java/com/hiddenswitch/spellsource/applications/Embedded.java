@@ -1,9 +1,8 @@
 package com.hiddenswitch.spellsource.applications;
 
-import ch.qos.logback.classic.Level;
 import com.hiddenswitch.spellsource.Broadcaster;
 import com.hiddenswitch.spellsource.Spellsource;
-import io.vertx.core.Future;
+import com.hiddenswitch.spellsource.util.Logging;
 import io.vertx.core.Vertx;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -16,10 +15,7 @@ public class Embedded {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("vertx.disableDnsResolver", "true");
-		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
-		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
-				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.toLevel(System.getProperty("spellsource.root.logger.level"), Level.ERROR));
+		Logging.setLoggingLevel();
 
 		final Vertx vertx = Vertx.vertx();
 		mongo().connectWithEnvironment(vertx);

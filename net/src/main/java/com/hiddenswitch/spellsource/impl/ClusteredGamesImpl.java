@@ -106,7 +106,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		logger.debug("connect: Connecting userId " + userId + " with gameId " + session.getGameId());
 		final SessionWriter writer = new SessionWriter(userId, playerId, eventBus, session, activityMonitor);
 		final MessageConsumer<Buffer> reader = eventBus.consumer(READER_ADDRESS_PREFIX + userId);
-		final Pump pipe = Pump.pump(reader.bodyStream(), writer).start();
+		final Pump pipe = Pump.pump(reader.bodyStream(), writer, Integer.MAX_VALUE).start();
 		return () -> {
 			pipe.stop();
 			writer.end();

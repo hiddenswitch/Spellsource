@@ -8,6 +8,7 @@ import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -46,7 +47,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 	@Test
 	@Suspendable
 	public void testStartsGame(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::startsGameSync);
 	}
 
@@ -88,7 +89,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 	@Test
 	@Suspendable
 	public void testCreatesInventory(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::createInventorySync);
 	}
 
@@ -130,7 +131,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 	@Test
 	public void testAllianceCardExtensionsDontBreak(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::allianceCardExtensionsDontBreak);
 	}
 
@@ -210,7 +211,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 	@Test
 	public void testFirstTimePlaysStatistic(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, this::firstTimePlaysStatistic);
 	}
 

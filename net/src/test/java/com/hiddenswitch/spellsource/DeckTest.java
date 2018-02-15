@@ -9,6 +9,7 @@ import com.hiddenswitch.spellsource.common.DeckListParsingException;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.Logging;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -48,7 +49,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 
 	@Test
 	public void testCreateDeck(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
 			final String userId1 = player1.getUserId();
@@ -61,7 +62,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 
 	@Test
 	public void testCreateManyDecks(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 
 		wrapSync(context, () -> {
 			CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
@@ -80,7 +81,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 
 	@Test
 	public void testUpdateDecks(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
 			final String userId1 = player1.getUserId();
@@ -107,7 +108,7 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 
 	@Test
 	public void testDeleteDecks(TestContext context) {
-		setLoggingLevel(Level.ERROR);
+		Logging.setLoggingLevel(Level.ERROR);
 		wrapSync(context, () -> {
 			CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
 			final String userId1 = player1.getUserId();

@@ -4,13 +4,8 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.RpcClient;
-import com.hiddenswitch.spellsource.util.SharedData;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.sync.SyncVerticle;
-
-import java.util.Map;
 
 /**
  * An abstract class providing common backend features for microservices in Spellsource.
@@ -24,7 +19,7 @@ import java.util.Map;
  * @param <T>
  */
 public abstract class AbstractService<T extends AbstractService<T>> extends SyncVerticle {
-	protected static Logger logger = LoggerFactory.getLogger(AbstractService.class);
+	protected static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AbstractService.class);
 
 	/**
 	 * The entry point for the service. Should be overridden.

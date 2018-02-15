@@ -83,11 +83,12 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 					try {
 						Lock lock = awaitResult(h -> vertx.sharedData().getLockWithTimeout("pipes-userId-" + userId, 200L, h));
+						logger.debug("/games-clustered: Creating WebSocket to EventBus mapping for userId {}", userId);
 						final ServerWebSocket socket = context.request().upgrade();
 						final MessageConsumer<Buffer> consumer = bus.consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
 						final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
-						final Pump pump1 = Pump.pump(socket, publisher).start();
-						final Pump pump2 = Pump.pump(consumer.bodyStream(), socket).start();
+						final Pump pump1 = Pump.pump(socket, publisher, Integer.MAX_VALUE).start();
+						final Pump pump2 = Pump.pump(consumer.bodyStream(), socket, Integer.MAX_VALUE).start();
 
 						socket.closeHandler(fiberHandler(disconnected -> {
 							try {
@@ -97,12 +98,13 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 								consumer.unregister();
 								pump1.stop();
 							} catch (Throwable throwable) {
-								logger.warn("socket closeHandler: Failed to clean up resources from a user socket due to an exception: ", throwable);
+								logger.warn("/games-clustered socket closeHandler: Failed to clean up resources from a user {} socket due to an exception {}", userId, throwable);
 							} finally {
 								lock.release();
 							}
 						}));
 					} catch (VertxException timeout) {
+						logger.debug("/games-clustered: Lock was not obtained for userId {}, user probably has another mapping already", userId);
 						context.response().end();
 					}
 				}));

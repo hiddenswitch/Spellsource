@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl.util;
 
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.common.*;
@@ -118,10 +119,8 @@ public class ServerGameContext extends GameContext {
 
 	@Suspendable
 	public void endTurn() {
-		logger.debug("endTurn: Ending turn: " + getActivePlayer().getId());
 		super.endTurn();
 		this.onGameStateChanged();
-		logger.debug("endTurn: Active player changed to: " + getActivePlayerId());
 		getListenerMap().get(getPlayer1()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 		getListenerMap().get(getPlayer2()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 	}
@@ -159,11 +158,10 @@ public class ServerGameContext extends GameContext {
 	 */
 	@Suspendable
 	public void networkPlay() {
-		logger.debug("networkPlay: Starting game between " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
+		logger.debug("{} networkedPlay: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		getNetworkGameLogic().contextReady();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
-		logger.debug("networkPlay: " + getActivePlayer().getName() + " begins");
 
 		updateActivePlayers();
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
@@ -184,6 +182,7 @@ public class ServerGameContext extends GameContext {
 			timerStartTimeMillis = System.currentTimeMillis();
 			mulliganTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::endMulligans));
 		} else {
+			logger.debug("{} networkPlay: No mulligan timer set for game because all players are not human", getGameId());
 			mulliganTimerId = null;
 		}
 
@@ -193,9 +192,11 @@ public class ServerGameContext extends GameContext {
 
 		// Mulligan simultaneously now
 		CompositeFuture.all(init1, init2).setHandler(cf -> {
+			logger.debug("{} networkPlay: Received mulligans", getGameId());
 			if (mulliganTimerId != null) {
 				scheduler.cancelTimer(mulliganTimerId);
 			}
+
 			final TimerId[] turnTimerId = {null};
 			Recursive<Runnable> playTurnLoop = new Recursive<>();
 			playTurnLoop.func = () -> {
@@ -205,12 +206,14 @@ public class ServerGameContext extends GameContext {
 				}
 
 				if (!isRunning) {
+					logger.debug("{} networkedPlay: Game no longer running, ending...", getGameId());
 					endGame();
 					return;
 				}
 
 				// Check if the game has been decided right at the end of the player's turn
 				if (updateAndGetGameOver()) {
+					logger.debug("{} networkedPlay: Game has ended with a normal resolution, ending...", getGameId());
 					endGame();
 					return;
 				}
@@ -226,7 +229,7 @@ public class ServerGameContext extends GameContext {
 
 					turnTimerId[0] = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::elapseTurn));
 				} else {
-					logger.debug("networkedPlay: Not setting timer because opponent is not human.");
+					logger.debug("{} networkedPlay: Not setting timer because opponent is not human.", getGameId());
 				}
 
 				Recursive<Handler<Boolean>> actionLoop = new Recursive<>();
@@ -301,7 +304,7 @@ public class ServerGameContext extends GameContext {
 			setActionsThisTurn(getActionsThisTurn() + 1);
 
 			if (getActionsThisTurn() > 99) {
-				logger.warn("Turn has been forcefully ended after {} actions", getActionsThisTurn());
+				logger.warn("{} networkedPlayTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
 				endTurn();
 				callback.handle(false);
 				return;
@@ -409,7 +412,7 @@ public class ServerGameContext extends GameContext {
 	@Override
 	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
 		String id = RandomStringUtils.randomAscii(8);
-		logger.debug("Requesting action with callback {} for playerId {}", id, playerId);
+		logger.debug("{} networkRequestAction: Requesting actions {} with callback {} for playerId={} userId={}", getGameId(), actions, id, playerId, getPlayer(playerId).getUserId());
 		final CallbackId callbackId = new CallbackId(id, playerId);
 		requestCallbacks.put(callbackId, new GameplayRequest(GameplayRequestType.ACTION, state, actions, callback));
 		// Send a state update for the other player too
@@ -457,7 +460,7 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
-		logger.debug("Requesting mulligan for playerId {} hashCode {}", player.getId(), player.hashCode());
+		logger.debug("{} networkRequestMulligan: Requesting mulligan for playerId={} userId={}", getGameId(), player.getId(), player.getUserId());
 		String id = RandomStringUtils.randomAscii(8);
 		requestCallbacks.put(new CallbackId(id, player.getId()), new GameplayRequest(GameplayRequestType.MULLIGAN, starterCards, callback));
 		getListenerMap().get(player).onMulligan(id, getGameStateCopy(), starterCards, player.getId());
@@ -477,11 +480,11 @@ public class ServerGameContext extends GameContext {
 			return;
 		}
 
-		logger.debug("Accepting action for callback {}", messageId);
+		logger.debug("{} onActionReceived: Received action {} for callback {}", getGameId(), action, messageId);
 		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
 		requestCallbacks.remove(CallbackId.of(messageId));
 		Sync.fiberHandler((Handler<GameAction>) handler).handle(action);
-		logger.debug("Action executed for callback {}", messageId);
+		logger.debug("{} onActionReceived: Executed action {} for callback {}", getGameId(), action, messageId);
 	}
 
 	/**
@@ -499,7 +502,7 @@ public class ServerGameContext extends GameContext {
 			return;
 		}
 
-		logger.debug("Mulligan received from {}", player.getName());
+		logger.debug("{} onMulliganReceived: Mulligan {} received from userId={}", getGameId(), discardedCards, player.getUserId());
 		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
 		requestCallbacks.remove(CallbackId.of(messageId));
 		((Handler<List<Card>>) handler).handle(discardedCards);
@@ -623,9 +626,8 @@ public class ServerGameContext extends GameContext {
 			throw new RuntimeException();
 		}
 		CallbackId reqId = reqResult.get();
-		List<Card> discardedCards = new ArrayList<>();
 		GameplayRequest request = requestCallbacks.get(reqId);
-		discardedCards.addAll(discardedCardIndices.stream().map(i -> request.starterCards.get(i)).collect(Collectors.toList()));
+		List<Card> discardedCards = discardedCardIndices.stream().map(i -> request.starterCards.get(i)).collect(Collectors.toList());
 		onMulliganReceived(messageId, getPlayer(reqId.playerId), discardedCards);
 	}
 

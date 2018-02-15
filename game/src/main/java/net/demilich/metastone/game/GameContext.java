@@ -286,6 +286,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 */
 	@Suspendable
 	protected void endGame() {
+		logger.debug("{} endGame: Game is now ending", getGameId());
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
 
 		notifyPlayersGameOver();
@@ -317,12 +318,12 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 
 	protected void calculateStatistics() {
 		if (getWinner() != null) {
-			logger.debug("Game finished after " + getTurn() + " turns, the winner is: " + getWinner().getName());
+			logger.debug("{} calculateStatistics: Game finished after {}, turns, the winner is {}", getGameId(), getTurn(), getWinner().getName());
 			getWinner().getStatistics().gameWon();
 			Player loser = getOpponent(getWinner());
 			loser.getStatistics().gameLost();
 		} else {
-			logger.debug("Game finished after " + getTurn() + " turns, DRAW");
+			logger.debug("{} calculateStatistics: Game finished after {} turns in a draw", getGameId(), getTurn());
 			getPlayer1().getStatistics().gameLost();
 			getPlayer2().getStatistics().gameLost();
 		}
@@ -333,6 +334,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 */
 	@Suspendable
 	public void endTurn() {
+		logger.debug("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getLogic().getNextActivePlayerId());
 		onGameStateChanged();
@@ -800,7 +802,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 		startTrace();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
-		logger.debug(getActivePlayer().getName() + " begins");
+		logger.debug("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 		getLogic().initializePlayer(PLAYER_1);
 		getLogic().initializePlayer(PLAYER_2);
@@ -849,7 +851,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 */
 	@Suspendable
 	public void play() {
-		logger.debug("Game starts: " + getPlayer1().getName() + " VS. " + getPlayer2().getName());
+		logger.debug("{} play: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		init();
 		resume();
 	}
@@ -868,7 +870,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	public boolean takeActionInTurn() {
 		setActionsThisTurn(getActionsThisTurn() + 1);
 		if (getActionsThisTurn() > 99) {
-			logger.warn("Turn has been forcefully ended after {} actions", getActionsThisTurn());
+			logger.warn("{} takeActionInTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
 			endTurn();
 			return false;
 		}
@@ -990,6 +992,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 */
 	@Suspendable
 	public void startTurn(int playerId) {
+		logger.debug("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
 		setTurn(getTurn() + 1);
 		getLogic().startTurn(playerId);
 		onGameStateChanged();
@@ -999,7 +1002,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 
 	@Override
 	public String toString() {
-		return String.format("[GameContext turn=%d turnState=%s]", getTurn(), getTurnState().toString());
+		return String.format("[GameContext gameId=%s turn=%d turnState=%s]", getGameId(), getTurn(), getTurnState().toString());
 	}
 
 	/**

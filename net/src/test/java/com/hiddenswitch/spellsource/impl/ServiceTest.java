@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hiddenswitch.spellsource.Spellsource;
+import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.*;
@@ -36,13 +37,6 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 	static TestContext wrappedContext;
 	protected Vertx vertx;
 	protected T service;
-
-	public void setLoggingLevel(Level level) {
-		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
-		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
-				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-		root.setLevel(level);
-	}
 
 	@Before
 	public void loadCards(TestContext context) {
