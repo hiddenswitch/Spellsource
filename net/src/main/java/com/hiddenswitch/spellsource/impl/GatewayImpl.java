@@ -118,7 +118,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		router.route().handler(LoggerHandler.create());
 
 		// CORS
-		router.route().handler(CorsHandler.create("localhost")
+		router.route().handler(CorsHandler.create(".*")
 				.allowedHeader("Content-Type")
 				.allowedHeader("X-Auth-Token")
 				.exposedHeader("Content-Type")
@@ -317,7 +317,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		} else {
 			UserRecord record = getAccounts().get(targetUserId);
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(new Account()
-					.name(record.getProfile().getDisplayName())
+					.name(record.getUsername())
 					.id(targetUserId))));
 		}
 	}
@@ -538,9 +538,9 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		long startOfFriendship = System.currentTimeMillis();
 
 		FriendRecord friendRecord = new FriendRecord().setFriendId(friendId).setSince(startOfFriendship)
-				.setDisplayName(friendAccount.getProfile().getDisplayName());
+				.setDisplayName(friendAccount.getUsername());
 		FriendRecord friendOfFriendRecord = new FriendRecord().setFriendId(userId).setSince(startOfFriendship)
-				.setDisplayName(friendAccount.getProfile().getDisplayName());
+				.setDisplayName(friendAccount.getUsername());
 
 		//update both sides
 		Accounts.update(getMongo(), userId, json("$push", json("friends", json(friendRecord))));
@@ -679,7 +679,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		}
 
 		MessageRecord messageSent = Conversations.insertMessage(Mongo.mongo().client(), userId,
-				myAccount.getProfile().getDisplayName(), friendId, request.getText());
+				myAccount.getUsername(), friendId, request.getText());
 		SendMessageResponse response = new SendMessageResponse().message(messageSent.toMessageDto());
 		return WebResult.succeeded(response);
 	}
@@ -692,14 +692,14 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		// Get the decks
 		GetCollectionResponse deckCollections = getInventory().getCollection(GetCollectionRequest.decks(userId, record.getDecks()));
 
-		final String displayName = record.getProfile().getDisplayName();
+		final String displayName = record.getUsername();
 		final List<GetCollectionResponse> responses = deckCollections.getResponses();
 		return new Account()
 				.id(record.getId())
 				.decks((responses != null && responses.size() > 0) ? responses.stream()
 						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())
-				.email(record.getProfile().getEmailAddress())
+				.email(record.getEmails().get(0).getAddress())
 				.inMatch(getMatchmaking().getCurrentMatch(new CurrentMatchRequest(userId)).getGameId() != null)
 				.name(displayName);
 	}

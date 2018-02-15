@@ -24,7 +24,11 @@ public class LoginToken implements Serializable {
 	 */
 	public static LoginToken createSecure(String userId) {
 		SecureRandom random = new SecureRandom();
-		return new LoginToken(Date.from(Instant.now().plus(60L * 60L * 24L * 365L, ChronoUnit.SECONDS)), userId, new BigInteger(130, random).toString(32));
+		return new LoginToken(expiration(), userId, new BigInteger(130, random).toString(32));
+	}
+
+	public static Date expiration() {
+		return Date.from(Instant.now().plus(60L * 60L * 24L * 365L, ChronoUnit.SECONDS));
 	}
 
 	protected LoginToken() {

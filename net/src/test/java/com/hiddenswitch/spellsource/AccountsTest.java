@@ -86,8 +86,8 @@ public class AccountsTest extends ServiceTest<AccountsImpl> {
 			CreateAccountResponse response = service.createAccount("test@test.com", "password", "username");
 			UserRecord profile = service.get(response.getUserId());
 			getContext().assertNotNull(profile);
-			getContext().assertEquals(profile.getProfile().getEmailAddress(), "test@test.com");
-			getContext().assertEquals(profile.getProfile().getDisplayName(), "username");
+			getContext().assertEquals(profile.getEmails().get(0).getAddress(), "test@test.com");
+			getContext().assertEquals(profile.getUsername(), "username");
 			assertThrows(() -> service.get("a"));
 			assertThrows(() -> service.get(null));
 		});

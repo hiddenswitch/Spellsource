@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.impl.util.MongoRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
@@ -15,6 +16,10 @@ import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -107,6 +112,24 @@ public interface Accounts {
 	static List<UserRecord> find(MongoClient client, JsonObject query) throws SuspendExecution, InterruptedException {
 		List<JsonObject> records = awaitResult(h -> client.find(Accounts.USERS, query, h));
 		return QuickJson.fromJson(records, UserRecord.class);
+	}
+
+	/**
+	 * Applies a SHA256 hash to the specified text and returns a base64 string (digest) matching this format.
+	 *
+	 * @param text The text to hash.
+	 * @return The "digest", or base64-encoded SHA256 hash.
+	 */
+	static String hash(String text) {
+		byte[] data = text.getBytes(StandardCharsets.UTF_8);
+		MessageDigest digester = null;
+		try {
+			digester = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+		digester.update(data);
+		return Base64.getEncoder().encodeToString(digester.digest());
 	}
 
 	/**

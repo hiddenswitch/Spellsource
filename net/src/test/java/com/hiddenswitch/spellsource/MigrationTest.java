@@ -192,10 +192,13 @@ public class MigrationTest {
 
 		// Download production database. Requires a working mongodump url
 		vertx.executeBlocking(done -> {
+			Process ssh = null;
 			Process mongodump = null;
 			try {
 				// The passwords that used to be here are invalid anyway.
-				mongodump = new ProcessBuilder("mongodump", "--host=localhost", "--port=20276", "--db=production", "--ssl", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames").start();
+				ssh = new ProcessBuilder("ssh", "-f", "ec2-user@34.210.69.168", "-o", "ExitOnForwardFailure=yes", "-i", "mongodb-master.pem", "-L", "27017:34.210.69.168:27017", "-N", "sleep", "30").start();
+				ssh.waitFor();
+				mongodump = new ProcessBuilder("mongodump", "--host=localhost", "--port=27017", "--db=production", "--ssl", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames").start();
 				int waitFor1 = mongodump.waitFor();
 				Process mongorestore = new ProcessBuilder("mongorestore", "--host=localhost", "--port=27017", "dump").start();
 				int waitFor2 = mongorestore.waitFor();

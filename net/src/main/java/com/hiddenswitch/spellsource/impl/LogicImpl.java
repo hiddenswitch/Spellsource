@@ -4,13 +4,11 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Decks;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.impl.util.LegacyPersistenceHandler;
+import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.Spellsource;
-import com.hiddenswitch.spellsource.impl.util.PersistenceContext;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.Inventory;
 import com.hiddenswitch.spellsource.Logic;
-import com.hiddenswitch.spellsource.impl.util.PersistenceTrigger;
 import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.RpcClient;
@@ -166,7 +164,7 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 			GetCollectionResponse deckCollection = inventory.sync().getCollection(new GetCollectionRequest()
 					.withUserId(player.getUserId()).withDeckId(player.getDeckId()));
 
-			String name = Accounts.findOne(player.getUserId()).getProfile().getDisplayName();
+			String name = Accounts.findOne(player.getUserId()).getUsername();
 
 			// TODO: Get more attributes from database
 			AttributeMap playerAttributes = new AttributeMap();
