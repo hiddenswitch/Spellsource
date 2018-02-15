@@ -43,6 +43,7 @@ public class Embedded {
 				});
 			} else {
 				System.err.println("Failed to migrate, deployment aborted.");
+				ExceptionUtils.printRootCauseStackTrace(then.cause());
 			}
 		});
 	}

@@ -1,7 +1,9 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponseUnityConnection;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -14,6 +16,7 @@ import io.vertx.ext.auth.User;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,11 +25,20 @@ import java.util.List;
  * The fields in this object correspond to the ones stored in Mongo. This also implements the Vertx User interface,
  * which allows queries to see if a user is authorized to do a particular task (very lightly implemented).
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRecord extends MongoRecord implements User, Serializable, ClusterSerializable {
-	private Profile profile;
-	private AuthorizationRecord auth;
+	public static final String EMAILS_ADDRESS = "emails.address";
+	public static final String SERVICES = "services";
+	public static final String RESUME = "resume";
+	public static final String LOGIN_TOKENS = "loginTokens";
+	public static final String SERVICES_RESUME_LOGIN_TOKENS = SERVICES + "." + RESUME + "." + LOGIN_TOKENS;
+
+	private List<EmailRecord> emails;
+	private String username;
+	private Date createdAt;
 	private List<String> decks;
 	private List<FriendRecord> friends;
+	private ServicesRecord services;
 	private boolean bot;
 
 	/**
@@ -49,25 +61,6 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	 */
 	public UserRecord(String id) {
 		super(id);
-	}
-
-	/**
-	 * Gets user profile information. This isn't safe to share with the public, because it contains the user's email
-	 * address.
-	 *
-	 * @return A Profile object.
-	 */
-	public Profile getProfile() {
-		return profile;
-	}
-
-	/**
-	 * Sets the user's profile.
-	 *
-	 * @param profile A Profile object.
-	 */
-	public void setProfile(Profile profile) {
-		this.profile = profile;
 	}
 
 	@Override
@@ -93,24 +86,6 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	@JsonIgnore
 	public void setAuthProvider(AuthProvider authProvider) {
 		this.authProvider = new WeakReference<>(authProvider);
-	}
-
-	/**
-	 * Gets the user's login tokens and password hash. Not public safe.
-	 *
-	 * @return An AuthorizationRecord object.
-	 */
-	public AuthorizationRecord getAuth() {
-		return auth;
-	}
-
-	/**
-	 * Sets the user's login token and password hash information.
-	 *
-	 * @param auth An AuthorizationRecord object.
-	 */
-	public void setAuth(AuthorizationRecord auth) {
-		this.auth = auth;
 	}
 
 	/**
@@ -196,5 +171,37 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	@Override
 	public int readFromBuffer(int pos, Buffer buffer) {
 		throw new UnsupportedOperationException();
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public List<EmailRecord> getEmails() {
+		return emails;
+	}
+
+	public void setEmails(List<EmailRecord> emails) {
+		this.emails = emails;
+	}
+
+	public ServicesRecord getServices() {
+		return services;
+	}
+
+	public void setServices(ServicesRecord services) {
+		this.services = services;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }

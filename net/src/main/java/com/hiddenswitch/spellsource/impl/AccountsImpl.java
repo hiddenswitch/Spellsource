@@ -5,23 +5,28 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.LoginResponse;
+import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.models.LoginRequest;
-import com.hiddenswitch.spellsource.util.QuickJson;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.QuickJson.toJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class AccountsImpl extends AbstractService<AccountsImpl> implements Accounts {
@@ -34,8 +39,8 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 		super.start();
 		List<String> collections = awaitResult(h -> getMongo().getCollections(h));
 		if (!collections.contains(USERS)) {
-			Void r1 = awaitResult(h -> getMongo().createCollection(USERS, h));
-			Void r2 = awaitResult(h -> getMongo().createIndex(USERS, QuickJson.json("profile.emailAddress", 1), h));
+			Mongo.mongo().createCollection(USERS);
+			Mongo.mongo().createIndex(USERS, json(UserRecord.EMAILS_ADDRESS, 1));
 		}
 		registration = Rpc.register(this, Accounts.class, vertx.eventBus());
 	}
@@ -78,31 +83,36 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 
 		final String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
 		UserRecord record = new UserRecord(userId);
+		EmailRecord email = new EmailRecord();
+		email.setAddress(request.getEmailAddress());
+		record.setEmails(Collections.singletonList(email));
 		record.setDecks(new ArrayList<>());
 		record.setFriends(new ArrayList<>());
-		Profile profile = new Profile();
-		profile.setEmailAddress(request.getEmailAddress());
-		profile.setDisplayName(request.getName());
-		record.setProfile(profile);
+		record.setUsername(request.getName());
 		record.setBot(request.isBot());
+		record.setCreatedAt(Date.from(Instant.now()));
 
-		final String scrypt = hashedPassword(password);
-		LoginToken token = LoginToken.createSecure(userId);
+		final String scrypt = securedPassword(password);
+		LoginToken forUser = LoginToken.createSecure(userId);
 
-		final AuthorizationRecord auth = new AuthorizationRecord();
-		auth.setScrypt(scrypt);
-		auth.setTokens(Collections.singletonList(new HashedLoginSecret(token)));
-		record.setAuth(auth);
+		HashedLoginTokenRecord loginToken = new HashedLoginTokenRecord(forUser);
+		record.setServices(new ServicesRecord());
+		ResumeRecord resume = new ResumeRecord();
+		resume.setLoginTokens(Collections.singletonList(loginToken));
+		record.getServices().setResume(resume);
+		PasswordRecord passwordRecord = new PasswordRecord();
+		passwordRecord.setScrypt(scrypt);
+		record.getServices().setPassword(passwordRecord);
 
-		String ignored = awaitResult(h -> getMongo().insert(USERS, QuickJson.toJson(record), h));
+		Mongo.mongo().insert(USERS, toJson(record));
 
 		response.setUserId(userId);
-		response.setLoginToken(token);
+		response.setLoginToken(forUser);
 
 		return response;
 	}
 
-	private String hashedPassword(String password) {
+	private String securedPassword(String password) {
 		return SCryptUtil.scrypt(password, 16384, 8, 1);
 	}
 
@@ -124,24 +134,24 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 		}
 
 		if (request.getPassword() != null
-				&& !SCryptUtil.check(request.getPassword(), userRecord.getAuth().getScrypt())) {
+				&& !SCryptUtil.check(request.getPassword(), userRecord.getServices().getPassword().getScrypt())) {
 			return new LoginResponse(false, true);
 		}
 
 		// Since we don't store the tokens unhashed, we have to add this token always. We slice down five tokens.
 		LoginToken token = LoginToken.createSecure(userRecord.getId());
-		HashedLoginSecret hashedLoginSecret = new HashedLoginSecret(token);
+		HashedLoginTokenRecord hashedLoginTokenRecord = new HashedLoginTokenRecord(token);
 		final int sliceLastFiveElements = -5;
 
 		// Update the record with the new token.
-		MongoClientUpdateResult updateResult = awaitResult(h -> getMongo().updateCollection(USERS,
-				QuickJson.json("_id", userRecord.getId()),
-				QuickJson.json("$push",
-						QuickJson.json("auth.tokens",
-								QuickJson.json("$each",
-										Collections.singletonList(QuickJson.toJson(hashedLoginSecret)),
+		MongoClientUpdateResult updateResult = Mongo.mongo().updateCollection(USERS,
+				json("_id", userRecord.getId()),
+				json("$push",
+						json(UserRecord.SERVICES_RESUME_LOGIN_TOKENS,
+								json("$each",
+										Collections.singletonList(toJson(hashedLoginTokenRecord)),
 										"$slice",
-										sliceLastFiveElements))), h));
+										sliceLastFiveElements))));
 
 		if (updateResult.getDocModified() == 0) {
 			throw new RuntimeException();
@@ -167,15 +177,12 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 
 	@Suspendable
 	public UserRecord get(String userId) {
-		List<JsonObject> records = awaitResult(h -> getMongo().find(USERS, QuickJson.json("_id", userId), h));
-		return records.size() == 0 ? null : QuickJson.fromJson(records.get(0), UserRecord.class);
+		return Mongo.mongo().findOne(USERS, json("_id", userId), UserRecord.class);
 	}
 
 	@Suspendable
 	public UserRecord getWithEmail(String email) {
-		List<JsonObject> records = awaitResult(h -> getMongo().find(USERS,
-                QuickJson.json("profile.emailAddress", email), h));
-        return records.size() == 0 ? null : QuickJson.fromJson(records.get(0), UserRecord.class);
+		return Mongo.mongo().findOne(USERS, json(UserRecord.EMAILS_ADDRESS, email), UserRecord.class);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -184,25 +191,28 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 				|| userId == null) {
 			return false;
 		}
-		JsonObject result = awaitResult(h -> getMongo().findOne(USERS, QuickJson.json("_id", userId), QuickJson.json("auth.tokens", 1), h));
+		JsonObject result = Mongo.mongo().findOne(USERS, json("_id", userId),
+				json(UserRecord.SERVICES_RESUME_LOGIN_TOKENS, 1));
 
 		if (result == null
 				|| result.isEmpty()) {
 			return false;
 		}
 
-		List<HashedLoginSecret> tokens = QuickJson.fromJson(result.getJsonObject("auth").getJsonArray("tokens"), HashedLoginSecret.class);
+		List<HashedLoginTokenRecord> tokens = fromJson(
+				result.getJsonObject(UserRecord.SERVICES).getJsonObject(UserRecord.RESUME).getJsonArray(UserRecord.LOGIN_TOKENS),
+				HashedLoginTokenRecord.class);
 
 		return isTokenInList(secret, tokens);
 	}
 
 	public boolean isAuthorizedWithToken(UserRecord record, String secret) {
-		return isTokenInList(secret, record.getAuth().getTokens());
+		return isTokenInList(secret, record.getServices().getResume().getLoginTokens());
 	}
 
-	private boolean isTokenInList(String secret, List<HashedLoginSecret> hashedSecrets) {
-		for (HashedLoginSecret loginToken : hashedSecrets) {
-			if (SCryptUtil.check(secret, loginToken.getHashedLoginToken())) {
+	private boolean isTokenInList(String secret, List<HashedLoginTokenRecord> hashedSecrets) {
+		for (HashedLoginTokenRecord loginToken : hashedSecrets) {
+			if (loginToken.check(secret)) {
 				return true;
 			}
 		}
@@ -216,7 +226,7 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 	}
 
 	private boolean emailExists(String emailAddress) throws SuspendExecution, InterruptedException {
-		Long count = awaitResult(h -> getMongo().count(USERS, QuickJson.json("profile.emailAddress", emailAddress), h));
+		Long count = Mongo.mongo().count(USERS, json(UserRecord.EMAILS_ADDRESS, emailAddress));
 		return count != 0;
 	}
 

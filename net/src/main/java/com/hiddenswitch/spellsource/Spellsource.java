@@ -25,6 +25,8 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -46,6 +48,7 @@ import static java.util.stream.Collectors.toSet;
  * It will provide more APIs for features in the future.
  */
 public class Spellsource {
+	private static Logger logger = LoggerFactory.getLogger(Spellsource.class);
 	private static Spellsource instance;
 	private List<DeckCreateRequest> cachedStandardDecks;
 	private Map<String, LegacyPersistenceHandler> legacyPersistenceHandlers = new HashMap<>();
@@ -166,7 +169,51 @@ public class Spellsource {
 									json("$unset", json("format", null)),
 									new UpdateOptions().setMulti(true));
 						}))
-				.migrateTo(4, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(5)
+						.withUp(thisVertx -> {
+							// Shuffle around the location of user record data
+							List<JsonObject> users = Mongo.mongo().find(Accounts.USERS, json());
+							for (JsonObject jo : users) {
+								String email = jo.getJsonObject("profile").getString("emailAddress");
+								String username = jo.getJsonObject("profile").getString("displayName");
+								String passwordScrypt = jo.getJsonObject("auth").getString("scrypt");
+
+								EmailRecord emailRecord = new EmailRecord();
+								emailRecord.setAddress(email);
+
+								List<JsonObject> tokens = jo.getJsonObject("auth").getJsonArray("tokens").stream()
+										.map(e -> (JsonObject) e)
+										.map(old -> {
+											HashedLoginTokenRecord newToken = new HashedLoginTokenRecord();
+											newToken.setHashedToken(old.getString("hashedLoginToken"));
+											newToken.setWhen(LoginToken.expiration());
+											return json(newToken);
+										}).collect(toList());
+
+								JsonObject updateCommand = json(
+										"$set", json(
+												"emails", Collections.singletonList(json(emailRecord)),
+												"username", username,
+												"services", json(
+														"password", json(
+																"scrypt", passwordScrypt
+														),
+														"resume", json(
+																"loginTokens", tokens
+														)
+												)),
+										"$unset", json("auth", null, "profile", null)
+								);
+
+								String userId = jo.getString("_id");
+								logger.debug("add MigrationRequest 5: Migrating passwords and emails for userId {}", userId);
+
+								Mongo.mongo().updateCollection(Accounts.USERS, json("_id", userId),
+										updateCommand);
+							}
+						}))
+				.migrateTo(5, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

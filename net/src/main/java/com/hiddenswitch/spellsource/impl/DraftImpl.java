@@ -11,6 +11,7 @@ import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.Decks;
 import com.hiddenswitch.spellsource.Draft;
 import com.hiddenswitch.spellsource.impl.util.DraftRecord;
+import com.hiddenswitch.spellsource.impl.util.MongoRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Registration;
@@ -102,7 +103,7 @@ public class DraftImpl extends AbstractService<DraftImpl> implements Draft {
 
 			DeckCreateResponse deck = decks.sync().createDeck(
 					new DeckCreateRequest()
-							.withName(String.format("%s's Draft Deck", user.getProfile().getDisplayName()))
+							.withName(String.format("%s's Draft Deck", user.getUsername()))
 							.withHeroClass(record.getPublicDraftState().getHeroClass())
 							.withUserId(request.getUserId())
 							.withDraft(true)

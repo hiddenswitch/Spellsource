@@ -11,9 +11,10 @@ import java.io.Serializable;
  * Created by bberman on 2/6/17.
  */
 public class MongoRecord implements Serializable {
+	public static final String ID = "_id";
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	@JsonProperty(value = "_id")
-	@SerializedName("_id")
+	@JsonProperty(value = ID)
+	@SerializedName(ID)
 	protected String _id;
 
 	@JsonIgnore
