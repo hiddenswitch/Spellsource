@@ -8,6 +8,7 @@ import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
 import io.vertx.ext.sync.Sync;
 
 import java.io.IOException;
@@ -73,7 +74,7 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 		Object result = null;
 		final DeliveryOptions deliveryOptions = new DeliveryOptions().setSendTimeout(timeout);
 		RpcOptions options = method.getAnnotation(RpcOptions.class);
-		RpcOptions.Serialization serialization = RpcOptions.Serialization.JAVA;
+		RpcOptions.Serialization serialization = Rpc.defaultSerialization();
 
 		if (options != null) {
 			deliveryOptions.setSendTimeout(options.sendTimeoutMS());
@@ -83,18 +84,25 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 		if (sync) {
 			final RpcOptions.Serialization finalSerialization = serialization;
 			result = awaitFiber(done -> {
-				call(methodName, args, deliveryOptions, finalSerialization, done);
+				call(methodName, args, deliveryOptions, finalSerialization, done, method);
 			});
 		} else {
-			call(methodName, args, deliveryOptions, serialization, next);
+			call(methodName, args, deliveryOptions, serialization, next, method);
 		}
 
 		return result;
 	}
 
 	@Suspendable
-	private void call(String methodName, Object[] args, final DeliveryOptions deliveryOptions, RpcOptions.Serialization serialization, Handler<AsyncResult<Object>> next) {
+	private void call(String methodName, Object[] args, final DeliveryOptions deliveryOptions, RpcOptions.Serialization serialization, Handler<AsyncResult<Object>> next, Method method) {
 		Object message = null;
+
+		String address = name + "::" + methodName;
+		if (deploymentId != null) {
+			address = deploymentId + "::" + address;
+		}
+
+		Handler<AsyncResult<Message<Object>>> handler;
 
 		if (serialization == RpcOptions.Serialization.JAVA) {
 			final Buffer result = Buffer.buffer(512);
@@ -107,15 +115,14 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			}
 
 			message = result;
+			handler = new ReplyHandler(next);
 		} else if (serialization == RpcOptions.Serialization.JSON) {
 			message = Serialization.serialize(args[0]);
+			handler = new JsonReplyHandler(next, method.getReturnType());
+		} else {
+			throw new RuntimeException("Unspecified serialization option in invocation.");
 		}
 
-
-		String address = name + "::" + methodName;
-		if (deploymentId != null) {
-			address = deploymentId + "::" + address;
-		}
-		eb.send(address, message, deliveryOptions, Sync.fiberHandler(new ReplyHandler(next)));
+		eb.send(address, message, deliveryOptions, Sync.fiberHandler(handler));
 	}
 }
