@@ -1,21 +1,18 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.fasterxml.jackson.core.JsonParseException;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
 
-import java.io.IOException;
-import java.io.OptionalDataException;
-
-class ReplyHandler implements Handler<AsyncResult<Message<Object>>> {
+class JsonReplyHandler implements Handler<AsyncResult<Message<Object>>> {
 	private final Handler<AsyncResult<Object>> next;
+	final Class responseClass;
 
-	ReplyHandler(Handler<AsyncResult<Object>> next) {
+	JsonReplyHandler(Handler<AsyncResult<Object>> next, Class responseClass) {
 		this.next = next;
+		this.responseClass = responseClass;
 	}
 
 	@Override
@@ -23,10 +20,10 @@ class ReplyHandler implements Handler<AsyncResult<Message<Object>>> {
 	public void handle(AsyncResult<Message<Object>> reply) {
 		if (reply.succeeded()) {
 			try {
-				Object body = Serialization.deserialize(new VertxBufferInputStream((Buffer) reply.result().body()));
+				Object body = Serialization.deserialize((String) reply.result().body(), responseClass);
 				next.handle(Future.succeededFuture(body));
-			} catch (IOException | ClassNotFoundException e) {
-				next.handle(Future.failedFuture(e));
+			} catch (RuntimeException dataException) {
+				next.handle(Future.failedFuture(dataException));
 			}
 		} else {
 			next.handle(Future.failedFuture(reply.cause()));

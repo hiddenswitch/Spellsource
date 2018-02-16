@@ -101,32 +101,37 @@ public class Rpc {
 		Registration registration = new Registration();
 
 		registration.setMessageConsumers(Stream.of(serviceInterface.getDeclaredMethods()).flatMap(method -> {
-			String methodName = name + "::" + method.getName();
+			final String address = name + "::" + method.getName();
 
 			SuspendableFunction<Object, Object> method1 = arg -> method.invoke(instance, arg);
 
 			// Get the context at the time of calling this function
-			RpcOptions.Serialization serialization = RpcOptions.Serialization.JAVA;
+			RpcOptions.Serialization serialization = defaultSerialization();
 			RpcOptions rpcOptions = method.getAnnotation(RpcOptions.class);
 			if (rpcOptions != null) {
 				serialization = rpcOptions.serialization();
 			}
+			Handler eventBusHandler;
 			if (serialization == RpcOptions.Serialization.JAVA) {
-				MessageConsumer<Buffer> consumer = eb.consumer(methodName, Sync.fiberHandler(new BufferEventBusHandler<>(method1)));
-				// If the instance we are consuming supports deployment IDs, register a function prefixed with the
-				// deployment ID in order to support stateful message consumers.
-				if (instance instanceof AbstractVerticle) {
-					AbstractVerticle deployedInstance = (AbstractVerticle) instance;
-					return Stream.of(consumer,
-							// Specific deployment instance ID consumer.
-							eb.consumer(deployedInstance + "::" + methodName, Sync.fiberHandler(new BufferEventBusHandler<>(method1))));
-				}
-				return Stream.of(consumer);
+				eventBusHandler = new BufferEventBusHandler<>(method1);
 			} else if (serialization == RpcOptions.Serialization.JSON) {
-				return Stream.of(eb.consumer(methodName, Sync.fiberHandler(new JsonEventBusHandler<>(method1, method.getParameterTypes()[0]))));
+				eventBusHandler = new JsonEventBusHandler<>(method1, method.getParameterTypes()[0]);
+			} else {
+				throw new RuntimeException("Unexpected serialization option for this event bus handler.");
 			}
 
-			throw new RuntimeException("Not reachable.");
+			MessageConsumer consumer = eb.consumer(address, Sync.fiberHandler(eventBusHandler));
+			// If the instance we are consuming supports deployment IDs, register a function prefixed with the
+			// deployment ID in order to support stateful message consumers.
+			if (instance instanceof AbstractVerticle) {
+				AbstractVerticle deployedInstance = (AbstractVerticle) instance;
+				// Specific deployment instance ID consumer.
+				final String specificInstanceAddress = deployedInstance + "::" + address;
+				MessageConsumer consumerSpecific = eb.consumer(specificInstanceAddress, Sync.fiberHandler(eventBusHandler));
+				return Stream.of(consumer, consumerSpecific);
+			}
+
+			return Stream.of(consumer);
 		}).collect(Collectors.toList()));
 
 		CompositeFuture.all(registration.getMessageConsumers()
@@ -241,5 +246,9 @@ public class Rpc {
 	 */
 	public static CompositeFuture unregister(Registration registration) throws SuspendExecution {
 		return Sync.awaitResult(h -> unregister(registration, h));
+	}
+
+	public static RpcOptions.Serialization defaultSerialization() {
+		return RpcOptions.Serialization.JAVA;
 	}
 }
