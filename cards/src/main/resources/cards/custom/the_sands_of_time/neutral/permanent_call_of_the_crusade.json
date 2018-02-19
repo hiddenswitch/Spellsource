@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Permanent. Adjacent minions have +1 attack. (After 3 turns, this dies)",
+  "description": "Permanent. Adjacent minions have +1 attack. (After 3 of your turns, this dies)",
   "trigger": {
     "countUntilCast": 3,
     "eventTrigger": {

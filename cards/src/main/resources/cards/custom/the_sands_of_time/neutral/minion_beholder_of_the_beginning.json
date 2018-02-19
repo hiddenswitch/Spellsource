@@ -10,12 +10,20 @@
   "description": "Battlecry: Deal damage equal to the lowest Cost in your hand.",
   "battlecry": {
     "targetSelection": "ANY",
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
     "spell": {
       "class": "DamageSpell",
       "value": {
-        "class": "LowestAttributeValueProvider",
+        "class": "ReduceValueProvider",
         "target": "FRIENDLY_HAND",
-        "attribute": "ACTUAL_MANA_COST"
+        "value1": {
+          "class": "ManaCostProvider"
+        },
+        "operation": "MINIMUM"
       }
     }
   },

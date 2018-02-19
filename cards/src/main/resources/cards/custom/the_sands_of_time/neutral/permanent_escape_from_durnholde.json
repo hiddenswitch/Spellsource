@@ -1,0 +1,45 @@
+{
+  "name": "Escape from Durnholde",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseHp": 1,
+  "baseAttack": 0,
+  "rarity": "RARE",
+  "description": "Permanent. At the start of your turn, if you control any minions, draw a card. (After 3 of your turns, this dies)",
+  "triggers": [
+    {
+      "countUntilCast": 3,
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      },
+      "maxFires": 3
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DrawCardSpell",
+        "condition": {
+          "class": "MinionCountCondition",
+          "value": 1,
+          "operation": "GREATER_OR_EQUAL",
+          "targetPlayer": "SELF"
+        }
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

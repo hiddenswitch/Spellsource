@@ -8,17 +8,29 @@
   "rarity": "RARE",
   "description": "Taunt. Battlecry: Gain +1 Health for each spell in your hand.",
   "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+      },
+      "value2": 0,
+      "operation": "GREATER"
+    },
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
       "hpBonus": {
-        "class": "PlayerAttributeValueProvider",
+        "class": "EntityCounter",
+        "target": "FRIENDLY_HAND",
         "filter": {
           "class": "CardFilter",
           "cardType": "SPELL"
-        },
-        "playerAttribute": "HAND_COUNT",
-        "targetPlayer": "SELF"
+        }
       }
     }
   },

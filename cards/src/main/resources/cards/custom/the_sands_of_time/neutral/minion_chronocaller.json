@@ -11,16 +11,24 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "PutRandomMinionOnBoardSpell",
+      "class": "RecruitSpell",
       "value": 2,
       "cardFilter": {
-        "class": "CardFilter",
-        "value": 2,
-        "attribute": "BASE_MANA_COST",
-        "cardType": "MINION",
-        "operation": "EQUAL"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "ManaCostFilter",
+            "value": 2,
+            "operation": "EQUAL"
+          }
+        ]
       },
-      "cardLocation": "DECK"
+      "cardLocation": "DECK",
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

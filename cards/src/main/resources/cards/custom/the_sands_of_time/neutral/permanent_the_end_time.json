@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "heroClass": "ANY",
   "rarity": "LEGENDARY",
-  "description": "At the end of the turn, summon a 2/2 Infinite Warden. Deathrattle: Destroy all enemies. (After 20 turns, this dies)",
+  "description": "At the end of the turn, summon a 2/2 Infinite Warden. Deathrattle: Destroy all enemies. (After 20 of your turns, this dies)",
   "triggers": [
     {
       "eventTrigger": {

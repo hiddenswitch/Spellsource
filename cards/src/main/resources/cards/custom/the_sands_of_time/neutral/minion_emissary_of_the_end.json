@@ -14,10 +14,18 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": {
-        "class": "HighestAttributeValueProvider",
+        "class": "ReduceValueProvider",
         "target": "FRIENDLY_HAND",
-        "attribute": "ACTUAL_MANA_COST"
+        "value1": {
+          "class": "ManaCostProvider"
+        },
+        "operation": "MAXIMUM"
       }
+    },
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
     }
   },
   "attributes": {
