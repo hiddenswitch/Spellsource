@@ -14,8 +14,7 @@
       "target": "SELF",
       "attribute": "CANNOT_ATTACK_HEROES",
       "revertTrigger": {
-        "class": "TurnStartTrigger",
-        "targetPlayer": "OPPONENT"
+        "class": "TurnEndTrigger"
       }
     }
   },
