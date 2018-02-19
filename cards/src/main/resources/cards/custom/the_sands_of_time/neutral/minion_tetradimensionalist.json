@@ -10,7 +10,7 @@
   "battlecry": {
     "spell": {
       "class": "SilenceSpell",
-      "target": "ALL_MINIONS",
+      "target": "ALL_OTHER_MINIONS",
       "filter": {
         "class": "AttributeFilter",
         "value": 3,

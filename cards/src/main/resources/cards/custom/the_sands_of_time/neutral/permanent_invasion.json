@@ -6,7 +6,7 @@
   "type": "MINION",
   "heroClass": "ANY",
   "rarity": "LEGENDARY",
-  "description": "Permanent. At the end of your turn, summon two random 1-Cost minions. The next two cost (1) more. (After 4 turns, this dies)",
+  "description": "Permanent. At the end of your turn, summon two random 1-Cost minions. The next two cost (1) more. (After 4 of your turns, this dies)",
   "triggers": [
     {
       "countUntilCast": 4,

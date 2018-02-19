@@ -1,10 +1,24 @@
 {
   "name": "Battle for Mount Hyjal",
   "baseManaCost": 3,
-  "type": "RIFT",
+  "baseHp": 1,
+  "baseAttack": 0,
+  "type": "MINION",
   "heroClass": "ANY",
   "rarity": "RARE",
-  "description": "Your minions have +2/+2. Battlecry: Summon an 8/8 Demon for your opponent.",
+  "description": "Permanent. Your minions have +2/+2. Battlecry: Summon an 8/8 Demon for your opponent. (After 3 of your turns, this dies)",
+  "trigger": {
+    "countUntilCast": 3,
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "SELF"
+    },
+    "maxFires": 3
+  },
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_MINIONS",
@@ -20,7 +34,8 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "PERMANENT": true
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",

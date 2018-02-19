@@ -20,6 +20,18 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testParadox() {
+		runGym((context, player, opponent) -> {
+			Minion paradox = playMinionCard(context, player, "minion_paradox");
+			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_paradox");
+			Assert.assertEquals(player.getHand().size(), 0);
+			playCard(context, player, "spell_the_coin");
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_paradox");
+		});
+	}
+
+	@Test
 	public void testEchoOfMalfurion() {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "minion_bloodfen_raptor");

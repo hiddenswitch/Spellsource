@@ -10,10 +10,11 @@
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",
-      "sourcePlayer": "SELF"
+      "sourcePlayer": "SELF",
+      "hostTargetType": "IGNORE_AS_TARGET"
     },
     "spell": {
-      "class": "ReturnMinionToHandSpell",
+      "class": "ReturnTargetToHandSpell",
       "target": "SELF"
     }
   },
