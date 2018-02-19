@@ -7,8 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.actions.PlayChooseOneCardAction;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -25,8 +24,6 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -49,7 +46,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 
 public class TestBase {
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
-		Card baseCard =  receiveCard(context, player, baseCardId);
+		Card baseCard = receiveCard(context, player, baseCardId);
 		int cost = CardCatalogue.getCardById(chosenCardId).getManaCost(context, player);
 		player.setMana(cost);
 		context.getLogic().performGameAction(player.getId(), context.getValidActions()
@@ -62,11 +59,11 @@ public class TestBase {
 		return baseCard;
 	}
 
-	public static class OverrideHandle<T extends Entity> {
+	public static class OverrideHandle<T> {
 		private T object;
 		private AtomicBoolean stopped = new AtomicBoolean(false);
 
-		private void set(T object) {
+		public void set(T object) {
 			this.object = object;
 		}
 
@@ -89,13 +86,13 @@ public class TestBase {
 
 	protected static OverrideHandle<Card> overrideRandomCard(GameContext context, String cardId) {
 		OverrideHandle<Card> handle = new OverrideHandle<>();
-		Card card = CardCatalogue.getCardById(cardId);
 		MockingDetails mockingDetails = Mockito.mockingDetails(context.getLogic());
 		GameLogic spyLogic = mockingDetails.isSpy() ? context.getLogic() : Mockito.spy(context.getLogic());
 		context.setLogic(spyLogic);
 		Answer answer = invocation -> {
+			handle.set(CardCatalogue.getCardById(cardId));
 			if (!handle.stopped.get()) {
-				return card;
+				return handle.get();
 			} else {
 				return invocation.callRealMethod();
 			}
@@ -104,7 +101,6 @@ public class TestBase {
 		Mockito.doAnswer(answer).when(spyLogic).getRandom(Mockito.anyList());
 		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.any(Bag.class));
 		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.anyList());
-		handle.set(card);
 		return handle;
 	}
 
@@ -120,6 +116,32 @@ public class TestBase {
 				actions.forEach(a -> discoveries.add((DiscoverAction) a));
 				DiscoverAction result = (DiscoverAction) discovery.apply(discoveries);
 				handle.set(result.getCard());
+				return result;
+			} else {
+				return invocation.callRealMethod();
+			}
+		}).when(overriden).requestAction(any(), any(), anyList());
+		return handle;
+	}
+
+	protected static OverrideHandle<EntityReference> overrideBattlecry(Player player, Function<List<BattlecryAction>, GameAction> battlecry) {
+		Behaviour overriden = Mockito.spy(player.getBehaviour());
+		player.setBehaviour(overriden);
+		OverrideHandle<EntityReference> handle = new OverrideHandle<>();
+		Mockito.doAnswer(invocation -> {
+			List<GameAction> actions = invocation.getArgument(2);
+			if (actions.stream().allMatch(a -> a instanceof BattlecryAction)
+					&& !handle.stopped.get()) {
+				List<BattlecryAction> battlecryActions = new ArrayList<>();
+
+				if (handle.get() != null
+						&& battlecryActions.stream().anyMatch(ba -> ba.getTargetReference().equals(handle.get()))) {
+					return battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(handle.get())).findFirst().orElseThrow(AssertionError::new);
+				}
+
+				actions.forEach(a -> battlecryActions.add((BattlecryAction) a));
+				BattlecryAction result = (BattlecryAction) battlecry.apply(battlecryActions);
+				handle.set(result.getTargetReference());
 				return result;
 			} else {
 				return invocation.callRealMethod();

@@ -7,6 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.utils.Attribute;
@@ -15,9 +16,61 @@ import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Stream;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testFifiFizzlewarp() {
+		// Test that cards that have race-filtered battlecries work correctly after Fifi
+		runGym((context, player, opponent) -> {
+			context.getLogic().putOnTopOfDeck(player, CardCatalogue.getCardById("minion_boulderfist_ogre"));
+
+			for (int i = 0; i < 2; i++) {
+				context.getLogic().putOnTopOfDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			}
+
+			OverrideHandle<Card> handle = overrideRandomCard(context, "minion_virmen_sensei");
+			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			handle.stop();
+
+			for (int i = 0; i < 3; i++) {
+				context.getLogic().drawCard(player.getId(), player);
+			}
+
+			context.getLogic().discardCard(player, fifi);
+
+			for (Card card : player.getHand().subList(0, 2)) {
+				Assert.assertEquals(card.getCardId(), "minion_virmen_sensei");
+				Assert.assertEquals(card.getRace(), Race.BEAST);
+			}
+
+			final MinionCard boulderfist = (MinionCard) player.getHand().get(2);
+			Assert.assertEquals(boulderfist.getCardId(), "minion_virmen_sensei");
+			Assert.assertEquals(boulderfist.getRace(), Race.NONE);
+
+			final MinionCard vermin1 = (MinionCard) player.getHand().get(0);
+			final MinionCard vermin2 = (MinionCard) player.getHand().get(1);
+
+			Minion target = playMinionCard(context, player, vermin1);
+			Minion notTarget = playMinionCard(context, player, boulderfist);
+
+			CountDownLatch latch = new CountDownLatch(1);
+			// Checks that a Virmen Sensei can target the Beast Virmen Sensei on the board and not the Race.NONE
+			// Virmen Sensei that was created from the Boulderfist Ogre
+			overrideBattlecry(player, battlecryActions -> {
+				Assert.assertEquals(battlecryActions.size(), 1);
+				Assert.assertEquals(battlecryActions.get(0).getTargetReference(), target.getReference());
+				latch.countDown();
+				return battlecryActions.get(0);
+			});
+
+			playCard(context, player, vermin2);
+			Assert.assertEquals(latch.getCount(), 0, "Should have requested battlecries");
+		});
+	}
 
 	@Test
 	public void testParadoxKingTogwaggleInteraction() {

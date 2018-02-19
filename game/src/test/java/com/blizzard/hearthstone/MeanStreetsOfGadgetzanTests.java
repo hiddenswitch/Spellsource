@@ -2,12 +2,35 @@ package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.concurrent.CountDownLatch;
+
 public class MeanStreetsOfGadgetzanTests extends TestBase {
+
+	@Test
+	public void testVirmenSensei() {
+		runGym((context, player, opponent) -> {
+			Minion beast = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playMinionCard(context, player, "token_silver_hand_recruit");
+			MinionCard card = (MinionCard) receiveCard(context, player, "minion_virmen_sensei");
+
+			CountDownLatch latch = new CountDownLatch(1);
+			overrideBattlecry(player, battlecryActions -> {
+				Assert.assertEquals(battlecryActions.size(), 1);
+				Assert.assertEquals(battlecryActions.get(0).getTargetReference(), beast.getReference());
+				latch.countDown();
+				return battlecryActions.get(0);
+			});
+
+			context.getLogic().performGameAction(player.getId(), card.play());
+			Assert.assertEquals(latch.getCount(), 0);
+		});
+	}
 
 	@Test
 	public void testWrathion() {
