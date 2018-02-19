@@ -8,20 +8,20 @@
   "rarity": "RARE",
   "description": "Taunt. Battlecry: If the total cost of your hand is more than (20), gain +4 Health.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "ComparisonCondition",
       "operation": "GREATER_OR_EQUAL",
       "value1": {
         "class": "ReduceValueProvider",
         "target": "FRIENDLY_HAND",
+        "operation": "ADD",
         "value1": {
           "class": "ManaCostProvider"
-        },
-        "operation": "ADD"
+        }
       },
       "value2": 20
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",

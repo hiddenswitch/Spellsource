@@ -1,10 +1,10 @@
 {
   "name": "Seed of Nordrassil",
-  "type": "MINION",
   "baseManaCost": 0,
-  "baseHp": 1,
-  "baseAttack": 0,
+  "type": "MINION",
   "heroClass": "BROWN",
+  "baseAttack": 0,
+  "baseHp": 1,
   "rarity": "FREE",
   "description": "Permanent. When you've played minions with a total of 40 stats, transform into Nordrassil.",
   "trigger": {
@@ -18,34 +18,34 @@
         {
           "class": "ModifyAttributeSpell",
           "target": "SELF",
-          "attribute": "RESERVED_INTEGER_1",
           "value": {
             "class": "AttributeValueProvider",
             "target": "EVENT_TARGET",
             "attribute": "ATTACK"
-          }
+          },
+          "attribute": "RESERVED_INTEGER_1"
         },
         {
           "class": "ModifyAttributeSpell",
           "target": "SELF",
-          "attribute": "RESERVED_INTEGER_1",
           "value": {
             "class": "AttributeValueProvider",
             "target": "EVENT_TARGET",
             "attribute": "HP"
-          }
+          },
+          "attribute": "RESERVED_INTEGER_1"
         },
         {
           "class": "ConditionalSpell",
           "condition": {
             "class": "ComparisonCondition",
+            "operation": "GREATER_OR_EQUAL",
             "value1": {
               "class": "AttributeValueProvider",
               "target": "SELF",
               "attribute": "RESERVED_INTEGER_1"
             },
-            "value2": 40,
-            "operation": "GREATER_OR_EQUAL"
+            "value2": 40
           },
           "spell": {
             "class": "TransformMinionSpell",

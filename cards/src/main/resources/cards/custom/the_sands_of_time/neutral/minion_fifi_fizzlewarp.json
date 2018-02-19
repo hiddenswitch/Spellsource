@@ -7,6 +7,9 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "description": "When the game starts, if your other minions are textless, give each one a random minion's effect.",
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
   "gameTriggers": [
     {
       "eventTrigger": {
@@ -69,6 +72,7 @@
           "spells": [
             {
               "class": "custom.TextifySpell",
+              "target": "FRIENDLY_DECK",
               "cardFilter": {
                 "class": "AndFilter",
                 "filters": [
@@ -91,7 +95,6 @@
                   }
                 ]
               },
-              "target": "FRIENDLY_DECK",
               "filter": {
                 "class": "AndFilter",
                 "filters": [
@@ -109,6 +112,7 @@
             },
             {
               "class": "custom.TextifySpell",
+              "target": "FRIENDLY_HAND",
               "cardFilter": {
                 "class": "AndFilter",
                 "filters": [
@@ -131,7 +135,6 @@
                   }
                 ]
               },
-              "target": "FRIENDLY_HAND",
               "filter": {
                 "class": "AndFilter",
                 "filters": [
@@ -151,8 +154,5 @@
         }
       }
     }
-  ],
-  "collectible": true,
-  "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  ]
 }

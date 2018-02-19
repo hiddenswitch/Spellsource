@@ -10,6 +10,7 @@
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER",
       "value1": {
         "class": "EntityCounter",
         "target": "FRIENDLY_HAND",
@@ -18,8 +19,7 @@
           "cardType": "SPELL"
         }
       },
-      "value2": 0,
-      "operation": "GREATER"
+      "value2": 0
     },
     "spell": {
       "class": "BuffSpell",

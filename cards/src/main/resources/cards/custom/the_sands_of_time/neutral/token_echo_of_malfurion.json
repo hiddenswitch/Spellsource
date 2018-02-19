@@ -8,7 +8,6 @@
   "rarity": "LEGENDARY",
   "description": "Battlecry: Gain the stats of the highest Cost minion in your hand.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "AnyMatchFilterCondition",
       "target": "FRIENDLY_HAND",
@@ -17,6 +16,7 @@
         "cardType": "MINION"
       }
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "GainStatsOfHighestCostMinionSpell",
       "target": "SELF"

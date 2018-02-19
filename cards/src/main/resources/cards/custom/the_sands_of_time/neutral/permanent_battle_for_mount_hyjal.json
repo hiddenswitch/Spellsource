@@ -1,10 +1,10 @@
 {
   "name": "Battle for Mount Hyjal",
   "baseManaCost": 3,
-  "baseHp": 1,
-  "baseAttack": 0,
   "type": "MINION",
   "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 1,
   "rarity": "RARE",
   "description": "Permanent. Your minions have +2/+2. Battlecry: Summon an 8/8 Demon for your opponent. (After 3 of your turns, this dies)",
   "trigger": {
