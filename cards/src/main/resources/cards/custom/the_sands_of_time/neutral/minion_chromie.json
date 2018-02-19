@@ -20,27 +20,27 @@
         },
         {
           "class": "ReceiveCardSpell",
-          "cardSource": {
-            "class": "DeckSource"
-          },
           "value": {
             "class": "AlgebraicValueProvider",
+            "operation": "MINIMUM",
             "value1": {
               "class": "CardCountValueProvider",
               "cardSource": {
                 "class": "DeckSource"
               }
             },
-            "value2": 10,
-            "operation": "MINIMUM"
+            "value2": 10
+          },
+          "cardSource": {
+            "class": "DeckSource"
           }
         },
         {
           "class": "DiscardSpell",
+          "value": -1,
           "cardSource": {
             "class": "DeckSource"
-          },
-          "value": -1
+          }
         },
         {
           "class": "StealCardSpell",

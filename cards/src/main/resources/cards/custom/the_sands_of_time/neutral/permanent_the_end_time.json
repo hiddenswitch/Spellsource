@@ -2,9 +2,9 @@
   "name": "The End Time",
   "baseManaCost": 6,
   "type": "MINION",
-  "baseHp": 1,
-  "baseAttack": 0,
   "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 1,
   "rarity": "LEGENDARY",
   "description": "At the end of the turn, summon a 2/2 Infinite Warden. Deathrattle: Destroy all enemies. (After 20 of your turns, this dies)",
   "triggers": [
@@ -18,8 +18,8 @@
         "condition": {
           "class": "AttributeCondition",
           "target": "SELF",
-          "attribute": "RESERVED_INTEGER_1",
           "value": 1,
+          "attribute": "RESERVED_INTEGER_1",
           "operation": "LESS_OR_EQUAL"
         },
         "spell1": {
@@ -38,8 +38,8 @@
         "spell2": {
           "class": "ModifyAttributeSpell",
           "target": "SELF",
-          "attribute": "RESERVED_INTEGER_1",
-          "value": -1
+          "value": -1,
+          "attribute": "RESERVED_INTEGER_1"
         }
       },
       "maxFires": 20

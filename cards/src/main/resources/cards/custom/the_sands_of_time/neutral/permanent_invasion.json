@@ -1,10 +1,10 @@
 {
   "name": "Invasion",
   "baseManaCost": 6,
-  "baseAttack": 0,
-  "baseHp": 1,
   "type": "MINION",
   "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 1,
   "rarity": "LEGENDARY",
   "description": "Permanent. At the end of your turn, summon two random 1-Cost minions. The next two cost (1) more. (After 4 of your turns, this dies)",
   "triggers": [

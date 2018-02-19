@@ -10,8 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",
-      "sourcePlayer": "SELF",
-      "hostTargetType": "IGNORE_AS_TARGET"
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "ReturnTargetToHandSpell",

@@ -10,17 +10,17 @@
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
       "value1": {
         "class": "EntityCounter",
         "target": "FRIENDLY_HAND",
         "filter": {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "race": "DRAGON"
+          "race": "DRAGON",
+          "cardType": "MINION"
         }
       },
-      "value2": 2,
-      "operation": "GREATER_OR_EQUAL"
+      "value2": 2
     },
     "targetSelection": "NONE",
     "spell": {

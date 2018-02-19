@@ -3,8 +3,8 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseHp": 1,
   "baseAttack": 0,
+  "baseHp": 1,
   "rarity": "RARE",
   "description": "Permanent. At the start of your turn, if you control any minions, draw a card. (After 3 of your turns, this dies)",
   "triggers": [

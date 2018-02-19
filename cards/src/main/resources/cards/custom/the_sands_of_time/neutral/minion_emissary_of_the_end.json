@@ -9,6 +9,11 @@
   "race": "NONE",
   "description": "Battlecry: Gain attack equal to the highest Cost in your hand.",
   "battlecry": {
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
     "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
@@ -16,16 +21,11 @@
       "attackBonus": {
         "class": "ReduceValueProvider",
         "target": "FRIENDLY_HAND",
+        "operation": "MAXIMUM",
         "value1": {
           "class": "ManaCostProvider"
-        },
-        "operation": "MAXIMUM"
+        }
       }
-    },
-    "condition": {
-      "class": "CardCountCondition",
-      "value": 1,
-      "operation": "GREATER_OR_EQUAL"
     }
   },
   "attributes": {

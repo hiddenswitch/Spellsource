@@ -16,14 +16,18 @@
     "spell": {
       "class": "MetaSpell",
       "target": "ALL_ENTITIES",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "cardId": "permanent_the_end_time"
+      },
       "spells": [
         {
           "class": "EitherOrSpell",
           "condition": {
             "class": "AttributeCondition",
             "target": "SELF",
-            "attribute": "RESERVED_INTEGER_1",
             "value": 1,
+            "attribute": "RESERVED_INTEGER_1",
             "operation": "LESS_OR_EQUAL"
           },
           "spell1": {
@@ -42,15 +46,11 @@
           "spell2": {
             "class": "ModifyAttributeSpell",
             "target": "SELF",
-            "attribute": "RESERVED_INTEGER_1",
-            "value": -1
+            "value": -1,
+            "attribute": "RESERVED_INTEGER_1"
           }
         }
-      ],
-      "filter": {
-        "class": "SpecificCardFilter",
-        "cardId": "permanent_the_end_time"
-      }
+      ]
     }
   },
   "collectible": false,

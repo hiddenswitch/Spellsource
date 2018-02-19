@@ -11,24 +11,24 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "randomTarget": true,
+      "value": 2,
       "cards": [
         "token_huffer",
         "token_misha",
         "token_leokk"
       ],
-      "value": 2
+      "randomTarget": true
     }
   },
   "deathrattle": {
     "class": "SummonSpell",
-    "randomTarget": true,
+    "value": 2,
     "cards": [
       "token_huffer",
       "token_misha",
       "token_leokk"
     ],
-    "value": 2
+    "randomTarget": true
   },
   "attributes": {
     "BATTLECRY": true,
