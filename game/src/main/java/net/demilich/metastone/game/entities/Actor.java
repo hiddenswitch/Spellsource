@@ -16,7 +16,12 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 /**
- * A
+ * An actor hosts common functionality between minions, weapons and heroes. Actors have hitpoints; they can be
+ * destroyed; they have deathrattles; they have other enchantments.
+ * <p>
+ * When actors enter or exit their respective zones ({@link net.demilich.metastone.game.targeting.Zones#HERO}, {@link
+ * net.demilich.metastone.game.targeting.Zones#BATTLEFIELD}, {@link net.demilich.metastone.game.targeting.Zones#WEAPON}),
+ * {@link net.demilich.metastone.game.events.BoardChangedEvent} will be raised.
  */
 public abstract class Actor extends Entity {
 

@@ -9,7 +9,11 @@
   "description": "Deathrattle: Return a friendly minion to your hand.",
   "deathrattle": {
     "class": "ReturnTargetToHandSpell",
-    "target": "FRIENDLY_MINIONS",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "filter": {
+      "class": "IsDestroyedFilter",
+      "invert": true
+    },
     "randomTarget": true
   },
   "attributes": {
