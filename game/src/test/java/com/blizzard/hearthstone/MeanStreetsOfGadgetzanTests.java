@@ -7,7 +7,7 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class MeanStreetsOfGadgetzhanTests extends TestBase {
+public class MeanStreetsOfGadgetzanTests extends TestBase {
 
 	@Test
 	public void testWrathion() {
