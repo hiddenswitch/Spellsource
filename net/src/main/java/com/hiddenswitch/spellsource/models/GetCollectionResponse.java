@@ -7,7 +7,13 @@ import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
 import java.util.List;
@@ -53,6 +59,22 @@ public class GetCollectionResponse implements Serializable {
 				.withUserId(userId)
 				.withDeckType(deckType)
 				.withName(name);
+	}
+
+	public Deck asDeck(String userId) {
+		Deck deck = new DeckWithId(getCollectionId());
+		deck.setHeroClass(getHeroClass());
+		deck.setName(getName());
+		String heroCardId = getHeroCardId();
+		if (heroCardId != null) {
+			deck.setHeroCard((HeroCard) CardCatalogue.getCardById(heroCardId));
+		}
+
+		getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord,
+				userId, getCollectionId())).map(CardDesc::createInstance).forEach(deck.getCards()
+				::addCard);
+
+		return deck;
 	}
 
 	public List<InventoryRecord> getInventoryRecords() {
@@ -225,6 +247,33 @@ public class GetCollectionResponse implements Serializable {
 	public GetCollectionResponse withHeroCardId(String heroCardId) {
 		this.heroCardId = heroCardId;
 		return this;
+	}
+
+	public static GetCollectionResponse empty() {
+		return new GetCollectionResponse();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof GetCollectionResponse)) {
+			return false;
+		}
+
+		GetCollectionResponse rhs = (GetCollectionResponse) obj;
+
+		final boolean idEquals = new EqualsBuilder()
+				.append(collectionId, rhs.collectionId)
+				.isEquals();
+
+		return idEquals
+				|| new EqualsBuilder()
+				.append(collectionType, rhs.collectionType)
+				.append(heroClass, rhs.heroClass)
+				.append(deckType, rhs.deckType)
+				.append(heroCardId, rhs.heroCardId)
+				.append(inventoryRecords == null ? null : inventoryRecords.stream().map(InventoryRecord::getCardId).toArray(),
+						rhs.inventoryRecords == null ? null : rhs.inventoryRecords.stream().map(InventoryRecord::getCardId).toArray()).isEquals();
+
 	}
 }
 

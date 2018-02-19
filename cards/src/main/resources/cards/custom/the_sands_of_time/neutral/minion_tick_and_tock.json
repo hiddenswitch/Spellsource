@@ -9,14 +9,20 @@
   "description": "Battlecry: If you're holding two Dragons, deal 5 damage to two random enemy minions.",
   "battlecry": {
     "condition": {
-      "class": "HoldsCardCondition",
-      "value": 2,
-      "cardFilter": {
-        "class": "CardFilter",
-        "race": "DRAGON"
-      }
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "race": "DRAGON"
+        }
+      },
+      "value2": 2,
+      "operation": "GREATER_OR_EQUAL"
     },
-    "targetSelection": "ANY",
+    "targetSelection": "NONE",
     "spell": {
       "class": "MultiTargetSpell",
       "target": "ENEMY_MINIONS",
@@ -32,13 +38,5 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1,
-  "glow": {
-    "class": "HoldsCardCondition",
-    "value": 2,
-    "cardFilter": {
-      "class": "CardFilter",
-      "race": "DRAGON"
-    }
-  }
+  "fileFormatVersion": 1
 }

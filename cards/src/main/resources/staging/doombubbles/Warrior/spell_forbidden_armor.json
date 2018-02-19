@@ -2,7 +2,7 @@
   "name": "Forbidden Armor",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "race": "PROTECTION",
   "description": "Spend all your mana. Gain Armor for double the mana spent.",

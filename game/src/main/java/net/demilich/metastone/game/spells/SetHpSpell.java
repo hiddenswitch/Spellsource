@@ -16,15 +16,17 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 public class SetHpSpell extends Spell {
 
-	public static SpellDesc create(EntityReference target, int hp) {
+	public static SpellDesc create(int hp) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(SetHpSpell.class);
 		arguments.put(SpellArg.VALUE, hp);
-		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}
 
-	public static SpellDesc create(int hp) {
-		return create(null, hp);
+	public static SpellDesc create(int value, boolean immuneToSilence) {
+		Map<SpellArg, Object> arguments = SpellDesc.build(SetHpSpell.class);
+		arguments.put(SpellArg.VALUE, value);
+		arguments.put(SpellArg.EXCLUSIVE, !immuneToSilence);
+		return new SpellDesc(arguments);
 	}
 
 	@Override

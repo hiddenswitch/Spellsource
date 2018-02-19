@@ -265,6 +265,7 @@ public abstract class Card extends Entity {
 	 * @see net.demilich.metastone.game.logic.GameLogic#getModifiedManaCost(Player, Card) for the best method to get the
 	 * cost of a card.
 	 */
+	@Suspendable
 	public int getManaCost(GameContext context, Player player) {
 		int actualManaCost = getBaseManaCost();
 		if (manaCostModifier != null) {

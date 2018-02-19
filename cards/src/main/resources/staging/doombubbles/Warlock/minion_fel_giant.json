@@ -2,7 +2,7 @@
   "name": "Fel Giant",
   "baseManaCost": 20,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "EPIC",

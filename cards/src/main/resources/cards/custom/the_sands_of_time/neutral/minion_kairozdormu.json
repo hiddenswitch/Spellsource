@@ -19,11 +19,14 @@
           "targetPlayer": "SELF"
         },
         {
-          "class": "ShuffleToDeckSpell",
-          "cardFilter": {
-            "class": "CardFilter",
-            "cardType": "MINION",
-            "manaCost": 7
+          "class": "CastRepeatedlySpell",
+          "spell": {
+            "class": "ShuffleToDeckSpell",
+            "cardFilter": {
+              "class": "CardFilter",
+              "cardType": "MINION",
+              "manaCost": 7
+            }
           },
           "howMany": 7
         }

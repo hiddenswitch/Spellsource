@@ -2,7 +2,7 @@
   "name": "The Codex of Xerrath",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "LEGENDARY",
   "description": "For the rest of the game, friendly characters are immune during your turn. Summon a Doomguard.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "The Dark Portal Opens",
   "baseManaCost": 4,
   "type": "RIFT",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "description": "Whenever your hero takes damage on your turn, summon a random Demon costing that much.",
   "trigger": {

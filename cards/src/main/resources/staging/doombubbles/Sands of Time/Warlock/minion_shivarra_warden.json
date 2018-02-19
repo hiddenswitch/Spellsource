@@ -2,7 +2,7 @@
   "name": "Shivarra Warden",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 9,
   "baseHp": 9,
   "rarity": "COMMON",

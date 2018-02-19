@@ -2,7 +2,7 @@
   "name": "Kargath Bladefist",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "LEGENDARY",

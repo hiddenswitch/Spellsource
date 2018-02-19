@@ -52,7 +52,7 @@ public interface PersistenceContext<T extends GameEvent> {
 	/**
 	 * The attribute this handler was configured to update.
 	 *
-	 * @return The attribute.
+	 * @return The attribute, or {@code null} if this context wasn't associated with a particular attribute.
 	 */
 	Attribute attribute();
 
@@ -65,3 +65,4 @@ public interface PersistenceContext<T extends GameEvent> {
 	@Suspendable
 	Logic logic();
 }
+

@@ -2,7 +2,9 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -15,7 +17,27 @@ public class ReduceValueProvider extends ValueProvider {
 		super(desc);
 	}
 
+	public static ValueProviderDesc create(EntityReference target, Attribute attribute, EntityFilter filter, AlgebraicOperation operation) {
+		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(ReduceValueProvider.class);
+		arguments.put(ValueProviderArg.TARGET, target);
+		arguments.put(ValueProviderArg.FILTER, filter);
+		arguments.put(ValueProviderArg.ATTRIBUTE, attribute);
+		arguments.put(ValueProviderArg.OPERATION, operation);
+
+		return new ValueProviderDesc(arguments);
+	}
+
+	public static ValueProviderDesc create(EntityReference target, ValueProviderDesc value1, EntityFilter filter, AlgebraicOperation operation) {
+		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(ReduceValueProvider.class);
+		arguments.put(ValueProviderArg.TARGET, target);
+		arguments.put(ValueProviderArg.FILTER, filter);
+		arguments.put(ValueProviderArg.VALUE_1, value1.createInstance());
+		arguments.put(ValueProviderArg.OPERATION, operation);
+		return new ValueProviderDesc(arguments);
+	}
+
 	@Override
+	@Suspendable
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
 		EntityReference sourceReference = (EntityReference) desc.get(ValueProviderArg.TARGET);
 		Attribute attribute = (Attribute) desc.get(ValueProviderArg.ATTRIBUTE);

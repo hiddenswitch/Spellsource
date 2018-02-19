@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -17,6 +18,61 @@ import org.testng.annotations.Test;
 import java.util.stream.Stream;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testEchoOfMalfurion() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "minion_bloodfen_raptor");
+			MinionCard boulderfist = (MinionCard) receiveCard(context, player, "minion_boulderfist_ogre");
+			Minion echo = playMinionCard(context, player, "token_echo_of_malfurion");
+			Assert.assertEquals(echo.getAttack(), boulderfist.getAttack() + echo.getBaseAttack());
+			Assert.assertEquals(echo.getHp(), boulderfist.getHp() + echo.getBaseHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion echo = playMinionCard(context, player, "token_echo_of_malfurion");
+			Assert.assertEquals(echo.getAttack(), echo.getBaseAttack());
+			Assert.assertEquals(echo.getHp(), echo.getBaseHp());
+		});
+	}
+
+	@Test
+	public void testChromie() {
+		// Test no excess cards
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 6; i++) {
+				shuffleToDeck(context, player, "minion_bloodfen_raptor");
+				receiveCard(context, player, "spell_mirror_image");
+			}
+
+			playCard(context, player, "minion_chromie");
+
+			Assert.assertTrue(player.getHand().stream().allMatch(c -> c.getCardId().equals("minion_bloodfen_raptor")));
+			Assert.assertTrue(player.getDeck().stream().allMatch(c -> c.getCardId().equals("spell_mirror_image")));
+			Assert.assertEquals(player.getHand().size(), 6);
+			Assert.assertEquals(player.getDeck().size(), 6);
+		});
+
+		// Test excess cards
+		runGym((context, player, opponent) -> {
+			player.getGraveyard().clear();
+
+			for (int i = 0; i < 20; i++) {
+				shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			}
+
+			for (int i = 0; i < 6; i++) {
+				receiveCard(context, player, "spell_mirror_image");
+			}
+
+			playCard(context, player, "minion_chromie");
+
+			Assert.assertTrue(player.getHand().stream().allMatch(c -> c.getCardId().equals("minion_bloodfen_raptor")));
+			Assert.assertTrue(player.getDeck().stream().allMatch(c -> c.getCardId().equals("spell_mirror_image")));
+			Assert.assertEquals(player.getHand().size(), 10);
+			Assert.assertEquals(player.getDeck().size(), 6);
+		});
+	}
 
 	@Test
 	public void testHighmountainPrimalist() {

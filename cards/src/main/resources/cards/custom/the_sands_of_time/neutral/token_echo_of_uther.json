@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Give a minion +4/+4 and Divine Shield. If it already had it, +8/+8 instead.",
+  "description": "Battlecry: Give a minion +4/+4 and Divine Shield. If it already has Divine Shield, +8/+8 instead.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
@@ -17,9 +17,17 @@
       },
       "exclusive": true,
       "spell1": {
-        "class": "BuffSpell",
-        "value": 4,
-        "attribute": "DIVINE_SHIELD"
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "value": 4
+          },
+          {
+            "class": "AddAttributeSpell",
+            "attribute": "DIVINE_SHIELD"
+          }
+        ]
       },
       "spell2": {
         "class": "BuffSpell",

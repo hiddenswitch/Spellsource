@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Permanent. Deals 1 damage to all minions at the end of your turn. (At the end of your 3rd, it dies)",
+  "description": "Permanent. Deals 1 damage to all minions at the end of your turn. (After 3 turns, this dies)",
   "triggers": [
     {
       "eventTrigger": {

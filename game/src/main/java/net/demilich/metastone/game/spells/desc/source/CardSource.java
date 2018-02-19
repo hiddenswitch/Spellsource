@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.desc.source;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardList;
@@ -24,6 +25,7 @@ public abstract class CardSource implements Serializable {
 		return desc.containsKey(arg);
 	}
 
+	@Suspendable
 	public CardList getCards(GameContext context, Player player) {
 		TargetPlayer targetPlayer = (TargetPlayer) desc.get(SourceArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
@@ -55,6 +57,7 @@ public abstract class CardSource implements Serializable {
 		return this.match(context, providingPlayer);
 	}
 
+	@Suspendable
 	protected abstract CardList match(GameContext context, Player player);
 
 	public TargetPlayer getTargetPlayer() {

@@ -14,7 +14,8 @@ public class WeaponCard extends ActorCard {
 
 	private static final Set<Attribute> ignoredAttributes = new HashSet<Attribute>(
 			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGER, Attribute.BASE_ATTACK,
-					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO));
+					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO,
+					Attribute.TRANSFORM_REFERENCE));
 
 	public WeaponCard(WeaponCardDesc desc) {
 		super(desc);

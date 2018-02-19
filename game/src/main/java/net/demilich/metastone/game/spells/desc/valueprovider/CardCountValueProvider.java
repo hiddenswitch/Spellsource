@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -16,6 +17,7 @@ public class CardCountValueProvider extends ValueProvider {
 	}
 
 	@Override
+	@Suspendable
 	protected int provideValue(GameContext context, Player player, Entity target, Entity source) {
 		CardSource cardSource = (CardSource) desc.get(ValueProviderArg.CARD_SOURCE);
 		if (cardSource == null) {

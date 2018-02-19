@@ -9,7 +9,7 @@
   "description": "Battlecry: If a friendly minion has 5 or more Attack, gain +2/+2.",
   "battlecry": {
     "condition": {
-      "class": "HasEntityCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "OTHER_FRIENDLY_MINIONS",
       "filter": {
         "class": "AttributeFilter",

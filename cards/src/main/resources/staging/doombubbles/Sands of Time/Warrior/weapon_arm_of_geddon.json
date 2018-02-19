@@ -2,7 +2,7 @@
   "name": "Arm of Geddon",
   "baseManaCost": 7,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 4,
   "durability": 2,
   "rarity": "EPIC",

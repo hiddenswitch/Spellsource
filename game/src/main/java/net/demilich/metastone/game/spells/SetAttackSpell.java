@@ -18,6 +18,13 @@ public class SetAttackSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
+	public static SpellDesc create(int value, boolean immuneToSilence) {
+		Map<SpellArg, Object> arguments = SpellDesc.build(SetAttackSpell.class);
+		arguments.put(SpellArg.VALUE, value);
+		arguments.put(SpellArg.EXCLUSIVE, !immuneToSilence);
+		return new SpellDesc(arguments);
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

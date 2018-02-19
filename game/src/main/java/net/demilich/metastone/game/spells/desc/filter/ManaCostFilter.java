@@ -6,7 +6,16 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
 
+import java.util.Map;
+
 public class ManaCostFilter extends EntityFilter {
+
+	public static ManaCostFilter create(int manaCost, Operation operation) {
+		Map<FilterArg, Object> arguments = FilterDesc.build(ManaCostFilter.class);
+		arguments.put(FilterArg.VALUE, manaCost);
+		arguments.put(FilterArg.OPERATION, operation);
+		return new ManaCostFilter(new FilterDesc(arguments));
+	}
 
 	public ManaCostFilter(FilterDesc desc) {
 		super(desc);

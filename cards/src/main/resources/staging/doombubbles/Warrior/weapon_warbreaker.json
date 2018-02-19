@@ -2,7 +2,7 @@
   "name": "Warbreaker",
   "baseManaCost": 4,
   "type": "WEAPON",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "damage": 2,
   "durability": 3,
   "rarity": "RARE",

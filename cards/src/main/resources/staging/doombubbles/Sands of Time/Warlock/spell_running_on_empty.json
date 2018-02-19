@@ -2,7 +2,7 @@
   "name": "Running on Empty",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "COMMON",
   "description": "Give a minion +2/+2. Discard a random card.",
   "targetSelection": "MINIONS",

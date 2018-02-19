@@ -68,11 +68,4 @@ public class TraceTests {
 		GameContext context2 = trace.replayContext(false);
 		Assert.assertEquals(context1.getTurn(), context2.getTurn());
 	}
-
-	@Test
-	@Ignore
-	public void testTraceRemovingNullRandoms() {
-		Trace trace = getTrace("removingNullRandoms");
-		GameContext context = trace.replayContext(false);
-	}
 }

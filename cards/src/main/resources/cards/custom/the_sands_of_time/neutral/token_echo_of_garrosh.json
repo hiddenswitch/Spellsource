@@ -2,7 +2,7 @@
   "name": "Echo of Garrosh",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",

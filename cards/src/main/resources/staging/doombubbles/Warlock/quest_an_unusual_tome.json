@@ -2,7 +2,7 @@
   "name": "An Unusual Tome",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "LEGENDARY",
   "description": "Quest: Use your Hero Power twice. Reward: Seek the Signal.",
   "quest": {

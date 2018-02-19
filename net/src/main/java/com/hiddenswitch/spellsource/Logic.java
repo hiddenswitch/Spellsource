@@ -104,4 +104,14 @@ public interface Logic {
 	 */
 	@Suspendable
 	PersistAttributeResponse persistAttribute(PersistAttributeRequest request);
+
+	/**
+	 * Retrieves a deck of a specific name from the player's collection.
+	 *
+	 * @param logicGetDeckRequest The request specifying the name and user ID of the player whose collection should be
+	 *                            queried.
+	 * @return A response containing the deck if it exists.
+	 */
+	@Suspendable
+	GetCollectionResponse getDeck(LogicGetDeckRequest logicGetDeckRequest);
 }

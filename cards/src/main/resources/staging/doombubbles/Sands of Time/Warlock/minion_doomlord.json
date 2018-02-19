@@ -2,7 +2,7 @@
   "name": "Doomlord",
   "baseManaCost": 10,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "RARE",

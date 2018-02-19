@@ -9,19 +9,23 @@ import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.Inventory;
 import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import com.hiddenswitch.spellsource.models.*;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.events.*;
+import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.trigger.GameStartTrigger;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.HeroCard;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckWithId;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -118,6 +122,18 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 					}
 				}
 		);
+
+		Spellsource.spellsource().trigger(
+				"has-rafaam-archivist-deck-1",
+				GameStartTrigger.create(TargetPlayer.BOTH),
+				(context, player, desc, source, target) -> {
+					final String userId = player.getUserId();
+
+					if (Mongo.mongo().count(Inventory.COLLECTIONS, json("userId", userId, "name", "The Supreme Archive")) > 0L) {
+						player.setAttribute(Attribute.HAS_SUPREME_ARCHIVE_DECK);
+					}
+				}
+		);
 	}
 
 	@Override
@@ -173,17 +189,9 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 			playerAttributes.put(Attribute.DECK_ID, player.getDeckId());
 
 			// Create the deck and assign all the appropriate IDs to the cards
-			Deck deck = new DeckWithId(player.getDeckId());
-			deck.setHeroClass(deckCollection.getHeroClass());
-			deck.setName(deckCollection.getName());
-			String heroCardId = deckCollection.getHeroCardId();
-			if (heroCardId != null) {
-				deck.setHeroCard((HeroCard) CardCatalogue.getCardById(heroCardId));
-			}
+			Deck deck = deckCollection.asDeck(player.getUserId());
 
-			deckCollection.getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord,
-					player.getUserId(), player.getDeckId())).map(CardDesc::createInstance).forEach(deck.getCards()
-					::addCard);
+			// Delegate
 
 			// TODO: Add player information as attached to the hero entity
 			response.getPlayers().set(player.getId(), new StartGameResponse.Player().withDeck(deck).withAttributes
@@ -326,6 +334,21 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 			);
 			return new PersistAttributeResponse().withUpdated(update.getDocModified());
 		}
+	}
+
+	@Override
+	@Suspendable
+	public GetCollectionResponse getDeck(LogicGetDeckRequest logicGetDeckRequest) {
+		// Looks up a deck by name
+		List<JsonObject> collections = Mongo.mongo().findWithOptions(Inventory.COLLECTIONS,
+				json("userId", logicGetDeckRequest.getUserId().toString(), "name", logicGetDeckRequest.getName()),
+				new FindOptions().setFields(json("_id", 1)));
+
+		if (collections.size() == 0) {
+			return GetCollectionResponse.empty();
+		}
+
+		return inventory.uncheckedSync().getCollection(GetCollectionRequest.deck(collections.get(0).getString("_id")));
 	}
 
 	@Override

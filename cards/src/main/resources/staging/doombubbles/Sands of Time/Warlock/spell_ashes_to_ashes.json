@@ -2,7 +2,7 @@
   "name": "Ashes to Ashes",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "COMMON",
   "race": "DESTRUCTION",
   "description": "Deal *3* damage. Take *3* damage.",

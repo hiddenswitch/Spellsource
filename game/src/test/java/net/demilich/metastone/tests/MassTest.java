@@ -67,19 +67,6 @@ public class MassTest extends TestBase {
 		Player player2 = new Player(player2Config);
 		GameLogic logic = new GameLogic();
 		GameContext context = new GameContext(player1, player2, logic, deckFormat) {
-			@Override
-			public void play() {
-				try {
-					super.play();
-				} catch (Exception e) {
-					logger.error(e.getMessage());
-					logger.error(ExceptionUtils.getStackTrace(e));
-					logger.error("Trace:");
-					logger.error(getTrace().dump());
-					Assert.fail();
-				}
-			}
-
 			protected void assertValidEntities() {
 				getEntities().forEach(e -> {
 							final boolean isValid = e.getEntityLocation().getIndex() >= 0

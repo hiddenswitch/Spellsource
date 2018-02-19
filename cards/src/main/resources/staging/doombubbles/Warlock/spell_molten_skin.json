@@ -2,7 +2,7 @@
   "name": "Molten Skin",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "race": "DESTRUCTION",
   "description": "Deal *3* damage to yourself and gain 9 armor.",

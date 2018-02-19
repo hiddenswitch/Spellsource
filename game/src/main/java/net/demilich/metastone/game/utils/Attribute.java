@@ -487,6 +487,12 @@ public enum Attribute {
 	 * <p>
 	 * This attribute implements Seadevil Stinger.
 	 */
+	MINIONS_COST_HEALTH,
+	/**
+	 * When any {@link Entity} has this attribute in play, a {@link MinionCard} costs health instead of mana.
+	 * <p>
+	 * This attribute implements Seadevil Stinger.
+	 */
 	MURLOCS_COST_HEALTH,
 	/**
 	 * A {@link net.demilich.metastone.game.entities.heroes.Hero} with this attribute does not take damage.
@@ -606,6 +612,11 @@ public enum Attribute {
 	 * battlefield.
 	 */
 	WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
+	/**
+	 * If a {@link Player} has this attribute, the player had a deck named "The Supreme Archive" in the player's
+	 * collection when the game began.
+	 */
+	HAS_SUPREME_ARCHIVE_DECK,
 	/**
 	 * A shorthand implementation of the Poisonous keyword. Indicates that whenever the source minion deals more than 0
 	 * damage to the target minion, the target minion  is destroyed.

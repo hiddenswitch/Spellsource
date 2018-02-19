@@ -2,7 +2,7 @@
   "name": "Echo of Ragnaros",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "BOSS",
+  "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",

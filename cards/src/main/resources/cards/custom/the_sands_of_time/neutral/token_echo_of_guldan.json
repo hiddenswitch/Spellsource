@@ -2,13 +2,13 @@
   "name": "Echo of Gul'Dan",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Your minions cost health instead of mana.",
+  "description": "Your minions cost Health instead of Mana.",
   "attributes": {
-    "CARD_TYPE_COSTS_HEALTH": "MINION"
+    "MINIONS_COST_HEALTH": true
   },
   "collectible": false,
   "set": "SANDS_OF_TIME",

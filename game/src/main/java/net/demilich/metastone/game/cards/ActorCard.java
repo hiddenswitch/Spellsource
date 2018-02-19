@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.cards.desc.ActorCardDesc;
 import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
@@ -38,7 +39,9 @@ public abstract class ActorCard extends Card {
 	protected Actor populate(Actor instance) {
 		ActorCardDesc desc = (ActorCardDesc) this.desc;
 		instance.setBattlecry(desc.getBattlecryAction());
-		instance.setRace(desc.race);
+		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?
+				(Race) getAttribute(Attribute.RACE) :
+				desc.race);
 
 		if (desc.deathrattle != null) {
 			instance.getAttributes().remove(Attribute.DEATHRATTLES);
