@@ -15,6 +15,36 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class NaxxramasTests extends TestBase {
+
+	@Test
+	public void testAnubarAmbusher() {
+		// Anub'ar Ambusher shouldn't return mortally wounded minions back to your hand
+		runGym((context, player, opponent) -> {
+			Minion ambusher = playMinionCard(context, player, "minion_anubar_ambusher");
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCard(context, opponent, "minion_kobold_geomancer");
+			// Deals 5 damage
+			playCard(context, opponent, "spell_flamestrike");
+			Assert.assertTrue(ambusher.isDestroyed());
+			Assert.assertTrue(bloodfen.isDestroyed());
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion ambusher = playMinionCard(context, player, "minion_anubar_ambusher");
+			Minion boulderfist = playMinionCard(context, player, "minion_boulderfist_ogre");
+			context.endTurn();
+			playCard(context, opponent, "minion_kobold_geomancer");
+			// Deals 5 damage
+			playCard(context, opponent, "spell_flamestrike");
+			Assert.assertTrue(ambusher.isDestroyed());
+			Assert.assertEquals(player.getMinions().size(), 0);
+			Assert.assertEquals(player.getHand().size(), 1);
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_boulderfist_ogre");
+		});
+	}
+
 	@Test
 	public void testLoatheb() {
 		runGym((context, player, opponent) -> {
