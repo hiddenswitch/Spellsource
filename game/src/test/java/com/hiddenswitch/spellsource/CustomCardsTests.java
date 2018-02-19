@@ -20,6 +20,16 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testParadoxKingTogwaggleInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion paradox = playMinionCard(context, player, "minion_paradox");
+			playCard(context, player, "minion_king_togwaggle");
+			Assert.assertEquals(player.getSetAsideZone().size(), 0);
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_paradox");
+		});
+	}
+
+	@Test
 	public void testParadox() {
 		runGym((context, player, opponent) -> {
 			Minion paradox = playMinionCard(context, player, "minion_paradox");
