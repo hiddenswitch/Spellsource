@@ -24,6 +24,23 @@ import java.util.stream.Stream;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	public void testRummagingKobold() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_wicked_knife");
+			// Wicked Knife is now destroyed
+			playCard(context, player, "weapon_ashbringer");
+			playCard(context, player, "minion_rummaging_kobold");
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "weapon_wicked_knife");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_wicked_knife");
+			playCard(context, player, "minion_rummaging_kobold");
+			Assert.assertEquals(player.getHand().size(), 0, "Wicked Knife was never destroyed");
+		});
+	}
+
+	@Test
 	@Ignore
 	public void testThirtyScrollsOfWonder() {
 		runGym((context, player, opponent) -> {

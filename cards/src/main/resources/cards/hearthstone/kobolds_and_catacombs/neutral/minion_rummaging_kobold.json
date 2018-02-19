@@ -20,9 +20,7 @@
             "cardType": "WEAPON"
           },
           {
-            "class": "AttributeFilter",
-            "attribute": "DESTROYED",
-            "operation": "HAS"
+            "class": "IsDestroyedFilter"
           }
         ]
       },
