@@ -1,0 +1,56 @@
+{
+  "name": "The Emereald Dream",
+  "baseManaCost": 3,
+  "baseAttack": 0,
+  "baseHp": 1,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "rarity": "EPIC",
+  "description": "Permanent. Whenever a minion is played, give it +1/+1 and increase this bonus by +1/+1. (After 2 of your turns, this dies)",
+  "triggers": [
+    {
+      "countUntilCast": 2,
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      },
+      "maxFires": 2
+    },
+    {
+      "eventTrigger": {
+        "class": "MinionPlayedTrigger"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "target": "EVENT_TARGET",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "SELF",
+              "attribute": "RESERVED_INTEGER_1"
+            }
+          },
+          {
+            "class": "ModifyAttributeSpell",
+            "target": "SELF",
+            "attribute": "RESERVED_INTEGER_1",
+            "value": 1
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "RESERVED_INTEGER_1": 1,
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}
