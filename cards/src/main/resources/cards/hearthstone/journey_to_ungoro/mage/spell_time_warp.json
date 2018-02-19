@@ -5,7 +5,7 @@
   "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "description": "Take an extra turn.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
     "class": "ModifyAttributeSpell",
     "target": "FRIENDLY_PLAYER",
