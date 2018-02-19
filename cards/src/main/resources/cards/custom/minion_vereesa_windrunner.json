@@ -11,7 +11,7 @@
     "eventTrigger": {
       "class": "SpellCastedTrigger",
       "fireCondition": {
-        "class": "HasEntityCondition",
+        "class": "AnyMatchFilterCondition",
         "target": "EVENT_TARGET",
         "filter": {
           "class": "CardFilter",

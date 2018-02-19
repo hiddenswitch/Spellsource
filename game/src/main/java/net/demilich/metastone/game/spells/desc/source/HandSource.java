@@ -4,6 +4,8 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardList;
 
+import java.util.Map;
+
 public class HandSource extends CardSource {
 
 	public HandSource(SourceDesc desc) {
@@ -15,4 +17,8 @@ public class HandSource extends CardSource {
 		return player.getHand();
 	}
 
+	public static HandSource create() {
+		Map<SourceArg, Object> args = SourceDesc.build(HandSource.class);
+		return new HandSource(new SourceDesc(args));
+	}
 }

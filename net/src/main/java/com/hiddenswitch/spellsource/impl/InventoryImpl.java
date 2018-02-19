@@ -248,7 +248,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 	@Override
 	@Suspendable
-	public GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution, InterruptedException {
+	public GetCollectionResponse getCollection(GetCollectionRequest request) {
 		if (request.isBatchRequest()) {
 			final List<GetCollectionResponse> responses = new ArrayList<>();
 			final List<GetCollectionRequest> requests = request.getRequests();

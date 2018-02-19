@@ -52,18 +52,21 @@
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "WARLOCK",
+              "heroClass": "VIOLET",
               "targetPlayer": "SELF"
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "WARRIOR",
+              "heroClass": "RED",
               "targetPlayer": "SELF"
             },
             {
-              "class": "HeroClassCondition",
-              "heroClass": "BOSS",
-              "targetPlayer": "SELF"
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_HERO",
+              "filter": {
+                "class": "SpecificCardFilter",
+                "cardId": "hero_ragnaros"
+              }
             }
           ],
           "spells": [
@@ -159,18 +162,21 @@
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "WARLOCK",
+              "heroClass": "VIOLET",
               "targetPlayer": "OPPONENT"
             },
             {
               "class": "HeroClassCondition",
-              "heroClass": "WARRIOR",
+              "heroClass": "RED",
               "targetPlayer": "OPPONENT"
             },
             {
-              "class": "HeroClassCondition",
-              "heroClass": "BOSS",
-              "targetPlayer": "OPPONENT"
+              "class": "AnyMatchFilterCondition",
+              "target": "ENEMY_HERO",
+              "filter": {
+                "class": "SpecificCardFilter",
+                "cardId": "hero_ragnaros"
+              }
             }
           ],
           "spells": [

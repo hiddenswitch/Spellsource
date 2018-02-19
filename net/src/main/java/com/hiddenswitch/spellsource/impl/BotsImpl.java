@@ -130,6 +130,9 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 	public NotifyGameOverResponse notifyGameOver(NotifyGameOverRequest request) throws InterruptedException, SuspendExecution {
 		// Return the bot servicing this game to the pool.
 		UserId bot = botGames.remove(new GameId(request.getGameId()));
+		if (bot == null) {
+			return new NotifyGameOverResponse();
+		}
 		unusedBots.add(Accounts.findOne(bot.toString()));
 		return new NotifyGameOverResponse();
 	}

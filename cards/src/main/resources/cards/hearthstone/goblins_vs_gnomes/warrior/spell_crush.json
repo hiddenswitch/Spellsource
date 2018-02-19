@@ -15,7 +15,7 @@
   "manaCostModifier": {
     "class": "ConditionalValueProvider",
     "condition": {
-      "class": "HasEntityCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "FRIENDLY_MINIONS",
       "filter": {
         "class": "DamagedFilter"

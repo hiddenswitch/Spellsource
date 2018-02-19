@@ -1,0 +1,59 @@
+{
+  "name": "Infinite Warden",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "At the end of your turn, reduce the duration of The End Time by 1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "ALL_ENTITIES",
+      "spells": [
+        {
+          "class": "EitherOrSpell",
+          "condition": {
+            "class": "AttributeCondition",
+            "target": "SELF",
+            "attribute": "RESERVED_INTEGER_1",
+            "value": 1,
+            "operation": "LESS_OR_EQUAL"
+          },
+          "spell1": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "DestroySpell",
+                "target": "SELF"
+              },
+              {
+                "class": "DestroySpell",
+                "target": "ENEMY_CHARACTERS"
+              }
+            ]
+          },
+          "spell2": {
+            "class": "ModifyAttributeSpell",
+            "target": "SELF",
+            "attribute": "RESERVED_INTEGER_1",
+            "value": -1
+          }
+        }
+      ],
+      "filter": {
+        "class": "SpecificCardFilter",
+        "cardId": "permanent_the_end_time"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

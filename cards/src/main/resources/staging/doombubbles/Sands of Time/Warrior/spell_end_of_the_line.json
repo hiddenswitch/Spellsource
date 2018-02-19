@@ -2,7 +2,7 @@
   "name": "End of the Line",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "RARE",
   "description": "Give the last minion in your deck +5/+5 and Taunt. Draw a card.",
   "targetSelection": "NONE",

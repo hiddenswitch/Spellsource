@@ -923,6 +923,7 @@ public interface Games {
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
+	@Suspendable
 	static com.hiddenswitch.spellsource.client.models.Entity getEntity(final GameContext workingContext, final Card card, int localPlayerId) {
 		if (card == null) {
 			return null;

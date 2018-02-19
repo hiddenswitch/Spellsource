@@ -9,7 +9,7 @@
   "description": "Battlecry: If an enemy minion has Taunt, gain Charge.",
   "battlecry": {
     "condition": {
-      "class": "HasEntityCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "ENEMY_MINIONS",
       "filter": {
         "class": "AttributeFilter",

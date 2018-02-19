@@ -2,7 +2,7 @@
   "name": "Last Stand",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "RARE",
   "race": "PROTECTION",
   "description": "Gain 6 Armor. Add a random Protection spell to your hand.",

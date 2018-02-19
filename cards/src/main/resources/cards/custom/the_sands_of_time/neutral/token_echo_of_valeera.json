@@ -15,6 +15,7 @@
     "spell": {
       "class": "MissilesSpell",
       "target": "ENEMY_CHARACTERS",
+      "randomTarget": true,
       "value": 4,
       "howMany": {
         "class": "AttributeValueProvider",

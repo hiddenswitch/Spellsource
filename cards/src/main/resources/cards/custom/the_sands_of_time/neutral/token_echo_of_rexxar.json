@@ -10,25 +10,25 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "SummonRandomSpell",
-      "value": 2,
+      "class": "SummonSpell",
+      "randomTarget": true,
       "cards": [
         "token_huffer",
         "token_misha",
         "token_leokk"
       ],
-      "exclusive": true
+      "value": 2
     }
   },
   "deathrattle": {
-    "class": "SummonRandomSpell",
-    "value": 2,
+    "class": "SummonSpell",
+    "randomTarget": true,
     "cards": [
       "token_huffer",
       "token_misha",
       "token_leokk"
     ],
-    "exclusive": true
+    "value": 2
   },
   "attributes": {
     "BATTLECRY": true,

@@ -2,7 +2,7 @@
   "name": "Soulstone",
   "baseManaCost": 20,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "description": "Restore 8 Health. Costs (1) less for each damage your hero has taken.",
   "targetSelection": "ANY",

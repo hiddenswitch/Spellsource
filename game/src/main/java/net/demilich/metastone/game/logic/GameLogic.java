@@ -195,6 +195,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		immuneToSilence.add(Attribute.RACE);
 		immuneToSilence.add(Attribute.NUMBER_OF_ATTACKS);
 		immuneToSilence.add(Attribute.PERMANENT);
+		immuneToSilence.add(Attribute.COPIED_FROM);
+		immuneToSilence.add(Attribute.TRANSFORM_REFERENCE);
+		immuneToSilence.add(Attribute.LAST_HIT);
+		immuneToSilence.add(Attribute.LAST_HEAL);
+		immuneToSilence.add(Attribute.RESERVED_BOOLEAN_1);
+		immuneToSilence.add(Attribute.RESERVED_BOOLEAN_2);
+		immuneToSilence.add(Attribute.RESERVED_BOOLEAN_3);
+		immuneToSilence.add(Attribute.RESERVED_BOOLEAN_4);
+		immuneToSilence.add(Attribute.RESERVED_INTEGER_1);
+		immuneToSilence.add(Attribute.RESERVED_INTEGER_2);
+		immuneToSilence.add(Attribute.RESERVED_INTEGER_3);
+		immuneToSilence.add(Attribute.RESERVED_INTEGER_4);
+		immuneToSilence.add(Attribute.CARD_INVENTORY_ID);
 	}
 
 	private int getId;
@@ -418,22 +431,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return false;
 		}
 		int manaCost = getModifiedManaCost(player, card);
-		if (card.getCardType().isCardType(CardType.SPELL)
-				&& player.hasAttribute(Attribute.SPELLS_COST_HEALTH)
-				&& player.getHero().getEffectiveHp() < manaCost) {
+		if (doesCardCostHealth(player, card)
+				&& player.getHero().getEffectiveHp() < manaCost
+				&& manaCost != 0) {
 			return false;
-		} else if (card.getCardType().isCardType(CardType.MINION)
-				&& (Race) card.getAttribute(Attribute.RACE) == Race.MURLOC
-				&& player.hasAttribute(Attribute.MURLOCS_COST_HEALTH)
-				&& player.getHero().getEffectiveHp() < manaCost) {
-			return false;
-		} else if (player.getMana() < manaCost && manaCost != 0
-				&& !((card.getCardType().isCardType(CardType.SPELL)
-				&& player.hasAttribute(Attribute.SPELLS_COST_HEALTH))
-				|| ((Race) card.getAttribute(Attribute.RACE) == Race.MURLOC
-				&& player.hasAttribute(Attribute.MURLOCS_COST_HEALTH)))) {
+		} else if (!doesCardCostHealth(player, card)
+				&& player.getMana() < manaCost
+				&& manaCost != 0) {
 			return false;
 		}
+
 		if (card.getCardType().isCardType(CardType.HERO_POWER)) {
 			HeroPowerCard power = (HeroPowerCard) card;
 			int heroPowerUsages = getGreatestAttributeValue(player, Attribute.HERO_POWER_USAGES);
@@ -1544,6 +1551,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param card   The card to cost.
 	 * @return The modified mana cost of the card.
 	 */
+	@Suspendable
 	public int getModifiedManaCost(Player player, Card card) {
 		int manaCost = card.getManaCost(context, player);
 		int minValue = 0;
@@ -2025,13 +2033,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void stealCard(Player newOwner, Entity source, Card card, Zones destination) throws IllegalArgumentException {
-
 		// If the card isn't already in the SET_ASIDE_ZONE, move it
-		if (card.getZone() != Zones.SET_ASIDE_ZONE
-				&& card.getEntityLocation().getPlayer() != newOwner.getId()) {
+		if (card.getZone() != Zones.SET_ASIDE_ZONE) {
 			// Move to set aside zone first.
-			context.getPlayer(card.getOwner()).getZone(card.getZone()).remove(card);
-			newOwner.getSetAsideZone().add(card);
+			context.getPlayer(card.getOwner()).getZone(card.getZone()).move(card, newOwner.getSetAsideZone());
 		}
 
 		// Only change the owner if necessary
@@ -2238,6 +2243,26 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
+	 * Determines whether the specified card, from this player's point of view, costs health, due to various effects on
+	 * the board.
+	 *
+	 * @param player The {@link Player} who would play the card.
+	 * @param card   The {@link Card}
+	 * @return {@code true} if this card costs health, otherwise {@code false}.
+	 */
+	public boolean doesCardCostHealth(Player player, Card card) {
+		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
+				&& player.hasAttribute(Attribute.SPELLS_COST_HEALTH);
+		final boolean murlocsCostHealthCondition = (Race) card.getAttribute(Attribute.RACE) == Race.MURLOC
+				&& player.getHero().hasAttribute(Attribute.MURLOCS_COST_HEALTH);
+		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
+				&& player.hasAttribute(Attribute.MINIONS_COST_HEALTH);
+		return spellsCostHealthCondition
+				|| murlocsCostHealthCondition
+				|| minionsCostHealthCondition;
+	}
+
+	/**
 	 * Plays a card.
 	 * <p>
 	 * {@link #playCard(int, EntityReference)} is always initiated by an action, like a {@link PlayCardAction}. It
@@ -2256,12 +2281,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Card card = (Card) context.resolveSingleTarget(EntityReference);
 
 		int modifiedManaCost = getModifiedManaCost(player, card);
-		if (card.getCardType().isCardType(CardType.SPELL)
-				&& player.hasAttribute(Attribute.SPELLS_COST_HEALTH)) {
-			context.getEnvironment().put(Environment.LAST_MANA_COST, 0);
-			damage(player, player.getHero(), modifiedManaCost, card, true);
-		} else if ((Race) card.getAttribute(Attribute.RACE) == Race.MURLOC
-				&& player.getHero().hasAttribute(Attribute.MURLOCS_COST_HEALTH)) {
+
+		if (doesCardCostHealth(player, card)) {
 			context.getEnvironment().put(Environment.LAST_MANA_COST, 0);
 			damage(player, player.getHero(), modifiedManaCost, card, true);
 		} else {

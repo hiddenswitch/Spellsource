@@ -1,10 +1,14 @@
 package com.hiddenswitch.spellsource.impl.util;
 
-import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.common.*;
 import com.hiddenswitch.spellsource.impl.TimerId;
+import com.hiddenswitch.spellsource.impl.UserId;
+import com.hiddenswitch.spellsource.models.GetCollectionResponse;
+import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
+import com.hiddenswitch.spellsource.models.LogicGetDeckResponse;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -15,11 +19,14 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.IdFactory;
@@ -84,6 +91,7 @@ public class ServerGameContext extends GameContext {
 		this.scheduler = scheduler;
 
 		enablePersistenceEffects();
+		enableTriggers();
 	}
 
 	/**
@@ -93,6 +101,20 @@ public class ServerGameContext extends GameContext {
 	 */
 	private void enablePersistenceEffects() {
 		this.getGameTriggers().add(new PersistenceTrigger(logic, this, this.gameId));
+	}
+
+	/**
+	 * Enables this match to use custom networked triggers
+	 */
+	private void enableTriggers() {
+		for (com.hiddenswitch.spellsource.Trigger trigger : Spellsource.spellsource().getGameTriggers().values()) {
+			final Map<SpellArg, Object> arguments = SpellDesc.build(DelegateSpell.class);
+			arguments.put(SpellArg.NAME, trigger.getSpellId());
+			SpellDesc spell = new SpellDesc(arguments);
+			final Enchantment e = new Enchantment(trigger.getEventTriggerDesc().create(), spell);
+			e.setOwner(0);
+			this.getGameTriggers().add(e);
+		}
 	}
 
 	public GameLogicAsync getNetworkGameLogic() {
@@ -643,5 +665,26 @@ public class ServerGameContext extends GameContext {
 		}
 
 		return Math.max(0, timerLengthMillis - (System.currentTimeMillis() - timerStartTimeMillis));
+	}
+
+	/**
+	 * Retrieves the deck using the player's {@link Player#getUserId()}
+	 *
+	 * @param player The player whose deck collections should be queried.
+	 * @param name   The name of the deck to retrieve
+	 * @return A {@link Deck} with valid but not located entities, or {@code null} if the deck could not be found.
+	 */
+	@Override
+	@Suspendable
+	public Deck getDeck(Player player, String name) {
+		GetCollectionResponse response = logic.uncheckedSync().getDeck(new LogicGetDeckRequest()
+				.withUserId(new UserId(player.getUserId()))
+				.withDeckName(name));
+
+		if (response.equals(GetCollectionResponse.empty())) {
+			return null;
+		}
+
+		return response.asDeck(player.getUserId());
 	}
 }

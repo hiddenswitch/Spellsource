@@ -2,7 +2,7 @@
   "name": "Dragon Roar",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "RARE",
   "race": "FURY",
   "description": "Give your minions +2 Health then deal *1* damage to ALL minions.",

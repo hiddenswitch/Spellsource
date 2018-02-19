@@ -2,7 +2,7 @@
   "name": "Blood of Mannoroth",
   "baseManaCost": 3,
   "type": "RIFT",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "RARE",
   "description": "Whenever a minion takes damage, give it +2 attack.",
   "trigger": {

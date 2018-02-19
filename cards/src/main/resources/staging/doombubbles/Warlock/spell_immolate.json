@@ -2,7 +2,7 @@
   "name": "Immolate",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "COMMON",
   "race": "DESTRUCTION",
   "description": "Deal *3* damage to a minion at the end of your turn. Add a Burning Ember to your hand.",

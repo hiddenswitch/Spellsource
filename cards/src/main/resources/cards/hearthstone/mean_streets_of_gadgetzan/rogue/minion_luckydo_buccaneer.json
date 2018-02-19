@@ -10,7 +10,7 @@
   "description": "Battlecry: If your weapon has at least 3 Attack, gain +4/+4.",
   "battlecry": {
     "condition": {
-      "class": "HasEntityCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "FRIENDLY_WEAPON",
       "filter": {
         "class": "AttributeFilter",

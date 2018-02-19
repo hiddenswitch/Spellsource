@@ -68,6 +68,7 @@ public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSer
 		parseArgument(SpellArg.OPERATION, jsonData, spellArgs, ParseValueType.ALGEBRAIC_OPERATION);
 		parseArgument(SpellArg.OPTIONS, jsonData, spellArgs, ParseValueType.BOOLEAN);
 		parseArgument(SpellArg.QUEST, jsonData, spellArgs, ParseValueType.QUEST);
+		parseArgument(SpellArg.RACE, jsonData, spellArgs, ParseValueType.RACE);
 		parseArgument(SpellArg.RANDOM_TARGET, jsonData, spellArgs, ParseValueType.BOOLEAN);
 		parseArgument(SpellArg.REVERT_TRIGGER, jsonData, spellArgs, ParseValueType.EVENT_TRIGGER);
 		parseArgument(SpellArg.SECRET, jsonData, spellArgs, ParseValueType.SECRET);

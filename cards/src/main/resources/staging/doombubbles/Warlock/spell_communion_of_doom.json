@@ -2,7 +2,7 @@
   "name": "Communion of DOOM!",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "rarity": "EPIC",
   "race": "DESTRUCTION",
   "description": "Destroy all minions. Discard a card for each enemy.",

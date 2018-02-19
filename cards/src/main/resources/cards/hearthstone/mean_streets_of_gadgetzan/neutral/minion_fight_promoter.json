@@ -9,7 +9,7 @@
   "description": "Battlecry: If you control a minion with 6 or more Health, draw two cards.",
   "battlecry": {
     "condition": {
-      "class": "HasEntityCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "FRIENDLY_MINIONS",
       "filter": {
         "class": "AttributeFilter",

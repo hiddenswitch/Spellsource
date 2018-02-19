@@ -2,7 +2,7 @@
   "name": "Tome of Ancient Evil",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "RARE",

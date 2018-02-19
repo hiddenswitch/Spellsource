@@ -10,7 +10,7 @@
     "class": "ConditionalSpell",
     "conditions": [
       {
-        "class": "HasEntityCondition",
+        "class": "AnyMatchFilterCondition",
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",
@@ -19,7 +19,7 @@
         "invert": true
       },
       {
-        "class": "HasEntityCondition",
+        "class": "AnyMatchFilterCondition",
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",
@@ -28,7 +28,7 @@
         "invert": true
       },
       {
-        "class": "HasEntityCondition",
+        "class": "AnyMatchFilterCondition",
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",
@@ -37,7 +37,7 @@
         "invert": true
       },
       {
-        "class": "HasEntityCondition",
+        "class": "AnyMatchFilterCondition",
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",

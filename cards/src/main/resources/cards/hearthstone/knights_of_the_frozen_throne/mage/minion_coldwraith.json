@@ -9,7 +9,7 @@
   "description": "Battlecry: If an enemy is Frozen, draw a card.",
   "battlecry": {
     "condition": {
-      "class": "HasEntityCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "ENEMY_CHARACTERS",
       "filter": {
         "class": "AttributeFilter",

@@ -15,7 +15,8 @@ public class MinionCard extends ActorCard {
 	private static Logger logger = LoggerFactory.getLogger(MinionCard.class);
 	private static final Set<Attribute> ignoredAttributes = new HashSet<Attribute>(
 			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGER, Attribute.BASE_ATTACK,
-					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO));
+					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO,
+					Attribute.TRANSFORM_REFERENCE));
 
 	public MinionCard(MinionCardDesc desc) {
 		super(desc);
@@ -86,4 +87,8 @@ public class MinionCard extends ActorCard {
 		return getDesc().battlecry != null;
 	}
 
+	@Override
+	public MinionCard clone() {
+		return (MinionCard) super.clone();
+	}
 }

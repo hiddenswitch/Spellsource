@@ -96,7 +96,8 @@ public interface Inventory {
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
-	GetCollectionResponse getCollection(GetCollectionRequest request) throws SuspendExecution, InterruptedException;
+	@Suspendable
+	GetCollectionResponse getCollection(GetCollectionRequest request);
 
 	/**
 	 * Trashes, but does not delete, a collection.

@@ -9,18 +9,20 @@
   "description": "Battlecry: Discover a card from a valid deck named 'The Supreme Archive' in your collection.",
   "battlecry": {
     "condition": {
-      "class": "custom.ArchiveAvailableCondition",
-      "targetPlayer": "SELF"
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "HAS_SUPREME_ARCHIVE_DECK"
     },
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverFilteredCardSpell",
+      "class": "DiscoverSpell",
       "spell": {
         "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"
       },
       "cardSource": {
-        "class": "SupremeArchiveSource",
+        "class": "DeckCollectionSource",
+        "collectionName": "The Supreme Archive",
         "targetPlayer": "SELF"
       }
     }
@@ -29,10 +31,6 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CLASSIC",
-  "fileFormatVersion": 1,
-  "glow": {
-    "class": "custom.ArchiveAvailableCondition",
-    "targetPlayer": "SELF"
-  }
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
 }

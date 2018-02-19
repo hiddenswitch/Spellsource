@@ -6,10 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.cards.SpellCard;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -30,6 +27,19 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class JourneyToUngoroTests extends TestBase {
+
+	@Test
+	public void testCavernsBelowChooseOneInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_the_caverns_below");
+			player.setMaxMana(10);
+			player.setMana(10);
+			playChooseOneCard(context, player, "spell_dark_wispers", "spell_dark_wispers_1");
+			playChooseOneCard(context, player, "spell_dark_wispers", "spell_dark_wispers_2");
+			playChooseOneCard(context, player, "spell_dark_wispers", "spell_dark_wispers_1");
+			playChooseOneCard(context, player, "spell_dark_wispers", "spell_dark_wispers_2");
+		});
+	}
 
 	@Test
 	public void testChargedDevlisaur() {

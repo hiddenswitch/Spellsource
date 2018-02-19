@@ -9,7 +9,7 @@
   "description": "Battlecry: If you have a minion with Spell Damage, gain +2/+2.",
   "battlecry": {
     "condition": {
-      "class": "HasEntityCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "FRIENDLY_MINIONS",
       "filter": {
         "class": "AttributeFilter",

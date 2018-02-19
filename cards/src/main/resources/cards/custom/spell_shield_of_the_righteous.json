@@ -6,7 +6,7 @@
   "rarity": "EPIC",
   "description": "Deal 8 damage to a minion with 1 Attack.",
   "condition": {
-    "class": "HasEntityCondition",
+    "class": "AnyMatchFilterCondition",
     "target": "ALL_MINIONS",
     "filter": {
       "class": "AttributeFilter",

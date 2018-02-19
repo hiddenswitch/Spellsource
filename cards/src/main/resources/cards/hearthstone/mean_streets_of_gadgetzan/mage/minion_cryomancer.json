@@ -9,7 +9,7 @@
   "description": "Battlecry: Gain +2/+2 if an enemy is Frozen.",
   "battlecry": {
     "condition": {
-      "class": "HasEntityCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "ENEMY_CHARACTERS",
       "filter": {
         "class": "AttributeFilter",

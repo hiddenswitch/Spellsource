@@ -18,6 +18,7 @@ import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.events.GameEvent;
@@ -55,6 +56,8 @@ public class Spellsource {
 	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
 	private HttpServer httpServer;
 	private Router router;
+	private Map<String, Trigger> gameTriggers = new HashMap<>();
+	private Map<String, Spell> spells = new HashMap<>();
 
 	private Spellsource() {
 	}
@@ -277,8 +280,9 @@ public class Spellsource {
 	 *                  where the value will be persisted in a database.
 	 * @param <T>       The type of the event that corresponds to the provided {@link GameEventType}.
 	 */
-	public <T extends GameEvent> void persistAttribute(String id, GameEventType event, Attribute attribute, Handler<PersistenceContext<T>> handler) {
+	public <T extends GameEvent> Spellsource persistAttribute(String id, GameEventType event, Attribute attribute, Handler<PersistenceContext<T>> handler) {
 		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(Sync.fiberHandler(handler), id, event, attribute));
+		return this;
 	}
 
 	/**
@@ -286,8 +290,23 @@ public class Spellsource {
 	 *                      GameEventType, Function, Function)} for an easy way to create this handler.
 	 * @param <T>           The event type.
 	 */
-	public <T extends GameEvent> void persistAttribute(LegacyPersistenceHandler<T> legacyHandler) {
+	public <T extends GameEvent> Spellsource persistAttribute(LegacyPersistenceHandler<T> legacyHandler) {
 		getLegacyPersistenceHandlers().put(legacyHandler.getId(), legacyHandler);
+		return this;
+	}
+
+	/**
+	 * Configures a trigger to be added to the start of every game.
+	 *
+	 * @param id               An ID for this trigger.
+	 * @param eventTriggerDesc The event this trigger should listen for.
+	 * @param spell            The spell that should be casted by this event trigger desc.
+	 * @return This Spellsource instance.
+	 */
+	public Spellsource trigger(String id, EventTriggerDesc eventTriggerDesc, Spell spell) {
+		getSpells().put(id, spell);
+		getGameTriggers().put(id, new Trigger(eventTriggerDesc, id));
+		return this;
 	}
 
 	/**
@@ -386,5 +405,13 @@ public class Spellsource {
 		httpServer = null;
 		router = null;
 		instance = null;
+	}
+
+	public Map<String, Trigger> getGameTriggers() {
+		return gameTriggers;
+	}
+
+	public Map<String, Spell> getSpells() {
+		return spells;
 	}
 }

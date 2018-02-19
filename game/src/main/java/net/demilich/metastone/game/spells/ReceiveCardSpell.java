@@ -38,6 +38,8 @@ public class ReceiveCardSpell extends Spell {
 
 			if (cardFilter != null) {
 				result = cards.filtered(cardFilter.matcher(context, player, source));
+			} else {
+				result.addAll(cards);
 			}
 
 			String replacementCard = (String) desc.get(SpellArg.CARD);

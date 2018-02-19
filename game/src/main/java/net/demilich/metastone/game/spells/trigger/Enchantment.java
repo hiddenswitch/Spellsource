@@ -162,6 +162,7 @@ public class Enchantment extends Entity implements Trigger {
 		// board changed event.
 		if (event.getEventType() != GameEventType.BOARD_CHANGED
 				&& primaryTrigger.interestedIn() != GameEventType.ALL
+				&& hostReference != null
 				&& !(hostReference.equals(new EntityReference(PLAYER_1))
 				|| hostReference.equals(new EntityReference(PLAYER_2)))) {
 			event.getGameContext().onEnchantmentFired(this);

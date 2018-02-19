@@ -2,7 +2,7 @@
   "name": "Flame Lasher",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "WARLOCK",
+  "heroClass": "VIOLET",
   "baseAttack": 7,
   "baseHp": 6,
   "rarity": "EPIC",

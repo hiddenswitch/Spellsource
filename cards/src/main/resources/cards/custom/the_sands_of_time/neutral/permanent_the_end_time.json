@@ -1,0 +1,70 @@
+{
+  "name": "The End Time",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseHp": 1,
+  "baseAttack": 0,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "At the end of the turn, summon a 2/2 Infinite Warden. Deathrattle: Destroy all enemies. (After 20 turns, this dies)",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "SELF",
+          "attribute": "RESERVED_INTEGER_1",
+          "value": 1,
+          "operation": "LESS_OR_EQUAL"
+        },
+        "spell1": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "DestroySpell",
+              "target": "SELF"
+            },
+            {
+              "class": "DestroySpell",
+              "target": "ENEMY_CHARACTERS"
+            }
+          ]
+        },
+        "spell2": {
+          "class": "ModifyAttributeSpell",
+          "target": "SELF",
+          "attribute": "RESERVED_INTEGER_1",
+          "value": -1
+        }
+      },
+      "maxFires": 20
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_infinite_warden"
+      }
+    }
+  ],
+  "deathrattle": {
+    "class": "DestroySpell",
+    "target": "ALL_ENEMIES"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "PERMANENT": true,
+    "RESERVED_INTEGER_1": 20
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

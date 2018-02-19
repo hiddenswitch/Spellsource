@@ -1,5 +1,6 @@
 package net.demilich.metastone.game;
 
+import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
@@ -27,6 +28,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.logic.Trace;
+import net.demilich.metastone.game.services.Inventory;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
@@ -135,11 +137,10 @@ import java.util.stream.Stream;
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
  * @see #getEntities() for a way to enumerate through all of the entities in the game.
  */
-public class GameContext implements Cloneable, Serializable, NetworkDelegate {
+public class GameContext implements Cloneable, Serializable, NetworkDelegate, Inventory {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
-
-	protected static final Logger logger = LoggerFactory.getLogger(GameContext.class);
+	protected final Logger logger = LoggerFactory.getLogger(GameContext.class);
 
 	private Player[] players = new Player[2];
 	private GameLogic logic;
@@ -1433,5 +1434,27 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate {
 	 */
 	public Trace getTrace() {
 		return trace;
+	}
+
+	/**
+	 * Returns {@code null}, because by default {@link GameContext} are not networked and have no sense of inventory.
+	 *
+	 * @param player The player whose deck collections should be queried.
+	 * @param name   The name of the deck to retrieve
+	 * @return
+	 */
+	@Override
+	@Suspendable
+	public Deck getDeck(Player player, String name) {
+		return null;
+	}
+
+	/**
+	 * Sets the logging level on this instance.
+	 *
+	 * @param loggingLevel A preferred logging level.
+	 */
+	public void setLoggingLevel(Level loggingLevel) {
+		((ch.qos.logback.classic.Logger) logger).setLevel(loggingLevel);
 	}
 }

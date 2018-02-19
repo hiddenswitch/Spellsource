@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards.desc;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -37,6 +38,7 @@ public class Desc<T extends Enum> extends HashMap<T, Object> implements Serializ
 		return containsKey(arg) ? (String) get(arg) : "";
 	}
 
+	@Suspendable
 	public int getValue(T arg, GameContext context, Player player, Entity target, Entity host, int defaultValue) {
 		Object storedValue = this.get(arg);
 		if (storedValue == null) {

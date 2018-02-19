@@ -1,0 +1,158 @@
+{
+  "name": "Fifi Fizzlewarp",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "When the game starts, if your other minions are textless, give each one a random minion's effect.",
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "AllMatchFilterCondition",
+              "target": "FRIENDLY_DECK",
+              "filter": {
+                "class": "OrFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION",
+                    "invert": true
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "minion_fifi_fizzlewarp"
+                  },
+                  {
+                    "class": "HasTextFilter",
+                    "invert": true
+                  }
+                ]
+              }
+            },
+            {
+              "class": "AllMatchFilterCondition",
+              "target": "FRIENDLY_HAND",
+              "filter": {
+                "class": "OrFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION",
+                    "invert": true
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "minion_fifi_fizzlewarp"
+                  },
+                  {
+                    "class": "HasTextFilter",
+                    "invert": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "custom.TextifySpell",
+              "cardFilter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                  },
+                  {
+                    "class": "HasTextFilter"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "minion_fifi_fizzlewarp",
+                    "invert": true
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "minion_prince_malchezaar",
+                    "invert": true
+                  }
+                ]
+              },
+              "target": "FRIENDLY_DECK",
+              "filter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "minion_fifi_fizzlewarp",
+                    "invert": true
+                  },
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                  }
+                ]
+              }
+            },
+            {
+              "class": "custom.TextifySpell",
+              "cardFilter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                  },
+                  {
+                    "class": "HasTextFilter"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "minion_fifi_fizzlewarp",
+                    "invert": true
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "minion_prince_malchezaar",
+                    "invert": true
+                  }
+                ]
+              },
+              "target": "FRIENDLY_HAND",
+              "filter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "SpecificCardFilter",
+                    "cardId": "minion_fifi_fizzlewarp",
+                    "invert": true
+                  },
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

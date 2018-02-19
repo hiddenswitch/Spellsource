@@ -1,0 +1,74 @@
+{
+  "name": "Invasion",
+  "baseManaCost": 6,
+  "baseAttack": 0,
+  "baseHp": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Permanent. At the end of your turn, summon two random 1-Cost minions. The next two cost (1) more. (After 4 turns, this dies)",
+  "triggers": [
+    {
+      "countUntilCast": 4,
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      },
+      "maxFires": 4
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "LEFT",
+            "cardFilter": {
+              "class": "CardFilter",
+              "cardType": "MINION",
+              "manaCost": {
+                "class": "AttributeValueProvider",
+                "target": "SELF",
+                "attribute": "RESERVED_INTEGER_1"
+              }
+            }
+          },
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "RIGHT",
+            "cardFilter": {
+              "class": "CardFilter",
+              "cardType": "MINION",
+              "manaCost": {
+                "class": "AttributeValueProvider",
+                "target": "SELF",
+                "attribute": "RESERVED_INTEGER_1"
+              }
+            }
+          },
+          {
+            "class": "ModifyAttributeSpell",
+            "target": "SELF",
+            "value": 1,
+            "attribute": "RESERVED_INTEGER_1"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": 1,
+    "RESERVED_INTEGER_1": 1
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

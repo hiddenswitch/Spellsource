@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.desc;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -194,6 +195,7 @@ public class SpellDesc extends Desc<SpellArg> {
 		return (CardSource) get(SpellArg.CARD_SOURCE);
 	}
 
+	@Suspendable
 	public CardList getFilteredCards(GameContext context, Player player, Entity host) {
 		CardSource source = getCardSource();
 		final EntityFilter filter;

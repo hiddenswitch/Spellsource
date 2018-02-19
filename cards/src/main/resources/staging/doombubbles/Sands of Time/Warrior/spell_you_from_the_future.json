@@ -2,7 +2,7 @@
   "name": "You From the Future",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "WARRIOR",
+  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Summon a copy of a friendly minion. Then, it attacks the original.",
   "targetSelection": "FRIENDLY_MINIONS",

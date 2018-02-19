@@ -97,7 +97,7 @@ public class Generator {
 		record.args.put(SpellArg.SUMMON_BASE_HP.toString(), minionCardDesc.baseHp);
 		record.args.put(SpellArg.SUMMON_BASE_ATTACK.toString(), minionCardDesc.baseAttack);
 		if (minionCardDesc.race != null) {
-			record.args.put(SpellArg.SUMMON_RACE.toString(), minionCardDesc.race.toString());
+			record.args.put(SpellArg.RACE.toString(), minionCardDesc.race.toString());
 		}
 		if (minionCardDesc.attributes != null) {
 			record.args.putAll(EnumSet.of(Attribute.WINDFURY, Attribute.TAUNT, Attribute.CHARGE, Attribute.DIVINE_SHIELD, Attribute.STEALTH)

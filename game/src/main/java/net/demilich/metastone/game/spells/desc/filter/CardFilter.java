@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
+import java.util.Map;
 
 public class CardFilter extends EntityFilter {
 
@@ -67,7 +68,7 @@ public class CardFilter extends EntityFilter {
 		}
 
 		if (desc.containsKey(FilterArg.MANA_COST)) {
-			int manaCost = desc.getValue(FilterArg.MANA_COST, context, player, null, null, 0);
+			int manaCost = desc.getValue(FilterArg.MANA_COST, context, player, null, host, 0);
 			// TODO: Should we be looking at base mana cost or modified mana cost here?
 			if (manaCost != card.getBaseManaCost()) {
 				return false;
@@ -114,5 +115,11 @@ public class CardFilter extends EntityFilter {
 	@Override
 	public boolean equals(Object other) {
 		return super.equals(other);
+	}
+
+	public static CardFilter create(CardType cardType) {
+		Map<FilterArg, Object> arguments = FilterDesc.build(CardFilter.class);
+		arguments.put(FilterArg.CARD_TYPE, cardType);
+		return new CardFilter(new FilterDesc(arguments));
 	}
 }

@@ -42,6 +42,7 @@ public class ConditionDescSerializer implements JsonDeserializer<ConditionDesc>,
 		parseArgument(ConditionArg.CARD_IDS, jsonData, arguments, ParseValueType.STRING_ARRAY);
 		parseArgument(ConditionArg.FILTER, jsonData, arguments, ParseValueType.ENTITY_FILTER);
 		parseArgument(ConditionArg.CARD_FILTER, jsonData, arguments, ParseValueType.ENTITY_FILTER);
+		parseArgument(ConditionArg.HERO_CLASS, jsonData, arguments, ParseValueType.HERO_CLASS);
 
 		return new ConditionDesc(arguments);
 	}
