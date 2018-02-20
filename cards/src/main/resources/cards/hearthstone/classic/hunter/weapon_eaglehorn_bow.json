@@ -13,9 +13,10 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "ModifyDurabilitySpell",
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
       "value": 1,
-      "targetPlayer": "SELF"
+      "attribute": "HP"
     }
   },
   "collectible": true,

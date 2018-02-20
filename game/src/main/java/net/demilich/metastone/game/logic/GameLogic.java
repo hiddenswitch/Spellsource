@@ -1353,7 +1353,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void fight(Player player, Actor attacker, Actor defender) {
-		context.getEnvironment().put(Environment.ATTACKER_REFERENCE, attacker.getReference());
+		context.getAttackerReferenceStack().push(attacker.getReference());
 
 		TargetAcquisitionEvent targetAcquisitionEvent = new TargetAcquisitionEvent(context, player.getId(), ActionType.PHYSICAL_ATTACK,
 				attacker, defender);
@@ -1385,7 +1385,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new PhysicalAttackEvent(context, attacker, defender, attackerDamage));
 		// secret may have killed attacker ADDENDUM: or defender
 		if (attacker.isDestroyed() || defender.isDestroyed()) {
-			context.getEnvironment().remove(Environment.ATTACKER_REFERENCE);
+			context.getAttackerReferenceStack().pop();
 			return;
 		}
 
@@ -1414,7 +1414,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		attacker.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, -1);
 		context.fireGameEvent(new AfterPhysicalAttackEvent(context, attacker, defender, damageDealtToDefender));
-		context.getEnvironment().remove(Environment.ATTACKER_REFERENCE);
+		context.getAttackerReferenceStack().pop();
 	}
 
 	/**

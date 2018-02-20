@@ -938,7 +938,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		final Entity entity = targetLogic.findEntity(this, targetKey).transformResolved(this);
 
 		// TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
-
 		if (entity.getZone() == Zones.REMOVED_FROM_PLAY) {
 			throw new RuntimeException("Invalid reference.");
 		}
@@ -1269,6 +1268,14 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 			getEnvironment().put(Environment.OUTPUTS, new EnvironmentDeque<>());
 		}
 		return (Deque<EntityReference>) getEnvironment().get(Environment.OUTPUTS);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Deque<EntityReference> getAttackerReferenceStack() {
+		if (!getEnvironment().containsKey(Environment.ATTACKER_REFERENCE_STACK)) {
+			getEnvironment().put(Environment.ATTACKER_REFERENCE_STACK, new EnvironmentDeque<>());
+		}
+		return (Deque<EntityReference>) getEnvironment().get(Environment.ATTACKER_REFERENCE_STACK);
 	}
 
 	/**

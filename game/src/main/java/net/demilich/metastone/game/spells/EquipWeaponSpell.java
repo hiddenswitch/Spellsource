@@ -45,6 +45,13 @@ public class EquipWeaponSpell extends Spell {
 		WeaponCard weaponCard = (WeaponCard) context.getCardById(weaponCardName);
 		Weapon weapon = weaponCard.getWeapon();
 		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
+		desc.subSpells(0).forEach(spellDesc -> {
+			if (weapon.isDestroyed()) {
+				return;
+			}
+
+			SpellUtils.castChildSpell(context, player, spellDesc, source, target, weapon);
+		});
 	}
 
 }

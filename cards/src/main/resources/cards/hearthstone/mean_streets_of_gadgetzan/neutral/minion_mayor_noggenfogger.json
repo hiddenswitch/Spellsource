@@ -6,36 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "All targets are chosen randomly.",
-  "triggers": [
-    {
-      "eventTrigger": {
-        "class": "TargetAcquisitionTrigger",
-        "actionType": "PHYSICAL_ATTACK",
-        "sourceEntityType": "MINION",
-        "sourcePlayer": "BOTH",
-        "targetPlayer": "BOTH"
-      },
-      "spell": {
-        "class": "RandomAttackTargetSpell"
-      }
-    },
-    {
-      "eventTrigger": {
-        "class": "TargetAcquisitionTrigger",
-        "actionType": "SPELL",
-        "sourcePlayer": "BOTH",
-        "targetPlayer": "BOTH"
-      },
-      "spell": {
-        "class": "RandomSpellTargetSpell",
-        "target": "PENDING_CARD"
-      }
-    }
-  ],
-  "attributes": {
-    "RANDOM_TARGETS": true
-  },
+  "description": "(Disabled) All targets are chosen randomly.",
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",
   "fileFormatVersion": 1

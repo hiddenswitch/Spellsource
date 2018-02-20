@@ -3,9 +3,11 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
@@ -20,6 +22,61 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Stream;
 
 public class CustomCardsTests extends TestBase {
+
+	public void testTheBigGameHunt() {
+		runGym((context, player, opponent) -> {
+			Minion bigGameHunt = playMinionCard(context, player, "permanent_the_big_game_hunt");
+			int elapsedLocalPlayerTurns = 0;
+			Minion bloodfen1 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion bloodfen2 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion bloodfen3 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			elapsedLocalPlayerTurns++;
+			Minion bloodfen4 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion bloodfen5 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion bloodfen6 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			// one point for player
+			attack(context, player, bloodfen1, bloodfen4);
+			context.endTurn();
+			elapsedLocalPlayerTurns++;
+			// two points for opponent
+			attack(context, opponent, bloodfen5, bloodfen2);
+			attack(context, opponent, bloodfen6, bloodfen3);
+			context.endTurn();
+			for (int i = elapsedLocalPlayerTurns; i < 4; i++) {
+				context.endTurn();
+				context.endTurn();
+			}
+			Assert.assertTrue(bigGameHunt.isDestroyed());
+			// Should be a total of -1
+			Assert.assertEquals(bigGameHunt.getAttributeValue(Attribute.RESERVED_INTEGER_1), -1);
+			Minion kingBangalash1 = player.getMinions().get(0);
+			Assert.assertEquals(kingBangalash1.getSourceCard().getCardId(), "minion_king_bangalash");
+			Assert.assertEquals(kingBangalash1.getAttack(), kingBangalash1.getBaseAttack() - 1);
+			Assert.assertEquals(kingBangalash1.getHp(), kingBangalash1.getBaseHp() - 1);
+
+			// Play a King Bangalash from the hand, observe it has the same buffs.
+			Minion kingBangalash2 = playMinionCard(context, player, "minion_king_bangalash");
+			Assert.assertEquals(kingBangalash2.getAttack(), kingBangalash2.getBaseAttack() - 1);
+			Assert.assertEquals(kingBangalash2.getHp(), kingBangalash2.getBaseHp() - 1);
+		});
+	}
+
+	@Test
+	public void testLieInWait() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_lie_in_wait");
+			context.endTurn();
+			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			attack(context, opponent, wolfrider, player.getHero());
+
+			Assert.assertEquals(player.getWeaponZone().get(0).getDurability(),
+					((WeaponCard) CardCatalogue.getCardById("weapon_eaglehorn_bow")).getBaseDurability() - 1,
+					"Eaglehorn Bow loses durability because the secret triggered before it was in play.");
+			Assert.assertTrue(wolfrider.isDestroyed());
+		});
+	}
 
 	@Test
 	public void testFifiFizzlewarp() {
@@ -504,6 +561,11 @@ public class CustomCardsTests extends TestBase {
 			factory.run((context, player, opponent) -> {
 				playCard(context, player, "secret_wandering_monster");
 				Assert.assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), 3);
+			});
+
+			factory.run((context, player, opponent) -> {
+				playCard(context, player, "secret_lie_in_wait");
+				Assert.assertEquals(player.getWeaponZone().get(0).getSourceCard().getCardId(), "weapon_eaglehorn_bow");
 			});
 		});
 	}

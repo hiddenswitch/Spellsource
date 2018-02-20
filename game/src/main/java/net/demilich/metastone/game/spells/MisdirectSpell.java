@@ -18,7 +18,7 @@ public class MisdirectSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Actor attacker = (Actor) context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.ATTACKER_REFERENCE));
+		Actor attacker = (Actor)context.resolveSingleTarget(context.getAttackerReferenceStack().peek());
 		if (attacker == null) {
 			logger.warn("onCast: Cannot misdirect a null attacker.");
 			return;
