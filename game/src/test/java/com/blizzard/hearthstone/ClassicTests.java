@@ -31,12 +31,47 @@ import net.demilich.metastone.tests.util.TestBase;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 
 public class ClassicTests extends TestBase {
+
+	@Test
+	public void testPerditionsBlade() {
+		runGym((context, player, opponent) -> {
+			AtomicBoolean cried = new AtomicBoolean(false);
+			overrideBattlecry(player, battlecryActions -> {
+				Assert.assertEquals(battlecryActions.size(), 2);
+				Assert.assertEquals(battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(player.getHero().getReference())).count(), 1L);
+				Assert.assertEquals(battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(opponent.getHero().getReference())).count(), 1L);
+				cried.set(true);
+				return battlecryActions.get(0);
+			});
+
+			playCard(context, player, "weapon_perditions_blade");
+			Assert.assertTrue(cried.get());
+			Assert.assertEquals(player.getWeaponZone().get(0).getSourceCard().getCardId(), "weapon_perditions_blade");
+		});
+
+		runGym((context, player, opponent) -> {
+			AtomicBoolean cried = new AtomicBoolean(false);
+			overrideBattlecry(player, battlecryActions -> {
+				Assert.assertEquals(battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(player.getHero().getReference())).count(), 1L);
+				Assert.assertEquals(battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(opponent.getHero().getReference())).count(), 1L);
+				cried.set(true);
+				return battlecryActions.get(0);
+			});
+
+			playCard(context, player, "spell_the_coin");
+			playCard(context, player, "weapon_perditions_blade");
+			Assert.assertTrue(cried.get());
+			Assert.assertEquals(player.getWeaponZone().get(0).getSourceCard().getCardId(), "weapon_perditions_blade");
+		});
+	}
 
 	@Test
 	public void testSpellbender() {
