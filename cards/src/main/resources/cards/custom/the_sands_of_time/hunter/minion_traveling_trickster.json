@@ -10,7 +10,25 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "custom.TravelingTricksterSpell"
+      "class": "DiscoverSpell",
+      "cardSource": {
+        "class": "SecretSource"
+      },
+      "spell1": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell"
+          },
+          {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          }
+        ]
+      },
+      "spell2": {
+        "class": "RevealCardSpell"
+      }
     }
   },
   "attributes": {

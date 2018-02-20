@@ -170,6 +170,7 @@ public class DiscoverSpell extends Spell {
 			// Construct the spell. Usually we include the parent
 			final SpellDesc[] notChosenSpellsArray = new SpellDesc[notChosenSpells.size()];
 			notChosenSpells.toArray(notChosenSpellsArray);
+			// TODO: What order should this be in, in order to not leak information about the choice?
 			final SpellDesc spell = SpellDesc.join(chosenSpell, notChosenSpellsArray);
 
 			DiscoverAction discover = DiscoverAction.createDiscover(spell);

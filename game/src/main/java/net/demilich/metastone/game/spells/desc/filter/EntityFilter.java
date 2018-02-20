@@ -94,3 +94,4 @@ public abstract class EntityFilter implements Serializable {
 		return entities;
 	}
 }
+

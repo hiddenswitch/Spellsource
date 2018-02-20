@@ -246,6 +246,10 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	public boolean canFireCondition(GameEvent event) {
+		if (isExpired()) {
+			return false;
+		}
+
 		if (primaryTrigger.canFireCondition(event) || (secondaryTrigger != null && secondaryTrigger.canFireCondition(event))) {
 			return true;
 		}

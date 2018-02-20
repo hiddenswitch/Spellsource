@@ -2,7 +2,6 @@ package net.demilich.metastone.game.logic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -240,7 +239,7 @@ public class TargetLogic implements Serializable {
 		} else if (targetKey.equals(EntityReference.ADJACENT_MINIONS)) {
 			return new ArrayList<>(context.getAdjacentMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.ATTACKER_ADJACENT_MINIONS)) {
-			return new ArrayList<>(context.getAdjacentMinions(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.ATTACKER_REFERENCE)).getReference()));
+			return new ArrayList<>(context.getAdjacentMinions(context.resolveSingleTarget(context.getAttackerReferenceStack().peek()).getReference()));
 		} else if (targetKey.equals(EntityReference.OPPOSITE_MINIONS)) {
 			return new ArrayList<>(context.getOppositeMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_LEFT)) {
@@ -292,7 +291,7 @@ public class TargetLogic implements Serializable {
 		} else if (targetKey.equals(EntityReference.KILLED_MINION)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.KILLED_MINION)));
 		} else if (targetKey.equals(EntityReference.ATTACKER)) {
-			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.ATTACKER_REFERENCE)));
+			return singleTargetAsList(context.resolveSingleTarget(context.getAttackerReferenceStack().peek()));
 		} else if (targetKey.equals(EntityReference.PENDING_CARD)) {
 			return singleTargetAsList((Entity) context.getPendingCard());
 		} else if (targetKey.equals(EntityReference.OUTPUT)) {

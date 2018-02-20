@@ -32,8 +32,8 @@ public class AuraDescSerializer implements JsonDeserializer<AuraDesc>, JsonSeria
 		parseArgument(AuraArg.ATTRIBUTE, jsonData, arguments, ParseValueType.ATTRIBUTE);
 		parseArgument(AuraArg.APPLY_EFFECT, jsonData, arguments, ParseValueType.SPELL);
 		parseArgument(AuraArg.REMOVE_EFFECT, jsonData, arguments, ParseValueType.SPELL);
-		parseArgument(AuraArg.ATTACK_BONUS, jsonData, arguments, ParseValueType.INTEGER);
-		parseArgument(AuraArg.HP_BONUS, jsonData, arguments, ParseValueType.INTEGER);
+		parseArgument(AuraArg.ATTACK_BONUS, jsonData, arguments, ParseValueType.VALUE);
+		parseArgument(AuraArg.HP_BONUS, jsonData, arguments, ParseValueType.VALUE);
 		parseArgument(AuraArg.SECONDARY_TRIGGER, jsonData, arguments, ParseValueType.EVENT_TRIGGER);
 		parseArgument(AuraArg.CONDITION, jsonData, arguments, ParseValueType.CONDITION);
 

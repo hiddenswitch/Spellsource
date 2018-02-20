@@ -24,9 +24,9 @@ public enum Environment {
 	 */
 	TARGET_OVERRIDE,
 	/**
-	 * This variable stores the current attacker.
+	 * This variable stores a stack of attackers.
 	 */
-	ATTACKER_REFERENCE,
+	ATTACKER_REFERENCE_STACK,
 	/**
 	 * This variable stores a stack of event targets, as events are executed one after another until all events are
 	 * processed.

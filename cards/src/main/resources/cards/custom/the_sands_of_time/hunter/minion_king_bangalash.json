@@ -1,0 +1,56 @@
+{
+  "name": "King Bangalash",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Has +1/+1 for each Point you had, and -1/-1 for each Point your Opponent had",
+  "aura": {
+    "class": "BuffAura",
+    "target": "SELF",
+    "attackBonus": {
+      "class": "ReduceValueProvider",
+      "target": "ALL_ENTITIES",
+      "attribute": "RESERVED_INTEGER_1",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "SpecificCardFilter",
+            "cardId": "permanent_the_big_game_hunt"
+          },
+          {
+            "class": "OwnedByPlayerFilter",
+            "targetPlayer": "SELF"
+          }
+        ]
+      },
+      "operation": "ADD"
+    },
+    "hpBonus": {
+      "class": "ReduceValueProvider",
+      "target": "ALL_ENTITIES",
+      "attribute": "RESERVED_INTEGER_1",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "SpecificCardFilter",
+            "cardId": "permanent_the_big_game_hunt"
+          },
+          {
+            "class": "OwnedByPlayerFilter",
+            "targetPlayer": "SELF"
+          }
+        ]
+      },
+      "operation": "ADD"
+    }
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}
