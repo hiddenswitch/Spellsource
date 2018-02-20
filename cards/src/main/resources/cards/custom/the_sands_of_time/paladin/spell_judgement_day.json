@@ -3,8 +3,8 @@
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "GOLD",
-  "rarity": "FREE",
-  "description": "Deal *{$1}[1]* damage to all minions. Deals 1 more damage for each turn it spends in your hand.",
+  "rarity": "RARE",
+  "description": "Deal 1 damage to all minions. Deals 1 more damage for each turn it spends in your hand.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",
@@ -14,24 +14,21 @@
       "class": "ModifyAttributeSpell",
       "target": "SELF",
       "value": 1,
-      "attribute": "SPELL_DAMAGE"
+      "attribute": "RESERVED_INTEGER_1"
     }
   },
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
     "target": "ALL_MINIONS",
-    "value": 1
-  },
-  "collectible": false,
-  "set": "KOBOLDS_AND_CATACOMBS",
-  "fileFormatVersion": 1,
-  "descValues": [
-    {
+    "value": {
       "class": "AttributeValueProvider",
       "target": "SELF",
-      "attribute": "SPELL_DAMAGE",
+      "attribute": "RESERVED_INTEGER_1",
       "offset": 1
     }
-  ]
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
 }

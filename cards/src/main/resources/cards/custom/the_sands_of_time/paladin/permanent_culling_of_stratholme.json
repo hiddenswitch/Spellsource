@@ -1,0 +1,39 @@
+{
+  "name": "Culling of Stratholme",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Permanent. Whenever a minion dies, the current turn player draws a card. (After 3 of your turns, this dies)",
+  "triggers": [
+    {
+      "countUntilCast": 3,
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      },
+      "maxFires": 3
+    },
+    {
+      "eventTrigger": {
+        "class": "MinionDeathTrigger"
+      },
+      "spell": {
+        "class": "DrawCardSpell",
+        "targetPlayer": "ACTIVE"
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}
