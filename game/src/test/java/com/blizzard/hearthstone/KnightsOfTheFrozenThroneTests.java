@@ -1,6 +1,8 @@
 package com.blizzard.hearthstone;
 
 
+import ch.qos.logback.classic.Level;
+import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -9,6 +11,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.ChooseBattlecryHeroCard;
 import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -40,6 +43,35 @@ import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.*;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
+
+	@Test
+	public void testEvolveHowlfiendInteraction() {
+		Logging.setLoggingLevel(Level.ERROR);
+		for (int i = 0; i < 100; i++) {
+			runGym((context, player, opponent) -> {
+
+				Minion howlfiend = playMinionCard(context, player, "minion_howlfiend");
+				playCard(context, player, "spell_evolve");
+				Assert.assertEquals(howlfiend.transformResolved(context).getSourceCard().getBaseManaCost(), CardCatalogue.getCardById("minion_howlfiend").getBaseManaCost() + 1);
+			});
+		}
+
+		for (int i = 0; i < 100; i++) {
+			runGym((context, player, opponent) -> {
+				context.setDeckFormat(DeckFormat.WILD);
+				MinionCard howlfiendCard = receiveCard(context, player, "minion_howlfiend");
+				playCard(context, player, "minion_emperor_thaurissan");
+				for (int j = 0; j < 3; j++) {
+					context.endTurn();
+					context.endTurn();
+				}
+				Assert.assertEquals(costOf(context, player, howlfiendCard), 0);
+				Minion howlfiend = playMinionCard(context, player, howlfiendCard);
+				playCard(context, player, "spell_evolve");
+				Assert.assertEquals(howlfiend.transformResolved(context).getSourceCard().getBaseManaCost(), CardCatalogue.getCardById("minion_howlfiend").getBaseManaCost() + 1);
+			});
+		}
+	}
 
 	@Test
 	public void testDoomedApprentice() {
