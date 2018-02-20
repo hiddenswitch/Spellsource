@@ -95,6 +95,21 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
 			Assert.assertEquals(shouldNotBeDrawn.getZone(), Zones.DECK);
 		});
+
+		// Getting Divine Shield minions from Fifi Fizzlewarp should work
+		runGym((context, player, opponent) -> {
+			MinionCard shouldBeDrawn = putOnTopOfDeck(context, player, "minion_dire_mole");
+			OverrideHandle<Card> handle = overrideRandomCard(context, "minion_argent_squire");
+			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			handle.stop();
+			context.getLogic().discardCard(player, fifi);
+			Card drawnCard = context.getLogic().drawCard(player.getId(), player);
+			Assert.assertEquals(drawnCard, shouldBeDrawn.transformResolved(context));
+			shouldBeDrawn = (MinionCard) shouldBeDrawn.transformResolved(context);
+			Minion argentSquire = playMinionCard(context, player, shouldBeDrawn);
+			Assert.assertTrue(argentSquire.hasAttribute(Attribute.DIVINE_SHIELD));
+		});
 	}
 
 	@Test
