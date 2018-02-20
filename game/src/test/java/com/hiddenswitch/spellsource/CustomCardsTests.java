@@ -3,13 +3,13 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
@@ -23,12 +23,12 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testFifiFizzlewarp() {
-		// Test that cards that have race-filtered battlecries work correctly after Fifi
+		// Test that cards that have race-filtered battlecries work correctly after Fifi Fizzlewarp
 		runGym((context, player, opponent) -> {
-			context.getLogic().putOnTopOfDeck(player, CardCatalogue.getCardById("minion_boulderfist_ogre"));
+			putOnTopOfDeck(context, player, "minion_boulderfist_ogre");
 
 			for (int i = 0; i < 2; i++) {
-				context.getLogic().putOnTopOfDeck(player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+				putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			}
 
 			OverrideHandle<Card> handle = overrideRandomCard(context, "minion_virmen_sensei");
@@ -36,11 +36,11 @@ public class CustomCardsTests extends TestBase {
 			context.fireGameEvent(new GameStartEvent(context, player.getId()));
 			handle.stop();
 
+			context.getLogic().discardCard(player, fifi);
+
 			for (int i = 0; i < 3; i++) {
 				context.getLogic().drawCard(player.getId(), player);
 			}
-
-			context.getLogic().discardCard(player, fifi);
 
 			for (Card card : player.getHand().subList(0, 2)) {
 				Assert.assertEquals(card.getCardId(), "minion_virmen_sensei");
@@ -69,6 +69,31 @@ public class CustomCardsTests extends TestBase {
 
 			playCard(context, player, vermin2);
 			Assert.assertEquals(latch.getCount(), 0, "Should have requested battlecries");
+		});
+
+		// Tol'Vir Warden should interact correctly with cards transformed by Fifi Fizzlewarp
+		runGym((context, player, opponent) -> {
+			// Cost 1 card
+			MinionCard shouldBeDrawn = putOnTopOfDeck(context, player, "minion_dire_mole");
+			// Cost 2 card
+			MinionCard shouldNotBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			MinionCard tolvirToPlay = putOnTopOfDeck(context, player, "minion_dire_mole");
+
+			OverrideHandle<Card> handle = overrideRandomCard(context, "minion_tolvir_warden");
+			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			handle.stop();
+
+			context.getLogic().discardCard(player, fifi);
+			Card drawnCard = context.getLogic().drawCard(player.getId(), player);
+			Assert.assertEquals(drawnCard, tolvirToPlay.transformResolved(context));
+			tolvirToPlay = (MinionCard) tolvirToPlay.transformResolved(context);
+			shouldBeDrawn = (MinionCard) shouldBeDrawn.transformResolved(context);
+			shouldNotBeDrawn = (MinionCard) shouldNotBeDrawn.transformResolved(context);
+
+			playCard(context, player, tolvirToPlay);
+			Assert.assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
+			Assert.assertEquals(shouldNotBeDrawn.getZone(), Zones.DECK);
 		});
 	}
 
