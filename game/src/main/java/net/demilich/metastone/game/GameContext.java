@@ -21,6 +21,7 @@ import net.demilich.metastone.game.entities.heroes.MetaHero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.environment.EnvironmentDeque;
+import net.demilich.metastone.game.environment.EnvironmentMap;
 import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.gameconfig.GameConfig;
@@ -1276,6 +1277,27 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 			getEnvironment().put(Environment.ATTACKER_REFERENCE_STACK, new EnvironmentDeque<>());
 		}
 		return (Deque<EntityReference>) getEnvironment().get(Environment.ATTACKER_REFERENCE_STACK);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map<Integer, EntityReference> getLastCardPlayedMap() {
+		if (!getEnvironment().containsKey(Environment.LAST_CARD_PLAYED)) {
+			getEnvironment().put(Environment.LAST_CARD_PLAYED, new EnvironmentMap<>());
+		}
+		return (Map<Integer, EntityReference>) getEnvironment().get(Environment.LAST_CARD_PLAYED);
+	}
+
+	public void setLastCardPlayed(int playerId, EntityReference cardReference) {
+		getLastCardPlayedMap().put(IdFactory.UNASSIGNED, cardReference);
+		getLastCardPlayedMap().put(playerId, cardReference);
+	}
+
+	public EntityReference getLastCardPlayed(int playerId) {
+		return getLastCardPlayedMap().get(playerId);
+	}
+
+	public EntityReference getLastCardPlayed() {
+		return getLastCardPlayedMap().get(IdFactory.UNASSIGNED);
 	}
 
 	/**

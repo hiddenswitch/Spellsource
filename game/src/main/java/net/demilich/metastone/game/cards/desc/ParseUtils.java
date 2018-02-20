@@ -272,6 +272,12 @@ public class ParseUtils {
 				return EntityReference.OTHER_ENEMY_MINIONS;
 			case "leftmost_friendly_card_hand":
 				return EntityReference.LEFTMOST_FRIENDLY_CARD_HAND;
+			case "last_card_played":
+				return EntityReference.LAST_CARD_PLAYED;
+			case "friendly_last_card_played":
+				return EntityReference.FRIENDLY_LAST_CARD_PLAYED;
+			case "enemy_last_card_played":
+				return EntityReference.ENEMY_LAST_CARD_PLAYED;
 			case "adjacent_minions":
 				return EntityReference.ADJACENT_MINIONS;
 			case "attacker_adjacent_minions":

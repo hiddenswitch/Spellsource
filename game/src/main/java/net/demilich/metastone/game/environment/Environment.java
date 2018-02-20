@@ -24,6 +24,10 @@ public enum Environment {
 	 */
 	TARGET_OVERRIDE,
 	/**
+	 * This variable stores a reference to the last card played for each player
+	 */
+	LAST_CARD_PLAYED,
+	/**
 	 * This variable stores a stack of attackers.
 	 */
 	ATTACKER_REFERENCE_STACK,

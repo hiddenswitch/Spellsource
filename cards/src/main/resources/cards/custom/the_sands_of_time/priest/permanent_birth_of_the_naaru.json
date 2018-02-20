@@ -1,0 +1,42 @@
+{
+  "name": "Birth of the Naaru",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Permanent. Whenever a friendly minion is healed, summon a Lightwarden. (After 2 of your turns, this dies)",
+  "triggers": [
+    {
+      "countUntilCast": 2,
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      },
+      "maxFires": 2
+    },
+    {
+      "eventTrigger": {
+        "class": "HealingTrigger",
+        "targetEntityType": "MINION",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "card": "minion_lightwarden"
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}
