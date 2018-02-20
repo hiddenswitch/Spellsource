@@ -49,7 +49,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		Logging.setLoggingLevel(Level.ERROR);
 		for (int i = 0; i < 100; i++) {
 			runGym((context, player, opponent) -> {
-
+				context.setDeckFormat(DeckFormat.WILD);
 				Minion howlfiend = playMinionCard(context, player, "minion_howlfiend");
 				playCard(context, player, "spell_evolve");
 				Assert.assertEquals(howlfiend.transformResolved(context).getSourceCard().getBaseManaCost(), CardCatalogue.getCardById("minion_howlfiend").getBaseManaCost() + 1);
