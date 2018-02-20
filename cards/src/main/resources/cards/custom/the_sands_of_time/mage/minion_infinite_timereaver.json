@@ -23,23 +23,22 @@
           "target": "FRIENDLY_PLAYER",
           "trigger": {
             "eventTrigger": {
-              "class": "MinionDeathTrigger"
+              "class": "AfterSpellCastedTrigger"
             },
             "spell": {
-              "class": "DrawCardSpell",
+              "class": "ConditionalSpell",
               "condition": {
                 "class": "IsDeadCondition",
-                "target": "SPELL_TARGET"
+                "target": "EVENT_TARGET"
+              },
+              "spell": {
+                "class": "DrawCardSpell"
               }
             },
-            "oneTime": true
-          },
-          "revertTrigger": {
-            "class": "AfterSpellCastedTrigger",
-            "sourcePlayer": "SELF"
+            "maxFires": 1
           }
         },
-        "oneTime": true
+        "maxFires": 1
       }
     }
   },

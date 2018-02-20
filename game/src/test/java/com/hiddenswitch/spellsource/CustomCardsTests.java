@@ -4,6 +4,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.WeaponCard;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -22,6 +23,56 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Stream;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testOwnWorstEnemey() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_own_worst_enemy");
+			Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			Minion source = playMinionCard(context, opponent, "minion_wolfrider");
+			attack(context, opponent, source, target);
+			Assert.assertTrue(source.isDestroyed());
+			Assert.assertFalse(target.isDestroyed());
+			Assert.assertTrue(player.getGraveyard().stream().anyMatch(c -> c.getEntityType() == EntityType.MINION
+					&& c.getSourceCard().getCardId().equals("minion_wolfrider")));
+		});
+	}
+
+	@Test
+	public void testInfiniteTimereaver() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			Card toDraw = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_infinite_timereaver");
+			playCardWithTarget(context, player, "spell_fireball", target);
+			Assert.assertEquals(player.getHand().get(0), toDraw);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			Card toDraw = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_infinite_timereaver");
+			playCard(context, player, "spell_flamestrike");
+			Assert.assertEquals(player.getHand().get(0), toDraw);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_infinite_timereaver");
+			playCardWithTarget(context, player, "spell_razorpetal", target);
+			Assert.assertEquals(player.getHand().size(), 0);
+			playCardWithTarget(context, player, "spell_razorpetal", target);
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+	}
 
 	@Test
 	public void testFreya() {
