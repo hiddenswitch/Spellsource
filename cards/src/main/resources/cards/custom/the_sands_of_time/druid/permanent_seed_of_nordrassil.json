@@ -10,14 +10,14 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
-      "targetPlayer": "SELF",
-      "hostTargetType": "IGNORE_AS_TARGET",
       "fireCondition": {
         "class": "AttributeCondition",
         "attribute": "RESERVED_BOOLEAN_1",
-        "operation": "HAS",
-        "invert": true
-      }
+        "invert": true,
+        "operation": "HAS"
+      },
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "MetaSpell",

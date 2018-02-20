@@ -1,0 +1,40 @@
+{
+  "name": "Theramore's Fall",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Permanent. Whenever you cast a spell, summon a Mana Wraith. (After 2 of your turns, this dies)",
+  "triggers": [
+    {
+      "countUntilCast": 2,
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      },
+      "maxFires": 2
+    },
+    {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "minion_mana_wraith"
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

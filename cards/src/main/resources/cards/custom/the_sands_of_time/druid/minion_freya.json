@@ -31,8 +31,8 @@
             },
             "spell": {
               "class": "RemoveAttributeSpell",
-              "attribute": "RESERVED_BOOLEAN_1",
-              "target": "SELF"
+              "target": "SELF",
+              "attribute": "RESERVED_BOOLEAN_1"
             },
             "maxFires": 1
           }
