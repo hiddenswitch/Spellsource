@@ -10,7 +10,14 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "attribute": "RESERVED_BOOLEAN_1",
+        "operation": "HAS",
+        "invert": true
+      }
     },
     "spell": {
       "class": "MetaSpell",
@@ -55,6 +62,9 @@
         }
       ]
     }
+  },
+  "attributes": {
+    "PERMANENT": true
   },
   "collectible": false,
   "set": "SANDS_OF_TIME",

@@ -27,7 +27,7 @@
           "class": "OwnedByPlayerCondition",
           "targetPlayer": "INACTIVE"
         },
-        "sourcePlayer": "SELF"
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "ModifyAttributeSpell",
@@ -43,7 +43,7 @@
           "class": "OwnedByPlayerCondition",
           "targetPlayer": "ACTIVE"
         },
-        "sourcePlayer": "OPPONENT"
+        "targetPlayer": "OPPONENT"
       },
       "spell": {
         "class": "ModifyAttributeSpell",
