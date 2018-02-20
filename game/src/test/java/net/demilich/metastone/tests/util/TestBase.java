@@ -59,6 +59,12 @@ public class TestBase {
 		return baseCard;
 	}
 
+	protected static <T extends Card> T putOnTopOfDeck(GameContext context, Player player, String cardId) {
+		final T card = (T) CardCatalogue.getCardById(cardId);
+		context.getLogic().putOnTopOfDeck(player, card);
+		return card;
+	}
+
 	public static class OverrideHandle<T> {
 		private T object;
 		private AtomicBoolean stopped = new AtomicBoolean(false);
@@ -165,8 +171,8 @@ public class TestBase {
 		return card;
 	}
 
-	public static Card shuffleToDeck(GameContext context, Player player, String cardId) {
-		Card card = CardCatalogue.getCardById(cardId);
+	public static <T extends Card> T shuffleToDeck(GameContext context, Player player, String cardId) {
+		T card = (T) CardCatalogue.getCardById(cardId);
 		context.getLogic().shuffleToDeck(player, card);
 		return card;
 	}
