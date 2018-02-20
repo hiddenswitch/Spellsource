@@ -32,6 +32,11 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertEquals(nordrassil.getAttributeValue(Attribute.RESERVED_INTEGER_1), 0, "Freya should not trigger Seed");
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
 			Assert.assertEquals(nordrassil.getAttributeValue(Attribute.RESERVED_INTEGER_1), bloodfen.getAttack() + bloodfen.getHp());
+			for (int i = 0; i < 2; i++) {
+				playCard(context, player, "minion_faceless_behemoth");
+			}
+
+			Assert.assertEquals(nordrassil.transformResolved(context).getSourceCard().getCardId(), "token_nordrassil", "Seed transformed into Nordrassil");
 		});
 	}
 
