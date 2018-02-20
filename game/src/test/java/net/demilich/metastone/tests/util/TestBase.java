@@ -165,8 +165,8 @@ public class TestBase {
 		});
 	}
 
-	public static Card receiveCard(GameContext context, Player player, String cardId) {
-		Card card = CardCatalogue.getCardById(cardId);
+	public static <T extends Card> T receiveCard(GameContext context, Player player, String cardId) {
+		T card = (T) CardCatalogue.getCardById(cardId);
 		context.getLogic().receiveCard(player.getId(), card);
 		return card;
 	}
