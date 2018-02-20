@@ -8,7 +8,8 @@
   "rarity": "COMMON",
   "description": "Deathrattle: Get a copy of the last card your opponent played.",
   "deathrattle": {
-    "class": "custom.ReceiveLastCardPlayedSpell"
+    "class": "CopyCardSpell",
+    "target": "ENEMY_LAST_CARD_PLAYED"
   },
   "attributes": {
     "DEATHRATTLES": true

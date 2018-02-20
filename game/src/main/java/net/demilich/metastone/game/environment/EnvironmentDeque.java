@@ -2,6 +2,7 @@ package net.demilich.metastone.game.environment;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;
+import java.util.LinkedHashMap;
 
 public class EnvironmentDeque<E extends Serializable> extends ArrayDeque<E> implements EnvironmentValue, Serializable {
 	@Override

@@ -25,6 +25,21 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testShadowOfThePast() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playCard(context, opponent, "minion_wolfrider");
+			playCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			Minion shadow = playMinionCard(context, player, "minion_shadow_of_the_past");
+			playCard(context, player, "minion_boulderfist_ogre");
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_fireball", shadow);
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_fireball");
+		});
+	}
+
+	@Test
 	public void testOwnWorstEnemey() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_own_worst_enemy");

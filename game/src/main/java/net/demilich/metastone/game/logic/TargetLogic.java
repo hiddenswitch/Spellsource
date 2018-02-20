@@ -342,6 +342,12 @@ public class TargetLogic implements Serializable {
 			ArrayList<Entity> friendly = new ArrayList<>(player.getHand().toList());
 			friendly.addAll(context.getOpponent(player).getHand().toList());
 			return friendly;
+		} else if (targetKey.equals(EntityReference.LAST_CARD_PLAYED)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayed()));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_CARD_PLAYED)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayed(player.getId())));
+		} else if (targetKey.equals(EntityReference.ENEMY_LAST_CARD_PLAYED)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayed(context.getOpponent(player).getId())));
 		} else if (targetKey.equals(EntityReference.TRANSFORM_REFERENCE)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TRANSFORM_REFERENCE)));
 		} else if (targetKey.equals(EntityReference.FRIENDLY_SET_ASIDE)) {

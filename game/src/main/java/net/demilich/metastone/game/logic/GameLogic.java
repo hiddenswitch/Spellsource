@@ -2293,6 +2293,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		player.getStatistics().cardPlayed(card, context.getTurn());
 		CardPlayedEvent cardPlayedEvent = new CardPlayedEvent(context, playerId, card);
+		context.setLastCardPlayed(playerId, card.getReference());
 		context.fireGameEvent(cardPlayedEvent);
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
