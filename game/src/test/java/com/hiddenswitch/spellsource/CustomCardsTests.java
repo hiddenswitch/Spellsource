@@ -23,6 +23,19 @@ import java.util.stream.Stream;
 
 public class CustomCardsTests extends TestBase {
 
+	@Test
+	public void testFreya() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_freya");
+			Minion nordrassil = player.getMinions().get(1);
+			Assert.assertEquals(nordrassil.getSourceCard().getCardId(), "permanent_seed_of_nordrassil");
+			Assert.assertEquals(nordrassil.getAttributeValue(Attribute.RESERVED_INTEGER_1), 0, "Freya should not trigger Seed");
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(nordrassil.getAttributeValue(Attribute.RESERVED_INTEGER_1), bloodfen.getAttack() + bloodfen.getHp());
+		});
+	}
+
+	@Test
 	public void testTheBigGameHunt() {
 		runGym((context, player, opponent) -> {
 			Minion bigGameHunt = playMinionCard(context, player, "permanent_the_big_game_hunt");

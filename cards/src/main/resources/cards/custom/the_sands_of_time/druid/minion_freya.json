@@ -10,8 +10,34 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "SummonSpell",
-      "card": "permanent_seed_of_nordrassil"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "RESERVED_BOOLEAN_1"
+        },
+        {
+          "class": "SummonSpell",
+          "card": "permanent_seed_of_nordrassil"
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "SELF",
+          "trigger": {
+            "eventTrigger": {
+              "class": "AfterMinionSummonedTrigger",
+              "hostTargetType": "IGNORE_OTHER_TARGETS"
+            },
+            "spell": {
+              "class": "RemoveAttributeSpell",
+              "attribute": "RESERVED_BOOLEAN_1",
+              "target": "SELF"
+            },
+            "maxFires": 1
+          }
+        }
+      ]
     }
   },
   "attributes": {
