@@ -351,6 +351,24 @@ public class CustomCardsTests extends TestBase {
 			Minion argentSquire = playMinionCard(context, player, shouldBeDrawn);
 			Assert.assertTrue(argentSquire.hasAttribute(Attribute.DIVINE_SHIELD));
 		});
+
+		// Test specifically Tirion's deathrattle
+		runGym((context, player, opponent) -> {
+			MinionCard shouldBeDrawn = putOnTopOfDeck(context, player, "minion_dire_mole");
+			OverrideHandle<Card> handle = overrideRandomCard(context, "minion_tirion_fordring");
+			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			handle.stop();
+			context.getLogic().discardCard(player, fifi);
+			Card drawnCard = context.getLogic().drawCard(player.getId(), player);
+			Assert.assertEquals(drawnCard, shouldBeDrawn.transformResolved(context));
+			shouldBeDrawn = (MinionCard) shouldBeDrawn.transformResolved(context);
+			Minion tirion = playMinionCard(context, player, shouldBeDrawn);
+			playCardWithTarget(context, player, "spell_fireball", tirion);
+			playCardWithTarget(context, player, "spell_fireball", tirion);
+			Assert.assertTrue(tirion.isDestroyed());
+			Assert.assertEquals(player.getHero().getWeapon().getSourceCard().getCardId(), "weapon_ashbringer");
+		});
 	}
 
 	@Test
