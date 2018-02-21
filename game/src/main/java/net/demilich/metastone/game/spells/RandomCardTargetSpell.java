@@ -50,7 +50,7 @@ public class RandomCardTargetSpell extends Spell {
 		} else if (SpellCard.class.isAssignableFrom(card.getClass())) {
 			spellCard = (SpellCard) card;
 		} else {
-			throw new RuntimeException("A non-spell card was passed into a RandomCardTargetSpell");
+			throw new RuntimeException(String.format("castCardWithRandomTargets %s %s: A non-spell card %s was passed into a RandomCardTargetSpell", context.getGameId(), source.toString(), card.toString()));
 		}
 
 		Zones destination = Zones.REMOVED_FROM_PLAY;

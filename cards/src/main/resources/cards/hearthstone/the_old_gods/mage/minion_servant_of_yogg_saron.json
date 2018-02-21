@@ -11,10 +11,21 @@
     "spell": {
       "class": "CastRandomSpellSpell",
       "cardFilter": {
-        "class": "CardFilter",
-        "value": 5,
-        "attribute": "BASE_MANA_COST",
-        "operation": "LESS_OR_EQUAL"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "value": 5,
+            "attribute": "BASE_MANA_COST",
+            "cardType": "SPELL",
+            "operation": "LESS_OR_EQUAL"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          }
+        ]
       }
     }
   },

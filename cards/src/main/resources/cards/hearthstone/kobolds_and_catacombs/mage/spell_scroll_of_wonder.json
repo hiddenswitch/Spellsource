@@ -14,7 +14,21 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "CastRandomSpellSpell"
+          "class": "CastRandomSpellSpell",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "CardFilter",
+                "cardType": "SPELL"
+              },
+              {
+                "class": "CardFilter",
+                "rarity": "LEGENDARY",
+                "invert": true
+              }
+            ]
+          }
         },
         {
           "class": "AddAttributeSpell",
@@ -33,7 +47,21 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "CastRandomSpellSpell"
+    "class": "CastRandomSpellSpell",
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "CardFilter",
+          "rarity": "LEGENDARY",
+          "invert": true
+        }
+      ]
+    }
   },
   "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",
