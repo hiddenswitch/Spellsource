@@ -9,6 +9,7 @@
   "description": "Choose One - Charge; or +2 Health and Taunt.",
   "options": [
     {
+      "name": "Cat Form",
       "description": "Charge",
       "spell": {
         "class": "TransformMinionSpell",
@@ -17,6 +18,7 @@
       }
     },
     {
+      "name": "Bear Form",
       "description": "+2 Health and Taunt",
       "spell": {
         "class": "TransformMinionSpell",
@@ -26,7 +28,7 @@
     }
   ],
   "bothOptions": {
-    "description": "Charge, +2 Health, and Taunt",
+    "description": "Druid of the Claw",
     "spell": {
       "class": "TransformMinionSpell",
       "target": "SELF",
