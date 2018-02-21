@@ -31,26 +31,17 @@ public class CastRandomSpellSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-		CardList spells = CardCatalogue.query(context.getDeckFormat(), CardType.SPELL);
-		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
+		CardList spells = desc.getFilteredCards(context, player, source);
 		TargetPlayer castingTargetPlayer = desc.getTargetPlayer() == null ? TargetPlayer.OWNER : desc.getTargetPlayer();
-
-		if (cardSource != null) {
-			spells = cardSource.getCards(context, player);
-		}
-
-		CardList filteredSpells = new CardArrayList();
-		for (Card spell : spells) {
-			if (filter == null || filter.matches(context, player, spell, source)) {
-				filteredSpells.addCard(spell);
-			}
-		}
 
 		player.setAttribute(Attribute.RANDOM_CHOICES, true);
 
 		int numberOfSpellsToCast = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < numberOfSpellsToCast; i++) {
+			if (spells.isEmpty()) {
+				logger.warn("onCast {} {}: An empty number of spells were found with the filter {} and source {}", context.getGameId(), source, desc.getCardFilter(), desc.getCardSource());
+				break;
+			}
 			// In case Yogg changes sides, this should case who the spells are being cast for.
 			Player castingPlayer;
 			switch (castingTargetPlayer) {
@@ -84,7 +75,7 @@ public class CastRandomSpellSpell extends Spell {
 				break;
 			}
 			// Must retrieve a copy because castWithRandomTargets mutates the incoming spell card
-			Card randomCard = context.getLogic().getRandom(filteredSpells).getCopy();
+			Card randomCard = context.getLogic().getRandom(spells).getCopy();
 			logger.debug("onCast {} {}: Casting random spell {}", context.getGameId(), source, randomCard);
 			RandomCardTargetSpell.castCardWithRandomTargets(context, castingPlayer, source, randomCard);
 			context.getLogic().endOfSequence();

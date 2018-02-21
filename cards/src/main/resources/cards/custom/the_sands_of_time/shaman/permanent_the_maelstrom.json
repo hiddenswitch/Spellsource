@@ -28,8 +28,17 @@
       "spell": {
         "class": "CastRandomSpellSpell",
         "cardFilter": {
-          "class": "SpecificCardFilter",
-          "secondaryTarget": "EVENT_SOURCE"
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "EVENT_SOURCE"
+            },
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            }
+          ]
         },
         "cardSource": {
           "class": "UncollectibleCatalogueSource"
