@@ -14,23 +14,23 @@
       },
       "spell": {
         "class": "SetAttributeSpell",
-        "attribute": "RESERVED_INTEGER_1",
         "target": "SELF",
-        "value": 70
+        "value": 70,
+        "attribute": "RESERVED_INTEGER_1"
       }
     },
     {
       "eventTrigger": {
         "class": "DamageReceivedTrigger",
-        "targetEntityType": "MINION",
-        "targetPlayer": "SELF",
         "fireCondition": {
           "class": "AttributeCondition",
           "target": "SELF",
-          "attribute": "RESERVED_INTEGER_1",
           "value": 0,
+          "attribute": "RESERVED_INTEGER_1",
           "operation": "GREATER"
-        }
+        },
+        "targetEntityType": "MINION",
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "MetaSpell",
@@ -38,8 +38,8 @@
           {
             "class": "ModifyAttributeSpell",
             "target": "SELF",
-            "attribute": "RESERVED_INTEGER_1",
-            "value": -1
+            "value": -1,
+            "attribute": "RESERVED_INTEGER_1"
           },
           {
             "class": "DamageSpell",
