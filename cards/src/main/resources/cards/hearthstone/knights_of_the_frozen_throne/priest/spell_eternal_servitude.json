@@ -11,8 +11,12 @@
     "spell": {
       "class": "SummonSpell"
     },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
     "cardSource": {
-      "class": "GraveyardMinionsSource",
+      "class": "GraveyardActorsSource",
       "targetPlayer": "SELF"
     }
   },

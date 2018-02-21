@@ -11,7 +11,8 @@
   "set": "SANDS_OF_TIME",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "PlayerAttributeValueProvider",
-    "playerAttribute": "DAMAGE_THIS_TURN"
+    "class": "AttributeValueProvider",
+    "target": "FRIENDLY_HERO",
+    "attribute": "DAMAGE_THIS_TURN"
   }
 }

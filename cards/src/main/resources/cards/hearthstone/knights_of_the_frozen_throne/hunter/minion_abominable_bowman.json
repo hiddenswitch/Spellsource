@@ -11,12 +11,12 @@
     "class": "SummonSpell",
     "boardPositionRelative": "RIGHT",
     "cardFilter": {
-      "class": "RaceFilter",
+      "class": "CardFilter",
       "race": "BEAST",
       "cardType": "MINION"
     },
     "cardSource": {
-      "class": "GraveyardMinionsSource",
+      "class": "GraveyardActorsSource",
       "targetPlayer": "SELF"
     }
   },

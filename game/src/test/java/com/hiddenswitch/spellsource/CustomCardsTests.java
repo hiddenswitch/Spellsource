@@ -25,6 +25,63 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testDesolationOfKaresh() {
+		// No combos played, should die
+		runGym((context, player, opponent) -> {
+			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
+			context.endTurn();
+			Assert.assertTrue(desolation.isDestroyed());
+		});
+
+		// Activated combo card played, should die in 2 turns
+		runGym((context, player, opponent) -> {
+			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
+			playCard(context, player, "minion_defias_ringleader");
+			context.endTurn();
+			Assert.assertFalse(desolation.isDestroyed());
+			context.endTurn();
+			context.endTurn();
+			Assert.assertTrue(desolation.isDestroyed());
+		});
+
+		// Not combo card played, should die next turn
+		runGym((context, player, opponent) -> {
+			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
+			playCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			Assert.assertTrue(desolation.isDestroyed());
+		});
+
+		// Activated combo card played, then not activated combo card played. Should die in 2 turns.
+		runGym((context, player, opponent) -> {
+			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
+			playCard(context, player, "minion_defias_ringleader");
+			context.endTurn();
+			Assert.assertFalse(desolation.isDestroyed());
+			context.endTurn();
+			playCard(context, player, "minion_defias_ringleader");
+			context.endTurn();
+			Assert.assertTrue(desolation.isDestroyed());
+		});
+
+		// Activated combo card played, then not activated combo card played, then activated combo card played. Should die in 3 turns.
+		runGym((context, player, opponent) -> {
+			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
+			playCard(context, player, "minion_defias_ringleader");
+			context.endTurn();
+			Assert.assertFalse(desolation.isDestroyed());
+			context.endTurn();
+			playCard(context, player, "minion_defias_ringleader");
+			playCard(context, player, "minion_defias_ringleader");
+			context.endTurn();
+			Assert.assertFalse(desolation.isDestroyed());
+			context.endTurn();
+			context.endTurn();
+			Assert.assertTrue(desolation.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testShadowOfThePast() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();

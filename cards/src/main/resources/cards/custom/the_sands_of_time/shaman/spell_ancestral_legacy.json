@@ -12,8 +12,15 @@
       "class": "ReceiveCardSpell",
       "targetPlayer": "SELF"
     },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "PLAYED_FROM_HAND_OR_DECK",
+      "cardType": "MINION",
+      "operation": "HAS"
+    },
     "cardSource": {
-      "class": "PlayedThisGameSource",
+      "class": "GraveyardActorsSource",
+      "cardType": "MINION",
       "targetPlayer": "SELF"
     }
   },

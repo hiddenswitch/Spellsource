@@ -29,6 +29,21 @@ import java.util.stream.Stream;
 public class JourneyToUngoroTests extends TestBase {
 
 	@Test
+	public void testCruelDinomancer() {
+		runGym((context, player, opponent) -> {
+			Card bloodfen = receiveCard(context, player, "minion_bloodfen_raptor");
+			// Ensure that cards that merely died don't get summoned
+			Minion target = playMinionCard(context, player, "minion_doomguard");
+			Assert.assertTrue(bloodfen.hasAttribute(Attribute.DISCARDED));
+			playCardWithTarget(context, player, "spell_pyroblast", target);
+			Assert.assertTrue(target.isDestroyed());
+			Minion dinomancer = playMinionCard(context, player, "minion_cruel_dinomancer");
+			playCardWithTarget(context, player, "spell_fireball", dinomancer);
+			Assert.assertTrue(player.getMinions().stream().anyMatch(m -> m.getSourceCard().getCardId().equals("minion_bloodfen_raptor")));
+		});
+	}
+
+	@Test
 	public void testCavernsBelowChooseOneInteraction() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "quest_the_caverns_below");

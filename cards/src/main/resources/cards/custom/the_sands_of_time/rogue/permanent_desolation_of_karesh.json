@@ -1,0 +1,84 @@
+{
+  "name": "Desolation of K'aresh",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Permanent. At the start of your turn, draw a card. Whenever you activate a Combo, last 1 more of your turns. (Dies after 1 of your turns unless increased)",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ConditionalEffectSpell",
+        "target": "SELF",
+        "condition": {
+          "class": "ComparisonCondition",
+          "operation": "LESS_OR_EQUAL",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "RESERVED_INTEGER_1"
+          },
+          "value2": 0
+        },
+        "spell1": {
+          "class": "ModifyAttributeSpell",
+          "target": "SELF",
+          "value": -1,
+          "attribute": "RESERVED_INTEGER_1"
+        },
+        "spell2": {
+          "class": "DestroySpell",
+          "target": "SELF"
+        }
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DrawCardSpell"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "CardPlayedTrigger",
+        "fireCondition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "AttributeCondition",
+              "target": "EVENT_TARGET",
+              "attribute": "COMBO",
+              "operation": "HAS"
+            },
+            {
+              "class": "ComboCondition"
+            }
+          ]
+        },
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ModifyAttributeSpell",
+        "target": "SELF",
+        "value": 1,
+        "attribute": "RESERVED_INTEGER_1"
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true,
+    "RESERVED_INTEGER_1": 1
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

@@ -10,11 +10,20 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "custom.LastStandSpell",
+        "class": "custom.LastMinionCardInDeckSpell",
         "spell": {
-          "class": "BuffSpell",
-          "value": 5,
-          "attribute": "TAUNT"
+          "class": "MetaSpell",
+          "target": "OUTPUT",
+          "spells": [
+            {
+              "class": "BuffSpell",
+              "value": 5
+            },
+            {
+              "class": "AddAttributeSpell",
+              "attribute": "TAUNT"
+            }
+          ]
         }
       },
       {

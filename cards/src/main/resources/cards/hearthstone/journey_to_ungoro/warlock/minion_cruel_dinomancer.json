@@ -16,7 +16,7 @@
       "operation": "HAS"
     },
     "cardSource": {
-      "class": "GraveyardMinionsSource",
+      "class": "GraveyardCardsSource",
       "targetPlayer": "SELF"
     }
   },

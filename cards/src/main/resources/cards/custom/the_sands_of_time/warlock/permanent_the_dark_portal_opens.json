@@ -1,0 +1,53 @@
+{
+  "name": "The Dark Portal Opens",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Permanent. Whenever your hero takes damage on your turn, summon a random Demon costing that much. (After 3 of your turns, this dies)",
+  "triggers": [
+    {
+      "countUntilCast": 3,
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      },
+      "maxFires": 3
+    },
+    {
+      "eventTrigger": {
+        "class": "DamageReceivedTrigger",
+        "fireCondition": {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "ACTIVE"
+        },
+        "targetEntityType": "HERO",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DEMON",
+          "manaCost": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_HERO",
+            "attribute": "LAST_HIT"
+          }
+        }
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

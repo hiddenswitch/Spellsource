@@ -24,7 +24,7 @@ public class StealCardSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (!(target instanceof Card)) {
-			logger.error("{} {} onCast: StealCardSpell called on non-Card {}.", context.getGameId(), source, target);
+			logger.error("onCast {} {}: StealCardSpell called on non-Card {}.", context.getGameId(), source, target);
 			return;
 		}
 

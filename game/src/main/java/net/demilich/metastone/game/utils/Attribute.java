@@ -608,6 +608,11 @@ public enum Attribute {
 	 */
 	HEALING_THIS_TURN,
 	/**
+	 * Every time an {@link Actor} is damaged, increment this attribute with the amount of damage and set it to zero at
+	 * the end of the turn.
+	 */
+	DAMAGE_THIS_TURN,
+	/**
 	 * Whenever an {@link Actor} dies, increment this attribute by 1 if the actor had the lowest attack on the
 	 * battlefield.
 	 */
@@ -637,7 +642,7 @@ public enum Attribute {
 	/**
 	 * Indicates that the specified spell card was casted from the hand or the deck.
 	 */
-	CAST_FROM_HAND_OR_DECK,
+	PLAYED_FROM_HAND_OR_DECK,
 	/**
 	 * An {@link EntityReference} that, when set, indicates which entity this copied, if the entity copied with {@link
 	 * Entity#getCopy}.

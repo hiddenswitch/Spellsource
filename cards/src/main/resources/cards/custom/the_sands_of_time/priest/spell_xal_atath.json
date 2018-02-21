@@ -16,7 +16,7 @@
         "filters": [
           {
             "class": "CardFilter",
-            "attribute": "CAST_FROM_HAND_OR_DECK",
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
             "operation": "HAS"
           },
           {
@@ -39,7 +39,7 @@
         ]
       },
       "cardSource": {
-        "class": "GraveyardSpellsSource",
+        "class": "GraveyardCardsSource",
         "targetPlayer": "SELF"
       }
     }

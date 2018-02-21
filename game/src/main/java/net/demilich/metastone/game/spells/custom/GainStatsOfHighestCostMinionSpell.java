@@ -45,7 +45,7 @@ public class GainStatsOfHighestCostMinionSpell extends BuffSpell {
 				.filtered(highestCostFilter.matcher(context, player, source));
 
 		if (eligibleMinions.isEmpty()) {
-			logger.debug("{} onCast: No minions found to gain stats from.", context.getGameId());
+			logger.debug("onCast {}: No minions found to gain stats from.", context.getGameId());
 			return;
 		}
 

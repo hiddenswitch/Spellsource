@@ -554,8 +554,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				chosenCard.setAttribute(Attribute.STARTED_IN_DECK);
 			}
 
-			sourceCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK, context.getTurn());
-			chosenCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK, context.getTurn());
+			chosenCard.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 		}
 
 		if (!spellDesc.hasPredefinedTarget() && targets != null && targets.size() == 1) {
@@ -700,7 +699,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				&& sourceCard instanceof SpellCard
 				&& !sourceCard.getCardType().isCardType(CardType.HERO_POWER)
 				&& !childSpell) {
-			sourceCard.setAttribute(Attribute.CAST_FROM_HAND_OR_DECK, context.getTurn());
+			sourceCard.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 		}
 
 		Spell spell = getSpellFactory().getSpell(spellDesc);
@@ -976,6 +975,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				Player sourceOwner = context.getPlayer(source.getOwner());
 				heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
 			}
+
+			// Implement Doomlord
+			target.modifyAttribute(Attribute.DAMAGE_THIS_TURN, damageDealt);
 
 			player.getStatistics().damageDealt(damageDealt);
 			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt);
@@ -1259,8 +1261,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		player.getAttributes().remove(Attribute.COMBO);
 		hero.activateWeapon(false);
 		context.getEntities()
-				.filter(actor -> actor.hasAttribute(Attribute.HEALING_THIS_TURN))
-				.forEach(actor -> actor.getAttributes().remove(Attribute.HEALING_THIS_TURN));
+				.filter(actor -> actor.hasAttribute(Attribute.HEALING_THIS_TURN) || actor.hasAttribute(Attribute.DAMAGE_THIS_TURN))
+				.forEach(actor -> {
+					actor.getAttributes().remove(Attribute.HEALING_THIS_TURN);
+					actor.getAttributes().remove(Attribute.DAMAGE_THIS_TURN);
+				});
 		context.fireGameEvent(new TurnEndEvent(context, playerId));
 		if (hasAttribute(player, Attribute.DOUBLE_END_TURN_TRIGGERS)) {
 			context.fireGameEvent(new TurnEndEvent(context, playerId));
@@ -2292,6 +2297,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		player.getStatistics().cardPlayed(card, context.getTurn());
+		card.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 		CardPlayedEvent cardPlayedEvent = new CardPlayedEvent(context, playerId, card);
 		context.setLastCardPlayed(playerId, card.getReference());
 		context.fireGameEvent(cardPlayedEvent);

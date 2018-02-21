@@ -11,24 +11,10 @@ import net.demilich.metastone.game.entities.EntityType;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class GraveyardSpellsSource extends CardSource implements Serializable {
+@Deprecated
+public class GraveyardSpellsSource extends GraveyardCardsSource {
 
 	public GraveyardSpellsSource(SourceDesc desc) {
 		super(desc);
 	}
-
-	@Override
-	protected CardList match(GameContext context, Player player) {
-		CardList graveyardSpells = new CardArrayList();
-		player.getGraveyard()
-				.stream()
-				.filter(c -> c.getEntityType() == EntityType.CARD)
-				.map(Entity::getSourceCard)
-				.filter(Objects::nonNull)
-				.filter(c -> c.getCardType() == CardType.SPELL
-						|| c.getCardType() == CardType.CHOOSE_ONE)
-				.forEach(graveyardSpells::addCard);
-		return graveyardSpells;
-	}
-
 }
