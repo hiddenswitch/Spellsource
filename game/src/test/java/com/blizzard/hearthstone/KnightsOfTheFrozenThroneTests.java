@@ -45,6 +45,21 @@ import static org.mockito.Mockito.*;
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 	@Test
+	public void testAnimatedBerserker() {
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, "minion_animated_berserker");
+			Assert.assertEquals(minion.getHp(), minion.getBaseHp());
+		});
+		
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, "minion_animated_berserker");
+			Minion damaged = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(minion.getHp(), minion.getBaseHp());
+			Assert.assertEquals(damaged.getHp(), damaged.getBaseHp() - 1);
+		});
+	}
+
+	@Test
 	public void testEvolveHowlfiendInteraction() {
 		Logging.setLoggingLevel(Level.ERROR);
 		for (int i = 0; i < 100; i++) {
