@@ -6,21 +6,55 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "(Disabled) Whenever a friendly minion takes damage, deal 1 damage to a random enemy.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "DamageReceivedTrigger",
-      "targetEntityType": "MINION",
-      "targetPlayer": "SELF"
+  "description": "Whenever a friendly minion takes damage, deal 1 damage to a random enemy.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "WillEndSequenceTrigger"
+      },
+      "spell": {
+        "class": "SetAttributeSpell",
+        "attribute": "RESERVED_INTEGER_1",
+        "target": "SELF",
+        "value": 70
+      }
     },
-    "spell": {
-      "class": "NullSpell",
-      "target": "ENEMY_MINIONS",
-      "value": 1,
-      "randomTarget": true
+    {
+      "eventTrigger": {
+        "class": "DamageReceivedTrigger",
+        "targetEntityType": "MINION",
+        "targetPlayer": "SELF",
+        "fireCondition": {
+          "class": "AttributeCondition",
+          "target": "SELF",
+          "attribute": "RESERVED_INTEGER_1",
+          "value": 0,
+          "operation": "GREATER"
+        }
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "ModifyAttributeSpell",
+            "target": "SELF",
+            "attribute": "RESERVED_INTEGER_1",
+            "value": -1
+          },
+          {
+            "class": "DamageSpell",
+            "target": "ENEMY_MINIONS",
+            "value": 1,
+            "randomTarget": true
+          }
+        ]
+      }
     }
+  ],
+  "attributes": {
+    "RESERVED_INTEGER_1": 70
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "SANDS_OF_TIME",
   "fileFormatVersion": 1
 }
