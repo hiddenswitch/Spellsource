@@ -156,6 +156,16 @@ public class TestBase {
 		return handle;
 	}
 
+	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, String cardId, Entity target) {
+		OverrideHandle<EntityReference> handle = overrideBattlecry(player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
+		return playMinionCard(context, player, cardId);
+	}
+
+	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, MinionCard card, Entity target) {
+		OverrideHandle<EntityReference> handle = overrideBattlecry(player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
+		return playMinionCard(context, player, card);
+	}
+
 	protected static void overrideDiscover(GameContext context, Player player, String cardId) {
 		OverrideHandle<Card> handle = overrideRandomCard(context, cardId);
 		overrideDiscover(player, discovers -> {
