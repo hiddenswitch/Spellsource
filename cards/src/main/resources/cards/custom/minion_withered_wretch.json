@@ -1,0 +1,29 @@
+{
+  "name": "Withered Wretch",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Whenever you lose Mana Crystals, gain +2/+2.",
+  "eventTrigger": {
+    "class": "MaxManaChangedTrigger",
+    "fireCondition": {
+      "class": "ComparisonCondition",
+      "operation": "LESS",
+      "value1": {
+        "class": "EventValueProvider"
+      },
+      "value2": 0    },
+    "targetPlayer": "SELF"
+  },
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF",
+    "value": {"class": "EventValueProvider", "multiplier":-2}
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
