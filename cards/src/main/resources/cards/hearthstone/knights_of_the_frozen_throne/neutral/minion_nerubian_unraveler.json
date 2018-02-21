@@ -9,7 +9,8 @@
   "description": "Spells cost (2) more.",
   "cardCostModifier": {
     "class": "CardCostModifier",
-    "value": -2,
+    "value": 2,
+    "operation": "ADD",
     "cardType": "SPELL",
     "targetPlayer": "BOTH"
   },
