@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.utils.Attribute;
 
 public class PutMinionOnBoardSpell extends Spell {
 	@Override
@@ -14,6 +15,7 @@ public class PutMinionOnBoardSpell extends Spell {
 		MinionCard minionCard = (MinionCard) target;
 
 		if (context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false)) {
+			minionCard.getAttributes().put(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 			context.getLogic().removeCard(minionCard);
 		}
 	}

@@ -26,10 +26,11 @@
     "cardFilter": {
       "class": "CardFilter",
       "attribute": "DEATHRATTLES",
+      "cardType": "MINION",
       "operation": "HAS"
     },
     "cardSource": {
-      "class": "GraveyardMinionsSource",
+      "class": "GraveyardActorsSource",
       "targetPlayer": "SELF"
     }
   },

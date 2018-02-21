@@ -7,9 +7,10 @@
   "description": "Summon a copy of a friendly minion. Then, it attacks the original.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "SummonAndDoSomethingSpell",
+    "class": "SummonSpell",
     "spell": {
-      "class": "AttackSpell"
+      "class": "FightSpell",
+      "secondaryTarget": "OUTPUT"
     }
   },
   "collectible": true,

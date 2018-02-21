@@ -5,6 +5,7 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +31,10 @@ public class CastRandomSpellSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		internalYogg(context, player, desc, source, target);
-	}
-
-	@Suspendable
-	private void internalYogg(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardFilter filter = (CardFilter) desc.get(SpellArg.CARD_FILTER);
+		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		CardList spells = CardCatalogue.query(context.getDeckFormat(), CardType.SPELL);
 		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
+		TargetPlayer castingTargetPlayer = desc.getTargetPlayer() == null ? TargetPlayer.OWNER : desc.getTargetPlayer();
 
 		if (cardSource != null) {
 			spells = cardSource.getCards(context, player);
@@ -55,22 +52,44 @@ public class CastRandomSpellSpell extends Spell {
 		int numberOfSpellsToCast = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < numberOfSpellsToCast; i++) {
 			// In case Yogg changes sides, this should case who the spells are being cast for.
-			Player owner = context.getPlayer(source.getOwner());
+			Player castingPlayer;
+			switch (castingTargetPlayer) {
+				case BOTH:
+					logger.error("onCast {} {}: Cannot cast for both players yet. Using OWNER by default.", context.getGameId(), source);
+				default:
+				case OWNER:
+					castingPlayer = context.getPlayer(source.getOwner());
+					break;
+				case SELF:
+					castingPlayer = player;
+					break;
+				case OPPONENT:
+					castingPlayer = context.getOpponent(player);
+					break;
+				case ACTIVE:
+					castingPlayer = context.getActivePlayer();
+					break;
+				case INACTIVE:
+					castingPlayer = context.getOpponent(context.getActivePlayer());
+					break;
+			}
+
 			// If Yogg is removed from the board, stop casting spells.
-			if ((source.getEntityType() == EntityType.MINION
-					&& source.getZone()
-					!= Zones.BATTLEFIELD)
-					|| source.isDestroyed()) {
+			if (source != null
+					&& castingTargetPlayer == TargetPlayer.OWNER
+					&& source.getEntityType() == EntityType.MINION
+					&& (source.getZone()
+					!= Zones.BATTLEFIELD
+					|| source.isDestroyed())) {
 				break;
 			}
 			// Must retrieve a copy because castWithRandomTargets mutates the incoming spell card
 			Card randomCard = context.getLogic().getRandom(filteredSpells).getCopy();
-			logger.debug("Yogg-Saron chooses to play " + randomCard.getName());
-			RandomCardTargetSpell.castCardWithRandomTargets(context, owner, source, randomCard);
+			logger.debug("onCast {} {}: Casting random spell {}", context.getGameId(), source, randomCard);
+			RandomCardTargetSpell.castCardWithRandomTargets(context, castingPlayer, source, randomCard);
 			context.getLogic().endOfSequence();
 		}
 
 		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 	}
-
 }

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "Deal *2* damage to all enemy minions. Summon a 1/1 Imp for each one that dies",
+  "description": "Deal 2 damage to all enemy minions. Summon a 1/1 Imp for each one that dies",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

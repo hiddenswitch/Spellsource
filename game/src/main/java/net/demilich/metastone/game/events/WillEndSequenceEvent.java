@@ -5,7 +5,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class WillEndSequenceEvent extends GameEvent {
 	public WillEndSequenceEvent(GameContext context) {
-		super(context, context.getActivePlayerId(), -1);
+		super(context, context.getActivePlayerId(), context.getActivePlayerId());
 	}
 
 	@Override

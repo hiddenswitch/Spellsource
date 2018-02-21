@@ -19,7 +19,7 @@
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "CAST_FROM_HAND_OR_DECK"
+          "attribute": "PLAYED_FROM_HAND_OR_DECK"
         },
         {
           "class": "RemoveCardSpell",

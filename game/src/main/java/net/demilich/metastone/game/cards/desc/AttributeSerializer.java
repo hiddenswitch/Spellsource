@@ -31,13 +31,14 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.RACE, jsonData, map, ParseValueType.RACE);
 		parseAttribute(Attribute.LAST_HIT, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.BOTH_CHOOSE_ONE_OPTIONS, jsonData, map, ParseValueType.BOOLEAN);
-		parseAttribute(Attribute.CAST_FROM_HAND_OR_DECK, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CANNOT_ATTACK, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CHOOSE_ONE, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CANNOT_ATTACK_HERO_ON_SUMMON, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CANNOT_ATTACK_HEROES, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.CHARGE, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.COMBO, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.DAMAGE_THIS_TURN, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.DIED_ON_TURN, jsonData, map, ParseValueType.INTEGER);
 		parseAttribute(Attribute.DESCRIPTION, jsonData, map, ParseValueType.STRING);
 		parseAttribute(Attribute.DOUBLE_END_TURN_TRIGGERS, jsonData, map, ParseValueType.BOOLEAN);

@@ -10,23 +10,10 @@ import net.demilich.metastone.game.entities.EntityType;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class GraveyardMinionsSource extends CardSource implements Serializable {
-
+@Deprecated
+public class GraveyardMinionsSource extends GraveyardActorsSource {
 	public GraveyardMinionsSource(SourceDesc desc) {
 		super(desc);
 	}
-
-	@Override
-	protected CardList match(GameContext context, Player player) {
-		CardList deadMinions = new CardArrayList();
-		player.getGraveyard()
-				.stream()
-				.filter(c -> c.getEntityType() == EntityType.MINION)
-				.map(Entity::getSourceCard)
-				.filter(Objects::nonNull)
-				.forEach(deadMinions::addCard);
-		return deadMinions.getCopy();
-	}
-
 }
 

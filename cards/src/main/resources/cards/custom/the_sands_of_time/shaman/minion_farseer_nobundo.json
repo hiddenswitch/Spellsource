@@ -1,21 +1,16 @@
 {
-  "name": "Farsser Nobundo",
+  "name": "Farseer Nobundo",
   "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "SILVER",
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Choose a friendly minion. Your totems now have that minion's effect.",
+  "description": "(Disabled) Battlecry: Choose a friendly minion. Your totems now have that minion's effect. (For the rest of the game)",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "TransferEffectsSpell",
-      "cardFilter": {
-        "class": "RaceFilter",
-        "race": "TOTEM"
-      },
-      "secondaryTarget": "FRIENDLY_MINIONS"
+      "class": "NullSpell"
     }
   },
   "attributes": {

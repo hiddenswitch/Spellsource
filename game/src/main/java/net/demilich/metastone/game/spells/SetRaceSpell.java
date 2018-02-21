@@ -35,7 +35,7 @@ public class SetRaceSpell extends Spell {
 			ActorCard actorCard = (ActorCard) target;
 			actorCard.getAttributes().put(Attribute.RACE, race);
 		} else {
-			logger.warn("{} onCast: Trying to set a race on {}, which is neither an Actor nor an ActorCard.", context.getGameId(), target);
+			logger.warn("onCast {}: Trying to set a race on {}, which is neither an Actor nor an ActorCard.", context.getGameId(), target);
 		}
 	}
 }

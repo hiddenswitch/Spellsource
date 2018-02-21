@@ -5,23 +5,22 @@
   "heroClass": "RED",
   "damage": 4,
   "durability": 2,
-  "rarity": "RARE",
-  "description": "After your Hero attacks, deal 2 damage to all characters.",
+  "rarity": "EPIC",
+  "description": "After your hero attacks, deal 2 damage to ALL other characters.",
   "trigger": {
     "eventTrigger": {
-      "class": "TargetAcquisitionTrigger",
-      "actionType": "PHYSICAL_ATTACK",
+      "class": "AfterPhysicalAttackTrigger",
       "sourceEntityType": "HERO",
       "sourcePlayer": "SELF",
       "targetPlayer": "BOTH"
     },
     "spell": {
       "class": "DamageSpell",
-      "target": "ALL_CHARACTERS",
+      "target": "OTHER_CHARACTERS",
       "value": 2
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "SANDS_OF_TIME",
   "fileFormatVersion": 1
 }

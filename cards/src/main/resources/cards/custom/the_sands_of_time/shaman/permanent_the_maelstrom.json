@@ -1,0 +1,47 @@
+{
+  "name": "The Maelstrom",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 1,
+  "baseHp": 0,
+  "rarity": "EPIC",
+  "description": "Permanent. Whenever a player casts a spell, cast a copy of it for them with random targets. (After 3 of your turns, this dies)",
+  "triggers": [
+    {
+      "countUntilCast": 3,
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      },
+      "maxFires": 3
+    },
+    {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "sourcePlayer": "BOTH"
+      },
+      "spell": {
+        "class": "CastRandomSpellSpell",
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "EVENT_SOURCE"
+        },
+        "cardSource": {
+          "class": "UncollectibleCatalogueSource"
+        },
+        "targetPlayer": "ACTIVE"
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

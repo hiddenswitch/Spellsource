@@ -7,6 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.*;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.utils.Attribute;
@@ -23,16 +24,19 @@ public class TextifySpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity spellSource, Entity spellTarget) {
 		// For now, don't support textifying anything but MinionCards directly
 		if (!(spellTarget instanceof MinionCard)) {
-			logger.warn("{} onCast: Attempting to target {}, which is not a MinionCard. Exiting gracefully.", context.getGameId(), spellTarget);
+			logger.warn("onCast {}: Attempting to target {}, which is not a MinionCard. Exiting gracefully.", context.getGameId(), spellTarget);
 			return;
 		}
 
 		// Retrieve a random effect
 		Card random = context.getLogic().getRandom(desc.getFilteredCards(context, player, spellSource));
 		if (!(random instanceof MinionCard)) {
-			logger.warn("{} onCast: Attempting to copy text from a non-MinionCard {}. Exiting gracefully.", context.getGameId(), random);
+			logger.warn("onCast {}: Attempting to copy text from a non-MinionCard {}. Exiting gracefully.", context.getGameId(), random);
 			return;
 		}
+
+		String name = desc.getString(SpellArg.NAME);
+
 
 		// Replaces the target card into the source card with the same non-text attributes
 		MinionCard source = (MinionCard) random;
@@ -45,9 +49,12 @@ public class TextifySpell extends Spell {
 				SetAttackSpell.create(target.getBaseAttack(), true),
 				SetHpSpell.create(target.getBaseHp(), true),
 				SetRaceSpell.create(target.getRace()),
-				SetAttributeSpell.create(replaced.getReference(), Attribute.BASE_MANA_COST, target.getBaseManaCost()),
-				SetAttributeSpell.create(replaced.getReference(), Attribute.NAME, target.getName())
+				SetAttributeSpell.create(replaced.getReference(), Attribute.BASE_MANA_COST, target.getBaseManaCost())
 		).forEach(spellDesc -> SpellUtils.castChildSpell(context, player, spellDesc, spellSource, replaced));
+
+		if (!name.equals("ORIGINAL")) {
+			SpellUtils.castChildSpell(context, player, SetAttributeSpell.create(replaced.getReference(), Attribute.NAME, target.getName()), spellSource, replaced);
+		}
 	}
 }
 

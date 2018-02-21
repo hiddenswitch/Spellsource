@@ -22,11 +22,15 @@
           "class": "AndFilter",
           "filters": [
             {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            },
+            {
               "class": "AttributeFilter",
               "value": {
                 "class": "CurrentTurnValueProvider"
               },
-              "attribute": "CAST_FROM_HAND_OR_DECK",
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
               "operation": "EQUAL"
             },
             {
@@ -37,7 +41,7 @@
           ]
         },
         "cardSource": {
-          "class": "GraveyardSpellsSource",
+          "class": "GraveyardCardsSource",
           "targetPlayer": "SELF"
         }
       },

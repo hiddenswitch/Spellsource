@@ -28,12 +28,12 @@ public class ChangeHeroSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String heroCardId = (String) desc.get(SpellArg.CARD);
 		if (heroCardId == null) {
-			logger.error("{} {} onCast: Requires hero card ID, none specified.", context.getGameId(), source);
+			logger.error("onCast {} {}: Requires hero card ID, none specified.", context.getGameId(), source);
 			return;
 		}
 		HeroCard heroCard = (HeroCard) context.getCardById(heroCardId);
 		if (heroCard == null) {
-			logger.error("{} {} onCast: Invalid heroCardId {}", context.getGameId(), source, heroCardId);
+			logger.error("onCast {} {}: Invalid heroCardId {}", context.getGameId(), source, heroCardId);
 		}
 
 		Hero hero = heroCard.createHero();
