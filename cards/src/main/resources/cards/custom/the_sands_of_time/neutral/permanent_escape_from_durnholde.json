@@ -26,12 +26,19 @@
         "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "DrawCardSpell",
+        "class": "ConditionalSpell",
         "condition": {
-          "class": "MinionCountCondition",
-          "value": 1,
-          "operation": "GREATER_OR_EQUAL",
-          "targetPlayer": "SELF"
+          "class": "ComparisonCondition",
+          "operation": "GREATER",
+          "targetPlayer": "SELF",
+          "value1": {
+            "class": "EntityCounter",
+            "target": "OTHER_FRIENDLY_MINIONS"
+          },
+          "value2": 0
+        },
+        "spell": {
+          "class": "DrawCardSpell"
         }
       }
     }
