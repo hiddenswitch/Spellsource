@@ -25,6 +25,21 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testHypnotist() {
+		runGym((context, player, opponent) -> {
+			MinionCard giantCard = receiveCard(context, player, "minion_molten_giant");
+			// Reduce its effective cost
+			playCardWithTarget(context, player, "spell_pyroblast", player.getHero());
+			final int pyroblastDamage = 10;
+			Assert.assertEquals(costOf(context, player, giantCard), giantCard.getBaseManaCost() - pyroblastDamage);
+			Minion giant = playMinionCard(context, player, giantCard);
+			playMinionCardWithBattlecry(context, player, "minion_hypnotist", giant);
+			Assert.assertEquals(giant.getHp(), giant.getSourceCard().getBaseManaCost(), "Hypnotist should set hp to base cost.");
+			Assert.assertEquals(giant.getAttack(), giant.getSourceCard().getBaseManaCost(), "Hypnotist should set attack to base cost.");
+		});
+	}
+
+	@Test
 	public void testDesolationOfKaresh() {
 		// No combos played, should die
 		runGym((context, player, opponent) -> {

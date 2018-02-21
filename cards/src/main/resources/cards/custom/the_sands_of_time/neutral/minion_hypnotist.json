@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Change a minion's stats to be equal to it's cost.",
+  "description": "Battlecry: Change a minion's stats to be equal to its cost.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
@@ -15,13 +15,15 @@
         {
           "class": "SetAttackSpell",
           "value": {
-            "class": "ManaCostProvider"
+            "class": "AttributeValueProvider",
+            "attribute": "BASE_MANA_COST"
           }
         },
         {
           "class": "SetHpSpell",
           "value": {
-            "class": "ManaCostProvider"
+            "class": "AttributeValueProvider",
+            "attribute": "BASE_MANA_COST"
           }
         }
       ]
