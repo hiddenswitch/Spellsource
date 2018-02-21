@@ -1,0 +1,35 @@
+Platform:
+  PlatformArn: arn:aws:elasticbeanstalk:us-west-2::platform/Docker running on 64bit Amazon Linux/2.8.4
+OptionSettings:
+  aws:elasticbeanstalk:command:
+    BatchSize: '30'
+    BatchSizeType: Percentage
+  aws:elb:policies:
+    ConnectionDrainingEnabled: true
+  aws:elasticbeanstalk:application:environment:
+    MONGO_URL: mongodb://172.31.20.8:27017/metastone
+    SPELLSOURCE_APPLICATION: Clustered
+  aws:elb:loadbalancer:
+    CrossZone: true
+  aws:elasticbeanstalk:environment:
+    ServiceRole: aws-elasticbeanstalk-service-role
+    LoadBalancerType: application
+  aws:elasticbeanstalk:healthreporting:system:
+    SystemType: enhanced
+  aws:autoscaling:launchconfiguration:
+    IamInstanceProfile: aws-elasticbeanstalk-ec2-role
+    InstanceType: m5.large
+  aws:elasticbeanstalk:environment:process:default:
+    StickinessEnabled: true
+  aws:autoscaling:asg:
+    MinSize: '1'
+    Availability Zones: Any 1
+    MaxSize: '1'
+    Custom Availability Zones: us-west-2a
+  aws:autoscaling:updatepolicy:rollingupdate:
+    RollingUpdateType: Health
+    RollingUpdateEnabled: true
+EnvironmentTier:
+  Type: Standard
+  Name: WebServer
+AWSConfigurationTemplateVersion: 1.1.0.0
