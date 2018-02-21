@@ -1,0 +1,14 @@
+{
+  "name": "Go Fish",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "COMMON",
+  "description": "Draw a card.",
+    "spell": {
+      "class": "DrawCardSpell"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

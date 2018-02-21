@@ -1,0 +1,20 @@
+{
+  "name": "Miracle",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "rarity": "EPIC",
+  "description": "Fully heal your Hero.",
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "MAX_HP"
+      }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

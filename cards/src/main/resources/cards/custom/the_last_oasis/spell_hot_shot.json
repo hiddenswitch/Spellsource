@@ -1,0 +1,38 @@
+{
+  "name": "Hot Shot",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "EPIC",
+  "description": "Deal 1 damage. Repeatable this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+	"value": 1
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "spell": {
+          "class": "AddEnchantmentSpell",
+          "target": "EVENT_CARD",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnEndTrigger"
+            },
+            "spell": {
+              "class": "RemoveCardSpell",
+              "target": "SELF"
+            }
+          }
+        },
+        "card": "spell_hot_shot"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
