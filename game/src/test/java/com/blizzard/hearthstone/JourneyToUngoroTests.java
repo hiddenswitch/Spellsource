@@ -6,27 +6,51 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+import static org.mockito.Mockito.*;
+
 public class JourneyToUngoroTests extends TestBase {
+
+	@Test
+	public void testLakkariSacrifice() {
+		// Deathwing discards should count towards Lakkari Sacrifice
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_lakkari_sacrifice");
+			List<Card> discardedCards = Stream
+					.generate(() -> receiveCard(context, player, "minion_bloodfen_raptor"))
+					.map(o -> (Card) o)
+					.limit(9)
+					.collect(toList());
+
+			final Quest quest = player.getQuests().get(0);
+			playCard(context, player, "minion_deathwing");
+			discardedCards.forEach(c -> Assert.assertTrue(c.hasAttribute(Attribute.DISCARDED)));
+			Assert.assertTrue(quest.isExpired());
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_nether_portal");
+		});
+	}
 
 	@Test
 	public void testCruelDinomancer() {
@@ -100,7 +124,7 @@ public class JourneyToUngoroTests extends TestBase {
 			final int j = j0;
 			runGym((context, player, opponent) -> {
 				context.endTurn();
-				List<Minion> minions = IntStream.range(0, 3).mapToObj(i -> playMinionCard(context, opponent, "minion_argent_squire")).collect(Collectors.toList());
+				List<Minion> minions = IntStream.range(0, 3).mapToObj(i -> playMinionCard(context, opponent, "minion_argent_squire")).collect(toList());
 				context.endTurn();
 				playCardWithTarget(context, player, "spell_meteor", minions.get(j));
 				for (int k = 0; k < 3; k++) {
@@ -176,7 +200,7 @@ public class JourneyToUngoroTests extends TestBase {
 			Stream.of("minion_bloodfen_raptor", "minion_bloodfen_raptor", "minion_bloodfen_raptor", "minion_bloodfen_raptor",
 					"spell_mirror_image", "spell_mirror_image", "spell_mirror_image", "spell_mirror_image")
 					.peek(cid -> playCard(context, player, cid)).peek(ignored -> Assert.assertEquals(player.getHand().size(), 0))
-					.collect(Collectors.toList());
+					.collect(toList());
 
 			playCard(context, player, "spell_mirror_image");
 			// Mirror image should not count
@@ -719,7 +743,7 @@ public class JourneyToUngoroTests extends TestBase {
 
 
 			return null;
-		}).collect(Collectors.toList());
+		}).collect(toList());
 	}
 
 	@Test
