@@ -11,7 +11,7 @@
     "class": "CardCostModifier",
     "target": "FRIENDLY_HAND",
     "value": 0,
-    "cardFilter": {
+    "filter": {
       "class": "CardFilter",
       "value": 1,
       "attribute": "BASE_MANA_COST",
