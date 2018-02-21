@@ -10,8 +10,8 @@
   "cardCostModifier": {
     "class": "CardCostModifier",
     "value": 2,
-    "operation": "ADD",
     "cardType": "SPELL",
+    "operation": "ADD",
     "targetPlayer": "BOTH"
   },
   "collectible": true,

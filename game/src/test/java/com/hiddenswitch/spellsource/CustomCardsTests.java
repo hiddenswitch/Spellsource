@@ -25,6 +25,34 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testEscapeFromDurnholde() {
+		runGym((context, player, opponent) -> {
+			Card shouldntDraw = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldDraw = putOnTopOfDeck(context, player, "spell_the_coin");
+			Assert.assertEquals(shouldntDraw.getZone(), Zones.DECK);
+			Assert.assertEquals(shouldDraw.getZone(), Zones.DECK);
+			playCard(context, player, "permanent_escape_from_durnholde");
+			context.endTurn();
+			Assert.assertEquals(shouldntDraw.getZone(), Zones.DECK);
+			Assert.assertEquals(shouldDraw.getZone(), Zones.DECK);
+			context.endTurn();
+			Assert.assertEquals(shouldDraw.getZone(), Zones.HAND);
+			Assert.assertEquals(shouldntDraw.getZone(), Zones.DECK);
+		});
+
+		runGym((context, player, opponent) -> {
+			Card shouldDraw1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldDraw2 = putOnTopOfDeck(context, player, "spell_the_coin");
+			playCard(context, player, "permanent_escape_from_durnholde");
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(shouldDraw1.getZone(), Zones.HAND);
+			Assert.assertEquals(shouldDraw2.getZone(), Zones.HAND);
+		});
+	}
+
+	@Test
 	public void testHypnotist() {
 		runGym((context, player, opponent) -> {
 			MinionCard giantCard = receiveCard(context, player, "minion_molten_giant");
