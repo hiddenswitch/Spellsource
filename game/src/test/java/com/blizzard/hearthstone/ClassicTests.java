@@ -41,6 +41,24 @@ import static org.mockito.Mockito.spy;
 public class ClassicTests extends TestBase {
 
 	@Test
+	public void testExplosiveTrapWeaponSituation() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_explosive_trap");
+			Minion taunt = playMinionCard(context, player, "minion_sleepy_dragon");
+			context.endTurn();
+			// Start of opponent's turn
+			int opponentHpBefore = opponent.getHero().getHp();
+			Assert.assertEquals(player.getSecrets().size(), 1);
+
+			playCard(context, opponent, "weapon_wicked_knife");
+			playCardWithTarget(context, opponent, "spell_sap", taunt);
+			attack(context, opponent, opponent.getHero(), player.getHero());
+			Assert.assertEquals(player.getSecrets().size(), 0);
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHpBefore - 2);
+		});
+	}
+
+	@Test
 	public void testPerditionsBlade() {
 		runGym((context, player, opponent) -> {
 			AtomicBoolean cried = new AtomicBoolean(false);
