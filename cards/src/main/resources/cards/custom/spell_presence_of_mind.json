@@ -36,7 +36,8 @@
       "cardType": "SPELL"
     },
     "cardSource": {
-      "class": "DeckSource"
+      "class": "DeckSource",
+      "distinct": true
     },
     "exclusive": true
   },

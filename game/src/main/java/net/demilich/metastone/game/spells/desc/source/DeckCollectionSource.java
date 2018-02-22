@@ -26,10 +26,7 @@ public class DeckCollectionSource extends CardSource implements Serializable, Ha
 		final String collectionName = desc.getString(SourceArg.COLLECTION_NAME);
 		final Deck deck = context.getDeck(player, collectionName);
 		if (deck != null) {
-			return new CardArrayList(deck.getCards()
-					.stream()
-					.collect(toMap(Card::getCardId, Function.identity(), (p, q) -> p))
-					.values());
+			return deck.getCards();
 		}
 		return new CardArrayList();
 	}

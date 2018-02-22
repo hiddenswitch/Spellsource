@@ -27,7 +27,7 @@ public abstract class Spell implements Serializable {
 	 * Arguments common to all spells that should not be considered invalid.
 	 */
 	private static final Set<SpellArg> COMMON_ARGS = Sets.newEnumSet(
-			Arrays.asList(SpellArg.FILTER, SpellArg.TARGET, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL), SpellArg.class);
+			Arrays.asList(SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL), SpellArg.class);
 
 	/**
 	 * Casts a spell for the given arguments.

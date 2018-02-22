@@ -21,7 +21,8 @@
       },
       "cardSource": {
         "class": "DeckSource",
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "distinct": true
       }
     }
   },

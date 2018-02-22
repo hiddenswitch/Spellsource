@@ -3,12 +3,16 @@ package net.demilich.metastone.game.spells.desc.source;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
 import java.io.Serializable;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toMap;
 
 public abstract class CardSource implements Serializable {
 	protected final SourceDesc desc;
@@ -31,30 +35,41 @@ public abstract class CardSource implements Serializable {
 		if (targetPlayer == null) {
 			targetPlayer = TargetPlayer.SELF;
 		}
-		Player providingPlayer = null;
-		switch (targetPlayer) {
-			case ACTIVE:
-				providingPlayer = context.getActivePlayer();
-				break;
-			case BOTH:
-				CardList cards = new CardArrayList();
-				for (Player selectedPlayer : context.getPlayers()) {
-					cards.addAll(this.match(context, source, selectedPlayer));
-				}
-				return cards;
-			case INACTIVE:
-				providingPlayer = context.getOpponent(context.getActivePlayer());
-				break;
-			case OPPONENT:
-				providingPlayer = context.getOpponent(player);
-				break;
-			case OWNER:
-			case SELF:
-			default:
-				providingPlayer = player;
-				break;
+
+		CardList cards = new CardArrayList();
+		if (targetPlayer == TargetPlayer.BOTH) {
+			for (Player selectedPlayer : context.getPlayers()) {
+				cards.addAll(this.match(context, source, selectedPlayer));
+			}
+		} else {
+			Player providingPlayer;
+			switch (targetPlayer) {
+				case ACTIVE:
+					providingPlayer = context.getActivePlayer();
+					break;
+				case INACTIVE:
+					providingPlayer = context.getOpponent(context.getActivePlayer());
+					break;
+				case OPPONENT:
+					providingPlayer = context.getOpponent(player);
+					break;
+				case OWNER:
+				case SELF:
+				default:
+					providingPlayer = player;
+					break;
+			}
+			cards.addAll(this.match(context, source, providingPlayer));
 		}
-		return this.match(context, source, providingPlayer);
+
+		if (desc.getBool(SourceArg.DISTINCT)) {
+			cards = new CardArrayList(cards
+					.stream()
+					.collect(toMap(Card::getCardId, Function.identity(), (p, q) -> p))
+					.values());
+		}
+
+		return cards;
 	}
 
 	@Suspendable

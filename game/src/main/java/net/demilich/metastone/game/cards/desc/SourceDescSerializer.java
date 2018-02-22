@@ -31,6 +31,7 @@ public class SourceDescSerializer implements JsonDeserializer<SourceDesc>, JsonS
 		parseArgument(SourceArg.COLLECTION_NAME, jsonData, arguments, ParseValueType.STRING);
 		parseArgument(SourceArg.INVERT, jsonData, arguments, ParseValueType.BOOLEAN);
 		parseArgument(SourceArg.SOURCE, jsonData, arguments, ParseValueType.TARGET_REFERENCE);
+		parseArgument(SourceArg.DISTINCT, jsonData, arguments, ParseValueType.BOOLEAN);
 
 		return new SourceDesc(arguments);
 	}

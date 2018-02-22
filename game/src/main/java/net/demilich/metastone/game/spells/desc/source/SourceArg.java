@@ -5,5 +5,6 @@ public enum SourceArg {
 	TARGET_PLAYER,
 	SOURCE,
 	INVERT,
+	DISTINCT,
 	COLLECTION_NAME
 }
