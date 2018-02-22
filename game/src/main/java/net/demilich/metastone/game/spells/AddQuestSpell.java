@@ -79,7 +79,7 @@ public class AddQuestSpell extends Spell {
 		}
 
 		if (!(questObject instanceof Quest)) {
-			logger.error("onCast {} {}: The specified QUEST argument is not a Quest object, it is a {}", context.getGameId(), source, questObject.getClass());
+			logger.error("onCast {} {}: The specified QUEST argument {} is not a Quest object, it is a {}", context.getGameId(), source, questObject, questObject.getClass());
 			return;
 		}
 
