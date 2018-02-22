@@ -9,7 +9,7 @@
   "description": "Whenever you play 1-Cost card, draw another one.",
   "trigger": {
     "eventTrigger": {
-      "class": "MinionPlayedTrigger",
+      "class": "CardPlayedTrigger",
       "cardFilter": {
         "class": "AttributeFilter",
         "attribute": "BASE_MANA_COST",
