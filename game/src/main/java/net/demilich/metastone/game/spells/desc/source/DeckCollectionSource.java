@@ -3,13 +3,18 @@ package net.demilich.metastone.game.spells.desc.source;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
-public class DeckCollectionSource extends CardSource implements Serializable, HasCardCreationSideEffects {
+import static java.util.stream.Collectors.toMap;
+
+public class DeckCollectionSource extends CardSource implements Serializable, HasCardCreationSideEffects, HasWeights {
 
 	public DeckCollectionSource(SourceDesc desc) {
 		super(desc);
@@ -21,8 +26,11 @@ public class DeckCollectionSource extends CardSource implements Serializable, Ha
 		final String collectionName = desc.getString(SourceArg.COLLECTION_NAME);
 		final Deck deck = context.getDeck(player, collectionName);
 		if (deck != null) {
-			return deck.getCards();
+			return new CardArrayList(deck.getCards()
+					.stream()
+					.collect(toMap(Card::getCardId, Function.identity(), (p, q) -> p))
+					.values());
 		}
-		return null;
+		return new CardArrayList();
 	}
 }
