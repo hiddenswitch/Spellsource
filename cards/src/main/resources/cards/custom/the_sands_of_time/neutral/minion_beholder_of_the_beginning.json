@@ -7,14 +7,14 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "NONE",
-  "description": "Battlecry: Deal damage equal to the lowest Cost in your hand.",
+  "description": "Battlecry: Deal damage to a minion equal to the lowest Cost in your hand.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",
       "value": 1,
       "operation": "GREATER_OR_EQUAL"
     },
-    "targetSelection": "ANY",
+    "targetSelection": "MINIONS",
     "spell": {
       "class": "DamageSpell",
       "value": {
