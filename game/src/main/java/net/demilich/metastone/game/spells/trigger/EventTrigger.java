@@ -13,9 +13,10 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.TargetType;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 
-public abstract class EventTrigger extends CustomCloneable {
+public abstract class EventTrigger extends CustomCloneable implements Serializable {
 	private int owner = -1;
 	protected final EventTriggerDesc desc;
 

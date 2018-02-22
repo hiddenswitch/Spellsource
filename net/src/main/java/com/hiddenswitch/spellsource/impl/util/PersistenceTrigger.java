@@ -20,6 +20,8 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.io.Serializable;
+
 /**
  * A trigger that records persistent {@link Attribute} to a database. Think of it as analytics for {@link Entity}
  * objects where some analytics events have side effects on gameplay.
@@ -41,7 +43,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * This class requires a reference to an {@link RpcClient} for {@link Logic}. It relies on the different ways RPC calls
  * can be made, like {@link RpcClient#sync()} versus {@link RpcClient#async(Handler)}.
  */
-public class PersistenceTrigger implements Trigger {
+public class PersistenceTrigger implements Trigger, Serializable {
 	static Logger logger = LoggerFactory.getLogger(PersistenceTrigger.class);
 	/**
 	 * The {@link RpcClient} for the {@link Logic} service.
