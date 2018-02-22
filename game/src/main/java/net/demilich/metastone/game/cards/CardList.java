@@ -3,6 +3,7 @@ package net.demilich.metastone.game.cards;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +25,7 @@ import java.util.stream.Stream;
  * @see CardZone for the entity zone that implements this interface.
  * @see CardArrayList for a {@link List} implementation of this interface.
  */
-public interface CardList extends Iterable<Card>, List<Card> {
+public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	/**
 	 * Adds the card fluently.
 	 *
