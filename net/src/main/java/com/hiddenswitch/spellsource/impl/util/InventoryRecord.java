@@ -11,6 +11,8 @@ import net.demilich.metastone.game.cards.CardParser;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
  * Created by bberman on 1/22/17.
  */
 public class InventoryRecord extends MongoRecord {
+	private static Logger logger = LoggerFactory.getLogger(InventoryRecord.class);
+
 	@JsonProperty
 	private Map<String, Object> cardDesc;
 
@@ -78,6 +82,7 @@ public class InventoryRecord extends MongoRecord {
 			try {
 				cardDescCached = CardParser.parseCard(new JsonObject(cardDesc)).getDesc();
 			} catch (IOException e) {
+				logger.error("getCardDesc: Record {} has an invalid cardDesc {} with exception {}", _id, cardDesc, e);
 				throw new RuntimeException();
 			}
 		}

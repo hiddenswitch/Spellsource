@@ -6,11 +6,14 @@ import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.impl.util.LegacyPersistenceHandler;
 import com.hiddenswitch.spellsource.impl.util.PersistenceTrigger;
 import com.hiddenswitch.spellsource.models.*;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Logic service that handles complex game logic.
@@ -18,6 +21,7 @@ import org.apache.commons.lang3.RandomStringUtils;
  * To implement a new persistence effect, see {@link Spellsource#persistAttribute(LegacyPersistenceHandler)}.
  */
 public interface Logic {
+	Logger logger = LoggerFactory.getLogger(Logic.class);
 
 	/**
 	 * Performs account creation action side effects, like adding the first cards to the player's collection, defining
@@ -68,31 +72,41 @@ public interface Logic {
 	 * @see PersistenceTrigger for more about how this method is used.
 	 */
 	static CardDesc getDescriptionFromRecord(InventoryRecord cardRecord, String userId, String deckId) {
-		// Set up the attributes
-		// Hearthstone cards are read directly from the database, since they do not support any mutability  rules.
-		CardDesc desc = cardRecord.getCardDesc();
-		if (desc.set != null
-				&& desc.set.isHearthstoneSet()
-				|| (desc.legacy == null || !desc.legacy)) {
-			desc = CardCatalogue.getCardById(desc.id).getDesc();
+		try {
+			// Set up the attributes
+			// Hearthstone cards are read directly from the database, since they do not support any mutability  rules.
+			CardDesc desc = cardRecord.getCardDesc();
+			if (desc.set != null
+					&& desc.set.isHearthstoneSet()
+					|| (desc.legacy == null || !desc.legacy)) {
+				final Card cardById = CardCatalogue.getCardById(desc.id);
+				if (cardById == null) {
+					logger.error("getDescriptionFromRecord: Card with desc.id={} was not found", desc.id);
+					return null;
+				}
+				desc = cardById.getDesc();
+			}
+
+			if (desc.attributes == null) {
+				desc.attributes = new AttributeMap();
+			}
+
+			desc.attributes.put(Attribute.USER_ID, userId);
+			desc.attributes.put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
+			desc.attributes.put(Attribute.DECK_ID, deckId);
+			desc.attributes.put(Attribute.DONOR_ID, cardRecord.getDonorUserId());
+			desc.attributes.put(Attribute.CHAMPION_ID, userId);
+			desc.attributes.put(Attribute.COLLECTION_IDS, cardRecord.getCollectionIds());
+			desc.attributes.put(Attribute.ALLIANCE_ID, cardRecord.getAllianceId());
+			desc.attributes.put(Attribute.ENTITY_INSTANCE_ID, RandomStringUtils.randomAlphanumeric(20).toLowerCase());
+
+			// Collect the persistent attributes
+			desc.attributes.putAll(cardRecord.getPersistentAttributes());
+			return desc;
+		} catch (Exception ex) {
+			logger.error("getDescriptionFromRecord: Error {} retrieveing data for userId={}, deckId={}, cardRecord={}", ex, userId, deckId, cardRecord);
+			return null;
 		}
-
-		if (desc.attributes == null) {
-			desc.attributes = new AttributeMap();
-		}
-
-		desc.attributes.put(Attribute.USER_ID, userId);
-		desc.attributes.put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
-		desc.attributes.put(Attribute.DECK_ID, deckId);
-		desc.attributes.put(Attribute.DONOR_ID, cardRecord.getDonorUserId());
-		desc.attributes.put(Attribute.CHAMPION_ID, userId);
-		desc.attributes.put(Attribute.COLLECTION_IDS, cardRecord.getCollectionIds());
-		desc.attributes.put(Attribute.ALLIANCE_ID, cardRecord.getAllianceId());
-		desc.attributes.put(Attribute.ENTITY_INSTANCE_ID, RandomStringUtils.randomAlphanumeric(20).toLowerCase());
-
-		// Collect the persistent attributes
-		desc.attributes.putAll(cardRecord.getPersistentAttributes());
-		return desc;
 	}
 
 	/**
