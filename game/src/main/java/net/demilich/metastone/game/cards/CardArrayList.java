@@ -37,7 +37,7 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 	 *
 	 * @param cards The list of cards.
 	 */
-	public CardArrayList(List<Card> cards) {
+	public CardArrayList(Collection<? extends Card> cards) {
 		this.cards = new ArrayList<>(cards);
 	}
 
