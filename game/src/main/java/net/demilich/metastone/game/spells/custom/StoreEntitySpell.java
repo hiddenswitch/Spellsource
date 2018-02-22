@@ -34,6 +34,7 @@ public class StoreEntitySpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc);
 		final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
 		logger.debug("onCast {} {}: The source entity added {} to its stored entity list. The list currently contains: {}", context.getGameId(), source, target, list.getReferences(context, source));
 		list.add(source, target);

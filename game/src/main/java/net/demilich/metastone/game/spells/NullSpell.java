@@ -9,6 +9,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A spell that has no effects.
@@ -29,6 +31,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class NullSpell extends Spell {
 
+	private static Logger logger = LoggerFactory.getLogger(NullSpell.class);
+
 	/**
 	 * Creates a spell that does nothing.
 	 *
@@ -43,6 +47,7 @@ public class NullSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc);
 		// intentionally do nothing
 	}
 

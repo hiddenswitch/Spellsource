@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * <pre>
  *     {
  *         "class": "ChangeHeroSpell",
- *         "cardId": "hero_ragnaros",
+ *         "card": "hero_ragnaros",
  *         "targetPlayer": "SELF"
  *     }
  * </pre>
@@ -58,6 +58,7 @@ public class ChangeHeroSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.SPELL);
 		String heroCardId = (String) desc.get(SpellArg.CARD);
 		if (heroCardId == null) {
 			logger.error("onCast {} {}: Requires hero card ID, none specified.", context.getGameId(), source);

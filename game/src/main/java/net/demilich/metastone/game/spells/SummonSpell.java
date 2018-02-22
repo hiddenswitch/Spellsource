@@ -48,6 +48,9 @@ import java.util.stream.Collectors;
  * SpellArg#BOARD_POSITION_RELATIVE} argument is set. When set to {@link RelativeToSource#RIGHT}, and the {@code source}
  * of the spell is a {@link Minion}, the summoned minion will appear to the right of the {@code source}.
  * <p>
+ * If {@link SpellArg#EXCLUSIVE} is specified, the spell will not summon minions whose card IDs are already on the
+ * battlefield.
+ * <p>
  * Many minions summon tokens to their side in their {@link net.demilich.metastone.game.spells.desc.BattlecryDesc#spell}
  * argument. For <b>example:</b>
  * <pre>
@@ -121,6 +124,20 @@ import java.util.stream.Collectors;
  *             "class": "DeckSource",
  *             "targetPlayer": "OPPONENT"
  *         }
+ *     }
+ * </pre>
+ * To summon one of four minions that don't already exist on the battlefield:
+ * <pre>
+ *     {
+ *          "class": "SummonSpell",
+ *          "cards": [
+ *              "token_searing_totem",
+ *              "token_healing_totem",
+ *              "token_wrath_of_air_totem",
+ *              "token_stoneclaw_totem"
+ *          ],
+ *          "exclusive": true,
+ *          "randomTarget": true
  *     }
  * </pre>
  *
@@ -215,6 +232,7 @@ public class SummonSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD, SpellArg.CARDS, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.BOARD_POSITION_RELATIVE, SpellArg.EXCLUSIVE);
 		// Summon minions from the cards or cardIds specified
 		List<Minion> summonedMinions = new ArrayList<>();
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
