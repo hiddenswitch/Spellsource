@@ -6,23 +6,15 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Whenever you play 1-Cost minion, draw another one.",
+  "description": "Whenever you play 1-Cost card, draw another one.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionPlayedTrigger",
       "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
-          {
-            "class": "ManaCostFilter",
-            "value": 1,
-            "operation": "EQUAL"
-          }
-        ]
+        "class": "AttributeFilter",
+        "attribute": "BASE_MANA_COST",
+        "value": 1,
+        "operation": "EQUAL"
       },
       "targetPlayer": "SELF"
     },
@@ -30,18 +22,10 @@
       "class": "FromDeckToHandSpell",
       "value": 1,
       "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
-          {
-            "class": "ManaCostFilter",
-            "value": 1,
-            "operation": "EQUAL"
-          }
-        ]
+        "class": "AttributeFilter",
+        "attribute": "BASE_MANA_COST",
+        "value": 1,
+        "operation": "EQUAL"
       }
     }
   },
