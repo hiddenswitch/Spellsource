@@ -15,9 +15,19 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "DamageSpell",
-      "target": "OTHER_CHARACTERS",
-      "value": 2
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": 2
+        },
+        {
+          "class": "DamageSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 2
+        }
+      ]
     }
   },
   "collectible": true,
