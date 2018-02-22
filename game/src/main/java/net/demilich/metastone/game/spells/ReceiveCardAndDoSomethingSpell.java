@@ -13,6 +13,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 
+/**
+ * @deprecated by {@link ReceiveCardSpell}, which supports sub spells in {@link SpellArg#SPELL}.
+ */
 @Deprecated
 public class ReceiveCardAndDoSomethingSpell extends ReceiveCardSpell {
 }

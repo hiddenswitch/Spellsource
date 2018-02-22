@@ -12,6 +12,9 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * @deprecated by {@link ReceiveCardSpell} with the argument {@link SpellArg#RANDOM_TARGET} set to {@code true}.
+ */
 @Deprecated
 public class ReceiveRandomCardSpell extends ReceiveCardSpell {
 
