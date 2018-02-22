@@ -36,7 +36,7 @@ public class DiscoverFilteredCardSpell extends Spell {
 		CardList cards = CardCatalogue.query(context.getDeckFormat());
 		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
 		if (cardSource != null) {
-			cards = cardSource.getCards(context, player);
+			cards = cardSource.getCards(context, source, player);
 		}
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
 		CardList discoverCards = new CardArrayList();

@@ -8,7 +8,6 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.BuffSpell;
-import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
@@ -41,7 +40,7 @@ public class GainStatsOfHighestCostMinionSpell extends BuffSpell {
 
 		final CardSource handSource = HandSource.create();
 		final CardList eligibleMinions = handSource
-				.getCards(context, player)
+				.getCards(context, source, player)
 				.filtered(highestCostFilter.matcher(context, player, source));
 
 		if (eligibleMinions.isEmpty()) {

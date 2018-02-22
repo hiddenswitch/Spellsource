@@ -17,6 +17,10 @@ public class DrawCardSpell extends Spell {
 		for (int i = 0; i < cardCount; i++) {
 			Card card = context.getLogic().drawCard(player.getId(), source);
 
+			if (card == null) {
+				continue;
+			}
+
 			SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 			SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 		}

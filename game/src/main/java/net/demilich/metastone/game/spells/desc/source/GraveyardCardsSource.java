@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.entities.Entity;
 
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ public class GraveyardCardsSource extends CardSource {
 	}
 
 	@Override
-	protected CardList match(GameContext context, Player player) {
+	protected CardList match(GameContext context, Entity source, Player player) {
 		return player
 				.getGraveyard()
 				.stream()

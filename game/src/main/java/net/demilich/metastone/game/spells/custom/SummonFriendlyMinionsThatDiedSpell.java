@@ -16,6 +16,11 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * Summons all the friendly minions that died this turn.
+ * <p>
+ * Implements Kel'Thuzad.
+ */
 public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 
 	public static SpellDesc create() {
