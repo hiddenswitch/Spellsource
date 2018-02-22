@@ -45,12 +45,29 @@ import static org.mockito.Mockito.*;
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 	@Test
+	public void testStitchedTracker() {
+		runGym((context, player, opponent) -> {
+			Card card1 = shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			Card card2 = shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			overrideDiscover(player, discoverActions -> {
+				Assert.assertEquals(discoverActions.size(), 1, "Discovers should be distinct");
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_stitched_tracker");
+			Assert.assertEquals(player.getDeck().size(), 2);
+			Assert.assertEquals(player.getHand().size(), 1);
+			Assert.assertNotEquals(player.getHand().get(0), card1);
+			Assert.assertNotEquals(player.getHand().get(0), card2);
+		});
+	}
+
+	@Test
 	public void testAnimatedBerserker() {
 		runGym((context, player, opponent) -> {
 			Minion minion = playMinionCard(context, player, "minion_animated_berserker");
 			Assert.assertEquals(minion.getHp(), minion.getBaseHp());
 		});
-		
+
 		runGym((context, player, opponent) -> {
 			Minion minion = playMinionCard(context, player, "minion_animated_berserker");
 			Minion damaged = playMinionCard(context, player, "minion_bloodfen_raptor");
@@ -533,6 +550,21 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			context.endTurn();
 			context.getLogic().performGameAction(player.getId(), new PhysicalAttackAction(friendlyMinion.getReference()).withTargetReference(opposingMinion.getReference()));
 			Assert.assertEquals(player.getMinions().size(), 0);
+			playCard(context, player, "spell_eternal_servitude");
+			Assert.assertEquals(player.getMinions().size(), 1);
+			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion target1 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion target2 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCardWithTarget(context, player, "spell_fireball", target1);
+			playCardWithTarget(context, player, "spell_fireball", target2);
+			Assert.assertEquals(player.getMinions().size(), 0);
+			overrideDiscover(player, discoverActions -> {
+				Assert.assertEquals(discoverActions.size(), 1, "Discover actions should be distinct");
+				return discoverActions.get(0);
+			});
 			playCard(context, player, "spell_eternal_servitude");
 			Assert.assertEquals(player.getMinions().size(), 1);
 			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");

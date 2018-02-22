@@ -23,7 +23,8 @@
       "cardSource": {
         "class": "DeckCollectionSource",
         "collectionName": "The Supreme Archive",
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "distinct": true
       }
     }
   },

@@ -25,7 +25,8 @@
       },
       "cardSource": {
         "class": "DeckSource",
-        "targetPlayer": "OPPONENT"
+        "targetPlayer": "OPPONENT",
+        "distinct": true
       }
     }
   },
