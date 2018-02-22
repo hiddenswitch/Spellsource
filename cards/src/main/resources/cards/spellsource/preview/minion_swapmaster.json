@@ -16,7 +16,9 @@
     },
     "spell": {
       "class": "SwapMinionSpell",
-      "target": "SELF"
+      "target": "ALL_OTHER_MINIONS",
+      "randomTarget": true,
+      "secondaryTarget": "SELF"
     }
   },
   "collectible": false,
