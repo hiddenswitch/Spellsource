@@ -1043,6 +1043,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@Suspendable
 	private int damageMinion(Player player, int damage, Entity source, Actor minion) {
+		if (damage == 0) {
+			return damage;
+		}
+		
 		if (minion.hasAttribute(Attribute.DIVINE_SHIELD)) {
 			removeAttribute(minion, Attribute.DIVINE_SHIELD);
 			context.fireGameEvent(new LoseDivineShieldEvent(context, minion, player.getId(), source.getId()));
