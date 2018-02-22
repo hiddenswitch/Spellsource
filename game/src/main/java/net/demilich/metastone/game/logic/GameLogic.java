@@ -2070,6 +2070,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void changeOwner(Entity target, int newOwnerId) throws ArrayStoreException {
+		innerChangeOwner(target, newOwnerId);
+		context.fireGameEvent(new BoardChangedEvent(context));
+	}
+
+	@Suspendable
+	public void innerChangeOwner(Entity target, int newOwnerId) {
 		if (target.getEntityLocation().getPlayer() != newOwnerId) {
 			throw new ArrayStoreException("Cannot change the owner of an entity that is located in a zone not owned by the new owner.");
 		}
@@ -2083,7 +2089,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 			addGameEventListener(context.getPlayer(newOwnerId), trigger, target);
 		}
-		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
 	/**
