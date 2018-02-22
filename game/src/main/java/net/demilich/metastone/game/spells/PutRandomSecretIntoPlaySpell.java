@@ -41,7 +41,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		for (int i = 0; i < howMany; i++) {
-			CardList secretCards = findSecretCards(cardSource.getCards(context, player));
+			CardList secretCards = findSecretCards(cardSource.getCards(context, source, player));
 
 			if (secretCards.isEmpty()) {
 				return;

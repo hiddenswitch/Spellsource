@@ -14,11 +14,43 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Changes the hero of {@link SpellArg#TARGET_PLAYER} to the specified hero card ID in {@link SpellArg#CARD}.
+ * <p>
+ * For <b>example,</b> to turn the casting player's hero into Ragnaros:
+ * <pre>
+ *     {
+ *         "class": "ChangeHeroSpell",
+ *         "cardId": "hero_ragnaros",
+ *         "targetPlayer": "SELF"
+ *     }
+ * </pre>
+ */
 public class ChangeHeroSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(ChangeHeroSpell.class);
 
+	/**
+	 * Changes the casting player's hero to the specified card ID.
+	 *
+	 * @param heroCardId A hero card ({@link net.demilich.metastone.game.cards.CardType#HERO}.
+	 * @return The spell
+	 */
 	public static SpellDesc create(String heroCardId) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(ChangeHeroSpell.class);
+		arguments.put(SpellArg.CARD, heroCardId);
+		return new SpellDesc(arguments);
+	}
+
+	/**
+	 * Changes the specified player's hero the specified card ID.
+	 *
+	 * @param player     The player whose hero should be changed.
+	 * @param heroCardId A hero card ({@link net.demilich.metastone.game.cards.CardType#HERO}.
+	 * @return The spell
+	 */
+	public static SpellDesc create(TargetPlayer player, String heroCardId) {
+		Map<SpellArg, Object> arguments = SpellDesc.build(ChangeHeroSpell.class);
+		arguments.put(SpellArg.TARGET_PLAYER, player);
 		arguments.put(SpellArg.CARD, heroCardId);
 		return new SpellDesc(arguments);
 	}
@@ -34,6 +66,7 @@ public class ChangeHeroSpell extends Spell {
 		HeroCard heroCard = (HeroCard) context.getCardById(heroCardId);
 		if (heroCard == null) {
 			logger.error("onCast {} {}: Invalid heroCardId {}", context.getGameId(), source, heroCardId);
+			return;
 		}
 
 		Hero hero = heroCard.createHero();

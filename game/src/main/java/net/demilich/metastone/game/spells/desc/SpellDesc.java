@@ -3,16 +3,12 @@ package net.demilich.metastone.game.spells.desc;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
-import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
@@ -207,6 +203,6 @@ public class SpellDesc extends Desc<SpellArg> {
 		} else {
 			filter = AndFilter.create();
 		}
-		return source.getCards(context, player).filtered(c -> filter.matches(context, player, c, host));
+		return source.getCards(context, host, player).filtered(c -> filter.matches(context, player, c, host));
 	}
 }

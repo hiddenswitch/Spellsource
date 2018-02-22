@@ -1,9 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -20,6 +16,13 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * Summons minions specified by cards; summons random minions from card filters; or copies minions according to
+ * targets.
+ */
 public class SummonSpell extends Spell {
 
 	public static SpellDesc create(MinionCard... minionCards) {

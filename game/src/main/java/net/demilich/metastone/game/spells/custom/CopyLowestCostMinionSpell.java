@@ -14,7 +14,6 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -23,7 +22,7 @@ public class CopyLowestCostMinionSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardSource sourceCards = desc.getCardSource();
-		List<Card> cards = sourceCards.getCards(context, player)
+		List<Card> cards = sourceCards.getCards(context, source, player)
 				.stream()
 				.filter(c -> c.getCardType() == CardType.MINION)
 				.sorted(Comparator.comparingInt(c1 -> context.getLogic().getModifiedManaCost(player, c1)))

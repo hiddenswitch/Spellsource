@@ -14,6 +14,16 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class GoblinsVersusGnomesTests extends TestBase {
+
+	@Test
+	public void testBlingtron3000() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_blingtron_3000");
+			Assert.assertEquals(player.getWeaponZone().size(), 1);
+			Assert.assertEquals(opponent.getWeaponZone().size(), 1);
+		});
+	}
+
 	@Test
 	public void testMalganisVoidcallerVoidwalkerSheepInteraction() {
 		/*

@@ -7,7 +7,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -15,7 +14,6 @@ import net.demilich.metastone.game.spells.desc.filter.AndFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
-import net.demilich.metastone.game.spells.desc.source.SourceDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class DiscardSpell extends Spell {
@@ -43,7 +41,7 @@ public class DiscardSpell extends Spell {
 		}
 		int numberOfCards = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 
-		CardList discardableCards = cardSource.getCards(context, player).filtered(cardFilter.matcher(context, player, source));
+		CardList discardableCards = cardSource.getCards(context, source, player).filtered(cardFilter.matcher(context, player, source));
 		int cardCount = numberOfCards == ALL_CARDS ? discardableCards.getCount() : numberOfCards;
 
 		for (int i = 0; i < cardCount; i++) {

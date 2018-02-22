@@ -24,6 +24,23 @@ import net.demilich.metastone.game.utils.Attribute;
 
 import java.io.Serializable;
 
+/**
+ * A card cost modifier.
+ * <p>
+ * In this <b>example</b>, the specified modifier reduces the hosting entity's cost by one.
+ * <pre>
+ *     {
+ *         "class": "CardCostModifier",
+ *         "target": "SELF",
+ *         "operation": "SUBTRACT",
+ *         "value": 1
+ *     }
+ * </pre>
+ *
+ * @see net.demilich.metastone.game.spells.CardCostModifierSpell for a spell that can put {@link CardCostModifier}
+ * effects into play.
+ * @see CardCostModifierArg for a list of arguments for card cost modification.
+ */
 public class CardCostModifier extends CustomCloneable implements Trigger, Serializable {
 	private static Logger logger = LoggerFactory.getLogger(CardCostModifier.class);
 	private boolean expired;
@@ -47,6 +64,33 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		}
 	}
 
+	/**
+	 * Determines whether this modifier applies to the specified card.
+	 * <p>
+	 * First, the method checks if the modifier has been {@link #expired} due to its {@link
+	 * CardCostModifierArg#EXPIRATION_TRIGGER}. For a {@link OneTurnCostModifier}, the expiration trigger is assumed to
+	 * be a {@link net.demilich.metastone.game.spells.trigger.TurnEndTrigger}.
+	 * <p>
+	 * Then, the modifier evaluates its {@link CardCostModifierArg#TARGET} and {@link CardCostModifierArg#FILTER} and
+	 * sees if the card is equal to or is contained within the resulting set of {@link Entity} objects. When not
+	 * specified, the {@link CardCostModifierArg#TARGET} is assumed to be the {@link EntityReference#FRIENDLY_HAND}.
+	 * <p>
+	 * The {@link CardCostModifierArg#RACE} argument, if specified, is compared to the {@code card} instance's {@link
+	 * Card#getRace()}.
+	 * <p>
+	 * The {@link CardCostModifierArg#CARD_TYPE} argument, if specified, is compared to the {@code card} instance's
+	 * {@link Card#getCardType()}.
+	 * <p>
+	 * Finally, the {@link CardCostModifierArg#TARGET_PLAYER} argument, if specified, is compared to the {@code card}
+	 * instance's {@link #getOwner()} with respect to the {@link #getHostReference()} of this modifier. For example, if
+	 * {@link CardCostModifierArg#TARGET_PLAYER} is {@link TargetPlayer#SELF}, then the card's {@link Card#getOwner()}
+	 * is compared to the {@link #getHostReference()} {@link Entity#getOwner()}.
+	 *
+	 * @param context The game context.
+	 * @param card    The card to evaluate.
+	 * @param player  The player from whose point of view this should be evaluated.
+	 * @return {@code true} if the modifier applies to this card.
+	 */
 	public boolean appliesTo(GameContext context, Card card, Player player) {
 		boolean applies = true;
 
@@ -119,6 +163,12 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		return applies;
 	}
 
+	/**
+	 * Card cost modifiers can always fire with respect to a given event (they are refreshed by all events).
+	 *
+	 * @param event A game event.
+	 * @return {@code true}.
+	 */
 	@Override
 	public boolean canFire(GameEvent event) {
 		return true;
@@ -131,14 +181,29 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		return clone;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void expire() {
 		expired = true;
 	}
 
+	/**
+	 * Returns the value of the specified {@link CardCostModifierArg}
+	 *
+	 * @param arg The argument
+	 * @return The value
+	 */
 	protected Object get(CardCostModifierArg arg) {
 		return desc.get(arg);
 	}
 
+	/**
+	 * Gets the filter to apply to the {@link CardCostModifierArg#TARGET}.
+	 *
+	 * @return An {@link EntityFilter}
+	 * @see #appliesTo(GameContext, Card, Player) to read more on how application is determined.
+	 */
 	protected EntityFilter getFilter() {
 		return (EntityFilter) desc.get(CardCostModifierArg.FILTER);
 	}
@@ -156,6 +221,12 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		return desc.getInt(CardCostModifierArg.MIN_VALUE);
 	}
 
+	/**
+	 * The player that originally created the card cost modifier, regardless if this modifier is being hosted by a
+	 * {@link Player} entity.
+	 *
+	 * @return The original creator (caster) of the modifier.
+	 */
 	@Override
 	public int getOwner() {
 		return owner;
@@ -172,10 +243,11 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	/**
 	 * Gets the target player of the given card cost modifier.
 	 * <p>
-	 * This is relative to the owner of the modifier, which is typically the caster, not the owner of the
-	 * {@link #getHostReference()}.
+	 * This is relative to the owner of the modifier, which is typically the caster, not the owner of the {@link
+	 * #getHostReference()}.
 	 *
-	 * @return {@link TargetPlayer#SELF} if not specified, otherwise the {@link  TargetPlayer} specified by the modifier.
+	 * @return {@link TargetPlayer#SELF} if not specified, otherwise the {@link  TargetPlayer} specified by the
+	 * modifier.
 	 */
 	public TargetPlayer getTargetPlayer() {
 		return (TargetPlayer) desc.getOrDefault(CardCostModifierArg.TARGET_PLAYER, TargetPlayer.SELF);

@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells.desc.source;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.stream.Collectors;
@@ -14,7 +15,7 @@ public class UngoroPackRarityWeightedCardSource extends CatalogueSource {
 	}
 
 	@Override
-	protected CardList match(GameContext context, Player player) {
+	protected CardList match(GameContext context, Entity source, Player player) {
 		return CardCatalogue
 				.query(context.getDeckFormat()).stream()
 				.filter(c -> c.getCardSet() == CardSet.JOURNEY_TO_UNGORO)

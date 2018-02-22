@@ -50,7 +50,7 @@ public class CopyCardSpell extends Spell {
 
 		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
 		if (cardSource != null) {
-			sourceCollection = cardSource.getCards(context, player);
+			sourceCollection = cardSource.getCards(context, source, player);
 		}
 
 		if (sourceCollection == null) {

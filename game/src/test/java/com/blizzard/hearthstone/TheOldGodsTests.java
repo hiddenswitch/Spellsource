@@ -194,7 +194,7 @@ public class TheOldGodsTests extends TestBase {
 			cardSourceArgs.put(SourceArg.TARGET_PLAYER, TargetPlayer.SELF);
 			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new SourceDesc(cardSourceArgs)) {
 				@Override
-				protected CardList match(GameContext context, Player player) {
+				protected CardList match(GameContext context, Entity source, Player player) {
 					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_the_coin"));
 				}
 			});
@@ -237,7 +237,7 @@ public class TheOldGodsTests extends TestBase {
 			cardSourceArgs.put(SourceArg.TARGET_PLAYER, TargetPlayer.SELF);
 			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new SourceDesc(cardSourceArgs)) {
 				@Override
-				protected CardList match(GameContext context, Player player) {
+				protected CardList match(GameContext context, Entity source, Player player) {
 					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_fireball"));
 				}
 			});

@@ -1,35 +1,21 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 
-public class EquipRandomWeaponSpell extends Spell {
-
-	public static SpellDesc create(TargetPlayer targetPlayer) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(EquipRandomWeaponSpell.class);
-		arguments.put(SpellArg.TARGET_PLAYER, targetPlayer);
-		arguments.put(SpellArg.TARGET, EntityReference.NONE);
-		return new SpellDesc(arguments);
-	}
+/**
+ * @deprecated by {@link EquipWeaponSpell}.
+ */
+@Deprecated
+public class EquipRandomWeaponSpell extends EquipWeaponSpell {
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardList allWeapons = CardCatalogue.query(context.getDeckFormat(), CardType.WEAPON);
-		WeaponCard weaponCard = (WeaponCard) context.getLogic().getRandom(allWeapons);
-		Weapon weapon = weaponCard.getWeapon();
-		weapon.setBattlecry(null);
-
-		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
+		super.onCast(context, player, EquipWeaponSpell.create(), source, target);
 	}
 
 }

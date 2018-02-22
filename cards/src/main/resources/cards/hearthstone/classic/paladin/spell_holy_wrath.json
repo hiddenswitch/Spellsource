@@ -7,7 +7,15 @@
   "description": "Draw a card and deal damage equal to its cost.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "custom.DealDamageFromDrawnCardSpell"
+    "class": "DrawCardSpell",
+    "value": 1,
+    "spell": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "ManaCostProvider",
+        "target": "OUTPUT"
+      }
+    }
   },
   "collectible": true,
   "set": "CLASSIC",

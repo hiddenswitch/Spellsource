@@ -28,7 +28,7 @@ public class ReceiveCardSpell extends Spell {
 		SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 		CardList cards = CardCatalogue.query(context.getDeckFormat());
 		if (cardSource != null) {
-			cards = cardSource.getCards(context, player).getCopy();
+			cards = cardSource.getCards(context, source, player).getCopy();
 		}
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		// If a card is being received from a filter, we're creating new cards

@@ -8,12 +8,32 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
+/**
+ * Casts a {@link SpellArg#SPELL} on the last {@link net.demilich.metastone.game.cards.MinionCard} in the {@link
+ * net.demilich.metastone.game.targeting.Zones#DECK} of the {@link SpellArg#TARGET_PLAYER}.
+ * <p>
+ * The {@link net.demilich.metastone.game.targeting.EntityReference#OUTPUT} will be set to the last minion card, unless
+ * none is found.
+ * <p>
+ * For <b>example</b>, to draw the last minion card in the player's deck:
+ * <pre>
+ *     {
+ *         "class": "LastMinionCardInDeckSpell",
+ *         "spell": {
+ *             "class": "ReceiveCardSpell",
+ *             "target": "OUTPUT"
+ *         }
+ *     }
+ * </pre>
+ * Implements End of the Line.
+ */
 public class LastMinionCardInDeckSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(LastMinionCardInDeckSpell.class);
 

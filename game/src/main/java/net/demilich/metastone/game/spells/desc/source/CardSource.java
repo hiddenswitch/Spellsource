@@ -5,10 +5,10 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
 import java.io.Serializable;
-import java.util.Map;
 
 public abstract class CardSource implements Serializable {
 	protected final SourceDesc desc;
@@ -26,7 +26,7 @@ public abstract class CardSource implements Serializable {
 	}
 
 	@Suspendable
-	public CardList getCards(GameContext context, Player player) {
+	public CardList getCards(GameContext context, Entity source, Player player) {
 		TargetPlayer targetPlayer = (TargetPlayer) desc.get(SourceArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
 			targetPlayer = TargetPlayer.SELF;
@@ -39,7 +39,7 @@ public abstract class CardSource implements Serializable {
 			case BOTH:
 				CardList cards = new CardArrayList();
 				for (Player selectedPlayer : context.getPlayers()) {
-					cards.addAll(this.match(context, selectedPlayer));
+					cards.addAll(this.match(context, source, selectedPlayer));
 				}
 				return cards;
 			case INACTIVE:
@@ -54,13 +54,14 @@ public abstract class CardSource implements Serializable {
 				providingPlayer = player;
 				break;
 		}
-		return this.match(context, providingPlayer);
+		return this.match(context, source, providingPlayer);
 	}
 
 	@Suspendable
-	protected abstract CardList match(GameContext context, Player player);
+	protected abstract CardList match(GameContext context, Entity source, Player player);
 
 	public TargetPlayer getTargetPlayer() {
 		return (TargetPlayer) desc.getOrDefault(SourceArg.TARGET_PLAYER, TargetPlayer.SELF);
 	}
 }
+
