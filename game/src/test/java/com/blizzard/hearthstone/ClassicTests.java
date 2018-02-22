@@ -41,6 +41,18 @@ import static org.mockito.Mockito.spy;
 public class ClassicTests extends TestBase {
 
 	@Test
+	public void testDivineShieldZeroAttackDefenderInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion attacker = playMinionCard(context, player, "minion_shielded_minibot");
+			context.endTurn();
+			Minion defender = playMinionCard(context, opponent, "minion_flametongue_totem");
+			context.endTurn();
+			attack(context, player, attacker, defender);
+			Assert.assertTrue(attacker.hasAttribute(Attribute.DIVINE_SHIELD));
+		});
+	}
+
+	@Test
 	public void testExplosiveTrapWeaponSituation() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_explosive_trap");
