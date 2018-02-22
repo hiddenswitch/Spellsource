@@ -15,6 +15,8 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Summons all the friendly minions that died this turn.
@@ -22,6 +24,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * Implements Kel'Thuzad.
  */
 public class SummonFriendlyMinionsThatDiedSpell extends Spell {
+
+	private static Logger logger = LoggerFactory.getLogger(SummonFriendlyMinionsThatDiedSpell.class);
 
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = SpellDesc.build(SummonFriendlyMinionsThatDiedSpell.class);
@@ -31,6 +35,7 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc);
 		int currentTurn = context.getTurn();
 		List<Entity> graveyardSnapshot = new ArrayList<>(player.getGraveyard());
 		for (Entity deadEntity : graveyardSnapshot) {

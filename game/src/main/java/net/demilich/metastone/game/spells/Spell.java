@@ -1,9 +1,10 @@
 package net.demilich.metastone.game.spells;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -11,6 +12,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
 
 /**
  * The base class for "spells," or collections of effects in the engine.
@@ -21,6 +23,12 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * To browse all the possible effects, visit the deriving classes of this class.
  */
 public abstract class Spell implements Serializable {
+	/**
+	 * Arguments common to all spells that should not be considered invalid.
+	 */
+	private static final Set<SpellArg> COMMON_ARGS = Sets.newEnumSet(
+			Arrays.asList(SpellArg.FILTER, SpellArg.TARGET, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL), SpellArg.class);
+
 	/**
 	 * Casts a spell for the given arguments.
 	 * <p>
@@ -101,5 +109,23 @@ public abstract class Spell implements Serializable {
 	@Override
 	public String toString() {
 		return "[SPELL " + getClass().getSimpleName() + "]";
+	}
+
+	/**
+	 * Allows an implementation to log when it encounters unexpected arguments.
+	 *
+	 * @param logger    The logger to print to
+	 * @param context   The context whose {@link GameContext#getGameId()} will be used to mark the log
+	 * @param source    The source of this call
+	 * @param desc      The description used in this call
+	 * @param validArgs The valid arguments
+	 */
+	protected void checkArguments(Logger logger, GameContext context, Entity source, SpellDesc desc, SpellArg... validArgs) {
+		Set<SpellArg> unexpectedArgs = new HashSet<>(desc.keySet());
+		unexpectedArgs.removeAll(Arrays.asList(validArgs));
+		unexpectedArgs.removeAll(COMMON_ARGS);
+		if (unexpectedArgs.size() > 0) {
+			logger.warn("checkArguments {} {}: Unexpected arguments {}", context.getGameId(), source, unexpectedArgs);
+		}
 	}
 }

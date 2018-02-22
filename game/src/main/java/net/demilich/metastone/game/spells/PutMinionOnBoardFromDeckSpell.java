@@ -5,6 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -53,6 +54,7 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc);
 		if (target == null) {
 			logger.error("onCast {} {}: The target {} is null", context.getGameId(), source, desc.getTarget());
 			return;
@@ -70,13 +72,18 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 
 		player.getDeck().move(minionCard, player.getSetAsideZone());
 
-		boolean summonSuccess = context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false);
+		final Minion summoned = minionCard.summon();
+		boolean summonSuccess = context.getLogic().summon(player.getId(), summoned, null, -1, false);
 
 		player.getSetAsideZone().move(minionCard, player.getDeck());
 
 		if (summonSuccess) {
 			minionCard.getAttributes().put(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 			context.getLogic().removeCard(minionCard);
+
+			desc.subSpells(0).forEach(subSpell -> {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, summoned);
+			});
 		}
 	}
 

@@ -100,6 +100,7 @@ public class CardCostModifierSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD_COST_MODIFIER);
 		CardCostModifierDesc manaModifierDesc = (CardCostModifierDesc) desc.get(SpellArg.CARD_COST_MODIFIER);
 
 		if (manaModifierDesc.containsKey(CardCostModifierArg.TARGET)
