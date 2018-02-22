@@ -25,6 +25,37 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testVindicatorMaraad() {
+		runGym((context, player, opponent) -> {
+			Card cost1Card = putOnTopOfDeck(context, player, "minion_argent_squire");
+			playCard(context, player, "minion_vindicator_maraad");
+			playCard(context, player, "spell_mirror_image");
+			Assert.assertEquals(player.getHand().get(0), cost1Card);
+		});
+
+		runGym((context, player, opponent) -> {
+			Card cost2Card = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_vindicator_maraad");
+			playCard(context, player, "spell_mirror_image");
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Card cost1Card = putOnTopOfDeck(context, player, "minion_argent_squire");
+			playCard(context, player, "minion_vindicator_maraad");
+			playCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Card cost2Card = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_vindicator_maraad");
+			playCard(context, player, "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
 	public void testEscapeFromDurnholde() {
 		runGym((context, player, opponent) -> {
 			Card shouldntDraw = putOnTopOfDeck(context, player, "spell_the_coin");

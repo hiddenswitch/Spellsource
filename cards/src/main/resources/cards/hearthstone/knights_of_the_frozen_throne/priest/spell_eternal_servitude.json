@@ -17,8 +17,8 @@
     },
     "cardSource": {
       "class": "GraveyardActorsSource",
-      "targetPlayer": "SELF",
-      "distinct": true
+      "distinct": true,
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,
