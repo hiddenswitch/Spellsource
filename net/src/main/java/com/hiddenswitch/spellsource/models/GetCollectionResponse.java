@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -70,9 +72,10 @@ public class GetCollectionResponse implements Serializable {
 			deck.setHeroCard((HeroCard) CardCatalogue.getCardById(heroCardId));
 		}
 
-		getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord,
-				userId, getCollectionId())).map(CardDesc::createInstance).forEach(deck.getCards()
-				::addCard);
+		getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord, userId, getCollectionId()))
+				.filter(Objects::nonNull)
+				.map(CardDesc::createInstance)
+				.forEach(deck.getCards()::addCard);
 
 		return deck;
 	}
@@ -189,14 +192,20 @@ public class GetCollectionResponse implements Serializable {
 				.type(InventoryCollection.TypeEnum.valueOf(getCollectionType().toString()))
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
 				// Massively increase the performance of inventory record creation by making parallel the inventory record creation here
-				.inventory(getInventoryRecords().parallelStream().map(cr ->
-						new CardRecord()
-								.userId(cr.getUserId())
-								.collectionIds(cr.getCollectionIds())
-								.entity(Games.getEntity(emptyContext, Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionId()).createInstance(), 0))
-								.id(cr.getId())
-								.allianceId(cr.getAllianceId())
-								.donorUserId(cr.getDonorUserId()))
+				.inventory(getInventoryRecords().parallelStream().map(cr -> {
+					final CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionId());
+					if (record == null) {
+						return null;
+					}
+					final Card instance = record.createInstance();
+					return new CardRecord()
+							.userId(cr.getUserId())
+							.collectionIds(cr.getCollectionIds())
+							.entity(Games.getEntity(emptyContext, instance, 0))
+							.id(cr.getId())
+							.allianceId(cr.getAllianceId())
+							.donorUserId(cr.getDonorUserId());
+				}).filter(Objects::nonNull)
 						.collect(toList()));
 
 		if (getHeroClass() != null) {
