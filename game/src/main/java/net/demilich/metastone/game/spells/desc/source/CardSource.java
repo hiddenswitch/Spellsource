@@ -59,7 +59,7 @@ public abstract class CardSource implements Serializable {
 					providingPlayer = player;
 					break;
 			}
-			cards.addAll(this.match(context, source, providingPlayer));
+			cards = this.match(context, source, providingPlayer);
 		}
 
 		if (desc.getBool(SourceArg.DISTINCT)) {
