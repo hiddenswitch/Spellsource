@@ -10,7 +10,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.SummonRandomMinionFilteredSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
@@ -30,9 +29,7 @@ import java.util.Set;
  * <p>
  * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Card, int,
  * boolean)} performs the consequences of playing a {@link MinionCard}; the card is moved to the {@link #GRAVEYARD} and
- * a new {@link Minion} is created by {@link MinionCard#summon()} and placed into the {@link #BATTLEFIELD}. Or, some
- * effects may summon a minion from an {@link EntityFilter} that has a zone specified, like a {@link
- * SummonRandomMinionFilteredSpell}.
+ * a new {@link Minion} is created by {@link MinionCard#summon()} and placed into the {@link #BATTLEFIELD}.
  *
  * @see Entity#moveOrAddTo(GameContext, Zones) for the method that generally moves entities from one zone to another.
  * @see net.demilich.metastone.game.entities.EntityLocation for more about entity locations and how zones are
