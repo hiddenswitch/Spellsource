@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.*;
@@ -216,7 +217,15 @@ public class Spellsource {
 										updateCommand);
 							}
 						}))
-				.migrateTo(5, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(6)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							MongoClientUpdateResult result1 = changeCardId("spell_temporary_anomaly", "spell_temporal_anomaly");
+							MongoClientUpdateResult result2 = changeCardId("minion_doomlord", "minion_dreadlord");
+							logger.info("add MigrationRequest 6: Fixed {} Temporal Anomaly cards, {} Dreadlord cards", result1.getDocModified(), result2.getDocModified());
+						}))
+				.migrateTo(6, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -413,5 +422,16 @@ public class Spellsource {
 
 	public Map<String, Spell> getSpells() {
 		return spells;
+	}
+
+	@Suspendable
+	public static MongoClientUpdateResult changeCardId(String oldId, String newId) {
+		if (CardCatalogue.getCardById(newId) == null) {
+			logger.error("changeCardId: Cannot change {} to {} because the new ID does not exist", oldId, newId);
+			return new MongoClientUpdateResult();
+		}
+
+		return Mongo.mongo().updateCollectionWithOptions(Inventory.INVENTORY,
+				json("cardDesc.id", oldId), json("$set", json("cardDesc.id", newId)), new UpdateOptions().setMulti(true));
 	}
 }
