@@ -170,7 +170,9 @@ public interface Games {
 								} else {
 									entity = Games.getEntity(workingContext, sourceCard, playerId);
 									String battlecryDescription = sourceCard.getBattlecryDescription(key);
+									String battlecryName = sourceCard.getBattlecryName(key);
 									entity.id(id)
+											.name(battlecryName)
 											.description(battlecryDescription);
 								}
 

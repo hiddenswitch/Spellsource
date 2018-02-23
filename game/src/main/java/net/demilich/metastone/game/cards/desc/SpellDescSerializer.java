@@ -11,6 +11,9 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * The serializer that interprets JSON representations of a spell.
+ */
 public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSerializer<SpellDesc> {
 	@SuppressWarnings("unchecked")
 	@Override

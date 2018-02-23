@@ -31,6 +31,17 @@ public class ChooseBattlecryMinionCard extends MinionCard implements HasChooseOn
 		return battlecryOptions[index].description;
 	}
 
+	public String getBattlecryName(int index) {
+		if (index < 0 || index >= battlecryOptions.length) {
+			return getBattlecryDescription(index);
+		}
+		if (battlecryOptions[index] == null) {
+			return getBattlecryDescription(index);
+		}
+		final String name = battlecryOptions[index].name;
+		return name == null ? getBattlecryDescription(index) : name;
+	}
+
 	public String getTransformMinionCardId(int index) {
 		BattlecryDesc battlecryOption = battlecryOptions[index];
 		if (battlecryOption == null) {

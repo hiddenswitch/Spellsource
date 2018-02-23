@@ -13,6 +13,7 @@ import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.RandomDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
@@ -1411,6 +1412,16 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		return fromConfig(GameConfig.fromDecks(decks));
 	}
 
+
+	/**
+	 * Creates a new game context with two random decks and random play behaviour.
+	 *
+	 * @return A game context
+	 * @see #play() to actually execute the game.
+	 */
+	public static GameContext fromTwoRandomDecks() {
+		return fromConfig(GameConfig.fromDecks(Arrays.asList(new RandomDeck(), new RandomDeck())));
+	}
 
 	/**
 	 * Creates a game context from the given state.

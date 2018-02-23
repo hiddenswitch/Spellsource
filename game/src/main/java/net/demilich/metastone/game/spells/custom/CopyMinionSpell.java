@@ -17,8 +17,43 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 
+/**
+ * Transforms the {@code source} (casting entity) of this spell into the {@code target} {@link Minion}.
+ * <p>
+ * The tranformation includes all of the {@link Trigger} objects that are associated with (hosted by) the {@code
+ * target}.
+ * <p>
+ * This spell can be used to interrupt summons.
+ * <p>
+ * The transformation does not count as a summon effect.
+ * <p>
+ * For <b>example</b>, to transform into a target minion in a battlecry:
+ * <pre>
+ *     {
+ *         "targetSelection": "MINIONS",
+ *         "spell": {
+ *             "class": "CopyMinionSpell"
+ *         }
+ *     }
+ * </pre>
+ * To transform into a random minion on the battlefield:
+ * <pre>
+ *     {
+ *         "spell": "CopyMinionSpell",
+ *         "target": "ALL_OTHER_MINIONS",
+ *         "randomTarget": true
+ *     }
+ * </pre>
+ *
+ * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion) for more about transformations.
+ */
 public class CopyMinionSpell extends Spell {
 
+	/**
+	 * Creates this spell. The {@code target} will be passed down by a parent invocation.
+	 *
+	 * @return The spell
+	 */
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = SpellDesc.build(CopyMinionSpell.class);
 		return new SpellDesc(arguments);

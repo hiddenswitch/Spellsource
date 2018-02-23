@@ -11,7 +11,26 @@ import net.demilich.metastone.game.entities.minions.Race;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A minion card can be used to summon a minion.
+ * <p>
+ * To instantiate a minion from this card, use {@link #summon()}. However, it is usually more appropriate to play the
+ * card instead:
+ * <p>
+ * <pre>
+ *     GameContext context = GameContext.fromTwoRandomDecks();
+ *     // Initialize the game context
+ *     context.init();
+ *     // Retrieve a valid minion card
+ *     MinionCard minionCard = (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor");
+ *     PlayCardAction summonMinionAction = minionCard.play();
+ *     context.getLogic().performGameAction(GameContext.PLAYER_1, summonMinionAction);
+ * </pre>
+ *
+ * @see ActorCard for the base class of {@link MinionCard}, {@link HeroCard} and {@link WeaponCard}.
+ */
 public class MinionCard extends ActorCard {
+
 	private static Logger logger = LoggerFactory.getLogger(MinionCard.class);
 	private static final Set<Attribute> ignoredAttributes = new HashSet<Attribute>(
 			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGER, Attribute.BASE_ATTACK,

@@ -2,21 +2,112 @@ package net.demilich.metastone.game.spells.desc.trigger;
 
 import java.io.Serializable;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 
+/**
+ * Data specifying a trigger, including what event it reacts to, what spell it casts, and various options.
+ * <p>
+ * This object is used to create an {@link Enchantment} using its {@link #create()} function whenever entities like
+ * actors come into play with a {@link net.demilich.metastone.game.cards.desc.ActorCardDesc#trigger} specified.
+ * <p>
+ * For <b>example,</b> the following JSON would belong on the {@link net.demilich.metastone.game.cards.desc.ActorCardDesc#trigger}
+ * field to describe a minion that draws a card whenever it is damaged, up to 3 times:
+ * <pre>
+ *     {
+ *         "eventTrigger": {
+ *             "class": "DamagedReceivedTrigger",
+ *             "hostTargetType": "IGNORE_OTHER_TARGETS"
+ *         },
+ *         "spell": {
+ *             "class": "DrawCardSpell",
+ *             "targetPlayer": "SELF"
+ *         },
+ *         "maxFires": 3
+ *     }
+ * </pre>
+ * Note, this is distinct from an {@link EventTriggerDesc} or {@link net.demilich.metastone.game.spells.trigger.EventTrigger},
+ * which defines how to react to which events in game.
+ */
 public final class TriggerDesc implements Serializable, Cloneable {
 
+	/**
+	 * The description of which "event trigger" (reacting to which event) this trigger will react to
+	 */
 	public EventTriggerDesc eventTrigger;
+	/**
+	 * The spell that will be cast by an {@link Enchantment#onFire(int, SpellDesc, GameEvent)} invocation.
+	 *
+	 * @see Enchantment for more about enchantments.
+	 */
 	public SpellDesc spell;
+	/**
+	 * When {@code true}, indicates the enchantment should only last one turn.
+	 */
 	public boolean oneTurn;
+	/**
+	 * When {@code true}, indicates the owner of the enchantment for the purposes of evaluating the {@code player}
+	 * argument of a {@link net.demilich.metastone.game.spells.Spell#onCast(GameContext, Player, SpellDesc, Entity,
+	 * Entity)} invocation shouldn't change if the owner of the {@link Enchantment#hostReference} changes.
+	 * <p>
+	 * This implements Blessing of Wisdom, Power Word: Glory and other effects whose text would change depending on
+	 * whose perspective the text is read from.
+	 */
 	public boolean persistentOwner;
+	/**
+	 * Indicates how many turns until this trigger comes into play.
+	 *
+	 * @deprecated because no effects currently use it, and therefore it is untested.
+	 */
+	@Deprecated
 	public int turnDelay;
+	/**
+	 * When {@code true}, this {@link Enchantment} should not be removed by a {@link
+	 * net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion)} or {@link
+	 * net.demilich.metastone.game.logic.GameLogic#replaceCard(int, Card, Card)} effect.
+	 * <p>
+	 * Implements Shifter Zerus, Molten Blade and other in-hand every-turn-replacement effects.
+	 */
 	public boolean keepAfterTransform;
+	/**
+	 * The maximum number of times this trigger can fire until it expires.
+	 * <p>
+	 * When {@code null} (the default), the trigger can fire an unlimited number of times.
+	 */
 	public Integer maxFires;
+	/**
+	 * The number of times an {@link Enchantment} fires until it actually casts its spell.
+	 * <p>
+	 * Implements Quests and many other counting behaviours in triggers.
+	 * <p>
+	 * Typically {@link #maxFires} is set to the same value as {@code countUntilCast} to limit the trigger to casting a
+	 * spell at most once, as soon as the {@link #eventTrigger} has fired {@code countUntilCast} times.
+	 */
 	public Integer countUntilCast;
+	/**
+	 * When {@code true}, treats the {@link GameContext#getEventValue()} as the amount to increment this enchantment's
+	 * firing counter.
+	 * <p>
+	 * Implements spellstones.
+	 */
 	public boolean countByValue;
 
+	/**
+	 * Creates an enchantment represented by this configuration.
+	 * <p>
+	 * The enchantment's {@link Enchantment#setHost(Entity)} call should be applied immediately afterwards to specify
+	 * the host of this enchantment. {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} and {@link
+	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} enchantments exist in play, and by convention they
+	 * have unspecified hosts.
+	 *
+	 * @return The enchantment
+	 */
 	public Enchantment create() {
 		Enchantment trigger = new Enchantment(eventTrigger.create(), spell, oneTurn, turnDelay);
 		trigger.setMaxFires(maxFires);

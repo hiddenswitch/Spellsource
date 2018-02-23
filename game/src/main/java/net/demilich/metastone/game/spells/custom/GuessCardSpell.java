@@ -13,6 +13,8 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,7 +25,14 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
+/**
+ * Prompts the player to guess which card started in the opponent's deck in order to receive it.
+ * <p>
+ * Implements Curious Glimmerroot.
+ */
 public class GuessCardSpell extends Spell {
+
+	private static Logger logger = LoggerFactory.getLogger(GuessCardSpell.class);
 
 	@Override
 	@Suspendable
@@ -48,6 +57,7 @@ public class GuessCardSpell extends Spell {
 			correctCard = (Card) context.getLogic().getRandom(deckCards.get(opponentClass));
 			correctClass = opponentClass;
 		} else {
+			logger.debug("onCast {} {}: The opponent's deck does not use any class cards, only choosing neutrals for wrong cards now.", context.getGameId(), source);
 			correctCard = (Card) context.getLogic().getRandom(deckCards.get(HeroClass.ANY));
 			correctClass = HeroClass.ANY;
 		}
@@ -64,11 +74,13 @@ public class GuessCardSpell extends Spell {
 		CardList cards = new CardArrayList();
 		cards.addCard(correctCard);
 		others.forEach(cards::addCard);
+		logger.debug("onCast {} {}: {} is correct, {} is wrong", context.getGameId(), source, correctCard, others);
 
 		cards.shuffle(context.getLogic().getRandom());
 		DiscoverAction result = SpellUtils.discoverCard(context, player, desc, cards);
 		String cardId = result.getCard().getCardId();
 		if (cardId.equals(correctCard.getCardId())) {
+			logger.debug("onCast {} {}: Player {} chose correct card {}", context.getGameId(), source, player, correctCard);
 			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById(cardId));
 		}
 	}
