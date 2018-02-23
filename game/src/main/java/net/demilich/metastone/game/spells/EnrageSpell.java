@@ -11,12 +11,46 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Implements the attack bonus portion of a complete Enrage effect. The {@code target}'s attack is increased by  {@link
+ * SpellArg#ATTACK_BONUS}. Optionally, an {@link SpellArg#ATTRIBUTE} is also applied when specified.
+ * <p>
+ * To implement "Enrage: +2 Attack", the {@link net.demilich.metastone.game.cards.MinionCard} needs to have a {@link
+ * net.demilich.metastone.game.spells.desc.trigger.TriggerDesc} specified in its {@link
+ * net.demilich.metastone.game.cards.desc.MinionCardDesc#trigger} field:
+ * <pre>
+ *      "trigger": {
+ *          "eventTrigger": {
+ *              "class": "EnrageChangedTrigger"
+ *          },
+ *          "spell": {
+ *              "class": "EnrageSpell",
+ *              "target": "SELF",
+ *              "attackBonus": 2
+ *          }
+ *      }
+ * </pre>
+ */
 public class EnrageSpell extends Spell {
 
+	/**
+	 * Creates this spell to increase the attack by {@code attackBonus} when the minion takes damage
+	 *
+	 * @param attackBonus The amount of attack bonus
+	 * @return This spell
+	 */
 	public static SpellDesc create(int attackBonus) {
 		return create(attackBonus, null);
 	}
 
+	/**
+	 * Creates this spell to increase the attack and apply an attribute when the minion takes damage. Removes the
+	 * attribute if the minion lost its {@link Attribute#ENRAGED} status.
+	 *
+	 * @param attackBonus The attack bonus
+	 * @param tag         The attribute to add
+	 * @return The spell
+	 */
 	public static SpellDesc create(int attackBonus, Attribute tag) {
 		Map<SpellArg, Object> arguments = SpellDesc.build(EnrageSpell.class);
 		arguments.put(SpellArg.ATTACK_BONUS, attackBonus);

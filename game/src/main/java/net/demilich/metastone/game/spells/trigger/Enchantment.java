@@ -110,7 +110,7 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	/**
-	 * Processes a firing. If the
+	 * Processes a firing.
 	 *
 	 * @param ownerId
 	 * @param spell
