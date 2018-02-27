@@ -93,7 +93,11 @@ public abstract class StringEx implements Serializable,
 	}
 
 	@Override
-	protected StringEx clone() throws CloneNotSupportedException {
-		return (StringEx) super.clone();
+	protected StringEx clone() {
+		try {
+			return (StringEx) super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 }

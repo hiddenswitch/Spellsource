@@ -26,9 +26,11 @@
 package com.hiddenswitch.spellsource.client.api;
 
 import com.hiddenswitch.spellsource.client.ApiException;
+import com.hiddenswitch.spellsource.client.models.SpellsourceException;
+import com.hiddenswitch.spellsource.client.models.ChangePasswordResponse;
+import com.hiddenswitch.spellsource.client.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
-import com.hiddenswitch.spellsource.client.models.SpellsourceException;
 import com.hiddenswitch.spellsource.client.models.DecksGetResponse;
 import com.hiddenswitch.spellsource.client.models.DecksGetAllResponse;
 import com.hiddenswitch.spellsource.client.models.DecksPutRequest;
@@ -68,6 +70,22 @@ public class DefaultApiTest {
 
     private final DefaultApi api = new DefaultApi();
 
+    
+    /**
+     * 
+     *
+     * Changes your password. Does not log you out after the password is changed. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void changePasswordTest() throws ApiException {
+        ChangePasswordRequest request = null;
+        // ChangePasswordResponse response = api.changePassword(request);
+
+        // TODO: test validations
+    }
     
     /**
      * 

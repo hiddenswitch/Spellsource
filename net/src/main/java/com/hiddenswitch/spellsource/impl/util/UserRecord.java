@@ -32,6 +32,7 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	public static final String RESUME = "resume";
 	public static final String LOGIN_TOKENS = "loginTokens";
 	public static final String SERVICES_RESUME_LOGIN_TOKENS = SERVICES + "." + RESUME + "." + LOGIN_TOKENS;
+	public static final String SERVICES_PASSWORD_SCRYPT = "services.password.scrypt";
 
 	private List<EmailRecord> emails;
 	private String username;

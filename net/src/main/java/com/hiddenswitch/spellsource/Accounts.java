@@ -2,12 +2,8 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.impl.util.MongoRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
-import com.hiddenswitch.spellsource.models.CreateAccountRequest;
-import com.hiddenswitch.spellsource.models.CreateAccountResponse;
-import com.hiddenswitch.spellsource.models.LoginRequest;
-import com.hiddenswitch.spellsource.models.LoginResponse;
+import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.QuickJson;
 import io.vertx.core.json.JsonObject;
@@ -174,4 +170,12 @@ public interface Accounts {
 	 */
 	@Suspendable
 	UserRecord get(String userId);
+
+	/**
+	 * Changes the user's password.
+	 * @param request The
+	 * @return
+	 */
+	@Suspendable
+	ChangePasswordResponse changePassword(ChangePasswordRequest request) throws SuspendExecution, InterruptedException;
 }

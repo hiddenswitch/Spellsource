@@ -69,14 +69,21 @@ import java.util.*;
 public class DefaultApiExample {
 
     public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
         
+        // Configure API key authorization: TokenSecurity
+        ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+        TokenSecurity.setApiKey("YOUR API KEY");
+        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+        //TokenSecurity.setApiKeyPrefix("Token");
+
         DefaultApi apiInstance = new DefaultApi();
-        CreateAccountRequest request = new CreateAccountRequest(); // CreateAccountRequest | 
+        ChangePasswordRequest request = new ChangePasswordRequest(); // ChangePasswordRequest | 
         try {
-            CreateAccountResponse result = apiInstance.createAccount(request);
+            ChangePasswordResponse result = apiInstance.changePassword(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#createAccount");
+            System.err.println("Exception when calling DefaultApi#changePassword");
             e.printStackTrace();
         }
     }
@@ -90,6 +97,7 @@ All URIs are relative to *http://metastone-dev.us-west-2.elasticbeanstalk.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**changePassword**](docs/DefaultApi.md#changePassword) | **POST** /accounts-password | 
 *DefaultApi* | [**createAccount**](docs/DefaultApi.md#createAccount) | **PUT** /accounts | 
 *DefaultApi* | [**decksDelete**](docs/DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
 *DefaultApi* | [**decksGet**](docs/DefaultApi.md#decksGet) | **GET** /decks/{deckId} | 
@@ -120,6 +128,8 @@ Class | Method | HTTP request | Description
  - [Account](docs/Account.md)
  - [CardEvent](docs/CardEvent.md)
  - [CardRecord](docs/CardRecord.md)
+ - [ChangePasswordRequest](docs/ChangePasswordRequest.md)
+ - [ChangePasswordResponse](docs/ChangePasswordResponse.md)
  - [ChooseOneOptions](docs/ChooseOneOptions.md)
  - [ClientToServerMessage](docs/ClientToServerMessage.md)
  - [ClientToServerMessageFirstMessage](docs/ClientToServerMessageFirstMessage.md)
