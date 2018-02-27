@@ -4,6 +4,7 @@ All URIs are relative to *http://metastone-dev.us-west-2.elasticbeanstalk.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**changePassword**](DefaultApi.md#changePassword) | **POST** /accounts-password | 
 [**createAccount**](DefaultApi.md#createAccount) | **PUT** /accounts | 
 [**decksDelete**](DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
 [**decksGet**](DefaultApi.md#decksGet) | **GET** /decks/{deckId} | 
@@ -28,6 +29,61 @@ Method | HTTP request | Description
 [**matchmakingGet**](DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 [**sendFriendMessage**](DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
 
+
+<a name="changePassword"></a>
+# **changePassword**
+> ChangePasswordResponse changePassword(request)
+
+
+
+Changes your password. Does not log you out after the password is changed. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+ChangePasswordRequest request = new ChangePasswordRequest(); // ChangePasswordRequest | 
+try {
+    ChangePasswordResponse result = apiInstance.changePassword(request);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#changePassword");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**ChangePasswordRequest**](ChangePasswordRequest.md)|  |
+
+### Return type
+
+[**ChangePasswordResponse**](ChangePasswordResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="createAccount"></a>
 # **createAccount**

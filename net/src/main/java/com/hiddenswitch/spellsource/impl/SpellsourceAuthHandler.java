@@ -16,7 +16,7 @@ import java.util.Set;
 class SpellsourceAuthHandler implements AuthHandler {
 	EventBus bus;
 
-	public SpellsourceAuthHandler(EventBus bus) {
+	private SpellsourceAuthHandler(EventBus bus) {
 		this.bus = bus;
 	}
 
@@ -98,5 +98,9 @@ class SpellsourceAuthHandler implements AuthHandler {
 
 	private void fail(RoutingContext event, String message) {
 		event.fail(403);
+	}
+
+	public static AuthHandler create(EventBus eventBus) {
+		return new SpellsourceAuthHandler(eventBus);
 	}
 }

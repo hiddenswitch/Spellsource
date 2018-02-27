@@ -161,6 +161,8 @@ public interface Gateway {
 
 	WebResult<SendMessageResponse> sendFriendMessage(RoutingContext context, String userId, String friendId, SendMessageRequest request) throws SuspendExecution, InterruptedException;
 
+	WebResult<com.hiddenswitch.spellsource.models.ChangePasswordResponse> changePassword(RoutingContext context, String userId, ChangePasswordRequest request) throws SuspendExecution, InterruptedException;
+
 	/**
 	 * Heuristically retrieves the primary networking interface for this device.
 	 *

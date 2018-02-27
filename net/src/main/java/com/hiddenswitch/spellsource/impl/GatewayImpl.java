@@ -13,6 +13,8 @@ import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
+import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -31,6 +33,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +61,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 		logger.info("start: Configuring router...");
 
-		final AuthHandler authHandler = new SpellsourceAuthHandler(vertx.eventBus());
+		final AuthHandler authHandler = SpellsourceAuthHandler.create(vertx.eventBus());
 		final BodyHandler bodyHandlerInternal = BodyHandler.create();
 
 		Handler<RoutingContext> bodyHandler = context -> {
@@ -180,6 +183,13 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
 
+		router.route("/accounts-password")
+				.handler(bodyHandler);
+		router.route("/accounts-password")
+				.handler(authHandler);
+		router.route("/accounts-password")
+				.method(HttpMethod.POST)
+				.handler(HandlerFactory.handler(com.hiddenswitch.spellsource.client.models.ChangePasswordRequest.class, this::changePassword));
 
 		router.route("/decks")
 				.handler(bodyHandler);
@@ -327,7 +337,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<GetAccountsResponse> getAccounts(RoutingContext context, String userId, GetAccountsRequest request) throws SuspendExecution, InterruptedException {
-		return null;
+		return WebResult.failed(404, new UnsupportedOperationException("Cannot retrieve multiple accounts through this interface."));
 	}
 
 	@Override
@@ -684,6 +694,17 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				myAccount.getUsername(), friendId, request.getText());
 		SendMessageResponse response = new SendMessageResponse().message(messageSent.toMessageDto());
 		return WebResult.succeeded(response);
+	}
+
+	@Override
+	public WebResult<ChangePasswordResponse> changePassword(RoutingContext context, String userId, com.hiddenswitch.spellsource.client.models.ChangePasswordRequest request) throws SuspendExecution, InterruptedException {
+		try {
+			getAccounts().changePassword(new ChangePasswordRequest(new UserId(userId), request.getPassword()));
+		} catch (RuntimeException ex) {
+			return WebResult.failed(ex);
+		}
+
+		return WebResult.succeeded(200, new ChangePasswordResponse());
 	}
 
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {

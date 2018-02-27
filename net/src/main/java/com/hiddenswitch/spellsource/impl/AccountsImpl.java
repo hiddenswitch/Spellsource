@@ -3,14 +3,11 @@ package com.hiddenswitch.spellsource.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.*;
-import com.hiddenswitch.spellsource.models.CreateAccountResponse;
-import com.hiddenswitch.spellsource.models.LoginResponse;
+import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.impl.util.*;
-import com.hiddenswitch.spellsource.models.CreateAccountRequest;
-import com.hiddenswitch.spellsource.models.LoginRequest;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
@@ -178,6 +175,38 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 	@Suspendable
 	public UserRecord get(String userId) {
 		return Mongo.mongo().findOne(USERS, json("_id", userId), UserRecord.class);
+	}
+
+	@Override
+	@Suspendable
+	public ChangePasswordResponse changePassword(ChangePasswordRequest request) throws SuspendExecution, InterruptedException {
+		if (request.getUserId() == null) {
+			throw new NullPointerException("No user specified.");
+		}
+
+		UserRecord record = get(request.getUserId().toString());
+		if (record == null) {
+			throw new NullPointerException("User not found.");
+		}
+
+		if (!isValidPassword(request.getPassword())) {
+			throw new SecurityException("Invalid password.");
+		}
+
+		final String scrypt = securedPassword(request.getPassword());
+
+		MongoClientUpdateResult result = Mongo.mongo().updateCollection(USERS,
+				json(MongoRecord.ID, record.getId()),
+				json("$set", json(
+						UserRecord.SERVICES_PASSWORD_SCRYPT, scrypt
+				)));
+		logger.debug("changePassword: Changed password for userId={}, username={}", record.getId(), record.getUsername());
+
+		if (result.getDocModified() == 0) {
+			throw new IllegalStateException("Unable to save the password change at this time.");
+		}
+
+		return new ChangePasswordResponse();
 	}
 
 	@Suspendable

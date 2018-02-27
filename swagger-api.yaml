@@ -219,6 +219,19 @@ definitions:
         type: 'array'
         items:
           $ref: '#/definitions/DecksGetResponse'
+  ChangePasswordRequest:
+    type: 'object'
+    required:
+      - properties
+    properties:
+      password:
+        type: 'string'
+        description: |
+          The new password
+  ChangePasswordResponse:
+    type: 'object'
+    description: |
+      An empty response signifying your password was correctly changed
   InventoryCollection:
     type: 'object'
     properties:
@@ -1440,6 +1453,27 @@ paths:
             A response containing the token to put into future request headers.
           schema:
             $ref: '#/definitions/LoginResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
+  /accounts-password:
+    post:
+      description: |
+        Changes your password. Does not log you out after the password is changed.
+      operationId: changePassword
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ChangePasswordRequest'
+      responses:
+        "200":
+          description: |
+            The password was successfully changed.
+          schema:
+            $ref: '#/definitions/ChangePasswordResponse'
         default:
           $ref: '#/responses/InternalServerError'
   /decks:
