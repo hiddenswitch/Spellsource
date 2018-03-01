@@ -53,6 +53,8 @@ Name | Type | Description | Notes
 **tribe** | **String** | When not null, indicates the card&#39;s tribe/race. Typically only minions have this field set. |  [optional]
 **fires** | **Integer** | The number of times this enchantment (secret, quest or trigger on card) has fired. |  [optional]
 **countUntilCast** | **Integer** | The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is triggered.  |  [optional]
+**cardSet** | **String** | The card expansion set this entity belongs to.  |  [optional]
+**rarity** | [**RarityEnum**](#RarityEnum) | The rarity of the card  |  [optional]
 
 
 <a name="CardTypeEnum"></a>
@@ -65,6 +67,18 @@ SPELL | &quot;SPELL&quot;
 WEAPON | &quot;WEAPON&quot;
 HERO_POWER | &quot;HERO_POWER&quot;
 CHOOSE_ONE | &quot;CHOOSE_ONE&quot;
+
+
+<a name="RarityEnum"></a>
+## Enum: RarityEnum
+Name | Value
+---- | -----
+FREE | &quot;FREE&quot;
+COMMON | &quot;COMMON&quot;
+RARE | &quot;RARE&quot;
+EPIC | &quot;EPIC&quot;
+LEGENDARY | &quot;LEGENDARY&quot;
+ALLIANCE | &quot;ALLIANCE&quot;
 
 
 

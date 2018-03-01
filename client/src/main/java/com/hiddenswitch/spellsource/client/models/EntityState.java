@@ -219,6 +219,46 @@ public class EntityState  implements Serializable {
   @SerializedName("countUntilCast")
   private Integer countUntilCast = null;
 
+  @SerializedName("cardSet")
+  private String cardSet = null;
+
+  /**
+   * The rarity of the card 
+   */
+  public enum RarityEnum {
+    @SerializedName("FREE")
+    FREE("FREE"),
+    
+    @SerializedName("COMMON")
+    COMMON("COMMON"),
+    
+    @SerializedName("RARE")
+    RARE("RARE"),
+    
+    @SerializedName("EPIC")
+    EPIC("EPIC"),
+    
+    @SerializedName("LEGENDARY")
+    LEGENDARY("LEGENDARY"),
+    
+    @SerializedName("ALLIANCE")
+    ALLIANCE("ALLIANCE");
+
+    private String value;
+
+    RarityEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+  }
+
+  @SerializedName("rarity")
+  private RarityEnum rarity = null;
+
   public EntityState location(EntityLocation location) {
     this.location = location;
     return this;
@@ -1101,6 +1141,42 @@ public class EntityState  implements Serializable {
     this.countUntilCast = countUntilCast;
   }
 
+  public EntityState cardSet(String cardSet) {
+    this.cardSet = cardSet;
+    return this;
+  }
+
+   /**
+   * The card expansion set this entity belongs to. 
+   * @return cardSet
+  **/
+  @ApiModelProperty(example = "null", value = "The card expansion set this entity belongs to. ")
+  public String getCardSet() {
+    return cardSet;
+  }
+
+  public void setCardSet(String cardSet) {
+    this.cardSet = cardSet;
+  }
+
+  public EntityState rarity(RarityEnum rarity) {
+    this.rarity = rarity;
+    return this;
+  }
+
+   /**
+   * The rarity of the card 
+   * @return rarity
+  **/
+  @ApiModelProperty(example = "null", value = "The rarity of the card ")
+  public RarityEnum getRarity() {
+    return rarity;
+  }
+
+  public void setRarity(RarityEnum rarity) {
+    this.rarity = rarity;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1159,12 +1235,14 @@ public class EntityState  implements Serializable {
         Objects.equals(this.cardType, entityState.cardType) &&
         Objects.equals(this.tribe, entityState.tribe) &&
         Objects.equals(this.fires, entityState.fires) &&
-        Objects.equals(this.countUntilCast, entityState.countUntilCast);
+        Objects.equals(this.countUntilCast, entityState.countUntilCast) &&
+        Objects.equals(this.cardSet, entityState.cardSet) &&
+        Objects.equals(this.rarity, entityState.rarity);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity);
   }
 
   @Override
@@ -1221,6 +1299,8 @@ public class EntityState  implements Serializable {
     sb.append("    tribe: ").append(toIndentedString(tribe)).append("\n");
     sb.append("    fires: ").append(toIndentedString(fires)).append("\n");
     sb.append("    countUntilCast: ").append(toIndentedString(countUntilCast)).append("\n");
+    sb.append("    cardSet: ").append(toIndentedString(cardSet)).append("\n");
+    sb.append("    rarity: ").append(toIndentedString(rarity)).append("\n");
     sb.append("}");
     return sb.toString();
   }
