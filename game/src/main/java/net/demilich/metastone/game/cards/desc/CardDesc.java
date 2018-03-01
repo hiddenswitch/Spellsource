@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards.desc;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
@@ -32,4 +33,8 @@ public abstract class CardDesc implements Serializable, Cloneable {
 	public TriggerDesc[] gameTriggers;
 
 	public abstract Card createInstance();
+
+	public boolean getCollectible() {
+		return collectible;
+	}
 }

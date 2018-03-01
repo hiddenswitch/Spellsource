@@ -14,10 +14,7 @@ import io.vertx.ext.web.handler.AuthHandler;
 import java.util.Set;
 
 class SpellsourceAuthHandler implements AuthHandler {
-	EventBus bus;
-
-	private SpellsourceAuthHandler(EventBus bus) {
-		this.bus = bus;
+	private SpellsourceAuthHandler() {
 	}
 
 	@Override
@@ -76,7 +73,7 @@ class SpellsourceAuthHandler implements AuthHandler {
 			final String userId = credentials.result().getString("userId");
 			final String secret = credentials.result().getString("secret");
 			final String token = userId + ":" + secret;
-
+			EventBus bus = event.vertx().eventBus();
 			Rpc.connect(Accounts.class, bus)
 					.promise(accounts -> accounts.getWithToken(token))
 					.setHandler(getResult -> {
@@ -100,7 +97,7 @@ class SpellsourceAuthHandler implements AuthHandler {
 		event.fail(403);
 	}
 
-	public static AuthHandler create(EventBus eventBus) {
-		return new SpellsourceAuthHandler(eventBus);
+	public static AuthHandler create() {
+		return new SpellsourceAuthHandler();
 	}
 }

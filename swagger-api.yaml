@@ -1367,6 +1367,21 @@ definitions:
               type: 'string'
             description: |
               Indicates that the player must choose from the specified deck IDs in the player's account.
+  GetCardsResponse:
+    type: object
+    description: |
+      A cacheable copy of the entire card catalogue.
+    properties:
+      version:
+        description: |
+          A token used in the If-None-Match argument when checking for new card catalogue content.
+        type: string
+      cards:
+        description: |
+          The actual array of cards representing the complete Spellsource catalogue.
+        type: 'array'
+        items:
+          $ref: '#/definitions/CardRecord'
   SpellsourceException:
     type: object
     description: |
@@ -1491,6 +1506,53 @@ paths:
             $ref: '#/definitions/ChangePasswordResponse'
         default:
           $ref: '#/responses/InternalServerError'
+  /cards:
+    get:
+      description: |
+        Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
+      operationId: getCards
+      parameters:
+        - name: If-None-Match
+          in: header
+          description: |
+            The value returned in the ETag header from the server when this was last called, or empty if this is the
+            first call to this resource.
+          type: string
+      responses:
+        "304":
+          description: |
+            Not modified. Reuse the existing cards database.
+          headers:
+            ETag:
+              type: string
+              description: |
+                The token to provide as the In-None-Match argument next time you check for new cards.
+        "200":
+          description: |
+            The cards database is new/updated and should replace your existing copy.
+          schema:
+            $ref: '#/definitions/GetCardsResponse'
+          headers:
+            ETag:
+              type: string
+              description: |
+                The token to provide as the In-None-Match argument next time you check for new cards.
+            Cache-Control:
+              type: string
+              description: |
+                A standard-compliant cache control that indicates this resource should be retained indefinitely
+                (public, max-age=31536000)
+            Last-Modified:
+              type: string
+              format: date-time
+              description: |
+                The RFC1123 date indicating when these cards were last modified (typically when the first host
+                in the cluser comes online).
+            Date:
+              type: string
+              format: date-time
+              description: |
+                 The RFC1123 date when this request was made.
   /decks:
     get:
       description: |

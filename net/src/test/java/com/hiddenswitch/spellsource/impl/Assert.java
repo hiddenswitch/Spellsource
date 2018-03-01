@@ -183,6 +183,16 @@ class Assert implements TestContext {
 	}
 
 	@Override
+	public TestContext verify(Handler<Void> block) {
+		if (ServiceTest.wrappedContext == null) {
+			block.handle(null);
+		} else {
+			ServiceTest.wrappedContext.verify(block);
+		}
+		return this;
+	}
+
+	@Override
 	@Suspendable
 	public void fail() {
 		if (ServiceTest.wrappedContext == null) {
@@ -220,6 +230,11 @@ class Assert implements TestContext {
 	@Override
 	public Async async(int count) {
 		return ServiceTest.wrappedContext.async(count);
+	}
+
+	@Override
+	public Async strictAsync(int count) {
+		return ServiceTest.wrappedContext.strictAsync(count);
 	}
 
 	@Override

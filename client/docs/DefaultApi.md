@@ -19,6 +19,7 @@ Method | HTTP request | Description
 [**friendPut**](DefaultApi.md#friendPut) | **PUT** /friends | 
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
+[**getCards**](DefaultApi.md#getCards) | **GET** /cards | 
 [**getFriendConversation**](DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 [**healthCheck**](DefaultApi.md#healthCheck) | **GET** / | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
@@ -832,6 +833,51 @@ Name | Type | Description  | Notes
 ### Authorization
 
 [TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getCards"></a>
+# **getCards**
+> GetCardsResponse getCards(ifNoneMatch)
+
+
+
+Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+
+DefaultApi apiInstance = new DefaultApi();
+String ifNoneMatch = "ifNoneMatch_example"; // String | The value returned in the ETag header from the server when this was last called, or empty if this is the first call to this resource. 
+try {
+    GetCardsResponse result = apiInstance.getCards(ifNoneMatch);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getCards");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ifNoneMatch** | **String**| The value returned in the ETag header from the server when this was last called, or empty if this is the first call to this resource.  | [optional]
+
+### Return type
+
+[**GetCardsResponse**](GetCardsResponse.md)
+
+### Authorization
+
+No authorization required
 
 ### HTTP request headers
 

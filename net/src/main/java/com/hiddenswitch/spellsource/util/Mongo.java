@@ -124,6 +124,13 @@ public class Mongo {
 
 	@Suspendable
 	public MongoClientUpdateResult updateCollectionWithOptions(String collection, JsonObject query, JsonObject update, UpdateOptions options) {
+		if (options.isUpsert()
+				&& update.containsKey("$set")
+				&& update.getJsonObject("$set").containsKey("_id")) {
+			// Fix for Mongo 3.6
+			String id = (String) update.getJsonObject("$set").remove("_id");
+			update.put("$setOnInsert", new JsonObject().put("_id", id));
+		}
 		return awaitResult(h -> client.updateCollectionWithOptions(collection, query, update, options, h));
 	}
 
