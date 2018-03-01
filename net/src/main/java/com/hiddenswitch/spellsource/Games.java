@@ -835,6 +835,8 @@ public interface Games {
 		entityState.location(Games.toClientLocation(actor.getEntityLocation()));
 		entityState.manaCost(card.getBaseManaCost());
 		entityState.heroClass(card.getHeroClass().toString());
+		entityState.cardSet(card.getCardSet().toString());
+		entityState.rarity(card.getRarity().getClientRarity());
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.silenced(actor.hasAttribute(Attribute.SILENCED));
 		entityState.deathrattles(actor.getDeathrattles() != null);
@@ -955,6 +957,8 @@ public interface Games {
 		}
 
 		entityState.owner(card.getOwner());
+		entityState.cardSet(card.getCardSet().toString());
+		entityState.rarity(card.getRarity().getClientRarity());
 		entityState.location(Games.toClientLocation(card.getEntityLocation()));
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
