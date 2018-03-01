@@ -32,11 +32,14 @@ import io.vertx.core.streams.Pump;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
+import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
@@ -52,6 +55,8 @@ import static java.util.stream.Collectors.toList;
  */
 public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway {
 	private static Logger logger = LoggerFactory.getLogger(Gateway.class);
+	private static final DateFormat dateTimeFormatter = Utils.createRFC1123DateTimeFormatter();
+
 
 	@Override
 	@Suspendable
@@ -61,7 +66,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 		logger.info("start: Configuring router...");
 
-		final AuthHandler authHandler = SpellsourceAuthHandler.create(vertx.eventBus());
+		final AuthHandler authHandler = SpellsourceAuthHandler.create();
 		final BodyHandler bodyHandlerInternal = BodyHandler.create();
 
 		Handler<RoutingContext> bodyHandler = context -> {
@@ -74,43 +79,13 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			}
 		};
 
-		EventBus bus = vertx.eventBus();
 		router.route("/" + Games.WEBSOCKET_PATH + "-clustered")
 				.method(HttpMethod.GET)
 				.handler(authHandler);
 
 		router.route("/" + Games.WEBSOCKET_PATH + "-clustered")
 				.method(HttpMethod.GET)
-				.handler(Sync.suspendableHandler(context -> {
-					final String userId = context.user().principal().getString("_id");
-
-					try {
-						Lock lock = awaitResult(h -> vertx.sharedData().getLockWithTimeout("pipes-userId-" + userId, 200L, h));
-						logger.debug("/games-clustered: Creating WebSocket to EventBus mapping for userId {}", userId);
-						final ServerWebSocket socket = context.request().upgrade();
-						final MessageConsumer<Buffer> consumer = bus.consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
-						final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
-						final Pump pump1 = Pump.pump(socket, publisher, Integer.MAX_VALUE).start();
-						final Pump pump2 = Pump.pump(consumer.bodyStream(), socket, Integer.MAX_VALUE).start();
-
-						socket.closeHandler(fiberHandler(disconnected -> {
-							try {
-								// Include a reference in this lambda to ensure the pump lasts
-								pump2.numberPumped();
-								publisher.close();
-								consumer.unregister();
-								pump1.stop();
-							} catch (Throwable throwable) {
-								logger.warn("/games-clustered socket closeHandler: Failed to clean up resources from a user {} socket due to an exception {}", userId, throwable);
-							} finally {
-								lock.release();
-							}
-						}));
-					} catch (VertxException timeout) {
-						logger.debug("/games-clustered: Lock was not obtained for userId {}, user probably has another mapping already", userId);
-						context.response().end();
-					}
-				}));
+				.handler(Games.createWebSocketHandler());
 
 		// Health check comes first
 		router.route("/")
@@ -126,9 +101,14 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		router.route().handler(CorsHandler.create(".*")
 				.allowedHeader("Content-Type")
 				.allowedHeader("X-Auth-Token")
+				.allowedHeader("If-None-Match")
 				.exposedHeader("Content-Type")
+				.exposedHeader("ETag")
+				.exposedHeader("Cache-Control")
+				.exposedHeader("Last-Modified")
+				.exposedHeader("Date")
 				.allowCredentials(true)
-				.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS)));
+				.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS, HttpMethod.HEAD)));
 
 		// Pass through cookies
 		router.route().handler(CookieHandler.create());
@@ -190,6 +170,14 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		router.route("/accounts-password")
 				.method(HttpMethod.POST)
 				.handler(HandlerFactory.handler(com.hiddenswitch.spellsource.client.models.ChangePasswordRequest.class, this::changePassword));
+
+		router.route("/cards")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler(this::getCards));
+
+		router.route("/cards")
+				.method(HttpMethod.HEAD)
+				.handler(HandlerFactory.handler(this::getCards));
 
 		router.route("/decks")
 				.handler(bodyHandler);
@@ -705,6 +693,43 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		}
 
 		return WebResult.succeeded(200, new ChangePasswordResponse());
+	}
+
+	@Override
+	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
+		SuspendableMap<String, Object> cache = SharedData.getClusterWideMap("Cards::cards");
+		// Our objective is to create a cards version ONCE for the entire cluster
+		final String thisCardsVersionId = deploymentID();
+		final String thisDate = dateTimeFormatter.format(new Date());
+		String cardsVersion = (String) cache.putIfAbsent("cards-version", thisCardsVersionId);
+		String lastModified = (String) cache.putIfAbsent("cards-last-modified", thisDate);
+		if (cardsVersion == null) {
+			cardsVersion = thisCardsVersionId;
+		}
+		if (lastModified == null) {
+			lastModified = thisDate;
+		}
+
+		context.response().putHeader("ETag", cardsVersion);
+		final String userVersion = context.request().getHeader("If-None-Match");
+		if (userVersion != null &&
+				userVersion.equals(cardsVersion)) {
+			return WebResult.succeeded(304, null);
+		}
+
+		context.response().putHeader("Cache-Control", "public, max-age=31536000");
+		context.response().putHeader("Last-Modified", lastModified);
+		context.response().putHeader("Date", thisDate);
+
+		if (context.request().method() == HttpMethod.HEAD) {
+			return WebResult.succeeded(null);
+		}
+
+		// We created the cache for the first time
+		// TODO: It's possible that there are multiple versions of Spellsource sharing a cluster, so version should be a hash
+		return WebResult.succeeded(new GetCardsResponse()
+				.cards(Cards.getCards())
+				.version(cardsVersion));
 	}
 
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {

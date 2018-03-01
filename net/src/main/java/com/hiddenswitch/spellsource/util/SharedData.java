@@ -9,6 +9,11 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class SharedData {
 	@Suspendable
+	public static <K, V> SuspendableMap<K, V> getClusterWideMap(String name) throws SuspendExecution {
+		return getClusterWideMap(name, Vertx.currentContext().owner());
+	}
+
+	@Suspendable
 	public static <K, V> SuspendableMap<K, V> getClusterWideMap(String name, final Vertx vertx) throws SuspendExecution {
 		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
 		if (vertx.isClustered()) {

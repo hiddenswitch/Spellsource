@@ -112,6 +112,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**friendPut**](docs/DefaultApi.md#friendPut) | **PUT** /friends | 
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
+*DefaultApi* | [**getCards**](docs/DefaultApi.md#getCards) | **GET** /cards | 
 *DefaultApi* | [**getFriendConversation**](docs/DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
@@ -181,6 +182,7 @@ Class | Method | HTTP request | Description
  - [GameState](docs/GameState.md)
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)
+ - [GetCardsResponse](docs/GetCardsResponse.md)
  - [GetConversationResponse](docs/GetConversationResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
  - [JavaSerializationObject](docs/JavaSerializationObject.md)

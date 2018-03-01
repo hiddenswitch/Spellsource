@@ -5,11 +5,23 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
 import com.hiddenswitch.spellsource.impl.GameId;
+import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.SharedData;
 import com.hiddenswitch.spellsource.util.SuspendableAsyncMap;
 import com.hiddenswitch.spellsource.util.SuspendableMap;
+import com.hiddenswitch.spellsource.util.Sync;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxException;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.eventbus.MessageProducer;
+import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.shareddata.Lock;
+import io.vertx.core.streams.Pump;
+import io.vertx.ext.web.RoutingContext;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -32,17 +44,23 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.fiberHandler;
+
 
 /**
  * A service that starts a game session, accepts connections from players and manages the state of the game.
  */
 public interface Games {
+	Logger gamesLogger = LoggerFactory.getLogger(Games.class);
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 	String WEBSOCKET_PATH = "games";
 
@@ -835,8 +853,8 @@ public interface Games {
 		entityState.location(Games.toClientLocation(actor.getEntityLocation()));
 		entityState.manaCost(card.getBaseManaCost());
 		entityState.heroClass(card.getHeroClass().toString());
-		entityState.cardSet(card.getCardSet().toString());
-		entityState.rarity(card.getRarity().getClientRarity());
+		entityState.cardSet(Objects.toString(card.getCardSet()));
+		entityState.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.silenced(actor.hasAttribute(Attribute.SILENCED));
 		entityState.deathrattles(actor.getDeathrattles() != null);
@@ -957,8 +975,8 @@ public interface Games {
 		}
 
 		entityState.owner(card.getOwner());
-		entityState.cardSet(card.getCardSet().toString());
-		entityState.rarity(card.getRarity().getClientRarity());
+		entityState.cardSet(Objects.toString(card.getCardSet()));
+		entityState.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
 		entityState.location(Games.toClientLocation(card.getEntityLocation()));
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
@@ -1057,5 +1075,45 @@ public interface Games {
 	 */
 	static long getDefaultNoActivityTimeout() {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
+	}
+
+	/**
+	 * Creates a web socket handler to route game traffic (actions, game states, etc.) between the HTTP/WS client this
+	 * handler will create and the appropriate event bus address for game traffic.
+	 *
+	 * @return A suspendable handler.
+	 */
+	static Handler<RoutingContext> createWebSocketHandler() {
+		return Sync.suspendableHandler(context -> {
+			final String userId = context.user().principal().getString("_id");
+			final Vertx vertx = context.vertx();
+			final EventBus bus = vertx.eventBus();
+			try {
+				Lock lock = awaitResult(h -> vertx.sharedData().getLockWithTimeout("pipes-userId-" + userId, 200L, h));
+				gamesLogger.debug("createWebSocketHandler: Creating WebSocket to EventBus mapping for userId {}", userId);
+				final ServerWebSocket socket = context.request().upgrade();
+				final MessageConsumer<Buffer> consumer = bus.consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
+				final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
+				final Pump pump1 = Pump.pump(socket, publisher, Integer.MAX_VALUE).start();
+				final Pump pump2 = Pump.pump(consumer.bodyStream(), socket, Integer.MAX_VALUE).start();
+
+				socket.closeHandler(fiberHandler(disconnected -> {
+					try {
+						// Include a reference in this lambda to ensure the pump lasts
+						pump2.numberPumped();
+						publisher.close();
+						consumer.unregister();
+						pump1.stop();
+					} catch (Throwable throwable) {
+						gamesLogger.warn("createWebSocketHandler socket closeHandler: Failed to clean up resources from a user {} socket due to an exception {}", userId, throwable);
+					} finally {
+						lock.release();
+					}
+				}));
+			} catch (VertxException timeout) {
+				gamesLogger.debug("createWebSocketHandler: Lock was not obtained for userId {}, user probably has another mapping already", userId);
+				context.response().end();
+			}
+		});
 	}
 }

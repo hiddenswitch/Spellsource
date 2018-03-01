@@ -1,0 +1,17 @@
+{
+  "id": "hero_neutral",
+  "name": "",
+  "heroPower": "hero_power_neutral",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

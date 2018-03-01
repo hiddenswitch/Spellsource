@@ -57,6 +57,7 @@ import com.hiddenswitch.spellsource.client.models.FriendPutResponse;
 import com.hiddenswitch.spellsource.client.models.FriendPutRequest;
 import com.hiddenswitch.spellsource.client.models.GetAccountsResponse;
 import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
+import com.hiddenswitch.spellsource.client.models.GetCardsResponse;
 import com.hiddenswitch.spellsource.client.models.GetConversationResponse;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
@@ -1674,6 +1675,109 @@ public class DefaultApi {
 
         com.squareup.okhttp.Call call = getAccountsCall(request, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<GetAccountsResponse>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /* Build call for getCards */
+    private com.squareup.okhttp.Call getCardsCall(String ifNoneMatch, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+
+        // create path and map variables
+        String localVarPath = "/cards".replaceAll("\\{format\\}","json");
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        if (ifNoneMatch != null)
+        localVarHeaderParams.put("If-None-Match", apiClient.parameterToString(ifNoneMatch));
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] {  };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+
+    /**
+     * 
+     * Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords 
+     * @param ifNoneMatch The value returned in the ETag header from the server when this was last called, or empty if this is the first call to this resource.  (optional)
+     * @return GetCardsResponse
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public GetCardsResponse getCards(String ifNoneMatch) throws ApiException {
+        ApiResponse<GetCardsResponse> resp = getCardsWithHttpInfo(ifNoneMatch);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords 
+     * @param ifNoneMatch The value returned in the ETag header from the server when this was last called, or empty if this is the first call to this resource.  (optional)
+     * @return ApiResponse&lt;GetCardsResponse&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<GetCardsResponse> getCardsWithHttpInfo(String ifNoneMatch) throws ApiException {
+        com.squareup.okhttp.Call call = getCardsCall(ifNoneMatch, null, null);
+        Type localVarReturnType = new TypeToken<GetCardsResponse>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords 
+     * @param ifNoneMatch The value returned in the ETag header from the server when this was last called, or empty if this is the first call to this resource.  (optional)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call getCardsAsync(String ifNoneMatch, final ApiCallback<GetCardsResponse> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = getCardsCall(ifNoneMatch, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<GetCardsResponse>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

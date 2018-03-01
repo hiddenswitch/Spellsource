@@ -6,12 +6,14 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
+import com.hiddenswitch.spellsource.client.ApiResponse;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.models.CreateGameSessionRequest;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.models.DeckCreateResponse;
+import com.hiddenswitch.spellsource.models.GetCardResponse;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
@@ -20,6 +22,7 @@ import io.vertx.core.eventbus.SendContext;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -52,6 +55,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 	private BotsImpl bots;
 	private static DefaultApi defaultApi = new DefaultApi();
 	private MatchmakingImpl matchmaking;
+	private static int currentUser = 0;
 
 
 	static {
@@ -426,12 +430,29 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		});
 	}
 
+	@Test
+	public void testCardsCollection(TestContext context) throws ApiException {
+		DefaultApi defaultApi = new DefaultApi();
+		defaultApi.getApiClient().setBasePath(UnityClient.basePath);
 
-	private static int currentTomer = 0;
+		GetCardsResponse response1 = defaultApi.getCards(null);
+		context.assertEquals((long) response1.getCards().size(), CardCatalogue.getRecords().values().stream().filter(c -> c.getDesc().collectible).count());
+		try {
+			ApiResponse<GetCardsResponse> response2 = defaultApi.getCardsWithHttpInfo(response1.getVersion());
+			context.fail();
+		} catch (ApiException ex) {
+			context.assertEquals(ex.getCode(), 304);
+		}
+
+		ApiResponse<GetCardsResponse> response3 = defaultApi.getCardsWithHttpInfo("invalid token");
+		context.assertNotNull(response3.getData());
+		context.assertEquals(response3.getStatusCode(), 200);
+		context.assertEquals(response3.getHeaders().get("ETag").get(0), response1.getVersion());
+	}
 
 	public CreateAccountResponse createRandomAccount(TestContext testContext, DefaultApi defaultApi) {
-		String username = "tomer" + currentTomer;
-		String email = "tomer" + (currentTomer++) + "@gmail.com";
+		String username = "tomer" + currentUser;
+		String email = "tomer" + (currentUser++) + "@gmail.com";
 
 		CreateAccountResponse createAccountResponse = null;
 		try {

@@ -183,6 +183,16 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	}
 
 	/**
+	 * Returns an uninitialized game context supporting all formats. Entity IDs have not been assigned to the cards;
+	 * mulligans haven't completed; the hero classes are neutral.
+	 *
+	 * @return An uninitialized game context that is nonetheless valid for performing many operations.
+	 */
+	public static GameContext uninitialized() {
+		return uninitialized(HeroClass.ANY, HeroClass.ANY);
+	}
+
+	/**
 	 * Creates a game context from the given players, logic and deck format.
 	 *
 	 * @param player1    The first {@link Player} with a valid {@link Behaviour}. This is not necessarily the player who

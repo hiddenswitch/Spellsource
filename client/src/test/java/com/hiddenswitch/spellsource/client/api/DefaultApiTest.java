@@ -45,6 +45,7 @@ import com.hiddenswitch.spellsource.client.models.FriendPutResponse;
 import com.hiddenswitch.spellsource.client.models.FriendPutRequest;
 import com.hiddenswitch.spellsource.client.models.GetAccountsResponse;
 import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
+import com.hiddenswitch.spellsource.client.models.GetCardsResponse;
 import com.hiddenswitch.spellsource.client.models.GetConversationResponse;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
@@ -306,6 +307,22 @@ public class DefaultApiTest {
     public void getAccountsTest() throws ApiException {
         GetAccountsRequest request = null;
         // GetAccountsResponse response = api.getAccounts(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getCardsTest() throws ApiException {
+        String ifNoneMatch = null;
+        // GetCardsResponse response = api.getCards(ifNoneMatch);
 
         // TODO: test validations
     }

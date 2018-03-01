@@ -163,6 +163,8 @@ public interface Gateway {
 
 	WebResult<com.hiddenswitch.spellsource.models.ChangePasswordResponse> changePassword(RoutingContext context, String userId, ChangePasswordRequest request) throws SuspendExecution, InterruptedException;
 
+	WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException;
+
 	/**
 	 * Heuristically retrieves the primary networking interface for this device.
 	 *
