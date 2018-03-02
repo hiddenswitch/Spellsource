@@ -248,4 +248,13 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		this.format = format;
 		return this;
 	}
+
+	public static DeckCreateRequest empty(String userId, String name, HeroClass heroClass) {
+		return new DeckCreateRequest()
+				.withFormat("Standard")
+				.withDraft(false)
+				.withHeroClass(heroClass)
+				.withName(name)
+				.withUserId(userId);
+	}
 }

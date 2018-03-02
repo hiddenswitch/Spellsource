@@ -48,11 +48,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 	@Override
 	public DeckCreateResponse createDeck(DeckCreateRequest request) throws SuspendExecution, InterruptedException {
 		if (request.getUserId() == null) {
-			throw new SecurityException();
-		}
-
-		if (!request.isValid()) {
-			throw new IllegalArgumentException("Invalid deck creation request.");
+			throw new SecurityException("A valid userID is required.");
 		}
 
 		List<String> inventoryIds = new ArrayList<>();
@@ -83,12 +79,12 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		}
 
 		if (inventoryIds.size() > getMaxDeckSize()) {
-			throw new RuntimeException();
+			throw new RuntimeException(String.format("Cannot create a deck whose size %d exceeds %d", inventoryIds.size(), getMaxDeckSize()));
 		} else {
 			final int size = request.getInventoryIds() != null ? request.getInventoryIds().size() : 0;
 			final int cardCount = request.getCardIds() != null ? request.getCardIds().size() : 0;
 			if (inventoryIds.size() != (size + cardCount)) {
-				throw new RuntimeException();
+				throw new RuntimeException("Cannot create a deck that requested invalid card IDs");
 			}
 		}
 
@@ -137,19 +133,21 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 					collectionUpdate);
 		}
 
-		if (updateCommand.getPullAllInventoryIds() != null) {
+		if (updateCommand.getPullAllInventoryIds() != null
+				&& !updateCommand.getPullAllInventoryIds().isEmpty()) {
 			RemoveFromCollectionResponse result = inventory.sync().removeFromCollection(RemoveFromCollectionRequest.byInventoryIds(deckId, updateCommand.getPullAllInventoryIds()));
 			removed.addAll(result.getInventoryIds());
 		}
 
 		if (updateCommand.getPushInventoryIds() != null
-				&& updateCommand.getPullAllInventoryIds() != null
-				&& !updateCommand.getPushCardIds().getEach().isEmpty()) {
+				&& updateCommand.getPushInventoryIds().getEach() != null
+				&& !updateCommand.getPushInventoryIds().getEach().isEmpty()) {
 			AddToCollectionResponse result = inventory.sync().addToCollection(AddToCollectionRequest.byInventoryIds(deckId, updateCommand.getPushInventoryIds().getEach()));
 			added.addAll(result.getInventoryIds());
 		}
 
-		if (updateCommand.getPullAllCardIds() != null) {
+		if (updateCommand.getPullAllCardIds() != null
+				&& !updateCommand.getPullAllCardIds().isEmpty()) {
 			RemoveFromCollectionResponse result = inventory.sync().removeFromCollection(RemoveFromCollectionRequest.byCardIds(deckId, updateCommand.getPullAllCardIds()));
 			removed.addAll(result.getInventoryIds());
 		}

@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
+import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushCardIds;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushInventoryIds;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.DeckListParsingException;
@@ -19,6 +20,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,6 +105,35 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 			GetCollectionResponse deck2 = getDeck(deckId);
 			getContext().assertTrue(deck2.getInventoryRecords().contains(replacement));
 			getContext().assertFalse(deck2.getInventoryRecords().contains(toReplace));
+		});
+	}
+
+	@Test
+	public void testUpdateDecksWithCardIds(TestContext context) {
+		wrapSync(context, () -> {
+			CreateAccountResponse player1 = accounts.createAccount("a@b.com", "a", "1");
+			final String userId = player1.getUserId();
+			CreateCollectionResponse emptyUserCollection = inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
+			DeckCreateResponse deck = service.createDeck(DeckCreateRequest.empty(userId, "name", HeroClass.BLACK));
+			DeckUpdateResponse update = service.updateDeck(new DeckUpdateRequest(userId, deck.getDeckId(), new DecksUpdateCommand()
+					.pushCardIds(new DecksUpdateCommandPushCardIds()
+							.addEachItem("spell_mirror_image")
+							.addEachItem("spell_mirror_image")
+							.addEachItem("spell_mirror_image")
+							.addEachItem("minion_bloodfen_raptor"))));
+
+			getContext().assertEquals(4L, update.getAddedInventoryIds().stream().distinct().count());
+			GetCollectionResponse userCollection = inventory.getCollection(GetCollectionRequest.user(userId));
+			getContext().assertEquals(3L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_mirror_image")).count());
+			getContext().assertEquals(1L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_bloodfen_raptor")).count());
+
+			update = service.updateDeck(new DeckUpdateRequest(userId, deck.getDeckId(), new DecksUpdateCommand()
+					.pullAllCardIds(Arrays.asList("spell_mirror_image", "spell_mirror_image", "minion_bloodfen_raptor"))));
+
+			getContext().assertEquals(3L, update.getRemovedInventoryIds().stream().distinct().count());
+			GetCollectionResponse updatedDeck = inventory.getCollection(GetCollectionRequest.deck(deck.getDeckId()));
+			getContext().assertEquals(1L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_mirror_image")).count());
+			getContext().assertEquals(0L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_bloodfen_raptor")).count());
 		});
 	}
 
@@ -216,14 +247,6 @@ public class DeckTest extends ServiceTest<DecksImpl> {
 		logic = new LogicImpl();
 		DecksImpl instance = new DecksImpl();
 
-		vertx.deployVerticle(accounts, then -> {
-			vertx.deployVerticle(cards, then2 -> {
-				vertx.deployVerticle(inventory, then3 -> {
-					vertx.deployVerticle(logic, then4 -> {
-						vertx.deployVerticle(instance, then5 -> done.handle(Future.succeededFuture(instance)));
-					});
-				});
-			});
-		});
+		deploy(Arrays.asList(accounts, cards, inventory, logic), instance, done);
 	}
 }
