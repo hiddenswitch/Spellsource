@@ -142,6 +142,7 @@ Class | Method | HTTP request | Description
  - [DecksPutRequest](docs/DecksPutRequest.md)
  - [DecksPutResponse](docs/DecksPutResponse.md)
  - [DecksUpdateCommand](docs/DecksUpdateCommand.md)
+ - [DecksUpdateCommandPushCardIds](docs/DecksUpdateCommandPushCardIds.md)
  - [DecksUpdateCommandPushInventoryIds](docs/DecksUpdateCommandPushInventoryIds.md)
  - [DraftState](docs/DraftState.md)
  - [DraftsChooseCardRequest](docs/DraftsChooseCardRequest.md)
