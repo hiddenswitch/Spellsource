@@ -4,6 +4,7 @@ import com.hiddenswitch.spellsource.Spellsource;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,7 +56,14 @@ public class CreateCollectionRequest implements Serializable {
 				.withUserId(ownerUserId)
 				.withUserIds(userIds)
 				.withInventoryIds(inventoryIds);
+	}
 
+	public static CreateCollectionRequest emptyUserCollection(String userId) {
+		return new CreateCollectionRequest()
+				.withType(CollectionTypes.USER)
+				.withUserId(userId)
+				.withName(userId + "'s Collection")
+				.withCardIds(Collections.emptyList());
 	}
 
 	public void setUserId(String userId) {

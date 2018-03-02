@@ -8,11 +8,26 @@ import java.util.List;
  */
 public class RemoveFromCollectionRequest implements Serializable {
 	private List<String> inventoryIds;
+	private List<String> cardIds;
 	private String collectionId;
 
-	public RemoveFromCollectionRequest(String collectionId, List<String> inventoryIds) {
+	private RemoveFromCollectionRequest() {
+	}
+
+	private RemoveFromCollectionRequest(String collectionId, List<String> inventoryIds) {
 		this.inventoryIds = inventoryIds;
 		this.collectionId = collectionId;
+	}
+
+	public static RemoveFromCollectionRequest byInventoryIds(String collectionId, List<String> inventoryIds) {
+		return new RemoveFromCollectionRequest(collectionId, inventoryIds);
+	}
+
+	public static RemoveFromCollectionRequest byCardIds(String collectionId, List<String> cardIds) {
+		RemoveFromCollectionRequest request = new RemoveFromCollectionRequest();
+		request.setCollectionId(collectionId);
+		request.setCardIds(cardIds);
+		return request;
 	}
 
 	public List<String> getInventoryIds() {
@@ -29,5 +44,13 @@ public class RemoveFromCollectionRequest implements Serializable {
 
 	public void setCollectionId(String collectionId) {
 		this.collectionId = collectionId;
+	}
+
+	public List<String> getCardIds() {
+		return cardIds;
+	}
+
+	public void setCardIds(List<String> cardIds) {
+		this.cardIds = cardIds;
 	}
 }

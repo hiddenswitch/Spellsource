@@ -119,8 +119,9 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		DecksUpdateCommand updateCommand = request.getUpdateCommand();
 		String deckId = request.getDeckId();
 		String userId = request.getUserId();
-		MongoClient mongo = getMongo();
 		JsonObject collectionUpdate = new JsonObject();
+		List<String> added = new ArrayList<>();
+		List<String> removed = new ArrayList<>();
 
 		if (updateCommand.getSetHeroClass() != null) {
 			jsonPut(collectionUpdate, "$set", json("heroClass", updateCommand.getSetHeroClass()));
@@ -131,25 +132,42 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		}
 
 		if (!collectionUpdate.isEmpty()) {
-			MongoClientUpdateResult r = awaitResult(h -> mongo.updateCollection(Inventory.COLLECTIONS,
+			MongoClientUpdateResult result = mongo().updateCollection(Inventory.COLLECTIONS,
 					json("_id", deckId, "userId", userId),
-					collectionUpdate, h));
+					collectionUpdate);
 		}
 
 		if (updateCommand.getPullAllInventoryIds() != null) {
-			inventory.sync().removeFromCollection(new RemoveFromCollectionRequest(deckId, updateCommand.getPullAllInventoryIds()));
+			RemoveFromCollectionResponse result = inventory.sync().removeFromCollection(RemoveFromCollectionRequest.byInventoryIds(deckId, updateCommand.getPullAllInventoryIds()));
+			removed.addAll(result.getInventoryIds());
 		}
 
-		if (updateCommand.getPushInventoryIds() != null) {
-			inventory.sync().addToCollection(new AddToCollectionRequest(deckId, updateCommand.getPushInventoryIds().getEach()));
+		if (updateCommand.getPushInventoryIds() != null
+				&& updateCommand.getPullAllInventoryIds() != null
+				&& !updateCommand.getPushCardIds().getEach().isEmpty()) {
+			AddToCollectionResponse result = inventory.sync().addToCollection(AddToCollectionRequest.byInventoryIds(deckId, updateCommand.getPushInventoryIds().getEach()));
+			added.addAll(result.getInventoryIds());
+		}
+
+		if (updateCommand.getPullAllCardIds() != null) {
+			RemoveFromCollectionResponse result = inventory.sync().removeFromCollection(RemoveFromCollectionRequest.byCardIds(deckId, updateCommand.getPullAllCardIds()));
+			removed.addAll(result.getInventoryIds());
+		}
+
+		if (updateCommand.getPushCardIds() != null
+				&& updateCommand.getPushCardIds().getEach() != null
+				&& !updateCommand.getPushCardIds().getEach().isEmpty()) {
+			AddToCollectionResponse result = inventory.sync().addToCollection(AddToCollectionRequest.byCardIds(userId, deckId, updateCommand.getPushCardIds().getEach()));
+			added.addAll(result.getInventoryIds());
 		}
 
 		if (updateCommand.getSetInventoryIds() != null) {
 			// Remove cards, then add them back in
 			List<String> inventoryIds = updateCommand.getSetInventoryIds();
-			inventory.sync().setCollection(new SetCollectionRequest(deckId, inventoryIds));
+			SetCollectionResponse result = inventory.sync().setCollection(new SetCollectionRequest(deckId, inventoryIds));
+			// TODO: Populate the appropriate added/removed response here
 		}
-		return new DeckUpdateResponse();
+		return DeckUpdateResponse.changed(added, removed);
 	}
 
 	@Override

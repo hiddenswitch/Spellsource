@@ -36,6 +36,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
 
+import static com.hiddenswitch.spellsource.Inventory.INVENTORY;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -151,11 +152,11 @@ public class Spellsource {
 
 							for (JsonObject record : Mongo.mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1)))) {
 								final String userId = record.getString("_id");
-								Mongo.mongo().updateCollectionWithOptions(Inventory.INVENTORY, json("userId", userId), json("$addToSet", json("collectionIds", userId)), new UpdateOptions().setMulti(true));
+								Mongo.mongo().updateCollectionWithOptions(INVENTORY, json("userId", userId), json("$addToSet", json("collectionIds", userId)), new UpdateOptions().setMulti(true));
 							}
 
 							// Remove all inventory records that are in just one collection, the user collection
-							Mongo.mongo().removeDocuments(Inventory.INVENTORY, json("collectionIds", json("$size", 1)));
+							Mongo.mongo().removeDocuments(INVENTORY, json("collectionIds", json("$size", 1)));
 						}))
 				.add(new MigrationRequest()
 						.withVersion(4)
@@ -225,7 +226,13 @@ public class Spellsource {
 							MongoClientUpdateResult result2 = changeCardId("minion_doomlord", "minion_dreadlord");
 							logger.info("add MigrationRequest 6: Fixed {} Temporal Anomaly cards, {} Dreadlord cards", result1.getDocModified(), result2.getDocModified());
 						}))
-				.migrateTo(6, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(7)
+						.withUp(thisVertx -> {
+							// Creates an index on the cardDesc.id property to help find cards in inventory management
+							mongo().createIndex(INVENTORY, json("cardDesc.id", 1));
+						}))
+				.migrateTo(7, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -431,7 +438,7 @@ public class Spellsource {
 			return new MongoClientUpdateResult();
 		}
 
-		return Mongo.mongo().updateCollectionWithOptions(Inventory.INVENTORY,
+		return Mongo.mongo().updateCollectionWithOptions(INVENTORY,
 				json("cardDesc.id", oldId), json("$set", json("cardDesc.id", newId)), new UpdateOptions().setMulti(true));
 	}
 }

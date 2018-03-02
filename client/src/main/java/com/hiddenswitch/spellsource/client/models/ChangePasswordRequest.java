@@ -48,7 +48,7 @@ public class ChangePasswordRequest  implements Serializable {
    * The new password 
    * @return password
   **/
-  @ApiModelProperty(example = "null", value = "The new password ")
+  @ApiModelProperty(example = "null", required = true, value = "The new password ")
   public String getPassword() {
     return password;
   }

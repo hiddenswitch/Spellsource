@@ -27,6 +27,7 @@ package com.hiddenswitch.spellsource.client.models;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushCardIds;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushInventoryIds;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -51,8 +52,14 @@ public class DecksUpdateCommand  implements Serializable {
   @SerializedName("pushInventoryIds")
   private DecksUpdateCommandPushInventoryIds pushInventoryIds = null;
 
+  @SerializedName("pushCardIds")
+  private DecksUpdateCommandPushCardIds pushCardIds = null;
+
   @SerializedName("pullAllInventoryIds")
   private List<String> pullAllInventoryIds = new ArrayList<String>();
+
+  @SerializedName("pullAllCardIds")
+  private List<String> pullAllCardIds = new ArrayList<String>();
 
   public DecksUpdateCommand setHeroClass(String setHeroClass) {
     this.setHeroClass = setHeroClass;
@@ -60,10 +67,10 @@ public class DecksUpdateCommand  implements Serializable {
   }
 
    /**
-   * Get setHeroClass
+   * Sets the hero class of the deck in this command. If the deck now contains cards that no longer belong to this hero class, the deck becomes invalid under standard rules. 
    * @return setHeroClass
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Sets the hero class of the deck in this command. If the deck now contains cards that no longer belong to this hero class, the deck becomes invalid under standard rules. ")
   public String getSetHeroClass() {
     return setHeroClass;
   }
@@ -78,10 +85,10 @@ public class DecksUpdateCommand  implements Serializable {
   }
 
    /**
-   * Get setName
+   * Sets the name of the deck in this command. If the name is null, the deck becomes invalid. 
    * @return setName
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Sets the name of the deck in this command. If the name is null, the deck becomes invalid. ")
   public String getSetName() {
     return setName;
   }
@@ -101,10 +108,10 @@ public class DecksUpdateCommand  implements Serializable {
   }
 
    /**
-   * Get setInventoryIds
+   * Sets the entire deck's inventory IDs in this command. Duplicate inventory IDs will cause the update to be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules, duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn't neutral or the same as the deck's hero class marks the deck as invalid. 
    * @return setInventoryIds
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Sets the entire deck's inventory IDs in this command. Duplicate inventory IDs will cause the update to be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules, duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn't neutral or the same as the deck's hero class marks the deck as invalid. ")
   public List<String> getSetInventoryIds() {
     return setInventoryIds;
   }
@@ -131,6 +138,24 @@ public class DecksUpdateCommand  implements Serializable {
     this.pushInventoryIds = pushInventoryIds;
   }
 
+  public DecksUpdateCommand pushCardIds(DecksUpdateCommandPushCardIds pushCardIds) {
+    this.pushCardIds = pushCardIds;
+    return this;
+  }
+
+   /**
+   * Get pushCardIds
+   * @return pushCardIds
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public DecksUpdateCommandPushCardIds getPushCardIds() {
+    return pushCardIds;
+  }
+
+  public void setPushCardIds(DecksUpdateCommandPushCardIds pushCardIds) {
+    this.pushCardIds = pushCardIds;
+  }
+
   public DecksUpdateCommand pullAllInventoryIds(List<String> pullAllInventoryIds) {
     this.pullAllInventoryIds = pullAllInventoryIds;
     return this;
@@ -142,16 +167,39 @@ public class DecksUpdateCommand  implements Serializable {
   }
 
    /**
-   * Get pullAllInventoryIds
+   * Removes all the specified inventory IDs from the user's deck. Does nothing if the deck does not contain any of the specified inventory IDs. This method will still succeed for inventory IDs that are found. 
    * @return pullAllInventoryIds
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "Removes all the specified inventory IDs from the user's deck. Does nothing if the deck does not contain any of the specified inventory IDs. This method will still succeed for inventory IDs that are found. ")
   public List<String> getPullAllInventoryIds() {
     return pullAllInventoryIds;
   }
 
   public void setPullAllInventoryIds(List<String> pullAllInventoryIds) {
     this.pullAllInventoryIds = pullAllInventoryIds;
+  }
+
+  public DecksUpdateCommand pullAllCardIds(List<String> pullAllCardIds) {
+    this.pullAllCardIds = pullAllCardIds;
+    return this;
+  }
+
+  public DecksUpdateCommand addPullAllCardIdsItem(String pullAllCardIdsItem) {
+    this.pullAllCardIds.add(pullAllCardIdsItem);
+    return this;
+  }
+
+   /**
+   * Removes all the specified card IDs from the user's deck. Does nothing if the deck does not contain any of the specified card IDs. This method will still succeed for deck IDs that are found. 
+   * @return pullAllCardIds
+  **/
+  @ApiModelProperty(example = "null", value = "Removes all the specified card IDs from the user's deck. Does nothing if the deck does not contain any of the specified card IDs. This method will still succeed for deck IDs that are found. ")
+  public List<String> getPullAllCardIds() {
+    return pullAllCardIds;
+  }
+
+  public void setPullAllCardIds(List<String> pullAllCardIds) {
+    this.pullAllCardIds = pullAllCardIds;
   }
 
 
@@ -168,12 +216,14 @@ public class DecksUpdateCommand  implements Serializable {
         Objects.equals(this.setName, decksUpdateCommand.setName) &&
         Objects.equals(this.setInventoryIds, decksUpdateCommand.setInventoryIds) &&
         Objects.equals(this.pushInventoryIds, decksUpdateCommand.pushInventoryIds) &&
-        Objects.equals(this.pullAllInventoryIds, decksUpdateCommand.pullAllInventoryIds);
+        Objects.equals(this.pushCardIds, decksUpdateCommand.pushCardIds) &&
+        Objects.equals(this.pullAllInventoryIds, decksUpdateCommand.pullAllInventoryIds) &&
+        Objects.equals(this.pullAllCardIds, decksUpdateCommand.pullAllCardIds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(setHeroClass, setName, setInventoryIds, pushInventoryIds, pullAllInventoryIds);
+    return Objects.hash(setHeroClass, setName, setInventoryIds, pushInventoryIds, pushCardIds, pullAllInventoryIds, pullAllCardIds);
   }
 
   @Override
@@ -185,7 +235,9 @@ public class DecksUpdateCommand  implements Serializable {
     sb.append("    setName: ").append(toIndentedString(setName)).append("\n");
     sb.append("    setInventoryIds: ").append(toIndentedString(setInventoryIds)).append("\n");
     sb.append("    pushInventoryIds: ").append(toIndentedString(pushInventoryIds)).append("\n");
+    sb.append("    pushCardIds: ").append(toIndentedString(pushCardIds)).append("\n");
     sb.append("    pullAllInventoryIds: ").append(toIndentedString(pullAllInventoryIds)).append("\n");
+    sb.append("    pullAllCardIds: ").append(toIndentedString(pullAllCardIds)).append("\n");
     sb.append("}");
     return sb.toString();
   }

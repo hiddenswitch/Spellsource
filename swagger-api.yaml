@@ -185,21 +185,66 @@ definitions:
     type: 'object'
     properties:
       setHeroClass:
+        description: |
+          Sets the hero class of the deck in this command. If the deck now contains cards that no longer belong to this
+          hero class, the deck becomes invalid under standard rules.
         type: 'string'
       setName:
+        description: |
+          Sets the name of the deck in this command. If the name is null, the deck becomes invalid.
         type: 'string'
       setInventoryIds:
+        description: |
+          Sets the entire deck's inventory IDs in this command. Duplicate inventory IDs will cause the update to
+          be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules,
+          duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn't neutral or the
+          same as the deck's hero class marks the deck as invalid.
         type: 'array'
         items:
           type: 'string'
       pushInventoryIds:
+        description: |
+          Adds the specified inventory IDs to the deck in this command. Duplicate inventory IDs will cause the update to
+          be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules,
+          duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn't neutral or the
+          same as the deck's hero class marks the deck as invalid.
         type: 'object'
+        required:
+          - $each
         properties:
           $each:
+            description: |
+              The items in this array specify which inventory IDs should be added.
+            type: 'array'
+            items:
+              type: 'string'
+      pushCardIds:
+        description: |
+          Adds the specified card IDs to the deck with this command. If the player doesn't own the card IDs, the current
+          Spellsource inventory rules will grant the cards to the user. Duplicates are allowed. Under standard rules,
+          the deck becomes invalid if the number of duplicates exceeds 2; or, if the hero class isn't neutral or the
+          same as the deck's hero class.
+        type: 'object'
+        required:
+          - $each
+        properties:
+          $each:
+            description: |
+              The items in this array specify which card IDs should be added.
             type: 'array'
             items:
               type: 'string'
       pullAllInventoryIds:
+        description: |
+          Removes all the specified inventory IDs from the user's deck. Does nothing if the deck does not contain any of
+          the specified inventory IDs. This method will still succeed for inventory IDs that are found.
+        type: 'array'
+        items:
+          type: 'string'
+      pullAllCardIds:
+        description: |
+          Removes all the specified card IDs from the user's deck. Does nothing if the deck does not contain any of the
+          specified card IDs. This method will still succeed for deck IDs that are found.
         type: 'array'
         items:
           type: 'string'
@@ -222,7 +267,7 @@ definitions:
   ChangePasswordRequest:
     type: 'object'
     required:
-      - properties
+      - password
     properties:
       password:
         type: 'string'

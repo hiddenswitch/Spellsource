@@ -34,29 +34,29 @@ import java.util.List;
 
 import java.io.Serializable;
 /**
- * Adds the specified inventory IDs to the deck in this command. Duplicate inventory IDs will cause the update to be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules, duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn&#39;t neutral or the same as the deck&#39;s hero class marks the deck as invalid. 
+ * Adds the specified card IDs to the deck with this command. If the player doesn&#39;t own the card IDs, the current Spellsource inventory rules will grant the cards to the user. Duplicates are allowed. Under standard rules, the deck becomes invalid if the number of duplicates exceeds 2; or, if the hero class isn&#39;t neutral or the same as the deck&#39;s hero class. 
  */
-@ApiModel(description = "Adds the specified inventory IDs to the deck in this command. Duplicate inventory IDs will cause the update to be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules, duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn't neutral or the same as the deck's hero class marks the deck as invalid. ")
+@ApiModel(description = "Adds the specified card IDs to the deck with this command. If the player doesn't own the card IDs, the current Spellsource inventory rules will grant the cards to the user. Duplicates are allowed. Under standard rules, the deck becomes invalid if the number of duplicates exceeds 2; or, if the hero class isn't neutral or the same as the deck's hero class. ")
 
-public class DecksUpdateCommandPushInventoryIds  implements Serializable {
+public class DecksUpdateCommandPushCardIds  implements Serializable {
   @SerializedName("$each")
   private List<String> each = new ArrayList<String>();
 
-  public DecksUpdateCommandPushInventoryIds each(List<String> each) {
+  public DecksUpdateCommandPushCardIds each(List<String> each) {
     this.each = each;
     return this;
   }
 
-  public DecksUpdateCommandPushInventoryIds addEachItem(String eachItem) {
+  public DecksUpdateCommandPushCardIds addEachItem(String eachItem) {
     this.each.add(eachItem);
     return this;
   }
 
    /**
-   * The items in this array specify which inventory IDs should be added. 
+   * The items in this array specify which card IDs should be added. 
    * @return each
   **/
-  @ApiModelProperty(example = "null", required = true, value = "The items in this array specify which inventory IDs should be added. ")
+  @ApiModelProperty(example = "null", required = true, value = "The items in this array specify which card IDs should be added. ")
   public List<String> getEach() {
     return each;
   }
@@ -74,8 +74,8 @@ public class DecksUpdateCommandPushInventoryIds  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DecksUpdateCommandPushInventoryIds decksUpdateCommandPushInventoryIds = (DecksUpdateCommandPushInventoryIds) o;
-    return Objects.equals(this.each, decksUpdateCommandPushInventoryIds.each);
+    DecksUpdateCommandPushCardIds decksUpdateCommandPushCardIds = (DecksUpdateCommandPushCardIds) o;
+    return Objects.equals(this.each, decksUpdateCommandPushCardIds.each);
   }
 
   @Override
@@ -86,7 +86,7 @@ public class DecksUpdateCommandPushInventoryIds  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DecksUpdateCommandPushInventoryIds {\n");
+    sb.append("class DecksUpdateCommandPushCardIds {\n");
     
     sb.append("    each: ").append(toIndentedString(each)).append("\n");
     sb.append("}");
