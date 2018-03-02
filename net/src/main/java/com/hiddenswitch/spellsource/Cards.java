@@ -8,7 +8,9 @@ import com.hiddenswitch.spellsource.models.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.List;
@@ -72,7 +74,8 @@ public interface Cards {
 		return CardCatalogue.getRecords().values()
 				.parallelStream()
 				.map(CardCatalogueRecord::getDesc)
-				.filter(CardDesc::getCollectible)
+				.filter(cd -> cd.collectible
+						&& DeckFormat.CUSTOM.isInFormat(cd.set))
 				.map(CardDesc::createInstance)
 				.map(card -> Games.getEntity(workingContext, card, 0))
 				.map(entity -> new CardRecord().entity(entity))

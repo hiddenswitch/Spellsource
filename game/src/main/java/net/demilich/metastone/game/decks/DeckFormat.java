@@ -175,7 +175,7 @@ public class DeckFormat implements Serializable, Cloneable {
 	}
 
 	public boolean isInFormat(CardSet set) {
-		return sets.contains(set);
+		return set != null && sets.contains(set);
 	}
 
 	public Set<CardSet> getCardSets() {
