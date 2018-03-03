@@ -288,6 +288,8 @@ definitions:
         type: 'string'
       heroClass:
         type: 'string'
+      format:
+        type: 'string'
       type:
         type: 'string'
         enum:

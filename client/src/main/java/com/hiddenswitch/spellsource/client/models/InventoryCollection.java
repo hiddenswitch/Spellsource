@@ -51,6 +51,9 @@ public class InventoryCollection  implements Serializable {
   @SerializedName("heroClass")
   private String heroClass = null;
 
+  @SerializedName("format")
+  private String format = null;
+
   /**
    * Gets or Sets type
    */
@@ -179,6 +182,24 @@ public class InventoryCollection  implements Serializable {
     this.heroClass = heroClass;
   }
 
+  public InventoryCollection format(String format) {
+    this.format = format;
+    return this;
+  }
+
+   /**
+   * Get format
+   * @return format
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getFormat() {
+    return format;
+  }
+
+  public void setFormat(String format) {
+    this.format = format;
+  }
+
   public InventoryCollection type(TypeEnum type) {
     this.type = type;
     return this;
@@ -252,6 +273,7 @@ public class InventoryCollection  implements Serializable {
         Objects.equals(this.userId, inventoryCollection.userId) &&
         Objects.equals(this.name, inventoryCollection.name) &&
         Objects.equals(this.heroClass, inventoryCollection.heroClass) &&
+        Objects.equals(this.format, inventoryCollection.format) &&
         Objects.equals(this.type, inventoryCollection.type) &&
         Objects.equals(this.deckType, inventoryCollection.deckType) &&
         Objects.equals(this.inventory, inventoryCollection.inventory);
@@ -259,7 +281,7 @@ public class InventoryCollection  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userId, name, heroClass, type, deckType, inventory);
+    return Objects.hash(id, userId, name, heroClass, format, type, deckType, inventory);
   }
 
   @Override
@@ -271,6 +293,7 @@ public class InventoryCollection  implements Serializable {
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
+    sb.append("    format: ").append(toIndentedString(format)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    deckType: ").append(toIndentedString(deckType)).append("\n");
     sb.append("    inventory: ").append(toIndentedString(inventory)).append("\n");
