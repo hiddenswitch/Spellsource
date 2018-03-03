@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **userId** | **String** |  |  [optional]
 **name** | **String** |  |  [optional]
 **heroClass** | **String** |  |  [optional]
+**format** | **String** |  |  [optional]
 **type** | [**TypeEnum**](#TypeEnum) |  |  [optional]
 **deckType** | [**DeckTypeEnum**](#DeckTypeEnum) |  |  [optional]
 **inventory** | [**List&lt;CardRecord&gt;**](CardRecord.md) |  |  [optional]

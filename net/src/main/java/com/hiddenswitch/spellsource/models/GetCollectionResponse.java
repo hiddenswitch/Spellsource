@@ -36,6 +36,7 @@ public class GetCollectionResponse implements Serializable {
 	private boolean trashed;
 	private DeckType deckType;
 	private String heroCardId;
+	private String format;
 
 	public static GetCollectionResponse batch(List<GetCollectionResponse> responses) {
 		return new GetCollectionResponse()
@@ -50,7 +51,7 @@ public class GetCollectionResponse implements Serializable {
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, List<InventoryRecord> inventoryRecords, boolean trashed, DeckType deckType, String heroCardId) {
+	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, String heroCardId, String format, DeckType deckType, List<InventoryRecord> inventoryRecords, boolean trashed) {
 		return new GetCollectionResponse()
 				.withTrashed(trashed)
 				.withCollectionType(CollectionTypes.DECK)
@@ -190,6 +191,7 @@ public class GetCollectionResponse implements Serializable {
 				.name(displayName)
 				.id(getCollectionId())
 				.type(InventoryCollection.TypeEnum.valueOf(getCollectionType().toString()))
+				.format(getFormat())
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
 				// Massively increase the performance of inventory record creation by making parallel the inventory record creation here
 				.inventory(getInventoryRecords().parallelStream().map(cr -> {
@@ -283,6 +285,14 @@ public class GetCollectionResponse implements Serializable {
 				.append(inventoryRecords == null ? null : inventoryRecords.stream().map(InventoryRecord::getCardId).toArray(),
 						rhs.inventoryRecords == null ? null : rhs.inventoryRecords.stream().map(InventoryRecord::getCardId).toArray()).isEquals();
 
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}
 }
 

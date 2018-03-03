@@ -348,7 +348,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 			deckIds.forEach(deckId -> {
 				CollectionRecord record = deckRecords.get(deckId);
-				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), deckInventories.get(deckId), record.isTrashed(), record.getDeckType(), record.getHeroCardId()));
+				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat() , record.getDeckType(), deckInventories.get(deckId), record.isTrashed()));
 			});
 
 			return GetCollectionResponse.batch(responses);
@@ -377,7 +377,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 		if (type == CollectionTypes.DECK) {
 			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), inventoryRecords, deck.isTrashed(), deck.getDeckType(), deck.getHeroCardId());
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat() , deck.getDeckType(), inventoryRecords, deck.isTrashed());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(request.getUserId(), inventoryRecords);
 		} /*  else {
