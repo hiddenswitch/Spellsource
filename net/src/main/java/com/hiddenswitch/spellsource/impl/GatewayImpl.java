@@ -375,11 +375,13 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	@Override
 	public WebResult<DecksPutResponse> decksPut(RoutingContext context, String userId, DecksPutRequest request) throws SuspendExecution, InterruptedException {
 		DeckCreateRequest createRequest;
-		if (request.getDeckList() == null) {
-			final HeroClass heroClass = HeroClass.valueOf(request.getHeroClass());
+		if (request.getDeckList() == null
+				|| request.getDeckList().equals("")) {
+			final HeroClass heroClass = HeroClass.valueOf(request.getHeroClass().name());
 
 			createRequest = new DeckCreateRequest()
 					.withName(request.getName())
+					.withFormat(request.getFormat().toString())
 					.withInventoryIds(request.getInventoryIds())
 					.withHeroClass(heroClass);
 		} else {
@@ -506,8 +508,8 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				new MatchmakingQueuesResponse()
 						.addQueuesItem(new MatchmakingQueueItem()
 								.name("Constructed")
-								.description("An unranked constructed with meta decks in Wild and Standard from Hearthstone.")
-								.tooltip("Play online unranked in Wild!")
+								.description("An unranked constructed with decks in the Custom format (includes community cards).")
+								.tooltip("Play online with custom cards!")
 								.queueId("constructed")
 								.requires(new MatchmakingQueueItemRequires()
 										.deckIdChoices(getAccounts().get(userId).getDecks()))));

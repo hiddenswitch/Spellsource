@@ -33,8 +33,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 /**
- * DecksPutResponse
+ * The deck that was created by a deck put request. 
  */
+@ApiModel(description = "The deck that was created by a deck put request. ")
 
 public class DecksPutResponse  implements Serializable {
   @SerializedName("deckId")

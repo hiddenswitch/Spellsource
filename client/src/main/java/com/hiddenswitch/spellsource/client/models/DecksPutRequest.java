@@ -34,12 +34,56 @@ import java.util.List;
 
 import java.io.Serializable;
 /**
- * DecksPutRequest
+ * This request allows a user to specify a decklist or deck properies for creating a new deck. Whenever a deck list is specified (non-null and not equal to the empty string), the deck list will be preferred. Decks created without a deck list may have no properties specified, and the deck will still be successfully created. 
  */
+@ApiModel(description = "This request allows a user to specify a decklist or deck properies for creating a new deck. Whenever a deck list is specified (non-null and not equal to the empty string), the deck list will be preferred. Decks created without a deck list may have no properties specified, and the deck will still be successfully created. ")
 
 public class DecksPutRequest  implements Serializable {
+  /**
+   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class. 
+   */
+  public enum HeroClassEnum {
+    @SerializedName("BROWN")
+    BROWN("BROWN"),
+    
+    @SerializedName("GREEN")
+    GREEN("GREEN"),
+    
+    @SerializedName("BLUE")
+    BLUE("BLUE"),
+    
+    @SerializedName("GOLD")
+    GOLD("GOLD"),
+    
+    @SerializedName("WHITE")
+    WHITE("WHITE"),
+    
+    @SerializedName("BLACK")
+    BLACK("BLACK"),
+    
+    @SerializedName("SILVER")
+    SILVER("SILVER"),
+    
+    @SerializedName("VIOLET")
+    VIOLET("VIOLET"),
+    
+    @SerializedName("RED")
+    RED("RED");
+
+    private String value;
+
+    HeroClassEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+  }
+
   @SerializedName("heroClass")
-  private String heroClass = null;
+  private HeroClassEnum heroClass = null;
 
   @SerializedName("name")
   private String name = null;
@@ -47,24 +91,58 @@ public class DecksPutRequest  implements Serializable {
   @SerializedName("inventoryIds")
   private List<String> inventoryIds = new ArrayList<String>();
 
+  /**
+   * The format of this deck. Format specifies which cards are allowable in this deck for validation. It also specifies which cards will appear in discovers during matchmaking.  Currenly, matchmaking occurs between decks of all formats, regardless of your choice of format. The smallest possible format encompassing both decks in a match is selected when the formats of the decks do not match.  Certain queues only support certain formats. Typically, when requesting the listing of queues with matchmakingGet, the queues will specify which current decks can be chosen. 
+   */
+  public enum FormatEnum {
+    @SerializedName("Standard")
+    STANDARD("Standard"),
+    
+    @SerializedName("Wild")
+    WILD("Wild"),
+    
+    @SerializedName("Custom")
+    CUSTOM("Custom"),
+    
+    @SerializedName("Spellsource")
+    SPELLSOURCE("Spellsource"),
+    
+    @SerializedName("All")
+    ALL("All");
+
+    private String value;
+
+    FormatEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+  }
+
+  @SerializedName("format")
+  private FormatEnum format = null;
+
   @SerializedName("deckList")
   private String deckList = null;
 
-  public DecksPutRequest heroClass(String heroClass) {
+  public DecksPutRequest heroClass(HeroClassEnum heroClass) {
     this.heroClass = heroClass;
     return this;
   }
 
    /**
-   * Get heroClass
+   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class. 
    * @return heroClass
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getHeroClass() {
+  @ApiModelProperty(example = "null", value = "A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class. ")
+  public HeroClassEnum getHeroClass() {
     return heroClass;
   }
 
-  public void setHeroClass(String heroClass) {
+  public void setHeroClass(HeroClassEnum heroClass) {
     this.heroClass = heroClass;
   }
 
@@ -74,10 +152,10 @@ public class DecksPutRequest  implements Serializable {
   }
 
    /**
-   * Get name
+   * The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to see this name.  Some custom cards interact with specific named decks in your collection. For those purposes, the deck names are case sensitive. When multiple decks share a name, one will be chosen arbitrarily (not at random). 
    * @return name
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(example = "null", value = "The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to see this name.  Some custom cards interact with specific named decks in your collection. For those purposes, the deck names are case sensitive. When multiple decks share a name, one will be chosen arbitrarily (not at random). ")
   public String getName() {
     return name;
   }
@@ -107,6 +185,24 @@ public class DecksPutRequest  implements Serializable {
 
   public void setInventoryIds(List<String> inventoryIds) {
     this.inventoryIds = inventoryIds;
+  }
+
+  public DecksPutRequest format(FormatEnum format) {
+    this.format = format;
+    return this;
+  }
+
+   /**
+   * The format of this deck. Format specifies which cards are allowable in this deck for validation. It also specifies which cards will appear in discovers during matchmaking.  Currenly, matchmaking occurs between decks of all formats, regardless of your choice of format. The smallest possible format encompassing both decks in a match is selected when the formats of the decks do not match.  Certain queues only support certain formats. Typically, when requesting the listing of queues with matchmakingGet, the queues will specify which current decks can be chosen. 
+   * @return format
+  **/
+  @ApiModelProperty(example = "null", value = "The format of this deck. Format specifies which cards are allowable in this deck for validation. It also specifies which cards will appear in discovers during matchmaking.  Currenly, matchmaking occurs between decks of all formats, regardless of your choice of format. The smallest possible format encompassing both decks in a match is selected when the formats of the decks do not match.  Certain queues only support certain formats. Typically, when requesting the listing of queues with matchmakingGet, the queues will specify which current decks can be chosen. ")
+  public FormatEnum getFormat() {
+    return format;
+  }
+
+  public void setFormat(FormatEnum format) {
+    this.format = format;
   }
 
   public DecksPutRequest deckList(String deckList) {
@@ -140,12 +236,13 @@ public class DecksPutRequest  implements Serializable {
     return Objects.equals(this.heroClass, decksPutRequest.heroClass) &&
         Objects.equals(this.name, decksPutRequest.name) &&
         Objects.equals(this.inventoryIds, decksPutRequest.inventoryIds) &&
+        Objects.equals(this.format, decksPutRequest.format) &&
         Objects.equals(this.deckList, decksPutRequest.deckList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(heroClass, name, inventoryIds, deckList);
+    return Objects.hash(heroClass, name, inventoryIds, format, deckList);
   }
 
   @Override
@@ -156,6 +253,7 @@ public class DecksPutRequest  implements Serializable {
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    inventoryIds: ").append(toIndentedString(inventoryIds)).append("\n");
+    sb.append("    format: ").append(toIndentedString(format)).append("\n");
     sb.append("    deckList: ").append(toIndentedString(deckList)).append("\n");
     sb.append("}");
     return sb.toString();
