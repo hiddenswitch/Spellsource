@@ -161,20 +161,72 @@ definitions:
         type: 'string'
   DecksPutRequest:
     type: 'object'
+    description: |
+      This request allows a user to specify a decklist or deck properies for creating a new deck. Whenever a deck list
+      is specified (non-null and not equal to the empty string), the deck list will be preferred. Decks created without
+      a deck list may have no properties specified, and the deck will still be successfully created.
     properties:
       heroClass:
+        description: |
+          A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless
+          otherwise specified.
+
+           - BROWN: Druid class.
+           - GREEN: Hunter class.
+           - BLUE: Mage class.
+           - GOLD: Paladin class.
+           - WHITE: Priest class.
+           - BLACK: Rogue class.
+           - SILVER: Shaman class.
+           - VIOLET: Warlock class.
+           - RED: Warrior class.
         type: 'string'
+        enum:
+          - 'BROWN'
+          - 'GREEN'
+          - 'BLUE'
+          - 'GOLD'
+          - 'WHITE'
+          - 'BLACK'
+          - 'SILVER'
+          - 'VIOLET'
+          - 'RED'
       name:
+        description: |
+          The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
+          see this name.
+
+          Some custom cards interact with specific named decks in your collection. For those purposes, the deck names
+          are case sensitive. When multiple decks share a name, one will be chosen arbitrarily (not at random).
         type: 'string'
       inventoryIds:
         type: 'array'
         items:
           type: 'string'
+      format:
+        description: |
+          The format of this deck. Format specifies which cards are allowable in this deck for validation. It also
+          specifies which cards will appear in discovers during matchmaking.
+
+          Currenly, matchmaking occurs between decks of all formats, regardless of your choice of format. The smallest
+          possible format encompassing both decks in a match is selected when the formats of the decks do not match.
+
+          Certain queues only support certain formats. Typically, when requesting the listing of queues with
+          matchmakingGet, the queues will specify which current decks can be chosen.
+        type: 'string'
+        enum:
+          - 'Standard'
+          - 'Wild'
+          - 'Custom'
+          - 'Spellsource'
+          - 'All'
       deckList:
         type: 'string'
         description: |
           A community-standard decklist.
   DecksPutResponse:
+    description: |
+      The deck that was created by a deck put request.
     type: 'object'
     properties:
       deckId:
@@ -183,6 +235,12 @@ definitions:
         $ref: '#/definitions/InventoryCollection'
   DecksUpdateCommand:
     type: 'object'
+    description: |
+      This command contains a variable number of changes to apply to a deck. Whenever multiple fields are set, the
+      server will try to resolve their effects in the least surprising way possible.
+
+      Specifically, if setInventoryIds is set, it will override all other changes to the inventory. Otherwise, removals
+      will be evaluated first, preferring inventory ID removals over card ID removals, followed by adds.
     properties:
       setHeroClass:
         description: |
