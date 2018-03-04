@@ -23,6 +23,7 @@ import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -436,7 +437,9 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		defaultApi.getApiClient().setBasePath(UnityClient.basePath);
 
 		GetCardsResponse response1 = defaultApi.getCards(null);
-		context.assertEquals((long) response1.getCards().size(), CardCatalogue.getRecords().values().stream().filter(c -> c.getDesc().collectible).count());
+		final long count = CardCatalogue.getRecords().values().stream().filter(c -> c.getDesc().collectible
+				&& DeckFormat.CUSTOM.isInFormat(c.getDesc().set)).count();
+		context.assertEquals((long) response1.getCards().size(), count);
 		try {
 			ApiResponse<GetCardsResponse> response2 = defaultApi.getCardsWithHttpInfo(response1.getVersion());
 			context.fail();
