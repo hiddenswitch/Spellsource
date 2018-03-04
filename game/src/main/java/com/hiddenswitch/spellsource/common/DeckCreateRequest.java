@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.common;
 
+import com.hiddenswitch.spellsource.util.CommunityDeckStringSerializer;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.game.decks.Deck;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +26,15 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	private List<String> cardIds = new ArrayList<>();
 
 	public static DeckCreateRequest fromDeckList(String deckList) throws DeckListParsingException {
+		if (!deckList.startsWith("#")
+				&& !deckList.contains("\n")) {
+			try {
+				return new CommunityDeckStringSerializer().toDeckCreateRequest(null, null, deckList);
+			} catch (Throwable ex) {
+				throw new DeckListParsingException(Collections.singletonList(ex));
+			}
+		}
+
 		DeckCreateRequest request = new DeckCreateRequest()
 				.withCardIds(new ArrayList<>());
 		// Parse with a regex
