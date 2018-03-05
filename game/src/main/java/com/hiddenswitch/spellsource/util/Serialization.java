@@ -155,70 +155,60 @@ public class Serialization {
 		return gson;
 	}
 
-	@Suspendable
-	public static String serialize(Object object) {
+	public synchronized static String serialize(Object object) {
 		return gson.toJson(object);
 	}
 
-	@Suspendable
-	public static byte[] serializeBytes(Object object) throws IOException {
+	public synchronized static byte[] serializeBytes(Object object) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		serialize(object, bos);
 		return bos.toByteArray();
 	}
 
-	@Suspendable
-	public static String serializeBase64(Object object) throws IOException {
+	public synchronized static String serializeBase64(Object object) throws IOException {
 		return ObjectSerializer.serializeBase64(object);
 	}
 
-	@Suspendable
-	public static <T> T deserializeBase64(String base64String) {
+	public synchronized static <T> T deserializeBase64(String base64String) {
 		return ObjectSerializer.deserializeBase64(base64String);
 	}
 
-	@Suspendable
-	public static <T> T deserialize(String json, Class<T> classOfT) throws JsonSyntaxException {
+	public synchronized static <T> T deserialize(String json, Class<T> classOfT) throws JsonSyntaxException {
 		return gson.fromJson(json, classOfT);
 	}
 
-	@Suspendable
-	public static <T> T deserialize(String json, Type typeOfT) throws JsonSyntaxException {
+	public synchronized static <T> T deserialize(String json, Type typeOfT) throws JsonSyntaxException {
 		return gson.fromJson(json, typeOfT);
 	}
 
 	@SuppressWarnings("unchecked")
-	@Suspendable
-	public static <T> T deserialize(byte[] buffer) throws IOException, ClassNotFoundException {
+	public synchronized static <T> T deserialize(byte[] buffer) throws IOException, ClassNotFoundException {
 		return deserialize(new ByteArrayInputStream(buffer));
 	}
 
 	@SuppressWarnings("unchecked")
-	@Suspendable
-	public static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {
+	public synchronized static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(stream);
 		T result = (T) ois.readObject();
 		ois.close();
 		return result;
 	}
 
-	@Suspendable
-	public static <T> T deserialize(InputStream stream, Class<? extends T> returnClass) throws IOException, ClassNotFoundException {
+	public synchronized static <T> T deserialize(InputStream stream, Class<? extends T> returnClass) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(stream);
 		T result = returnClass.cast(ois.readObject());
 		ois.close();
 		return result;
 	}
 
-	@Suspendable
-	public static void serialize(Object obj, OutputStream output) throws IOException {
+	public synchronized static void serialize(Object obj, OutputStream output) throws IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(output);
 		oos.writeObject(obj);
 		oos.flush();
 		oos.close();
 	}
 
-	public static <T> T deserialize(JsonObject body, Class<? extends T> returnClass) {
+	public synchronized static <T> T deserialize(JsonObject body, Class<? extends T> returnClass) {
 		return gson.fromJson(body.encode(), returnClass);
 	}
 }

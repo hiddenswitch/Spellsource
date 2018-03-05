@@ -61,6 +61,7 @@ public class GetCollectionResponse implements Serializable {
 				.withHeroCardId(heroCardId)
 				.withUserId(userId)
 				.withDeckType(deckType)
+				.withFormat(format)
 				.withName(name);
 	}
 
@@ -293,6 +294,11 @@ public class GetCollectionResponse implements Serializable {
 
 	public void setFormat(String format) {
 		this.format = format;
+	}
+
+	public GetCollectionResponse withFormat(String format) {
+		this.format = format;
+		return this;
 	}
 }
 
