@@ -276,7 +276,8 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		logger.debug("getCurrentMatch: Retrieving information for userId " + request.getUserId());
 		logQueue();
 		final QueueEntry queueEntry = queue.get(new UserId(request.getUserId()));
-		if (queueEntry != null) {
+		if (queueEntry != null
+				&& !queueEntry.isPending()) {
 			logger.debug("getCurrentMatch: User " + request.getUserId() + " has match " + queueEntry.gameId);
 			return new CurrentMatchResponse(queueEntry.gameId.toString());
 		} else {
