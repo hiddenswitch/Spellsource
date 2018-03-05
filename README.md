@@ -42,7 +42,12 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
  6. Download the Spellsource Client from within the launcher and start it.
  7. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
 
- ### Getting started with Development on Windows
+### Using the Command Line Simulator
+
+ 1. Build the `cluster` shadow JAR: `./gradlew cluster:shadowJar`.
+ 2. Execute the simulator with `java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.Simulate`. Read the help there.
+ 
+### Getting started with Development on Windows
 
    1. Windows Defender significantly slows down or fails install processes. To temporarily turn off Windows Defender, hit the `Windows` key, type `Windows Defender` and open the `Windows Defender Security Center`.
      1. Then, visit the `Virus & threat protection` page, then `Virus & threat protection settings`, and turn off all protection modes.
