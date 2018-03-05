@@ -18,6 +18,8 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
+import io.vertx.core.eventbus.impl.clustered.ClusteredEventBus;
+import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.shareddata.Lock;
 import io.vertx.core.streams.Pump;
@@ -44,6 +46,7 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1091,7 +1094,17 @@ public interface Games {
 			try {
 				Lock lock = awaitResult(h -> vertx.sharedData().getLockWithTimeout("pipes-userId-" + userId, 200L, h));
 				gamesLogger.debug("createWebSocketHandler: Creating WebSocket to EventBus mapping for userId {}", userId);
-				final ServerWebSocket socket = context.request().upgrade();
+				final ServerWebSocket socket;
+				final HttpServerRequest request = context.request();
+				try {
+					socket = request.upgrade();
+				} catch (IllegalStateException ex) {
+					gamesLogger.error("createWebSocketHandler: Failed to upgrade with error: {}. Request={}", new ToStringBuilder(request)
+							.append("headers", request.headers().entries())
+							.append("uri", request.uri())
+							.append("userId", userId).toString());
+					throw ex;
+				}
 				final MessageConsumer<Buffer> consumer = bus.consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
 				final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
 				final Pump pump1 = Pump.pump(socket, publisher, Integer.MAX_VALUE).start();
