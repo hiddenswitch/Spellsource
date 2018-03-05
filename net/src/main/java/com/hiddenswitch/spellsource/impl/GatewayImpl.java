@@ -358,7 +358,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			internalResponse = getAccounts().login(
 					new com.hiddenswitch.spellsource.models.LoginRequest().withEmail(request.getEmail())
 							.withPassword(request.getPassword()));
-		} catch (Exception ex) {
+		} catch (Throwable ex) {
 			return WebResult.failed(403, ex);
 		}
 
@@ -449,7 +449,12 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	@Override
 	public WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext routingContext, String userId, String queueId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException {
 		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.getCasual());
-		MatchmakingResponse internalResponse = getMatchmaking().matchmakeAndJoin(internalRequest);
+		MatchmakingResponse internalResponse;
+		try {
+			internalResponse = getMatchmaking().matchmakeAndJoin(internalRequest);
+		} catch (Throwable ex) {
+			return WebResult.failed(500, ex);
+		}
 
 		// Compute the appropriate response
 		MatchmakingQueuePutResponse userResponse = new MatchmakingQueuePutResponse();
