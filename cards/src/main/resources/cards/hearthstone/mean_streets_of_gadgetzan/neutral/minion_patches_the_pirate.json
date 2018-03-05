@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "LEGENDARY",
   "race": "PIRATE",
-  "description": "Charge. After you play a pirate, summon this minion from your deck.",
+  "description": "After you play a pirate, summon this minion from your deck.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
@@ -21,9 +21,6 @@
       "class": "PutMinionOnBoardFromDeckSpell",
       "target": "SELF"
     }
-  },
-  "attributes": {
-    "CHARGE": true
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",
