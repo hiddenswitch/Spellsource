@@ -100,7 +100,17 @@ public class Simulate {
 		}
 
 		// Create all possible deck to deck matchups
-		final List<String[]> combinations = GameContext.getDeckCombinations(new ArrayList<>(decks.keySet()));
+		final List<String[]> combinations;
+		// If the simulation is using two different behaviours, we want every behaviour to have had a chance to play
+		// every deck
+		if (simulationConfig.twoDifferentBehaviours()) {
+			// Combinations with replacement
+			combinations = decks.keySet().stream().flatMap(deck1 -> decks.keySet().stream()
+					.map(deck2 -> new String[]{deck1, deck2})).collect(Collectors.toList());
+		} else {
+			// Just include distinct combinations (combinations without replacement)
+			combinations = GameContext.getDeckCombinations(new ArrayList<>(decks.keySet()));
+		}
 
 		if (!mirrors) {
 			combinations.removeIf(pair -> pair[0].equals(pair[1]));

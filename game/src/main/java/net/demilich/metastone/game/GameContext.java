@@ -31,6 +31,7 @@ import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.logic.Trace;
 import net.demilich.metastone.game.services.Inventory;
+import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
@@ -1343,18 +1344,22 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	}
 
 	/**
-	 * Runs a simulation of the decks with the default {@link net.demilich.metastone.game.shared.threat.GameStateValueBehaviour}
-	 * AI.
+	 * Runs a simulation of the decks with the specified AIs.
+	 * <p>
+	 * This call will be blocking regardless of using it in a parallel fashion.
 	 *
 	 * @param deckPair        A pair of decks to run a match with.
 	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
+	 *                        <p>
+	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the
+	 *                        first player's AI should be a game state value behaviour.
 	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
 	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this
 	 *                        computation on this JVM instance.
 	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
-	 *                        completed.
+	 *                        completed. This can be used to implement progress on a different thread.
 	 */
 	public static SimulationResult simulate(List<Deck> deckPair, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter) {
 		// Actually run the computation

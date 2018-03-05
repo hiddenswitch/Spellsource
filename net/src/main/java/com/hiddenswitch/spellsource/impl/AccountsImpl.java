@@ -9,6 +9,7 @@ import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.lambdaworks.crypto.SCryptUtil;
+import io.vertx.core.VertxException;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -34,10 +35,14 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 	@Suspendable
 	public void start() throws SuspendExecution {
 		super.start();
-		List<String> collections = awaitResult(h -> getMongo().getCollections(h));
+		List<String> collections = Mongo.mongo().getCollections();
 		if (!collections.contains(USERS)) {
-			Mongo.mongo().createCollection(USERS);
-			Mongo.mongo().createIndex(USERS, json(UserRecord.EMAILS_ADDRESS, 1));
+			try {
+				Mongo.mongo().createCollection(USERS);
+				Mongo.mongo().createIndex(USERS, json(UserRecord.EMAILS_ADDRESS, 1));
+			} catch (VertxException ex) {
+				logger.error("An error occurred while trying to create the users collection: {}", ex.getMessage());
+			}
 		}
 		registration = Rpc.register(this, Accounts.class, vertx.eventBus());
 	}
