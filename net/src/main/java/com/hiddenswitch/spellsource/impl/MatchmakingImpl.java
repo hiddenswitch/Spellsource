@@ -114,6 +114,14 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	@Suspendable
 	public MatchmakingResponse matchmakeAndJoin(MatchmakingRequest matchmakingRequest) throws SuspendExecution, InterruptedException {
+		if (matchmakingRequest.getUserId() == null) {
+			throw new IllegalArgumentException("Null userId specified.");
+		}
+
+		if (matchmakingRequest.getDeckId() == null) {
+			throw new IllegalArgumentException("Null deckId specified.");
+		}
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("matchmakeAndJoin: Starting request for user " + matchmakingRequest.getUserId());
 		}

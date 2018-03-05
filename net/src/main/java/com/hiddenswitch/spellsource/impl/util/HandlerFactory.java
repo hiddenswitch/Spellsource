@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.WebResult;
 import com.hiddenswitch.spellsource.util.Sync;
@@ -15,8 +16,18 @@ import org.slf4j.LoggerFactory;
 public class HandlerFactory {
 	static Logger logger = LoggerFactory.getLogger(HandlerFactory.class);
 
-	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, AuthorizedRequestHandler<T, R> internalHandler) {
+	private static Handler<RoutingContext> returnUnhandledExceptions(SuspendableAction1<RoutingContext> handler) {
 		return Sync.suspendableHandler((context) -> {
+			try {
+				handler.call(context);
+			} catch (Throwable unhandled) {
+				respond(context, WebResult.failed(500, unhandled));
+			}
+		});
+	}
+
+	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, AuthorizedRequestHandler<T, R> internalHandler) {
+		return returnUnhandledExceptions((context) -> {
 			String userId = context.user().principal().getString("_id");
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			WebResult<R> result = internalHandler.call(context, userId, request);
@@ -25,7 +36,7 @@ public class HandlerFactory {
 	}
 
 	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, RequestHandler<T, R> internalHandler) {
-		return Sync.suspendableHandler((context) -> {
+		return returnUnhandledExceptions((context) -> {
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			WebResult<R> result = internalHandler.call(context, request);
 			respond(context, result);
@@ -33,7 +44,7 @@ public class HandlerFactory {
 	}
 
 	public static <R> Handler<RoutingContext> handler(String paramName, AuthorizedParamHandler<R> internalHandler) {
-		return Sync.suspendableHandler((context) -> {
+		return returnUnhandledExceptions((context) -> {
 			String request = context.pathParam(paramName);
 			String userId = context.user().principal().getString("_id");
 			WebResult<R> result = internalHandler.call(context, userId, request);
@@ -42,7 +53,7 @@ public class HandlerFactory {
 	}
 
 	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, String paramName, AuthorizedBodyAndParamHandler<T, R> internalHandler) {
-		return Sync.suspendableHandler((context) -> {
+		return returnUnhandledExceptions((context) -> {
 			String param = context.pathParam(paramName);
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			String userId = context.user().principal().getString("_id");
@@ -52,7 +63,7 @@ public class HandlerFactory {
 	}
 
 	public static <R> Handler<RoutingContext> handler(AuthorizedHandler<R> internalHandler) {
-		return Sync.suspendableHandler((context) -> {
+		return returnUnhandledExceptions((context) -> {
 			String userId = context.user().principal().getString("_id");
 			WebResult<R> result = internalHandler.call(context, userId);
 			respond(context, result);
@@ -60,7 +71,7 @@ public class HandlerFactory {
 	}
 
 	public static <R> Handler<RoutingContext> handler(EmptyHandler<R> internalHandler) {
-		return Sync.suspendableHandler((context) -> {
+		return returnUnhandledExceptions((context) -> {
 			WebResult<R> result = internalHandler.call(context);
 			respond(context, result);
 		});
@@ -85,7 +96,7 @@ public class HandlerFactory {
 	}
 
 	public static <R> Handler<RoutingContext> paramHandler(String paramName, ParamHandler<R> internalHandler) {
-		return Sync.suspendableHandler((context) -> {
+		return returnUnhandledExceptions((context) -> {
 			String request = context.pathParam(paramName);
 			WebResult<R> result = internalHandler.call(context, request);
 			respond(context, result);
