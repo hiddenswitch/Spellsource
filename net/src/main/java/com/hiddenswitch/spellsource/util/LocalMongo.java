@@ -68,7 +68,7 @@ public class LocalMongo {
 	public void start() throws Exception {
 		mongodExecutable = starter.prepare(new MongodConfigBuilder()
 				.replication(replication)
-				.version(Version.Main.PRODUCTION)
+				.version(Version.Main.V3_5)
 				.net(new Net("localhost", 27017, Network.localhostIsIPv6()))
 				.build());
 		mongodProcess = mongodExecutable.start();

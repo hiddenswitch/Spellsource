@@ -34,6 +34,7 @@ public class SimulationConfig implements Serializable {
 	private int number;
 	private boolean quiet;
 	private boolean mirrors;
+	private boolean twoDifferentBehaviours;
 
 	public SimulationConfig() {
 	}
@@ -68,6 +69,15 @@ public class SimulationConfig implements Serializable {
 
 	public boolean playMirrorMatchups() {
 		return mirrors;
+	}
+
+	/**
+	 * Returns true if the player specified two different behaviours. This would indicate that the deck list needs to be
+	 * a full table and not an upper triangle.
+	 * @return {@code true} if the user specified two different behaviours.
+	 */
+	public boolean twoDifferentBehaviours() {
+		return twoDifferentBehaviours;
 	}
 
 	public SimulationConfig fromCommandLine(String... args) {
@@ -139,6 +149,11 @@ public class SimulationConfig implements Serializable {
 
 		if (cmd.hasOption(behaviourOption.getOpt())) {
 			List<String> behaviours = Arrays.asList(cmd.getOptionValues(behaviourOption.getOpt()));
+
+			if (behaviours.stream().distinct().count() > 1L) {
+				twoDifferentBehaviours = true;
+			}
+
 			List<Supplier<Behaviour>> suppliers = behaviours.stream()
 					.map(availableBehaviours::get)
 					.map(behaviourClass -> {
