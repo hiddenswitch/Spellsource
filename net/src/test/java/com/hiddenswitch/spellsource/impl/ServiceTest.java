@@ -38,6 +38,10 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 	protected Vertx vertx;
 	protected T service;
 
+	public static boolean isCI() {
+		return Boolean.parseBoolean(System.getenv("CI"));
+	}
+
 	@Before
 	public void loadCards(TestContext context) {
 		vertx = Vertx.vertx(new VertxOptions().setEventLoopPoolSize(20).setWorkerPoolSize(20));

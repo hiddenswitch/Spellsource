@@ -7,9 +7,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.netty.handler.codec.http.websocketx.WebSocket08FrameDecoder;
-import io.netty.handler.codec.http.websocketx.WebSocket08FrameEncoder;
-import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.vertx.core.*;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.ext.unit.Async;
@@ -47,7 +44,7 @@ public class ClusterTest {
 	@Ignore
 	@SuppressWarnings("unchecked")
 	public void testClusteredDeploy(TestContext context) {
-		if (isCI()) {
+		if (ServiceTest.isCI()) {
 			return;
 		}
 		// For debug purposes
@@ -130,7 +127,7 @@ public class ClusterTest {
 	@Test(timeout = 155000L)
 	@Ignore
 	public void testMultiHostCluster(TestContext context) {
-		if (isCI()) {
+		if (ServiceTest.isCI()) {
 			return;
 		}
 
@@ -147,7 +144,7 @@ public class ClusterTest {
 
 	@Test(timeout = 200000L)
 	public void testMultiHostMultiClientCluster(TestContext context) throws InterruptedException {
-		if (isCI()) {
+		if (ServiceTest.isCI()) {
 			return;
 		}
 
@@ -199,7 +196,7 @@ public class ClusterTest {
 
 	@Before
 	public void startServices() throws Exception {
-		if (isCI()) {
+		if (ServiceTest.isCI()) {
 			return;
 		}
 
@@ -214,7 +211,7 @@ public class ClusterTest {
 
 	@After
 	public void stopServices(TestContext context) throws IOException {
-		if (isCI()) {
+		if (ServiceTest.isCI()) {
 			return;
 		}
 
@@ -233,10 +230,6 @@ public class ClusterTest {
 			Mongo.mongo().stopEmbedded();
 			System.getProperties().remove("mongo.url");
 		}));
-	}
-
-	protected static boolean isCI() {
-		return Boolean.parseBoolean(System.getenv("CI"));
 	}
 
 	@Suspendable

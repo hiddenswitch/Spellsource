@@ -67,23 +67,14 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		logger.info("start: Configuring router...");
 
 		final AuthHandler authHandler = SpellsourceAuthHandler.create();
-		final BodyHandler bodyHandlerInternal = BodyHandler.create();
+		final BodyHandler bodyHandler = BodyHandler.create();
 
-		Handler<RoutingContext> bodyHandler = context -> {
-			// Connection upgrade requests never end and therefore the body handler will never
-			// pass through to the subsequent route handlers.
-			if ("websocket".equalsIgnoreCase(context.request().getHeader("Upgrade"))) {
-				context.next();
-			} else {
-				bodyHandlerInternal.handle(context);
-			}
-		};
-
-		router.route("/" + Games.WEBSOCKET_PATH + "-clustered")
+		final String websocketPath = "/" + Games.WEBSOCKET_PATH + "-clustered";
+		router.route(websocketPath)
 				.method(HttpMethod.GET)
 				.handler(authHandler);
 
-		router.route("/" + Games.WEBSOCKET_PATH + "-clustered")
+		router.route(websocketPath)
 				.method(HttpMethod.GET)
 				.handler(Games.createWebSocketHandler());
 
@@ -107,6 +98,9 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				.exposedHeader("Cache-Control")
 				.exposedHeader("Last-Modified")
 				.exposedHeader("Date")
+				.exposedHeader("Connection")
+				.exposedHeader("WebSocket")
+				.exposedHeader("Upgrade")
 				.allowCredentials(true)
 				.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS, HttpMethod.HEAD)));
 
@@ -115,7 +109,9 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 		// add "content-type=application/json" to all responses
 		router.route().handler(context -> {
-			context.response().putHeader("Content-Type", "application/json");
+			if (!context.request().uri().contains(websocketPath)) {
+				context.response().putHeader("Content-Type", "application/json");
+			}
 			context.next();
 		});
 
