@@ -11,6 +11,7 @@ import net.demilich.metastone.game.cards.CardParser;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -168,7 +169,9 @@ public class InventoryRecord extends MongoRecord {
 
 	@JsonIgnore
 	public String getCardId() {
-		return (String) cardDesc.get("id");
+		return cardDesc != null && cardDesc.containsKey("id")
+				? (String) cardDesc.get("id")
+				: null;
 	}
 
 	public Object getPersistentAttribute(Attribute attribute) {
@@ -187,6 +190,14 @@ public class InventoryRecord extends MongoRecord {
 	public AttributeMap getPersistentAttributes() {
 		return new AttributeMap(getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
 				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue)));
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("id", getId())
+				.append("cardId", getCardId())
+				.toString();
 	}
 }
 
