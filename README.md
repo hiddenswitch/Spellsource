@@ -1,22 +1,16 @@
 # Spellsource-Server
 
-[![Build Status](https://travis-ci.org/hiddenswitch/Spellsource-Server.svg?branch=master)](https://travis-ci.org/hiddenswitch/Spellsource-Server)
-
-Check [the project](https://github.com/hiddenswitch/Spellsource-Server/projects/1?) tab for progress on Kobolds and Catacombs. 100% card coverage in Wild and Standard, including Kobolds and Catacombs.
-
 ![In-Game Screenshot](docs/sn2.png)
 
-A multiplayer, networked adaptation of `metastone`
+A multiplayer, networked adaptation of `metastone`. This is a simulator and game server for community and official Hearthstone cards.
 
 Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client. Play online against others! No other installation required.
 
-Please see the issues tab to report bugs or request functionality.
+Please see the Issues tab to report bugs or request functionality.
 
 ### Description
 
-`metastone` was a simulator for the online collectible card game (CCG) Hearthstone&reg; by Activison Blizzard written in Java. It strives to be a useful tool for card value analysis, deck building and performance evaluation. There is also support for custom cards, allowing users to implement their own card inventions and testing them within the simulator engine. `metastone` tries to re-implement all game mechanics and rules from the original game as accurately as possible.
-
-The `Spellsource-Server` project adapts and updates `metastone` to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches. It currently covers 100% of Hearthstone cards, with a handful of bugs, up to Knights of the Frozen Throne.
+The `Spellsource-Server` project adapts and updates `metastone`, an unmaintained Hearthstone simulator, to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches. It currently covers 100% of Hearthstone cards, with a handful of bugs, plus hundreds of community cards.
 
 The `Spellsource-Client` project is not yet released, but it backs the game client for this server. It is fully animated.
 
@@ -37,7 +31,7 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
  3. Clone this repository.
  4. To run the server locally, execute the following on a command prompt:
     * Linux/Mac OS X: Run `./gradlew net:local`.
-    * Windows: See the **Windows Installation Guide** below.
+    * Windows: See the **Getting started with Development on Windows** guide below.
  5. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
  6. Download the Spellsource Client from within the launcher and start it.
  7. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
