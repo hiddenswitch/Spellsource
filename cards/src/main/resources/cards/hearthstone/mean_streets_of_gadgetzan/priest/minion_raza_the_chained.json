@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: If your deck has no duplicates, your Hero Power costs (0) this game.",
+  "description": "Battlecry: If your deck has no duplicates, your Hero Power costs (1) this game.",
   "battlecry": {
     "condition": {
       "class": "HighlanderDeckCondition"
@@ -17,7 +17,7 @@
       "cardCostModifier": {
         "class": "CardCostModifier",
         "target": "FRIENDLY_HERO_POWER",
-        "value": 0,
+        "value": 1,
         "operation": "SET",
         "targetPlayer": "SELF"
       }

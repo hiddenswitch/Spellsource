@@ -87,7 +87,7 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 			player.setMaxMana(2);
 			player.setMana(2);
 			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(opponent.getHero().getReference()));
-			Assert.assertEquals(player.getMana(), 2);
+			Assert.assertEquals(player.getMana(), 1);
 		});
 	}
 
