@@ -353,14 +353,20 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<LoginResponse> login(RoutingContext context, LoginRequest request) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.spellsource.models.LoginResponse internalResponse = getAccounts().login(
-				new com.hiddenswitch.spellsource.models.LoginRequest().withEmail(request.getEmail())
-						.withPassword(request.getPassword()));
+		com.hiddenswitch.spellsource.models.LoginResponse internalResponse;
+		try {
+			internalResponse = getAccounts().login(
+					new com.hiddenswitch.spellsource.models.LoginRequest().withEmail(request.getEmail())
+							.withPassword(request.getPassword()));
+		} catch (Exception ex) {
+			return WebResult.failed(403, ex);
+		}
+
 
 		if (internalResponse.isBadPassword()) {
-			return WebResult.failed(new RuntimeException("Invalid password."));
+			return WebResult.failed(403, new RuntimeException("Invalid password."));
 		} else if (internalResponse.isBadEmail()) {
-			return WebResult.failed(new RuntimeException("Invalid email address."));
+			return WebResult.failed(403, new RuntimeException("Invalid email address."));
 		}
 
 		return WebResult.succeeded(new LoginResponse()
