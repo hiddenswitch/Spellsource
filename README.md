@@ -57,7 +57,8 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
       This installs `chocolatey`, the Windows development package manager.
    4. We'll now install basic development packages. This includes the MongoDB, Java 8 SDK, `git` and `ConEmu`, a great Windows terminal emulator.
       ```
-      choco install mongodb.install chocolatey-core.extension git.install git-credential-manager-for-windows jdk8 conemu
+      choco install mongodb.install --version 3.6.0
+      choco install chocolatey-core.extension git.install git-credential-manager-for-windows jdk8 conemu
       ```
       Then, install [IntelliJ Idea Community Edition](https://www.jetbrains.com/idea/download/#section=windows) to edit the `Spellsource-Server` Java project. Since sometimes `choco` packages fail to install, you might need to manually install [MongoDB](https://www.mongodb.com/download-center#community), [JDK8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html), and [git](https://git-scm.com/download/win).  
    5. Exit `Windows PowerShell`
