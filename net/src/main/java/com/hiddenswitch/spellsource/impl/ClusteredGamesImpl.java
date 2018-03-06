@@ -72,8 +72,8 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			final ActivityMonitor activityMonitor = new ActivityMonitor(vertx, gameId, request.getNoActivityTimeout(), this::kill);
 			final ActivityMonitor connectionTimeout = new ActivityMonitor(vertx, gameId, 10000L, this::connectionTimedOut);
 			final ArrayList<Runnable> closers = new ArrayList<>();
-			closers.add(connect(session, 0, request.getPregame1().getUserId(), eventBus, activityMonitor));
-			closers.add(connect(session, 1, request.getPregame2().getUserId(), eventBus, activityMonitor));
+			closers.add(connect(session, 0, request.getPregame1().getUserId(), eventBus, Arrays.asList(activityMonitor, connectionTimeout)));
+			closers.add(connect(session, 1, request.getPregame2().getUserId(), eventBus, Arrays.asList(activityMonitor, connectionTimeout)));
 			pipeClosers.put(key, closers);
 			gameActivityMonitors.put(key, activityMonitor);
 			gameActivityMonitors.put(key, connectionTimeout);
@@ -117,12 +117,12 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 	 * @param playerId
 	 * @param userId
 	 * @param eventBus
-	 * @param activityMonitor
+	 * @param activityMonitors
 	 * @return A function that when called closes all the created pipes.
 	 */
-	private Runnable connect(GameSession session, int playerId, String userId, EventBus eventBus, ActivityMonitor activityMonitor) {
+	private Runnable connect(GameSession session, int playerId, String userId, EventBus eventBus, List<ActivityMonitor> activityMonitors) {
 		logger.debug("connect: Connecting userId " + userId + " with gameId " + session.getGameId());
-		final SessionWriter writer = new SessionWriter(userId, playerId, eventBus, session, activityMonitor);
+		final SessionWriter writer = new SessionWriter(userId, playerId, eventBus, session, activityMonitors);
 		final MessageConsumer<Buffer> reader = eventBus.consumer(READER_ADDRESS_PREFIX + userId);
 		final Pump pipe = Pump.pump(reader.bodyStream(), writer, Integer.MAX_VALUE).start();
 		return () -> {

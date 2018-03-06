@@ -11,6 +11,7 @@ import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.streams.WriteStream;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -20,16 +21,16 @@ public class SessionWriter implements WriteStream<Buffer> {
 	private final int playerId;
 	private final EventBus eventBus;
 	private final GameSession session;
-	private final ActivityMonitor activityMonitor;
+	private final List<ActivityMonitor> activityMonitors;
 	private final List<EventBusWriter> writers = new ArrayList<>();
 	private Handler<Throwable> exceptionHandler;
 
-	public SessionWriter(String userId, int playerId, EventBus eventBus, GameSession session, ActivityMonitor activityMonitor) {
+	public SessionWriter(String userId, int playerId, EventBus eventBus, GameSession session, List<ActivityMonitor> activityMonitors) {
 		this.userId = userId;
 		this.playerId = playerId;
 		this.eventBus = eventBus;
 		this.session = session;
-		this.activityMonitor = activityMonitor;
+		this.activityMonitors = activityMonitors == null ? Collections.emptyList() : activityMonitors;
 	}
 
 	private void handleWebSocketMessage(Buffer messageBuffer) {
@@ -41,7 +42,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 			case FIRST_MESSAGE:
 				EventBusWriter writer = new EventBusWriter(eventBus, userId, playerId);
 				writers.add(writer);
-				activityMonitor.activity();
+				activityMonitors.forEach(ActivityMonitor::activity);
 
 				if (session.isGameReady()) {
 					// TODO: Remove references to the old socket
@@ -55,7 +56,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 				if (session == null) {
 					throw new RuntimeException();
 				}
-				activityMonitor.activity();
+				activityMonitors.forEach(ActivityMonitor::activity);
 				final String messageId = message.getRepliesTo();
 				session.onActionReceived(messageId, message.getActionIndex());
 				break;
@@ -63,7 +64,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 				if (session == null) {
 					throw new RuntimeException();
 				}
-				activityMonitor.activity();
+				activityMonitors.forEach(ActivityMonitor::activity);
 				final String messageId2 = message.getRepliesTo();
 				session.onMulliganReceived(messageId2, message.getDiscardedCardIndices());
 				break;
@@ -77,7 +78,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 				if (session == null) {
 					break;
 				}
-				activityMonitor.activity();
+				activityMonitors.forEach(ActivityMonitor::activity);
 				if (null != message.getEntityTouch()) {
 					session.onTouch(playerId, message.getEntityTouch());
 				} else if (null != message.getEntityUntouch()) {
