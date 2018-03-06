@@ -126,7 +126,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			logger.debug("matchmakeAndJoin: Starting request for user " + matchmakingRequest.getUserId());
 		}
 
-		logQueue();
+		logQueue("matchmakeAndJoin");
 
 		final InvocationId invocationId = InvocationId.create();
 		RuntimeException ex = null;
@@ -274,7 +274,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 	@Override
 	public CurrentMatchResponse getCurrentMatch(CurrentMatchRequest request) throws SuspendExecution, InterruptedException {
 		logger.debug("getCurrentMatch: Retrieving information for userId " + request.getUserId());
-		logQueue();
+		logQueue("getCurrentMatch");
 		final QueueEntry queueEntry = queue.get(new UserId(request.getUserId()));
 		if (queueEntry != null
 				&& !queueEntry.isPending()) {
@@ -292,7 +292,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			logger.debug("expireOrEndMatch: Expiring match " + request.gameId);
 		}
 
-		logQueue();
+		logQueue("expireOrEndMatch");
 		if (request.users == null) {
 			throw new NullPointerException("Request does not contain users specified");
 		}
@@ -334,14 +334,14 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 
 
 	@Suspendable
-	protected void logQueue() {
+	protected void logQueue(String prefix) {
 		if (logger.isDebugEnabled()) {
 			List<String> list = new ArrayList<>();
 			for (Map.Entry<UserId, QueueEntry> e : queue.entrySet()) {
 				String format = String.format("(%s, %s)", e.getKey().toString(), e.getValue().gameId.toString());
 				list.add(format);
 			}
-			logger.debug("getCurrentMatch: queueContents=" + String.join(", ", list));
+			logger.debug(prefix + " logQueue: queueContents=" + String.join(", ", list));
 		}
 	}
 

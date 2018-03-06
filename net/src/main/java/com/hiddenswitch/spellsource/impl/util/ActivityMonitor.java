@@ -20,9 +20,10 @@ public class ActivityMonitor {
 	private final long noActivityTimeout;
 	private final WeakReference<Vertx> vertx;
 	private long lastTimerId = Long.MIN_VALUE;
-	private final SuspendableAction1<String> onTimeout;
+	private final SuspendableAction1<ActivityMonitor> onTimeout;
+	private boolean cancelled = false;
 
-	public ActivityMonitor(Vertx vertx, String gameId, long noActivityTimeout, SuspendableAction1<String> onTimeout) {
+	public ActivityMonitor(Vertx vertx, String gameId, long noActivityTimeout, SuspendableAction1<ActivityMonitor> onTimeout) {
 		this.vertx = new WeakReference<>(vertx);
 		this.gameId = gameId;
 		this.noActivityTimeout = noActivityTimeout;
@@ -30,7 +31,7 @@ public class ActivityMonitor {
 	}
 
 	private void handleTimeout(long t) throws InterruptedException, SuspendExecution {
-		onTimeout.call(gameId);
+		onTimeout.call(this);
 	}
 
 	@Suspendable
@@ -47,6 +48,12 @@ public class ActivityMonitor {
 
 	@Suspendable
 	public void cancel() {
+		if (cancelled) {
+			return;
+		}
+
+		cancelled = true;
+
 		final Vertx vertx = this.vertx.get();
 
 		if (vertx == null) {
@@ -56,5 +63,9 @@ public class ActivityMonitor {
 		if (lastTimerId != Long.MIN_VALUE) {
 			vertx.cancelTimer(lastTimerId);
 		}
+	}
+
+	public String getGameId() {
+		return gameId;
 	}
 }

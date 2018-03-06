@@ -20,6 +20,12 @@ import java.util.List;
  */
 public interface GameSession extends Server {
 
+	/**
+	 * Have both players connected?
+	 *
+	 * @return {@code true} if both players have sent their {@link com.hiddenswitch.spellsource.common.MessageType#FIRST_MESSAGE}
+	 * to the game session.
+	 */
 	boolean isGameReady();
 
 	/**
