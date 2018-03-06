@@ -4,11 +4,19 @@ import ch.qos.logback.classic.Level;
 import io.netty.handler.codec.http.websocketx.WebSocket08FrameDecoder;
 import io.netty.handler.codec.http.websocketx.WebSocket08FrameEncoder;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Logging {
+	static ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
+			.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+
 	static {
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
+	}
+
+	public static Logger root() {
+		return root;
 	}
 
 	public static void setLoggingLevelForClass(Class clazz, Level level) {
