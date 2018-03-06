@@ -30,9 +30,15 @@ Tracker.autorun(() => {
     });
 });
 
-Meteor.startup(() => {
-    // On startup, clear all the local versions' that we might be downloading.
-    LocalVersions.update({}, {$set: {downloading: false}}, {multi: true});
+LocalVersions.once('loaded', (count) => {
+    let allLocals = LocalVersions.find({downloading: true}).fetch();
+    allLocals.forEach((localVersion) => {
+        try {
+            LocalVersions.update({_id: localVersion._id}, {$set: {downloading: false}});
+        } catch (ex) {
+            console.error(ex);
+        }
+    });
 
     // Get the latest version information.
     Meteor.subscribe('versions');
