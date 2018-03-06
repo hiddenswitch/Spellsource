@@ -21,7 +21,6 @@ public class ActivityMonitor {
 	private final WeakReference<Vertx> vertx;
 	private long lastTimerId = Long.MIN_VALUE;
 	private final SuspendableAction1<ActivityMonitor> onTimeout;
-	private boolean cancelled = false;
 
 	public ActivityMonitor(Vertx vertx, String gameId, long noActivityTimeout, SuspendableAction1<ActivityMonitor> onTimeout) {
 		this.vertx = new WeakReference<>(vertx);
@@ -48,12 +47,6 @@ public class ActivityMonitor {
 
 	@Suspendable
 	public void cancel() {
-		if (cancelled) {
-			return;
-		}
-
-		cancelled = true;
-
 		final Vertx vertx = this.vertx.get();
 
 		if (vertx == null) {
