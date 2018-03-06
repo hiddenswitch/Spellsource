@@ -47,7 +47,6 @@ public class NullSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc);
 		// intentionally do nothing
 	}
 

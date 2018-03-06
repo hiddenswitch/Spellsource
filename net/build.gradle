@@ -50,6 +50,7 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.5.1'
     compile group: 'com.github.flapdoodle-oss', name: 'de.flapdoodle.embed.mongo', version: 'e5232204c2'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    compile group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'
 
     compile project(':game')
     compile project(':cards')
