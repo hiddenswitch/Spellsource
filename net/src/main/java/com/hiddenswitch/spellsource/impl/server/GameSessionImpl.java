@@ -213,14 +213,24 @@ public class GameSessionImpl implements GameSession {
 	@Override
 	public void kill() {
 		// The game never started if this were null
+		final boolean open1 = Writer.isOpen(getClient1());
+		final boolean open2 = Writer.isOpen(getClient2());
 		if (getGameContext() != null) {
 			getGameContext().kill();
+		} else if (!isGameReady()) {
+			// Send a game over message to the players that may have connected
+			if (open1) {
+				getClient1().onGameEnd(null);
+			}
+			if (open2) {
+				getClient2().onGameEnd(null);
+			}
 		}
 
-		if (getClient1() != null) {
+		if (open1) {
 			getClient1().close();
 		}
-		if (getClient2() != null) {
+		if (open2) {
 			getClient2().close();
 		}
 	}
@@ -326,7 +336,9 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public void onConcede(int playerId) {
-		getGameContext().concede(playerId);
+		if (getGameContext() != null) {
+			getGameContext().concede(playerId);
+		}
 	}
 
 	@Override

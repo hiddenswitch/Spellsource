@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.*;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Gateway;
 import com.hiddenswitch.spellsource.Matchmaking;
@@ -28,7 +29,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 	private SuspendableMap<GameId, CreateGameSessionResponse> connections;
 	private Map<GameId, GameSession> sessions = new ConcurrentHashMap<>();
 	private Map<GameId, List<Runnable>> pipeClosers = new ConcurrentHashMap<>();
-	private Map<GameId, ActivityMonitor> gameActivityMonitors = new ConcurrentHashMap<>();
+	private ListMultimap<GameId, ActivityMonitor> gameActivityMonitors = Multimaps.synchronizedListMultimap(ArrayListMultimap.create());
 
 	@Override
 	public void start() throws SuspendExecution {
@@ -69,11 +70,13 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			// Listen for messages from the clients
 			final EventBus eventBus = vertx.eventBus();
 			final ActivityMonitor activityMonitor = new ActivityMonitor(vertx, gameId, request.getNoActivityTimeout(), this::kill);
+			final ActivityMonitor connectionTimeout = new ActivityMonitor(vertx, gameId, 10000L, this::connectionTimedOut);
 			final ArrayList<Runnable> closers = new ArrayList<>();
 			closers.add(connect(session, 0, request.getPregame1().getUserId(), eventBus, activityMonitor));
 			closers.add(connect(session, 1, request.getPregame2().getUserId(), eventBus, activityMonitor));
 			pipeClosers.put(key, closers);
 			gameActivityMonitors.put(key, activityMonitor);
+			gameActivityMonitors.put(key, connectionTimeout);
 			final CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), session);
 			connections.replace(key, response);
 			sessions.put(key, session);
@@ -86,9 +89,24 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 	}
 
 	@Suspendable
+	private void connectionTimedOut(ActivityMonitor activityMonitor) throws SuspendExecution, InterruptedException {
+		// Check if players have connected
+		final GameId key = new GameId(activityMonitor.getGameId());
+		final GameSession gameSession = sessions.get(key);
+		if (gameSession == null
+				|| gameSession.isGameReady()) {
+			activityMonitor.cancel();
+			gameActivityMonitors.remove(key, activityMonitor);
+		} else {
+			kill(key.toString());
+		}
+	}
+
+	@Suspendable
 	private void onGameOver(GameSessionImpl session) {
 		logger.debug("onGameOver: Handling on game over for session " + session.getGameId());
 		final String gameOverId = session.getGameId();
+		// The players should not accidentally wind back up in games
 		vertx.setTimer(500L, Sync.suspendableHandler(t -> kill(gameOverId)));
 	}
 
@@ -113,6 +131,11 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 			reader.unregister();
 			logger.debug("connect: Closing writing pipe for userId " + userId);
 		};
+	}
+
+	@Suspendable
+	private void kill(ActivityMonitor monitor) throws InterruptedException, SuspendExecution {
+		kill(monitor.getGameId());
 	}
 
 	@Suspendable
@@ -144,9 +167,9 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		session.kill();
 
 		if (gameActivityMonitors.containsKey(key)) {
-			gameActivityMonitors.get(key).cancel();
-			gameActivityMonitors.remove(key);
+			gameActivityMonitors.get(key).forEach(ActivityMonitor::cancel);
 		}
+		gameActivityMonitors.removeAll(key);
 
 		for (Runnable runnable : pipeClosers.get(key)) {
 			runnable.run();
