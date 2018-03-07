@@ -80,11 +80,8 @@ public class Trace implements Serializable, Cloneable {
 	}
 
 	public String dump() {
-		try {
-			return Serialization.serializeBase64(this);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		return Serialization.serializeBase64(this);
+
 	}
 
 	public static Trace load(String trace) {

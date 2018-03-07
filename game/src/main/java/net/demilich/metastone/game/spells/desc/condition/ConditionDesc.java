@@ -10,6 +10,10 @@ import net.demilich.metastone.game.cards.desc.Desc;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class ConditionDesc extends Desc<ConditionArg, Condition> {
 
+	public ConditionDesc() {
+		super();
+	}
+
 	public ConditionDesc(Class<? extends Condition> conditionClass) {
 		super(conditionClass);
 	}

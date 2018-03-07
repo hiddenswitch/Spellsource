@@ -6,18 +6,18 @@ import java.util.List;
 /**
  * Created by bberman on 1/19/17.
  */
-public class AddToCollectionRequest implements Serializable {
+public final class AddToCollectionRequest implements Serializable {
 	private String collectionId;
 	private List<String> inventoryIds;
 	private List<String> cardIds;
 	private String userId;
 	private int copies = 1;
 
-	public static AddToCollectionRequest byInventoryIds(String collectionId, List<String> inventoryIds) {
+	public static AddToCollectionRequest createWithInventory(String collectionId, List<String> inventoryIds) {
 		return new AddToCollectionRequest(collectionId, inventoryIds);
 	}
 
-	public static AddToCollectionRequest byCardIds(String userId, String collectionId, List<String> cardIds) {
+	public static AddToCollectionRequest createWithCardIds(String userId, String collectionId, List<String> cardIds) {
 		return new AddToCollectionRequest()
 				.withUserId(userId)
 				.withCollectionId(collectionId)

@@ -137,7 +137,7 @@ public class Spellsource {
 									new FindOptions().setFields(json("_id", true))).stream()
 									.map(o -> o.getString("_id")).collect(toList());
 							for (String deckId : deckIds) {
-								decksImpl.deleteDeck(new DeckDeleteRequest(deckId));
+								decksImpl.deleteDeck(DeckDeleteRequest.create(deckId));
 							}
 							Void ignored = awaitResult(h -> thisVertx.undeploy(deploymentId, h));
 							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId2, h));

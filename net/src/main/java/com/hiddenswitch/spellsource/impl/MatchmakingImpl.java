@@ -164,7 +164,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			// If this is a bot request, create a bot game.
 			if (matchmakingRequest.isBotMatch()) {
 				logger.debug("matchmakeAndJoin: Matchmaker is creating an AI game for " + userId);
-				final BotsStartGameRequest request = new BotsStartGameRequest(matchmakingRequest.getUserId(), matchmakingRequest.getDeckId());
+				final BotsStartGameRequest request = BotsStartGameRequest.request(matchmakingRequest.getUserId(), matchmakingRequest.getDeckId());
 				BotsStartGameResponse botGameStarted = bots.sync().startGame(request);
 				// Occupy a spot in the queue for this user and the bot
 				queue.put(userId, QueueEntry.ready(new GameId(botGameStarted.getGameId()), deckId));
@@ -279,10 +279,10 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 		if (queueEntry != null
 				&& !queueEntry.isPending()) {
 			logger.debug("getCurrentMatch: User " + request.getUserId() + " has match " + queueEntry.gameId);
-			return new CurrentMatchResponse(queueEntry.gameId.toString());
+			return CurrentMatchResponse.response(queueEntry.gameId.toString());
 		} else {
 			logger.debug("getCurrentMatch: User " + request.getUserId() + " does not have match.");
-			return new CurrentMatchResponse(null);
+			return CurrentMatchResponse.response(null);
 		}
 	}
 

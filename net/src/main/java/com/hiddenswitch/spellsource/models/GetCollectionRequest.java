@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 /**
  * Created by bberman on 1/22/17.
  */
-public class GetCollectionRequest implements Serializable {
+public final class GetCollectionRequest implements Serializable {
 	private String userId;
 	private String deckId;
 	private List<GetCollectionRequest> requests;

@@ -2,11 +2,18 @@ package com.hiddenswitch.spellsource.models;
 
 import java.io.Serializable;
 
-public class DeckDeleteRequest implements Serializable {
-	private final String deckId;
+public final class DeckDeleteRequest implements Serializable {
+	private String deckId;
 
-	public DeckDeleteRequest(String deckId) {
+	private DeckDeleteRequest() {
+	}
+
+	private DeckDeleteRequest(String deckId) {
 		this.deckId = deckId;
+	}
+
+	public static DeckDeleteRequest create(String deckId) {
+		return new DeckDeleteRequest(deckId);
 	}
 
 	public String getDeckId() {

@@ -5,8 +5,11 @@ import java.io.Serializable;
 /**
  * Created by bberman on 1/19/17.
  */
-public class GetCardRequest implements Serializable {
-	String cardId;
+public final class GetCardRequest implements Serializable {
+	private String cardId;
+
+	public GetCardRequest() {
+	}
 
 	public String getCardId() {
 		return cardId;

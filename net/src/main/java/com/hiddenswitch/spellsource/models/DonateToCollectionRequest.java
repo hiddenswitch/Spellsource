@@ -6,14 +6,21 @@ import java.util.List;
 /**
  * Created by bberman on 3/4/17.
  */
-public class DonateToCollectionRequest implements Serializable {
-	private final String allianceId;
-	private final List<String> inventoryIds;
+public final class DonateToCollectionRequest implements Serializable {
+	private String allianceId;
+	private List<String> inventoryIds;
 
-	public DonateToCollectionRequest(String allianceId, List<String> inventoryIds) {
+	private DonateToCollectionRequest() {
+	}
+
+	private DonateToCollectionRequest(String allianceId, List<String> inventoryIds) {
 
 		this.allianceId = allianceId;
 		this.inventoryIds = inventoryIds;
+	}
+
+	public static DonateToCollectionRequest create(String allianceId, List<String> inventoryIds) {
+		return new DonateToCollectionRequest(allianceId, inventoryIds);
 	}
 
 	public String getAllianceId() {

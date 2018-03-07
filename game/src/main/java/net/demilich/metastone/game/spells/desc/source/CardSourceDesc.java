@@ -6,6 +6,10 @@ import java.util.Map;
 
 public class CardSourceDesc extends Desc<CardSourceArg, CardSource> {
 
+	public CardSourceDesc() {
+		super();
+	}
+
 	public CardSourceDesc(Class<? extends CardSource> cardSourceClass) {
 		super(cardSourceClass);
 	}

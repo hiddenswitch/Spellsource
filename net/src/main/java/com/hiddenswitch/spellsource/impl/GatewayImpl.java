@@ -8,7 +8,6 @@ import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
@@ -17,24 +16,14 @@ import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.VertxException;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.core.shareddata.Lock;
-import io.vertx.core.streams.Pump;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
 import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -44,7 +33,6 @@ import java.util.List;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
-import static io.vertx.ext.sync.Sync.fiberHandler;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -344,7 +332,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 		// Initialize the collection
 		final String userId = internalResponse.getUserId();
-		getLogic().initializeUser(new InitializeUserRequest(userId));
+		getLogic().initializeUser(InitializeUserRequest.create(userId));
 		final Account account = getAccount(userId);
 		return WebResult.succeeded(new CreateAccountResponse()
 				.loginToken(internalResponse.getLoginToken().getToken())
@@ -414,7 +402,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<DecksGetResponse> decksUpdate(RoutingContext context, String userId, String deckId, DecksUpdateCommand updateCommand) throws SuspendExecution, InterruptedException {
-		getDecks().updateDeck(new DeckUpdateRequest(userId, deckId, updateCommand));
+		getDecks().updateDeck(DeckUpdateRequest.create(userId, deckId, updateCommand));
 
 		// Get the updated collection
 		return getDeck(userId, deckId);
@@ -443,7 +431,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		if (!collection.getUserId().equals(userId)) {
 			return WebResult.failed(new SecurityException("You can't delete someone else's deck!"));
 		}
-		return WebResult.succeeded(getDecks().deleteDeck(new DeckDeleteRequest(deckId)));
+		return WebResult.succeeded(getDecks().deleteDeck(DeckDeleteRequest.create(deckId)));
 	}
 
 	@Override
@@ -475,7 +463,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<com.hiddenswitch.spellsource.client.models.MatchCancelResponse> matchmakingConstructedQueueDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.spellsource.models.MatchCancelResponse internalResponse = getMatchmaking().cancel(new MatchCancelRequest(userId));
+		com.hiddenswitch.spellsource.models.MatchCancelResponse internalResponse = getMatchmaking().cancel(MatchCancelRequest.create(userId));
 
 		com.hiddenswitch.spellsource.client.models.MatchCancelResponse response =
 				new com.hiddenswitch.spellsource.client.models.MatchCancelResponse()
@@ -486,12 +474,12 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.spellsource.models.MatchCancelResponse response = getMatchmaking().cancel(new MatchCancelRequest(userId));
+		com.hiddenswitch.spellsource.models.MatchCancelResponse response = getMatchmaking().cancel(MatchCancelRequest.create(userId));
 		if (response == null
 				|| response.getGameId() == null) {
 			return WebResult.failed(new RuntimeException("Could not concede the requested game."));
 		}
-		getGames().concedeGameSession(new ConcedeGameSessionRequest(response.getGameId(), response.getPlayerId()));
+		getGames().concedeGameSession(ConcedeGameSessionRequest.request(response.getGameId(), response.getPlayerId()));
 		return WebResult.succeeded(new MatchConcedeResponse().isConceded(true));
 	}
 
@@ -501,7 +489,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			return WebResult.failed(400, new RuntimeException("Cannot retrieve a JSON game state this way in a clustered environment."));
 		}
 
-		CurrentMatchResponse response = getMatchmaking().getCurrentMatch(new CurrentMatchRequest(userId));
+		CurrentMatchResponse response = getMatchmaking().getCurrentMatch(CurrentMatchRequest.request(userId));
 		if (response.getGameId() == null) {
 			return WebResult.failed(404, new NullPointerException("Game not found."));
 		}
@@ -696,7 +684,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	@Override
 	public WebResult<ChangePasswordResponse> changePassword(RoutingContext context, String userId, com.hiddenswitch.spellsource.client.models.ChangePasswordRequest request) throws SuspendExecution, InterruptedException {
 		try {
-			getAccounts().changePassword(new ChangePasswordRequest(new UserId(userId), request.getPassword()));
+			getAccounts().changePassword(ChangePasswordRequest.request(new UserId(userId), request.getPassword()));
 		} catch (RuntimeException ex) {
 			return WebResult.failed(ex);
 		}
@@ -757,7 +745,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getEmails().get(0).getAddress())
-				.inMatch(getMatchmaking().getCurrentMatch(new CurrentMatchRequest(userId)).getGameId() != null)
+				.inMatch(getMatchmaking().getCurrentMatch(CurrentMatchRequest.request(userId)).getGameId() != null)
 				.name(displayName);
 	}
 

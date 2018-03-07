@@ -219,7 +219,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 				json("$addToSet", json("collectionIds", collectionId)),
 				new UpdateOptions().setMulti(true));
 
-		return new AddToCollectionResponse(result, inventoryIds);
+		return AddToCollectionResponse.create(result, inventoryIds);
 	}
 
 	@Override
@@ -294,7 +294,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 				new UpdateOptions().setMulti(true),
 				h));
 
-		return new BorrowFromCollectionResponse(update.getDocModified());
+		return BorrowFromCollectionResponse.response(update.getDocModified());
 	}
 
 	@Override

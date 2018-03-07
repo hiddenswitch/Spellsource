@@ -2,11 +2,18 @@ package com.hiddenswitch.spellsource.models;
 
 import java.io.Serializable;
 
-public class DeckListUpdateResponse implements Serializable {
-	private final long updatedCount;
+public final class DeckListUpdateResponse implements Serializable {
+	private long updatedCount;
 
-	public DeckListUpdateResponse(long updatedCount) {
+	private DeckListUpdateResponse() {
+	}
+
+	private DeckListUpdateResponse(long updatedCount) {
 		this.updatedCount = updatedCount;
+	}
+
+	public static DeckListUpdateResponse create(long updatedCount) {
+		return new DeckListUpdateResponse(updatedCount);
 	}
 
 	public long getUpdatedCount() {

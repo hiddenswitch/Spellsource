@@ -15,6 +15,10 @@ import java.util.Map;
 
 public class AuraDesc extends Desc<AuraArg, Aura> {
 
+	public AuraDesc() {
+		super();
+	}
+
 	public AuraDesc(Class<? extends Aura> clazz) {
 		super(clazz);
 	}

@@ -12,6 +12,9 @@ public class EventLogicRequest<T extends GameEvent> extends LogicRequest impleme
 	private int entityId;
 	private T event;
 
+	public EventLogicRequest() {
+	}
+
 	public String getCardInventoryId() {
 		return cardInventoryId;
 	}

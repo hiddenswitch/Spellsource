@@ -71,6 +71,10 @@ import static java.util.stream.Collectors.toList;
  */
 public class SpellDesc extends Desc<SpellArg, Spell> {
 
+	public SpellDesc() {
+		super();
+	}
+
 	public SpellDesc(Map<SpellArg, Object> arguments) {
 		super(arguments);
 	}

@@ -8,6 +8,10 @@ import java.util.Map;
 
 public final class CardCostModifierDesc extends Desc<CardCostModifierArg, CardCostModifier> {
 
+	public CardCostModifierDesc() {
+		super();
+	}
+
 	public CardCostModifierDesc(Class<? extends CardCostModifier> clazz) {
 		super(clazz);
 	}

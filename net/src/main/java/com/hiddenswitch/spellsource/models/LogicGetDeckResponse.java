@@ -2,8 +2,11 @@ package com.hiddenswitch.spellsource.models;
 
 import java.io.Serializable;
 
-public class LogicGetDeckResponse implements Serializable{
+public final class LogicGetDeckResponse implements Serializable {
 	private GetCollectionResponse collectionResponse;
+
+	public LogicGetDeckResponse() {
+	}
 
 	public GetCollectionResponse getCollection() {
 		return collectionResponse;

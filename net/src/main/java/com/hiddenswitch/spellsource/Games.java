@@ -647,7 +647,7 @@ public interface Games {
 	 * @return A client view game state.
 	 */
 	default GameState getClientGameState(String gameId, String userId) {
-		DescribeGameSessionResponse gameSession = describeGameSession(new DescribeGameSessionRequest(gameId));
+		DescribeGameSessionResponse gameSession = describeGameSession(DescribeGameSessionRequest.create(gameId));
 		final com.hiddenswitch.spellsource.common.GameState state = gameSession.getState();
 		GameContext workingContext = new GameContext();
 		workingContext.setGameState(state);

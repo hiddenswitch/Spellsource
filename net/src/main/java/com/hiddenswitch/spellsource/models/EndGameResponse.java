@@ -5,5 +5,8 @@ import java.io.Serializable;
 /**
  * Created by bberman on 2/11/17.
  */
-public class EndGameResponse implements Serializable {
+public final class EndGameResponse implements Serializable {
+
+	public EndGameResponse() {
+	}
 }

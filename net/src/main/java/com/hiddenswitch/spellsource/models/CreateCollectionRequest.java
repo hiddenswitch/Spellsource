@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Created by bberman on 1/19/17.
  */
-public class CreateCollectionRequest implements Serializable {
+public final class CreateCollectionRequest implements Serializable {
 	private CollectionTypes type;
 	private String userId;
 	private List<String> userIds;
@@ -26,7 +26,7 @@ public class CreateCollectionRequest implements Serializable {
 	private String heroCardId;
 	private String format;
 
-	protected CreateCollectionRequest() {
+	private CreateCollectionRequest() {
 	}
 
 	public static CreateCollectionRequest deck(String userId, String name, HeroClass heroClass, List<String> inventoryIds, boolean draft) {

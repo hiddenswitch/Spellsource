@@ -6,14 +6,18 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DeckCreateResponse implements Serializable {
-	private final String deckId;
-	private final GetCollectionResponse collection;
+public final class DeckCreateResponse implements Serializable {
+	private String deckId;
+	private GetCollectionResponse collection;
 
 
-	public DeckCreateResponse(String deckId, GetCollectionResponse collection) {
+	private DeckCreateResponse(String deckId, GetCollectionResponse collection) {
 		this.deckId = deckId;
 		this.collection = collection;
+	}
+
+	public static DeckCreateResponse create(String deckId, GetCollectionResponse collection) {
+		return new DeckCreateResponse(deckId, collection);
 	}
 
 	public List<String> getInventoryIds() {

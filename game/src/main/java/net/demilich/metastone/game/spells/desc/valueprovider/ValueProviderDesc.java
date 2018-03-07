@@ -9,6 +9,10 @@ import java.util.Map;
 
 public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 
+	public ValueProviderDesc() {
+		super();
+	}
+
 	public static Map<ValueProviderArg, Object> build(Class<? extends ValueProvider> providerClass) {
 		final Map<ValueProviderArg, Object> arguments = new EnumMap<>(ValueProviderArg.class);
 		arguments.put(ValueProviderArg.CLASS, providerClass);

@@ -5,11 +5,18 @@ import java.io.Serializable;
 /**
  * Created by bberman on 1/30/17.
  */
-public class InitializeUserRequest implements Serializable {
+public final class InitializeUserRequest implements Serializable {
 	private String userId;
 
-	public InitializeUserRequest(String userId) {
+	private InitializeUserRequest() {
+	}
+
+	private InitializeUserRequest(String userId) {
 		setUserId(userId);
+	}
+
+	public static InitializeUserRequest create(String userId) {
+		return new InitializeUserRequest(userId);
 	}
 
 	public String getUserId() {

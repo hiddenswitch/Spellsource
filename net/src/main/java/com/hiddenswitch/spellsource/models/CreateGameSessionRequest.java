@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
-public class CreateGameSessionRequest implements Serializable {
+public final class CreateGameSessionRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String gameId;
@@ -15,6 +15,9 @@ public class CreateGameSessionRequest implements Serializable {
 	private PregamePlayerConfiguration pregame2;
 	private Trigger customTriggers;
 	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
+
+	public CreateGameSessionRequest() {
+	}
 
 	public PregamePlayerConfiguration getPregame1() {
 		return pregame1;

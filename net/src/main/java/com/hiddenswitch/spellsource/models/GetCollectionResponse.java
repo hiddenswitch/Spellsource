@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * Created by bberman on 1/22/17.
  */
-public class GetCollectionResponse implements Serializable {
+public final class GetCollectionResponse implements Serializable {
 	private List<GetCollectionResponse> responses;
 	private List<InventoryRecord> inventoryRecords;
 	private CollectionTypes collectionType;
@@ -37,6 +37,9 @@ public class GetCollectionResponse implements Serializable {
 	private DeckType deckType;
 	private String heroCardId;
 	private String format;
+
+	private GetCollectionResponse() {
+	}
 
 	public static GetCollectionResponse batch(List<GetCollectionResponse> responses) {
 		return new GetCollectionResponse()

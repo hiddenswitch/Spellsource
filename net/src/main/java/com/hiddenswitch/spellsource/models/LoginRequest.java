@@ -2,9 +2,12 @@ package com.hiddenswitch.spellsource.models;
 
 import java.io.Serializable;
 
-public class LoginRequest implements Serializable {
+public final class LoginRequest implements Serializable {
 	private String email;
 	private String password;
+
+	public LoginRequest() {
+	}
 
 	public LoginRequest withEmail(String username) {
 		this.email = username;

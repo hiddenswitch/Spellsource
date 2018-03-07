@@ -2,13 +2,19 @@ package com.hiddenswitch.spellsource.models;
 
 import java.io.Serializable;
 
-public class MatchCancelRequest implements Serializable {
+public final class MatchCancelRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private String userId;
 
-	private final String userId;
+	public MatchCancelRequest() {
+	}
 
-	public MatchCancelRequest(String userId) {
+	private MatchCancelRequest(String userId) {
 		this.userId = userId;
+	}
+
+	public static MatchCancelRequest create(String userId) {
+		return new MatchCancelRequest(userId);
 	}
 
 	public String getUserId() {

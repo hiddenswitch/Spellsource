@@ -7,8 +7,10 @@ import java.io.Serializable;
 /**
  * Created by bberman on 1/19/17.
  */
-public class InsertCardRequest implements Serializable {
+public final class InsertCardRequest implements Serializable {
 	private CardCatalogueRecord card;
+
+	public InsertCardRequest() {}
 
 	public CardCatalogueRecord getCard() {
 		return card;

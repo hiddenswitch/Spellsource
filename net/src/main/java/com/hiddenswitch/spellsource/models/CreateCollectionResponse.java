@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by bberman on 1/19/17.
  */
-public class CreateCollectionResponse implements Serializable {
+public final class CreateCollectionResponse implements Serializable {
 	private String collectionId;
 	private List<String> createdInventoryIds;
 
@@ -23,7 +23,7 @@ public class CreateCollectionResponse implements Serializable {
 		return this;
 	}
 
-	protected CreateCollectionResponse() {
+	private CreateCollectionResponse() {
 	}
 
 	public static CreateCollectionResponse user(String userId, List<String> newInventoryIds) {

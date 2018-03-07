@@ -15,7 +15,6 @@ import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
-import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.cards.CardCatalogue;
 
@@ -103,7 +102,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		GetCollectionResponse getCollectionResponse = inventory.sync()
 				.getCollection(new GetCollectionRequest().withUserId(userId).withDeckId(createCollectionResponse.getCollectionId()));
 
-		return new DeckCreateResponse(deckId, getCollectionResponse);
+		return DeckCreateResponse.create(deckId, getCollectionResponse);
 	}
 
 	private int getMaxDeckSize() {
@@ -142,7 +141,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		if (updateCommand.getPushInventoryIds() != null
 				&& updateCommand.getPushInventoryIds().getEach() != null
 				&& !updateCommand.getPushInventoryIds().getEach().isEmpty()) {
-			AddToCollectionResponse result = inventory.sync().addToCollection(AddToCollectionRequest.byInventoryIds(deckId, updateCommand.getPushInventoryIds().getEach()));
+			AddToCollectionResponse result = inventory.sync().addToCollection(AddToCollectionRequest.createWithInventory(deckId, updateCommand.getPushInventoryIds().getEach()));
 			added.addAll(result.getInventoryIds());
 		}
 
@@ -155,7 +154,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		if (updateCommand.getPushCardIds() != null
 				&& updateCommand.getPushCardIds().getEach() != null
 				&& !updateCommand.getPushCardIds().getEach().isEmpty()) {
-			AddToCollectionResponse result = inventory.sync().addToCollection(AddToCollectionRequest.byCardIds(userId, deckId, updateCommand.getPushCardIds().getEach()));
+			AddToCollectionResponse result = inventory.sync().addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, updateCommand.getPushCardIds().getEach()));
 			added.addAll(result.getInventoryIds());
 		}
 
@@ -184,7 +183,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 		// Remove the deckId from the user's decks
 		Accounts.update(getMongo(), userId, json("$pull", json("decks", deckId)));
 
-		return new DeckDeleteResponse(response);
+		return DeckDeleteResponse.create(response);
 	}
 
 	@Suspendable
@@ -196,7 +195,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 
 		// Trash them all
 		for (String deckId : deckIds) {
-			deleteDeck(new DeckDeleteRequest(deckId));
+			deleteDeck(DeckDeleteRequest.create(deckId));
 		}
 
 		// Get all the users
@@ -213,7 +212,7 @@ public class DecksImpl extends AbstractService<DecksImpl> implements Decks {
 			}
 		}
 
-		return new DeckListUpdateResponse(updated.get());
+		return DeckListUpdateResponse.create(updated.get());
 	}
 
 	@Override
