@@ -9,7 +9,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -17,14 +16,14 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class AddEnchantmentSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, TriggerDesc trigger) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(AddEnchantmentSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(AddEnchantmentSpell.class);
 		arguments.put(SpellArg.TRIGGER, trigger);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}
 
 	public static SpellDesc create(EntityReference target, Aura aura) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(AddEnchantmentSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(AddEnchantmentSpell.class);
 		arguments.put(SpellArg.AURA, aura);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);

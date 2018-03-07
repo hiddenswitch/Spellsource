@@ -109,7 +109,7 @@ public final class TriggerDesc implements Serializable, Cloneable {
 	 * @return The enchantment
 	 */
 	public Enchantment create() {
-		Enchantment trigger = new Enchantment(eventTrigger.create(), spell, oneTurn, turnDelay);
+		Enchantment trigger = new Enchantment(eventTrigger.createInstance(), spell, oneTurn, turnDelay);
 		trigger.setMaxFires(maxFires);
 		trigger.setPersistentOwner(persistentOwner);
 		trigger.setKeepAfterTransform(keepAfterTransform);

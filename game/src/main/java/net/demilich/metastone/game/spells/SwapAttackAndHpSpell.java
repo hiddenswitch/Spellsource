@@ -19,7 +19,7 @@ public class SwapAttackAndHpSpell extends Spell {
 	}
 
 	public static SpellDesc create(EntityReference target) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SwapAttackAndHpSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SwapAttackAndHpSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}

@@ -6,11 +6,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.ActorCard;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -18,7 +15,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class AddDeathrattleSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc deathrattle) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(AddDeathrattleSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(AddDeathrattleSpell.class);
 		arguments.put(SpellArg.SPELL, deathrattle);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);

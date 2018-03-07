@@ -1,5 +1,4 @@
 {
-  "id": "minion_sourcing_specialist",
   "name": "Sourcing Specialist",
   "baseManaCost": 7,
   "type": "MINION",
@@ -7,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Battlecry: Summon the last minion Sourcing Specialist destroyed.",
+  "description": "Battlecry: Summon the last minion this destroyed. Legacy: In any match.",
   "battlecry": {
     "spell": {
       "class": "SummonCardFromAttributeSpell",
@@ -18,6 +17,7 @@
   "attributes": {
     "BATTLECRY": true
   },
+  "legacy": true,
   "collectible": true,
   "set": "SPELLSOURCE",
   "fileFormatVersion": 1

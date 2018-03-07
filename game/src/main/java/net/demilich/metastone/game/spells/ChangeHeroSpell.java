@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells;
 
 import java.util.Map;
-import java.util.stream.Stream;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
@@ -36,7 +35,7 @@ public class ChangeHeroSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(String heroCardId) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ChangeHeroSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ChangeHeroSpell.class);
 		arguments.put(SpellArg.CARD, heroCardId);
 		return new SpellDesc(arguments);
 	}
@@ -49,7 +48,7 @@ public class ChangeHeroSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(TargetPlayer player, String heroCardId) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ChangeHeroSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ChangeHeroSpell.class);
 		arguments.put(SpellArg.TARGET_PLAYER, player);
 		arguments.put(SpellArg.CARD, heroCardId);
 		return new SpellDesc(arguments);

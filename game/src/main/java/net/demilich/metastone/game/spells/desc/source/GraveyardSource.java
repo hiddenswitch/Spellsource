@@ -6,7 +6,7 @@ package net.demilich.metastone.game.spells.desc.source;
 @Deprecated
 public class GraveyardSource extends GraveyardMinionsSource {
 
-	public GraveyardSource(SourceDesc desc) {
+	public GraveyardSource(CardSourceDesc desc) {
 		super(desc);
 	}
 }

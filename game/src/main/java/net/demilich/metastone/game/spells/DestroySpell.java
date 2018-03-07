@@ -27,7 +27,7 @@ public class DestroySpell extends Spell {
 	}
 
 	public static SpellDesc create(EntityReference target, Predicate<Entity> targetFilter, boolean randomTarget) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(DestroySpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(DestroySpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.RANDOM_TARGET, randomTarget);
 		if (targetFilter != null) {

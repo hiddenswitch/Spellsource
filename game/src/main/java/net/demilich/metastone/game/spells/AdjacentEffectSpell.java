@@ -15,7 +15,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class AdjacentEffectSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc primarySpell, SpellDesc secondarySpell) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(AdjacentEffectSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(AdjacentEffectSpell.class);
 		if (primarySpell != null) {
 			arguments.put(SpellArg.SPELL_1, primarySpell);
 		}

@@ -12,7 +12,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 public class ComboSpell extends ConditionalEffectSpell {
 
 	public static SpellDesc create(SpellDesc either, SpellDesc or, boolean exclusive) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ComboSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ComboSpell.class);
 		arguments.put(SpellArg.SPELL_1, either);
 		arguments.put(SpellArg.SPELL_2, or);
 		arguments.put(SpellArg.EXCLUSIVE, exclusive);

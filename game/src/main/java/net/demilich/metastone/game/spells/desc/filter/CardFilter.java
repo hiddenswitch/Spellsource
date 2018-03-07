@@ -11,7 +11,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
 import java.util.Map;
@@ -118,7 +117,7 @@ public class CardFilter extends EntityFilter {
 	}
 
 	public static CardFilter create(CardType cardType) {
-		Map<FilterArg, Object> arguments = FilterDesc.build(CardFilter.class);
+		Map<FilterArg, Object> arguments = new FilterDesc(CardFilter.class);
 		arguments.put(FilterArg.CARD_TYPE, cardType);
 		return new CardFilter(new FilterDesc(arguments));
 	}

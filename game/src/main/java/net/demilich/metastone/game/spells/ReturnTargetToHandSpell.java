@@ -28,7 +28,7 @@ public class ReturnTargetToHandSpell extends Spell {
 	}
 
 	public static SpellDesc create(EntityReference target, SpellDesc spell, boolean randomTarget) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ReturnTargetToHandSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ReturnTargetToHandSpell.class);
 		arguments.put(SpellArg.SPELL, spell);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.RANDOM_TARGET, randomTarget);

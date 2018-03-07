@@ -17,7 +17,7 @@ public class RemoveAttributeSpell extends RevertableSpell {
 	}
 
 	public static SpellDesc create(EntityReference target, Attribute tag) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(RemoveAttributeSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(RemoveAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);

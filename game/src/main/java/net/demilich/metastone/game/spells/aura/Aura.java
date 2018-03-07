@@ -5,7 +5,6 @@ import java.util.*;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -28,7 +27,7 @@ public class Aura extends Enchantment {
 	private SortedSet<Integer> affectedEntities = new TreeSet<>();
 
 	public Aura(AuraDesc desc) {
-		this(desc.getSecondaryTrigger() == null ? null : desc.getSecondaryTrigger().create(), desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
+		this(desc.getSecondaryTrigger() == null ? null : desc.getSecondaryTrigger().createInstance(), desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
 		setEntityFilter(desc.getFilter());
 		setCondition(desc.getCondition());
 	}

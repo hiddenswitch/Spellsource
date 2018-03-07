@@ -17,7 +17,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class CastFromGroupSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(CastFromGroupSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(CastFromGroupSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.SPELL, spell);
 		return new SpellDesc(arguments);

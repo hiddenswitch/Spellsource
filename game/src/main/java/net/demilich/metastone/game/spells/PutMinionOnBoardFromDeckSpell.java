@@ -46,7 +46,7 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(EntityReference minionCard) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(PutMinionOnBoardFromDeckSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(PutMinionOnBoardFromDeckSpell.class);
 		arguments.put(SpellArg.TARGET, minionCard);
 		return new SpellDesc(arguments);
 	}

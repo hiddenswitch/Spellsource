@@ -5,36 +5,31 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.demilich.metastone.game.cards.desc.Desc;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
-public class FilterDesc extends Desc<FilterArg> {
+public class FilterDesc extends Desc<FilterArg, EntityFilter> {
 
-	public static Map<FilterArg, Object> build(Class<? extends EntityFilter> filterClass) {
-		final Map<FilterArg, Object> arguments = new EnumMap<>(FilterArg.class);
-		arguments.put(FilterArg.CLASS, filterClass);
-		return arguments;
+	public FilterDesc(Class<? extends EntityFilter> filterClass) {
+		super(filterClass);
 	}
 
 	public FilterDesc(Map<FilterArg, Object> arguments) {
 		super(arguments);
 	}
 
-	public EntityFilter create() {
-		Class<? extends EntityFilter> filterClass = getFilterClass();
-		try {
-			return filterClass.getConstructor(FilterDesc.class).newInstance(this);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-		}
-		return null;
+	@Override
+	protected Class<? extends Desc> getDescImplClass() {
+		return FilterDesc.class;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Class<? extends EntityFilter> getFilterClass() {
-		return (Class<? extends EntityFilter>) get(FilterArg.CLASS);
+	@Override
+	public FilterArg getClassArg() {
+		return FilterArg.CLASS;
 	}
 
+	@Override
+	public FilterDesc clone() {
+		return (FilterDesc)copyTo(new FilterDesc(getDescClass()));
+	}
 }

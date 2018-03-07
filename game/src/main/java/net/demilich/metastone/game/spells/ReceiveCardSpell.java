@@ -4,9 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -216,7 +214,7 @@ public class ReceiveCardSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ReceiveCardSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ReceiveCardSpell.class);
 		return new SpellDesc(arguments);
 	}
 
@@ -227,7 +225,7 @@ public class ReceiveCardSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(String cardId) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ReceiveCardSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ReceiveCardSpell.class);
 		arguments.put(SpellArg.CARD, cardId);
 		return new SpellDesc(arguments);
 	}
@@ -239,7 +237,7 @@ public class ReceiveCardSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(EntityReference target) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ReceiveCardSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ReceiveCardSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}
@@ -251,7 +249,7 @@ public class ReceiveCardSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(String... cardIds) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ReceiveCardSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ReceiveCardSpell.class);
 		arguments.put(SpellArg.CARDS, cardIds);
 		arguments.put(SpellArg.RANDOM_TARGET, true);
 		return new SpellDesc(arguments);
@@ -283,7 +281,7 @@ public class ReceiveCardSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(CardSource source, EntityFilter filter, int cards) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ReceiveCardSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ReceiveCardSpell.class);
 		arguments.put(SpellArg.CARD_FILTER, filter);
 		arguments.put(SpellArg.CARD_SOURCE, source);
 		arguments.put(SpellArg.VALUE, cards);

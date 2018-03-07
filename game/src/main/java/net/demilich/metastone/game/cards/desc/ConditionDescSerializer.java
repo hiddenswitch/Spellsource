@@ -26,7 +26,7 @@ public class ConditionDescSerializer implements JsonDeserializer<ConditionDesc>,
 			e.printStackTrace();
 			throw new JsonParseException("Condition parser encountered an invalid class: " + conditionClassName);
 		}
-		Map<ConditionArg, Object> arguments = ConditionDesc.build(conditionClass);
+		Map<ConditionArg, Object> arguments = new ConditionDesc(conditionClass);
 		parseArgument(ConditionArg.RACE, jsonData, arguments, ParseValueType.RACE);
 		parseArgument(ConditionArg.VALUE, jsonData, arguments, ParseValueType.INTEGER);
 		parseArgument(ConditionArg.VALUE1, jsonData, arguments, ParseValueType.VALUE);
@@ -59,7 +59,7 @@ public class ConditionDescSerializer implements JsonDeserializer<ConditionDesc>,
 	@Override
 	public JsonElement serialize(ConditionDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
-		result.add("class", new JsonPrimitive(src.getConditionClass().getSimpleName()));
+		result.add("class", new JsonPrimitive(src.getDescClass().getSimpleName()));
 		for (ConditionArg attribute : ConditionArg.values()) {
 			if (attribute == ConditionArg.CLASS) {
 				continue;

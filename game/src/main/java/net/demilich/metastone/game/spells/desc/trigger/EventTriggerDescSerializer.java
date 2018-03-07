@@ -26,7 +26,7 @@ public class EventTriggerDescSerializer implements JsonDeserializer<EventTrigger
 			e.printStackTrace();
 			throw new JsonParseException("Trigger parser encountered an invalid class: " + triggerClassName);
 		}
-		Map<EventTriggerArg, Object> arguments = EventTriggerDesc.build(triggerClass);
+		Map<EventTriggerArg, Object> arguments = new EventTriggerDesc(triggerClass);
 		parseArgument(EventTriggerArg.RACE, jsonData, arguments, ParseValueType.RACE);
 		parseArgument(EventTriggerArg.CARD_TYPE, jsonData, arguments, ParseValueType.CARD_TYPE);
 		parseArgument(EventTriggerArg.TARGET_PLAYER, jsonData, arguments, ParseValueType.TARGET_PLAYER);
@@ -57,7 +57,7 @@ public class EventTriggerDescSerializer implements JsonDeserializer<EventTrigger
 	@Override
 	public JsonElement serialize(EventTriggerDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
-		result.add("class", new JsonPrimitive(src.getTriggerClass().getSimpleName()));
+		result.add("class", new JsonPrimitive(src.getDescClass().getSimpleName()));
 		for (EventTriggerArg attribute : EventTriggerArg.values()) {
 			if (attribute == EventTriggerArg.CLASS) {
 				continue;

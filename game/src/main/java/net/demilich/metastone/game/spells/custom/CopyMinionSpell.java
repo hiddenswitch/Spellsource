@@ -7,7 +7,6 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.Spell;
@@ -55,7 +54,7 @@ public class CopyMinionSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(CopyMinionSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(CopyMinionSpell.class);
 		return new SpellDesc(arguments);
 	}
 

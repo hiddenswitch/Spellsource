@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 public class CreateCardFromChoicesSpell extends Spell {
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(CreateCardFromChoicesSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(CreateCardFromChoicesSpell.class);
 		return new SpellDesc(arguments);
 	}
 

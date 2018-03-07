@@ -36,7 +36,7 @@ public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSer
 			throw new JsonParseException("SpellDesc parser encountered an invalid spell class: " + suppliedClassName);
 		}
 
-		Map<SpellArg, Object> spellArgs = SpellDesc.build(spellClass);
+		Map<SpellArg, Object> spellArgs = new SpellDesc(spellClass);
 		parseArgument(SpellArg.ATTACK_BONUS, jsonData, spellArgs, ParseValueType.VALUE);
 		parseArgument(SpellArg.ATTRIBUTE, jsonData, spellArgs, ParseValueType.ATTRIBUTE);
 		parseArgument(SpellArg.AURA, jsonData, spellArgs, ParseValueType.AURA);
@@ -111,7 +111,7 @@ public class SpellDescSerializer implements JsonDeserializer<SpellDesc>, JsonSer
 		}
 		sources.get().add(src);
 		JsonObject result = new JsonObject();
-		result.add("class", new JsonPrimitive(src.getSpellClass().getSimpleName()));
+		result.add("class", new JsonPrimitive(src.getDescClass().getSimpleName()));
 		for (SpellArg attribute : SpellArg.values()) {
 			if (attribute == SpellArg.CLASS) {
 				continue;

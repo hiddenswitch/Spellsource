@@ -5,11 +5,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -23,7 +18,7 @@ public class BuffWeaponSpell extends BuffSpell {
 	}
 
 	public static SpellDesc create(EntityReference target, int attackBonus, int durabilityBonus) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(BuffWeaponSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(BuffWeaponSpell.class);
 		arguments.put(SpellArg.ATTACK_BONUS, attackBonus);
 		arguments.put(SpellArg.HP_BONUS, durabilityBonus);
 		arguments.put(SpellArg.TARGET, target);

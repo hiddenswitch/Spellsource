@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class ValueProviderDesc extends Desc<ValueProviderArg> {
+public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 
 	public static Map<ValueProviderArg, Object> build(Class<? extends ValueProvider> providerClass) {
 		final Map<ValueProviderArg, Object> arguments = new EnumMap<>(ValueProviderArg.class);
@@ -19,24 +19,26 @@ public class ValueProviderDesc extends Desc<ValueProviderArg> {
 		super(arguments);
 	}
 
-	public ValueProvider createInstance() {
-		Class<? extends ValueProvider> valueProviderClass = getValueProviderClass();
-		try {
-			return valueProviderClass.getConstructor(ValueProviderDesc.class).newInstance(this);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public ValueProviderDesc(Class<? extends ValueProvider> vpClass) {
+		super(vpClass);
+	}
+
+	@Override
+	protected Class<? extends Desc> getDescImplClass() {
+		return ValueProviderDesc.class;
+	}
+
+	@Override
+	public ValueProviderArg getClassArg() {
+		return ValueProviderArg.CLASS;
+	}
+
+	@Override
+	public ValueProviderDesc clone() {
+		return (ValueProviderDesc)copyTo(new ValueProviderDesc(getDescClass()));
 	}
 
 	public EntityReference getSource() {
 		return (EntityReference) get(ValueProviderArg.TARGET);
 	}
-
-	@SuppressWarnings("unchecked")
-	public Class<? extends ValueProvider> getValueProviderClass() {
-		return (Class<? extends ValueProvider>) get(ValueProviderArg.CLASS);
-	}
-
 }

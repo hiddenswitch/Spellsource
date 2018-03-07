@@ -24,7 +24,7 @@ public class PutMiniCopyInHandSpell extends Spell {
 	}
 
 	public static SpellDesc create(EntityReference target, int amount) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(PutMiniCopyInHandSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(PutMiniCopyInHandSpell.class);
 		arguments.put(SpellArg.HOW_MANY, amount);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);

@@ -18,7 +18,7 @@ public class GainManaSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(GainManaSpell.class);
 
 	public static SpellDesc create(int mana) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(GainManaSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(GainManaSpell.class);
 		arguments.put(SpellArg.VALUE, mana);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		return new SpellDesc(arguments);

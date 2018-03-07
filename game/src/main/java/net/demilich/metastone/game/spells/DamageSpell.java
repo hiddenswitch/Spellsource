@@ -27,7 +27,7 @@ public class DamageSpell extends Spell {
 	}
 
 	public static SpellDesc create(EntityReference target, int damage, Predicate<Entity> targetFilter, boolean randomTarget) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(DamageSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(DamageSpell.class);
 		arguments.put(SpellArg.VALUE, damage);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.RANDOM_TARGET, randomTarget);
@@ -38,7 +38,7 @@ public class DamageSpell extends Spell {
 	}
 
 	public static SpellDesc create(EntityReference target, ValueProvider damageModfier) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(DamageSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(DamageSpell.class);
 		arguments.put(SpellArg.VALUE, damageModfier);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);

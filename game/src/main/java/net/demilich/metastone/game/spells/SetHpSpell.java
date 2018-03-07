@@ -4,7 +4,6 @@ import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.ActorCard;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -12,18 +11,17 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 public class SetHpSpell extends Spell {
 
 	public static SpellDesc create(int hp) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SetHpSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SetHpSpell.class);
 		arguments.put(SpellArg.VALUE, hp);
 		return new SpellDesc(arguments);
 	}
 
 	public static SpellDesc create(int value, boolean immuneToSilence) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SetHpSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SetHpSpell.class);
 		arguments.put(SpellArg.VALUE, value);
 		arguments.put(SpellArg.EXCLUSIVE, !immuneToSilence);
 		return new SpellDesc(arguments);

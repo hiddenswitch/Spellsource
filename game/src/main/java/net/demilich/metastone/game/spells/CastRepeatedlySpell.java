@@ -31,7 +31,7 @@ public class CastRepeatedlySpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(CastRepeatedlySpell.class);
 
 	public static SpellDesc create(SpellDesc spell, int value) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(CastRandomSpellSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(CastRandomSpellSpell.class);
 		arguments.put(SpellArg.SPELL, spell);
 		arguments.put(SpellArg.HOW_MANY, value);
 		return new SpellDesc(arguments);

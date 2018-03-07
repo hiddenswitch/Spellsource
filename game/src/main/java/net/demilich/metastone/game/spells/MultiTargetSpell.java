@@ -15,7 +15,7 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 public class MultiTargetSpell extends Spell {
 
 	public static SpellDesc create(int targets) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(MultiTargetSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(MultiTargetSpell.class);
 		arguments.put(SpellArg.VALUE, targets);
 		return new SpellDesc(arguments);
 	}

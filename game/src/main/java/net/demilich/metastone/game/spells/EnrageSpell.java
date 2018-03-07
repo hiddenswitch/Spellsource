@@ -52,7 +52,7 @@ public class EnrageSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(int attackBonus, Attribute tag) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(EnrageSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(EnrageSpell.class);
 		arguments.put(SpellArg.ATTACK_BONUS, attackBonus);
 		arguments.put(SpellArg.TARGET, EntityReference.SELF);
 		arguments.put(SpellArg.ATTRIBUTE, tag);

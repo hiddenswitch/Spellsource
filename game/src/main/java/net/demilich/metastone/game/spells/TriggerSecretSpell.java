@@ -5,7 +5,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.SecretCard;
-import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.SecretPlayedEvent;
 import net.demilich.metastone.game.events.SecretRevealedEvent;
@@ -25,7 +24,7 @@ public class TriggerSecretSpell extends Spell {
 		if (card instanceof SecretCard) {
 			SecretCard secretCard = (SecretCard) card;
 			SpellDesc secretSpell =
-					AddSecretSpell.class.isAssignableFrom(secretCard.getSpell().getSpellClass())
+					AddSecretSpell.class.isAssignableFrom(secretCard.getSpell().getDescClass())
 							? ((Secret) (secretCard.getSpell().get(SpellArg.SECRET))).getSpell().clone()
 							: secretCard.getSpell().clone();
 

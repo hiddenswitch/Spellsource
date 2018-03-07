@@ -8,7 +8,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 public class EnrageChangedTrigger extends EventTrigger {
 
 	public EnrageChangedTrigger() {
-		this(EventTriggerDesc.createEmpty(EnrageChangedTrigger.class));
+		this(new EventTriggerDesc(EnrageChangedTrigger.class));
 	}
 
 	public EnrageChangedTrigger(EventTriggerDesc desc) {

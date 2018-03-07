@@ -22,8 +22,8 @@ import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
-import net.demilich.metastone.game.spells.desc.source.SourceArg;
-import net.demilich.metastone.game.spells.desc.source.SourceDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSourceArg;
+import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.CardRevealedTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
@@ -175,10 +175,10 @@ public class TheOldGodsTests extends TestBase {
 		// Test that yogg casts the expected number of spells.
 		runGym((context, player, opponent) -> {
 			final int expectedSpells = 3;
-			final Map<SpellArg, Object> build = SpellDesc.build(YoggTestSpell1.class);
+			final Map<SpellArg, Object> build = new SpellDesc(YoggTestSpell1.class);
 			build.put(SpellArg.TARGET, EVENT_TARGET);
 			final Enchantment testEnchantment = new Enchantment(
-					new CardRevealedTrigger(EventTriggerDesc.createEmpty(CardRevealedTrigger.class)),
+					new CardRevealedTrigger(new EventTriggerDesc(CardRevealedTrigger.class)),
 					new SpellDesc(build));
 			testEnchantment.setHost(player);
 			testEnchantment.setOwner(player.getId());
@@ -190,9 +190,9 @@ public class TheOldGodsTests extends TestBase {
 			MinionCard yoggCard = (MinionCard) CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
 			final BattlecryDesc battlecry = ((MinionCardDesc) yoggCard.getDesc()).battlecry;
 			final SpellDesc originalSpell = battlecry.spell;
-			Map<SourceArg, Object> cardSourceArgs = SourceDesc.build(CardSource.class);
-			cardSourceArgs.put(SourceArg.TARGET_PLAYER, TargetPlayer.SELF);
-			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new SourceDesc(cardSourceArgs)) {
+			Map<CardSourceArg, Object> cardSourceArgs = new CardSourceDesc(CardSource.class);
+			cardSourceArgs.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
+			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
 				@Override
 				protected CardList match(GameContext context, Entity source, Player player) {
 					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_the_coin"));
@@ -218,10 +218,10 @@ public class TheOldGodsTests extends TestBase {
 						}
 					});
 
-			final Map<SpellArg, Object> build = SpellDesc.build(YoggTestSpell2.class);
+			final Map<SpellArg, Object> build = new SpellDesc(YoggTestSpell2.class);
 			build.put(SpellArg.TARGET, EVENT_TARGET);
 			final Enchantment testEnchantment = new Enchantment(
-					new CardRevealedTrigger(EventTriggerDesc.createEmpty(CardRevealedTrigger.class)),
+					new CardRevealedTrigger(new EventTriggerDesc(CardRevealedTrigger.class)),
 					new SpellDesc(build));
 			testEnchantment.setHost(player);
 			testEnchantment.setOwner(player.getId());
@@ -233,9 +233,9 @@ public class TheOldGodsTests extends TestBase {
 			MinionCard yoggCard = (MinionCard) CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
 			final BattlecryDesc battlecry = ((MinionCardDesc) yoggCard.getDesc()).battlecry;
 			final SpellDesc originalSpell = battlecry.spell;
-			Map<SourceArg, Object> cardSourceArgs = SourceDesc.build(CardSource.class);
-			cardSourceArgs.put(SourceArg.TARGET_PLAYER, TargetPlayer.SELF);
-			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new SourceDesc(cardSourceArgs)) {
+			Map<CardSourceArg, Object> cardSourceArgs = new CardSourceDesc(CardSource.class);
+			cardSourceArgs.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
+			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
 				@Override
 				protected CardList match(GameContext context, Entity source, Player player) {
 					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_fireball"));
@@ -322,7 +322,7 @@ public class TheOldGodsTests extends TestBase {
 		Card cardInHand = player.getHand().get(player.getHand().size() - 1);
 		Assert.assertEquals(cardInHand.getCardId(), originalMinion[0].getSourceCard().getCardId());
 		context.getLogic().performGameAction(player.getId(), cardInHand.play());
-		int buff = light.getSpell().subSpells().filter(sd -> sd.getSpellClass().equals(BuffSpell.class)).findFirst().orElseThrow(AssertionError::new).getInt(SpellArg.VALUE, -999);
+		int buff = light.getSpell().subSpells().filter(sd -> sd.getDescClass().equals(BuffSpell.class)).findFirst().orElseThrow(AssertionError::new).getInt(SpellArg.VALUE, -999);
 		Assert.assertEquals(player.getMinions().get(0).getAttack(), originalMinion[0].getAttack() + buff);
 		Assert.assertEquals(player.getMinions().get(0).getHp(), originalMinion[0].getHp() + buff);
 	}

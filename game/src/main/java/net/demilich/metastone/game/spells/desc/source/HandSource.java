@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class HandSource extends CardSource {
 
-	public HandSource(SourceDesc desc) {
+	public HandSource(CardSourceDesc desc) {
 		super(desc);
 	}
 
@@ -19,7 +19,7 @@ public class HandSource extends CardSource {
 	}
 
 	public static HandSource create() {
-		Map<SourceArg, Object> args = SourceDesc.build(HandSource.class);
-		return new HandSource(new SourceDesc(args));
+		Map<CardSourceArg, Object> args = new CardSourceDesc(HandSource.class);
+		return new HandSource(new CardSourceDesc(args));
 	}
 }

@@ -22,7 +22,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 @Deprecated
 public class DiscoverFilteredCardSpell extends Spell {
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(DiscoverFilteredCardSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(DiscoverFilteredCardSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.SPELL, spell);
 		return new SpellDesc(arguments);

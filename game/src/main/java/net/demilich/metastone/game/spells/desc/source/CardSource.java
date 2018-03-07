@@ -15,23 +15,23 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.toMap;
 
 public abstract class CardSource implements Serializable {
-	protected final SourceDesc desc;
+	protected final CardSourceDesc desc;
 
-	public CardSource(SourceDesc desc) {
+	public CardSource(CardSourceDesc desc) {
 		this.desc = desc;
 	}
 
-	public Object getArg(SourceArg arg) {
+	public Object getArg(CardSourceArg arg) {
 		return desc.get(arg);
 	}
 
-	public boolean hasArg(SourceArg arg) {
+	public boolean hasArg(CardSourceArg arg) {
 		return desc.containsKey(arg);
 	}
 
 	@Suspendable
 	public CardList getCards(GameContext context, Entity source, Player player) {
-		TargetPlayer targetPlayer = (TargetPlayer) desc.get(SourceArg.TARGET_PLAYER);
+		TargetPlayer targetPlayer = (TargetPlayer) desc.get(CardSourceArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
 			targetPlayer = TargetPlayer.SELF;
 		}
@@ -62,7 +62,7 @@ public abstract class CardSource implements Serializable {
 			cards = this.match(context, source, providingPlayer);
 		}
 
-		if (desc.getBool(SourceArg.DISTINCT)) {
+		if (desc.getBool(CardSourceArg.DISTINCT)) {
 			cards = new CardArrayList(cards
 					.stream()
 					.collect(toMap(Card::getCardId, Function.identity(), (p, q) -> p))
@@ -76,7 +76,7 @@ public abstract class CardSource implements Serializable {
 	protected abstract CardList match(GameContext context, Entity source, Player player);
 
 	public TargetPlayer getTargetPlayer() {
-		return (TargetPlayer) desc.getOrDefault(SourceArg.TARGET_PLAYER, TargetPlayer.SELF);
+		return (TargetPlayer) desc.getOrDefault(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
 	}
 }
 

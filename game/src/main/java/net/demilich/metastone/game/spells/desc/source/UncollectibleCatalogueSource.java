@@ -8,7 +8,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class UncollectibleCatalogueSource extends CardSource implements HasCardCreationSideEffects {
 
-	public UncollectibleCatalogueSource(SourceDesc desc) {
+	public UncollectibleCatalogueSource(CardSourceDesc desc) {
 		super(desc);
 	}
 

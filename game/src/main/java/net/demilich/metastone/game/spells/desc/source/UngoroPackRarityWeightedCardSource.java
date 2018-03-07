@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class UngoroPackRarityWeightedCardSource extends CatalogueSource {
 
-	public UngoroPackRarityWeightedCardSource(SourceDesc desc) {
+	public UngoroPackRarityWeightedCardSource(CardSourceDesc desc) {
 		super(desc);
 	}
 

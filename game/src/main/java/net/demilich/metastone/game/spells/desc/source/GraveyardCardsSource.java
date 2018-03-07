@@ -7,13 +7,11 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 
-import java.util.Objects;
-
 import static java.util.stream.Collectors.toCollection;
 
 public class GraveyardCardsSource extends CardSource {
 
-	public GraveyardCardsSource(SourceDesc desc) {
+	public GraveyardCardsSource(CardSourceDesc desc) {
 		super(desc);
 	}
 

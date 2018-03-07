@@ -26,7 +26,7 @@ public class CardCostModifierDescSerializer implements JsonDeserializer<CardCost
 			e.printStackTrace();
 			throw new JsonParseException("ManaModifier parser encountered an invalid class: " + cardCostModifierClassName);
 		}
-		Map<CardCostModifierArg, Object> arguments = CardCostModifierDesc.build(cardCostModifierClass);
+		Map<CardCostModifierArg, Object> arguments = new CardCostModifierDesc(cardCostModifierClass);
 		parseArgument(CardCostModifierArg.TARGET_PLAYER, jsonData, arguments, ParseValueType.TARGET_PLAYER);
 		parseArgument(CardCostModifierArg.RACE, jsonData, arguments, ParseValueType.RACE);
 		parseArgument(CardCostModifierArg.VALUE, jsonData, arguments, ParseValueType.VALUE);
@@ -56,7 +56,7 @@ public class CardCostModifierDescSerializer implements JsonDeserializer<CardCost
 	@Override
 	public JsonElement serialize(CardCostModifierDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
-		result.add("class", new JsonPrimitive(src.getManaModifierClass().getSimpleName()));
+		result.add("class", new JsonPrimitive(src.getDescClass().getSimpleName()));
 		for (CardCostModifierArg attribute : CardCostModifierArg.values()) {
 			if (attribute == CardCostModifierArg.CLASS) {
 				continue;

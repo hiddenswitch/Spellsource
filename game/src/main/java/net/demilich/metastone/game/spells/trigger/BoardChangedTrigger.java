@@ -8,7 +8,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 public class BoardChangedTrigger extends EventTrigger {
 
 	public BoardChangedTrigger() {
-		this(EventTriggerDesc.createEmpty(BoardChangedTrigger.class));
+		this(new EventTriggerDesc(BoardChangedTrigger.class));
 	}
 
 	public BoardChangedTrigger(EventTriggerDesc desc) {

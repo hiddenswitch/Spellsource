@@ -5,7 +5,6 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.ActorCard;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -75,13 +74,13 @@ public class SetAttackSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(SetAttackSpell.class);
 
 	public static SpellDesc create(int value) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SetAttackSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SetAttackSpell.class);
 		arguments.put(SpellArg.VALUE, value);
 		return new SpellDesc(arguments);
 	}
 
 	public static SpellDesc create(int value, boolean immuneToSilence) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SetAttackSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SetAttackSpell.class);
 		arguments.put(SpellArg.VALUE, value);
 		arguments.put(SpellArg.EXCLUSIVE, !immuneToSilence);
 		return new SpellDesc(arguments);

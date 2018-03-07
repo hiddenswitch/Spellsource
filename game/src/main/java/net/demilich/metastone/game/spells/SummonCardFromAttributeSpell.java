@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class SummonCardFromAttributeSpell extends Spell {
 	public static SpellDesc create(Attribute attributeContainingCardId, String defaultCardId, EntityReference target) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SummonCardFromAttributeSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SummonCardFromAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, attributeContainingCardId);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.CARD, defaultCardId);

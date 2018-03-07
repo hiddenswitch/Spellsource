@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +28,8 @@ public class AuraBuffSpell extends Spell {
 		return create(attackBonus, hpBonus, null);
 	}
 
-	public static SpellDesc create(Object attackBonus, Object hpBonus, Predicate<Entity> targetFilter) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(AuraBuffSpell.class);
+	public static SpellDesc create(@NotNull Object attackBonus, Object hpBonus, Predicate<Entity> targetFilter) {
+		Map<SpellArg, Object> arguments = new SpellDesc(AuraBuffSpell.class);
 		arguments.put(SpellArg.ATTACK_BONUS, attackBonus);
 		arguments.put(SpellArg.HP_BONUS, hpBonus);
 		if (targetFilter != null) {

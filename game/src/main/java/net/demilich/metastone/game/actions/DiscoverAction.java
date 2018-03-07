@@ -10,9 +10,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.condition.Condition;
-import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -125,7 +122,7 @@ public class DiscoverAction extends GameAction {
 
 	@Override
 	public String toString() {
-		return String.format("[%s '%s' %s]", getActionType(), getSpell().getSpellClass().getSimpleName(), card.getCardId());
+		return String.format("[%s '%s' %s]", getActionType(), getSpell().getDescClass().getSimpleName(), card.getCardId());
 	}
 
 	@Override

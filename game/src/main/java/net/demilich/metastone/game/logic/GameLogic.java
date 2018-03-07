@@ -677,7 +677,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				if (targetOverride != null && targetOverride.getId() != IdFactory.UNASSIGNED) {
 					targets.remove(0);
 					targets.add(targetOverride);
-					spellDesc = spellDesc.addArg(SpellArg.FILTER, null);
+					spellDesc = spellDesc.removeArg(SpellArg.FILTER);
 				}
 			}
 
@@ -2597,7 +2597,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				.map(t -> (Enchantment) t);
 
 		if (existingTriggers.anyMatch(t -> t.getSourceCard().getCardId().equals(entity.getSourceCard() != null ? entity.getSourceCard().getCardId() : null)
-				&& t.getSpell().getSpellClass().equals(triggerDesc.spell.getSpellClass()))) {
+				&& t.getSpell().getDescClass().equals(triggerDesc.spell.getDescClass()))) {
 			return;
 		}
 

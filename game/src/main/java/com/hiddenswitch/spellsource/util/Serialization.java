@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.util;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -32,7 +31,7 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.filter.FilterDesc;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
-import net.demilich.metastone.game.spells.desc.source.SourceDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerializer;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
@@ -50,14 +49,10 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 public class Serialization {
-	static private Gson gson;
-
-	static {
-		configureGson();
-	}
+	private static final ThreadLocal<Gson> gsons = ThreadLocal.withInitial(Serialization::createGson);
 
 	@SuppressWarnings("unchecked")
-	private static void configureGson() {
+	private static Gson createGson() {
 		RuntimeTypeAdapterFactory<GameAction> gameActions = RuntimeTypeAdapterFactory.of(GameAction.class, "actionType");
 		gameActions.registerSubtype(EndTurnAction.class, ActionType.END_TURN.toString());
 		gameActions.registerSubtype(PhysicalAttackAction.class, ActionType.PHYSICAL_ATTACK.toString());
@@ -141,22 +136,22 @@ public class Serialization {
 		gsonBuilder.registerTypeAdapter(ValueProviderDesc.class, new ValueProviderDescSerializer());
 		gsonBuilder.registerTypeAdapter(CardCostModifierDesc.class, new CardCostModifierDescSerializer());
 		gsonBuilder.registerTypeAdapter(FilterDesc.class, new FilterDescSerializer());
-		gsonBuilder.registerTypeAdapter(SourceDesc.class, new SourceDescSerializer());
+		gsonBuilder.registerTypeAdapter(CardSourceDesc.class, new SourceDescSerializer());
 
 		// Concrete types
 		gsonBuilder.registerTypeHierarchyAdapter(Condition.class, new Condition.Serializer());
 		gsonBuilder.registerTypeHierarchyAdapter(EventTrigger.class, new EventTrigger.Serializer());
 		gsonBuilder.registerTypeHierarchyAdapter(ValueProvider.class, new ValueProvider.Serializer());
 		gsonBuilder.enableComplexMapKeySerialization();
-		gson = gsonBuilder.create();
+		return gsonBuilder.create();
 	}
 
 	public static Gson getGson() {
-		return gson;
+		return gsons.get();
 	}
 
 	public synchronized static String serialize(Object object) {
-		return gson.toJson(object);
+		return gsons.get().toJson(object);
 	}
 
 	public synchronized static byte[] serializeBytes(Object object) throws IOException {
@@ -165,50 +160,50 @@ public class Serialization {
 		return bos.toByteArray();
 	}
 
-	public synchronized static String serializeBase64(Object object) throws IOException {
+	public static String serializeBase64(Object object) throws IOException {
 		return ObjectSerializer.serializeBase64(object);
 	}
 
-	public synchronized static <T> T deserializeBase64(String base64String) {
+	public static <T> T deserializeBase64(String base64String) {
 		return ObjectSerializer.deserializeBase64(base64String);
 	}
 
-	public synchronized static <T> T deserialize(String json, Class<T> classOfT) throws JsonSyntaxException {
-		return gson.fromJson(json, classOfT);
+	public static <T> T deserialize(String json, Class<T> classOfT) throws JsonSyntaxException {
+		return gsons.get().fromJson(json, classOfT);
 	}
 
-	public synchronized static <T> T deserialize(String json, Type typeOfT) throws JsonSyntaxException {
-		return gson.fromJson(json, typeOfT);
+	public static <T> T deserialize(String json, Type typeOfT) throws JsonSyntaxException {
+		return gsons.get().fromJson(json, typeOfT);
 	}
 
 	@SuppressWarnings("unchecked")
-	public synchronized static <T> T deserialize(byte[] buffer) throws IOException, ClassNotFoundException {
+	public static <T> T deserialize(byte[] buffer) throws IOException, ClassNotFoundException {
 		return deserialize(new ByteArrayInputStream(buffer));
 	}
 
 	@SuppressWarnings("unchecked")
-	public synchronized static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {
+	public static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(stream);
 		T result = (T) ois.readObject();
 		ois.close();
 		return result;
 	}
 
-	public synchronized static <T> T deserialize(InputStream stream, Class<? extends T> returnClass) throws IOException, ClassNotFoundException {
+	public static <T> T deserialize(InputStream stream, Class<? extends T> returnClass) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(stream);
 		T result = returnClass.cast(ois.readObject());
 		ois.close();
 		return result;
 	}
 
-	public synchronized static void serialize(Object obj, OutputStream output) throws IOException {
+	public static void serialize(Object obj, OutputStream output) throws IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(output);
 		oos.writeObject(obj);
 		oos.flush();
 		oos.close();
 	}
 
-	public synchronized static <T> T deserialize(JsonObject body, Class<? extends T> returnClass) {
-		return gson.fromJson(body.encode(), returnClass);
+	public static <T> T deserialize(JsonObject body, Class<? extends T> returnClass) {
+		return gsons.get().fromJson(body.encode(), returnClass);
 	}
 }

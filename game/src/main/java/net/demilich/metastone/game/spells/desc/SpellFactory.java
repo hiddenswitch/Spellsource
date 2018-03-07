@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class SpellFactory implements Serializable {
 
 	public Spell getSpell(SpellDesc spellDesc) {
-		Class<? extends Spell> spellClass = spellDesc.getSpellClass();
+		Class<? extends Spell> spellClass = spellDesc.getDescClass();
 		try {
 			return spellClass.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {

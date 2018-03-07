@@ -74,18 +74,13 @@ public interface Logic {
 	static CardDesc getDescriptionFromRecord(InventoryRecord cardRecord, String userId, String deckId) {
 		try {
 			// Set up the attributes
-			// Hearthstone cards are read directly from the database, since they do not support any mutability  rules.
 			CardDesc desc = cardRecord.getCardDesc();
-			if (desc.set != null
-					&& desc.set.isHearthstoneSet()
-					|| (desc.legacy == null || !desc.legacy)) {
-				final Card cardById = CardCatalogue.getCardById(desc.id);
-				if (cardById == null) {
-					logger.error("getDescriptionFromRecord: Card with desc.id={} was not found", desc.id);
-					return null;
-				}
-				desc = cardById.getDesc();
+			final Card cardById = CardCatalogue.getCardById(desc.id);
+			if (cardById == null) {
+				logger.error("getDescriptionFromRecord: Card with desc.id={} was not found", desc.id);
+				return null;
 			}
+			desc = cardById.getDesc();
 
 			if (desc.attributes == null) {
 				desc.attributes = new AttributeMap();
@@ -104,7 +99,7 @@ public interface Logic {
 			desc.attributes.putAll(cardRecord.getPersistentAttributes());
 			return desc;
 		} catch (Exception ex) {
-			logger.error("getDescriptionFromRecord: Error {} retrieveing data for userId={}, deckId={}, cardRecord={}", ex, userId, deckId, cardRecord);
+			logger.error("getDescriptionFromRecord: Error {} retrieving data for userId={}, deckId={}, cardRecord={}", ex, userId, deckId, cardRecord);
 			return null;
 		}
 	}

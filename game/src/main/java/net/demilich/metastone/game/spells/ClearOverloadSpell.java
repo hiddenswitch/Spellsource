@@ -13,7 +13,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 public class ClearOverloadSpell extends Spell {
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ClearOverloadSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ClearOverloadSpell.class);
 		return new SpellDesc(arguments);
 	}
 

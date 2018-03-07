@@ -11,13 +11,13 @@ import java.util.Map;
 
 public class GameStartTrigger extends EventTrigger {
 	public static EventTriggerDesc create(TargetPlayer targetPlayer) {
-		Map<EventTriggerArg, Object> arguments = EventTriggerDesc.build(GameStartTrigger.class);
+		Map<EventTriggerArg, Object> arguments = new EventTriggerDesc(GameStartTrigger.class);
 		arguments.put(EventTriggerArg.TARGET_PLAYER, targetPlayer);
 		return new EventTriggerDesc(arguments);
 	}
 
 	public GameStartTrigger() {
-		this(EventTriggerDesc.createEmpty(GameStartTrigger.class));
+		this(new EventTriggerDesc(GameStartTrigger.class));
 	}
 
 	public GameStartTrigger(EventTriggerDesc desc) {

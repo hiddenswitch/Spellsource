@@ -28,7 +28,7 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(SummonFriendlyMinionsThatDiedSpell.class);
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SummonFriendlyMinionsThatDiedSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SummonFriendlyMinionsThatDiedSpell.class);
 		return new SpellDesc(arguments);
 	}
 

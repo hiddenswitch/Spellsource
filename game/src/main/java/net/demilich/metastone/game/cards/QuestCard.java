@@ -14,7 +14,7 @@ public class QuestCard extends SpellCard {
 
 	public QuestCard(QuestCardDesc desc) {
 		super(desc);
-		EventTrigger trigger = desc.quest.create();
+		EventTrigger trigger = desc.quest.createInstance();
 		setQuest(new Quest(trigger, desc.spell, this, desc.countUntilCast));
 		setAttribute(Attribute.QUEST);
 	}

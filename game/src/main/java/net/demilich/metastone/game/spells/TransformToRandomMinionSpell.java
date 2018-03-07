@@ -14,7 +14,7 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 public class TransformToRandomMinionSpell extends TransformMinionSpell {
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(TransformToRandomMinionSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(TransformToRandomMinionSpell.class);
 		return new SpellDesc(arguments);
 	}
 

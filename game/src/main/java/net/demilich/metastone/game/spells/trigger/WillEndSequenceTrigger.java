@@ -11,7 +11,7 @@ public class WillEndSequenceTrigger extends EventTrigger {
 	}
 
 	public WillEndSequenceTrigger() {
-		super(EventTriggerDesc.createEmpty(WillEndSequenceTrigger.class));
+		super(new EventTriggerDesc(WillEndSequenceTrigger.class));
 	}
 
 	@Override

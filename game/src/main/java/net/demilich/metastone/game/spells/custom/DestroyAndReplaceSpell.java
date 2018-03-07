@@ -17,7 +17,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class DestroyAndReplaceSpell extends Spell {
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(DestroyAndReplaceSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(DestroyAndReplaceSpell.class);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		return new SpellDesc(arguments);
 	}

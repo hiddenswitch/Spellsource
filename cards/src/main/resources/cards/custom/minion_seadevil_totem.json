@@ -43,7 +43,7 @@
         "spells": [
           {
             "class": "DestroySpell",
-            "target": "OTHER_MINIONS",
+            "target": "ALL_OTHER_MINIONS",
             "filter": {
               "class": "RaceFilter",
               "race": "TOTEM"

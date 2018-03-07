@@ -11,7 +11,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 public class SecretSource extends CardSource implements HasCardCreationSideEffects {
 
-	public SecretSource(SourceDesc desc) {
+	public SecretSource(CardSourceDesc desc) {
 		super(desc);
 	}
 

@@ -8,7 +8,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.desc.ActorCardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -19,7 +18,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class CopyDeathrattleSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(CopyDeathrattleSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(CopyDeathrattleSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}
