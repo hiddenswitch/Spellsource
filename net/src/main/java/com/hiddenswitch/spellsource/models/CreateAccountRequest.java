@@ -2,12 +2,15 @@ package com.hiddenswitch.spellsource.models;
 
 import java.io.Serializable;
 
-public class CreateAccountRequest implements Serializable {
+public final class CreateAccountRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String emailAddress;
 	private String password;
 	private boolean bot;
+
+	public CreateAccountRequest() {
+	}
 
 	/**
 	 * The username. Visible to opponents. Not used for logging in.

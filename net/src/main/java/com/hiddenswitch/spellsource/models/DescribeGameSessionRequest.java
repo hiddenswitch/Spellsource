@@ -5,12 +5,19 @@ import java.io.Serializable;
 /**
  * Created by bberman on 11/18/16.
  */
-public class DescribeGameSessionRequest implements Serializable {
+public final class DescribeGameSessionRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String gameId;
 
-	public DescribeGameSessionRequest(String gameId) {
+	private DescribeGameSessionRequest() {
+	}
+
+	private DescribeGameSessionRequest(String gameId) {
 		setGameId(gameId);
+	}
+
+	public static DescribeGameSessionRequest create(String gameId) {
+		return new DescribeGameSessionRequest(gameId);
 	}
 
 	public String getGameId() {

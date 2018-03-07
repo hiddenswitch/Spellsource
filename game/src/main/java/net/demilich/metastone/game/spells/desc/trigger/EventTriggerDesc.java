@@ -10,6 +10,10 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public final class EventTriggerDesc extends Desc<EventTriggerArg, EventTrigger> {
 
+	public EventTriggerDesc() {
+		super();
+	}
+
 	public EventTriggerDesc(Class<? extends EventTrigger> triggerClass) {
 		super(triggerClass);
 	}

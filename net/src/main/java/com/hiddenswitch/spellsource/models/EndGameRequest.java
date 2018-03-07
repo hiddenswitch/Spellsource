@@ -7,8 +7,11 @@ import java.util.List;
 /**
  * Created by bberman on 2/11/17.
  */
-public class EndGameRequest implements Serializable {
+public final class EndGameRequest implements Serializable {
 	private List<Player> players;
+
+	public EndGameRequest() {
+	}
 
 	public List<Player> getPlayers() {
 		return players;

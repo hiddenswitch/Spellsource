@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class DeckUpdateResponse implements Serializable {
+public final class DeckUpdateResponse implements Serializable {
 	private List<String> addedInventoryIds = Collections.emptyList();
 	private List<String> removedInventoryIds = Collections.emptyList();
 

@@ -1,15 +1,10 @@
 package com.hiddenswitch.spellsource;
 
-import ch.qos.logback.classic.Level;
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.impl.AccountsImpl;
 import com.hiddenswitch.spellsource.impl.CardsImpl;
 import com.hiddenswitch.spellsource.impl.InventoryImpl;
 import com.hiddenswitch.spellsource.impl.ServiceTest;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Logging;
 import io.vertx.core.*;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -20,8 +15,6 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -49,7 +42,7 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 			CreateCollectionResponse createEmptyUserCollection = service.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
 			CreateCollectionResponse createEmptyDeck = service.createCollection(CreateCollectionRequest.deck(userId, "name", HeroClass.BLACK, Collections.emptyList(), false));
 			final String deckId = createEmptyDeck.getCollectionId();
-			AddToCollectionResponse addToCollectionResponse = service.addToCollection(AddToCollectionRequest.byCardIds(userId, deckId, Arrays.asList("minion_bloodfen_raptor", "minion_bloodfen_raptor")));
+			AddToCollectionResponse addToCollectionResponse = service.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("minion_bloodfen_raptor", "minion_bloodfen_raptor")));
 			getContext().assertEquals(2, addToCollectionResponse.getInventoryIds().size(), "Two Bloodfen Raptors should have been added");
 			GetCollectionResponse updatedUserCollection = service.getCollection(GetCollectionRequest.user(userId));
 			GetCollectionResponse updatedDeckCollection = service.getCollection(GetCollectionRequest.deck(deckId));
@@ -60,8 +53,8 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 
 			// Now add a card to the user collection, assert that when I request two duplicates I use one from the user
 			// collection and one is created
-			AddToCollectionResponse oneCardAdded = service.addToCollection(AddToCollectionRequest.byCardIds(userId, userId, Arrays.asList("spell_mirror_image")));
-			AddToCollectionResponse addTwoMirrorImages = service.addToCollection(AddToCollectionRequest.byCardIds(userId, deckId, Arrays.asList("spell_mirror_image", "spell_mirror_image")));
+			AddToCollectionResponse oneCardAdded = service.addToCollection(AddToCollectionRequest.createWithCardIds(userId, userId, Arrays.asList("spell_mirror_image")));
+			AddToCollectionResponse addTwoMirrorImages = service.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("spell_mirror_image", "spell_mirror_image")));
 			getContext().assertEquals(2, addTwoMirrorImages.getInventoryIds().size());
 			getContext().assertEquals(1L, addTwoMirrorImages.getInventoryIds().stream().filter(id -> id.equals(oneCardAdded.getInventoryIds().get(0))).count());
 			getContext().assertEquals(1L, addTwoMirrorImages.getInventoryIds().stream().filter(id -> !id.equals(oneCardAdded.getInventoryIds().get(0))).count());
@@ -73,8 +66,8 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 
 			// Now create 3 duplicate cards in the user collection, and assert that when I add 2 of that card ID, at
 			// least one is unused. Then, when I add a third, assert that all 3 are being used.
-			AddToCollectionResponse threeCardsAdded = service.addToCollection(AddToCollectionRequest.byCardIds(userId, userId, Arrays.asList("spell_fireball", "spell_fireball", "spell_fireball")));
-			AddToCollectionResponse addTwoFireballs = service.addToCollection(AddToCollectionRequest.byCardIds(userId, deckId, Arrays.asList("spell_fireball", "spell_fireball")));
+			AddToCollectionResponse threeCardsAdded = service.addToCollection(AddToCollectionRequest.createWithCardIds(userId, userId, Arrays.asList("spell_fireball", "spell_fireball", "spell_fireball")));
+			AddToCollectionResponse addTwoFireballs = service.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("spell_fireball", "spell_fireball")));
 			updatedUserCollection = service.getCollection(GetCollectionRequest.user(userId));
 			updatedDeckCollection = service.getCollection(GetCollectionRequest.deck(deckId));
 			getContext().assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
@@ -83,7 +76,7 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_fireball")
 							&& record.getCollectionIds().stream().noneMatch(cid -> cid.equals(deckId))).count());
 
-			AddToCollectionResponse addOneMoreFireball = service.addToCollection(AddToCollectionRequest.byCardIds(userId, deckId, Arrays.asList("spell_fireball")));
+			AddToCollectionResponse addOneMoreFireball = service.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("spell_fireball")));
 
 			updatedUserCollection = service.getCollection(GetCollectionRequest.user(userId));
 			updatedDeckCollection = service.getCollection(GetCollectionRequest.deck(deckId));
@@ -106,7 +99,7 @@ public class InventoryTest extends ServiceTest<InventoryImpl> {
 			// Add a fireball to another deck, remove it, and assert as a side effect the unchanged deck was unaffected.
 			CreateCollectionResponse newDeck = service.createCollection(CreateCollectionRequest.deck(userId, "name", HeroClass.BLACK, Collections.emptyList(), false));
 			getContext().assertNotEquals(newDeck.getCollectionId(), deckId);
-			AddToCollectionResponse addOneFireballToNewDeck = service.addToCollection(AddToCollectionRequest.byCardIds(userId, newDeck.getCollectionId(), Arrays.asList("spell_fireball")));
+			AddToCollectionResponse addOneFireballToNewDeck = service.addToCollection(AddToCollectionRequest.createWithCardIds(userId, newDeck.getCollectionId(), Arrays.asList("spell_fireball")));
 			updatedUserCollection = service.getCollection(GetCollectionRequest.user(userId));
 			updatedDeckCollection = service.getCollection(GetCollectionRequest.deck(deckId));
 			getContext().assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());

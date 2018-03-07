@@ -53,7 +53,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 
 	public static InitializeUserResponse initializeUserId(Logic service, String userId) throws SuspendExecution,
 			InterruptedException {
-		return service.initializeUser(new InitializeUserRequest(userId).withUserId(userId));
+		return service.initializeUser(InitializeUserRequest.create(userId).withUserId(userId));
 	}
 
 	private void startsGameSync() throws SuspendExecution, InterruptedException {
@@ -116,7 +116,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 				"testpass", "doctorpangloss");
 		final String userId = createAccountResponse.getUserId();
 
-		service.initializeUser(new InitializeUserRequest(userId).withUserId(userId));
+		service.initializeUser(InitializeUserRequest.create(userId).withUserId(userId));
 
 		GetCollectionResponse response = inventory.getCollection(GetCollectionRequest.user(userId));
 
@@ -143,8 +143,8 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 		String userId2 = car2.getUserId();
 
 		// Initialize them
-		InitializeUserResponse userResponse1 = service.initializeUser(new InitializeUserRequest(userId1));
-		InitializeUserResponse userResponse2 = service.initializeUser(new InitializeUserRequest(userId2));
+		InitializeUserResponse userResponse1 = service.initializeUser(InitializeUserRequest.create(userId1));
+		InitializeUserResponse userResponse2 = service.initializeUser(InitializeUserRequest.create(userId2));
 
 		// Give a player the forever post doc card
 		AddToCollectionResponse minionResponse = inventory.addToCollection(new AddToCollectionRequest().withUserId
@@ -163,7 +163,7 @@ public class LogicTest extends ServiceTest<LogicImpl> {
 				Collections.emptyList()));
 
 		// Donate the card to the alliance
-		inventory.donateToCollection(new DonateToCollectionRequest(allianceId, Collections.singletonList
+		inventory.donateToCollection(DonateToCollectionRequest.create(allianceId, Collections.singletonList
 				(foreverPostdocInventoryId)));
 
 		// Borrow it from the collection

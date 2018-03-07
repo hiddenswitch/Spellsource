@@ -8,9 +8,16 @@ import java.io.Serializable;
 public class ContainsGameSessionResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public final boolean result;
+	public boolean result;
 
-	public ContainsGameSessionResponse(boolean result) {
+	private ContainsGameSessionResponse() {
+	}
+
+	private ContainsGameSessionResponse(boolean result) {
 		this.result = result;
+	}
+
+	public static ContainsGameSessionResponse response(boolean result) {
+		return new ContainsGameSessionResponse(result);
 	}
 }

@@ -4,13 +4,20 @@ import com.hiddenswitch.spellsource.impl.UserId;
 
 import java.io.Serializable;
 
-public class ChangePasswordRequest implements Serializable {
-	private final String password;
-	private final UserId userId;
+public final class ChangePasswordRequest implements Serializable {
+	private String password;
+	private UserId userId;
 
-	public ChangePasswordRequest(UserId userId, String password) {
+	private ChangePasswordRequest() {
+	}
+
+	private ChangePasswordRequest(UserId userId, String password) {
 		this.password = password;
 		this.userId = userId;
+	}
+
+	public static ChangePasswordRequest request(UserId userId, String password) {
+		return new ChangePasswordRequest(userId, password);
 	}
 
 	public String getPassword() {

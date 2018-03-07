@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.SerializationTestContext;
+import com.hiddenswitch.spellsource.util.TestBase;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -22,7 +23,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import com.hiddenswitch.spellsource.util.TestBase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -55,14 +55,12 @@ public class SerializationTest extends TestBase {
 
 	@Test
 	public void testDeckSerialization() {
-		DeckFormat deckFormat = new DeckFormat();
-		for (CardSet set : CardSet.values()) {
-			deckFormat.addSet(set);
+		for (int i = 0; i < 10000; i++) {
+			Deck deck = DeckFactory.getRandomDeck(getRandomClass(), DeckFormat.ALL);
+			String s = Serialization.serialize(deck);
+			Deck deck2 = Serialization.deserialize(s, Deck.class);
+			assertReflectionEquals(deck, deck2);
 		}
-		Deck deck = DeckFactory.getRandomDeck(HeroClass.BLUE, deckFormat);
-		String s = Serialization.serialize(deck);
-		Deck deck2 = Serialization.deserialize(s, Deck.class);
-		assertReflectionEquals(deck, deck2);
 	}
 
 	@Test

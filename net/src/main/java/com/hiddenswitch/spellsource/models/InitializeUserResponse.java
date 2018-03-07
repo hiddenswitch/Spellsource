@@ -6,9 +6,12 @@ import java.util.List;
 /**
  * Created by bberman on 1/30/17.
  */
-public class InitializeUserResponse implements Serializable {
+public final class InitializeUserResponse implements Serializable {
 	private CreateCollectionResponse createCollectionResponse;
 	private List<DeckCreateResponse> deckCreateResponses;
+
+	public InitializeUserResponse() {
+	}
 
 	public CreateCollectionResponse getCreateCollectionResponse() {
 		return createCollectionResponse;

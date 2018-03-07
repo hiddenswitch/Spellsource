@@ -4,9 +4,12 @@ import com.hiddenswitch.spellsource.impl.UserId;
 
 import java.io.Serializable;
 
-public class LogicGetDeckRequest implements Serializable {
+public final class LogicGetDeckRequest implements Serializable {
 	private UserId userId;
 	private String name;
+
+	public LogicGetDeckRequest() {
+	}
 
 	public UserId getUserId() {
 		return userId;

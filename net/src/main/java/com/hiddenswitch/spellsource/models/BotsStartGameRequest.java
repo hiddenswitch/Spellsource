@@ -5,14 +5,21 @@ import java.io.Serializable;
 /**
  * Created by bberman on 4/2/17.
  */
-public class BotsStartGameRequest implements Serializable {
+public final class BotsStartGameRequest implements Serializable {
 
 	private String userId;
 	private String deckId;
 
-	public BotsStartGameRequest(String userId, String deckId) {
+	private BotsStartGameRequest() {
+	}
+
+	private BotsStartGameRequest(String userId, String deckId) {
 		this.userId = userId;
 		this.deckId = deckId;
+	}
+
+	public static BotsStartGameRequest request(String userId, String deckId) {
+		return new BotsStartGameRequest(userId, deckId);
 	}
 
 	public String getUserId() {

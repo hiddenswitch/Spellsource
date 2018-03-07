@@ -9,10 +9,13 @@ import java.util.*;
 /**
  * Created by bberman on 2/19/17.
  */
-public class LogicResponse implements Serializable {
+public final class LogicResponse implements Serializable {
 	private Map<EntityReference, Map<Attribute, Object>> modifiedAttributes = new HashMap<>();
 	private List<String> gameIdsAffected = new ArrayList<>();
 	private List<Integer> entityIdsAffected = new ArrayList<>();
+
+	public LogicResponse() {
+	}
 
 	public List<String> getGameIdsAffected() {
 		return gameIdsAffected;

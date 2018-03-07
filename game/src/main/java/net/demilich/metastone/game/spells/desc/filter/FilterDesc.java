@@ -10,6 +10,10 @@ import net.demilich.metastone.game.cards.desc.Desc;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class FilterDesc extends Desc<FilterArg, EntityFilter> {
 
+	public FilterDesc() {
+		super();
+	}
+
 	public FilterDesc(Class<? extends EntityFilter> filterClass) {
 		super(filterClass);
 	}

@@ -6,11 +6,13 @@ import java.util.List;
 /**
  * Created by bberman on 1/19/17.
  */
-public class BorrowFromCollectionRequest implements Serializable {
+public final class BorrowFromCollectionRequest implements Serializable {
 	private String collectionId;
 	private List<String> collectionIds;
 	private String userId;
 	private List<String> inventoryIds;
+
+	public BorrowFromCollectionRequest() {}
 
 	public BorrowFromCollectionRequest withCollectionId(String collectionId) {
 		this.collectionId = collectionId;

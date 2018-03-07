@@ -43,13 +43,18 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.nustaq.serialization.FSTConfiguration;
+import org.nustaq.serialization.FSTObjectInput;
+import org.nustaq.serialization.FSTObjectOutput;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.Base64;
 import java.util.Map;
 
 public class Serialization {
 	private static final ThreadLocal<Gson> gsons = ThreadLocal.withInitial(Serialization::createGson);
+	private static ThreadLocal<FSTConfiguration> fsts = ThreadLocal.withInitial(FSTConfiguration::createDefaultConfiguration);
 
 	@SuppressWarnings("unchecked")
 	private static Gson createGson() {
@@ -160,14 +165,6 @@ public class Serialization {
 		return bos.toByteArray();
 	}
 
-	public static String serializeBase64(Object object) throws IOException {
-		return ObjectSerializer.serializeBase64(object);
-	}
-
-	public static <T> T deserializeBase64(String base64String) {
-		return ObjectSerializer.deserializeBase64(base64String);
-	}
-
 	public static <T> T deserialize(String json, Class<T> classOfT) throws JsonSyntaxException {
 		return gsons.get().fromJson(json, classOfT);
 	}
@@ -203,7 +200,49 @@ public class Serialization {
 		oos.close();
 	}
 
+	/*
+	@SuppressWarnings("unchecked")
+	public static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {
+		FSTObjectInput ois = fsts.get().getObjectInput(stream);
+		T result = (T) ois.readObject();
+		stream.close();
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T deserialize(InputStream stream, Class<? extends T> returnClass) throws Exception {
+		FSTObjectInput ois = fsts.get().getObjectInput(stream);
+		T result = (T) ois.readObject(returnClass);
+		return result;
+	}
+
+	public static void serialize(Object obj, OutputStream stream) throws IOException {
+		FSTObjectOutput oos = fsts.get().getObjectOutput(stream);
+		oos.writeObject(obj, obj.getClass());
+		oos.flush();
+	}
+	*/
+
 	public static <T> T deserialize(JsonObject body, Class<? extends T> returnClass) {
 		return gsons.get().fromJson(body.encode(), returnClass);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T deserializeBase64(String serializedBase64) {
+		byte bytes[] = Base64.getDecoder().decode(serializedBase64);
+
+		try {
+			return /*(T) fsts.get().getObjectInput(bytes).readObject()*/ deserialize(bytes);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> String serializeBase64(T src) {
+		try {
+			return Base64.getEncoder().encodeToString(/*fsts.get().asByteArray(src)*/serializeBytes(src));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

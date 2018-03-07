@@ -8,11 +8,14 @@ import java.io.Serializable;
 /**
  * Contains the results of a login.
  */
-public class LoginResponse implements Serializable {
+public final class LoginResponse implements Serializable {
 	private LoginToken token;
 	private UserRecord record;
 	private boolean badEmail;
 	private boolean badPassword;
+
+	public LoginResponse() {
+	}
 
 	public LoginResponse(LoginToken token, UserRecord record) {
 		this.token = token;

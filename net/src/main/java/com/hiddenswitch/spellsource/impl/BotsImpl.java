@@ -160,7 +160,7 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 						.withPassword("securebotpassword")
 						.withBot(true));
 
-				logic.sync().initializeUser(new InitializeUserRequest(response.getUserId()));
+				logic.sync().initializeUser(InitializeUserRequest.create(response.getUserId()));
 				newBotIds.add(response.getUserId());
 			}
 

@@ -2,10 +2,13 @@ package com.hiddenswitch.spellsource.models;
 
 import java.io.Serializable;
 
-public class DraftActionRequest implements Serializable {
+public final class DraftActionRequest implements Serializable {
 	private String userId;
 	private int heroIndex = -1;
 	private int cardIndex = -1;
+
+	public DraftActionRequest() {
+	}
 
 	public int getHeroIndex() {
 		return heroIndex;

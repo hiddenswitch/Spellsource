@@ -9,6 +9,9 @@ public class LogicRequest implements Serializable {
 	private String gameId;
 	private String userId;
 
+	public LogicRequest() {
+	}
+
 	public String getGameId() {
 		return gameId;
 	}

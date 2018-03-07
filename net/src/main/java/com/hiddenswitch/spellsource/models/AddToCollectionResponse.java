@@ -11,16 +11,25 @@ import java.util.Map;
 /**
  * Created by bberman on 1/19/17.
  */
-public class AddToCollectionResponse implements Serializable {
-	private final Map<String, Object> updateResult;
-	private final List<String> inventoryIds;
+public final class AddToCollectionResponse implements Serializable {
+	private Map<String, Object> updateResult;
+	private List<String> inventoryIds;
+
+	private AddToCollectionResponse() {
+		updateResult = null;
+		inventoryIds = null;
+	}
+
+	public static AddToCollectionResponse create(MongoClientUpdateResult updateResult, List<String> inventoryIds) {
+		return new AddToCollectionResponse(updateResult, inventoryIds);
+	}
 
 	@JsonIgnore
 	public MongoClientUpdateResult getUpdateResult() {
 		return new MongoClientUpdateResult(new JsonObject(updateResult));
 	}
 
-	public AddToCollectionResponse(MongoClientUpdateResult updateResult, List<String> inventoryIds) {
+	private AddToCollectionResponse(MongoClientUpdateResult updateResult, List<String> inventoryIds) {
 		this.updateResult = updateResult.toJson().getMap();
 		this.inventoryIds = inventoryIds;
 	}

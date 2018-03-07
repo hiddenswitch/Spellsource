@@ -7,8 +7,11 @@ import java.io.Serializable;
 /**
  * Created by bberman on 1/19/17.
  */
-public class GetCardResponse implements Serializable {
+public final class GetCardResponse implements Serializable {
 	private CardCatalogueRecord record;
+
+	public GetCardResponse() {
+	}
 
 	public CardCatalogueRecord getRecord() {
 		return record;

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The results of creating an account.
  */
-public class CreateAccountResponse implements Serializable {
+public final class CreateAccountResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private LoginToken loginToken;
@@ -15,6 +15,9 @@ public class CreateAccountResponse implements Serializable {
 	private boolean invalidName;
 	private boolean invalidEmailAddress;
 	private boolean invalidPassword;
+
+	public CreateAccountResponse() {
+	}
 
 	/**
 	 * The login token object that the client should use for future calls to APIs.
