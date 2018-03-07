@@ -39,7 +39,7 @@ public class NullSpell extends Spell {
 	 * @return The spell.
 	 */
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(NullSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(NullSpell.class);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		return new SpellDesc(arguments);
 	}

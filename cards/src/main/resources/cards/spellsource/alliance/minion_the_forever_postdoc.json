@@ -1,5 +1,4 @@
 {
-  "id": "minion_the_forever_postdoc",
   "name": "The Forever Post-Doc",
   "baseManaCost": 5,
   "type": "MINION",
@@ -7,10 +6,11 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Call to Arms: If this is the first time you've played this minion, permanently cost (1) less.",
+  "description": "Legacy: Whenever an ally summons this minion for the first time, permanently cost (1) less.",
   "collectible": true,
   "set": "SPELLSOURCE",
   "fileFormatVersion": 1,
+  "legacy": true,
   "manaCostModifier": {
     "class": "AttributeValueProvider",
     "target": "SELF",

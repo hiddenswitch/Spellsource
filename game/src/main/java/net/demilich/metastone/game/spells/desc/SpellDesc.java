@@ -10,16 +10,11 @@ import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
-import net.demilich.metastone.game.spells.SummonSpell;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
-import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
-import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
-import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -74,16 +69,24 @@ import static java.util.stream.Collectors.toList;
  * @see net.demilich.metastone.game.cards.desc.SpellDescSerializer for the official interpretation of each of the
  * attributes (how they are converted from JSON to a concrete value in the game).
  */
-public class SpellDesc extends Desc<SpellArg> {
+public class SpellDesc extends Desc<SpellArg, Spell> {
 
 	public SpellDesc(Map<SpellArg, Object> arguments) {
 		super(arguments);
 	}
 
-	public static Map<SpellArg, Object> build(Class<? extends Spell> spellClass) {
-		final Map<SpellArg, Object> arguments = new EnumMap<>(SpellArg.class);
-		arguments.put(SpellArg.CLASS, spellClass);
-		return arguments;
+	@Override
+	protected Class<? extends Desc> getDescImplClass() {
+		return SpellDesc.class;
+	}
+
+	@Override
+	public SpellArg getClassArg() {
+		return SpellArg.CLASS;
+	}
+
+	public SpellDesc(Class<? extends Spell> spellClass) {
+		super(spellClass);
 	}
 
 	public SpellDesc addArg(SpellArg spellArg, Object value) {
@@ -100,17 +103,7 @@ public class SpellDesc extends Desc<SpellArg> {
 
 	@Override
 	public SpellDesc clone() {
-		SpellDesc clone = new SpellDesc(build(getSpellClass()));
-		for (SpellArg spellArg : keySet()) {
-			Object value = get(spellArg);
-			if (value instanceof CustomCloneable) {
-				CustomCloneable cloneable = (CustomCloneable) value;
-				clone.put(spellArg, cloneable.clone());
-			} else {
-				clone.put(spellArg, value);
-			}
-		}
-		return clone;
+		return (SpellDesc) copyTo(new SpellDesc(getDescClass()));
 	}
 
 	public EntityFilter getEntityFilter() {
@@ -119,11 +112,6 @@ public class SpellDesc extends Desc<SpellArg> {
 
 	public int getInt(SpellArg spellArg, int defaultValue) {
 		return containsKey(spellArg) ? (int) get(spellArg) : defaultValue;
-	}
-
-	@SuppressWarnings("unchecked")
-	public Class<? extends Spell> getSpellClass() {
-		return (Class<? extends Spell>) get(SpellArg.CLASS);
 	}
 
 	public EntityReference getTarget() {

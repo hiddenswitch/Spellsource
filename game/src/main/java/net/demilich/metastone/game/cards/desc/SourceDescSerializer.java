@@ -6,13 +6,13 @@ import java.util.Map;
 import com.google.gson.*;
 
 import net.demilich.metastone.game.spells.desc.source.CardSource;
-import net.demilich.metastone.game.spells.desc.source.SourceArg;
-import net.demilich.metastone.game.spells.desc.source.SourceDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSourceArg;
+import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 
-public class SourceDescSerializer implements JsonDeserializer<SourceDesc>, JsonSerializer<SourceDesc> {
+public class SourceDescSerializer implements JsonDeserializer<CardSourceDesc>, JsonSerializer<CardSourceDesc> {
 	@SuppressWarnings("unchecked")
 	@Override
-	public SourceDesc deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
+	public CardSourceDesc deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
 		if (!(json instanceof JsonObject)) {
 			throw new JsonParseException("SourceDescSerializer parser expected an JsonObject but found " + json + " instead");
 		}
@@ -26,17 +26,17 @@ public class SourceDescSerializer implements JsonDeserializer<SourceDesc>, JsonS
 			throw new JsonParseException("SourceDescSerializer parser encountered an invalid class: " + cardSourceClassName);
 		}
 
-		Map<SourceArg, Object> arguments = SourceDesc.build(cardSourceClass);
-		parseArgument(SourceArg.TARGET_PLAYER, jsonData, arguments, ParseValueType.TARGET_PLAYER);
-		parseArgument(SourceArg.COLLECTION_NAME, jsonData, arguments, ParseValueType.STRING);
-		parseArgument(SourceArg.INVERT, jsonData, arguments, ParseValueType.BOOLEAN);
-		parseArgument(SourceArg.SOURCE, jsonData, arguments, ParseValueType.TARGET_REFERENCE);
-		parseArgument(SourceArg.DISTINCT, jsonData, arguments, ParseValueType.BOOLEAN);
+		Map<CardSourceArg, Object> arguments = new CardSourceDesc(cardSourceClass);
+		parseArgument(CardSourceArg.TARGET_PLAYER, jsonData, arguments, ParseValueType.TARGET_PLAYER);
+		parseArgument(CardSourceArg.COLLECTION_NAME, jsonData, arguments, ParseValueType.STRING);
+		parseArgument(CardSourceArg.INVERT, jsonData, arguments, ParseValueType.BOOLEAN);
+		parseArgument(CardSourceArg.SOURCE, jsonData, arguments, ParseValueType.TARGET_REFERENCE);
+		parseArgument(CardSourceArg.DISTINCT, jsonData, arguments, ParseValueType.BOOLEAN);
 
-		return new SourceDesc(arguments);
+		return new CardSourceDesc(arguments);
 	}
 
-	private void parseArgument(SourceArg arg, JsonObject jsonData, Map<SourceArg, Object> arguments, ParseValueType valueType) {
+	private void parseArgument(CardSourceArg arg, JsonObject jsonData, Map<CardSourceArg, Object> arguments, ParseValueType valueType) {
 		String argName = ParseUtils.toCamelCase(arg.toString());
 		if (!jsonData.has(argName)) {
 			return;
@@ -46,11 +46,11 @@ public class SourceDescSerializer implements JsonDeserializer<SourceDesc>, JsonS
 	}
 
 	@Override
-	public JsonElement serialize(SourceDesc src, Type typeOfSrc, JsonSerializationContext context) {
+	public JsonElement serialize(CardSourceDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
-		result.add("class", new JsonPrimitive(src.getSourceClass().getSimpleName()));
-		for (SourceArg attribute : SourceArg.values()) {
-			if (attribute == SourceArg.CLASS) {
+		result.add("class", new JsonPrimitive(src.getDescClass().getSimpleName()));
+		for (CardSourceArg attribute : CardSourceArg.values()) {
+			if (attribute == CardSourceArg.CLASS) {
 				continue;
 			}
 			if (!src.containsKey(attribute)) {

@@ -19,7 +19,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class MergeSpell extends Spell {
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(MergeSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(MergeSpell.class);
 		return new SpellDesc(arguments);
 	}
 

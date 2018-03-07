@@ -26,7 +26,7 @@ public class MindControlOneTurnSpell extends MindControlSpell {
 	}
 
 	public static SpellDesc create(EntityReference target) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(MindControlOneTurnSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(MindControlOneTurnSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}
@@ -47,8 +47,8 @@ public class MindControlOneTurnSpell extends MindControlSpell {
 
 		// mind control is terminated either when silenced or turn ends
 		SpellDesc reverseMindcontrolSpell = MindControlSpell.create(EntityReference.SELF, TargetPlayer.OPPONENT, false);
-		EventTrigger silenceTrigger = new SilenceTrigger(EventTriggerDesc.createEmpty(SilenceTrigger.class));
-		EventTrigger turnEndTrigger = new TurnEndTrigger(EventTriggerDesc.createEmpty(TurnEndTrigger.class));
+		EventTrigger silenceTrigger = new SilenceTrigger(new EventTriggerDesc(SilenceTrigger.class));
+		EventTrigger turnEndTrigger = new TurnEndTrigger(new EventTriggerDesc(TurnEndTrigger.class));
 		turnEndTrigger.setOwner(player.getId());
 		Enchantment returnOnSilence = new Enchantment(silenceTrigger, turnEndTrigger, reverseMindcontrolSpell, true);
 		context.getLogic().addGameEventListener(player, returnOnSilence, target);

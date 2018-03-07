@@ -5,7 +5,6 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +15,12 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.filter.CardFilter;
-import net.demilich.metastone.game.spells.desc.source.CardSource;
 
 public class CastRandomSpellSpell extends Spell {
 	Logger logger = LoggerFactory.getLogger(CastRandomSpellSpell.class);
 
 	public static SpellDesc create(int value) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(CastRandomSpellSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(CastRandomSpellSpell.class);
 		arguments.put(SpellArg.VALUE, value);
 		return new SpellDesc(arguments);
 	}

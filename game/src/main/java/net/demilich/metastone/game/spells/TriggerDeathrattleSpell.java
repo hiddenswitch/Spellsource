@@ -14,7 +14,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class TriggerDeathrattleSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(TriggerDeathrattleSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(TriggerDeathrattleSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}

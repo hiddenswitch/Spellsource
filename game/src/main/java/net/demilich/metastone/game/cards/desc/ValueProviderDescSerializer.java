@@ -65,7 +65,7 @@ public class ValueProviderDescSerializer implements JsonDeserializer<ValueProvid
 	@Override
 	public JsonElement serialize(ValueProviderDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
-		result.add("class", new JsonPrimitive(src.getValueProviderClass().getSimpleName()));
+		result.add("class", new JsonPrimitive(src.getDescClass().getSimpleName()));
 		for (ValueProviderArg attribute : ValueProviderArg.values()) {
 			if (attribute == ValueProviderArg.CLASS) {
 				continue;

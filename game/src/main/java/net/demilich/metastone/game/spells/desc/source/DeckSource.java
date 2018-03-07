@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class DeckSource extends CardSource implements Serializable {
 
-	public DeckSource(SourceDesc desc) {
+	public DeckSource(CardSourceDesc desc) {
 		super(desc);
 	}
 

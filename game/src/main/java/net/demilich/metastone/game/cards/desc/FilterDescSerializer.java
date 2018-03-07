@@ -25,7 +25,7 @@ public class FilterDescSerializer implements JsonDeserializer<FilterDesc>, JsonS
 			e.printStackTrace();
 			throw new JsonParseException("ValueProvider parser encountered an invalid class: " + filterClassName);
 		}
-		Map<FilterArg, Object> arguments = FilterDesc.build(filterClass);
+		Map<FilterArg, Object> arguments = new FilterDesc(filterClass);
 
 		parseArgument(FilterArg.VALUE, jsonData, arguments, ParseValueType.VALUE);
 		parseArgument(FilterArg.TARGET_PLAYER, jsonData, arguments, ParseValueType.TARGET_PLAYER);
@@ -59,7 +59,7 @@ public class FilterDescSerializer implements JsonDeserializer<FilterDesc>, JsonS
 	@Override
 	public JsonElement serialize(FilterDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
-		result.add("class", new JsonPrimitive(src.getFilterClass().getSimpleName()));
+		result.add("class", new JsonPrimitive(src.getDescClass().getSimpleName()));
 		for (FilterArg attribute : FilterArg.values()) {
 			if (attribute == FilterArg.CLASS) {
 				continue;

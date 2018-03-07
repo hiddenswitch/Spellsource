@@ -15,7 +15,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.DeckSource;
-import net.demilich.metastone.game.spells.desc.source.SourceDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.Zones;
 
@@ -36,7 +36,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
 		if (cardSource == null) {
-			cardSource = new SourceDesc(SourceDesc.build(DeckSource.class)).create();
+			cardSource = new CardSourceDesc(DeckSource.class).createInstance();
 		}
 		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);

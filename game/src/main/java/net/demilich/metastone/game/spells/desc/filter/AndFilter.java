@@ -9,11 +9,11 @@ import java.util.Map;
 public class AndFilter extends EntityFilter {
 
 	public static AndFilter create() {
-		return new AndFilter(new FilterDesc(FilterDesc.build(AndFilter.class)));
+		return new AndFilter(new FilterDesc(AndFilter.class));
 	}
 
 	public static AndFilter create(EntityFilter... filters) {
-		Map<FilterArg, Object> arguments = FilterDesc.build(AndFilter.class);
+		Map<FilterArg, Object> arguments = new FilterDesc(AndFilter.class);
 		arguments.put(FilterArg.FILTERS, filters);
 		return new AndFilter(new FilterDesc(arguments));
 	}

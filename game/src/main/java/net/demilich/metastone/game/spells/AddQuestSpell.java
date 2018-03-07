@@ -8,9 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
-import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +61,7 @@ public class AddQuestSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(TargetPlayer target, Quest quest) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(AddQuestSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(AddQuestSpell.class);
 		arguments.put(SpellArg.QUEST, quest);
 		arguments.put(SpellArg.TARGET_PLAYER, target);
 		return new SpellDesc(arguments);

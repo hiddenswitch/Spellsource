@@ -46,6 +46,10 @@ subprojects {
         options.encoding = 'UTF-8'
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
+
+    dependencies {
+        compile 'org.jetbrains:annotations-java5:15.0'
+    }
 }
 
 if (System.env.TRAVIS == 'true') {

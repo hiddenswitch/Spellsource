@@ -15,7 +15,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class EitherOrSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc either, SpellDesc or, ISpellConditionChecker condition) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(EitherOrSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(EitherOrSpell.class);
 		arguments.put(SpellArg.SPELL_1, either);
 		arguments.put(SpellArg.SPELL_2, or);
 		arguments.put(SpellArg.CONDITION, condition);

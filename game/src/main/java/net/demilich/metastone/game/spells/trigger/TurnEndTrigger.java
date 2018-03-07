@@ -8,7 +8,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 public class TurnEndTrigger extends EventTrigger {
 
 	public TurnEndTrigger() {
-		this(EventTriggerDesc.createEmpty(TurnEndTrigger.class));
+		this(new EventTriggerDesc(TurnEndTrigger.class));
 	}
 
 	public TurnEndTrigger(EventTriggerDesc desc) {

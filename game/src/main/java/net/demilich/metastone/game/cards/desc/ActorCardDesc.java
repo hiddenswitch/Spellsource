@@ -65,7 +65,7 @@ public abstract class ActorCardDesc extends CardDesc {
 		}
 		BattlecryAction battlecryAction = BattlecryAction.createBattlecry(battlecry.spell, battlecry.getTargetSelection());
 		if (battlecry.condition != null) {
-			battlecryAction.setCondition(battlecry.condition.create());
+			battlecryAction.setCondition(battlecry.condition.createInstance());
 		}
 		return battlecryAction;
 	}

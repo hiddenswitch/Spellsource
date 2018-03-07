@@ -27,10 +27,14 @@ public class AddAttributeSpell extends RevertableSpell {
 	}
 
 	public static SpellDesc create(EntityReference target, Attribute tag, EventTrigger revertTrigger) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(AddAttributeSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(AddAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);
-		arguments.put(SpellArg.REVERT_TRIGGER, revertTrigger);
-		arguments.put(SpellArg.TARGET, target);
+		if (revertTrigger != null) {
+			arguments.put(SpellArg.REVERT_TRIGGER, revertTrigger);
+		}
+		if (target != null) {
+			arguments.put(SpellArg.TARGET, target);
+		}
 		return new SpellDesc(arguments);
 	}
 

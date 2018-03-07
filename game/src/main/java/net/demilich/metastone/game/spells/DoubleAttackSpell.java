@@ -19,7 +19,7 @@ public class DoubleAttackSpell extends Spell {
 	}
 
 	public static SpellDesc create(EntityReference target) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(DoubleAttackSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(DoubleAttackSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}

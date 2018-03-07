@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class SetAttributeSpell extends Spell {
 	public static SpellDesc create(EntityReference target, Attribute tag, Object value) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SetAttributeSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SetAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);
 		arguments.put(SpellArg.VALUE, value);
 		arguments.put(SpellArg.TARGET, target);

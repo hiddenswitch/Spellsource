@@ -71,7 +71,7 @@ public class CardCostModifierSpell extends Spell {
 	 * @return The spell.
 	 */
 	public static SpellDesc create(CardCostModifierDesc cardCostModifierDesc, EntityReference host) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(CardCostModifierSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(CardCostModifierSpell.class);
 		arguments.put(SpellArg.CARD_COST_MODIFIER, cardCostModifierDesc);
 		arguments.put(SpellArg.TARGET, host);
 		return new SpellDesc(arguments);
@@ -89,7 +89,7 @@ public class CardCostModifierSpell extends Spell {
 	 * @return The spell.
 	 */
 	public static SpellDesc create(EntityReference target, AlgebraicOperation operation, int value) {
-		CardCostModifierDesc manaModifierDesc = new CardCostModifierDesc(CardCostModifierDesc.build(CardCostModifier.class));
+		CardCostModifierDesc manaModifierDesc = new CardCostModifierDesc(CardCostModifier.class);
 		manaModifierDesc = manaModifierDesc.addArg(CardCostModifierArg.OPERATION, operation);
 		manaModifierDesc = manaModifierDesc.addArg(CardCostModifierArg.TARGET, EntityReference.SELF);
 		manaModifierDesc = manaModifierDesc.addArg(CardCostModifierArg.VALUE, value);
@@ -110,7 +110,7 @@ public class CardCostModifierSpell extends Spell {
 					context.getGameId(), source, target, manaModifierDesc.get(CardCostModifierArg.TARGET));
 		}
 		// The target is the host of the mana cost modifier.
-		context.getLogic().addGameEventListener(player, manaModifierDesc.create(), target == null ? player : target);
+		context.getLogic().addGameEventListener(player, manaModifierDesc.createInstance(), target == null ? player : target);
 	}
 
 }

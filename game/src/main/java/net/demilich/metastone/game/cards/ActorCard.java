@@ -10,7 +10,6 @@ import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public abstract class ActorCard extends Card {
 	List<SpellDesc> deathrattleEnchantments = new ArrayList<>();
@@ -63,12 +62,12 @@ public abstract class ActorCard extends Card {
 		}
 
 		if (desc.aura != null) {
-			final Aura enchantment = desc.aura.create();
+			final Aura enchantment = desc.aura.createInstance();
 			instance.addEnchantment(enchantment);
 		}
 
 		if (desc.cardCostModifier != null) {
-			instance.setCardCostModifier(desc.cardCostModifier.create());
+			instance.setCardCostModifier(desc.cardCostModifier.createInstance());
 		}
 
 		return instance;

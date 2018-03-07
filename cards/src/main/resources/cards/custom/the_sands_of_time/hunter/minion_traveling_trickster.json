@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Discover a Secret. Your opponent can see your options.",
+  "description": "Battlecry: Discover a Secret. Your opponent can see your options. (Work in progress)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -14,20 +14,8 @@
       "cardSource": {
         "class": "SecretSource"
       },
-      "spell1": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "RevealCardSpell"
-          },
-          {
-            "class": "ReceiveCardSpell",
-            "targetPlayer": "SELF"
-          }
-        ]
-      },
-      "spell2": {
-        "class": "RevealCardSpell"
+      "spell": {
+        "class": "ReceiveCardSpell"
       }
     }
   },

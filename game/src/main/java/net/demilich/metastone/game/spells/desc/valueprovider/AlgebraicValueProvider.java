@@ -10,8 +10,12 @@ public class AlgebraicValueProvider extends ValueProvider {
 
 	public static AlgebraicValueProvider create(Object value1, Object value2, AlgebraicOperation operation) {
 		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(AlgebraicValueProvider.class);
-		arguments.put(ValueProviderArg.VALUE_1, value1);
-		arguments.put(ValueProviderArg.VALUE_2, value2);
+		if (value1 != null) {
+			arguments.put(ValueProviderArg.VALUE_1, value1);
+		}
+		if (value2 != null) {
+			arguments.put(ValueProviderArg.VALUE_2, value2);
+		}
 		arguments.put(ValueProviderArg.OPERATION, operation);
 		return (AlgebraicValueProvider) (new ValueProviderDesc(arguments).createInstance());
 	}

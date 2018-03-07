@@ -26,7 +26,7 @@ public class AuraDescSerializer implements JsonDeserializer<AuraDesc>, JsonSeria
 			e.printStackTrace();
 			throw new JsonParseException("Aura parser encountered an invalid class: " + auraClassName);
 		}
-		Map<AuraArg, Object> arguments = AuraDesc.build(auraClass);
+		Map<AuraArg, Object> arguments = new AuraDesc(auraClass);
 		parseArgument(AuraArg.FILTER, jsonData, arguments, ParseValueType.ENTITY_FILTER);
 		parseArgument(AuraArg.TARGET, jsonData, arguments, ParseValueType.TARGET_REFERENCE);
 		parseArgument(AuraArg.ATTRIBUTE, jsonData, arguments, ParseValueType.ATTRIBUTE);
@@ -52,7 +52,7 @@ public class AuraDescSerializer implements JsonDeserializer<AuraDesc>, JsonSeria
 	@Override
 	public JsonElement serialize(AuraDesc src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
-		result.add("class", new JsonPrimitive(src.getAuraClass().getSimpleName()));
+		result.add("class", new JsonPrimitive(src.getDescClass().getSimpleName()));
 		for (AuraArg attribute : AuraArg.values()) {
 			if (attribute == AuraArg.CLASS) {
 				continue;

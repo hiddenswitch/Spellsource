@@ -20,7 +20,7 @@ public class TemporaryAttackSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(TemporaryAttackSpell.class);
 
 	public static SpellDesc create(EntityReference target, int attackBonus) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(TemporaryAttackSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(TemporaryAttackSpell.class);
 		arguments.put(SpellArg.VALUE, attackBonus);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);

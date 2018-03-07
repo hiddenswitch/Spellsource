@@ -23,7 +23,7 @@ public class TestSecretCard extends SecretCard {
 		desc.type = CardType.SPELL;
 		desc.heroClass = HeroClass.ANY;
 		desc.attributes = new AttributeMap();
-		desc.trigger = EventTriggerDesc.createEmpty(TurnEndTrigger.class);
+		desc.trigger = new EventTriggerDesc(TurnEndTrigger.class);
 		return desc;
 	}
 
@@ -37,7 +37,7 @@ public class TestSecretCard extends SecretCard {
 		setCollectible(false);
 
 		SpellDesc damageSpell = DamageSpell.create(EntityReference.ENEMY_CHARACTERS, damage);
-		setSecret(new Secret(new PhysicalAttackTrigger(EventTriggerDesc.createEmpty(PhysicalAttackTrigger.class)), damageSpell, this));
+		setSecret(new Secret(new PhysicalAttackTrigger(new EventTriggerDesc(PhysicalAttackTrigger.class)), damageSpell, this));
 	}
 
 }

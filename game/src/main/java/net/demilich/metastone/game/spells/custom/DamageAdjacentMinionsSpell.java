@@ -14,7 +14,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 public class DamageAdjacentMinionsSpell extends Spell {
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(DamageAdjacentMinionsSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(DamageAdjacentMinionsSpell.class);
 		return new SpellDesc(arguments);
 	}
 

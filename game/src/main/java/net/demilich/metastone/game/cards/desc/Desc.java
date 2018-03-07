@@ -4,15 +4,22 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.CustomCloneable;
+import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
+import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
+import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
  * A card or card component description base class.
@@ -21,10 +28,39 @@ import java.util.Set;
  *
  * @param <T>
  */
-public class Desc<T extends Enum> extends HashMap<T, Object> implements Serializable, Cloneable {
-	public Desc(Map<T, Object> arguments) {
+public abstract class Desc<T extends Enum, V> extends ConcurrentHashMap<T, Object> implements Serializable, Cloneable {
+	protected Desc(Map<T, Object> arguments) {
 		super(arguments);
 	}
+
+	protected Desc() {
+		super();
+	}
+
+	public Desc(Class<? extends V> clazz) {
+		super();
+		put(getClassArg(), clazz);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Class<? extends V> getDescClass() {
+		return (Class<? extends V>) get(getClassArg());
+	}
+
+	protected abstract Class<? extends Desc> getDescImplClass();
+
+	public V createInstance() {
+		Class<? extends V> clazz = getDescClass();
+		try {
+			return clazz.getConstructor(getDescImplClass()).newInstance(this);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public abstract T getClassArg();
 
 	public boolean getBool(T arg) {
 		return containsKey(arg) && (boolean) get(arg);
@@ -79,5 +115,42 @@ public class Desc<T extends Enum> extends HashMap<T, Object> implements Serializ
 			builder.append(entry.hashCode());
 		}
 		return builder.toHashCode();
+	}
+
+	@Override
+	public Object put(@NotNull T key, Object value) {
+		if (value == null && this.containsKey(key)) {
+			throw new IllegalStateException("Cannot clear a key with a null value");
+		}
+		if (value == null) {
+			return null;
+		}
+		return super.put(key, value);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public abstract Desc<T, V> clone();
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.toString();
+	}
+
+	protected Desc<T, V> copyTo(Desc<T, V> clone) {
+		synchronized (this) {
+			for (T arg : keySet()) {
+				Object value = get(arg);
+				if (value instanceof CustomCloneable) {
+					CustomCloneable cloneable = (CustomCloneable) value;
+					clone.put(arg, cloneable.clone());
+				} else {
+					clone.put(arg, value);
+				}
+			}
+		}
+		return clone;
 	}
 }

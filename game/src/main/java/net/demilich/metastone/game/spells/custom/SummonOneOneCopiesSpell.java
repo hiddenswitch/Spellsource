@@ -18,7 +18,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class SummonOneOneCopiesSpell extends Spell {
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SummonOneOneCopiesSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SummonOneOneCopiesSpell.class);
 		return new SpellDesc(arguments);
 	}
 

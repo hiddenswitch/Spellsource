@@ -14,7 +14,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class DiscardCardsFromDeckSpell extends Spell {
 
 	public static SpellDesc create(int howMany) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(DiscardCardsFromDeckSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(DiscardCardsFromDeckSpell.class);
 		arguments.put(SpellArg.VALUE, howMany);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		return new SpellDesc(arguments);

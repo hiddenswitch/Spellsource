@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class ModifyAttributeSpell extends RevertableSpell {
 	public static SpellDesc create(EntityReference target, Attribute tag, int value) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ModifyAttributeSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ModifyAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);
 		arguments.put(SpellArg.VALUE, value);
 		arguments.put(SpellArg.TARGET, target);

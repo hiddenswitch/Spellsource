@@ -5,8 +5,6 @@ import java.util.stream.Collectors;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +20,7 @@ public class DiscoverOptionSpell extends Spell {
 	Logger logger = LoggerFactory.getLogger(DiscoverOptionSpell.class);
 
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(DiscoverOptionSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(DiscoverOptionSpell.class);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.SPELL, spell);
 		return new SpellDesc(arguments);

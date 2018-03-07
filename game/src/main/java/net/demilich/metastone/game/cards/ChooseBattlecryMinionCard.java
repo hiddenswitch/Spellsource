@@ -53,7 +53,7 @@ public class ChooseBattlecryMinionCard extends MinionCard implements HasChooseOn
 			return null;
 		}
 
-		if (TransformMinionSpell.class.isAssignableFrom(spell.getSpellClass())) {
+		if (TransformMinionSpell.class.isAssignableFrom(spell.getDescClass())) {
 			return spell.getString(SpellArg.CARD);
 		}
 

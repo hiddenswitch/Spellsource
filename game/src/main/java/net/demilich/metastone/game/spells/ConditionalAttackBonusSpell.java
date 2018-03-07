@@ -15,7 +15,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class ConditionalAttackBonusSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, ValueProvider valueProvider) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ConditionalAttackBonusSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ConditionalAttackBonusSpell.class);
 		arguments.put(SpellArg.VALUE, valueProvider);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);

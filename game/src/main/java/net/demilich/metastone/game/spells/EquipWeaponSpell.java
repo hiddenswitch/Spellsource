@@ -51,14 +51,14 @@ public class EquipWeaponSpell extends Spell {
 	private Logger logger = LoggerFactory.getLogger(EquipWeaponSpell.class);
 
 	public static SpellDesc create(String cardId) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(EquipWeaponSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(EquipWeaponSpell.class);
 		arguments.put(SpellArg.CARD, cardId);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		return new SpellDesc(arguments);
 	}
 
 	public static SpellDesc create(TargetPlayer targetPlayer, WeaponCard weaponCard) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(EquipWeaponSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(EquipWeaponSpell.class);
 		arguments.put(SpellArg.CARD, weaponCard);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		if (targetPlayer != null) {
@@ -73,7 +73,7 @@ public class EquipWeaponSpell extends Spell {
 	 * @return This spell
 	 */
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(EquipWeaponSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(EquipWeaponSpell.class);
 		arguments.put(SpellArg.CARD_SOURCE, CatalogueSource.create());
 		arguments.put(SpellArg.CARD_FILTER, CardFilter.create(CardType.WEAPON));
 		return new SpellDesc(arguments);

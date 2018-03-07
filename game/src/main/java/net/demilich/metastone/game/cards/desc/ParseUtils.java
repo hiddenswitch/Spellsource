@@ -28,7 +28,7 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.FilterDesc;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
-import net.demilich.metastone.game.spells.desc.source.SourceDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerializer;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
@@ -151,21 +151,21 @@ public class ParseUtils {
 					entry = entry.getAsJsonObject().get("desc");
 				}
 				FilterDesc filterDesc = filterParser.deserialize(entry, FilterDesc.class, null);
-				return filterDesc.create();
+				return filterDesc.createInstance();
 			}
 			case CARD_SOURCE: {
 				if (entry.getAsJsonObject().has("desc")) {
 					entry = entry.getAsJsonObject().get("desc");
 				}
-				SourceDesc sourceDesc = sourceParser.deserialize(entry, SourceDesc.class, null);
-				return sourceDesc.create();
+				CardSourceDesc cardSourceDesc = sourceParser.deserialize(entry, CardSourceDesc.class, null);
+				return cardSourceDesc.createInstance();
 			}
 			case AURA: {
 				if (entry.getAsJsonObject().has("desc")) {
 					entry = entry.getAsJsonObject().get("desc");
 				}
 				AuraDesc auraDesc = auraParser.deserialize(entry, AuraDesc.class, null);
-				return auraDesc.create();
+				return auraDesc.createInstance();
 			}
 			case ENTITY_FILTER_ARRAY: {
 				JsonArray jsonArray = entry.getAsJsonArray();
@@ -176,7 +176,7 @@ public class ParseUtils {
 						entry1 = entry1.getAsJsonObject().get("desc");
 					}
 					FilterDesc filterDesc = filterParser.deserialize(entry1, FilterDesc.class, null);
-					array[i] = filterDesc.create();
+					array[i] = filterDesc.createInstance();
 				}
 				return array;
 			}
@@ -185,7 +185,7 @@ public class ParseUtils {
 					entry = entry.getAsJsonObject().get("desc");
 				}
 				ConditionDesc conditionDesc = conditionParser.deserialize(entry, ConditionDesc.class, null);
-				return conditionDesc.create();
+				return conditionDesc.createInstance();
 			}
 			case CONDITION_ARRAY: {
 				JsonArray jsonArray = entry.getAsJsonArray();
@@ -196,7 +196,7 @@ public class ParseUtils {
 						entry1 = entry1.getAsJsonObject().get("desc");
 					}
 					ConditionDesc conditionDesc = conditionParser.deserialize(entry1, ConditionDesc.class, null);
-					array[i] = conditionDesc.create();
+					array[i] = conditionDesc.createInstance();
 				}
 				return array;
 			}

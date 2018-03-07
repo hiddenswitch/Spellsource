@@ -25,7 +25,7 @@ public class SpellCard extends Card {
 		setTargetRequirement(desc.targetSelection);
 		setSpell(desc.spell);
 		if (desc.condition != null) {
-			condition = desc.condition.create();
+			condition = desc.condition.createInstance();
 		}
 	}
 

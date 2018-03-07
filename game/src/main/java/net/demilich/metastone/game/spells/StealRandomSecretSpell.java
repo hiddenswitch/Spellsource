@@ -18,7 +18,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class StealRandomSecretSpell extends Spell {
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(StealRandomSecretSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(StealRandomSecretSpell.class);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		return new SpellDesc(arguments);
 	}

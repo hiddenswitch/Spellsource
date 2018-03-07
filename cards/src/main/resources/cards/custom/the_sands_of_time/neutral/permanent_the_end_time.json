@@ -57,7 +57,7 @@
   ],
   "deathrattle": {
     "class": "DestroySpell",
-    "target": "ALL_ENEMIES"
+    "target": "ENEMY_CHARACTERS"
   },
   "attributes": {
     "DEATHRATTLES": true,

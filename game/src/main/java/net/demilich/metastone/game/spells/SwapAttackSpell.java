@@ -15,7 +15,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 public class SwapAttackSpell extends Spell {
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SwapAttackSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SwapAttackSpell.class);
 		return new SpellDesc(arguments);
 	}
 

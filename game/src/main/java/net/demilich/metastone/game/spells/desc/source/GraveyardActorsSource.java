@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toCollection;
 
 public class GraveyardActorsSource extends CardSource implements HasCardCreationSideEffects {
 
-	public GraveyardActorsSource(SourceDesc desc) {
+	public GraveyardActorsSource(CardSourceDesc desc) {
 		super(desc);
 	}
 

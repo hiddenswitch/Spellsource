@@ -8,7 +8,6 @@ import com.hiddenswitch.spellsource.impl.TimerId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
-import com.hiddenswitch.spellsource.models.LogicGetDeckResponse;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -108,10 +107,10 @@ public class ServerGameContext extends GameContext {
 	 */
 	private void enableTriggers() {
 		for (com.hiddenswitch.spellsource.Trigger trigger : Spellsource.spellsource().getGameTriggers().values()) {
-			final Map<SpellArg, Object> arguments = SpellDesc.build(DelegateSpell.class);
+			final Map<SpellArg, Object> arguments = new SpellDesc(DelegateSpell.class);
 			arguments.put(SpellArg.NAME, trigger.getSpellId());
 			SpellDesc spell = new SpellDesc(arguments);
-			final Enchantment e = new Enchantment(trigger.getEventTriggerDesc().create(), spell);
+			final Enchantment e = new Enchantment(trigger.getEventTriggerDesc().createInstance(), spell);
 			e.setOwner(0);
 			this.getGameTriggers().add(e);
 		}

@@ -12,7 +12,7 @@ import java.util.Map;
 public class ForceDeathPhaseSpell extends Spell {
 
 	public static SpellDesc create() {
-		Map<SpellArg, Object> arguments = SpellDesc.build(ForceDeathPhaseSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(ForceDeathPhaseSpell.class);
 		return new SpellDesc(arguments);
 	}
 

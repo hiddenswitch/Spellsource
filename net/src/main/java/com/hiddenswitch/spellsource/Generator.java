@@ -114,8 +114,8 @@ public class Generator {
 			battlecryTrigger.eventTrigger = new EventTriggerDesc(args);
 			// TODO: When reconstructing the card, create the appropriate actions.
 			if (minionCardDesc.battlecry.condition != null) {
-				Map<SpellArg, Object> conditionalSpell = SpellDesc.build(ConditionalSpell.class);
-				conditionalSpell.put(SpellArg.CONDITION, minionCardDesc.battlecry.condition.create());
+				Map<SpellArg, Object> conditionalSpell = new SpellDesc(ConditionalSpell.class);
+				conditionalSpell.put(SpellArg.CONDITION, minionCardDesc.battlecry.condition.createInstance());
 				conditionalSpell.put(SpellArg.SPELL, minionCardDesc.battlecry.spell);
 				battlecryTrigger.spell = new SpellDesc(conditionalSpell);
 			} else {
@@ -179,7 +179,7 @@ public class Generator {
 				.collect(Collectors.toMap(kv -> kv.getKey().toString(), Map.Entry::getValue));
 
 		// Handle the spell class specially
-		spellRecord.args.put("CLASS", spellDesc.getSpellClass().getSimpleName());
+		spellRecord.args.put("CLASS", spellDesc.getDescClass().getSimpleName());
 
 		// Handle the target class specially
 		if (spellDesc.getTarget() != null) {

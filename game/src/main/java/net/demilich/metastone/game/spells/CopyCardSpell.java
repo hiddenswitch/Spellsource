@@ -23,7 +23,7 @@ public class CopyCardSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(CopyCardSpell.class);
 
 	public static SpellDesc create(Card card) {
-		Map<SpellArg, Object> args = SpellDesc.build(CopyCardSpell.class);
+		Map<SpellArg, Object> args = new SpellDesc(CopyCardSpell.class);
 		args.put(SpellArg.TARGET, card.getReference());
 		return new SpellDesc(args);
 	}

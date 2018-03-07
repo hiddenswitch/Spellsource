@@ -159,7 +159,7 @@ public class SerializationTest extends TestBase {
 		DiscoverAction discoverAction1 = (DiscoverAction) deserializedGameActions.get(7);
 		assertNotNull(discoverAction1);
 		assertEquals(discoverAction1.getActionType(), ActionType.DISCOVER);
-		assertEquals(discoverAction1.getSpell().getSpellClass(), discoverAction.getSpell().getSpellClass());
+		assertEquals(discoverAction1.getSpell().getDescClass(), discoverAction.getSpell().getDescClass());
 		assertSpellsEqual(discoverAction1.getSpell(), discoverAction.getSpell());
 	}
 

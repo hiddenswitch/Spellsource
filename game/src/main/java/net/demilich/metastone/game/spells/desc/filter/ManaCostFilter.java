@@ -11,7 +11,7 @@ import java.util.Map;
 public class ManaCostFilter extends EntityFilter {
 
 	public static ManaCostFilter create(int manaCost, Operation operation) {
-		Map<FilterArg, Object> arguments = FilterDesc.build(ManaCostFilter.class);
+		Map<FilterArg, Object> arguments = new FilterDesc(ManaCostFilter.class);
 		arguments.put(FilterArg.VALUE, manaCost);
 		arguments.put(FilterArg.OPERATION, operation);
 		return new ManaCostFilter(new FilterDesc(arguments));

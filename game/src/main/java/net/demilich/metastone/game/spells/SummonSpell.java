@@ -175,7 +175,7 @@ public class SummonSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(String minionCard) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SummonSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SummonSpell.class);
 		arguments.put(SpellArg.CARD, minionCard);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		return new SpellDesc(arguments);
@@ -188,7 +188,7 @@ public class SummonSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(String[] minionCards) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SummonSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SummonSpell.class);
 		arguments.put(SpellArg.CARDS, minionCards);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		return new SpellDesc(arguments);
@@ -215,7 +215,7 @@ public class SummonSpell extends Spell {
 	 * @return The spell
 	 */
 	public static SpellDesc create(TargetPlayer targetPlayer, RelativeToSource relativeBoardPosition, MinionCard... minionCards) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SummonSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SummonSpell.class);
 		String[] cardNames = new String[minionCards.length];
 		for (int i = 0; i < minionCards.length; i++) {
 			cardNames[i] = minionCards[i].getCardId();
@@ -239,7 +239,7 @@ public class SummonSpell extends Spell {
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 
 		if (count <= 0) {
-			logger.error("onCast {} {}: An invalid count of {} was specified. The VALUE argument was {}", context.getGameId(), source, count, desc.get(SpellArg.VALUE));
+			logger.warn("onCast {} {}: A summon count of {} was specified. The VALUE argument was {}", context.getGameId(), source, count, desc.get(SpellArg.VALUE));
 			return;
 		}
 

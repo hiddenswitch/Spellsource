@@ -7,7 +7,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -19,7 +18,7 @@ public class PutCopyInHandSpell extends Spell {
 	}
 
 	public static SpellDesc create(EntityReference target, int amount) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(PutCopyInHandSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(PutCopyInHandSpell.class);
 		arguments.put(SpellArg.HOW_MANY, amount);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);

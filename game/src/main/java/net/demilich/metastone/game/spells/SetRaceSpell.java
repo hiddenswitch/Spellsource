@@ -19,7 +19,7 @@ public class SetRaceSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(SetRaceSpell.class);
 
 	public static SpellDesc create(Race race) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(SetRaceSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(SetRaceSpell.class);
 		arguments.put(SpellArg.RACE, race);
 		return new SpellDesc(arguments);
 	}

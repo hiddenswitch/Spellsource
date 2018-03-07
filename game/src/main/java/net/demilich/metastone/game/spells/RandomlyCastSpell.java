@@ -14,7 +14,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class RandomlyCastSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc... spells) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(RandomlyCastSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(RandomlyCastSpell.class);
 		arguments.put(SpellArg.SPELLS, spells);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);

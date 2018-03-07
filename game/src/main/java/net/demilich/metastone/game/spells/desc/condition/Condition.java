@@ -4,9 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.google.gson.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.desc.ConditionDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -31,7 +29,7 @@ public abstract class Condition implements Serializable {
 		@Override
 		public Condition deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 			ConditionDesc desc = context.deserialize(json.getAsJsonObject().getAsJsonObject("desc"), ConditionDesc.class);
-			return desc == null ? null : desc.create();
+			return desc == null ? null : desc.createInstance();
 		}
 
 		@Override

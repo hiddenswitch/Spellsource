@@ -224,8 +224,10 @@ public abstract class Actor extends Entity {
 		setAttribute(Attribute.BASE_HP, value);
 	}
 
-	public void setBattlecry(BattlecryAction battlecry) {
-		setAttribute(Attribute.BATTLECRY, battlecry);
+	public void setBattlecry( BattlecryAction battlecry) {
+		if (battlecry != null) {
+			setAttribute(Attribute.BATTLECRY, battlecry);
+		}
 	}
 
 	public void setCardCostModifier(CardCostModifier cardCostModifier) {
@@ -263,7 +265,9 @@ public abstract class Actor extends Entity {
 	}
 
 	public void setRace(Race race) {
-		setAttribute(Attribute.RACE, race);
+		if (race != null) {
+			setAttribute(Attribute.RACE, race);
+		}
 	}
 
 	@Override

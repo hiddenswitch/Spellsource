@@ -21,14 +21,14 @@ public class BuffSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(BuffSpell.class);
 
 	public static SpellDesc create(EntityReference target, int value) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(BuffSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(BuffSpell.class);
 		arguments.put(SpellArg.VALUE, value);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
 	}
 
 	public static SpellDesc create(EntityReference target, int attackBonus, int hpBonus) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(BuffSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(BuffSpell.class);
 		arguments.put(SpellArg.ATTACK_BONUS, attackBonus);
 		arguments.put(SpellArg.HP_BONUS, hpBonus);
 		arguments.put(SpellArg.TARGET, target);

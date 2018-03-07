@@ -7,25 +7,37 @@
   "description": "Spend all your mana. Summon that many 1/1 Tentacles.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "SummonSpell",
-        "value": {
-          "class": "PlayerAttributeValueProvider",
-          "playerAttribute": "MANA"
-        },
-        "card": "token_icky_tentacle"
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "MANA"
       },
-      {
-        "class": "GainManaSpell",
-        "value": {
-          "class": "PlayerAttributeValueProvider",
-          "multiplier": -1,
-          "playerAttribute": "MANA"
+      "value2": 0,
+      "operation": "GREATER"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "value": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA"
+          },
+          "card": "token_icky_tentacle"
+        },
+        {
+          "class": "GainManaSpell",
+          "value": {
+            "class": "PlayerAttributeValueProvider",
+            "multiplier": -1,
+            "playerAttribute": "MANA"
+          }
         }
-      }
-    ]
+      ]
+    }
   },
   "collectible": true,
   "set": "THE_OLD_GODS",

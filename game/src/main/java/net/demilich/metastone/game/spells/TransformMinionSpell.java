@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,15 +21,20 @@ public class TransformMinionSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(TransformMinionSpell.class);
 
 	public static SpellDesc create(EntityReference target, Minion transformTarget, boolean randomTarget) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(TransformMinionSpell.class);
-		arguments.put(SpellArg.SECONDARY_TARGET, transformTarget);
-		arguments.put(SpellArg.TARGET, target);
+		Map<SpellArg, Object> arguments = new SpellDesc(TransformMinionSpell.class);
+		if (transformTarget != null) {
+			arguments.put(SpellArg.SECONDARY_TARGET, transformTarget);
+		}
+		if (target != null) {
+			arguments.put(SpellArg.TARGET, target);
+		}
+
 		arguments.put(SpellArg.RANDOM_TARGET, randomTarget);
 		return new SpellDesc(arguments);
 	}
 
 	public static SpellDesc create(EntityReference target, String templateCard, boolean randomTarget) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(TransformMinionSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(TransformMinionSpell.class);
 		arguments.put(SpellArg.CARD, templateCard);
 		arguments.put(SpellArg.TARGET, target);
 		arguments.put(SpellArg.RANDOM_TARGET, randomTarget);

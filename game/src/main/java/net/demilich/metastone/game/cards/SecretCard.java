@@ -17,7 +17,7 @@ public class SecretCard extends SpellCard {
 
 	public SecretCard(SecretCardDesc desc) {
 		super(desc);
-		EventTrigger trigger = desc.trigger.create();
+		EventTrigger trigger = desc.trigger.createInstance();
 		setSecret(new Secret(trigger, desc.spell, this));
 		setAttribute(Attribute.SECRET);
 	}

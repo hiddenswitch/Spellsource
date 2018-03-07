@@ -65,7 +65,7 @@ public class HeroCard extends ActorCard {
 
 	protected WeaponCard getWeaponCard(SpellDesc battlecry) {
 		SpellDesc equipWeaponSpell = battlecry.subSpells()
-				.filter(p -> p.getSpellClass().equals(EquipWeaponSpell.class))
+				.filter(p -> p.getDescClass().equals(EquipWeaponSpell.class))
 				.findFirst().orElse(null);
 
 		if (equipWeaponSpell == null) {

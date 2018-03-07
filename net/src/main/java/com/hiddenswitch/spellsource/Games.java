@@ -18,7 +18,6 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
-import io.vertx.core.eventbus.impl.clustered.ClusteredEventBus;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.shareddata.Lock;
@@ -1033,7 +1032,7 @@ public interface Games {
 				SpellCard spellCard = (SpellCard) card;
 				int damage = 0;
 				int spellpowerDamage = 0;
-				if (DamageSpell.class.isAssignableFrom(spellCard.getSpell().getSpellClass())
+				if (DamageSpell.class.isAssignableFrom(spellCard.getSpell().getDescClass())
 						&& owningPlayer != null) {
 					// Use a zero zero minion as the target entity
 					final MinionCardDesc desc = new MinionCardDesc();

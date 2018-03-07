@@ -19,7 +19,7 @@ public class HealSpell extends Spell {
 	}
 
 	public static SpellDesc create(EntityReference target, int healing, boolean randomTarget) {
-		Map<SpellArg, Object> arguments = SpellDesc.build(HealSpell.class);
+		Map<SpellArg, Object> arguments = new SpellDesc(HealSpell.class);
 		arguments.put(SpellArg.VALUE, healing);
 		arguments.put(SpellArg.TARGET, target);
 		if (randomTarget) {

@@ -20,7 +20,7 @@ public class RecastSpell extends Spell {
 		}
 		if (card instanceof SpellCard) {
 			SpellCard spell = (SpellCard) card;
-			spell.setSpell(spell.getSpell().addArg(SpellArg.FILTER, null));
+			spell.setSpell(spell.getSpell().removeArg(SpellArg.FILTER));
 			SpellUtils.castChildSpell(context, player, spell.getSpell(), source, target);
 		}
 	}
