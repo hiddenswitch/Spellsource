@@ -452,7 +452,7 @@ public interface Games {
 			final int damageDealt = physicalAttackEvent.getDamageDealt();
 			final com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
 			clientEvent.physicalAttack(physicalAttack);
-		} else if (DiscardEvent.class.isAssignableFrom(event.getClass())) {
+		} else if (event instanceof DiscardEvent) {
 			// Handles both discard and mill events
 			final DiscardEvent discardEvent = (DiscardEvent) event;
 			// You always see which cards get discarded
