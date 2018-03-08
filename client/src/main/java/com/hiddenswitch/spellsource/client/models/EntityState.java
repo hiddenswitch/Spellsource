@@ -259,6 +259,9 @@ public class EntityState  implements Serializable {
   @SerializedName("rarity")
   private RarityEnum rarity = null;
 
+  @SerializedName("gameStarted")
+  private Boolean gameStarted = null;
+
   public EntityState location(EntityLocation location) {
     this.location = location;
     return this;
@@ -1177,6 +1180,24 @@ public class EntityState  implements Serializable {
     this.rarity = rarity;
   }
 
+  public EntityState gameStarted(Boolean gameStarted) {
+    this.gameStarted = gameStarted;
+    return this;
+  }
+
+   /**
+   * For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the other player to finish mulligan or, if both players have this field as true, indicates the game has begun on turn 0. 
+   * @return gameStarted
+  **/
+  @ApiModelProperty(example = "null", value = "For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the other player to finish mulligan or, if both players have this field as true, indicates the game has begun on turn 0. ")
+  public Boolean getGameStarted() {
+    return gameStarted;
+  }
+
+  public void setGameStarted(Boolean gameStarted) {
+    this.gameStarted = gameStarted;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1237,12 +1258,13 @@ public class EntityState  implements Serializable {
         Objects.equals(this.fires, entityState.fires) &&
         Objects.equals(this.countUntilCast, entityState.countUntilCast) &&
         Objects.equals(this.cardSet, entityState.cardSet) &&
-        Objects.equals(this.rarity, entityState.rarity);
+        Objects.equals(this.rarity, entityState.rarity) &&
+        Objects.equals(this.gameStarted, entityState.gameStarted);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
   }
 
   @Override
@@ -1301,6 +1323,7 @@ public class EntityState  implements Serializable {
     sb.append("    countUntilCast: ").append(toIndentedString(countUntilCast)).append("\n");
     sb.append("    cardSet: ").append(toIndentedString(cardSet)).append("\n");
     sb.append("    rarity: ").append(toIndentedString(rarity)).append("\n");
+    sb.append("    gameStarted: ").append(toIndentedString(gameStarted)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -743,7 +743,8 @@ public interface Games {
 							.lockedMana(player.getLockedMana())
 							.maxMana(player.getMaxMana())
 							.mana(player.getMana())
-							.location(Games.toClientLocation(player.getEntityLocation())));
+							.location(Games.toClientLocation(player.getEntityLocation()))
+							.gameStarted(player.hasAttribute(Attribute.GAME_STARTED)));
 			playerEntities.add(playerEntity);
 			final com.hiddenswitch.spellsource.client.models.Entity heroEntity = getEntity(workingContext, player.getHero(), localPlayerId);
 			// Include the player's mana, locked mana and max mana in the hero entity for convenience
@@ -777,6 +778,9 @@ public interface Games {
 				.state(new EntityState()
 						.location(toClientLocation(e.getEntityLocation())))
 				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.valueOf(e.getEntityType().toString()))).collect(Collectors.toList()));
+
+		// Sort the entities by ID
+		entities.sort(Comparator.comparingInt(Entity::getId));
 
 		return new GameState()
 				.isLocalPlayerTurn(localPlayerId == workingContext.getActivePlayerId())
