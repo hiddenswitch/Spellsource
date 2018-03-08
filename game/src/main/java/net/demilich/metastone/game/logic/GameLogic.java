@@ -2186,7 +2186,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// draw random cards from deck until required starter card count is
 		// reached
 		while (starterCards.size() < numberOfStarterCards) {
-			Card randomCard = getRandom(player.getDeck());
+			Card randomCard = getRandom(player.getDeck().filtered(card -> !card.hasAttribute(Attribute.NEVER_MULLIGANS)));
 			player.getDeck().move(randomCard, player.getSetAsideZone());
 			starterCards.add(randomCard);
 		}
