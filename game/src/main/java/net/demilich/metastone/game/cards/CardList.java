@@ -233,14 +233,14 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	}
 
 	/**
-	 * Removes and returns the last card in the card list.
+	 * Returns the last card in the card list.
 	 *
 	 * @return The last card, or null if the {@link #size()} is {@code 0}.
 	 */
-	default Card pop() {
+	default Card peek() {
 		if (size() == 0) {
 			return null;
 		}
-		return remove(size() - 1);
+		return get(size() - 1);
 	}
 }

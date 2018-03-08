@@ -15,6 +15,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
 import org.mockito.Mockito;
@@ -36,9 +37,37 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.spy;
 
 public class ClassicTests extends TestBase {
+
+	@Test
+	public void testColdlightOracle() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 2; i++) {
+				putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			}
+
+			for (int i = 0; i < 10; i++) {
+				receiveCard(context, player, "minion_bloodfen_raptor");
+			}
+
+			GameLogic spyLogic = spy(context.getLogic());
+			context.setLogic(spyLogic);
+
+			doAnswer(answer -> {
+				final Card card = answer.getArgument(1);
+				if (card.getSourceCard().getCardId().equals("minion_coldlight_oracle")) {
+					return answer.callRealMethod();
+				}
+				Assert.assertEquals(card.getZone(), Zones.DECK);
+				return answer.callRealMethod();
+			}).when(spyLogic).discardCard(any(), any());
+			playCard(context, player, "minion_coldlight_oracle");
+		});
+	}
 
 	@Test
 	public void testDivineShieldZeroAttackDefenderInteraction() {

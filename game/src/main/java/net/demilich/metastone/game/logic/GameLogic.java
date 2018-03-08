@@ -1046,7 +1046,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (damage == 0) {
 			return damage;
 		}
-		
+
 		if (minion.hasAttribute(Attribute.DIVINE_SHIELD)) {
 			removeAttribute(minion, Attribute.DIVINE_SHIELD);
 			context.fireGameEvent(new LoseDivineShieldEvent(context, minion, player.getId(), source.getId()));
@@ -1159,13 +1159,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void discardCard(Player player, Card card) {
-		logger.debug("{} discards {}", player.getName(), card);
 		// only a 'real' discard should fire a DiscardEvent
 		if (card.getZone() == Zones.HAND) {
+			logger.debug("discardCard {}: {} discards {}", context.getGameId(), player.getName(), card);
 			card.getAttributes().put(Attribute.DISCARDED, true);
 			context.fireGameEvent(new DiscardEvent(context, player.getId(), card));
 			player.getStatistics().cardDiscarded();
 		} else if (card.getZone() == Zones.DECK) {
+			logger.debug("discardCard {}: {} mills {}", context.getGameId(), player.getName(), card);
 			context.fireGameEvent(new MillEvent(context, player.getId(), card));
 		}
 
@@ -1192,7 +1193,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return null;
 		}
 
-		return drawCard(playerId, deck.pop(), source);
+		return drawCard(playerId, deck.peek(), source);
 	}
 
 	/**
@@ -2954,7 +2955,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
-			player.getDeck().add(card);
+			if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+				player.getDeck().add(card);
+			} else {
+				card.moveOrAddTo(context, Zones.DECK);
+			}
 
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);
