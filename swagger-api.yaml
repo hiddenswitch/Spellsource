@@ -1389,6 +1389,12 @@ definitions:
           - 'EPIC'
           - 'LEGENDARY'
           - 'ALLIANCE'
+      gameStarted:
+        description: |
+          For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the
+          other player to finish mulligan or, if both players have this field as true, indicates the game has begun on
+          turn 0.
+        type: 'boolean'
   DraftsChooseCardRequest:
     type: 'object'
     required:

@@ -55,6 +55,7 @@ Name | Type | Description | Notes
 **countUntilCast** | **Integer** | The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is triggered.  |  [optional]
 **cardSet** | **String** | The card expansion set this entity belongs to.  |  [optional]
 **rarity** | [**RarityEnum**](#RarityEnum) | The rarity of the card  |  [optional]
+**gameStarted** | **Boolean** | For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the other player to finish mulligan or, if both players have this field as true, indicates the game has begun on turn 0.  |  [optional]
 
 
 <a name="CardTypeEnum"></a>
