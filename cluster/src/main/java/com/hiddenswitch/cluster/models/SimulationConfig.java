@@ -120,7 +120,7 @@ public class SimulationConfig implements Serializable {
 		} catch (ParseException e) {
 			System.err.println(e.getMessage());
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("--decks \"Tempo Rogue.txt\",\"Miracle Rogue.txt\" --number 1000 --behaviour GameStateValueBehaviour", options);
+			formatter.printHelp("--decks \"net/src/main/resources/decklists/current/Big Priest.txt\",\"net/src/main/resources/decklists/current/Tempo Rogue.txt\" --number 1000 -b GameStateValueBehaviour", options);
 			invalid = true;
 			return this;
 		}
@@ -178,7 +178,7 @@ public class SimulationConfig implements Serializable {
 
 			for (int i = 0; i < behaviours.size(); i++) {
 				if (suppliers.get(i) == null) {
-					System.err.println(String.format("The supplied behaviour name %s is missing a no-args constructor or cannot be found on the classpath.", behaviours.get(0)));
+					System.err.println(String.format("The supplied behaviour name %s is missing a no-args constructor or cannot be found on the classpath (check the spelling).", behaviours.get(0)));
 					invalid = true;
 					return this;
 				}
