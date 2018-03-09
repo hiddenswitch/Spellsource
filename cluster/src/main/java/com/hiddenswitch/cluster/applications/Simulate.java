@@ -66,6 +66,7 @@ public class Simulate {
 
 		// Turn the decks into Deck objects
 		final Map<String, Deck> decks = deckPaths.stream()
+				.distinct()
 				.map(str -> str.replace("\\ ", " "))
 				// Open the files
 				.map(File::new)
