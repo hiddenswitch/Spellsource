@@ -16,6 +16,7 @@ import de.flapdoodle.embed.process.io.directories.IDirectory;
 import de.flapdoodle.embed.process.runtime.Network;
 import de.flapdoodle.embed.process.store.Downloader;
 import de.flapdoodle.embed.process.store.ExtractedArtifactStoreBuilder;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +69,7 @@ public class LocalMongo {
 	public void start() throws Exception {
 		mongodExecutable = starter.prepare(new MongodConfigBuilder()
 				.replication(replication)
-				.version(Version.Main.V3_5)
+				.version(SystemUtils.IS_OS_WINDOWS ? Version.Main.V3_5 : Version.Main.V3_6)
 				.net(new Net("localhost", 27017, Network.localhostIsIPv6()))
 				.build());
 		mongodProcess = mongodExecutable.start();
