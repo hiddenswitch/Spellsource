@@ -51,7 +51,7 @@ appender("STDOUT", ConsoleAppender) {
     }
 }
 
-root(DEBUG, ["STDOUT", "ASYNC_AWS_LOGS"])
+root(DEBUG, isAWS ? ["STDOUT", "ASYNC_AWS_LOGS"] : ["STDOUT"])
 
 logger("io.netty", ERROR)
 logger("com.hazelcast", ERROR)

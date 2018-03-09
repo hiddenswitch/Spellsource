@@ -9,6 +9,9 @@ import java.util.*;
 
 public class PlayRandomBehaviour extends AbstractBehaviour {
 
+	public PlayRandomBehaviour() {
+	}
+
 	private Random random = new Random();
 
 	@Override
