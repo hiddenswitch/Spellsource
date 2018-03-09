@@ -50,6 +50,7 @@ subprojects {
     dependencies {
         compile 'org.jetbrains:annotations-java5:15.0'
         compile 'de.ruedigermoeller:fst:2.56'
+        runtime 'org.codehaus.groovy:groovy:2.3.0'
     }
 }
 
