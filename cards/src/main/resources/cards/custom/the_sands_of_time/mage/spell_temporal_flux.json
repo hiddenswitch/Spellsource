@@ -1,6 +1,6 @@
 {
   "name": "Temporal Flux",
-  "baseManaCost": 1,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
@@ -24,6 +24,6 @@
     ]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "SANDS_OF_TIME",
   "fileFormatVersion": 1
 }
