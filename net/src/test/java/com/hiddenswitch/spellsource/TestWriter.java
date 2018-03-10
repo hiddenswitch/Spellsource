@@ -17,7 +17,7 @@ public class TestWriter implements Writer {
 	}
 
 	@Override
-	public void onGameEnd(Player winner) {
+	public void onGameEnd(GameState gameState, Player winner) {
 
 	}
 

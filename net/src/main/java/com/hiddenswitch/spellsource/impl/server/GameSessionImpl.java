@@ -18,7 +18,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
@@ -220,10 +219,10 @@ public class GameSessionImpl implements GameSession {
 		} else if (!isGameReady()) {
 			// Send a game over message to the players that may have connected
 			if (open1) {
-				getClient1().onGameEnd(null);
+				getClient1().onGameEnd(null, null);
 			}
 			if (open2) {
-				getClient2().onGameEnd(null);
+				getClient2().onGameEnd(null, null);
 			}
 		}
 

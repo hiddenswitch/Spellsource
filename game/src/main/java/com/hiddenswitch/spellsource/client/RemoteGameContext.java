@@ -300,7 +300,7 @@ public class RemoteGameContext extends GameContext implements Writer {
 	}
 
 	@Override
-	public void onGameEnd(Player w) {
+	public void onGameEnd(GameState gameState, Player w) {
 		this.setWinner(w);
 		this.gameDecided = true;
 		this.onGameStateChanged();
