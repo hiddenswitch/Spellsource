@@ -8,7 +8,9 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -57,7 +59,8 @@ public class CastFromGroupSpell extends Spell {
 				return;
 			}
 
-			SpellDesc chosen = SpellUtils.getSpellDiscover(context, player, desc, thisRoundsChoices, source).getSpell();
+			DiscoverAction discover = SpellUtils.getSpellDiscover(context, player, desc, thisRoundsChoices, source);
+			SpellDesc chosen = discover.getSpell();
 
 			if (exclusive) {
 				allChoices.remove(chosen);

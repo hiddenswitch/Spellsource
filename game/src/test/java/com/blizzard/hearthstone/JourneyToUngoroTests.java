@@ -20,6 +20,7 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -665,6 +666,7 @@ public class JourneyToUngoroTests extends TestBase {
 	}
 
 	@Test
+	@Ignore
 	public void testTheVoraxx() {
 		runGym((context, player, opponent) -> {
 			Minion voraxx = playMinionCard(context, player, "minion_the_voraxx");
@@ -672,6 +674,45 @@ public class JourneyToUngoroTests extends TestBase {
 			Assert.assertEquals(player.getMinions().size(), 2);
 			Assert.assertEquals(voraxx.getAttack(), 4, "The Voraxx should have been buffed by 1. ");
 			Assert.assertEquals(player.getMinions().get(1).getAttack(), 2, "The plant should be buffed");
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion voraxx = playMinionCard(context, player, "minion_the_voraxx");
+			DiscoverAction[] discoverAction = new DiscoverAction[1];
+			OverrideDiscoverBehaviour behaviour = overrideDiscoverChoice(discoverActions -> {
+				discoverAction[0] = discoverActions.get(0);
+				return discoverActions.get(0);
+			});
+			player.setBehaviour(behaviour);
+			playCardWithTarget(context, player, "spell_adaptation", voraxx);
+			Card card = discoverAction[0].getCard();
+			Assert.assertEquals(player.getMinions().size(), 2);
+			String name = card.getName();
+			Minion plant = player.getMinions().get(1);
+			Stream.of(voraxx, plant).forEach(minion -> {
+				if (name.equals("Crackling Shield")) {
+					Assert.assertTrue(minion.hasAttribute(Attribute.DIVINE_SHIELD));
+				} else if (name.equals("Flaming Claws")) {
+					Assert.assertEquals(minion.getAttack(), minion.getBaseAttack() + 3);
+				} else if (name.equals("Lightning Speed")) {
+					Assert.assertTrue(minion.hasAttribute(Attribute.WINDFURY));
+				} else if (name.equals("Liquid Membrane")) {
+					Assert.assertTrue(minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+				} else if (name.equals("Living Spores")) {
+					Assert.assertEquals(minion.getDeathrattles().size(), 1);
+				} else if (name.equals("Massive")) {
+					Assert.assertTrue(minion.hasAttribute(Attribute.TAUNT));
+				} else if (name.equals("Poison Spit")) {
+					Assert.assertTrue(minion.hasAttribute(Attribute.POISONOUS));
+				} else if (name.equals("Rocky Carapace")) {
+					Assert.assertEquals(minion.getHp(), minion.getBaseHp() + 3);
+				} else if (name.equals("Shrouding Mist")) {
+					Assert.assertTrue(minion.hasAttribute(Attribute.STEALTH));
+				} else if (name.equals("Volcanic Might")) {
+					Assert.assertEquals(minion.getHp(), minion.getBaseHp() + 1);
+					Assert.assertEquals(minion.getAttack(), minion.getBaseAttack() + 1);
+				}
+			});
 		});
 	}
 
