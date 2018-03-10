@@ -495,6 +495,8 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testToMySide() {
 		runGym((context, player, opponent) -> {
+			// Test putting a spell in the deck
+			shuffleToDeck(context, player, "spell_mirror_image");
 			playCard(context, player, "spell_to_my_side");
 			Assert.assertEquals(player.getMinions().size(), 2);
 			Assert.assertEquals(player.getMinions().stream().map(Minion::getSourceCard).map(Card::getCardId).distinct().count(), 2L);
