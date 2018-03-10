@@ -364,6 +364,8 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(context.getOpponent(player).getHeroPowerZone().get(0));
 		} else if (targetKey.equals(EntityReference.ALL_ENTITIES)) {
 			return context.getEntities().collect(Collectors.toList());
+		} else if (targetKey.equals(EntityReference.TRIGGER_HOST)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getTriggerHostStack().peek()));
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

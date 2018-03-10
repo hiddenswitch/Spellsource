@@ -278,6 +278,8 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_LAST_CARD_PLAYED;
 			case "enemy_last_card_played":
 				return EntityReference.ENEMY_LAST_CARD_PLAYED;
+			case "trigger_host":
+				return EntityReference.TRIGGER_HOST;
 			case "adjacent_minions":
 				return EntityReference.ADJACENT_MINIONS;
 			case "attacker_adjacent_minions":

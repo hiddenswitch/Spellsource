@@ -74,6 +74,7 @@ public class TriggerManager implements Cloneable, Serializable {
 		List<Trigger> removeTriggers = new ArrayList<Trigger>();
 
 		for (Trigger trigger : triggers) {
+			event.getGameContext().getTriggerHostStack().push(trigger.getHostReference());
 			// In order to stop premature expiration, check
 			// for a oneTurnOnly tag and that it isn't delayed.
 			if (event.getEventType() == GameEventType.TURN_END) {
@@ -88,15 +89,16 @@ public class TriggerManager implements Cloneable, Serializable {
 				removeTriggers.add(trigger);
 			}
 
-			if (!trigger.interestedIn(event.getEventType())) {
-				continue;
-			}
-			if (triggers.contains(trigger) && trigger.canFire(event)) {
+			if (trigger.interestedIn(event.getEventType())
+					&& triggers.contains(trigger) && trigger.canFire(event)) {
 				eventTriggers.add(trigger);
 			}
+			event.getGameContext().getTriggerHostStack().pop();
 		}
 
 		for (Trigger trigger : eventTriggers) {
+			event.getGameContext().getTriggerHostStack().push(trigger.getHostReference());
+
 			if (trigger.canFireCondition(event) && triggers.contains(trigger)) {
 				trigger.onGameEvent(event);
 			}
@@ -107,6 +109,7 @@ public class TriggerManager implements Cloneable, Serializable {
 			if (trigger.isExpired()) {
 				removeTriggers.add(trigger);
 			}
+			event.getGameContext().getTriggerHostStack().pop();
 		}
 
 		triggers.removeAll(removeTriggers);

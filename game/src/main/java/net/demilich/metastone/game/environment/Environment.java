@@ -106,5 +106,5 @@ public enum Environment {
 	/**
 	 * Stores a stack of event sources.
 	 */
-	EVENT_SOURCE_REFERENCE_STACK;
+	EVENT_SOURCE_REFERENCE_STACK, TRIGGER_HOST_STACK;
 }

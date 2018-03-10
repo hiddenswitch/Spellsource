@@ -1512,4 +1512,17 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	public void setLoggingLevel(Level loggingLevel) {
 		((ch.qos.logback.classic.Logger) logger).setLevel(loggingLevel);
 	}
+
+	/**
+	 * Retrieves the stack of hosts of the currently firing trigger.
+	 *
+	 * @return A host reference, or null if the trigger didn't have a host.
+	 */
+	@SuppressWarnings("unchecked")
+	public Deque<EntityReference> getTriggerHostStack() {
+		if (!getEnvironment().containsKey(Environment.TRIGGER_HOST_STACK)) {
+			getEnvironment().put(Environment.TRIGGER_HOST_STACK, new EnvironmentDeque<>());
+		}
+		return (Deque<EntityReference>) getEnvironment().get(Environment.TRIGGER_HOST_STACK);
+	}
 }

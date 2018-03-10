@@ -25,6 +25,18 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testArmageddonVanguard() {
+		runGym((context, player, opponent) -> {
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion armageddon = playMinionCard(context, player, "minion_armageddon_vanguard");
+			context.endTurn();
+			int opponentHp = opponent.getHero().getHp();
+			playCardWithTarget(context, opponent, "spell_razorpetal", bloodfen);
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+		});
+	}
+
+	@Test
 	public void testVindicatorMaraad() {
 		runGym((context, player, opponent) -> {
 			Card cost1Card = putOnTopOfDeck(context, player, "minion_argent_squire");
