@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "CopyDeathrattleSpell",
+      "class": "RevealCardSpell",
       "target": "FRIENDLY_DECK",
       "filter": {
         "class": "AndFilter",
@@ -26,7 +26,10 @@
           }
         ]
       },
-      "randomTarget": true
+      "randomTarget": true,
+      "spell": {
+        "class": "CopyDeathrattleSpell"
+      }
     }
   },
   "attributes": {
