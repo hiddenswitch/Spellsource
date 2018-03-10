@@ -56,6 +56,7 @@ import java.util.stream.Stream;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static io.vertx.ext.sync.Sync.fiberHandler;
+import static java.util.stream.Collectors.toList;
 
 
 /**
@@ -276,7 +277,7 @@ public interface Games {
 						.defenders(kv.getValue().stream().map(ga ->
 								new TargetActionPair().target(ga.getTargetReference().getId())
 										.action(ga.getId())
-						).collect(Collectors.toList())))
+						).collect(toList())))
 				.forEach(clientActions::addPhysicalAttacksItem);
 
 		// Hero powers
@@ -333,7 +334,7 @@ public interface Games {
 		// Add all the action indices for compatibility purposes
 		clientActions.compatibility(actions.stream()
 				.map(GameAction::getId)
-				.collect(Collectors.toList()));
+				.collect(toList()));
 
 		return clientActions;
 	}
@@ -390,7 +391,7 @@ public interface Games {
 						.filter(a -> a.getTargetReference() != null)
 						.map(a -> new SummonActionIndexToActions()
 								.action(a.getId())
-								.index(minionEntityIdToLocation.get(a.getTargetReference().getId()))).collect(Collectors.toList()));
+								.index(minionEntityIdToLocation.get(a.getTargetReference().getId()))).collect(toList()));
 
 		// Add the null targeted action, if it exists
 		Optional<? extends PlayCardAction> nullPlay = summonActions.stream()
@@ -728,7 +729,7 @@ public interface Games {
 		entities.addAll(
 				Stream.concat(local.getQuests().stream(), opponent.getQuests().stream())
 						.map(e -> getEntity(workingContext, e, localPlayerId))
-						.collect(Collectors.toList())
+						.collect(toList())
 		);
 
 		List<com.hiddenswitch.spellsource.client.models.Entity> playerEntities = new ArrayList<>();
@@ -746,7 +747,13 @@ public interface Games {
 							.location(Games.toClientLocation(player.getEntityLocation()))
 							.gameStarted(player.hasAttribute(Attribute.GAME_STARTED)));
 			playerEntities.add(playerEntity);
+			// The heroes may have wound up in the graveyard
 			final com.hiddenswitch.spellsource.client.models.Entity heroEntity = getEntity(workingContext, player.getHero(), localPlayerId);
+
+			if (heroEntity == null) {
+				continue;
+			}
+
 			// Include the player's mana, locked mana and max mana in the hero entity for convenience
 			heroEntity.getState()
 					.mana(player.getMana())
@@ -768,7 +775,20 @@ public interface Games {
 		// Get local discoveries
 		entities.addAll(local.getDiscoverZone().stream()
 				.map(c -> getEntity(workingContext, c, localPlayerId))
-				.collect(Collectors.toList()));
+				.collect(toList()));
+
+		// Get the heroes that may have wound up in the graveyard
+		entities.addAll(Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
+				.filter(e -> e.getEntityType() == EntityType.HERO)
+				.map(h -> {
+					final Entity e = getEntity(workingContext, h, localPlayerId);
+					Player owner = h.getOwner() == local.getId() ? local : opponent;
+					e.getState()
+							.mana(owner.getMana())
+							.maxMana(owner.getMaxMana())
+							.lockedMana(owner.getLockedMana());
+					return e;
+				}).collect(toList()));
 
 		// Any missing entities will get a stand-in entry
 		Set<Integer> visibleEntityIds = entities.stream().map(com.hiddenswitch.spellsource.client.models.Entity::getId).collect(Collectors.toSet());
@@ -777,7 +797,7 @@ public interface Games {
 				.cardId("hidden")
 				.state(new EntityState()
 						.location(toClientLocation(e.getEntityLocation())))
-				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.valueOf(e.getEntityType().toString()))).collect(Collectors.toList()));
+				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.valueOf(e.getEntityType().toString()))).collect(toList()));
 
 		// Sort the entities by ID
 		entities.sort(Comparator.comparingInt(Entity::getId));
