@@ -73,7 +73,7 @@ public class SocketWriter implements Writer {
 	}
 
 	@Override
-	public void onGameEnd(Player winner) {
+	public void onGameEnd(GameState gameState, Player winner) {
 		flushEvents();
 		sendMessage(new ServerToClientMessage(winner, true));
 	}

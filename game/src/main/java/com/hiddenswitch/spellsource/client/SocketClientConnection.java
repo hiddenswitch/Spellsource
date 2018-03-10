@@ -90,7 +90,7 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 							case ON_GAME_END:
 								isGameEnded = true;
 								shouldRun = false;
-								updateListener.onGameEnd(message.winner);
+								updateListener.onGameEnd(null, message.winner);
 								break;
 							case SET_PLAYERS:
 								break;

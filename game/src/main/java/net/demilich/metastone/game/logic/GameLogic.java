@@ -599,7 +599,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
-	                      boolean childSpell) {
+						  boolean childSpell) {
 		castSpell(playerId, spellDesc, sourceReference, targetReference, TargetSelection.NONE, childSpell);
 	}
 
@@ -651,7 +651,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
-	                      TargetSelection targetSelection, boolean childSpell) {
+						  TargetSelection targetSelection, boolean childSpell) {
 		Player player = context.getPlayer(playerId);
 		Entity source = null;
 		if (sourceReference != null) {
@@ -3634,6 +3634,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return The turn time in milliseconds.
 	 */
 	public int getTurnTimeMillis(int playerId) {
-		return Integer.parseInt(System.getProperty("games.turnTimeMillis", Integer.toString(DEFAULT_TURN_TIME * 1000)));
+		return Integer.parseInt(System.getProperty("games.turnTimeMillis", System.getenv().getOrDefault("SPELLSOURCE_TURN_TIME", Integer.toString(DEFAULT_TURN_TIME * 1000))));
 	}
 }

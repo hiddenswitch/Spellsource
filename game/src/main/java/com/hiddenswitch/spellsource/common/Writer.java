@@ -20,7 +20,7 @@ public interface Writer {
 	void onNotification(Notification event, GameState gameState);
 
 	@Suspendable
-	void onGameEnd(Player winner);
+	void onGameEnd(GameState gameState, Player winner);
 
 	@Suspendable
 	void onActivePlayer(Player activePlayer);

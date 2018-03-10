@@ -191,7 +191,6 @@ public class ServerGameContext extends GameContext {
 		getNetworkGameLogic().initializePlayer(IdFactory.PLAYER_1);
 		getNetworkGameLogic().initializePlayer(IdFactory.PLAYER_2);
 
-		updateClientsWithGameState();
 
 		Future<Void> init1 = Future.future();
 		Future<Void> init2 = Future.future();
@@ -204,9 +203,12 @@ public class ServerGameContext extends GameContext {
 			mulliganTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::endMulligans));
 		} else {
 			logger.debug("{} networkPlay: No mulligan timer set for game because all players are not human", getGameId());
+			timerLengthMillis = null;
+			timerStartTimeMillis = null;
 			mulliganTimerId = null;
 		}
 
+		updateClientsWithGameState();
 
 		getNetworkGameLogic().initAsync(getActivePlayerId(), true, p -> init1.complete());
 		getNetworkGameLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, p -> init2.complete());
@@ -250,6 +252,8 @@ public class ServerGameContext extends GameContext {
 
 					turnTimerId[0] = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::elapseTurn));
 				} else {
+					timerLengthMillis = null;
+					timerStartTimeMillis = null;
 					logger.debug("{} networkedPlay: Not setting timer because opponent is not human.", getGameId());
 				}
 
@@ -531,7 +535,7 @@ public class ServerGameContext extends GameContext {
 
 	@Override
 	public void sendGameOver(Player recipient, Player winner) {
-		getListenerMap().get(recipient).onGameEnd(winner);
+		getListenerMap().get(recipient).onGameEnd(getGameStateCopy(), winner);
 	}
 
 	@Override
