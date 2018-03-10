@@ -149,6 +149,16 @@
                   }
                 ]
               }
+            },
+            {
+              "class": "AddAttributeSpell",
+              "target": "FRIENDLY_DECK",
+              "attribute": "STARTED_IN_DECK"
+            },
+            {
+              "class": "AddAttributeSpell",
+              "target": "FRIENDLY_HAND",
+              "attribute": "STARTED_IN_DECK"
             }
           ]
         }
