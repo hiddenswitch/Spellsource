@@ -180,6 +180,11 @@ public class Spellsource {
 							// Shuffle around the location of user record data
 							List<JsonObject> users = Mongo.mongo().find(Accounts.USERS, json());
 							for (JsonObject jo : users) {
+								if (!jo.containsKey("profile")
+										|| !jo.getJsonObject("profile").containsKey("emailAddress")) {
+									continue;
+								}
+
 								String email = jo.getJsonObject("profile").getString("emailAddress");
 								String username = jo.getJsonObject("profile").getString("displayName");
 								String passwordScrypt = jo.getJsonObject("auth").getString("scrypt");
