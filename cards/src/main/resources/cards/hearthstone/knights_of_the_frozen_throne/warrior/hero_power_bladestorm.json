@@ -1,11 +1,11 @@
 {
-  "name": "Siphon Life",
+  "name": "Bladestorm",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "RED",
   "rarity": "FREE",
   "description": "Hero Power: Deal 1 damage to all minions.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
     "target": "ALL_MINIONS",
