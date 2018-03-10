@@ -11,7 +11,8 @@
     "eventTrigger": {
       "class": "DamageCausedTrigger",
       "sourceEntityType": "HERO",
-      "targetPlayer": "SELF"
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "AdjacentEffectSpell",
@@ -20,7 +21,7 @@
         "class": "DamageSpell",
         "value": {
           "class": "AttributeValueProvider",
-          "target": "SELF",
+          "target": "FRIENDLY_HERO",
           "attribute": "ATTACK"
         }
       }
