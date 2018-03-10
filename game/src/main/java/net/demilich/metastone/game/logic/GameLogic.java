@@ -192,6 +192,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		immuneToSilence.add(Attribute.AURA_ATTACK_BONUS);
 		immuneToSilence.add(Attribute.AURA_HP_BONUS);
 		immuneToSilence.add(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
+		immuneToSilence.add(Attribute.AURA_TAUNT);
 		immuneToSilence.add(Attribute.RACE);
 		immuneToSilence.add(Attribute.NUMBER_OF_ATTACKS);
 		immuneToSilence.add(Attribute.PERMANENT);

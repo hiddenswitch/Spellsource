@@ -156,6 +156,12 @@ public enum Attribute {
 	 */
 	TAUNT,
 	/**
+	 * Like taunt, but created as a result of an {@link net.demilich.metastone.game.spells.aura.Aura}.
+	 *
+	 * @see #TAUNT for more about taunt.
+	 */
+	AURA_TAUNT,
+	/**
 	 * The total amount of spell damage that an {@link Entity} contributes.
 	 */
 	SPELL_DAMAGE,

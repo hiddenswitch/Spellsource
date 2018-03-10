@@ -13,7 +13,8 @@ public class WeightedHeuristic implements Heuristic {
 		if (minion.hasAttribute(Attribute.FROZEN)) {
 			return minion.getHp();
 		}
-		if (minion.hasAttribute(Attribute.TAUNT)) {
+		if (minion.hasAttribute(Attribute.TAUNT)
+				|| minion.hasAttribute(Attribute.AURA_TAUNT)) {
 			minionScore += 2;
 		}
 		if (minion.hasAttribute(Attribute.WINDFURY)) {

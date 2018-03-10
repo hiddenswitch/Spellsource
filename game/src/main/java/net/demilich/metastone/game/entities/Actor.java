@@ -310,6 +310,7 @@ public abstract class Actor extends Entity {
 		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
+		clone.getAttributes().remove(Attribute.AURA_TAUNT);
 		// TODO: When auras put attributes on minions that aren't attack or hp bonuses, they must be removed here
 		return clone;
 	}

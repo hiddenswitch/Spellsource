@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
@@ -23,6 +24,20 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Stream;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testSpaceMoorine() {
+		runGym((context, player, opponent) -> {
+			Minion spaceMoorine = playMinionCard(context, player, "minion_space_moorine");
+			Assert.assertFalse(spaceMoorine.hasAttribute(Attribute.AURA_TAUNT));
+			playCard(context, player, "spell_iron_hide");
+			Assert.assertTrue(spaceMoorine.hasAttribute(Attribute.AURA_TAUNT));
+			context.endTurn();
+			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			Assert.assertTrue(context.getValidActions().stream().filter(va -> va.getActionType() == ActionType.PHYSICAL_ATTACK)
+					.allMatch(t -> t.getTargetReference().equals(spaceMoorine.getReference())));
+		});
+	}
 
 	@Test
 	public void testArmageddonVanguard() {
