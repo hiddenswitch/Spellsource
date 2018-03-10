@@ -450,6 +450,21 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertTrue(tirion.isDestroyed());
 			Assert.assertEquals(player.getHero().getWeapon().getSourceCard().getCardId(), "weapon_ashbringer");
 		});
+
+		// Test Leyline Manipulator doesn't reduce cost of fifi cards
+		runGym((context, player, opponent) -> {
+			MinionCard shouldBeDrawn = putOnTopOfDeck(context, player, "minion_dire_mole");
+			OverrideHandle<Card> handle = overrideRandomCard(context, "minion_tirion_fordring");
+			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			handle.stop();
+			context.getLogic().discardCard(player, fifi);
+			Card drawnCard = context.getLogic().drawCard(player.getId(), player);
+			Assert.assertEquals(drawnCard, shouldBeDrawn.transformResolved(context));
+			shouldBeDrawn = (MinionCard) shouldBeDrawn.transformResolved(context);
+			playCard(context, player, "minion_leyline_manipulator");
+			Assert.assertEquals(costOf(context, player, shouldBeDrawn), CardCatalogue.getCardById("minion_dire_mole").getBaseManaCost());
+		});
 	}
 
 	@Test
