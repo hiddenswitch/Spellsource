@@ -17,4 +17,9 @@ public class WillEndSequenceEvent extends GameEvent {
 	public GameEventType getEventType() {
 		return GameEventType.WILL_END_SEQUENCE;
 	}
+
+	@Override
+	public boolean isClientInterested() {
+		return false;
+	}
 }

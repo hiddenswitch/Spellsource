@@ -24,7 +24,7 @@
         "class": "DamageReceivedTrigger",
         "fireCondition": {
           "class": "AttributeCondition",
-          "target": "SELF",
+          "target": "TRIGGER_HOST",
           "value": 0,
           "attribute": "RESERVED_INTEGER_1",
           "operation": "GREATER"
@@ -43,7 +43,7 @@
           },
           {
             "class": "DamageSpell",
-            "target": "ENEMY_MINIONS",
+            "target": "ENEMY_CHARACTERS",
             "value": 1,
             "randomTarget": true
           }

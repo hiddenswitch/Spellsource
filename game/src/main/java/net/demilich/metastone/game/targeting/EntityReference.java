@@ -60,6 +60,7 @@ public class EntityReference implements Serializable {
 	public static final EntityReference LAST_CARD_PLAYED = new EntityReference(-53);
 	public static final EntityReference FRIENDLY_LAST_CARD_PLAYED = new EntityReference(-54);
 	public static final EntityReference ENEMY_LAST_CARD_PLAYED = new EntityReference(-55);
+	public static final EntityReference TRIGGER_HOST = new EntityReference(-56);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
