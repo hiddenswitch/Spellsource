@@ -23,17 +23,8 @@
           "operation": "LESS_OR_EQUAL"
         },
         "spell1": {
-          "class": "MetaSpell",
-          "spells": [
-            {
-              "class": "DestroySpell",
-              "target": "SELF"
-            },
-            {
-              "class": "DestroySpell",
-              "target": "ENEMY_CHARACTERS"
-            }
-          ]
+          "class": "DestroySpell",
+          "target": "SELF"
         },
         "spell2": {
           "class": "ModifyAttributeSpell",

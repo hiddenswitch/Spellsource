@@ -25,27 +25,15 @@
           "class": "EitherOrSpell",
           "condition": {
             "class": "AttributeCondition",
-            "target": "SELF",
             "value": 1,
             "attribute": "RESERVED_INTEGER_1",
             "operation": "LESS_OR_EQUAL"
           },
           "spell1": {
-            "class": "MetaSpell",
-            "spells": [
-              {
-                "class": "DestroySpell",
-                "target": "SELF"
-              },
-              {
-                "class": "DestroySpell",
-                "target": "ENEMY_CHARACTERS"
-              }
-            ]
+            "class": "DestroySpell"
           },
           "spell2": {
             "class": "ModifyAttributeSpell",
-            "target": "SELF",
             "value": -1,
             "attribute": "RESERVED_INTEGER_1"
           }
