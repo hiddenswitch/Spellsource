@@ -71,6 +71,10 @@
           "class": "MetaSpell",
           "spells": [
             {
+              "class": "RevealCardSpell",
+              "target": "SELF"
+            },
+            {
               "class": "custom.TextifySpell",
               "target": "FRIENDLY_DECK",
               "cardFilter": {
