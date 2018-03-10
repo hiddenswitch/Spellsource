@@ -7,10 +7,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.ChooseBattlecryHeroCard;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -43,6 +40,23 @@ import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.*;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
+
+	@Test
+	public void testShadowmourne() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_shadowmourne");
+			context.endTurn();
+			Minion left = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			Minion target = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			Minion right = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			context.endTurn();
+			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			attack(context, player, player.getHero(), target);
+			Stream.of(left, target, right).forEach(minion -> {
+				Assert.assertEquals(minion.getHp(), minion.getBaseHp() - ((WeaponCard) CardCatalogue.getCardById("weapon_shadowmourne")).getBaseDamage() - 1);
+			});
+		}, HeroClass.BROWN, HeroClass.BROWN);
+	}
 
 	@Test
 	public void testStitchedTracker() {
