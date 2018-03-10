@@ -879,6 +879,7 @@ public interface Games {
 				|| actor.hasAttribute(Attribute.AURA_HP_BONUS)
 				|| actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
 				|| actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)
+				|| actor.hasAttribute(Attribute.AURA_TAUNT)
 				|| actor.hasAttribute(Attribute.HP_BONUS)
 				|| actor.hasAttribute(Attribute.ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
@@ -886,7 +887,7 @@ public interface Games {
 		entityState.frozen(actor.hasAttribute(Attribute.FROZEN));
 		entityState.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING));
 		entityState.stealth(actor.hasAttribute(Attribute.STEALTH));
-		entityState.taunt(actor.hasAttribute(Attribute.TAUNT));
+		entityState.taunt(actor.hasAttribute(Attribute.TAUNT) | actor.hasAttribute(Attribute.AURA_TAUNT));
 		entityState.divineShield(actor.hasAttribute(Attribute.DIVINE_SHIELD));
 		entityState.enraged(actor.hasAttribute(Attribute.ENRAGED));
 		entityState.destroyed(actor.hasAttribute(Attribute.DESTROYED));

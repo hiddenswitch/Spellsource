@@ -87,7 +87,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 				* (minion.getAttack() - minion.getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS));
 		minionScore += weights.get(WeightedFeature.MINION_HP_FACTOR) * minion.getHp();
 
-		if (minion.hasAttribute(Attribute.TAUNT)) {
+		if (minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.TAUNT)) {
 			switch (threatLevel) {
 				case RED:
 					minionScore += weights.get(WeightedFeature.MINION_RED_TAUNT_MODIFIER);

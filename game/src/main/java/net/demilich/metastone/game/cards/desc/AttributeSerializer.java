@@ -77,6 +77,7 @@ public class AttributeSerializer implements JsonDeserializer<AttributeMap>, Json
 		parseAttribute(Attribute.UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.UNTARGETABLE_BY_OPPONENT_SPELLS, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS, jsonData, map, ParseValueType.BOOLEAN);
+		parseAttribute(Attribute.AURA_TAUNT, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.TAUNT, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.WINDFURY, jsonData, map, ParseValueType.BOOLEAN);
 		parseAttribute(Attribute.PERMANENT, jsonData, map, ParseValueType.BOOLEAN);

@@ -66,6 +66,7 @@ public class CopyMinionSpell extends Spell {
 		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
+		clone.getAttributes().remove(Attribute.AURA_TAUNT);
 		clone.clearEnchantments();
 
 		Minion sourceActor = (Minion) context.resolveSingleTarget(context.getSummonReferenceStack().peek());
