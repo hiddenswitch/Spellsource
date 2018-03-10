@@ -76,7 +76,7 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			attack(context, player, shaku, opponent.getHero());
-			Assert.assertEquals(player.getHand().get(0).getHeroClass(), opponent.getHero().getHeroClass());
+			Assert.assertTrue(player.getHand().get(0).hasHeroClass(opponent.getHero().getHeroClass()));
 		});
 	}
 
