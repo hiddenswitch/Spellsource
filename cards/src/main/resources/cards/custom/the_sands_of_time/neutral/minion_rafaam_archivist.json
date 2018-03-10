@@ -3,7 +3,7 @@
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4,
+  "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "description": "Battlecry: Discover a card from a valid deck named 'The Supreme Archive' in your collection.",
