@@ -26,6 +26,29 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testTheEndTime() {
+		runGym((context, player, opponent) -> {
+			Minion endTime = playMinionCard(context, player, "permanent_the_end_time");
+			Assert.assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 20);
+			context.endTurn();
+			Assert.assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 19);
+			context.endTurn();
+			Assert.assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 19);
+			context.endTurn();
+			Assert.assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 17);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion endTime = playMinionCard(context, player, "permanent_the_end_time");
+			Assert.assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 20);
+			endTime.setAttribute(Attribute.RESERVED_INTEGER_1, 1);
+			context.endTurn();
+			Assert.assertEquals(context.getStatus(), GameStatus.WON);
+			Assert.assertEquals(context.getWinningPlayerId(), player.getId());
+		});
+	}
+
+	@Test
 	public void testSpaceMoorine() {
 		runGym((context, player, opponent) -> {
 			Minion spaceMoorine = playMinionCard(context, player, "minion_space_moorine");
