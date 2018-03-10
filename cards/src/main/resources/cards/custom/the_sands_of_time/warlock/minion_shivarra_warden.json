@@ -2,7 +2,7 @@
   "name": "Shivarra Warden",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "PURPLE",
   "baseAttack": 9,
   "baseHp": 9,
   "rarity": "COMMON",
@@ -20,6 +20,6 @@
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "SANDS_OF_TIME",
   "fileFormatVersion": 1
 }
