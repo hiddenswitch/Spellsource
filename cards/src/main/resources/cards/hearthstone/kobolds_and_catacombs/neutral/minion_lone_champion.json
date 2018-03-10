@@ -13,7 +13,7 @@
       "class": "ConditionalSpell",
       "condition": {
         "class": "MinionCountCondition",
-        "value": 0,
+        "value": 1,
         "operation": "EQUAL",
         "targetPlayer": "SELF"
       },
