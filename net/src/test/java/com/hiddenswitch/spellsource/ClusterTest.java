@@ -211,6 +211,7 @@ public class ClusterTest {
 
 	@After
 	public void stopServices(TestContext context) throws IOException {
+		Async strict = context.strictAsync(2);
 		if (ServiceTest.isCI()) {
 			return;
 		}
@@ -228,7 +229,10 @@ public class ClusterTest {
 			hazelcastInstances.clear();
 			verticies.clear();
 			Mongo.mongo().stopEmbedded();
+			Mongo.mongo().close();
+			Spellsource.spellsource().close();
 			System.getProperties().remove("mongo.url");
+			strict.complete();
 		}));
 	}
 
