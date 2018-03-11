@@ -3,14 +3,68 @@ package com.blizzard.hearthstone;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.tests.util.TestBase;
+import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MeanStreetsOfGadgetzanTests extends TestBase {
+
+	@Test
+	public void testMayorNoggenfogger() {
+		// Noggen correctly overrides to allow taunters and stealths
+		runGym((context, player, opponent) -> {
+			Minion noggen = playMinionCard(context, player, "minion_mayor_noggenfogger");
+			Minion footman = playMinionCard(context, player, "minion_goldshire_footman");
+			Minion stealth = playMinionCard(context, player, "minion_worgen_infiltrator");
+			context.endTurn();
+			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			GameLogic spyLogic = Mockito.spy(context.getLogic());
+			context.setLogic(spyLogic);
+			CountDownLatch latch = new CountDownLatch(1);
+			Mockito.doAnswer(invocation -> {
+				List<Entity> targets = invocation.getArgument(0);
+				Assert.assertEquals(targets.size(), 4, "Noggen, Footman, Worgen and the hero are all the valid targets");
+				List<Integer> ids = targets.stream().map(Entity::getReference).map(EntityReference::getId).collect(Collectors.toList());
+				Assert.assertTrue(ids.containsAll(Stream.of(noggen, footman, stealth, player.getHero()).map(Entity::getReference).map(EntityReference::getId).collect(Collectors.toList())));
+				latch.countDown();
+				return invocation.callRealMethod();
+			}).when(spyLogic).getRandom(Mockito.anyList());
+			attack(context, opponent, wolfrider, noggen);
+			Assert.assertEquals(latch.getCount(), 0L);
+		});
+
+		// Noggen correctly overrides filtered battlecries
+		runGym((context, player, opponent) -> {
+			Minion noggen = playMinionCard(context, player, "minion_mayor_noggenfogger");
+			Minion pirate1 = playMinionCard(context, player, "minion_bloodsail_raider");
+			Minion pirate2 = playMinionCard(context, player, "minion_bloodsail_raider");
+
+			GameLogic spyLogic = Mockito.spy(context.getLogic());
+			context.setLogic(spyLogic);
+			CountDownLatch latch = new CountDownLatch(1);
+			Mockito.doAnswer(invocation -> {
+				List<Entity> targets = invocation.getArgument(0);
+				Assert.assertEquals(targets.size(), 2, "Pirates are the only valid targets");
+				List<Integer> ids = targets.stream().map(Entity::getReference).map(EntityReference::getId).collect(Collectors.toList());
+				Assert.assertTrue(ids.containsAll(Stream.of(pirate1, pirate2).map(Entity::getReference).map(EntityReference::getId).collect(Collectors.toList())));
+				latch.countDown();
+				return invocation.callRealMethod();
+			}).when(spyLogic).getRandom(Mockito.anyList());
+			playMinionCard(context, player, "minion_golakka_crawler");
+			Assert.assertEquals(latch.getCount(), 0L);
+		});
+	}
 
 	@Test
 	public void testVirmenSensei() {

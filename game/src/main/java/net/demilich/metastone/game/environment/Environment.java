@@ -1,6 +1,10 @@
 package net.demilich.metastone.game.environment;
 
 import com.hiddenswitch.spellsource.common.GameState;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 
 /**
  * A collection of environment variables.
@@ -106,5 +110,14 @@ public enum Environment {
 	/**
 	 * Stores a stack of event sources.
 	 */
-	EVENT_SOURCE_REFERENCE_STACK, TRIGGER_HOST_STACK;
+	EVENT_SOURCE_REFERENCE_STACK,
+	/**
+	 * Stores the stack of trigger hosts as triggers are processed
+	 */
+	TRIGGER_HOST_STACK,
+	/**
+	 * Stores the next target of an {@link net.demilich.metastone.game.logic.GameLogic#castSpell(int, SpellDesc,
+	 * EntityReference, EntityReference, TargetSelection, boolean, GameAction)} invocation to allow it to be modified.
+	 */
+	TARGET_OVERRIDE_STACK;
 }

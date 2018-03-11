@@ -53,6 +53,10 @@ public class Aura extends Enchantment {
 		this(null, applyAuraEffect, removeAuraEffect, targetSelection);
 	}
 
+	protected Aura(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell) {
+		super(primaryTrigger, secondaryTrigger, spell, false);
+	}
+
 	protected boolean affects(GameContext context, Player player, Entity target, List<Entity> resolvedTargets) {
 		Entity source = context.resolveSingleTarget(getHostReference());
 		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, target, source)) {
@@ -67,9 +71,15 @@ public class Aura extends Enchantment {
 	public Aura clone() {
 		Aura clone = (Aura) super.clone();
 		clone.targets = this.targets;
-		clone.applyAuraEffect = this.applyAuraEffect.clone();
-		clone.removeAuraEffect = this.removeAuraEffect.clone();
-		clone.affectedEntities = new TreeSet<>(this.affectedEntities);
+		if (applyAuraEffect != null) {
+			clone.applyAuraEffect = this.applyAuraEffect.clone();
+		}
+		if (removeAuraEffect != null) {
+			clone.removeAuraEffect = this.removeAuraEffect.clone();
+		}
+		if (affectedEntities != null) {
+			clone.affectedEntities = new TreeSet<>(this.affectedEntities);
+		}
 		return clone;
 	}
 

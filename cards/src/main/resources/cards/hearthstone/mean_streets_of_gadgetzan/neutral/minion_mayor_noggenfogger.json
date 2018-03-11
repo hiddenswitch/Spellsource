@@ -6,7 +6,10 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "(Disabled) All targets are chosen randomly.",
+  "description": "All targets are chosen randomly.",
+  "aura": {
+    "class": "NoggenfoggerAura"
+  },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",
   "fileFormatVersion": 1

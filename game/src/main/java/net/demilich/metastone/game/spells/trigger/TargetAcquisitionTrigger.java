@@ -11,6 +11,10 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class TargetAcquisitionTrigger extends EventTrigger {
 
+	public TargetAcquisitionTrigger() {
+		this(new EventTriggerDesc(TargetAcquisitionTrigger.class));
+	}
+
 	public TargetAcquisitionTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}
@@ -20,7 +24,7 @@ public class TargetAcquisitionTrigger extends EventTrigger {
 		TargetAcquisitionEvent targetAcquisitionEvent = (TargetAcquisitionEvent) event;
 
 		ActionType actionType = (ActionType) desc.get(EventTriggerArg.ACTION_TYPE);
-		if (targetAcquisitionEvent.getActionType() != actionType) {
+		if (actionType != null && targetAcquisitionEvent.getActionType() != actionType) {
 			return false;
 		}
 		EntityType sourceEntityType = (EntityType) desc.get(EventTriggerArg.SOURCE_ENTITY_TYPE);
@@ -40,3 +44,4 @@ public class TargetAcquisitionTrigger extends EventTrigger {
 		return GameEventType.TARGET_ACQUISITION;
 	}
 }
+

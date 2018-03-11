@@ -409,7 +409,7 @@ public class ClassicTests extends TestBase {
 			playCard(context, player, "secret_misdirection");
 			context.endTurn();
 			int startingHp = opponent.getHero().getHp();
-			Minion boar = playMinionCard(context, player, "minion_stonetusk_boar");
+			Minion boar = playMinionCard(context, opponent, "minion_stonetusk_boar");
 			attack(context, opponent, boar, player.getHero());
 			Assert.assertEquals(player.getSecrets().size(), 0);
 			Assert.assertEquals(opponent.getHero().getHp(), startingHp - 1);
@@ -421,8 +421,8 @@ public class ClassicTests extends TestBase {
 
 			playCard(context, player, "secret_misdirection");
 			context.endTurn();
-			Minion boar = playMinionCard(context, player, "minion_stonetusk_boar");
-			Minion boar2 = playMinionCard(context, player, "minion_stonetusk_boar");
+			Minion boar = playMinionCard(context, opponent, "minion_stonetusk_boar");
+			Minion boar2 = playMinionCard(context, opponent, "minion_stonetusk_boar");
 			Mockito.doReturn(boar2)
 					.when(context.getLogic())
 					.getAnotherRandomTarget(any(), any(), any(), any());
