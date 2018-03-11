@@ -47,7 +47,7 @@ public class PhysicalAttackAction extends GameAction {
 		Actor defender = (Actor) context.resolveSingleTarget(getTargetReference());
 		Actor attacker = (Actor) context.resolveSingleTarget(attackerReference);
 
-		context.getLogic().fight(context.getPlayer(playerId), attacker, defender);
+		context.getLogic().fight(context.getPlayer(playerId), attacker, defender, this);
 	}
 
 	public EntityReference getAttackerReference() {

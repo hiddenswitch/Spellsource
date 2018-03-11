@@ -67,7 +67,7 @@ public class BattlecryAction extends GameAction {
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		EntityReference target = getPredefinedSpellTargetOrUserTarget();
-		context.getLogic().castSpell(playerId, getSpell(), getSourceReference(), target, getTargetRequirement(), false);
+		context.getLogic().castSpell(playerId, getSpell(), getSourceReference(), target, getTargetRequirement(), false, this);
 	}
 
 	public EntityReference getPredefinedSpellTargetOrUserTarget() {

@@ -24,7 +24,7 @@ public class PlayChooseOneCardAction extends PlayCardAction implements HasChoice
 	@Override
 	@Suspendable
 	public void play(GameContext context, int playerId) {
-		context.getLogic().castChooseOneSpell(playerId, spell, EntityReference, getTargetReference(), chosenCard);
+		context.getLogic().castChooseOneSpell(playerId, spell, EntityReference, getTargetReference(), chosenCard, this);
 	}
 
 	public SpellDesc getSpell() {

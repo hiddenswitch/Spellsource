@@ -2,6 +2,7 @@ package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.entities.Entity;
 
 public class TargetAcquisitionEvent extends GameEvent {
@@ -9,10 +10,12 @@ public class TargetAcquisitionEvent extends GameEvent {
 	private final Entity target;
 	private final Entity source;
 	private final ActionType actionType;
+	private final GameAction action;
 
-	public TargetAcquisitionEvent(GameContext context, int playerId, ActionType actionType, Entity source, Entity target) {
-		super(context, playerId, source.getOwner());
-		this.actionType = actionType;
+	public TargetAcquisitionEvent(GameContext context, GameAction sourceAction, Entity source, Entity target) {
+		super(context, target.getOwner(), source.getOwner());
+		this.action = sourceAction;
+		this.actionType = sourceAction == null ? null : sourceAction.getActionType();
 		this.source = source;
 		this.target = target;
 	}
@@ -20,7 +23,7 @@ public class TargetAcquisitionEvent extends GameEvent {
 	public ActionType getActionType() {
 		return actionType;
 	}
-	
+
 	@Override
 	public Entity getEventSource() {
 		return getSource();
@@ -44,4 +47,7 @@ public class TargetAcquisitionEvent extends GameEvent {
 		return target;
 	}
 
+	public GameAction getAction() {
+		return action;
+	}
 }

@@ -14,14 +14,11 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.DrawCardUntilConditionSpell;
-import net.demilich.metastone.game.spells.desc.SpellFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -679,7 +676,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			context.endTurn();
 			Minion arcaneGiant = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_arcane_giant"));
 			context.endTurn();
-			context.getLogic().fight(player, princeTaldaram, arcaneGiant);
+			context.getLogic().fight(player, princeTaldaram, arcaneGiant, null);
 			Assert.assertTrue(arcaneGiant.hasAttribute(Attribute.FROZEN));
 		});
 	}

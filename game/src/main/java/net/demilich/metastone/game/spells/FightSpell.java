@@ -6,7 +6,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -45,7 +44,7 @@ public class FightSpell extends Spell {
 				((Hero) resolvedSource).activateWeapon(true);
 			}
 
-			context.getLogic().fight(player, (Actor) resolvedSource, (Actor) target);
+			context.getLogic().fight(player, (Actor) resolvedSource, (Actor) target, null);
 			desc.subSpells(0).forEach(subSpell -> {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, resolvedSource);
 			});

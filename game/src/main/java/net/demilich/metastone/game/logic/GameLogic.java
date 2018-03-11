@@ -40,6 +40,8 @@ import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.game.shared.utils.MathUtils;
 import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.collections4.Bag;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +67,7 @@ import static java.util.stream.Collectors.toList;
  * <p>
  * Most effects are encoded in {@link Spell} classes, which subsequently call functions in this class. However, a few
  * key functions are called by {@link GameAction#execute(GameContext, int)} calls directly, like {@link #summon(int,
- * Minion, Card, int, boolean)} and {@link #fight(Player, Actor, Actor)}.
+ * Minion, Card, int, boolean)} and {@link #fight(Player, Actor, Actor, PhysicalAttackAction)}.
  */
 public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public static final int END_OF_SEQUENCE_MAX_DEPTH = 14;
@@ -534,9 +536,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param sourceReference The source of the spell, typically the original {@link ChooseOneCard}.
 	 * @param targetReference The target selected for this choice.
 	 * @param cardId          The card that was chosen.
+	 * @param sourceAction
 	 */
 	@Suspendable
-	public void castChooseOneSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference, String cardId) {
+	public void castChooseOneSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference, String cardId, GameAction sourceAction) {
 		Player player = context.getPlayer(playerId);
 		Entity source = null;
 
@@ -562,14 +565,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (chosenCard.getTargetRequirement() != TargetSelection.NONE) {
 				context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
 				context.getEnvironment().put(Environment.CHOOSE_ONE_CARD, chosenCard.getCardId());
-				GameEvent spellTargetEvent = new TargetAcquisitionEvent(context, playerId, ActionType.SPELL, chosenCard, targets.get(0));
-				context.fireGameEvent(spellTargetEvent);
-				Entity targetOverride = context
-						.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE));
-				if (targetOverride != null && targetOverride.getId() != IdFactory.UNASSIGNED) {
-					targets.remove(0);
-					targets.add(targetOverride);
-					spellDesc = spellDesc.addArg(SpellArg.FILTER, null);
+				Entity override = targetAcquisition(player, sourceCard, sourceAction);
+				if (override != null) {
+					targets = Collections.singletonList(override);
+					spellDesc = spellDesc.removeArg(SpellArg.FILTER);
 				}
 			}
 		}
@@ -601,7 +600,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
 						  boolean childSpell) {
-		castSpell(playerId, spellDesc, sourceReference, targetReference, TargetSelection.NONE, childSpell);
+		castSpell(playerId, spellDesc, sourceReference, targetReference, TargetSelection.NONE, childSpell, null);
 	}
 
 	/**
@@ -636,6 +635,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                        SpellCastedTrigger}. When {@code false}, this spell is what a player would interpret as a
 	 *                        spell coming from a card (a "spell" in the sense of what is written on cards). Battlecries
 	 *                        and deathrattles are, unusually, {@code false} (not) child spells.
+	 * @param sourceAction    The {@link GameAction}, usually a {@link }
 	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the code that interprets the {@link
 	 * SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
 	 * @see Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for the function that typically has the
@@ -652,7 +652,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
-						  TargetSelection targetSelection, boolean childSpell) {
+						  TargetSelection targetSelection, boolean childSpell, GameAction sourceAction) {
 		Player player = context.getPlayer(playerId);
 		Entity source = null;
 		if (sourceReference != null) {
@@ -664,42 +664,26 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// note: this code block is basically exclusively for the SpellBender
 		// Secret, but it can easily be expanded if targets of area of effect
 		// spell should be changeable as well
-		Card sourceCard = null;
-		if (source != null) {
-			sourceCard = source.getEntityType() == EntityType.CARD ? (Card) source : null;
-		}
-		if (sourceCard != null && sourceCard.getCardType().isCardType(CardType.SPELL) && !spellDesc.hasPredefinedTarget() && targets != null
-				&& targets.size() == 1) {
-			if (sourceCard.getCardType().isCardType(CardType.SPELL) && targetSelection != TargetSelection.NONE && !childSpell) {
-				GameEvent spellTargetEvent = new TargetAcquisitionEvent(context, playerId, ActionType.SPELL, sourceCard, targets.get(0));
-				context.fireGameEvent(spellTargetEvent);
-				Entity targetOverride = context
-						.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE));
-				if (targetOverride != null && targetOverride.getId() != IdFactory.UNASSIGNED) {
-					targets.remove(0);
-					targets.add(targetOverride);
-					spellDesc = spellDesc.removeArg(SpellArg.FILTER);
-				}
-			}
+		Card sourceCard = source != null ? source.getSourceCard() : null;
 
+		Entity override = targetAcquisition(player, source, sourceAction);
+		if (override != null) {
+			targets = Collections.singletonList(override);
+			spellDesc = spellDesc.removeArg(SpellArg.FILTER);
 		}
 
 		// This implements Ice Walker
-		if (sourceCard != null
-				&& sourceCard.getCardType().isCardType(CardType.HERO_POWER)
-				&& targets != null
-				&& targets.size() > 0
+		if (sourceAction != null
+				&& sourceAction instanceof HeroPowerAction
 				&& targetSelection != TargetSelection.NONE
-				&& hasAttribute(player, Attribute.HERO_POWER_FREEZES_TARGET)
-				&& !childSpell) {
+				&& hasAttribute(player, Attribute.HERO_POWER_FREEZES_TARGET)) {
 			spellDesc = SpellDesc.join(spellDesc, AddAttributeSpell.create(Attribute.FROZEN));
 		}
 
 		// This implements a more durable tracking of spells that were casted
 		if (sourceCard != null
-				&& sourceCard instanceof SpellCard
-				&& !sourceCard.getCardType().isCardType(CardType.HERO_POWER)
-				&& !childSpell) {
+				&& sourceAction != null
+				&& sourceAction instanceof PlaySpellCardAction) {
 			sourceCard.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 		}
 
@@ -717,7 +701,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					.add(context.getPlayer(playerId), sourceCard);
 		}
 
-		if (sourceCard != null && sourceCard.getCardType().isCardType(CardType.SPELL) && !childSpell) {
+		if (sourceCard != null
+				&& sourceCard.getCardType().isCardType(CardType.SPELL)
+				&& !childSpell) {
 			context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
 
 			endOfSequence();
@@ -727,6 +713,36 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				context.fireGameEvent(new AfterSpellCastedEvent(context, playerId, sourceCard, targets.get(0)));
 			}
 		}
+	}
+
+	/**
+	 * Processes an action for its appropriate target overriding effects, if any, and triggers target acquisiton.
+	 *
+	 * @param player
+	 * @param source
+	 * @param sourceAction
+	 * @return {@code null} if this is not an overridable form of target acquisition; or, the intended target if the target was not overridden, or the new target.
+	 */
+	@Suspendable
+	protected @Nullable
+	Entity targetAcquisition(@NotNull Player player, @NotNull Entity source, @Nullable GameAction sourceAction) {
+		if (sourceAction == null) {
+			return null;
+		}
+
+		if (sourceAction.getTargetRequirement() == TargetSelection.NONE) {
+			return null;
+		}
+
+		Entity target = context.resolveSingleTarget(sourceAction.getTargetReference());
+		TargetAcquisitionEvent gameEvent = new TargetAcquisitionEvent(context, sourceAction, source, target);
+		context.fireGameEvent(gameEvent);
+		Entity targetOverride = context.getTargetOverride(player, source);
+		if (targetOverride != null) {
+			// Consume the target override
+			context.setTargetOverride(null);
+		}
+		return targetOverride == null ? target : targetOverride;
 	}
 
 	/**
@@ -925,8 +941,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Damage is measured by a number which is deducted from the armor first, followed by hitpoints, of an {@link
 	 * Actor}. If the {@link Actor#getHp()} is reduced to zero (or below), it will be killed. Note that other types of
 	 * harm that can be inflicted to characters (such as a {@link DestroySpell}, freeze effects and the card Equality)
-	 * are not considered damage for game purposes and, although most damage is dealt through {@link #fight(Player,
-	 * Actor, Actor)}, dealing damage is not considered an "fight" for game purposes.
+	 * are not considered damage for game purposes and, although most damage is dealt through {@link #fight(Player, Actor, Actor, PhysicalAttackAction)}, dealing damage is not considered an "fight" for game purposes.
 	 * <p>
 	 * Damage can activate a number of triggered effects, both from receiving it (such as Acolyte of Pain's {@link
 	 * DamageReceivedTrigger}) and from dealing it (such as Lightning Automaton's {@link DamageCausedTrigger}). However,
@@ -1350,9 +1365,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * combat as either an attacker or defender too, but all sources of hero attack power only apply on their own turn.
 	 * Therefore, enemy minions can hit the hero without harm during the opponent's turn.
 	 *
-	 * @param player   The player who is initiating the fight.
-	 * @param attacker The attacking {@link Actor}
-	 * @param defender The defending {@link Actor}
+	 * @param player       The player who is initiating the fight.
+	 * @param attacker     The attacking {@link Actor}
+	 * @param defender     The defending {@link Actor}
+	 * @param sourceAction
 	 * @see <a href="http://hearthstone.gamepedia.com/Attack">Attack</a> for more on this method and its rules.
 	 * @see PhysicalAttackAction#execute(GameContext, int) for the main caller of this function.
 	 * @see net.demilich.metastone.game.spells.MisdirectSpell for an example of a spell that causes actors to fight each
@@ -1363,17 +1379,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * affect what can and cannot be fought by a player.
 	 */
 	@Suspendable
-	public void fight(Player player, Actor attacker, Actor defender) {
+	public void fight(Player player, Actor attacker, Actor defender, PhysicalAttackAction sourceAction) {
 		context.getAttackerReferenceStack().push(attacker.getReference());
 
-		TargetAcquisitionEvent targetAcquisitionEvent = new TargetAcquisitionEvent(context, player.getId(), ActionType.PHYSICAL_ATTACK,
-				attacker, defender);
-		context.fireGameEvent(targetAcquisitionEvent);
 		Actor target = defender;
-		if (context.getEnvironment().containsKey(Environment.TARGET_OVERRIDE)) {
-			target = (Actor) context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE));
+		Entity targetOverride = targetAcquisition(player, attacker, sourceAction);
+		if (targetOverride != null) {
+			target = (Actor) targetOverride;
 		}
-		context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
 
 		if (target != defender) {
 			// Override the defender here for the sake of readability

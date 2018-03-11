@@ -252,7 +252,7 @@ public enum Attribute {
 	 * such as that of Knife Juggler, and dealing combat damage in exchange, such as when being struck by a clumsy
 	 * minion such as Ogre Brute, or by a Misdirection-redirected minion.
 	 *
-	 * @see GameLogic#fight(Player, Actor, Actor) for the situation where physical attacks cause a minion to lose
+	 * @see GameLogic#fight(Player, Actor, Actor, net.demilich.metastone.game.actions.PhysicalAttackAction) for the situation where physical attacks cause a minion to lose
 	 * stealth.
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage originating
 	 * from a minion causes it to lose stealth.

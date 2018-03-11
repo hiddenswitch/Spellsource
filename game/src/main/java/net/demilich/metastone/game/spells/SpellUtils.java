@@ -45,13 +45,12 @@ public class SpellUtils {
 	 * @param spell   The child spell to cast.
 	 * @param source  The source of the spell, typically the spell card or minion whose battlecry is being called.
 	 * @param target  The target reference.
-	 * @see net.demilich.metastone.game.logic.GameLogic#castSpell(int, SpellDesc, EntityReference, EntityReference,
-	 * TargetSelection, boolean) where its parameter {@code childSpell = true}.
 	 */
 	@Suspendable
 	public static void castChildSpell(GameContext context, Player player, SpellDesc spell, Entity source, Entity target) {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		EntityReference targetReference = spell.getTarget();
+		// Inherit target
 		if (targetReference == null && target != null) {
 			targetReference = target.getReference();
 		}

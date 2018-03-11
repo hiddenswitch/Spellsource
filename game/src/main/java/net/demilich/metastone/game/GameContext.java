@@ -45,6 +45,8 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.NetworkDelegate;
 import net.demilich.metastone.game.utils.TurnState;
 import org.apache.commons.math3.util.Combinations;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -999,6 +1001,52 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	}
 
 	/**
+	 * Retrieves the current target override specified in the environment.
+	 * <p>
+	 * A target override can be a specific {@link EntityReference} or a "group reference" (logical entity reference)
+	 * that returns exactly zero or one targets. The override should almost always succeed, and it would be surprising if
+	 * there were overrides that resulted in no targets being found.
+	 *
+	 * @param player The player for whom the override should be evaluated.
+	 * @param source The source entity of this override.
+	 * @return An {@link Entity} or {@code null} if no override is specified.
+	 */
+	public @Nullable
+	Entity getTargetOverride(@NotNull Player player, @Nullable Entity source) {
+		if (!getEnvironment().containsKey(Environment.TARGET_OVERRIDE)) {
+			return null;
+		}
+
+		EntityReference reference = (EntityReference) getEnvironment().get(Environment.TARGET_OVERRIDE);
+
+		if (reference != null
+				&& !reference.equals(EntityReference.NONE)) {
+			// Might be a single-entity reference
+			if (source == null && reference.isTargetGroup()) {
+				throw new NullPointerException("Should not be retrieving a target override for a logical reference that has no valid source.");
+			}
+			List<Entity> entities = resolveTarget(player, source, reference);
+			if (entities == null) {
+				logger.warn("getTargetOverride {} {}: Key {} resolved to no target entities", getGameId(), source, reference);
+				return null;
+			}
+
+			if (entities.size() == 0) {
+				logger.warn("getTargetOverride {} {}: Key {} resolved to empty entities list", getGameId(), source, reference);
+				return null;
+			}
+
+			if (entities.size() > 1) {
+				throw new RuntimeException("Not permitted to override a multi-target reference.");
+			}
+
+			return entities.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Starts the turn for a player.
 	 *
 	 * @param playerId The player whose turn should be started.
@@ -1524,5 +1572,9 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 			getEnvironment().put(Environment.TRIGGER_HOST_STACK, new EnvironmentDeque<>());
 		}
 		return (Deque<EntityReference>) getEnvironment().get(Environment.TRIGGER_HOST_STACK);
+	}
+
+	public void setTargetOverride(EntityReference reference) {
+		getEnvironment().put(Environment.TARGET_OVERRIDE, reference);
 	}
 }

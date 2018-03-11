@@ -60,11 +60,15 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	public Enchantment clone() {
 		Enchantment clone = (Enchantment) super.clone();
-		clone.primaryTrigger = (EventTrigger) primaryTrigger.clone();
+		if (primaryTrigger != null) {
+			clone.primaryTrigger = (EventTrigger) primaryTrigger.clone();
+		}
 		if (secondaryTrigger != null) {
 			clone.secondaryTrigger = (EventTrigger) secondaryTrigger.clone();
 		}
-		clone.spell = getSpell().clone();
+		if (getSpell() != null) {
+			clone.spell = getSpell().clone();
+		}
 		return clone;
 	}
 
