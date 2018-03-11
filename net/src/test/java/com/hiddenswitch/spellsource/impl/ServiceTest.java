@@ -44,6 +44,7 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 
 	@Before
 	public void loadCards(TestContext context) {
+		wrap(context);
 		vertx = Vertx.vertx(new VertxOptions().setEventLoopPoolSize(20).setWorkerPoolSize(20));
 		vertx.exceptionHandler(h -> {
 			getContext().fail(h.getCause());
@@ -133,7 +134,7 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 
 	@After
 	public void destroyVertx(TestContext context) {
-//		Async async = context.async();
+		Async async = context.strictAsync(2);
 		List<UnityClient> clients = context.get("clients");
 
 		if (clients != null) {
@@ -148,7 +149,8 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 			Mongo.mongo().stopEmbedded();
 			Mongo.mongo().close();
 			Spellsource.spellsource().close();
-//			async.complete();
+			unwrap();
+			async.complete();
 		}));
 	}
 }
