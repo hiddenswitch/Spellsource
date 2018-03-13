@@ -8,7 +8,7 @@ import io.vertx.core.eventbus.Message;
 
 class JsonReplyHandler implements Handler<AsyncResult<Message<Object>>> {
 	private final Handler<AsyncResult<Object>> next;
-	final Class responseClass;
+	private final Class responseClass;
 
 	JsonReplyHandler(Handler<AsyncResult<Object>> next, Class responseClass) {
 		this.next = next;
@@ -17,6 +17,7 @@ class JsonReplyHandler implements Handler<AsyncResult<Message<Object>>> {
 
 	@Override
 	@Suspendable
+	@SuppressWarnings("unchecked")
 	public void handle(AsyncResult<Message<Object>> reply) {
 		if (reply.succeeded()) {
 			try {

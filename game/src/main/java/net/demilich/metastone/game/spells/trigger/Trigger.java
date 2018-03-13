@@ -120,19 +120,6 @@ public interface Trigger extends Serializable {
 	boolean oneTurnOnly();
 
 	/**
-	 * Returns true if the effects of this trigger are delayed until {@link #delayTimeDown()} is called (typically
-	 * at the end of a turn).
-	 *
-	 * @return {@code true} if the effects of the trigger are delayed.
-	 */
-	boolean isDelayed();
-
-	/**
-	 * Notifies the trigger that its delay has elapsed.
-	 */
-	void delayTimeDown();
-
-	/**
 	 * Expires the trigger; marks it for removal and prevents it from executing in the future.
 	 */
 	void expire();

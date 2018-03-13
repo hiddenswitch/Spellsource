@@ -59,14 +59,13 @@ public class MinionCard extends ActorCard {
 			}
 		}
 
-		populate(minion);
+		applyText(minion);
 
 		minion.setBaseAttack(getBaseAttack());
 		minion.setAttack(getAttack());
 		minion.setHp(getHp());
 		minion.setMaxHp(getHp());
 		minion.setBaseHp(getBaseHp());
-		minion.setBattlecry(desc.getBattlecryAction());
 		minion.setHp(minion.getMaxHp());
 
 		return minion;
@@ -88,22 +87,6 @@ public class MinionCard extends ActorCard {
 
 	public Minion summon() {
 		return createMinion();
-	}
-
-	public boolean hasTrigger() {
-		return getDesc().trigger != null || (getDesc().triggers != null && getDesc().triggers.length > 0);
-	}
-
-	public boolean hasAura() {
-		return getDesc().aura != null;
-	}
-
-	public boolean hasCardCostModifier() {
-		return getDesc().cardCostModifier != null;
-	}
-
-	public boolean hasBattlecry() {
-		return getDesc().battlecry != null;
 	}
 
 	@Override

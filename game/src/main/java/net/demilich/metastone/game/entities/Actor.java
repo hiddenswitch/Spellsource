@@ -224,7 +224,7 @@ public abstract class Actor extends Entity {
 		setAttribute(Attribute.BASE_HP, value);
 	}
 
-	public void setBattlecry( BattlecryAction battlecry) {
+	public void setBattlecry(BattlecryAction battlecry) {
 		if (battlecry != null) {
 			setAttribute(Attribute.BATTLECRY, battlecry);
 		}

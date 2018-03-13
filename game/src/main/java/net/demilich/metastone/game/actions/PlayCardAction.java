@@ -16,6 +16,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A play card action stores a card and possibly choose one option index for a card and target.
+ */
 public abstract class PlayCardAction extends GameAction {
 
 	public static Logger logger = LoggerFactory.getLogger(PlayCardAction.class);

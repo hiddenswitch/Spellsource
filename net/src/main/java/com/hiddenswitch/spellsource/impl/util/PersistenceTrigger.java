@@ -133,15 +133,6 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
-	public boolean isDelayed() {
-		return false;
-	}
-
-	@Override
-	public void delayTimeDown() {
-	}
-
-	@Override
 	public void expire() {
 	}
 

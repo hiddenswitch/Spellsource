@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.desc.ActorCardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -22,9 +23,29 @@ public abstract class ActorCard extends Card {
 		return ((ActorCardDesc) desc).deathrattle != null;
 	}
 
+	public ActorCardDesc getDesc() {
+		return (ActorCardDesc) desc;
+	}
+
 	public void addDeathrattle(SpellDesc deathrattle) {
 		// TODO: Should Forlorn Stalker affect cards with deathrattle added this way?
 		deathrattleEnchantments.add(deathrattle);
+	}
+
+	public boolean hasTrigger() {
+		return getDesc().trigger != null || (getDesc().triggers != null && getDesc().triggers.length > 0);
+	}
+
+	public boolean hasAura() {
+		return getDesc().aura != null;
+	}
+
+	public boolean hasCardCostModifier() {
+		return getDesc().cardCostModifier != null;
+	}
+
+	public boolean hasBattlecry() {
+		return getDesc().battlecry != null;
 	}
 
 	@Override
@@ -35,7 +56,15 @@ public abstract class ActorCard extends Card {
 		return clone;
 	}
 
-	protected Actor populate(Actor instance) {
+	/**
+	 * Applies this card's effects (everything except mana cost, attack and HP) to the specified actor. Mutates the
+	 * provided instance.
+	 *
+	 * @param instance An actor to apply effects to
+	 * @return The provided actor.
+	 */
+	@Suspendable
+	public Actor applyText(Actor instance) {
 		ActorCardDesc desc = (ActorCardDesc) this.desc;
 		instance.setBattlecry(desc.getBattlecryAction());
 		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?

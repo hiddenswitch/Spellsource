@@ -29,7 +29,6 @@ public class Enchantment extends Entity implements Trigger {
 	private final boolean oneTurn;
 	private boolean expired;
 	private boolean persistentOwner;
-	private int turnDelay;
 	private Integer maxFires;
 	private int fires;
 	private boolean keepAfterTransform;
@@ -37,24 +36,20 @@ public class Enchantment extends Entity implements Trigger {
 	private Integer countUntilCast;
 	private boolean countByValue;
 
-	protected Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn, int turnDelay) {
+
+	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
 		this.primaryTrigger = primaryTrigger;
 		this.secondaryTrigger = secondaryTrigger;
 		this.spell = spell;
 		this.oneTurn = oneTurn;
-		this.turnDelay = turnDelay;
-	}
-
-	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
-		this(primaryTrigger, secondaryTrigger, spell, oneTurn, 0);
 	}
 
 	public Enchantment(EventTrigger trigger, SpellDesc spell) {
-		this(trigger, spell, false, 0);
+		this(trigger, spell, false);
 	}
 
-	public Enchantment(EventTrigger trigger, SpellDesc spell, boolean oneTime, int turnDelay) {
-		this(trigger, null, spell, oneTime, turnDelay);
+	public Enchantment(EventTrigger trigger, SpellDesc spell, boolean oneTime) {
+		this(trigger, null, spell, oneTime);
 	}
 
 	@Override
@@ -210,10 +205,6 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public boolean canFire(GameEvent event) {
-		if (turnDelay > 0) {
-			return false;
-		}
-
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference);
 		return (triggerFires(primaryTrigger, event, host) || triggerFires(secondaryTrigger, event, host));
 	}
@@ -234,16 +225,6 @@ public class Enchantment extends Entity implements Trigger {
 
 	public void setPersistentOwner(boolean persistentOwner) {
 		this.persistentOwner = persistentOwner;
-	}
-
-	public void delayTimeDown() {
-		if (turnDelay > 0) {
-			turnDelay--;
-		}
-	}
-
-	public boolean isDelayed() {
-		return turnDelay > 0;
 	}
 
 	public boolean oneTurnOnly() {

@@ -41,9 +41,8 @@ public class WeaponCard extends ActorCard {
 		weapon.setMaxHp(getDurability());
 		weapon.setHp(weapon.getMaxDurability());
 		weapon.setBaseHp(getBaseDurability());
-		weapon.setBattlecry(desc.getBattlecryAction());
 
-		populate(weapon);
+		applyText(weapon);
 
 		weapon.setOnEquip(desc.onEquip);
 		weapon.setOnUnequip(desc.onUnequip);

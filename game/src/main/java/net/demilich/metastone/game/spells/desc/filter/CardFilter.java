@@ -117,8 +117,17 @@ public class CardFilter extends EntityFilter {
 	}
 
 	public static CardFilter create(CardType cardType) {
-		Map<FilterArg, Object> arguments = new FilterDesc(CardFilter.class);
-		arguments.put(FilterArg.CARD_TYPE, cardType);
-		return new CardFilter(new FilterDesc(arguments));
+		return create(cardType, null);
+	}
+
+	public static CardFilter create(CardType cardType, Race race) {
+		FilterDesc arguments = new FilterDesc(CardFilter.class);
+		if (cardType != null) {
+			arguments.put(FilterArg.CARD_TYPE, cardType);
+		}
+		if (race != null) {
+			arguments.put(FilterArg.RACE, race);
+		}
+		return new CardFilter(arguments);
 	}
 }

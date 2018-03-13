@@ -61,13 +61,6 @@ public final class TriggerDesc implements Serializable, Cloneable {
 	 */
 	public boolean persistentOwner;
 	/**
-	 * Indicates how many turns until this trigger comes into play.
-	 *
-	 * @deprecated because no effects currently use it, and therefore it is untested.
-	 */
-	@Deprecated
-	public int turnDelay;
-	/**
 	 * When {@code true}, this {@link Enchantment} should not be removed by a {@link
 	 * net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion)} or {@link
 	 * net.demilich.metastone.game.logic.GameLogic#replaceCard(int, Card, Card)} effect.
@@ -109,7 +102,7 @@ public final class TriggerDesc implements Serializable, Cloneable {
 	 * @return The enchantment
 	 */
 	public Enchantment create() {
-		Enchantment trigger = new Enchantment(eventTrigger.createInstance(), spell, oneTurn, turnDelay);
+		Enchantment trigger = new Enchantment(eventTrigger.createInstance(), spell, oneTurn);
 		trigger.setMaxFires(maxFires);
 		trigger.setPersistentOwner(persistentOwner);
 		trigger.setKeepAfterTransform(keepAfterTransform);
