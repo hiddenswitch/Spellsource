@@ -238,7 +238,6 @@ public class ParseUtils {
 		triggerDesc.spell = spellParser.deserialize(triggerObject.get("spell"), SpellDesc.class, null);
 		triggerDesc.oneTurn = triggerObject.has("oneTurn") && triggerObject.get("oneTurn").getAsBoolean();
 		triggerDesc.persistentOwner = triggerObject.has("persistentOwner") && triggerObject.get("persistentOwner").getAsBoolean();
-		triggerDesc.turnDelay = triggerObject.has("turnDelay") ? triggerObject.get("turnDelay").getAsInt() : 0;
 		triggerDesc.maxFires = triggerObject.has("maxFires") ? triggerObject.get("maxFires").getAsInt() : null;
 		triggerDesc.countUntilCast = triggerObject.has("countUntilCast") ? triggerObject.get("countUntilCast").getAsInt() : null;
 		triggerDesc.keepAfterTransform = triggerObject.has("keepAfterTransform") && triggerObject.get("keepAfterTransform").getAsBoolean();

@@ -33,7 +33,7 @@ public class HeroCard extends ActorCard {
 			}
 		}
 
-		populate(hero);
+		applyText(hero);
 
 		return hero;
 	}

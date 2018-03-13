@@ -82,12 +82,11 @@ public class TriggerManager implements Cloneable, Serializable {
 			// In order to stop premature expiration, check
 			// for a oneTurnOnly tag and that it isn't delayed.
 			if (event.getEventType() == GameEventType.TURN_END) {
-				if (trigger.oneTurnOnly() && !trigger.isDelayed() &&
+				if (trigger.oneTurnOnly() &&
 						!trigger.interestedIn(GameEventType.TURN_START) &&
 						!trigger.interestedIn(GameEventType.TURN_END)) {
 					trigger.expire();
 				}
-				trigger.delayTimeDown();
 			}
 			if (trigger.isExpired()) {
 				removeTriggers.add(trigger);

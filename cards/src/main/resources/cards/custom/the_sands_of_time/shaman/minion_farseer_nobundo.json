@@ -6,11 +6,16 @@
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "(Disabled) Battlecry: Choose a friendly minion. Your totems now have that minion's effect. (For the rest of the game)",
+  "description": "Battlecry: Choose a friendly minion. Your totems now have that minion's effect. (For the rest of the game)",
   "battlecry": {
-    "targetSelection": "FRIENDLY_MINIONS",
+    "targetSelection": "OTHER_FRIENDLY_MINIONS",
     "spell": {
-      "class": "NullSpell"
+      "filter": {
+        "class": "SpecificCardFilter",
+        "cardId": "minion_farseer_nobundo",
+        "invert": true
+      },
+      "class": "custom.FarseerNobundoSpell"
     }
   },
   "attributes": {

@@ -40,9 +40,4 @@ public class NoggenfoggerAura extends Aura {
 
 		gc.setTargetOverride(gc.getLogic().getRandom(validTargets).getReference());
 	}
-
-	@Override
-	public boolean interestedIn(GameEventType eventType) {
-		return super.interestedIn(eventType);
-	}
 }

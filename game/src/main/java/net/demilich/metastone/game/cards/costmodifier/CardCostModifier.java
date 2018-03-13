@@ -316,15 +316,6 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	@Override
-	public boolean isDelayed() {
-		return false;
-	}
-
-	@Override
-	public void delayTimeDown() {
-	}
-
-	@Override
 	public boolean canFireCondition(GameEvent event) {
 		if (expirationTrigger != null) {
 			return expirationTrigger.canFireCondition(event);

@@ -26,6 +26,111 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testFarseerNobundo() {
+		// Test that battlecries from the hand are triggered.
+		runGym((context, player, opponent) -> {
+			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
+			MinionCard startedInDeck = putOnTopOfDeck(context, player, "token_searing_totem");
+			MinionCard startedInHand = receiveCard(context, player, "token_searing_totem");
+			Minion copyCard = playMinionCard(context, player, "minion_king_mukla");
+			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			Assert.assertEquals(onBoardBefore.getAttack(), 1);
+			Assert.assertEquals(onBoardBefore.getHp(), 1);
+			Assert.assertEquals(opponent.getHand().size(), 2, "The opponent should have two bananas at the moment.");
+			playCard(context, player, startedInHand);
+			Assert.assertEquals(opponent.getHand().size(), 4, "The opponent should have four bananas.");
+			context.endTurn();
+			context.endTurn();
+			Assert.assertEquals(startedInDeck.getZone(), Zones.HAND);
+			playCard(context, player, startedInDeck);
+			Assert.assertEquals(opponent.getHand().size(), 6);
+		});
+
+		// Test auras and triggers
+		runGym((context, player, opponent) -> {
+			int stormwinds = 0;
+			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
+			MinionCard startedInHand = receiveCard(context, player, "token_searing_totem");
+			Minion copyCard = playMinionCard(context, player, "minion_stormwind_champion");
+			stormwinds++;
+			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			stormwinds++;
+			Assert.assertEquals(onBoardBefore.getAttack(), onBoardBefore.getBaseAttack() + stormwinds - 1);
+			Assert.assertEquals(onBoardBefore.getHp(), onBoardBefore.getBaseHp() + stormwinds - 1);
+			playCard(context, player, startedInHand);
+			stormwinds++;
+			Assert.assertEquals(onBoardBefore.getAttack(), onBoardBefore.getBaseAttack() + stormwinds - 1);
+			Assert.assertEquals(onBoardBefore.getHp(), onBoardBefore.getBaseHp() + stormwinds - 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			int clerics = 0;
+			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
+			MinionCard startedInHand = receiveCard(context, player, "token_searing_totem");
+			Minion copyCard = playMinionCard(context, player, "minion_northshire_cleric");
+			clerics++;
+			Minion damaged = playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			clerics++;
+			playCard(context, player, startedInHand);
+			clerics++;
+			damaged.setHp(damaged.getHp() - 1);
+			Assert.assertTrue(damaged.isWounded());
+			for (int i = 0; i < 30; i++) {
+				shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			}
+			Assert.assertEquals(player.getHand().size(), 0);
+			playCardWithTarget(context, player, "hero_power_heal", damaged);
+			Assert.assertEquals(player.getHand().size(), clerics);
+		});
+
+		// Test deathrattle
+		runGym((context, player, opponent) -> {
+			int lootHoarders = 0;
+			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
+			MinionCard startedInHand = receiveCard(context, player, "token_searing_totem");
+			Minion copyCard = playMinionCard(context, player, "minion_loot_hoarder");
+			lootHoarders++;
+			Minion damaged = playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			lootHoarders++;
+			playCard(context, player, startedInHand);
+			lootHoarders++;
+			for (int i = 0; i < 30; i++) {
+				shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			}
+			Assert.assertEquals(player.getHand().size(), 0);
+			playCard(context, player, "spell_twisting_nether");
+			Assert.assertEquals(player.getHand().size(), lootHoarders);
+		});
+
+		// Test copies text attribute of source card even when silenced
+		runGym((context, player, opponent) -> {
+			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
+			Minion copyCard = playMinionCard(context, player, "minion_argent_Squire");
+			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			Assert.assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
+			playCardWithTarget(context, player, "spell_silence", copyCard);
+			Assert.assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
+			Minion copyCard = playMinionCard(context, player, "minion_argent_Squire");
+			playCardWithTarget(context, player, "spell_silence", copyCard);
+			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			Assert.assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
+		});
+
+		// Test does not copy non-text attributes (buffs or whatever)
+		runGym((context, player, opponent) -> {
+			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
+			Minion copyCard = playMinionCard(context, player, "minion_argent_Squire");
+			playCardWithTarget(context, player, "spell_windfury", copyCard);
+			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			Assert.assertFalse(onBoardBefore.hasAttribute(Attribute.WINDFURY));
+		});
+	}
+
+	@Test
 	public void testTheEndTime() {
 		runGym((context, player, opponent) -> {
 			Minion endTime = playMinionCard(context, player, "permanent_the_end_time");
