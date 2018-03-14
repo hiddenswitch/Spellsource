@@ -66,10 +66,7 @@ public class TargetLogic implements Serializable {
 				continue;
 			}
 
-			if (entity.getOwner() != player.getId() && (entity.hasAttribute(Attribute.STEALTH) || entity.hasAttribute(Attribute.IMMUNE))) {
-				continue;
-			}
-			if (entity.getOwner() != player.getId() && entity instanceof Hero && context.getLogic().hasAttribute(context.getPlayer(entity.getOwner()), Attribute.IMMUNE_HERO)) {
+			if (entity.getOwner() != player.getId() && (entity.hasAttribute(Attribute.STEALTH) || entity.hasAttribute(Attribute.IMMUNE) || entity.hasAttribute(Attribute.AURA_IMMUNE))) {
 				continue;
 			}
 

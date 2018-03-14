@@ -1,0 +1,54 @@
+{
+  "name": "Flame Lasher",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 7,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Immune while Chaos Bolt, Communion of DOOM!, Immolate, or Molten Skin are played.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "cardId": "spell_chaos_bolt"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "cardId": "spell_communion_of_doom"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "cardId": "spell_molten_skin"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "cardId": "spell_immolate"
+          }
+        ]
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "IMMUNE",
+      "revertTrigger": {
+        "class": "AfterSpellCastedTrigger",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

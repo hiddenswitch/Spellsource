@@ -1,0 +1,25 @@
+{
+  "name": "Immolate",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "COMMON",
+  "description": "Deal 3 damage to a minion at the end of your turn. Add a Burning Ember to your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_burning_ember"
+      },
+      {
+        "class": "custom.ImmolateSpell",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

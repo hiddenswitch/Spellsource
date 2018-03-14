@@ -7,25 +7,16 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "description": "During your turn, your Hero is immune.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "BoardChangedTrigger"
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_HERO",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
     },
-    "spell": {
-      "class": "EitherOrSpell",
-      "target": "SELF",
-      "condition": {
-        "class": "OwnedByPlayerCondition",
-        "targetPlayer": "ACTIVE"
-      },
-      "spell1": {
-        "class": "AddAttributeSpell",
-        "attribute": "IMMUNE_HERO"
-      },
-      "spell2": {
-        "class": "RemoveAttributeSpell",
-        "attribute": "IMMUNE_HERO"
-      }
+    "attribute": "AURA_IMMUNE",
+    "secondaryTrigger": {
+      "class": "TurnStartTrigger"
     }
   },
   "collectible": true,

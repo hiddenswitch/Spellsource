@@ -4,11 +4,15 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "EPIC",
-  "race": "DESTRUCTION",
   "description": "Destroy all minions. Discard a card for each enemy.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS",
+      "offset": 1
+    },
     "spells": [
       {
         "class": "DestroySpell",
@@ -17,8 +21,8 @@
       {
         "class": "DiscardSpell",
         "value": {
-          "class": "EntityCounter",
-          "target": "ENEMY_MINIONS"
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
         }
       }
     ]

@@ -6,11 +6,15 @@
   "damage": 2,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Whenever you cast an Arms spell, gain +1 Attack.",
+  "description": "Whenever you cast Colossus Smash, gain +1 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "race": "ARMS",
+      "condition": {
+        "class": "CardPropertyCondition",
+        "target": "EVENT_TARGET",
+        "cardId": "spell_colossus_smash"
+      },
       "sourcePlayer": "SELF"
     },
     "spell": {

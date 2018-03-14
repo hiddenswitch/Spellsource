@@ -12,6 +12,9 @@
     "spell": {
       "class": "RevealCardSpell",
       "target": "FRIENDLY_DECK",
+      "spell": {
+        "class": "CopyDeathrattleSpell"
+      },
       "filter": {
         "class": "AndFilter",
         "filters": [
@@ -26,10 +29,7 @@
           }
         ]
       },
-      "randomTarget": true,
-      "spell": {
-        "class": "CopyDeathrattleSpell"
-      }
+      "randomTarget": true
     }
   },
   "attributes": {

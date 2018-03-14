@@ -599,7 +599,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
-						  boolean childSpell) {
+	                      boolean childSpell) {
 		castSpell(playerId, spellDesc, sourceReference, targetReference, TargetSelection.NONE, childSpell, null);
 	}
 
@@ -652,7 +652,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
-						  TargetSelection targetSelection, boolean childSpell, GameAction sourceAction) {
+	                      TargetSelection targetSelection, boolean childSpell, GameAction sourceAction) {
 		Player player = context.getPlayer(playerId);
 		Entity source = null;
 		if (sourceReference != null) {
@@ -721,7 +721,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player
 	 * @param source
 	 * @param sourceAction
-	 * @return {@code null} if this is not an overridable form of target acquisition; or, the intended target if the target was not overridden, or the new target.
+	 * @return {@code null} if this is not an overridable form of target acquisition; or, the intended target if the
+	 * target was not overridden, or the new target.
 	 */
 	@Suspendable
 	protected @Nullable
@@ -794,6 +795,24 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Set the new hero's number of attacks to the old hero's.
 		hero.getAttributes().put(Attribute.NUMBER_OF_ATTACKS, previousHero.getAttributes().get(Attribute.NUMBER_OF_ATTACKS));
+
+		// Maintain the old hero's temporary stats
+		Stream.of(Attribute.NUMBER_OF_ATTACKS,
+				Attribute.TOTAL_DAMAGE_DEALT,
+				Attribute.LAST_HEAL,
+				Attribute.LAST_HIT,
+				Attribute.RESERVED_BOOLEAN_1,
+				Attribute.RESERVED_BOOLEAN_2,
+				Attribute.RESERVED_BOOLEAN_3,
+				Attribute.RESERVED_BOOLEAN_4,
+				Attribute.RESERVED_INTEGER_1,
+				Attribute.RESERVED_INTEGER_2,
+				Attribute.RESERVED_INTEGER_3,
+				Attribute.RESERVED_INTEGER_4).forEach(attr -> {
+			if (previousHero.hasAttribute(attr)) {
+				hero.getAttributes().put(attr, previousHero.getAttributes().get(attr));
+			}
+		});
 
 		// Remove the old hero from play
 		removeEnchantments(previousHero);
@@ -941,7 +960,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Damage is measured by a number which is deducted from the armor first, followed by hitpoints, of an {@link
 	 * Actor}. If the {@link Actor#getHp()} is reduced to zero (or below), it will be killed. Note that other types of
 	 * harm that can be inflicted to characters (such as a {@link DestroySpell}, freeze effects and the card Equality)
-	 * are not considered damage for game purposes and, although most damage is dealt through {@link #fight(Player, Actor, Actor, PhysicalAttackAction)}, dealing damage is not considered an "fight" for game purposes.
+	 * are not considered damage for game purposes and, although most damage is dealt through {@link #fight(Player,
+	 * Actor, Actor, PhysicalAttackAction)}, dealing damage is not considered an "fight" for game purposes.
 	 * <p>
 	 * Damage can activate a number of triggered effects, both from receiving it (such as Acolyte of Pain's {@link
 	 * DamageReceivedTrigger}) and from dealing it (such as Lightning Automaton's {@link DamageCausedTrigger}). However,
@@ -1044,7 +1064,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	private int damageHero(Hero hero, final int damage) {
-		if (hero.hasAttribute(Attribute.IMMUNE) || hasAttribute(context.getPlayer(hero.getOwner()), Attribute.IMMUNE_HERO)) {
+		if (hero.hasAttribute(Attribute.IMMUNE) || hero.hasAttribute(Attribute.AURA_IMMUNE)) {
 			return 0;
 		}
 		int effectiveHp = hero.getHp() + hero.getArmor();
@@ -1068,7 +1088,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			context.fireGameEvent(new LoseDivineShieldEvent(context, minion, player.getId(), source.getId()));
 			return 0;
 		}
-		if (minion.hasAttribute(Attribute.IMMUNE)) {
+		if (minion.hasAttribute(Attribute.IMMUNE) || minion.hasAttribute(Attribute.AURA_IMMUNE)) {
 			return 0;
 		}
 		if (damage >= minion.getHp() && minion.hasAttribute(Attribute.CANNOT_REDUCE_HP_BELOW_1)) {

@@ -5,23 +5,19 @@
   "heroClass": "RED",
   "rarity": "RARE",
   "race": "PROTECTION",
-  "description": "Gain 6 Armor. Add a random Protection spell to your hand.",
+  "description": "Gain 6 Armor. Add Forbidden Armor to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "BuffHeroSpell",
+        "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
         "armorBonus": 4
       },
       {
         "class": "ReceiveCardSpell",
-        "cardFilter": {
-          "class": "CardFilter",
-          "race": "PROTECTION",
-          "cardType": "SPELL"
-        }
+        "card": "spell_forbidden_armor"
       }
     ]
   },

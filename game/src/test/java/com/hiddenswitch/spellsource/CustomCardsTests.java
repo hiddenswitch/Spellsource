@@ -26,6 +26,37 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testDiabologist() {
+		runGym((context, player, opponent) -> {
+			Card card1 = receiveCard(context, player, "minion_bloodfen_raptor");
+			Card card2 = receiveCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_doomguard");
+			Assert.assertTrue(card1.hasAttribute(Attribute.DISCARDED));
+			Assert.assertTrue(card2.hasAttribute(Attribute.DISCARDED));
+			CountDownLatch latch = new CountDownLatch(1);
+			overrideDiscover(player, discoverActions -> {
+				latch.countDown();
+				Assert.assertEquals(discoverActions.size(), 1, "Should not show duplicate cards due to discover rules");
+				Assert.assertEquals(discoverActions.get(0).getCard().getCardId(), "minion_bloodfen_raptor");
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_diabologist");
+			Assert.assertEquals(latch.getCount(), 0);
+		});
+	}
+
+	@Test
+	public void testDreadCaptainBones() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_wicked_knife");
+			final Weapon weapon = player.getWeaponZone().get(0);
+			Assert.assertEquals(weapon.getDurability(), weapon.getBaseDurability());
+			playCard(context, player, "minion_dread_captain_bones");
+			Assert.assertEquals(weapon.getDurability(), weapon.getBaseDurability() + 1);
+		});
+	}
+
+	@Test
 	public void testFarseerNobundo() {
 		// Test that battlecries from the hand are triggered.
 		runGym((context, player, opponent) -> {

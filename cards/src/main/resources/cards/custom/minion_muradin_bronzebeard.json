@@ -16,7 +16,7 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "BuffHeroSpell",
+          "class": "BuffSpell",
           "target": "FRIENDLY_HERO",
           "armorBonus": {
             "class": "AlgebraicValueProvider",
@@ -30,9 +30,10 @@
           }
         },
         {
-          "class": "SetHeroHpSpell",
+          "class": "SetAttributeSpell",
           "target": "FRIENDLY_HERO",
-          "value": 1
+          "value": 1,
+          "attribute": "HP"
         }
       ]
     }
@@ -42,8 +43,5 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1,
-  "glow": {
-    "class": "HighlanderDeckCondition"
-  }
+  "fileFormatVersion": 1
 }

@@ -11,13 +11,11 @@
     "race": "DEMON",
     "targetPlayer": "SELF"
   },
+  "countUntilCast": 4,
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "card": "spell_the_codex_of_xerrath"
-  },
-  "attributes": {
-    "QUEST": 4
   },
   "collectible": false,
   "set": "CUSTOM",

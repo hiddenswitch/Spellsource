@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "COMMON",
-  "description": "Cleave",
+  "description": "Cleave. (Also damages adjacent minions)",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

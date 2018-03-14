@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "RED",
   "rarity": "RARE",
-  "race": "FURY",
   "description": "Give your minions 'Enrage: +3 Attack'.",
   "targetSelection": "NONE",
   "spell": {
@@ -19,19 +18,14 @@
           },
           "spell": {
             "class": "EnrageSpell",
-            "target": "SELF"
+            "target": "SELF",
+            "attackBonus": 3
           }
         }
       },
       {
         "class": "AddAttributeSpell",
         "attribute": "ENRAGABLE"
-      },
-      {
-        "class": "ModifyAttributeSpell",
-        "value": 3,
-        "attribute": "ENRAGED_ATTACK",
-        "operation": "ADD"
       },
       {
         "class": "ConditionalSpell",
@@ -46,7 +40,8 @@
               "attribute": "ENRAGED"
             },
             {
-              "class": "EnrageSpell"
+              "class": "EnrageSpell",
+              "attackBonus": 3
             }
           ]
         }

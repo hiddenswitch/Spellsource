@@ -10,12 +10,12 @@
   "battlecry": {
     "targetSelection": "OTHER_FRIENDLY_MINIONS",
     "spell": {
+      "class": "custom.FarseerNobundoSpell",
       "filter": {
         "class": "SpecificCardFilter",
         "cardId": "minion_farseer_nobundo",
         "invert": true
-      },
-      "class": "custom.FarseerNobundoSpell"
+      }
     }
   },
   "attributes": {

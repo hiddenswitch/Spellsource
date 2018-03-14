@@ -14,17 +14,8 @@
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "AlgebraicValueProvider",
-    "operation": "SUBTRACT",
-    "value1": {
-      "class": "AttributeValueProvider",
-      "target": "FRIENDLY_HERO",
-      "attribute": "MAX_HP"
-    },
-    "value2": {
-      "class": "AttributeValueProvider",
-      "target": "FRIENDLY_HERO",
-      "attribute": "HP"
-    }
+    "class": "AttributeValueProvider",
+    "target": "FRIENDLY_HERO",
+    "attribute": "TOTAL_DAMAGE_DEALT"
   }
 }

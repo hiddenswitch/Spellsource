@@ -51,6 +51,10 @@ public abstract class ActorCardDesc extends CardDesc {
 	 */
 	public AuraDesc aura;
 	/**
+	 * The aura that is active whenever the actor is in play.
+	 */
+	public AuraDesc[] auras;
+	/**
 	 * The actor's race, or "tribe."
 	 */
 	public Race race;

@@ -10,9 +10,10 @@
   "description": "Taunt. Deathrattle: Shuffle one copy of each card you've discarded this game into your deck.",
   "deathrattle": {
     "class": "ShuffleToDeckSpell",
-    "cardSource": {
-      "class": "DiscardSource",
-      "targetPlayer": "SELF"
+    "target": "FRIENDLY_GRAVEYARD",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "DISCARDED"
     },
     "howMany": 1
   },

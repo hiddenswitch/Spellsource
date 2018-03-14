@@ -10,12 +10,12 @@
     "class": "ConditionalSpell",
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER",
       "value1": {
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "MANA"
       },
-      "value2": 0,
-      "operation": "GREATER"
+      "value2": 0
     },
     "spell": {
       "class": "MetaSpell",

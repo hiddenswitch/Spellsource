@@ -67,6 +67,12 @@ public enum Attribute {
 	 */
 	AURA_HP_BONUS,
 	/**
+	 * Grants an immunity aura when present on an entity.
+	 *
+	 * @see #IMMUNE
+	 */
+	AURA_IMMUNE,
+	/**
 	 * The base number of hitpoints for the {@link Actor}.
 	 */
 	BASE_HP,
@@ -252,8 +258,8 @@ public enum Attribute {
 	 * such as that of Knife Juggler, and dealing combat damage in exchange, such as when being struck by a clumsy
 	 * minion such as Ogre Brute, or by a Misdirection-redirected minion.
 	 *
-	 * @see GameLogic#fight(Player, Actor, Actor, net.demilich.metastone.game.actions.PhysicalAttackAction) for the situation where physical attacks cause a minion to lose
-	 * stealth.
+	 * @see GameLogic#fight(Player, Actor, Actor, net.demilich.metastone.game.actions.PhysicalAttackAction) for the
+	 * situation where physical attacks cause a minion to lose stealth.
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage originating
 	 * from a minion causes it to lose stealth.
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
@@ -500,12 +506,6 @@ public enum Attribute {
 	 * This attribute implements Seadevil Stinger.
 	 */
 	MURLOCS_COST_HEALTH,
-	/**
-	 * A {@link net.demilich.metastone.game.entities.heroes.Hero} with this attribute does not take damage.
-	 *
-	 * @see GameLogic#damageHero(Hero, int) for the complete damage implementation for heroes.
-	 */
-	IMMUNE_HERO,
 	/**
 	 * An {@link Entity} with this attribute takes twice the damage whenever it is dealt damage.
 	 *

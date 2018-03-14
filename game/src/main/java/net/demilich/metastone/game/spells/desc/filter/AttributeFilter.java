@@ -26,6 +26,8 @@ public class AttributeFilter extends EntityFilter {
 		Operation operation = (Operation) desc.get(FilterArg.OPERATION);
 		if (operation == Operation.HAS) {
 			return entity.hasAttribute(attribute);
+		} else if (operation == null) {
+			operation = Operation.HAS;
 		}
 
 		int targetValue;

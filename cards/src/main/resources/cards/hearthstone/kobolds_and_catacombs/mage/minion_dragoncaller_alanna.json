@@ -10,6 +10,7 @@
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER",
       "value1": {
         "class": "CardCountValueProvider",
         "cardFilter": {
@@ -33,8 +34,7 @@
           "targetPlayer": "SELF"
         }
       },
-      "value2": 0,
-      "operation": "GREATER"
+      "value2": 0
     },
     "spell": {
       "class": "SummonSpell",

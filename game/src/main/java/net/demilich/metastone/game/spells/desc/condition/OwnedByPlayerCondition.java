@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 public class OwnedByPlayerCondition extends Condition {
 
@@ -15,18 +16,18 @@ public class OwnedByPlayerCondition extends Condition {
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		TargetPlayer targetPlayer = (TargetPlayer) desc.get(ConditionArg.TARGET_PLAYER);
 		switch (targetPlayer) {
-		case ACTIVE:
-			return context.getActivePlayerId() == player.getId();
-		case INACTIVE:
-			return context.getActivePlayerId() != player.getId();
-		case BOTH:
-			return true;
-		case OPPONENT:
-			return target.getOwner() != player.getId();
-		case SELF:
-			return target.getOwner() == player.getId();
-		default:
-			break;
+			case ACTIVE:
+				return context.getActivePlayerId() == player.getId();
+			case INACTIVE:
+				return context.getActivePlayerId() != player.getId();
+			case BOTH:
+				return true;
+			case OPPONENT:
+				return target.getOwner() != player.getId();
+			case SELF:
+				return target.getOwner() == player.getId();
+			default:
+				break;
 
 		}
 		return false;

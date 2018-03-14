@@ -8,6 +8,7 @@
   "rarity": "COMMON",
   "description": "Battlecry: Draw a card. Overload: (1)",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "DrawCardSpell"
     }

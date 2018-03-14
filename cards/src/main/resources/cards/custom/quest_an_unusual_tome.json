@@ -7,16 +7,13 @@
   "description": "Quest: Use your Hero Power twice. Reward: Seek the Signal.",
   "quest": {
     "class": "InspireTrigger",
-    "value": 2,
     "targetPlayer": "SELF"
   },
+  "countUntilCast": 2,
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "card": "quest_seek_the_signal"
-  },
-  "attributes": {
-    "QUEST": 2
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "RED",
   "rarity": "EPIC",
-  "race": "ARMS",
   "description": "Destroy a minion and the minions next to it.",
   "targetSelection": "MINIONS",
   "spell": {
