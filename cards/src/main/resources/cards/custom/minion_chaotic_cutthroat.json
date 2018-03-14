@@ -9,6 +9,7 @@
   "race": "PIRATE",
   "description": "Battlecry and Deathrattle: Deal 1 damage to a random enemy.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "MissilesSpell",
       "target": "ENEMY_CHARACTERS",

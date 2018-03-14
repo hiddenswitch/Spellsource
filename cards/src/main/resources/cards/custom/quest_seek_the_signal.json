@@ -7,16 +7,13 @@
   "description": "Quest: Cast 3 Spells. Reward: The Black Harvest.",
   "quest": {
     "class": "SpellCastedTrigger",
-    "value": 3,
     "sourcePlayer": "SELF"
   },
+  "countUntilCast": 3,
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "card": "quest_the_black_harvest"
-  },
-  "attributes": {
-    "QUEST": 3
   },
   "collectible": false,
   "set": "CUSTOM",

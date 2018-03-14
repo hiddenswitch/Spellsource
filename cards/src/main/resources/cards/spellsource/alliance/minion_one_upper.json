@@ -22,8 +22,8 @@
     "BATTLECRY": true,
     "TAUNT": true
   },
-  "legacy": true,
   "collectible": true,
   "set": "SPELLSOURCE",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "legacy": true
 }

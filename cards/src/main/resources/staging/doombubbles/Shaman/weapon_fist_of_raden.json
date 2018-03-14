@@ -17,7 +17,7 @@
           "target": "FRIENDLY_PLAYER",
           "cardCostModifier": {
             "class": "CardCostModifier",
-            "value": "1",
+            "value": 1,
             "race": "ELEMENTAL",
             "cardType": "SPELL",
             "expirationTrigger": {

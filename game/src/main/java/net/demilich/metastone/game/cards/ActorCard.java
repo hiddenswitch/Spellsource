@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.utils.Attribute;
 
@@ -37,7 +38,8 @@ public abstract class ActorCard extends Card {
 	}
 
 	public boolean hasAura() {
-		return getDesc().aura != null;
+		return getDesc().aura != null
+				|| getDesc().auras != null && getDesc().auras.length > 0;
 	}
 
 	public boolean hasCardCostModifier() {
@@ -93,6 +95,12 @@ public abstract class ActorCard extends Card {
 		if (desc.aura != null) {
 			final Aura enchantment = desc.aura.createInstance();
 			instance.addEnchantment(enchantment);
+		}
+
+		if (desc.auras != null) {
+			for (AuraDesc auraDesc : desc.auras) {
+				instance.addEnchantment(auraDesc.createInstance());
+			}
 		}
 
 		if (desc.cardCostModifier != null) {

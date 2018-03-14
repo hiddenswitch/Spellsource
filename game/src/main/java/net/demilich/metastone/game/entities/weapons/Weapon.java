@@ -31,11 +31,6 @@ public class Weapon extends Actor {
 	}
 
 	@Override
-	public int getMaxHp() {
-		return getMaxDurability();
-	}
-
-	@Override
 	public int getAttack() {
 		return getWeaponDamage();
 	}
@@ -54,7 +49,7 @@ public class Weapon extends Actor {
 	}
 
 	public int getMaxDurability() {
-		return getAttributeValue(Attribute.MAX_HP) + getAttributeValue(Attribute.HP_BONUS);
+		return getMaxHp();
 	}
 
 	public int getWeaponDamage() {

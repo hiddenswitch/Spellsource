@@ -1,24 +1,23 @@
 {
-  "name": "Dragon Roar",
+  "name": "Molten Skin",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "RED",
-  "rarity": "RARE",
-  "race": "FURY",
-  "description": "Give your minions +2 Health then deal *1* damage to ALL minions.",
+  "heroClass": "VIOLET",
+  "rarity": "EPIC",
+  "description": "Deal 3 damage to yourself and gain 9 armor.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "target": "ALL_MINIONS",
-        "value": 1
+        "target": "FRIENDLY_HERO",
+        "value": 3
       },
       {
         "class": "BuffSpell",
-        "target": "FRIENDLY_MINIONS",
-        "hpBonus": 2
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 9
       }
     ]
   },
