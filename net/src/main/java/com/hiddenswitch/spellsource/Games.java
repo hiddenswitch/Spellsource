@@ -778,7 +778,7 @@ public interface Games {
 				.collect(toList()));
 
 		// Get the heroes that may have wound up in the graveyard
-		entities.addAll(Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
+		final List<Entity> graveyardHeroes = Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
 				.filter(e -> e.getEntityType() == EntityType.HERO)
 				.map(h -> {
 					final Entity e = getEntity(workingContext, h, localPlayerId);
@@ -788,7 +788,11 @@ public interface Games {
 							.maxMana(owner.getMaxMana())
 							.lockedMana(owner.getLockedMana());
 					return e;
-				}).collect(toList()));
+				})
+				// Don't include heroes that have already been added
+				.filter(e -> playerEntities.stream().noneMatch(v -> v.getId().equals(e.getId())))
+				.collect(toList());
+		entities.addAll(graveyardHeroes);
 
 		// Any missing entities will get a stand-in entry
 		Set<Integer> visibleEntityIds = entities.stream().map(com.hiddenswitch.spellsource.client.models.Entity::getId).collect(Collectors.toSet());
