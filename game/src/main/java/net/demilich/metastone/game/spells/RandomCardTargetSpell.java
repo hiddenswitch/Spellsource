@@ -15,6 +15,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,6 +54,9 @@ public class RandomCardTargetSpell extends Spell {
 			throw new RuntimeException(String.format("castCardWithRandomTargets %s %s: A non-spell card %s was passed into a RandomCardTargetSpell", context.getGameId(), source.toString(), card.toString()));
 		}
 
+		// Makes random discover choices
+		player.setAttribute(Attribute.RANDOM_CHOICES);
+
 		Zones destination = Zones.REMOVED_FROM_PLAY;
 		if (spellCard.getZone() == Zones.DECK
 				|| spellCard.getZone() == Zones.HAND) {
@@ -74,6 +78,7 @@ public class RandomCardTargetSpell extends Spell {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
 			spellCard.moveOrAddTo(context, destination);
 			context.getLogic().removeCard(spellCard);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return;
 		}
 
@@ -87,6 +92,7 @@ public class RandomCardTargetSpell extends Spell {
 
 		spellCard.moveOrAddTo(context, destination);
 		context.getLogic().removeCard(spellCard);
+		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 	}
 
 }
