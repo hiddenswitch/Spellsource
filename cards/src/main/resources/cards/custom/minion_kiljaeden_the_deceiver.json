@@ -13,7 +13,8 @@
     "target": "FRIENDLY_GRAVEYARD",
     "filter": {
       "class": "AttributeFilter",
-      "attribute": "DISCARDED"
+      "attribute": "DISCARDED",
+      "operation": "HAS"
     },
     "howMany": 1
   },

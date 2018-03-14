@@ -214,7 +214,7 @@ public class GameSessionImpl implements GameSession {
 		// The game never started if this were null
 		final boolean open1 = Writer.isOpen(getClient1());
 		final boolean open2 = Writer.isOpen(getClient2());
-		if (getGameContext() != null) {
+		if (getGameContext() != null && isGameReady()) {
 			getGameContext().kill();
 		} else if (!isGameReady()) {
 			// Send a game over message to the players that may have connected
@@ -319,11 +319,17 @@ public class GameSessionImpl implements GameSession {
 	@Override
 	@Suspendable
 	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
+		if (!isGameReady()) {
+			throw new RuntimeException("Unexpectedly trying to mulligan a game that isn't ready yet");
+		}
 		getGameContext().onMulliganReceived(messageId, discardedCardIndices);
 	}
 
 	@Override
 	public void onEmote(int entityId, Emote.MessageEnum message) {
+		if (!isGameReady()) {
+			return;
+		}
 		if (getClient1() != null) {
 			getClient1().onEmote(entityId, message);
 		}
@@ -335,6 +341,9 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public void onConcede(int playerId) {
+		if (!isGameReady()) {
+			return;
+		}
 		if (getGameContext() != null) {
 			getGameContext().concede(playerId);
 		}
@@ -342,6 +351,9 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public void onTouch(int playerId, int entityId) {
+		if (!isGameReady()) {
+			return;
+		}
 		getPlayerListener(getOpponent(playerId))
 				.onNotification(
 						new TouchingNotification(playerId, entityId, true),
@@ -350,6 +362,9 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public void onUntouch(int playerId, int entityId) {
+		if (!isGameReady()) {
+			return;
+		}
 		getPlayerListener(getOpponent(playerId))
 				.onNotification(
 						new TouchingNotification(playerId, entityId, false),

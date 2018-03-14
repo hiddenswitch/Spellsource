@@ -24,10 +24,13 @@ public class AttributeFilter extends EntityFilter {
 		List<Entity> entities = getTargetedEntities(context, player, host);
 		Attribute attribute = (Attribute) desc.get(FilterArg.ATTRIBUTE);
 		Operation operation = (Operation) desc.get(FilterArg.OPERATION);
+
+		if (operation == null) {
+			operation = Operation.HAS;
+		}
+
 		if (operation == Operation.HAS) {
 			return entity.hasAttribute(attribute);
-		} else if (operation == null) {
-			operation = Operation.HAS;
 		}
 
 		int targetValue;
