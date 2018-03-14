@@ -145,8 +145,7 @@ import java.util.stream.Stream;
 public class GameContext implements Cloneable, Serializable, NetworkDelegate, Inventory {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
-	protected final Logger logger = LoggerFactory.getLogger(GameContext.class);
-
+	protected Logger logger = LoggerFactory.getLogger(GameContext.class);
 	private Player[] players = new Player[2];
 	private GameLogic logic;
 	private DeckFormat deckFormat;
@@ -1576,5 +1575,13 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 	public void setTargetOverride(EntityReference reference) {
 		getEnvironment().put(Environment.TARGET_OVERRIDE, reference);
+	}
+
+	public Logger getLogger() {
+		return logger;
+	}
+
+	public void setLogger(Logger logger) {
+		this.logger = logger;
 	}
 }

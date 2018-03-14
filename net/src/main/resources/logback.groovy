@@ -15,6 +15,7 @@ import ch.qos.logback.classic.PatternLayout
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.filter.ThresholdFilter
 import ch.qos.logback.core.ConsoleAppender
+import ch.qos.logback.classic.Level
 
 import static ch.qos.logback.classic.Level.DEBUG
 import static ch.qos.logback.classic.Level.ERROR
@@ -47,7 +48,7 @@ appender("STDOUT", ConsoleAppender) {
     }
 
     filter(ThresholdFilter) {
-        level = ERROR
+        level = isAWS ? ERROR : DEBUG
     }
 }
 

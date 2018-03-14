@@ -9,7 +9,6 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class PlayChooseOneCardAction extends PlayCardAction implements HasChoiceCard {
 	private SpellDesc spell;
-	protected final EntityReference EntityReference;
 	protected final String chosenCard;
 
 	public PlayChooseOneCardAction(SpellDesc spell, Card chooseOneCard, String chosenCard, TargetSelection targetSelection) {

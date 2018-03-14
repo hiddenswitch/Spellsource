@@ -185,6 +185,14 @@ public class WebSocketWriter implements Writer {
 	@Override
 	public void onGameEnd(com.hiddenswitch.spellsource.common.GameState state, Player winner) {
 		flush();
+		if (state == null) {
+			sendMessage(new ServerToClientMessage()
+					.messageType(MessageType.ON_GAME_END)
+					.gameOver(new GameOver()
+							.localPlayerWon(false)));
+			return;
+		}
+
 		final GameState gameState = getClientGameState(state);
 		GameOver gameOver = new GameOver();
 		if (winner == null) {

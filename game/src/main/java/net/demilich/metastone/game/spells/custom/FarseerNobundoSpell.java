@@ -27,6 +27,10 @@ public class FarseerNobundoSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity spellSource, Entity spellTarget) {
+		if (spellTarget == null) {
+			return;
+		}
+
 		SpellDesc existingTotems = AddActorEffectsToTargetActorSpell.create(spellTarget.getReference());
 		existingTotems.put(SpellArg.FILTER, CardFilter.create(CardType.MINION, Race.TOTEM));
 		existingTotems.put(SpellArg.TARGET, EntityReference.OTHER_FRIENDLY_MINIONS);

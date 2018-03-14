@@ -184,13 +184,14 @@ public class ServerGameContext extends GameContext {
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
 
+		logger.debug("{} networkedPlay: Updating active players", getGameId());
 		updateActivePlayers();
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 
 		// Make sure the players are initialized before sending the original player updates.
 		getNetworkGameLogic().initializePlayer(IdFactory.PLAYER_1);
 		getNetworkGameLogic().initializePlayer(IdFactory.PLAYER_2);
-
+		logger.debug("{} networkedPlay: Players initialized", getGameId());
 
 		Future<Void> init1 = Future.future();
 		Future<Void> init2 = Future.future();
