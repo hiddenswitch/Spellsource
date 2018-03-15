@@ -33,8 +33,17 @@
               "operation": "GREATER"
             },
             {
-              "class": "IsDeadCondition",
+              "class": "AttributeCondition",
               "target": "EVENT_TARGET",
+              "value": 0,
+              "attribute": "HP",
+              "operation": "GREATER_OR_EQUAL"
+            },
+            {
+              "class": "AttributeCondition",
+              "target": "EVENT_TARGET",
+              "attribute": "DESTROYED",
+              "operation": "HAS",
               "invert": true
             }
           ]
