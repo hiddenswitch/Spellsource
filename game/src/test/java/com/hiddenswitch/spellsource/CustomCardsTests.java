@@ -253,7 +253,16 @@ public class CustomCardsTests extends TestBase {
 				playCardWithTarget(context, opponent, "spell_razorpetal", armageddon1);
 			}
 			Assert.assertTrue(armageddon1.isDestroyed());
-			Assert.assertEquals(armageddon2.getHp(), 1);
+			Assert.assertTrue(armageddon2.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			final Minion armageddon1 = playMinionCard(context, player, "minion_armageddon_vanguard");
+			Minion target = playMinionCard(context, player, "minion_snowflipper_penguin");
+			context.endTurn();
+			int opponentHp = opponent.getHero().getHp();
+			playCardWithTarget(context, opponent, "spell_razorpetal", target);
+			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 1);
 		});
 	}
 
