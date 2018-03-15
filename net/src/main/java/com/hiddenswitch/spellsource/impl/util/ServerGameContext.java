@@ -193,7 +193,6 @@ public class ServerGameContext extends GameContext {
 		if (turnTimerId != null) {
 			scheduler.cancelTimer(turnTimerId);
 		}
-		this.onGameStateChanged();
 		getListenerMap().get(getPlayer1()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 		getListenerMap().get(getPlayer2()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 	}
