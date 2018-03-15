@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.WeaponCard;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -20,8 +21,14 @@ import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
+
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.spy;
 
 public class CustomCardsTests extends TestBase {
 
@@ -222,6 +229,31 @@ public class CustomCardsTests extends TestBase {
 			int opponentHp = opponent.getHero().getHp();
 			playCardWithTarget(context, opponent, "spell_razorpetal", bloodfen);
 			Assert.assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			GameLogic spyLogic = spy(context.getLogic());
+			context.setLogic(spyLogic);
+
+			final Minion armageddon1 = playMinionCard(context, player, "minion_armageddon_vanguard");
+			context.endTurn();
+			final Minion armageddon2 = playMinionCard(context, opponent, "minion_armageddon_vanguard");
+			doAnswer(invocation -> {
+				List<Entity> randomTargets = invocation.getArgument(0);
+				if (randomTargets.contains(armageddon1)) {
+					return armageddon1;
+				} else if (randomTargets.contains(armageddon2)) {
+					return armageddon2;
+				} else {
+					throw new AssertionError("Unexpected random request");
+				}
+			}).when(spyLogic).getRandom(anyList());
+
+			while (!armageddon1.isDestroyed()) {
+				playCardWithTarget(context, opponent, "spell_razorpetal", armageddon1);
+			}
+			Assert.assertTrue(armageddon1.isDestroyed());
+			Assert.assertEquals(armageddon2.getHp(), 1);
 		});
 	}
 
@@ -1593,7 +1625,7 @@ public class CustomCardsTests extends TestBase {
 	public void testStablePortal() {
 		// Correctly adds a Beast to player's hand with a mana cost 2 less
 		runGym((context, player, opponent) -> {
-			GameLogic spiedLogic = Mockito.spy(context.getLogic());
+			GameLogic spiedLogic = spy(context.getLogic());
 			context.setLogic(spiedLogic);
 
 			Mockito.doAnswer(invocation ->
