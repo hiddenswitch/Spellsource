@@ -23,8 +23,8 @@ public class ReplaceCardsSpell extends Spell {
 
 		replacement = context.getLogic().replaceCard(player.getId(), (Card) target, replacement);
 		final Card output = replacement;
-		desc.subSpells(0).forEach(subSpell -> {
+		for (SpellDesc subSpell : desc.subSpells(0)) {
 			SpellUtils.castChildSpell(context, player, subSpell, source, target, output);
-		});
+		}
 	}
 }

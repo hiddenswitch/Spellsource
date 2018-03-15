@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import java.util.List;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
@@ -72,8 +73,10 @@ public class ChangeHeroSpell extends Spell {
 		Hero hero = heroCard.createHero();
 		context.getLogic().changeHero(player, hero);
 
-		desc.subSpells(0).forEach(subSpell -> {
+		List<SpellDesc> spellDescs = desc.subSpells(0);
+		for (SpellDesc subSpell : spellDescs) {
 			SpellUtils.castChildSpell(context, player, subSpell, source, target, hero);
-		});
+		}
+		;
 	}
 }

@@ -23,9 +23,9 @@ public class PutDeckTopSpell extends Spell {
 		for (Card card : cards) {
 			context.getLogic().putOnTopOfDeck(player, card);
 
-			desc.subSpells(0).forEach(subSpell -> {
+			for (SpellDesc subSpell : desc.subSpells(0)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
-			});
+			}
 		}
 	}
 }

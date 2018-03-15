@@ -1307,6 +1307,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					actor.getAttributes().remove(Attribute.HEALING_THIS_TURN);
 					actor.getAttributes().remove(Attribute.DAMAGE_THIS_TURN);
 				});
+
+		logger.debug("endTurn {}: Firing end turn event for player {}", context.getGameId(), playerId);
+
 		context.fireGameEvent(new TurnEndEvent(context, playerId));
 		if (hasAttribute(player, Attribute.DOUBLE_END_TURN_TRIGGERS)) {
 			context.fireGameEvent(new TurnEndEvent(context, playerId));

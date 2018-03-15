@@ -115,14 +115,14 @@ public class EquipWeaponSpell extends Spell {
 
 		Weapon weapon = ((WeaponCard) context.getLogic().getRandom(results)).getWeapon();
 		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
-		desc.subSpells(0).forEach(spellDesc -> {
+		for (SpellDesc spellDesc : desc.subSpells(0)) {
 			if (weapon.isDestroyed()) {
 				logger.error("onCast {} {}: Something destroyed the weapon {} before the subspell {} could be cast on it", context.getGameId(), source, weapon, spellDesc);
-				return;
+				continue;
 			}
 
 			SpellUtils.castChildSpell(context, player, spellDesc, source, target, weapon);
-		});
+		}
 
 
 	}

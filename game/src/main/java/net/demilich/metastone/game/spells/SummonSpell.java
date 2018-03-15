@@ -313,7 +313,8 @@ public class SummonSpell extends Spell {
 				}
 				summonedMinions.add(minion);
 				if (target instanceof Actor) {
-					for (Trigger trigger : context.getTriggersAssociatedWith(target.getReference())) {
+					List<Trigger> triggers = context.getTriggersAssociatedWith(target.getReference());
+					for (Trigger trigger : triggers) {
 						Trigger triggerClone = trigger.clone();
 						context.getLogic().addGameEventListener(player, triggerClone, minion);
 					}
@@ -325,7 +326,7 @@ public class SummonSpell extends Spell {
 			logger.debug("onCast {} {}: No minions were successfully summoned. Usually this is due to a full board or a secret.", context.getGameId(), source);
 		}
 
-		summonedMinions.forEach(summoned -> {
+		for (Minion summoned : summonedMinions) {
 			// Shouldn't cast spells on minions that wound up in the graveyard somehow due to other subspells.
 			// This checks if a subspell has ended the sequence with {@link GameLogic#endOfSequence()}
 			if (summoned.isDestroyed()
@@ -334,10 +335,12 @@ public class SummonSpell extends Spell {
 				return;
 			}
 
-			desc.subSpells(0).forEach(subSpell -> {
+			List<SpellDesc> collect = desc.subSpells(0);
+
+			for (SpellDesc subSpell : collect) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, summoned);
-			});
-		});
+			}
+		}
 	}
 
 }

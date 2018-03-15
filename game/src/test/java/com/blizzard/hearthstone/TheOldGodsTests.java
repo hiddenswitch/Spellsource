@@ -322,7 +322,7 @@ public class TheOldGodsTests extends TestBase {
 		Card cardInHand = player.getHand().get(player.getHand().size() - 1);
 		Assert.assertEquals(cardInHand.getCardId(), originalMinion[0].getSourceCard().getCardId());
 		context.getLogic().performGameAction(player.getId(), cardInHand.play());
-		int buff = light.getSpell().subSpells().filter(sd -> sd.getDescClass().equals(BuffSpell.class)).findFirst().orElseThrow(AssertionError::new).getInt(SpellArg.VALUE, -999);
+		int buff = light.getSpell().subSpells().stream().filter(sd -> sd.getDescClass().equals(BuffSpell.class)).findFirst().orElseThrow(AssertionError::new).getInt(SpellArg.VALUE, -999);
 		Assert.assertEquals(player.getMinions().get(0).getAttack(), originalMinion[0].getAttack() + buff);
 		Assert.assertEquals(player.getMinions().get(0).getHp(), originalMinion[0].getHp() + buff);
 	}

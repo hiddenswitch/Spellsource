@@ -44,6 +44,7 @@ import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.NetworkDelegate;
 import net.demilich.metastone.game.utils.TurnState;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.math3.util.Combinations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -1010,8 +1011,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * Retrieves the current target override specified in the environment.
 	 * <p>
 	 * A target override can be a specific {@link EntityReference} or a "group reference" (logical entity reference)
-	 * that returns exactly zero or one targets. The override should almost always succeed, and it would be surprising if
-	 * there were overrides that resulted in no targets being found.
+	 * that returns exactly zero or one targets. The override should almost always succeed, and it would be surprising
+	 * if there were overrides that resulted in no targets being found.
 	 *
 	 * @param player The player for whom the override should be evaluated.
 	 * @param source The source entity of this override.

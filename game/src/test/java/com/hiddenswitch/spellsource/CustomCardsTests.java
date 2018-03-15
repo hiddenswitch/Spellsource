@@ -33,6 +33,21 @@ import static org.mockito.Mockito.spy;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testYouFromTheFutureKargath() {
+		// You from the Future on Kargath Baldefist causes doubly triggered end of turn effects
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_kargath_bladefist");
+			playCardWithTarget(context, player, "spell_you_from_the_future", target);
+			Minion target2 = player.getMinions().get(1);
+			Assert.assertTrue(target.isWounded());
+			Assert.assertTrue(target2.isWounded());
+			context.endTurn();
+			Assert.assertEquals(target.getAttack(), target.getBaseAttack() + 4);
+			Assert.assertEquals(target2.getAttack(), target2.getBaseAttack() + 4);
+		});
+	}
+
+	@Test
 	public void testTheEmeraldDream() {
 		runGym((context, player, opponent) -> {
 			Minion emeraldDream = playMinionCard(context, player, "permanent_the_emerald_dream");
