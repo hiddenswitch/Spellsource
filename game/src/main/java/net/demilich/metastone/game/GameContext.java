@@ -145,7 +145,7 @@ import java.util.stream.Stream;
 public class GameContext implements Cloneable, Serializable, NetworkDelegate, Inventory {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
-	protected Logger logger = LoggerFactory.getLogger(GameContext.class);
+	protected static Logger logger = LoggerFactory.getLogger(GameContext.class);
 	private Player[] players = new Player[2];
 	private GameLogic logic;
 	private DeckFormat deckFormat;
@@ -162,6 +162,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	private boolean ignoreEvents;
 	private CardList tempCards = new CardArrayList();
 	private transient Trace trace = new Trace();
+	private boolean gameEnded;
 
 	/**
 	 * Creates a game context with no valid start state.
@@ -301,11 +302,16 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 */
 	@Suspendable
 	protected void endGame() {
+		// Don't do processing of end game effects more than once.
+		if (gameEnded) {
+			notifyPlayersGameOver();
+			return;
+		}
+
+		gameEnded = true;
 		logger.debug("{} endGame: Game is now ending", getGameId());
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
-
 		notifyPlayersGameOver();
-
 		calculateStatistics();
 	}
 
@@ -405,6 +411,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been
 	 * destroyed.
 	 */
+	@Suspendable
 	public boolean updateAndGetGameOver() {
 		if (getPlayer1() == null
 				|| getPlayer2() == null) {
@@ -835,6 +842,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		trace.setCatalogueVersion(CardCatalogue.getVersion());
 	}
 
+	@Suspendable
 	protected void onGameStateChanged() {
 	}
 
@@ -901,13 +909,12 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		}
 
 		GameAction nextAction = getActivePlayer().getBehaviour().requestAction(this, getActivePlayer(), getValidActions());
-		while (!acceptAction(nextAction)) {
-			nextAction = getActivePlayer().getBehaviour().requestAction(this, getActivePlayer(), getValidActions());
-		}
+
 		if (nextAction == null) {
 			throw new RuntimeException("Behaviour " + getActivePlayer().getBehaviour().getName() + " selected NULL action while "
 					+ getValidActions().size() + " actions were available");
 		}
+
 		trace.addAction(nextAction.getId(), nextAction);
 		performAction(getActivePlayerId(), nextAction);
 

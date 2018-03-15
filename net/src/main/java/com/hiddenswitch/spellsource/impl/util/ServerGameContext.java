@@ -12,6 +12,7 @@ import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.VertxException;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -36,6 +37,7 @@ import net.demilich.metastone.game.utils.TurnState;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -52,8 +54,8 @@ import java.util.stream.Collectors;
  */
 public class ServerGameContext extends GameContext {
 	private final String gameId;
-	private Map<Player, Writer> listenerMap = new HashMap<>();
-	private final Map<CallbackId, GameplayRequest> requestCallbacks = Collections.synchronizedMap(new HashMap<>());
+	private Map<Player, Writer> listenerMap = new ConcurrentHashMap<>();
+	private final Map<CallbackId, GameplayRequest> requestCallbacks = new ConcurrentHashMap<>();
 	private boolean isRunning = true;
 	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
 	private final List<Trigger> gameTriggers = new ArrayList<>();
@@ -63,6 +65,7 @@ public class ServerGameContext extends GameContext {
 	private int timerElapsedForPlayerId;
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
+	private TimerId turnTimerId;
 
 	/**
 	 * {@inheritDoc}
@@ -116,8 +119,9 @@ public class ServerGameContext extends GameContext {
 		}
 	}
 
-	public GameLogicAsync getNetworkGameLogic() {
-		return (GameLogicAsync) getLogic();
+	@Override
+	public GameLogicAsync getLogic() {
+		return (GameLogicAsync) super.getLogic();
 	}
 
 	public void setUpdateListener(Player player, Writer listener) {
@@ -125,13 +129,58 @@ public class ServerGameContext extends GameContext {
 	}
 
 	@Override
-	public void init() throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("ServerGameContext::init is unsupported.");
+	@Suspendable
+	public void init() {
+		logger.debug("{} networkedPlay: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
+		getLogic().contextReady();
+		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
+		setActivePlayerId(getPlayer(startingPlayerId).getId());
+
+		logger.debug("{} networkedPlay: Updating active players", getGameId());
+		updateActivePlayers();
+		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
+
+		// Make sure the players are initialized before sending the original player updates.
+		getLogic().initializePlayer(IdFactory.PLAYER_1);
+		getLogic().initializePlayer(IdFactory.PLAYER_2);
+		logger.debug("{} networkedPlay: Players initialized", getGameId());
+
+		Future<Void> init1 = Future.future();
+		Future<Void> init2 = Future.future();
+
+		// Set the mulligan timer
+		final TimerId mulliganTimerId;
+		if (getPlayers().stream().allMatch(Player::isHuman)) {
+			timerLengthMillis = getLogic().getMulliganTimeMillis();
+			timerStartTimeMillis = System.currentTimeMillis();
+			mulliganTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::endMulligans));
+		} else {
+			logger.debug("{} networkPlay: No mulligan timer set for game because all players are not human", getGameId());
+			timerLengthMillis = null;
+			timerStartTimeMillis = null;
+			mulliganTimerId = null;
+		}
+
+		updateClientsWithGameState();
+
+		getLogic().initAsync(getActivePlayerId(), true, p -> init1.complete());
+		getLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, p -> init2.complete());
+
+		// Mulligan simultaneously now
+		try {
+			CompositeFuture done = Sync.awaitResult(h -> CompositeFuture.all(init1, init2).setHandler(h), 2 * GameLogic.DEFAULT_MULLIGAN_TIME * 1000);
+		} catch (VertxException ex) {
+			logger.error("{} init: Failed to mulligan due to unknown error: {}", getGameId(), ex);
+		}
+
+		finishMulliganTimer(mulliganTimerId);
 	}
 
 	@Override
 	@Suspendable
 	public void startTurn(int playerId) {
+		processTurnTimers(getActivePlayerId());
+
 		super.startTurn(playerId);
 		GameState state = new GameState(this, TurnState.TURN_IN_PROGRESS);
 		getListenerMap().get(getPlayer1()).onUpdate(state);
@@ -141,6 +190,9 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	public void endTurn() {
 		super.endTurn();
+		if (turnTimerId != null) {
+			scheduler.cancelTimer(turnTimerId);
+		}
 		this.onGameStateChanged();
 		getListenerMap().get(getPlayer1()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 		getListenerMap().get(getPlayer2()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
@@ -148,11 +200,6 @@ public class ServerGameContext extends GameContext {
 
 	private Player getNonActivePlayer() {
 		return getOpponent(getActivePlayer());
-	}
-
-	@Override
-	public void play() throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("ServerGameContext::play should not be called. Use ::networkPlay instead.");
 	}
 
 	/**
@@ -174,115 +221,48 @@ public class ServerGameContext extends GameContext {
 		}
 	}
 
-	/**
-	 * Starts the game and initializes the turn loop.
-	 */
+	@Override
 	@Suspendable
-	public void networkPlay() {
-		logger.debug("{} networkedPlay: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
-		getNetworkGameLogic().contextReady();
-		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
-		setActivePlayerId(getPlayer(startingPlayerId).getId());
+	public void resume() {
+		while (!updateAndGetGameOver()) {
+			startTurn(getActivePlayerId());
+			while (takeActionInTurn()) {
+				if (!isRunning) {
+					break;
+				}
+			}
+			if (getTurn() > GameLogic.TURN_LIMIT) {
+				break;
+			}
+		}
+		endGame();
+	}
 
-		logger.debug("{} networkedPlay: Updating active players", getGameId());
-		updateActivePlayers();
-		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
+	@Suspendable
+	private void finishMulliganTimer(TimerId mulliganTimerId) {
+		logger.debug("{} networkPlay: Received mulligans", getGameId());
+		if (mulliganTimerId != null) {
+			scheduler.cancelTimer(mulliganTimerId);
+		}
+	}
 
-		// Make sure the players are initialized before sending the original player updates.
-		getNetworkGameLogic().initializePlayer(IdFactory.PLAYER_1);
-		getNetworkGameLogic().initializePlayer(IdFactory.PLAYER_2);
-		logger.debug("{} networkedPlay: Players initialized", getGameId());
-
-		Future<Void> init1 = Future.future();
-		Future<Void> init2 = Future.future();
-
-		// Set the mulligan timer
-		final TimerId mulliganTimerId;
-		if (getPlayers().stream().allMatch(Player::isHuman)) {
-			timerLengthMillis = getLogic().getMulliganTimeMillis();
+	@Suspendable
+	private void processTurnTimers(int activePlayerId) {
+		// Start the turn timer
+		if (turnTimerId != null) {
+			scheduler.cancelTimer(turnTimerId);
+		}
+		timerElapsedForPlayerId = -1;
+		if (getNonActivePlayer().isHuman()) {
+			timerLengthMillis = (long) getTurnTimeForPlayer(activePlayerId);
 			timerStartTimeMillis = System.currentTimeMillis();
-			mulliganTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::endMulligans));
+
+			turnTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::elapseTurn));
 		} else {
-			logger.debug("{} networkPlay: No mulligan timer set for game because all players are not human", getGameId());
 			timerLengthMillis = null;
 			timerStartTimeMillis = null;
-			mulliganTimerId = null;
+			logger.debug("{} networkedPlay: Not setting timer because opponent is not human.", getGameId());
 		}
-
-		updateClientsWithGameState();
-
-		getNetworkGameLogic().initAsync(getActivePlayerId(), true, p -> init1.complete());
-		getNetworkGameLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, p -> init2.complete());
-
-		// Mulligan simultaneously now
-		CompositeFuture.all(init1, init2).setHandler(cf -> {
-			logger.debug("{} networkPlay: Received mulligans", getGameId());
-			if (mulliganTimerId != null) {
-				scheduler.cancelTimer(mulliganTimerId);
-			}
-
-			final TimerId[] turnTimerId = {null};
-			Recursive<Runnable> playTurnLoop = new Recursive<>();
-			playTurnLoop.func = () -> {
-				// End the existing turn timer, if it's set
-				if (turnTimerId[0] != null) {
-					scheduler.cancelTimer(turnTimerId[0]);
-				}
-
-				if (!isRunning) {
-					logger.debug("{} networkedPlay: Game no longer running, ending...", getGameId());
-					endGame();
-					return;
-				}
-
-				// Check if the game has been decided right at the end of the player's turn
-				if (updateAndGetGameOver()) {
-					logger.debug("{} networkedPlay: Game has ended with a normal resolution, ending...", getGameId());
-					endGame();
-					return;
-				}
-
-				final int activePlayerId = getActivePlayerId();
-				startTurn(activePlayerId);
-
-				// Start the turn timer
-				timerElapsedForPlayerId = -1;
-				if (getNonActivePlayer().isHuman()) {
-					timerLengthMillis = (long) getTurnTimeForPlayer(activePlayerId);
-					timerStartTimeMillis = System.currentTimeMillis();
-
-					turnTimerId[0] = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::elapseTurn));
-				} else {
-					timerLengthMillis = null;
-					timerStartTimeMillis = null;
-					logger.debug("{} networkedPlay: Not setting timer because opponent is not human.", getGameId());
-				}
-
-				Recursive<Handler<Boolean>> actionLoop = new Recursive<>();
-
-				actionLoop.func = hasMoreActions -> {
-					if (!isRunning) {
-						endGame();
-						return;
-					}
-					if (hasMoreActions) {
-						networkedPlayTurn(actionLoop.func);
-					} else {
-						if (getTurn() > GameLogic.TURN_LIMIT
-								|| updateAndGetGameOver()) {
-							endGame();
-						} else {
-							playTurnLoop.func.run();
-						}
-					}
-				};
-
-				networkedPlayTurn(actionLoop.func);
-			};
-
-			// Start the active player's turn once the game is initialized.
-			playTurnLoop.func.run();
-		});
 	}
 
 	@Suspendable
@@ -310,59 +290,10 @@ public class ServerGameContext extends GameContext {
 		return getLogic().getTurnTimeMillis(activePlayerId);
 	}
 
+	@Suspendable
 	protected void updateActivePlayers() {
 		getListenerMap().get(getActivePlayer()).onActivePlayer(getActivePlayer());
 		getListenerMap().get(getNonActivePlayer()).onActivePlayer(getActivePlayer());
-	}
-
-	@Override
-	public boolean takeActionInTurn() throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("ServerGameContext::playTurn should not be called.");
-	}
-
-	@Suspendable
-	protected void networkedPlayTurn(Handler<Boolean> callback) {
-		if (!isRunning) {
-			return;
-		}
-
-		try {
-			setActionsThisTurn(getActionsThisTurn() + 1);
-
-			if (getActionsThisTurn() > 99) {
-				logger.warn("{} networkedPlayTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
-				endTurn();
-				callback.handle(false);
-				return;
-			}
-
-			if (getLogic().hasAutoHeroPower(getActivePlayerId())) {
-				performAction(getActivePlayerId(), getAutoHeroPowerAction());
-				callback.handle(true);
-				return;
-			}
-
-			List<GameAction> validActions = getValidActions();
-			if (validActions.size() == 0) {
-				endTurn();
-				callback.handle(false);
-				return;
-			}
-
-			NetworkBehaviour networkBehaviour = (NetworkBehaviour) getActivePlayer().getBehaviour();
-			networkBehaviour.requestActionAsync(this, getActivePlayer(), getValidActions(), action -> {
-				if (action == null) {
-					throw new RuntimeException("Behaviour " + getActivePlayer().getBehaviour().getName() + " selected NULL action while "
-							+ getValidActions().size() + " actions were available");
-				}
-				performAction(getActivePlayerId(), action);
-				callback.handle(action.getActionType() != ActionType.END_TURN);
-			});
-		} catch (NullPointerException e) {
-			if (isRunning) {
-				throw e;
-			}
-		}
 	}
 
 	@Override
@@ -371,6 +302,7 @@ public class ServerGameContext extends GameContext {
 		updateClientsWithGameState();
 	}
 
+	@Suspendable
 	public void updateClientsWithGameState() {
 		GameState state = getGameStateCopy();
 		getListenerMap().get(getPlayer1()).onUpdate(state);

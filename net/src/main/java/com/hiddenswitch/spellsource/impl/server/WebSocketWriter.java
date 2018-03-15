@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl.server;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.client.Configuration;
@@ -60,6 +61,7 @@ public class WebSocketWriter implements Writer {
 		open = false;
 	}
 
+	@Suspendable
 	private void sendMessage(ServerToClientMessage message) {
 		try {
 			sendMessage(getPrivateSocket(), message);
@@ -68,6 +70,7 @@ public class WebSocketWriter implements Writer {
 		}
 	}
 
+	@Suspendable
 	protected void sendMessage(WriteStream<Buffer> socket, ServerToClientMessage message) throws IOException {
 		// Always include the playerId in the message
 		message.setLocalPlayerId(playerId);
@@ -78,6 +81,7 @@ public class WebSocketWriter implements Writer {
 		socket.write(Buffer.buffer(Configuration.getDefaultApiClient().getJSON().serialize(message)));
 	}
 
+	@Suspendable
 	public void close() {
 		try {
 			if (!open) {
@@ -89,6 +93,7 @@ public class WebSocketWriter implements Writer {
 	}
 
 	@Override
+	@Suspendable
 	public void onNotification(Notification event, com.hiddenswitch.spellsource.common.GameState gameState) {
 		if (!event.isClientInterested()) {
 			return;
@@ -183,6 +188,7 @@ public class WebSocketWriter implements Writer {
 	}
 
 	@Override
+	@Suspendable
 	public void onGameEnd(com.hiddenswitch.spellsource.common.GameState state, Player winner) {
 		flush();
 		if (state == null) {
@@ -210,12 +216,14 @@ public class WebSocketWriter implements Writer {
 	}
 
 	@Override
+	@Suspendable
 	public void onActivePlayer(Player activePlayer) {
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.ON_ACTIVE_PLAYER));
 	}
 
 	@Override
+	@Suspendable
 	public void onTurnEnd(Player activePlayer, int turnNumber, TurnState turnState) {
 		// TODO: Do nothing?
 		sendMessage(new ServerToClientMessage()
@@ -223,6 +231,7 @@ public class WebSocketWriter implements Writer {
 	}
 
 	@Override
+	@Suspendable
 	public void onUpdate(com.hiddenswitch.spellsource.common.GameState state) {
 		final GameState gameState = getClientGameState(state);
 		sendMessage(new ServerToClientMessage()
@@ -253,6 +262,7 @@ public class WebSocketWriter implements Writer {
 	}
 
 	@Override
+	@Suspendable
 	public void onRequestAction(String id, com.hiddenswitch.spellsource.common.GameState state, List<GameAction> availableActions) {
 		flush();
 		// Set the ids on the available actions
@@ -271,6 +281,7 @@ public class WebSocketWriter implements Writer {
 	}
 
 	@Override
+	@Suspendable
 	public void onMulligan(String id, com.hiddenswitch.spellsource.common.GameState state, List<Card> cards, int playerId) {
 		flush();
 		final GameContext simulatedContext = new GameContext();
@@ -284,6 +295,7 @@ public class WebSocketWriter implements Writer {
 	}
 
 	@Override
+	@Suspendable
 	public void onEmote(int entityId, Emote.MessageEnum emote) {
 		sendMessage(new ServerToClientMessage()
 				.messageType(MessageType.EMOTE)

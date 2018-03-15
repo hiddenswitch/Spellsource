@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Gateway;
 import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Port;
+import com.hiddenswitch.spellsource.common.SuspendablePump;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
 import com.hiddenswitch.spellsource.impl.server.GameSessionImpl;
 import com.hiddenswitch.spellsource.impl.server.SessionWriter;
@@ -124,7 +125,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		logger.debug("connect: Connecting userId " + userId + " with gameId " + session.getGameId());
 		final SessionWriter writer = new SessionWriter(userId, playerId, eventBus, session, activityMonitors);
 		final MessageConsumer<Buffer> reader = eventBus.consumer(READER_ADDRESS_PREFIX + userId);
-		final Pump pipe = Pump.pump(reader.bodyStream(), writer, Integer.MAX_VALUE).start();
+		final Pump pipe = new SuspendablePump<>(reader.bodyStream(), writer, Integer.MAX_VALUE).start();
 		return () -> {
 			pipe.stop();
 			writer.end();

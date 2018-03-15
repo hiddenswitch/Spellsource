@@ -187,7 +187,7 @@ public class GameSessionImpl implements GameSession {
 				h.handle(this);
 			});
 		});
-		getGameContext().networkPlay();
+		getGameContext().play();
 	}
 
 	@Override
