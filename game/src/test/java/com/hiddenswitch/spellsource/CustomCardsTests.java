@@ -26,6 +26,21 @@ import java.util.stream.Stream;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testTheEmeraldDream() {
+		runGym((context, player, opponent) -> {
+			Minion emeraldDream = playMinionCard(context, player, "permanent_the_emerald_dream");
+			int count = 0;
+			Minion snowflipper;
+			for (int i = 0; i < 5; i++) {
+				snowflipper = playMinionCard(context, player, "minion_snowflipper_penguin");
+				count++;
+				Assert.assertEquals(snowflipper.getAttack(), snowflipper.getBaseAttack() + count);
+				Assert.assertEquals(snowflipper.getHp(), snowflipper.getBaseHp() + count);
+			}
+		});
+	}
+
+	@Test
 	public void testDiabologist() {
 		runGym((context, player, opponent) -> {
 			Card card1 = receiveCard(context, player, "minion_bloodfen_raptor");
