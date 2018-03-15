@@ -23,11 +23,21 @@
       "eventTrigger": {
         "class": "DamageReceivedTrigger",
         "fireCondition": {
-          "class": "AttributeCondition",
-          "target": "TRIGGER_HOST",
-          "value": 0,
-          "attribute": "RESERVED_INTEGER_1",
-          "operation": "GREATER"
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "AttributeCondition",
+              "target": "TRIGGER_HOST",
+              "value": 0,
+              "attribute": "RESERVED_INTEGER_1",
+              "operation": "GREATER"
+            },
+            {
+              "class": "IsDeadCondition",
+              "target": "EVENT_TARGET",
+              "invert": true
+            }
+          ]
         },
         "targetEntityType": "MINION",
         "targetPlayer": "SELF"
