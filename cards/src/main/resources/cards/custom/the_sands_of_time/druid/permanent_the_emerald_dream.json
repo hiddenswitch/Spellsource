@@ -1,5 +1,5 @@
 {
-  "name": "The Emereald Dream",
+  "name": "The Emerald Dream",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BROWN",
@@ -22,7 +22,7 @@
     },
     {
       "eventTrigger": {
-        "class": "MinionPlayedTrigger"
+        "class": "BeforeMinionPlayedTrigger"
       },
       "spell": {
         "class": "MetaSpell",
@@ -32,13 +32,13 @@
             "target": "EVENT_TARGET",
             "value": {
               "class": "AttributeValueProvider",
-              "target": "SELF",
+              "target": "TRIGGER_HOST",
               "attribute": "RESERVED_INTEGER_1"
             }
           },
           {
             "class": "ModifyAttributeSpell",
-            "target": "SELF",
+            "target": "TRIGGER_HOST",
             "value": 1,
             "attribute": "RESERVED_INTEGER_1"
           }

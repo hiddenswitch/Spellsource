@@ -48,13 +48,16 @@ public class NaxxramasTests extends TestBase {
 	@Test
 	public void testLoatheb() {
 		runGym((context, player, opponent) -> {
-			Card fireball = receiveCard(context, opponent, "spell_fireball");
+			Card friendlyFireball = receiveCard(context, player, "spell_fireball");
 			playCard(context, player, "minion_loatheb");
+			Assert.assertEquals(costOf(context, player, friendlyFireball), friendlyFireball.getBaseManaCost());
 			context.endTurn();
-			Assert.assertEquals(costOf(context, player, fireball), fireball.getBaseManaCost() + 5);
+			Card fireball = receiveCard(context, opponent, "spell_fireball");
+			Assert.assertEquals(costOf(context, player, friendlyFireball), friendlyFireball.getBaseManaCost());
+			Assert.assertEquals(costOf(context, opponent, fireball), fireball.getBaseManaCost() + 5);
 			context.endTurn();
 			context.endTurn();
-			Assert.assertEquals(costOf(context, player, fireball), fireball.getBaseManaCost());
+			Assert.assertEquals(costOf(context, opponent, fireball), fireball.getBaseManaCost());
 		});
 	}
 
