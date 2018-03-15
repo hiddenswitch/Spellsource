@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.demilich.metastone.game.actions.PlayCardAction;
+import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.TurnEndEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
@@ -32,11 +34,30 @@ import net.demilich.metastone.game.spells.SilenceSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 
 public class AdvancedMechanicTests extends TestBase {
+
+	@Test
+	public void testEndTurnEventAppearsOnce() {
+		runGym((context, player, opponent) -> {
+			context = spy(context);
+			context.getLogic().setContext(context);
+			AtomicInteger counter = new AtomicInteger(0);
+			doAnswer(invocation -> {
+				GameEvent event = invocation.getArgument(0);
+				if (event instanceof TurnEndEvent) {
+					counter.incrementAndGet();
+				}
+				return invocation.callRealMethod();
+			}).when(context).fireGameEvent(any());
+			context.endTurn();
+			Assert.assertEquals(counter.get(), 1);
+		});
+	}
 
 	@Test
 	public void testDiscover() {

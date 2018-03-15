@@ -81,9 +81,9 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 			minionCard.getAttributes().put(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 			context.getLogic().removeCard(minionCard);
 
-			desc.subSpells(0).forEach(subSpell -> {
+			for (SpellDesc subSpell : desc.subSpells(0)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, summoned);
-			});
+			}
 		}
 	}
 

@@ -45,9 +45,9 @@ public class FightSpell extends Spell {
 			}
 
 			context.getLogic().fight(player, (Actor) resolvedSource, (Actor) target, null);
-			desc.subSpells(0).forEach(subSpell -> {
+			for (SpellDesc subSpell : desc.subSpells(0)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, resolvedSource);
-			});
+			}
 
 			if (resolvedSource instanceof Hero) {
 				// Deactivate the weapon when we're done.

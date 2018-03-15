@@ -17,6 +17,7 @@ import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -154,12 +155,12 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 		put(SpellArg.TARGET, target);
 	}
 
-	public Stream<SpellDesc> subSpells(final int depth) {
+	public List<SpellDesc> subSpells(final int depth) {
 		Stream<SpellDesc> spells;
 		SpellDesc[] spellsArray = (SpellDesc[]) get(SpellArg.SPELLS);
 		if (spellsArray != null && spellsArray.length > 0) {
 			spells = Stream.concat(Stream.of(spellsArray),
-					Stream.of(spellsArray).flatMap(SpellDesc::subSpells)
+					Stream.of(spellsArray).flatMap(s -> s.subSpells().stream())
 			);
 		} else {
 			spells = Stream.empty();
@@ -173,13 +174,13 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 		if (depth == 0) {
 			unitSpells = units.stream();
 		} else {
-			unitSpells = Stream.concat(units.stream(), units.stream().flatMap(u -> u.subSpells(depth - 1)));
+			unitSpells = Stream.concat(units.stream(), units.stream().flatMap(u -> u.subSpells(depth - 1).stream()));
 		}
 
-		return Stream.concat(spells, unitSpells);
+		return Stream.concat(spells, unitSpells).collect(Collectors.toList());
 	}
 
-	public Stream<SpellDesc> subSpells() {
+	public List<SpellDesc> subSpells() {
 		return subSpells(20);
 	}
 
