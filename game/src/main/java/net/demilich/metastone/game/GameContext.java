@@ -358,8 +358,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		logger.debug("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getLogic().getNextActivePlayerId());
-		onGameStateChanged();
 		setTurnState(TurnState.TURN_ENDED);
+		onGameStateChanged();
 	}
 
 
@@ -1062,9 +1062,9 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		logger.debug("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
 		setTurn(getTurn() + 1);
 		getLogic().startTurn(playerId);
-		onGameStateChanged();
 		setActionsThisTurn(0);
 		setTurnState(TurnState.TURN_IN_PROGRESS);
+		onGameStateChanged();
 	}
 
 	@Override
