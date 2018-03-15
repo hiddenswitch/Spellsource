@@ -11,9 +11,25 @@
   "deckTrigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
-      "queueCondition": {
-        "class": "RaceCondition",
-        "race": "DRAGON"
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "target": "TRIGGER_HOST",
+            "invert": true
+          },
+          {
+            "class": "RaceCondition",
+            "race": "DRAGON"
+          },
+          {
+            "class": "MinionCountCondition",
+            "targetPlayer": "SELF",
+            "value": 7,
+            "operation": "LESS"
+          }
+        ]
       },
       "targetPlayer": "SELF"
     },

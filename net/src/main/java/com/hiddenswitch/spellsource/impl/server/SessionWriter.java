@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl.server;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
@@ -33,6 +34,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 		this.activityMonitors = activityMonitors == null ? Collections.emptyList() : activityMonitors;
 	}
 
+	@Suspendable
 	private void handleWebSocketMessage(Buffer messageBuffer) {
 		com.hiddenswitch.spellsource.client.models.ClientToServerMessage message =
 				Configuration.getDefaultApiClient().getJSON().deserialize(messageBuffer.toString(),
@@ -101,6 +103,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 	}
 
 	@Override
+	@Suspendable
 	public WriteStream<Buffer> write(Buffer data) {
 		try {
 			handleWebSocketMessage(data);

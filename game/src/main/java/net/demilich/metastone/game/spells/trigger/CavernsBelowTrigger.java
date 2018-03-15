@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
@@ -38,7 +39,9 @@ public class CavernsBelowTrigger extends BeforeMinionPlayedTrigger {
 		// We're going to store the most recent max in the conditional attack bonus attribute
 		// on our enchantment
 		int max = (int) host.getAttributes().getOrDefault(Attribute.RESERVED_INTEGER_1, 0);
-		Map<EntityReference, Entity> entities = context.getEntities().collect(toMap(Entity::getReference, Function.identity()));
+		Map<EntityReference, Entity> entities = context.getEntities()
+				.filter(entity -> !entity.getSourceCard().getCardType().isCardType(CardType.CHOOSE_ONE))
+				.collect(toMap(Entity::getReference, Function.identity()));
 		Map<String, Long> counts = list.getReferences(context, host)
 				.stream()
 				.map(entities::get)

@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.common.SuspendablePump;
 import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
@@ -1135,8 +1136,8 @@ public interface Games {
 				}
 				final MessageConsumer<Buffer> consumer = bus.consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
 				final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
-				final Pump pump1 = Pump.pump(socket, publisher, Integer.MAX_VALUE).start();
-				final Pump pump2 = Pump.pump(consumer.bodyStream(), socket, Integer.MAX_VALUE).start();
+				final Pump pump1 = new SuspendablePump<>(socket, publisher, Integer.MAX_VALUE).start();
+				final Pump pump2 = new SuspendablePump<>(consumer.bodyStream(), socket, Integer.MAX_VALUE).start();
 
 				socket.closeHandler(fiberHandler(disconnected -> {
 					try {
