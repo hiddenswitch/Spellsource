@@ -1,23 +1,17 @@
 package com.hiddenswitch.spellsource;
 
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-
-import java.util.stream.Collectors;
 
 public class ScenarioTests extends TestBase {
 
 	@Test
 	void testNecromancer() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().changeHero(player, ((HeroCard) CardCatalogue.getCardById("hero_necromancer")).createHero(), true);
+			context.getLogic().changeHero(player, ((Card) CardCatalogue.getCardById("hero_necromancer")).createHero(), true);
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor") /*Cost 2*/;
 			Minion bearshark = playMinionCard(context, player, "minion_bearshark") /*Cost 3*/;
 			Assert.assertEquals(bloodfen.getDeathrattles().size(), 1);

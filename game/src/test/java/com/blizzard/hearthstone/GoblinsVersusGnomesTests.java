@@ -5,7 +5,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
@@ -101,14 +100,14 @@ public class GoblinsVersusGnomesTests extends TestBase {
 		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player paladin = context.getPlayer1();
 
-		MinionCard adjacentMinionCard1 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentMinionCard1);
+		Card adjacentCard1 = new TestMinionCard(1, 5, 0);
+		playMinionCard(context, paladin, adjacentCard1);
 
-		MinionCard targetMinionCard = (MinionCard) CardCatalogue.getCardById("minion_burly_rockjaw_trogg");
-		Minion targetMinion = playMinionCard(context, paladin, targetMinionCard);
+		Card targetCard = CardCatalogue.getCardById("minion_burly_rockjaw_trogg");
+		Minion targetMinion = playMinionCard(context, paladin, targetCard);
 
-		MinionCard adjacentMinionCard2 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentMinionCard2);
+		Card adjacentCard2 = new TestMinionCard(1, 5, 0);
+		playMinionCard(context, paladin, adjacentCard2);
 
 		context.getLogic().endTurn(paladin.getId());
 

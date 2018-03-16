@@ -8,7 +8,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.desc.ActorCardDesc;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -29,9 +29,8 @@ public class CopyDeathrattleSpell extends Spell {
 		Actor copyTo = (Actor) source;
 		List<SpellDesc> deathrattles = new ArrayList<>();
 		// Only actors have copyable deathrattles
-		if (target instanceof Card &&
-				((Card) target).getDesc() instanceof ActorCardDesc) {
-			final ActorCardDesc actorCardDesc = (ActorCardDesc) ((Card) target).getDesc();
+		if (target instanceof Card) {
+			final CardDesc actorCardDesc = ((Card) target).getDesc();
 			if (actorCardDesc.deathrattle != null) {
 				deathrattles.add(actorCardDesc.deathrattle);
 			}

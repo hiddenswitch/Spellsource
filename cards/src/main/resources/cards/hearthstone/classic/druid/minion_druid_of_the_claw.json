@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "description": "Choose One - Charge; or +2 Health and Taunt.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "name": "Cat Form",
       "description": "Charge",
@@ -27,7 +27,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Druid of the Claw",
     "spell": {
       "class": "TransformMinionSpell",

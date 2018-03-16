@@ -9,6 +9,7 @@ import java.util.stream.StreamSupport;
 
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -25,11 +26,6 @@ import ch.qos.logback.classic.Logger;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.cards.HeroCard;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
@@ -161,7 +157,7 @@ public class TestBase {
 		return playMinionCard(context, player, cardId);
 	}
 
-	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, MinionCard card, Entity target) {
+	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, Card card, Entity target) {
 		OverrideHandle<EntityReference> handle = overrideBattlecry(player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
 		return playMinionCard(context, player, card);
 	}
@@ -384,14 +380,14 @@ public class TestBase {
 				CardSet.BASIC,
 				CardSet.CLASSIC)), new TestBehaviour());
 		player1Config.setName("Player 1");
-		player1Config.setHeroCard(getHeroCardForClass(hero1));
+		player1Config.setHeroCard(HeroClass.getHeroCard(hero1));
 		Player player1 = new Player(player1Config);
 
 		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(hero2, new DeckFormat().withCardSets(
 				CardSet.BASIC,
 				CardSet.CLASSIC)), new TestBehaviour());
 		player2Config.setName("Player 2");
-		player2Config.setHeroCard(getHeroCardForClass(hero2));
+		player2Config.setHeroCard(HeroClass.getHeroCard(hero2));
 		Player player2 = new Player(player2Config);
 
 		GameLogic logic = new GameLogic();
@@ -409,16 +405,6 @@ public class TestBase {
 				if (minion.getSourceCard().getCardId().equals(cardId)) {
 					return minion;
 				}
-			}
-		}
-		return null;
-	}
-
-	protected static HeroCard getHeroCardForClass(HeroClass heroClass) {
-		for (Card card : CardCatalogue.getHeroes()) {
-			HeroCard heroCard = (HeroCard) card;
-			if (heroCard.getHeroClass() == heroClass) {
-				return heroCard;
 			}
 		}
 		return null;
@@ -465,15 +451,15 @@ public class TestBase {
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, String minionCardId) {
-		return playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById(minionCardId));
+		return playMinionCard(context, player, CardCatalogue.getCardById(minionCardId));
 	}
 
-	protected static Minion playMinionCard(GameContext context, Player player, MinionCard minionCard) {
-		if (minionCard.getZone() != Zones.HAND) {
-			context.getLogic().receiveCard(player.getId(), minionCard);
+	protected static Minion playMinionCard(GameContext context, Player player, Card card) {
+		if (card.getZone() != Zones.HAND) {
+			context.getLogic().receiveCard(player.getId(), card);
 		}
 
-		context.getLogic().performGameAction(player.getId(), minionCard.play());
+		context.getLogic().performGameAction(player.getId(), card.play());
 		return getSummonedMinion(player.getMinions());
 	}
 

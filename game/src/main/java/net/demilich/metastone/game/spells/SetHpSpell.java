@@ -3,7 +3,7 @@ package net.demilich.metastone.game.spells;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.cards.ActorCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -38,7 +38,7 @@ public class SetHpSpell extends Spell {
 
 		if (target instanceof Actor) {
 			context.getLogic().setHpAndMaxHp((Actor) target, hp);
-		} else if (target instanceof ActorCard) {
+		} else if (target instanceof Card) {
 			target.getAttributes().put(Attribute.HP, hp);
 		}
 

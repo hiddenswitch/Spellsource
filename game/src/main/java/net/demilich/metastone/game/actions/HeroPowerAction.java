@@ -3,7 +3,6 @@ package net.demilich.metastone.game.actions;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.heroes.powers.HeroPowerChooseOneCard;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
@@ -17,7 +16,7 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 		setActionType(ActionType.HERO_POWER);
 	}
 
-	public HeroPowerAction(SpellDesc spell, HeroPowerChooseOneCard card, TargetSelection targetRequirement, Card chosenCard) {
+	public HeroPowerAction(SpellDesc spell, Card card, TargetSelection targetRequirement, Card chosenCard) {
 		super(spell, card, targetRequirement);
 		this.choiceCardId = chosenCard.getCardId();
 		setActionType(ActionType.HERO_POWER);
@@ -39,7 +38,7 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 	@Override
 	@Suspendable
 	public void play(GameContext context, int playerId) {
-		context.getLogic().castSpell(playerId, getSpell(), EntityReference, getTargetReference(), getTargetRequirement(), false, this);
+		context.getLogic().castSpell(playerId, getSpell(), entityReference, getTargetReference(), getTargetRequirement(), false, this);
 	}
 
 	@Override

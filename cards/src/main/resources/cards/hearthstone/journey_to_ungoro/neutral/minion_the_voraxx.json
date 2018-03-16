@@ -19,7 +19,7 @@
       "spell": {
         "class": "RecastSpell",
         "target": "OUTPUT",
-        "card": "PENDING_CARD"
+        "secondaryTarget": "EVENT_SOURCE"
       },
       "boardPositionRelative": "RIGHT",
       "card": "token_sapling"

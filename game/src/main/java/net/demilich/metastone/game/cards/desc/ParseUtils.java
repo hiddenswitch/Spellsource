@@ -145,27 +145,27 @@ public class ParseUtils {
 					entry = entry.getAsJsonObject().get("desc");
 				}
 				ValueProviderDesc valueProviderDesc = valueProviderParser.deserialize(entry, ValueProviderDesc.class, null);
-				return valueProviderDesc.createInstance();
+				return valueProviderDesc.create();
 			case ENTITY_FILTER: {
 				if (entry.getAsJsonObject().has("desc")) {
 					entry = entry.getAsJsonObject().get("desc");
 				}
 				FilterDesc filterDesc = filterParser.deserialize(entry, FilterDesc.class, null);
-				return filterDesc.createInstance();
+				return filterDesc.create();
 			}
 			case CARD_SOURCE: {
 				if (entry.getAsJsonObject().has("desc")) {
 					entry = entry.getAsJsonObject().get("desc");
 				}
 				CardSourceDesc cardSourceDesc = sourceParser.deserialize(entry, CardSourceDesc.class, null);
-				return cardSourceDesc.createInstance();
+				return cardSourceDesc.create();
 			}
 			case AURA: {
 				if (entry.getAsJsonObject().has("desc")) {
 					entry = entry.getAsJsonObject().get("desc");
 				}
 				AuraDesc auraDesc = auraParser.deserialize(entry, AuraDesc.class, null);
-				return auraDesc.createInstance();
+				return auraDesc.create();
 			}
 			case ENTITY_FILTER_ARRAY: {
 				JsonArray jsonArray = entry.getAsJsonArray();
@@ -176,7 +176,7 @@ public class ParseUtils {
 						entry1 = entry1.getAsJsonObject().get("desc");
 					}
 					FilterDesc filterDesc = filterParser.deserialize(entry1, FilterDesc.class, null);
-					array[i] = filterDesc.createInstance();
+					array[i] = filterDesc.create();
 				}
 				return array;
 			}
@@ -185,7 +185,7 @@ public class ParseUtils {
 					entry = entry.getAsJsonObject().get("desc");
 				}
 				ConditionDesc conditionDesc = conditionParser.deserialize(entry, ConditionDesc.class, null);
-				return conditionDesc.createInstance();
+				return conditionDesc.create();
 			}
 			case CONDITION_ARRAY: {
 				JsonArray jsonArray = entry.getAsJsonArray();
@@ -196,7 +196,7 @@ public class ParseUtils {
 						entry1 = entry1.getAsJsonObject().get("desc");
 					}
 					ConditionDesc conditionDesc = conditionParser.deserialize(entry1, ConditionDesc.class, null);
-					array[i] = conditionDesc.createInstance();
+					array[i] = conditionDesc.create();
 				}
 				return array;
 			}

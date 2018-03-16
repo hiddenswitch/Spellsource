@@ -19,7 +19,7 @@ public class Quest extends Enchantment {
 	}
 
 	public Quest(TriggerDesc desc, Card source) {
-		this(desc.eventTrigger.createInstance(), desc.spell, source, desc.countUntilCast);
+		this(desc.eventTrigger.create(), desc.spell, source, desc.countUntilCast);
 		setMaxFires(desc.maxFires);
 		setKeepAfterTransform(desc.keepAfterTransform);
 		setCountByValue(desc.countByValue);

@@ -6,7 +6,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardParseException;
-import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
@@ -119,15 +118,6 @@ public class GeneratorTest {
 				return String.format("MODEL %s AS COUNTS", column);
 			}
 		}), Stream.of("IGNORE index")).reduce((a1, a2) -> a1 + ";\n    " + a2).orElse("") + "\n);", new File("population.bql"), Charset.defaultCharset());
-	}
-
-	@Test
-	@Ignore
-	public void testNewSummonSpell() throws CardParseException, IOException, URISyntaxException {
-		GameContext gc = GameContext.uninitialized(HeroClass.BLUE, HeroClass.GREEN);
-		Player player1 = gc.getPlayer1();
-		Card source = (new Generator()).getSpellRecords().get(0).toCard();
-		assertNotNull(SpellUtils.getMinionCardFromSummonSpell(gc, player1, source, ((SpellCard) source).getSpell()));
 	}
 
 }

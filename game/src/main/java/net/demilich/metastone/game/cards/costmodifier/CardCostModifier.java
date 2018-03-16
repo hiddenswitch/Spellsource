@@ -57,7 +57,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		this.desc = desc;
 		EventTriggerDesc triggerDesc = (EventTriggerDesc) desc.get(CardCostModifierArg.EXPIRATION_TRIGGER);
 		if (triggerDesc != null) {
-			this.expirationTrigger = triggerDesc.createInstance();
+			this.expirationTrigger = triggerDesc.create();
 		}
 		if (desc.containsKey(CardCostModifierArg.TARGET)) {
 			targetReference = (EntityReference) desc.get(CardCostModifierArg.TARGET);

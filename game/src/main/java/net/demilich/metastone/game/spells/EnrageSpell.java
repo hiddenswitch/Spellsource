@@ -15,9 +15,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * Implements the attack bonus portion of a complete Enrage effect. The {@code target}'s attack is increased by  {@link
  * SpellArg#ATTACK_BONUS}. Optionally, an {@link SpellArg#ATTRIBUTE} is also applied when specified.
  * <p>
- * To implement "Enrage: +2 Attack", the {@link net.demilich.metastone.game.cards.MinionCard} needs to have a {@link
+ * To implement "Enrage: +2 Attack", the {@link net.demilich.metastone.game.cards.Card} needs to have a {@link
  * net.demilich.metastone.game.spells.desc.trigger.TriggerDesc} specified in its {@link
- * net.demilich.metastone.game.cards.desc.MinionCardDesc#trigger} field:
+ * net.demilich.metastone.game.cards.desc.CardDesc#trigger} field:
  * <pre>
  *      "trigger": {
  *          "eventTrigger": {

@@ -5,26 +5,17 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.targeting.Zones;
 
 public class InDeckFilter extends EntityFilter {
 
 	public InDeckFilter(FilterDesc desc) {
 		super(desc);
 	}
-	
+
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		Card card = null;
-		if (entity instanceof Card) {
-			card = (Card) entity;
-		} else if (entity instanceof Actor) {
-			Actor actor = (Actor) entity;
-			card = actor.getSourceCard();
-		} else {
-			return false;
-		}
-
-		return player.getDeck().containsCard(card);
+		return entity.getZone() == Zones.DECK && entity.getOwner() == player.getId();
 	}
 
 }

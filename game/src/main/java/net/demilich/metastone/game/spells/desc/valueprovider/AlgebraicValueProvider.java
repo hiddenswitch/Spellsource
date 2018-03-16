@@ -17,7 +17,7 @@ public class AlgebraicValueProvider extends ValueProvider {
 			arguments.put(ValueProviderArg.VALUE_2, value2);
 		}
 		arguments.put(ValueProviderArg.OPERATION, operation);
-		return (AlgebraicValueProvider) (new ValueProviderDesc(arguments).createInstance());
+		return (AlgebraicValueProvider) (new ValueProviderDesc(arguments).create());
 	}
 
 	private static int evaluateOperation(int value1, int value2, AlgebraicOperation operation) {

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "description": "Choose a Deathrattle (Secretly) - Deal 3 damage to all minions; or Give them +2/+2",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Secret Deathrattle: Deal 3 damage to all minions",
       "spell": {
@@ -33,7 +33,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Secret Deathrattle: Deal 3 damage to all minions and give them +2/+2",
     "spell": {
       "class": "AddDeathrattleSpell",

@@ -21,7 +21,7 @@ public class CardCountValueProvider extends ValueProvider {
 	protected int provideValue(GameContext context, Player player, Entity target, Entity source) {
 		CardSource cardSource = (CardSource) desc.get(ValueProviderArg.CARD_SOURCE);
 		if (cardSource == null) {
-			cardSource = new CardSourceDesc(HandSource.class).createInstance();
+			cardSource = new CardSourceDesc(HandSource.class).create();
 		}
 
 		EntityFilter cardFilter;

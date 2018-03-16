@@ -20,8 +20,6 @@ public class GraveyardCountCondition extends Condition {
 		for (Entity deadEntity : player.getGraveyard()) {
 			if (deadEntity instanceof Minion) {
 				count++;
-			} else if (deadEntity instanceof Card) {
-				continue;
 			}
 		}
 		int targetValue = desc.getInt(ConditionArg.VALUE);

@@ -13,8 +13,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.cards.SecretCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -88,16 +87,16 @@ public class SecretTest extends TestBase {
 		Player warrior = context.getPlayer2();
 		warrior.setMana(10);
 
-		SecretCard secretCard = new TestSecretCard();
+		Card secretCard = new TestSecretCard();
 		context.getLogic().receiveCard(mage.getId(), secretCard);
 		Assert.assertTrue(context.getLogic().canPlaySecret(mage, secretCard));
 		context.getLogic().performGameAction(mage.getId(), secretCard.play());
 
-		SecretCard secretCard2 = new TestSecretCard();
+		Card secretCard2 = new TestSecretCard();
 		context.getLogic().receiveCard(mage.getId(), secretCard2);
 		Assert.assertFalse(context.getLogic().canPlaySecret(mage, secretCard2));
 
-		SecretCard otherSecret = (SecretCard) CardCatalogue.getCardById("secret_explosive_trap");
+		Card otherSecret = (Card) CardCatalogue.getCardById("secret_explosive_trap");
 		context.getLogic().receiveCard(mage.getId(), otherSecret);
 		Assert.assertTrue(context.getLogic().canPlaySecret(mage, otherSecret));
 	}
@@ -110,7 +109,7 @@ public class SecretTest extends TestBase {
 
 		playCard(context, player, "secret_duplicate");
 
-		Minion novice = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_novice_engineer"));
+		Minion novice = playMinionCard(context, player, CardCatalogue.getCardById("minion_novice_engineer"));
 		while (player.getHand().getCount() < GameLogic.MAX_HAND_CARDS) {
 			playCard(context, player, "minion_novice_engineer");
 		}
@@ -133,8 +132,8 @@ public class SecretTest extends TestBase {
 		clearZone(context, player.getDeck());
 		clearZone(context, opponent.getDeck());
 
-		MinionCard minionCard = (MinionCard) CardCatalogue.getCardById("minion_wisp");
-		Minion minion = playMinionCard(context, player, minionCard);
+		Card card = CardCatalogue.getCardById("minion_wisp");
+		Minion minion = playMinionCard(context, player, card);
 		context.endTurn();
 
 		Card explosiveTrap = CardCatalogue.getCardById("secret_explosive_trap");
@@ -161,8 +160,8 @@ public class SecretTest extends TestBase {
 		clearZone(context, player.getDeck());
 		clearZone(context, opponent.getDeck());
 
-		MinionCard minionCard = (MinionCard) CardCatalogue.getCardById("minion_wisp");
-		Minion minion = playMinionCard(context, player, minionCard);
+		Card card = CardCatalogue.getCardById("minion_wisp");
+		Minion minion = playMinionCard(context, player, card);
 		context.endTurn();
 
 		Card freezingTrap = CardCatalogue.getCardById("secret_freezing_trap");
@@ -206,7 +205,7 @@ public class SecretTest extends TestBase {
 
 		playCard(context, player, "secret_avenge");
 		playCard(context, player, "minion_murloc_raider");
-		Minion minion = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_murloc_raider"));
+		Minion minion = playMinionCard(context, player, CardCatalogue.getCardById("minion_murloc_raider"));
 		Assert.assertEquals(player.getSecrets().size(), 1);
 		context.endTurn();
 		playCardWithTarget(context, opponent, CardCatalogue.getCardById("spell_bash"), minion);

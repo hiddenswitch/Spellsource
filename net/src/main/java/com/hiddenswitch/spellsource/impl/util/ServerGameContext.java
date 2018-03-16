@@ -113,7 +113,7 @@ public class ServerGameContext extends GameContext {
 			final Map<SpellArg, Object> arguments = new SpellDesc(DelegateSpell.class);
 			arguments.put(SpellArg.NAME, trigger.getSpellId());
 			SpellDesc spell = new SpellDesc(arguments);
-			final Enchantment e = new Enchantment(trigger.getEventTriggerDesc().createInstance(), spell);
+			final Enchantment e = new Enchantment(trigger.getEventTriggerDesc().create(), spell);
 			e.setOwner(0);
 			this.getGameTriggers().add(e);
 		}

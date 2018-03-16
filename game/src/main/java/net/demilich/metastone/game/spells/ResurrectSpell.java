@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -9,7 +8,7 @@ import java.util.stream.Collectors;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -48,8 +47,8 @@ public class ResurrectSpell extends Spell {
 				return;
 			}
 			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
-			MinionCard minionCard = (MinionCard) resurrectedMinion.getSourceCard();
-			final Minion summonedMinion = minionCard.summon();
+			Card card = resurrectedMinion.getSourceCard();
+			final Minion summonedMinion = card.summon();
 			final boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, null, -1, false);
 			if (summoned
 					&& desc.containsKey(SpellArg.SPELL)

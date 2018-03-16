@@ -29,14 +29,13 @@ public class CreateCardFromChoicesSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Map<Integer, List<MinionCard>> cards = CardCatalogue.stream()
+		Map<Integer, List<Card>> sourceCards = CardCatalogue.stream()
 				.filter(Card::isCollectible)
 				.filter(c -> c.getRace() == Race.BEAST)
 				.filter(c -> c.getCardType() == CardType.MINION)
 				.filter(c -> c.getHeroClass() == HeroClass.ANY || c.getHeroClass() == HeroClass.GREEN)
 				.filter(c -> c.getBaseManaCost() <= 5)
 				.filter(c -> context.getDeckFormat().isInFormat(c))
-				.map(c -> (MinionCard) c)
 				.collect(groupingBy(c -> {
 					if (c.hasAura()
 							|| c.hasBattlecry()
@@ -53,8 +52,8 @@ public class CreateCardFromChoicesSpell extends Spell {
 				new CardArrayList(), new CardArrayList()
 		};
 		for (int i = 0; i < 2; i++) {
-			List<MinionCard> minionCards = cards.get(i);
-			minionCards.stream().filter(new RandomSubsetSelector(minionCards.size(), 3, context.getLogic().getRandom()))
+			List<Card> cards = sourceCards.get(i);
+			cards.stream().filter(new RandomSubsetSelector(cards.size(), 3, context.getLogic().getRandom()))
 					.forEach(options[i]::addCard);
 		}
 
@@ -70,10 +69,10 @@ public class CreateCardFromChoicesSpell extends Spell {
 		// According to https://us.battle.net/forums/en/hearthstone/topic/20759196602
 		// Retrieve the first beast chosen, then apply the stats from the second beast as a buff
 		// Except for the attack and health, that seems to just be baked in.
-		MinionCard card = (MinionCard) chosen[0].getCard().getCopy();
-		MinionCard other = (MinionCard) chosen[1].getCard().getCopy();
-		card.setName(desc.getString(SpellArg.NAME));
-		card.setDescription(card.getDescription() + "\n" + other.getDescription());
+		Card card = chosen[0].getCard().getCopy();
+		Card other = chosen[1].getCard().getCopy();
+		card.getAttributes().put(Attribute.NAME, desc.getString(SpellArg.NAME));
+		card.getAttributes().put(Attribute.DESCRIPTION, card.getDescription() + "\n" + other.getDescription());
 		card.getAttributes().put(Attribute.ATTACK, card.getAttack() + other.getAttack());
 		card.getAttributes().put(Attribute.BASE_ATTACK, card.getBaseAttack() + other.getBaseAttack());
 		card.getAttributes().put(Attribute.HP, card.getHp() + other.getHp());

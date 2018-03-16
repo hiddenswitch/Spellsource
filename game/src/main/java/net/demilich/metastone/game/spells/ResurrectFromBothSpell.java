@@ -6,7 +6,7 @@ import java.util.List;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -37,8 +37,8 @@ public class ResurrectFromBothSpell extends Spell {
 				return;
 			}
 			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
-			MinionCard minionCard = (MinionCard) resurrectedMinion.getSourceCard();
-			context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false);
+			Card card = resurrectedMinion.getSourceCard();
+			context.getLogic().summon(player.getId(), card.summon(), null, -1, false);
 			deadMinions.remove(resurrectedMinion);
 		}
 	}

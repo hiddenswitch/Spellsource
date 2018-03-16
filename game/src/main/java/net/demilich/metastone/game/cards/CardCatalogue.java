@@ -191,7 +191,7 @@ public class CardCatalogue {
 		}
 
 		for (CardDesc desc : cardDesc.values()) {
-			Card instance = desc.createInstance();
+			Card instance = desc.create();
 			CardCatalogue.add(instance);
 		}
 

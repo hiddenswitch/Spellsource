@@ -16,7 +16,6 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
-import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
@@ -445,7 +444,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		if (card.getCardType().isCardType(CardType.HERO_POWER)) {
-			HeroPowerCard power = (HeroPowerCard) card;
+			Card power = card;
 			int heroPowerUsages = getGreatestAttributeValue(player, Attribute.HERO_POWER_USAGES);
 			if (heroPowerUsages == 0) {
 				heroPowerUsages = 1;
@@ -462,9 +461,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return canSummonMoreMinions(player);
 		}
 
-		if (card instanceof SpellCard) {
-			SpellCard spellCard = (SpellCard) card;
-			return spellCard.canBeCast(context, player);
+		if (card.getCardType().isCardType(CardType.SPELL)) {
+			return card.canBeCast(context, player);
 		}
 		return true;
 	}
@@ -495,7 +493,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param card   The secret card being evaluated.
 	 * @return {@code true} if the secret can be played.
 	 */
-	public boolean canPlaySecret(Player player, SecretCard card) {
+	public boolean canPlaySecret(Player player, @NotNull Card card) {
 		return player.getSecrets().size() < MAX_SECRETS && !player.getSecretCardIds().contains(card.getCardId());
 	}
 
@@ -508,8 +506,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param card
 	 * @return
 	 */
-	public boolean canPlayQuest(Player player, QuestCard card) {
-		return player.getSecrets().size() < MAX_SECRETS && player.getQuests().size() < MAX_QUESTS && !player.getQuests().contains(card.getCardId());
+	public boolean canPlayQuest(Player player, @NotNull Card card) {
+		return player.getSecrets().size() < MAX_SECRETS && player.getQuests().size() < MAX_QUESTS
+				&& player.getQuests().stream().map(Quest::getSourceCard).map(Card::getCardId).noneMatch(cid -> cid.equals(card.getCardId()));
 	}
 
 	/**
@@ -533,7 +532,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param playerId        The player casting the choose one spell.
 	 * @param spellDesc       The {@link SpellDesc} of the chosen card, not the parent card that contains the choices.
-	 * @param sourceReference The source of the spell, typically the original {@link ChooseOneCard}.
+	 * @param sourceReference The source of the spell, typically the original {@link Card}.
 	 * @param targetReference The target selected for this choice.
 	 * @param cardId          The card that was chosen.
 	 * @param sourceAction
@@ -550,7 +549,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		EntityReference spellTarget = spellDesc.hasPredefinedTarget() ? spellDesc.getTarget() : targetReference;
 		List<Entity> targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
 		Card sourceCard = null;
-		SpellCard chosenCard = (SpellCard) context.getCardById(cardId);
+		Card chosenCard = context.getCardById(cardId);
+		chosenCard.setOwner(playerId);
+		chosenCard.setId(generateId());
+		chosenCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 		sourceCard = source.getEntityType() == EntityType.CARD ? (Card) source : null;
 
 		if (sourceCard != null) {
@@ -562,10 +564,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		if (!spellDesc.hasPredefinedTarget() && targets != null && targets.size() == 1) {
-			if (chosenCard.getTargetRequirement() != TargetSelection.NONE) {
+			if (chosenCard.getTargetSelection() != TargetSelection.NONE) {
 				context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
-				context.getEnvironment().put(Environment.CHOOSE_ONE_CARD, chosenCard.getCardId());
-				Entity override = targetAcquisition(player, sourceCard, sourceAction);
+				Entity override = targetAcquisition(player, chosenCard, sourceAction);
 				if (override != null) {
 					targets = Collections.singletonList(override);
 					spellDesc = spellDesc.removeArg(SpellArg.FILTER);
@@ -577,8 +578,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		spell.cast(context, player, spellDesc, source, targets);
 
 		context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
-		context.getEnvironment().remove(Environment.CHOOSE_ONE_CARD);
 
+		chosenCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		endOfSequence();
 		if (targets == null || targets.size() != 1) {
 			context.fireGameEvent(new AfterSpellCastedEvent(context, playerId, sourceCard, null));
@@ -626,7 +627,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param playerId        The players from whose point of view this spell is cast (typically the owning player).
 	 * @param spellDesc       A description of the spell.
 	 * @param sourceReference The origin of the spell. This is typically the {@link Minion} if the spell is a battlecry
-	 *                        or deathrattle; or, the {@link SpellCard} if this spell is coming from a card.
+	 *                        or deathrattle; or, the {@link Card} if this spell is coming from a card.
 	 * @param targetReference A reference to the target the user selected, if the spell was supposed to have a target.
 	 * @param targetSelection If not {@code null}, the spell must have at least one {@link Entity} satisfying this
 	 *                        target selection requirement in order for it to be cast.
@@ -646,9 +647,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) for the code that turns a target selection
 	 * into actions the player can take.
 	 * @see PlaySpellCardAction#play(GameContext, int) for the call to this function that a player actually does when
-	 * they play a {@link SpellCard} (as opposed to a battlecry or deathrattle).
+	 * they play a {@link Card} (as opposed to a battlecry or deathrattle).
 	 * @see BattlecryAction#execute(GameContext, int) for the call to this function that demonstrates a battlecry
-	 * effect. Battlecries are spells in the sense that they are effects, though they're not {@link SpellCard} objects.
+	 * effect. Battlecries are spells in the sense that they are effects, though they're not {@link Card} objects.
 	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
@@ -1329,7 +1330,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                         false} if the weapon was equipped due to some other effect (typically a random weapon
 	 */
 	@Suspendable
-	public void equipWeapon(int playerId, Weapon weapon, WeaponCard weaponCard, boolean resolveBattlecry) {
+	public void equipWeapon(int playerId, Weapon weapon, Card weaponCard, boolean resolveBattlecry) {
 		PreEquipWeapon preEquipWeapon = new PreEquipWeapon(playerId, weapon).invoke();
 		Weapon currentWeapon = preEquipWeapon.getCurrentWeapon();
 		Player player = preEquipWeapon.getPlayer();
@@ -1344,7 +1345,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected void postEquipWeapon(int playerId, Weapon newWeapon, Weapon currentWeapon, Player player, WeaponCard source) {
+	protected void postEquipWeapon(int playerId, Weapon newWeapon, Weapon currentWeapon, Player player, Card source) {
 		if (currentWeapon != null) {
 			markAsDestroyed(currentWeapon);
 		}
@@ -1823,8 +1824,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player                    The player who chose the target of the healing.
 	 * @param target                    The target of the healing.
 	 * @param healing                   The amount of healing.
-	 * @param source                    The {@link Entity}, typically a {@link SpellCard} or {@link Minion} with
-	 *                                  battlecry, that is the source of the healing.
+	 * @param source                    The {@link Entity}, typically a {@link Card} or {@link Minion} with battlecry,
+	 *                                  that is the source of the healing.
 	 * @param applyHealingAmplification Whether or not to compute the effects of {@link Attribute#HEAL_AMPLIFY_MULTIPLIER}
 	 *                                  on this card.
 	 * @see Attribute#ENRAGED for more about enrage.
@@ -2265,8 +2266,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * generates a {@link DiscoverAction} that gets sent to this method.
 	 * @see Minion#getBattlecry() for the method that creates battlecry actions. (Note: Deathrattles never involve a
 	 * player decision, so deathrattles never generate a battlecry).
-	 * @see ChooseOneCard#playOptions() for the choose one mechanic's way of creating a {@link PlayCardAction} that
-	 * corresponds to the choices on a choose one card.
 	 */
 	@Suspendable
 	public void performGameAction(int playerId, GameAction action) {
@@ -2319,10 +2318,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * <p>
 	 * {@link #playCard(int, EntityReference)} is always initiated by an action, like a {@link PlayCardAction}. It
 	 * represents playing a card from the hand. This method then deducts the appropriate amount of mana (or health,
-	 * depending on the card). Then, it will check if the {@link SpellCard} was countered by Counter Spell (a {@link
-	 * Secret} which adds a {@link Attribute#COUNTERED} attribute to the card that was raised in the {@link
-	 * CardPlayedEvent}). It applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked next turn.
-	 * Finally, it removes the card from the player's {@link Zones#HAND} and puts it in the {@link Zones#GRAVEYARD}.
+	 * depending on the card). Then, it will check if the {@link Card} was countered by Counter Spell (a {@link Secret}
+	 * which adds a {@link Attribute#COUNTERED} attribute to the card that was raised in the {@link CardPlayedEvent}).
+	 * It applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked next turn. Finally, it removes
+	 * the card from the player's {@link Zones#HAND} and puts it in the {@link Zones#GRAVEYARD}.
 	 *
 	 * @param playerId        The player that is playing the card.
 	 * @param EntityReference The card that got played.
@@ -2389,15 +2388,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * {@link Zones#SECRET} zone.
 	 * <p>
 	 * The caller is responsible for enforcing that fewer than {@link #MAX_SECRETS} are in play; that only distinct
-	 * secrets are active; and, that the {@link SecretCard} is discarded. The {@link SecretPlayedEvent} is not censored
-	 * here and has sensitive information that cannot be shown to the opponent.
+	 * secrets are active; and, that the {@link Card} is discarded. The {@link SecretPlayedEvent} is not censored here
+	 * and has sensitive information that cannot be shown to the opponent.
 	 *
 	 * @param player   The player whose gaining the secret.
 	 * @param secret   The secret being played.
 	 * @param fromHand When {@code true}, a {@link SecretPlayedEvent} is fired; otherwise, the event is not fired.
 	 * @see net.demilich.metastone.game.spells.AddSecretSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for
-	 * the place where secret entities are created. A {@link SecretCard} uses this spell to actually create a {@link
-	 * Secret}.
+	 * the place where secret entities are created. A {@link Card} uses this spell to actually create a {@link Secret}.
 	 */
 	@Suspendable
 	public void playSecret(Player player, Secret secret, boolean fromHand) {
@@ -2407,12 +2405,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		addGameEventListener(player, newSecret, player.getHero());
 		player.getSecrets().add(newSecret);
 		if (fromHand) {
-			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), (SecretCard) newSecret.getSourceCard()));
+			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), newSecret.getSourceCard()));
 		}
 	}
 
 	void processTargetModifiers(Player player, GameAction action) {
-		HeroPowerCard heroPower = player.getHero().getHeroPower();
+		Card heroPower = player.getHero().getHeroPower();
 		if (heroPower.getHeroClass() != HeroClass.GREEN) {
 			return;
 		}
@@ -2964,7 +2962,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// Move the secret to removed from play.
 		removeEnchantments(secret);
 		secret.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		context.fireGameEvent(new SecretRevealedEvent(context, (SecretCard) secret.getSourceCard(), player.getId()));
+		context.fireGameEvent(new SecretRevealedEvent(context, secret.getSourceCard(), player.getId()));
 	}
 
 	// TODO: circular dependency. Very ugly, refactor!
@@ -3144,8 +3142,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Summons a {@link Minion}.
 	 * <p>
 	 * Playing a minion card places that minion onto the battlefield. This process is known as 'summoning'. Each minion
-	 * has a mana cost indicated by {@link MinionCard#getManaCost(GameContext, Player)}, which shows the amount of mana
-	 * you must pay to summon the minion.
+	 * has a mana cost indicated by {@link Card#getManaCost(GameContext, Player)}, which shows the amount of mana you
+	 * must pay to summon the minion.
 	 * <p>
 	 * Successfully playing a minion card will transform the card into the minion itself, which will then appear upon
 	 * the battleground represented by a portrait. Once summoned the minion will stay on the battlefield until it is
@@ -3162,19 +3160,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * field, the player will not be able to summon further minions. Minion cards and summon effects such as Totemic
 	 * Call will not be playable, and any minion Battlecries and Deathrattles that summon other minions will be wasted.
 	 * <p>
-	 * Minions summoned by a summon effect written on a card other than a {@link MinionCard} are not played directly
-	 * from the hand, and therefore will not trigger Battlecries or Overload. However, they will work with triggered
-	 * effects which respond to the summoning of minions, like {@link MinionSummonedTrigger}.
+	 * Minions summoned by a summon effect written on a card other than a {@link Card} are not played directly from the
+	 * hand, and therefore will not trigger Battlecries or Overload. However, they will work with triggered effects
+	 * which respond to the summoning of minions, like {@link MinionSummonedTrigger}.
 	 *
 	 * @param playerId         The player who will own the minion (not the initiator of the summon, which may be the
 	 *                         opponent).
-	 * @param minion           The minion to summon. Typically the result of a {@link MinionCard#summon()} call, but
-	 *                         other cards have effects that summon minions on e.g., battlecry with a {@link
-	 *                         SummonSpell}.
-	 * @param source           The {@link MinionCard} or {@link Entity} response for this minion.
+	 * @param minion           The minion to summon. Typically the result of a {@link Card#summon()} call, but other
+	 *                         cards have effects that summon minions on e.g., battlecry with a {@link SummonSpell}.
+	 * @param source           The {@link Card} or {@link Entity} response for this minion.
 	 * @param index            The location on the {@link Zones#BATTLEFIELD} to place this minion.
 	 * @param resolveBattlecry If {@code true}, the battlecry should be cast. Battlecries are only cast when a {@link
-	 *                         Minion} is summoned by a {@link MinionCard} played from the {@link Zones#HAND}.
+	 *                         Minion} is summoned by a {@link Card} played from the {@link Zones#HAND}.
 	 * @return {@code true} if the summoning was successful.
 	 */
 	@Suspendable
@@ -3361,7 +3358,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void useHeroPower(int playerId) {
 		Player player = context.getPlayer(playerId);
-		HeroPowerCard power = player.getHero().getHeroPower();
+		Card power = player.getHero().getHeroPower();
 		int modifiedManaCost = getModifiedManaCost(player, power);
 		modifyCurrentMana(playerId, -modifiedManaCost);
 		power.markUsed();
@@ -3386,7 +3383,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	public void equipWeaponAsync(int playerId, Weapon weapon, WeaponCard weaponCard, Handler<AsyncResult<Boolean>> result, boolean resolveBattlecry) {
+	public void equipWeaponAsync(int playerId, Weapon weapon, Card weaponCard, Handler<AsyncResult<Boolean>> result, boolean resolveBattlecry) {
 		throw new RuntimeException("Cannot call GameLogic::equipWeaponAsync from a non-async GameLogic instance.");
 	}
 

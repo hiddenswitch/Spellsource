@@ -19,8 +19,6 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -84,12 +82,12 @@ public class TestBase {
 		}
 		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(hero1, deckFormat), new TestBehaviour());
 		player1Config.setName("GamePlayer 1");
-		player1Config.setHeroCard(getHeroCardForClass(hero1));
+		player1Config.setHeroCard(HeroClass.getHeroCard(hero1));
 		Player player1 = new Player(player1Config);
 
 		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(hero2, deckFormat), new TestBehaviour());
 		player2Config.setName("GamePlayer 2");
-		player2Config.setHeroCard(getHeroCardForClass(hero2));
+		player2Config.setHeroCard(HeroClass.getHeroCard(hero2));
 		Player player2 = new Player(player2Config);
 
 		GameLogic logic = new GameLogic();
@@ -105,16 +103,6 @@ public class TestBase {
 				if (minion.getSourceCard().getCardId().equals(cardId)) {
 					return minion;
 				}
-			}
-		}
-		return null;
-	}
-
-	protected static HeroCard getHeroCardForClass(HeroClass heroClass) {
-		for (Card card : CardCatalogue.getHeroes()) {
-			HeroCard heroCard = (HeroCard) card;
-			if (heroCard.getHeroClass() == heroClass) {
-				return heroCard;
 			}
 		}
 		return null;
@@ -148,9 +136,9 @@ public class TestBase {
 		context.getLogic().performGameAction(player.getId(), action);
 	}
 
-	protected static Minion playMinionCard(GameContext context, Player player, MinionCard minionCard) {
-		context.getLogic().receiveCard(player.getId(), minionCard);
-		context.getLogic().performGameAction(player.getId(), minionCard.play());
+	protected static Minion playMinionCard(GameContext context, Player player, Card card) {
+		context.getLogic().receiveCard(player.getId(), card);
+		context.getLogic().performGameAction(player.getId(), card.play());
 		return getSummonedMinion(player.getMinions());
 	}
 

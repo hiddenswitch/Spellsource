@@ -6,11 +6,11 @@
   "rarity": "RARE",
   "description": "Select One - Draw 3 cards; or gain 2 Mana Cells.",
   "targetSelection": "NONE",
-  "options": [
+  "chooseOneCardIds": [
     "spell_dinner_prep_2",
     "spell_dinner_prep_1"
   ],
-  "bothOptions": "spell_dinner_prep_3",
+  "chooseBothCardId": "spell_dinner_prep_3",
   "collectible": true,
   "set": "SPELLSOURCE",
   "fileFormatVersion": 1

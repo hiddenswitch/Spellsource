@@ -3,21 +3,18 @@ package net.demilich.metastone.game;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
-import net.demilich.metastone.game.cards.SecretCard;
-import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
@@ -49,7 +46,7 @@ public class Player extends Entity implements Serializable {
 	public static Player empty() {
 		Player player = new Player();
 		PlayerConfig config = new PlayerConfig(Deck.EMPTY, new DoNothingBehaviour());
-		player.buildFromConfig(config);
+		player.init(config);
 		return player;
 	}
 
@@ -67,7 +64,7 @@ public class Player extends Entity implements Serializable {
 		PlayerConfig config = new PlayerConfig(deck, new DoNothingBehaviour());
 		config.setHeroCard(deck.getHeroCard());
 		player.setId(id);
-		player.buildFromConfig(config);
+		player.init(config);
 		player.setUserId(userId);
 		return player;
 	}
@@ -150,11 +147,15 @@ public class Player extends Entity implements Serializable {
 	 */
 	public Player(PlayerConfig config) {
 		this();
-		buildFromConfig(config);
+		init(config);
 	}
 
-	protected void buildFromConfig(PlayerConfig config) {
-		config.build();
+	protected void init(PlayerConfig config) {
+		config.setDeckForPlay(config.getDeck());
+		if (config.getHeroCard() == null) {
+			config.setHeroCard(HeroClass.getHeroCard(config.getDeckForPlay().getHeroClass()));
+		}
+		config.setHeroForPlay(config.getHeroCard());
 		Deck selectedDeck = config.getDeckForPlay();
 
 		this.deck = new CardZone(getId(), Zones.DECK, selectedDeck.getCardsCopy());
@@ -295,7 +296,7 @@ public class Player extends Entity implements Serializable {
 	 * one of each secret in their {@link #secretZone}.
 	 *
 	 * @return The set of secret card IDs.
-	 * @see net.demilich.metastone.game.logic.GameLogic#canPlaySecret(Player, SecretCard) to see how this method plays
+	 * @see net.demilich.metastone.game.logic.GameLogic#canPlaySecret(Player, Card) to see how this method plays
 	 * into rules regarding the ability to play secrets.
 	 */
 	public Set<String> getSecretCardIds() {
@@ -510,7 +511,7 @@ public class Player extends Entity implements Serializable {
 	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate way to change
 	 * heroes.
 	 */
-	public EntityZone<HeroPowerCard> getHeroPowerZone() {
+	public EntityZone<Card> getHeroPowerZone() {
 		return getHero().getHeroPowerZone();
 	}
 
@@ -518,7 +519,7 @@ public class Player extends Entity implements Serializable {
 	 * Retrieves the weapon zone belonging to this player's hero entity.
 	 *
 	 * @return A weapon zone.
-	 * @see net.demilich.metastone.game.logic.GameLogic#equipWeapon(int, Weapon, WeaponCard, boolean) for the
+	 * @see net.demilich.metastone.game.logic.GameLogic#equipWeapon(int, Weapon, Card, boolean) for the
 	 * appropriate way to mutate this zone.
 	 */
 	public EntityZone<Weapon> getWeaponZone() {

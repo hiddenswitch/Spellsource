@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "description": "Draw a card and give your opponent a 'Naturalize'; or vice versa.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "name": "You Draw, Give Naturalize",
       "description": "Draw a card, give your opponent a 'Naturalize' ",
@@ -45,7 +45,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "name": "Both Draw and Gain Naturalize",
     "description": "Both players draw a card. Add a 'Naturalize' to both players' hands.",
     "spell": {

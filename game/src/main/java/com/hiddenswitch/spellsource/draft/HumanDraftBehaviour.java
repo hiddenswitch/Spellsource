@@ -4,11 +4,9 @@ import com.hiddenswitch.spellsource.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.behaviour.human.DraftSelectionOptions;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.heroes.MetaHero;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +23,7 @@ public class HumanDraftBehaviour implements DraftBehaviour {
 	@Override
 	public void chooseHeroAsync(List<HeroClass> classes, Handler<AsyncResult<HeroClass>> result) {
 		// Convert to hero cards
-		this.cards = classes.stream().map(MetaHero::getHeroCard).collect(Collectors.toList());
+		this.cards = classes.stream().map(HeroClass::getHeroCard).collect(Collectors.toList());
 		this.chooseHeroHandler = result;
 		DraftSelectionOptions options = new DraftSelectionOptions(this, this.cards);
 	}
@@ -45,20 +43,4 @@ public class HumanDraftBehaviour implements DraftBehaviour {
 	public void notifyDraftStateAsync(PublicDraftState state, Handler<AsyncResult<Void>> acknowledged) {
 	}
 
-	public void putChosenCard(Card chosenCard) {
-		// Find the chosen card GROAN
-		int index = 0;
-		for (int i = 0; i < cards.size(); i++) {
-			if (Objects.equals(cards.get(i).getCardId(), chosenCard.getCardId())) {
-				index = i;
-				break;
-			}
-		}
-
-		if (chosenCard instanceof HeroCard) {
-			this.chooseHeroHandler.handle(new Result<>(chosenCard.getHeroClass()));
-		} else {
-			this.chooseCardHandler.handle(new Result<>(index));
-		}
-	}
 }

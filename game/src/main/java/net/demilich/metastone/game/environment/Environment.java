@@ -77,10 +77,6 @@ public enum Environment {
 	 */
 	OUTPUTS,
 	/**
-	 * This variable stores the parent {@link net.demilich.metastone.game.cards.ChooseOneCard}.
-	 */
-	CHOOSE_ONE_CARD,
-	/**
 	 * This variable stores the mana cost of the last card played.
 	 * <p>
 	 * This implements Atiesh, the weapon granted by Medivh, the Guardian

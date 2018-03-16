@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "description": "Choose One - Deal 2 damage; or Silence a minion.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "2 damage",
       "targetSelection": "ANY",
@@ -24,7 +24,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Silence and deal 2 damage",
     "targetSelection": "ANY",
     "spell": {

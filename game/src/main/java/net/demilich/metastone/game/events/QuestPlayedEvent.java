@@ -2,7 +2,6 @@ package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.QuestCard;
 import net.demilich.metastone.game.entities.Entity;
 
 public class QuestPlayedEvent extends GameEvent implements HasCard {

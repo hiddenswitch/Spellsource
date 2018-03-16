@@ -15,7 +15,7 @@ import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.SecretCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.EntityLocation;
@@ -152,7 +152,7 @@ public class WebSocketWriter implements Writer {
 			if (sourceEntity.getEntityType() == EntityType.CARD) {
 				Card card = (Card) sourceEntity;
 				if (card.getCardType() == CardType.SPELL
-						&& card instanceof SecretCard
+						&& card.isSecret()
 						&& card.getOwner() != playerId) {
 					source = Games.getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 				}

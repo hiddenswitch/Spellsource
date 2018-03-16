@@ -29,7 +29,7 @@ public abstract class Condition implements Serializable {
 		@Override
 		public Condition deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 			ConditionDesc desc = context.deserialize(json.getAsJsonObject().getAsJsonObject("desc"), ConditionDesc.class);
-			return desc == null ? null : desc.createInstance();
+			return desc == null ? null : desc.create();
 		}
 
 		@Override

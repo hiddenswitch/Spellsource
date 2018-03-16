@@ -17,7 +17,6 @@ import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
-import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -78,11 +77,11 @@ public class SerializationTest extends TestBase {
 	@Test
 	@Ignore
 	public void testAllGameActions() {
-		SpellCard fireball = (SpellCard) CardCatalogue.getCardById("spell_fireball");
-		MinionCard elven_archer = (MinionCard) CardCatalogue.getCardById("minion_elven_archer");
-		HeroPowerCard heroPowerFireblast = (HeroPowerCard) CardCatalogue.getCardById("hero_power_fireblast");
-		WeaponCard assassinsBlade = (WeaponCard) CardCatalogue.getCardById("weapon_assassins_blade");
-		SpellCard journeyBelow = (SpellCard) CardCatalogue.getCardById("spell_journey_below");
+		Card fireball = CardCatalogue.getCardById("spell_fireball");
+		Card elven_archer = CardCatalogue.getCardById("minion_elven_archer");
+		Card heroPowerFireblast = CardCatalogue.getCardById("hero_power_fireblast");
+		Card assassinsBlade = CardCatalogue.getCardById("weapon_assassins_blade");
+		Card journeyBelow = CardCatalogue.getCardById("spell_journey_below");
 		CardList discoverCards = new CardArrayList();
 		discoverCards.addCard(fireball.getCopy());
 		DiscoverAction discoverAction = DiscoverAction.createDiscover(journeyBelow.getSpell());
@@ -171,13 +170,13 @@ public class SerializationTest extends TestBase {
 		HeroClass heroClass1 = getRandomClass();
 		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass1, deckFormat), new PlayRandomBehaviour());
 		player1Config.setName("Player 1");
-		player1Config.setHeroCard(getHeroCardForClass(heroClass1));
+		player1Config.setHeroCard(HeroClass.getHeroCard(heroClass1));
 		Player player1 = new Player(player1Config);
 
 		HeroClass heroClass2 = getRandomClass();
 		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass2, deckFormat), new PlayRandomBehaviour());
 		player2Config.setName("Player 2");
-		player2Config.setHeroCard(getHeroCardForClass(heroClass2));
+		player2Config.setHeroCard(HeroClass.getHeroCard(heroClass2));
 		Player player2 = new Player(player2Config);
 		GameContext context = new SerializationTestContext(player1, player2, new GameLogic(), deckFormat);
 		try {

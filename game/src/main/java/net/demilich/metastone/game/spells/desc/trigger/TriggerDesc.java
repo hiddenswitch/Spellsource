@@ -15,9 +15,9 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
  * Data specifying a trigger, including what event it reacts to, what spell it casts, and various options.
  * <p>
  * This object is used to create an {@link Enchantment} using its {@link #create()} function whenever entities like
- * actors come into play with a {@link net.demilich.metastone.game.cards.desc.ActorCardDesc#trigger} specified.
+ * actors come into play with a {@link net.demilich.metastone.game.cards.desc.CardDesc#trigger} specified.
  * <p>
- * For <b>example,</b> the following JSON would belong on the {@link net.demilich.metastone.game.cards.desc.ActorCardDesc#trigger}
+ * For <b>example,</b> the following JSON would belong on the {@link net.demilich.metastone.game.cards.desc.CardDesc#trigger}
  * field to describe a minion that draws a card whenever it is damaged, up to 3 times:
  * <pre>
  *     {
@@ -102,7 +102,7 @@ public final class TriggerDesc implements Serializable, Cloneable {
 	 * @return The enchantment
 	 */
 	public Enchantment create() {
-		Enchantment trigger = new Enchantment(eventTrigger.createInstance(), spell, oneTurn);
+		Enchantment trigger = new Enchantment(eventTrigger.create(), spell, oneTurn);
 		trigger.setMaxFires(maxFires);
 		trigger.setPersistentOwner(persistentOwner);
 		trigger.setKeepAfterTransform(keepAfterTransform);

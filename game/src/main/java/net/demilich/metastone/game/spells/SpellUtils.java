@@ -1,14 +1,13 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
-import net.demilich.metastone.game.cards.desc.SpellCardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -114,8 +113,8 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Consider the {@link Environment#PENDING_CARD} and {@link Environment#OUTPUTS}, and the {@link
-	 * Zones#DISCOVER} zone for the specified card
+	 * Consider the {@link Environment#PENDING_CARD} and {@link Environment#OUTPUTS}, and the {@link Zones#DISCOVER}
+	 * zone for the specified card
 	 *
 	 * @param context
 	 * @param cardId
@@ -139,12 +138,12 @@ public class SpellUtils {
 	/**
 	 * Retrieves the cards specified inside the {@link SpellArg#CARD} and {@link SpellArg#CARDS} arguments.
 	 *
-	 * @param context The game context to use for {@link GameContext#getPendingCard()} or
-	 *                {@link GameContext#getOutputCard()} lookups.
+	 * @param context The game context to use for {@link GameContext#getPendingCard()} or {@link
+	 *                GameContext#getOutputCard()} lookups.
 	 * @param spell   The spell description to retrieve the cards from.
 	 * @return A new array of {@link Card} entities.
-	 * @see #castChildSpell(GameContext, Player, SpellDesc, Entity, Entity, Entity) for a description of what an
-	 * {@code "OUTPUT_CARD"} value corresponds to.
+	 * @see #castChildSpell(GameContext, Player, SpellDesc, Entity, Entity, Entity) for a description of what an {@code
+	 * "OUTPUT_CARD"} value corresponds to.
 	 */
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
 		String[] cardIds;
@@ -254,10 +253,10 @@ public class SpellUtils {
 	 * @param desc    A {@link SpellDesc} to use as the "parent" of the discovered spells. The mana cost and targets are
 	 *                inherited from this spell.
 	 * @param spells  A list of spells from which to generate virtual cards.
-	 * @param source  The source entity, typically the {@link SpellCard} or {@link Minion#getBattlecry()} that initiated
-	 *                this call.
+	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecry()} that initiated this
+	 *                call.
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected
-	 * card. To retrieve the spell, get the card's spell with {@link SpellCard#getSpell()}.
+	 * card. To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
 	 */
 	@Suspendable
 	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
@@ -265,7 +264,7 @@ public class SpellUtils {
 		List<Card> cards = new ArrayList<>();
 		for (int i = 0; i < spells.size(); i++) {
 			final SpellDesc spell = spells.get(i);
-			final SpellCardDesc spellCardDesc = new SpellCardDesc();
+			final CardDesc spellCardDesc = new CardDesc();
 			final String name = spell.getString(SpellArg.NAME);
 			final String description = spell.getString(SpellArg.DESCRIPTION);
 			// TODO: Parse the parenthesized part of a name in a spell as a description
@@ -286,7 +285,7 @@ public class SpellUtils {
 			spellCardDesc.spell = spell;
 			spellCardDesc.collectible = false;
 
-			Card card = spellCardDesc.createInstance();
+			Card card = spellCardDesc.create();
 			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.DISCOVER);
@@ -402,18 +401,12 @@ public class SpellUtils {
 		}
 	}
 
-	public static MinionCard getMinionCardFromSummonSpell(GameContext context, Player player, Entity source, SpellDesc desc) {
-		// TODO: Actually create a minion card
-		return (MinionCard) (new MinionCardDesc().createInstance());
-	}
-
 	static SpellDesc[] getGroup(GameContext context, SpellDesc spell) {
 		Card card = null;
 		String cardName = (String) spell.get(SpellArg.GROUP);
 		card = context.getCardById(cardName);
-		if (card != null && card instanceof GroupCard) {
-			GroupCard groupCard = (GroupCard) card;
-			return groupCard.getGroup();
+		if (card.getCardType() == CardType.GROUP) {
+			return card.getGroup();
 		}
 		return null;
 	}
@@ -456,10 +449,10 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link SpellArg#CARDS}
-	 * properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource} and {@link
-	 * net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the target's
-	 * {@link Entity#getSourceCard()} as the targeted card.
+	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
+	 * SpellArg#CARDS} properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource}
+	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses
+	 * the target's {@link Entity#getSourceCard()} as the targeted card.
 	 * <p>
 	 * The number of cards randomly retrieved is equal to the {@link SpellArg#VALUE} specified in the {@code desc}
 	 * argument, defaulting to 1.
@@ -476,10 +469,10 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link SpellArg#CARDS}
-	 * properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource} and {@link
-	 * net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the target's
-	 * {@link Entity#getSourceCard()} as the targeted card.
+	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
+	 * SpellArg#CARDS} properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource}
+	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses
+	 * the target's {@link Entity#getSourceCard()} as the targeted card.
 	 *
 	 * @param context The game context
 	 * @param player  The player from whose point of view these cards should be retrieved

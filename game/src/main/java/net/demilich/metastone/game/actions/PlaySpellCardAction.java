@@ -12,8 +12,6 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 public class PlaySpellCardAction extends PlayCardAction {
 
 	private SpellDesc spell;
-	@SerializedName("EntityReference2")
-	protected EntityReference EntityReference;
 
 	protected PlaySpellCardAction() {
 		super();
@@ -25,13 +23,13 @@ public class PlaySpellCardAction extends PlayCardAction {
 		setActionType(ActionType.SPELL);
 		setTargetRequirement(targetSelection);
 		this.setSpell(spell);
-		this.EntityReference = card.getReference();
+		this.entityReference = card.getReference();
 	}
 
 	@Override
 	@Suspendable
 	public void play(GameContext context, int playerId) {
-		context.getLogic().castSpell(playerId, spell, EntityReference, getTargetReference(), getTargetRequirement(), false, this);
+		context.getLogic().castSpell(playerId, spell, entityReference, getTargetReference(), getTargetRequirement(), false, this);
 	}
 
 	public SpellDesc getSpell() {
@@ -43,7 +41,7 @@ public class PlaySpellCardAction extends PlayCardAction {
 	}
 
 	public EntityReference getSourceCardEntityId() {
-		return EntityReference;
+		return entityReference;
 	}
 
 	@Override

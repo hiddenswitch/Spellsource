@@ -4,15 +4,18 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.SecretCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.SecretPlayedEvent;
 import net.demilich.metastone.game.events.SecretRevealedEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TriggerSecretSpell extends Spell {
+
+	private static Logger logger = LoggerFactory.getLogger(TriggerSecretSpell.class);
 
 	@Override
 	@Suspendable
@@ -21,16 +24,17 @@ public class TriggerSecretSpell extends Spell {
 		if (card == null) {
 			card = (Card) target;
 		}
-		if (card instanceof SecretCard) {
-			SecretCard secretCard = (SecretCard) card;
+		if (card.isSecret()) {
 			SpellDesc secretSpell =
-					AddSecretSpell.class.isAssignableFrom(secretCard.getSpell().getDescClass())
-							? ((Secret) (secretCard.getSpell().get(SpellArg.SECRET))).getSpell().clone()
-							: secretCard.getSpell().clone();
+					AddSecretSpell.class.isAssignableFrom(card.getSpell().getDescClass())
+							? ((Secret) (card.getSpell().get(SpellArg.SECRET))).getSpell().clone()
+							: card.getSpell().clone();
 
-			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), secretCard));
-			SpellUtils.castChildSpell(context, player, secretSpell, secretCard, target);
-			context.fireGameEvent(new SecretRevealedEvent(context, secretCard, player.getId()));
+			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), card));
+			SpellUtils.castChildSpell(context, player, secretSpell, card, target);
+			context.fireGameEvent(new SecretRevealedEvent(context, card, player.getId()));
+		} else {
+			logger.warn("onCast {} {}: Targeting {} which is not a secret", context.getGameId(), source, card);
 		}
 	}
 

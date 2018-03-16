@@ -6,11 +6,11 @@
   "rarity": "COMMON",
   "description": "Select One - Discover a power; or discover a minion.",
   "targetSelection": "NONE",
-  "options": [
+  "chooseOneCardIds": [
     "spell_grocery_trip_2",
     "spell_grocery_trip_1"
   ],
-  "bothOptions": "spell_grocery_trip_3",
+  "chooseBothCardId": "spell_grocery_trip_3",
   "collectible": true,
   "set": "SPELLSOURCE",
   "fileFormatVersion": 1

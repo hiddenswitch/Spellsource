@@ -6,11 +6,11 @@
   "rarity": "RARE",
   "description": "Choose One - Summon a Jade Golem; or Shuffle 3 copies of this card into your deck.",
   "targetSelection": "NONE",
-  "options": [
+  "chooseOneCardIds": [
     "spell_jade_idol_1",
     "spell_jade_idol_2"
   ],
-  "bothOptions": "spell_jade_idol_3",
+  "chooseBothCardId": "spell_jade_idol_3",
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",
   "fileFormatVersion": 1

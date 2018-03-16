@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Optional;
 
 /**
- * Casts a {@link SpellArg#SPELL} on the last {@link net.demilich.metastone.game.cards.MinionCard} in the {@link
+ * Casts a {@link SpellArg#SPELL} on the last {@link net.demilich.metastone.game.cards.Card} in the {@link
  * net.demilich.metastone.game.targeting.Zones#DECK} of the {@link SpellArg#TARGET_PLAYER}.
  * <p>
  * The {@link net.demilich.metastone.game.targeting.EntityReference#OUTPUT} will be set to the last minion card, unless

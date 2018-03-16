@@ -21,7 +21,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.aura.AttributeAura;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.aura.BuffAura;
@@ -44,8 +43,6 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.nustaq.serialization.FSTConfiguration;
-import org.nustaq.serialization.FSTObjectInput;
-import org.nustaq.serialization.FSTObjectOutput;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -69,20 +66,6 @@ public class Serialization {
 		gameActions.registerSubtype(PlayWeaponCardAction.class, ActionType.EQUIP_WEAPON.toString());
 		gameActions.registerSubtype(DiscoverAction.class, ActionType.DISCOVER.toString());
 
-		RuntimeTypeAdapterFactory<CardDesc> descs = RuntimeTypeAdapterFactory.of(CardDesc.class, "descType");
-		descs.registerSubtype(ChooseOneCardDesc.class, CardType.CHOOSE_ONE.toString());
-		descs.registerSubtype(ActorCardDesc.class, "ACTOR");
-		descs.registerSubtype(MinionCardDesc.class, CardType.MINION.toString());
-		descs.registerSubtype(ChooseBattlecryCardDesc.class, "CHOOSE_BATTLECRY");
-		descs.registerSubtype(ChooseBattlecryHeroCardDesc.class, "CHOOSE_BATTLECRY_HERO");
-		descs.registerSubtype(WeaponCardDesc.class, CardType.WEAPON.toString());
-		descs.registerSubtype(SpellCardDesc.class, CardType.SPELL.toString());
-		descs.registerSubtype(QuestCardDesc.class, "QUEST");
-		descs.registerSubtype(GroupCardDesc.class, CardType.GROUP.toString());
-		descs.registerSubtype(SecretCardDesc.class, "SECRET");
-		descs.registerSubtype(HeroPowerCardDesc.class, CardType.HERO_POWER.toString());
-		descs.registerSubtype(HeroCardDesc.class, CardType.HERO.toString());
-
 		RuntimeTypeAdapterFactory<Entity> entities = RuntimeTypeAdapterFactory.of(Entity.class, "entityType");
 		entities.registerSubtype(Player.class, "PLAYER");
 		RuntimeTypeAdapterFactory<Actor> actors = RuntimeTypeAdapterFactory.of(Actor.class, "entityType");
@@ -94,18 +77,7 @@ public class Serialization {
 
 		RuntimeTypeAdapterFactory<Card> cards = RuntimeTypeAdapterFactory.of(Card.class, "entityType");
 		for (RuntimeTypeAdapterFactory factory : new RuntimeTypeAdapterFactory[]{entities, cards}) {
-			factory.registerSubtype(ChooseOneCard.class, "CHOOSE_ONE_CARD");
-			factory.registerSubtype(ChooseBattlecryMinionCard.class, "CHOOSE_BATTLECRY_CARD");
-			factory.registerSubtype(ActorCard.class, "ACTOR_CARD");
-			factory.registerSubtype(HeroCard.class, "HERO_CARD");
-			factory.registerSubtype(ChooseBattlecryHeroCard.class, "CHOOSE_BATTLECRY_HERO_CARD");
-			factory.registerSubtype(MinionCard.class, "MINION_CARD");
-			factory.registerSubtype(SpellCard.class, "SPELL_CARD");
-			factory.registerSubtype(WeaponCard.class, "WEAPON_CARD");
-			factory.registerSubtype(HeroPowerCard.class, "HERO_POWER_CARD");
-			factory.registerSubtype(SecretCard.class, "SECRET_CARD");
-			factory.registerSubtype(QuestCard.class, "QUEST_CARD");
-			factory.registerSubtype(GroupCard.class, "GROUP_CARD");
+			factory.registerSubtype(Card.class, "CARD");
 		}
 
 		RuntimeTypeAdapterFactory<Trigger> listeners = RuntimeTypeAdapterFactory.of(Trigger.class, "type");
@@ -121,7 +93,6 @@ public class Serialization {
 
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapterFactory(gameActions);
-		gsonBuilder.registerTypeAdapterFactory(descs);
 		gsonBuilder.registerTypeAdapterFactory(entities);
 		gsonBuilder.registerTypeAdapterFactory(cards);
 		gsonBuilder.registerTypeAdapterFactory(actors);

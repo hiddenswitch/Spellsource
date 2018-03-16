@@ -7,7 +7,7 @@
   "baseHp": 2.0,
   "rarity": "COMMON",
   "description": "Choose One - Transform to gain Charge; or +1/+1 and Stealth.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Charge",
       "spell": {
@@ -25,7 +25,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Charge, Stealth, +1/+1",
     "spell": {
       "class": "TransformMinionSpell",

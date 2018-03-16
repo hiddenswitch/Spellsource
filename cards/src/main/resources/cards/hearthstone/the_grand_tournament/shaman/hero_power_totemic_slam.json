@@ -11,7 +11,7 @@
     "operation": "LESS"
   },
   "targetSelection": "NONE",
-  "options": [
+  "chooseOneCardIds": [
     "spell_summon_searing_totem",
     "spell_summon_healing_totem",
     "spell_summon_wrath_of_air_totem",

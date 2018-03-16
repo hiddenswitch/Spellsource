@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.cards.ActorCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;

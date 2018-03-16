@@ -20,7 +20,7 @@ public class Secret extends Enchantment {
 	}
 
 	public Secret(TriggerDesc desc, Card source) {
-		this(desc.eventTrigger.createInstance(), desc.spell, source);
+		this(desc.eventTrigger.create(), desc.spell, source);
 		setCountUntilCast(desc.countUntilCast);
 		if (desc.maxFires == null) {
 			setMaxFires(1);

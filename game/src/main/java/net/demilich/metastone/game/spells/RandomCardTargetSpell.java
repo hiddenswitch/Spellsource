@@ -6,8 +6,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.ChooseOneCard;
-import net.demilich.metastone.game.cards.SpellCard;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -43,13 +43,12 @@ public class RandomCardTargetSpell extends Spell {
 
 	@Suspendable
 	public static void castCardWithRandomTargets(GameContext context, Player player, Entity source, Card card) {
-		SpellCard spellCard;
 		GameAction action;
-		if (ChooseOneCard.class.isAssignableFrom(card.getClass())) {
-			ChooseOneCard chooseOneCard = (ChooseOneCard) card;
-			spellCard = (SpellCard) context.getLogic().getRandom(Arrays.asList(chooseOneCard.getChoiceCards()));
-		} else if (SpellCard.class.isAssignableFrom(card.getClass())) {
-			spellCard = (SpellCard) card;
+		Card spellCard;
+		if (card.hasChoices()) {
+			spellCard = CardCatalogue.getCardById(context.getLogic().getRandom(Arrays.asList(card.getChooseOneCardIds())));
+		} else if (card.getCardType() == CardType.SPELL) {
+			spellCard = card;
 		} else {
 			throw new RuntimeException(String.format("castCardWithRandomTargets %s %s: A non-spell card %s was passed into a RandomCardTargetSpell", context.getGameId(), source.toString(), card.toString()));
 		}
@@ -74,7 +73,7 @@ public class RandomCardTargetSpell extends Spell {
 
 		context.getLogic().revealCard(player, spellCard);
 
-		if (spellCard.getTargetRequirement() == TargetSelection.NONE) {
+		if (spellCard.getTargetSelection() == TargetSelection.NONE) {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
 			spellCard.moveOrAddTo(context, destination);
 			context.getLogic().removeCard(spellCard);
@@ -82,7 +81,7 @@ public class RandomCardTargetSpell extends Spell {
 			return;
 		}
 
-		action = new PlaySpellCardAction(spellCard.getSpell(), spellCard, spellCard.getTargetRequirement());
+		action = new PlaySpellCardAction(spellCard.getSpell(), spellCard, spellCard.getTargetSelection());
 		List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
 		EntityReference randomTarget = null;
 		if (targets != null && targets.size() != 0) {

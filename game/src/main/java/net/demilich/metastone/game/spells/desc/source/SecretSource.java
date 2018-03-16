@@ -5,7 +5,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.SecretCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
@@ -25,6 +24,6 @@ public class SecretSource extends CardSource implements HasCardCreationSideEffec
 						playerClass :
 						HeroClass.GOLD;
 		return CardCatalogue.query(context.getDeckFormat())
-				.filtered(c -> c.getHeroClass() == heroClass && c instanceof SecretCard);
+				.filtered(c -> c.getHeroClass() == heroClass && c.isSecret());
 	}
 }

@@ -5,11 +5,9 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -22,7 +20,7 @@ public class TheGrandTournamentTests extends TestBase {
 	public void testSaboteur() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_saboteur");
-			HeroPowerCard heroPower = opponent.getHeroPowerZone().get(0);
+			Card heroPower = opponent.getHeroPowerZone().get(0);
 			Assert.assertEquals(costOf(context, opponent, heroPower), 2);
 			context.endTurn();
 			Assert.assertEquals(costOf(context, opponent, heroPower), 7);
@@ -93,7 +91,7 @@ public class TheGrandTournamentTests extends TestBase {
 		Player priest = context.getPlayer1();
 		Player warrior = context.getPlayer2();
 
-		MinionCard eydisDarkbaneCard = (MinionCard) CardCatalogue.getCardById("minion_eydis_darkbane");
+		Card eydisDarkbaneCard = CardCatalogue.getCardById("minion_eydis_darkbane");
 		Minion eydisDarkbane = playMinionCard(context, priest, eydisDarkbaneCard);
 
 		Card testSpellCard = CardCatalogue.getCardById("spell_power_word_shield");

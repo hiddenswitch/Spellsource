@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.AddEnchantmentSpell;

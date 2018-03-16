@@ -5,7 +5,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.AddDeathrattleSpell;
@@ -27,7 +26,7 @@ public class JailMinionSpell extends Spell {
 			targetPlayer = TargetPlayer.OPPONENT;
 		}
 		source.getAttributes().remove(Attribute.DEATHRATTLES);
-		SpellDesc deathrattle = SummonSpell.create(targetPlayer, (MinionCard) minion.getSourceCard());
+		SpellDesc deathrattle = SummonSpell.create(targetPlayer, minion.getSourceCard());
 		SpellDesc addDeathrattleSpell = AddDeathrattleSpell.create(deathrattle);
 		SpellDesc destroySpell = DestroySpell.create(target.getReference());
 		SpellUtils.castChildSpell(context, player, destroySpell, source, target);

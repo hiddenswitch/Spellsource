@@ -21,9 +21,9 @@ public abstract class RevertableSpell extends Spell {
 		EventTriggerDesc triggerDesc = (EventTriggerDesc) desc.get(SpellArg.REVERT_TRIGGER);
 
 		if (triggerDesc != null) {
-			EventTrigger revertTrigger = triggerDesc.createInstance();
+			EventTrigger revertTrigger = triggerDesc.create();
 			EventTriggerDesc secondTriggerDesc = (EventTriggerDesc) desc.get(SpellArg.SECOND_REVERT_TRIGGER);
-			EventTrigger secondRevertTrigger = secondTriggerDesc != null ? secondTriggerDesc.createInstance() : null;
+			EventTrigger secondRevertTrigger = secondTriggerDesc != null ? secondTriggerDesc.create() : null;
 			SpellDesc revert = getReverseSpell(context, player, source, desc, target.getReference());
 			Enchantment removeTrigger = new Enchantment(revertTrigger, secondRevertTrigger, revert, false);
 			removeTrigger.setMaxFires(1);

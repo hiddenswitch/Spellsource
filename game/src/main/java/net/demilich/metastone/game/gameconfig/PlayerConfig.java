@@ -2,46 +2,28 @@ package net.demilich.metastone.game.gameconfig;
 
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
-import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
-import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.MetaDeck;
-import net.demilich.metastone.game.decks.RandomDeck;
-import net.demilich.metastone.game.entities.heroes.MetaHero;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
 
 public class PlayerConfig implements Cloneable, Serializable {
 
 	private String name;
-	private HeroCard heroCard;
+	private Card heroCard;
 	private Deck deck;
 	private Behaviour behaviour;
 
 	private Deck deckForPlay;
-	private HeroCard heroForPlay;
+	private Card heroForPlay;
 
 	public PlayerConfig() {
 	}
 
 	public PlayerConfig(Deck deck, Behaviour behaviour) {
-		this.deck = deck;
-		this.behaviour = behaviour;
-	}
-
-	public void build() {
-		if (deck instanceof MetaDeck) {
-			MetaDeck metaDeck = (MetaDeck) deck;
-			deckForPlay = metaDeck.selectRandom();
-
-			heroForPlay = MetaHero.getHeroCard(deckForPlay.getHeroClass());
-		} else {
-			deckForPlay = deck;
-			if (heroCard == null) {
-				heroCard = MetaHero.getHeroCard(deckForPlay.getHeroClass());
-			}
-			heroForPlay = heroCard;
-		}
+		this.setDeck(deck);
+		this.setBehaviour(behaviour);
 	}
 
 	public Behaviour getBehaviour() {
@@ -56,19 +38,19 @@ public class PlayerConfig implements Cloneable, Serializable {
 		return deckForPlay;
 	}
 
-	public HeroCard getHeroCard() {
+	public Card getHeroCard() {
 		return heroCard;
 	}
 
-	public HeroCard getHeroForPlay() {
-		if (deck.getHeroCard() != null) {
-			return deck.getHeroCard();
+	public Card getHeroForPlay() {
+		if (getDeck().getHeroCard() != null) {
+			return getDeck().getHeroCard();
 		}
 		return heroForPlay;
 	}
 
 	public String getName() {
-		return name != null ? name : heroCard.getName();
+		return name != null ? name : getHeroCard().getName();
 	}
 
 	public void setBehaviour(Behaviour behaviour) {
@@ -79,7 +61,7 @@ public class PlayerConfig implements Cloneable, Serializable {
 		this.deck = deck;
 	}
 
-	public void setHeroCard(HeroCard HeroCard) {
+	public void setHeroCard(Card HeroCard) {
 		this.heroCard = HeroCard;
 	}
 
@@ -110,15 +92,23 @@ public class PlayerConfig implements Cloneable, Serializable {
 	@Override
 	protected PlayerConfig clone() throws CloneNotSupportedException {
 		PlayerConfig clone = (PlayerConfig) super.clone();
-		if (deck != null) {
-			clone.setDeck(deck.clone());
+		if (getDeck() != null) {
+			clone.setDeck(getDeck().clone());
 		}
-		if (behaviour != null) {
-			clone.setBehaviour(behaviour.clone());
+		if (getBehaviour() != null) {
+			clone.setBehaviour(getBehaviour().clone());
 		}
-		if (heroCard != null) {
-			clone.setHeroCard((HeroCard) heroCard.clone());
+		if (getHeroCard() != null) {
+			clone.setHeroCard((Card) getHeroCard().clone());
 		}
 		return clone;
+	}
+
+	public void setDeckForPlay(Deck deckForPlay) {
+		this.deckForPlay = deckForPlay;
+	}
+
+	public void setHeroForPlay(Card heroForPlay) {
+		this.heroForPlay = heroForPlay;
 	}
 }

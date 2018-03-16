@@ -1,14 +1,14 @@
 package net.demilich.metastone.game.entities.minions;
 
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 
 public class Minion extends Actor {
 
-	public Minion(MinionCard sourceCard) {
+	public Minion(Card sourceCard) {
 		super(sourceCard);
 		Race race = sourceCard.hasAttribute(Attribute.RACE) ? (Race) sourceCard.getAttribute(Attribute.RACE) : Race.NONE;
 		setRace(race);

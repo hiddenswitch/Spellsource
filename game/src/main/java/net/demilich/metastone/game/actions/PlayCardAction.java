@@ -9,7 +9,6 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -22,23 +21,21 @@ import java.util.List;
 public abstract class PlayCardAction extends GameAction {
 
 	public static Logger logger = LoggerFactory.getLogger(PlayCardAction.class);
-
-	protected EntityReference EntityReference;
-	private Integer chooseOneOptionIndex = null;
+	protected EntityReference entityReference;
+	protected Integer chooseOneOptionIndex = null;
 
 	protected PlayCardAction() {
 	}
 
 	public PlayCardAction(EntityReference EntityReference) {
-		this.EntityReference = EntityReference;
+		this.entityReference = EntityReference;
 	}
 
 	@Override
 	public boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
 		Card card = (Card) context.resolveSingleTarget(getEntityReference());
-		if (card instanceof SpellCard) {
-			SpellCard spellCard = (SpellCard) card;
-			return spellCard.canBeCastOn(context, player, entity);
+		if (card.isSpell()) {
+			return card.canBeCastOn(context, player, entity);
 		}
 
 		return true;
@@ -61,7 +58,7 @@ public abstract class PlayCardAction extends GameAction {
 	}
 
 	public EntityReference getEntityReference() {
-		return EntityReference;
+		return entityReference;
 	}
 
 	public Integer getChooseOneOptionIndex() {
@@ -77,7 +74,7 @@ public abstract class PlayCardAction extends GameAction {
 
 	@Override
 	public String toString() {
-		return String.format("%s Card: %s Target: %s", getActionType(), EntityReference, getTargetReference());
+		return String.format("%s Card: %s Target: %s", getActionType(), entityReference, getTargetReference());
 	}
 
 	@Override
@@ -96,7 +93,7 @@ public abstract class PlayCardAction extends GameAction {
 		Card playedCard = (Card) context.resolveSingleTarget(getEntityReference());
 		String cardName = playedCard != null ? playedCard.getName() : "an unknown card";
 		if (playedCard.getCardType() == CardType.SPELL
-				&& playedCard.hasAttribute(Attribute.SECRET)) {
+				&& playedCard.isSecret()) {
 			cardName = "a secret";
 		}
 		return String.format("%s played %s.", context.getActivePlayer().getName(), cardName);

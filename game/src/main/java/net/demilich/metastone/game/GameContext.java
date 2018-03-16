@@ -18,7 +18,6 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.heroes.MetaHero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.environment.EnvironmentDeque;
@@ -31,7 +30,6 @@ import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.logic.Trace;
 import net.demilich.metastone.game.services.Inventory;
-import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
@@ -44,7 +42,6 @@ import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.NetworkDelegate;
 import net.demilich.metastone.game.utils.TurnState;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.math3.util.Combinations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -181,8 +178,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	public static GameContext uninitialized(HeroClass playerHero1, HeroClass playerHero2) {
 		final Player player1 = new Player();
 		final Player player2 = new Player();
-		player1.setHero(MetaHero.getHeroCard(playerHero1).createHero());
-		player2.setHero(MetaHero.getHeroCard(playerHero2).createHero());
+		player1.setHero(HeroClass.getHeroCard(playerHero1).createHero());
+		player2.setHero(HeroClass.getHeroCard(playerHero2).createHero());
 		return new GameContext(player1, player2, new GameLogic(), new DeckFormat().withCardSets(CardSet.values()));
 	}
 
@@ -1591,5 +1588,31 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 	public void setLogger(Logger logger) {
 		this.logger = logger;
+	}
+
+	/**
+	 * Resolves a single target that could be a {@link EntityReference#isTargetGroup()} that points to exactly one
+	 * entity, like {@link EntityReference#FRIENDLY_HERO}.
+	 *
+	 * @param player The source player.
+	 * @param source The entity from whose point of view this target should be evaluated.
+	 * @param target A target key to a specific entity or a named reference ("target group") that returns exactly one
+	 *               entity.
+	 * @return The entity.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> T resolveSingleTarget(Player player, Entity source, EntityReference target) {
+		if (target.isTargetGroup()) {
+			List<Entity> entities = resolveTarget(player, source, target);
+			if (entities == null
+					|| entities.size() == 0) {
+				return null;
+			} else if (entities.size() > 1) {
+				throw new ArrayStoreException(String.format("Cannot resolve target %s %s %s", player.toString(), source.toString(), target.toString()));
+			}
+			return (T) entities.get(0);
+		} else {
+			return (T) resolveSingleTarget(target);
+		}
 	}
 }

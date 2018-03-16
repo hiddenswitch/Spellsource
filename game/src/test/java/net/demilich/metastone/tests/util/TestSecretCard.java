@@ -1,10 +1,13 @@
 package net.demilich.metastone.tests.util;
 
+import net.demilich.metastone.game.actions.PlayCardAction;
+import net.demilich.metastone.game.actions.PlaySpellCardAction;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
-import net.demilich.metastone.game.cards.SecretCard;
-import net.demilich.metastone.game.cards.desc.SecretCardDesc;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.spells.AddSecretSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -12,18 +15,24 @@ import net.demilich.metastone.game.spells.trigger.PhysicalAttackTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.apache.commons.lang3.RandomStringUtils;
 
-public class TestSecretCard extends SecretCard {
+public class TestSecretCard extends Card {
 
-	private static SecretCardDesc toDesc() {
-		SecretCardDesc desc = new SecretCardDesc();
+	private final int damage;
+
+	private static CardDesc toDesc() {
+		CardDesc desc = new CardDesc();
+		desc.id = "secret_test_card";
 		desc.name = "Trap";
 		desc.rarity = Rarity.FREE;
 		desc.type = CardType.SPELL;
 		desc.heroClass = HeroClass.ANY;
 		desc.attributes = new AttributeMap();
-		desc.trigger = new EventTriggerDesc(TurnEndTrigger.class);
+		desc.secret = new EventTriggerDesc(TurnEndTrigger.class);
 		return desc;
 	}
 
@@ -33,11 +42,15 @@ public class TestSecretCard extends SecretCard {
 
 	public TestSecretCard(int damage) {
 		super(toDesc());
-		setDescription("Secret for unit testing. Deals " + damage + " damage to all enemies");
-		setCollectible(false);
+		this.damage = damage;
+		getAttributes().put(Attribute.DESCRIPTION, "Secret for unit testing. Deals " + damage + " damage to all enemies");
 
-		SpellDesc damageSpell = DamageSpell.create(EntityReference.ENEMY_CHARACTERS, damage);
-		setSecret(new Secret(new PhysicalAttackTrigger(new EventTriggerDesc(PhysicalAttackTrigger.class)), damageSpell, this));
+
 	}
 
+	@Override
+	public PlayCardAction play() {
+		SpellDesc damageSpell = DamageSpell.create(EntityReference.ENEMY_CHARACTERS, damage);
+		return new PlaySpellCardAction(AddSecretSpell.create(new Secret(new PhysicalAttackTrigger(new EventTriggerDesc(PhysicalAttackTrigger.class)), damageSpell, this)), this, TargetSelection.NONE);
+	}
 }

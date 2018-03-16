@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "description": "Choose One - Deal 3 damage; or Gain +3 Attack and Stealth.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Deal 3 damage",
       "targetSelection": "ANY",
@@ -36,7 +36,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Deal 3 damage and Gain +3 Attack and Stealth",
     "targetSelection": "ANY",
     "spell": {

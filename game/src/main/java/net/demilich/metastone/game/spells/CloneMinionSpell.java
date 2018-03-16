@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -15,7 +14,7 @@ public class CloneMinionSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (target instanceof Hero) {
-			target = ((MinionCard) context.getPendingCard()).summon();
+			target = context.getPendingCard().summon();
 		}
 		Minion template = (Minion) target;
 		Minion clone = template.getCopy();

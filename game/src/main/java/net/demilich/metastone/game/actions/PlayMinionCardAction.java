@@ -3,7 +3,7 @@ package net.demilich.metastone.game.actions;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -44,15 +44,15 @@ public class PlayMinionCardAction extends PlayCardAction {
 	@Override
 	@Suspendable
 	protected void play(GameContext context, int playerId) {
-		MinionCard minionCard = (MinionCard) context.getPendingCard();
+		Card card = context.getPendingCard();
 		Actor nextTo = (Actor) (getTargetReference() != null ? context.resolveSingleTarget(getTargetReference()) : null);
-		Minion minion = minionCard.summon();
+		Minion minion = card.summon();
 		if (overrideBattlecry != null) {
 			minion.setBattlecry(overrideBattlecry);
 		}
 		Player player = context.getPlayer(playerId);
 		int index = player.getMinions().indexOf(nextTo);
-		context.getLogic().summon(playerId, minion, minionCard, index, true);
+		context.getLogic().summon(playerId, minion, card, index, true);
 	}
 
 }

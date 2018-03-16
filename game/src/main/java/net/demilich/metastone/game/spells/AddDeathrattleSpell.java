@@ -5,7 +5,7 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.ActorCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -32,8 +32,8 @@ public class AddDeathrattleSpell extends Spell {
 		if (target instanceof Actor) {
 			Actor actor = (Actor) target;
 			actor.addDeathrattle(deathrattle.clone());
-		} else if (target instanceof ActorCard) {
-			ActorCard card = (ActorCard) target;
+		} else if (target instanceof Card) {
+			Card card = (Card) target;
 			card.addDeathrattle(deathrattle.clone());
 		}
 	}

@@ -1,20 +1,20 @@
 package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.SecretCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
-public class SecretRevealedEvent extends GameEvent {
-	private final SecretCard secretCard;
+public class SecretRevealedEvent extends GameEvent implements HasCard {
+	private final Card secretCard;
 
-	public SecretRevealedEvent(GameContext context, SecretCard secret, int playerId) {
+	public SecretRevealedEvent(GameContext context, Card secret, int playerId) {
 		super(context, playerId, secret.getOwner());
 		this.secretCard = secret;
 	}
 	
 	@Override
 	public Entity getEventTarget() {
-		return getSecretCard();
+		return getCard();
 	}
 
 	@Override
@@ -22,12 +22,13 @@ public class SecretRevealedEvent extends GameEvent {
 		return GameEventType.SECRET_REVEALED;
 	}
 
-	public SecretCard getSecretCard() {
-		return secretCard;
-	}
-
 	@Override
 	public boolean isClientInterested() {
 		return true;
+	}
+
+	@Override
+	public Card getCard() {
+		return secretCard;
 	}
 }

@@ -5,6 +5,9 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.desc.filter.Operation;
+import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 
 public class ManaCostCondition extends Condition {
 
@@ -20,8 +23,9 @@ public class ManaCostCondition extends Condition {
 		}
 
 		Card card = (Card) target;
-		int value = desc.getInt(ConditionArg.VALUE);
-		return context.getLogic().getModifiedManaCost(player, card) == value;
+		int value = desc.getValue(ConditionArg.VALUE, context, player, target, source, 0);
+		Operation operation = (Operation) desc.getOrDefault(ConditionArg.OPERATION, Operation.EQUAL);
+		return SpellUtils.evaluateOperation(operation, context.getLogic().getModifiedManaCost(player, card), value);
 	}
 
 }

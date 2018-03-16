@@ -31,7 +31,7 @@ public class ReduceValueProvider extends ValueProvider {
 		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(ReduceValueProvider.class);
 		arguments.put(ValueProviderArg.TARGET, target);
 		arguments.put(ValueProviderArg.FILTER, filter);
-		arguments.put(ValueProviderArg.VALUE_1, value1.createInstance());
+		arguments.put(ValueProviderArg.VALUE_1, value1.create());
 		arguments.put(ValueProviderArg.OPERATION, operation);
 		return new ValueProviderDesc(arguments);
 	}
@@ -85,7 +85,7 @@ public class ReduceValueProvider extends ValueProvider {
 				ValueProvider targetValueProvider = (ValueProvider) desc.get(ValueProviderArg.VALUE_1);
 				value = operation.performOperation(value, targetValueProvider.getValue(context, player, entity, target));
 			} else if (attribute != null) {
-				int value1 = AttributeValueProvider.create(attribute, entity.getReference()).createInstance().getValue(context, player, entity, host);
+				int value1 = AttributeValueProvider.create(attribute, entity.getReference()).create().getValue(context, player, entity, host);
 				value = operation.performOperation(value, value1);
 			} else {
 				value = operation.performOperation(value, desc.getInt(ValueProviderArg.VALUE_1));
