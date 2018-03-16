@@ -8,7 +8,7 @@
   "baseHp": 4.0,
   "rarity": "RARE",
   "description": "Choose One - Give each player a Mana Crystal; or Each player draws a card.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Mana Crystal",
       "spell": {
@@ -27,7 +27,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Mana Crystal and Draw",
     "spell": {
       "class": "MetaSpell",

@@ -1,12 +1,10 @@
 package net.demilich.metastone.game.decks;
 
-import com.google.common.collect.Sets;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,7 +14,7 @@ public class Deck implements Serializable, Cloneable {
 	public static final Deck EMPTY;
 	private String name = "";
 	private HeroClass heroClass;
-	private HeroCard heroCard;
+	private Card heroCard;
 	private DeckFormat format;
 	protected CardList cards = new CardArrayList();
 	private String description;
@@ -124,11 +122,11 @@ public class Deck implements Serializable, Cloneable {
 		return builder.toString();
 	}
 
-	public HeroCard getHeroCard() {
+	public Card getHeroCard() {
 		return heroCard;
 	}
 
-	public void setHeroCard(HeroCard heroCard) {
+	public void setHeroCard(Card heroCard) {
 		this.heroCard = heroCard;
 	}
 
@@ -150,7 +148,7 @@ public class Deck implements Serializable, Cloneable {
 	public Deck clone() throws CloneNotSupportedException {
 		Deck clone = (Deck) super.clone();
 		clone.cards = cards.getCopy();
-		clone.heroCard = heroCard == null ? null : (HeroCard) heroCard.clone();
+		clone.heroCard = heroCard == null ? null : (Card) heroCard.clone();
 		clone.format = format == null ? null : format.clone();
 		return clone;
 	}

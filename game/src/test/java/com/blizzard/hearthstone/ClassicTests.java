@@ -2,7 +2,7 @@ package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -33,12 +33,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.spy;
 
 public class ClassicTests extends TestBase {
@@ -165,7 +163,7 @@ public class ClassicTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_ysera");
-			Stream<String> yseraCards = Arrays.stream((String[]) ((MinionCardDesc) CardCatalogue.getRecords().get("minion_ysera")
+			Stream<String> yseraCards = Arrays.stream((String[]) ((CardDesc) CardCatalogue.getRecords().get("minion_ysera")
 					.getDesc()).trigger.spell.get(SpellArg.CARDS));
 			context.endTurn();
 			Assert.assertTrue(yseraCards.anyMatch(c -> c.equals(player.getHand().get(0).getCardId())));
@@ -350,8 +348,8 @@ public class ClassicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			player.setMana(5);
 			player.setMaxMana(5);
-			ChooseOneCard nourish = (ChooseOneCard) CardCatalogue.getCardById("spell_nourish");
-			playCard(context, player, nourish.getChoiceCards()[0]);
+			Card nourish = CardCatalogue.getCardById("spell_nourish");
+			playCard(context, player, nourish.getChooseOneCardIds()[0]);
 			Assert.assertEquals(player.getMaxMana(), 7);
 			Assert.assertEquals(player.getMana(), 2);
 		});
@@ -362,8 +360,8 @@ public class ClassicTests extends TestBase {
 			}
 			player.setMana(5);
 			player.setMaxMana(5);
-			ChooseOneCard nourish = (ChooseOneCard) CardCatalogue.getCardById("spell_nourish");
-			playCard(context, player, nourish.getChoiceCards()[1]);
+			Card nourish = CardCatalogue.getCardById("spell_nourish");
+			playCard(context, player, nourish.getChooseOneCardIds()[1]);
 			Assert.assertEquals(player.getMaxMana(), 5);
 			Assert.assertEquals(player.getMana(), 0);
 			Assert.assertEquals(player.getHand().size(), 3);
@@ -375,8 +373,8 @@ public class ClassicTests extends TestBase {
 			}
 			player.setMana(5);
 			player.setMaxMana(5);
-			ChooseOneCard nourish = (ChooseOneCard) CardCatalogue.getCardById("spell_nourish");
-			playCard(context, player, nourish.getBothChoicesCard());
+			Card nourish = CardCatalogue.getCardById("spell_nourish");
+			playCard(context, player, nourish.getChooseBothCardId());
 			Assert.assertEquals(player.getMaxMana(), 7);
 			Assert.assertEquals(player.getMana(), 2);
 			Assert.assertEquals(player.getHand().size(), 3);
@@ -439,7 +437,7 @@ public class ClassicTests extends TestBase {
 		Player opponent = context.getPlayer2();
 
 		context.endTurn();
-		Minion impGangBoss = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_imp_gang_boss"));
+		Minion impGangBoss = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_imp_gang_boss"));
 		context.endTurn();
 
 		playCard(context, player, "spell_blizzard");
@@ -457,8 +455,8 @@ public class ClassicTests extends TestBase {
 		Player opponent = context.getPlayer2();
 
 		context.endTurn();
-		playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_haunted_creeper"));
-		playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_harvest_golem"));
+		playMinionCard(context, opponent, CardCatalogue.getCardById("minion_haunted_creeper"));
+		playMinionCard(context, opponent, CardCatalogue.getCardById("minion_harvest_golem"));
 		Assert.assertEquals(opponent.getMinions().size(), 2);
 		context.endTurn();
 
@@ -486,7 +484,7 @@ public class ClassicTests extends TestBase {
 		Player opponent = context.getPlayer2();
 
 		Assert.assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
-		MinionCard elvenArcherCard = (MinionCard) CardCatalogue.getCardById("minion_elven_archer");
+		Card elvenArcherCard = CardCatalogue.getCardById("minion_elven_archer");
 		playCardWithTarget(context, player, elvenArcherCard, opponent.getHero());
 		Assert.assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 1);
 	}
@@ -567,14 +565,14 @@ public class ClassicTests extends TestBase {
 		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player paladin = context.getPlayer1();
 
-		MinionCard adjacentMinionCard1 = new TestMinionCard(1, 5, 0);
-		Minion adjacentMinion1 = playMinionCard(context, paladin, adjacentMinionCard1);
+		Card adjacentCard1 = new TestMinionCard(1, 5, 0);
+		Minion adjacentMinion1 = playMinionCard(context, paladin, adjacentCard1);
 
-		MinionCard targetMinionCard = new TestMinionCard(3, 1, 0);
-		Minion targetMinion = playMinionCard(context, paladin, targetMinionCard);
+		Card targetCard = new TestMinionCard(3, 1, 0);
+		Minion targetMinion = playMinionCard(context, paladin, targetCard);
 
-		MinionCard adjacentMinionCard2 = new TestMinionCard(1, 5, 0);
-		Minion adjacentMinion2 = playMinionCard(context, paladin, adjacentMinionCard2);
+		Card adjacentCard2 = new TestMinionCard(1, 5, 0);
+		Minion adjacentMinion2 = playMinionCard(context, paladin, adjacentCard2);
 
 		context.getLogic().endTurn(paladin.getId());
 
@@ -601,14 +599,14 @@ public class ClassicTests extends TestBase {
 		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player paladin = context.getPlayer1();
 
-		MinionCard adjacentMinionCard1 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentMinionCard1);
+		Card adjacentCard1 = new TestMinionCard(1, 5, 0);
+		playMinionCard(context, paladin, adjacentCard1);
 
-		MinionCard targetMinionCard = (MinionCard) CardCatalogue.getCardById("minion_emperor_cobra");
-		Minion targetMinion = playMinionCard(context, paladin, targetMinionCard);
+		Card targetCard = CardCatalogue.getCardById("minion_emperor_cobra");
+		Minion targetMinion = playMinionCard(context, paladin, targetCard);
 
-		MinionCard adjacentMinionCard2 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentMinionCard2);
+		Card adjacentCard2 = new TestMinionCard(1, 5, 0);
+		playMinionCard(context, paladin, adjacentCard2);
 
 		context.getLogic().endTurn(paladin.getId());
 
@@ -632,20 +630,20 @@ public class ClassicTests extends TestBase {
 		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player paladin = context.getPlayer1();
 
-		MinionCard adjacentMinionCard1 = new TestMinionCard(1, 5, 0);
-		Minion adjacentMinion1 = playMinionCard(context, paladin, adjacentMinionCard1);
+		Card adjacentCard1 = new TestMinionCard(1, 5, 0);
+		Minion adjacentMinion1 = playMinionCard(context, paladin, adjacentCard1);
 
-		MinionCard targetMinionCard = new TestMinionCard(3, 1, 0);
-		Minion targetMinion = playMinionCard(context, paladin, targetMinionCard);
+		Card targetCard = new TestMinionCard(3, 1, 0);
+		Minion targetMinion = playMinionCard(context, paladin, targetCard);
 
-		MinionCard adjacentMinionCard2 = new TestMinionCard(1, 5, 0);
-		Minion adjacentMinion2 = playMinionCard(context, paladin, adjacentMinionCard2);
+		Card adjacentCard2 = new TestMinionCard(1, 5, 0);
+		Minion adjacentMinion2 = playMinionCard(context, paladin, adjacentCard2);
 
 		context.getLogic().endTurn(paladin.getId());
 
 		Player rogue = context.getPlayer2();
 
-		MinionCard azureDrakeCard = (MinionCard) CardCatalogue.getCardById("minion_azure_drake");
+		Card azureDrakeCard = CardCatalogue.getCardById("minion_azure_drake");
 		playMinionCard(context, rogue, azureDrakeCard);
 
 		Card betrayal = CardCatalogue.getCardById("spell_betrayal");
@@ -672,8 +670,8 @@ public class ClassicTests extends TestBase {
 		Card summoningPortal2 = CardCatalogue.getCardById("minion_summoning_portal");
 		context.getLogic().receiveCard(player.getId(), summoningPortal2);
 
-		MinionCard testMinionCard = new TestMinionCard(1, 1, 4);
-		context.getLogic().receiveCard(player.getId(), testMinionCard);
+		Card testCard = new TestMinionCard(1, 1, 4);
+		context.getLogic().receiveCard(player.getId(), testCard);
 		Assert.assertEquals(player.getMana(), 10);
 
 		// first summoning portal costs full 4 mana
@@ -686,7 +684,7 @@ public class ClassicTests extends TestBase {
 
 		// base cost of minion card is 4, reduced by both summoning portals, but
 		// not below 1
-		context.getLogic().performGameAction(player.getId(), testMinionCard.play());
+		context.getLogic().performGameAction(player.getId(), testCard.play());
 		Assert.assertEquals(player.getMana(), 3);
 
 	}
@@ -703,13 +701,13 @@ public class ClassicTests extends TestBase {
 		Assert.assertTrue(player.getHero().getWeapon() != null);
 		Assert.assertEquals(player.getHero().getWeapon().getWeaponDamage(), 3);
 
-		MinionCard spitefulSmithCard = (MinionCard) CardCatalogue.getCardById("minion_spiteful_smith");
+		Card spitefulSmithCard = CardCatalogue.getCardById("minion_spiteful_smith");
 		Minion spitefulSmith = playMinionCard(context, player, spitefulSmithCard);
 		// Smith has been played, but is not enraged yet, so weapon damage
 		// should still be unaltered
 		Assert.assertEquals(player.getHero().getWeapon().getWeaponDamage(), 3);
 
-		SpellCard damageSpell = new TestSpellCard(DamageSpell.create(1));
+		Card damageSpell = new TestSpellCard(DamageSpell.create(1));
 		damageSpell.setTargetRequirement(TargetSelection.ANY);
 		context.getLogic().receiveCard(player.getId(), damageSpell);
 		GameAction spellAction = damageSpell.play();
@@ -726,7 +724,7 @@ public class ClassicTests extends TestBase {
 
 		// wipe everything
 		SpellDesc wipeSpell = DestroySpell.create(EntityReference.ALL_MINIONS);
-		SpellCard wipe = new TestSpellCard(wipeSpell);
+		Card wipe = new TestSpellCard(wipeSpell);
 		playCard(context, player, wipe);
 
 		// Smith is destroyed, weapon power should be back to normal
@@ -742,11 +740,11 @@ public class ClassicTests extends TestBase {
 		Player warrior = context.getPlayer2();
 		warrior.setMana(10);
 
-		MinionCard faerieDragonCard = (MinionCard) CardCatalogue.getCardById("minion_faerie_dragon");
+		Card faerieDragonCard = CardCatalogue.getCardById("minion_faerie_dragon");
 		context.getLogic().receiveCard(warrior.getId(), faerieDragonCard);
 		context.getLogic().performGameAction(warrior.getId(), faerieDragonCard.play());
 
-		MinionCard devMonsterCard = new TestMinionCard(1, 1);
+		Card devMonsterCard = new TestMinionCard(1, 1);
 		context.getLogic().receiveCard(mage.getId(), devMonsterCard);
 		context.getLogic().performGameAction(mage.getId(), devMonsterCard.play());
 
@@ -784,10 +782,10 @@ public class ClassicTests extends TestBase {
 		final int BASE_ATTACK = 2;
 		final int ATTACK_BONUS = 3;
 
-		MinionCard gurubashiBerserkerCard = (MinionCard) CardCatalogue.getCardById("minion_gurubashi_berserker");
+		Card gurubashiBerserkerCard = CardCatalogue.getCardById("minion_gurubashi_berserker");
 		playCard(context, warrior, gurubashiBerserkerCard);
 
-		MinionCard oasisSnapjawCard = (MinionCard) CardCatalogue.getCardById("minion_oasis_snapjaw");
+		Card oasisSnapjawCard = CardCatalogue.getCardById("minion_oasis_snapjaw");
 		playCard(context, mage, oasisSnapjawCard);
 
 		Actor attacker = getSingleMinion(mage.getMinions());
@@ -822,7 +820,7 @@ public class ClassicTests extends TestBase {
 		Player warrior = context.getPlayer2();
 		warrior.setMana(10);
 
-		MinionCard devMonsterCard = new TestMinionCard(1, 1);
+		Card devMonsterCard = new TestMinionCard(1, 1);
 		context.getLogic().receiveCard(player.getId(), devMonsterCard);
 		context.getLogic().performGameAction(player.getId(), devMonsterCard.play());
 

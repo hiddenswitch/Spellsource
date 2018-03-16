@@ -57,7 +57,7 @@ public class EquipWeaponSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	public static SpellDesc create(TargetPlayer targetPlayer, WeaponCard weaponCard) {
+	public static SpellDesc create(TargetPlayer targetPlayer, Card weaponCard) {
 		Map<SpellArg, Object> arguments = new SpellDesc(EquipWeaponSpell.class);
 		arguments.put(SpellArg.CARD, weaponCard);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
@@ -79,7 +79,7 @@ public class EquipWeaponSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	public static SpellDesc create(WeaponCard weaponCard) {
+	public static SpellDesc create(Card weaponCard) {
 		return create(TargetPlayer.SELF, weaponCard);
 	}
 
@@ -94,17 +94,17 @@ public class EquipWeaponSpell extends Spell {
 				logger.error("onCast {} {}: The CARD {} was not found.", context.getGameId(), source, cardId);
 				return;
 			}
-			if (!(cardById instanceof WeaponCard)) {
+			if (!(cardById.getCardType() == CardType.WEAPON)) {
 				logger.error("onCast {} {}: The CARD {} is not a weapon that can be equipped.", context.getGameId(), source, cardById);
 				return;
 			}
 
-			WeaponCard weaponCard = (WeaponCard) cardById;
+			Card weaponCard = cardById;
 
 			results.add(weaponCard);
 		} else if (desc.getEntityFilter() != null || desc.getCardSource() != null) {
 			results.addAll(desc.getFilteredCards(context, player, source));
-			if (results.stream().anyMatch(c -> !(c instanceof WeaponCard))) {
+			if (results.stream().anyMatch(c -> !(c.getCardType() == CardType.WEAPON))) {
 				logger.error("onCast {} {}: The CARD_FILTER {} and CARD_SOURCE {} produced cards that aren't weapon cards", context.getGameId(), source, desc.getCardFilter(), desc.getCardSource());
 				return;
 			}
@@ -113,7 +113,7 @@ public class EquipWeaponSpell extends Spell {
 			return;
 		}
 
-		Weapon weapon = ((WeaponCard) context.getLogic().getRandom(results)).getWeapon();
+		Weapon weapon = context.getLogic().getRandom(results).createWeapon();
 		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
 		for (SpellDesc spellDesc : desc.subSpells(0)) {
 			if (weapon.isDestroyed()) {

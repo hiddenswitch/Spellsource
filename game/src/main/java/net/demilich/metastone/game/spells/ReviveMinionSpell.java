@@ -5,7 +5,7 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -33,8 +33,8 @@ public class ReviveMinionSpell extends Spell {
 		int hpAdjustment = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
 		Actor targetActor = (Actor) target;
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
-		MinionCard minionCard = (MinionCard) targetActor.getSourceCard();
-		Minion minion = minionCard.summon();
+		Card card = targetActor.getSourceCard();
+		Minion minion = card.summon();
 		if (hpAdjustment != 0) {
 			minion.setHp(hpAdjustment);
 		}

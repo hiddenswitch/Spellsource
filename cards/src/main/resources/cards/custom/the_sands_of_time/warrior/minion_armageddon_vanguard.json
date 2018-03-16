@@ -43,8 +43,8 @@
               "class": "AttributeCondition",
               "target": "EVENT_TARGET",
               "attribute": "DESTROYED",
-              "operation": "HAS",
-              "invert": true
+              "invert": true,
+              "operation": "HAS"
             }
           ]
         },

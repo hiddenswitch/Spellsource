@@ -5,8 +5,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.DamageSpell;
@@ -81,13 +79,13 @@ public class BlackrockMountainTests extends TestBase {
 		Player player = context.getPlayer1();
 		int playerStartingHp = player.getHero().getHp();
 		int opponentStartingHp = context.getPlayer2().getHero().getHp();
-		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_axe_flinger"));
-		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_axe_flinger"));
+		playMinionCard(context, player, CardCatalogue.getCardById("minion_axe_flinger"));
+		playMinionCard(context, player, CardCatalogue.getCardById("minion_axe_flinger"));
 
 		context.getLogic().endTurn(player.getId());
 		Player opponent = context.getOpponent(player);
 
-		SpellCard damageCard = new TestSpellCard(DamageSpell.create(EntityReference.ENEMY_CHARACTERS, 1));
+		Card damageCard = new TestSpellCard(DamageSpell.create(EntityReference.ENEMY_CHARACTERS, 1));
 		playCard(context, opponent, damageCard);
 		Assert.assertEquals(player.getHero().getHp(), playerStartingHp - 1);
 		Assert.assertEquals(opponent.getHero().getHp(), opponentStartingHp - 4);
@@ -104,11 +102,11 @@ public class BlackrockMountainTests extends TestBase {
 		behaviour.setTargetPreference(heroReference);
 		Assert.assertTrue(heroReference.getId() != -1);
 
-		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_blackwing_corruptor"));
+		playMinionCard(context, player, CardCatalogue.getCardById("minion_blackwing_corruptor"));
 		Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp());
 
 		receiveCard(context, player, "minion_azure_drake");
-		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_blackwing_corruptor"));
+		playMinionCard(context, player, CardCatalogue.getCardById("minion_blackwing_corruptor"));
 		Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 3);
 	}
 
@@ -118,12 +116,12 @@ public class BlackrockMountainTests extends TestBase {
 		Player player = context.getPlayer1();
 		clearHand(context, player);
 
-		Minion blackwingTechnician = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_blackwing_technician"));
+		Minion blackwingTechnician = playMinionCard(context, player, CardCatalogue.getCardById("minion_blackwing_technician"));
 		Assert.assertEquals(blackwingTechnician.getHp(), blackwingTechnician.getBaseHp());
 		Assert.assertEquals(blackwingTechnician.getAttack(), blackwingTechnician.getBaseAttack());
 
 		receiveCard(context, player, "minion_azure_drake");
-		blackwingTechnician = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_blackwing_technician"));
+		blackwingTechnician = playMinionCard(context, player, CardCatalogue.getCardById("minion_blackwing_technician"));
 		Assert.assertEquals(blackwingTechnician.getHp(), blackwingTechnician.getBaseHp() + 1);
 		Assert.assertEquals(blackwingTechnician.getAttack(), blackwingTechnician.getBaseAttack() + 1);
 	}
@@ -136,7 +134,7 @@ public class BlackrockMountainTests extends TestBase {
 
 		Assert.assertEquals(player.getHand().getCount(), 0);
 
-		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_chromaggus"));
+		playMinionCard(context, player, CardCatalogue.getCardById("minion_chromaggus"));
 		context.getLogic().drawCard(player.getId(), player.getHero());
 		Assert.assertEquals(player.getHand().getCount(), 2);
 
@@ -144,7 +142,7 @@ public class BlackrockMountainTests extends TestBase {
 
 		Assert.assertEquals(player.getHand().getCount(), 0);
 
-		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_chromaggus"));
+		playMinionCard(context, player, CardCatalogue.getCardById("minion_chromaggus"));
 		context.getLogic().drawCard(player.getId(), player.getHero());
 		Assert.assertEquals(player.getHand().getCount(), 3);
 	}
@@ -155,13 +153,13 @@ public class BlackrockMountainTests extends TestBase {
 		Player player = context.getPlayer1();
 		clearHand(context, player);
 
-		Minion coreRager = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_core_rager"));
+		Minion coreRager = playMinionCard(context, player, CardCatalogue.getCardById("minion_core_rager"));
 		Assert.assertEquals(coreRager.getAttack(), coreRager.getBaseAttack() + 3);
 		Assert.assertEquals(coreRager.getHp(), coreRager.getBaseHp() + 3);
 
 		context.getLogic().drawCard(player.getId(), player.getHero());
 
-		coreRager = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_core_rager"));
+		coreRager = playMinionCard(context, player, CardCatalogue.getCardById("minion_core_rager"));
 		Assert.assertEquals(coreRager.getAttack(), coreRager.getBaseAttack());
 		Assert.assertEquals(coreRager.getHp(), coreRager.getBaseHp());
 	}
@@ -173,7 +171,7 @@ public class BlackrockMountainTests extends TestBase {
 		Player opponent = context.getOpponent(player);
 
 		Minion testMinion1 = playMinionCard(context, player, new TestMinionCard(3, 3, 0));
-		Minion injuredBlademaster = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_injured_blademaster"));
+		Minion injuredBlademaster = playMinionCard(context, player, CardCatalogue.getCardById("minion_injured_blademaster"));
 		Minion testMinion2 = playMinionCard(context, player, new TestMinionCard(3, 3, 0));
 		Assert.assertEquals(testMinion1.getHp(), testMinion1.getMaxHp());
 		Assert.assertEquals(injuredBlademaster.getHp(), injuredBlademaster.getMaxHp() - 4);
@@ -182,11 +180,11 @@ public class BlackrockMountainTests extends TestBase {
 		context.getLogic().endTurn(player.getId());
 
 		Minion testMinionOpponent = playMinionCard(context, opponent, new TestMinionCard(3, 3, 0));
-		Minion injuredBlademasterOpponent = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_injured_blademaster"));
+		Minion injuredBlademasterOpponent = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_injured_blademaster"));
 		Assert.assertEquals(testMinionOpponent.getHp(), testMinionOpponent.getMaxHp());
 		Assert.assertEquals(injuredBlademasterOpponent.getHp(), injuredBlademasterOpponent.getMaxHp() - 4);
 
-		Minion darkIronSkulker = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_dark_iron_skulker"));
+		Minion darkIronSkulker = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_dark_iron_skulker"));
 		Assert.assertEquals(darkIronSkulker.getHp(), darkIronSkulker.getMaxHp());
 
 		Assert.assertEquals(testMinionOpponent.getHp(), testMinionOpponent.getMaxHp());
@@ -204,11 +202,11 @@ public class BlackrockMountainTests extends TestBase {
 
 		final int MANA_REDUCTION = 2;
 
-		MinionCard dragonConsort = (MinionCard) CardCatalogue.getCardById("minion_dragon_consort");
+		Card dragonConsort = CardCatalogue.getCardById("minion_dragon_consort");
 		context.getLogic().receiveCard(player.getId(), dragonConsort);
 		Assert.assertEquals(dragonConsort.getManaCost(context, player), dragonConsort.getBaseManaCost());
 
-		playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_dragon_consort"));
+		playMinionCard(context, player, CardCatalogue.getCardById("minion_dragon_consort"));
 		Assert.assertEquals(costOf(context, player, dragonConsort), dragonConsort.getBaseManaCost() - MANA_REDUCTION);
 	}
 
@@ -219,7 +217,7 @@ public class BlackrockMountainTests extends TestBase {
 
 		final String TOKEN = "token_black_whelp";
 
-		Minion dragonEgg = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_dragon_egg"));
+		Minion dragonEgg = playMinionCard(context, player, CardCatalogue.getCardById("minion_dragon_egg"));
 		Assert.assertEquals(getSummonedMinion(player.getMinions()), dragonEgg);
 
 		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_fireball"), dragonEgg);
@@ -235,8 +233,8 @@ public class BlackrockMountainTests extends TestBase {
 		final int ATTACK_BONUS = 1;
 		final int HP_BONUS = 1;
 
-		Minion dragonkin1 = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_dragonkin_sorcerer"));
-		Minion dragonkin2 = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_dragonkin_sorcerer"));
+		Minion dragonkin1 = playMinionCard(context, player, CardCatalogue.getCardById("minion_dragonkin_sorcerer"));
+		Minion dragonkin2 = playMinionCard(context, player, CardCatalogue.getCardById("minion_dragonkin_sorcerer"));
 		Assert.assertEquals(dragonkin1.getAttack(), dragonkin2.getAttack());
 		Assert.assertEquals(dragonkin1.getHp(), dragonkin2.getHp());
 
@@ -254,13 +252,13 @@ public class BlackrockMountainTests extends TestBase {
 		final int ATTACK_BONUS = 3;
 		final int HP_BONUS = 3;
 
-		Minion drakonid = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_drakonid_crusher"));
+		Minion drakonid = playMinionCard(context, player, CardCatalogue.getCardById("minion_drakonid_crusher"));
 		Assert.assertEquals(drakonid.getAttack(), drakonid.getBaseAttack());
 		Assert.assertEquals(drakonid.getHp(), drakonid.getBaseHp());
 
 		opponent.getHero().setHp(15);
 
-		drakonid = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_drakonid_crusher"));
+		drakonid = playMinionCard(context, player, CardCatalogue.getCardById("minion_drakonid_crusher"));
 		Assert.assertEquals(drakonid.getAttack(), drakonid.getBaseAttack() + ATTACK_BONUS);
 		Assert.assertEquals(drakonid.getHp(), drakonid.getBaseHp() + HP_BONUS);
 	}
@@ -272,9 +270,9 @@ public class BlackrockMountainTests extends TestBase {
 		Player opponent = context.getPlayer2();
 
 		context.endTurn();
-		Minion firstYeti = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_chillwind_yeti"));
-		Minion impGangBoss = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_imp_gang_boss"));
-		Minion secondYeti = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_chillwind_yeti"));
+		Minion firstYeti = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_chillwind_yeti"));
+		Minion impGangBoss = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_imp_gang_boss"));
+		Minion secondYeti = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_chillwind_yeti"));
 		Assert.assertEquals(opponent.getMinions().size(), 3);
 		context.endTurn();
 
@@ -291,7 +289,7 @@ public class BlackrockMountainTests extends TestBase {
 		GameContext context = createContext(HeroClass.RED, HeroClass.VIOLET);
 
 		Player player = context.getPlayer1();
-		MinionCard emperorThaurissanCard = (MinionCard) CardCatalogue.getCardById("minion_emperor_thaurissan");
+		Card emperorThaurissanCard = CardCatalogue.getCardById("minion_emperor_thaurissan");
 		Minion emperorThaurissan = playMinionCard(context, player, emperorThaurissanCard);
 		for (Card card : player.getHand().toList()) {
 			context.getLogic().removeCard(card);

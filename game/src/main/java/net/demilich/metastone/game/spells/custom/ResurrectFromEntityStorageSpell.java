@@ -6,13 +6,17 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResurrectFromEntityStorageSpell extends Spell {
+
+	private static Logger logger = LoggerFactory.getLogger(ResurrectFromEntityStorageSpell.class);
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -26,8 +30,9 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			if (card.getCardType() == CardType.MINION) {
-				MinionCard minionCard = (MinionCard) card;
-				context.getLogic().summon(player.getId(), minionCard.summon(), minionCard, -1, false);
+				context.getLogic().summon(player.getId(), card.summon(), card, -1, false);
+			} else {
+				logger.warn("onCast {} {}: Trying to resurrect {} from entity storage, which is not a minion", context.getGameId(), source, card);
 			}
 			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 			context.getLogic().removeCard(card);

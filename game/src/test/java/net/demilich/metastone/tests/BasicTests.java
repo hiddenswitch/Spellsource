@@ -7,7 +7,6 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.BuffSpell;
@@ -90,13 +89,13 @@ public class BasicTests extends TestBase {
 		Player warrior = context.getPlayer2();
 		warrior.setMana(10);
 
-		MinionCard minionCard1 = new TestMinionCard(5, 5);
-		context.getLogic().receiveCard(mage.getId(), minionCard1);
-		context.getLogic().performGameAction(mage.getId(), minionCard1.play());
+		Card card1 = new TestMinionCard(5, 5);
+		context.getLogic().receiveCard(mage.getId(), card1);
+		context.getLogic().performGameAction(mage.getId(), card1.play());
 
-		MinionCard minionCard2 = new TestMinionCard(1, 1);
-		context.getLogic().receiveCard(warrior.getId(), minionCard2);
-		context.getLogic().performGameAction(warrior.getId(), minionCard2.play());
+		Card card2 = new TestMinionCard(1, 1);
+		context.getLogic().receiveCard(warrior.getId(), card2);
+		context.getLogic().performGameAction(warrior.getId(), card2.play());
 
 		Assert.assertEquals(mage.getMinions().size(), 1);
 		Assert.assertEquals(warrior.getMinions().size(), 1);
@@ -123,7 +122,7 @@ public class BasicTests extends TestBase {
 		for (Card card : mage.getHand().toList()) {
 			context.getLogic().removeCard(card);
 		}
-		MinionCard devMonster = new TestMinionCard(1, 1);
+		Card devMonster = new TestMinionCard(1, 1);
 		context.getLogic().receiveCard(mage.getId(), devMonster);
 		Assert.assertEquals(mage.getHand().getCount(), 1);
 		context.getLogic().performGameAction(mage.getId(), devMonster.play());
@@ -134,7 +133,7 @@ public class BasicTests extends TestBase {
 		Assert.assertEquals(minion.getHp(), 1);
 		Assert.assertEquals(minion.isDestroyed(), false);
 
-		MinionCard devMonster2 = new TestMinionCard(2, 2);
+		Card devMonster2 = new TestMinionCard(2, 2);
 		context.getLogic().receiveCard(mage.getId(), devMonster2);
 		GameAction summonAction = devMonster2.play();
 		summonAction.setTarget(minion);

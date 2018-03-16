@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * A spell that has no effects.
  * <p>
  * This is useful for situations where a spell <b>must</b> be specified, like in a {@link
- * net.demilich.metastone.game.cards.desc.SpellCardDesc#spell} property in its JSON, but when no effects are intended.
+ * net.demilich.metastone.game.cards.desc.CardDesc#spell} property in its JSON, but when no effects are intended.
  * <p>
  * For <b>example</b>, place the following as the {@code spell} property in the card JSON for a spell card that should
  * do nothing:

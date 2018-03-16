@@ -50,7 +50,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			attack(context, player, player.getHero(), target);
 			Stream.of(left, target, right).forEach(minion -> {
-				Assert.assertEquals(minion.getHp(), minion.getBaseHp() - ((WeaponCard) CardCatalogue.getCardById("weapon_shadowmourne")).getBaseDamage() - 1);
+				Assert.assertEquals(minion.getHp(), minion.getBaseHp() - CardCatalogue.getCardById("weapon_shadowmourne").getBaseDamage() - 1);
 			});
 		}, HeroClass.BROWN, HeroClass.BROWN);
 	}
@@ -102,7 +102,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		for (int i = 0; i < 100; i++) {
 			runGym((context, player, opponent) -> {
 				context.setDeckFormat(DeckFormat.WILD);
-				MinionCard howlfiendCard = receiveCard(context, player, "minion_howlfiend");
+				Card howlfiendCard = receiveCard(context, player, "minion_howlfiend");
 				playCard(context, player, "minion_emperor_thaurissan");
 				for (int j = 0; j < 3; j++) {
 					context.endTurn();
@@ -329,7 +329,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			playCard(context, opponent, "minion_prince_keleseth");
 			context.endTurn();
 			playCard(context, player, "spell_death_grip");
-			Minion acolyte = playMinionCard(context, player, (MinionCard) player.getHand().get(0));
+			Minion acolyte = playMinionCard(context, player, player.getHand().get(0));
 			Assert.assertEquals(acolyte.getAttack(), 2, "The stolen Acolyte should still have the Prince Keleseth buff applied to it.");
 		});
 	}
@@ -386,14 +386,14 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		runGym((GameContext context, Player player, Player opponent) -> {
 			Behaviour spiedBehavior = Mockito.spy(player.getBehaviour());
 			player.setBehaviour(spiedBehavior);
-			List<MinionCard> minionCards = new ArrayList<>();
+			List<Card> cards = new ArrayList<>();
 			AtomicBoolean isBuildingBeast = new AtomicBoolean(false);
 			final Answer<GameAction> answer = invocation -> {
 
 				if (isBuildingBeast.get()) {
 					final List<GameAction> gameActions = (List<GameAction>) invocation.getArguments()[2];
 					final DiscoverAction discoverAction = (DiscoverAction) gameActions.get(0);
-					minionCards.add((MinionCard) discoverAction.getCard());
+					cards.add(discoverAction.getCard());
 					return discoverAction;
 				}
 				return (GameAction) invocation.callRealMethod();
@@ -407,14 +407,14 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			isBuildingBeast.set(true);
 			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play());
 			isBuildingBeast.set(false);
-			MinionCard cardInHand = (MinionCard) player.getHand().get(0);
-			Assert.assertEquals(cardInHand.getBaseHp(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseHp)).getSum());
-			Assert.assertEquals(cardInHand.getBaseAttack(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseAttack)).getSum());
-			Assert.assertEquals(cardInHand.getBaseManaCost(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseManaCost)).getSum());
+			Card cardInHand = player.getHand().get(0);
+			Assert.assertEquals(cardInHand.getBaseHp(), cards.stream().collect(summarizingInt(Card::getBaseHp)).getSum());
+			Assert.assertEquals(cardInHand.getBaseAttack(), cards.stream().collect(summarizingInt(Card::getBaseAttack)).getSum());
+			Assert.assertEquals(cardInHand.getBaseManaCost(), cards.stream().collect(summarizingInt(Card::getBaseManaCost)).getSum());
 			playMinionCard(context, player, cardInHand);
 			Minion playedCard = player.getMinions().get(0);
-			Assert.assertEquals(playedCard.getBaseAttack(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseAttack)).getSum());
-			Assert.assertEquals(playedCard.getBaseHp(), minionCards.stream().collect(summarizingInt(MinionCard::getBaseHp)).getSum());
+			Assert.assertEquals(playedCard.getBaseAttack(), cards.stream().collect(summarizingInt(Card::getBaseAttack)).getSum());
+			Assert.assertEquals(playedCard.getBaseHp(), cards.stream().collect(summarizingInt(Card::getBaseHp)).getSum());
 		});
 	}
 
@@ -536,8 +536,8 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 			Assert.assertTrue(player.getHero().getWeapon().isActive());
 			context.endTurn();
-			Minion tarCreeper1 = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_tar_creeper"));
-			Minion tarCreeper2 = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_tar_creeper"));
+			Minion tarCreeper1 = playMinionCard(context, player, CardCatalogue.getCardById("minion_tar_creeper"));
+			Minion tarCreeper2 = playMinionCard(context, player, CardCatalogue.getCardById("minion_tar_creeper"));
 			context.endTurn();
 			context.getLogic().performGameAction(player.getId(), new PhysicalAttackAction(player.getHero().getReference()).withTargetReference(tarCreeper1.getReference()));
 			Assert.assertEquals(tarCreeper1.getHp(), 1);
@@ -555,9 +555,9 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
 	public void testEternalServitude() {
 		runGym((context, player, opponent) -> {
-			Minion friendlyMinion = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			Minion friendlyMinion = playMinionCard(context, player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
 			context.endTurn();
-			Minion opposingMinion = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			Minion opposingMinion = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_bloodfen_raptor"));
 			context.endTurn();
 			context.getLogic().performGameAction(player.getId(), new PhysicalAttackAction(friendlyMinion.getReference()).withTargetReference(opposingMinion.getReference()));
 			Assert.assertEquals(player.getMinions().size(), 0);
@@ -589,7 +589,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			player.getHero().setHp(originalHp);
 			int expectedHealing = 5;
 			for (int i = 0; i < expectedHealing; i++) {
-				playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
+				playMinionCard(context, player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
 			}
 			playCard(context, player, "spell_spirit_lash");
 			Assert.assertEquals(player.getHero().getHp(), originalHp + expectedHealing);
@@ -613,7 +613,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	public void testEmbraceDarkness() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion bloodfenRaptor = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			Minion bloodfenRaptor = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_bloodfen_raptor"));
 			context.endTurn();
 			playCardWithTarget(context, player, CardCatalogue.getCardById("spell_embrace_darkness"), bloodfenRaptor);
 			Assert.assertEquals(bloodfenRaptor.getOwner(), opponent.getId());
@@ -648,7 +648,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			playCard(context, player, "minion_prince_keleseth");
 			context.endTurn();
 			context.endTurn();
-			Minion bloodfen = playMinionCard(context, player, (MinionCard) player.getHand().get(0));
+			Minion bloodfen = playMinionCard(context, player, player.getHand().get(0));
 			Assert.assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack());
 			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp());
 		});
@@ -659,7 +659,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			playCard(context, player, "minion_prince_keleseth");
 			context.endTurn();
 			context.endTurn();
-			Minion bloodfen = playMinionCard(context, player, (MinionCard) player.getHand().get(0));
+			Minion bloodfen = playMinionCard(context, player, player.getHand().get(0));
 			Assert.assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack() + 1);
 			Assert.assertEquals(bloodfen.getHp(), bloodfen.getBaseHp() + 1);
 		});
@@ -668,13 +668,13 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
 	public void testPrinceTaldaram() {
 		runGym((context, player, opponent) -> {
-			Minion waterElemental = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_water_elemental"));
-			Minion princeTaldaram = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_prince_taldaram"));
+			Minion waterElemental = playMinionCard(context, player, CardCatalogue.getCardById("minion_water_elemental"));
+			Minion princeTaldaram = playMinionCard(context, player, CardCatalogue.getCardById("minion_prince_taldaram"));
 			Assert.assertEquals(princeTaldaram.getZone(), Zones.BATTLEFIELD);
 			Assert.assertEquals(princeTaldaram.getAttack(), 3);
 			Assert.assertEquals(princeTaldaram.getHp(), 3);
 			context.endTurn();
-			Minion arcaneGiant = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_arcane_giant"));
+			Minion arcaneGiant = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_arcane_giant"));
 			context.endTurn();
 			context.getLogic().fight(player, princeTaldaram, arcaneGiant, null);
 			Assert.assertTrue(arcaneGiant.hasAttribute(Attribute.FROZEN));
@@ -688,7 +688,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 					.map(CardCatalogue::getCardById)
 					.forEach(c -> context.getLogic().shuffleToDeck(player, c));
 
-			Minion meatWagon = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_meat_wagon"));
+			Minion meatWagon = playMinionCard(context, player, CardCatalogue.getCardById("minion_meat_wagon"));
 			context.getLogic().destroy(meatWagon);
 			Assert.assertEquals(player.getMinions().size(), 1);
 			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_dragon_egg");
@@ -698,7 +698,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 					.findFirst()
 					.orElseThrow(AssertionError::new).moveOrAddTo(context, Zones.GRAVEYARD);
 
-			meatWagon = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_meat_wagon"));
+			meatWagon = playMinionCard(context, player, CardCatalogue.getCardById("minion_meat_wagon"));
 			playCardWithTarget(context, player, CardCatalogue.getCardById("spell_divine_strength" /*+1/+2*/), meatWagon);
 			Assert.assertEquals(meatWagon.getAttack(), 2);
 			context.getLogic().destroy(meatWagon);
@@ -713,7 +713,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			Stream.of("weapon_arcanite_reaper" /*5/2*/, "weapon_coghammer" /*2/3*/, "minion_bloodfen_raptor")
 					.map(CardCatalogue::getCardById)
 					.forEach(c -> context.getLogic().receiveCard(player.getId(), c));
-			Minion furnacefireColossus = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_furnacefire_colossus"));
+			Minion furnacefireColossus = playMinionCard(context, player, CardCatalogue.getCardById("minion_furnacefire_colossus"));
 			Assert.assertEquals(furnacefireColossus.getAttack(), 6 + 5 + 2);
 			Assert.assertEquals(furnacefireColossus.getHp(), 6 + 2 + 3);
 			Assert.assertEquals(player.getHand().size(), 1);
@@ -725,10 +725,10 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	public void testFrostmourne() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "weapon_frostmourne");
-			Minion leeroyJenkins = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_leeroy_jenkins"));
+			Minion leeroyJenkins = playMinionCard(context, player, CardCatalogue.getCardById("minion_leeroy_jenkins"));
 
-			Minion bloodfenRaptor = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_bloodfen_raptor"));
-			Minion waterElemental = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_water_elemental"));
+			Minion bloodfenRaptor = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			Minion waterElemental = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_water_elemental"));
 
 			PhysicalAttackAction heroAttack = new PhysicalAttackAction(player.getHero().getReference());
 			heroAttack.setTarget(bloodfenRaptor);
@@ -757,7 +757,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 					.map(CardCatalogue::getCardById)
 					.forEach(c -> context.getLogic().receiveCard(player.getId(), c));
 
-			playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_emperor_thaurissan"));
+			playMinionCard(context, player, CardCatalogue.getCardById("minion_emperor_thaurissan"));
 			context.endTurn();
 			context.endTurn();
 			context.endTurn();
@@ -802,7 +802,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 				player.setMaxMana(2);
 				player.setMana(2);
 
-				Minion icyVeins = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_ice_walker"));
+				Minion icyVeins = playMinionCard(context, player, CardCatalogue.getCardById("minion_ice_walker"));
 				PlayCardAction play = player.getHero().getHeroPower().play();
 				Entity target;
 
@@ -886,11 +886,11 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		Stream<String> heroPowers = Stream.of("hero_power_plague_lord1", "hero_power_plague_lord2");
 
 		List<Object> allChecked = zip(heroPowers, heroPowerChecks, (heroPowerCardId, heroPowerChecker) -> {
-			Stream<GameContext> contexts = Stream.of((Function<ChooseBattlecryHeroCard, PlayCardAction>) (card -> card.playOptions()[0]),
+			Stream<GameContext> contexts = Stream.of((Function<Card, PlayCardAction>) (card -> card.playOptions()[0]),
 					card -> card.playOptions()[1],
-					ChooseBattlecryHeroCard::playBothOptions)
+					Card::playBothOptions)
 					.map(actionGetter -> {
-						ChooseBattlecryHeroCard malfurion = (ChooseBattlecryHeroCard) CardCatalogue.getCardById("hero_malfurion_the_pestilent");
+						Card malfurion = (Card) CardCatalogue.getCardById("hero_malfurion_the_pestilent");
 
 						GameContext context1 = createContext(HeroClass.BROWN, HeroClass.RED);
 						Player player = context1.getPlayer1();

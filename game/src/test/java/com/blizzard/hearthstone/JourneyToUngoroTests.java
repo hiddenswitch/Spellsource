@@ -8,9 +8,8 @@ import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.cards.SpellCard;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -30,7 +29,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static org.mockito.Mockito.*;
 
 public class JourneyToUngoroTests extends TestBase {
 
@@ -466,9 +464,9 @@ public class JourneyToUngoroTests extends TestBase {
 			c.endTurn();
 			Minion raptor = playMinionCard(c, p, "minion_bloodfen_raptor");
 			c.endTurn();
-			MinionCardDesc custom = (MinionCardDesc) CardCatalogue.getRecords().get("minion_mind_control_tech").getDesc();
+			CardDesc custom = (CardDesc) CardCatalogue.getRecords().get("minion_mind_control_tech").getDesc();
 			custom.battlecry.condition = null;
-			MinionCard customControl = new MinionCard(custom);
+			Card customControl = new Card(custom);
 			playCard(c, o, customControl);
 			Assert.assertEquals(o.getMinions().size(), 2, "Raptor + Mind Control Tech");
 			Assert.assertFalse(o.getMinions().stream().map(Minion::getSourceCard).anyMatch(c1 -> c1.getCardId().equals("permanent_sherazin_seed")));
@@ -856,7 +854,7 @@ public class JourneyToUngoroTests extends TestBase {
 			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
 			Card copiedFireball = player.getHand().get(0);
 			Assert.assertEquals(copiedFireball.getCardId(), "spell_fireball");
-			SpellCard graveyardFireball = (SpellCard) opponent.getGraveyard().get(opponent.getGraveyard().size() - 1);
+			Card graveyardFireball = (Card) opponent.getGraveyard().get(opponent.getGraveyard().size() - 1);
 			Assert.assertEquals(graveyardFireball.getCardId(), "spell_fireball");
 			Assert.assertNotEquals(copiedFireball.getId(), graveyardFireball.getId());
 			Assert.assertEquals(costOf(context, player, copiedFireball), 0);
@@ -878,7 +876,7 @@ public class JourneyToUngoroTests extends TestBase {
 				if (first) {
 					Assert.assertTrue(validActions.stream().allMatch(ga -> ga.getActionType() == ActionType.DISCOVER));
 					action[0] = (DiscoverAction) validActions.get(0);
-					MinionCard original = (MinionCard) action[0].getCard();
+					Card original = action[0].getCard();
 					originalMinion[0] = original.summon();
 					handSize[0] = player.getHand().size();
 					return action[0];
@@ -887,7 +885,7 @@ public class JourneyToUngoroTests extends TestBase {
 				return super.requestAction(context, player, validActions);
 			}
 		});
-		SpellCard freeFromAmber = (SpellCard) CardCatalogue.getCardById("spell_free_from_amber");
+		Card freeFromAmber = CardCatalogue.getCardById("spell_free_from_amber");
 		playCard(context, player, freeFromAmber);
 		Assert.assertEquals(player.getHand().size(), handSize[0]);
 		Assert.assertEquals(player.getDiscoverZone().size(), 0);

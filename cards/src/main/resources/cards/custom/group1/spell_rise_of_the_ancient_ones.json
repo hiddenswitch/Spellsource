@@ -1,0 +1,22 @@
+{
+  "name": "Rise of the Ancient Ones",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "EPIC",
+  "description": "Summon the 4 Old Gods from their deep slumber.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "minion_cthun",
+      "minion_yogg_saron_hopes_end",
+      "minion_nzoth_the_corruptor",
+      "minion_yshaarj_rage_unbound"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "Jack of Spades"
+}

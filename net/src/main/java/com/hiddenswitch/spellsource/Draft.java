@@ -9,7 +9,6 @@ import com.hiddenswitch.spellsource.models.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.heroes.MetaHero;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -88,10 +87,10 @@ public interface Draft {
 								.collect(Collectors.toList()))
 				.deckId(inState.getDeckId())
 				.draftIndex(inState.getDraftIndex())
-				.heroClass(inState.getHeroClass() == null ? null : Games.getEntity(workingContext, MetaHero.getHeroCard(inState.getHeroClass()), 0).id(0))
+				.heroClass(inState.getHeroClass() == null ? null : Games.getEntity(workingContext, HeroClass.getHeroCard(inState.getHeroClass()), 0).id(0))
 				.heroClassChoices(inState.getHeroClassChoices() == null ? null :
 						IntStream.range(0, inState.getHeroClassChoices().size())
-								.mapToObj(i -> Games.getEntity(workingContext, MetaHero.getHeroCard(inState.getHeroClassChoices().get(i)), 0).id(i))
+								.mapToObj(i -> Games.getEntity(workingContext, HeroClass.getHeroCard(inState.getHeroClassChoices().get(i)), 0).id(i))
 								.collect(Collectors.toList()))
 				.losses(inState.getLosses())
 				.selectedCards(inState.getSelectedCards() == null ? null :

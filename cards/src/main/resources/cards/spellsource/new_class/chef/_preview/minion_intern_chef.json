@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "description": "Select One - Hire a 2/2 token; or gain an empty Mana Crystal.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Hire 2/2 token",
       "spell": {
@@ -26,7 +26,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Hire 2/2 token and Mana Cell.",
     "spell": {
       "class": "MetaSpell",

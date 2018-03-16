@@ -36,6 +36,7 @@ public class AuraDescSerializer implements JsonDeserializer<AuraDesc>, JsonSeria
 		parseArgument(AuraArg.HP_BONUS, jsonData, arguments, ParseValueType.VALUE);
 		parseArgument(AuraArg.SECONDARY_TRIGGER, jsonData, arguments, ParseValueType.EVENT_TRIGGER);
 		parseArgument(AuraArg.CONDITION, jsonData, arguments, ParseValueType.CONDITION);
+		parseArgument(AuraArg.CARD_ID, jsonData, arguments, ParseValueType.STRING);
 
 		return new AuraDesc(arguments);
 	}

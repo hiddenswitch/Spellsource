@@ -7,4 +7,6 @@ public class CardAura extends Aura {
 	public CardAura(AuraDesc desc) {
 		super(desc);
 	}
+
+
 }

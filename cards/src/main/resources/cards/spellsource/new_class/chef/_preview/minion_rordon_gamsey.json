@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "description": "Select One - Renew your Mana Cells; or gain 10 Armor.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Refresh Mana",
       "spell": {
@@ -35,7 +35,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Renew and 10 Armor",
     "spell": {
       "class": "MetaSpell",

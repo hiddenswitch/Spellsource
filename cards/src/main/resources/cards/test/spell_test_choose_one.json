@@ -6,11 +6,11 @@
   "rarity": "COMMON",
   "description": "",
   "targetSelection": "NONE",
-  "options": [
+  "chooseOneCardIds": [
     "spell_test_choose_one_1",
     "spell_test_choose_one_2"
   ],
-  "bothOptions": "spell_test_choose_one_3",
+  "chooseBothCardId": "spell_test_choose_one_3",
   "collectible": true,
   "set": "TEST",
   "fileFormatVersion": 1

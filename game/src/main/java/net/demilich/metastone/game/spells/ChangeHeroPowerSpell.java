@@ -12,7 +12,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
@@ -30,12 +29,12 @@ public class ChangeHeroPowerSpell extends Spell {
 		if (heroPowerCardId != null) {
 			cards.add(CardCatalogue.getCardById(heroPowerCardId));
 		}
-		HeroPowerCard heroPower = (HeroPowerCard) context.getLogic().getRandom(cards);
+		Card heroPower = context.getLogic().getRandom(cards);
 		heroPower.setId(context.getLogic().generateId());
 		heroPower.setOwner(hero.getOwner());
 		logger.debug("{}'s hero power was changed to {}", hero.getName(), heroPower);
 		// The old hero power should be removed from play.
-		HeroPowerCard oldHeroPower = hero.getHeroPower();
+		Card oldHeroPower = hero.getHeroPower();
 		context.removeTriggersAssociatedWith(oldHeroPower.getReference(), true);
 		oldHeroPower.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		context.getLogic().removeCard(oldHeroPower);

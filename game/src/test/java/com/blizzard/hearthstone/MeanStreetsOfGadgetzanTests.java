@@ -1,9 +1,6 @@
 package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -71,7 +68,7 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion beast = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playMinionCard(context, player, "token_silver_hand_recruit");
-			MinionCard card = (MinionCard) receiveCard(context, player, "minion_virmen_sensei");
+			Card card = receiveCard(context, player, "minion_virmen_sensei");
 
 			CountDownLatch latch = new CountDownLatch(1);
 			overrideBattlecry(player, battlecryActions -> {

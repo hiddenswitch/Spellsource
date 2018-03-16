@@ -2,13 +2,15 @@ package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class PlayChooseOneCardAction extends PlayCardAction implements HasChoiceCard {
-	private SpellDesc spell;
+	protected SpellDesc spell;
 	protected final String chosenCard;
 
 	public PlayChooseOneCardAction(SpellDesc spell, Card chooseOneCard, String chosenCard, TargetSelection targetSelection) {
@@ -16,14 +18,19 @@ public class PlayChooseOneCardAction extends PlayCardAction implements HasChoice
 		setActionType(ActionType.SPELL);
 		setTargetRequirement(targetSelection);
 		this.setSpell(spell);
-		this.EntityReference = chooseOneCard.getReference();
+		this.entityReference = chooseOneCard.getReference();
 		this.chosenCard = chosenCard;
+	}
+
+	@Override
+	public boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
+		return CardCatalogue.getCardById(chosenCard).canBeCastOn(context, player, entity);
 	}
 
 	@Override
 	@Suspendable
 	public void play(GameContext context, int playerId) {
-		context.getLogic().castChooseOneSpell(playerId, spell, EntityReference, getTargetReference(), chosenCard, this);
+		context.getLogic().castChooseOneSpell(playerId, spell, entityReference, getTargetReference(), chosenCard, this);
 	}
 
 	public SpellDesc getSpell() {

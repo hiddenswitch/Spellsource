@@ -1,5 +1,6 @@
 package net.demilich.metastone.tests;
 
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -7,7 +8,6 @@ import org.testng.annotations.Test;
 
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.WeaponCard;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
@@ -19,7 +19,7 @@ public class WeaponTests extends TestBase {
 		Player player = context.getPlayer1();
 		Hero warrior = player.getHero();
 
-		WeaponCard weaponCard = (WeaponCard) CardCatalogue.getCardById("weapon_test_3_2");
+		Card weaponCard = CardCatalogue.getCardById("weapon_test_3_2");
 
 		context.setActivePlayerId(player.getId());
 		context.getLogic().startTurn(player.getId());

@@ -5,7 +5,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -30,7 +29,7 @@ public enum Attribute {
 	 */
 	HP,
 	/**
-	 * The attack value written on the {@link MinionCard}. This is distinct from {@link #BASE_ATTACK}, which is the base
+	 * The attack value written on the {@link Card}. This is distinct from {@link #BASE_ATTACK}, which is the base
 	 * attack value of the {@link Minion} this card would summon.
 	 */
 	ATTACK,
@@ -72,6 +71,12 @@ public enum Attribute {
 	 * @see #IMMUNE
 	 */
 	AURA_IMMUNE,
+	/**
+	 * When set, the card behaves as though it were actually a copy of the card of the specified ID.
+	 *
+	 * This is distinct from transformation effects.
+	 */
+	AURA_CARD_ID,
 	/**
 	 * The base number of hitpoints for the {@link Actor}.
 	 */
@@ -267,7 +272,7 @@ public enum Attribute {
 	 */
 	STEALTH,
 	/**
-	 * A {@link net.demilich.metastone.game.cards.SecretCard} has this attribute to help spells find secrets in the
+	 * A {@link net.demilich.metastone.game.cards.Card} has this attribute to help spells find secrets in the
 	 * deck.
 	 * <p>
 	 * Cards marked secret should not be revealed to the opponent.
@@ -336,7 +341,7 @@ public enum Attribute {
 	 */
 	AURA_UNTARGETABLE_BY_SPELLS,
 	/**
-	 * When a {@link net.demilich.metastone.game.cards.SpellCard} that casts a {@link
+	 * When a {@link net.demilich.metastone.game.cards.Card} that casts a {@link
 	 * net.demilich.metastone.game.spells.DamageSpell} has this attribute, its bonus from spell damage is doubled.
 	 *
 	 * @see GameLogic#applySpellpower(Player, Entity, int) for an entity's spellpower contribution.
@@ -494,14 +499,14 @@ public enum Attribute {
 	 */
 	SPELLS_COST_HEALTH,
 	/**
-	 * When any {@link Entity} has this attribute in play, a {@link MinionCard} with the {@link
+	 * When any {@link Entity} has this attribute in play, a {@link Card} with the {@link
 	 * net.demilich.metastone.game.entities.minions.Race#MURLOC} costs health instead of mana.
 	 * <p>
 	 * This attribute implements Seadevil Stinger.
 	 */
 	MINIONS_COST_HEALTH,
 	/**
-	 * When any {@link Entity} has this attribute in play, a {@link MinionCard} costs health instead of mana.
+	 * When any {@link Entity} has this attribute in play, a {@link Card} costs health instead of mana.
 	 * <p>
 	 * This attribute implements Seadevil Stinger.
 	 */
@@ -587,7 +592,7 @@ public enum Attribute {
 	ALLIANCE_ID,
 	/**
 	 * Every time a player summons this {@link Minion} for the first time in their lifetime of the game, the {@link
-	 * MinionCard} is incremented. This attribute persists between matches.
+	 * Card} is incremented. This attribute persists between matches.
 	 */
 	UNIQUE_CHAMPION_IDS_SIZE,
 	/**
@@ -636,7 +641,7 @@ public enum Attribute {
 	/**
 	 * A shorthand implementation of the Lifesteal keyword. Indicates that the {@link Hero} of the owner of the {@link
 	 * Minion}, {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} or {@link
-	 * net.demilich.metastone.game.cards.SpellCard} should be healed by the amount of damage dealt by that minion.
+	 * net.demilich.metastone.game.cards.Card} should be healed by the amount of damage dealt by that minion.
 	 */
 	LIFESTEAL,
 	/**
@@ -729,7 +734,7 @@ public enum Attribute {
 	RESERVED_BOOLEAN_1,
 	RESERVED_BOOLEAN_2,
 	RESERVED_BOOLEAN_3,
-	RESERVED_BOOLEAN_4;
+	RESERVED_BOOLEAN_4, MANA_COST_MODIFIER, USED_THIS_TURN, HERO_CLASS, TARGET_SELECTION;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

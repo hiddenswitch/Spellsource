@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TurnEndEvent;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
@@ -24,8 +22,6 @@ import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.HasChooseOneActions;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -112,8 +108,8 @@ public class AdvancedMechanicTests extends TestBase {
 		Player opponent = context.getPlayer2();
 
 		context.endTurn();
-		TestMinionCard minionCard = new TestMinionCard(1, 4);
-		playCard(context, opponent, minionCard);
+		TestMinionCard Card = new TestMinionCard(1, 4);
+		playCard(context, opponent, Card);
 		context.endTurn();
 
 		player.getHero().getHeroPower().markUsed();
@@ -163,13 +159,13 @@ public class AdvancedMechanicTests extends TestBase {
 		Player warrior = context.getPlayer2();
 		warrior.setMana(10);
 
-		MinionCard minionCard1 = new TestMinionCard(2, 2, Attribute.DIVINE_SHIELD);
-		context.getLogic().receiveCard(mage.getId(), minionCard1);
-		context.getLogic().performGameAction(mage.getId(), minionCard1.play());
+		Card card1 = new TestMinionCard(2, 2, Attribute.DIVINE_SHIELD);
+		context.getLogic().receiveCard(mage.getId(), card1);
+		context.getLogic().performGameAction(mage.getId(), card1.play());
 
-		MinionCard minionCard2 = new TestMinionCard(5, 5);
-		context.getLogic().receiveCard(warrior.getId(), minionCard2);
-		context.getLogic().performGameAction(warrior.getId(), minionCard2.play());
+		Card card2 = new TestMinionCard(5, 5);
+		context.getLogic().receiveCard(warrior.getId(), card2);
+		context.getLogic().performGameAction(warrior.getId(), card2.play());
 
 		Actor attacker = getSingleMinion(mage.getMinions());
 		Actor defender = getSingleMinion(warrior.getMinions());
@@ -274,10 +270,10 @@ public class AdvancedMechanicTests extends TestBase {
 		int modifiedHp = 1;
 		// cast a spell on the minion which modifies the hp
 		SpellDesc setHpSpell = SetHpSpell.create(modifiedHp);
-		SpellCard spellCard = new TestSpellCard(setHpSpell);
-		spellCard.setTargetRequirement(TargetSelection.MINIONS);
-		context.getLogic().receiveCard(player.getId(), spellCard);
-		GameAction playSpellCard = spellCard.play();
+		Card card = new TestSpellCard(setHpSpell);
+		card.setTargetRequirement(TargetSelection.MINIONS);
+		context.getLogic().receiveCard(player.getId(), card);
+		GameAction playSpellCard = card.play();
 		playSpellCard.setTarget(minion);
 		context.getLogic().performGameAction(player.getId(), playSpellCard);
 		Assert.assertEquals(minion.getHp(), modifiedHp);
@@ -285,10 +281,10 @@ public class AdvancedMechanicTests extends TestBase {
 
 		// silence the creature - hp should be back to original value
 		SpellDesc silenceSpell = SilenceSpell.create();
-		spellCard = new TestSpellCard(silenceSpell);
-		spellCard.setTargetRequirement(TargetSelection.MINIONS);
-		context.getLogic().receiveCard(player.getId(), spellCard);
-		playSpellCard = spellCard.play();
+		card = new TestSpellCard(silenceSpell);
+		card.setTargetRequirement(TargetSelection.MINIONS);
+		context.getLogic().receiveCard(player.getId(), card);
+		playSpellCard = card.play();
 		playSpellCard.setTarget(minion);
 		context.getLogic().performGameAction(player.getId(), playSpellCard);
 		Assert.assertEquals(minion.getHp(), baseHp);
@@ -346,9 +342,9 @@ public class AdvancedMechanicTests extends TestBase {
 			context.getLogic().performGameAction(player.getId(), damageSpell.play());
 			Assert.assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - expectedDamage);
 
-			MinionCard spellPowerMinionCard = (MinionCard) CardCatalogue.getCardById("minion_test_spellpower");
-			context.getLogic().receiveCard(player.getId(), spellPowerMinionCard);
-			context.getLogic().performGameAction(player.getId(), spellPowerMinionCard.play());
+			Card spellPowerCard = CardCatalogue.getCardById("minion_test_spellpower");
+			context.getLogic().receiveCard(player.getId(), spellPowerCard);
+			context.getLogic().performGameAction(player.getId(), spellPowerCard.play());
 			damageSpell = damageSpell.getCopy();
 			context.getLogic().receiveCard(player.getId(), damageSpell);
 			context.getLogic().performGameAction(player.getId(), damageSpell.play());

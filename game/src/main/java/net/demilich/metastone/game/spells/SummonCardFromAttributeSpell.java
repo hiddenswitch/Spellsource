@@ -5,7 +5,6 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -42,8 +41,8 @@ public class SummonCardFromAttributeSpell extends Spell {
 			return;
 		}
 		for (int i = 0; i < count; i++) {
-			MinionCard minionCard = count == 1 ? (MinionCard) card : (MinionCard) card.clone();
-			context.getLogic().summon(player.getId(), minionCard.summon(), null, boardPosition, false);
+			card = count == 1 ? card : card.clone();
+			context.getLogic().summon(player.getId(), card.summon(), null, boardPosition, false);
 		}
 	}
 }

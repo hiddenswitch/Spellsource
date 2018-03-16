@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "description": "Choose One - Give your hero +1 Attack this turn; or gain 3 Armor.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "+1 Attack",
       "targetSelection": "NONE",
@@ -27,7 +27,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "+1 Attack this turn and 3 Armor",
     "targetSelection": "NONE",
     "spell": {

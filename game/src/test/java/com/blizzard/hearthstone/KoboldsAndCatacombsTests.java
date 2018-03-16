@@ -562,8 +562,8 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Assert.assertEquals(costOf(context, player, card), 1);
 			player.setMaxMana(10);
 			player.setMana(10);
-			Assert.assertEquals(((MinionCard) card).getBaseAttack(), 1);
-			Assert.assertEquals(((MinionCard) card).getBaseHp(), 1);
+			Assert.assertEquals(card.getBaseAttack(), 1);
+			Assert.assertEquals(card.getBaseHp(), 1);
 			context.getLogic().performGameAction(player.getId(), card.play());
 			Assert.assertEquals(player.getMana(), 9);
 			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");

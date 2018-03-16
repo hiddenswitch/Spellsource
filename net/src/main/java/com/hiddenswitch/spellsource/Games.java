@@ -28,7 +28,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
@@ -174,7 +174,7 @@ public interface Games {
 				.map(kv -> {
 					ChooseOneOptions summon = new ChooseOneOptions();
 					summon.cardInHandId(kv.getKey());
-					ChooseBattlecryMinionCard sourceCard = (ChooseBattlecryMinionCard) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
+					Card sourceCard = (Card) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
 					EntityLocation sourceCardLocation = sourceCard.getEntityLocation();
 
 					kv.getValue().stream()
@@ -241,7 +241,7 @@ public interface Games {
 				.map(kv -> {
 					ChooseOneOptions hero = new ChooseOneOptions();
 					hero.cardInHandId(kv.getKey());
-					ChooseBattlecryHeroCard sourceCard = (ChooseBattlecryHeroCard) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
+					Card sourceCard = (Card) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
 					EntityLocation sourceCardLocation = sourceCard.getEntityLocation();
 
 					kv.getValue().stream()
@@ -495,7 +495,7 @@ public interface Games {
 			final Card card = cardPlayedEvent.getCard();
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
 			if (card.getCardType() == CardType.SPELL
-					&& card instanceof SecretCard
+					&& card.isSecret()
 					&& card.getOwner() != playerId
 					&& event instanceof CardPlayedEvent) {
 				entity = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
@@ -526,7 +526,7 @@ public interface Games {
 			final Card card = afterSpellCastedEvent.getCard();
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
 			if (card.getCardType() == CardType.SPELL
-					&& card instanceof SecretCard
+					&& card.isSecret()
 					&& card.getOwner() != playerId) {
 				entity = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 			}
@@ -537,11 +537,11 @@ public interface Games {
 		} else if (event instanceof SecretRevealedEvent) {
 			final SecretRevealedEvent secretRevealedEvent = (SecretRevealedEvent) event;
 			clientEvent.secretRevealed(new GameEventSecretRevealed()
-					.secret(getEntity(workingContext, secretRevealedEvent.getSecretCard(), playerId)));
+					.secret(getEntity(workingContext, secretRevealedEvent.getCard(), playerId)));
 		} else if (event instanceof QuestSuccessfulEvent) {
 			final QuestSuccessfulEvent questSuccessfulEvent = (QuestSuccessfulEvent) event;
 			clientEvent.questSuccessful(new GameEventQuestSuccessful()
-					.quest(getEntity(workingContext, questSuccessfulEvent.getQuest(), playerId)));
+					.quest(getEntity(workingContext, questSuccessfulEvent.getCard(), playerId)));
 		} else if (event instanceof JoustEvent) {
 			final JoustEvent joustEvent = (JoustEvent) event;
 			clientEvent.joust(new GameEventJoust()
@@ -1026,52 +1026,46 @@ public interface Games {
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		switch (card.getCardType()) {
 			case HERO:
-				HeroCard heroCard = (HeroCard) card;
+				Card heroCard = (Card) card;
 				// Retrieve the weapon attack
-				WeaponCard heroWeaponCard = heroCard.getWeapon();
-				if (heroWeaponCard != null) {
-					entityState.attack(heroWeaponCard.getBaseDamage());
+				Card weapon = heroCard.getWeapon();
+				if (weapon != null) {
+					entityState.attack(weapon.getBaseDamage());
 				}
 				entityState.armor(heroCard.getArmor());
 				break;
 			case MINION:
-				MinionCard minionCard = (MinionCard) card;
-				entityState.attack(minionCard.getAttack() + minionCard.getBonusAttack());
-				entityState.baseAttack(minionCard.getBaseAttack());
-				entityState.baseManaCost(minionCard.getBaseManaCost());
-				entityState.hp(minionCard.getHp());
-				entityState.baseHp(minionCard.getBaseHp());
-				entityState.maxHp(minionCard.getBaseHp() + minionCard.getBonusHp());
-				entityState.underAura(minionCard.getBonusAttack() > 0
-						|| minionCard.getBonusAttack() > 0
+				entityState.attack(card.getAttack() + card.getBonusAttack());
+				entityState.baseAttack(card.getBaseAttack());
+				entityState.baseManaCost(card.getBaseManaCost());
+				entityState.hp(card.getHp());
+				entityState.baseHp(card.getBaseHp());
+				entityState.maxHp(card.getBaseHp() + card.getBonusHp());
+				entityState.underAura(card.getBonusAttack() > 0
+						|| card.getBonusAttack() > 0
 						|| hostsTrigger);
-				entityState.tribe(minionCard.getRace() != null ? minionCard.getRace().name() : null);
+				entityState.tribe(card.getRace() != null ? card.getRace().name() : null);
 				break;
 			case WEAPON:
-				WeaponCard weaponCard = (WeaponCard) card;
-				entityState.durability(weaponCard.getDurability());
-				entityState.hp(weaponCard.getDurability());
-				entityState.maxHp(weaponCard.getBaseDurability() + weaponCard.getBonusDurability());
-				entityState.attack(weaponCard.getDamage() + weaponCard.getBonusDamage());
-				entityState.underAura(weaponCard.getBonusDamage() > 0
-						|| weaponCard.getBonusDurability() > 0
+				entityState.durability(card.getDurability());
+				entityState.hp(card.getDurability());
+				entityState.maxHp(card.getBaseDurability() + card.getBonusDurability());
+				entityState.attack(card.getDamage() + card.getBonusDamage());
+				entityState.underAura(card.getBonusDamage() > 0
+						|| card.getBonusDurability() > 0
 						|| hostsTrigger);
 				break;
 			case SPELL:
 			case HERO_POWER:
-				SpellCard spellCard = (SpellCard) card;
 				int damage = 0;
 				int spellpowerDamage = 0;
-				if (DamageSpell.class.isAssignableFrom(spellCard.getSpell().getDescClass())
+				if (DamageSpell.class.isAssignableFrom(card.getSpell().getDescClass())
 						&& owningPlayer != null) {
-					// Use a zero zero minion as the target entity
-					final MinionCardDesc desc = new MinionCardDesc();
-					desc.baseAttack = 0;
-					desc.baseHp = 0;
-					Minion zeroZero = ((MinionCard) desc.createInstance()).summon();
-					zeroZero.setId(65535);
-					damage = DamageSpell.getDamage(workingContext, owningPlayer, spellCard.getSpell(), card, zeroZero);
-					spellpowerDamage = workingContext.getLogic().applySpellpower(owningPlayer, spellCard, damage);
+
+					Minion zeroOne = CardCatalogue.getCardById("minion_snowflipper_penguin").summon();
+					zeroOne.setId(65535);
+					damage = DamageSpell.getDamage(workingContext, owningPlayer, card.getSpell(), card, zeroOne);
+					spellpowerDamage = workingContext.getLogic().applySpellpower(owningPlayer, card, damage);
 				}
 				entityState.underAura(spellpowerDamage > damage
 						|| hostsTrigger);

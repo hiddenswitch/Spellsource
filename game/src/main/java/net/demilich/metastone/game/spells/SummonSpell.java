@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -37,7 +36,7 @@ import java.util.stream.Collectors;
  * <p>
  * If {@link SpellArg#CARD}, {@link SpellArg#CARDS}, {@link SpellArg#CARD_FILTER}, and {@link SpellArg#CARD_SOURCE} are
  * all omitted, the spell will try to summon a <b>copy</b> of {@code target}. If the {@code target} is a {@link
- * MinionCard}, it is used as the card to {@link MinionCard#summon()} from; otherwise, if the {@code target} is a {@link
+ * Card}, it is used as the card to {@link Card#summon()} from; otherwise, if the {@code target} is a {@link
  * Minion}, the target is copied with {@link Actor#getCopy()}, its enchantments are removed, it is summoned, and then
  * the enchantments are copied.
  * <p>
@@ -150,33 +149,33 @@ public class SummonSpell extends Spell {
 	/**
 	 * Creates this spell to summon the specified minion cards
 	 *
-	 * @param minionCards One or more minions to summon. Each will be summoned.
+	 * @param cards One or more minions to summon. Each will be summoned.
 	 * @return The spell
 	 */
-	public static SpellDesc create(MinionCard... minionCards) {
-		return create(TargetPlayer.SELF, minionCards);
+	public static SpellDesc create(Card... cards) {
+		return create(TargetPlayer.SELF, cards);
 	}
 
 	/**
 	 * Creates this spell to summon the specified minions relative to the source minion (used in a battlecry).
 	 *
 	 * @param relativeBoardPosition The board position.
-	 * @param minionCards           One or more minions to summon. Each will be summoned.
+	 * @param cards           One or more minions to summon. Each will be summoned.
 	 * @return The spell
 	 */
-	public static SpellDesc create(RelativeToSource relativeBoardPosition, MinionCard... minionCards) {
-		return create(TargetPlayer.SELF, relativeBoardPosition, minionCards);
+	public static SpellDesc create(RelativeToSource relativeBoardPosition, Card... cards) {
+		return create(TargetPlayer.SELF, relativeBoardPosition, cards);
 	}
 
 	/**
 	 * Summons the specified minion card ID
 	 *
-	 * @param minionCard The String minion card ID
+	 * @param Card The String minion card ID
 	 * @return The spell
 	 */
-	public static SpellDesc create(String minionCard) {
+	public static SpellDesc create(String Card) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SummonSpell.class);
-		arguments.put(SpellArg.CARD, minionCard);
+		arguments.put(SpellArg.CARD, Card);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
 		return new SpellDesc(arguments);
 	}
@@ -198,11 +197,11 @@ public class SummonSpell extends Spell {
 	 * Summons the specified cards for the specified player.
 	 *
 	 * @param targetPlayer The player on whose battlefield these minions should be summoned
-	 * @param minionCards  The minion cards
+	 * @param cards  The minion cards
 	 * @return The spell
 	 */
-	public static SpellDesc create(TargetPlayer targetPlayer, MinionCard... minionCards) {
-		return create(targetPlayer, null, minionCards);
+	public static SpellDesc create(TargetPlayer targetPlayer, Card... cards) {
+		return create(targetPlayer, null, cards);
 	}
 
 	/**
@@ -211,14 +210,14 @@ public class SummonSpell extends Spell {
 	 * @param targetPlayer          The player whose battlefield should be the destination for these minions
 	 * @param relativeBoardPosition Relative to the source minion (when played as a battlecry), where should these
 	 *                              minions be summoned?
-	 * @param minionCards           The cards to summon from
+	 * @param cards           The cards to summon from
 	 * @return The spell
 	 */
-	public static SpellDesc create(TargetPlayer targetPlayer, RelativeToSource relativeBoardPosition, MinionCard... minionCards) {
+	public static SpellDesc create(TargetPlayer targetPlayer, RelativeToSource relativeBoardPosition, Card... cards) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SummonSpell.class);
-		String[] cardNames = new String[minionCards.length];
-		for (int i = 0; i < minionCards.length; i++) {
-			cardNames[i] = minionCards[i].getCardId();
+		String[] cardNames = new String[cards.length];
+		for (int i = 0; i < cards.length; i++) {
+			cardNames[i] = cards[i].getCardId();
 		}
 		arguments.put(SpellArg.CARDS, cardNames);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
@@ -266,11 +265,11 @@ public class SummonSpell extends Spell {
 			if (desc.getBool(SpellArg.RANDOM_TARGET)
 					|| hasFilter) {
 				for (int i = 0; i < count; i++) {
-					MinionCard card = (MinionCard) context.getLogic().getRandom(cards);
+					Card card = context.getLogic().getRandom(cards);
 					if (card == null) {
 						if (desc.containsKey(SpellArg.CARD)) {
 							String replacementCard = desc.getString(SpellArg.CARD);
-							card = (MinionCard) context.getCardById(replacementCard);
+							card = context.getCardById(replacementCard);
 						} else {
 							// No card or replacement found.
 							continue;
@@ -286,8 +285,8 @@ public class SummonSpell extends Spell {
 			} else {
 				for (Card card : cards) {
 					for (int i = 0; i < count; i++) {
-						MinionCard minionCard = count == 1 ? (MinionCard) card : (MinionCard) card.clone();
-						final Minion minion = minionCard.summon();
+						card = count == 1 ? card : card.clone();
+						final Minion minion = card.summon();
 
 						if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false)) {
 							summonedMinions.add(minion);
@@ -300,7 +299,7 @@ public class SummonSpell extends Spell {
 			for (int i = 0; i < count; i++) {
 				Minion minion;
 				if (target.getEntityType() == EntityType.CARD) {
-					minion = ((MinionCard) target.getSourceCard()).summon();
+					minion = target.getSourceCard().summon();
 				} else {
 					minion = ((Minion) target).getCopy();
 					minion.clearEnchantments();

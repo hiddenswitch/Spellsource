@@ -8,12 +8,11 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.Spell;
@@ -81,7 +80,7 @@ public class TheOldGodsTests extends TestBase {
 			Mockito.doAnswer(invocation -> {
 				if (invocationCount.getAndIncrement() == 0) {
 					// We're choosing the hero power
-					HeroPowerCard chosen = (HeroPowerCard) invocation.callRealMethod();
+					Card chosen = (Card) invocation.callRealMethod();
 					chosenHeroClass.set(chosen.getHeroClass());
 					return chosen;
 				}
@@ -187,8 +186,8 @@ public class TheOldGodsTests extends TestBase {
 				playCard(context, player, "spell_innervate");
 			}
 			// Modify yogg to only cast the coin
-			MinionCard yoggCard = (MinionCard) CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
-			final BattlecryDesc battlecry = ((MinionCardDesc) yoggCard.getDesc()).battlecry;
+			Card yoggCard = CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
+			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).battlecry;
 			final SpellDesc originalSpell = battlecry.spell;
 			Map<CardSourceArg, Object> cardSourceArgs = new CardSourceDesc(CardSource.class);
 			cardSourceArgs.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
@@ -230,8 +229,8 @@ public class TheOldGodsTests extends TestBase {
 				playCard(context, player, "spell_innervate");
 			}
 			// Modify yogg to only cast the coin
-			MinionCard yoggCard = (MinionCard) CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
-			final BattlecryDesc battlecry = ((MinionCardDesc) yoggCard.getDesc()).battlecry;
+			Card yoggCard = CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
+			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).battlecry;
 			final SpellDesc originalSpell = battlecry.spell;
 			Map<CardSourceArg, Object> cardSourceArgs = new CardSourceDesc(CardSource.class);
 			cardSourceArgs.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
@@ -270,15 +269,15 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testDarkshireCoucilman() {
 		runGym((context, player, opponent) -> {
-			Minion darkshireCouncilman = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_darkshire_councilman"));
+			Minion darkshireCouncilman = playMinionCard(context, player, CardCatalogue.getCardById("minion_darkshire_councilman"));
 			Assert.assertEquals(darkshireCouncilman.getAttack(), darkshireCouncilman.getBaseAttack());
 
-			Minion darkshireCouncilman2 = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_darkshire_councilman"));
+			Minion darkshireCouncilman2 = playMinionCard(context, player, CardCatalogue.getCardById("minion_darkshire_councilman"));
 			Assert.assertEquals(darkshireCouncilman.getAttack(), darkshireCouncilman.getBaseAttack() + 1);
 			Assert.assertEquals(darkshireCouncilman2.getAttack(), darkshireCouncilman2.getBaseAttack());
 
 			context.getLogic().endTurn(player.getId());
-			Minion opponentMinion = playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_darkshire_councilman"));
+			Minion opponentMinion = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_darkshire_councilman"));
 
 			Assert.assertEquals(darkshireCouncilman.getAttack(), darkshireCouncilman.getBaseAttack() + 1);
 			Assert.assertEquals(darkshireCouncilman2.getAttack(), darkshireCouncilman2.getBaseAttack());
@@ -303,7 +302,7 @@ public class TheOldGodsTests extends TestBase {
 					Assert.assertEquals(validActions.size(), 3);
 					final DiscoverAction discoverAction = (DiscoverAction) validActions.get(0);
 					action[0] = discoverAction;
-					MinionCard original = (MinionCard) action[0].getCard();
+					Card original = action[0].getCard();
 					originalMinion[0] = original.summon();
 					handSize[0] = player.getHand().size();
 					final Card minionOverride = CardCatalogue.getCardById("minion_bloodfen_raptor");
@@ -316,7 +315,7 @@ public class TheOldGodsTests extends TestBase {
 				return super.requestAction(context, player, validActions);
 			}
 		});
-		SpellCard light = (SpellCard) CardCatalogue.getCardById("spell_a_light_in_the_darkness");
+		Card light = CardCatalogue.getCardById("spell_a_light_in_the_darkness");
 		playCard(context, player, light);
 		Assert.assertEquals(player.getHand().size(), handSize[0] + 1);
 		Card cardInHand = player.getHand().get(player.getHand().size() - 1);
@@ -349,7 +348,7 @@ public class TheOldGodsTests extends TestBase {
 	public void testRallyingBlade() {
 		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
 		Player player = context.getPlayer1();
-		MinionCard argentSquireCard = (MinionCard) CardCatalogue.getCardById("minion_argent_squire");
+		Card argentSquireCard = CardCatalogue.getCardById("minion_argent_squire");
 		Minion argentSquire = playMinionCard(context, player, argentSquireCard);
 		Assert.assertEquals(argentSquire.getAttack(), 1);
 		Assert.assertEquals(argentSquire.getHp(), 1);

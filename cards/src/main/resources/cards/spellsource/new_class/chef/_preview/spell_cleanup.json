@@ -6,11 +6,11 @@
   "rarity": "COMMON",
   "description": "Select One - Deal 1 damage and draw a card; or deal 3 damage.",
   "targetSelection": "NONE",
-  "options": [
+  "chooseOneCardIds": [
     "spell_cleanup_2",
     "spell_cleanup_1"
   ],
-  "bothOptions": "spell_cleanup_3",
+  "chooseBothCardId": "spell_cleanup_3",
   "collectible": true,
   "set": "SPELLSOURCE",
   "fileFormatVersion": 1

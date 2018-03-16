@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "description": "Choose One - Gain 10 Armor; or Refresh your Mana.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Gain 10 Armor",
       "spell": {
@@ -35,7 +35,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "10 Armor and Refresh",
     "spell": {
       "class": "MetaSpell",

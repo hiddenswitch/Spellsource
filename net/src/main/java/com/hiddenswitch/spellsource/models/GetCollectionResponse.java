@@ -7,9 +7,8 @@ import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckWithId;
@@ -74,12 +73,12 @@ public final class GetCollectionResponse implements Serializable {
 		deck.setName(getName());
 		String heroCardId = getHeroCardId();
 		if (heroCardId != null) {
-			deck.setHeroCard((HeroCard) CardCatalogue.getCardById(heroCardId));
+			deck.setHeroCard((Card) CardCatalogue.getCardById(heroCardId));
 		}
 
 		getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord, userId, getCollectionId()))
 				.filter(Objects::nonNull)
-				.map(CardDesc::createInstance)
+				.map(CardDesc::create)
 				.forEach(deck.getCards()::addCard);
 
 		return deck;
@@ -203,7 +202,7 @@ public final class GetCollectionResponse implements Serializable {
 					if (record == null) {
 						return null;
 					}
-					final Card instance = record.createInstance();
+					final Card instance = record.create();
 					return new CardRecord()
 							.userId(cr.getUserId())
 							.collectionIds(cr.getCollectionIds())

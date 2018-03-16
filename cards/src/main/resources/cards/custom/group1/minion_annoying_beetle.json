@@ -1,0 +1,15 @@
+{
+  "name": "Annoying Beetle",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Your opponent's Hero Power is \"DIE, INSECT!\"",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "Squishyblob"
+}

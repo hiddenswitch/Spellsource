@@ -1,10 +1,10 @@
 package com.hiddenswitch.spellsource;
 
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -22,10 +22,10 @@ public class AllianceSpellTests extends TestBase {
 		Player warrior = context.getPlayer2();
 		warrior.setMana(10);
 
-		MinionCard minionCard = (MinionCard) CardCatalogue.getCardById("minion_sourcing_specialist");
-		minionCard.setAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID, "minion_wisp");
+		Card card = CardCatalogue.getCardById("minion_sourcing_specialist");
+		card.setAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID, "minion_wisp");
 
-		playCard(context, mage, minionCard);
+		playCard(context, mage, card);
 
 		Assert.assertTrue(mage.getMinions().stream().anyMatch(m -> m.getSourceCard().getCardId().equals("minion_wisp")));
 	}

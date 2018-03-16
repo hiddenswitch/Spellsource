@@ -63,7 +63,6 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  *     }
  * </pre>
  *
- * @see net.demilich.metastone.game.cards.desc.ActorCardDesc for all the available actor fields.
  * @see net.demilich.metastone.game.logic.GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) to see
  * how the battlecry action is processed.
  */
@@ -84,7 +83,7 @@ public class BattlecryDesc implements Serializable {
 	/**
 	 * The condition to evaluate if the player will be prompted to make a battlecry action.
 	 * <p>
-	 * The condition is also used to determine if the {@link net.demilich.metastone.game.cards.ActorCard} in the
+	 * The condition is also used to determine if the {@link net.demilich.metastone.game.cards.Card} in the
 	 * player's hand should receive a "yellow glow" indicating its condition is met.
 	 * <p>
 	 * In order to implement this glow, it is preferred to specify a condition here rather than using a {@link

@@ -6,7 +6,7 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.Spell;
@@ -28,8 +28,8 @@ public class SummonOneOneCopiesSpell extends Spell {
 		List<Entity> otherMinions = context.resolveTarget(player, source, EntityReference.OTHER_FRIENDLY_MINIONS);
 		for (Entity entity : otherMinions) {
 			Minion minion = (Minion) entity;
-			MinionCard minionCard = (MinionCard) minion.getSourceCard();
-			minion = minionCard.summon();
+			Card card = minion.getSourceCard();
+			minion = card.summon();
 			if (context.getLogic().summon(player.getId(), minion, null, -1, false)) {
 				minion.setAttack(1);
 				minion.setHp(1);

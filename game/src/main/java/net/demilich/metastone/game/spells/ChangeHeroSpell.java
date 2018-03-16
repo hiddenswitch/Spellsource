@@ -6,7 +6,7 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -64,7 +64,7 @@ public class ChangeHeroSpell extends Spell {
 			logger.error("onCast {} {}: Requires hero card ID, none specified.", context.getGameId(), source);
 			return;
 		}
-		HeroCard heroCard = (HeroCard) context.getCardById(heroCardId);
+		Card heroCard = (Card) context.getCardById(heroCardId);
 		if (heroCard == null) {
 			logger.error("onCast {} {}: Invalid heroCardId {}", context.getGameId(), source, heroCardId);
 			return;

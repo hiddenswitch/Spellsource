@@ -3,19 +3,14 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
-import com.hiddenswitch.spellsource.client.models.Entity;
 import com.hiddenswitch.spellsource.models.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -76,7 +71,7 @@ public interface Cards {
 				.map(CardCatalogueRecord::getDesc)
 				.filter(cd -> cd.collectible
 						&& DeckFormat.CUSTOM.isInFormat(cd.set))
-				.map(CardDesc::createInstance)
+				.map(CardDesc::create)
 				.map(card -> Games.getEntity(workingContext, card, 0))
 				.map(entity -> new CardRecord().entity(entity))
 				.collect(toList());

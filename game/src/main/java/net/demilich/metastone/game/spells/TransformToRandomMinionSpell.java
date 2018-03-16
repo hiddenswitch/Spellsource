@@ -26,12 +26,11 @@ public class TransformToRandomMinionSpell extends TransformMinionSpell {
 		CardList allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
 		CardList filteredMinions = new CardArrayList();
 		for (Card card : allMinions) {
-			MinionCard minionCard = (MinionCard) card;
 			if (filter == null || filter.matches(context, player, card, source)) {
-				filteredMinions.addCard(minionCard);
+				filteredMinions.addCard(card);
 			}
 		}
-		MinionCard randomCard = (MinionCard) context.getLogic().getRandom(filteredMinions);
+		Card randomCard = context.getLogic().getRandom(filteredMinions);
 
 		if (randomCard != null) {
 			SpellDesc transformMinionSpell = TransformMinionSpell.create(randomCard.getCardId());

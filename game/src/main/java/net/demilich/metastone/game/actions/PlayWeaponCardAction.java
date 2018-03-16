@@ -2,12 +2,15 @@ package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.WeaponCard;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class PlayWeaponCardAction extends PlayCardAction {
+	private BattlecryAction battlecry;
+
 	private PlayWeaponCardAction() {
-		setTargetReference(EntityReference.NONE);
+		setTargetReference(entityReference.NONE);
 		setActionType(ActionType.EQUIP_WEAPON);
 	}
 
@@ -16,11 +19,22 @@ public class PlayWeaponCardAction extends PlayCardAction {
 		setActionType(ActionType.EQUIP_WEAPON);
 	}
 
+	public PlayWeaponCardAction(EntityReference reference, BattlecryAction battlecry) {
+		super(reference);
+		setActionType(ActionType.EQUIP_WEAPON);
+		this.battlecry = battlecry;
+	}
+
 	@Override
 	@Suspendable
 	public void play(GameContext context, int playerId) {
-		WeaponCard weaponCard = (WeaponCard) context.getPendingCard();
-		context.getLogic().equipWeapon(playerId, weaponCard.getWeapon(), weaponCard, true);
+		Card weaponCard = context.getPendingCard();
+
+		Weapon weapon = weaponCard.createWeapon();
+		if (battlecry != null) {
+			weapon.setBattlecry(battlecry);
+		}
+		context.getLogic().equipWeapon(playerId, weapon, weaponCard, true);
 	}
 
 }

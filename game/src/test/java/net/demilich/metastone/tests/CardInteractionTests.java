@@ -12,8 +12,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
-import net.demilich.metastone.game.cards.SpellCard;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -34,7 +32,7 @@ public class CardInteractionTests extends TestBase {
 		Player hunter = context.getPlayer1();
 
 		// summon Ghaz'rilla
-		MinionCard gahzrillaCard = (MinionCard) CardCatalogue.getCardById("minion_gahzrilla");
+		Card gahzrillaCard = CardCatalogue.getCardById("minion_gahzrilla");
 		Minion gahzrilla = playMinionCard(context, hunter, gahzrillaCard);
 		Assert.assertEquals(gahzrilla.getAttack(), 6);
 		Assert.assertEquals(gahzrilla.getHp(), 9);
@@ -82,7 +80,7 @@ public class CardInteractionTests extends TestBase {
 		GameContext context = createContext(HeroClass.BLACK, HeroClass.RED);
 		Player player = context.getPlayer1();
 
-		Minion knifeJuggler = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_knife_juggler"));
+		Minion knifeJuggler = playMinionCard(context, player, CardCatalogue.getCardById("minion_knife_juggler"));
 		playCard(context, player, "spell_conceal");
 		// knife juggler should be stealthed
 		Assert.assertTrue(knifeJuggler.hasAttribute(Attribute.STEALTH));
@@ -105,15 +103,15 @@ public class CardInteractionTests extends TestBase {
 
 		// summon test minion
 		player.setMana(10);
-		TestMinionCard minionCard = new TestMinionCard(6, 6, 0);
-		playCard(context, player, minionCard);
+		TestMinionCard Card = new TestMinionCard(6, 6, 0);
+		playCard(context, player, Card);
 
 		Actor minion = getSingleMinion(player.getMinions());
 
 		// buff test minion
-		SpellCard buffSpellCard = (SpellCard) CardCatalogue.getCardById("spell_bananas");
-		context.getLogic().receiveCard(player.getId(), buffSpellCard);
-		GameAction action = buffSpellCard.play();
+		Card buffCard = CardCatalogue.getCardById("spell_bananas");
+		context.getLogic().receiveCard(player.getId(), buffCard);
+		GameAction action = buffCard.play();
 		action.setTarget(minion);
 		context.getLogic().performGameAction(player.getId(), action);
 
@@ -127,17 +125,17 @@ public class CardInteractionTests extends TestBase {
 
 		// swap hp and attack of wounded test minion
 		SpellDesc swapHpAttackSpell = SwapAttackAndHpSpell.create(EntityReference.FRIENDLY_MINIONS);
-		SpellCard swapSpellCard = new TestSpellCard(swapHpAttackSpell);
-		buffSpellCard.setTargetRequirement(TargetSelection.NONE);
-		playCard(context, player, swapSpellCard);
+		Card swapCard = new TestSpellCard(swapHpAttackSpell);
+		buffCard.setTargetRequirement(TargetSelection.NONE);
+		playCard(context, player, swapCard);
 		Assert.assertEquals(minion.getAttack(), 3);
 		Assert.assertEquals(minion.getHp(), 7);
 
 		// silence minion and check if it regains original stats
 		SpellDesc silenceSpell = SilenceSpell.create(EntityReference.FRIENDLY_MINIONS);
-		SpellCard silenceSpellCard = new TestSpellCard(silenceSpell);
-		silenceSpellCard.setTargetRequirement(TargetSelection.NONE);
-		playCard(context, player, silenceSpellCard);
+		Card silenceCard = new TestSpellCard(silenceSpell);
+		silenceCard.setTargetRequirement(TargetSelection.NONE);
+		playCard(context, player, silenceCard);
 		Assert.assertEquals(minion.getAttack(), 6);
 		Assert.assertEquals(minion.getHp(), 6);
 	}
@@ -149,14 +147,14 @@ public class CardInteractionTests extends TestBase {
 
 		// summon test minion
 		player.setMana(10);
-		TestMinionCard minionCard = new TestMinionCard(1, 3, 0);
-		playCard(context, player, minionCard);
+		TestMinionCard Card = new TestMinionCard(1, 3, 0);
+		playCard(context, player, Card);
 
 		// buff test minion with temporary buff
 		SpellDesc buffSpell = TemporaryAttackSpell.create(EntityReference.FRIENDLY_MINIONS, +4);
-		SpellCard buffSpellCard = new TestSpellCard(buffSpell);
-		buffSpellCard.setTargetRequirement(TargetSelection.NONE);
-		playCard(context, player, buffSpellCard);
+		Card buffCard = new TestSpellCard(buffSpell);
+		buffCard.setTargetRequirement(TargetSelection.NONE);
+		playCard(context, player, buffCard);
 
 		Actor minion = getSingleMinion(player.getMinions());
 		Assert.assertEquals(minion.getAttack(), 5);
@@ -164,9 +162,9 @@ public class CardInteractionTests extends TestBase {
 
 		// swap hp and attack of wounded test minion
 		SpellDesc swapHpAttackSpell = SwapAttackAndHpSpell.create(EntityReference.FRIENDLY_MINIONS);
-		SpellCard swapSpellCard = new TestSpellCard(swapHpAttackSpell);
-		buffSpellCard.setTargetRequirement(TargetSelection.NONE);
-		playCard(context, player, swapSpellCard);
+		Card swapCard = new TestSpellCard(swapHpAttackSpell);
+		buffCard.setTargetRequirement(TargetSelection.NONE);
+		playCard(context, player, swapCard);
 		Assert.assertEquals(minion.getAttack(), 3);
 		Assert.assertEquals(minion.getHp(), 5);
 
@@ -185,7 +183,7 @@ public class CardInteractionTests extends TestBase {
 			playCard(context, warrior, "weapon_arcanite_reaper");
 			playCard(context, warrior, new TestMinionCard(2, 1, 0));
 
-			Minion bloodsailRaider = playMinionCard(context, warrior, (MinionCard) CardCatalogue.getCardById("minion_bloodsail_raider"));
+			Minion bloodsailRaider = playMinionCard(context, warrior, CardCatalogue.getCardById("minion_bloodsail_raider"));
 			Assert.assertEquals(bloodsailRaider.getAttack(), 7);
 		});
 	}
@@ -253,7 +251,7 @@ public class CardInteractionTests extends TestBase {
 
 		int cardCount = player.getHand().getCount();
 
-		Minion minion = playMinionCard(context, player, (MinionCard) CardCatalogue.getCardById("minion_chillwind_yeti"));
+		Minion minion = playMinionCard(context, player, CardCatalogue.getCardById("minion_chillwind_yeti"));
 		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_blessing_of_wisdom"), minion);
 		Assert.assertEquals(cardCount, player.getHand().getCount());
 
@@ -273,7 +271,7 @@ public class CardInteractionTests extends TestBase {
 
 		context.endTurn();
 		for (int i = 0; i < GameLogic.MAX_MINIONS; i++) {
-			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_imp_gang_boss"));
+			playMinionCard(context, opponent, CardCatalogue.getCardById("minion_imp_gang_boss"));
 		}
 
 		Assert.assertEquals(opponent.getMinions().size(), GameLogic.MAX_MINIONS);
@@ -291,7 +289,7 @@ public class CardInteractionTests extends TestBase {
 
 		context.endTurn();
 		for (int i = 0; i < GameLogic.MAX_MINIONS; i++) {
-			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_harvest_golem"));
+			playMinionCard(context, opponent, CardCatalogue.getCardById("minion_harvest_golem"));
 		}
 
 		Assert.assertEquals(opponent.getMinions().size(), GameLogic.MAX_MINIONS);
@@ -310,7 +308,7 @@ public class CardInteractionTests extends TestBase {
 
 		context.endTurn();
 		for (int i = 0; i < 4; i++) {
-			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_grim_patron"));
+			playMinionCard(context, opponent, CardCatalogue.getCardById("minion_grim_patron"));
 		}
 
 		Assert.assertEquals(opponent.getMinions().size(), 4);
@@ -330,9 +328,9 @@ public class CardInteractionTests extends TestBase {
 		Player opponent = context.getPlayer2();
 
 		context.endTurn();
-		playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_wobbling_runts"));
+		playMinionCard(context, opponent, CardCatalogue.getCardById("minion_wobbling_runts"));
 		for (int i = 0; i < GameLogic.MAX_MINIONS - 1; i++) {
-			playMinionCard(context, opponent, (MinionCard) CardCatalogue.getCardById("minion_wisp"));
+			playMinionCard(context, opponent, CardCatalogue.getCardById("minion_wisp"));
 		}
 
 		Assert.assertEquals(opponent.getMinions().size(), GameLogic.MAX_MINIONS);

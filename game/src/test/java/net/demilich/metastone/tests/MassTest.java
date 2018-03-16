@@ -11,7 +11,6 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
@@ -22,7 +21,6 @@ import ch.qos.logback.classic.Logger;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -58,13 +56,13 @@ public class MassTest extends TestBase {
 		HeroClass heroClass1 = getRandomClass();
 		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass1, deckFormat), new PlayRandomBehaviour());
 		player1Config.setName("Player 1");
-		player1Config.setHeroCard(getHeroCardForClass(heroClass1));
+		player1Config.setHeroCard(HeroClass.getHeroCard(heroClass1));
 		Player player1 = new Player(player1Config);
 
 		HeroClass heroClass2 = getRandomClass();
 		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass2, deckFormat), new PlayRandomBehaviour());
 		player2Config.setName("Player 2");
-		player2Config.setHeroCard(getHeroCardForClass(heroClass2));
+		player2Config.setHeroCard(HeroClass.getHeroCard(heroClass2));
 		Player player2 = new Player(player2Config);
 		GameLogic logic = new GameLogic();
 		GameContext context = new GameContext(player1, player2, logic, deckFormat) {

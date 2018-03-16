@@ -3,7 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -42,12 +42,12 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 	/**
 	 * Creates this spell for the specified minion card.
 	 *
-	 * @param minionCard The {@link MinionCard} to move from the deck to the battlefield.
+	 * @param Card The {@link Card} to move from the deck to the battlefield.
 	 * @return The spell
 	 */
-	public static SpellDesc create(EntityReference minionCard) {
+	public static SpellDesc create(EntityReference Card) {
 		Map<SpellArg, Object> arguments = new SpellDesc(PutMinionOnBoardFromDeckSpell.class);
-		arguments.put(SpellArg.TARGET, minionCard);
+		arguments.put(SpellArg.TARGET, Card);
 		return new SpellDesc(arguments);
 	}
 
@@ -59,27 +59,28 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 			logger.error("onCast {} {}: The target {} is null", context.getGameId(), source, desc.getTarget());
 			return;
 		}
-		if (!(target instanceof MinionCard)) {
-			logger.error("onCast {} {}: The target {}  is not a MinionCard", context.getGameId(), source, target);
+
+		if (!(target instanceof Card)) {
+			logger.error("onCast {} {}: The target {} is not a Card", context.getGameId(), source, target);
 			return;
 		}
 
-		MinionCard minionCard = (MinionCard) target;
-		if (!player.getDeck().contains(minionCard)) {
-			logger.warn("onCast {} {}: The specified minion card {} was not present in {}'s deck. Exiting.", context.getGameId(), source, minionCard, player);
+		Card card = (Card) target;
+		if (!player.getDeck().contains(card)) {
+			logger.warn("onCast {} {}: The specified minion card {} was not present in {}'s deck. Exiting.", context.getGameId(), source, card, player);
 			return;
 		}
 
-		player.getDeck().move(minionCard, player.getSetAsideZone());
+		player.getDeck().move(card, player.getSetAsideZone());
 
-		final Minion summoned = minionCard.summon();
+		final Minion summoned = card.summon();
 		boolean summonSuccess = context.getLogic().summon(player.getId(), summoned, null, -1, false);
 
-		player.getSetAsideZone().move(minionCard, player.getDeck());
+		player.getSetAsideZone().move(card, player.getDeck());
 
 		if (summonSuccess) {
-			minionCard.getAttributes().put(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
-			context.getLogic().removeCard(minionCard);
+			card.getAttributes().put(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
+			context.getLogic().removeCard(card);
 
 			for (SpellDesc subSpell : desc.subSpells(0)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, summoned);

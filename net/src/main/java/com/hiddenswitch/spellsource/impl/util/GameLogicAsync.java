@@ -2,26 +2,15 @@ package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
-import com.hiddenswitch.spellsource.common.NullResult;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.BattlecryAction;
-import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.WeaponCard;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.logic.SummonResult;
-import net.demilich.metastone.game.targeting.TargetSelection;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static io.vertx.ext.sync.Sync.fiberHandler;
 

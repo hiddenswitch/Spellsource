@@ -49,7 +49,7 @@ public abstract class Desc<T extends Enum, V> extends ConcurrentHashMap<T, Objec
 
 	protected abstract Class<? extends Desc> getDescImplClass();
 
-	public V createInstance() {
+	public V create() {
 		Class<? extends V> clazz = getDescClass();
 		try {
 			return clazz.getConstructor(getDescImplClass()).newInstance(this);

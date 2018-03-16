@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource.common;
 
 import com.hiddenswitch.spellsource.util.CommunityDeckStringSerializer;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -215,7 +215,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		Deck deck = new Deck(getHeroClass());
 		deck.setName(getName());
 		if (getHeroCardId() != null) {
-			deck.setHeroCard((HeroCard) CardCatalogue.getCardById(getHeroCardId()));
+			deck.setHeroCard((Card) CardCatalogue.getCardById(getHeroCardId()));
 		}
 		getCardIds().forEach(cardId -> deck.getCards().addCard(CardCatalogue.getCardById(cardId)));
 		deck.setFormat(DeckFormat.getFormat(format));

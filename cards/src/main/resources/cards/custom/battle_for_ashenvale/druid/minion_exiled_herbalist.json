@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "description": "Taunt. Choose One - Gain Lifesteal; or draw a card.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Gain Lifesteal.",
       "spell": {
@@ -23,7 +23,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Gain Lifesteal and draw a card",
     "spell": {
       "class": "MetaSpell",

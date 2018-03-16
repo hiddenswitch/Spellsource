@@ -1,11 +1,12 @@
 package net.demilich.metastone.game.actions;
 
-import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class PlayHeroCardChooseOneAction extends PlayHeroCardAction implements HasChooseOneActions {
-	public PlayHeroCardChooseOneAction(HeroCard heroCard, EntityReference EntityReference) {
+
+	public PlayHeroCardChooseOneAction(Card heroCard, EntityReference EntityReference) {
 		super(EntityReference);
 	}
 
@@ -22,5 +23,9 @@ public class PlayHeroCardChooseOneAction extends PlayHeroCardAction implements H
 	@Override
 	public boolean hasBothOptions() {
 		return false;
+	}
+
+	public void setBattlecryAction(BattlecryAction battlecry) {
+		this.battlecryAction = battlecry;
 	}
 }

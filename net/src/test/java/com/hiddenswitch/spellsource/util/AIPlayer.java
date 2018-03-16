@@ -16,7 +16,7 @@ public class AIPlayer extends Player {
 	public AIPlayer(Deck deck) {
 		super();
 		setConfiguredDeck(deck);
-		buildFromConfig(new PlayerConfig(deck, new AI()));
+		init(new PlayerConfig(deck, new AI()));
 	}
 
 	public Deck getConfiguredDeck() {

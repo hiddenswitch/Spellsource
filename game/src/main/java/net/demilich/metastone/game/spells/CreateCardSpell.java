@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +16,6 @@ import net.demilich.metastone.game.cards.CardDescType;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
-import net.demilich.metastone.game.cards.desc.SpellCardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -119,7 +118,7 @@ public class CreateCardSpell extends Spell {
 				SpellDesc[] spellArray = new SpellDesc[spellList.size()];
 				spellList.toArray(spellArray);
 				SpellDesc spell = MetaSpell.create(target != null ? target.getReference() : null, false, spellArray);
-				SpellCardDesc spellCardDesc = new SpellCardDesc();
+				CardDesc spellCardDesc = new CardDesc();
 				spellCardDesc.id = context.getLogic().generateCardId();
 				spellCardDesc.name = desc.getString(SpellArg.SECONDARY_NAME);
 				spellCardDesc.heroClass = heroClass;
@@ -132,7 +131,7 @@ public class CreateCardSpell extends Spell {
 				spellCardDesc.set = cardSet;
 				spellCardDesc.collectible = false;
 				spellCardDesc.baseManaCost = desc.getValue(SpellArg.MANA, context, player, target, source, 0);
-				newCard = spellCardDesc.createInstance();
+				newCard = spellCardDesc.create();
 				break;
 			case CHOOSE_ONE:
 			case HERO_POWER:

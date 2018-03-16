@@ -18,7 +18,6 @@ import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
@@ -45,15 +44,15 @@ public class ActionLogic implements Serializable {
 	@Suspendable
 	private List<GameAction> getHeroPowerActions(GameContext context, Player player) {
 		List<GameAction> heroPowerActions = new ArrayList<GameAction>();
-		HeroPowerCard heroPower = player.getHero().getHeroPower();
-		heroPower.onWillUse(context, player);
+		Card heroPower = player.getHero().getHeroPower();
+
 		EntityReference heroPowerReference = new EntityReference(heroPower.getId()
 		);
 		if (!context.getLogic().canPlayCard(player.getId(), heroPowerReference)) {
 			return heroPowerActions;
 		}
-		if (heroPower.hasAttribute(Attribute.CHOOSE_ONE)) {
-			HasChooseOneActions chooseOneCard = (HasChooseOneActions) heroPower;
+		if (heroPower.isChooseOne()) {
+			HasChooseOneActions chooseOneCard = heroPower;
 			for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
 				rollout(chooseOneAction, context, player, heroPowerActions);
 			}
@@ -89,8 +88,8 @@ public class ActionLogic implements Serializable {
 				continue;
 			}
 
-			if (card.hasAttribute(Attribute.CHOOSE_ONE)) {
-				HasChooseOneActions chooseOneCard = (HasChooseOneActions) card;
+			if (card.isChooseOne()) {
+				HasChooseOneActions chooseOneCard = card;
 				if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS) && chooseOneCard.hasBothOptions()) {
 					GameAction chooseOneAction = chooseOneCard.playBothOptions();
 					rollout(chooseOneAction, context, player, playCardActions);
@@ -128,10 +127,10 @@ public class ActionLogic implements Serializable {
 
 	@Suspendable
 	public boolean hasAutoHeroPower(GameContext context, Player player) {
-		HeroPowerCard heroPower = player.getHero().getHeroPower();
-		heroPower.onWillUse(context, player);
+		Card heroPower = player.getHero().getHeroPower();
+
 		EntityReference heroPowerReference = new EntityReference(heroPower.getId());
-		return (context.getLogic().canPlayCard(player.getId(), heroPowerReference) && heroPower.getTargetRequirement() == TargetSelection.AUTO);
+		return (context.getLogic().canPlayCard(player.getId(), heroPowerReference) && heroPower.getTargetSelection() == TargetSelection.AUTO);
 	}
 
 	public void rollout(GameAction action, GameContext context, Player player, Collection<GameAction> actions) {
