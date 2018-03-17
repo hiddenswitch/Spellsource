@@ -53,7 +53,10 @@ public class AddActorEffectsToTargetActorSpell extends Spell {
 			originalRace = Race.NONE;
 		}
 		// Copy the attributes onto the actor
-		AttributeMap sourceAttributes = sourceCard.getAttributes().clone();
+		AttributeMap sourceAttributes = new AttributeMap();
+		for (Attribute key : sourceCard.getAttributes().unsafeKeySet()) {
+			sourceAttributes.put(key, sourceCard.getAttributes().get(key));
+		}
 		// Copy "text" attributes onto the actor by excluding the non-text ones
 		Stream.of(Attribute.AURA_ATTACK_BONUS, Attribute.AURA_HP_BONUS, Attribute.AURA_TAUNT, Attribute.AURA_UNTARGETABLE_BY_SPELLS,
 				Attribute.BASE_ATTACK, Attribute.BASE_HP, Attribute.BASE_MANA_COST, Attribute.HP, Attribute.MAX_HP,

@@ -12,7 +12,7 @@ public class TranspositionTable {
 
 	private static int hash(Entity entity) {
 		int hash = entity.getName().hashCode();
-		for (Attribute tag : entity.getAttributes().keySet()) {
+		for (Attribute tag : entity.getAttributes().unsafeKeySet()) {
 			Object value = entity.getAttributes().get(tag);
 			if (!(value instanceof Integer)) {
 				continue;

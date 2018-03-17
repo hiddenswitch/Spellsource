@@ -69,7 +69,7 @@ public abstract class Actor extends Entity {
 	@Override
 	public Actor clone() {
 		Actor clone = (Actor) super.clone();
-		clone.setAttributes(new AttributeMap(getAttributes()));
+		clone.attributes = this.attributes.clone();
 		clone.clearEnchantments();
 		for (Enchantment trigger : getEnchantments()) {
 			clone.enchantments.add(trigger.clone());

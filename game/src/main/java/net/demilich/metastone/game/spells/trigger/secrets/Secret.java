@@ -16,7 +16,7 @@ public class Secret extends Enchantment {
 		super(trigger, spell);
 		setSourceCard(source);
 		setMaxFires(1);
-		setAttributes((AttributeMap) source.getAttributes().clone());
+		getAttributes().putAll(source.getAttributes());
 	}
 
 	public Secret(TriggerDesc desc, Card source) {

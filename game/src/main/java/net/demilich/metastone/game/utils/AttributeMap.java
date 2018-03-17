@@ -38,4 +38,12 @@ public class AttributeMap extends ConcurrentHashMap<Attribute, Object> implement
 		return super.put(key, value);
 	}
 
+	public Set<Attribute> unsafeKeySet() {
+		return keySet();
+	}
+
+	@Override
+	public Set<Entry<Attribute, Object>> entrySet() {
+		return super.entrySet();
+	}
 }

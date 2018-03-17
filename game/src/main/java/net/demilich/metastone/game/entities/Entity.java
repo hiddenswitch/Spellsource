@@ -49,8 +49,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public static final int NO_OWNER = -1;
 
-	private String name;
-	private AttributeMap attributes = new AttributeMap();
+	protected String name;
+	protected AttributeMap attributes = new AttributeMap();
 	/**
 	 * @see #getId()
 	 */
@@ -114,7 +114,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @throws ClassCastException if the {@link Attribute} is not an {@link Integer}
 	 */
 	public int getAttributeValue(Attribute attribute) throws ClassCastException {
-		return getAttributes().containsKey(attribute) ? (int) getAttributes().get(attribute) : 0;
+		return (int) getAttributes().getOrDefault(attribute, 0);
 	}
 
 	/**
@@ -272,6 +272,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public void setAttribute(Attribute attribute, Object value) {
 		clearSilence(attribute);
+		if (value == null) {
+			return;
+		}
 		getAttributes().put(attribute, value);
 	}
 
@@ -293,6 +296,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 *
 	 * @param attributes The {@link AttributeMap}
 	 */
+	@Deprecated
 	public void setAttributes(AttributeMap attributes) {
 		this.attributes = attributes;
 	}
