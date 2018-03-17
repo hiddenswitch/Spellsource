@@ -48,6 +48,24 @@ import static net.demilich.metastone.game.targeting.EntityReference.EVENT_TARGET
 public class TheOldGodsTests extends TestBase {
 
 	@Test
+	public void testShadowcaster() {
+		runGym((context, player, opponent) -> {
+			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playMinionCardWithBattlecry(context, player, "minion_shadowcaster", bloodfenRaptor);
+			Card miniCopy = player.getHand().get(0);
+			Assert.assertEquals(miniCopy.getCardId(), "minion_bloodfen_raptor");
+			Assert.assertEquals(miniCopy.getAttack(), 1);
+			Assert.assertEquals(miniCopy.getHp(), 1);
+			Minion mini = playMinionCard(context, player, miniCopy);
+			Assert.assertEquals(mini.getAttack(), 1);
+			Assert.assertEquals(mini.getHp(), 1);
+			playCardWithTarget(context, player, "spell_silence", mini);
+			Assert.assertEquals(mini.getAttack(), 3);
+			Assert.assertEquals(mini.getHp(), 2);
+		});
+	}
+
+	@Test
 	public void testRenounceDarkness() {
 		runGym((context, player, opponent) -> {
 			Map<HeroClass, Card> testCard = Stream.of(

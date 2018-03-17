@@ -3176,21 +3176,29 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public boolean summon(int playerId, Minion minion, Card source, int index, boolean resolveBattlecry) {
-		PreSummon preSummon = new PreSummon(playerId, minion, index, source).invoke();
-		if (preSummon.failed()) return false;
-		Player player = preSummon.getPlayer();
+		Player player = context.getPlayer(playerId);
+		if (!canSummonMoreMinions(player)) {
+			return false;
+		}
+		minion.setId(generateId());
+		minion.setOwner(player.getId());
+
+		context.getSummonReferenceStack().push(minion.getReference());
+
+		if (index < 0 || index >= player.getMinions().size()) {
+			minion.moveOrAddTo(context, Zones.BATTLEFIELD);
+		} else {
+			player.getMinions().add(index, minion);
+		}
+
+		context.fireGameEvent(new BeforeSummonEvent(context, minion, source));
+		context.fireGameEvent(new BoardChangedEvent(context));
 
 		if (resolveBattlecry && minion.getBattlecry() != null) {
 			resolveBattlecry(player.getId(), minion);
 			endOfSequence();
 		}
 
-		postSummon(minion, source, player, false);
-		return true;
-	}
-
-	@Suspendable
-	protected void postSummon(Minion minion, Card source, Player player, boolean skipAfterSummon) {
 		if (context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null) {
 			minion = (Minion) context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TRANSFORM_REFERENCE));
 			minion.setBattlecry(null);
@@ -3223,22 +3231,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			addGameEventListener(player, minion.getCardCostModifier(), minion);
 		}
 
-//		if (source != null) {
-//			source.setAttribute(Attribute.ATTACK, source.getAttributeValue(Attribute.BASE_ATTACK));
-//			source.setAttribute(Attribute.ATTACK_BONUS, 0);
-//			source.setAttribute(Attribute.MAX_HP, source.getAttributeValue(Attribute.BASE_HP));
-//			source.setAttribute(Attribute.HP, source.getAttributeValue(Attribute.BASE_HP));
-//			source.setAttribute(Attribute.HP_BONUS, 0);
-//		}
-
 		handleEnrage(minion);
 
 		context.getSummonReferenceStack().pop();
-		if (player.getMinions().contains(minion)
-				&& !skipAfterSummon) {
+		if (player.getMinions().contains(minion)) {
 			context.fireGameEvent(new AfterSummonEvent(context, minion, source));
 		}
 		context.fireGameEvent(new BoardChangedEvent(context));
+		return true;
 	}
 
 	/**
@@ -3602,54 +3602,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 
 			player.getHero().setWeapon(weapon);
-			return this;
-		}
-	}
-
-	protected class PreSummon {
-		private Card source;
-		private boolean failed;
-		private int playerId;
-		private Minion minion;
-		private int index;
-		private Player player;
-
-		public PreSummon(int playerId, Minion minion, int index, Card source) {
-			this.playerId = playerId;
-			this.minion = minion;
-			this.index = index;
-			this.source = source;
-		}
-
-		public boolean failed() {
-			return failed;
-		}
-
-		public Player getPlayer() {
-			return player;
-		}
-
-		@Suspendable
-		public PreSummon invoke() {
-			player = context.getPlayer(playerId);
-			if (!canSummonMoreMinions(player)) {
-				failed = true;
-				return this;
-			}
-			minion.setId(generateId());
-			minion.setOwner(player.getId());
-
-			context.getSummonReferenceStack().push(minion.getReference());
-
-			if (index < 0 || index >= player.getMinions().size()) {
-				minion.moveOrAddTo(context, Zones.BATTLEFIELD);
-			} else {
-				player.getMinions().add(index, minion);
-			}
-
-			context.fireGameEvent(new BeforeSummonEvent(context, minion, source));
-			context.fireGameEvent(new BoardChangedEvent(context));
-			failed = false;
 			return this;
 		}
 	}
