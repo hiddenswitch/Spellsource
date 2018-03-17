@@ -117,7 +117,7 @@ public class AdvancedMechanicTests extends TestBase {
 			context.getLogic().removeCard(card);
 		}
 		Card wrath = CardCatalogue.getCardById("spell_test_choose_one");
-		HasChooseOneActions wrathChooseOne = (HasChooseOneActions) wrath;
+		HasChooseOneActions wrathChooseOne = wrath;
 		context.getLogic().receiveCard(player.getId(), wrath);
 		player.setMana(wrath.getBaseManaCost() + 1);
 		List<GameAction> validActions = context.getLogic().getValidActions(player.getId());

@@ -61,6 +61,7 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	private CardDesc desc;
 	private List<SpellDesc> deathrattleEnchantments = new ArrayList<>();
+	private CardAttributes cardAttributes = new CardAttributes(this);
 
 	protected Card() {
 		super();
@@ -72,62 +73,9 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @param desc The Card description.
 	 */
 	public Card(CardDesc desc) {
+		super();
 		// Save a reference to the description for later use.
 		setDesc(desc);
-		setAttribute(Attribute.BASE_MANA_COST, desc.baseManaCost);
-
-		if (desc.attributes != null) {
-			getAttributes().putAll(desc.attributes);
-		}
-
-		if (desc.manaCostModifier != null) {
-			getAttributes().put(Attribute.MANA_COST_MODIFIER, desc.manaCostModifier.create());
-		}
-
-		if (desc.passiveTrigger != null) {
-			getAttributes().put(Attribute.PASSIVE_TRIGGERS, new TriggerDesc[]{desc.passiveTrigger});
-		}
-
-		if (desc.passiveTriggers != null) {
-			getAttributes().put(Attribute.PASSIVE_TRIGGERS, desc.passiveTriggers);
-		}
-
-		if (desc.deckTrigger != null) {
-			getAttributes().put(Attribute.DECK_TRIGGER, desc.deckTrigger);
-		}
-
-		if (desc.gameTriggers != null) {
-			getAttributes().put(Attribute.GAME_TRIGGERS, desc.gameTriggers);
-		}
-
-		if (getCardType() == CardType.WEAPON) {
-			setAttribute(Attribute.BASE_ATTACK, desc.damage);
-			setAttribute(Attribute.ATTACK, desc.damage);
-			setAttribute(Attribute.BASE_HP, desc.durability);
-			setAttribute(Attribute.HP, desc.durability);
-			setAttribute(Attribute.MAX_HP, desc.durability);
-		} else if (getCardType() == CardType.MINION) {
-			setAttribute(Attribute.BASE_ATTACK, desc.baseAttack);
-			setAttribute(Attribute.ATTACK, desc.baseAttack);
-			setAttribute(Attribute.BASE_HP, desc.baseHp);
-			setAttribute(Attribute.HP, desc.baseHp);
-			setAttribute(Attribute.MAX_HP, desc.baseHp);
-		} else if (getCardType() == CardType.HERO) {
-			setAttribute(Attribute.BASE_HP, getAttributeValue(Attribute.MAX_HP));
-
-		}
-
-		if (desc.race != null) {
-			setRace(desc.race);
-		}
-
-		if (desc.secret != null) {
-			setAttribute(Attribute.SECRET);
-		}
-
-		if (desc.quest != null) {
-			setAttribute(Attribute.QUEST);
-		}
 	}
 
 	public Minion summon() {
@@ -136,7 +84,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		}
 
 		Minion minion = new Minion(this);
-		for (Attribute gameTag : getAttributes().keySet()) {
+		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (!ignoredAttributes.contains(gameTag)) {
 				minion.setAttribute(gameTag, getAttribute(gameTag));
 			}
@@ -157,7 +105,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	public Hero createHero() {
 		Card heroPower = CardCatalogue.getCardById(getDesc().heroPower);
 		Hero hero = new Hero(this, heroPower);
-		for (Attribute gameTag : getAttributes().keySet()) {
+		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (inheritedAttributes.contains(gameTag)) {
 				hero.setAttribute(gameTag, getAttribute(gameTag));
 			}
@@ -178,8 +126,9 @@ public class Card extends Entity implements HasChooseOneActions {
 	@Override
 	public Card clone() {
 		Card clone = (Card) super.clone();
-		clone.desc = this.desc;
-		clone.setAttributes(new AttributeMap(getAttributes()));
+		clone.cardAttributes = this.cardAttributes.clone();
+		clone.cardAttributes.setCard(clone);
+		clone.setDesc(this.getDesc());
 		clone.deathrattleEnchantments = new ArrayList<>();
 		deathrattleEnchantments.forEach(de -> clone.deathrattleEnchantments.add(de.clone()));
 		return clone;
@@ -577,7 +526,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		}
 		Weapon weapon = new Weapon(this);
 		// assign battlecry if there is one specified
-		for (Attribute gameTag : getAttributes().keySet()) {
+		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (!ignoredAttributes.contains(gameTag)) {
 				weapon.setAttribute(gameTag, getAttribute(gameTag));
 			}
@@ -690,43 +639,43 @@ public class Card extends Entity implements HasChooseOneActions {
 	 */
 	@Suspendable
 	public Actor applyText(Actor instance) {
-		instance.setBattlecry(desc.getBattlecryAction());
+		instance.setBattlecry(getDesc().getBattlecryAction());
 		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?
 				(Race) getAttribute(Attribute.RACE) :
-				desc.race);
+				getDesc().race);
 
-		if (desc.deathrattle != null) {
+		if (getDesc().deathrattle != null) {
 			instance.getAttributes().remove(Attribute.DEATHRATTLES);
-			instance.addDeathrattle(desc.deathrattle);
+			instance.addDeathrattle(getDesc().deathrattle);
 		}
 
 		if (deathrattleEnchantments.size() > 0) {
 			deathrattleEnchantments.forEach(instance::addDeathrattle);
 		}
 
-		if (desc.trigger != null) {
-			instance.addEnchantment(desc.trigger.create());
+		if (getDesc().trigger != null) {
+			instance.addEnchantment(getDesc().trigger.create());
 		}
 
-		if (desc.triggers != null) {
-			for (TriggerDesc trigger : desc.triggers) {
+		if (getDesc().triggers != null) {
+			for (TriggerDesc trigger : getDesc().triggers) {
 				instance.addEnchantment(trigger.create());
 			}
 		}
 
-		if (desc.aura != null) {
-			final Aura enchantment = desc.aura.create();
+		if (getDesc().aura != null) {
+			final Aura enchantment = getDesc().aura.create();
 			instance.addEnchantment(enchantment);
 		}
 
-		if (desc.auras != null) {
-			for (AuraDesc auraDesc : desc.auras) {
+		if (getDesc().auras != null) {
+			for (AuraDesc auraDesc : getDesc().auras) {
 				instance.addEnchantment(auraDesc.create());
 			}
 		}
 
-		if (desc.cardCostModifier != null) {
-			instance.setCardCostModifier(desc.cardCostModifier.create());
+		if (getDesc().cardCostModifier != null) {
+			instance.setCardCostModifier(getDesc().cardCostModifier.create());
 		}
 
 		return instance;
@@ -777,11 +726,6 @@ public class Card extends Entity implements HasChooseOneActions {
 	public boolean hasBattlecry() {
 		return getDesc().battlecry != null;
 	}
-
-	public void setRace(Race race) {
-		setAttribute(Attribute.RACE, race);
-	}
-
 
 	public String getBattlecryDescription(int index) {
 		if (index < 0 || index >= getChooseOneBattlecries().length) {
@@ -878,5 +822,16 @@ public class Card extends Entity implements HasChooseOneActions {
 	@Override
 	public String getName() {
 		return (String) getAttributes().getOrDefault(Attribute.NAME, getDesc().name);
+	}
+
+	@Override
+	public AttributeMap getAttributes() {
+		return cardAttributes;
+	}
+
+	@Override
+	public void setAttributes(AttributeMap attributes) {
+		cardAttributes.clear();
+		cardAttributes.putAll(attributes);
 	}
 }
