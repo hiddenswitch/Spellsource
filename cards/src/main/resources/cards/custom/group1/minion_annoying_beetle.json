@@ -9,6 +9,11 @@
   "race": "BEAST",
   "description": "Your opponent's Hero Power is \"DIE, INSECT!\"",
   "collectible": true,
+  "aura": {
+    "class": "CardAura",
+    "target": "ENEMY_HERO_POWER",
+    "cardId": "hero_power_die_insect"
+  },
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "author": "Squishyblob"
