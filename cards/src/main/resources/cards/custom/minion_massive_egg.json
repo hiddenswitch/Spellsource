@@ -1,0 +1,22 @@
+{
+  "name": "Massive Egg",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Deathrattle: Summon a 7/14 Ultrasaur",
+  "deathrattle": {
+ "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_ultrasaur",
+},
+  "attributes": {
+    "DEATHRATTLES": true,
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
