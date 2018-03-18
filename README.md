@@ -68,6 +68,10 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
       cd Documents
       git clone https://github.com/hiddenswitch/Spellsource-Server.git
       ```
+   8. Enter the directory with the code files in it with the following command. Whenever you want to execute commands on files located inside the code, you'll have to **cd** (change directory) into it.
+      ```
+      cd Spellsource-Server
+      ```
    8. Start by running the tests that don't require networking behavior to verify your installation worked. To do this, execute the following command:
       ```
       ./gradlew game:test
@@ -76,7 +80,7 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
    9. If the tests pass, you're now ready to start the server.
       1. In one tab in `ConEmu`, `cd` into your `Spellsource-Server` directory. You'll see an example of this below. Then, start MongoDB with the commands:
          ```
-         cd .\Spellsource-Server
+         cd Spellsource-Server
          md -Force .\net\.mongo\db
          & "C:\Program Files\MongoDB\Server\3.6\bin\mongod" --dbpath .\net\.mongo\db
          ```
