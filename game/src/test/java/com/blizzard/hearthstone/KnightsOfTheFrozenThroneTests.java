@@ -589,7 +589,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			player.getHero().setHp(originalHp);
 			int expectedHealing = 5;
 			for (int i = 0; i < expectedHealing; i++) {
-				playMinionCard(context, player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+				playMinionCard(context, player, "minion_bloodfen_raptor");
 			}
 			playCard(context, player, "spell_spirit_lash");
 			Assert.assertEquals(player.getHero().getHp(), originalHp + expectedHealing);

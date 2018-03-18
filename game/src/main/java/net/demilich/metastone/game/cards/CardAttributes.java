@@ -12,6 +12,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A hashmap that can contain "overrides" to a {@link CardDesc}. This allows cards to assume other identities while
+ * retaining their enchantments by changing their {@link Attribute#CARD_ID} or {@link Attribute#AURA_CARD_ID}.
+ */
 public final class CardAttributes extends AttributeMap implements Cloneable {
 	private Card card;
 
@@ -219,5 +223,13 @@ public final class CardAttributes extends AttributeMap implements Cloneable {
 			unsafe.add(new SimpleEntry<>(key, get(key)));
 		}
 		return unsafe;
+	}
+
+	String getOverrideCardId() {
+		String cardId = (String) super.get(Attribute.AURA_CARD_ID);
+		if (cardId == null) {
+			cardId = (String) super.get(Attribute.CARD_ID);
+		}
+		return cardId;
 	}
 }

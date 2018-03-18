@@ -196,9 +196,15 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		if (value == null) {
 			return false;
 		}
+
+		if (value instanceof Boolean) {
+			return (boolean) value;
+		}
+
 		if (value instanceof Integer) {
 			return ((int) value) != 0;
 		}
+
 		return true;
 	}
 
@@ -243,7 +249,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public void setAttribute(Attribute attribute) {
 		clearSilence(attribute);
-		getAttributes().put(attribute, 1);
+		getAttributes().put(attribute, true);
 	}
 
 	private void clearSilence(Attribute attribute) {

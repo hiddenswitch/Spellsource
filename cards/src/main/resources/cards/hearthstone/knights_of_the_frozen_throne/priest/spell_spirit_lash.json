@@ -12,7 +12,7 @@
     "value": 1
   },
   "attributes": {
-    "LIFESTEAL": 1
+    "LIFESTEAL": true
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

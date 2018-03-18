@@ -1602,6 +1602,10 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Entity> T resolveSingleTarget(Player player, Entity source, EntityReference target) {
+		if (target == null || target.equals(EntityReference.NONE)) {
+			return null;
+		}
+
 		if (target.isTargetGroup()) {
 			List<Entity> entities = resolveTarget(player, source, target);
 			if (entities == null

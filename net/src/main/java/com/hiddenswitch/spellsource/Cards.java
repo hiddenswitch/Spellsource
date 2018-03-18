@@ -67,7 +67,7 @@ public interface Cards {
 	static List<CardRecord> getCards() {
 		GameContext workingContext = GameContext.uninitialized();
 		return CardCatalogue.getRecords().values()
-				.parallelStream()
+				.stream()
 				.map(CardCatalogueRecord::getDesc)
 				.filter(cd -> cd.collectible
 						&& DeckFormat.CUSTOM.isInFormat(cd.set))

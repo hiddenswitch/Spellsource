@@ -9,7 +9,12 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 public class AttributeAura extends Aura {
 
 	public AttributeAura(AuraDesc desc) {
-		super(desc.getSecondaryTrigger() != null ? desc.getSecondaryTrigger().create() : null, AddAttributeSpell.create(desc.getAttribute()), RemoveAttributeSpell.create(desc.getAttribute()), desc.getTarget(), (EntityFilter) desc.get(AuraArg.FILTER), desc.getCondition());
+		super(desc.getSecondaryTrigger() != null ? desc.getSecondaryTrigger().create() : null,
+				AddAttributeSpell.create(desc.getAttribute()),
+				RemoveAttributeSpell.create(desc.getAttribute()),
+				desc.getTarget(),
+				(EntityFilter) desc.get(AuraArg.FILTER),
+				desc.getCondition());
 	}
 }
 

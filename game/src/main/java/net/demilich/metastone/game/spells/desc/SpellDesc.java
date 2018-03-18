@@ -15,6 +15,7 @@ import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -247,5 +248,13 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 			filter = AndFilter.create();
 		}
 		return source.getCards(context, host, player).filtered(c -> filter.matches(context, player, c, host));
+	}
+
+	public Attribute getAttribute() {
+		return (Attribute) get(SpellArg.ATTRIBUTE);
+	}
+
+	public EntityReference getSecondaryTarget() {
+		return (EntityReference) get(SpellArg.SECONDARY_TARGET);
 	}
 }
