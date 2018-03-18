@@ -25,70 +25,17 @@
         }
       },
       "spell2": {
-        "class": "DiscoverOptionSpell",
-        "howMany": 4,
-        "spells": [
-          {
-            "class": "ReceiveCardSpell",
-            "value": 1,
-            "name": "BLUE",
-            "description": "Receive a random Mage Secret.",
-            "cardFilter": {
-              "class": "CardFilter",
-              "heroClass": "BLUE",
-              "attribute": "SECRET",
-              "operation": "HAS"
-            },
-            "cardSource": {
-              "class": "UnweightedCatalogueSource"
-            }
-          },
-          {
-            "class": "ReceiveCardSpell",
-            "value": 1,
-            "name": "GREEN",
-            "description": "Receive a random Hunter secret.",
-            "cardFilter": {
-              "class": "CardFilter",
-              "heroClass": "GREEN",
-              "attribute": "SECRET",
-              "operation": "HAS"
-            },
-            "cardSource": {
-              "class": "UnweightedCatalogueSource"
-            }
-          },
-          {
-            "class": "ReceiveCardSpell",
-            "value": 1,
-            "name": "GOLD",
-            "description": "Receive a random Paladin secret.",
-            "cardFilter": {
-              "class": "CardFilter",
-              "heroClass": "GOLD",
-              "attribute": "SECRET",
-              "operation": "HAS"
-            },
-            "cardSource": {
-              "class": "UnweightedCatalogueSource"
-            }
-          },
-          {
-            "class": "ReceiveCardSpell",
-            "value": 1,
-            "name": "BLACK",
-            "description": "Receive a random Rogue secret.",
-            "cardFilter": {
-              "class": "CardFilter",
-              "heroClass": "BLACK",
-              "attribute": "SECRET",
-              "operation": "HAS"
-            },
-            "cardSource": {
-              "class": "UnweightedCatalogueSource"
-            }
-          }
-        ]
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "RecastSpell"
+        },
+        "cards": [
+          "spell_receive_mage_secret",
+          "spell_receive_hunter_secret",
+          "spell_receive_paladin_secret",
+          "spell_receive_rogue_secret"
+        ],
+        "howMany": 4
       }
     }
   },

@@ -1,7 +1,9 @@
 package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -28,6 +30,25 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testAnnoyingBeetle() {
+		runGym((context, player, opponent) -> {
+			Minion annoyingBeetle = playMinionCard(context, player, "minion_annoying_beetle");
+			Assert.assertEquals(opponent.getHeroPowerZone().get(0).getCardId(), "hero_power_die_insect");
+			context.endTurn();
+			GameLogic spy = spy(context.getLogic());
+			context.setLogic(spy);
+			doAnswer(invocation -> player.getHero()).when(spy).getRandom(anyList());
+			int hp = player.getHero().getHp();
+			context.getLogic().performGameAction(opponent.getId(), opponent.getHeroPowerZone().get(0).play());
+			Assert.assertEquals(player.getHero().getHp(), hp - 8);
+			context.endTurn();
+
+			destroy(context, annoyingBeetle);
+			Assert.assertEquals(opponent.getHeroPowerZone().get(0).getCardId(), "hero_power_fireblast");
+		}, HeroClass.BLUE, HeroClass.BLUE);
+	}
 
 	@Test
 	public void testYouFromTheFutureKargath() {
@@ -904,12 +925,16 @@ public class CustomCardsTests extends TestBase {
 		Stream.of(MAGE, HUNTER, PALADIN, ROGUE).forEach(heroClass -> {
 			runGym((context, player, opponent) -> {
 				playCard(context, player, "spell_the_coin");
+				CardArrayList cards = new CardArrayList();
 				overrideDiscover(player, discoveries -> {
 					Assert.assertEquals(discoveries.size(), 4);
+					discoveries.stream().map(DiscoverAction::getCard).forEach(cards::addCard);
 					return discoveries.get(heroClass);
 				});
 				playCard(context, player, "minion_criminologist");
-				HeroClass secretClass = player.getHand().get(0).getHeroClass();
+				Card card = player.getHand().get(0);
+				Assert.assertTrue(card.isSecret());
+				HeroClass secretClass = card.getHeroClass();
 				switch (heroClass) {
 					case MAGE:
 						Assert.assertEquals(secretClass, HeroClass.BLUE);

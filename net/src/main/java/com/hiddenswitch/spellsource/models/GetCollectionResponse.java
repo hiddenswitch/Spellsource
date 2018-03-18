@@ -16,6 +16,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -190,28 +191,32 @@ public final class GetCollectionResponse implements Serializable {
 		final HeroClass fakeHeroClass = getHeroClass() == null ? HeroClass.RED : getHeroClass();
 		GameContext emptyContext = GameContext.uninitialized(fakeHeroClass, fakeHeroClass);
 
+		List<InventoryRecord> inventoryRecords = getInventoryRecords();
+		List<CardRecord> records = new ArrayList<>();
+
+		for (InventoryRecord cr : inventoryRecords) {
+			final CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionId());
+
+			if (record == null) {
+				continue;
+			}
+			final Card instance = record.create();
+			records.add(new CardRecord()
+					.userId(cr.getUserId())
+					.collectionIds(cr.getCollectionIds())
+					.entity(Games.getEntity(emptyContext, instance, 0))
+					.id(cr.getId())
+					.allianceId(cr.getAllianceId())
+					.donorUserId(cr.getDonorUserId()));
+		}
+
 		InventoryCollection collection = new InventoryCollection()
 				.name(displayName)
 				.id(getCollectionId())
 				.type(InventoryCollection.TypeEnum.valueOf(getCollectionType().toString()))
 				.format(getFormat())
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
-				// Massively increase the performance of inventory record creation by making parallel the inventory record creation here
-				.inventory(getInventoryRecords().parallelStream().map(cr -> {
-					final CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionId());
-					if (record == null) {
-						return null;
-					}
-					final Card instance = record.create();
-					return new CardRecord()
-							.userId(cr.getUserId())
-							.collectionIds(cr.getCollectionIds())
-							.entity(Games.getEntity(emptyContext, instance, 0))
-							.id(cr.getId())
-							.allianceId(cr.getAllianceId())
-							.donorUserId(cr.getDonorUserId());
-				}).filter(Objects::nonNull)
-						.collect(toList()));
+				.inventory(records);
 
 		if (getHeroClass() != null) {
 			collection.heroClass(getHeroClass().toString());

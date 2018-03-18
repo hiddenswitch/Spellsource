@@ -146,10 +146,15 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Gets the card's ID as it corresponds to the card catalogue. This is the base definition of the card.
 	 *
-	 * @return
+	 * @return The card ID as set by an aura, a permanent effect or in the description.
 	 */
 	public String getCardId() {
-		return ((String) getAttributes().getOrDefault(Attribute.AURA_CARD_ID, getDesc().id)).toLowerCase();
+		String cardId = cardAttributes.getOverrideCardId();
+		if (cardId == null) {
+			return desc.id;
+		} else {
+			return cardId;
+		}
 	}
 
 	/**
@@ -374,7 +379,11 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return A {@link CardDesc}
 	 */
 	public CardDesc getDesc() {
-		return desc;
+		if (cardAttributes.getOverrideCardId() == null){
+			return desc;
+		}
+		// Prevents copying here
+		return CardCatalogue.getRecords().get(cardAttributes.getOverrideCardId()).getDesc();
 	}
 
 	@Override

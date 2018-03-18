@@ -40,6 +40,7 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
@@ -1026,13 +1027,12 @@ public interface Games {
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		switch (card.getCardType()) {
 			case HERO:
-				Card heroCard = (Card) card;
 				// Retrieve the weapon attack
-				Card weapon = heroCard.getWeapon();
+				Card weapon = card.getWeapon();
 				if (weapon != null) {
 					entityState.attack(weapon.getBaseDamage());
 				}
-				entityState.armor(heroCard.getArmor());
+				entityState.armor(card.getArmor());
 				break;
 			case MINION:
 				entityState.attack(card.getAttack() + card.getBonusAttack());
@@ -1059,12 +1059,14 @@ public interface Games {
 			case HERO_POWER:
 				int damage = 0;
 				int spellpowerDamage = 0;
-				if (DamageSpell.class.isAssignableFrom(card.getSpell().getDescClass())
+				SpellDesc spell = card.getSpell();
+
+				if (DamageSpell.class.isAssignableFrom(spell.getDescClass())
 						&& owningPlayer != null) {
 
-					Minion zeroOne = CardCatalogue.getCardById("minion_snowflipper_penguin").summon();
-					zeroOne.setId(65535);
-					damage = DamageSpell.getDamage(workingContext, owningPlayer, card.getSpell(), card, zeroOne);
+					Minion oneOne = CardCatalogue.getCardById("minion_snowflipper_penguin").summon();
+					oneOne.setId(65535);
+					damage = DamageSpell.getDamage(workingContext, owningPlayer, card.getSpell(), card, oneOne);
 					spellpowerDamage = workingContext.getLogic().applySpellpower(owningPlayer, card, damage);
 				}
 				entityState.underAura(spellpowerDamage > damage

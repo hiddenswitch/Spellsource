@@ -15,6 +15,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.collections4.Bag;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
@@ -59,6 +60,11 @@ public class TestBase {
 		final T card = (T) CardCatalogue.getCardById(cardId);
 		context.getLogic().putOnTopOfDeck(player, card);
 		return card;
+	}
+
+	protected static void destroy(GameContext context, Minion target) {
+		target.getAttributes().put(Attribute.DESTROYED, true);
+		context.getLogic().endOfSequence();
 	}
 
 	public static class OverrideHandle<T> {
