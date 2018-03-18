@@ -51,3 +51,4 @@ public class AddAttributeSpell extends RevertableSpell {
 		super.onCast(context, player, desc, source, target);
 	}
 }
+
