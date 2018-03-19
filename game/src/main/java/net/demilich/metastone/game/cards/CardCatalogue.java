@@ -185,7 +185,7 @@ public class CardCatalogue {
 				recordsByName.putIfAbsent(desc.name, new ArrayList<>());
 				recordsByName.get(desc.name).add(record);
 			} catch (Exception e) {
-				logger.error(e.toString());
+				logger.error("An error occurred while processing {}: {}", resourceInputStream.fileName, e.toString());
 				badCards.add(resourceInputStream.fileName);
 			}
 		}

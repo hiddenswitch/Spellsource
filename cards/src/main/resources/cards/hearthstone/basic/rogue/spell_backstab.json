@@ -15,7 +15,7 @@
     }
   },
   "attributes": {
-    "NAME": "Sneak Attack"
+    "SPELLSOURCE_NAME": "Sneak Attack"
   },
   "collectible": true,
   "set": "BASIC",

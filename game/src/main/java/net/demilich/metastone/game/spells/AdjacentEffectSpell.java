@@ -17,10 +17,10 @@ public class AdjacentEffectSpell extends Spell {
 	public static SpellDesc create(EntityReference target, SpellDesc primarySpell, SpellDesc secondarySpell) {
 		Map<SpellArg, Object> arguments = new SpellDesc(AdjacentEffectSpell.class);
 		if (primarySpell != null) {
-			arguments.put(SpellArg.SPELL_1, primarySpell);
+			arguments.put(SpellArg.SPELL1, primarySpell);
 		}
 		if (secondarySpell != null) {
-			arguments.put(SpellArg.SPELL_2, secondarySpell);
+			arguments.put(SpellArg.SPELL2, secondarySpell);
 		}
 		if (primarySpell == null && secondarySpell == null) {
 			throw new IllegalArgumentException("Both primary- and secondary spell are NULL; at least one of them must be set");
@@ -39,12 +39,12 @@ public class AdjacentEffectSpell extends Spell {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		List<Actor> adjacentMinions = context.getAdjacentMinions(target.getReference());
 
-		SpellDesc primary = (SpellDesc) desc.get(SpellArg.SPELL_1);
+		SpellDesc primary = (SpellDesc) desc.get(SpellArg.SPELL1);
 		if (primary != null) {
 			context.getLogic().castSpell(player.getId(), primary, sourceReference, target.getReference(), true);
 		}
 
-		SpellDesc secondary = (SpellDesc) desc.get(SpellArg.SPELL_2);
+		SpellDesc secondary = (SpellDesc) desc.get(SpellArg.SPELL2);
 		if (secondary == null) {
 			secondary = primary;
 		}

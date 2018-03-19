@@ -15,6 +15,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.BuffSpell;
+import net.demilich.metastone.game.spells.CastFromGroupSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
@@ -26,7 +27,9 @@ import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.CardRevealedTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
@@ -340,8 +343,36 @@ public class TheOldGodsTests extends TestBase {
 		Assert.assertEquals(cardInHand.getCardId(), originalMinion[0].getSourceCard().getCardId());
 		context.getLogic().performGameAction(player.getId(), cardInHand.play());
 		int buff = light.getSpell().subSpells().stream().filter(sd -> sd.getDescClass().equals(BuffSpell.class)).findFirst().orElseThrow(AssertionError::new).getInt(SpellArg.VALUE, -999);
-		Assert.assertEquals(player.getMinions().get(0).getAttack(), originalMinion[0].getAttack() + buff);
-		Assert.assertEquals(player.getMinions().get(0).getHp(), originalMinion[0].getHp() + buff);
+		// Find the minion that was created with the specified card, because minions like Dr. Boom put unexpected cards into play into the first position.
+		Minion targetMinion = player.getMinions().stream().filter(m -> m.getSourceCard().getCardId().equals(cardInHand.getCardId())).findFirst().orElseThrow(AssertionError::new);
+		// Some minions, like Fireguard Destroyer, increase their stats by a random amount, so handle that here.
+		Card sourceCard = targetMinion.getSourceCard();
+		boolean hasRandomStatsIncrease = Stream.of(
+				"minion_fireguard_destroyer",
+				"minion_injured_blademaster",
+				"minion_injured_kvaldir",
+				"minion_midnight_drake",
+				"minion_twilight_drake").anyMatch(c -> {
+			return sourceCard.getCardId().equals(c);
+		});
+
+		boolean buffsSelf = false;
+		// LISP to the rescue
+		if (sourceCard.getDesc().battlecry != null) {
+			buffsSelf = Stream.concat(Stream.of(sourceCard.getDesc().battlecry.spell), sourceCard.getDesc().battlecry.spell.subSpells().stream())
+					.anyMatch(spellDesc -> (BuffSpell.class.isAssignableFrom(spellDesc.getDescClass())
+							|| CastFromGroupSpell.class.isAssignableFrom(spellDesc.getDescClass())) && spellDesc.getTarget() != null
+							&& spellDesc.getTarget().equals(EntityReference.SELF));
+		}
+
+		if (hasRandomStatsIncrease || buffsSelf) {
+			Assert.assertTrue(targetMinion.getAttributeValue(Attribute.ATTACK_BONUS) >= 1);
+			Assert.assertTrue(targetMinion.getAttributeValue(Attribute.HP_BONUS) >= 1);
+		} else {
+			Assert.assertEquals(targetMinion.getAttack(), originalMinion[0].getAttack() + buff);
+			Assert.assertEquals(targetMinion.getHp(), originalMinion[0].getHp() + buff);
+		}
+
 	}
 
 	@Test

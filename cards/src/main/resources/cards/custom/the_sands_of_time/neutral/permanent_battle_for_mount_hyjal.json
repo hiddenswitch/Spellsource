@@ -39,6 +39,5 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1,
-  "duration": 3
+  "fileFormatVersion": 1
 }

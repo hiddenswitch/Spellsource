@@ -2,6 +2,8 @@ package net.demilich.metastone.game.cards.desc;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
@@ -16,12 +18,13 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 
+@JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public class CardDesc implements Serializable, Cloneable {
 	public String id;
 	public String name;
@@ -37,10 +40,10 @@ public class CardDesc implements Serializable, Cloneable {
 	public AttributeMap attributes;
 	public int fileFormatVersion = 1;
 	public ValueProviderDesc manaCostModifier;
-	public TriggerDesc passiveTrigger;
-	public TriggerDesc[] passiveTriggers;
-	public TriggerDesc deckTrigger;
-	public TriggerDesc[] gameTriggers;
+	public EnchantmentDesc passiveTrigger;
+	public EnchantmentDesc[] passiveTriggers;
+	public EnchantmentDesc deckTrigger;
+	public EnchantmentDesc[] gameTriggers;
 	public String author;
 	/**
 	 * Specifies the actor's battlecry.
@@ -65,11 +68,11 @@ public class CardDesc implements Serializable, Cloneable {
 	 * net.demilich.metastone.game.targeting.Zones#BATTLEFIELD}, {@link net.demilich.metastone.game.targeting.Zones#WEAPON},
 	 * or {@link net.demilich.metastone.game.targeting.Zones#HERO}).
 	 */
-	public TriggerDesc trigger;
+	public EnchantmentDesc trigger;
 	/**
 	 * Multiple {@link #trigger} objects that should come into play whenever the actor comes into an in-play zone.
 	 */
-	public TriggerDesc[] triggers;
+	public EnchantmentDesc[] triggers;
 	/**
 	 * The aura that is active whenever the actor is in play.
 	 */
@@ -111,6 +114,7 @@ public class CardDesc implements Serializable, Cloneable {
 	public EventTriggerDesc quest;
 	public int countUntilCast;
 
+	@JsonIgnore
 	public Card create() {
 		return new Card(this);
 	}
@@ -119,6 +123,7 @@ public class CardDesc implements Serializable, Cloneable {
 		return collectible;
 	}
 
+	@JsonIgnore
 	public BattlecryAction getBattlecryAction() {
 		if (battlecry == null) {
 			return null;

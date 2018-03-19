@@ -1,4 +1,4 @@
-# client
+# spellsource-client
 
 ## Requirements
 
@@ -26,8 +26,8 @@ Add this dependency to your project's POM:
 
 ```xml
 <dependency>
-    <groupId>io.swagger</groupId>
-    <artifactId>client</artifactId>
+    <groupId>com.hiddenswitch</groupId>
+    <artifactId>spellsource-client</artifactId>
     <version>1.0.0</version>
     <scope>compile</scope>
 </dependency>
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "io.swagger:client:1.0.0"
+compile "com.hiddenswitch:spellsource-client:1.0.0"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/client-1.0.0.jar
+* target/spellsource-client-1.0.0.jar
 * target/lib/*.jar
 
 ## Getting Started
@@ -60,7 +60,7 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 import com.hiddenswitch.spellsource.client.*;
 import com.hiddenswitch.spellsource.client.auth.*;
-import com.hiddenswitch.spellsource.client.model.*;
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 import java.io.File;
@@ -225,7 +225,7 @@ Authentication schemes defined for the API:
 
 ## Recommendation
 
-It's recommended to create an instance of `ApiClient` per thread in a multithreaded environment to avoid any potential issue.
+It's recommended to create an instance of `ApiClient` per thread in a multithreaded environment to avoid any potential issues.
 
 ## Author
 

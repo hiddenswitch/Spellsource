@@ -6,7 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class OrFilter extends EntityFilter {
 
-	public OrFilter(FilterDesc desc) {
+	public OrFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

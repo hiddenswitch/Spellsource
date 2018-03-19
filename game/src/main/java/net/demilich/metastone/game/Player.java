@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
@@ -37,6 +37,32 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
+	protected CardZone deck = new CardZone(getId(), Zones.DECK);
+	private CardZone hand = new CardZone(getId(), Zones.HAND);
+	private CardZone discoverZone = new CardZone(getId(), Zones.DISCOVER);
+	private EntityZone<Entity> setAsideZone = new EntityZone<>(getId(), Zones.SET_ASIDE_ZONE);
+	private EntityZone<Entity> graveyard = new EntityZone<>(getId(), Zones.GRAVEYARD);
+	private EntityZone<Entity> removedFromPlay = new EntityZone<>(getId(), Zones.REMOVED_FROM_PLAY);
+	private EntityZone<Minion> minions = new EntityZone<>(getId(), Zones.BATTLEFIELD);
+	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), Zones.HERO);
+	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), Zones.SECRET);
+	private EntityZone<Quest> quests = new EntityZone<>(getId(), Zones.QUEST);
+	private EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER);
+
+	private final GameStatistics statistics = new GameStatistics();
+
+	/**
+	 * @see #getMana()
+	 */
+	private int mana;
+	/**
+	 * @see #getMaxMana()
+	 */
+	private int maxMana;
+	private int lockedMana;
+
+	@JsonIgnore
+	private Behaviour behaviour;
 
 	/**
 	 * Create an empty player instance.
@@ -69,37 +95,8 @@ public class Player extends Entity implements Serializable {
 		return player;
 	}
 
-	protected String deckName;
-	protected CardZone deck = new CardZone(getId(), Zones.DECK);
-	private CardZone hand = new CardZone(getId(), Zones.HAND);
-	private CardZone discoverZone = new CardZone(getId(), Zones.DISCOVER);
-	private EntityZone<Entity> setAsideZone = new EntityZone<>(getId(), Zones.SET_ASIDE_ZONE);
-	private EntityZone<Entity> graveyard = new EntityZone<>(getId(), Zones.GRAVEYARD);
-	private EntityZone<Entity> removedFromPlay = new EntityZone<>(getId(), Zones.REMOVED_FROM_PLAY);
-	private EntityZone<Minion> minions = new EntityZone<>(getId(), Zones.BATTLEFIELD);
-	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), Zones.HERO);
-	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), Zones.SECRET);
-	private EntityZone<Quest> quests = new EntityZone<>(getId(), Zones.QUEST);
-	private EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER);
-
-	private final GameStatistics statistics = new GameStatistics();
-
-	/**
-	 * @see #getMana()
-	 */
-	private int mana;
-	/**
-	 * @see #getMaxMana()
-	 */
-	private int maxMana;
-	private int lockedMana;
-
-	@Expose(serialize = false, deserialize = false)
-	private Behaviour behaviour;
-
 	private Player(Player otherPlayer) {
 		this.setName(otherPlayer.getName());
-		this.deckName = otherPlayer.getDeckName();
 		this.getAttributes().putAll(otherPlayer.getAttributes());
 		this.playerZone.add(this);
 		this.setId(otherPlayer.getId());
@@ -161,7 +158,6 @@ public class Player extends Entity implements Serializable {
 		this.deck = new CardZone(getId(), Zones.DECK, selectedDeck.getCardsCopy());
 		this.setHero(config.getHeroForPlay().createHero());
 		this.setName(config.getName() + " - " + getHero().getName());
-		this.deckName = selectedDeck.getName();
 		setBehaviour(config.getBehaviour().clone());
 	}
 
@@ -194,11 +190,6 @@ public class Player extends Entity implements Serializable {
 	 */
 	public CardZone getDeck() {
 		return deck;
-	}
-
-	@Deprecated
-	public String getDeckName() {
-		return deckName;
 	}
 
 	@Override

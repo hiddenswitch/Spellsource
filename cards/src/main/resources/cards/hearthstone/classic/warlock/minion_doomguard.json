@@ -18,7 +18,7 @@
   "attributes": {
     "BATTLECRY": true,
     "CHARGE": true,
-    "NAME": "Bogovey Samurai"
+    "SPELLSOURCE_NAME": "Bogovey Samurai"
   },
   "collectible": true,
   "set": "CLASSIC",

@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.impl.server;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import io.vertx.core.CompositeFuture;
@@ -9,6 +8,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.json.Json;
 import io.vertx.core.streams.WriteStream;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class SessionWriter implements WriteStream<Buffer> {
 	@Suspendable
 	private void handleWebSocketMessage(Buffer messageBuffer) {
 		com.hiddenswitch.spellsource.client.models.ClientToServerMessage message =
-				Configuration.getDefaultApiClient().getJSON().deserialize(messageBuffer.toString(),
+				Json.decodeValue(messageBuffer,
 						com.hiddenswitch.spellsource.client.models.ClientToServerMessage.class);
 
 		switch (message.getMessageType()) {

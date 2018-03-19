@@ -13,8 +13,8 @@ public class ComboSpell extends ConditionalEffectSpell {
 
 	public static SpellDesc create(SpellDesc either, SpellDesc or, boolean exclusive) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ComboSpell.class);
-		arguments.put(SpellArg.SPELL_1, either);
-		arguments.put(SpellArg.SPELL_2, or);
+		arguments.put(SpellArg.SPELL1, either);
+		arguments.put(SpellArg.SPELL2, or);
 		arguments.put(SpellArg.EXCLUSIVE, exclusive);
 		return new SpellDesc(arguments);
 	}

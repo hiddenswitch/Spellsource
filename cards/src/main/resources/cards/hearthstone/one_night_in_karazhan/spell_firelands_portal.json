@@ -24,7 +24,7 @@
     ]
   },
   "attributes": {
-    "NAME": "Bomb Carrier"
+    "SPELLSOURCE_NAME": "Bomb Carrier"
   },
   "collectible": true,
   "set": "ONE_NIGHT_IN_KARAZHAN",

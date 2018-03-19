@@ -11,13 +11,13 @@ import java.util.Map;
 public class ManaCostFilter extends EntityFilter {
 
 	public static ManaCostFilter create(int manaCost, Operation operation) {
-		Map<FilterArg, Object> arguments = new FilterDesc(ManaCostFilter.class);
+		Map<FilterArg, Object> arguments = new EntityFilterDesc(ManaCostFilter.class);
 		arguments.put(FilterArg.VALUE, manaCost);
 		arguments.put(FilterArg.OPERATION, operation);
-		return new ManaCostFilter(new FilterDesc(arguments));
+		return new ManaCostFilter(new EntityFilterDesc(arguments));
 	}
 
-	public ManaCostFilter(FilterDesc desc) {
+	public ManaCostFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

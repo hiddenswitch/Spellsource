@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AttributeFilter extends EntityFilter {
 
-	public AttributeFilter(FilterDesc desc) {
+	public AttributeFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

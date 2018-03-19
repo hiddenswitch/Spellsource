@@ -3,11 +3,8 @@ package com.hiddenswitch.spellsource.impl.util;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.CaseFormat;
-import com.hiddenswitch.spellsource.util.QuickJson;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardParser;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -15,7 +12,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +24,7 @@ public class InventoryRecord extends MongoRecord {
 	private static Logger logger = LoggerFactory.getLogger(InventoryRecord.class);
 
 	@JsonProperty
-	private Map<String, Object> cardDesc;
+	private CardDesc cardDesc;
 
 	/**
 	 * The userId of the player who originally opened the pack containing the card.
@@ -52,42 +48,21 @@ public class InventoryRecord extends MongoRecord {
 	@JsonProperty
 	private Map<String, Object> facts = new HashMap<>();
 
-	@JsonIgnore
-	private transient CardDesc cardDescCached;
-
-	protected InventoryRecord() {
-	}
-
-	public InventoryRecord(Card card) {
-		this(card.getDesc());
-	}
-
-	public InventoryRecord(JsonObject card) {
-		this.cardDesc = card.getMap();
+	public InventoryRecord() {
 	}
 
 	public InventoryRecord(String id, JsonObject card) {
 		super(id);
-		this.cardDesc = card.getMap();
+		this.cardDesc = card.mapTo(CardDesc.class);
 	}
 
-	public InventoryRecord(CardDesc cardDesc) {
-		this();
-		this.cardDesc = QuickJson.toJson(cardDesc).getMap();
+	public InventoryRecord(String id, CardDesc cardDesc) {
+		super(id);
+		this.cardDesc = cardDesc;
 	}
 
-	@JsonIgnore
-	@SuppressWarnings("unchecked")
 	public CardDesc getCardDesc() {
-		if (cardDescCached == null) {
-			try {
-				cardDescCached = CardParser.parseCard(new JsonObject(cardDesc)).getDesc();
-			} catch (IOException e) {
-				logger.error("getCardDesc: Record {} has an invalid cardDesc {} with exception {}", _id, cardDesc, e);
-				throw new RuntimeException();
-			}
-		}
-		return cardDescCached;
+		return cardDesc;
 	}
 
 	@JsonIgnore
@@ -153,11 +128,6 @@ public class InventoryRecord extends MongoRecord {
 	}
 
 	@JsonIgnore
-	public Map<String, Object> getCardDescMap() {
-		return cardDesc;
-	}
-
-	@JsonIgnore
 	public Map<String, Object> getFacts() {
 		return facts;
 	}
@@ -169,8 +139,8 @@ public class InventoryRecord extends MongoRecord {
 
 	@JsonIgnore
 	public String getCardId() {
-		return cardDesc != null && cardDesc.containsKey("id")
-				? (String) cardDesc.get("id")
+		return cardDesc != null && cardDesc.id != null
+				? cardDesc.id
 				: null;
 	}
 

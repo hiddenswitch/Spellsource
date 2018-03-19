@@ -1,12 +1,11 @@
 package com.blizzard.hearthstone;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.hiddenswitch.spellsource.util.Serialization;
-import net.demilich.metastone.game.cards.*;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardParseException;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.io.IOUtils;
@@ -15,7 +14,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -23,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CatalogueTests {
-	static Gson gson = new Gson();
 
 	private static String getCurrentCards() {
 		String testedUrl = "https://api.hearthstonejson.com/v1/23180/enUS/cards.json";
@@ -42,18 +39,20 @@ public class CatalogueTests {
 		connection.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
 		String cards = IOUtils.toString(connection.getInputStream());
 
-		JsonArray json = gson.fromJson(cards, JsonArray.class);
+
+		JsonArray json = new JsonArray(cards);
 		List<JsonObject> cardObjects = new ArrayList<>();
-		for (JsonElement e : json) {
-			JsonObject jo = e.getAsJsonObject();
-			if (jo.has("type")
-					&& jo.has("collectible")
-					&& jo.get("collectible").getAsBoolean()
-					&& !jo.get("type").getAsString().equals("ENCHANTMENT")
-					&& !jo.get("type").getAsString().equals("HERO")) {
+		for (Object e : json) {
+			JsonObject jo = (JsonObject) e;
+			if (jo.containsKey("type")
+					&& jo.containsKey("collectible")
+					&& jo.getBoolean("collectible")
+					&& !jo.getString("type").equals("ENCHANTMENT")
+					&& !jo.getString("type").equals("HERO")) {
 				cardObjects.add(jo);
 			}
 		}
+
 		Object[][] data = new Object[cardObjects.size()][1];
 		for (int i = 0; i < cardObjects.size(); i++) {
 			data[i][0] = cardObjects.get(i);
@@ -63,32 +62,26 @@ public class CatalogueTests {
 
 	@Test(dataProvider = "HearthstoneCards")
 	public void testHasCard(JsonObject cardObject) {
-		final Card card = CardCatalogue.getCardByName(cardObject.get("name").getAsString());
+		final Card card = CardCatalogue.getCardByName(cardObject.getString("name"));
 		Assert.assertNotNull(card);
 	}
 
 	@Test(dataProvider = "HearthstoneCards")
 	public void testAttributes(JsonObject cardObject) {
-		Type listType = new TypeToken<List<String>>() {
-		}.getType();
-		final Card card = CardCatalogue.getCardByName(cardObject.get("name").getAsString());
-		String name = cardObject.get("name").getAsString();
-//		String text = cardObject.has("text") ? cardObject.get("text").getAsString() : "";
-//		text = Jsoup.parse(text).text();
-//		text = text.replaceAll("[\\$\\#]", "").replaceAll("\\[x\\]", "");
-//		String description = card.getDescription();
-//		// Only compare non-whitespace and non-punctuation
-//		text = text.replaceAll("[\\s.,:;]", "");
-//		description = description.replaceAll("[\\s.,:;]", "");
-//		Assert.assertEquals(description, text, "Wrong description for " + name);
-		Assert.assertEquals(card.getBaseManaCost(), cardObject.get("cost").getAsInt(), "Wrong cost for " + name);
+		final Card card = CardCatalogue.getCardByName(cardObject.getString("name"));
+		String name = cardObject.getString("name");
+		Assert.assertEquals(card.getBaseManaCost(), (int) cardObject.getInteger("cost", -1), "Wrong cost for " + name);
 		Assert.assertTrue(card.isCollectible());
 		if (card.getCardType() == CardType.MINION) {
-			Assert.assertEquals(card.getBaseAttack(), cardObject.get("attack").getAsInt(), "Wrong attack for " + name);
-			Assert.assertEquals(card.getBaseHp(), cardObject.get("health").getAsInt(), "Wrong health for " + name);
+			Assert.assertEquals(card.getBaseAttack(), (int) cardObject.getInteger("attack", -1), "Wrong attack for " + name);
+			Assert.assertEquals(card.getBaseHp(), (int) cardObject.getInteger("health", -1), "Wrong health for " + name);
 
-			if (cardObject.has("mechanics")) {
-				List<String> mechanics = Serialization.getGson().fromJson(cardObject.get("mechanics"), listType);
+			if (cardObject.containsKey("mechanics")) {
+				List<String> mechanics = new ArrayList<String>();
+				for (Object o : cardObject.getJsonArray("mechanics")) {
+					mechanics.add((String) o);
+				}
+
 				final boolean battlecry = mechanics.stream().anyMatch(m -> m.equals("BATTLECRY"));
 				final boolean combos = mechanics.stream().anyMatch(m -> m.equals("COMBO"));
 				Assert.assertEquals(card.hasBattlecry(), battlecry || combos, name + " is missing a combos or battlecry attribute.");
@@ -105,8 +98,8 @@ public class CatalogueTests {
 				Assert.assertEquals(card.hasAttribute(Attribute.DIVINE_SHIELD), divineShield, name + " is missing divine shield attribute.");
 			}
 
-			if (cardObject.has("race")) {
-				String race = cardObject.get("race").getAsString();
+			if (cardObject.containsKey("race")) {
+				String race = cardObject.getString("race");
 				if (race.equals("MECHANICAL")) {
 					race = "MECH";
 				}
@@ -116,8 +109,8 @@ public class CatalogueTests {
 				Assert.assertEquals(card.getRace(), Race.NONE, name + " should not have race but has " + card.getRace().toString());
 			}
 
-			if (cardObject.has("rarity")) {
-				String rarity = cardObject.get("rarity").getAsString();
+			if (cardObject.containsKey("rarity")) {
+				String rarity = cardObject.getString("rarity");
 				final String actual = card.getRarity().toString();
 				Assert.assertEquals(actual, rarity, name + " should have rarity " + rarity + " but has " + actual);
 			}

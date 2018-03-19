@@ -16,8 +16,8 @@ public class EitherOrSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc either, SpellDesc or, ISpellConditionChecker condition) {
 		Map<SpellArg, Object> arguments = new SpellDesc(EitherOrSpell.class);
-		arguments.put(SpellArg.SPELL_1, either);
-		arguments.put(SpellArg.SPELL_2, or);
+		arguments.put(SpellArg.SPELL1, either);
+		arguments.put(SpellArg.SPELL2, or);
 		arguments.put(SpellArg.CONDITION, condition);
 		arguments.put(SpellArg.TARGET, target);
 		return new SpellDesc(arguments);
@@ -31,8 +31,8 @@ public class EitherOrSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
-		SpellDesc either = (SpellDesc) desc.get(SpellArg.SPELL_1);
-		SpellDesc or = (SpellDesc) desc.get(SpellArg.SPELL_2);
+		SpellDesc either = (SpellDesc) desc.get(SpellArg.SPELL1);
+		SpellDesc or = (SpellDesc) desc.get(SpellArg.SPELL2);
 
 		SpellDesc spellToCast = condition.isFulfilled(context, player, source, target) ? either : or;
 		SpellUtils.castChildSpell(context, player, spellToCast, source, target);

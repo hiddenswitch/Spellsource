@@ -10,7 +10,7 @@
     "class": "ReturnTargetToHandSpell"
   },
   "attributes": {
-    "NAME": "Paralyzing Touch"
+    "SPELLSOURCE_NAME": "Paralyzing Touch"
   },
   "collectible": true,
   "set": "BASIC",

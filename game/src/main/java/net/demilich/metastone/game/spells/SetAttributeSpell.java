@@ -26,8 +26,7 @@ public class SetAttributeSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		Object value = desc.get(SpellArg.VALUE);
-		if (value instanceof Integer
-				|| ValueProvider.class.isAssignableFrom(value.getClass())) {
+		if (ValueProvider.class.isAssignableFrom(value.getClass())) {
 			value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		}
 		target.setAttribute(attribute, value);

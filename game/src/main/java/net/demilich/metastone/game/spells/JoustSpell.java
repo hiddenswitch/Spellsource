@@ -15,7 +15,7 @@ public class JoustSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		JoustEvent joustEvent = context.getLogic().joust(player, desc.getCardFilter(), source);
 		if (!joustEvent.isWon()) {
-			SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL_1);
+			SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
 			if (spell1 != null) {
 				SpellUtils.castChildSpell(context, player, spell1, source, target);	
 			}
@@ -23,7 +23,7 @@ public class JoustSpell extends Spell {
 			return;
 		}
 		
-		SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL_2);
+		SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
 		if (spell2 != null) {
 			SpellUtils.castChildSpell(context, player, spell2, source, target);
 			return;

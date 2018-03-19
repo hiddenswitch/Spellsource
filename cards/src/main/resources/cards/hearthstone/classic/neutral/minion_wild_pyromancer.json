@@ -19,7 +19,7 @@
     }
   },
   "attributes": {
-    "NAME": "Necromancer"
+    "SPELLSOURCE_NAME": "Necromancer"
   },
   "collectible": true,
   "set": "CLASSIC",

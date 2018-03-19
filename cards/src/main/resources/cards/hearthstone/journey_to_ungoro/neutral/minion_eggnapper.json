@@ -17,7 +17,7 @@
   "attributes": {
     "DEATHRATTLES": true,
     "DESCRIPTION": "Deathrattle: Summon two 1/1 Wild Cats.",
-    "NAME": "Forest Witch"
+    "SPELLSOURCE_NAME": "Forest Witch"
   },
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",

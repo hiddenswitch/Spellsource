@@ -3,26 +3,25 @@ package com.hiddenswitch.spellsource.impl.server;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.Games;
-import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.Writer;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.json.Json;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.EntityLocation;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.events.TriggerFired;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.utils.TurnState;
 
 import java.io.IOException;
 import java.util.*;
@@ -78,7 +77,7 @@ public class WebSocketWriter implements Writer {
 		if (!open) {
 			return;
 		}
-		socket.write(Buffer.buffer(Configuration.getDefaultApiClient().getJSON().serialize(message)));
+		socket.write(Json.encodeToBuffer(message));
 	}
 
 	@Suspendable

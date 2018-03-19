@@ -4,8 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "race": "BALANCE",
-  "description": "Deal *3* damage and discover a Balance spell. It costs (2) less.",
+  "description": "Deal 3 damage and discover a Balance spell. It costs (2) less.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

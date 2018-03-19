@@ -11,15 +11,17 @@
     {
       "eventTrigger": {
         "class": "SpellCastedTrigger",
-        "condition": {
+        "fireCondition": {
           "class": "OrCondition",
           "conditions": [
             {
               "class": "CardPropertyCondition",
+              "target": "EVENT_SOURCE",
               "cardId": "spell_bloodthirst"
             },
             {
               "class": "CardPropertyCondition",
+              "target": "EVENT_SOURCE",
               "cardId": "spell_dragon_roar"
             }
           ]
@@ -35,15 +37,17 @@
     {
       "eventTrigger": {
         "class": "AfterSpellCastedTrigger",
-        "condition": {
+        "fireCondition": {
           "class": "OrCondition",
           "conditions": [
             {
               "class": "CardPropertyCondition",
+              "target": "EVENT_SOURCE",
               "cardId": "spell_bloodthirst"
             },
             {
               "class": "CardPropertyCondition",
+              "target": "EVENT_SOURCE",
               "cardId": "spell_dragon_roar"
             }
           ]

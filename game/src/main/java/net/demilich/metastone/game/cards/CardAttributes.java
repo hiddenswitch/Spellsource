@@ -1,14 +1,21 @@
 package net.demilich.metastone.game.cards;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializable;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import io.vertx.core.impl.ConcurrentHashSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 
-import java.util.AbstractMap;
-import java.util.HashSet;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,7 +23,8 @@ import java.util.Set;
  * A hashmap that can contain "overrides" to a {@link CardDesc}. This allows cards to assume other identities while
  * retaining their enchantments by changing their {@link Attribute#CARD_ID} or {@link Attribute#AURA_CARD_ID}.
  */
-public final class CardAttributes extends AttributeMap implements Cloneable {
+public final class CardAttributes extends AttributeMap implements Cloneable, JsonSerializable, Serializable {
+	@JsonIgnore
 	private Card card;
 
 	public CardAttributes(Card card) {
@@ -106,10 +114,10 @@ public final class CardAttributes extends AttributeMap implements Cloneable {
 					return desc.manaCostModifier == null ? null : desc.manaCostModifier.create();
 				case PASSIVE_TRIGGERS:
 					if (desc.passiveTrigger == null && (desc.passiveTriggers == null || desc.passiveTriggers.length == 0)) {
-						return new TriggerDesc[0];
+						return new EnchantmentDesc[0];
 					}
 					if (desc.passiveTrigger != null && (desc.passiveTriggers == null || desc.passiveTriggers.length == 0)) {
-						return new TriggerDesc[]{desc.passiveTrigger};
+						return new EnchantmentDesc[]{desc.passiveTrigger};
 					}
 					return desc.passiveTriggers;
 				case DECK_TRIGGER:
@@ -231,5 +239,24 @@ public final class CardAttributes extends AttributeMap implements Cloneable {
 			cardId = (String) super.get(Attribute.CARD_ID);
 		}
 		return cardId;
+	}
+
+	@Override
+	public void serialize(JsonGenerator gen, SerializerProvider serializers) throws IOException {
+		gen.writeStartObject();
+		innerSerialize(gen);
+		gen.writeEndObject();
+	}
+
+	private void innerSerialize(JsonGenerator gen) throws IOException {
+		for (Entry<Attribute, Object> entry : super.entrySet()) {
+			gen.writeFieldName(entry.getKey().name());
+			gen.writeObject(entry.getValue());
+		}
+	}
+
+	@Override
+	public void serializeWithType(JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) throws IOException {
+		serialize(gen, serializers);
 	}
 }

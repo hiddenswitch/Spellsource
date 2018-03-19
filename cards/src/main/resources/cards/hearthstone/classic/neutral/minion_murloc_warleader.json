@@ -19,7 +19,7 @@
   },
   "attributes": {
     "DESCRIPTION": "Your other Murlocs have +2 Attack.",
-    "NAME": "Murloc Equipment"
+    "SPELLSOURCE_NAME": "Murloc Equipment"
   },
   "collectible": true,
   "set": "CLASSIC",

@@ -12,7 +12,7 @@
     "value": 2
   },
   "attributes": {
-    "NAME": "Everfire"
+    "SPELLSOURCE_NAME": "Everfire"
   },
   "collectible": true,
   "set": "BASIC",

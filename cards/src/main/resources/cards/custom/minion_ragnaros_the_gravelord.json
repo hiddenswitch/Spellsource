@@ -9,17 +9,20 @@
   "race": "ELEMENTAL",
   "description": "At the end of your turn, summon a random friendly minion that died this game.",
   "trigger": {
-    "condition": {
-      "class": "GraveyardCountCondition",
-      "value": 0,
-      "operation": "GREATER"
-    },
     "eventTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "ResurrectSpell"
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "GraveyardCountCondition",
+        "value": 0,
+        "operation": "GREATER"
+      },
+      "spell": {
+        "class": "ResurrectSpell"
+      }
     }
   },
   "collectible": false,

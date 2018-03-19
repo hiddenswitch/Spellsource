@@ -20,7 +20,7 @@
         "filters": [
           {
             "class": "CardFilter",
-            "type": "MINION"
+            "cardType": "MINION"
           },
           {
             "class": "AttributeFilter",

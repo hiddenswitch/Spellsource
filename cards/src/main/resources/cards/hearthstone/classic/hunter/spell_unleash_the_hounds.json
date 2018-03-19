@@ -15,7 +15,7 @@
     "card": "token_hound"
   },
   "attributes": {
-    "NAME": "Amate's Howl"
+    "SPELLSOURCE_NAME": "Amate's Howl"
   },
   "collectible": true,
   "set": "CLASSIC",

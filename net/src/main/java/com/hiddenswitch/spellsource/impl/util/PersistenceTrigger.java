@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.gson.annotations.Expose;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.models.EventLogicRequest;
@@ -26,7 +25,8 @@ import java.io.Serializable;
  * A trigger that records persistent {@link Attribute} to a database. Think of it as analytics for {@link Entity}
  * objects where some analytics events have side effects on gameplay.
  * <p>
- * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute, Handler)}.
+ * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute,
+ * Handler)}.
  * <p>
  * In games with persistence effects enabled, the {@link PersistenceTrigger} is added to a list of "other triggers" that
  * are just always running throughout a game. In Spellsource, this trigger is added by a {@link
@@ -48,11 +48,10 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	/**
 	 * The {@link RpcClient} for the {@link Logic} service.
 	 */
-	@Expose(serialize = false, deserialize = false)
 	private transient final RpcClient<Logic> logic;
-	private final String gameId;
-	@Expose(serialize = false, deserialize = false)
 	private transient final GameContext context;
+
+	private final String gameId;
 
 	public PersistenceTrigger(RpcClient<Logic> logic, GameContext context, String gameId) {
 		this.logic = logic;

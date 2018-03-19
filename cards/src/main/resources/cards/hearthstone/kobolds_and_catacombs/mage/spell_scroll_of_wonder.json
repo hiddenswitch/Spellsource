@@ -31,8 +31,11 @@
           }
         },
         {
-          "class": "AddAttributeSpell",
+          "class": "SetAttributeSpell",
           "target": "SELF",
+          "value": {
+            "class": "CurrentTurnValueProvider"
+          },
           "attribute": "PLAYED_FROM_HAND_OR_DECK"
         },
         {

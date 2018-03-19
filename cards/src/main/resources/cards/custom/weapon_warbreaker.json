@@ -10,7 +10,7 @@
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "condition": {
+      "fireCondition": {
         "class": "CardPropertyCondition",
         "target": "EVENT_TARGET",
         "cardId": "spell_colossus_smash"

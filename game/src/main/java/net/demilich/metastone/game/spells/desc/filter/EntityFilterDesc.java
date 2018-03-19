@@ -1,30 +1,31 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.EnumMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.EntityFilterDescDeserializer;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
-public class FilterDesc extends Desc<FilterArg, EntityFilter> {
+@JsonDeserialize(using = EntityFilterDescDeserializer.class)
+public class EntityFilterDesc extends Desc<FilterArg, EntityFilter> {
 
-	public FilterDesc() {
+	public EntityFilterDesc() {
 		super();
 	}
 
-	public FilterDesc(Class<? extends EntityFilter> filterClass) {
+	public EntityFilterDesc(Class<? extends EntityFilter> filterClass) {
 		super(filterClass);
 	}
 
-	public FilterDesc(Map<FilterArg, Object> arguments) {
+	public EntityFilterDesc(Map<FilterArg, Object> arguments) {
 		super(arguments);
 	}
 
 	@Override
 	protected Class<? extends Desc> getDescImplClass() {
-		return FilterDesc.class;
+		return EntityFilterDesc.class;
 	}
 
 	@Override
@@ -33,7 +34,7 @@ public class FilterDesc extends Desc<FilterArg, EntityFilter> {
 	}
 
 	@Override
-	public FilterDesc clone() {
-		return (FilterDesc)copyTo(new FilterDesc(getDescClass()));
+	public EntityFilterDesc clone() {
+		return (EntityFilterDesc)copyTo(new EntityFilterDesc(getDescClass()));
 	}
 }

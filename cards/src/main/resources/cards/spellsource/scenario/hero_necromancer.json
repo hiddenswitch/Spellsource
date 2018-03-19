@@ -43,6 +43,7 @@
             "target": "EVENT_TARGET",
             "spell": {
               "class": "SummonSpell",
+              "boardPositionRelative": "RIGHT",
               "cardFilter": {
                 "class": "CardFilter",
                 "target": "SELF",
@@ -52,7 +53,6 @@
                   "offset": -1
                 },
                 "attribute": "BASE_MANA_COST",
-                "boardPositionRelative": "RIGHT",
                 "cardType": "MINION",
                 "operation": "EQUAL"
               }

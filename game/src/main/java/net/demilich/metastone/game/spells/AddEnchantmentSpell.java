@@ -9,13 +9,13 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class AddEnchantmentSpell extends Spell {
 
-	public static SpellDesc create(EntityReference target, TriggerDesc trigger) {
+	public static SpellDesc create(EntityReference target, EnchantmentDesc trigger) {
 		Map<SpellArg, Object> arguments = new SpellDesc(AddEnchantmentSpell.class);
 		arguments.put(SpellArg.TRIGGER, trigger);
 		arguments.put(SpellArg.TARGET, target);
@@ -29,18 +29,18 @@ public class AddEnchantmentSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	public static SpellDesc create(TriggerDesc trigger) {
+	public static SpellDesc create(EnchantmentDesc trigger) {
 		return create(null, trigger);
 	}
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		TriggerDesc triggerDesc = (TriggerDesc) desc.get(SpellArg.TRIGGER);
+		EnchantmentDesc enchantmentDesc = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
 		Aura aura = (Aura) desc.get(SpellArg.AURA);
 
-		if (triggerDesc != null) {
-			Enchantment enchantment = triggerDesc.create();
+		if (enchantmentDesc != null) {
+			Enchantment enchantment = enchantmentDesc.create();
 			enchantment.setOwner(player.getId());
 			context.getLogic().addGameEventListener(player, enchantment, target);
 		}

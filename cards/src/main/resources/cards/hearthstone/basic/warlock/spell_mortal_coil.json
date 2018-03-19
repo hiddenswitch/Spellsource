@@ -21,7 +21,7 @@
     }
   },
   "attributes": {
-    "NAME": "Stroke of Insanity"
+    "SPELLSOURCE_NAME": "Stroke of Insanity"
   },
   "collectible": true,
   "set": "BASIC",

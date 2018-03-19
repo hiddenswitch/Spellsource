@@ -8,7 +8,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 
 public class RaceFilter extends EntityFilter {
 
-	public RaceFilter(FilterDesc desc) {
+	public RaceFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

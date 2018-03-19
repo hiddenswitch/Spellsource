@@ -16,7 +16,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "Butcher"
+    "SPELLSOURCE_NAME": "Butcher"
   },
   "collectible": true,
   "set": "CLASSIC",

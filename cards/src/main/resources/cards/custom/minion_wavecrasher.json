@@ -37,12 +37,5 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1,
-  "glow": {
-    "class": "PlayedLastTurnCondition",
-    "filter": {
-      "class": "CardFilter",
-      "race": "ELEMENTAL"
-    }
-  }
+  "fileFormatVersion": 1
 }

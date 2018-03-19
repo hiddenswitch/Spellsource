@@ -7,7 +7,7 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 
 public class OwnedByPlayerFilter extends EntityFilter {
 
-	public OwnedByPlayerFilter(FilterDesc desc) {
+	public OwnedByPlayerFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

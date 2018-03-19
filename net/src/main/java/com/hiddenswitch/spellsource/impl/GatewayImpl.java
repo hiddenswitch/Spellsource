@@ -436,7 +436,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext routingContext, String userId, String queueId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException {
-		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.getCasual());
+		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.isCasual());
 		MatchmakingResponse internalResponse;
 		try {
 			internalResponse = getMatchmaking().matchmakeAndJoin(internalRequest);
@@ -596,8 +596,8 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<DraftState> draftsPost(RoutingContext context, String userId, DraftsPostRequest request) throws SuspendExecution, InterruptedException {
-		if (null != request.getStartDraft()
-				&& request.getStartDraft()) {
+		if (null != request.isStartDraft()
+				&& request.isStartDraft()) {
 			try {
 				return WebResult.succeeded(
 						Draft.toDraftState(
@@ -606,8 +606,8 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			} catch (NullPointerException unexpectedRequest) {
 				return WebResult.failed(400, unexpectedRequest);
 			}
-		} else if (null != request.getRetireEarly()
-				&& request.getRetireEarly()) {
+		} else if (null != request.isRetireEarly()
+				&& request.isRetireEarly()) {
 			return WebResult.succeeded(
 					Draft.toDraftState(
 							getDrafts().retireDraftEarly(new RetireDraftRequest().withUserId(userId))

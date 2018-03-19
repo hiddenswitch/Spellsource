@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "Beast",
+  "race": "BEAST",
   "description": "Battlecry: Steal a Banana from your opponent.",
   "battlecry": {
     "targetSelection": "NONE",

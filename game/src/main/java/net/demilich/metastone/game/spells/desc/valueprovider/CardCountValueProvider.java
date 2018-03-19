@@ -32,7 +32,7 @@ public class CardCountValueProvider extends ValueProvider {
 		}
 
 		return cardSource.getCards(context, source, player)
-				.filtered(c -> cardFilter.matches(context, player, c, source))
+				.filtered(cardFilter.matcher(context, player, source))
 				.getCount();
 	}
 

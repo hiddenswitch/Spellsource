@@ -46,6 +46,7 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -105,7 +106,16 @@ public interface Games {
 	 * @return A list of game client actions.
 	 */
 	static GameActions getClientActions(GameContext workingContext, List<GameAction> actions, int playerId) {
-		final GameActions clientActions = new GameActions();
+		final GameActions clientActions = new GameActions()
+				.battlecries(new ArrayList<>())
+				.chooseOnes(new ArrayList<>())
+				.compatibility(new ArrayList<>())
+				.discoveries(new ArrayList<>())
+				.heroes(new ArrayList<>())
+				.physicalAttacks(new ArrayList<>())
+				.spells(new ArrayList<>())
+				.summons(new ArrayList<>())
+				.weapons(new ArrayList<>());
 
 		// Get the minions' indices
 		Map<Integer, Integer> minionsOrWeapons = workingContext.getEntities()
@@ -995,11 +1005,13 @@ public interface Games {
 		int owner = card.getOwner();
 		Player owningPlayer;
 		if (owner != -1) {
-			final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
-					&& card.getOwner() == workingContext.getActivePlayerId()
-					&& localPlayerId == card.getOwner();
-			entityState.playable(playable);
-			entityState.manaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
+			if (card.getZone() == Zones.HAND) {
+				final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
+						&& card.getOwner() == workingContext.getActivePlayerId()
+						&& localPlayerId == card.getOwner();
+				entityState.playable(playable);
+				entityState.manaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
+			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 		} else {
 			entityState.playable(false);
@@ -1061,7 +1073,13 @@ public interface Games {
 				int spellpowerDamage = 0;
 				SpellDesc spell = card.getSpell();
 
-				if (DamageSpell.class.isAssignableFrom(spell.getDescClass())
+				// Could be a choose-one hero power card
+				if (spell == null) {
+					break;
+				}
+
+				if (card.getZone() == Zones.HAND
+						&& DamageSpell.class.isAssignableFrom(spell.getDescClass())
 						&& owningPlayer != null) {
 
 					Minion oneOne = CardCatalogue.getCardById("minion_snowflipper_penguin").summon();

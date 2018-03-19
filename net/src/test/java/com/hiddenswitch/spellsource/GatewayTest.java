@@ -6,7 +6,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
-import com.hiddenswitch.spellsource.client.ApiResponse;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.*;
@@ -21,6 +20,7 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.SendContext;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.unit.junit.Repeat;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -89,9 +89,9 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 				Thread t = new Thread(() -> {
 					ApiClient client = new ApiClient().setBasePath(UnityClient.basePath);
-					client.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
-					client.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
-					client.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
+//					client.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
+//					client.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
+//					client.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
 					DefaultApi api = new DefaultApi(client);
 					String random = RandomStringUtils.randomAlphanumeric(36) + Integer.toString(j);
 					try {
@@ -177,12 +177,12 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		unwrap();
 	}
 
-	@Test(timeout = 400000L)
+	@Test(timeout = 800000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		Logging.setLoggingLevel(Level.DEBUG);
 		wrap(context);
 		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 3;
+		final int count = processorCount * 6;
 		CountDownLatch latch = new CountDownLatch(count);
 		CompositeFuture.join(Collections.nCopies(2, Arrays.asList(
 				new GatewayImpl(),
@@ -208,7 +208,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(160L, TimeUnit.SECONDS);
+		latch.await(320L, TimeUnit.SECONDS);
 		getContext().assertEquals(latch.getCount(), 0L);
 		unwrap();
 	}
@@ -259,7 +259,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 			Boolean done = awaitResult(h -> vertx.executeBlocking((then) -> {
 				UnityClient client2 = new UnityClient(context, token);
 				try {
-					boolean isInMatch = client2.getApi().getAccount(userId).getAccounts().get(0).getInMatch();
+					boolean isInMatch = client2.getApi().getAccount(userId).getAccounts().get(0).isInMatch();
 					then.complete(isInMatch);
 				} catch (ApiException e) {
 					then.fail(new AssertionError());
@@ -441,16 +441,15 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 				&& DeckFormat.CUSTOM.isInFormat(c.getDesc().set)).count();
 		context.assertEquals((long) response1.getCards().size(), count);
 		try {
-			ApiResponse<GetCardsResponse> response2 = defaultApi.getCardsWithHttpInfo(response1.getVersion());
+			GetCardsResponse response2 = defaultApi.getCards(response1.getVersion());
 			context.fail();
 		} catch (ApiException ex) {
 			context.assertEquals(ex.getCode(), 304);
 		}
 
-		ApiResponse<GetCardsResponse> response3 = defaultApi.getCardsWithHttpInfo("invalid token");
-		context.assertNotNull(response3.getData());
-		context.assertEquals(response3.getStatusCode(), 200);
-		context.assertEquals(response3.getHeaders().get("ETag").get(0), response1.getVersion());
+		GetCardsResponse response3 = defaultApi.getCards("invalid token");
+		context.assertNotNull(response3);
+		context.assertEquals(response3.getVersion(), response1.getVersion());
 	}
 
 	public CreateAccountResponse createRandomAccount(TestContext testContext, DefaultApi defaultApi) {

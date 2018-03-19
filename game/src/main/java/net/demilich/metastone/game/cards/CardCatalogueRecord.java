@@ -1,24 +1,21 @@
 package net.demilich.metastone.game.cards;
 
-import io.vertx.core.json.Json;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * A record that stores a card's ID, JSON representation and {@link CardDesc}.
  */
 public class CardCatalogueRecord implements Serializable {
 	private String id;
-	private String json;
 	private transient JsonObject cachedJson;
 	private CardDesc desc;
 
-	public CardCatalogueRecord(String id, JsonObject json, CardDesc desc) {
+	public CardCatalogueRecord(String id, CardDesc desc) {
 		this.id = id;
-		this.json = json.encode();
 		this.desc = desc;
 	}
 
@@ -28,18 +25,6 @@ public class CardCatalogueRecord implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	@SuppressWarnings("unchecked")
-	public JsonObject getJson() {
-		if (cachedJson == null) {
-			cachedJson = new JsonObject(Json.decodeValue(json, Map.class)).put("id", id);
-		}
-		return cachedJson;
-	}
-
-	public void setJson(String json) {
-		this.json = json;
 	}
 
 	public CardDesc getDesc() {

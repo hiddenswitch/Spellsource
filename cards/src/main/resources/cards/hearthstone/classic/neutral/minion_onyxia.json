@@ -47,7 +47,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "Emperor Colossus"
+    "SPELLSOURCE_NAME": "Emperor Colossus"
   },
   "collectible": true,
   "set": "CLASSIC",

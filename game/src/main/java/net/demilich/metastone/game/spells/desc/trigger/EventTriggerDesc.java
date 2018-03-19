@@ -3,10 +3,13 @@ package net.demilich.metastone.game.spells.desc.trigger;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.EventTriggerDescDeserializer;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
+@JsonDeserialize(using = EventTriggerDescDeserializer.class)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public final class EventTriggerDesc extends Desc<EventTriggerArg, EventTrigger> {
 

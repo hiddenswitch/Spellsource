@@ -2,6 +2,8 @@ package net.demilich.metastone.game.spells.desc.trigger;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -35,7 +37,11 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
  * Note, this is distinct from an {@link EventTriggerDesc} or {@link net.demilich.metastone.game.spells.trigger.EventTrigger},
  * which defines how to react to which events in game.
  */
-public final class TriggerDesc implements Serializable, Cloneable {
+@JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
+public final class EnchantmentDesc implements Serializable, Cloneable {
+
+	public EnchantmentDesc() {
+	}
 
 	/**
 	 * The description of which "event trigger" (reacting to which event) this trigger will react to
@@ -101,14 +107,15 @@ public final class TriggerDesc implements Serializable, Cloneable {
 	 *
 	 * @return The enchantment
 	 */
+	@JsonIgnore
 	public Enchantment create() {
-		Enchantment trigger = new Enchantment(eventTrigger.create(), spell, oneTurn);
-		trigger.setMaxFires(maxFires);
-		trigger.setPersistentOwner(persistentOwner);
-		trigger.setKeepAfterTransform(keepAfterTransform);
-		trigger.setCountUntilCast(countUntilCast);
-		trigger.setCountByValue(countByValue);
-		return trigger;
+		Enchantment enchantment = new Enchantment(eventTrigger.create(), spell, oneTurn);
+		enchantment.setMaxFires(maxFires);
+		enchantment.setPersistentOwner(persistentOwner);
+		enchantment.setKeepAfterTransform(keepAfterTransform);
+		enchantment.setCountUntilCast(countUntilCast);
+		enchantment.setCountByValue(countByValue);
+		return enchantment;
 	}
 
 }

@@ -8,7 +8,7 @@
   "rarity": "FREE",
   "description": "",
   "attributes": {
-    "NAME": "Katana"
+    "SPELLSOURCE_NAME": "Katana"
   },
   "collectible": true,
   "set": "BASIC",
