@@ -31,7 +31,7 @@
   },
   "attributes": {
     "DESCRIPTION": "Stealth. Whenever this attacks and kills a minion, summon 2 Murlocs from your deck.",
-    "NAME": "Xiaolian, Blademaster",
+    "SPELLSOURCE_NAME": "Xiaolian, Blademaster",
     "STEALTH": true
   },
   "collectible": true,

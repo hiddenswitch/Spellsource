@@ -25,7 +25,7 @@
     ]
   },
   "attributes": {
-    "NAME": "Exploding Egg"
+    "SPELLSOURCE_NAME": "Exploding Egg"
   },
   "collectible": true,
   "set": "ONE_NIGHT_IN_KARAZHAN",

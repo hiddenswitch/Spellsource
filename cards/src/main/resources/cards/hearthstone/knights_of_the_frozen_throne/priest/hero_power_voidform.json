@@ -19,13 +19,13 @@
         "trigger": {
           "eventTrigger": {
             "class": "CardPlayedTrigger",
-            "maxFires": 1,
             "targetPlayer": "SELF"
           },
           "spell": {
             "class": "RefreshHeroPowerSpell",
             "targetPlayer": "SELF"
-          }
+          },
+          "maxFires": 1
         }
       }
     ]

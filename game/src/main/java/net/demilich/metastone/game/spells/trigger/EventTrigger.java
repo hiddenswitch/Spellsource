@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import com.google.gson.*;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
@@ -112,17 +111,5 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 			return false;
 		}
 		return true;
-	}
-
-	public static class Serializer implements JsonSerializer<EventTrigger>, JsonDeserializer<EventTrigger> {
-		@Override
-		public EventTrigger deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-			return new GameStartTrigger(context.deserialize(json.getAsJsonObject().getAsJsonObject("desc"), EventTriggerDesc.class));
-		}
-
-		@Override
-		public JsonElement serialize(EventTrigger src, Type typeOfSrc, JsonSerializationContext context) {
-			return context.serialize(src.desc);
-		}
 	}
 }

@@ -22,7 +22,7 @@
     }
   },
   "attributes": {
-    "NAME": "Challenger of Ancients"
+    "SPELLSOURCE_NAME": "Challenger of Ancients"
   },
   "collectible": true,
   "set": "BASIC",

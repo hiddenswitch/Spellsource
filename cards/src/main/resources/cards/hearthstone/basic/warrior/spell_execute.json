@@ -13,7 +13,7 @@
     }
   },
   "attributes": {
-    "NAME": "Death Note"
+    "SPELLSOURCE_NAME": "Death Note"
   },
   "collectible": true,
   "set": "BASIC",

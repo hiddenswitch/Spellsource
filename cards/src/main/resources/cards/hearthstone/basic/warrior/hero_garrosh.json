@@ -10,7 +10,7 @@
   "attributes": {
     "HP": 30,
     "MAX_HP": 30,
-    "NAME": "Agfen"
+    "SPELLSOURCE_NAME": "Agfen"
   },
   "collectible": false,
   "set": "BASIC",

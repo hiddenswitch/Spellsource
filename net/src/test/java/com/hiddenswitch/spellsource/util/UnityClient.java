@@ -11,6 +11,7 @@ import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import io.vertx.core.Handler;
+import io.vertx.core.json.Json;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.unit.TestContext;
@@ -44,9 +45,9 @@ public class UnityClient {
 	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
 		apiClient.setBasePath(basePath);
-		apiClient.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
-		apiClient.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
-		apiClient.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
+//		apiClient.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
+//		apiClient.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
+//		apiClient.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
 		api = new DefaultApi(apiClient);
 		this.context = context;
 		List<UnityClient> clients = context.get("clients");
@@ -155,7 +156,7 @@ public class UnityClient {
 		endpoint = new WebsocketClientEndpoint(url, loginToken);
 		endpoint.addMessageHandler(h -> {
 			logger.debug("play: Handing message for userId " + getUserId());
-			ServerToClientMessage message = apiClient.getJSON().deserialize(h, ServerToClientMessage.class);
+			ServerToClientMessage message = Json.decodeValue(h, ServerToClientMessage.class);
 
 			for (java.util.function.Consumer<ServerToClientMessage> handler : handlers) {
 				if (handler != null) {
@@ -274,7 +275,7 @@ public class UnityClient {
 	}
 
 	private String serialize(Object obj) {
-		return apiClient.getJSON().serialize(obj);
+		return Json.encode(obj);
 	}
 
 	public ApiClient getApiClient() {

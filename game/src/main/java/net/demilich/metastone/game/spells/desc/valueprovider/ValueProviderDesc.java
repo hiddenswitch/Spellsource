@@ -1,12 +1,14 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.ValueProviderDescDeserializer;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.Map;
 
+@JsonDeserialize(using = ValueProviderDescDeserializer.class)
 public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 
 	public ValueProviderDesc() {

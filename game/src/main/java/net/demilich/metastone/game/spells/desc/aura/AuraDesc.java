@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.spells.desc.aura;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import net.demilich.metastone.game.cards.desc.AuraDescDeserializer;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.utils.Attribute;
@@ -13,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.Map;
 
+@JsonDeserialize(using = AuraDescDeserializer.class)
 public class AuraDesc extends Desc<AuraArg, Aura> {
 
 	public AuraDesc() {

@@ -4,28 +4,37 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'gradle.plugin.org.detoeuf:swagger-codegen-plugin:1.6.3'
+        classpath('io.swagger:swagger-codegen:2.3.1')
     }
 }
 
-apply plugin: 'org.detoeuf.swagger-codegen'
+import io.swagger.codegen.config.CodegenConfigurator
+import io.swagger.codegen.DefaultGenerator
 
-swagger {
-    inputSpec = 'swagger-api.yaml'
-
-    output = 'client'
-    language = 'java'
-
-    additionalProperties = [
-            'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
-            'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
-            'apiPackage'             : 'com.hiddenswitch.spellsource.client.api',
-            'library'                : 'okhttp-gson',
-            'serializableModel'      : 'true',
-            'dateLibrary'            : 'java8',
-            'artifactId'             : 'client',
-            'hideGenerationTimestamp': 'true'
-    ]
+task(swagger) {
+    def input = "swagger-api.yaml"
+    inputs.file(input)
+    def output = file('client')
+    outputs.dir(output)
+    doLast {
+        def config = new CodegenConfigurator()
+        config.setInputSpec(input)
+        config.setOutputDir(output.path)
+        config.setLang('java')
+        config.setAdditionalProperties([
+                'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
+                'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
+                'apiPackage'             : 'com.hiddenswitch.spellsource.client.api',
+                'library'                : 'jersey1',
+                'serializableModel'      : 'true',
+                'dateLibrary'            : 'java8',
+                'artifactId'             : 'client',
+                'hideGenerationTimestamp': 'true'
+        ])
+        config.setGroupId('com.hiddenswitch')
+        config.setArtifactId('spellsource-client')
+        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+    }
 }
 
 subprojects {

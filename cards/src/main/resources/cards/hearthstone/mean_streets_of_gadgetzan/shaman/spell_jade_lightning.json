@@ -49,7 +49,7 @@
     ]
   },
   "attributes": {
-    "NAME": "Cursed Shuriken"
+    "SPELLSOURCE_NAME": "Cursed Shuriken"
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

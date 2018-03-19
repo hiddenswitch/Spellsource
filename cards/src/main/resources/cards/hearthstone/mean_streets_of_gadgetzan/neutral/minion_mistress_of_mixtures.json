@@ -24,7 +24,7 @@
   },
   "attributes": {
     "DEATHRATTLES": true,
-    "NAME": "Sanctuary Nurse"
+    "SPELLSOURCE_NAME": "Sanctuary Nurse"
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

@@ -17,7 +17,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "Sulphur Golem"
+    "SPELLSOURCE_NAME": "Sulphur Golem"
   },
   "collectible": true,
   "set": "BASIC",

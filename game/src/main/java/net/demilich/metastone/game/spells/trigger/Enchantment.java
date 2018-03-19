@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.gson.annotations.Expose;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.HasValue;
@@ -23,7 +22,6 @@ public class Enchantment extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
 	private EventTrigger primaryTrigger;
 	private EventTrigger secondaryTrigger;
-	@Expose(serialize = false, deserialize = false)
 	private SpellDesc spell;
 	private EntityReference hostReference;
 	private final boolean oneTurn;

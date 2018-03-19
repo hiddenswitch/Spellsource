@@ -43,7 +43,7 @@ public enum Attribute {
 	MAX_HP,
 	/**
 	 * The current armor belonging to the {@link Actor}, or the additional armor gained by playing the specified {@link
-	 * net.demilich.metastone.game.cards.HeroCard}.
+	 * net.demilich.metastone.game.cards.Card}.
 	 */
 	ARMOR,
 	/**
@@ -73,7 +73,7 @@ public enum Attribute {
 	AURA_IMMUNE,
 	/**
 	 * When set, the card behaves as though it were actually a copy of the card of the specified ID.
-	 *
+	 * <p>
 	 * This is distinct from transformation effects.
 	 */
 	AURA_CARD_ID,
@@ -272,8 +272,7 @@ public enum Attribute {
 	 */
 	STEALTH,
 	/**
-	 * A {@link net.demilich.metastone.game.cards.Card} has this attribute to help spells find secrets in the
-	 * deck.
+	 * A {@link net.demilich.metastone.game.cards.Card} has this attribute to help spells find secrets in the deck.
 	 * <p>
 	 * Cards marked secret should not be revealed to the opponent.
 	 */
@@ -341,8 +340,8 @@ public enum Attribute {
 	 */
 	AURA_UNTARGETABLE_BY_SPELLS,
 	/**
-	 * When a {@link net.demilich.metastone.game.cards.Card} that casts a {@link
-	 * net.demilich.metastone.game.spells.DamageSpell} has this attribute, its bonus from spell damage is doubled.
+	 * When a {@link net.demilich.metastone.game.cards.Card} that casts a {@link net.demilich.metastone.game.spells.DamageSpell}
+	 * has this attribute, its bonus from spell damage is doubled.
 	 *
 	 * @see GameLogic#applySpellpower(Player, Entity, int) for an entity's spellpower contribution.
 	 */
@@ -640,8 +639,8 @@ public enum Attribute {
 	POISONOUS,
 	/**
 	 * A shorthand implementation of the Lifesteal keyword. Indicates that the {@link Hero} of the owner of the {@link
-	 * Minion}, {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} or {@link
-	 * net.demilich.metastone.game.cards.Card} should be healed by the amount of damage dealt by that minion.
+	 * Minion}, or {@link net.demilich.metastone.game.cards.Card} should be healed by the amount of damage dealt by that
+	 * minion.
 	 */
 	LIFESTEAL,
 	/**
@@ -667,6 +666,30 @@ public enum Attribute {
 	 * Overrides the description of the {@link Entity}
 	 */
 	DESCRIPTION,
+	/**
+	 * Indicates the name in Spellsource for the specified card.
+	 */
+	SPELLSOURCE_NAME,
+	/**
+	 * Returns the {@link Card}'s {@link net.demilich.metastone.game.cards.desc.CardDesc#manaCostModifier} field.
+	 */
+	MANA_COST_MODIFIER,
+	/**
+	 * Indicates the number of uses of a hero power.
+	 */
+	USED_THIS_TURN,
+	/**
+	 * Returns the {@link Card}'s {@link net.demilich.metastone.game.cards.desc.CardDesc#heroClass} field.
+	 */
+	HERO_CLASS,
+	/**
+	 * Returns the {@link Card}'s {@link net.demilich.metastone.game.cards.desc.CardDesc#targetSelection} field.
+	 */
+	TARGET_SELECTION,
+	/**
+	 * When set, overrides the card's identity and makes it behave like a different card in all its base effects.
+	 */
+	CARD_ID,
 	/**
 	 * Indicates how many extra turns the player has.
 	 * <p>
@@ -734,7 +757,7 @@ public enum Attribute {
 	RESERVED_BOOLEAN_1,
 	RESERVED_BOOLEAN_2,
 	RESERVED_BOOLEAN_3,
-	RESERVED_BOOLEAN_4, MANA_COST_MODIFIER, USED_THIS_TURN, HERO_CLASS, TARGET_SELECTION, CARD_ID;
+	RESERVED_BOOLEAN_4;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

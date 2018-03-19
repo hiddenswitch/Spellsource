@@ -11,7 +11,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 public class HighestAttributeFilter extends EntityFilter {
 
-	public HighestAttributeFilter(FilterDesc desc) {
+	public HighestAttributeFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

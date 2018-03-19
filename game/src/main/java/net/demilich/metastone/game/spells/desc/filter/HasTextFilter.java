@@ -6,7 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class HasTextFilter extends EntityFilter {
 
-	public HasTextFilter(FilterDesc desc) {
+	public HasTextFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

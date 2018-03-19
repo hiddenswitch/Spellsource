@@ -3,7 +3,7 @@ package net.demilich.metastone.game.entities;
 import java.io.Serializable;
 
 import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.utils.Attribute;
@@ -50,7 +50,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	public static final int NO_OWNER = -1;
 
 	protected String name;
-	protected AttributeMap attributes = new AttributeMap();
+	protected AttributeMap attributes;
 	/**
 	 * @see #getId()
 	 */
@@ -66,6 +66,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 
 	protected Entity() {
 		super();
+		attributes = new AttributeMap();
 	}
 
 	/**
@@ -446,7 +447,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	/**
 	 * Gets the possibly modified description of the entity to render to the end user.
 	 *
-	 * @return The {@link #getSourceCard()}'s {@link Card#description} field, or the value specified in {@link
+	 * @return The {@link #getSourceCard()}'s {@link Card#getDescription()} field, or the value specified in {@link
 	 * Attribute#DESCRIPTION}.
 	 */
 	public String getDescription() {
@@ -473,8 +474,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The entity's defined game triggers
 	 * @see GameLogic#processGameTriggers(Player, Entity) for the place to activate these triggers.
 	 */
-	public TriggerDesc[] getGameTriggers() {
-		return (TriggerDesc[]) getAttributes().getOrDefault(Attribute.GAME_TRIGGERS, new TriggerDesc[0]);
+	public EnchantmentDesc[] getGameTriggers() {
+		return (EnchantmentDesc[]) getAttributes().getOrDefault(Attribute.GAME_TRIGGERS, new EnchantmentDesc[0]);
 	}
 
 	@Override

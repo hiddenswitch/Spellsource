@@ -18,6 +18,7 @@ import io.vertx.ext.mongo.*;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
@@ -76,7 +77,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 				.queryCards(new QueryCardsRequest()
 						.withRequests(commons, allianceRares));
 
-		List<String> ids = createCardsForUser(request.getUserId(), response.getRecords().stream().map(CardCatalogueRecord::getJson).collect(toList()));
+		List<String> ids = createCardsForUser(request.getUserId(), response.getRecords().stream().map(CardCatalogueRecord::getDesc).collect(toList()));
 		return new OpenCardPackResponse(ids);
 	}
 
@@ -98,7 +99,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 				if (request.getQueryCardsRequest() != null) {
 					int copies = request.getCopies();
 					final QueryCardsResponse cardsResponse = cards.sync().queryCards(request.getQueryCardsRequest());
-					List<JsonObject> cardsToAdd = cardsResponse.getRecords().stream().map(CardCatalogueRecord::getJson).collect(toList());
+					List<CardDesc> cardsToAdd = cardsResponse.getRecords().stream().map(CardCatalogueRecord::getDesc).collect(toList());
 					newInventoryIds.addAll(createCardsForUser(userId, cardsToAdd, copies));
 				}
 				if (request.getCardIds() != null
@@ -137,7 +138,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 		}
 	}
 
-	protected List<String> createCardsForUser(final String userId, final List<JsonObject> cardsToAdd, int copies) throws InterruptedException, SuspendExecution {
+	protected List<String> createCardsForUser(final String userId, final List<CardDesc> cardsToAdd, int copies) throws InterruptedException, SuspendExecution {
 		if (userId == null) {
 			throw new NullPointerException();
 		}
@@ -146,7 +147,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 		List<JsonObject> documents = Collections.nCopies(copies, cardsToAdd)
 				.stream()
 				.flatMap(Collection::stream)
-				.map(card -> new InventoryRecord(RandomStringUtils.randomAlphanumeric(36), card)
+				.map(card -> new InventoryRecord(RandomStringUtils.randomAlphanumeric(36), new JsonObject().put("id", card.id))
 						.withUserId(userId)
 						.withCollectionIds(userIdCollection))
 				.map(QuickJson::toJson)
@@ -157,13 +158,14 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 		return documents.stream().map(o -> o.getString("_id")).collect(toList());
 	}
 
-	protected List<String> createCardsForUser(final String userId, final List<JsonObject> cardsToAdd) throws InterruptedException, SuspendExecution {
+	protected List<String> createCardsForUser(final String userId, final List<CardDesc> cardsToAdd) throws InterruptedException, SuspendExecution {
 		return createCardsForUser(userId, cardsToAdd, 1);
 	}
 
 	protected List<String> createCardsForUser(final List<String> cardIds, final String userId, int copies) throws InterruptedException, SuspendExecution {
 		return createCardsForUser(userId,
-				cards.sync().queryCards(new QueryCardsRequest().withCardIds(cardIds)).getRecords().stream().map(CardCatalogueRecord::getJson).collect(toList()), copies);
+				cards.sync().queryCards(new QueryCardsRequest().withCardIds(cardIds))
+						.getRecords().stream().map(CardCatalogueRecord::getDesc).collect(toList()), copies);
 	}
 
 	protected List<String> createCardsForUser(final List<String> cardIds, final String userId) throws InterruptedException, SuspendExecution {
@@ -348,7 +350,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 			deckIds.forEach(deckId -> {
 				CollectionRecord record = deckRecords.get(deckId);
-				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat() , record.getDeckType(), deckInventories.get(deckId), record.isTrashed()));
+				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed()));
 			});
 
 			return GetCollectionResponse.batch(responses);
@@ -377,7 +379,7 @@ public class InventoryImpl extends AbstractService<InventoryImpl> implements Inv
 
 		if (type == CollectionTypes.DECK) {
 			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat() , deck.getDeckType(), inventoryRecords, deck.isTrashed());
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(request.getUserId(), inventoryRecords);
 		} /*  else {

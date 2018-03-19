@@ -5,13 +5,12 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class SameHeroClassFilter extends EntityFilter {
 
-	public SameHeroClassFilter(FilterDesc desc) {
+	public SameHeroClassFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

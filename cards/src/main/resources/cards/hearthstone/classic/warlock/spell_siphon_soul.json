@@ -20,7 +20,7 @@
     ]
   },
   "attributes": {
-    "NAME": "Lava Cleanse"
+    "SPELLSOURCE_NAME": "Lava Cleanse"
   },
   "collectible": true,
   "set": "CLASSIC",

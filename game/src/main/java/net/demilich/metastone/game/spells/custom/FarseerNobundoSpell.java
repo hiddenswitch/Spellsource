@@ -15,7 +15,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.BeforeMinionSummonedTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -34,7 +34,7 @@ public class FarseerNobundoSpell extends Spell {
 		existingTotems.put(SpellArg.FILTER, CardFilter.create(CardType.MINION, Race.TOTEM));
 		existingTotems.put(SpellArg.TARGET, EntityReference.OTHER_FRIENDLY_MINIONS);
 
-		TriggerDesc trigger = new TriggerDesc();
+		EnchantmentDesc trigger = new EnchantmentDesc();
 		trigger.eventTrigger = new EventTriggerDesc(BeforeMinionSummonedTrigger.class);
 		trigger.eventTrigger.put(EventTriggerArg.TARGET_PLAYER, TargetPlayer.SELF);
 		trigger.eventTrigger.put(EventTriggerArg.RACE, Race.TOTEM);

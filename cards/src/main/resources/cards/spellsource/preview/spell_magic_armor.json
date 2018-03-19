@@ -10,20 +10,19 @@
   "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
-    "eventTrigger": {
-      "class": "PreDamageTrigger",
-      "sourcePlayer": "BOTH",
-      "targetEntityType": "HERO",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "ModifyDamageSpell",
-      "value": 1,
-      "operation": "SET"
-    },
-    "revertTrigger": {
-      "class": "TurnStartTrigger",
-      "targetPlayer": "SELF"
+    "trigger": {
+      "eventTrigger": {
+        "class": "PreDamageTrigger",
+        "sourcePlayer": "BOTH",
+        "targetEntityType": "HERO",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ModifyDamageSpell",
+        "value": 1,
+        "operation": "SET"
+      },
+      "oneTurn": true
     }
   },
   "collectible": false,

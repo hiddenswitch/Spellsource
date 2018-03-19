@@ -2,6 +2,8 @@ package net.demilich.metastone.game.spells.desc;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.entities.Actor;
@@ -66,7 +68,8 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  * @see net.demilich.metastone.game.logic.GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) to see
  * how the battlecry action is processed.
  */
-public class BattlecryDesc implements Serializable {
+@JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
+public final class BattlecryDesc implements Serializable {
 	/**
 	 * The spell to cast when this battlecry's {@link #condition} is true (or always cast if no condition is specified
 	 * and a valid target is available).
@@ -112,6 +115,7 @@ public class BattlecryDesc implements Serializable {
 		return targetSelection != null ? targetSelection : TargetSelection.NONE;
 	}
 
+	@JsonIgnore
 	public BattlecryAction toBattlecryAction() {
 		return BattlecryAction.createBattlecry(spell, getTargetSelection());
 	}

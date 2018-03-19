@@ -9,7 +9,7 @@
   "description": "Taunt. Divine Shield",
   "attributes": {
     "DIVINE_SHIELD": true,
-    "NAME": "Fassnu Samurai",
+    "SPELLSOURCE_NAME": "Fassnu Samurai",
     "TAUNT": true
   },
   "collectible": true,

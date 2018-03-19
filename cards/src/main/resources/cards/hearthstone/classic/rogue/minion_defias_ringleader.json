@@ -19,7 +19,7 @@
   },
   "attributes": {
     "COMBO": true,
-    "NAME": "Fox Vixen"
+    "SPELLSOURCE_NAME": "Fox Vixen"
   },
   "collectible": true,
   "set": "CLASSIC",

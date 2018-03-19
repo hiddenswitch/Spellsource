@@ -155,6 +155,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	private GameStatus result;
 	private TurnState turnState = TurnState.TURN_ENDED;
 	private boolean disposed = false;
+	// Note: startTurn is called at least once, so the reported turn will always start counting at 1
 	private int turn;
 	private int actionsThisTurn;
 	private boolean ignoreEvents;

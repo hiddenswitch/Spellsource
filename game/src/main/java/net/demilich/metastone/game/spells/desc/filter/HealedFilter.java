@@ -6,7 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 
 public class HealedFilter extends EntityFilter {
-	public HealedFilter(FilterDesc desc) {
+	public HealedFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

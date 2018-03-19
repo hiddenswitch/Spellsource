@@ -15,13 +15,13 @@ import java.util.function.Predicate;
  * Filters {@link Entity} objects using its {@link #test(GameContext, Player, Entity, Entity)} implementation.
  */
 public abstract class EntityFilter implements Serializable {
-	protected final FilterDesc desc;
+	protected final EntityFilterDesc desc;
 
-	public FilterDesc getDesc() {
+	public EntityFilterDesc getDesc() {
 		return desc;
 	}
 
-	public EntityFilter(FilterDesc desc) {
+	public EntityFilter(EntityFilterDesc desc) {
 		this.desc = desc;
 	}
 

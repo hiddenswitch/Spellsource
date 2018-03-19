@@ -10,7 +10,7 @@
   "attributes": {
     "HP": 30,
     "MAX_HP": 30,
-    "NAME": "Lir"
+    "SPELLSOURCE_NAME": "Lir"
   },
   "collectible": false,
   "set": "BASIC",

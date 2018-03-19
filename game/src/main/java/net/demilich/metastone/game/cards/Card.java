@@ -1,6 +1,10 @@
 package net.demilich.metastone.game.cards;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.JsonSerializable;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.entities.Actor;
@@ -30,7 +34,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -61,10 +65,9 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	private CardDesc desc;
 	private List<SpellDesc> deathrattleEnchantments = new ArrayList<>();
-	private CardAttributes cardAttributes = new CardAttributes(this);
 
 	protected Card() {
-		super();
+		attributes = new CardAttributes(this);
 	}
 
 	/**
@@ -73,7 +76,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @param desc The Card description.
 	 */
 	public Card(CardDesc desc) {
-		super();
+		this();
 		// Save a reference to the description for later use.
 		setDesc(desc);
 	}
@@ -86,7 +89,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		Minion minion = new Minion(this);
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (!ignoredAttributes.contains(gameTag)) {
-				minion.setAttribute(gameTag, getAttribute(gameTag));
+				minion.getAttributes().put(gameTag, getAttributes().get(gameTag));
 			}
 		}
 
@@ -107,7 +110,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		Hero hero = new Hero(this, heroPower);
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (inheritedAttributes.contains(gameTag)) {
-				hero.setAttribute(gameTag, getAttribute(gameTag));
+				hero.getAttributes().put(gameTag, getAttributes().get(gameTag));
 			}
 		}
 
@@ -126,8 +129,8 @@ public class Card extends Entity implements HasChooseOneActions {
 	@Override
 	public Card clone() {
 		Card clone = (Card) super.clone();
-		clone.cardAttributes = this.cardAttributes.clone();
-		clone.cardAttributes.setCard(clone);
+		clone.attributes = this.attributes.clone();
+		clone.getAttributes().setCard(clone);
 		clone.setDesc(this.getDesc());
 		clone.deathrattleEnchantments = new ArrayList<>();
 		deathrattleEnchantments.forEach(de -> clone.deathrattleEnchantments.add(de.clone()));
@@ -149,7 +152,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return The card ID as set by an aura, a permanent effect or in the description.
 	 */
 	public String getCardId() {
-		String cardId = cardAttributes.getOverrideCardId();
+		String cardId = getAttributes().getOverrideCardId();
 		if (cardId == null) {
 			return desc.id;
 		} else {
@@ -379,11 +382,11 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return A {@link CardDesc}
 	 */
 	public CardDesc getDesc() {
-		if (cardAttributes.getOverrideCardId() == null){
+		if (getAttributes().getOverrideCardId() == null) {
 			return desc;
 		}
 		// Prevents copying here
-		return CardCatalogue.getRecords().get(cardAttributes.getOverrideCardId()).getDesc();
+		return CardCatalogue.getRecords().get(getAttributes().getOverrideCardId()).getDesc();
 	}
 
 	@Override
@@ -391,8 +394,8 @@ public class Card extends Entity implements HasChooseOneActions {
 		return this;
 	}
 
-	public TriggerDesc[] getPassiveTriggers() {
-		return (TriggerDesc[]) getAttribute(Attribute.PASSIVE_TRIGGERS);
+	public EnchantmentDesc[] getPassiveTriggers() {
+		return (EnchantmentDesc[]) getAttribute(Attribute.PASSIVE_TRIGGERS);
 	}
 
 	@Override
@@ -403,14 +406,14 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Returns the triggers that are active when the card is in the deck.
 	 *
-	 * @return A list of {@link TriggerDesc} objects.
+	 * @return A list of {@link EnchantmentDesc} objects.
 	 */
-	public TriggerDesc[] getDeckTriggers() {
-		final TriggerDesc triggerDesc = (TriggerDesc) getAttribute(Attribute.DECK_TRIGGER);
-		if (triggerDesc == null) {
-			return new TriggerDesc[0];
+	public EnchantmentDesc[] getDeckTriggers() {
+		final EnchantmentDesc enchantmentDesc = (EnchantmentDesc) getAttribute(Attribute.DECK_TRIGGER);
+		if (enchantmentDesc == null) {
+			return new EnchantmentDesc[0];
 		}
-		return new TriggerDesc[]{triggerDesc};
+		return new EnchantmentDesc[]{enchantmentDesc};
 	}
 
 	public void setDesc(CardDesc desc) {
@@ -537,7 +540,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		// assign battlecry if there is one specified
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (!ignoredAttributes.contains(gameTag)) {
-				weapon.setAttribute(gameTag, getAttribute(gameTag));
+				weapon.getAttributes().put(gameTag, getAttributes().get(gameTag));
 			}
 		}
 		weapon.setAttack(getDamage());
@@ -667,7 +670,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		}
 
 		if (getDesc().triggers != null) {
-			for (TriggerDesc trigger : getDesc().triggers) {
+			for (EnchantmentDesc trigger : getDesc().triggers) {
 				instance.addEnchantment(trigger.create());
 			}
 		}
@@ -834,13 +837,13 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	@Override
-	public AttributeMap getAttributes() {
-		return cardAttributes;
+	public CardAttributes getAttributes() {
+		return (CardAttributes) attributes;
 	}
 
 	@Override
 	public void setAttributes(AttributeMap attributes) {
-		cardAttributes.clear();
-		cardAttributes.putAll(attributes);
+		this.attributes.clear();
+		this.attributes.putAll(attributes);
 	}
 }

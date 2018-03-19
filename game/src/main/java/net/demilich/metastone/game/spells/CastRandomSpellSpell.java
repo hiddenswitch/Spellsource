@@ -31,7 +31,7 @@ public class CastRandomSpellSpell extends Spell {
 		CardList spells = desc.getFilteredCards(context, player, source);
 		TargetPlayer castingTargetPlayer = desc.getTargetPlayer() == null ? TargetPlayer.OWNER : desc.getTargetPlayer();
 
-		player.setAttribute(Attribute.RANDOM_CHOICES, true);
+		player.setAttribute(Attribute.RANDOM_CHOICES);
 
 		int numberOfSpellsToCast = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < numberOfSpellsToCast; i++) {

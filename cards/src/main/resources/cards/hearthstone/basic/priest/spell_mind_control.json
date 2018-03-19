@@ -10,7 +10,7 @@
     "class": "MindControlSpell"
   },
   "attributes": {
-    "NAME": "Will of the Emperor"
+    "SPELLSOURCE_NAME": "Will of the Emperor"
   },
   "collectible": true,
   "set": "BASIC",

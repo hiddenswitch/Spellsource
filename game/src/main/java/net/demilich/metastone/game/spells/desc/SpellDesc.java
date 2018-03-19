@@ -1,12 +1,13 @@
 package net.demilich.metastone.game.spells.desc;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.SpellDescDeserializer;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
@@ -68,9 +69,10 @@ import static java.util.stream.Collectors.toList;
  * Deathrattles are resolved whenever an actor is destroyed before an {@link GameLogic#endOfSequence()} occurs, which is
  * generally at the end of any action besides discovering.
  *
- * @see net.demilich.metastone.game.cards.desc.SpellDescSerializer for the official interpretation of each of the
+ * @see SpellDescDeserializer for the official interpretation of each of the
  * attributes (how they are converted from JSON to a concrete value in the game).
  */
+@JsonDeserialize(using = SpellDescDeserializer.class)
 public class SpellDesc extends Desc<SpellArg, Spell> {
 
 	public SpellDesc() {
@@ -166,7 +168,7 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 		} else {
 			spells = Stream.empty();
 		}
-		List<SpellDesc> units = Stream.of(SpellArg.SPELL, SpellArg.SPELL_1, SpellArg.SPELL_2)
+		List<SpellDesc> units = Stream.of(SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2)
 				.map(this::get)
 				.filter(Objects::nonNull)
 				.map(o -> (SpellDesc) o).collect(toList());

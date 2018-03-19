@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "race": "Beast",
+  "race": "BEAST",
   "description": "Battlecry: Discard a Banana to restore 6 Health to your hero.",
   "battlecry": {
     "condition": {

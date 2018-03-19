@@ -36,7 +36,7 @@
     }
   },
   "attributes": {
-    "NAME": "Fassnu Ronin"
+    "SPELLSOURCE_NAME": "Fassnu Ronin"
   },
   "collectible": true,
   "set": "CLASSIC",

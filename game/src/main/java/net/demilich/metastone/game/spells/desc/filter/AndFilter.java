@@ -9,16 +9,16 @@ import java.util.Map;
 public class AndFilter extends EntityFilter {
 
 	public static AndFilter create() {
-		return new AndFilter(new FilterDesc(AndFilter.class));
+		return new AndFilter(new EntityFilterDesc(AndFilter.class));
 	}
 
 	public static AndFilter create(EntityFilter... filters) {
-		Map<FilterArg, Object> arguments = new FilterDesc(AndFilter.class);
+		Map<FilterArg, Object> arguments = new EntityFilterDesc(AndFilter.class);
 		arguments.put(FilterArg.FILTERS, filters);
-		return new AndFilter(new FilterDesc(arguments));
+		return new AndFilter(new EntityFilterDesc(arguments));
 	}
 
-	public AndFilter(FilterDesc desc) {
+	public AndFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

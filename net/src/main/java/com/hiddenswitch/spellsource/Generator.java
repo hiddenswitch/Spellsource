@@ -10,7 +10,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.ClassUtils;
 
@@ -102,9 +102,9 @@ public class Generator {
 		}
 
 		// TODO: Put together the battlecry, deathrattle, aura and trigger stuff
-		List<TriggerDesc> triggerDescs = new ArrayList<>();
+		List<EnchantmentDesc> enchantmentDescs = new ArrayList<>();
 		if (cardDesc.battlecry != null) {
-			TriggerDesc battlecryTrigger = new TriggerDesc();
+			EnchantmentDesc battlecryTrigger = new EnchantmentDesc();
 			battlecryTrigger.oneTurn = true;
 			Map<EventTriggerArg, Object> args = new HashMap<>();
 			args.put(EventTriggerArg.CLASS, BATTLECRY);
@@ -119,35 +119,35 @@ public class Generator {
 				battlecryTrigger.spell = cardDesc.battlecry.spell;
 			}
 			battlecryTrigger.spell.put(SpellArg.TARGET_SELECTION, cardDesc.battlecry.getTargetSelection());
-			triggerDescs.add(battlecryTrigger);
+			enchantmentDescs.add(battlecryTrigger);
 		}
 
 		if (cardDesc.deathrattle != null) {
-			TriggerDesc deathrattleTrigger = new TriggerDesc();
+			EnchantmentDesc deathrattleTrigger = new EnchantmentDesc();
 			deathrattleTrigger.oneTurn = true;
 			Map<EventTriggerArg, Object> args = new HashMap<>();
 			args.put(EventTriggerArg.CLASS, DEATHRATTLE);
 			deathrattleTrigger.spell = cardDesc.deathrattle;
-			triggerDescs.add(deathrattleTrigger);
+			enchantmentDescs.add(deathrattleTrigger);
 		}
 
 		if (cardDesc.trigger != null) {
-			triggerDescs.add(cardDesc.trigger);
+			enchantmentDescs.add(cardDesc.trigger);
 		}
 
 		if (cardDesc.triggers != null) {
-			triggerDescs.addAll(Arrays.asList(cardDesc.triggers));
+			enchantmentDescs.addAll(Arrays.asList(cardDesc.triggers));
 		}
 
-		record.args.put("SUB_TRIGGER_COUNT", triggerDescs.size());
+		record.args.put("SUB_TRIGGER_COUNT", enchantmentDescs.size());
 		record.args.put("SUB_TRIGGER_RANK", rank + 1);
 
-		if (triggerDescs.size() == 0) {
-			record.args.put(SpellArg.SUMMON_TRIGGERS.toString(), triggerDescs);
+		if (enchantmentDescs.size() == 0) {
+			record.args.put(SpellArg.SUMMON_TRIGGERS.toString(), enchantmentDescs);
 		}
 
 		return Stream.concat(Stream.of(record),
-				triggerDescs.stream().flatMap(t -> toRecords(t, record, rank + 1, terminal)));
+				enchantmentDescs.stream().flatMap(t -> toRecords(t, record, rank + 1, terminal)));
 	}
 
 	private Stream<Record> toRecords(final SpellDesc spellDesc, final Record record, final int rank, final boolean terminal) {
@@ -192,7 +192,7 @@ public class Generator {
 
 
 		// Get all the subspells
-		SpellArg[] subSpellArgs = {SpellArg.SPELL, SpellArg.SPELL_1, SpellArg.SPELL_2};
+		SpellArg[] subSpellArgs = {SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2};
 		Stream<Record> subSpells = Stream.of(subSpellArgs)
 				.filter(spellDesc::containsKey)
 				.flatMap(arg -> toRecords((SpellDesc) spellDesc.get(arg), spellRecord, rank + 1, terminal));
@@ -258,8 +258,8 @@ public class Generator {
 		}
 	}
 
-	private Stream<Record> toRecords(TriggerDesc triggerDesc, Record record, int rank, boolean terminal) {
+	private Stream<Record> toRecords(EnchantmentDesc enchantmentDesc, Record record, int rank, boolean terminal) {
 		// TODO: For now, just emit the spells
-		return toRecords(triggerDesc.spell, record, rank, terminal);
+		return toRecords(enchantmentDesc.spell, record, rank, terminal);
 	}
 }

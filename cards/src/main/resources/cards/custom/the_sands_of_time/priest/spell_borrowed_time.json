@@ -45,13 +45,13 @@
               },
               "operation": "SUBTRACT"
             }
-          }
-        },
-        "maxFires": 1
+          },
+          "maxFires": 1
+        }
       }
     ]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "SANDS_OF_TIME",
   "fileFormatVersion": 1
 }

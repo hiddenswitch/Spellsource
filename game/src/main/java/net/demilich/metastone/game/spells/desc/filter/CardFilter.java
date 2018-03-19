@@ -13,11 +13,10 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.SpellUtils;
 
 import java.util.List;
-import java.util.Map;
 
 public class CardFilter extends EntityFilter {
 
-	public CardFilter(FilterDesc desc) {
+	public CardFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 
@@ -121,7 +120,7 @@ public class CardFilter extends EntityFilter {
 	}
 
 	public static CardFilter create(CardType cardType, Race race) {
-		FilterDesc arguments = new FilterDesc(CardFilter.class);
+		EntityFilterDesc arguments = new EntityFilterDesc(CardFilter.class);
 		if (cardType != null) {
 			arguments.put(FilterArg.CARD_TYPE, cardType);
 		}

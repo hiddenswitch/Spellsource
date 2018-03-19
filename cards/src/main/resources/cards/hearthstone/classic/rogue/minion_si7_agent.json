@@ -19,7 +19,7 @@
   },
   "attributes": {
     "COMBO": true,
-    "NAME": "Bakeneko Assassin"
+    "SPELLSOURCE_NAME": "Bakeneko Assassin"
   },
   "collectible": true,
   "set": "CLASSIC",

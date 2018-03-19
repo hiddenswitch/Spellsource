@@ -24,7 +24,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.SpellFactory;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.FilterArg;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.DamageCausedTrigger;
 import net.demilich.metastone.game.spells.trigger.DamageReceivedTrigger;
 import net.demilich.metastone.game.spells.trigger.HealingTrigger;
@@ -420,13 +420,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * requires targets has possible targets in the game.
 	 *
 	 * @param playerId        The player whose point of view should be considered for this method.
-	 * @param EntityReference A reference to the card.
+	 * @param entityReference A reference to the card.
 	 * @return {@code true} if the card can be played.
 	 */
 	@Suspendable
-	public boolean canPlayCard(int playerId, EntityReference EntityReference) {
+	public boolean canPlayCard(int playerId, EntityReference entityReference) {
 		Player player = context.getPlayer(playerId);
-		Card card = (Card) context.resolveSingleTarget(EntityReference);
+		Card card = (Card) context.resolveSingleTarget(entityReference);
 		// A player cannot play a card the player does not own.
 		if (card.getOwner() != player.getId()
 				&& card.getOwner() != Entity.NO_OWNER) {
@@ -2609,8 +2609,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void processPassiveTriggers(Player player, Card card) {
 		if (card.getPassiveTriggers() != null
 				&& card.getPassiveTriggers().length > 0) {
-			for (TriggerDesc triggerDesc : card.getPassiveTriggers()) {
-				processTriggerDesc(player, card, triggerDesc);
+			for (EnchantmentDesc enchantmentDesc : card.getPassiveTriggers()) {
+				processTriggerDesc(player, card, enchantmentDesc);
 			}
 		}
 	}
@@ -2619,25 +2619,25 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void processGameTriggers(Player player, Entity entity) {
 		if (entity.getGameTriggers() != null
 				&& entity.getGameTriggers().length > 0) {
-			for (TriggerDesc triggerDesc : entity.getGameTriggers()) {
-				processTriggerDesc(player, entity, triggerDesc);
+			for (EnchantmentDesc enchantmentDesc : entity.getGameTriggers()) {
+				processTriggerDesc(player, entity, enchantmentDesc);
 			}
 		}
 	}
 
 	@Suspendable
-	protected void processTriggerDesc(Player player, Entity entity, TriggerDesc triggerDesc) {
+	protected void processTriggerDesc(Player player, Entity entity, EnchantmentDesc enchantmentDesc) {
 		Stream<Enchantment> existingTriggers = context.getTriggersAssociatedWith(entity.getReference())
 				.stream()
 				.filter(t -> Enchantment.class.isAssignableFrom(t.getClass()))
 				.map(t -> (Enchantment) t);
 
 		if (existingTriggers.anyMatch(t -> t.getSourceCard().getCardId().equals(entity.getSourceCard() != null ? entity.getSourceCard().getCardId() : null)
-				&& t.getSpell().getDescClass().equals(triggerDesc.spell.getDescClass()))) {
+				&& t.getSpell().getDescClass().equals(enchantmentDesc.spell.getDescClass()))) {
 			return;
 		}
 
-		Enchantment enchantment = triggerDesc.create();
+		Enchantment enchantment = enchantmentDesc.create();
 		enchantment.setSourceCard(entity.getSourceCard());
 		addGameEventListener(player, enchantment, entity);
 	}
@@ -3034,8 +3034,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	private void processDeckTriggers(Player player, Card card) {
 		if (card.getDeckTriggers() != null
 				&& card.getDeckTriggers().length > 0) {
-			for (TriggerDesc triggerDesc : card.getDeckTriggers()) {
-				processTriggerDesc(player, card, triggerDesc);
+			for (EnchantmentDesc enchantmentDesc : card.getDeckTriggers()) {
+				processTriggerDesc(player, card, enchantmentDesc);
 			}
 		}
 	}

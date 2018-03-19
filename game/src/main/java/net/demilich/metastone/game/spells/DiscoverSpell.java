@@ -18,7 +18,6 @@ import net.demilich.metastone.game.spells.desc.source.HasWeights;
 import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
-import org.apache.commons.collections4.bag.TreeBag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,13 +59,13 @@ public class DiscoverSpell extends Spell {
 		}
 
 		// SPELL and SPELL_1 are cast on the chosen cards
-		SpellDesc chosenSpellTemplate = SpellDesc.join((SpellDesc) desc.get(SpellArg.SPELL), (SpellDesc) desc.get(SpellArg.SPELL_1));
+		SpellDesc chosenSpellTemplate = SpellDesc.join((SpellDesc) desc.get(SpellArg.SPELL), (SpellDesc) desc.get(SpellArg.SPELL1));
 		if (chosenSpellTemplate == null) {
 			chosenSpellTemplate = ReceiveCardSpell.create();
 		}
 
 		// SPELL_2 is cast on the cards that aren't chosen
-		SpellDesc otherSpell = (SpellDesc) desc.getOrDefault(SpellArg.SPELL_2, NullSpell.create());
+		SpellDesc otherSpell = (SpellDesc) desc.getOrDefault(SpellArg.SPELL2, NullSpell.create());
 		CardList allCards = new CardArrayList();
 		allCards.addAll(specificCards);
 		allCards.addAll(filteredCards);

@@ -11,7 +11,7 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.filter.FilterDesc;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc;
 import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.HashMap;
@@ -43,7 +43,7 @@ public class HealingMissilesSpell extends HealSpell {
 				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
 				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			} else {
-				EntityFilter targetFilter = new EntityFilter(new FilterDesc(new HashMap<>())) {
+				EntityFilter targetFilter = new EntityFilter(new EntityFilterDesc(new HashMap<>())) {
 					@Override
 					protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 						return ((Actor) entity).isWounded();

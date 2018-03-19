@@ -11,7 +11,7 @@
     "value": 1
   },
   "attributes": {
-    "NAME": "Focus"
+    "SPELLSOURCE_NAME": "Focus"
   },
   "collectible": true,
   "set": "BASIC",

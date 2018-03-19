@@ -10,7 +10,7 @@
   "description": "Charge",
   "attributes": {
     "CHARGE": true,
-    "NAME": "Fanatic"
+    "SPELLSOURCE_NAME": "Fanatic"
   },
   "collectible": true,
   "set": "BASIC",

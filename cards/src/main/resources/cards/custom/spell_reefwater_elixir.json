@@ -4,7 +4,6 @@
   "type": "SPELL",
   "heroClass": "WHITE",
   "rarity": "COMMON",
-  "race": "POTION",
   "description": "Restore a minion to full Health and give it Spell Damage +2.",
   "targetSelection": "MINIONS",
   "spell": {

@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -28,7 +29,8 @@ import java.util.function.Supplier;
  *
  * @param <T>
  */
-public abstract class Desc<T extends Enum, V> extends ConcurrentHashMap<T, Object> implements Serializable, Cloneable {
+@JsonSerialize(using = DescSerializer.class)
+public abstract class Desc<T extends Enum<T>, V> extends ConcurrentHashMap<T, Object> implements Serializable, Cloneable {
 	protected Desc(Map<T, Object> arguments) {
 		super(arguments);
 	}
