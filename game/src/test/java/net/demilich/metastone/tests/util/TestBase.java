@@ -62,7 +62,7 @@ public class TestBase {
 		return card;
 	}
 
-	protected static void destroy(GameContext context, Minion target) {
+	protected static void destroy(GameContext context, Actor target) {
 		target.getAttributes().put(Attribute.DESTROYED, true);
 		context.getLogic().endOfSequence();
 	}

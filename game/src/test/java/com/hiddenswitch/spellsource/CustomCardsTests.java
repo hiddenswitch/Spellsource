@@ -32,6 +32,26 @@ import static org.mockito.Mockito.spy;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testDeepBorer() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			receiveCard(context, player, "minion_deep_borer");
+			context.endTurn();
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getDeck().get(0).getCardId(), "minion_deep_borer");
+		});
+
+		// Should not produce infinite loop
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_deep_borer");
+			receiveCard(context, player, "minion_deep_borer");
+			context.endTurn();
+			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_deep_borer");
+			Assert.assertEquals(player.getDeck().get(0).getCardId(), "minion_deep_borer");
+		});
+	}
+
+	@Test
 	public void testAnnoyingBeetle() {
 		runGym((context, player, opponent) -> {
 			Minion annoyingBeetle = playMinionCard(context, player, "minion_annoying_beetle");

@@ -1,0 +1,38 @@
+{
+  "name": "Prince Tenris",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If your deck has no 1-Cost cards, your hero has +1 Attack for the rest of the game.",
+  "battlecry": {
+    "condition": {
+      "class": "DeckContainsCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": 1
+      },
+      "invert": true
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "BuffAura",
+        "target": "FRIENDLY_HERO",
+        "attackBonus": 1,
+        "hpBonus": 0
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "author": "Nekkit",
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -8,26 +8,12 @@
   "rarity": "COMMON",
   "race": "PIRATE",
   "description": "Has Charge while you have a weapon equipped.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "BoardChangedTrigger"
-    },
-    "spell": {
-      "class": "ConditionalEffectSpell",
-      "condition": {
-        "class": "HasWeaponCondition"
-      },
-      "exclusive": true,
-      "spell1": {
-        "class": "RemoveAttributeSpell",
-        "target": "SELF",
-        "attribute": "CHARGE"
-      },
-      "spell2": {
-        "class": "AddAttributeSpell",
-        "target": "SELF",
-        "attribute": "CHARGE"
-      }
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "attribute": "AURA_CHARGE",
+    "condition": {
+      "class": "HasWeaponCondition"
     }
   },
   "collectible": true,

@@ -188,6 +188,10 @@ public enum Attribute {
 	 */
 	CHARGE,
 	/**
+	 * An Aura version of {@link #CHARGE}.
+	 */
+	AURA_CHARGE,
+	/**
 	 * An attribute that tracks the number of attacks the {@link Actor} has this turn. Typically, actors start with 1
 	 * attack every turn.
 	 *
@@ -370,6 +374,10 @@ public enum Attribute {
 	 * When set, this {@link Minion} cannot attack.
 	 */
 	CANNOT_ATTACK,
+	/**
+	 * An Aura version of {@link #CANNOT_ATTACK}.
+	 */
+	AURA_CANNOT_ATTACK,
 	/**
 	 * When set, this {@link Minion} cannot target heroes with physical attacks.
 	 * <p>

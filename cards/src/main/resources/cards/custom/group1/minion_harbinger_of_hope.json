@@ -1,0 +1,27 @@
+{
+  "name": "Harbinger of Hope",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Deathrattle: Draw a Legendary minion from your deck.",
+  "deathrattle": {
+    "class": "FromDeckToHandSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "rarity": "LEGENDARY"
+    },
+    "targetPlayer": "SELF"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "author": "Kittenguin",
+  "fileFormatVersion": 1
+}

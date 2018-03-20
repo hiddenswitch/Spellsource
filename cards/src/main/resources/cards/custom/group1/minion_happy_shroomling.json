@@ -1,0 +1,29 @@
+{
+  "name": "Happy Shroomling",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give all Common friendly minions +1/+1.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "filter": {
+        "class": "CardFilter",
+        "rarity": "COMMON"
+      },
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "author": "The Flawless Walrus",
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Dante the Outlaw",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Take control of an enemy minion with less Attack than this one.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "MindControlSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "ATTACK",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SELF",
+          "attribute": "ATTACK"
+        },
+        "operation": "LESS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "author": "Mike Pence",
+  "fileFormatVersion": 1
+}

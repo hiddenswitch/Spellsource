@@ -837,12 +837,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			endOfSequence();
 		}
 
-		if (hero.hasEnchantment()) {
-			for (Enchantment trigger : hero.getEnchantments()) {
-				addGameEventListener(player, trigger, hero);
-			}
-		}
-
+		processBattlefieldEnchantments(player, hero);
 		processGameTriggers(player, hero);
 		processGameTriggers(player, hero.getHeroPower());
 		processPassiveTriggers(player, hero.getHeroPower());
@@ -1341,28 +1336,20 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			endOfSequence();
 		}
 
-		postEquipWeapon(playerId, weapon, currentWeapon, player, weaponCard);
-	}
-
-	@Suspendable
-	protected void postEquipWeapon(int playerId, Weapon newWeapon, Weapon currentWeapon, Player player, Card source) {
 		if (currentWeapon != null) {
 			markAsDestroyed(currentWeapon);
 		}
 
-		player.getStatistics().equipWeapon(newWeapon);
-		newWeapon.onEquip(context, player);
-		newWeapon.setActive(context.getActivePlayerId() == playerId);
-		if (newWeapon.hasEnchantment()) {
-			List<Enchantment> enchantments = newWeapon.getEnchantments();
-			for (Enchantment enchantment : enchantments) {
-				addGameEventListener(player, enchantment, newWeapon);
-			}
+		player.getStatistics().equipWeapon(weapon);
+		weapon.onEquip(context, player);
+		weapon.setActive(context.getActivePlayerId() == playerId);
+
+		processBattlefieldEnchantments(player, weapon);
+
+		if (weapon.getCardCostModifier() != null) {
+			addGameEventListener(player, weapon.getCardCostModifier(), weapon);
 		}
-		if (newWeapon.getCardCostModifier() != null) {
-			addGameEventListener(player, newWeapon.getCardCostModifier(), newWeapon);
-		}
-		context.fireGameEvent(new WeaponEquippedEvent(context, newWeapon, source));
+		context.fireGameEvent(new WeaponEquippedEvent(context, weapon, weaponCard));
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -2747,7 +2734,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	private void removeEnchantments(Entity entity) {
+	public void removeEnchantments(Entity entity) {
 		removeEnchantments(entity, true);
 	}
 
@@ -3031,7 +3018,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	private void processDeckTriggers(Player player, Card card) {
+	public void processDeckTriggers(Player player, Card card) {
 		if (card.getDeckTriggers() != null
 				&& card.getDeckTriggers().length > 0) {
 			for (EnchantmentDesc enchantmentDesc : card.getDeckTriggers()) {
@@ -3221,11 +3208,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
 		refreshAttacksPerRound(minion);
 
-		if (minion.hasEnchantment()) {
-			for (Enchantment trigger : minion.getEnchantments()) {
-				addGameEventListener(player, trigger, minion);
-			}
-		}
+		processBattlefieldEnchantments(player, minion);
 
 		if (minion.getCardCostModifier() != null) {
 			addGameEventListener(player, minion.getCardCostModifier(), minion);
@@ -3239,6 +3222,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		context.fireGameEvent(new BoardChangedEvent(context));
 		return true;
+	}
+
+	@Suspendable
+	public void processBattlefieldEnchantments(Player player, Actor actor) {
+		if (actor.hasEnchantment()) {
+			for (Enchantment trigger : actor.getEnchantments()) {
+				addGameEventListener(player, trigger, actor);
+			}
+		}
 	}
 
 	/**
@@ -3317,11 +3309,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				applyAttribute(newMinion, Attribute.SUMMONING_SICKNESS);
 				refreshAttacksPerRound(newMinion);
 
-				if (newMinion.hasEnchantment()) {
-					for (Enchantment enchantment : newMinion.getEnchantments()) {
-						addGameEventListener(owner, enchantment, newMinion);
-					}
-				}
+				processBattlefieldEnchantments(owner, newMinion);
 
 				if (newMinion.getCardCostModifier() != null) {
 					addGameEventListener(owner, newMinion.getCardCostModifier(), newMinion);
