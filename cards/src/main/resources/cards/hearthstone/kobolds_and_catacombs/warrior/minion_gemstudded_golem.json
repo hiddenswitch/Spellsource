@@ -17,7 +17,7 @@
       "attribute": "ARMOR",
       "operation": "LESS"
     },
-    "attribute": "CANNOT_ATTACK",
+    "attribute": "AURA_CANNOT_ATTACK",
     "secondaryTrigger": {
       "class": "ArmorChangedTrigger",
       "targetPlayer": "SELF"

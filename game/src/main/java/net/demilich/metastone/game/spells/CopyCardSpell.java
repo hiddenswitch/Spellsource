@@ -28,6 +28,12 @@ public class CopyCardSpell extends Spell {
 		return new SpellDesc(args);
 	}
 
+	public static SpellDesc create(Card card, int copies) {
+		SpellDesc desc = create(card);
+		desc.put(SpellArg.VALUE, copies);
+		return desc;
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -112,5 +118,4 @@ public class CopyCardSpell extends Spell {
 				return null;
 		}
 	}
-
 }

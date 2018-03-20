@@ -1,0 +1,35 @@
+{
+  "name": "Slark and Brack",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "MURLOC",
+  "description": "Murlocs to the left have Charge. Murlocs to the right have Taunt.",
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "MINIONS_TO_RIGHT",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MURLOC"
+      },
+      "attribute": "AURA_CHARGE"
+    },
+    {
+      "class": "AttributeAura",
+      "target": "MINIONS_TO_LEFT",
+      "attribute": "AURA_TAUNT",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MURLOC"
+      }
+    }
+  ],
+  "collectible": true,
+  "author": "NightscaleReaper",
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

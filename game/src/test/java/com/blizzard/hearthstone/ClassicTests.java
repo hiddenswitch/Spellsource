@@ -42,6 +42,19 @@ import static org.mockito.Mockito.spy;
 public class ClassicTests extends TestBase {
 
 	@Test
+	public void testSouthseaDeckhand() {
+		runGym((context, player, opponent) -> {
+			Minion deckhand = playMinionCard(context, player, "minion_southsea_deckhand");
+			Assert.assertFalse(deckhand.canAttackThisTurn());
+			playCard(context, player, "weapon_wicked_knife");
+			Assert.assertTrue(deckhand.canAttackThisTurn());
+			destroy(context, player.getHero().getWeapon());
+			Assert.assertEquals(player.getHero().getWeapon(), null);
+			Assert.assertFalse(deckhand.canAttackThisTurn());
+		});
+	}
+
+	@Test
 	public void testColdlightOracle() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 2; i++) {

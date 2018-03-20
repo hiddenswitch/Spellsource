@@ -45,6 +45,8 @@ public class CardDesc implements Serializable, Cloneable {
 	public EnchantmentDesc deckTrigger;
 	public EnchantmentDesc[] gameTriggers;
 	public String author;
+	public String flavor;
+	public String wiki;
 	/**
 	 * Specifies the actor's battlecry.
 	 * <p>

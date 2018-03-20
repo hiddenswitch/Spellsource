@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.entities;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.io.Serializable;
@@ -166,6 +167,31 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 
 	public static EntityZone empty(int player) {
 		return new EntityZone(player, Zones.NONE);
+	}
+
+	/**
+	 * Swaps two entities with each other. They must be of the same type.
+	 *
+	 * @param sourceEntity One of the two entities to swap in location.
+	 * @param targetEntity One of the two entities to swap in location.
+	 * @param context      An {@link EntityZoneTable}, typically a {@link GameContext}, to look up entities inside of.
+	 * @param <E>          The type of the entity to swap (must be the same).
+	 */
+	public static <E extends Entity> void swap(E sourceEntity, E targetEntity, EntityZoneTable context) {
+		EntityZone<E> sourceZone = context.getZone(sourceEntity.getEntityLocation().getPlayer(), sourceEntity.getEntityLocation().getZone());
+		EntityZone<E> targetZone = context.getZone(targetEntity.getEntityLocation().getPlayer(), targetEntity.getEntityLocation().getZone());
+		int sourceIndex = sourceEntity.getEntityLocation().getIndex();
+		int targetIndex = targetEntity.getEntityLocation().getIndex();
+		int sourceOwner = sourceEntity.getOwner();
+		int targetOwner = targetEntity.getOwner();
+		if (sourceEntity.getOwner() != targetOwner) {
+			sourceEntity.setOwner(targetOwner);
+		}
+		if (targetEntity.getOwner() != sourceOwner) {
+			targetEntity.setOwner(sourceOwner);
+		}
+		sourceZone.move(sourceIndex, targetZone, targetIndex);
+		targetZone.move(targetIndex + 1, sourceZone, sourceIndex);
 	}
 }
 

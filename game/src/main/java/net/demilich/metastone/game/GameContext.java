@@ -17,6 +17,7 @@ import net.demilich.metastone.game.decks.RandomDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.entities.EntityZoneTable;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
@@ -140,7 +141,7 @@ import java.util.stream.Stream;
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
  * @see #getEntities() for a way to enumerate through all of the entities in the game.
  */
-public class GameContext implements Cloneable, Serializable, NetworkDelegate, Inventory {
+public class GameContext implements Cloneable, Serializable, NetworkDelegate, Inventory, EntityZoneTable {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
 	protected static Logger logger = LoggerFactory.getLogger(GameContext.class);
@@ -1619,5 +1620,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		} else {
 			return (T) resolveSingleTarget(target);
 		}
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <E extends Entity> EntityZone<E> getZone(int owner, Zones zone) {
+		return (EntityZone<E>) getPlayer(owner).getZone(zone);
 	}
 }

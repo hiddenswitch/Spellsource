@@ -1,0 +1,27 @@
+{
+  "name": "Bear Hug",
+  "type": "SPELL",
+  "baseManaCost": 6,
+  "description": "Deal 5 damage to a minion. Summon a 3/3 Bear with Taunt.",
+  "rarity": "COMMON",
+  "heroClass": "GREEN",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 5
+      },
+      {
+        "class": "SummonSpell",
+        "card": "minion_ironfur_grizzly"
+      }
+    ]
+  },
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "flavor": "You're my bear-st friend!",
+  "author": "Zyliee"
+}

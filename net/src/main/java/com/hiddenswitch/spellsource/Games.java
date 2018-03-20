@@ -921,13 +921,14 @@ public interface Games {
 				|| actor.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
 		entityState.frozen(actor.hasAttribute(Attribute.FROZEN));
+		entityState.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE));
 		entityState.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING));
 		entityState.stealth(actor.hasAttribute(Attribute.STEALTH));
 		entityState.taunt(actor.hasAttribute(Attribute.TAUNT) | actor.hasAttribute(Attribute.AURA_TAUNT));
 		entityState.divineShield(actor.hasAttribute(Attribute.DIVINE_SHIELD));
 		entityState.enraged(actor.hasAttribute(Attribute.ENRAGED));
 		entityState.destroyed(actor.hasAttribute(Attribute.DESTROYED));
-		entityState.cannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK));
+		entityState.cannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK) || actor.hasAttribute(Attribute.AURA_CANNOT_ATTACK));
 		entityState.spellDamage(actor.getAttributeValue(Attribute.SPELL_DAMAGE));
 		entityState.windfury(actor.hasAttribute(Attribute.WINDFURY));
 		entityState.summoningSickness(actor.hasAttribute(Attribute.SUMMONING_SICKNESS));

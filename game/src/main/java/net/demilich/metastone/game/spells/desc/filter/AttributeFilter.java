@@ -32,9 +32,9 @@ public class AttributeFilter extends EntityFilter {
 
 		int targetValue;
 		if (entities == null) {
-			targetValue = desc.getValue(FilterArg.VALUE, context, player, null, null, 0);
+			targetValue = desc.getValue(FilterArg.VALUE, context, player, null, host, 0);
 		} else {
-			targetValue = desc.getValue(FilterArg.VALUE, context, player, entities.get(0), null, 0);
+			targetValue = desc.getValue(FilterArg.VALUE, context, player, entities.get(0), host, 0);
 		}
 
 		int actualValue = -1;

@@ -836,7 +836,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			playCard(context, player, "spell_oaken_summons");
 			Minion ironwoodGolem = player.getMinions().get(0);
 			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
-			Assert.assertFalse(ironwoodGolem.hasAttribute(Attribute.CANNOT_ATTACK));
+			Assert.assertFalse(ironwoodGolem.hasAttribute(Attribute.AURA_CANNOT_ATTACK));
 			context.endTurn();
 			context.endTurn();
 			Assert.assertTrue(ironwoodGolem.canAttackThisTurn());

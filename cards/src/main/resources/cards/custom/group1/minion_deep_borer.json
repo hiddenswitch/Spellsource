@@ -1,0 +1,28 @@
+{
+  "name": "Deep Borer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "While this is in your hand, swap this with a card in your deck at the end of your turn.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SwapCardsSpell",
+      "secondaryTarget": "SELF",
+      "target": "FRIENDLY_DECK",
+      "randomTarget": "true"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "author": "Petar",
+  "wiki": "End of turn effects on the swapped card will not be activated, since they were not in play at the start of the sequence.",
+  "fileFormatVersion": 1
+}

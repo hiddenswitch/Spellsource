@@ -47,13 +47,14 @@ public abstract class Actor extends Entity {
 	}
 
 	public boolean canAttackThisTurn() {
-		if (hasAttribute(Attribute.CANNOT_ATTACK)) {
+		if (hasAttribute(Attribute.CANNOT_ATTACK)
+				|| hasAttribute(Attribute.AURA_CANNOT_ATTACK)) {
 			return false;
 		}
 		if (hasAttribute(Attribute.FROZEN)) {
 			return false;
 		}
-		if (hasAttribute(Attribute.SUMMONING_SICKNESS) && !hasAttribute(Attribute.CHARGE)) {
+		if (hasAttribute(Attribute.SUMMONING_SICKNESS) && !hasAttribute(Attribute.CHARGE) && !hasAttribute(Attribute.AURA_CHARGE)) {
 			return false;
 		}
 		if (hasAttribute(Attribute.PERMANENT)) {
