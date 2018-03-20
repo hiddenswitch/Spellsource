@@ -15,6 +15,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.mongo.WriteOption;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
@@ -237,7 +238,56 @@ public class Spellsource {
 							// Creates an index on the cardDesc.id property to help find cards in inventory management
 							mongo().createIndex(INVENTORY, json("cardDesc.id", 1));
 						}))
-				.migrateTo(7, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(8)
+						.withUp(thisVertx -> {
+							// Remove all fields except the cardDesc.id field
+							mongo().updateCollectionWithOptions(INVENTORY, json(), json(
+									"$unset", json(
+											"cardDesc.name", 1,
+											"cardDesc.description", 1,
+											"cardDesc.legacy", 1,
+											"cardDesc.type", 1,
+											"cardDesc.heroClass", 1,
+											"cardDesc.heroClasses", 1,
+											"cardDesc.rarity", 1,
+											"cardDesc.set", 1,
+											"cardDesc.baseManaCost", 1,
+											"cardDesc.collectible", 1,
+											"cardDesc.attributes", 1,
+											"cardDesc.fileFormatVersion", 1,
+											"cardDesc.manaCostModifier", 1,
+											"cardDesc.passiveTriggers", 1,
+											"cardDesc.deckTrigger", 1,
+											"cardDesc.gameTriggers", 1,
+											"cardDesc.battlecry", 1,
+											"cardDesc.deathrattle", 1,
+											"cardDesc.trigger", 1,
+											"cardDesc.triggers", 1,
+											"cardDesc.aura", 1,
+											"cardDesc.auras", 1,
+											"cardDesc.race", 1,
+											"cardDesc.cardCostModifier", 1,
+											"cardDesc.baseAttack", 1,
+											"cardDesc.baseHp", 1,
+											"cardDesc.damage", 1,
+											"cardDesc.durability", 1,
+											"cardDesc.onEquip", 1,
+											"cardDesc.onUnequip", 1,
+											"cardDesc.heroPower", 1,
+											"cardDesc.targetSelection", 1,
+											"cardDesc.spell", 1,
+											"cardDesc.condition", 1,
+											"cardDesc.group", 1,
+											"cardDesc.secret", 1,
+											"cardDesc.quest", 1,
+											"cardDesc.countUntilCast", 1,
+											"cardDesc.options", 1,
+											"cardDesc.bothOptions", 1
+									)
+							), new UpdateOptions().setMulti(true).setWriteOption(WriteOption.UNACKNOWLEDGED));
+						}))
+				.migrateTo(8, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
