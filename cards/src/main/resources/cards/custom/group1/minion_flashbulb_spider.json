@@ -15,6 +15,6 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "author": "CattyNerd",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "CattyNerd"
 }

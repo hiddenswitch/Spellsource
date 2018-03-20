@@ -32,7 +32,7 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "author": "Nekkit",
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "Nekkit"
 }

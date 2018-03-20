@@ -29,7 +29,7 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "author": "superduper",
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "superduper"
 }

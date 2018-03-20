@@ -12,8 +12,8 @@
     "value": 1,
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "MINION",
-      "rarity": "LEGENDARY"
+      "rarity": "LEGENDARY",
+      "cardType": "MINION"
     },
     "targetPlayer": "SELF"
   },
@@ -22,6 +22,6 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "author": "Kittenguin",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "Kittenguin"
 }

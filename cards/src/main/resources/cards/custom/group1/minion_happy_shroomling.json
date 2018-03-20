@@ -11,11 +11,11 @@
     "spell": {
       "class": "BuffSpell",
       "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 1,
       "filter": {
         "class": "CardFilter",
         "rarity": "COMMON"
       },
-      "attackBonus": 1,
       "hpBonus": 1
     }
   },
@@ -23,7 +23,7 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "author": "The Flawless Walrus",
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "The Flawless Walrus"
 }

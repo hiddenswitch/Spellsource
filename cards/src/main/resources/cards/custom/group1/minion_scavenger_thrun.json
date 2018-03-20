@@ -1,23 +1,27 @@
 {
   "name": "Scavenger Thrun",
-  "type": "MINION",
   "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GREEN",
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "heroClass": "GREEN",
   "description": "Whenever a friendly Beast dies, Adapt the minions next to this one.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
-      "targetPlayer": "SELF",
-      "race": "BEAST"
+      "race": "BEAST",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "AdjacentEffectSpell",
       "target": "TRIGGER_HOST",
       "spell2": {
         "class": "EitherOrSpell",
+        "condition": {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "ACTIVE"
+        },
         "spell1": {
           "class": "CastFromGroupSpell",
           "group": "group_adapt"
@@ -40,17 +44,13 @@
               "attribute": "RANDOM_CHOICES"
             }
           ]
-        },
-        "condition": {
-          "class": "OwnedByPlayerCondition",
-          "targetPlayer": "ACTIVE"
         }
       }
     }
   },
-  "wiki": "If the friendly Beast dies during your turn, choose the adaptation. Otherwise, during your opponent's turn, the adaptation will be chosen at random.",
-  "author": "thefinalrefuge",
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "thefinalrefuge",
+  "wiki": "If the friendly Beast dies during your turn, choose the adaptation. Otherwise, during your opponent's turn, the adaptation will be chosen at random."
 }

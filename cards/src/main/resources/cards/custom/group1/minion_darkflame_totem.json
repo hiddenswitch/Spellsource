@@ -25,6 +25,6 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "author": "mendinja",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "mendinja"
 }
