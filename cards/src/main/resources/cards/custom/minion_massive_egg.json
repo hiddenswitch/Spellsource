@@ -16,6 +16,6 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "author": "Pircival",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "Pircival"
 }

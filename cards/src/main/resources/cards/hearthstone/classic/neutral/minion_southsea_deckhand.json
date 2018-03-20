@@ -11,10 +11,10 @@
   "aura": {
     "class": "AttributeAura",
     "target": "SELF",
-    "attribute": "AURA_CHARGE",
     "condition": {
       "class": "HasWeaponCondition"
-    }
+    },
+    "attribute": "AURA_CHARGE"
   },
   "collectible": true,
   "set": "CLASSIC",

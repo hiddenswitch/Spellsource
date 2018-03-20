@@ -8,15 +8,18 @@
   "rarity": "LEGENDARY",
   "race": "MURLOC",
   "description": "Murlocs to the left have Charge. Murlocs to the right have Taunt.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "auras": [
     {
       "class": "AttributeAura",
       "target": "MINIONS_TO_RIGHT",
+      "attribute": "AURA_CHARGE",
       "filter": {
         "class": "RaceFilter",
         "race": "MURLOC"
-      },
-      "attribute": "AURA_CHARGE"
+      }
     },
     {
       "class": "AttributeAura",
@@ -28,8 +31,5 @@
       }
     }
   ],
-  "collectible": true,
-  "author": "NightscaleReaper",
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "author": "NightscaleReaper"
 }

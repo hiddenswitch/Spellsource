@@ -1,10 +1,10 @@
 {
   "name": "Bear Hug",
-  "type": "SPELL",
   "baseManaCost": 6,
-  "description": "Deal 5 damage to a minion. Summon a 3/3 Bear with Taunt.",
-  "rarity": "COMMON",
+  "type": "SPELL",
   "heroClass": "GREEN",
+  "rarity": "COMMON",
+  "description": "Deal 5 damage to a minion. Summon a 3/3 Bear with Taunt.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -19,9 +19,9 @@
       }
     ]
   },
-  "fileFormatVersion": 1,
-  "set": "CUSTOM",
   "collectible": true,
-  "flavor": "You're my bear-st friend!",
-  "author": "Zyliee"
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "Zyliee",
+  "flavor": "You're my bear-st friend!"
 }

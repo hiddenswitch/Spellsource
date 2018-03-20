@@ -11,7 +11,7 @@
     "value": 2
   },
   "collectible": true,
-  "author": "Talist",
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "Talist"
 }

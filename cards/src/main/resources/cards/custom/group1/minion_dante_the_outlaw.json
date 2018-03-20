@@ -13,12 +13,12 @@
       "class": "MindControlSpell",
       "filter": {
         "class": "AttributeFilter",
-        "attribute": "ATTACK",
         "value": {
           "class": "AttributeValueProvider",
           "target": "SELF",
           "attribute": "ATTACK"
         },
+        "attribute": "ATTACK",
         "operation": "LESS"
       }
     }
@@ -28,6 +28,6 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "author": "Mike Pence",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "Mike Pence"
 }

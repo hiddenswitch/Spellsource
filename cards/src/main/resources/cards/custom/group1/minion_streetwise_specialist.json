@@ -1,11 +1,11 @@
 {
   "name": "Streetwise Specialist",
-  "baseAttack": 2,
-  "baseHp": 4,
   "baseManaCost": 3,
   "type": "MINION",
-  "rarity": "RARE",
   "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
   "description": "After your opponent draws a card, deal 2 damage to the enemy hero",
   "trigger": {
     "eventTrigger": {
@@ -18,8 +18,8 @@
       "value": 2
     }
   },
-  "author": "Basse22",
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "Basse22"
 }
