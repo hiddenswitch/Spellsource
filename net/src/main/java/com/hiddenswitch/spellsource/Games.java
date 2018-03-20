@@ -1006,7 +1006,9 @@ public interface Games {
 		int owner = card.getOwner();
 		Player owningPlayer;
 		if (owner != -1) {
-			if (card.getZone() == Zones.HAND) {
+			if (card.getZone() == Zones.HAND
+					|| card.getZone() == Zones.DECK
+					|| card.getZone() == Zones.SET_ASIDE_ZONE) {
 				final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
 						&& card.getOwner() == workingContext.getActivePlayerId()
 						&& localPlayerId == card.getOwner();
