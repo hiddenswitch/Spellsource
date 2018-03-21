@@ -620,7 +620,7 @@ public enum Attribute {
 	 * Every time an {@link Actor} damages a target, increment this attribute with the total amount of damage dealt
 	 * across all games.
 	 */
-	LIFETIME_DAMAGE_DEALT,
+	TOTAL_DAMAGE_DEALT,
 	/**
 	 * Every time an {@link Actor} receives damage, increment this attribute with the total amount of damage dealt.
 	 */

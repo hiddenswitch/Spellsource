@@ -64,11 +64,11 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		Spellsource.spellsource().persistAttribute(
 				"total-damage-dealt-1",
 				GameEventType.AFTER_PHYSICAL_ATTACK,
-				Attribute.LIFETIME_DAMAGE_DEALT,
+				Attribute.TOTAL_DAMAGE_DEALT,
 				(PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 					int attackerDamage = context.event().getDamageDealt();
 					context.update(context.event().getAttacker().getReference(),
-							context.event().getAttacker().getAttributeValue(Attribute.LIFETIME_DAMAGE_DEALT) + attackerDamage);
+							context.event().getAttacker().getAttributeValue(Attribute.TOTAL_DAMAGE_DEALT) + attackerDamage);
 				}
 		);
 
