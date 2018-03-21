@@ -32,6 +32,18 @@ import static org.mockito.Mockito.spy;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testFelGiant() {
+		runGym((context, player, opponent) -> {
+			// Prevents fatigue damage
+			putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			Card card = receiveCard(context, player, "minion_fel_giant");
+			Assert.assertEquals(costOf(context, player, card), card.getBaseManaCost());
+			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			Assert.assertEquals(costOf(context, player, card), card.getBaseManaCost() - 2);
+		}, HeroClass.VIOLET, HeroClass.VIOLET);
+	}
+
+	@Test
 	public void testDeepBorer() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_bloodfen_raptor");

@@ -333,7 +333,7 @@ public class Spellsource {
 	 *     		Spellsource.Spellsource().persistAttribute(
 	 *              "total-damage-dealt-1",
 	 *              GameEventType.AFTER_PHYSICAL_ATTACK,
-	 *              Attribute.TOTAL_DAMAGE_DEALT,
+	 *              Attribute.LIFETIME_DAMAGE_DEALT,
 	 *              (PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 	 *                  int attackerDamage = context.event().getDamageDealt();
 	 *                  context.update(context.event().getAttacker().getReference(), attackerDamage);

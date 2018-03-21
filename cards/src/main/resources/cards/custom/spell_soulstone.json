@@ -16,6 +16,6 @@
   "manaCostModifier": {
     "class": "AttributeValueProvider",
     "target": "FRIENDLY_HERO",
-    "attribute": "TOTAL_DAMAGE_DEALT"
+    "attribute": "TOTAL_DAMAGE_RECEIVED"
   }
 }

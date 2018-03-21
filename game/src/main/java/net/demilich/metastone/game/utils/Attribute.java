@@ -617,9 +617,14 @@ public enum Attribute {
 	 */
 	LAST_MINION_DESTROYED_INVENTORY_ID,
 	/**
-	 * Every time an {@link Actor} damages a target, increment this attribute with the total amount of damage dealt.
+	 * Every time an {@link Actor} damages a target, increment this attribute with the total amount of damage dealt
+	 * across all games.
 	 */
-	TOTAL_DAMAGE_DEALT,
+	LIFETIME_DAMAGE_DEALT,
+	/**
+	 * Every time an {@link Actor} receives damage, increment this attribute with the total amount of damage dealt.
+	 */
+	TOTAL_DAMAGE_RECEIVED,
 	/**
 	 * Every time an {@link Actor} is healed, increment this attribute with the amount of healing and set to zero at the
 	 * end of the turn.

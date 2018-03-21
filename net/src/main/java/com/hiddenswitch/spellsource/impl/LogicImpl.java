@@ -55,33 +55,6 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 				this::beforeSummon,
 				PersistenceTrigger::beforeSummon));
 
-		/*
-		Spellsource.spellsource().persistAttribute(
-				"unique-champion-ids-1",
-				GameEventType.AFTER_SUMMON,
-				Attribute.UNIQUE_CHAMPION_IDS,
-				(PersistenceContext<AfterSummonEvent> context) -> {
-					if (context.event().getMinion() == null) {
-						return;
-					}
-
-					if (context.event().getMinion().getSourceCard() == null) {
-						return;
-					}
-
-					// Only count summons from the hand
-					if (context.event().getSource() == null) {
-						return;
-					}
-
-					String inventoryIds
-
-					int attackerDamage = context.event().getDamageDealt();
-					context.update(context.event().getAttacker().getReference(),
-							context.event().getAttacker().getAttributeValue(Attribute.TOTAL_DAMAGE_DEALT) + attackerDamage);
-				});
-				*/
-
 		Spellsource.spellsource().persistAttribute(LegacyPersistenceHandler.create(
 				"last-minion-destroyed-1",
 				GameEventType.AFTER_PHYSICAL_ATTACK,
@@ -91,11 +64,11 @@ public class LogicImpl extends AbstractService<LogicImpl> implements Logic {
 		Spellsource.spellsource().persistAttribute(
 				"total-damage-dealt-1",
 				GameEventType.AFTER_PHYSICAL_ATTACK,
-				Attribute.TOTAL_DAMAGE_DEALT,
+				Attribute.LIFETIME_DAMAGE_DEALT,
 				(PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 					int attackerDamage = context.event().getDamageDealt();
 					context.update(context.event().getAttacker().getReference(),
-							context.event().getAttacker().getAttributeValue(Attribute.TOTAL_DAMAGE_DEALT) + attackerDamage);
+							context.event().getAttacker().getAttributeValue(Attribute.LIFETIME_DAMAGE_DEALT) + attackerDamage);
 				}
 		);
 
