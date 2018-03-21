@@ -18,6 +18,10 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
 import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
@@ -38,11 +42,10 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  */
 public class Enchantment extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
-	private EventTrigger primaryTrigger;
-	private EventTrigger secondaryTrigger;
+	protected List<EventTrigger> triggers = new ArrayList<>();
 	private SpellDesc spell;
 	private EntityReference hostReference;
-	private final boolean oneTurn;
+	private boolean oneTurn;
 	private boolean expired;
 	private boolean persistentOwner;
 	private Integer maxFires;
@@ -54,10 +57,19 @@ public class Enchantment extends Entity implements Trigger {
 
 
 	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
-		this.primaryTrigger = primaryTrigger;
-		this.secondaryTrigger = secondaryTrigger;
+		if (primaryTrigger != null) {
+			this.triggers.add(primaryTrigger);
+		}
+		if (secondaryTrigger != null) {
+			this.triggers.add(secondaryTrigger);
+		}
 		this.spell = spell;
 		this.oneTurn = oneTurn;
+	}
+
+	public Enchantment(List<EventTrigger> triggers, SpellDesc spell) {
+		this.triggers.addAll(triggers);
+		this.spell = spell;
 	}
 
 	public Enchantment(EventTrigger trigger, SpellDesc spell) {
@@ -71,11 +83,9 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	public Enchantment clone() {
 		Enchantment clone = (Enchantment) super.clone();
-		if (primaryTrigger != null) {
-			clone.primaryTrigger = (EventTrigger) primaryTrigger.clone();
-		}
-		if (secondaryTrigger != null) {
-			clone.secondaryTrigger = (EventTrigger) secondaryTrigger.clone();
+		clone.triggers = new ArrayList<>();
+		for (EventTrigger trigger : this.triggers) {
+			clone.triggers.add(trigger.clone());
 		}
 		if (getSpell() != null) {
 			clone.spell = getSpell().clone();
@@ -99,7 +109,10 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public int getOwner() {
-		return primaryTrigger.getOwner();
+		if (triggers.size() == 0) {
+			return -1;
+		}
+		return triggers.get(0).getOwner();
 	}
 
 	public SpellDesc getSpell() {
@@ -108,11 +121,12 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public boolean interestedIn(GameEventType eventType) {
-		boolean result = primaryTrigger.interestedIn() == eventType || primaryTrigger.interestedIn() == GameEventType.ALL;
-		if (secondaryTrigger != null) {
-			result |= secondaryTrigger.interestedIn() == eventType || secondaryTrigger.interestedIn() == GameEventType.ALL;
+		for (EventTrigger trigger : triggers) {
+			if (trigger.interestedIn() == eventType || trigger.interestedIn() == GameEventType.ALL) {
+				return true;
+			}
 		}
-		return result;
+		return false;
 	}
 
 	@Override
@@ -161,7 +175,7 @@ public class Enchantment extends Entity implements Trigger {
 			return;
 		}
 
-		int ownerId = primaryTrigger.getOwner();
+		int ownerId = getOwner();
 
 		// Expire the trigger beforehand, in case of copying minion (Echoing
 		// Ooze). Since this method should only be called
@@ -177,7 +191,7 @@ public class Enchantment extends Entity implements Trigger {
 		// board changed event.
 		if (event.getEventType() != GameEventType.BOARD_CHANGED
 				&& event.getEventType() != GameEventType.WILL_END_SEQUENCE
-				&& primaryTrigger.interestedIn() != GameEventType.ALL
+				&& triggers.stream().noneMatch(trigger -> trigger.interestedIn() == GameEventType.ALL)
 				&& hostReference != null
 				&& !(hostReference.equals(new EntityReference(PLAYER_1))
 				|| hostReference.equals(new EntityReference(PLAYER_2)))) {
@@ -199,9 +213,8 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public void setOwner(int playerIndex) {
-		primaryTrigger.setOwner(playerIndex);
-		if (secondaryTrigger != null) {
-			secondaryTrigger.setOwner(playerIndex);
+		for (EventTrigger trigger : triggers) {
+			trigger.setOwner(playerIndex);
 		}
 	}
 
@@ -222,7 +235,12 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	public boolean canFire(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference);
-		return (triggerFires(primaryTrigger, event, host) || triggerFires(secondaryTrigger, event, host));
+		for (EventTrigger trigger : triggers) {
+			if (triggerFires(trigger, event, host)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean triggerFires(EventTrigger trigger, GameEvent event, Entity host) {
@@ -252,8 +270,10 @@ public class Enchantment extends Entity implements Trigger {
 			return false;
 		}
 
-		if (primaryTrigger.canFireCondition(event) || (secondaryTrigger != null && secondaryTrigger.canFireCondition(event))) {
-			return true;
+		for (EventTrigger trigger : triggers) {
+			if (trigger.canFireCondition(event)) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -302,7 +322,23 @@ public class Enchantment extends Entity implements Trigger {
 		this.countByValue = countByValue;
 	}
 
+	/**
+	 * Indicates that the {@link HasValue#getValue()} of the event should be used to increment the enchantment's counter
+	 * (typically its {@link #fires}) instead of the value 1 (i.e., every event that causes a trigger to fire increments
+	 * the number of fires by 1).
+	 *
+	 * @return {@code true} if the enchantment increases its fires counter by the event's value.
+	 */
 	public boolean isCountByValue() {
 		return countByValue;
+	}
+
+	/**
+	 * Get a read-only list of triggers that fire this enchantment.
+	 *
+	 * @return An unmodifiable list of triggers.
+	 */
+	public List<EventTrigger> getTriggers() {
+		return Collections.unmodifiableList(triggers);
 	}
 }
