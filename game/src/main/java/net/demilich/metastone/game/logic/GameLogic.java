@@ -799,7 +799,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Maintain the old hero's temporary stats
 		Stream.of(Attribute.NUMBER_OF_ATTACKS,
-				Attribute.TOTAL_DAMAGE_DEALT,
+				Attribute.LIFETIME_DAMAGE_DEALT,
 				Attribute.LAST_HEAL,
 				Attribute.LAST_HIT,
 				Attribute.RESERVED_BOOLEAN_1,
@@ -1056,6 +1056,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		target.setAttribute(Attribute.LAST_HIT, damageDealt);
+		target.getAttributes().put(Attribute.TOTAL_DAMAGE_RECEIVED, (int) target.getAttributes().getOrDefault(Attribute.TOTAL_DAMAGE_RECEIVED, 0) + damageDealt);
+
 		return damageDealt;
 	}
 
@@ -1523,7 +1525,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * For heroes that have a {@link HeroPowerCard} that has automatic target selection, returns the hero power. It is
+	 * For heroes that have a {@link Card} that has automatic target selection, returns the hero power. It is
 	 * not clear if this is used by any hero power cards in the game.
 	 *
 	 * @param playerId The player equipped with an auto hero power.
