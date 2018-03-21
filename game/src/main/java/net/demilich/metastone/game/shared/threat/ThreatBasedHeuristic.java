@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -169,6 +172,26 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		for (Minion minion : opponent.getMinions()) {
 			score -= calculateMinionScore(minion, threatLevel);
 		}
+
+		int questCount = player.getQuests().size();
+		if (questCount > 0) {
+			questCount += player.getQuests().get(0).getFires();
+		}
+
+		// Count triggered quests
+		long questRewards = 0L;
+		for (Entity e : player.getRemovedFromPlay()) {
+			if (e instanceof Quest) {
+				Quest quest = (Quest) e;
+				if (quest.isExpired()
+						&& quest.getFires() == quest.getCountUntilCast()) {
+					questRewards++;
+				}
+			}
+		}
+
+		score += questCount * weights.get(WeightedFeature.QUEST_COUNTER_VALUE);
+		score += questRewards * weights.get(WeightedFeature.QUEST_REWARD_VALUE);
 
 		return score;
 	}

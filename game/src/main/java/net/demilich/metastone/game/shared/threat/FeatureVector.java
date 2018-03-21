@@ -27,6 +27,8 @@ public class FeatureVector implements Cloneable, Serializable {
 		defaultVector.set(WeightedFeature.MINION_STEALTHED_MODIFIER, 1);
 		defaultVector.set(WeightedFeature.MINION_UNTARGETABLE_BY_SPELLS_MODIFIER, 1.5);
 		defaultVector.set(WeightedFeature.HARD_REMOVAL_VALUE, 2);
+		defaultVector.set(WeightedFeature.QUEST_COUNTER_VALUE, 3);
+		defaultVector.set(WeightedFeature.QUEST_REWARD_VALUE, 9);
 		return defaultVector;
 	}
 
@@ -51,6 +53,8 @@ public class FeatureVector implements Cloneable, Serializable {
 		defaultVector.set(WeightedFeature.MINION_STEALTHED_MODIFIER, 1.281);
 		defaultVector.set(WeightedFeature.MINION_UNTARGETABLE_BY_SPELLS_MODIFIER, 0);
 		defaultVector.set(WeightedFeature.HARD_REMOVAL_VALUE, 2);
+		defaultVector.set(WeightedFeature.QUEST_COUNTER_VALUE, 33.3);
+		defaultVector.set(WeightedFeature.QUEST_REWARD_VALUE, 55.7);
 		return defaultVector;
 	}
 
