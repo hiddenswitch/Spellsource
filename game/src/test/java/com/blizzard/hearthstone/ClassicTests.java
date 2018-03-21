@@ -185,6 +185,20 @@ public class ClassicTests extends TestBase {
 	}
 
 	@Test
+	public void testAIWillPlayQuests() {
+		runGym((context, player, opponent) -> {
+			Card powerTrip = receiveCard(context, player, "spell_power_trip");
+			receiveCard(context, player, "minion_voidwalker");
+			// The AI loves Taunts
+			receiveCard(context, player, "spell_mirror_image");
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			GameAction action = behaviour.requestAction(context, player, context.getValidActions());
+			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
+			Assert.assertEquals(((PlayCardAction) action).getEntityReference(), powerTrip.getReference());
+		});
+	}
+
+	@Test
 	public void testAIWillNeverPlayCursed() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
