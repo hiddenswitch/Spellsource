@@ -178,14 +178,14 @@ public class CardCatalogue {
 				final CardCatalogueRecord record = cardParser.parseCard(resourceInputStream);
 				CardDesc desc = record.getDesc();
 				if (cardDesc.containsKey(desc.id)) {
-					logger.error("Card id {} is duplicated!", desc.id);
+					logger.error("loadCards: Card id {} is duplicated!", desc.id);
 				}
 				cardDesc.put(desc.id, desc);
 				records.put(desc.id, record);
 				recordsByName.putIfAbsent(desc.name, new ArrayList<>());
 				recordsByName.get(desc.name).add(record);
 			} catch (Exception e) {
-				logger.error("An error occurred while processing {}: {}", resourceInputStream.fileName, e.toString());
+				logger.error("loadCards: An error occurred while processing {}: {}", resourceInputStream.fileName, e.toString());
 				badCards.add(resourceInputStream.fileName);
 			}
 		}
@@ -195,7 +195,7 @@ public class CardCatalogue {
 			CardCatalogue.add(instance);
 		}
 
-		logger.debug("{} cards loaded.", CardCatalogue.cards.size());
+		logger.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
 	}
 
 	public static Stream<Card> stream() {

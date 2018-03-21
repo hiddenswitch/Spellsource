@@ -405,14 +405,15 @@ public class JourneyToUngoroTests extends TestBase {
 
 	@Test
 	public void testClutchmotherZavas() {
-		runGym((c, p, o) -> {
-			receiveCard(c, p, "minion_clutchmother_zavas");
-			playMinionCard(c, p, "minion_succubus");
-			c.getLogic().performGameAction(p.getId(), p.getHand().get(0).play());
+		runGym((context, player, opponent) -> {
+			Card clutchmotherBase = receiveCard(context, player, "minion_clutchmother_zavas");
+			playMinionCard(context, player, "minion_succubus");
+			playMinionCard(context, player, "minion_succubus");
 
-			Minion clutchmother = getSummonedMinion(p.getMinions());
-			Assert.assertEquals(clutchmother.getAttack(), 4);
-			Assert.assertEquals(clutchmother.getHp(), 4);
+			Minion clutchmother = playMinionCard(context, player, clutchmotherBase);
+			Assert.assertEquals(clutchmother.getAttack(), 6);
+			Assert.assertEquals(clutchmother.getHp(), 6);
+
 		});
 	}
 
