@@ -1,6 +1,6 @@
 {
   "name": "Gemstone Giant",
-  "baseManaCost": 12,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 8,
