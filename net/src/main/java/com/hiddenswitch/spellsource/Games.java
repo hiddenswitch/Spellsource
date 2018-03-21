@@ -1008,7 +1008,8 @@ public interface Games {
 		if (owner != -1) {
 			if (card.getZone() == Zones.HAND
 					|| card.getZone() == Zones.DECK
-					|| card.getZone() == Zones.SET_ASIDE_ZONE) {
+					|| card.getZone() == Zones.SET_ASIDE_ZONE
+					|| card.getZone() == Zones.HERO_POWER) {
 				final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
 						&& card.getOwner() == workingContext.getActivePlayerId()
 						&& localPlayerId == card.getOwner();
