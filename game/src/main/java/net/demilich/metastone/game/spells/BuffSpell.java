@@ -51,7 +51,7 @@ public class BuffSpell extends Spell {
 			}
 		}
 
-		logger.debug("{} gains ({})", target, attackBonus + "/" + (hpBonus + armorBonus));
+		logger.debug("onCast {} {}: {} gains ({})", context.getGameId(), source, target, attackBonus + "/" + (hpBonus + armorBonus));
 
 		if (attackBonus != 0) {
 			if (target instanceof Hero) {

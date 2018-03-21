@@ -1198,6 +1198,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			logger.debug("discardCard {}: {} discards {}", context.getGameId(), player.getName(), card);
 			card.getAttributes().put(Attribute.DISCARDED, true);
 			context.fireGameEvent(new DiscardEvent(context, player.getId(), card));
+			if (!card.hasAttribute(Attribute.DISCARDED)) {
+				logger.debug("discardCard {}: Discard of {} has been canceled by a trigger.", context.getGameId(), card);
+				return;
+			}
 			player.getStatistics().cardDiscarded();
 		} else if (card.getZone() == Zones.DECK) {
 			logger.debug("discardCard {}: {} mills {}", context.getGameId(), player.getName(), card);
@@ -1525,8 +1529,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * For heroes that have a {@link Card} that has automatic target selection, returns the hero power. It is
-	 * not clear if this is used by any hero power cards in the game.
+	 * For heroes that have a {@link Card} that has automatic target selection, returns the hero power. It is not clear
+	 * if this is used by any hero power cards in the game.
 	 *
 	 * @param playerId The player equipped with an auto hero power.
 	 * @return The action to play the hero power.

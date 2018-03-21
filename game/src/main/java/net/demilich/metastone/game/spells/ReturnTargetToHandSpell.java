@@ -6,6 +6,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,14 +60,27 @@ public class ReturnTargetToHandSpell extends Spell {
 				context.getLogic().removeActor((Actor) target, true);
 			}
 			// The source card may be in the graveyard.
-			Card returnedCard = target.getSourceCard();
-			if (returnedCard.getZone() != Zones.GRAVEYARD
-					|| returnedCard.getZone() != Zones.REMOVED_FROM_PLAY
-					|| !returnedCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-				returnedCard = returnedCard.getCopy();
+			Card returnedCard;
+			if (target instanceof Card) {
+				returnedCard = (Card) target;
+			} else {
+				returnedCard = target.getSourceCard();
+
+				if (returnedCard.getZone() != Zones.GRAVEYARD
+						|| returnedCard.getZone() != Zones.REMOVED_FROM_PLAY
+						|| !returnedCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+					returnedCard = returnedCard.getCopy();
+				}
 			}
+
 			returnedCard.getAttributes().putAll(map);
-			context.getLogic().receiveCard(target.getOwner(), returnedCard);
+			// Prevents cards from being discarded
+			if (returnedCard.getZone() == Zones.HAND
+					&& returnedCard.hasAttribute(Attribute.DISCARDED)) {
+				returnedCard.getAttributes().remove(Attribute.DISCARDED);
+			} else {
+				context.getLogic().receiveCard(target.getOwner(), returnedCard);
+			}
 			if (cardSpell != null) {
 				SpellUtils.castChildSpell(context, player, cardSpell, source, target, returnedCard);
 			}
