@@ -162,7 +162,7 @@ public class Aura extends Enchantment {
 		return condition;
 	}
 
-	private void setCondition(Condition condition) {
+	protected void setCondition(Condition condition) {
 		this.condition = condition;
 	}
 }

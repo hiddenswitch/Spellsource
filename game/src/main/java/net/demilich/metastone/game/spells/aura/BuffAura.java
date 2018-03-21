@@ -14,6 +14,10 @@ public class BuffAura extends Aura {
 
 	public BuffAura(AuraDesc desc) {
 		this(desc.get(AuraArg.ATTACK_BONUS), desc.get(AuraArg.HP_BONUS), desc.getTarget(), desc.getFilter());
+		if (desc.getSecondaryTrigger() != null) {
+			triggers.add(desc.getSecondaryTrigger().create());
+		}
+		setCondition(desc.getCondition());
 	}
 
 	public BuffAura(Object attackBonus, Object hpBonus, EntityReference targetSelection, EntityFilter filter) {
@@ -26,6 +30,6 @@ public class BuffAura extends Aura {
 		super(new WillEndSequenceTrigger(), AuraBuffSpell.create(attackBonus, hpBonus), AuraBuffSpell.create(
 				AlgebraicValueProvider.create(attackBonus, null, AlgebraicOperation.NEGATE),
 				AlgebraicValueProvider.create(hpBonus, null, AlgebraicOperation.NEGATE)), targetSelection);
-		this.setEntityFilter(filter);
+		setEntityFilter(filter);
 	}
 }
