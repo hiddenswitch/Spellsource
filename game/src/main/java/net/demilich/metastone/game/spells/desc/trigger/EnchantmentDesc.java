@@ -36,6 +36,7 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
  * </pre>
  * Note, this is distinct from an {@link EventTriggerDesc} or {@link net.demilich.metastone.game.spells.trigger.EventTrigger},
  * which defines how to react to which events in game.
+ * @see Enchantment for more about enchantments.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class EnchantmentDesc implements Serializable, Cloneable {

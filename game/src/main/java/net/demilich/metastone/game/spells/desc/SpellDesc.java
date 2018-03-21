@@ -69,8 +69,8 @@ import static java.util.stream.Collectors.toList;
  * Deathrattles are resolved whenever an actor is destroyed before an {@link GameLogic#endOfSequence()} occurs, which is
  * generally at the end of any action besides discovering.
  *
- * @see SpellDescDeserializer for the official interpretation of each of the
- * attributes (how they are converted from JSON to a concrete value in the game).
+ * @see SpellDescDeserializer for the official interpretation of each of the attributes (how they are converted from
+ * JSON to a concrete value in the game).
  */
 @JsonDeserialize(using = SpellDescDeserializer.class)
 public class SpellDesc extends Desc<SpellArg, Spell> {

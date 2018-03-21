@@ -8,6 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -17,6 +18,19 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
+/**
+ * Auras represent ongoing effects applied to certain entities and is updated whenever (1) the board changes, (2) a
+ * sequence ends, (3) a special secondary trigger is fired, or (4) a condition is changed during these earlier events.
+ * <p>
+ * An aura is not an {@code abstract} class; it can be directly specified using an {@link AuraDesc} with a specific
+ * {@link AuraArg#APPLY_EFFECT} and {@link AuraArg#REMOVE_EFFECT}. The remove effect should reverse the consequences of
+ * the add effect. Since this is challenging to come up with without a background in software engineering, the {@link
+ * BuffAura} and {@link AttributeAura} should cover most cases of ongoing effects correctly.
+ * <p>
+ * The {@link #onGameEvent(GameEvent)} method actually implements the evaluation of the condition, the filter, the
+ * target and the add/remove effects. Observe that unlike an {@link Enchantment}, which it inherits, auras do not
+ * respect configuration features like {@link #maxFires}. It is unclear how such features should be interpreted.
+ */
 public class Aura extends Enchantment {
 	private EntityReference targets;
 	private SpellDesc applyAuraEffect;

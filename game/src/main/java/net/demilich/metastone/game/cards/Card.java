@@ -238,7 +238,8 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * Gets a cleaned up description of the card. In the future, this description should "fill in the blanks" for cards
 	 * that have variables, like which minion will be summoned or how much spell damage the spell will deal.
 	 *
-	 * @return The description.
+	 * @return The value of the {@link Attribute#DESCRIPTION} on this {@link Card}, if it is not null. Otherwise, the
+	 * {@link CardDesc#description} field.
 	 */
 	public String getDescription() {
 		// Cleanup the html tags that appear in the description
@@ -831,6 +832,11 @@ public class Card extends Entity implements HasChooseOneActions {
 		return hasChoices();
 	}
 
+	/**
+	 * Determines how this card should be named.
+	 *
+	 * @return The value of the {@link Attribute#NAME} attribute, or the underlying {@link CardDesc#name} field.
+	 */
 	@Override
 	public String getName() {
 		return (String) getAttributes().getOrDefault(Attribute.NAME, getDesc().name);

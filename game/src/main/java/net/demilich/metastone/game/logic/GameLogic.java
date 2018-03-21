@@ -194,6 +194,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		immuneToSilence.add(Attribute.AURA_HP_BONUS);
 		immuneToSilence.add(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
 		immuneToSilence.add(Attribute.AURA_TAUNT);
+		immuneToSilence.add(Attribute.AURA_CANNOT_ATTACK);
+		immuneToSilence.add(Attribute.AURA_CHARGE);
+		immuneToSilence.add(Attribute.AURA_CARD_ID);
+		immuneToSilence.add(Attribute.AURA_IMMUNE);
 		immuneToSilence.add(Attribute.RACE);
 		immuneToSilence.add(Attribute.NUMBER_OF_ATTACKS);
 		immuneToSilence.add(Attribute.PERMANENT);
@@ -749,6 +753,28 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	/**
 	 * Changes the player's hero.
+	 * <p>
+	 * A hero consists of the actual {@link Hero} actor, the hero's hero power {@link Card} specified on its {@link
+	 * net.demilich.metastone.game.cards.desc.CardDesc#heroPower} field, and possibly a {@link Weapon} equipped by an
+	 * {@link EquipWeaponSpell} specified in its battlecry. Heroes that do not resolve battlecries (i.e., heroes that
+	 * are not played from the hand) generally do not equip weapons, while heroes coming into play in any way generally
+	 * change the hero powers.
+	 * <p>
+	 * Many attributes of the current hero are retained, like its {@link Attribute#NUMBER_OF_ATTACKS}. Enchantments are
+	 * removed. When the hero card specifies a new {@link Attribute#MAX_HP} and {@link Attribute#HP}, the hitpoints of
+	 * the new hero are changed; otherwise, the old hitpoints are retained. An {@link Attribute#ARMOR} amount is added
+	 * to the previous hero's armor, not replaced.
+	 * <p>
+	 * Hero powers have their {@link net.demilich.metastone.game.cards.desc.CardDesc#passiveTrigger} processed, because
+	 * the hero power behaves like an extension of the hand, not a zone in play. Otherwise, the {@link
+	 * net.demilich.metastone.game.cards.desc.CardDesc#trigger} is activated when the hero comes into play.
+	 * <p>
+	 * The previous hero is not moved to the graveyard, because it was not destroyed. It is moved to {@link
+	 * Zones#REMOVED_FROM_PLAY}.
+	 * <p>
+	 * Some "boss" heroes, like Ragnaros, should not change the hero class of the player. They use the hero class {@link
+	 * HeroClass#INHERIT}, which will set the player and hero's class to the previous hero's class. Note that in
+	 * Spellsource, changing your hero to a different class will change the results of your discovers.
 	 * <p>
 	 * Implements Lord Jaraxxus and hero cards. Resolves battlecries.
 	 *

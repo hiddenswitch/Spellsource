@@ -4,6 +4,9 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.HasValue;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
+import net.demilich.metastone.game.spells.trigger.secrets.Secret;
+import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,21 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
 import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
+/**
+ * An enchantment is a type of entity that reacts to certain events using a trigger by casting a spell.
+ * <p>
+ * Enchantments live inside {@link TriggerManager#triggers}; some enchantments, like {@link Secret} and {@link Quest},
+ * live in their respective zones {@link Zones#QUEST} and {@link Zones#SECRET}. Otherwise, unlike in Hearthstone,
+ * enchantments are generally not targetable and do not "live" on cards or in zones.
+ * <p>
+ * Enchantments consistent of two important features: a {@link EventTrigger} built from an {@link
+ * net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc}, and a {@link SpellDesc} indicating which spell
+ * should be cast when the enchantment's {@link EventTrigger} and its conditions {@link EventTrigger#fire(GameEvent,
+ * Entity)}.
+ * <p>
+ * Enchantments are specified by a {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} in the card
+ * JSON. They can also be specified as fields in e.g., {@link net.demilich.metastone.game.spells.AddEnchantmentSpell}.
+ */
 public class Enchantment extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
 	private EventTrigger primaryTrigger;
