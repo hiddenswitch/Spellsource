@@ -799,7 +799,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Maintain the old hero's temporary stats
 		Stream.of(Attribute.NUMBER_OF_ATTACKS,
-				Attribute.LIFETIME_DAMAGE_DEALT,
+				Attribute.TOTAL_DAMAGE_DEALT,
 				Attribute.LAST_HEAL,
 				Attribute.LAST_HIT,
 				Attribute.RESERVED_BOOLEAN_1,
