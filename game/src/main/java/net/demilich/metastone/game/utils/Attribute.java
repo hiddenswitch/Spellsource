@@ -618,7 +618,9 @@ public enum Attribute {
 	LAST_MINION_DESTROYED_INVENTORY_ID,
 	/**
 	 * Every time an {@link Actor} damages a target, increment this attribute with the total amount of damage dealt
-	 * across all games.
+	 * across <b>all games.</b>
+	 * <p>
+	 * This is a legacy mechanic. In a networked multiplayer environment, this value will persist between matches.
 	 */
 	TOTAL_DAMAGE_DEALT,
 	/**

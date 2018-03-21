@@ -21,14 +21,14 @@ public class MissilesSpell extends DamageSpell {
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		int missiles = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 2);
-		int healing = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
+		int damage = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
 
-		if (healing == 1 && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
+		if (damage == 1 && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			missiles = context.getLogic().applySpellpower(player, source, missiles);
 			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.SPELL_AMPLIFY_MULTIPLIER);
 		} else if (source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
-			healing = context.getLogic().applySpellpower(player, source, healing);
-			healing = context.getLogic().applyAmplify(player, healing, Attribute.SPELL_AMPLIFY_MULTIPLIER);
+			damage = context.getLogic().applySpellpower(player, source, damage);
+			damage = context.getLogic().applyAmplify(player, damage, Attribute.SPELL_AMPLIFY_MULTIPLIER);
 		}
 		for (int i = 0; i < missiles; i++) {
 			List<Actor> validTargets;
@@ -44,7 +44,7 @@ public class MissilesSpell extends DamageSpell {
 				return;
 			}
 			Actor randomTarget = context.getLogic().getRandom(validTargets);
-			context.getLogic().damage(player, randomTarget, healing, source, true);
+			context.getLogic().damage(player, randomTarget, damage, source, true);
 		}
 	}
 
