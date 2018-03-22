@@ -20,11 +20,23 @@
         {
         "class": "ReplaceCardsSpell",
         "target": "FRIENDLY_HAND",
-        "filter": {
-          "class": "CardFilter",
-          "heroClass": "BLUE",
-          "cardType": "SPELL"
-          }
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "heroClass": "BLUE",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "CardFilter",
+              "rarity": "LEGENDARY",
+              "invert": true
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
         }
       ]
     }
