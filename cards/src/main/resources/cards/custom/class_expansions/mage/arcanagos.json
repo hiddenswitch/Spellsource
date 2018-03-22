@@ -1,0 +1,41 @@
+{
+  "name": "Arcanagos",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Battlecry: Shuffle a copy of your hand into your deck. Replace your hand with random Mage spells.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+        "spell": {
+          "class": "ShuffleToDeckSpell",
+          "target": "FRIENDLY_HAND"
+          }
+        },
+        {
+        "class": "ReplaceCardsSpell",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "heroClass": "MAGE",
+          "cardType": "SPELL"
+          }
+        }
+      ]
+    }
+  },
+  
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
