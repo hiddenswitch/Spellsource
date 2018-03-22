@@ -129,3 +129,4 @@ public abstract class Spell implements Serializable {
 		}
 	}
 }
+
