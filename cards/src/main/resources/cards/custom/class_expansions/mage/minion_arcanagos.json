@@ -22,7 +22,7 @@
         "target": "FRIENDLY_HAND",
         "filter": {
           "class": "CardFilter",
-          "heroClass": "MAGE",
+          "heroClass": "BLUE",
           "cardType": "SPELL"
           }
         }
