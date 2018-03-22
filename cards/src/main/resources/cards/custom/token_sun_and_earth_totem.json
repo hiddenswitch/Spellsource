@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "SILVER",
   "baseAttack": 0,
-  "baseHp": 3,
+  "baseHp": 4,
   "rarity": "FREE",
   "race": "TOTEM",
   "description": "At the end of your turn, restore 2 Health to all friendly minions.",
@@ -19,7 +19,7 @@
       "value": 2
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
