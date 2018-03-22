@@ -12,6 +12,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
+/**
+ * Sets the {@code target}'s {@link SpellArg#ATTRIBUTE} to the specified {@link SpellArg#VALUE}.
+ */
 public class SetAttributeSpell extends Spell {
 	public static SpellDesc create(EntityReference target, Attribute tag, Object value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SetAttributeSpell.class);
