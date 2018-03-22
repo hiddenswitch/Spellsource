@@ -45,4 +45,9 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 		return 0;
 	}
 
+	public static ValueProvider create(PlayerAttribute attribute) {
+		ValueProviderDesc desc = new ValueProviderDesc(PlayerAttributeValueProvider.class);
+		desc.put(ValueProviderArg.PLAYER_ATTRIBUTE, attribute);
+		return desc.create();
+	}
 }
