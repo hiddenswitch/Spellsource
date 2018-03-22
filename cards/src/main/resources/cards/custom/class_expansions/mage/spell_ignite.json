@@ -11,7 +11,7 @@
     "target": "TARGET",
     "value": 1,
     "howMany": 6
-  }
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
