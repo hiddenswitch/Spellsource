@@ -13,7 +13,18 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.Map;
 
 /**
- * Created by bberman on 3/17/17.
+ * Reads a card ID from the specified attribute {@link SpellArg#ATTRIBUTE}. Summons the card with that ID.
+ * <p>
+ * For example, to summon the last minion a minion destroyed:
+ * <pre>
+ *      "spell": {
+ *          "class": "SummonCardFromAttributeSpell",
+ *          "target": "SELF",
+ *          "attribute": "LAST_MINION_DESTROYED_CARD_ID"
+ *      }
+ * </pre>
+ * <p>
+ * Implements Sourcing Specialist.
  */
 public class SummonCardFromAttributeSpell extends Spell {
 	public static SpellDesc create(Attribute attributeContainingCardId, String defaultCardId, EntityReference target) {
