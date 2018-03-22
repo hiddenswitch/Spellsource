@@ -14,10 +14,8 @@
       "class": "MetaSpell",
       "spells": [
         {
-        "spell": {
-          "class": "ShuffleToDeckSpell",
-          "target": "FRIENDLY_HAND"
-          }
+        "class": "ShuffleToDeckSpell",
+        "target": "FRIENDLY_HAND"
         },
         {
         "class": "ReplaceCardsSpell",
