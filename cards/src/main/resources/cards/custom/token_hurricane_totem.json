@@ -4,14 +4,14 @@
   "type": "MINION",
   "heroClass": "SILVER",
   "baseAttack": 0,
-  "baseHp": 3,
+  "baseHp": 4,
   "rarity": "FREE",
   "race": "TOTEM",
   "description": "Spell Damage +2",
   "attributes": {
     "SPELL_DAMAGE": 2
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
