@@ -13,10 +13,27 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Gives the player a temporary amount of {@link SpellArg#VALUE} mana.
+ * <p>
+ * To give the player 1 mana, like the coin:
+ * <pre>
+ *     {
+ *         "class": "GainManaSpell",
+ *         "value": 1
+ *     }
+ * </pre>
+ */
 public class GainManaSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(GainManaSpell.class);
 
+	/**
+	 * Gain a fixed amount of mana.
+	 *
+	 * @param mana The amount of mana the player should gain this turn.
+	 * @return The spell
+	 */
 	public static SpellDesc create(int mana) {
 		Map<SpellArg, Object> arguments = new SpellDesc(GainManaSpell.class);
 		arguments.put(SpellArg.VALUE, mana);
@@ -28,7 +45,9 @@ public class GainManaSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int mana = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-		logger.debug("{} gains {} mana", player.getName(), mana);
+		if (mana <= 0) {
+			logger.debug("onCast {} {}: Player loses mana ({}) in this spell.", context.getGameId(), source, mana);
+		}
 		context.getLogic().modifyCurrentMana(player.getId(), mana);
 	}
 
