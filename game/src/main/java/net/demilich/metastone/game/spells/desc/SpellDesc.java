@@ -17,6 +17,7 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -237,8 +238,26 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 		return (CardSource) get(SpellArg.CARD_SOURCE);
 	}
 
+	/**
+	 * Uses the {@link SpellArg#CARD_FILTER} and {@link SpellArg#CARD_SOURCE} to generated a list of filtered cards.
+	 * <p>
+	 * When {@link SpellArg#CARD_FILTER} is not specified, a filter that always returns {@code true} (i.e., selects all
+	 * cards) is used.
+	 * <p>
+	 * When {@link SpellArg#CARD_SOURCE} is not specified, a {@link CatalogueSource} using the current {@link
+	 * net.demilich.metastone.game.decks.DeckFormat} is assumed.
+	 * <p>
+	 * When neither is specified, this method returns all {@link net.demilich.metastone.game.cards.desc.CardDesc#collectible}
+	 * cards in the given format.
+	 *
+	 * @param context The game context to use for evaluating the card source and filter.
+	 * @param player  The player from whose point of view the card source and filter should be evaluated.
+	 * @param host    The host entity from whose point of view the card source and filter should be evaluated.
+	 * @return A possibly empty list of cards.
+	 */
 	@Suspendable
-	public CardList getFilteredCards(GameContext context, Player player, Entity host) {
+	public @NotNull
+	CardList getFilteredCards(GameContext context, Player player, Entity host) {
 		CardSource source = getCardSource();
 		final EntityFilter filter;
 		if (source == null) {
