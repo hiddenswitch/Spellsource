@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "SILVER",
   "baseAttack": 0,
-  "baseHp": 3,
+  "baseHp": 4,
   "rarity": "FREE",
   "race": "TOTEM",
   "description": "Taunt. Divine Shield.",
@@ -12,7 +12,7 @@
     "DIVINE_SHIELD": true,
     "TAUNT": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
