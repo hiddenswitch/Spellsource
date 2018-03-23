@@ -18,14 +18,14 @@
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "TAUNT"
+          "attribute": "STEALTH"
         }  
       ]
     },
     {
-      "class": "SummonSpell",
       "name": "Consult the Trees",
       "description": "Summon two 1/1 Saplings.",
+      "class": "SummonSpell",
       "card": [
         "token_sapling",
         "token_sapling"
