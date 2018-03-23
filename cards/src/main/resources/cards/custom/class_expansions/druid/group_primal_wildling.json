@@ -37,7 +37,7 @@
       "description": "Deal 2 damage.",
       "heroClass": "BROWN",
       "class": "DamageSpell",
-      "target": "ENEMY_MINIONS",
+      "target": "ANY",
       "value": 2
     }
   ],
