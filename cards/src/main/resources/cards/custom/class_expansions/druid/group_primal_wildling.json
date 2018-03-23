@@ -1,0 +1,43 @@
+{
+  "name": "Plan Your Attack!",
+  "baseManaCost": 0,
+  "type": "GROUP",
+  "heroClass": "BROWN",
+  "group": [
+    {
+      "class": "MetaSpell",
+      "name": "Stalk Your Prey",
+      "description": "Gain +1/+1 and Stealth.",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 1,
+          "hpBonus": 1,
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "TAUNT"
+        }  
+      ]
+    },
+    {
+      "class": "SummonSpell",
+      "name": "Consult the Trees",
+      "description": "Summon two 1/1 Saplings.",
+      "card": "token_sapling"
+    },
+    {
+      "class": "DamageSpell",
+      "target": "ANY",
+      "name": "Leap From the Canopy",
+      "description": "Deal 2 damage.",
+      "value": 2
+    }
+  ],
+  "rarity": "FREE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
