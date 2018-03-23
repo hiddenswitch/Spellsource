@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Choose Twice - Gain +1/+1 and Stealth; Summon two 1/1 Saplings; Deal 2 damage.",
+  "description": "Choose Twice - Gain +2/+1 and Stealth; Summon two 1/1 Saplings; Deal 2 damage.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
