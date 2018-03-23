@@ -26,7 +26,10 @@
       "class": "SummonSpell",
       "name": "Consult the Trees",
       "description": "Summon two 1/1 Saplings.",
-      "card": "token_sapling"
+      "card": [
+        "token_sapling",
+        "token_sapling"
+      ]
     },
     {
       "class": "DamageSpell",
