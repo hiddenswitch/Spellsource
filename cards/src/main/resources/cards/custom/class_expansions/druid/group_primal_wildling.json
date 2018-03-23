@@ -31,11 +31,11 @@
       "card": "token_sapling"
     },
     {
-      "name": "Leap From the Canopy",
-      "description": "Deal 2 damage.",
       "class": "DamageSpell",
       "target": "ANY",
-      "value": 2
+      "value": 2,
+      "name": "Leap From the Canopy",
+      "description": "Deal 2 damage."
     }
   ],
   "rarity": "FREE",
