@@ -12,7 +12,7 @@
     "spell": {
       "class": "CastFromGroupSpell",
       "value": 2,
-      "group": "group_primal_wildling"
+      "group": "group_primal_wildling",
       "target": "SELF"
     }
   },
