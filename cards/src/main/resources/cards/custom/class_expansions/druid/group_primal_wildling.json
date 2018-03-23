@@ -7,13 +7,13 @@
     {
       "class": "MetaSpell",
       "name": "Stalk Your Prey",
-      "description": "Gain +1/+1 and Stealth.",
+      "description": "Gain +2/+1 and Stealth.",
       "heroClass": "BROWN",
       "spells": [
         {
           "class": "BuffSpell",
           "target": "SELF",
-          "attackBonus": 1,
+          "attackBonus": 2,
           "hpBonus": 1
         },
         {
@@ -37,7 +37,7 @@
       "description": "Deal 2 damage.",
       "heroClass": "BROWN",
       "class": "DamageSpell",
-      "target": "SPELL_TARGET",
+      "target": "ENEMY_MINIONS",
       "value": 2
     }
   ],
