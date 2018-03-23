@@ -8,7 +8,6 @@
       "class": "MetaSpell",
       "name": "Stalk Your Prey",
       "description": "Gain +2/+1 and Stealth.",
-      "heroClass": "BROWN",
       "spells": [
         {
           "class": "BuffSpell",
@@ -26,7 +25,6 @@
     {
       "name": "Consult the Trees",
       "description": "Summon two 1/1 Saplings.",
-      "heroClass": "BROWN",
       "class": "SummonSpell",
       "target": "NONE",
       "value": 2,
@@ -35,7 +33,6 @@
     {
       "name": "Leap From the Canopy",
       "description": "Deal 2 damage.",
-      "heroClass": "BROWN",
       "class": "DamageSpell",
       "target": "ANY",
       "value": 2
