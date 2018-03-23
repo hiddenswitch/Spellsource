@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
  *         "targetPlayer": "SELF"
  *     }
  * </pre>
+ * Casts the {@link SpellArg#SPELL} sub-spell with the {@link net.demilich.metastone.game.targeting.EntityReference#OUTPUT}
+ * set to the new hero.
  */
 public class ChangeHeroSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(ChangeHeroSpell.class);
