@@ -32,7 +32,7 @@
     },
     {
       "class": "DamageSpell",
-      "target": "ANY",
+      "target": "SPELL_TARGET",
       "value": 2,
       "name": "Leap From the Canopy",
       "description": "Deal 2 damage."
