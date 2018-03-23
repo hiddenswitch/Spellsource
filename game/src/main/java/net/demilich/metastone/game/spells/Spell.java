@@ -32,6 +32,14 @@ public abstract class Spell implements Serializable {
 	/**
 	 * Casts a spell for the given arguments.
 	 * <p>
+	 * If there is at least one valid target in {@code targets} and {@link SpellArg#RANDOM_TARGET} is {@code true}, a
+	 * single target from the list will be chosen at random.
+	 * <p>
+	 * If {@code targets} is {@code null}, this is a spell that does not ordinarily receive targets, so it will be cast
+	 * once.
+	 * <p>
+	 * If {@code targets.size()} is {@code 0}, this spell takes targets but none were found, so the spell is not cast.
+	 * <p>
 	 * This spell casting code is responsible for interpreting the {@link SpellArg#FILTER} and {@link
 	 * SpellArg#RANDOM_TARGET} attributes of a {@link SpellDesc}.
 	 *
