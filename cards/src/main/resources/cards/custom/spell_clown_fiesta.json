@@ -78,7 +78,8 @@
         ]
       },
     "targetSelection": "NONE"
-    },
+    }
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
