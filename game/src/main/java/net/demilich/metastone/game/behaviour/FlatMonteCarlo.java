@@ -16,6 +16,11 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 
 public class FlatMonteCarlo extends AbstractBehaviour {
+	private static class ScoredAction {
+		protected GameAction action;
+		protected double score;
+	}
+
 	private final static Logger logger = LoggerFactory.getLogger(FlatMonteCarlo.class);
 	private int iterations;
 	private long timeout = 59000;
@@ -35,7 +40,7 @@ public class FlatMonteCarlo extends AbstractBehaviour {
 				bestScore = score;
 			}
 		}
-		logger.debug("Best action determined by MonteCarlo: " + bestAction.getActionType());
+		logger.debug("getBestAction: Best action determined by MonteCarlo: {}", bestAction);
 		return bestAction;
 	}
 
@@ -71,10 +76,17 @@ public class FlatMonteCarlo extends AbstractBehaviour {
 		if (validActions.size() == 1) {
 			return validActions.get(0);
 		}
+		final int playerId = player.getId();
 		final long startMillis = System.currentTimeMillis();
-		Map<GameAction, Double> actionScores = validActions.parallelStream().collect(Collectors.toMap(
-				Function.identity(), gameAction -> simulate(context, player.getId(), gameAction, startMillis)
-		));
+		Map<GameAction, Double> actionScores = validActions
+				.parallelStream()
+				.map(gameAction -> {
+					double score = simulate(context, playerId, gameAction, startMillis);
+					ScoredAction scored = new ScoredAction();
+					scored.action = gameAction;
+					scored.score = score;
+					return scored;
+				}).collect(Collectors.toMap(scored -> scored.action, scored -> scored.score));
 
 		return getBestAction(actionScores);
 	}
@@ -84,7 +96,8 @@ public class FlatMonteCarlo extends AbstractBehaviour {
 		GameContext simulation = context.clone();
 		simulation.getLogic().performGameAction(simulation.getActivePlayerId(), action);
 		if (simulation.updateAndGetGameOver()) {
-			return simulation.getWinningPlayerId() == playerId ? 1 : 0;
+			// Action leads to lethal
+			return simulation.getWinningPlayerId() == playerId ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
 		}
 		double score = 0;
 		int i = 0;
@@ -95,7 +108,7 @@ public class FlatMonteCarlo extends AbstractBehaviour {
 			}
 			score += playRandomUntilEnd(simulation.clone(), playerId);
 		}
-		return score / i;
+		return score;
 	}
 
 	public long getTimeout() {
