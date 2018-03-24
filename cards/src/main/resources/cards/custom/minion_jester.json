@@ -14,10 +14,19 @@
         "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "ShuffleToDeckSpell",
-        "card": "spell_clown_fiesta",
-        "howMany": 3,
-        "targetPlayer": "SELF"
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF"
+          },
+          {
+            "class": "ShuffleToDeckSpell",
+            "card": "spell_clown_fiesta",
+            "howMany": 3,
+            "targetPlayer": "SELF"
+          }
+        ]
       }
     }
   ],
