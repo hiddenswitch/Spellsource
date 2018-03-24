@@ -34,7 +34,8 @@
                 "cardId": "spell_felfire_potion"
               }
             ]
-          }
+          },
+          "targetSelection": "NONE"
         },
         {
           "class": "SetAttributeSpell",
@@ -53,7 +54,6 @@
         }
       ]
     },
-  "targetSelection": "NONE",
   "spell": {
     "class": "CastRandomSpellSpell",
       "cardFilter": {
@@ -76,7 +76,8 @@
           "cardId": "spell_felfire_potion"
           }
         ]
-      }
+      },
+    "targetSelection": "NONE"
     },
   "collectible": false,
   "set": "CUSTOM",
