@@ -22,3 +22,4 @@ public class AndCondition extends Condition {
 	}
 
 }
+

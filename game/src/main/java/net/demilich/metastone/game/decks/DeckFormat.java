@@ -27,7 +27,8 @@ public class DeckFormat implements Serializable, Cloneable {
 							MEAN_STREETS_OF_GADGETZAN,
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
-							KOBOLDS_AND_CATACOMBS
+							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD
 					)));
 
 	public static final DeckFormat WILD = new DeckFormat()
@@ -49,6 +50,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
 							HALL_OF_FAME
 					))
 			);
@@ -72,6 +74,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
 							HALL_OF_FAME,
@@ -98,6 +101,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
 							HALL_OF_FAME,
 							PROCEDURAL_PREVIEW,
 							CardSet.SPELLSOURCE,
