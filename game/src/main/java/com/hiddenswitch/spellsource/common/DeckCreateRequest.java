@@ -103,8 +103,8 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 			}
 		}
 
-		if (request.getCardIds().size() != 30) {
-			errors.add(new IllegalArgumentException(String.format("You must specify a deck with 30 cards. You gave %d", request.getCardIds().size())));
+		if (request.getCardIds().size() == 0) {
+			errors.add(new IllegalArgumentException(String.format("You must specify a deck with at least 1 card.")));
 		}
 
 		if (request.getHeroClass() == null) {
