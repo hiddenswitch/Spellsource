@@ -25,6 +25,10 @@ public class FlatMonteCarlo extends AbstractBehaviour {
 	private int iterations;
 	private long timeout = 59000;
 
+	public FlatMonteCarlo() {
+		this(8);
+	}
+
 	public FlatMonteCarlo(int iterations) {
 		this.iterations = iterations;
 	}
