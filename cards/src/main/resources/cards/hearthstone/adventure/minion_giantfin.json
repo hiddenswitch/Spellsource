@@ -1,0 +1,37 @@
+{
+  "name": "Giantfin",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "race": "MURLOC",
+  "description": "At the end of your turn, draw until you have as many cards as your opponent.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "targetPlayer": "OPPONENT",
+          "playerAttribute": "HAND_COUNT"
+        },
+        "value2": {
+          "class": "PlayerAttributeValueProvider",
+          "targetPlayer": "SELF",
+          "playerAttribute": "HAND_COUNT"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "BLIZZARD_ADVENTURE",
+  "fileFormatVersion": 1
+}
