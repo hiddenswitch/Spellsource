@@ -2,9 +2,9 @@
   "name": "Lord Slitherspear",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "At the end of your turn, summon a 1/1 Hungry Naga for each enemy minion.",
   "trigger": {

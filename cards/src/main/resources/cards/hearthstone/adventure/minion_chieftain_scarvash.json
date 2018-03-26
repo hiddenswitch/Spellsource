@@ -10,9 +10,9 @@
   "cardCostModifier": {
     "class": "CardCostModifier",
     "target": "FRIENDLY_HAND",
-    "targetPlayer": "OPPONENT",
+    "value": 1,
     "operation": "ADD",
-    "value": 1
+    "targetPlayer": "OPPONENT"
   },
   "collectible": true,
   "set": "BLIZZARD_ADVENTURE",

@@ -2,9 +2,9 @@
   "name": "Noth The Plaguebringer",
   "baseManaCost": 9,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Whenever an enemy minion dies, summon a 1/1 Skeleton.",
   "trigger": {
@@ -14,8 +14,8 @@
     },
     "spell": {
       "class": "SummonSpell",
-      "card": "token_skeleton",
-      "boardPositionRelative": "RIGHT"
+      "boardPositionRelative": "RIGHT",
+      "card": "token_skeleton"
     }
   },
   "collectible": true,

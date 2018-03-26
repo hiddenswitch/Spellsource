@@ -9,7 +9,6 @@
   "race": "BEAST",
   "description": "Battlecry: If your deck has only even-Cost cards, deal 2 damage.",
   "battlecry": {
-    "targetSelection": "ANY",
     "condition": {
       "class": "AllModuloValueEqualsZeroCondition",
       "target": "FRIENDLY_DECK",
@@ -19,6 +18,7 @@
       },
       "value2": 2
     },
+    "targetSelection": "ANY",
     "spell": {
       "class": "DamageSpell",
       "value": 2

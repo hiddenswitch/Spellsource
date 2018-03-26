@@ -2,9 +2,9 @@
   "name": "Giantfin",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "race": "MURLOC",
   "description": "At the end of your turn, draw until you have as many cards as your opponent.",
@@ -20,13 +20,13 @@
         "operation": "SUBTRACT",
         "value1": {
           "class": "PlayerAttributeValueProvider",
-          "targetPlayer": "OPPONENT",
-          "playerAttribute": "HAND_COUNT"
+          "playerAttribute": "HAND_COUNT",
+          "targetPlayer": "OPPONENT"
         },
         "value2": {
           "class": "PlayerAttributeValueProvider",
-          "targetPlayer": "SELF",
-          "playerAttribute": "HAND_COUNT"
+          "playerAttribute": "HAND_COUNT",
+          "targetPlayer": "SELF"
         }
       }
     }
