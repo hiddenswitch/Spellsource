@@ -1,0 +1,36 @@
+{
+  "name": "Skelesaurus Hex",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "At the end of your turn, give each player a random card. It costs (0).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "BOTH",
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      },
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "operation": "SET",
+          "value": 0
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "BLIZZARD_ADVENTURE",
+  "fileFormatVersion": 1
+}
