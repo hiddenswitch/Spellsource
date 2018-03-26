@@ -1,0 +1,39 @@
+{
+  "name": "Warpath",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RED",
+  "rarity": "COMMON",
+  "description": "Echo. Deal 1 damage to all minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "spell": {
+          "class": "AddEnchantmentSpell",
+          "target": "OUTPUT",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnEndTrigger"
+            },
+            "spell": {
+              "class": "RemoveCardSpell",
+              "target": "SELF"
+            }
+          }
+        },
+        "card": "spell_warpath"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

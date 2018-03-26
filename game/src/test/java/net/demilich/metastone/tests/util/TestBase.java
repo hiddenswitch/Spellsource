@@ -379,6 +379,7 @@ public class TestBase {
 				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
 				CardSet.THE_OLD_GODS,
 				CardSet.KOBOLDS_AND_CATACOMBS,
+				CardSet.WITCHWOOD,
 				CardSet.CUSTOM
 		);
 

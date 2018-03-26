@@ -1,0 +1,46 @@
+{
+  "name": "Face Collector",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Echo. Battlecry: Add a random Legendary minion to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReceiveCardSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "cardType": "MINION"
+          }
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "spell": {
+            "class": "AddEnchantmentSpell",
+            "target": "OUTPUT",
+            "trigger": {
+              "eventTrigger": {
+                "class": "TurnEndTrigger"
+              },
+              "spell": {
+                "class": "RemoveCardSpell",
+                "target": "SELF"
+              }
+            }
+          },
+          "card": "minion_face_collector"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

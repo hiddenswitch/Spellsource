@@ -1,0 +1,36 @@
+{
+  "name": "Phantom Militia",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Echo. Taunt.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "OUTPUT",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger"
+          },
+          "spell": {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        }
+      },
+      "card": "minion_phantom_militia"
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}
