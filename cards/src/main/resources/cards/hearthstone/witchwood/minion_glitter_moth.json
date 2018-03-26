@@ -9,7 +9,6 @@
   "race": "BEAST",
   "description": "Battlecry: If your deck has only odd-Cost cards, double the Health of your other minions.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "AllModuloValueEqualsZeroCondition",
       "target": "FRIENDLY_DECK",
@@ -20,6 +19,7 @@
       },
       "value2": 2
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "OTHER_FRIENDLY_MINIONS",

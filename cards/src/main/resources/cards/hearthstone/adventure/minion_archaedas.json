@@ -2,9 +2,9 @@
   "name": "Archaedas",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "At the end of your turn, turn a random enemy minion into a 0/2 Statue.",
   "trigger": {
@@ -14,8 +14,8 @@
     },
     "spell": {
       "class": "TransformMinionSpell",
-      "card": "token_earthen_statue",
       "target": "ENEMY_MINIONS",
+      "card": "token_earthen_statue",
       "randomTarget": true
     }
   },

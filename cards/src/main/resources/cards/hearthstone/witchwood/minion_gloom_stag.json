@@ -9,7 +9,6 @@
   "race": "BEAST",
   "description": "Taunt. Battlecry: If your deck has only odd-Cost cards, gain +2/+2.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "AllModuloValueEqualsZeroCondition",
       "target": "FRIENDLY_DECK",
@@ -20,16 +19,17 @@
       },
       "value2": 2
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "hpBonus": 2,
-      "attackBonus": 2
+      "attackBonus": 2,
+      "hpBonus": 2
     }
   },
   "attributes": {
-    "TAUNT": true,
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "WITCHWOOD",

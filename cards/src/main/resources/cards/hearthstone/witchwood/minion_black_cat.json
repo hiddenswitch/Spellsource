@@ -9,7 +9,6 @@
   "race": "BEAST",
   "description": "Spell Damage +1. Battlecry: If your deck has only odd-Cost cards, draw a card.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "AllModuloValueEqualsZeroCondition",
       "target": "FRIENDLY_DECK",
@@ -20,6 +19,7 @@
       },
       "value2": 2
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "DrawCardSpell"
     }

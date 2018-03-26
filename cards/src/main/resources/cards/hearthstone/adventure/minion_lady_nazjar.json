@@ -2,9 +2,9 @@
   "name": "Lady Naz'Jar",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "At the end of your turn, replace all other minions with new ones of the same cost.",
   "trigger": {

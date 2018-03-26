@@ -8,6 +8,9 @@
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Start of Game: If your deck has only odd-Cost cards, upgrade your Hero Power.",
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1,
   "gameTriggers": [
     {
       "eventTrigger": {
@@ -123,8 +126,5 @@
         }
       }
     }
-  ],
-  "collectible": true,
-  "set": "WITCHWOOD",
-  "fileFormatVersion": 1
+  ]
 }

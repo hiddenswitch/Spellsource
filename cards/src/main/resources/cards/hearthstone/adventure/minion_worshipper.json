@@ -2,9 +2,9 @@
   "name": "Worshipper",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 4,
-  "heroClass": "ANY",
   "rarity": "FREE",
   "description": "Your Hero has +1 attack.",
   "aura": {
