@@ -23,8 +23,16 @@
       "aura": {
         "class": "BuffAura",
         "target": "FRIENDLY_HERO",
+        "condition": {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "ACTIVE"
+        },
         "attackBonus": 1,
-        "hpBonus": 0
+        "hpBonus": 0,
+        "secondaryTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "BOTH"
+        }
       }
     }
   },

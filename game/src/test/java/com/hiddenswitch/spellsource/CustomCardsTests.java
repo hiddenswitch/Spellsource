@@ -32,6 +32,18 @@ import static org.mockito.Mockito.spy;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testPrinceTenris() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_prince_tenris");
+			Assert.assertEquals(player.getHero().getAttack(), 1);
+			context.endTurn();
+			Assert.assertEquals(player.getHero().getAttack(), 0);
+			context.endTurn();
+			Assert.assertEquals(player.getHero().getAttack(), 1);
+		});
+	}
+
+	@Test
 	public void testFelGiant() {
 		runGym((context, player, opponent) -> {
 			// Prevents fatigue damage
