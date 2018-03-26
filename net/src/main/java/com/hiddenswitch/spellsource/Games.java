@@ -54,6 +54,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -131,7 +132,8 @@ public interface Games {
 				.stream()
 				.map(kv -> {
 					SpellAction spellAction = new SpellAction()
-							.sourceId(kv.getKey());
+							.sourceId(kv.getKey())
+							.targetKeyToActions(new ArrayList<>());
 
 					// Targetable battlecry
 					kv.getValue().stream()
@@ -343,6 +345,25 @@ public interface Games {
 				.findFirst()
 				.ifPresent(endTurnAction1 -> clientActions.endTurn(endTurnAction1.getId()));
 
+		// Fix choose ones
+		clientActions.getChooseOnes().forEach(chooseOneOptions -> {
+			if (chooseOneOptions.getHeroes() == null) {
+				chooseOneOptions.setHeroes(Collections.emptyList());
+			}
+			if (chooseOneOptions.getEntities() == null) {
+				chooseOneOptions.setEntities(Collections.emptyList());
+			}
+			if (chooseOneOptions.getHeroPowers() == null) {
+				chooseOneOptions.setHeroPowers(Collections.emptyList());
+			}
+			if (chooseOneOptions.getSpells() == null) {
+				chooseOneOptions.setSpells(Collections.emptyList());
+			}
+			if (chooseOneOptions.getSummons() == null) {
+				chooseOneOptions.setSummons(Collections.emptyList());
+			}
+		});
+
 		// Add all the action indices for compatibility purposes
 		clientActions.compatibility(actions.stream()
 				.map(GameAction::getId)
@@ -421,7 +442,8 @@ public interface Games {
 	@Suspendable
 	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> playCardActions) {
 		SpellAction spellAction = new SpellAction()
-				.sourceId(sourceCardId);
+				.sourceId(sourceCardId)
+				.targetKeyToActions(new ArrayList<>());
 
 		// Targetable spell
 		if (playCardActions.size() == 1
