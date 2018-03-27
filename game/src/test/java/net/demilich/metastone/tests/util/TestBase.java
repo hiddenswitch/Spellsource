@@ -366,6 +366,7 @@ public class TestBase {
 		DeckFormat deckFormat = new DeckFormat().withCardSets(
 				CardSet.BASIC,
 				CardSet.CLASSIC,
+				CardSet.BLIZZARD_ADVENTURE,
 				CardSet.BLACKROCK_MOUNTAIN,
 				CardSet.GOBLINS_VS_GNOMES,
 				CardSet.LEAGUE_OF_EXPLORERS,

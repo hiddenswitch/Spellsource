@@ -1,0 +1,15 @@
+{
+  "name": "Nefarian",
+  "heroPower": "hero_power_wild_magic",
+  "baseManaCost": 10,
+  "type": "HERO",
+  "heroClass": "INHERIT",
+  "rarity": "LEGENDARY",
+  "attributes": {
+    "ARMOR": 5,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "BLIZZARD_ADVENTURE",
+  "fileFormatVersion": 1
+}

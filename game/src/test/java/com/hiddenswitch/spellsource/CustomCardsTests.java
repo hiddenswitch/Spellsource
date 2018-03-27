@@ -32,6 +32,15 @@ import static org.mockito.Mockito.spy;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testANewChallenger() {
+		runGym((context, player, opponent) -> {
+			overrideRandomCard(context, "hero_nefarian");
+			playCard(context, player, "spell_a_new_challenger");
+			Assert.assertEquals(player.getHero().getSourceCard().getCardId(), "hero_nefarian");
+		});
+	}
+
+	@Test
 	public void testPrinceTenris() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_prince_tenris");
