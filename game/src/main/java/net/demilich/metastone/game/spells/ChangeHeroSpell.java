@@ -66,7 +66,7 @@ public class ChangeHeroSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARDS, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.SPELL);
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARDS, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.SPELL, SpellArg.EXCLUSIVE);
 		CardList heroCards = SpellUtils.getCards(context, player, target, source, desc);
 		if (heroCards.size() == 0) {
 			logger.error("onCast {} {}: Requires hero card ID, none specified.", context.getGameId(), source);
