@@ -1,11 +1,22 @@
 package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class AdventureTests extends TestBase {
+
+	@Test
+	public void testNefarian() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "hero_nefarian");
+			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			Assert.assertTrue(player.getHand().get(0).hasHeroClass(opponent.getHero().getHeroClass()));
+		}, HeroClass.VIOLET, HeroClass.GOLD);
+	}
+
 	@Test
 	public void testChieftainScarvash() {
 		runGym((context, player, opponent) -> {

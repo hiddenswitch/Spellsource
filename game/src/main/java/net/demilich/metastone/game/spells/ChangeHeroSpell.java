@@ -7,6 +7,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -15,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Changes the hero of {@link SpellArg#TARGET_PLAYER} to the specified hero card ID in {@link SpellArg#CARD}.
+ * Changes the hero of {@link SpellArg#TARGET_PLAYER} to the specified hero card ID in {@link SpellArg#CARD}. If {@link
+ * SpellArg#CARDS} or {@link SpellArg#CARD_FILTER} or {@link SpellArg#CARD_SOURCE} are specified, a random hero card
+ * will be chosen from the lists of cards.
  * <p>
  * For <b>example,</b> to turn the casting player's hero into Ragnaros:
  * <pre>
@@ -60,18 +63,14 @@ public class ChangeHeroSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.SPELL);
-		String heroCardId = (String) desc.get(SpellArg.CARD);
-		if (heroCardId == null) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARDS, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.SPELL);
+		CardList heroCards = SpellUtils.getCards(context, player, target, source, desc);
+		if (heroCards.size() == 0) {
 			logger.error("onCast {} {}: Requires hero card ID, none specified.", context.getGameId(), source);
 			return;
 		}
-		Card heroCard = (Card) context.getCardById(heroCardId);
-		if (heroCard == null) {
-			logger.error("onCast {} {}: Invalid heroCardId {}", context.getGameId(), source, heroCardId);
-			return;
-		}
 
+		Card heroCard = heroCards.get(0);
 		Hero hero = heroCard.createHero();
 		context.getLogic().changeHero(player, hero);
 
@@ -79,6 +78,5 @@ public class ChangeHeroSpell extends Spell {
 		for (SpellDesc subSpell : spellDescs) {
 			SpellUtils.castChildSpell(context, player, subSpell, source, target, hero);
 		}
-		;
 	}
 }
