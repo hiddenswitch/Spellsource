@@ -20,6 +20,9 @@ import org.slf4j.LoggerFactory;
  * SpellArg#CARDS} or {@link SpellArg#CARD_FILTER} or {@link SpellArg#CARD_SOURCE} are specified, a random hero card
  * will be chosen from the lists of cards.
  * <p>
+ * This spell activates the {@link net.demilich.metastone.game.cards.desc.CardDesc#battlecry} by default. To disable it,
+ * set {@link SpellArg#EXCLUSIVE} to {@code true}.
+ * <p>
  * For <b>example,</b> to turn the casting player's hero into Ragnaros:
  * <pre>
  *     {
@@ -72,7 +75,7 @@ public class ChangeHeroSpell extends Spell {
 
 		Card heroCard = heroCards.get(0);
 		Hero hero = heroCard.createHero();
-		context.getLogic().changeHero(player, hero);
+		context.getLogic().changeHero(player, hero, !(boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false));
 
 		List<SpellDesc> spellDescs = desc.subSpells(0);
 		for (SpellDesc subSpell : spellDescs) {
