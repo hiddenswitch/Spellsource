@@ -1,7 +1,7 @@
 {
-  "name": "Nefarian",
+  "name": "Lord Nefarian",
   "heroPower": "hero_power_wild_magic",
-  "baseManaCost": 10,
+  "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "INHERIT",
   "rarity": "LEGENDARY",
