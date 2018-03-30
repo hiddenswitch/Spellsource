@@ -143,6 +143,7 @@ public class ClusterTest {
 	}
 
 	@Test(timeout = 200000L)
+	@Ignore
 	public void testMultiHostMultiClientCluster(TestContext context) throws InterruptedException {
 		if (ServiceTest.isCI()) {
 			context.async().complete();
