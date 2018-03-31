@@ -18,8 +18,8 @@ public class AttributeAppliedTrigger extends EventTrigger {
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		AttributeAppliedEvent e = (AttributeAppliedEvent) event;
-		Attribute attribute = (Attribute) desc.get(EventTriggerArg.REQUIRED_ATTRIBUTE);
-		EntityType targetEntityType = (EntityType) desc.get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		Attribute attribute = (Attribute) getDesc().get(EventTriggerArg.REQUIRED_ATTRIBUTE);
+		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
 		return (targetEntityType == null || e.getTarget().getEntityType() == targetEntityType)
 				&& e.getAttribute() == attribute;
 

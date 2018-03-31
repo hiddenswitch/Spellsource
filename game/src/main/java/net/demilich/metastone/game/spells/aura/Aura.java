@@ -5,6 +5,8 @@ import java.util.*;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -31,19 +33,20 @@ import net.demilich.metastone.game.targeting.Zones;
  * target and the add/remove effects. Observe that unlike an {@link Enchantment}, which it inherits, auras do not
  * respect configuration features like {@link #maxFires}. It is unclear how such features should be interpreted.
  */
-public class Aura extends Enchantment {
+public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	private EntityReference targets;
 	private SpellDesc applyAuraEffect;
 	private SpellDesc removeAuraEffect;
 	private EntityFilter entityFilter;
 	private Condition condition;
-
 	private SortedSet<Integer> affectedEntities = new TreeSet<>();
+	private AuraDesc desc;
 
 	public Aura(AuraDesc desc) {
 		this(desc.getSecondaryTrigger() == null ? null : desc.getSecondaryTrigger().create(), desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
 		setEntityFilter(desc.getFilter());
 		setCondition(desc.getCondition());
+		setDesc(desc);
 	}
 
 	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection, EntityFilter entityFilter, Condition condition) {
@@ -164,6 +167,16 @@ public class Aura extends Enchantment {
 
 	protected void setCondition(Condition condition) {
 		this.condition = condition;
+	}
+
+	@Override
+	public AuraDesc getDesc() {
+		return desc;
+	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (AuraDesc)desc;
 	}
 }
 

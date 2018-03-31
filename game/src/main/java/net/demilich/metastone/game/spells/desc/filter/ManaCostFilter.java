@@ -24,8 +24,8 @@ public class ManaCostFilter extends EntityFilter {
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		Card card = entity.getSourceCard();
-		int mana = desc.getValue(FilterArg.VALUE, context, player, null, host, 0);
-		Operation operation = (Operation) desc.get(FilterArg.OPERATION);
+		int mana = getDesc().getValue(FilterArg.VALUE, context, player, null, host, 0);
+		Operation operation = (Operation) getDesc().get(FilterArg.OPERATION);
 		int actualValue = context.getLogic().getModifiedManaCost(player, card);
 		return SpellUtils.evaluateOperation(operation, actualValue, mana);
 	}

@@ -35,7 +35,7 @@ public class StoredEntitiesSource extends CardSource {
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		EntityReference sourceOverride = (EntityReference) desc.get(CardSourceArg.SOURCE);
+		EntityReference sourceOverride = (EntityReference) getDesc().get(CardSourceArg.SOURCE);
 		if (source == null
 				&& sourceOverride == null) {
 			logger.error("match {}: A SOURCE argument is required.", context.getGameId());
