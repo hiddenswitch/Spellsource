@@ -1,0 +1,26 @@
+{
+  "name": "Knight Eternal",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Battlecry: Transform a random card in your hand into a Knight Eternal.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "TransformCardSpell",
+      "target": "FRIENDLY_HAND",
+      "card": "minion_knight_eternal",
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "Pircival"
+}
