@@ -40,16 +40,16 @@ public class CardFilter extends EntityFilter {
 
 		Card card = entity.getSourceCard();
 
-		CardType cardType = (CardType) desc.get(FilterArg.CARD_TYPE);
+		CardType cardType = (CardType) getDesc().get(FilterArg.CARD_TYPE);
 		if (cardType != null && !card.getCardType().isCardType(cardType)) {
 			return false;
 		}
-		Race race = (Race) desc.get(FilterArg.RACE);
+		Race race = (Race) getDesc().get(FilterArg.RACE);
 		if (race != null && race != card.getAttribute(Attribute.RACE)) {
 			return false;
 		}
 
-		HeroClass[] heroClasses = (HeroClass[]) desc.get(FilterArg.HERO_CLASSES);
+		HeroClass[] heroClasses = (HeroClass[]) getDesc().get(FilterArg.HERO_CLASSES);
 		if (heroClasses != null && heroClasses.length > 0) {
 			boolean test = false;
 			for (HeroClass heroClass : heroClasses) {
@@ -60,31 +60,31 @@ public class CardFilter extends EntityFilter {
 			}
 		}
 
-		HeroClass heroClass = (HeroClass) desc.get(FilterArg.HERO_CLASS);
+		HeroClass heroClass = (HeroClass) getDesc().get(FilterArg.HERO_CLASS);
 		if (heroClass != null && heroClassTest(context, player, card, heroClass)) {
 			return false;
 		}
 
-		if (desc.containsKey(FilterArg.MANA_COST)) {
-			int manaCost = desc.getValue(FilterArg.MANA_COST, context, player, null, host, 0);
+		if (getDesc().containsKey(FilterArg.MANA_COST)) {
+			int manaCost = getDesc().getValue(FilterArg.MANA_COST, context, player, null, host, 0);
 			// TODO: Should we be looking at base mana cost or modified mana cost here?
 			if (manaCost != card.getBaseManaCost()) {
 				return false;
 			}
 		}
-		Rarity rarity = (Rarity) desc.get(FilterArg.RARITY);
+		Rarity rarity = (Rarity) getDesc().get(FilterArg.RARITY);
 		if (rarity != null && !card.getRarity().isRarity(rarity)) {
 			return false;
 		}
 
-		if (desc.containsKey(FilterArg.ATTRIBUTE)) {
-			Attribute attribute = (Attribute) desc.get(FilterArg.ATTRIBUTE);
+		if (getDesc().containsKey(FilterArg.ATTRIBUTE)) {
+			Attribute attribute = (Attribute) getDesc().get(FilterArg.ATTRIBUTE);
 			Operation operation = null;
-			if (desc.containsKey(FilterArg.OPERATION)) {
-				operation = (Operation) desc.get(FilterArg.OPERATION);
+			if (getDesc().containsKey(FilterArg.OPERATION)) {
+				operation = (Operation) getDesc().get(FilterArg.OPERATION);
 			}
-			if (!desc.containsKey(FilterArg.OPERATION)
-					&& desc.containsKey(FilterArg.VALUE)) {
+			if (!getDesc().containsKey(FilterArg.OPERATION)
+					&& getDesc().containsKey(FilterArg.VALUE)) {
 				operation = Operation.EQUAL;
 			}
 			if (operation == Operation.HAS || operation == null) {
@@ -93,16 +93,16 @@ public class CardFilter extends EntityFilter {
 
 			int targetValue;
 			if (entities == null) {
-				targetValue = desc.getInt(FilterArg.VALUE);
+				targetValue = getDesc().getInt(FilterArg.VALUE);
 			} else {
-				targetValue = desc.getValue(FilterArg.VALUE, context, player, entities.get(0), null, 0);
+				targetValue = getDesc().getValue(FilterArg.VALUE, context, player, entities.get(0), null, 0);
 			}
 
 			int actualValue = card.getAttributeValue(attribute);
 			return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
 		}
 
-		CardSet cardSet = (CardSet) desc.get(FilterArg.CARD_SET);
+		CardSet cardSet = (CardSet) getDesc().get(FilterArg.CARD_SET);
 		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
 			return false;
 		}

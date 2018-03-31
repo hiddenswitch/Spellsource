@@ -13,10 +13,10 @@ public class ConditionalValueProvider extends ValueProvider {
 
 	@Override
 	protected int provideValue(GameContext context, Player player, Entity target, Entity source) {
-		int ifTrue = desc.getInt(ValueProviderArg.IF_TRUE);
-		int ifFalse = desc.getInt(ValueProviderArg.IF_FALSE);
+		int ifTrue = getDesc().getInt(ValueProviderArg.IF_TRUE);
+		int ifFalse = getDesc().getInt(ValueProviderArg.IF_FALSE);
 
-		Condition condition = (Condition) desc.get(ValueProviderArg.CONDITION);
+		Condition condition = (Condition) getDesc().get(ValueProviderArg.CONDITION);
 		return condition.isFulfilled(context, player, source, target) ? ifTrue : ifFalse;
 	}
 

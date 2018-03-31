@@ -13,7 +13,7 @@ public class OwnedByPlayerFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		TargetPlayer targetPlayer = (TargetPlayer) desc.get(FilterArg.TARGET_PLAYER);
+		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(FilterArg.TARGET_PLAYER);
 
 		switch (targetPlayer) {
 			case ACTIVE:

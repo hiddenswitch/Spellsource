@@ -13,7 +13,7 @@ public class GameValueProvider extends ValueProvider {
 
 	@Override
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		GameValue gameValue = (GameValue) desc.get(ValueProviderArg.GAME_VALUE);
+		GameValue gameValue = (GameValue) getDesc().get(ValueProviderArg.GAME_VALUE);
 		switch (gameValue) {
 			case LAST_MANA_COST:
 				return (int) context.getEnvironment().get(Environment.LAST_MANA_COST);

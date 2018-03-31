@@ -25,7 +25,7 @@ public class MinionDeathTrigger extends EventTrigger {
 
 		Minion minion = (Minion) killEvent.getVictim();
 
-		Race race = (Race) desc.get(EventTriggerArg.RACE);
+		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
 		if (race != null && minion.getRace() != race) {
 			return false;
 		}

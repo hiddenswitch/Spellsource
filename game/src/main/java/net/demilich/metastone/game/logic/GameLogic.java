@@ -3,7 +3,8 @@ package net.demilich.metastone.game.logic;
 import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import net.demilich.metastone.game.*;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
@@ -16,27 +17,19 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
+import net.demilich.metastone.game.shared.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.SpellFactory;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.FilterArg;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import net.demilich.metastone.game.spells.trigger.DamageCausedTrigger;
-import net.demilich.metastone.game.spells.trigger.DamageReceivedTrigger;
-import net.demilich.metastone.game.spells.trigger.HealingTrigger;
-import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.spells.trigger.MinionSummonedTrigger;
-import net.demilich.metastone.game.spells.trigger.SpellCastedTrigger;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.TriggerManager;
+import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
-import net.demilich.metastone.game.shared.utils.MathUtils;
 import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.collections4.Bag;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +44,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -152,7 +144,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	private static final AtomicLong seedUniquifier = new AtomicLong(8682522807148012L);
 	private final TargetLogic targetLogic = new TargetLogic();
 	private final ActionLogic actionLogic = new ActionLogic();
-	private SpellFactory spellFactory = new SpellFactory();
 	private IdFactoryImpl idFactory;
 	private long seed = createSeed();
 	private Random random = new Random(seed);
@@ -578,7 +569,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		Spell spell = getSpellFactory().getSpell(spellDesc);
+		Spell spell = spellDesc.create();
 		spell.cast(context, player, spellDesc, source, targets);
 
 		context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
@@ -692,7 +683,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			sourceCard.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 		}
 
-		Spell spell = getSpellFactory().getSpell(spellDesc);
+		Spell spell = spellDesc.create();
 		spell.cast(context, player, spellDesc, source, targets);
 
 		// This implements Lynessa Sunsorrow
@@ -3535,14 +3526,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	public long getSeed() {
 		return seed;
-	}
-
-	public SpellFactory getSpellFactory() {
-		return spellFactory;
-	}
-
-	public void setSpellFactory(SpellFactory spellFactory) {
-		this.spellFactory = spellFactory;
 	}
 
 	protected class FirstHand {

@@ -7,6 +7,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -22,7 +24,9 @@ import org.slf4j.Logger;
  * <p>
  * To browse all the possible effects, visit the deriving classes of this class.
  */
-public abstract class Spell implements Serializable {
+public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
+	private SpellDesc desc;
+
 	/**
 	 * Arguments common to all spells that should not be considered invalid.
 	 */
@@ -135,6 +139,16 @@ public abstract class Spell implements Serializable {
 		if (unexpectedArgs.size() > 0) {
 			logger.warn("checkArguments {} {}: Unexpected arguments {}", context.getGameId(), source, unexpectedArgs);
 		}
+	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (SpellDesc) desc;
+	}
+
+	@Override
+	public SpellDesc getDesc() {
+		return desc;
 	}
 }
 

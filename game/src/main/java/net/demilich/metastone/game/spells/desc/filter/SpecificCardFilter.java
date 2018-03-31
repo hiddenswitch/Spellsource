@@ -23,8 +23,8 @@ public class SpecificCardFilter extends EntityFilter {
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		String cardId = entity.getSourceCard().getCardId();
-		String requiredCardId = desc.getString(FilterArg.CARD_ID);
-		EntityReference comparedTo = (EntityReference) desc.get(FilterArg.SECONDARY_TARGET);
+		String requiredCardId = getDesc().getString(FilterArg.CARD_ID);
+		EntityReference comparedTo = (EntityReference) getDesc().get(FilterArg.SECONDARY_TARGET);
 		if (comparedTo != null
 				&& !comparedTo.equals(EntityReference.NONE)) {
 			List<Entity> entities = context.resolveTarget(player, host, comparedTo);

@@ -39,8 +39,8 @@ public class ReduceValueProvider extends ValueProvider {
 	@Override
 	@Suspendable
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		EntityReference sourceReference = (EntityReference) desc.get(ValueProviderArg.TARGET);
-		Attribute attribute = (Attribute) desc.get(ValueProviderArg.ATTRIBUTE);
+		EntityReference sourceReference = (EntityReference) getDesc().get(ValueProviderArg.TARGET);
+		Attribute attribute = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
 		List<Entity> entities = null;
 		if (sourceReference != null) {
 			entities = context.resolveTarget(player, host, sourceReference);
@@ -52,12 +52,12 @@ public class ReduceValueProvider extends ValueProvider {
 			return 0;
 		}
 
-		AlgebraicOperation operation = desc.containsKey(ValueProviderArg.OPERATION) ?
-				(AlgebraicOperation) desc.get(ValueProviderArg.OPERATION)
+		AlgebraicOperation operation = getDesc().containsKey(ValueProviderArg.OPERATION) ?
+				(AlgebraicOperation) getDesc().get(ValueProviderArg.OPERATION)
 				: AlgebraicOperation.MAXIMUM;
 
 
-		EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
+		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
 		int value;
 
 		if (operation == AlgebraicOperation.MAXIMUM) {
@@ -79,16 +79,16 @@ public class ReduceValueProvider extends ValueProvider {
 				continue;
 			}
 
-			boolean isApplyingValueProvider = desc.containsKey(ValueProviderArg.VALUE1) &&
-					ValueProvider.class.isAssignableFrom(desc.get(ValueProviderArg.VALUE1).getClass());
+			boolean isApplyingValueProvider = getDesc().containsKey(ValueProviderArg.VALUE1) &&
+					ValueProvider.class.isAssignableFrom(getDesc().get(ValueProviderArg.VALUE1).getClass());
 			if (isApplyingValueProvider) {
-				ValueProvider targetValueProvider = (ValueProvider) desc.get(ValueProviderArg.VALUE1);
+				ValueProvider targetValueProvider = (ValueProvider) getDesc().get(ValueProviderArg.VALUE1);
 				value = operation.performOperation(value, targetValueProvider.getValue(context, player, entity, target));
 			} else if (attribute != null) {
 				int value1 = AttributeValueProvider.create(attribute, entity.getReference()).create().getValue(context, player, entity, host);
 				value = operation.performOperation(value, value1);
 			} else {
-				value = operation.performOperation(value, desc.getInt(ValueProviderArg.VALUE1));
+				value = operation.performOperation(value, getDesc().getInt(ValueProviderArg.VALUE1));
 			}
 
 		}

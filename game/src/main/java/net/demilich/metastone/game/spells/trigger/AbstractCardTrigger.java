@@ -17,17 +17,17 @@ public abstract class AbstractCardTrigger extends EventTrigger {
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		HasCard cardPlayedEvent = (HasCard) event;
-		CardType cardType = (CardType) desc.get(EventTriggerArg.CARD_TYPE);
+		CardType cardType = (CardType) getDesc().get(EventTriggerArg.CARD_TYPE);
 		if (cardType != null && !cardPlayedEvent.getCard().getCardType().isCardType(cardType)) {
 			return false;
 		}
 
-		Attribute requiredAttribute = (Attribute) desc.get(EventTriggerArg.REQUIRED_ATTRIBUTE);
+		Attribute requiredAttribute = (Attribute) getDesc().get(EventTriggerArg.REQUIRED_ATTRIBUTE);
 		if (requiredAttribute != null && !cardPlayedEvent.getCard().getAttributes().containsKey(requiredAttribute)) {
 			return false;
 		}
 
-		Race race = (Race) desc.get(EventTriggerArg.RACE);
+		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
 		if (race != null && cardPlayedEvent.getCard().getAttribute(Attribute.RACE) != race) {
 			return false;
 		}
