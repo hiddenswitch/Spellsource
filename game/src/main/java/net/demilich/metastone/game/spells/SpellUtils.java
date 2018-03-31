@@ -495,7 +495,7 @@ public class SpellUtils {
 			}
 		}
 
-		if (count != cards.size()) {
+		if (count < cards.size()) {
 			CardList result = new CardArrayList();
 			int i = count;
 			while (cards.size() > 0
