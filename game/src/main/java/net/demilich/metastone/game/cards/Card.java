@@ -297,6 +297,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return A {@link Race}
 	 */
+	@Override
 	public Race getRace() {
 		return (Race) getAttributes().getOrDefault(Attribute.RACE, getDesc().race == null ? Race.NONE : getDesc().race);
 	}
@@ -851,5 +852,9 @@ public class Card extends Entity implements HasChooseOneActions {
 	public void setAttributes(AttributeMap attributes) {
 		this.attributes.clear();
 		this.attributes.putAll(attributes);
+	}
+
+	public boolean isHeroPower() {
+		return getCardType().isCardType(CardType.HERO_POWER);
 	}
 }

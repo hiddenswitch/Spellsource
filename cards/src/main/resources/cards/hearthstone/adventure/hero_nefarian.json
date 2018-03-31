@@ -16,6 +16,7 @@
         },
         {
           "class": "ShuffleToDeckSpell",
+          "value": 60,
           "cards": [
             "spell_dragons_breath",
             "spell_dragons_breath",

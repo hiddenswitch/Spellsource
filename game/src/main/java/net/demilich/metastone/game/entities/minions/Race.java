@@ -9,5 +9,19 @@ public enum Race {
 	DRAGON,
 	TOTEM,
 	MECH,
-	ELEMENTAL
+	ELEMENTAL,
+	ALL;
+
+	public boolean hasRace(Race comparedTo) {
+		if (this == ALL && comparedTo != NONE && comparedTo != null) {
+			return true;
+		}
+
+		if (comparedTo == ALL
+				&& this != NONE) {
+			return true;
+		}
+
+		return this == comparedTo;
+	}
 }

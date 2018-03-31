@@ -28,7 +28,7 @@ public abstract class AbstractCardTrigger extends EventTrigger {
 		}
 
 		Race race = (Race) desc.get(EventTriggerArg.RACE);
-		if (race != null && cardPlayedEvent.getCard().getAttribute(Attribute.RACE) != race) {
+		if (race != null && !cardPlayedEvent.getCard().getRace().hasRace(race)) {
 			return false;
 		}
 

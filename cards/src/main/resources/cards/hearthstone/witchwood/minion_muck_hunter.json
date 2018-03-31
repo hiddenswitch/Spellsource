@@ -1,0 +1,27 @@
+{
+  "name": "Muck Hunter",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Rush. Battlecry: Summon two 2/1 Muck Monsters for your opponent.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_muck_monster",
+        "token_muck_monster"
+      ],
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "CANNOT_ATTACK_HERO_ON_SUMMON": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -152,10 +152,6 @@ public abstract class Actor extends Entity {
 				+ getAttributeValue(Attribute.AURA_HP_BONUS);
 	}
 
-	public Race getRace() {
-		return (Race) getAttribute(Attribute.RACE);
-	}
-
 	@Override
 	public Card getSourceCard() {
 		return sourceCard;
