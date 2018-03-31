@@ -1,0 +1,37 @@
+{
+  "name": "Bewitch",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "SILVER",
+  "rarity": "FREE",
+  "description": "Passive Hero Power: After you play a minion, add a random Shaman spell to your hand.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "SILVER",
+        "cardType": "SPELL"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
+    }
+  },
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

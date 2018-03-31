@@ -40,7 +40,8 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertEquals(player.getHero().getSourceCard().getCardId(), "hero_nefarian");
 			final String[] nefarianCards = (String[]) CardCatalogue.getCardById("hero_nefarian").getDesc()
 					.battlecry.spell.subSpells(0).get(1).get(SpellArg.CARDS);
-			Assert.assertEquals(player.getDeck().size(), nefarianCards.length);
+			// Draws a card
+			Assert.assertEquals(player.getDeck().size(), nefarianCards.length-1);
 		});
 	}
 

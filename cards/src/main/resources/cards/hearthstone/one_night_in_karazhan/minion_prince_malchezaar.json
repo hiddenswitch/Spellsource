@@ -28,6 +28,7 @@
             "class": "CastRepeatedlySpell",
             "spell": {
               "class": "ShuffleToDeckSpell",
+              "value": 1,
               "cardFilter": {
                 "class": "AndFilter",
                 "filters": [

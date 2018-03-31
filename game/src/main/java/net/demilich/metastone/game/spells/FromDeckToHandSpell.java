@@ -24,7 +24,7 @@ public class FromDeckToHandSpell extends Spell {
 			return;
 		}
 
-		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		String replacementCard = (String) desc.get(SpellArg.CARD);
 
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);

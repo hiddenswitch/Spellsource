@@ -3,6 +3,7 @@ package net.demilich.metastone.game.entities;
 import java.io.Serializable;
 
 import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
@@ -484,5 +485,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 			return 1;
 		}
 		return Integer.compare(this.getId(), o.getId());
+	}
+
+	public Race getRace() {
+		return (Race) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
 	}
 }

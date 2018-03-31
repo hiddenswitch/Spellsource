@@ -328,7 +328,7 @@ public class SpellUtils {
 	public static int hasHowManyOfRace(Player player, Race race) {
 		int count = 0;
 		for (Minion minion : player.getMinions()) {
-			if (minion.getRace() == race) {
+			if (minion.getRace().hasRace(race)) {
 				count++;
 			}
 		}
@@ -337,24 +337,6 @@ public class SpellUtils {
 
 	public static boolean highlanderDeck(Player player) {
 		return player.getDeck().stream().map(Card::getCardId).distinct().count() == player.getDeck().getCount();
-	}
-
-	public static boolean holdsCardOfType(Player player, CardType cardType) {
-		for (Card card : player.getHand()) {
-			if (card.getCardType().isCardType(cardType)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean holdsMinionOfRace(Player player, Race race) {
-		for (Card card : player.getHand()) {
-			if (card.getAttribute(Attribute.RACE) == race) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Suspendable
