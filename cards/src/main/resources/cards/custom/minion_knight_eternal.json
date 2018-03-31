@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "TransformCardSpell",
+      "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
       "card": "minion_knight_eternal",
       "randomTarget": true
