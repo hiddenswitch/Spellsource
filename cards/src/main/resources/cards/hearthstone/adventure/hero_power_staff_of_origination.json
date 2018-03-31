@@ -1,0 +1,30 @@
+{
+  "name": "Staff Of Origination",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Hero Power: Add a random legendary minion to your hand. It costs (4) less.",
+  "targetSelection": "NONE",
+"spell": {
+		"class": "ReceiveCardAndDoSomethingSpell",
+		"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "MINION",
+			"rarity": "LEGENDARY"
+		},
+		"spell": {
+			"class": "CardCostModifierSpell",
+			"target": "FRIENDLY_PLAYER",
+			"cardCostModifier": {
+				"class": "CardCostModifier",
+				"target": "OUTPUT",
+				"operation": "SUBTRACT",
+				"value": 4
+			}
+		}
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
