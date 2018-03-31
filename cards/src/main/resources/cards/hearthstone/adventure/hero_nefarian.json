@@ -1,7 +1,7 @@
 {
   "name": "Lord Nefarian",
   "heroPower": "hero_power_wild_magic",
-  "baseManaCost": 0,
+  "baseManaCost": 10,
   "type": "HERO",
   "heroClass": "INHERIT",
   "rarity": "LEGENDARY",
@@ -47,6 +47,10 @@
             "spell_shield_block",
             "spell_shield_block"
           ]
+        },
+        {
+          "class": "DrawCardSpell",
+          "targetPlayer": "SELF"
         }
       ]
     }
