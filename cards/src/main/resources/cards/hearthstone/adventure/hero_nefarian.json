@@ -51,7 +51,8 @@
         },
         {
           "class": "DrawCardSpell",
-          "targetPlayer": "SELF"
+          "targetPlayer": "SELF",
+          "value": 3
         }
       ]
     }
