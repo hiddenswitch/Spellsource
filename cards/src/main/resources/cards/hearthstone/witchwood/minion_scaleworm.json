@@ -28,7 +28,7 @@
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "CANNOT_ATTACK_HERO_ON_SUMMON"
+          "attribute": "RUSH"
         }
       ]
     }

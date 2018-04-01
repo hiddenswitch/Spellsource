@@ -13,7 +13,6 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.utils.AttributeMap;
 
 /**
  * An actor hosts common functionality between minions, weapons and heroes. Actors have hitpoints; they can be
@@ -54,7 +53,8 @@ public abstract class Actor extends Entity {
 		if (hasAttribute(Attribute.FROZEN)) {
 			return false;
 		}
-		if (hasAttribute(Attribute.SUMMONING_SICKNESS) && !hasAttribute(Attribute.CHARGE) && !hasAttribute(Attribute.AURA_CHARGE)) {
+		if (hasAttribute(Attribute.SUMMONING_SICKNESS) && !hasAttribute(Attribute.CHARGE) && !hasAttribute(Attribute.AURA_CHARGE)
+				&& !hasAttribute(Attribute.RUSH) && !hasAttribute(Attribute.AURA_RUSH)) {
 			return false;
 		}
 		if (hasAttribute(Attribute.PERMANENT)) {

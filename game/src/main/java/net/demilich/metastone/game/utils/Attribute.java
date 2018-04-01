@@ -533,11 +533,11 @@ public enum Attribute {
 	 * @see net.demilich.metastone.game.actions.PhysicalAttackAction for a complete implementation of what a minion can
 	 * attack.
 	 */
-	CANNOT_ATTACK_HERO_ON_SUMMON,
+	RUSH,
 	/**
-	 * Aura version of {@link #CANNOT_ATTACK_HERO_ON_SUMMON}
+	 * Aura version of {@link #RUSH}
 	 */
-	AURA_CANNOT_ATTACK_HERO_ON_SUMMON,
+	AURA_RUSH,
 	/**
 	 * An attribute that keeps track of how much attack and hitpoints to add to the next Jade Golem that gets summoned.
 	 */

@@ -10,7 +10,7 @@
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",
-    "attribute": "AURA_CANNOT_ATTACK_HERO_ON_SUMMON"
+    "attribute": "AURA_RUSH"
   },
   "collectible": true,
   "set": "WITCHWOOD",

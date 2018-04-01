@@ -34,5 +34,6 @@
       "card": "PENDING_CARD"
     }
   },
+  "collectible": true,
   "fileFormatVersion": 1
 }

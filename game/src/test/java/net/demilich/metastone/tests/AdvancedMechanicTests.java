@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TurnEndEvent;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -36,6 +38,27 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 
 public class AdvancedMechanicTests extends TestBase {
+
+	@Test
+	public void testRush() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion opponentMinion = playMinionCard(context, opponent, "minion_black_test");
+			context.endTurn();
+			Minion rushMinion = playMinionCard(context, player, "minion_test_rush");
+			Assert.assertTrue(rushMinion.canAttackThisTurn());
+			Assert.assertTrue(context.getValidActions().stream().noneMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponent.getHero().getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponentMinion.getReference())));
+			context.endTurn();
+			context.endTurn();
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponent.getHero().getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponentMinion.getReference())));
+		});
+	}
 
 	@Test
 	public void testEndTurnEventAppearsOnce() {
