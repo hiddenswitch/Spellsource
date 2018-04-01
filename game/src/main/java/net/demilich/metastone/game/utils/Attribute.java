@@ -359,6 +359,7 @@ public enum Attribute {
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the full spell damage calculation.
 	 */
 	SPELL_AMPLIFY_MULTIPLIER,
+	HERO_POWER_SPELL_AMPLIFY_MULTIPLIER,
 	/**
 	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use {@link
 	 * GameLogic#heal(Player, Actor, int, Entity)} are multiplied by this attribute's value.
@@ -366,6 +367,7 @@ public enum Attribute {
 	 * This implements Prophet Velen.
 	 */
 	HEAL_AMPLIFY_MULTIPLIER,
+	HERO_POWER_HEAL_AMPLIFY_MULTIPLIER,
 	/**
 	 * An attribute that specifies that the attack of this {@link Minion} is equal to its hitpoints.
 	 */
@@ -532,6 +534,10 @@ public enum Attribute {
 	 * attack.
 	 */
 	CANNOT_ATTACK_HERO_ON_SUMMON,
+	/**
+	 * Aura version of {@link #CANNOT_ATTACK_HERO_ON_SUMMON}
+	 */
+	AURA_CANNOT_ATTACK_HERO_ON_SUMMON,
 	/**
 	 * An attribute that keeps track of how much attack and hitpoints to add to the next Jade Golem that gets summoned.
 	 */

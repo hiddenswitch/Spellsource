@@ -31,7 +31,7 @@ public class CreateCardFromChoicesSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Map<Integer, List<Card>> sourceCards = CardCatalogue.stream()
 				.filter(Card::isCollectible)
-				.filter(c -> c.getRace() == Race.BEAST)
+				.filter(c -> c.getRace().hasRace(Race.BEAST))
 				.filter(c -> c.getCardType() == CardType.MINION)
 				.filter(c -> c.getHeroClass() == HeroClass.ANY || c.getHeroClass() == HeroClass.GREEN)
 				.filter(c -> c.getBaseManaCost() <= 5)

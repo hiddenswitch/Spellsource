@@ -21,7 +21,7 @@ public class RaceCondition extends Condition {
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		Race race = (Race) desc.get(ConditionArg.RACE);
-		return target.getAttribute(Attribute.RACE) == race;
+		return target.getRace().hasRace(race);
 	}
 
 }

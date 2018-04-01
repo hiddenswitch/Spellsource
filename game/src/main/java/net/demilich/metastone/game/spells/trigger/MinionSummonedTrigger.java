@@ -19,7 +19,7 @@ public class MinionSummonedTrigger extends EventTrigger {
 	protected boolean fire(GameEvent event, Entity host) {
 		SummonEvent summonEvent = (SummonEvent) event;
 		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && summonEvent.getMinion().getRace() != race) {
+		if (race != null && !summonEvent.getMinion().getRace().hasRace(race)) {
 			return false;
 		}
 

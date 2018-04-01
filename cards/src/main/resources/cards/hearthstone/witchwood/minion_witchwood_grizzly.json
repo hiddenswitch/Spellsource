@@ -1,0 +1,30 @@
+{
+  "name": "Witchwood Grizzly",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 12,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Taunt. Battlecry: Lose 1 Health for each card in your opponent's hand.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "hpBonus": {
+        "class": "PlayerAttributeValueProvider",
+        "multiplier": -1,
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

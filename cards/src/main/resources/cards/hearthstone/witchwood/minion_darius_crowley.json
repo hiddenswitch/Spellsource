@@ -1,0 +1,31 @@
+{
+  "name": "Darius Crowley",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Rush. After this attacks and kills a minion, gain +2/+2.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "TRIGGER_HOST",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "CANNOT_ATTACK_HERO_ON_SUMMON": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

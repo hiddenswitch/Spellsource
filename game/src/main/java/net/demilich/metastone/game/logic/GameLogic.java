@@ -452,6 +452,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (heroPowersDisabled()) {
 				return false;
 			}
+
+			return card.canBeCast(context, player);
 		} else if (card.getCardType().isCardType(CardType.MINION)) {
 			return canSummonMoreMinions(player);
 		}
@@ -1047,8 +1049,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			} else if (sourceCard.getCardType().isCardType(CardType.HERO_POWER)) {
 				damage = applyHeroPowerDamage(player, damage);
 			}
-			if (sourceCard.getCardType().isCardType(CardType.SPELL) || sourceCard.getCardType().isCardType(CardType.HERO_POWER)) {
+			if (sourceCard.isSpell() || sourceCard.isHeroPower()) {
 				damage = applyAmplify(player, damage, Attribute.SPELL_AMPLIFY_MULTIPLIER);
+			}
+			if (sourceCard.isHeroPower()) {
+				damage = applyAmplify(player, damage, Attribute.HERO_POWER_SPELL_AMPLIFY_MULTIPLIER);
 			}
 		}
 		int damageDealt = 0;
@@ -1844,12 +1849,23 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			damage(player, target, healing, source);
 			return;
 		}
+
+		if (source instanceof Card) {
+			Card sourceCard = (Card) source;
+			if (sourceCard.isSpell()
+					|| sourceCard.isHeroPower()) {
+				healing = applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
+			}
+			if (sourceCard.isHeroPower()) {
+				healing = applyAmplify(player, healing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
+			}
+		}
+
 		if (applyHealingAmplification
 				&& source != null
 				&& source instanceof Card
 				&& (((Card) source).getCardType().isCardType(CardType.SPELL)
 				|| ((Card) source).getCardType().isCardType(CardType.HERO_POWER))) {
-			healing = applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
 		}
 		boolean success = false;
 		switch (target.getEntityType()) {
@@ -2312,8 +2328,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public boolean doesCardCostHealth(Player player, Card card) {
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
 				&& player.hasAttribute(Attribute.SPELLS_COST_HEALTH);
-		final boolean murlocsCostHealthCondition = (Race) card.getAttribute(Attribute.RACE) == Race.MURLOC
-				&& player.getHero().hasAttribute(Attribute.MURLOCS_COST_HEALTH);
+		final boolean murlocsCostHealthCondition = card.getRace().hasRace(Race.MURLOC)
+				&& player.hasAttribute(Attribute.MURLOCS_COST_HEALTH);
 		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
 				&& player.hasAttribute(Attribute.MINIONS_COST_HEALTH);
 		return spellsCostHealthCondition

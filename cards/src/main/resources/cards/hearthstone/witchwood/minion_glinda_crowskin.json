@@ -1,0 +1,38 @@
+{
+  "name": "Glinda Crowskin",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Minions in your hand have Echo.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "cardType": "MINION"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "OUTPUT",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger"
+          },
+          "spell": {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        }
+      },
+      "card": "PENDING_CARD"
+    }
+  },
+  "fileFormatVersion": 1
+}
