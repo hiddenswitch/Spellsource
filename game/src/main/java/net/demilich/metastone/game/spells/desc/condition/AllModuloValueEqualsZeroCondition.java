@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells.desc.condition;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
 
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * A condition that is fulfilled if all the entities in {@link ConditionArg#TARGET}, when evaluated as the {@code
@@ -84,6 +87,11 @@ public class AllModuloValueEqualsZeroCondition extends Condition {
 			targets = Collections.singletonList(target);
 		} else {
 			targets = context.resolveTarget(player, source, targetKey);
+		}
+
+		if (desc.containsKey(ConditionArg.FILTER)) {
+			EntityFilter filter = (EntityFilter) desc.get(ConditionArg.FILTER);
+			targets = targets.stream().filter(filter.matcher(context, player, source)).collect(toList());
 		}
 
 		boolean passes = true;

@@ -1,14 +1,65 @@
 package com.blizzard.hearthstone;
 
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.stream.Stream;
+
 public class WitchwoodTests extends TestBase {
+
+	@Test
+	public void testGennGreymane() {
+		{
+			DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false);
+			context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+			context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+				Stream.generate(() -> "minion_bloodfen_raptor")
+						.map(CardCatalogue::getCardById)
+						.limit(29)
+						.forEach(deck::addCard);
+				deck.addCard(CardCatalogue.getCardById("minion_genn_greymane"));
+			});
+
+			context.init();
+			Assert.assertTrue(context.getEntities().anyMatch(c -> c.getSourceCard().getCardId().equals("spell_the_coin")));
+			// Both player's hero powers should cost one
+			Assert.assertEquals(context.getEntities().filter(c -> c.getEntityType() == EntityType.CARD)
+					.map(c -> (Card) c)
+					.filter(c -> c.getCardType() == CardType.HERO_POWER)
+					.filter(c -> costOf(context, context.getPlayer(c.getOwner()), c) == 1)
+					.count(), 2L);
+		}
+
+		{
+			DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false);
+			context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+			context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+				Stream.generate(() -> "minion_argent_squire")
+						.map(CardCatalogue::getCardById)
+						.limit(29)
+						.forEach(deck::addCard);
+				deck.addCard(CardCatalogue.getCardById("minion_genn_greymane"));
+			});
+
+			context.init();
+			// Someone should have the coin
+			Assert.assertTrue(context.getEntities().anyMatch(c -> c.getSourceCard().getCardId().equals("spell_the_coin")));
+			// Both player's hero powers should cost one
+			Assert.assertEquals(context.getEntities().filter(c -> c.getEntityType() == EntityType.CARD)
+					.map(c -> (Card) c)
+					.filter(c -> c.getCardType() == CardType.HERO_POWER)
+					.filter(c -> costOf(context, context.getPlayer(c.getOwner()), c) == 2)
+					.count(), 2L);
+		}
+	}
 
 	@Test
 	public void testNightmareAmalgam() {
