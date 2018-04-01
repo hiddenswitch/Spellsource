@@ -25,6 +25,10 @@
             {
               "class": "AllModuloValueEqualsZeroCondition",
               "target": "FRIENDLY_HAND",
+              "filter": {
+                "class": "CardFilter",
+                "attribute": "STARTED_IN_DECK"
+              },
               "value1": {
                 "class": "AttributeValueProvider",
                 "attribute": "BASE_MANA_COST",
@@ -35,6 +39,10 @@
             {
               "class": "AllModuloValueEqualsZeroCondition",
               "target": "FRIENDLY_DECK",
+              "filter": {
+                "class": "CardFilter",
+                "attribute": "STARTED_IN_DECK"
+              },
               "value1": {
                 "class": "AttributeValueProvider",
                 "attribute": "BASE_MANA_COST",

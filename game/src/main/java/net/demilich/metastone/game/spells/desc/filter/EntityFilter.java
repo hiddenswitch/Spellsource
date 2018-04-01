@@ -36,7 +36,7 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 		return getDesc().containsKey(arg);
 	}
 
-	public Predicate<Card> matcher(GameContext context, Player player, Entity host) {
+	public <T extends Entity> Predicate<T> matcher(GameContext context, Player player, Entity host) {
 		return (card) -> matches(context, player, card, host);
 	}
 
