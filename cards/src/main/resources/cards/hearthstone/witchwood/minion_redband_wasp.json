@@ -22,8 +22,8 @@
     }
   },
   "attributes": {
-    "CANNOT_ATTACK_HERO_ON_SUMMON": true,
-    "ENRAGABLE": true
+    "ENRAGABLE": true,
+    "RUSH": true
   },
   "collectible": true,
   "set": "WITCHWOOD",
