@@ -21,9 +21,8 @@
         },
         "spell": {
           "class": "FromDeckToHandSpell",
-          "target": "NONE",
-          "value": 1,
-          "cardFilter": {
+          "target": "FRIENDLY_DECK",
+          "filter": {
             "class": "SpecificCardFilter",
             "secondaryTarget": "OUTPUT"
           }
@@ -36,10 +35,8 @@
       "cardType": "SPELL"
     },
     "cardSource": {
-      "class": "DeckSource",
-      "distinct": true
-    },
-    "exclusive": true
+      "class": "CatalogueSource"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -1,5 +1,5 @@
 {
-  "name": "Nefarian",
+  "name": "Lord Nefarian",
   "heroPower": "hero_power_wild_magic",
   "baseManaCost": 10,
   "type": "HERO",
@@ -16,6 +16,7 @@
         },
         {
           "class": "ShuffleToDeckSpell",
+          "value": 60,
           "cards": [
             "spell_dragons_breath",
             "spell_dragons_breath",
@@ -47,6 +48,10 @@
             "spell_shield_block",
             "spell_shield_block"
           ]
+        },
+        {
+          "class": "DrawCardSpell",
+          "targetPlayer": "SELF"
         }
       ]
     }

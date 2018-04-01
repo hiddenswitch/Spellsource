@@ -45,7 +45,7 @@ public class CardFilter extends EntityFilter {
 			return false;
 		}
 		Race race = (Race) getDesc().get(FilterArg.RACE);
-		if (race != null && race != card.getAttribute(Attribute.RACE)) {
+		if (race != null && !card.getRace().hasRace(race)) {
 			return false;
 		}
 

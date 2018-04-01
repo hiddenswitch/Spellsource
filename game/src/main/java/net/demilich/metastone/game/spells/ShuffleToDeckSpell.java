@@ -35,7 +35,8 @@ public class ShuffleToDeckSpell extends Spell {
 			return;
 		}
 
-		CardList cards = SpellUtils.getCards(context, player, target, source, desc);
+		CardList cards = SpellUtils.getCards(context, player, target, source, desc,
+				desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
 
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {

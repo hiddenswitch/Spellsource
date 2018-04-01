@@ -14,6 +14,7 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
@@ -37,6 +38,10 @@ public class CustomCardsTests extends TestBase {
 			overrideRandomCard(context, "hero_nefarian");
 			playCard(context, player, "spell_a_new_challenger");
 			Assert.assertEquals(player.getHero().getSourceCard().getCardId(), "hero_nefarian");
+			final String[] nefarianCards = (String[]) CardCatalogue.getCardById("hero_nefarian").getDesc()
+					.battlecry.spell.subSpells(0).get(1).get(SpellArg.CARDS);
+			// Draws a card
+			Assert.assertEquals(player.getDeck().size(), nefarianCards.length-1);
 		});
 	}
 
