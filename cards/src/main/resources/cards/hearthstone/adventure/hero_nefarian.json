@@ -5,6 +5,7 @@
   "type": "HERO",
   "heroClass": "INHERIT",
   "rarity": "LEGENDARY",
+  "description": "Battlecry: Replace your deck with Nefarian's. Draw 3 cards.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -59,6 +60,7 @@
   },
   "attributes": {
     "ARMOR": 5,
+    "BATTLECRY": true,
     "MAX_HP": 30
   },
   "collectible": false,
