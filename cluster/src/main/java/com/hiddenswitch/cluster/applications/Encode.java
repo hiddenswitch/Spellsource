@@ -56,6 +56,7 @@ public class Encode {
 			cardRecord.put("class", desc.type)
 					.put("depth", 0)
 					.put("rarity", desc.rarity)
+					.put("type", desc.type)
 					.put("heroClass", desc.heroClass == null ? desc.heroClasses[0] : desc.heroClass)
 					.put("baseManaCost", desc.baseManaCost);
 
@@ -181,7 +182,7 @@ public class Encode {
 		final LinkedList<EnchantmentDesc> linked = link(single, multi);
 		ProcessResults results = new ProcessResults();
 		results.depth = depth;
-		results.thisType = parent;
+		results.thisType = "EnchantmentDesc";
 
 		final int size = linked.size();
 		if (size == 0) {
@@ -221,7 +222,7 @@ public class Encode {
 		final LinkedList<BattlecryDesc> linked = link(single, multi);
 		ProcessResults results = new ProcessResults();
 		results.depth = depth;
-		results.thisType = parent;
+		results.thisType = "BattlecryDesc";
 
 		final int size = linked.size();
 		if (size == 0) {
