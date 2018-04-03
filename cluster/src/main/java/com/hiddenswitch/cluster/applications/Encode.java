@@ -16,7 +16,9 @@ import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,10 +27,30 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class Encode {
+	private static final String FORMAT = "format";
+
 
 	public static void main(String[] args) throws IOException {
-		CardCatalogue.loadCardsFromPackage();
+		EncodingConfiguration encodingConfiguration = new EncodingConfiguration().parseCommandLine(args);
 
+		if (!encodingConfiguration.isValid()) {
+			return;
+		}
+
+		String chosenFormat = encodingConfiguration.getChosenFormat();
+		CardCatalogue.loadCardsFromPackage();
+		if (chosenFormat.equals("tables")) {
+			ListMultimap<String, JsonObject> records = getAsTables();
+
+			for (String key : records.asMap().keySet()) {
+				JsonArray jsonArray = new JsonArray(records.get(key));
+				FileUtils.writeStringToFile(new File(key + ".json"), jsonArray.encode());
+			}
+		}
+	}
+
+	@NotNull
+	public static ListMultimap<String, JsonObject> getAsTables() {
 		ListMultimap<String, JsonObject> records = LinkedListMultimap.create();
 
 		for (Card card : CardCatalogue.getAll()) {
@@ -153,11 +175,7 @@ public class Encode {
 			records.putAll(components);
 			// TODO: Handle card references where the card that it references is itself
 		}
-
-		for (String key : records.asMap().keySet()) {
-			JsonArray jsonArray = new JsonArray(records.get(key));
-			FileUtils.writeStringToFile(new File(key + ".json"), jsonArray.encode());
-		}
+		return records;
 	}
 
 	public static <T> LinkedList<T> link(T single, T[] multi) {
@@ -337,6 +355,44 @@ public class Encode {
 		public ProcessResults merge(ProcessResults other) {
 			next.addAll(other.next);
 			records.putAll(other.records);
+			return this;
+		}
+	}
+
+	static class EncodingConfiguration {
+		private boolean invalid;
+		private String chosenFormat;
+
+		public EncodingConfiguration() {
+		}
+
+		boolean isValid() {
+			return !invalid;
+		}
+
+		public String getChosenFormat() {
+			return chosenFormat;
+		}
+
+		public EncodingConfiguration parseCommandLine(String... args) {
+			Options options = new Options();
+			Option format = new Option(Character.toString(FORMAT.charAt(0)), FORMAT, true, "The format to encode to. Valid options are \"tables\", \"tensorflow\"");
+			format.setRequired(true);
+			options.addOption(format);
+			CommandLineParser parser = new DefaultParser();
+			CommandLine cmd = null;
+			try {
+				cmd = parser.parse(options, args);
+			} catch (ParseException e) {
+				System.err.println(e.getMessage());
+				HelpFormatter formatter = new HelpFormatter();
+				formatter.printHelp("--format tables", options);
+				invalid = true;
+				return this;
+			}
+
+			chosenFormat = cmd.getOptionValue(FORMAT);
+			invalid = false;
 			return this;
 		}
 	}
