@@ -1,9 +1,14 @@
 package net.demilich.metastone.game.spells.desc.trigger;
 
 import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -12,6 +17,8 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+
+import static com.google.common.collect.Maps.immutableEntry;
 
 /**
  * Data specifying a trigger, including what event it reacts to, what spell it casts, and various options.
@@ -39,7 +46,7 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
  * @see Enchantment for more about enchantments.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class EnchantmentDesc implements Serializable, Cloneable {
+public final class EnchantmentDesc extends AbstractMap<EnchantmentDescArg, Object> implements Serializable, Cloneable {
 
 	public EnchantmentDesc() {
 	}
@@ -97,6 +104,19 @@ public final class EnchantmentDesc implements Serializable, Cloneable {
 	 * Implements spellstones.
 	 */
 	public boolean countByValue;
+
+	@Override
+	public Set<Entry<EnchantmentDescArg, Object>> entrySet() {
+		return Sets.newHashSet(
+				immutableEntry(EnchantmentDescArg.EVENT_TRIGGER, eventTrigger),
+				immutableEntry(EnchantmentDescArg.SPELL, spell),
+				immutableEntry(EnchantmentDescArg.ONE_TURN, oneTurn),
+				immutableEntry(EnchantmentDescArg.PERSISTENT_OWNER, persistentOwner),
+				immutableEntry(EnchantmentDescArg.MAX_FIRES, maxFires),
+				immutableEntry(EnchantmentDescArg.COUNT_UNTIL_CAST, countUntilCast),
+				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue)
+		);
+	}
 
 	/**
 	 * Creates an enchantment represented by this configuration.

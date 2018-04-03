@@ -2,6 +2,8 @@ package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
@@ -30,7 +32,9 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
+
+import static com.google.common.collect.Maps.immutableEntry;
 
 /**
  * The class that card JSON files deserialize (get decoded) into.
@@ -41,7 +45,7 @@ import java.util.List;
  * @see Card for the gameplay functionality of a card that consults data stored in a {@link CardDesc}.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class CardDesc implements Serializable, Cloneable {
+public final class CardDesc extends AbstractMap<CardDescArg, Object> implements Serializable, Cloneable {
 	/**
 	 * The ID of the card when referred to by other cards and other places in the game engine.
 	 * <p>
@@ -498,5 +502,52 @@ public final class CardDesc implements Serializable, Cloneable {
 			battlecryAction.setCondition(battlecry.condition.create());
 		}
 		return battlecryAction;
+	}
+
+	@Override
+	@JsonIgnore
+	public Set<Entry<CardDescArg, Object>> entrySet() {
+		return Sets.newHashSet(
+				immutableEntry(CardDescArg.ID, id),
+				immutableEntry(CardDescArg.NAME, name),
+				immutableEntry(CardDescArg.DESCRIPTION, description),
+				immutableEntry(CardDescArg.LEGACY, legacy),
+				immutableEntry(CardDescArg.TYPE, type),
+				immutableEntry(CardDescArg.HERO_CLASS, heroClass),
+				immutableEntry(CardDescArg.HERO_CLASSES, heroClasses),
+				immutableEntry(CardDescArg.RARITY, rarity),
+				immutableEntry(CardDescArg.SET, set),
+				immutableEntry(CardDescArg.BASE_MANA_COST, baseManaCost),
+				immutableEntry(CardDescArg.COLLECTIBLE, collectible),
+				immutableEntry(CardDescArg.ATTRIBUTES, attributes),
+				immutableEntry(CardDescArg.MANA_COST_MODIFIER, manaCostModifier),
+				immutableEntry(CardDescArg.PASSIVE_TRIGGERS, getPassiveTriggers()),
+				immutableEntry(CardDescArg.DECK_TRIGGERS, getDeckTriggers()),
+				immutableEntry(CardDescArg.GAME_TRIGGERS, getGameTriggers()),
+				immutableEntry(CardDescArg.BATTLECRY, battlecry),
+				immutableEntry(CardDescArg.DEATHRATTLE, deathrattle),
+				immutableEntry(CardDescArg.TRIGGERS, triggers),
+				immutableEntry(CardDescArg.AURAS, auras),
+				immutableEntry(CardDescArg.BASE_ATTACK, baseAttack),
+				immutableEntry(CardDescArg.BASE_HP, baseHp),
+				immutableEntry(CardDescArg.TARGET_SELECTION, targetSelection),
+				immutableEntry(CardDescArg.SPELL, spell),
+				immutableEntry(CardDescArg.CONDITION, condition)
+		);
+	}
+
+	@JsonIgnore
+	public EnchantmentDesc[] getPassiveTriggers() {
+		return passiveTrigger != null ? new EnchantmentDesc[]{passiveTrigger} : passiveTriggers;
+	}
+
+	@JsonIgnore
+	public EnchantmentDesc[] getGameTriggers() {
+		return gameTriggers;
+	}
+
+	@JsonIgnore
+	public EnchantmentDesc[] getDeckTriggers() {
+		return deckTrigger != null ? new EnchantmentDesc[]{deckTrigger} : deckTriggers;
 	}
 }
