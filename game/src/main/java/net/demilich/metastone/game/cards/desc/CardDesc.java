@@ -1,8 +1,5 @@
 package net.demilich.metastone.game.cards.desc;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import net.demilich.metastone.game.Player;
@@ -22,8 +19,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
@@ -31,6 +28,9 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * The class that card JSON files deserialize (get decoded) into.
@@ -212,6 +212,7 @@ public final class CardDesc implements Serializable, Cloneable {
 	 * Indiciates an {@link Enchantment} that is active while the card is in the player's {@link Zones#DECK}.
 	 */
 	public EnchantmentDesc deckTrigger;
+	public EnchantmentDesc[] deckTriggers;
 	/**
 	 * Indicates an {@link Enchantment} that is active as soon as the game begins (just after {@link
 	 * net.demilich.metastone.game.logic.GameLogic#handleMulligan(Player, boolean, GameLogic.FirstHand, List)}, in the

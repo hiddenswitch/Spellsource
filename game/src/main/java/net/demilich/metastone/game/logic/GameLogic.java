@@ -1909,7 +1909,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	/**
 	 * Starts a game for the given player by requesting a mulligan and setting up all the {@link
-	 * net.demilich.metastone.game.spells.trigger.GameStartTrigger} and {@link Attribute#DECK_TRIGGER} cards.
+	 * net.demilich.metastone.game.spells.trigger.GameStartTrigger} and {@link Attribute#DECK_TRIGGERS} cards.
 	 *
 	 * @param playerId The player to start the game for.
 	 * @param begins   {@code true} if this player is starting the game and should start with {@link #STARTER_CARDS}
@@ -2798,7 +2798,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	/**
 	 * Replaces the specified old card with the specified new card. Deals with cards that have {@link
-	 * Attribute#DECK_TRIGGER} correctly.
+	 * Attribute#DECK_TRIGGERS} correctly.
 	 *
 	 * @param playerId The player whose {@link Zones#DECK} will be manipulated.
 	 * @param oldCard  The old {@link Card} to find and replace in this deck.

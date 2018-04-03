@@ -3,20 +3,19 @@ package net.demilich.metastone.game.cards;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializable;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import io.vertx.core.impl.ConcurrentHashSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Map;
+import java.lang.reflect.Array;
 import java.util.Set;
 
 /**
@@ -51,8 +50,8 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 		if (desc.passiveTrigger != null || (desc.passiveTriggers != null && desc.passiveTriggers.length > 0)) {
 			keys.add(Attribute.PASSIVE_TRIGGERS);
 		}
-		if (desc.deckTrigger != null) {
-			keys.add(Attribute.DECK_TRIGGER);
+		if (desc.deckTrigger != null || (desc.deckTriggers != null && desc.deckTriggers.length > 0)) {
+			keys.add(Attribute.DECK_TRIGGERS);
 		}
 		if (desc.gameTriggers != null) {
 			keys.add(Attribute.GAME_TRIGGERS);
@@ -113,15 +112,9 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 				case MANA_COST_MODIFIER:
 					return desc.manaCostModifier == null ? null : desc.manaCostModifier.create();
 				case PASSIVE_TRIGGERS:
-					if (desc.passiveTrigger == null && (desc.passiveTriggers == null || desc.passiveTriggers.length == 0)) {
-						return new EnchantmentDesc[0];
-					}
-					if (desc.passiveTrigger != null && (desc.passiveTriggers == null || desc.passiveTriggers.length == 0)) {
-						return new EnchantmentDesc[]{desc.passiveTrigger};
-					}
-					return desc.passiveTriggers;
-				case DECK_TRIGGER:
-					return desc.deckTrigger;
+					return link(desc.passiveTrigger, desc.passiveTriggers, EnchantmentDesc.class);
+				case DECK_TRIGGERS:
+					return link(desc.deckTrigger, desc.deckTriggers, EnchantmentDesc.class);
 				case GAME_TRIGGERS:
 					return desc.gameTriggers;
 				case RACE:
@@ -167,6 +160,19 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 		return super.get(key);
 	}
 
+	@NotNull
+	public <T> T[] link(T single, T[] multi, Class<? extends T> tClass) {
+		if (single == null && (multi == null || multi.length == 0)) {
+			return (T[]) Array.newInstance(tClass, 0);
+		}
+		if (single != null && (multi == null || multi.length == 0)) {
+			T[] out = (T[]) Array.newInstance(tClass, 1);
+			out[0] = single;
+			return out;
+		}
+		return multi;
+	}
+
 	@Override
 	public boolean containsKey(Object key) {
 		CardDesc desc = getCard().getDesc();
@@ -180,8 +186,8 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 				return desc.manaCostModifier != null;
 			case PASSIVE_TRIGGERS:
 				return desc.passiveTrigger != null || (desc.passiveTriggers != null && desc.passiveTriggers.length > 0);
-			case DECK_TRIGGER:
-				return desc.deckTrigger != null;
+			case DECK_TRIGGERS:
+				return desc.deckTrigger != null || (desc.deckTriggers != null && desc.deckTriggers.length > 0);
 			case GAME_TRIGGERS:
 				return desc.gameTriggers != null;
 			case RACE:
