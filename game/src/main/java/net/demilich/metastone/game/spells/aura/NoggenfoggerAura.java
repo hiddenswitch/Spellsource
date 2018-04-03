@@ -18,6 +18,7 @@ public class NoggenfoggerAura extends Aura {
 
 	public NoggenfoggerAura(AuraDesc desc) {
 		super(new TargetAcquisitionTrigger(), null, NullSpell.create());
+		setDesc(desc);
 	}
 
 	@Override

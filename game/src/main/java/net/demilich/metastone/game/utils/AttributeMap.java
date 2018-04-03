@@ -24,7 +24,7 @@ public class AttributeMap extends ConcurrentHashMap<Attribute, Object> implement
 	}
 
 	public AttributeMap(Map<Attribute, Object> attributes) {
-		super(attributes);
+		super(attributes == null ? Collections.emptyMap() : attributes);
 	}
 
 	@Override

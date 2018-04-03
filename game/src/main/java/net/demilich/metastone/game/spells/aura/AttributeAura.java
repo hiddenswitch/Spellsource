@@ -15,6 +15,7 @@ public class AttributeAura extends Aura {
 				desc.getTarget(),
 				(EntityFilter) desc.get(AuraArg.FILTER),
 				desc.getCondition());
+		setDesc(desc);
 	}
 }
 

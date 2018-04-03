@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <V> The abstract base class of the concrete type.
  */
 @JsonSerialize(using = DescSerializer.class)
-public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends ConcurrentHashMap<T, Object> implements Serializable, Cloneable, HasDesc<Desc<T, V>> {
+public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends LinkedHashMap<T, Object> implements Serializable, Cloneable, HasDesc<Desc<T, V>> {
 	protected Desc(Map<T, Object> arguments) {
 		super(arguments);
 	}
