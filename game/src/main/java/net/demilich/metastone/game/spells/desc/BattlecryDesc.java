@@ -1,14 +1,21 @@
 package net.demilich.metastone.game.spells.desc;
 
 import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
+
+import static com.google.common.collect.Maps.immutableEntry;
 
 /**
  * The object describing a battlecry.
@@ -69,7 +76,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  * how the battlecry action is processed.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class BattlecryDesc implements Serializable {
+public final class BattlecryDesc extends AbstractMap<BattlecryDescArg, Object> implements Serializable {
 	/**
 	 * The spell to cast when this battlecry's {@link #condition} is true (or always cast if no condition is specified
 	 * and a valid target is available).
@@ -86,8 +93,8 @@ public final class BattlecryDesc implements Serializable {
 	/**
 	 * The condition to evaluate if the player will be prompted to make a battlecry action.
 	 * <p>
-	 * The condition is also used to determine if the {@link net.demilich.metastone.game.cards.Card} in the
-	 * player's hand should receive a "yellow glow" indicating its condition is met.
+	 * The condition is also used to determine if the {@link net.demilich.metastone.game.cards.Card} in the player's
+	 * hand should receive a "yellow glow" indicating its condition is met.
 	 * <p>
 	 * In order to implement this glow, it is preferred to specify a condition here rather than using a {@link
 	 * net.demilich.metastone.game.spells.ConditionalSpell} in the {@link #spell} field.
@@ -118,5 +125,16 @@ public final class BattlecryDesc implements Serializable {
 	@JsonIgnore
 	public BattlecryAction toBattlecryAction() {
 		return BattlecryAction.createBattlecry(spell, getTargetSelection());
+	}
+
+	@Override
+	public Set<Entry<BattlecryDescArg, Object>> entrySet() {
+		return Sets.newHashSet(
+				immutableEntry(BattlecryDescArg.SPELL, spell),
+				immutableEntry(BattlecryDescArg.TARGET_SELECTION, targetSelection),
+				immutableEntry(BattlecryDescArg.CONDITION, condition),
+				immutableEntry(BattlecryDescArg.NAME, name),
+				immutableEntry(BattlecryDescArg.DESCRIPTION, description)
+		);
 	}
 }
