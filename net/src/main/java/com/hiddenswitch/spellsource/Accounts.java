@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
@@ -11,6 +12,7 @@ import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.web.RoutingContext;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -129,6 +131,17 @@ public interface Accounts {
 	}
 
 	/**
+	 * Retrieves the userId from a routing context after it has been handled by an {@link
+	 * com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler}.
+	 *
+	 * @param context The routing context from which to retrieve the user ID
+	 * @return The User ID
+	 */
+	static String userId(RoutingContext context) {
+		return context.user().principal().getString("_id");
+	}
+
+	/**
 	 * Creates an account.
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
@@ -173,6 +186,7 @@ public interface Accounts {
 
 	/**
 	 * Changes the user's password.
+	 *
 	 * @param request The
 	 * @return
 	 */
