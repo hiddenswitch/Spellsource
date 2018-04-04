@@ -39,7 +39,6 @@ import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetAccountsResponse;
 import com.hiddenswitch.spellsource.client.models.GetCardsResponse;
-import com.hiddenswitch.spellsource.client.models.GetConversationResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.MatchCancelResponse;
@@ -47,8 +46,6 @@ import com.hiddenswitch.spellsource.client.models.MatchConcedeResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuesResponse;
-import com.hiddenswitch.spellsource.client.models.SendMessageRequest;
-import com.hiddenswitch.spellsource.client.models.SendMessageResponse;
 import com.hiddenswitch.spellsource.client.models.SpellsourceException;
 import com.hiddenswitch.spellsource.client.models.UnfriendResponse;
 
@@ -747,49 +744,6 @@ public class DefaultApi {
       }
   /**
    * 
-   * get conversation with friend 
-   * @param friendId id of friend (required)
-   * @return GetConversationResponse
-   * @throws ApiException if fails to make API call
-   */
-  public GetConversationResponse getFriendConversation(String friendId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'friendId' is set
-    if (friendId == null) {
-      throw new ApiException(400, "Missing the required parameter 'friendId' when calling getFriendConversation");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/friends/{friendId}/conversation"
-      .replaceAll("\\{" + "friendId" + "\\}", apiClient.escapeString(friendId.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "TokenSecurity" };
-
-    GenericType<GetConversationResponse> localVarReturnType = new GenericType<GetConversationResponse>() {};
-    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
-   * 
    * Returns an empty body if the server is available. 
    * @throws ApiException if fails to make API call
    */
@@ -1071,54 +1025,5 @@ public class DefaultApi {
 
     GenericType<MatchmakingQueuesResponse> localVarReturnType = new GenericType<MatchmakingQueuesResponse>() {};
     return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
-   * 
-   * send message to friend 
-   * @param friendId id of friend (required)
-   * @param request Send message request (required)
-   * @return SendMessageResponse
-   * @throws ApiException if fails to make API call
-   */
-  public SendMessageResponse sendFriendMessage(String friendId, SendMessageRequest request) throws ApiException {
-    Object localVarPostBody = request;
-    
-    // verify the required parameter 'friendId' is set
-    if (friendId == null) {
-      throw new ApiException(400, "Missing the required parameter 'friendId' when calling sendFriendMessage");
-    }
-    
-    // verify the required parameter 'request' is set
-    if (request == null) {
-      throw new ApiException(400, "Missing the required parameter 'request' when calling sendFriendMessage");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/friends/{friendId}/conversation"
-      .replaceAll("\\{" + "friendId" + "\\}", apiClient.escapeString(friendId.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "TokenSecurity" };
-
-    GenericType<SendMessageResponse> localVarReturnType = new GenericType<SendMessageResponse>() {};
-    return apiClient.invokeAPI(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
       }
 }

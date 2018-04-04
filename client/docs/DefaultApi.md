@@ -20,7 +20,6 @@ Method | HTTP request | Description
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
 [**getCards**](DefaultApi.md#getCards) | **GET** /cards | 
-[**getFriendConversation**](DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 [**healthCheck**](DefaultApi.md#healthCheck) | **GET** / | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
 [**matchmakingConstructedDelete**](DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/{queueId} | 
@@ -28,7 +27,6 @@ Method | HTTP request | Description
 [**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking | 
 [**matchmakingConstructedQueuePut**](DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
 [**matchmakingGet**](DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
-[**sendFriendMessage**](DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
 
 
 <a name="changePassword"></a>
@@ -884,61 +882,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="getFriendConversation"></a>
-# **getFriendConversation**
-> GetConversationResponse getFriendConversation(friendId)
-
-
-
-get conversation with friend 
-
-### Example
-```java
-// Import classes:
-//import com.hiddenswitch.spellsource.client.ApiClient;
-//import com.hiddenswitch.spellsource.client.ApiException;
-//import com.hiddenswitch.spellsource.client.Configuration;
-//import com.hiddenswitch.spellsource.client.auth.*;
-//import com.hiddenswitch.spellsource.client.api.DefaultApi;
-
-ApiClient defaultClient = Configuration.getDefaultApiClient();
-
-// Configure API key authorization: TokenSecurity
-ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
-TokenSecurity.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//TokenSecurity.setApiKeyPrefix("Token");
-
-DefaultApi apiInstance = new DefaultApi();
-String friendId = "friendId_example"; // String | id of friend
-try {
-    GetConversationResponse result = apiInstance.getFriendConversation(friendId);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling DefaultApi#getFriendConversation");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **friendId** | **String**| id of friend |
-
-### Return type
-
-[**GetConversationResponse**](GetConversationResponse.md)
-
-### Authorization
-
-[TokenSecurity](../README.md#TokenSecurity)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
 <a name="healthCheck"></a>
 # **healthCheck**
 > healthCheck()
@@ -1283,63 +1226,6 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**MatchmakingQueuesResponse**](MatchmakingQueuesResponse.md)
-
-### Authorization
-
-[TokenSecurity](../README.md#TokenSecurity)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-<a name="sendFriendMessage"></a>
-# **sendFriendMessage**
-> SendMessageResponse sendFriendMessage(friendId, request)
-
-
-
-send message to friend 
-
-### Example
-```java
-// Import classes:
-//import com.hiddenswitch.spellsource.client.ApiClient;
-//import com.hiddenswitch.spellsource.client.ApiException;
-//import com.hiddenswitch.spellsource.client.Configuration;
-//import com.hiddenswitch.spellsource.client.auth.*;
-//import com.hiddenswitch.spellsource.client.api.DefaultApi;
-
-ApiClient defaultClient = Configuration.getDefaultApiClient();
-
-// Configure API key authorization: TokenSecurity
-ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
-TokenSecurity.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//TokenSecurity.setApiKeyPrefix("Token");
-
-DefaultApi apiInstance = new DefaultApi();
-String friendId = "friendId_example"; // String | id of friend
-SendMessageRequest request = new SendMessageRequest(); // SendMessageRequest | Send message request
-try {
-    SendMessageResponse result = apiInstance.sendFriendMessage(friendId, request);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling DefaultApi#sendFriendMessage");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **friendId** | **String**| id of friend |
- **request** | [**SendMessageRequest**](SendMessageRequest.md)| Send message request |
-
-### Return type
-
-[**SendMessageResponse**](SendMessageResponse.md)
 
 ### Authorization
 
