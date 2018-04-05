@@ -4,21 +4,29 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "LEGENDARY",
-  "description": "Replace your Hero with a random Adventure Boss.",
+  "description": "When the game starts, replace your Hero with a random Adventure Boss.",
   "targetSelection": "NONE",
-  "spell": {
-    "class": "ChangeHeroSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardSet": "BLIZZARD_ADVENTURE",
-      "cardType": "HERO"
-    },
-    "cardSource": {
-      "class": "UncollectibleCatalogueSource"
-    }
-  },
   "collectible": true,
   "set": "BLIZZARD_ADVENTURE",
   "fileFormatVersion": 1,
-  "author": "Boso101"
+  "author": "Boso101",
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ChangeHeroSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardSet": "BLIZZARD_ADVENTURE",
+          "cardType": "HERO"
+        },
+        "cardSource": {
+          "class": "UncollectibleCatalogueSource"
+        }
+      }
+    }
+  ]
 }
