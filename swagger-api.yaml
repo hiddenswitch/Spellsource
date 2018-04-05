@@ -848,6 +848,10 @@ definitions:
         type: 'boolean'
       deckId:
         type: 'string'
+      botDeckId:
+        type: 'string'
+        description: |
+          When set, specifies that the bot should play the provided deck.
       deck:
         $ref: '#/definitions/MatchmakingDeck'
   MatchmakingQueuePutResponseUnityConnection:

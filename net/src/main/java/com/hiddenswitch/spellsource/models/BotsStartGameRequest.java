@@ -9,17 +9,17 @@ public final class BotsStartGameRequest implements Serializable {
 
 	private String userId;
 	private String deckId;
+	private String botDeckId;
 
 	private BotsStartGameRequest() {
 	}
 
-	private BotsStartGameRequest(String userId, String deckId) {
-		this.userId = userId;
-		this.deckId = deckId;
-	}
-
-	public static BotsStartGameRequest request(String userId, String deckId) {
-		return new BotsStartGameRequest(userId, deckId);
+	public static BotsStartGameRequest request(String userId, String deckId, String botDeckId) {
+		BotsStartGameRequest request = new BotsStartGameRequest();
+		request.userId = userId;
+		request.deckId = deckId;
+		request.botDeckId = botDeckId;
+		return request;
 	}
 
 	public String getUserId() {
@@ -36,5 +36,13 @@ public final class BotsStartGameRequest implements Serializable {
 
 	public void setDeckId(String deckId) {
 		this.deckId = deckId;
+	}
+
+	public String getBotDeckId() {
+		return botDeckId;
+	}
+
+	public void setBotDeckId(String botDeckId) {
+		this.botDeckId = botDeckId;
 	}
 }

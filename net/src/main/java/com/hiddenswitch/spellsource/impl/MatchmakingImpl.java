@@ -164,7 +164,7 @@ public class MatchmakingImpl extends AbstractService<MatchmakingImpl> implements
 			// If this is a bot request, create a bot game.
 			if (matchmakingRequest.isBotMatch()) {
 				logger.debug("matchmakeAndJoin: Matchmaker is creating an AI game for " + userId);
-				final BotsStartGameRequest request = BotsStartGameRequest.request(matchmakingRequest.getUserId(), matchmakingRequest.getDeckId());
+				final BotsStartGameRequest request = BotsStartGameRequest.request(matchmakingRequest.getUserId(), matchmakingRequest.getDeckId(), matchmakingRequest.getBotDeckId());
 				BotsStartGameResponse botGameStarted = bots.sync().startGame(request);
 				// Occupy a spot in the queue for this user and the bot
 				queue.put(userId, QueueEntry.ready(new GameId(botGameStarted.getGameId()), deckId));

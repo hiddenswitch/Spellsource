@@ -436,7 +436,9 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext routingContext, String userId, String queueId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException {
-		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.isCasual());
+		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.isCasual())
+				.withBotDeckId(request.getBotDeckId());
+
 		MatchmakingResponse internalResponse;
 		try {
 			internalResponse = getMatchmaking().matchmakeAndJoin(internalRequest);
