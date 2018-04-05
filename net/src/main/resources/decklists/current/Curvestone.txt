@@ -1,7 +1,6 @@
-### Curvestone (Tavern Brawl)
+### Curvestone (Scenario)
 # Class: Violet
-# Format: Wild
-# Year of the Mammoth
+# Format: Custom
 #
 # 10x (0) Minion on Curve
 # 10x (0) Spell on Curve

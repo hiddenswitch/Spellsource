@@ -287,7 +287,35 @@ public class Spellsource {
 									)
 							), new UpdateOptions().setMulti(true).setWriteOption(WriteOption.UNACKNOWLEDGED));
 						}))
-				.migrateTo(8, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(9)
+						.withUp(thisVertx -> {
+							// Refresh the bot decks
+							InventoryImpl inventory = new InventoryImpl();
+							CardsImpl cards = new CardsImpl();
+							DecksImpl decksService = new DecksImpl();
+							String deploymentId = awaitResult(h -> thisVertx.deployVerticle(decksService, h));
+							String deploymentId2 = awaitResult(h -> thisVertx.deployVerticle(inventory, h));
+							String deploymentId3 = awaitResult(h -> thisVertx.deployVerticle(cards, h));
+
+							List<JsonObject> bots = mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("decks", 1)));
+							for (JsonObject bot : bots) {
+								for (Object obj : bot.getJsonArray("decks")) {
+									String deckId = (String) obj;
+									decksService.deleteDeck(DeckDeleteRequest.create(deckId));
+								}
+								for (DeckCreateRequest req : Spellsource.spellsource().getStandardDecks()) {
+									if (req.getFormat().equals("Standard")) {
+										decksService.createDeck(req.withUserId(bot.getString("_id")));
+									}
+								}
+							}
+
+							for (String dId : Arrays.asList(deploymentId, deploymentId2, deploymentId3)) {
+								Void ignored = awaitResult(h -> thisVertx.undeploy(dId, h));
+							}
+						}))
+				.migrateTo(9, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
