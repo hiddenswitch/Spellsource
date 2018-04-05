@@ -4,11 +4,13 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class AdventureTests extends TestBase {
 
 	@Test
+	@Ignore
 	public void testNefarian() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_nefarian");
