@@ -38,7 +38,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		DeckCreateRequest request = new DeckCreateRequest()
 				.withCardIds(new ArrayList<>());
 		// Parse with a regex
-		String regex = "(?:^(?:###*|#*\\s?[Nn]ame:)\\s?(?<name>.+)$)|(?:[Cc]lass:\\s?(?<heroClass>\\w+)$)|(?:[Hh]ero:\\s?(?<heroCard>\\w+))|(?:[Ff]ormat:\\s?(?<format>\\w+))|(?:(?<count>\\d+)x[\\s\\(\\)\\d]+(?<cardName>.+$))";
+		String regex = "(?:^(?:###*|#*\\s?[Nn]ame:)\\s?(?<name>.+)$)|(?:[Cc]lass:\\s?(?<heroClass>\\w+)$)|(?:[Hh]ero:\\s?(?<heroCard>.+$))|(?:[Ff]ormat:\\s?(?<format>\\w+))|(?:(?<count>\\d+)x(\\s?\\(\\d*\\))?\\s?(?<cardName>.+$))";
 		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
 		Matcher matcher = pattern.matcher(deckList);
 		List<Throwable> errors = new ArrayList<>();

@@ -260,6 +260,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void addGameEventListener(Player player, Trigger gameEventListener, Entity host) {
+		if (context.updateAndGetGameOver()) {
+			// Don't add game event listeners while the game is over
+			return;
+		}
+
 		gameEventListener.setHost(host);
 		if (!gameEventListener.hasPersistentOwner() || gameEventListener.getOwner() == Entity.NO_OWNER) {
 			gameEventListener.setOwner(player.getId());
@@ -932,6 +937,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// this method performs the actual removal
 		destroy(destroyList.toArray(new Actor[0]));
 		if (context.updateAndGetGameOver()) {
+			// The game ended. By now, all the triggers that were put into play may have been expired
 			return;
 		}
 

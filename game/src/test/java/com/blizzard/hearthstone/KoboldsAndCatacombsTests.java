@@ -76,7 +76,9 @@ public class KoboldsAndCatacombsTests extends TestBase {
 				context.getLogic().gainArmor(player, i);
 				playCard(context, player, "minion_geosculptor_yip");
 				context.endTurn();
-				Assert.assertEquals(player.getMinions().size(), 2);
+				int expectedMinions = 2;
+				expectedMinions += player.getMinions().stream().filter(c -> c.getSourceCard().getCardId().equals("minion_drakkari_enchanter")).count();
+				Assert.assertEquals(player.getMinions().size(), expectedMinions);
 				Assert.assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), expectedCost);
 			});
 		}

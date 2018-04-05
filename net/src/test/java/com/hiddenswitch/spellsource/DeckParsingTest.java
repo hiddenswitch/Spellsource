@@ -11,6 +11,26 @@ import java.util.stream.Stream;
 
 public class DeckParsingTest {
 	@Test
+	public void testDecklistParsingNumberNameCards() {
+		CardCatalogue.loadCardsFromPackage();
+		String deckList1 = "Name: Test Name\nClass: WHITE\nFormat: All\n1x Has Number Name 1\n1x 2 Has Number Name";
+		final DeckCreateRequest createRequest = DeckCreateRequest.fromDeckList(deckList1);
+		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_1"));
+		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_2"));
+	}
+
+	@Test
+	public void testDecklistTwoWordHero() {
+		CardCatalogue.loadCardsFromPackage();
+		String deckList1 = "Name: Test Name\nClass: WHITE\nFormat: All\nHero: Two Words\n1x Has Number Name 1\n1x 2 Has Number Name";
+		final DeckCreateRequest createRequest = DeckCreateRequest.fromDeckList(deckList1);
+		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_1"));
+		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_2"));
+		Assert.assertEquals(createRequest.getHeroCardId(), "hero_two_word_name");
+	}
+
+
+	@Test
 	public void testDecklistParsing() {
 		CardCatalogue.loadCardsFromPackage();
 		String deckList1 = "### Tempo Rogue\n" +
