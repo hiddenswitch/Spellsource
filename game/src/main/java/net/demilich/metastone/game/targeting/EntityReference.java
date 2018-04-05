@@ -157,16 +157,12 @@ public class EntityReference implements Serializable {
 	public static final EntityReference ENEMY_PLAYER = new EntityReference(-22);
 	/**
 	 * References the minions with an index less than the {@code source} minion.
-	 * <p>
-	 * TODO: Currently, the client renders minions in reverse order.
-	 * <p>
+	 *
 	 * The client will appear to be targeting to the minions on-screen to the right of the {@code source}.
 	 */
 	public static final EntityReference MINIONS_TO_LEFT = new EntityReference(-23);
 	/**
 	 * References the minions with an index greater than the {@code source} minion.
-	 * <p>
-	 * TODO: Currently, the client renders minions in reverse order.
 	 * <p>
 	 * The client will appear to be targeting to the minions on-screen to the left of the {@code source}.
 	 */
@@ -308,16 +304,12 @@ public class EntityReference implements Serializable {
 	 * References the friendly minion with the largest index in the minions zone, or an empty list if the minion zone is
 	 * empty.
 	 * <p>
-	 * TODO: Currently, the client renders minions in reverse order.
-	 * <p>
 	 * The rightmost minion in the client will appear to be the leftmost one.
 	 */
 	public static final EntityReference RIGHTMOST_FRIENDLY_MINION = new EntityReference(-38);
 	/**
 	 * References the enemy minion with the largest index in the minions zone, or an empty list if the minion zone is
 	 * empty.
-	 * <p>
-	 * TODO: Currently, the client renders minions in reverse order.
 	 * <p>
 	 * The rightmost minion in the client will appear to be the leftmost one.
 	 */
