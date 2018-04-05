@@ -309,6 +309,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		}
 
 		gameEnded = true;
+		getTriggerManager().expireAll();
 		logger.debug("{} endGame: Game is now ending", getGameId());
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
 		notifyPlayersGameOver();
