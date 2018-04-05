@@ -100,7 +100,10 @@ public class BotsImpl extends AbstractService<BotsImpl> implements Bots {
 		BotsStartGameResponse response = new BotsStartGameResponse();
 		UserRecord bot = pollBot();
 		GameId gameId = GameId.create();
-		String botDeckId = getRandomDeck(bot);
+		if (request.getBotDeckId() != null) {
+			logger.info("startGame: UserId {} requested bot to play deckId {}", request.getUserId(), request.getBotDeckId());
+		}
+		String botDeckId = request.getBotDeckId() == null ? getRandomDeck(bot) : request.getBotDeckId();
 		botGames.put(gameId, new UserId(bot.getId()));
 		MatchCreateResponse matchCreateResponse = matchmaking.sync().createMatch(MatchCreateRequest.botMatch(gameId, new UserId(request.getUserId()), new UserId(bot.getId()), new DeckId(request.getDeckId()), new DeckId(botDeckId)));
 		response.setGameId(matchCreateResponse.getCreateGameSessionResponse().gameId);
