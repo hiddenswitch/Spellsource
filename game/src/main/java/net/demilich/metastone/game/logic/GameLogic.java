@@ -3056,12 +3056,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			card.setOwner(player.getId());
 		}
 
+		// Remove passive triggers
+		removeEnchantments(card);
+
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
 			if (count == 0) {
-				player.getDeck().add(card);
+				card.moveOrAddTo(context, Zones.DECK);
 			} else {
-				player.getDeck().add(getRandom().nextInt(count), card);
+				card.moveOrAddTo(context, Zones.DECK, getRandom().nextInt(count));
 			}
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);

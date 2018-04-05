@@ -2,6 +2,7 @@
   "name": "Clown Fiesta",
   "baseManaCost": 6,
   "type": "SPELL",
+  "heroClass": "ANY",
   "rarity": "FREE",
   "description": "Cast Pyroblast, Meteor, Fireball, or Felfire Potion with random targets. Draw a card. Cast this when drawn.",
   "passiveTrigger": {
@@ -15,7 +16,7 @@
         {
           "class": "CastRandomSpellSpell",
           "cardFilter": {
-            "class": "AndFilter",
+            "class": "OrFilter",
             "filters": [
               {
                 "class": "SpecificCardFilter",
@@ -34,8 +35,7 @@
                 "cardId": "spell_felfire_potion"
               }
             ]
-          },
-          "targetSelection": "NONE"
+          }
         },
         {
           "class": "SetAttributeSpell",
@@ -53,31 +53,31 @@
           "class": "DrawCardSpell"
         }
       ]
-    },
+    }
+  },
+  "targetSelection": "NONE",
   "spell": {
     "class": "CastRandomSpellSpell",
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
+    "cardFilter": {
+      "class": "OrFilter",
+      "filters": [
+        {
           "class": "SpecificCardFilter",
           "cardId": "spell_pyroblast"
-          },
-          {
+        },
+        {
           "class": "SpecificCardFilter",
           "cardId": "spell_meteor"
-          },
-          {
+        },
+        {
           "class": "SpecificCardFilter",
           "cardId": "spell_fireball"
-          },
-          {
+        },
+        {
           "class": "SpecificCardFilter",
           "cardId": "spell_felfire_potion"
-          }
-        ]
-      },
-    "targetSelection": "NONE"
+        }
+      ]
     }
   },
   "collectible": false,

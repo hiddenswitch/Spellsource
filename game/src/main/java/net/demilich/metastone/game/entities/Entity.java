@@ -391,6 +391,18 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	@SuppressWarnings("unchecked")
 	public void moveOrAddTo(GameContext context, Zones destination) throws ArrayStoreException {
+		moveOrAddTo(context, destination, context.getPlayer(getOwner()).getZone(destination).size());
+	}
+
+	/**
+	 * Moves this entity to a new zone ({@link Zones}) belonging to the {@link Player} indexed by {@link #getOwner()}.
+	 *
+	 * @param context     The game context this entity is in.
+	 * @param destination The destination zone belonging to the player to move to.
+	 * @throws ArrayStoreException if the entity has no owner; or if the entity already exists in the destination.
+	 */
+	@SuppressWarnings("unchecked")
+	public void moveOrAddTo(GameContext context, Zones destination, int index) throws ArrayStoreException {
 		if (getOwner() == Entity.NO_OWNER) {
 			throw new ArrayStoreException("No owner for entity.");
 		}
@@ -403,7 +415,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 			throw new ArrayStoreException("Already in destination.");
 		} else {
 			final Zones currentZone = getEntityLocation().getZone();
-			player.getZone(currentZone).move(this, player.getZone(destination));
+			player.getZone(currentZone).move(getEntityLocation().getIndex(), player.getZone(destination), index);
 		}
 	}
 
