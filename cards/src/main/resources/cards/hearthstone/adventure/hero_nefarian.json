@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "INHERIT",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Replace your deck with Nefarian's. Draw 3 cards.",
+  "description": "Battlecry: Replace your deck with Nefarian's.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -52,7 +52,7 @@
         },
         {
           "class": "DrawCardSpell",
-          "value": 3,
+          "value": 0,
           "targetPlayer": "SELF"
         }
       ]
