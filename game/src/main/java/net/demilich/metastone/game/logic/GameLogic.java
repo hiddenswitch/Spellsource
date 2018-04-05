@@ -1927,10 +1927,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	protected void startGameForPlayer(Player player) {
 		player.setAttribute(Attribute.GAME_STARTED);
+
+		processGameTriggers(player, player.getHero());
+		processBattlefieldEnchantments(player, player.getHero());
+
+		processGameTriggers(player, player.getHero().getHeroPower());
+		processPassiveTriggers(player, player.getHero().getHeroPower());
+
 		for (Card card : player.getDeck()) {
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);
 		}
+
 		for (Card card : player.getHand()) {
 			processGameTriggers(player, card);
 			processPassiveTriggers(player, card);
