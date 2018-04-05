@@ -20,6 +20,7 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.spy;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	@Ignore
 	public void testANewChallenger() {
 		runGym((context, player, opponent) -> {
 			overrideRandomCard(context, "hero_nefarian");
