@@ -14,35 +14,34 @@
       "class": "MetaSpell",
       "spells": [
         {
-        "class": "ShuffleToDeckSpell",
-        "target": "FRIENDLY_HAND"
+          "class": "ShuffleToDeckSpell",
+          "target": "FRIENDLY_HAND"
         },
         {
-        "class": "ReplaceCardsSpell",
-        "target": "FRIENDLY_HAND",
-        "cardFilter": {
-          "class": "AndFilter",
-          "filters": [
-            {
-              "class": "CardFilter",
-              "heroClass": "BLUE",
-              "cardType": "SPELL"
-            },
-            {
-              "class": "CardFilter",
-              "rarity": "LEGENDARY",
-              "invert": true
-            }
-          ]
-        },
-        "cardSource": {
-          "class": "CatalogueSource"
-        }
+          "class": "ReplaceCardsSpell",
+          "target": "FRIENDLY_HAND",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "CardFilter",
+                "heroClass": "BLUE",
+                "cardType": "SPELL"
+              },
+              {
+                "class": "CardFilter",
+                "rarity": "LEGENDARY",
+                "invert": true
+              }
+            ]
+          },
+          "cardSource": {
+            "class": "CatalogueSource"
+          }
         }
       ]
     }
   },
-  
   "attributes": {
     "BATTLECRY": true
   },

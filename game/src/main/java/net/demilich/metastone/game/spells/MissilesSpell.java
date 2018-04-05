@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import java.util.List;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -14,12 +15,20 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MissilesSpell extends DamageSpell {
+
+	private static Logger logger = LoggerFactory.getLogger(MissilesSpell.class);
 
 	@Override
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
+		if (desc.getTarget() == null
+				|| desc.getTarget().equals(EntityReference.TARGET)) {
+			logger.warn("cast {} {}: Probable incorrect usage of MissilesSpell.", context.getGameId(), source);
+		}
 		int missiles = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 2);
 		int damage = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
 

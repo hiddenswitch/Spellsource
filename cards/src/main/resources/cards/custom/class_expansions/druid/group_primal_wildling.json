@@ -6,6 +6,7 @@
   "group": [
     {
       "class": "MetaSpell",
+      "target": "SELF",
       "name": "Stalk Your Prey",
       "description": "Gain +2/+1 and Stealth.",
       "spells": [
@@ -19,15 +20,15 @@
           "class": "AddAttributeSpell",
           "target": "SELF",
           "attribute": "STEALTH"
-        }  
+        }
       ]
     },
     {
-      "name": "Consult the Trees",
-      "description": "Summon two 1/1 Saplings.",
       "class": "SummonSpell",
       "target": "NONE",
       "value": 2,
+      "name": "Consult the Trees",
+      "description": "Summon two 1/1 Saplings.",
       "card": "token_sapling"
     },
     {

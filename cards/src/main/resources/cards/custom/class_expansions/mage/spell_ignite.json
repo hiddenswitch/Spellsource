@@ -7,10 +7,33 @@
   "description": "Deal 1 damage to a minion 6 times.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "MissilesSpell",
-    "target": "TARGET",
-    "value": 1,
-    "howMany": 6
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

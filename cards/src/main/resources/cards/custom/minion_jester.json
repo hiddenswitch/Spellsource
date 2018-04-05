@@ -7,6 +7,9 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "description": "Start of Game: Shuffle 3 Clown Fiestas into your deck.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "gameTriggers": [
     {
       "eventTrigger": {
@@ -29,9 +32,5 @@
         ]
       }
     }
-  ],
-  
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  ]
 }
