@@ -375,8 +375,7 @@ public class ClassicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			player.setMana(5);
 			player.setMaxMana(5);
-			Card nourish = CardCatalogue.getCardById("spell_nourish");
-			playCard(context, player, nourish.getChooseOneCardIds()[0]);
+			playChooseOneCard(context, player, "spell_nourish", "spell_nourish_1");
 			Assert.assertEquals(player.getMaxMana(), 7);
 			Assert.assertEquals(player.getMana(), 2);
 		});
@@ -387,8 +386,7 @@ public class ClassicTests extends TestBase {
 			}
 			player.setMana(5);
 			player.setMaxMana(5);
-			Card nourish = CardCatalogue.getCardById("spell_nourish");
-			playCard(context, player, nourish.getChooseOneCardIds()[1]);
+			playChooseOneCard(context, player, "spell_nourish", "spell_nourish_2");
 			Assert.assertEquals(player.getMaxMana(), 5);
 			Assert.assertEquals(player.getMana(), 0);
 			Assert.assertEquals(player.getHand().size(), 3);
