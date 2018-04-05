@@ -1,0 +1,32 @@
+{
+  "name": "Magmatic Totem",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "TOTEM",
+  "description": "Your Totems have +1 Attack during your opponent's turn.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+          "class": "RaceFilter",
+          "race": "TOTEM"
+        },
+    "attackBonus": 1,
+    "hpBonus": 0,
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "INACTIVE"
+    },
+    "secondaryTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "BOTH"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
