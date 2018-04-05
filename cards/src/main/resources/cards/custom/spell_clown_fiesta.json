@@ -1,0 +1,86 @@
+{
+  "name": "Clown Fiesta",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "rarity": "FREE",
+  "description": "Cast Pyroblast, Meteor, Fireball, or Felfire Potion with random targets. Draw a card. Cast this when drawn.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CastRandomSpellSpell",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_pyroblast"
+              },
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_meteor"
+              },
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_fireball"
+              },
+              {
+                "class": "SpecificCardFilter",
+                "cardId": "spell_felfire_potion"
+              }
+            ]
+          },
+          "targetSelection": "NONE"
+        },
+        {
+          "class": "SetAttributeSpell",
+          "target": "SELF",
+          "value": {
+            "class": "CurrentTurnValueProvider"
+          },
+          "attribute": "PLAYED_FROM_HAND_OR_DECK"
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "EVENT_TARGET"
+        },
+        {
+          "class": "DrawCardSpell"
+        }
+      ]
+    },
+  "spell": {
+    "class": "CastRandomSpellSpell",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+          "class": "SpecificCardFilter",
+          "cardId": "spell_pyroblast"
+          },
+          {
+          "class": "SpecificCardFilter",
+          "cardId": "spell_meteor"
+          },
+          {
+          "class": "SpecificCardFilter",
+          "cardId": "spell_fireball"
+          },
+          {
+          "class": "SpecificCardFilter",
+          "cardId": "spell_felfire_potion"
+          }
+        ]
+      },
+    "targetSelection": "NONE"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
