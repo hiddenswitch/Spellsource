@@ -575,6 +575,16 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	}
 
 	@Test
+	public void testSonyaShadowdancerGadgetzanFerrymanInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_sonya_shadowdancer");
+			playMinionCardWithBattlecry(context, player, "minion_gadgetzan_ferryman", bloodfen);
+			Assert.assertEquals(player.getHand().size(), 1);
+		});
+	}
+
+	@Test
 	public void testTemporus() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_temporus");
