@@ -14,9 +14,19 @@
       "class": "ReceiveCardSpell",
       "value": 1,
       "cardFilter": {
-        "class": "CardFilter",
-        "heroClass": "SILVER",
-        "cardType": "SPELL"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "heroClass": "SILVER",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          }
+        ]
       },
       "cardSource": {
         "class": "UnweightedCatalogueSource"
