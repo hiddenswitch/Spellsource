@@ -409,7 +409,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 
 		final Player player = context.getPlayer(getOwner());
 		if (getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-			player.getZone(destination).add(this);
+			player.getZone(destination).add(index, this);
 		} else if (getEntityLocation().getZone() == destination) {
 			// Already in the destination.
 			throw new ArrayStoreException("Already in destination.");
