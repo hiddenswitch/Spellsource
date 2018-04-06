@@ -1149,6 +1149,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		for (int i = 0; i < targets.length; i++) {
 			Actor target = targets[i];
+			EntityLocation actorPreviousLocation = previousLocation.get(target);
 			Player owner = context.getPlayer(target.getOwner());
 			switch (target.getEntityType()) {
 				case HERO:
@@ -1156,12 +1157,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					applyAttribute(context.getPlayer(target.getOwner()), Attribute.DESTROYED);
 					break;
 				case MINION:
-					context.getEnvironment().put(Environment.KILLED_MINION, target.getReference());
-					KillEvent killEvent = new KillEvent(context, target);
-					context.fireGameEvent(killEvent);
-					context.getEnvironment().remove(Environment.KILLED_MINION);
-					applyAttribute(target, Attribute.DESTROYED);
-					target.setAttribute(Attribute.DIED_ON_TURN, context.getTurn());
+					// Minions removed peacefully do not trigger kill events
+					// Deathrattles delegate correctly and do not trigger if the minion was previously in the set aside
+					// zone.
+					if (actorPreviousLocation.getZone() != Zones.SET_ASIDE_ZONE) {
+						context.getEnvironment().put(Environment.KILLED_MINION, target.getReference());
+						KillEvent killEvent = new KillEvent(context, target);
+						context.fireGameEvent(killEvent);
+						context.getEnvironment().remove(Environment.KILLED_MINION);
+						applyAttribute(target, Attribute.DESTROYED);
+						target.setAttribute(Attribute.DIED_ON_TURN, context.getTurn());
+					}
 					break;
 				case WEAPON:
 					destroyWeapon((Weapon) target);
@@ -2740,7 +2746,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	/**
 	 * Removes an actor by moving it to...
-	 * <p>
+	 *
 	 * <ul> <li>The {@link Zones#GRAVEYARD} if the actor is being removed {@code peacefully == false}. Also marks it
 	 * {@link Attribute#DESTROYED}.</li> <li>The {@link Zones#SET_ASIDE_ZONE} if the actor is being removed {@code
 	 * peacefully == true}. The caller is responsible for moving it elsewhere.</li> </ul>
