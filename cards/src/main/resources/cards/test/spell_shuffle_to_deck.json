@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "value": 60,
+    "cards": [
+      "minion_black_test",
+      "minion_blue_test",
+      "minion_brown_test",
+      "minion_gold_test",
+      "minion_green_test",
+      "minion_red_test",
+      "minion_silver_test",
+      "minion_violet_test",
+      "minion_white_test"
+    ]
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
