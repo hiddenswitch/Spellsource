@@ -1,11 +1,8 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.hiddenswitch.spellsource.client.models.CompactChange;
-import com.hiddenswitch.spellsource.client.models.CompactChangeDocument;
+
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
 public interface DiffContext<T, K extends Comparable> {

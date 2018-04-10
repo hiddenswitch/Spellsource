@@ -105,7 +105,7 @@ public abstract class StringEx implements Serializable,
 			return null;
 		}
 	}
-
+/*
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
 		if (id == null) {
@@ -136,4 +136,5 @@ public abstract class StringEx implements Serializable,
 			throws ObjectStreamException {
 		id = null;
 	}
+	*/
 }

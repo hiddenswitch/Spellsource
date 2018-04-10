@@ -1,8 +1,6 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import com.google.common.base.Objects;
-import com.hiddenswitch.spellsource.client.models.Conversation;
-import com.hiddenswitch.spellsource.client.models.Message;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,7 +42,6 @@ public class ConversationRecord extends MongoRecord implements Serializable{
     }
 
     public Conversation toConversationDto() {
-        List<Message> messageDtos = this.messages.stream().map(MessageRecord::toMessageDto).collect(Collectors.toList());
-        return new Conversation().id(this._id).messages(messageDtos);
+        return null;
     }
 }

@@ -113,7 +113,6 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**getCards**](docs/DefaultApi.md#getCards) | **GET** /cards | 
-*DefaultApi* | [**getFriendConversation**](docs/DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
 *DefaultApi* | [**matchmakingConstructedDelete**](docs/DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/{queueId} | 
@@ -121,7 +120,6 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking | 
 *DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
 *DefaultApi* | [**matchmakingGet**](docs/DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
-*DefaultApi* | [**sendFriendMessage**](docs/DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
 
 
 ## Documentation for Models
@@ -131,10 +129,10 @@ Class | Method | HTTP request | Description
  - [CardRecord](docs/CardRecord.md)
  - [ChangePasswordRequest](docs/ChangePasswordRequest.md)
  - [ChangePasswordResponse](docs/ChangePasswordResponse.md)
+ - [ChatMessage](docs/ChatMessage.md)
  - [ChooseOneOptions](docs/ChooseOneOptions.md)
  - [ClientToServerMessage](docs/ClientToServerMessage.md)
  - [ClientToServerMessageFirstMessage](docs/ClientToServerMessageFirstMessage.md)
- - [Conversation](docs/Conversation.md)
  - [CreateAccountRequest](docs/CreateAccountRequest.md)
  - [CreateAccountResponse](docs/CreateAccountResponse.md)
  - [DecksGetAllResponse](docs/DecksGetAllResponse.md)
@@ -154,6 +152,14 @@ Class | Method | HTTP request | Description
  - [EntityChangeSetInner](docs/EntityChangeSetInner.md)
  - [EntityLocation](docs/EntityLocation.md)
  - [EntityState](docs/EntityState.md)
+ - [Envelope](docs/Envelope.md)
+ - [EnvelopeAdded](docs/EnvelopeAdded.md)
+ - [EnvelopeMethod](docs/EnvelopeMethod.md)
+ - [EnvelopeMethodSendMessage](docs/EnvelopeMethodSendMessage.md)
+ - [EnvelopeResult](docs/EnvelopeResult.md)
+ - [EnvelopeResultSendMessage](docs/EnvelopeResultSendMessage.md)
+ - [EnvelopeSub](docs/EnvelopeSub.md)
+ - [EnvelopeSubConversation](docs/EnvelopeSubConversation.md)
  - [Friend](docs/Friend.md)
  - [FriendPutRequest](docs/FriendPutRequest.md)
  - [FriendPutResponse](docs/FriendPutResponse.md)
@@ -184,7 +190,6 @@ Class | Method | HTTP request | Description
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)
  - [GetCardsResponse](docs/GetCardsResponse.md)
- - [GetConversationResponse](docs/GetConversationResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
  - [JavaSerializationObject](docs/JavaSerializationObject.md)
  - [LoginRequest](docs/LoginRequest.md)
@@ -198,7 +203,6 @@ Class | Method | HTTP request | Description
  - [MatchmakingQueuePutResponse](docs/MatchmakingQueuePutResponse.md)
  - [MatchmakingQueuePutResponseUnityConnection](docs/MatchmakingQueuePutResponseUnityConnection.md)
  - [MatchmakingQueuesResponse](docs/MatchmakingQueuesResponse.md)
- - [Message](docs/Message.md)
  - [MessageType](docs/MessageType.md)
  - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)
  - [SendMessageRequest](docs/SendMessageRequest.md)

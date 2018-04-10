@@ -98,6 +98,10 @@ public interface Accounts {
 		return Mongo.mongo().findOne(Accounts.USERS, QuickJson.json("_id", userId), UserRecord.class);
 	}
 
+	static UserRecord findOne(UserId userId) throws SuspendExecution, InterruptedException {
+		return findOne(userId.toString());
+	}
+
 	/**
 	 * Finds user accounts with the given options.
 	 *

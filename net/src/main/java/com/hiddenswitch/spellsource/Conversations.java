@@ -1,11 +1,12 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.ConversationRecord;
 import com.hiddenswitch.spellsource.impl.util.MessageRecord;
-import com.hiddenswitch.spellsource.util.QuickJson;
-import com.hiddenswitch.spellsource.util.Sync;
+import com.hiddenswitch.spellsource.impl.util.UserRecord;
+import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
@@ -14,12 +15,14 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.web.RoutingContext;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.List;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class Conversations {
+	/*
 	private static final String CONVERSATIONS = "conversations";
 	private final static char ID_SEPARATOR = '$';
 
@@ -60,21 +63,47 @@ public class Conversations {
 		}
 		return conversation;
 	}
+	*/
 
-	public static Handler<RoutingContext> createRealtimeConversation(List<UserId> users) {
-		return (routingContext) -> {
-			String thisUserId = Accounts.userId(routingContext);
+	public static void realtime() {
+		// Only requires accounts
+		Realtime.method(EnvelopeMethod::getSendMessage, context -> {
+			final EnvelopeMethodSendMessage sendMessage = context.request();
+			// Sending a chat message
+			SuspendableMultimap<ConversationId, ChatMessage> conversations = SharedData.getClusterWideMultimap("conversations");
+			final UserRecord sender = Accounts.findOne(context.user());
+			final String conversationId = sendMessage.getConversationId();
+			// TODO: Check that you have permission to actually message this conversation ID
 
-			if (!users.contains(new UserId(thisUserId))) {
-				throw new SecurityException("Not permitted.");
+			final ChatMessage message = new ChatMessage()
+					.messageId("c" + Integer.toString(conversations.size()) + ":" + RandomStringUtils.randomAlphanumeric(6))
+					.conversationId(conversationId)
+					.message(sendMessage.getMessage())
+					.senderUserId(sender.getId())
+					.senderName(sender.getUsername());
+
+			conversations.put(new ConversationId(conversationId), message);
+			// Notify updated/result obtained
+			context.result().sendMessage(new EnvelopeResultSendMessage().messageId(message.getMessageId()));
+		});
+
+		Realtime.publish(EnvelopeSubConversation.class, EnvelopeSub::getConversation, (ChatMessage obj) -> new EnvelopeAdded().chatMessage(obj), context -> {
+			// Subscribe to conversation
+			final String conversationId = context.request().getConversationId();
+			final ConversationId key = new ConversationId(conversationId);
+
+			AddedChangedRemoved<ConversationId, ChatMessage> observer =
+					SharedData.subscribeToKeyInMultimap("conversations", key);
+
+			for (ChatMessage message : SharedData.<ConversationId, ChatMessage>getClusterWideMultimap("conversations").get(key)) {
+				context.client().added(message.getConversationId(), message);
 			}
 
-			ServerWebSocket client = routingContext.request().upgrade();
+			context.addDisposable(observer.added().subscribe(next -> {
+				context.client().added(next.getKey(), next.getValue());
+			}));
 
-			// Create a reference to the topic with a deterministic key
-			EventBus eventBus = Vertx.currentContext().owner().eventBus();
-
-			// Rebroadcast send messagees to all the participants.
-		};
+			context.addDisposable(observer);
+		});
 	}
 }
