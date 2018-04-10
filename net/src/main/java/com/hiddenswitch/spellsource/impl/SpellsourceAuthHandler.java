@@ -13,7 +13,7 @@ import io.vertx.ext.web.handler.AuthHandler;
 
 import java.util.Set;
 
-class SpellsourceAuthHandler implements AuthHandler {
+public class SpellsourceAuthHandler implements AuthHandler {
 	private SpellsourceAuthHandler() {
 	}
 

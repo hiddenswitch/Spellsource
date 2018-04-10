@@ -33,7 +33,6 @@ import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetAccountsResponse;
 import com.hiddenswitch.spellsource.client.models.GetCardsResponse;
-import com.hiddenswitch.spellsource.client.models.GetConversationResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.MatchCancelResponse;
@@ -41,8 +40,6 @@ import com.hiddenswitch.spellsource.client.models.MatchConcedeResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuesResponse;
-import com.hiddenswitch.spellsource.client.models.SendMessageRequest;
-import com.hiddenswitch.spellsource.client.models.SendMessageResponse;
 import com.hiddenswitch.spellsource.client.models.SpellsourceException;
 import com.hiddenswitch.spellsource.client.models.UnfriendResponse;
 import org.junit.Test;
@@ -320,22 +317,6 @@ public class DefaultApiTest {
     /**
      * 
      *
-     * get conversation with friend 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getFriendConversationTest() throws ApiException {
-        String friendId = null;
-        GetConversationResponse response = api.getFriendConversation(friendId);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
      * Returns an empty body if the server is available. 
      *
      * @throws ApiException
@@ -439,23 +420,6 @@ public class DefaultApiTest {
     @Test
     public void matchmakingGetTest() throws ApiException {
         MatchmakingQueuesResponse response = api.matchmakingGet();
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * send message to friend 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void sendFriendMessageTest() throws ApiException {
-        String friendId = null;
-        SendMessageRequest request = null;
-        SendMessageResponse response = api.sendFriendMessage(friendId, request);
 
         // TODO: test validations
     }

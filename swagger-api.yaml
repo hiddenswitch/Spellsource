@@ -108,18 +108,6 @@ definitions:
           True if the client should attempt to connect to a match with its token.
       personalCollection:
         $ref: '#/definitions/InventoryCollection'
-  SendMessageRequest:
-    type: 'object'
-    required:
-      - text
-    properties:
-      text:
-        type: 'string'
-  SendMessageResponse:
-    type: 'object'
-    properties:
-      message:
-        $ref: '#/definitions/Message'
   GetAccountsRequest:
     type: 'object'
     required:

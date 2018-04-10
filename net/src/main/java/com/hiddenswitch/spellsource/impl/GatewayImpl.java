@@ -57,6 +57,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		final AuthHandler authHandler = SpellsourceAuthHandler.create();
 		final BodyHandler bodyHandler = BodyHandler.create();
 
+		// Handle game messaging here
 		final String websocketPath = "/" + Games.WEBSOCKET_PATH + "-clustered";
 		router.route(websocketPath)
 				.method(HttpMethod.GET)
@@ -65,6 +66,18 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		router.route(websocketPath)
 				.method(HttpMethod.GET)
 				.handler(Games.createWebSocketHandler());
+
+		// Handle all realtime messaging here
+		router.route("/realtime")
+				.method(HttpMethod.GET)
+				.handler(authHandler);
+
+		router.route("/realtime")
+				.method(HttpMethod.GET)
+				.handler(Realtime.create());
+
+		// Enable realtime conversations
+		Conversations.realtime();
 
 		// Health check comes first
 		router.route("/")
@@ -263,19 +276,6 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		router.route("/drafts/cards")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
-
-		router.route("/friends/:friendId/conversation")
-				.handler(bodyHandler);
-		router.route("/friends/:friendId/conversation")
-				.handler(authHandler);
-		router.route("/friends/:friendId/conversation")
-				.method(HttpMethod.PUT)
-				.handler(HandlerFactory.handler(SendMessageRequest.class, "friendId",
-						this::sendFriendMessage));
-
-		router.route("/friends/:friendId/conversation")
-				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler("friendId", this::getFriendConversation));
 
 		Void listen = awaitResult(done -> {
 			try {
@@ -651,36 +651,9 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		}
 	}
 
-	public WebResult<GetConversationResponse> getFriendConversation(
-			RoutingContext context, String userId, String friendId) throws SuspendExecution, InterruptedException {
-		UserRecord userAccount = (UserRecord) context.user();
-		if (!userAccount.isFriend(friendId)) {
-			return WebResult.failed(404, new Exception("Friend account not found"));
-		}
-
-		GetConversationResponse getConversationResponse = new GetConversationResponse().conversation(
-				Conversations.getCreateConversation(getMongo(), userId, friendId).toConversationDto());
-
-		return WebResult.succeeded(getConversationResponse);
-	}
-
 	@Override
 	public WebResult<Void> healthCheck(RoutingContext context) throws SuspendExecution, InterruptedException {
 		return WebResult.succeeded(200, null);
-	}
-
-	public WebResult<SendMessageResponse> sendFriendMessage(
-			RoutingContext context, String userId, String friendId, SendMessageRequest request)
-			throws SuspendExecution, InterruptedException {
-		UserRecord myAccount = (UserRecord) context.user();
-		if (!myAccount.isFriend(friendId)) {
-			return WebResult.failed(404, new Exception("Not friends"));
-		}
-
-		MessageRecord messageSent = Conversations.insertMessage(Mongo.mongo().client(), userId,
-				myAccount.getUsername(), friendId, request.getText());
-		SendMessageResponse response = new SendMessageResponse().message(messageSent.toMessageDto());
-		return WebResult.succeeded(response);
 	}
 
 	@Override

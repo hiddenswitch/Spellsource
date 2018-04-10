@@ -155,11 +155,7 @@ public interface Gateway {
 
 	WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException;
 
-	WebResult getFriendConversation(RoutingContext context, String userId, String friendId) throws SuspendExecution, InterruptedException;
-
 	WebResult<Void> healthCheck(RoutingContext context) throws SuspendExecution, InterruptedException;
-
-	WebResult<SendMessageResponse> sendFriendMessage(RoutingContext context, String userId, String friendId, SendMessageRequest request) throws SuspendExecution, InterruptedException;
 
 	WebResult<com.hiddenswitch.spellsource.models.ChangePasswordResponse> changePassword(RoutingContext context, String userId, ChangePasswordRequest request) throws SuspendExecution, InterruptedException;
 
