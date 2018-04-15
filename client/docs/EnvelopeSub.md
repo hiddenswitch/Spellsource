@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **conversation** | [**EnvelopeSubConversation**](EnvelopeSubConversation.md) |  |  [optional]
+**friends** | [**EnvelopeSubFriends**](EnvelopeSubFriends.md) |  |  [optional]
 
 
 

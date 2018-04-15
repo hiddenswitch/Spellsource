@@ -1,10 +1,10 @@
 
-# SendMessageRequest
+# EnvelopeChanged
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**text** | **String** |  | 
+**friend** | [**Friend**](Friend.md) |  |  [optional]
 
 
 

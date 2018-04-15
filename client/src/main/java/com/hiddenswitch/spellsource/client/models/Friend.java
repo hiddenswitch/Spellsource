@@ -17,6 +17,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.PresenceEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -28,8 +29,11 @@ import java.io.Serializable;
 public class Friend implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("friendid")
-  private String friendid = null;
+  @JsonProperty("presence")
+  private PresenceEnum presence = null;
+
+  @JsonProperty("friendId")
+  private String friendId = null;
 
   @JsonProperty("since")
   private Long since = null;
@@ -37,22 +41,40 @@ public class Friend implements Serializable {
   @JsonProperty("friendName")
   private String friendName = null;
 
-  public Friend friendid(String friendid) {
-    this.friendid = friendid;
+  public Friend presence(PresenceEnum presence) {
+    this.presence = presence;
     return this;
   }
 
    /**
-   * Get friendid
-   * @return friendid
+   * Get presence
+   * @return presence
   **/
   @ApiModelProperty(value = "")
-  public String getFriendid() {
-    return friendid;
+  public PresenceEnum getPresence() {
+    return presence;
   }
 
-  public void setFriendid(String friendid) {
-    this.friendid = friendid;
+  public void setPresence(PresenceEnum presence) {
+    this.presence = presence;
+  }
+
+  public Friend friendId(String friendId) {
+    this.friendId = friendId;
+    return this;
+  }
+
+   /**
+   * Get friendId
+   * @return friendId
+  **/
+  @ApiModelProperty(value = "")
+  public String getFriendId() {
+    return friendId;
+  }
+
+  public void setFriendId(String friendId) {
+    this.friendId = friendId;
   }
 
   public Friend since(Long since) {
@@ -101,14 +123,15 @@ public class Friend implements Serializable {
       return false;
     }
     Friend friend = (Friend) o;
-    return Objects.equals(this.friendid, friend.friendid) &&
+    return Objects.equals(this.presence, friend.presence) &&
+        Objects.equals(this.friendId, friend.friendId) &&
         Objects.equals(this.since, friend.since) &&
         Objects.equals(this.friendName, friend.friendName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(friendid, since, friendName);
+    return Objects.hash(presence, friendId, since, friendName);
   }
 
 
@@ -117,7 +140,8 @@ public class Friend implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class Friend {\n");
     
-    sb.append("    friendid: ").append(toIndentedString(friendid)).append("\n");
+    sb.append("    presence: ").append(toIndentedString(presence)).append("\n");
+    sb.append("    friendId: ").append(toIndentedString(friendId)).append("\n");
     sb.append("    since: ").append(toIndentedString(since)).append("\n");
     sb.append("    friendName: ").append(toIndentedString(friendName)).append("\n");
     sb.append("}");

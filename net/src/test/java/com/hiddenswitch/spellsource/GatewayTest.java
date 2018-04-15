@@ -228,7 +228,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 
 		client.createUserAccount(null);
 		client.matchmakeAndPlayAgainstAI(client.getAccount().getDecks()
-				.stream().filter(d -> d.getName().equals("Necromancer (Tavern Brawl)")).findFirst().orElseThrow(AssertionError::new).getId());
+				.stream().filter(d -> d.getName().equals("Necromancer (Scenario)")).findFirst().orElseThrow(AssertionError::new).getId());
 		client.waitUntilDone();
 		getContext().assertTrue(client.isGameOver());
 
@@ -496,7 +496,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 			testContext.assertEquals(200, e.getCode(), "Adding new friend. Should return 200");
 		}
 		testContext.assertEquals(
-				friendPutResponse.getFriend().getFriendid(), createAccount2Response.getAccount().getId());
+				friendPutResponse.getFriend().getFriendId(), createAccount2Response.getAccount().getId());
 
 		// test putting friend that already exists
 		try {
@@ -532,7 +532,7 @@ public class GatewayTest extends ServiceTest<GatewayImpl> {
 		}
 		testContext.assertNotNull(unfriendResponse.getDeletedFriend(),
 				"unfriend response should include the friend details");
-		testContext.assertEquals(unfriendResponse.getDeletedFriend().getFriendid(),
+		testContext.assertEquals(unfriendResponse.getDeletedFriend().getFriendId(),
 				createAccount1Response.getAccount().getId());
 
 		// try to unfriend the first user again

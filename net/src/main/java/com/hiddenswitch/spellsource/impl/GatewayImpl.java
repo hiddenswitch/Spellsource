@@ -573,7 +573,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		//Oops
 		FriendRecord friendOfFriendRecord = friendAccount.getFriendById(userId);
 		if (friendOfFriendRecord == null) {
-			return WebResult.failed(418, new Exception("Friends not balanced. OOPS"));
+			return WebResult.failed(418, new Exception("Presence not balanced. OOPS"));
 		}
 
 		//delete from both sides

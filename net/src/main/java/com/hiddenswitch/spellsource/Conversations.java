@@ -2,108 +2,70 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.impl.util.ConversationRecord;
-import com.hiddenswitch.spellsource.impl.util.MessageRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.*;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.http.ServerWebSocket;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.MongoClient;
-import io.vertx.ext.mongo.MongoClientUpdateResult;
-import io.vertx.ext.web.RoutingContext;
+import io.reactivex.disposables.Disposable;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.util.List;
-
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.core.json.JsonObject.mapFrom;
 
 public class Conversations {
-	/*
-	private static final String CONVERSATIONS = "conversations";
-	private final static char ID_SEPARATOR = '$';
 
-	public static String getId(String id1, String id2) {
-		return id1.compareTo(id2) > 0 ? id1 + ID_SEPARATOR + id2 : id2 + ID_SEPARATOR + id1;
-	}
+	public static void realtime() throws SuspendExecution {
+		SuspendableMultimap<ConversationId, ChatMessage> conversations = SharedData.getClusterWideMultimap("conversations");
 
-	public static MessageRecord insertMessage(MongoClient mongo, String originId, String authorDisplayName,
-	                                          String destId, String text)
-			throws SuspendExecution, InterruptedException {
+		Realtime.connected(connection -> {
+			connection.handler(Sync.suspendableHandler(buf -> {
+				// TODO: Cache the deserialization here
+				Envelope msg = buf.mapTo(Envelope.class);
 
-		//get conversation
-		ConversationRecord conversation = getCreateConversation(mongo, originId, destId);
+				// Send a message
+				if (msg.getMethod() != null && msg.getMethod().getSendMessage() != null) {
+					EnvelopeMethodSendMessage sendMessage = msg.getMethod().getSendMessage();
+					// Sending a chat message
+					UserRecord sender = Accounts.findOne(connection.userId());
+					String conversationId = sendMessage.getConversationId();
+					if (!conversationId.contains(connection.userId())) {
+						throw new SecurityException(String.format("User %s attempted to subscribe to unauthorized conversationId %s",
+										connection.userId(),
+										conversationId));
+					}
+					// Conversation IDs should be of the form userId1,userId2
+					// TODO: Assert that it's two valid user IDs.
+					ChatMessage message = new ChatMessage()
+									.messageId("c:" + Integer.toString(conversations.size()) + ":" + RandomStringUtils.randomAlphanumeric(6))
+									.conversationId(conversationId)
+									.message(sendMessage.getMessage())
+									.senderUserId(sender.getId())
+									.senderName(sender.getUsername());
 
-		//create message record
-		MessageRecord messageRecord = new MessageRecord(originId, authorDisplayName, text, System.currentTimeMillis());
+					conversations.put(new ConversationId(conversationId), message);
+					connection.write(mapFrom(new Envelope().result(new EnvelopeResult().sendMessage(new EnvelopeResultSendMessage().messageId(message.getMessageId())))));
+				}
 
-		//insert message record
-		MongoClientUpdateResult result = awaitResult(h -> mongo.updateCollection(CONVERSATIONS,
-				QuickJson.json("_id", conversation.getId()),
-				QuickJson.json("$push", QuickJson.json("messages", QuickJson.json(messageRecord))), h));
+				if (msg.getSub() != null && msg.getSub().getConversation() != null) {
+					// Subscribe to conversation
+					EnvelopeSubConversation request = msg.getSub().getConversation();
+					String conversationId = request.getConversationId();
+					ConversationId key = new ConversationId(conversationId);
 
-		return messageRecord;
-	}
+					AddedChangedRemoved<ConversationId, ChatMessage> observer =
+									SharedData.subscribeToKeyInMultimap("conversations", key);
 
-	public static ConversationRecord getCreateConversation(MongoClient mongo, String player1, String player2)
-			throws SuspendExecution, InterruptedException {
-		String conversationId = getId(player1, player2);
-		JsonObject result = awaitResult(h -> mongo.findOne(CONVERSATIONS, QuickJson.json("_id", conversationId), QuickJson.json(), h));
+					for (ChatMessage message : conversations.get(key)) {
+						connection.write(mapFrom(new Envelope().added(new EnvelopeAdded().chatMessage(message))));
+					}
 
-		ConversationRecord conversation;
-		if (result != null) {
-			conversation = QuickJson.fromJson(result, ConversationRecord.class);
-		} else {
-			final ConversationRecord newConversation = new ConversationRecord(conversationId);
-			String ignored = awaitResult(h -> mongo.insert(CONVERSATIONS, QuickJson.toJson(newConversation), h));
-			conversation = newConversation;
-		}
-		return conversation;
-	}
-	*/
+					Disposable sub = observer.added().subscribe(next -> {
+						connection.write(mapFrom(new Envelope().added(new EnvelopeAdded().chatMessage(next.getValue()))));
+					});
 
-	public static void realtime() {
-		// Only requires accounts
-		Realtime.method(EnvelopeMethod::getSendMessage, context -> {
-			final EnvelopeMethodSendMessage sendMessage = context.request();
-			// Sending a chat message
-			SuspendableMultimap<ConversationId, ChatMessage> conversations = SharedData.getClusterWideMultimap("conversations");
-			final UserRecord sender = Accounts.findOne(context.user());
-			final String conversationId = sendMessage.getConversationId();
-			// TODO: Check that you have permission to actually message this conversation ID
-
-			final ChatMessage message = new ChatMessage()
-					.messageId("c" + Integer.toString(conversations.size()) + ":" + RandomStringUtils.randomAlphanumeric(6))
-					.conversationId(conversationId)
-					.message(sendMessage.getMessage())
-					.senderUserId(sender.getId())
-					.senderName(sender.getUsername());
-
-			conversations.put(new ConversationId(conversationId), message);
-			// Notify updated/result obtained
-			context.result().sendMessage(new EnvelopeResultSendMessage().messageId(message.getMessageId()));
-		});
-
-		Realtime.publish(EnvelopeSubConversation.class, EnvelopeSub::getConversation, (ChatMessage obj) -> new EnvelopeAdded().chatMessage(obj), context -> {
-			// Subscribe to conversation
-			final String conversationId = context.request().getConversationId();
-			final ConversationId key = new ConversationId(conversationId);
-
-			AddedChangedRemoved<ConversationId, ChatMessage> observer =
-					SharedData.subscribeToKeyInMultimap("conversations", key);
-
-			for (ChatMessage message : SharedData.<ConversationId, ChatMessage>getClusterWideMultimap("conversations").get(key)) {
-				context.client().added(message.getConversationId(), message);
-			}
-
-			context.addDisposable(observer.added().subscribe(next -> {
-				context.client().added(next.getKey(), next.getValue());
+					connection.endHandler(v -> {
+						sub.dispose();
+						observer.dispose();
+					});
+				}
 			}));
-
-			context.addDisposable(observer);
 		});
 	}
 }

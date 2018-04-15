@@ -39,12 +39,17 @@ public class MigrationTest {
 	@Before
 	public void startEmbeddedMongo(TestContext context) {
 		vertx = Vertx.vertx();
-		Mongo.mongo().startEmbedded().connectWithEnvironment(vertx);
 		Async async = context.async();
-		vertx.runOnContext(cleanupContext -> {
-			cleanup(Future.future().setHandler(context.asyncAssertSuccess(then -> {
-				async.complete();
-			})));
+
+		vertx.executeBlocking(fut -> {
+			Mongo.mongo().startEmbedded().connectWithEnvironment(vertx);
+			fut.complete();
+		}, v1 -> {
+			vertx.runOnContext(cleanupContext -> {
+				cleanup(Future.future().setHandler(context.asyncAssertSuccess(then -> {
+					async.complete();
+				})));
+			});
 		});
 	}
 
@@ -80,20 +85,20 @@ public class MigrationTest {
 			RpcClient<Migrations> migrator = Rpc.connect(Migrations.class, vertx.eventBus());
 
 			CompositeFuture waterfall = CompositeFuture.join(
-					migrator.promise(service ->
-							service.add(new MigrationRequest()
-									.withVersion(2)
-									.withUp((thisVertx) -> {
-										Mongo.mongo().insert("testcollection3", json("_id", "test2"));
-									}))),
-					migrator.promise(service ->
-							service.add(new MigrationRequest()
-									.withVersion(1)
-									.withUp((thisVertx) -> {
-										Mongo.mongo().createCollection("testcollection3");
-										Mongo.mongo().insert("testcollection3", json("_id", "test"));
-									}))),
-					migrator.promise(service -> service.migrateTo(new MigrateToRequest().withLatest(true)))
+							migrator.promise(service ->
+											service.add(new MigrationRequest()
+															.withVersion(2)
+															.withUp((thisVertx) -> {
+																Mongo.mongo().insert("testcollection3", json("_id", "test2"));
+															}))),
+							migrator.promise(service ->
+											service.add(new MigrationRequest()
+															.withVersion(1)
+															.withUp((thisVertx) -> {
+																Mongo.mongo().createCollection("testcollection3");
+																Mongo.mongo().insert("testcollection3", json("_id", "test"));
+															}))),
+							migrator.promise(service -> service.migrateTo(new MigrateToRequest().withLatest(true)))
 			);
 
 			waterfall.setHandler(context.asyncAssertSuccess(then2 -> {
@@ -108,80 +113,80 @@ public class MigrationTest {
 	@Test
 	public void testAndMigrateWithAPI(final TestContext context) {
 		Migrations.migrate(vertx)
-				.add(new MigrationRequest()
-						.withVersion(1)
-						.withUp((thisVertx) -> {
-							Mongo.mongo().createCollection("testcollection");
-							Mongo.mongo().insert("testcollection", json("_id", "test"));
-						}))
-				.add(new MigrationRequest()
-						.withVersion(2)
-						.withUp((thisVertx) -> {
-							Mongo.mongo().insert("testcollection", json("_id", "test2"));
-						}))
-				.migrateTo(2, context.asyncAssertSuccess(then -> {
-					if (then.failed()) {
-						context.fail(then.cause());
-					}
-					Mongo.mongo().client().count("testcollection", json(), context.asyncAssertSuccess(then3 -> {
-						context.assertEquals(then3, 2L);
-					}));
-				}));
+						.add(new MigrationRequest()
+										.withVersion(1)
+										.withUp((thisVertx) -> {
+											Mongo.mongo().createCollection("testcollection");
+											Mongo.mongo().insert("testcollection", json("_id", "test"));
+										}))
+						.add(new MigrationRequest()
+										.withVersion(2)
+										.withUp((thisVertx) -> {
+											Mongo.mongo().insert("testcollection", json("_id", "test2"));
+										}))
+						.migrateTo(2, context.asyncAssertSuccess(then -> {
+							if (then.failed()) {
+								context.fail(then.cause());
+							}
+							Mongo.mongo().client().count("testcollection", json(), context.asyncAssertSuccess(then3 -> {
+								context.assertEquals(then3, 2L);
+							}));
+						}));
 	}
 
 	@Ignore
 	@Test
 	public void testInOrder(final TestContext context) {
 		Migrations.migrate(vertx)
-				.add(new MigrationRequest()
-						.withVersion(3)
-						.withUp(thisVertx -> {
-							Mongo.mongo().updateCollection("testCollection1", json("_id", "test"), json("$set", json("value", 3)));
-						}))
-				.add(new MigrationRequest()
-						.withVersion(4)
-						.withUp(thisVertx -> {
-							Mongo.mongo().updateCollection("testCollection1", json("_id", "test"), json("$set", json("value", 4)));
-						}))
-				.add(new MigrationRequest()
-						.withVersion(2)
-						.withUp(thisVertx -> {
-							Mongo.mongo().updateCollection("testCollection1", json("_id", "test"), json("$set", json("value", 2)));
-						}))
-				.add(new MigrationRequest()
-						.withVersion(1)
-						.withUp(thisVertx -> {
-							Mongo.mongo().createCollection("testCollection1");
-							Mongo.mongo().insert("testCollection1", json("_id", "test", "value", 1));
-						}))
-				.migrateTo(4, context.asyncAssertSuccess(then -> {
-					Mongo.mongo().client().findOne("testCollection1", json("_id", "test"), json(), context.asyncAssertSuccess(then2 -> {
-						context.assertEquals(then2.getInteger("value"), 4);
-					}));
-				}));
+						.add(new MigrationRequest()
+										.withVersion(3)
+										.withUp(thisVertx -> {
+											Mongo.mongo().updateCollection("testCollection1", json("_id", "test"), json("$set", json("value", 3)));
+										}))
+						.add(new MigrationRequest()
+										.withVersion(4)
+										.withUp(thisVertx -> {
+											Mongo.mongo().updateCollection("testCollection1", json("_id", "test"), json("$set", json("value", 4)));
+										}))
+						.add(new MigrationRequest()
+										.withVersion(2)
+										.withUp(thisVertx -> {
+											Mongo.mongo().updateCollection("testCollection1", json("_id", "test"), json("$set", json("value", 2)));
+										}))
+						.add(new MigrationRequest()
+										.withVersion(1)
+										.withUp(thisVertx -> {
+											Mongo.mongo().createCollection("testCollection1");
+											Mongo.mongo().insert("testCollection1", json("_id", "test", "value", 1));
+										}))
+						.migrateTo(4, context.asyncAssertSuccess(then -> {
+							Mongo.mongo().client().findOne("testCollection1", json("_id", "test"), json(), context.asyncAssertSuccess(then2 -> {
+								context.assertEquals(then2.getInteger("value"), 4);
+							}));
+						}));
 	}
 
 	@Ignore
 	@Test
 	public void testLongMigration(final TestContext context) {
 		Migrations.migrate(vertx)
-				.add(new MigrationRequest()
-						.withVersion(1)
-						.withUp(thisVertx -> {
-							Mongo.mongo().createCollection("testCollection88");
-							Mongo.mongo().insert("testCollection88", json("_id", "test", "value", 1));
-							Long r = awaitEvent(h -> thisVertx.setTimer(Duration.of(32, ChronoUnit.SECONDS).toMillis(), h));
-						}))
-				.migrateTo(1, context.asyncAssertSuccess(then -> {
-					Mongo.mongo().client().findOne("testCollection88", json("_id", "test"), json(), context.asyncAssertSuccess(then2 -> {
-						context.assertEquals(then2.getInteger("value"), 1);
-					}));
-				}));
+						.add(new MigrationRequest()
+										.withVersion(1)
+										.withUp(thisVertx -> {
+											Mongo.mongo().createCollection("testCollection88");
+											Mongo.mongo().insert("testCollection88", json("_id", "test", "value", 1));
+											Long r = awaitEvent(h -> thisVertx.setTimer(Duration.of(32, ChronoUnit.SECONDS).toMillis(), h));
+										}))
+						.migrateTo(1, context.asyncAssertSuccess(then -> {
+							Mongo.mongo().client().findOne("testCollection88", json("_id", "test"), json(), context.asyncAssertSuccess(then2 -> {
+								context.assertEquals(then2.getInteger("value"), 1);
+							}));
+						}));
 	}
 
 	public void setLoggingLevel(Level level) {
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
-				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+						.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
 		root.setLevel(level);
 	}
 

@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -26,6 +27,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static io.vertx.core.json.Json.decodeValue;
+import static io.vertx.core.json.Json.encodeToBuffer;
+
 @RunWith(VertxUnitRunner.class)
 public class RealtimeTest {
 	@Test
@@ -37,67 +41,49 @@ public class RealtimeTest {
 		final Vertx[] vertices = new Vertx[1];
 		Vertx.clusteredVertx(new VertxOptions().setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
 			vertices[0] = vertx;
-			Mongo.mongo().connectWithEnvironment(vertx);
+			vertx.executeBlocking(fut -> {
+				Mongo.mongo().connectWithEnvironment(vertx);
+				fut.complete();
+			}, v1 -> {
+				Future<String> f1 = Future.future();
+				Future<String> f2 = Future.future();
+				final AccountsImpl accounts = new AccountsImpl();
+				CreateAccountResponse[] user1 = new CreateAccountResponse[1];
+				CreateAccountResponse[] user2 = new CreateAccountResponse[1];
+				vertx.exceptionHandler(context.exceptionHandler());
+				vertx.deployVerticle(accounts, f1);
+				vertx.deployVerticle(new InitVerticle(user1, user2, accounts), f2);
 
-			Future<String> f1 = Future.future();
-			Future<String> f2 = Future.future();
-			final AccountsImpl accounts = new AccountsImpl();
-			CreateAccountResponse[] user1 = new CreateAccountResponse[1];
-			CreateAccountResponse[] user2 = new CreateAccountResponse[1];
-			vertx.exceptionHandler(context.exceptionHandler());
-			vertx.deployVerticle(accounts, f1);
-			vertx.deployVerticle(new SyncVerticle() {
-				@Override
-				@Suspendable
-				public void start() throws Exception {
-					Router route = Router.router(vertx);
-					AuthHandler authHandler = SpellsourceAuthHandler.create();
+				CompositeFuture.join(f1, f2).setHandler(then2 -> {
+					// Deployed. Subscribe to conversation
+					// User 1 client
+					final HttpClientOptions options = new HttpClientOptions().setDefaultPort(8080).setDefaultHost("localhost");
+					final String conversationId = user1[0].getUserId() + "," + user2[0].getUserId();
+					vertx.createHttpClient(options).websocket("/realtime?X-Auth-Token=" + user1[0].getLoginToken().getToken(), handler -> {
+						// Subscribe
+						handler.write(encodeToBuffer(
+										new Envelope().sub(new EnvelopeSub().conversation(new EnvelopeSubConversation().conversationId(conversationId)))));
 
-					route.route("/realtime")
-							.method(HttpMethod.GET)
-							.handler(authHandler);
-
-					route.route("/realtime")
-							.method(HttpMethod.GET)
-							.handler(Realtime.create());
-
-					Conversations.realtime();
-
-					user1[0] = accounts.createAccount(RandomStringUtils.randomAlphanumeric(64) + "@gmail.com", "pass1234", RandomStringUtils.randomAlphanumeric(64));
-					user2[0] = accounts.createAccount(RandomStringUtils.randomAlphanumeric(64) + "@gmail.com", "pass1234", RandomStringUtils.randomAlphanumeric(64));
-
-					getVertx().createHttpServer().requestHandler(route::accept).listen(8080);
-				}
-			}, f2);
-
-			CompositeFuture.join(f1, f2).setHandler(context.asyncAssertSuccess(then2 -> {
-
-				// Deployed. Subscribe to conversation
-				// User 1 client
-				final HttpClientOptions options = new HttpClientOptions().setDefaultPort(8080).setDefaultHost("localhost");
-				vertx.createHttpClient(options).websocket("/realtime?X-Auth-Token=" + user1[0].getLoginToken().getToken(), handler -> {
-					// Subscribe
-					handler.write(Json.encodeToBuffer(new Envelope().sub(new EnvelopeSub().conversation(new EnvelopeSubConversation().conversationId("testConversation1")))));
-
-					// Send message
-					handler.write(Json.encodeToBuffer(new Envelope().method(new EnvelopeMethod().sendMessage(new EnvelopeMethodSendMessage().conversationId("testConversation1").message("hello")))));
-				});
-
-				// User 2 client
-				vertx.createHttpClient(options).websocket("/realtime?X-Auth-Token=" + user2[0].getLoginToken().getToken(), handler -> {
-					handler.handler(incoming -> {
-						Envelope envelope = Json.decodeValue(incoming, Envelope.class);
-						context.assertEquals(envelope.getAdded().getChatMessage().getMessage(), "hello");
-						// TODO: Undeploy
-						async.complete();
+						// Send message
+						handler.write(encodeToBuffer(
+										new Envelope().method(new EnvelopeMethod().sendMessage(new EnvelopeMethodSendMessage().conversationId(conversationId).message("hello")))));
 					});
-					// Subscribe
-					handler.write(Json.encodeToBuffer(new Envelope().sub(new EnvelopeSub().conversation(new EnvelopeSubConversation().conversationId("testConversation1")))));
+
+					// User 2 client
+					vertx.createHttpClient(options).websocket("/realtime?X-Auth-Token=" + user2[0].getLoginToken().getToken(), handler -> {
+						handler.handler(incoming -> {
+							Envelope envelope = decodeValue(incoming, Envelope.class);
+							context.assertEquals(envelope.getAdded().getChatMessage().getMessage(), "hello");
+							async.complete();
+						});
+						// Subscribe
+						handler.write(encodeToBuffer(new Envelope().sub(new EnvelopeSub().conversation(new EnvelopeSubConversation().conversationId(conversationId)))));
+					});
 				});
-			}));
+			});
 		}));
 
-		async.awaitSuccess(35000L);
+		async.awaitSuccess(180000L);
 		Async async2 = context.async();
 		if (vertices[0] != null) {
 			vertices[0].close(then -> {
@@ -106,6 +92,41 @@ public class RealtimeTest {
 				async2.complete();
 			});
 		}
-		async2.awaitSuccess(35000L);
+		async2.awaitSuccess(180000L);
+		Mongo.mongo().stopEmbedded();
+	}
+
+	private static class InitVerticle extends SyncVerticle {
+		private final CreateAccountResponse[] user1;
+		private final CreateAccountResponse[] user2;
+		private final AccountsImpl accounts;
+
+		public InitVerticle(CreateAccountResponse[] user1, CreateAccountResponse[] user2, AccountsImpl accounts) {
+			this.user1 = user1;
+			this.user2 = user2;
+			this.accounts = accounts;
+		}
+
+		@Override
+		@Suspendable
+		public void start() throws SuspendExecution, InterruptedException {
+			Router route = Router.router(vertx);
+			AuthHandler authHandler = SpellsourceAuthHandler.create();
+
+			route.route("/realtime")
+							.method(HttpMethod.GET)
+							.handler(authHandler);
+
+			route.route("/realtime")
+							.method(HttpMethod.GET)
+							.handler(Realtime.create());
+
+			Conversations.realtime();
+
+			user1[0] = accounts.createAccount(RandomStringUtils.randomAlphanumeric(64) + "@gmail.com", "pass1234", RandomStringUtils.randomAlphanumeric(64));
+			user2[0] = accounts.createAccount(RandomStringUtils.randomAlphanumeric(64) + "@gmail.com", "pass1234", RandomStringUtils.randomAlphanumeric(64));
+
+			getVertx().createHttpServer().requestHandler(route::accept).listen(8080);
+		}
 	}
 }

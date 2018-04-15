@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.EnvelopeSubConversation;
+import com.hiddenswitch.spellsource.client.models.EnvelopeSubFriends;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -31,6 +32,9 @@ public class EnvelopeSub implements Serializable {
 
   @JsonProperty("conversation")
   private EnvelopeSubConversation conversation = null;
+
+  @JsonProperty("friends")
+  private EnvelopeSubFriends friends = null;
 
   public EnvelopeSub conversation(EnvelopeSubConversation conversation) {
     this.conversation = conversation;
@@ -50,6 +54,24 @@ public class EnvelopeSub implements Serializable {
     this.conversation = conversation;
   }
 
+  public EnvelopeSub friends(EnvelopeSubFriends friends) {
+    this.friends = friends;
+    return this;
+  }
+
+   /**
+   * Get friends
+   * @return friends
+  **/
+  @ApiModelProperty(value = "")
+  public EnvelopeSubFriends getFriends() {
+    return friends;
+  }
+
+  public void setFriends(EnvelopeSubFriends friends) {
+    this.friends = friends;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -60,12 +82,13 @@ public class EnvelopeSub implements Serializable {
       return false;
     }
     EnvelopeSub envelopeSub = (EnvelopeSub) o;
-    return Objects.equals(this.conversation, envelopeSub.conversation);
+    return Objects.equals(this.conversation, envelopeSub.conversation) &&
+        Objects.equals(this.friends, envelopeSub.friends);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(conversation);
+    return Objects.hash(conversation, friends);
   }
 
 
@@ -75,6 +98,7 @@ public class EnvelopeSub implements Serializable {
     sb.append("class EnvelopeSub {\n");
     
     sb.append("    conversation: ").append(toIndentedString(conversation)).append("\n");
+    sb.append("    friends: ").append(toIndentedString(friends)).append("\n");
     sb.append("}");
     return sb.toString();
   }

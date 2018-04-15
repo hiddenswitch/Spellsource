@@ -315,7 +315,13 @@ public class Spellsource {
 								Void ignored = awaitResult(h -> thisVertx.undeploy(dId, h));
 							}
 						}))
-				.migrateTo(9, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(10)
+						.withUp(thisVertx -> {
+							// Add an index for the friend IDs
+							mongo().createIndex(Accounts.USERS, json("friends.friendId", 1));
+						}))
+				.migrateTo(10, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

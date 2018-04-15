@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.ext.mongo.MongoClient;
+import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 
 /**
@@ -30,7 +31,10 @@ public abstract class AbstractService<T extends AbstractService<T>> extends Sync
 	@Suspendable
 	public void start() throws SuspendExecution {
 		// Sets up a mongo connection from the environment if it doesn't already exist
-		Mongo.mongo().connectWithEnvironment(vertx);
+		Sync.awaitResult(h -> vertx.executeBlocking(fut -> {
+			Mongo.mongo().connectWithEnvironment(vertx);
+			fut.complete();
+		}, h));
 	}
 
 

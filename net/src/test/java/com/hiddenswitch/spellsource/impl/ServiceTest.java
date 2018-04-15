@@ -51,32 +51,35 @@ public abstract class ServiceTest<T extends AbstractService<T>> {
 		});
 
 		CardCatalogue.loadCardsFromPackage();
+		Async async = context.async();
 
-		Mongo.mongo().connectWithEnvironment(vertx);
+		vertx.executeBlocking(fut -> {
+			Mongo.mongo().connectWithEnvironment(vertx);
+			fut.complete();
+		}, v1 -> {
+			deployServices(vertx, context.asyncAssertSuccess(i -> {
+				service = i;
 
-		deployServices(vertx, context.asyncAssertSuccess(i -> {
-			service = i;
 
-			Async async = context.async();
+				if (service != null
+								&& service.getMongo() != null) {
 
-			if (service != null
-					&& service.getMongo() != null) {
+					service.getMongo().getCollections(collections -> {
+						final List<Future> futures = collections.result().stream().map(collection -> {
+							Future<MongoClientDeleteResult> thisFuture = Future.future();
+							service.getMongo().removeDocuments(collection, new JsonObject(), thisFuture.completer());
+							return thisFuture;
+						}).collect(Collectors.toList());
 
-				service.getMongo().getCollections(collections -> {
-					final List<Future> futures = collections.result().stream().map(collection -> {
-						Future<MongoClientDeleteResult> thisFuture = Future.future();
-						service.getMongo().removeDocuments(collection, new JsonObject(), thisFuture.completer());
-						return thisFuture;
-					}).collect(Collectors.toList());
-
-					CompositeFuture.join(futures).setHandler(then -> {
-						async.complete();
+						CompositeFuture.join(futures).setHandler(then -> {
+							async.complete();
+						});
 					});
-				});
-			} else {
-				async.complete();
-			}
-		}));
+				} else {
+					async.complete();
+				}
+			}));
+		});
 	}
 
 	public abstract void deployServices(Vertx vertx, Handler<AsyncResult<T>> done);
