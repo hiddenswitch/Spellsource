@@ -31,6 +31,13 @@ definitions:
         properties:
           chatMessage:
             $ref: '#/definitions/ChatMessage'
+          friend:
+            $ref: '#/definitions/Friend'
+      changed:
+        type: 'object'
+        properties:
+          account:
+            $ref: '#/definitions/Account'
       sub:
         type: 'object'
         properties:
@@ -39,6 +46,8 @@ definitions:
             properties:
               conversationId:
                 type: 'string'
+          account:
+            $ref: '#/definitions/EnvelopeSubAccount'
       method:
         type: 'object'
         properties:
@@ -57,6 +66,8 @@ definitions:
             properties:
               messageId:
                 type: 'string'
+  EnvelopeSubAccount:
+    type: 'object'
   ChatMessage:
     type: 'object'
     properties:
@@ -75,10 +86,19 @@ definitions:
         type: 'string'
       message:
         type: 'string'
+  PresenceEnum:
+   type: 'string'
+   enum:
+    - 'UNKNOWN'
+    - 'OFFLINE'
+    - 'IN_GAME'
+    - 'ONLINE'
   Friend:
     type: 'object'
     properties:
-      friendid:
+      presence:
+        $ref: '#/definitions/PresenceEnum'
+      friendId:
         type: 'string'
       since:
         type: 'integer'

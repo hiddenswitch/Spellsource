@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.EnvelopeAdded;
+import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
 import com.hiddenswitch.spellsource.client.models.EnvelopeMethod;
 import com.hiddenswitch.spellsource.client.models.EnvelopeResult;
 import com.hiddenswitch.spellsource.client.models.EnvelopeSub;
@@ -34,6 +35,9 @@ public class Envelope implements Serializable {
 
   @JsonProperty("added")
   private EnvelopeAdded added = null;
+
+  @JsonProperty("changed")
+  private EnvelopeChanged changed = null;
 
   @JsonProperty("sub")
   private EnvelopeSub sub = null;
@@ -60,6 +64,24 @@ public class Envelope implements Serializable {
 
   public void setAdded(EnvelopeAdded added) {
     this.added = added;
+  }
+
+  public Envelope changed(EnvelopeChanged changed) {
+    this.changed = changed;
+    return this;
+  }
+
+   /**
+   * Get changed
+   * @return changed
+  **/
+  @ApiModelProperty(value = "")
+  public EnvelopeChanged getChanged() {
+    return changed;
+  }
+
+  public void setChanged(EnvelopeChanged changed) {
+    this.changed = changed;
   }
 
   public Envelope sub(EnvelopeSub sub) {
@@ -127,6 +149,7 @@ public class Envelope implements Serializable {
     }
     Envelope envelope = (Envelope) o;
     return Objects.equals(this.added, envelope.added) &&
+        Objects.equals(this.changed, envelope.changed) &&
         Objects.equals(this.sub, envelope.sub) &&
         Objects.equals(this.method, envelope.method) &&
         Objects.equals(this.result, envelope.result);
@@ -134,7 +157,7 @@ public class Envelope implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(added, sub, method, result);
+    return Objects.hash(added, changed, sub, method, result);
   }
 
 
@@ -144,6 +167,7 @@ public class Envelope implements Serializable {
     sb.append("class Envelope {\n");
     
     sb.append("    added: ").append(toIndentedString(added)).append("\n");
+    sb.append("    changed: ").append(toIndentedString(changed)).append("\n");
     sb.append("    sub: ").append(toIndentedString(sub)).append("\n");
     sb.append("    method: ").append(toIndentedString(method)).append("\n");
     sb.append("    result: ").append(toIndentedString(result)).append("\n");

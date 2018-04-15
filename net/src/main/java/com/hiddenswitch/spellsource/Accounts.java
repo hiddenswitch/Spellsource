@@ -5,13 +5,16 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.JsonObjectSubscriptionContext;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.QuickJson;
+import io.vertx.core.Context;
+import io.vertx.core.Vertx;
+import io.vertx.core.impl.ConcurrentHashSet;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.FindOptions;
-import io.vertx.ext.mongo.MongoClient;
-import io.vertx.ext.mongo.MongoClientUpdateResult;
-import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.core.streams.ReadStream;
+import io.vertx.ext.mongo.*;
 import io.vertx.ext.web.RoutingContext;
 
 import java.nio.charset.StandardCharsets;
@@ -19,7 +22,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Set;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.array;
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 
@@ -43,7 +50,7 @@ public interface Accounts {
 	 * @throws InterruptedException
 	 */
 	static MongoClientUpdateResult update(MongoClient client, String userId, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
-		return awaitResult(h -> client.updateCollection(Accounts.USERS, QuickJson.json("_id", userId), updateCommand, h));
+		return awaitResult(h -> client.updateCollection(Accounts.USERS, json("_id", userId), updateCommand, h));
 	}
 
 	/**
@@ -56,7 +63,7 @@ public interface Accounts {
 	 * @throws InterruptedException
 	 */
 	static MongoClientUpdateResult update(String userId, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
-		return Mongo.mongo().updateCollection(Accounts.USERS, QuickJson.json("_id", userId), updateCommand);
+		return mongo().updateCollection(Accounts.USERS, json("_id", userId), updateCommand);
 	}
 
 	/**
@@ -69,7 +76,7 @@ public interface Accounts {
 	 * @throws InterruptedException
 	 */
 	static MongoClientUpdateResult update(JsonObject query, JsonObject updateCommand) throws SuspendExecution {
-		return Mongo.mongo().updateCollectionWithOptions(Accounts.USERS, query, updateCommand, new UpdateOptions().setMulti(true));
+		return mongo().updateCollectionWithOptions(Accounts.USERS, query, updateCommand, new UpdateOptions().setMulti(true));
 	}
 
 	/**
@@ -95,7 +102,7 @@ public interface Accounts {
 	 * @throws InterruptedException
 	 */
 	static UserRecord findOne(String userId) throws SuspendExecution, InterruptedException {
-		return Mongo.mongo().findOne(Accounts.USERS, QuickJson.json("_id", userId), UserRecord.class);
+		return mongo().findOne(Accounts.USERS, json("_id", userId), UserRecord.class);
 	}
 
 	static UserRecord findOne(UserId userId) throws SuspendExecution, InterruptedException {

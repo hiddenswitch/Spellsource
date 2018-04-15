@@ -7,6 +7,7 @@ import com.hazelcast.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.shareddata.AsyncMap;
+import io.vertx.core.shareddata.Lock;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
 import java.util.Map;
@@ -64,5 +65,11 @@ public class SharedData {
 
 	public static HazelcastClusterManager getClusterManager() {
 		return (HazelcastClusterManager) ((VertxInternal) (Vertx.currentContext().owner())).getClusterManager();
+	}
+
+	@Suspendable
+	public static Lock lock(String name, long timeout) {
+		final Vertx vertx = Vertx.currentContext().owner();
+		return awaitResult(h -> vertx.sharedData().getLockWithTimeout(name, timeout, h));
 	}
 }

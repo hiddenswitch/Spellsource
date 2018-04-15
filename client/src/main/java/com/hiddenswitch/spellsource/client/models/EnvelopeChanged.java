@@ -17,44 +17,22 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.ChatMessage;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * EnvelopeAdded
+ * EnvelopeChanged
  */
 
-public class EnvelopeAdded implements Serializable {
+public class EnvelopeChanged implements Serializable {
   private static final long serialVersionUID = 1L;
-
-  @JsonProperty("chatMessage")
-  private ChatMessage chatMessage = null;
 
   @JsonProperty("friend")
   private Friend friend = null;
 
-  public EnvelopeAdded chatMessage(ChatMessage chatMessage) {
-    this.chatMessage = chatMessage;
-    return this;
-  }
-
-   /**
-   * Get chatMessage
-   * @return chatMessage
-  **/
-  @ApiModelProperty(value = "")
-  public ChatMessage getChatMessage() {
-    return chatMessage;
-  }
-
-  public void setChatMessage(ChatMessage chatMessage) {
-    this.chatMessage = chatMessage;
-  }
-
-  public EnvelopeAdded friend(Friend friend) {
+  public EnvelopeChanged friend(Friend friend) {
     this.friend = friend;
     return this;
   }
@@ -81,23 +59,21 @@ public class EnvelopeAdded implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeAdded envelopeAdded = (EnvelopeAdded) o;
-    return Objects.equals(this.chatMessage, envelopeAdded.chatMessage) &&
-        Objects.equals(this.friend, envelopeAdded.friend);
+    EnvelopeChanged envelopeChanged = (EnvelopeChanged) o;
+    return Objects.equals(this.friend, envelopeChanged.friend);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(chatMessage, friend);
+    return Objects.hash(friend);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeAdded {\n");
+    sb.append("class EnvelopeChanged {\n");
     
-    sb.append("    chatMessage: ").append(toIndentedString(chatMessage)).append("\n");
     sb.append("    friend: ").append(toIndentedString(friend)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -3,11 +3,17 @@ package com.hiddenswitch.spellsource.util;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.util.MongoRecord;
+import com.mongodb.async.client.MongoDatabase;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.*;
+import io.vertx.ext.mongo.impl.MongoClientImpl;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
@@ -45,7 +51,7 @@ public class Mongo {
 			localMongoServer = new LocalMongo();
 			try {
 				localMongoServer.start();
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				logger.error("Mongo failed to start.", e);
 				return this;
 			}
@@ -79,7 +85,7 @@ public class Mongo {
 
 	public Mongo connect(Vertx vertx) {
 		// Gets the connection string from the static field.
-		return connect(vertx, "mongodb://localhost:27017/production");
+		return connect(vertx, "mongodb://localhost:27017/production?replicaSet=localReplSet");
 	}
 
 	/**
@@ -325,6 +331,55 @@ public class Mongo {
 	@Suspendable
 	public MongoClientBulkWriteResult insertManyWithOptions(String collection, List<JsonObject> documents, BulkWriteOptions options) {
 		return bulkWriteWithOptions(collection, documents.stream().map(BulkOperation::createInsert).collect(Collectors.toList()), options);
+	}
+
+	/**
+	 * Subscribes to the change stream specified by the given aggregation pipeline.
+	 * <p>
+	 * {@code pipeline} describes a Mongo "aggregation" pipeline object limited to {@code $match}, {@code $project},
+	 * {@code $addFields}, {@code $replaceRoot} and {@code $redact} commands. This pipeline is evaluated not against the
+	 * underlying collection's document but against a "change event" document:
+	 *
+	 * <pre>
+	 * {
+	 *    _id : { (metadata related to the change) },
+	 *    "operationType" : (one of {@link MongoClientChangeOperationType}),
+	 *    "fullDocument" : { the collection document when {@link WatchOptions#fullDocument} is set to "updateLookup" },
+	 *    "ns" : {
+	 *       "db" : "database",
+	 *       "coll" : "collection"
+	 *    },
+	 *    "documentKey" : { "_id" : (ObjectId or string) },
+	 *    "updateDescription" : {
+	 *       "updatedFields" : { key-value pairs of updated fields, whose keys match the fields as updated by an update
+	 *                           cmd },
+	 *       "removedFields" : [ "field names", ... ]
+	 *    }
+	 * }
+	 * </pre>
+	 * <p>
+	 * This change document format differs slightly from {@link MongoClientChange} due to differences in the Mongo
+	 * driver.
+	 * <p>
+	 * {@code options} and {@code pipeline} should not be {@code null}. Use {@code new JsonArray()} as your {@code
+	 * pipeline} to specify all changes, and {@code new WatchOptions()} for default options.
+	 * <p>
+	 * Requires that the mongod server is running at least 3.6.0 and that the connection is a replica set connection
+	 * (e.g., {@code "mongodb://localhost:27017/dbname?replicaSet=replSetName"}.
+	 * <p>
+	 * Trying to watch for change streams on a non-replica-set node will fail.
+	 * <p>
+	 * Each watch uses 1 connection to the database until {@link MongoClientChangeStream#close(Handler)} is called.
+	 * Reportedly, there is a limit of <a href="https://github.com/meteor/meteor-feature-requests/issues/158#issuecomment-339376181">
+	 * 1,000 change stream watches</a> in Mongo 3.6. This will exceed the default max connections in any case.
+	 *
+	 * @param collection the collection
+	 * @param pipeline   the Mongo aggregation pipeline
+	 * @param watchOptions    the options
+	 */
+	@Suspendable
+	public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline, WatchOptions watchOptions) {
+		return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h));
 	}
 
 
