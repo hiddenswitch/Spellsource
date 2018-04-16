@@ -36,8 +36,8 @@ definitions:
       changed:
         type: 'object'
         properties:
-          account:
-            $ref: '#/definitions/Account'
+          friend:
+            $ref: '#/definitions/Friend'
       sub:
         type: 'object'
         properties:

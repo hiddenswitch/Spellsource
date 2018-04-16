@@ -1,36 +1,26 @@
-package com.hiddenswitch.spellsource;
+package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.impl.AccountsImpl;
-import com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler;
+import com.hiddenswitch.spellsource.Accounts;
+import com.hiddenswitch.spellsource.Cluster;
+import com.hiddenswitch.spellsource.Spellsource;
+import com.hiddenswitch.spellsource.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.util.Mongo;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
-import io.vertx.core.http.HttpClientOptions;
-import io.vertx.core.http.HttpMethod;
-import io.vertx.core.json.Json;
-import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static io.vertx.core.json.Json.decodeValue;
-import static io.vertx.core.json.Json.encodeToBuffer;
 
 @RunWith(VertxUnitRunner.class)
 public class SpellsourceTestBase {
@@ -55,6 +45,11 @@ public class SpellsourceTestBase {
 				}));
 			}));
 		}
+	}
+
+	protected CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {
+		return Accounts.createAccountInner(new CreateAccountRequest().withEmailAddress("test-" + RandomStringUtils.randomAlphanumeric(32) + "@test.com")
+						.withName("username" + RandomStringUtils.randomAlphanumeric(32)).withPassword("password"));
 	}
 
 	@AfterClass

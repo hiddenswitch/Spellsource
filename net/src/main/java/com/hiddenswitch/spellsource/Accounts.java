@@ -3,30 +3,28 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.impl.util.UserRecord;
+import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.JsonObjectSubscriptionContext;
-import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.QuickJson;
-import io.vertx.core.Context;
-import io.vertx.core.Vertx;
-import io.vertx.core.impl.ConcurrentHashSet;
-import io.vertx.core.json.JsonArray;
+import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.streams.ReadStream;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.web.RoutingContext;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Set;
+import java.sql.Date;
+import java.time.Instant;
+import java.util.*;
+import java.util.regex.Pattern;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
-import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.QuickJson.toJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 
@@ -38,6 +36,7 @@ public interface Accounts {
 	 * The USERS constant specifies the name of the collection in Mongo that contains the user data.
 	 */
 	String USERS = "accounts.users";
+	Pattern USERNAME_PATTERN = Pattern.compile("[A-Za-z0-9_]+");
 
 	/**
 	 * Updates an account. Useful for joining data into the account object, like deck or statistics information.
@@ -152,14 +151,96 @@ public interface Accounts {
 		return context.user().principal().getString("_id");
 	}
 
+	@NotNull
+	static CreateAccountResponse createAccountInner(CreateAccountRequest request) throws SuspendExecution, InterruptedException {
+		CreateAccountResponse response = new CreateAccountResponse();
+
+		if (!isValidName(request.getName())) {
+			response.setInvalidName(true);
+			return response;
+		}
+
+		if (!isValidEmailAddress(request.getEmailAddress())
+				|| emailExists(request.getEmailAddress())) {
+			response.setInvalidEmailAddress(true);
+			return response;
+		}
+
+		final String password = request.getPassword();
+		if (!isValidPassword(password)) {
+			response.setInvalidPassword(true);
+			return response;
+		}
+
+		final String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
+		UserRecord record = new UserRecord(userId);
+		EmailRecord email = new EmailRecord();
+		email.setAddress(request.getEmailAddress());
+		record.setEmails(Collections.singletonList(email));
+		record.setDecks(new ArrayList<>());
+		record.setFriends(new ArrayList<>());
+		record.setUsername(request.getName());
+		record.setBot(request.isBot());
+		record.setCreatedAt(Date.from(Instant.now()));
+
+		final String scrypt = securedPassword(password);
+		LoginToken forUser = LoginToken.createSecure(userId);
+
+		HashedLoginTokenRecord loginToken = new HashedLoginTokenRecord(forUser);
+		record.setServices(new ServicesRecord());
+		ResumeRecord resume = new ResumeRecord();
+		resume.setLoginTokens(Collections.singletonList(loginToken));
+		record.getServices().setResume(resume);
+		PasswordRecord passwordRecord = new PasswordRecord();
+		passwordRecord.setScrypt(scrypt);
+		record.getServices().setPassword(passwordRecord);
+
+		mongo().insert(USERS, toJson(record));
+
+		response.setUserId(userId);
+		response.setLoginToken(forUser);
+
+		return response;
+	}
+
+	static String securedPassword(String password) {
+		return SCryptUtil.scrypt(password, 16384, 8, 1);
+	}
+
+	static boolean isValidPassword(String password) {
+		return password != null && password.length() >= 1;
+	}
+
+	static boolean emailExists(String emailAddress) throws SuspendExecution, InterruptedException {
+		Long count = mongo().count(USERS, json(UserRecord.EMAILS_ADDRESS, emailAddress));
+		return count != 0;
+	}
+
+	static boolean isValidEmailAddress(String emailAddress) {
+		return EmailValidator.getInstance().isValid(emailAddress);
+	}
+
+	static boolean isValidName(String name) {
+		return getUsernamePattern().matcher(name).matches()
+				&& !isVulgar(name);
+	}
+
+	static boolean isVulgar(String name) {
+		return false;
+	}
+
+	static Pattern getUsernamePattern() {
+		return USERNAME_PATTERN;
+	}
+
 	/**
 	 * Creates an account.
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
 	 * set to true, the account creation failed with the specified handled reason. On subsequent requests from a client
-	 * that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests.
-	 * The token and user ID should be saved.
+	 * that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests. The
+	 * token and user ID should be saved.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */

@@ -17,10 +17,10 @@ import java.util.Objects;
 import java.io.Serializable;
 
 /**
- * EnvelopeSubFriends
+ * EnvelopeSubAccount
  */
 
-public class EnvelopeSubFriends implements Serializable {
+public class EnvelopeSubAccount implements Serializable {
   private static final long serialVersionUID = 1L;
 
 
@@ -44,7 +44,7 @@ public class EnvelopeSubFriends implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeSubFriends {\n");
+    sb.append("class EnvelopeSubAccount {\n");
     
     sb.append("}");
     return sb.toString();
