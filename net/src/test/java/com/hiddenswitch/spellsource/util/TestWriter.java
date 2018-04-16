@@ -1,4 +1,4 @@
-package com.hiddenswitch.spellsource;
+package com.hiddenswitch.spellsource.util;
 
 import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.GameState;

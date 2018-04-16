@@ -12,15 +12,9 @@ import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.VertxException;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 
-import java.sql.Date;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
@@ -28,7 +22,6 @@ import static com.hiddenswitch.spellsource.util.QuickJson.toJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class AccountsImpl extends AbstractService<AccountsImpl> implements Accounts {
-	private Pattern usernamePattern = Pattern.compile("[A-Za-z0-9_]+");
 	private Registration registration;
 
 	@Override
@@ -64,58 +57,7 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 
 	@Override
 	public CreateAccountResponse createAccount(CreateAccountRequest request) throws SuspendExecution, InterruptedException {
-		CreateAccountResponse response = new CreateAccountResponse();
-
-		if (!isValidName(request.getName())) {
-			response.setInvalidName(true);
-			return response;
-		}
-
-		if (!isValidEmailAddress(request.getEmailAddress())
-				|| emailExists(request.getEmailAddress())) {
-			response.setInvalidEmailAddress(true);
-			return response;
-		}
-
-		final String password = request.getPassword();
-		if (!isValidPassword(password)) {
-			response.setInvalidPassword(true);
-			return response;
-		}
-
-		final String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
-		UserRecord record = new UserRecord(userId);
-		EmailRecord email = new EmailRecord();
-		email.setAddress(request.getEmailAddress());
-		record.setEmails(Collections.singletonList(email));
-		record.setDecks(new ArrayList<>());
-		record.setFriends(new ArrayList<>());
-		record.setUsername(request.getName());
-		record.setBot(request.isBot());
-		record.setCreatedAt(Date.from(Instant.now()));
-
-		final String scrypt = securedPassword(password);
-		LoginToken forUser = LoginToken.createSecure(userId);
-
-		HashedLoginTokenRecord loginToken = new HashedLoginTokenRecord(forUser);
-		record.setServices(new ServicesRecord());
-		ResumeRecord resume = new ResumeRecord();
-		resume.setLoginTokens(Collections.singletonList(loginToken));
-		record.getServices().setResume(resume);
-		PasswordRecord passwordRecord = new PasswordRecord();
-		passwordRecord.setScrypt(scrypt);
-		record.getServices().setPassword(passwordRecord);
-
-		Mongo.mongo().insert(USERS, toJson(record));
-
-		response.setUserId(userId);
-		response.setLoginToken(forUser);
-
-		return response;
-	}
-
-	private String securedPassword(String password) {
-		return SCryptUtil.scrypt(password, 16384, 8, 1);
+		return Accounts.createAccountInner(request);
 	}
 
 	@Override
@@ -194,11 +136,11 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 			throw new NullPointerException("User not found.");
 		}
 
-		if (!isValidPassword(request.getPassword())) {
+		if (!Accounts.isValidPassword(request.getPassword())) {
 			throw new SecurityException("Invalid password.");
 		}
 
-		final String scrypt = securedPassword(request.getPassword());
+		final String scrypt = Accounts.securedPassword(request.getPassword());
 
 		MongoClientUpdateResult result = Mongo.mongo().updateCollection(USERS,
 				json(MongoRecord.ID, record.getId()),
@@ -215,12 +157,12 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 	}
 
 	@Suspendable
-	public UserRecord getWithEmail(String email) {
+	public static UserRecord getWithEmail(String email) {
 		return Mongo.mongo().findOne(USERS, json(UserRecord.EMAILS_ADDRESS, email), UserRecord.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	public boolean isAuthorizedWithToken(String userId, String secret) throws SuspendExecution, InterruptedException {
+	public static boolean isAuthorizedWithToken(String userId, String secret) throws SuspendExecution, InterruptedException {
 		if (secret == null
 				|| userId == null) {
 			return false;
@@ -240,11 +182,11 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 		return isTokenInList(secret, tokens);
 	}
 
-	public boolean isAuthorizedWithToken(UserRecord record, String secret) {
+	public static boolean isAuthorizedWithToken(UserRecord record, String secret) {
 		return isTokenInList(secret, record.getServices().getResume().getLoginTokens());
 	}
 
-	private boolean isTokenInList(String secret, List<HashedLoginTokenRecord> hashedSecrets) {
+	private static boolean isTokenInList(String secret, List<HashedLoginTokenRecord> hashedSecrets) {
 		for (HashedLoginTokenRecord loginToken : hashedSecrets) {
 			if (loginToken.check(secret)) {
 				return true;
@@ -254,32 +196,6 @@ public class AccountsImpl extends AbstractService<AccountsImpl> implements Accou
 		return false;
 	}
 
-
-	private boolean isValidPassword(String password) {
-		return password != null && password.length() >= 1;
-	}
-
-	private boolean emailExists(String emailAddress) throws SuspendExecution, InterruptedException {
-		Long count = Mongo.mongo().count(USERS, json(UserRecord.EMAILS_ADDRESS, emailAddress));
-		return count != 0;
-	}
-
-	private boolean isValidEmailAddress(String emailAddress) {
-		return EmailValidator.getInstance().isValid(emailAddress);
-	}
-
-	private boolean isValidName(String name) {
-		return getUsernamePattern().matcher(name).matches()
-				&& !isVulgar(name);
-	}
-
-	private boolean isVulgar(String name) {
-		return false;
-	}
-
-	private Pattern getUsernamePattern() {
-		return usernamePattern;
-	}
 
 	@Override
 	@Suspendable

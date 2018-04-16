@@ -4,6 +4,8 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.MultiMap;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.shareddata.AsyncMap;
@@ -32,6 +34,12 @@ public class SharedData {
 		} else {
 			return new SuspendableWrappedMap<>(client.<K, V>getLocalMap(name));
 		}
+	}
+
+	public static <K, V> void getClusterWideMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
+		Vertx vertx = Vertx.currentContext().owner();
+		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
+		client.getAsyncMap(name, handler);
 	}
 
 	@Suspendable

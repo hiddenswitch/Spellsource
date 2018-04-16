@@ -160,6 +160,7 @@ Class | Method | HTTP request | Description
  - [EnvelopeResult](docs/EnvelopeResult.md)
  - [EnvelopeResultSendMessage](docs/EnvelopeResultSendMessage.md)
  - [EnvelopeSub](docs/EnvelopeSub.md)
+ - [EnvelopeSubAccount](docs/EnvelopeSubAccount.md)
  - [EnvelopeSubConversation](docs/EnvelopeSubConversation.md)
  - [Friend](docs/Friend.md)
  - [FriendPutRequest](docs/FriendPutRequest.md)

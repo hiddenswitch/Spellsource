@@ -47,6 +47,10 @@ public class ConnectionImpl implements Connection {
 			for (Handler<Void> handler : endHandlers) {
 				handler.handle(v);
 			}
+			exceptionHandlers.clear();
+			drainHandlers.clear();
+			handlers.clear();
+			endHandlers.clear();
 		}));
 	}
 
@@ -111,6 +115,12 @@ public class ConnectionImpl implements Connection {
 	@Override
 	public String userId() {
 		return userId;
+	}
+
+	@Override
+	public Connection removeHandler(Handler<JsonObject> handler) {
+		handlers.remove(handler);
+		return this;
 	}
 
 	@Override

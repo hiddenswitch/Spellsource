@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.util.SharedData;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.*;
 import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Lock;
 import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
@@ -51,16 +52,18 @@ public class Realtime {
 
 		ServerWebSocket socket = routingContext.request().upgrade();
 		Deque<Handler<Connection>> handlers = getHandlers();
+		Connection connection = Connection.create(socket, userId);
 
-		final Connection connection = Connection.create(socket, userId);
-
+		// All handlers should run simultaneously
 		for (Handler<Connection> handler : handlers) {
-			try {
-				handler.handle(connection);
-			} catch (Throwable t) {
-				logger.error("connected {} {}: Handler threw an exception, propagated error", userId, routingContext.request().connection().remoteAddress());
-				Vertx.currentContext().exceptionHandler().handle(t);
-			}
+			Vertx.currentContext().runOnContext(v -> {
+				try {
+					handler.handle(connection);
+				} catch (Throwable t) {
+					logger.error("connected {} {}: Handler threw an exception, propagated error", userId, routingContext.request().connection().remoteAddress());
+					throw t;
+				}
+			});
 		}
 
 		// The lock gets released when the user disconnects
