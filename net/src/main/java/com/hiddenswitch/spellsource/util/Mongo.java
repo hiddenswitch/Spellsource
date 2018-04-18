@@ -176,12 +176,18 @@ public class Mongo {
 	@Suspendable
 	public <T extends MongoRecord> T findOne(String collection, JsonObject query, JsonObject fields, Class<? extends T> returnClass) {
 		final JsonObject obj = awaitResult(h -> client.findOne(collection, query, fields, then -> h.handle(then.otherwiseEmpty())));
+		if (obj == null) {
+			return null;
+		}
 		return QuickJson.fromJson(obj, returnClass);
 	}
 
 	@Suspendable
 	public <T extends MongoRecord> T findOne(String collection, JsonObject query, Class<? extends T> returnClass) {
 		final JsonObject obj = awaitResult(h -> client.findOne(collection, query, null, then -> h.handle(then.otherwiseEmpty())));
+		if (obj == null) {
+			return null;
+		}
 		return QuickJson.fromJson(obj, returnClass);
 	}
 
@@ -376,12 +382,12 @@ public class Mongo {
 	 * @param collection the collection
 	 * @param pipeline   the Mongo aggregation pipeline
 	 * @param watchOptions    the options
-	 */
+
 	@Suspendable
 	public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline, WatchOptions watchOptions) {
 		return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h));
 	}
-
+	 */
 
 	public void close() {
 		if (client == null) {

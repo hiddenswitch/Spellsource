@@ -3,10 +3,7 @@ package com.hiddenswitch.spellsource.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.*;
-import com.hiddenswitch.spellsource.Games;
-import com.hiddenswitch.spellsource.Gateway;
-import com.hiddenswitch.spellsource.Matchmaking;
-import com.hiddenswitch.spellsource.Port;
+import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.common.SuspendablePump;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
 import com.hiddenswitch.spellsource.impl.server.GameSessionImpl;
@@ -19,13 +16,17 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.Pump;
+import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> implements Games {
-	public static final String READER_ADDRESS_PREFIX = "ClusteredGamesImpl/";
+public class ClusteredGamesImpl extends SyncVerticle implements Games {
+	public static final String READER_ADDRESS_PREFIX = "Games::reader-";
+	static final Logger logger = LoggerFactory.getLogger(Games.class);
 	private Registration registration;
 	private SuspendableMap<GameId, CreateGameSessionResponse> connections;
 	private Map<GameId, GameSession> sessions = new ConcurrentHashMap<>();
@@ -34,11 +35,10 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 
 	@Override
 	public void start() throws SuspendExecution {
-		super.start();
 		CardCatalogue.loadCardsFromPackage();
 
-		connections = Games.getConnections(vertx);
-		registration = Rpc.register(this, Games.class, vertx.eventBus());
+		connections = Games.getConnections();
+		registration = Rpc.register(this, Games.class);
 	}
 
 	@Override
@@ -160,7 +160,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 		}
 
 		try {
-			Rpc.connect(Matchmaking.class, vertx.eventBus()).sync().expireOrEndMatch(request);
+			Matchmaking.expireOrEndMatch(request);
 		} catch (VertxException noHandlerFound) {
 			logger.error("kill: For gameId " + gameId + ", an error occurred trying to expireOrEndMatch: " + noHandlerFound.getMessage());
 		}
@@ -206,7 +206,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 				return new EndGameSessionResponse();
 			}
 
-			Rpc.connect(Games.class, vertx.eventBus()).sync(connection.deploymentId).endGameSession(request);
+			Rpc.connect(Games.class).sync(connection.deploymentId).endGameSession(request);
 		}
 		return new EndGameSessionResponse();
 	}
@@ -236,7 +236,7 @@ public class ClusteredGamesImpl extends AbstractService<ClusteredGamesImpl> impl
 				return new ConcedeGameSessionResponse();
 			}
 
-			Rpc.connect(Games.class, vertx.eventBus()).sync(connection.deploymentId).concedeGameSession(request);
+			Rpc.connect(Games.class).sync(connection.deploymentId).concedeGameSession(request);
 		}
 		return new ConcedeGameSessionResponse();
 	}

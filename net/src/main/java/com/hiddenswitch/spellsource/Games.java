@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.SuspendablePump;
 import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
 import com.hiddenswitch.spellsource.impl.GameId;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.SharedData;
@@ -13,6 +14,7 @@ import com.hiddenswitch.spellsource.util.SuspendableAsyncMap;
 import com.hiddenswitch.spellsource.util.SuspendableMap;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Handler;
+import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
@@ -64,10 +66,10 @@ import static java.util.stream.Collectors.toList;
 /**
  * A service that starts a game session, accepts connections from players and manages the state of the game.
  */
-public interface Games {
-	Logger gamesLogger = LoggerFactory.getLogger(Games.class);
-	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
+public interface Games extends Verticle {
+	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	String WEBSOCKET_PATH = "games";
+	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 
 	static Games create() {
 		return new ClusteredGamesImpl();
@@ -600,8 +602,12 @@ public interface Games {
 	 * depending on whether or not the underlying {@link SharedData} is operating on a {@link Vertx#isClustered()}
 	 * instance.
 	 */
-	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections(Vertx vertx) throws SuspendExecution {
-		return SharedData.getClusterWideMap("ClusteredGamesImpl/connections", vertx);
+	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
+		return SharedData.getClusterWideMap("Games::connections");
+	}
+
+	static SuspendableMap<UserId, GameId> getGames() throws SuspendExecution {
+		return SharedData.getClusterWideMap("Games::players");
 	}
 
 	/**
@@ -1160,13 +1166,13 @@ public interface Games {
 			final EventBus bus = vertx.eventBus();
 			try {
 				Lock lock = awaitResult(h -> vertx.sharedData().getLockWithTimeout("pipes-userId-" + userId, 200L, h));
-				gamesLogger.debug("createWebSocketHandler: Creating WebSocket to EventBus mapping for userId {}", userId);
+				LOGGER.debug("createWebSocketHandler: Creating WebSocket to EventBus mapping for userId {}", userId);
 				final ServerWebSocket socket;
 				final HttpServerRequest request = context.request();
 				try {
 					socket = request.upgrade();
 				} catch (IllegalStateException ex) {
-					gamesLogger.error("createWebSocketHandler: Failed to upgrade with error: {}. Request={}", new ToStringBuilder(request)
+					LOGGER.error("createWebSocketHandler: Failed to upgrade with error: {}. Request={}", new ToStringBuilder(request)
 							.append("headers", request.headers().entries())
 							.append("uri", request.uri())
 							.append("userId", userId).toString());
@@ -1185,13 +1191,13 @@ public interface Games {
 						consumer.unregister();
 						pump1.stop();
 					} catch (Throwable throwable) {
-						gamesLogger.warn("createWebSocketHandler socket closeHandler: Failed to clean up resources from a user {} socket due to an exception {}", userId, throwable);
+						LOGGER.warn("createWebSocketHandler socket closeHandler: Failed to clean up resources from a user {} socket due to an exception {}", userId, throwable);
 					} finally {
 						lock.release();
 					}
 				}));
 			} catch (VertxException timeout) {
-				gamesLogger.debug("createWebSocketHandler: Lock was not obtained for userId {}, user probably has another mapping already", userId);
+				LOGGER.debug("createWebSocketHandler: Lock was not obtained for userId {}, user probably has another mapping already", userId);
 				context.response().end();
 			}
 		});

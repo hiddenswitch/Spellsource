@@ -5,7 +5,7 @@ import io.vertx.core.Handler;
 
 import java.io.Serializable;
 
-public class MigrationToResponse implements Serializable {
+public class MigrationToResponse implements Serializable, AsyncResult<Void> {
 	private boolean failed;
 	private boolean succeeded;
 	private Handler<AsyncResult<Void>> handler;

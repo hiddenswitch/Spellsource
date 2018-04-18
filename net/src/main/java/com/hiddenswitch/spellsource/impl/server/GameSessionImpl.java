@@ -38,8 +38,8 @@ public class GameSessionImpl implements GameSession {
 	private int websocketPort;
 	private Writer c1;
 	private Writer c2;
-	private PregamePlayerConfiguration pregamePlayerConfiguration1;
-	private PregamePlayerConfiguration pregamePlayerConfiguration2;
+	private Configuration configuration1;
+	private Configuration configuration2;
 	private ServerGameContext gameContext;
 	private final String gameId;
 	//	private final Map<String, String> secretForUserId = new HashMap<>();
@@ -47,10 +47,10 @@ public class GameSessionImpl implements GameSession {
 	private final HashSet<Handler<GameSessionImpl>> gameOverHandlers = new HashSet<>();
 	private final Vertx vertx;
 
-	public GameSessionImpl(String host, int websocketPort, PregamePlayerConfiguration p1, PregamePlayerConfiguration p2, String gameId, Vertx vertx) {
+	public GameSessionImpl(String host, int websocketPort, Configuration p1, Configuration p2, String gameId, Vertx vertx) {
 		setHost(host);
-		this.pregamePlayerConfiguration1 = p1;
-		this.pregamePlayerConfiguration2 = p2;
+		this.configuration1 = p1;
+		this.configuration2 = p2;
 		this.gameId = gameId;
 		this.vertx = vertx;
 		this.websocketPort = websocketPort;
@@ -59,7 +59,7 @@ public class GameSessionImpl implements GameSession {
 		}
 	}
 
-	private ClientConnectionConfiguration getConfigurationFor(PregamePlayerConfiguration player) {
+	private ClientConnectionConfiguration getConfigurationFor(Configuration player) {
 		return new ClientConnectionConfigurationImpl(player.getUserId());
 	}
 
@@ -136,25 +136,25 @@ public class GameSessionImpl implements GameSession {
 	private void startGame() {
 		logger.debug("startGame: Starting game {}", gameId);
 		DeckFormat deckFormat = DeckFormat.getSmallestSupersetFormat(
-				Arrays.asList(pregamePlayerConfiguration1.getDeck(), pregamePlayerConfiguration2.getDeck()));
+				Arrays.asList(configuration1.getDeck(), configuration2.getDeck()));
 		logger.debug("startGame: Selected sets {} for play", deckFormat.getCardSets());
 
 		// Configure the network behaviours on the players
-		Player player1 = getPlayer(pregamePlayerConfiguration1.getUserId());
-		Player player2 = getPlayer(pregamePlayerConfiguration2.getUserId());
+		Player player1 = getPlayer(configuration1.getUserId());
+		Player player2 = getPlayer(configuration2.getUserId());
 		player1.setBehaviour(new NetworkBehaviour());
 		player2.setBehaviour(new NetworkBehaviour());
-		this.gameContext = new ServerGameContext(player1, player2, deckFormat, getGameId(), Rpc.connect(Logic.class, vertx.eventBus()), new VertxScheduler(vertx));
+		this.gameContext = new ServerGameContext(player1, player2, deckFormat, getGameId(), Rpc.connect(Logic.class), new VertxScheduler(vertx));
 		final Writer listener1;
 		final Writer listener2;
 
 		if (isAgainstAI()) {
-			if (pregamePlayerConfiguration1.isAI()) {
+			if (configuration1.isAI()) {
 				listener1 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_1);
 				getGameContext().getPlayer(0).setAttribute(Attribute.AI_OPPONENT);
 				listener2 = getPlayerListener(PLAYER_2);
 				setClient1(listener1);
-			} else if (pregamePlayerConfiguration2.isAI()) {
+			} else if (configuration2.isAI()) {
 				listener1 = getPlayerListener(PLAYER_1);
 				listener2 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_2);
 				getGameContext().getPlayer(1).setAttribute(Attribute.AI_OPPONENT);
@@ -169,7 +169,7 @@ public class GameSessionImpl implements GameSession {
 
 		// Merge in attributes
 		for (int i = 0; i < 2; i++) {
-			PregamePlayerConfiguration config = new PregamePlayerConfiguration[]{pregamePlayerConfiguration1, pregamePlayerConfiguration2}[i];
+			Configuration config = new Configuration[]{configuration1, configuration2}[i];
 			final AttributeMap attributes = config.getAttributes();
 			if (attributes == null) {
 				continue;
@@ -192,12 +192,12 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public ClientConnectionConfiguration getConfigurationForPlayer1() {
-		return getConfigurationFor(pregamePlayerConfiguration1);
+		return getConfigurationFor(configuration1);
 	}
 
 	@Override
 	public ClientConnectionConfiguration getConfigurationForPlayer2() {
-		return getConfigurationFor(pregamePlayerConfiguration2);
+		return getConfigurationFor(configuration2);
 	}
 
 	private Writer getPlayerListener(int player) {
@@ -241,11 +241,11 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	private boolean isAgainstAI() {
-		return pregamePlayerConfiguration1.isAI()
-				|| pregamePlayerConfiguration2.isAI();
+		return configuration1.isAI()
+				|| configuration2.isAI();
 	}
 
-	private Player createAIPlayer(PregamePlayerConfiguration pregame, int id) {
+	private Player createAIPlayer(Configuration pregame, int id) {
 		PlayerConfig playerConfig = new PlayerConfig(pregame.getDeck(), new DoNothingBehaviour());
 		Player player = new Player(playerConfig);
 		player.setId(id);
@@ -283,10 +283,10 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public Player getPlayer(String userId) {
-		final PregamePlayerConfiguration[] configs = {pregamePlayerConfiguration1, pregamePlayerConfiguration2};
+		final Configuration[] configs = {configuration1, configuration2};
 
 		for (int i = 0; i < 2; i++) {
-			PregamePlayerConfiguration pregame = configs[i];
+			Configuration pregame = configs[i];
 			if (pregame.getUserId().equals(userId)) {
 				if (pregame.isAI()) {
 					return createAIPlayer(pregame, i);

@@ -44,7 +44,7 @@ public class ClusterTest {
 	@Ignore
 	@SuppressWarnings("unchecked")
 	public void testClusteredDeploy(TestContext context) {
-		if (ServiceTest.isCI()) {
+		if (SpellsourceTestBase.isCI()) {
 			return;
 		}
 		// For debug purposes
@@ -55,9 +55,7 @@ public class ClusterTest {
 			verticies.add(vertx1);
 			vertx1.exceptionHandler(context.exceptionHandler());
 			final List<Future> services = Stream.of(
-					new ClusteredGamesImpl(),
-					new BotsImpl(),
-					new LogicImpl())
+					Games.create())
 					.map(service -> {
 						Future<String> future = Future.future();
 						vertx1.deployVerticle(service, future);
@@ -102,13 +100,7 @@ public class ClusterTest {
 			verticies.add(vertx2);
 			vertx2.exceptionHandler(context.exceptionHandler());
 			final List<Future> gameServices = Stream.of(
-					new AccountsImpl(),
-					new CardsImpl(),
-					new DecksImpl(),
-					new DraftImpl(),
-					new InventoryImpl(),
-					new MatchmakingImpl(),
-					new GatewayImpl())
+					Gateway.create())
 					.map(service -> {
 						Future<String> future = Future.future();
 						vertx2.deployVerticle(service, future);
@@ -127,7 +119,7 @@ public class ClusterTest {
 	@Test(timeout = 155000L)
 	@Ignore
 	public void testMultiHostCluster(TestContext context) {
-		if (ServiceTest.isCI()) {
+		if (SpellsourceTestBase.isCI()) {
 			return;
 		}
 
@@ -145,7 +137,7 @@ public class ClusterTest {
 	@Test(timeout = 200000L)
 	@Ignore
 	public void testMultiHostMultiClientCluster(TestContext context) throws InterruptedException {
-		if (ServiceTest.isCI()) {
+		if (SpellsourceTestBase.isCI()) {
 			context.async().complete();
 			return;
 		}
@@ -198,7 +190,7 @@ public class ClusterTest {
 
 	@Before
 	public void startServices() throws Exception {
-		if (ServiceTest.isCI()) {
+		if (SpellsourceTestBase.isCI()) {
 			return;
 		}
 
@@ -214,7 +206,7 @@ public class ClusterTest {
 	@After
 	public void stopServices(TestContext context) throws IOException {
 		Async strict = context.strictAsync(2);
-		if (ServiceTest.isCI()) {
+		if (SpellsourceTestBase.isCI()) {
 			return;
 		}
 

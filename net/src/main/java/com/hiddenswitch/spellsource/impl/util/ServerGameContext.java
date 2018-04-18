@@ -102,7 +102,7 @@ public class ServerGameContext extends GameContext {
 	 * @see PersistenceTrigger for more about how this method is used.
 	 */
 	private void enablePersistenceEffects() {
-		this.getGameTriggers().add(new PersistenceTrigger(logic, this, this.gameId));
+		this.getGameTriggers().add(new PersistenceTrigger(this, this.gameId));
 	}
 
 	/**
@@ -612,7 +612,7 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public Deck getDeck(Player player, String name) {
-		GetCollectionResponse response = logic.uncheckedSync().getDeck(new LogicGetDeckRequest()
+		GetCollectionResponse response = Logic.getDeck(new LogicGetDeckRequest()
 				.withUserId(new UserId(player.getUserId()))
 				.withDeckName(name));
 
