@@ -36,7 +36,6 @@ public class UnityClient {
 	private Account account;
 	private TestContext context;
 	private WebsocketClientEndpoint endpoint;
-	private String gameId;
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
@@ -45,9 +44,6 @@ public class UnityClient {
 	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
 		apiClient.setBasePath(basePath);
-//		apiClient.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
-//		apiClient.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
-//		apiClient.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
 		api = new DefaultApi(apiClient);
 		this.context = context;
 		List<UnityClient> clients = context.get("clients");
@@ -318,7 +314,7 @@ public class UnityClient {
 	public UnityClient waitUntilDone() {
 		logger.debug("waitUntilDone: UserId " + getUserId() + " is waiting");
 		float time = 0f;
-		while (!(time > 52f || this.isGameOver())) {
+		while (!(time > 90f || this.isGameOver())) {
 			try {
 				Strand.sleep(1000);
 			} catch (SuspendExecution | InterruptedException suspendExecution) {

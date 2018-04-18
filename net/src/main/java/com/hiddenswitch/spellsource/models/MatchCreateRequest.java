@@ -3,9 +3,6 @@ package com.hiddenswitch.spellsource.models;
 import com.hiddenswitch.spellsource.impl.DeckId;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.impl.util.Matchmaker;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckWithId;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;

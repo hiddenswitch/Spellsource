@@ -1082,7 +1082,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	public Entity tryFind(EntityReference targetKey) {
 		try {
 			return resolveSingleTarget(targetKey);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 		return null;
 	}

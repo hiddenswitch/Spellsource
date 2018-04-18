@@ -119,6 +119,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			EntityReference entityReference = new EntityReference(entityId);
 			Entity affectedEntity = context.tryFind(entityReference);
 			if (affectedEntity == null) {
+				// It was removed from play or otherwise could not be found.
 				iterator.remove();
 			} else {
 				relevantTargets.add(affectedEntity);

@@ -729,7 +729,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	protected @Nullable
-	Entity targetAcquisition(@NotNull Player player, @NotNull Entity source, @Nullable GameAction sourceAction) {
+	Entity targetAcquisition(@NotNull Player player, @Nullable Entity source, @Nullable GameAction sourceAction) {
 		if (sourceAction == null) {
 			return null;
 		}

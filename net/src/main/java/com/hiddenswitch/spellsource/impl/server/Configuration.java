@@ -1,20 +1,19 @@
 package com.hiddenswitch.spellsource.impl.server;
 
 import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
-public class PregamePlayerConfiguration implements Serializable {
+public class Configuration implements Serializable {
 	private final Deck deck;
 	private final String name;
 	private AttributeMap attributes;
 	private boolean isAI;
 
-	public PregamePlayerConfiguration(Deck deck, String name) {
+	public Configuration(Deck deck, String name) {
 		this.deck = deck;
 		this.name = name;
 		this.attributes = new AttributeMap();
@@ -36,12 +35,12 @@ public class PregamePlayerConfiguration implements Serializable {
 		isAI = AI;
 	}
 
-	public PregamePlayerConfiguration withAI(boolean AI) {
+	public Configuration withAI(boolean AI) {
 		isAI = AI;
 		return this;
 	}
 
-	public PregamePlayerConfiguration withAttributes(final AttributeMap attributes) {
+	public Configuration withAttributes(final AttributeMap attributes) {
 		this.attributes = attributes;
 		return this;
 	}

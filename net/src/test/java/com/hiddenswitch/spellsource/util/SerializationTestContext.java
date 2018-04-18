@@ -5,7 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.logic.GameLogic;
 
-import static com.hiddenswitch.spellsource.Assert.*;
+import static com.hiddenswitch.spellsource.util.Assert.*;
 
 public class SerializationTestContext extends GameContext {
 	public SerializationTestContext() {

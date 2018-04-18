@@ -45,19 +45,19 @@ public final class CardDesc implements Serializable, Cloneable {
 	/**
 	 * The ID of the card when referred to by other cards and other places in the game engine.
 	 * <p>
-	 * Typically, the ID is not specified inside the card file. It is assumed to be the file name of the card file,
-	 * minus the JSON extension. For example, the card {@code minion_bloodfen_raptor.json} will have its ID field
-	 * assigned to {@code minion_bloodfen_raptor}.
+	 * Typically, the ID is not specified inside the card file. It is assumed to be the file name of the card file, minus
+	 * the JSON extension. For example, the card {@code minion_bloodfen_raptor.json} will have its ID field assigned to
+	 * {@code minion_bloodfen_raptor}.
 	 * <p>
 	 * IDs should not be changed after a public server release is made, even when there is a misspelling or other issue.
-	 * Player's inventories store references to the underlying cards using the IDs, and changing the IDs will damage
-	 * those references. The {@code Spellsource} migrations system provides a mechanism for changing IDs of cards after
-	 * they have been given to players; see the {@code net} module's {@code Spellsource} class for details.
+	 * Player's inventories store references to the underlying cards using the IDs, and changing the IDs will damage those
+	 * references. The {@code Spellsource} migrations system provides a mechanism for changing IDs of cards after they
+	 * have been given to players; see the {@code net} module's {@code Spellsource} class for details.
 	 */
 	public String id;
 	/**
-	 * The name of the card that should be rendered in the client. The name is also used for some card mechanics, like
-	 * The Caverns Below. The name can be overridden by {@link Attribute#NAME} on the card entity.
+	 * The name of the card that should be rendered in the client. The name is also used for some card mechanics, like The
+	 * Caverns Below. The name can be overridden by {@link Attribute#NAME} on the card entity.
 	 *
 	 * @see Card#getName() for the complete usage of the name field.
 	 */
@@ -92,8 +92,7 @@ public final class CardDesc implements Serializable, Cloneable {
 	 */
 	public HeroClass[] heroClasses;
 	/**
-	 * The rarity of the card. Use {@link Rarity#FREE} for tokens, and {@link Rarity#ALLIANCE} for {@link #legacy}
-	 * cards.
+	 * The rarity of the card. Use {@link Rarity#FREE} for tokens, and {@link Rarity#ALLIANCE} for {@link #legacy} cards.
 	 */
 	public Rarity rarity;
 	/**
@@ -105,8 +104,8 @@ public final class CardDesc implements Serializable, Cloneable {
 	 */
 	public CardSet set;
 	/**
-	 * The base mana cost of the card. All cards should have this field set, even if they are virtual / non-acting
-	 * cards. Use {@code 0} as the cost of those cards.
+	 * The base mana cost of the card. All cards should have this field set, even if they are virtual / non-acting cards.
+	 * Use {@code 0} as the cost of those cards.
 	 * <p>
 	 * Choice cards for {@link CardType#CHOOSE_ONE} cards and {@link CardType#MINION} cards with choose-one battlecries
 	 * that transform into another {@link Minion} should have the same cost as the parent card. For example, the choice
@@ -120,8 +119,8 @@ public final class CardDesc implements Serializable, Cloneable {
 	 */
 	public boolean collectible = true;
 	/**
-	 * Represents a key-value collection of {@link Attribute}. {@link AttributeMap} is a {@link java.util.Map} type, so
-	 * in JSON, it will be represented by a bracketed object.
+	 * Represents a key-value collection of {@link Attribute}. {@link AttributeMap} is a {@link java.util.Map} type, so in
+	 * JSON, it will be represented by a bracketed object.
 	 * <p>
 	 * For example, a spell with lifesteal will have a field {@code "attributes"} that looks like:
 	 * <pre>
@@ -138,8 +137,8 @@ public final class CardDesc implements Serializable, Cloneable {
 	 * </pre>
 	 *
 	 * @see Attribute for a full description of attributes. Some of them are not appropriate to put on a card, because
-	 * they are ephemeral (that is, they are only on a {@link net.demilich.metastone.game.entities.Entity} while it is
-	 * in play, not on a card definition like {@link CardDesc}).
+	 * they are ephemeral (that is, they are only on a {@link net.demilich.metastone.game.entities.Entity} while it is in
+	 * play, not on a card definition like {@link CardDesc}).
 	 */
 	public AttributeMap attributes;
 	/**
@@ -167,8 +166,8 @@ public final class CardDesc implements Serializable, Cloneable {
 	/**
 	 * Describes an {@link Enchantment} that is active while the card is in the player's {@link Zones#HAND}.
 	 * <p>
-	 * For example, to reduce the cost of a card each turn the card is in the player's hand, the {@code
-	 * "passiveTrigger"} field should look like:
+	 * For example, to reduce the cost of a card each turn the card is in the player's hand, the {@code "passiveTrigger"}
+	 * field should look like:
 	 * <pre>
 	 *     "passiveTrigger": {
 	 *          "eventTrigger": {
@@ -194,8 +193,8 @@ public final class CardDesc implements Serializable, Cloneable {
 	/**
 	 * Describes an array of {@link Enchantment}s that are active while the card is in the player's {@link Zones#HAND}.
 	 * <p>
-	 * Arrays in JSON are specified using {@code []}. Place what you would ordinarily put in the value part (to the
-	 * right of the colon) for {@link #passiveTrigger} into the brackets here. For example:
+	 * Arrays in JSON are specified using {@code []}. Place what you would ordinarily put in the value part (to the right
+	 * of the colon) for {@link #passiveTrigger} into the brackets here. For example:
 	 * <pre>
 	 *     "passiveTriggers": [
 	 *          {
@@ -261,8 +260,7 @@ public final class CardDesc implements Serializable, Cloneable {
 	 * Stores notes about the card's implementation or behaviour. Use this field to explain surprising rules or to do a
 	 * Q&A.
 	 * <p>
-	 * This field will be migrated to support Markdown syntax in the future for better rendering controls in the
-	 * client.
+	 * This field will be migrated to support Markdown syntax in the future for better rendering controls in the client.
 	 */
 	public String wiki;
 	/**
@@ -284,12 +282,11 @@ public final class CardDesc implements Serializable, Cloneable {
 	 */
 	public SpellDesc deathrattle;
 	/**
-	 * Specifies the minion, hero, or weapon's {@link Enchantment} that become active when the actor goes into an
-	 * in-play zone ({@link Zones#BATTLEFIELD}, {@link Zones#WEAPON}, {@link Zones#HERO}).
+	 * Specifies the minion, hero, or weapon's {@link Enchantment} that become active when the actor goes into an in-play
+	 * zone ({@link Zones#BATTLEFIELD}, {@link Zones#WEAPON}, {@link Zones#HERO}).
 	 * <p>
-	 * {@link CardType#HERO_POWER} should have its {@link #passiveTrigger} or {@link #passiveTriggers} fields set
-	 * instead of this one, because hero powers behave like an extension of your hand and not like a place in the
-	 * battlefield.
+	 * {@link CardType#HERO_POWER} should have its {@link #passiveTrigger} or {@link #passiveTriggers} fields set instead
+	 * of this one, because hero powers behave like an extension of your hand and not like a place in the battlefield.
 	 */
 	public EnchantmentDesc trigger;
 	/**
@@ -301,8 +298,8 @@ public final class CardDesc implements Serializable, Cloneable {
 	 * {@link Zones#HERO}). {@link Card} entities do not support auras, since they are not in play.
 	 * <p>
 	 * Auras describe ongoing effects on other cards. They are updated at the end of a sequence (i.e., when actors are
-	 * removed from the battlefield) and whenever the "board" (the three in-play zones) change. Updated means the
-	 * affected actors are recalculated.
+	 * removed from the battlefield) and whenever the "board" (the three in-play zones) change. Updated means the affected
+	 * actors are recalculated.
 	 * <p>
 	 * Auras are appropriate for effects like Ironwood Golem, which reads "Taunt. Can only attack if you have 3 or more
 	 * Armor.":
@@ -327,8 +324,8 @@ public final class CardDesc implements Serializable, Cloneable {
 	 * Observe that this aura, an {@link net.demilich.metastone.game.spells.aura.AttributeAura}, has a condition to
 	 * indicate when the specified attribute should or should not be present on the target ({@link
 	 * net.demilich.metastone.game.targeting.EntityReference#SELF}). Also observe that the attribute is prefixed with
-	 * {@code AURA_} indicating that, as opposed to an effect that is applied once (e.g {@link
-	 * Attribute#CANNOT_ATTACK}), it is an "aura" effect, and it won't be removed by a silence.
+	 * {@code AURA_} indicating that, as opposed to an effect that is applied once (e.g {@link Attribute#CANNOT_ATTACK}),
+	 * it is an "aura" effect, and it won't be removed by a silence.
 	 *
 	 * @see net.demilich.metastone.game.spells.aura.Aura for more about auras.
 	 */
@@ -373,8 +370,8 @@ public final class CardDesc implements Serializable, Cloneable {
 	public BattlecryDesc chooseBothBattlecry;
 	/**
 	 * Whenever the card is a {@link CardType#CHOOSE_ONE} and this field is specified, the player will get to choose
-	 * between these two cards for their effects. The choice card is put into the {@link Zones#SET_ASIDE_ZONE}, cast,
-	 * and then put into {@link Zones#REMOVED_FROM_PLAY}, while the base card is moved to the {@link Zones#GRAVEYARD}.
+	 * between these two cards for their effects. The choice card is put into the {@link Zones#SET_ASIDE_ZONE}, cast, and
+	 * then put into {@link Zones#REMOVED_FROM_PLAY}, while the base card is moved to the {@link Zones#GRAVEYARD}.
 	 * <p>
 	 * These choice cards should not be {@link #collectible}.
 	 */
@@ -394,8 +391,8 @@ public final class CardDesc implements Serializable, Cloneable {
 	 */
 	public int durability;
 	/**
-	 * Indicates a spell that should be cast when the weapon enters the battlefield/an in-play zone, regardless of how
-	 * it is put into play (i.e., unlike a battlecry, which is only activated by cards played from the hand).
+	 * Indicates a spell that should be cast when the weapon enters the battlefield/an in-play zone, regardless of how it
+	 * is put into play (i.e., unlike a battlecry, which is only activated by cards played from the hand).
 	 * <p>
 	 * Contemporaneously, such effects are better implemented by {@link #aura}.
 	 */
@@ -414,9 +411,9 @@ public final class CardDesc implements Serializable, Cloneable {
 	 */
 	public String heroPower;
 	/**
-	 * Indicates what kind of target selection this {@link CardType#SPELL} or {@link CardType#HERO_POWER} has. Any
-	 * choice other than {@link TargetSelection#NONE} will prompt the user to pick a target as filtered by the {@link
-	 * #spell} field's {@link net.demilich.metastone.game.spells.desc.SpellArg#FILTER} field.
+	 * Indicates what kind of target selection this {@link CardType#SPELL} or {@link CardType#HERO_POWER} has. Any choice
+	 * other than {@link TargetSelection#NONE} will prompt the user to pick a target as filtered by the {@link #spell}
+	 * field's {@link net.demilich.metastone.game.spells.desc.SpellArg#FILTER} field.
 	 * <p>
 	 * For example, to indicate a spell should prompt the user to choose any Murloc on the battlefield:
 	 * <pre>
@@ -430,17 +427,16 @@ public final class CardDesc implements Serializable, Cloneable {
 	 *         "..."
 	 *     }
 	 * </pre>
-	 * Observe that a {@code "target"} of {@link net.demilich.metastone.game.targeting.EntityReference#ALL_MINIONS} is
-	 * not specified on the {@code "spell"} field; the target is set to the player's choice, as filtered by {@code
-	 * "filter"}.
+	 * Observe that a {@code "target"} of {@link net.demilich.metastone.game.targeting.EntityReference#ALL_MINIONS} is not
+	 * specified on the {@code "spell"} field; the target is set to the player's choice, as filtered by {@code "filter"}.
 	 */
 	public TargetSelection targetSelection;
 	/**
 	 * Indicates the spell that this {@link CardType#SPELL} or {@link CardType#HERO_POWER} should cast when {@link
 	 * Card#play()}.
 	 * <p>
-	 * For {@link CardType#SPELL} that contain a {@link #secret} or {@link #quest} field set, this spell is cast when
-	 * the secret or quest is activated.
+	 * For {@link CardType#SPELL} that contain a {@link #secret} or {@link #quest} field set, this spell is cast when the
+	 * secret or quest is activated.
 	 */
 	public SpellDesc spell;
 	/**
@@ -463,8 +459,7 @@ public final class CardDesc implements Serializable, Cloneable {
 	 */
 	public EventTriggerDesc quest;
 	/**
-	 * Indicates the number of times the {@link #quest} trigger needs to fire until this quest's {@link #spell} is
-	 * cast.
+	 * Indicates the number of times the {@link #quest} trigger needs to fire until this quest's {@link #spell} is cast.
 	 */
 	public int countUntilCast;
 
@@ -497,5 +492,18 @@ public final class CardDesc implements Serializable, Cloneable {
 			battlecryAction.setCondition(battlecry.condition.create());
 		}
 		return battlecryAction;
+	}
+
+	@Override
+	public CardDesc clone() {
+		try {
+			CardDesc clone = (CardDesc) super.clone();
+			if (attributes != null) {
+				clone.attributes = attributes.clone();
+			}
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 }

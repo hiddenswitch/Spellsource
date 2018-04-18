@@ -36,26 +36,4 @@ public abstract class AbstractService<T extends AbstractService<T>> extends Sync
 			fut.complete();
 		}, h));
 	}
-
-
-	/**
-	 * Get a reference to the Mongo client.
-	 *
-	 * @return A Vertx MongoClient
-	 */
-	public MongoClient getMongo() {
-		return Mongo.mongo().client();
-	}
-
-	/**
-	 * Gets an {@link RpcClient} that makes direct calls to this instance, not calls over the network.
-	 *
-	 * @return An {@link RpcClient} that runs "locally."
-	 */
-	@SuppressWarnings("unchecked")
-	public RpcClient<T> getLocalClient() {
-		T service = (T) this;
-		Class<?> thisClass = ((T) this).getClass();
-		return new LocalRpcClient<>(thisClass, service);
-	}
 }
