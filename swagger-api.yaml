@@ -24,75 +24,156 @@ securityDefinitions:
     name: X-Auth-Token
 definitions:
   Envelope:
+    description: |
+      A container for data to and from the server. This envelope is the type of every message sent through the
+      /realtime websocket endpoint.
     type: 'object'
     properties:
       added:
+        description: |
+          Indicates one of the records should be added to the client's ephemeral collections.
         type: 'object'
         properties:
           chatMessage:
             $ref: '#/definitions/ChatMessage'
           friend:
             $ref: '#/definitions/Friend'
+          invite:
+            $ref: '#/definitions/Invite'
       changed:
+        description: |
+          Indicates that a record's fields have changed. In this model, the new document is a full replacement.
         type: 'object'
         properties:
           friend:
             $ref: '#/definitions/Friend'
+      removed:
+        description: |
+          Indicates that a record has been removed from the client's ephemeral collections.
+        type: 'object'
+        properties:
+          inviteId:
+            description: |
+              The unique ID of the invitation that should be removed.
+            type: 'string'
       sub:
+        description: |
+          When populated by the client and sent to the server, subscribes to data of the specified kind.
         type: 'object'
         properties:
           conversation:
+            description: |
+              Subscribe to messages in a specific conversation. Receives all past messages, followed by any new ones.
             type: 'object'
             properties:
               conversationId:
                 type: 'string'
-          account:
-            $ref: '#/definitions/EnvelopeSubAccount'
       method:
+        description: |
+          When populated by the client and sent to the server, indicates a method should be called. The side effects of
+          methods may include new data updates and a response.
         type: 'object'
         properties:
+          methodId:
+            description: |
+              The client-specified ID that will be used to mark the reply (the result) of this method call.
           sendMessage:
+            description: |
+              Send a change message to the indicated conversationId.
             type: 'object'
             properties:
               conversationId:
+                description: |
+                  A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first
+                  lexicographically.
                 type: 'string'
               message:
+                description: |
+                  The contents of the message to send to the conversation.
                 type: 'string'
       result:
+        description: |
+          When populated on the server and sent to the client, indicates that a method call had a specific result.
         type: 'object'
         properties:
+          methodId:
+            description: |
+              The ID of the method this is a result for.
           sendMessage:
+            description: |
+              The result of sending a message.
             type: 'object'
             properties:
               messageId:
+                description: |
+                  The new message ID.
                 type: 'string'
-  EnvelopeSubAccount:
-    type: 'object'
   ChatMessage:
+    description: |
+      A chat message.
     type: 'object'
     properties:
       messageId:
+        description: |
+          The ID of the message.
         type: 'string'
       conversationId:
+        description: |
+          A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first
+          lexicographically.
         type: 'string'
       senderName:
+        description: |
+          The text to render in the sender name field.
         type: 'string'
       senderUserId:
+        description: |
+          The user ID of the sender. Useful for looking up against the presence notifications.
         type: 'string'
       timestamp:
+        description: |
+          The timestamp of the message.
         type: 'integer'
         format: 'int64'
       dateLabel:
+        description: |
+          The text that should be used to render when this message was sent.
         type: 'string'
       message:
+        description: |
+          The contents of this message.
         type: 'string'
+  Invite:
+    description: |
+      An object that indicates the player has a pending invitation to a game.
+    type: 'object'
+    properties:
+      fromName:
+        description: |
+          The user from whom the invite originates
+        type: 'string'
+      message:
+        description: |
+          The description of this invite. Typically includes the queue contents and possibly a note from the user.
+        type: 'string'
+      queueId:
+        description: |
+          The queue ID to put into the matchmaking request to fulfill this invite.
+        type: 'string'
+      expiresAt:
+        description: |
+          An expiration timestamp.
+        type: 'integer'
+        format: 'int64'
   PresenceEnum:
-   type: 'string'
-   enum:
-    - 'UNKNOWN'
-    - 'OFFLINE'
-    - 'IN_GAME'
-    - 'ONLINE'
+    description: |
+      Indicates the current status of a friend. 
+    type: 'string'
+    enum:
+      - 'UNKNOWN'
+      - 'OFFLINE'
+      - 'IN_GAME'
+      - 'ONLINE'
   Friend:
     type: 'object'
     properties:
