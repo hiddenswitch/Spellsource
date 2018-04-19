@@ -22,8 +22,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * ChatMessage
+ * A chat message. 
  */
+@ApiModel(description = "A chat message. ")
 
 public class ChatMessage implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -55,10 +56,10 @@ public class ChatMessage implements Serializable {
   }
 
    /**
-   * Get messageId
+   * The ID of the message. 
    * @return messageId
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The ID of the message. ")
   public String getMessageId() {
     return messageId;
   }
@@ -73,10 +74,10 @@ public class ChatMessage implements Serializable {
   }
 
    /**
-   * Get conversationId
+   * A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first lexicographically. 
    * @return conversationId
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first lexicographically. ")
   public String getConversationId() {
     return conversationId;
   }
@@ -91,10 +92,10 @@ public class ChatMessage implements Serializable {
   }
 
    /**
-   * Get senderName
+   * The text to render in the sender name field. 
    * @return senderName
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The text to render in the sender name field. ")
   public String getSenderName() {
     return senderName;
   }
@@ -109,10 +110,10 @@ public class ChatMessage implements Serializable {
   }
 
    /**
-   * Get senderUserId
+   * The user ID of the sender. Useful for looking up against the presence notifications. 
    * @return senderUserId
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The user ID of the sender. Useful for looking up against the presence notifications. ")
   public String getSenderUserId() {
     return senderUserId;
   }
@@ -127,10 +128,10 @@ public class ChatMessage implements Serializable {
   }
 
    /**
-   * Get timestamp
+   * The timestamp of the message. 
    * @return timestamp
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The timestamp of the message. ")
   public Long getTimestamp() {
     return timestamp;
   }
@@ -145,10 +146,10 @@ public class ChatMessage implements Serializable {
   }
 
    /**
-   * Get dateLabel
+   * The text that should be used to render when this message was sent. 
    * @return dateLabel
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The text that should be used to render when this message was sent. ")
   public String getDateLabel() {
     return dateLabel;
   }
@@ -163,10 +164,10 @@ public class ChatMessage implements Serializable {
   }
 
    /**
-   * Get message
+   * The contents of this message. 
    * @return message
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The contents of this message. ")
   public String getMessage() {
     return message;
   }

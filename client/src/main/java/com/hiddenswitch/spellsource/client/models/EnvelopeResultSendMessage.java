@@ -22,8 +22,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * EnvelopeResultSendMessage
+ * The result of sending a message. 
  */
+@ApiModel(description = "The result of sending a message. ")
 
 public class EnvelopeResultSendMessage implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -37,10 +38,10 @@ public class EnvelopeResultSendMessage implements Serializable {
   }
 
    /**
-   * Get messageId
+   * The new message ID. 
    * @return messageId
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The new message ID. ")
   public String getMessageId() {
     return messageId;
   }

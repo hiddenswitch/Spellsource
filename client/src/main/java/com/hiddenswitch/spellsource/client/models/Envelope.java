@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.EnvelopeAdded;
 import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
 import com.hiddenswitch.spellsource.client.models.EnvelopeMethod;
+import com.hiddenswitch.spellsource.client.models.EnvelopeRemoved;
 import com.hiddenswitch.spellsource.client.models.EnvelopeResult;
 import com.hiddenswitch.spellsource.client.models.EnvelopeSub;
 import io.swagger.annotations.ApiModel;
@@ -27,8 +28,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * Envelope
+ * A container for data to and from the server. This envelope is the type of every message sent through the /realtime websocket endpoint. 
  */
+@ApiModel(description = "A container for data to and from the server. This envelope is the type of every message sent through the /realtime websocket endpoint. ")
 
 public class Envelope implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -38,6 +40,9 @@ public class Envelope implements Serializable {
 
   @JsonProperty("changed")
   private EnvelopeChanged changed = null;
+
+  @JsonProperty("removed")
+  private EnvelopeRemoved removed = null;
 
   @JsonProperty("sub")
   private EnvelopeSub sub = null;
@@ -82,6 +87,24 @@ public class Envelope implements Serializable {
 
   public void setChanged(EnvelopeChanged changed) {
     this.changed = changed;
+  }
+
+  public Envelope removed(EnvelopeRemoved removed) {
+    this.removed = removed;
+    return this;
+  }
+
+   /**
+   * Get removed
+   * @return removed
+  **/
+  @ApiModelProperty(value = "")
+  public EnvelopeRemoved getRemoved() {
+    return removed;
+  }
+
+  public void setRemoved(EnvelopeRemoved removed) {
+    this.removed = removed;
   }
 
   public Envelope sub(EnvelopeSub sub) {
@@ -150,6 +173,7 @@ public class Envelope implements Serializable {
     Envelope envelope = (Envelope) o;
     return Objects.equals(this.added, envelope.added) &&
         Objects.equals(this.changed, envelope.changed) &&
+        Objects.equals(this.removed, envelope.removed) &&
         Objects.equals(this.sub, envelope.sub) &&
         Objects.equals(this.method, envelope.method) &&
         Objects.equals(this.result, envelope.result);
@@ -157,7 +181,7 @@ public class Envelope implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(added, changed, sub, method, result);
+    return Objects.hash(added, changed, removed, sub, method, result);
   }
 
 
@@ -168,6 +192,7 @@ public class Envelope implements Serializable {
     
     sb.append("    added: ").append(toIndentedString(added)).append("\n");
     sb.append("    changed: ").append(toIndentedString(changed)).append("\n");
+    sb.append("    removed: ").append(toIndentedString(removed)).append("\n");
     sb.append("    sub: ").append(toIndentedString(sub)).append("\n");
     sb.append("    method: ").append(toIndentedString(method)).append("\n");
     sb.append("    result: ").append(toIndentedString(result)).append("\n");

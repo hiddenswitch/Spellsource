@@ -20,6 +20,8 @@ import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.Pair;
 
+import com.hiddenswitch.spellsource.client.models.AcceptInviteRequest;
+import com.hiddenswitch.spellsource.client.models.AcceptInviteResponse;
 import com.hiddenswitch.spellsource.client.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.client.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
@@ -39,6 +41,9 @@ import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetAccountsResponse;
 import com.hiddenswitch.spellsource.client.models.GetCardsResponse;
+import com.hiddenswitch.spellsource.client.models.InviteGetResponse;
+import com.hiddenswitch.spellsource.client.models.InvitePostRequest;
+import com.hiddenswitch.spellsource.client.models.InviteResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.MatchCancelResponse;
@@ -75,6 +80,48 @@ public class DefaultApi {
     this.apiClient = apiClient;
   }
 
+  /**
+   * 
+   * Accepts the invite. If this is an invite to friend the user, this method will perform the friending path for you. If this is an invite to play a match and a matchmaking queue put is specified (with the deck ID), this method will enter you into the special invite matchmaking queue. 
+   * @param request  (required)
+   * @return AcceptInviteResponse
+   * @throws ApiException if fails to make API call
+   */
+  public AcceptInviteResponse acceptInvite(AcceptInviteRequest request) throws ApiException {
+    Object localVarPostBody = request;
+    
+    // verify the required parameter 'request' is set
+    if (request == null) {
+      throw new ApiException(400, "Missing the required parameter 'request' when calling acceptInvite");
+    }
+    
+    // create path and map variables
+    String localVarPath = "/invites/{inviteId}";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/json"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "TokenSecurity" };
+
+    GenericType<AcceptInviteResponse> localVarReturnType = new GenericType<AcceptInviteResponse>() {};
+    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
   /**
    * 
    * Changes your password. Does not log you out after the password is changed. 
@@ -370,6 +417,42 @@ public class DefaultApi {
 
     GenericType<DecksGetResponse> localVarReturnType = new GenericType<DecksGetResponse>() {};
     return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
+  /**
+   * 
+   * When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite. 
+   * @return InviteResponse
+   * @throws ApiException if fails to make API call
+   */
+  public InviteResponse deleteInvite() throws ApiException {
+    Object localVarPostBody = null;
+    
+    // create path and map variables
+    String localVarPath = "/invites/{inviteId}";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/json"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "TokenSecurity" };
+
+    GenericType<InviteResponse> localVarReturnType = new GenericType<InviteResponse>() {};
+    return apiClient.invokeAPI(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
       }
   /**
    * 
@@ -744,6 +827,78 @@ public class DefaultApi {
       }
   /**
    * 
+   * Retrieves information about a specific invite, as long as this user is either the sender or recipient. 
+   * @return InviteResponse
+   * @throws ApiException if fails to make API call
+   */
+  public InviteResponse getInvite() throws ApiException {
+    Object localVarPostBody = null;
+    
+    // create path and map variables
+    String localVarPath = "/invites/{inviteId}";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/json"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "TokenSecurity" };
+
+    GenericType<InviteResponse> localVarReturnType = new GenericType<InviteResponse>() {};
+    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
+  /**
+   * 
+   * Retrieve all invites where this user is either the sender or recipient. 
+   * @return InviteGetResponse
+   * @throws ApiException if fails to make API call
+   */
+  public InviteGetResponse getInvites() throws ApiException {
+    Object localVarPostBody = null;
+    
+    // create path and map variables
+    String localVarPath = "/invites";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/json"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "TokenSecurity" };
+
+    GenericType<InviteGetResponse> localVarReturnType = new GenericType<InviteGetResponse>() {};
+    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
+  /**
+   * 
    * Returns an empty body if the server is available. 
    * @throws ApiException if fails to make API call
    */
@@ -1025,5 +1180,47 @@ public class DefaultApi {
 
     GenericType<MatchmakingQueuesResponse> localVarReturnType = new GenericType<MatchmakingQueuesResponse>() {};
     return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
+  /**
+   * 
+   * Send an invite 
+   * @param request  (required)
+   * @return InviteResponse
+   * @throws ApiException if fails to make API call
+   */
+  public InviteResponse postInvite(InvitePostRequest request) throws ApiException {
+    Object localVarPostBody = request;
+    
+    // verify the required parameter 'request' is set
+    if (request == null) {
+      throw new ApiException(400, "Missing the required parameter 'request' when calling postInvite");
+    }
+    
+    // create path and map variables
+    String localVarPath = "/invites";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/json"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "TokenSecurity" };
+
+    GenericType<InviteResponse> localVarReturnType = new GenericType<InviteResponse>() {};
+    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
       }
 }

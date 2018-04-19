@@ -17,38 +17,48 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.EnvelopeSubConversation;
+import com.hiddenswitch.spellsource.client.models.Invite;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 
 /**
- * When populated by the client and sent to the server, subscribes to data of the specified kind. 
+ * The invites where this user is either the sender or recipient. 
  */
-@ApiModel(description = "When populated by the client and sent to the server, subscribes to data of the specified kind. ")
+@ApiModel(description = "The invites where this user is either the sender or recipient. ")
 
-public class EnvelopeSub implements Serializable {
+public class InviteGetResponse implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("conversation")
-  private EnvelopeSubConversation conversation = null;
+  @JsonProperty("invites")
+  private List<Invite> invites = null;
 
-  public EnvelopeSub conversation(EnvelopeSubConversation conversation) {
-    this.conversation = conversation;
+  public InviteGetResponse invites(List<Invite> invites) {
+    this.invites = invites;
+    return this;
+  }
+
+  public InviteGetResponse addInvitesItem(Invite invitesItem) {
+    if (this.invites == null) {
+      this.invites = new ArrayList<>();
+    }
+    this.invites.add(invitesItem);
     return this;
   }
 
    /**
-   * Get conversation
-   * @return conversation
+   * Get invites
+   * @return invites
   **/
   @ApiModelProperty(value = "")
-  public EnvelopeSubConversation getConversation() {
-    return conversation;
+  public List<Invite> getInvites() {
+    return invites;
   }
 
-  public void setConversation(EnvelopeSubConversation conversation) {
-    this.conversation = conversation;
+  public void setInvites(List<Invite> invites) {
+    this.invites = invites;
   }
 
 
@@ -60,22 +70,22 @@ public class EnvelopeSub implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeSub envelopeSub = (EnvelopeSub) o;
-    return Objects.equals(this.conversation, envelopeSub.conversation);
+    InviteGetResponse inviteGetResponse = (InviteGetResponse) o;
+    return Objects.equals(this.invites, inviteGetResponse.invites);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(conversation);
+    return Objects.hash(invites);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeSub {\n");
+    sb.append("class InviteGetResponse {\n");
     
-    sb.append("    conversation: ").append(toIndentedString(conversation)).append("\n");
+    sb.append("    invites: ").append(toIndentedString(invites)).append("\n");
     sb.append("}");
     return sb.toString();
   }

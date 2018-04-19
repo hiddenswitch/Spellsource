@@ -22,8 +22,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * EnvelopeMethodSendMessage
+ * Send a change message to the indicated conversationId. 
  */
+@ApiModel(description = "Send a change message to the indicated conversationId. ")
 
 public class EnvelopeMethodSendMessage implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -40,10 +41,10 @@ public class EnvelopeMethodSendMessage implements Serializable {
   }
 
    /**
-   * Get conversationId
+   * A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first lexicographically. 
    * @return conversationId
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first lexicographically. ")
   public String getConversationId() {
     return conversationId;
   }
@@ -58,10 +59,10 @@ public class EnvelopeMethodSendMessage implements Serializable {
   }
 
    /**
-   * Get message
+   * The contents of the message to send to the conversation. 
    * @return message
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The contents of the message to send to the conversation. ")
   public String getMessage() {
     return message;
   }

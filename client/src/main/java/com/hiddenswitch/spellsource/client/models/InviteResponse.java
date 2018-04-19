@@ -14,14 +14,42 @@
 package com.hiddenswitch.spellsource.client.models;
 
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.Invite;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * EnvelopeSubAccount
+ * The invitation that was sent, or the updated invite 
  */
+@ApiModel(description = "The invitation that was sent, or the updated invite ")
 
-public class EnvelopeSubAccount implements Serializable {
+public class InviteResponse implements Serializable {
   private static final long serialVersionUID = 1L;
+
+  @JsonProperty("invite")
+  private Invite invite = null;
+
+  public InviteResponse invite(Invite invite) {
+    this.invite = invite;
+    return this;
+  }
+
+   /**
+   * Get invite
+   * @return invite
+  **/
+  @ApiModelProperty(value = "")
+  public Invite getInvite() {
+    return invite;
+  }
+
+  public void setInvite(Invite invite) {
+    this.invite = invite;
+  }
 
 
   @Override
@@ -32,20 +60,22 @@ public class EnvelopeSubAccount implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return true;
+    InviteResponse inviteResponse = (InviteResponse) o;
+    return Objects.equals(this.invite, inviteResponse.invite);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash();
+    return Objects.hash(invite);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeSubAccount {\n");
+    sb.append("class InviteResponse {\n");
     
+    sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.channels.Channels;
@@ -19,7 +18,6 @@ import com.hiddenswitch.spellsource.util.SharedData;
 import com.hiddenswitch.spellsource.util.SuspendableMap;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Closeable;
-import io.vertx.core.Context;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
@@ -44,6 +42,7 @@ public interface Matchmaking extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Matchmaking.class);
 	Map<UserId, Strand> LOCAL_STRANDS = new ConcurrentHashMap<>();
 	Map<String, QueueChannel<QueueEntryX>> QUEUES = new ConcurrentHashMap<>();
+	Map<String, Semaphore> SEMAPHORES = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates a bot game
@@ -259,22 +258,13 @@ public interface Matchmaking extends Verticle {
 		return LOCAL_STRANDS;
 	}
 
-	static QueueChannel<QueueEntryX> getQueue(String key) {
-		return QUEUES.computeIfAbsent(key, (k) -> new QueueObjectChannel<>(new ArrayQueue<>(1), Channels.OverflowPolicy.THROW, false, false));
+	static QueueChannel<QueueEntryX> getQueue(String queueId, String key) {
+		return QUEUES.computeIfAbsent(key + "[" + queueId + "]", (k) -> new QueueObjectChannel<>(new ArrayQueue<>(1), Channels.OverflowPolicy.THROW, false, false));
 	}
 
-	static Semaphore getParty() {
-		Context context = Vertx.currentContext();
-		Semaphore party;
-		synchronized (context) {
-			String key = "Matchmaking::party";
-			party = context.get(key);
-			if (party == null) {
-				party = new Semaphore(2);
-				context.put(key, party);
-			}
-		}
-		return party;
+	static Semaphore getParty(String queueId) {
+		String key = "Matchmaking::party[" + queueId + "]";
+		return SEMAPHORES.computeIfAbsent(key, (k) -> new Semaphore(2));
 	}
 
 	static Closeable cancellation() {
@@ -316,15 +306,16 @@ public interface Matchmaking extends Verticle {
 
 
 			long timeout = request.getTimeout();
+			String queueId = request.getQueueId() == null ? "constructed" : request.getQueueId();
 
 			Map<UserId, Strand> strands = getLocalStrands();
 			if (strands.putIfAbsent(userId, Strand.currentStrand()) != null) {
 				throw new ConcurrentModificationException();
 			}
 
-			QueueChannel<QueueEntryX> firstUser = getQueue("Matchmaking::firstUser");
-			QueueChannel<QueueEntryX> secondUser = getQueue("Matchmaking::secondUser");
-			Semaphore party = getParty();
+			QueueChannel<QueueEntryX> firstUser = getQueue(queueId, "Matchmaking::firstUser");
+			QueueChannel<QueueEntryX> secondUser = getQueue(queueId, "Matchmaking::secondUser");
+			Semaphore party = getParty(queueId);
 			long startTime = System.currentTimeMillis();
 			try {
 				// There are at most two users who can modify the queue

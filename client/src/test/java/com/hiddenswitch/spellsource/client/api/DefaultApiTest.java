@@ -33,6 +33,8 @@ import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetAccountsResponse;
 import com.hiddenswitch.spellsource.client.models.GetCardsResponse;
+import com.hiddenswitch.spellsource.client.models.InvitePostRequest;
+import com.hiddenswitch.spellsource.client.models.InvitePostResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.MatchCancelResponse;
@@ -420,6 +422,22 @@ public class DefaultApiTest {
     @Test
     public void matchmakingGetTest() throws ApiException {
         MatchmakingQueuesResponse response = api.matchmakingGet();
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Send an invite 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void postInviteTest() throws ApiException {
+        InvitePostRequest request = null;
+        InvitePostResponse response = api.postInvite(request);
 
         // TODO: test validations
     }

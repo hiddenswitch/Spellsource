@@ -42,6 +42,7 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	private List<FriendRecord> friends = new ArrayList<>();
 	private ServicesRecord services = new ServicesRecord();
 	private boolean bot;
+	private String privacyToken;
 
 	/**
 	 * A weak reference to the auth provider, automatically connected by Vertx.
@@ -205,5 +206,13 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getPrivacyToken() {
+		return privacyToken;
+	}
+
+	public void setPrivacyToken(String privacyToken) {
+		this.privacyToken = privacyToken;
 	}
 }

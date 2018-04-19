@@ -146,13 +146,13 @@ public class Mongo {
 	}
 
 	@Suspendable
-	public <T extends MongoRecord> List<T> find(String collection, JsonObject query, Class<T> returnClass) {
+	public <T> List<T> find(String collection, JsonObject query, Class<T> returnClass) {
 		final List<JsonObject> objs = awaitResult(h -> client.find(collection, query, h));
 		return QuickJson.fromJson(objs, returnClass);
 	}
 
 	@Suspendable
-	public <T extends MongoRecord> List<T> findWithOptions(String collection, JsonObject query, FindOptions options, Class<T> returnClass) {
+	public <T> List<T> findWithOptions(String collection, JsonObject query, FindOptions options, Class<T> returnClass) {
 		final List<JsonObject> objs = awaitResult(h -> client.findWithOptions(collection, query, options, h));
 		return QuickJson.fromJson(objs, returnClass);
 	}

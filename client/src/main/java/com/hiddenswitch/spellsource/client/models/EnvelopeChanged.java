@@ -23,8 +23,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * EnvelopeChanged
+ * Indicates that a record&#39;s fields have changed. In this model, the new document is a full replacement. 
  */
+@ApiModel(description = "Indicates that a record's fields have changed. In this model, the new document is a full replacement. ")
 
 public class EnvelopeChanged implements Serializable {
   private static final long serialVersionUID = 1L;

@@ -17,38 +17,37 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.EnvelopeSubConversation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * When populated by the client and sent to the server, subscribes to data of the specified kind. 
+ * Indicates that a record has been removed from the client&#39;s ephemeral collections. 
  */
-@ApiModel(description = "When populated by the client and sent to the server, subscribes to data of the specified kind. ")
+@ApiModel(description = "Indicates that a record has been removed from the client's ephemeral collections. ")
 
-public class EnvelopeSub implements Serializable {
+public class EnvelopeRemoved implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("conversation")
-  private EnvelopeSubConversation conversation = null;
+  @JsonProperty("inviteId")
+  private String inviteId = null;
 
-  public EnvelopeSub conversation(EnvelopeSubConversation conversation) {
-    this.conversation = conversation;
+  public EnvelopeRemoved inviteId(String inviteId) {
+    this.inviteId = inviteId;
     return this;
   }
 
    /**
-   * Get conversation
-   * @return conversation
+   * The unique ID of the invitation that should be removed. 
+   * @return inviteId
   **/
-  @ApiModelProperty(value = "")
-  public EnvelopeSubConversation getConversation() {
-    return conversation;
+  @ApiModelProperty(value = "The unique ID of the invitation that should be removed. ")
+  public String getInviteId() {
+    return inviteId;
   }
 
-  public void setConversation(EnvelopeSubConversation conversation) {
-    this.conversation = conversation;
+  public void setInviteId(String inviteId) {
+    this.inviteId = inviteId;
   }
 
 
@@ -60,22 +59,22 @@ public class EnvelopeSub implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeSub envelopeSub = (EnvelopeSub) o;
-    return Objects.equals(this.conversation, envelopeSub.conversation);
+    EnvelopeRemoved envelopeRemoved = (EnvelopeRemoved) o;
+    return Objects.equals(this.inviteId, envelopeRemoved.inviteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(conversation);
+    return Objects.hash(inviteId);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeSub {\n");
+    sb.append("class EnvelopeRemoved {\n");
     
-    sb.append("    conversation: ").append(toIndentedString(conversation)).append("\n");
+    sb.append("    inviteId: ").append(toIndentedString(inviteId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

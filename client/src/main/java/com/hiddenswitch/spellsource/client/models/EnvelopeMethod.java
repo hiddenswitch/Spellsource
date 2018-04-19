@@ -23,14 +23,36 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * EnvelopeMethod
+ * When populated by the client and sent to the server, indicates a method should be called. The side effects of methods may include new data updates and a response. 
  */
+@ApiModel(description = "When populated by the client and sent to the server, indicates a method should be called. The side effects of methods may include new data updates and a response. ")
 
 public class EnvelopeMethod implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("methodId")
+  private String methodId = null;
+
   @JsonProperty("sendMessage")
   private EnvelopeMethodSendMessage sendMessage = null;
+
+  public EnvelopeMethod methodId(String methodId) {
+    this.methodId = methodId;
+    return this;
+  }
+
+   /**
+   * The client-specified ID that will be used to mark the reply (the result) of this method call. 
+   * @return methodId
+  **/
+  @ApiModelProperty(value = "The client-specified ID that will be used to mark the reply (the result) of this method call. ")
+  public String getMethodId() {
+    return methodId;
+  }
+
+  public void setMethodId(String methodId) {
+    this.methodId = methodId;
+  }
 
   public EnvelopeMethod sendMessage(EnvelopeMethodSendMessage sendMessage) {
     this.sendMessage = sendMessage;
@@ -60,12 +82,13 @@ public class EnvelopeMethod implements Serializable {
       return false;
     }
     EnvelopeMethod envelopeMethod = (EnvelopeMethod) o;
-    return Objects.equals(this.sendMessage, envelopeMethod.sendMessage);
+    return Objects.equals(this.methodId, envelopeMethod.methodId) &&
+        Objects.equals(this.sendMessage, envelopeMethod.sendMessage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sendMessage);
+    return Objects.hash(methodId, sendMessage);
   }
 
 
@@ -74,6 +97,7 @@ public class EnvelopeMethod implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class EnvelopeMethod {\n");
     
+    sb.append("    methodId: ").append(toIndentedString(methodId)).append("\n");
     sb.append("    sendMessage: ").append(toIndentedString(sendMessage)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -17,67 +17,23 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.ChatMessage;
-import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.Invite;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * Indicates one of the records should be added to the client&#39;s ephemeral collections. 
+ * The invitation that was sent 
  */
-@ApiModel(description = "Indicates one of the records should be added to the client's ephemeral collections. ")
+@ApiModel(description = "The invitation that was sent ")
 
-public class EnvelopeAdded implements Serializable {
+public class InvitePostResponse implements Serializable {
   private static final long serialVersionUID = 1L;
-
-  @JsonProperty("chatMessage")
-  private ChatMessage chatMessage = null;
-
-  @JsonProperty("friend")
-  private Friend friend = null;
 
   @JsonProperty("invite")
   private Invite invite = null;
 
-  public EnvelopeAdded chatMessage(ChatMessage chatMessage) {
-    this.chatMessage = chatMessage;
-    return this;
-  }
-
-   /**
-   * Get chatMessage
-   * @return chatMessage
-  **/
-  @ApiModelProperty(value = "")
-  public ChatMessage getChatMessage() {
-    return chatMessage;
-  }
-
-  public void setChatMessage(ChatMessage chatMessage) {
-    this.chatMessage = chatMessage;
-  }
-
-  public EnvelopeAdded friend(Friend friend) {
-    this.friend = friend;
-    return this;
-  }
-
-   /**
-   * Get friend
-   * @return friend
-  **/
-  @ApiModelProperty(value = "")
-  public Friend getFriend() {
-    return friend;
-  }
-
-  public void setFriend(Friend friend) {
-    this.friend = friend;
-  }
-
-  public EnvelopeAdded invite(Invite invite) {
+  public InvitePostResponse invite(Invite invite) {
     this.invite = invite;
     return this;
   }
@@ -104,25 +60,21 @@ public class EnvelopeAdded implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeAdded envelopeAdded = (EnvelopeAdded) o;
-    return Objects.equals(this.chatMessage, envelopeAdded.chatMessage) &&
-        Objects.equals(this.friend, envelopeAdded.friend) &&
-        Objects.equals(this.invite, envelopeAdded.invite);
+    InvitePostResponse invitePostResponse = (InvitePostResponse) o;
+    return Objects.equals(this.invite, invitePostResponse.invite);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(chatMessage, friend, invite);
+    return Objects.hash(invite);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeAdded {\n");
+    sb.append("class InvitePostResponse {\n");
     
-    sb.append("    chatMessage: ").append(toIndentedString(chatMessage)).append("\n");
-    sb.append("    friend: ").append(toIndentedString(friend)).append("\n");
     sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
     sb.append("}");
     return sb.toString();
