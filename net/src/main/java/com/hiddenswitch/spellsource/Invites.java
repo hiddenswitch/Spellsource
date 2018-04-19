@@ -29,13 +29,14 @@ public interface Invites {
 
 	static void realtime() throws SuspendExecution {
 		Realtime.connected(Sync.suspendableHandler(connection -> {
-			// Notify recipients of undelivered invites
-			List<Invite> invites = mongo().find(INVITES, json("toUserId", connection.userId(), "status", Invite.StatusEnum.UNDELIVERED.getValue()), Invite.class);
+			// Notify recipients of all pending invites.
+			List<Invite> invites = mongo().find(INVITES, json("toUserId", connection.userId(), "status", json("$in", PENDING_STATUSES)), Invite.class);
 			for (Invite invite : invites) {
 				invite.status(Invite.StatusEnum.PENDING);
 				connection.write(JsonObject.mapFrom(new Envelope().added(new EnvelopeAdded().invite(invite))));
 			}
 
+			// Set undelivered to pending
 			JsonArray ids = new JsonArray(invites.stream().map(Invite::getId).collect(Collectors.toList()));
 			mongo().updateCollectionWithOptions(INVITES,
 					json("_id", json("$in", ids)),
@@ -45,7 +46,7 @@ public interface Invites {
 		}));
 	}
 
-	static InvitePostResponse postInvite(InvitePostRequest request, UserRecord user) throws SuspendExecution {
+	static InvitePostResponse invite(InvitePostRequest request, UserRecord user) throws SuspendExecution {
 		UserRecord toUser;
 		if (request.getToUserId() != null) {
 			// Check if the other player is a friend
@@ -77,6 +78,7 @@ public interface Invites {
 
 		Vertx vertx = Vertx.currentContext().owner();
 
+		// Set timer to expire the invite after 15 minutes
 		vertx.setTimer(15 * 60 * 1000L, Sync.suspendableHandler(timerId -> {
 			// If the invite hasn't been acted on, expire it
 			mongo().updateCollection(INVITES,
@@ -95,7 +97,7 @@ public interface Invites {
 				.queueId(customQueueId);
 
 		// Notify both users of the new invite, but only wait to see if the recipient is around to actually receive it right
-		// now.
+		// now. We'll update the record immediately and only insert it into the db with the proper status
 		WriteStream<Buffer> toUserConnection = Connection.get(toUser.getId());
 		if (toUserConnection != null) {
 			invite.status(Invite.StatusEnum.PENDING);
@@ -104,6 +106,8 @@ public interface Invites {
 			));
 		}
 
+		// The sender can receive this invite at any time through the channel since they will receive it in their post
+		// response also.
 		Connection.get(user.getId(), res -> {
 			WriteStream<Buffer> conn = res.result();
 			if (conn == null) {
