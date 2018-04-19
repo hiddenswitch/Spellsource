@@ -82,3 +82,4 @@ public interface SuspendableMap<K, V> {
 		return true;
 	}
 }
+

@@ -78,12 +78,12 @@ public class DefaultApiExample {
         //TokenSecurity.setApiKeyPrefix("Token");
 
         DefaultApi apiInstance = new DefaultApi();
-        ChangePasswordRequest request = new ChangePasswordRequest(); // ChangePasswordRequest | 
+        AcceptInviteRequest request = new AcceptInviteRequest(); // AcceptInviteRequest | 
         try {
-            ChangePasswordResponse result = apiInstance.changePassword(request);
+            AcceptInviteResponse result = apiInstance.acceptInvite(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#changePassword");
+            System.err.println("Exception when calling DefaultApi#acceptInvite");
             e.printStackTrace();
         }
     }
@@ -97,6 +97,7 @@ All URIs are relative to *http://metastone-dev.us-west-2.elasticbeanstalk.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**acceptInvite**](docs/DefaultApi.md#acceptInvite) | **POST** /invites/{inviteId} | 
 *DefaultApi* | [**changePassword**](docs/DefaultApi.md#changePassword) | **POST** /accounts-password | 
 *DefaultApi* | [**createAccount**](docs/DefaultApi.md#createAccount) | **PUT** /accounts | 
 *DefaultApi* | [**decksDelete**](docs/DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
@@ -104,6 +105,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**decksGetAll**](docs/DefaultApi.md#decksGetAll) | **GET** /decks | 
 *DefaultApi* | [**decksPut**](docs/DefaultApi.md#decksPut) | **PUT** /decks | 
 *DefaultApi* | [**decksUpdate**](docs/DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
+*DefaultApi* | [**deleteInvite**](docs/DefaultApi.md#deleteInvite) | **DELETE** /invites/{inviteId} | 
 *DefaultApi* | [**draftsChooseCard**](docs/DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards | 
 *DefaultApi* | [**draftsChooseHero**](docs/DefaultApi.md#draftsChooseHero) | **PUT** /drafts/hero | 
 *DefaultApi* | [**draftsGet**](docs/DefaultApi.md#draftsGet) | **GET** /drafts | 
@@ -113,6 +115,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**getCards**](docs/DefaultApi.md#getCards) | **GET** /cards | 
+*DefaultApi* | [**getInvite**](docs/DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
+*DefaultApi* | [**getInvites**](docs/DefaultApi.md#getInvites) | **GET** /invites | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
 *DefaultApi* | [**matchmakingConstructedDelete**](docs/DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/{queueId} | 
@@ -125,6 +129,8 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
+ - [AcceptInviteRequest](docs/AcceptInviteRequest.md)
+ - [AcceptInviteResponse](docs/AcceptInviteResponse.md)
  - [Account](docs/Account.md)
  - [CardEvent](docs/CardEvent.md)
  - [CardRecord](docs/CardRecord.md)
@@ -195,8 +201,9 @@ Class | Method | HTTP request | Description
  - [GetCardsResponse](docs/GetCardsResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
  - [Invite](docs/Invite.md)
+ - [InviteGetResponse](docs/InviteGetResponse.md)
  - [InvitePostRequest](docs/InvitePostRequest.md)
- - [InvitePostResponse](docs/InvitePostResponse.md)
+ - [InviteResponse](docs/InviteResponse.md)
  - [JavaSerializationObject](docs/JavaSerializationObject.md)
  - [LoginRequest](docs/LoginRequest.md)
  - [LoginResponse](docs/LoginResponse.md)

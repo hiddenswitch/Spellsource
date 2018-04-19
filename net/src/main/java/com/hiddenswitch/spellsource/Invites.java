@@ -46,7 +46,7 @@ public interface Invites {
 		}));
 	}
 
-	static InvitePostResponse invite(InvitePostRequest request, UserRecord user) throws SuspendExecution {
+	static InviteResponse invite(InvitePostRequest request, UserRecord user) throws SuspendExecution {
 		UserRecord toUser;
 		if (request.getToUserId() != null) {
 			// Check if the other player is a friend
@@ -121,7 +121,7 @@ public interface Invites {
 
 		mongo().insert(INVITES, mapFrom(invite));
 
-		return new InvitePostResponse()
+		return new InviteResponse()
 				.invite(invite);
 	}
 }

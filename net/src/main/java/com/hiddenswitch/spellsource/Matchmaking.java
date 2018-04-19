@@ -25,11 +25,11 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Lock;
 import net.demilich.metastone.game.decks.Deck;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 public interface Matchmaking extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Matchmaking.class);
 	Map<UserId, Strand> LOCAL_STRANDS = new ConcurrentHashMap<>();
-	Map<String, QueueChannel<QueueEntryX>> QUEUES = new ConcurrentHashMap<>();
+	Map<String, QueueChannel<QueueEntry>> QUEUES = new ConcurrentHashMap<>();
 	Map<String, Semaphore> SEMAPHORES = new ConcurrentHashMap<>();
 
 	/**
@@ -216,6 +216,7 @@ public interface Matchmaking extends Verticle {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("createMatch: Creating match for request " + request.toString());
 		}
+
 		final String deckId1 = request.getDeckId1().toString();
 		final String deckId2 = request.getDeckId2().toString();
 		final String userId1 = request.getUserId1().toString();
@@ -258,7 +259,7 @@ public interface Matchmaking extends Verticle {
 		return LOCAL_STRANDS;
 	}
 
-	static QueueChannel<QueueEntryX> getQueue(String queueId, String key) {
+	static QueueChannel<QueueEntry> getQueue(String queueId, String key) {
 		return QUEUES.computeIfAbsent(key + "[" + queueId + "]", (k) -> new QueueObjectChannel<>(new ArrayQueue<>(1), Channels.OverflowPolicy.THROW, false, false));
 	}
 
@@ -313,8 +314,8 @@ public interface Matchmaking extends Verticle {
 				throw new ConcurrentModificationException();
 			}
 
-			QueueChannel<QueueEntryX> firstUser = getQueue(queueId, "Matchmaking::firstUser");
-			QueueChannel<QueueEntryX> secondUser = getQueue(queueId, "Matchmaking::secondUser");
+			QueueChannel<QueueEntry> firstUser = getQueue(queueId, "Matchmaking::firstUser");
+			QueueChannel<QueueEntry> secondUser = getQueue(queueId, "Matchmaking::secondUser");
 			Semaphore party = getParty(queueId);
 			long startTime = System.currentTimeMillis();
 			try {
@@ -322,23 +323,28 @@ public interface Matchmaking extends Verticle {
 				if (party.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 					try {
 						// Test if we are the first user
-						if (firstUser.trySend(new QueueEntryX(request, new GameId(RandomStringUtils.randomNumeric(42))))) {
+						GameId thisGameId = GameId.create();
+						if (firstUser.trySend(new QueueEntry(request, thisGameId))) {
 							// One user is in the queue at this point (this user)
 							while (true) {
 								try {
 									timeout -= System.currentTimeMillis() - startTime;
+									startTime = System.currentTimeMillis();
 									if (timeout < 0) {
 										// We timed out for whatever reason
 										return null;
 									}
 									// Wait until the second user is added
-									QueueEntryX match = secondUser.receive(timeout, TimeUnit.MILLISECONDS);
+									QueueEntry match = secondUser.receive(timeout, TimeUnit.MILLISECONDS);
 									if (match == null) {
 										// We timed out, which is as good as cancelling.
 										throw new InterruptedException();
 									} else {
 										// A second user has released us and now we have our match
 										// Second user creates game
+										if (!match.gameId.equals(thisGameId)) {
+											throw new AssertionError("Game IDs do not match.");
+										}
 										return match.gameId;
 									}
 								} catch (InterruptedException canceled) {
@@ -362,7 +368,7 @@ public interface Matchmaking extends Verticle {
 							// doesn't really matter if this poll is interruptible, but the exception either way (cancel or
 							// interrupt) will lead us to the right places.
 							try {
-								QueueEntryX match = firstUser.receive(timeout, TimeUnit.MILLISECONDS);
+								QueueEntry match = firstUser.receive(timeout, TimeUnit.MILLISECONDS);
 								if (match == null) {
 									throw new InterruptedException();
 								} else {
@@ -373,7 +379,7 @@ public interface Matchmaking extends Verticle {
 											new DeckId(request.getDeckId()));
 									// Queue ourselves into the second user slot, to signal to the first user whom they're matching
 									// with.
-									secondUser.sendNonSuspendable(new QueueEntryX(request, match.gameId));
+									secondUser.sendNonSuspendable(new QueueEntry(request, match.gameId));
 									// At this point, the first user isn't permitted to cancel gracefully. The test for valid
 									// matching will be kicked off to the match connection.
 									LOGGER.debug("matchmake: Matching {} and {} into game {}", match.req.getUserId(), userId, match.gameId);
@@ -396,7 +402,7 @@ public interface Matchmaking extends Verticle {
 				strands.remove(userId);
 			}
 		} catch (Throwable t) {
-			LOGGER.debug("matchmake: User {} is already waiting on another invocation");
+			LOGGER.debug("matchmake: User {} is already waiting on another invocation", userId);
 			return null;
 		} finally {
 			if (lock != null) {
@@ -405,11 +411,11 @@ public interface Matchmaking extends Verticle {
 		}
 	}
 
-	class QueueEntryX {
+	class QueueEntry implements Serializable {
 		MatchmakingRequest req;
 		GameId gameId;
 
-		public QueueEntryX(MatchmakingRequest req, GameId gameId) {
+		public QueueEntry(MatchmakingRequest req, GameId gameId) {
 			this.req = req;
 			this.gameId = gameId;
 		}
