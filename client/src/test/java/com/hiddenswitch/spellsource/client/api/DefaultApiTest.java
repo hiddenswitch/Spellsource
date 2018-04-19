@@ -14,6 +14,8 @@
 package com.hiddenswitch.spellsource.client.api;
 
 import com.hiddenswitch.spellsource.client.ApiException;
+import com.hiddenswitch.spellsource.client.models.AcceptInviteRequest;
+import com.hiddenswitch.spellsource.client.models.AcceptInviteResponse;
 import com.hiddenswitch.spellsource.client.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.client.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
@@ -33,8 +35,9 @@ import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetAccountsResponse;
 import com.hiddenswitch.spellsource.client.models.GetCardsResponse;
+import com.hiddenswitch.spellsource.client.models.InviteGetResponse;
 import com.hiddenswitch.spellsource.client.models.InvitePostRequest;
-import com.hiddenswitch.spellsource.client.models.InvitePostResponse;
+import com.hiddenswitch.spellsource.client.models.InviteResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.MatchCancelResponse;
@@ -60,6 +63,22 @@ public class DefaultApiTest {
 
     private final DefaultApi api = new DefaultApi();
 
+    
+    /**
+     * 
+     *
+     * Accepts the invite. If this is an invite to friend the user, this method will perform the friending path for you. If this is an invite to play a match and a matchmaking queue put is specified (with the deck ID), this method will enter you into the special invite matchmaking queue. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void acceptInviteTest() throws ApiException {
+        AcceptInviteRequest request = null;
+        AcceptInviteResponse response = api.acceptInvite(request);
+
+        // TODO: test validations
+    }
     
     /**
      * 
@@ -169,6 +188,21 @@ public class DefaultApiTest {
         String deckId = null;
         DecksUpdateCommand updateCommand = null;
         DecksGetResponse response = api.decksUpdate(deckId, updateCommand);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void deleteInviteTest() throws ApiException {
+        InviteResponse response = api.deleteInvite();
 
         // TODO: test validations
     }
@@ -319,6 +353,36 @@ public class DefaultApiTest {
     /**
      * 
      *
+     * Retrieves information about a specific invite, as long as this user is either the sender or recipient. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getInviteTest() throws ApiException {
+        InviteResponse response = api.getInvite();
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Retrieve all invites where this user is either the sender or recipient. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getInvitesTest() throws ApiException {
+        InviteGetResponse response = api.getInvites();
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * Returns an empty body if the server is available. 
      *
      * @throws ApiException
@@ -437,7 +501,7 @@ public class DefaultApiTest {
     @Test
     public void postInviteTest() throws ApiException {
         InvitePostRequest request = null;
-        InvitePostResponse response = api.postInvite(request);
+        InviteResponse response = api.postInvite(request);
 
         // TODO: test validations
     }

@@ -336,15 +336,11 @@ public class Spellsource {
 						.withVersion(12)
 						.withUp(thisVertx -> {
 							// Give all users a privacy token
-							List<Future> updates = new ArrayList<>();
 							for (JsonObject userRecord : mongo().find(Accounts.USERS, json())) {
-								Future<MongoClientUpdateResult> fut = Future.future();
-								mongo().client().updateCollection(Accounts.USERS, json("_id", userRecord.getString("_id")),
-										json("$set", json("privacyToken", RandomStringUtils.randomNumeric(4))), fut);
-								updates.add(fut);
+								mongo().updateCollection(Accounts.USERS, json("_id", userRecord.getString("_id")),
+										json("$set", json("privacyToken", RandomStringUtils.randomNumeric(4))));
 							}
 
-							CompositeFuture res = awaitResult(h -> CompositeFuture.all(updates).setHandler(h));
 
 							// Add an index for invites
 							if (!mongo().getCollections().contains(Invites.INVITES)) {
