@@ -120,6 +120,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking | 
 *DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
 *DefaultApi* | [**matchmakingGet**](docs/DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
+*DefaultApi* | [**postInvite**](docs/DefaultApi.md#postInvite) | **POST** /invites | 
 
 
 ## Documentation for Models
@@ -157,10 +158,10 @@ Class | Method | HTTP request | Description
  - [EnvelopeChanged](docs/EnvelopeChanged.md)
  - [EnvelopeMethod](docs/EnvelopeMethod.md)
  - [EnvelopeMethodSendMessage](docs/EnvelopeMethodSendMessage.md)
+ - [EnvelopeRemoved](docs/EnvelopeRemoved.md)
  - [EnvelopeResult](docs/EnvelopeResult.md)
  - [EnvelopeResultSendMessage](docs/EnvelopeResultSendMessage.md)
  - [EnvelopeSub](docs/EnvelopeSub.md)
- - [EnvelopeSubAccount](docs/EnvelopeSubAccount.md)
  - [EnvelopeSubConversation](docs/EnvelopeSubConversation.md)
  - [Friend](docs/Friend.md)
  - [FriendPutRequest](docs/FriendPutRequest.md)
@@ -193,6 +194,9 @@ Class | Method | HTTP request | Description
  - [GetAccountsResponse](docs/GetAccountsResponse.md)
  - [GetCardsResponse](docs/GetCardsResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
+ - [Invite](docs/Invite.md)
+ - [InvitePostRequest](docs/InvitePostRequest.md)
+ - [InvitePostResponse](docs/InvitePostResponse.md)
  - [JavaSerializationObject](docs/JavaSerializationObject.md)
  - [LoginRequest](docs/LoginRequest.md)
  - [LoginResponse](docs/LoginResponse.md)

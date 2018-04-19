@@ -23,14 +23,36 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * EnvelopeResult
+ * When populated on the server and sent to the client, indicates that a method call had a specific result. 
  */
+@ApiModel(description = "When populated on the server and sent to the client, indicates that a method call had a specific result. ")
 
 public class EnvelopeResult implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("methodId")
+  private String methodId = null;
+
   @JsonProperty("sendMessage")
   private EnvelopeResultSendMessage sendMessage = null;
+
+  public EnvelopeResult methodId(String methodId) {
+    this.methodId = methodId;
+    return this;
+  }
+
+   /**
+   * The ID of the method this is a result for. 
+   * @return methodId
+  **/
+  @ApiModelProperty(value = "The ID of the method this is a result for. ")
+  public String getMethodId() {
+    return methodId;
+  }
+
+  public void setMethodId(String methodId) {
+    this.methodId = methodId;
+  }
 
   public EnvelopeResult sendMessage(EnvelopeResultSendMessage sendMessage) {
     this.sendMessage = sendMessage;
@@ -60,12 +82,13 @@ public class EnvelopeResult implements Serializable {
       return false;
     }
     EnvelopeResult envelopeResult = (EnvelopeResult) o;
-    return Objects.equals(this.sendMessage, envelopeResult.sendMessage);
+    return Objects.equals(this.methodId, envelopeResult.methodId) &&
+        Objects.equals(this.sendMessage, envelopeResult.sendMessage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sendMessage);
+    return Objects.hash(methodId, sendMessage);
   }
 
 
@@ -74,6 +97,7 @@ public class EnvelopeResult implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class EnvelopeResult {\n");
     
+    sb.append("    methodId: ").append(toIndentedString(methodId)).append("\n");
     sb.append("    sendMessage: ").append(toIndentedString(sendMessage)).append("\n");
     sb.append("}");
     return sb.toString();

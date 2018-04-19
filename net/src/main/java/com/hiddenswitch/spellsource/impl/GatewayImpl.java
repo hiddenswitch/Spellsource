@@ -282,6 +282,13 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
 
+		router.route("/invites")
+				.handler(bodyHandler);
+		router.route("/invites")
+				.handler(authHandler);
+		router.route("/invites")
+				.method(HttpMethod.POST);
+
 		Void listen = awaitResult(done -> {
 			try {
 				Spellsource.spellsource().httpServer(vertx).listen(then -> {

@@ -5,7 +5,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **conversation** | [**EnvelopeSubConversation**](EnvelopeSubConversation.md) |  |  [optional]
-**account** | [**EnvelopeSubAccount**](EnvelopeSubAccount.md) |  |  [optional]
 
 
 

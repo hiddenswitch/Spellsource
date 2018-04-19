@@ -26,6 +26,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
@@ -331,7 +332,30 @@ public class Spellsource {
 							// Add an index for the friend IDs
 							mongo().createIndex(Accounts.USERS, json("friends.friendId", 1));
 						}))
-				.migrateTo(11, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(12)
+						.withUp(thisVertx -> {
+							// Give all users a privacy token
+							List<Future> updates = new ArrayList<>();
+							for (JsonObject userRecord : mongo().find(Accounts.USERS, json())) {
+								Future<MongoClientUpdateResult> fut = Future.future();
+								mongo().client().updateCollection(Accounts.USERS, json("_id", userRecord.getString("_id")),
+										json("$set", json("privacyToken", RandomStringUtils.randomNumeric(4))), fut);
+								updates.add(fut);
+							}
+
+							CompositeFuture res = awaitResult(h -> CompositeFuture.all(updates).setHandler(h));
+
+							// Add an index for invites
+							if (!mongo().getCollections().contains(Invites.INVITES)) {
+								mongo().createCollection(Invites.INVITES);
+							}
+
+							mongo().createIndex(Invites.INVITES, json("toUserId", 1));
+							// Create an index for the username
+							mongo().createIndex(Accounts.USERS, json("username", 1));
+						}))
+				.migrateTo(12, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

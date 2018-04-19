@@ -1,10 +1,10 @@
 
-# EnvelopeResultSendMessage
+# InviteGetResponse
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**messageId** | **String** | The new message ID.  |  [optional]
+**invites** | [**List&lt;Invite&gt;**](Invite.md) |  |  [optional]
 
 
 
