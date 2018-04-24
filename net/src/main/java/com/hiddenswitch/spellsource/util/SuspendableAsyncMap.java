@@ -70,7 +70,7 @@ public final class SuspendableAsyncMap<K, V> implements SuspendableMap<K, V> {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public V remove(K key) {
-		return awaitResult(h -> map.remove((K) key, h));
+		return awaitResult(h -> map.remove(key, h));
 	}
 
 	@Override
