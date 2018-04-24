@@ -51,7 +51,11 @@ public abstract class SpellsourceTestBase {
 			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5701));
 			final Async async = context.async();
 
-			Vertx.clusteredVertx(new VertxOptions().setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
+			Vertx.clusteredVertx(new VertxOptions()
+					.setWorkerPoolSize(99)
+					.setEventLoopPoolSize(99)
+					.setInternalBlockingPoolSize(99)
+					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
 				SpellsourceTestBase.vertx = vertx;
 				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
 					vertx.executeBlocking(fut -> {

@@ -2,21 +2,14 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.channels.Channels;
-import co.paralleluniverse.strands.channels.QueueChannel;
-import co.paralleluniverse.strands.channels.QueueObjectChannel;
 import co.paralleluniverse.strands.concurrent.Semaphore;
-import co.paralleluniverse.strands.queues.ArrayQueue;
 import com.hiddenswitch.spellsource.impl.DeckId;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Rpc;
-import com.hiddenswitch.spellsource.util.SharedData;
-import com.hiddenswitch.spellsource.util.SuspendableMap;
-import com.hiddenswitch.spellsource.util.Sync;
+import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Closeable;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
@@ -25,6 +18,7 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Lock;
 import net.demilich.metastone.game.decks.Deck;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +27,6 @@ import java.io.Serializable;
 import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The matchmaking service is the primary entry point into ranked games for clients.
@@ -41,8 +34,10 @@ import java.util.concurrent.TimeUnit;
 public interface Matchmaking extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Matchmaking.class);
 	Map<UserId, Strand> LOCAL_STRANDS = new ConcurrentHashMap<>();
-	Map<String, QueueChannel<QueueEntry>> QUEUES = new ConcurrentHashMap<>();
-	Map<String, Semaphore> SEMAPHORES = new ConcurrentHashMap<>();
+	Map<String, SuspendableQueue<QueueEntry>> QUEUES = new ConcurrentHashMap<>();
+	Map<String, SuspendableSemaphore> SEMAPHORES = new ConcurrentHashMap<>();
+	Semaphore QUEUES_LOCK = new Semaphore(1);
+	Semaphore SEMAPHORES_LOCK = new Semaphore(1);
 
 	/**
 	 * Creates a bot game
@@ -107,10 +102,6 @@ public interface Matchmaking extends Verticle {
 				.withUserId2(otherUserId)
 				.withGameId(gameId);
 
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("createMatch: Creating match for request " + request.toString());
-		}
-
 		MatchCreateResponse createMatchResponse = createMatch(request);
 
 		CreateGameSessionResponse createGameSessionResponse = createMatchResponse.getCreateGameSessionResponse();
@@ -135,7 +126,7 @@ public interface Matchmaking extends Verticle {
 			}
 		}
 
-		LOGGER.debug("matchmakeAndJoin: Users " + userId + " and " + otherUserId + " are unlocked because a game has been successfully created for them with gameId " + gameId);
+		LOGGER.debug("vs: Users " + userId + " and " + otherUserId + " are unlocked because a game has been successfully created for them with gameId " + gameId);
 		return gameId;
 	}
 
@@ -251,21 +242,41 @@ public interface Matchmaking extends Verticle {
 		return new MatchCreateResponse(createGameSessionResponse);
 	}
 
-	static SuspendableMap<UserId, Long> getUserLocks() throws SuspendExecution {
-		return SharedData.getClusterWideMap("Matchmaking::strands");
-	}
-
 	static Map<UserId, Strand> getLocalStrands() {
 		return LOCAL_STRANDS;
 	}
 
-	static QueueChannel<QueueEntry> getQueue(String queueId, String key) {
-		return QUEUES.computeIfAbsent(key + "[" + queueId + "]", (k) -> new QueueObjectChannel<>(new ArrayQueue<>(1), Channels.OverflowPolicy.THROW, false, false));
+	static SuspendableQueue<QueueEntry> getQueue(String queueId, String key) throws SuspendExecution, InterruptedException {
+		String queueKey = key + "[" + queueId + "]";
+		try {
+			QUEUES_LOCK.acquire();
+			if (QUEUES.containsKey(queueKey)) {
+				return QUEUES.get(queueKey);
+			} else {
+				SuspendableQueue<QueueEntry> v = SuspendableQueue.create(queueKey, 1);
+				QUEUES.put(queueKey, v);
+				return v;
+			}
+		} finally {
+			QUEUES_LOCK.release();
+		}
+
 	}
 
-	static Semaphore getParty(String queueId) {
+	static SuspendableSemaphore getParty(String queueId) throws SuspendExecution, InterruptedException {
 		String key = "Matchmaking::party[" + queueId + "]";
-		return SEMAPHORES.computeIfAbsent(key, (k) -> new Semaphore(2));
+		try {
+			SEMAPHORES_LOCK.acquire();
+			if (SEMAPHORES.containsKey(key)) {
+				return SEMAPHORES.get(key);
+			} else {
+				SuspendableSemaphore v = SuspendableSemaphore.create(key, 2);
+				SEMAPHORES.put(key, v);
+				return v;
+			}
+		} finally {
+			SEMAPHORES_LOCK.release();
+		}
 	}
 
 	static Closeable cancellation() {
@@ -314,13 +325,13 @@ public interface Matchmaking extends Verticle {
 				throw new ConcurrentModificationException();
 			}
 
-			QueueChannel<QueueEntry> firstUser = getQueue(queueId, "Matchmaking::firstUser");
-			QueueChannel<QueueEntry> secondUser = getQueue(queueId, "Matchmaking::secondUser");
-			Semaphore party = getParty(queueId);
+			SuspendableQueue<QueueEntry> firstUser = getQueue(queueId, "Matchmaking::firstUser");
+			SuspendableQueue<QueueEntry> secondUser = getQueue(queueId, "Matchmaking::secondUser");
+			SuspendableSemaphore party = getParty(queueId);
 			long startTime = System.currentTimeMillis();
 			try {
 				// There are at most two users who can modify the queue
-				if (party.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
+				if (party.tryAcquire(timeout)) {
 					try {
 						// Test if we are the first user
 						GameId thisGameId = GameId.create();
@@ -335,7 +346,7 @@ public interface Matchmaking extends Verticle {
 										return null;
 									}
 									// Wait until the second user is added
-									QueueEntry match = secondUser.receive(timeout, TimeUnit.MILLISECONDS);
+									QueueEntry match = secondUser.poll(timeout);
 									if (match == null) {
 										// We timed out, which is as good as cancelling.
 										throw new InterruptedException();
@@ -350,7 +361,7 @@ public interface Matchmaking extends Verticle {
 								} catch (InterruptedException canceled) {
 									// We timed out or cancelled waiting for a second user. The semaphore and the queue semantics
 									// ensure we're the user in firstUser, unless a second user has already gotten us
-									if (firstUser.tryReceive() == null) {
+									if (firstUser.poll(180L) == null) {
 										// A second user has already consumed us to start a match. We have to continue to wait
 										// for the second user.
 										continue;
@@ -368,7 +379,7 @@ public interface Matchmaking extends Verticle {
 							// doesn't really matter if this poll is interruptible, but the exception either way (cancel or
 							// interrupt) will lead us to the right places.
 							try {
-								QueueEntry match = firstUser.receive(timeout, TimeUnit.MILLISECONDS);
+								QueueEntry match = firstUser.poll(timeout);
 								if (match == null) {
 									throw new InterruptedException();
 								} else {
@@ -379,7 +390,9 @@ public interface Matchmaking extends Verticle {
 											new DeckId(request.getDeckId()));
 									// Queue ourselves into the second user slot, to signal to the first user whom they're matching
 									// with.
-									secondUser.sendNonSuspendable(new QueueEntry(request, match.gameId));
+									if (!secondUser.trySend(new QueueEntry(request, match.gameId))) {
+										throw new AssertionError();
+									}
 									// At this point, the first user isn't permitted to cancel gracefully. The test for valid
 									// matching will be kicked off to the match connection.
 									LOGGER.debug("matchmake: Matching {} and {} into game {}", match.req.getUserId(), userId, match.gameId);
@@ -418,6 +431,13 @@ public interface Matchmaking extends Verticle {
 		public QueueEntry(MatchmakingRequest req, GameId gameId) {
 			this.req = req;
 			this.gameId = gameId;
+		}
+
+		@Override
+		public String toString() {
+			return new ToStringBuilder(this)
+					.append("userId", req.getUserId())
+					.toString();
 		}
 	}
 }

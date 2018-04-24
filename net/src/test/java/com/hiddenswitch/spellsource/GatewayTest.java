@@ -191,7 +191,7 @@ public class GatewayTest extends SpellsourceTestBase {
 
 		// Random games can take quite a long time to finish so be patient...
 		latch.await(80L, TimeUnit.SECONDS);
-		assertEquals( 0L, latch.getCount());
+		assertEquals(0L, latch.getCount());
 	}
 
 	@Test
