@@ -6,6 +6,7 @@ import io.vertx.core.Closeable;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;

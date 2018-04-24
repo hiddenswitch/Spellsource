@@ -28,7 +28,8 @@ import java.util.stream.Collectors;
 
 public class UnityClient {
 	private static Logger logger = LoggerFactory.getLogger(UnityClient.class);
-	public static String basePath = "http://localhost:" + Integer.toString(Port.port());
+	public static final String BASE = "http://localhost:";
+	public static String basePath = BASE + Integer.toString(Port.port());
 	private ApiClient apiClient;
 	private DefaultApi api;
 	private boolean gameOver;
@@ -39,24 +40,29 @@ public class UnityClient {
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
+	private String thisUrl;
 
 
 	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
+		thisUrl = basePath;
 		apiClient.setBasePath(basePath);
 		api = new DefaultApi(apiClient);
 		this.context = context;
 		List<UnityClient> clients = context.get("clients");
 		if (clients == null) {
-			clients = new Vector<>();
+			clients = new LinkedList<>();
 			context.put("clients", clients);
 		}
 		clients.add(this);
 	}
 
-	public UnityClient(TestContext context, int turnsToPlay) {
+	public UnityClient(TestContext context, int port) {
 		this(context);
-		this.turnsToPlay = new AtomicInteger(turnsToPlay);
+		apiClient = new ApiClient();
+		thisUrl = BASE + Integer.toString(port);
+		apiClient.setBasePath(thisUrl);
+		api = new DefaultApi(apiClient);
 	}
 
 	public UnityClient(TestContext context, String token) {
@@ -143,7 +149,7 @@ public class UnityClient {
 		// Get the port from the url
 		final URL basePathUrl;
 		try {
-			basePathUrl = new URL(basePath);
+			basePathUrl = new URL(thisUrl);
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		}

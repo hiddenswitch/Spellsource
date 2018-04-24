@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
@@ -17,7 +16,6 @@ import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.mongo.WriteOption;
 import io.vertx.ext.sync.Sync;
-import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -36,7 +34,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
-import java.util.function.Function;
 
 import static com.hiddenswitch.spellsource.Draft.DRAFTS;
 import static com.hiddenswitch.spellsource.Inventory.COLLECTIONS;
@@ -60,8 +57,6 @@ public class Spellsource {
 	private static Spellsource instance;
 	private List<DeckCreateRequest> cachedStandardDecks;
 	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
-	private HttpServer httpServer;
-	private Router router;
 	private Map<String, Trigger> gameTriggers = new HashMap<>();
 	private Map<String, Spell> spells = new HashMap<>();
 
@@ -481,42 +476,7 @@ public class Spellsource {
 		return persistAttributeHandlers;
 	}
 
-	/**
-	 * Gets the shared http server for this vertx instance
-	 *
-	 * @param vertx The Vertx instance
-	 * @return The server
-	 */
-	public synchronized HttpServer httpServer(Vertx vertx) {
-		if (httpServer == null) {
-			httpServer = vertx.createHttpServer(new HttpServerOptions().setHost("0.0.0.0").setPort(Port.port()));
-		}
-		return httpServer;
-	}
-
-	/**
-	 * Gets the shared router for this vertx instance
-	 *
-	 * @param vertx
-	 * @return
-	 */
-	public synchronized Router router(Vertx vertx) {
-		if (router == null) {
-			HttpServer server = httpServer(vertx);
-			router = Router.router(vertx);
-			server.requestHandler(router::accept);
-			try {
-				server.listen();
-			} catch (IllegalStateException ignored) {
-			}
-		}
-
-		return router;
-	}
-
 	public void close() {
-		httpServer = null;
-		router = null;
 		instance = null;
 	}
 

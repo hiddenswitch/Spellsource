@@ -221,7 +221,8 @@ public class GatewayTest extends SpellsourceTestBase {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
 		assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
 
-		UnityClient client = new UnityClient(context, 1);
+		UnityClient client = new UnityClient(context);
+		client.getTurnsToPlay().set(1);
 		client.createUserAccount(null);
 		final String token = client.getToken();
 		final String userId = client.getAccount().getId();

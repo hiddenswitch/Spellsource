@@ -11,6 +11,8 @@
 
 package com.hiddenswitch.spellsource.common;
 
+import co.paralleluniverse.fibers.Fiber;
+import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.Handler;
 import io.vertx.core.streams.Pump;
 import io.vertx.core.streams.ReadStream;
@@ -57,14 +59,23 @@ public class SuspendablePump<T> implements Pump {
 		this.readStream = rs;
 		this.writeStream = ws;
 		drainHandler = v -> readStream.resume();
-		dataHandler = Sync.fiberHandler(data -> {
-			writeStream.write(data);
-			incPumped();
-			if (writeStream.writeQueueFull()) {
-				readStream.pause();
-				writeStream.drainHandler(drainHandler);
+		dataHandler = data -> {
+			if (Fiber.isCurrentFiber()) {
+				handleData(data);
+			} else {
+				Sync.fiberHandler(this::handleData).handle(data);
 			}
-		});
+		};
+	}
+
+	@Suspendable
+	private void handleData(T data) {
+		writeStream.write(data);
+		incPumped();
+		if (writeStream.writeQueueFull()) {
+			readStream.pause();
+			writeStream.drainHandler(drainHandler);
+		}
 	}
 
 	/**

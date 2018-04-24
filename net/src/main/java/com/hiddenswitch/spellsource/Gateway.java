@@ -113,8 +113,9 @@ import java.util.Comparator;
  */
 public interface Gateway extends Verticle {
 	static Gateway create() {
-		return new GatewayImpl();
+		return new GatewayImpl(Port.port());
 	}
+	static Gateway create(int port) {return new GatewayImpl(port);}
 
 	WebResult<GetAccountsResponse> getAccount(RoutingContext context, String userId, String targetUserId) throws SuspendExecution, InterruptedException;
 
