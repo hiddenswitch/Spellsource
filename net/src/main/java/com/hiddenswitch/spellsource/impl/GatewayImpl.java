@@ -17,6 +17,8 @@ import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.sync.SyncVerticle;
@@ -44,12 +46,19 @@ import static java.util.stream.Collectors.toList;
 public class GatewayImpl extends SyncVerticle implements Gateway {
 	private static Logger logger = LoggerFactory.getLogger(Gateway.class);
 	private static final DateFormat dateTimeFormatter = Utils.createRFC1123DateTimeFormatter();
+	private final int port;
+	private HttpServer server;
+
+	public GatewayImpl(int port) {
+		this.port = port;
+	}
 
 
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
-		Router router = Spellsource.spellsource().router(vertx);
+		server = vertx.createHttpServer(new HttpServerOptions().setHost("0.0.0.0").setPort(port));
+		Router router = Router.router(vertx);
 
 		logger.info("start: Configuring router...");
 
@@ -289,17 +298,8 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		router.route("/invites")
 				.method(HttpMethod.POST);
 
-		Void listen = awaitResult(done -> {
-			try {
-				Spellsource.spellsource().httpServer(vertx).listen(then -> {
-					done.handle(Future.succeededFuture());
-				});
-			} catch (IllegalStateException alreadyListening) {
-				done.handle(Future.succeededFuture());
-			} catch (Exception e) {
-				done.handle(Future.failedFuture(e));
-			}
-		});
+		server.requestHandler(router::accept);
+		HttpServer listening = awaitResult(server::listen);
 
 		logger.info("start: Router configured.");
 	}
@@ -708,6 +708,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	@Suspendable
 	public void stop() throws Exception {
+		if (server != null) {
+			server.close();
+		}
 	}
 
 }
