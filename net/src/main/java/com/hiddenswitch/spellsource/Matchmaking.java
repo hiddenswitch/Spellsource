@@ -52,7 +52,7 @@ public interface Matchmaking extends Verticle {
 	 * @throws InterruptedException
 	 */
 	static GameId bot(UserId userId, DeckId deckId, DeckId botDeckId) throws SuspendExecution, InterruptedException {
-		LOGGER.debug("matchmakeAndJoin: Matchmaker is creating an AI game for " + userId);
+		LOGGER.debug("bot: Matchmaker is creating an AI game for " + userId);
 		Lock botLock = null;
 		GameId gameId = GameId.create();
 
@@ -64,7 +64,7 @@ public interface Matchmaking extends Verticle {
 			// Retrieve a bot and use it to play against the opponent
 			UserRecord bot = Accounts.get(Bots.pollBotId());
 			if (botDeckId != null) {
-				LOGGER.info("matchmakeAndJoin: UserId {} requested bot to play deckId {}", userId, botDeckId);
+				LOGGER.info("bot: UserId {} requested bot to play deckId {}", userId, botDeckId);
 			}
 
 			if (botDeckId == null) {
@@ -75,7 +75,7 @@ public interface Matchmaking extends Verticle {
 					Matchmaking.createMatch(
 							MatchCreateRequest.botMatch(gameId, userId, new UserId(bot.getId()), deckId, botDeckId));
 
-			LOGGER.debug("matchmakeAndJoin: User " + userId + " is unlocked by the AI bot creation path.");
+			LOGGER.debug("bot: User " + userId + " is unlocked by the AI bot creation path.");
 			botLock.release();
 			return gameId;
 		} finally {
