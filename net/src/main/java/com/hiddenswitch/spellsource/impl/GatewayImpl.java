@@ -538,6 +538,15 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// lookup own user account
 		UserRecord myAccount = (UserRecord) context.user();
 
+		if (req.getFriendId() != null) {
+			return WebResult.failed(409, new IllegalArgumentException("Not supported."));
+		}
+
+		if (req.getUsernameWithToken() == null
+				|| req.getUsernameWithToken().split("#").length != 2) {
+			return WebResult.failed(409, new IllegalArgumentException("No username and security token specified; or, an invalid one was specified."));
+		}
+
 		try {
 			FriendPutResponse response = Friends.putFriend(myAccount, req);
 			return WebResult.succeeded(response);
@@ -697,7 +706,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getEmails().get(0).getAddress())
 				.inMatch(Matchmaking.getCurrentMatch(CurrentMatchRequest.request(userId)).getGameId() != null)
-				.name(displayName);
+				.name(displayName + "#" + record.getPrivacyToken());
 	}
 
 

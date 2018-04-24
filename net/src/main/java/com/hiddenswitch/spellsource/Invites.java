@@ -2,8 +2,10 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.InviteId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
+import com.hiddenswitch.spellsource.models.MatchmakingRequest;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -12,6 +14,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.mongo.UpdateOptions;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -27,7 +30,7 @@ public interface Invites {
 	JsonArray PENDING_STATUSES = new JsonArray().add(Invite.StatusEnum.UNDELIVERED.getValue()).add(Invite.StatusEnum.PENDING.getValue());
 
 
-	static void realtime() throws SuspendExecution {
+	static void subscribe() throws SuspendExecution {
 		Realtime.connected(Sync.suspendableHandler(connection -> {
 			// Notify recipients of all pending invites.
 			List<Invite> invites = mongo().find(INVITES, json("toUserId", connection.userId(), "status", json("$in", PENDING_STATUSES)), Invite.class);
@@ -69,9 +72,8 @@ public interface Invites {
 		}
 
 		InviteId inviteId = InviteId.create();
-		// Create a new queue just for this invite.
-		// Right now, anyone can wait in any queue, but this is probably the most convenient.
-		String customQueueId = request.getQueueId() + "-" + inviteId;
+
+		// Configure expiration
 		Calendar expiryTime = Calendar.getInstance();
 		expiryTime.setTime(new Date());
 		expiryTime.add(Calendar.MINUTE, 15);
@@ -93,14 +95,35 @@ public interface Invites {
 				.toUserId(toUser.getId())
 				.message(request.getMessage())
 				.expiresAt(expiryTime.getTimeInMillis())
-				.status(Invite.StatusEnum.UNDELIVERED)
-				.queueId(customQueueId);
+				.status(Invite.StatusEnum.UNDELIVERED);
 
+		if (request.isFriend() != null) {
+			// This is a friend request
+			invite.setFriendId(user.getId());
+		} else if (request.getQueueId() != null) {
+			// This is a matchmaking queue request
+			// Create a new queue just for this invite.
+			// Right now, anyone can wait in any queue, but this is probably the most convenient.
+			String customQueueId = request.getQueueId() + "-" + inviteId;
+			invite.queueId(customQueueId);
+		}
+
+		mongo().insert(INVITES, mapFrom(invite));
+
+		updateInvite(invite);
+
+		return new InviteResponse()
+				.invite(invite);
+	}
+
+	static void updateInvite(@NotNull Invite invite) throws SuspendExecution {
 		// Notify both users of the new invite, but only wait to see if the recipient is around to actually receive it right
 		// now. We'll update the record immediately and only insert it into the db with the proper status
-		WriteStream<Buffer> toUserConnection = Connection.get(toUser.getId());
+		WriteStream<Buffer> toUserConnection = Connection.get(invite.getToUserId());
 		if (toUserConnection != null) {
-			invite.status(Invite.StatusEnum.PENDING);
+			if (invite.getStatus() == Invite.StatusEnum.UNDELIVERED) {
+				invite.status(Invite.StatusEnum.PENDING);
+			}
 			toUserConnection.write(Json.encodeToBuffer(
 					new Envelope().added(new EnvelopeAdded().invite(invite))
 			));
@@ -108,7 +131,7 @@ public interface Invites {
 
 		// The sender can receive this invite at any time through the channel since they will receive it in their post
 		// response also.
-		Connection.get(user.getId(), res -> {
+		Connection.get(invite.getFromUserId(), res -> {
 			WriteStream<Buffer> conn = res.result();
 			if (conn == null) {
 				return;
@@ -118,10 +141,101 @@ public interface Invites {
 					new Envelope().added(new EnvelopeAdded().invite(invite))
 			));
 		});
+	}
 
-		mongo().insert(INVITES, mapFrom(invite));
+	/**
+	 * Accepts an invite. If it's a matchmaking invitation, the user will automatically be put into a matchmaking queue
+	 * and will wait.
+	 *
+	 * @param inviteId The invite to accept
+	 * @param request  The request
+	 * @param user     The user executing the request
+	 * @return An updated invite and potentially information about the new friend or game.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
+	static @NotNull
+	AcceptInviteResponse accept(@NotNull InviteId inviteId, @NotNull AcceptInviteRequest request, @NotNull UserRecord user) throws SuspendExecution, InterruptedException {
+		Invite invite = mongo().findOne(INVITES, json("_id", inviteId.toString()), Invite.class);
+		if (invite == null) {
+			throw new NullPointerException(String.format("Invite not found: %s", inviteId));
+		}
+		if (!invite.getToUserId().equals(user.getId())) {
+			throw new SecurityException("You did not have access to change this invite.");
+		}
+		switch (invite.getStatus()) {
+			case PENDING:
+			case UNDELIVERED:
+				invite.setStatus(Invite.StatusEnum.ACCEPTED);
+				break;
+			case ACCEPTED:
+				throw new IllegalStateException("The invite was already accepted.");
+			case TIMEOUT:
+				throw new IllegalStateException("The invite timed out.");
+			case REJECTED:
+				throw new IllegalStateException("The invite was rejected.");
+			case CANCELLED:
+				throw new IllegalStateException("The invite was canceled.");
+		}
 
-		return new InviteResponse()
-				.invite(invite);
+		mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", Invite.StatusEnum.ACCEPTED.getValue())));
+		updateInvite(invite);
+		AcceptInviteResponse res = new AcceptInviteResponse();
+		if (invite.getFriendId() != null) {
+			// Make them friends
+			res.friend(Friends.putFriend(user, new FriendPutRequest().friendId(invite.getFriendId())));
+		}
+		if (invite.getQueueId() != null) {
+			// Enqueue the player automatically
+			try {
+				GameId gameId = Matchmaking.matchmake(new MatchmakingRequest(request.getMatch(), user.getId()));
+				// These are the semantics of the matchmake function.
+				if (gameId == null) {
+					throw new InterruptedException();
+				}
+				res.match(new MatchmakingQueuePutResponse().unityConnection(new MatchmakingQueuePutResponseUnityConnection()));
+			} catch (InterruptedException ex) {
+				mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", Invite.StatusEnum.REJECTED.getValue())));
+				updateInvite(invite);
+				throw new IllegalStateException("Matchmaking was canceled, so the invite was rejected by the recipient.");
+			}
+		}
+		return res;
+	}
+
+	static @NotNull
+	InviteResponse deleteInvite(@NotNull InviteId inviteId, @NotNull UserRecord user) throws SuspendExecution {
+		Invite invite = mongo().findOne(INVITES, json("_id", inviteId.toString()), Invite.class);
+
+		if (invite == null) {
+			throw new NullPointerException(String.format("Invite not found: %s", inviteId));
+		}
+
+		boolean isSender = invite.getFromUserId().equals(user.getId());
+		boolean isRecipient = invite.getToUserId().equals(user.getId());
+		if (!isSender && !isRecipient) {
+			throw new SecurityException("You did not have access to change this invite.");
+		}
+
+		Invite.StatusEnum status = isSender ? Invite.StatusEnum.CANCELLED : Invite.StatusEnum.REJECTED;
+		switch (invite.getStatus()) {
+			case PENDING:
+			case UNDELIVERED:
+				invite.setStatus(status);
+				break;
+			case ACCEPTED:
+				throw new IllegalStateException("The invite was already accepted.");
+			case TIMEOUT:
+				throw new IllegalStateException("The invite timed out.");
+			case REJECTED:
+				throw new IllegalStateException("The invite was rejected.");
+			case CANCELLED:
+				throw new IllegalStateException("The invite was already canceled.");
+		}
+
+		mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", status)));
+
+		updateInvite(invite);
+		return new InviteResponse().invite(invite);
 	}
 }

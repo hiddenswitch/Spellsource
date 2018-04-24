@@ -22,14 +22,36 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * FriendPutRequest
+ * Adds two users to each other&#39;s friends list. 
  */
+@ApiModel(description = "Adds two users to each other's friends list. ")
 
 public class FriendPutRequest implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("usernameWithToken")
+  private String usernameWithToken = null;
+
   @JsonProperty("friendId")
   private String friendId = null;
+
+  public FriendPutRequest usernameWithToken(String usernameWithToken) {
+    this.usernameWithToken = usernameWithToken;
+    return this;
+  }
+
+   /**
+   * The username with the privacy token, like \&quot;username#1234\&quot;. 
+   * @return usernameWithToken
+  **/
+  @ApiModelProperty(value = "The username with the privacy token, like \"username#1234\". ")
+  public String getUsernameWithToken() {
+    return usernameWithToken;
+  }
+
+  public void setUsernameWithToken(String usernameWithToken) {
+    this.usernameWithToken = usernameWithToken;
+  }
 
   public FriendPutRequest friendId(String friendId) {
     this.friendId = friendId;
@@ -37,10 +59,10 @@ public class FriendPutRequest implements Serializable {
   }
 
    /**
-   * Get friendId
+   * Not supported. Throws an error if this is specified on the client. 
    * @return friendId
   **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(required = true, value = "Not supported. Throws an error if this is specified on the client. ")
   public String getFriendId() {
     return friendId;
   }
@@ -59,12 +81,13 @@ public class FriendPutRequest implements Serializable {
       return false;
     }
     FriendPutRequest friendPutRequest = (FriendPutRequest) o;
-    return Objects.equals(this.friendId, friendPutRequest.friendId);
+    return Objects.equals(this.usernameWithToken, friendPutRequest.usernameWithToken) &&
+        Objects.equals(this.friendId, friendPutRequest.friendId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(friendId);
+    return Objects.hash(usernameWithToken, friendId);
   }
 
 
@@ -73,6 +96,7 @@ public class FriendPutRequest implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class FriendPutRequest {\n");
     
+    sb.append("    usernameWithToken: ").append(toIndentedString(usernameWithToken)).append("\n");
     sb.append("    friendId: ").append(toIndentedString(friendId)).append("\n");
     sb.append("}");
     return sb.toString();

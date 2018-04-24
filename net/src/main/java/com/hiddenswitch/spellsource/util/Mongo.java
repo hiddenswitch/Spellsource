@@ -174,7 +174,7 @@ public class Mongo {
 	}
 
 	@Suspendable
-	public <T extends MongoRecord> T findOne(String collection, JsonObject query, JsonObject fields, Class<? extends T> returnClass) {
+	public <T> T findOne(String collection, JsonObject query, JsonObject fields, Class<? extends T> returnClass) {
 		final JsonObject obj = awaitResult(h -> client.findOne(collection, query, fields, then -> h.handle(then.otherwiseEmpty())));
 		if (obj == null) {
 			return null;
@@ -183,7 +183,7 @@ public class Mongo {
 	}
 
 	@Suspendable
-	public <T extends MongoRecord> T findOne(String collection, JsonObject query, Class<? extends T> returnClass) {
+	public <T> T findOne(String collection, JsonObject query, Class<? extends T> returnClass) {
 		final JsonObject obj = awaitResult(h -> client.findOne(collection, query, null, then -> h.handle(then.otherwiseEmpty())));
 		if (obj == null) {
 			return null;

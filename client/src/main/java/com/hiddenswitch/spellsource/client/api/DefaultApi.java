@@ -618,7 +618,7 @@ public class DefaultApi {
       }
   /**
    * 
-   * unfriend a user 
+   * Removes the friend relationship between two users. 
    * @param friendId id of friend to unfriend. (required)
    * @return UnfriendResponse
    * @throws ApiException if fails to make API call
@@ -661,8 +661,8 @@ public class DefaultApi {
       }
   /**
    * 
-   * connect with a friend 
-   * @param request Friend put request  (required)
+   * Adds a specified user to your friend list. 
+   * @param request  (required)
    * @return FriendPutResponse
    * @throws ApiException if fails to make API call
    */
@@ -1183,7 +1183,7 @@ public class DefaultApi {
       }
   /**
    * 
-   * Send an invite 
+   * Send an invite. 
    * @param request  (required)
    * @return InviteResponse
    * @throws ApiException if fails to make API call

@@ -11,16 +11,35 @@ import com.hiddenswitch.spellsource.util.Mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
 public interface Friends {
+	/**
+	 * Friends the specified users on behalf of the specified user.
+	 *
+	 * @param thisAccount The user who is initiating the friending.
+	 * @param req         The request containing the username and privacy token; or the exact friend ID of the user to
+	 *                    befriend.
+	 * @return
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	static FriendPutResponse putFriend(UserRecord thisAccount, FriendPutRequest req) throws SuspendExecution, InterruptedException {
 		String friendId = req.getFriendId();
 		String userId = thisAccount.getId();
 
-		//lookup friend user record
-		UserRecord friendAccount = Accounts.findOne(req.getFriendId());
+		String[] tokens = req.getUsernameWithToken().split("#");
+
+		// lookup friend user record
+		UserRecord friendAccount;
+		if (req.getUsernameWithToken() != null) {
+			friendAccount = Mongo.mongo().findOne(Accounts.USERS, json("username", tokens[0], "privacyToken", tokens[1]), UserRecord.class);
+		} else if (req.getFriendId() != null) {
+			friendAccount = Accounts.findOne(req.getFriendId());
+		} else {
+			friendAccount = null;
+		}
 
 		//if no friend, return 404
 		if (friendAccount == null) {
-			throw new NullPointerException("Friend account not found");
+			throw new NullPointerException("Friend account not found, or an invalid username and token were provided.");
 		}
 
 		//check if already friends
@@ -73,9 +92,9 @@ public interface Friends {
 
 		//delete from both sides
 		Accounts.update(Mongo.mongo().client(), userId, json("$pull",
-					json("friends", json("friendId", friendId))));
+				json("friends", json("friendId", friendId))));
 		Accounts.update(Mongo.mongo().client(), friendId, json("$pull",
-					json("friends", json("friendId", userId))));
+				json("friends", json("friendId", userId))));
 
 		return new UnfriendResponse().deletedFriend(friendRecord.toFriendDto());
 	}
