@@ -6,7 +6,18 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "[x]<b>Divine Shield</b>\nWhenever you restore Health,\ngain <b>Divine Shield</b>.",
+  "description": "<b>Divine Shield</b>\nWhenever you restore Health,\ngain <b>Divine Shield</b>.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "TRIGGER_HOST",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
   "attributes": {
     "DIVINE_SHIELD": true
   },

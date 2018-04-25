@@ -6,7 +6,30 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "[x]<b>Choose One -</b> Transform\ninto a 4/2 with <b>Rush</b>;\nor a 2/4 with <b>Taunt</b>.",
+  "description": "<b>Choose One -</b> Transform\ninto a 4/2 with <b>Rush</b>;\nor a 2/4 with <b>Taunt</b>.",
+  "chooseOneBattlecries": [
+    {
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_druid_of_the_scythe1"
+      }
+    },
+    {
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_druid_of_the_scythe2"
+      }
+    }
+  ],
+  "chooseBothBattlecry": {
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_druid_of_the_scythe3"
+    }
+  },
   "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",

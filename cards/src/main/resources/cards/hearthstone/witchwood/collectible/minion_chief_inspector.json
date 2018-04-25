@@ -10,7 +10,8 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "DestroySecretsSpell",
+      "targetPlayer": "OPPONENT"
     }
   },
   "attributes": {

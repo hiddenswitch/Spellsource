@@ -7,7 +7,9 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "description": "<b>Echo</b>",
-  "attributes": {},
+  "attributes": {
+    "ECHO": true
+  },
   "collectible": true,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

@@ -6,11 +6,21 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "[x]<b>Battlecry:</b> Add a random\n<b>Legendary</b> minion from\nthe past to your hand.",
+  "description": "<b>Battlecry:</b> Add a random\n<b>Legendary</b> minion from\nthe past to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "cardSource": {
+        "class": "FormatCatalogueSource",
+        "format": "WILD"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "LEGENDARY",
+        "cardType": "MINION"
+      }
     }
   },
   "attributes": {

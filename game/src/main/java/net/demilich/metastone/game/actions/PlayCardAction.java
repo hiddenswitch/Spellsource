@@ -22,7 +22,6 @@ public abstract class PlayCardAction extends GameAction {
 
 	public static Logger logger = LoggerFactory.getLogger(PlayCardAction.class);
 	protected EntityReference entityReference;
-	protected Integer chooseOneOptionIndex = null;
 
 	protected PlayCardAction() {
 	}
@@ -61,16 +60,8 @@ public abstract class PlayCardAction extends GameAction {
 		return entityReference;
 	}
 
-	public Integer getChooseOneOptionIndex() {
-		return chooseOneOptionIndex;
-	}
-
 	@Suspendable
 	protected abstract void play(GameContext context, int playerId);
-
-	public void setChooseOneOptionIndex(Integer chooseOneOptionIndex) {
-		this.chooseOneOptionIndex = chooseOneOptionIndex;
-	}
 
 	@Override
 	public String toString() {

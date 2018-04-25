@@ -8,7 +8,9 @@
   "rarity": "COMMON",
   "description": "<b>Deathrattle:</b> Give your minions +1 Attack.",
   "deathrattle": {
-    "class": "NullSpell"
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1
   },
   "attributes": {
     "DEATHRATTLES": true

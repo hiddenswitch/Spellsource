@@ -7,30 +7,11 @@
   "description": "Echo. Deal 2 damage to a minion.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "DamageSpell",
-        "value": 2
-      },
-      {
-        "class": "ReceiveCardSpell",
-        "spell": {
-          "class": "AddEnchantmentSpell",
-          "target": "OUTPUT",
-          "trigger": {
-            "eventTrigger": {
-              "class": "TurnEndTrigger"
-            },
-            "spell": {
-              "class": "RemoveCardSpell",
-              "target": "SELF"
-            }
-          }
-        },
-        "card": "spell_cheap_shot"
-      }
-    ]
+    "class": "DamageSpell",
+    "value": 2
+  },
+  "attributes": {
+    "ECHO": true
   },
   "collectible": true,
   "set": "WITCHWOOD",

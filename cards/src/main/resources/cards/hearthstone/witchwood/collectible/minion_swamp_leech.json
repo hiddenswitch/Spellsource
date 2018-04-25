@@ -8,7 +8,9 @@
   "rarity": "COMMON",
   "race": "BEAST",
   "description": "<b>Lifesteal</b>",
-  "attributes": {},
+  "attributes": {
+    "LIFESTEAL": true
+  },
   "collectible": true,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

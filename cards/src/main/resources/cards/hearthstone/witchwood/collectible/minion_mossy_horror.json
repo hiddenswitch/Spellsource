@@ -6,11 +6,18 @@
   "baseAttack": 2,
   "baseHp": 7,
   "rarity": "EPIC",
-  "description": "<b>Battlecry:</b> Destroy all other\u00a0minions with 2\u00a0or\u00a0less\u00a0Attack.",
+  "description": "<b>Battlecry:</b> Destroy all other minions with 2 or less Attack.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "DestroySpell",
+      "target": "ALL_OTHER_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 2,
+        "operation": "LESS_OR_EQUAL",
+        "attribute": "ATTACK"
+      }
     }
   },
   "attributes": {

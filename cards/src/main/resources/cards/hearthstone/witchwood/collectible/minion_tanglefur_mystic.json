@@ -10,7 +10,16 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "BOTH",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": 2,
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
     }
   },
   "attributes": {

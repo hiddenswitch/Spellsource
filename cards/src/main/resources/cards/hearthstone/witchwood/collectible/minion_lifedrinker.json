@@ -7,11 +7,23 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "[x]<b>Battlecry:</b> Deal 3 damage to\nthe enemy hero. Restore\n3 Health to your hero.",
+  "description": "<b>Battlecry:</b> Deal 3 damage to\nthe enemy hero. Restore\n3 Health to your hero.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_HERO",
+          "value": 3
+        },
+        {
+          "class": "HealSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 3
+        }
+      ]
     }
   },
   "attributes": {

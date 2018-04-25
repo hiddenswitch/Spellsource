@@ -10,8 +10,13 @@
   "description": "<b>Combo:</b> Give your weapon +1 Attack.",
   "battlecry": {
     "targetSelection": "NONE",
+    "condition": {
+      "class": "ComboCondition"
+    },
     "spell": {
-      "class": "NullSpell"
+      "class": "BuffSpell",
+      "target": "FRIENDLY_WEAPON",
+      "attackBonus": 1
     }
   },
   "attributes": {

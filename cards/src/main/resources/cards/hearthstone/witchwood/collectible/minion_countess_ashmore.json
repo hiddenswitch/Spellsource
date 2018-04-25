@@ -6,11 +6,37 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "[x]<b>Battlecry:</b> Draw a <b>Rush</b>,\n<b>Lifesteal</b>, and <b>Deathrattle</b>\ncard from your deck.",
+  "description": "<b>Battlecry:</b> Draw a <b>Rush</b>,\n<b>Lifesteal</b>, and <b>Deathrattle</b>\ncard from your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "attribute": "RUSH"
+          }
+        },
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "attribute": "LIFESTEAL"
+          }
+        },
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "attribute": "DEATHRATTLES"
+          }
+        }
+      ]
     }
   },
   "attributes": {

@@ -7,11 +7,21 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "<b>Battlecry:</b> If you played an\u00a0Elemental last turn, draw a card.",
+  "description": "<b>Battlecry:</b> If you played an Elemental last turn, draw a card.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "PlayedLastTurnCondition",
+        "filter": {
+          "class": "CardFilter",
+          "race": "ELEMENTAL"
+        }
+      },
+      "spell": {
+        "class": "DrawCardSpell"
+      }
     }
   },
   "attributes": {

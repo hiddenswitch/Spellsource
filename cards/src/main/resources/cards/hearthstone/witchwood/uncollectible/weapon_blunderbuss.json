@@ -4,7 +4,7 @@
   "type": "WEAPON",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Also damages the minions next to whomever your hero\u00a0attacks.",
+  "description": "Also damages the minions next to whomever your hero attacks.",
   "attributes": {},
   "collectible": false,
   "set": "WITCHWOOD",

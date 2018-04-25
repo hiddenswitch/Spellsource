@@ -6,8 +6,20 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "[x]<b>Spell Damage +1</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
-  "attributes": {},
+  "description": "<b>Spell Damage +1</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SwapAttackAndHpSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "SPELL_DAMAGE": 1
+  },
   "collectible": true,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

@@ -24,6 +24,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about game actions.
  */
 public abstract class GameAction implements Cloneable, Serializable, Notification {
+	protected Integer chooseOneOptionIndex = null;
 	private int id = -1;
 	private TargetSelection targetRequirement = TargetSelection.NONE;
 	private ActionType actionType = ActionType.SYSTEM;
@@ -153,6 +154,14 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	@Override
 	public boolean isClientInterested() {
 		return true;
+	}
+
+	public Integer getChooseOneOptionIndex() {
+		return chooseOneOptionIndex;
+	}
+
+	public void setChooseOneOptionIndex(Integer chooseOneOptionIndex) {
+		this.chooseOneOptionIndex = chooseOneOptionIndex;
 	}
 
 	@Override

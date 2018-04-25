@@ -6,10 +6,20 @@
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "RARE",
-  "description": "[x]<b>Divine Shield</b>, <b>Rush</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "description": "<b>Divine Shield</b>, <b>Rush</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
   "attributes": {
     "DIVINE_SHIELD": true,
     "RUSH": true
+  },
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SwapAttackAndHpSpell",
+      "target": "SELF"
+    }
   },
   "collectible": true,
   "set": "WITCHWOOD",

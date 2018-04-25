@@ -11,7 +11,21 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "heroClass": "OPPONENT"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          }
+        ]
+      }
     }
   },
   "attributes": {

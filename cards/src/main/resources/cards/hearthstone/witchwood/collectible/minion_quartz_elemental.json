@@ -8,7 +8,19 @@
   "rarity": "COMMON",
   "race": "ELEMENTAL",
   "description": "Can't attack while damaged.",
-  "attributes": {},
+  "trigger": {
+    "eventTrigger": {
+      "class": "EnrageChangedTrigger"
+    },
+    "spell": {
+      "class": "EnrageSpell",
+      "target": "SELF",
+      "attribute": "AURA_CANNOT_ATTACK"
+    }
+  },
+  "attributes": {
+    "ENRAGABLE": true
+  },
   "collectible": true,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

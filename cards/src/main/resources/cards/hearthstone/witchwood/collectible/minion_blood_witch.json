@@ -6,8 +6,19 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "At the start of your turn, deal 1 damage to your\u00a0hero.",
+  "description": "At the start of your turn, deal 1 damage to your hero.",
   "attributes": {},
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 1
+    }
+  },
   "collectible": true,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

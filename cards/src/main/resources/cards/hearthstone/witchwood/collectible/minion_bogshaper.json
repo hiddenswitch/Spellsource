@@ -7,7 +7,20 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Whenever you cast a spell, draw a minion from your\u00a0deck.",
+  "description": "Whenever you cast a spell, draw a minion from your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    }
+  },
   "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",

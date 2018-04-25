@@ -93,8 +93,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public static final int MAX_QUESTS = 1;
 	/**
-	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link Deck} with. Some effects,
-	 * like Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
+	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link Deck} with. Some effects, like
+	 * Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
 	 */
 	public static final int DECK_SIZE = 30;
 	/**
@@ -210,16 +210,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	private int getId;
 
 	/**
-	 * Creates a new game logic instance whose next ID generated for an {@link Entity#setId(int)} argument will be
-	 * zero.
+	 * Creates a new game logic instance whose next ID generated for an {@link Entity#setId(int)} argument will be zero.
 	 */
 	public GameLogic() {
 		idFactory = new IdFactoryImpl();
 	}
 
 	/**
-	 * Creates a game logic instance with an ID factory. Typically you can create an ID factory and set its current ID
-	 * to whichever number you want to be the next entity ID created by this game logic.
+	 * Creates a game logic instance with an ID factory. Typically you can create an ID factory and set its current ID to
+	 * whichever number you want to be the next entity ID created by this game logic.
 	 *
 	 * @param idFactory An existing ID factory.
 	 */
@@ -250,8 +249,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Adds a {@link Trigger} to a specified {@link Entity}. These are typically {@link Enchantment} instances that
-	 * react to game events.
+	 * Adds a {@link Trigger} to a specified {@link Entity}. These are typically {@link Enchantment} instances that react
+	 * to game events.
 	 *
 	 * @param player            Usually the current turn player.
 	 * @param gameEventListener A game event listener, like a {@link Aura}, {@link Secret} or {@link CardCostModifier}.
@@ -289,8 +288,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Handles combo and mana cost modifier removal for the card played in the {@link
-	 * PlayCardAction#execute(GameContext, int)} method. Can probably be inlined.
+	 * Handles combo and mana cost modifier removal for the card played in the {@link PlayCardAction#execute(GameContext,
+	 * int)} method. Can probably be inlined.
 	 *
 	 * @param playerId        The player index
 	 * @param EntityReference A reference to the card.
@@ -324,8 +323,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Gives an {@link Entity} a boolean {@link Attribute}.
 	 * <p>
-	 * This addresses bugs with {@link Attribute#WINDFURY} and should be the place for special rules around attributes
-	 * in the future.
+	 * This addresses bugs with {@link Attribute#WINDFURY} and should be the place for special rules around attributes in
+	 * the future.
 	 *
 	 * @param entity An {@link Entity}
 	 * @param attr   An {@link Attribute}
@@ -338,8 +337,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Gives an {@link Entity} a boolean {@link Attribute}.
 	 * <p>
-	 * This addresses bugs with {@link Attribute#WINDFURY} and should be the place for special rules around attributes
-	 * in the future.
+	 * This addresses bugs with {@link Attribute#WINDFURY} and should be the place for special rules around attributes in
+	 * the future.
 	 *
 	 * @param entity An {@link Entity}
 	 * @param attr   An {@link Attribute}
@@ -416,8 +415,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	/**
 	 * Determines whether the given player can play the given card. Useful for drawing green borders around cards to
-	 * signal to an end user that they can play a particular card. Takes into account whether or not a spell that
-	 * requires targets has possible targets in the game.
+	 * signal to an end user that they can play a particular card. Takes into account whether or not a spell that requires
+	 * targets has possible targets in the game.
 	 *
 	 * @param playerId        The player whose point of view should be considered for this method.
 	 * @param entityReference A reference to the card.
@@ -485,11 +484,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Determines whether a player can play a {@link Secret}.
 	 * <p>
-	 * Players cannot have more than one copy of the same Secret active at any one time. Players are unable to play
-	 * Secret cards which match one of their active Secrets.
+	 * Players cannot have more than one copy of the same Secret active at any one time. Players are unable to play Secret
+	 * cards which match one of their active Secrets.
 	 * <p>
-	 * When played directly from the hand, players can have up to 5 different Secrets active at a time. Once this limit
-	 * is reached, the player will be unable to play further Secret cards.
+	 * When played directly from the hand, players can have up to 5 different Secrets active at a time. Once this limit is
+	 * reached, the player will be unable to play further Secret cards.
 	 *
 	 * @param player The player whose {@link Zones#SECRET} zone should be inspected.
 	 * @param card   The secret card being evaluated.
@@ -529,8 +528,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Choose One is an ability which allows a player to choose one of multiple possible effects when the card is played
 	 * from the hand. Cards with this ability are limited to the druid class.
 	 * <p>
-	 * Choose One effects are similar to Discover effects, and certain other cards such as Tracking, which also allow
-	 * you to choose between multiple options.
+	 * Choose One effects are similar to Discover effects, and certain other cards such as Tracking, which also allow you
+	 * to choose between multiple options.
 	 *
 	 * @param playerId        The player casting the choose one spell.
 	 * @param spellDesc       The {@link SpellDesc} of the chosen card, not the parent card that contains the choices.
@@ -563,6 +562,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 
 			chosenCard.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
+			sourceCard.getAttributes().put(Attribute.CHOICE, Arrays.asList(sourceCard.getChooseOneCardIds()).indexOf(cardId));
 		}
 
 		if (!spellDesc.hasPredefinedTarget() && targets != null && targets.size() == 1) {
@@ -610,15 +610,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Casts a spell.
 	 * <p>
 	 * This method uses the {@link SpellDesc} (a {@link Map} of {@link SpellArg}, {@link Object}) to figure out what the
-	 * spell should do. The {@link SpellFactory#getSpell(SpellDesc)} method creates an instance of the {@link Spell}
-	 * class returned by {@code spellDesc.getSpellClass()}, then calls its {@link Spell#onCast(GameContext, Player,
-	 * SpellDesc, Entity, Entity)} method to actually execute the code of the spell.
+	 * spell should do. The {@link SpellFactory#getSpell(SpellDesc)} method creates an instance of the {@link Spell} class
+	 * returned by {@code spellDesc.getSpellClass()}, then calls its {@link Spell#onCast(GameContext, Player, SpellDesc,
+	 * Entity, Entity)} method to actually execute the code of the spell.
 	 * <p>
-	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose
-	 * {@link SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of
-	 * {@link EntityFilter} with {@link FilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would
-	 * be {@code 2} to deal 2 damage, and whose (4) {@link SpellArg#TARGET} would be {@link
-	 * EntityReference#ALL_MINIONS}.
+	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose {@link
+	 * SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of {@link
+	 * EntityFilter} with {@link FilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would be {@code
+	 * 2} to deal 2 damage, and whose (4) {@link SpellArg#TARGET} would be {@link EntityReference#ALL_MINIONS}.
 	 * <p>
 	 * Effects can modify spells or create new ones. {@link SpellDesc} allows the code to modify the "code" of a spell.
 	 * <p>
@@ -628,13 +627,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param playerId        The players from whose point of view this spell is cast (typically the owning player).
 	 * @param spellDesc       A description of the spell.
-	 * @param sourceReference The origin of the spell. This is typically the {@link Minion} if the spell is a battlecry
-	 *                        or deathrattle; or, the {@link Card} if this spell is coming from a card.
+	 * @param sourceReference The origin of the spell. This is typically the {@link Minion} if the spell is a battlecry or
+	 *                        deathrattle; or, the {@link Card} if this spell is coming from a card.
 	 * @param targetReference A reference to the target the user selected, if the spell was supposed to have a target.
-	 * @param targetSelection If not {@code null}, the spell must have at least one {@link Entity} satisfying this
-	 *                        target selection requirement in order for it to be cast.
-	 * @param childSpell      When {@code true}, this spell is part an effect, like one of the {@link SpellArg#SPELLS}
-	 *                        of a {@link MetaSpell}, and so it shouldn't trigger the firing of events like {@link
+	 * @param targetSelection If not {@code null}, the spell must have at least one {@link Entity} satisfying this target
+	 *                        selection requirement in order for it to be cast.
+	 * @param childSpell      When {@code true}, this spell is part an effect, like one of the {@link SpellArg#SPELLS} of
+	 *                        a {@link MetaSpell}, and so it shouldn't trigger the firing of events like {@link
 	 *                        SpellCastedTrigger}. When {@code false}, this spell is what a player would interpret as a
 	 *                        spell coming from a card (a "spell" in the sense of what is written on cards). Battlecries
 	 *                        and deathrattles are, unusually, {@code false} (not) child spells.
@@ -643,15 +642,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
 	 * @see Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for the function that typically has the
 	 * spell-specific code (e.g., {@link DamageSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} actually
-	 * implements the logic of a damage spell and interprets the {@link SpellArg#VALUE} attribute of the {@link
-	 * SpellDesc} as damage.
+	 * implements the logic of a damage spell and interprets the {@link SpellArg#VALUE} attribute of the {@link SpellDesc}
+	 * as damage.
 	 * @see MetaSpell for the mechanism that multiple spells as children are chained together to create an effect.
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) for the code that turns a target selection
 	 * into actions the player can take.
-	 * @see PlaySpellCardAction#play(GameContext, int) for the call to this function that a player actually does when
-	 * they play a {@link Card} (as opposed to a battlecry or deathrattle).
-	 * @see BattlecryAction#execute(GameContext, int) for the call to this function that demonstrates a battlecry
-	 * effect. Battlecries are spells in the sense that they are effects, though they're not {@link Card} objects.
+	 * @see PlaySpellCardAction#play(GameContext, int) for the call to this function that a player actually does when they
+	 * play a {@link Card} (as opposed to a battlecry or deathrattle).
+	 * @see BattlecryAction#execute(GameContext, int) for the call to this function that demonstrates a battlecry effect.
+	 * Battlecries are spells in the sense that they are effects, though they're not {@link Card} objects.
 	 */
 	@Suspendable
 	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
@@ -754,14 +753,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * <p>
 	 * A hero consists of the actual {@link Hero} actor, the hero's hero power {@link Card} specified on its {@link
 	 * net.demilich.metastone.game.cards.desc.CardDesc#heroPower} field, and possibly a {@link Weapon} equipped by an
-	 * {@link EquipWeaponSpell} specified in its battlecry. Heroes that do not resolve battlecries (i.e., heroes that
-	 * are not played from the hand) generally do not equip weapons, while heroes coming into play in any way generally
-	 * change the hero powers.
+	 * {@link EquipWeaponSpell} specified in its battlecry. Heroes that do not resolve battlecries (i.e., heroes that are
+	 * not played from the hand) generally do not equip weapons, while heroes coming into play in any way generally change
+	 * the hero powers.
 	 * <p>
 	 * Many attributes of the current hero are retained, like its {@link Attribute#NUMBER_OF_ATTACKS}. Enchantments are
-	 * removed. When the hero card specifies a new {@link Attribute#MAX_HP} and {@link Attribute#HP}, the hitpoints of
-	 * the new hero are changed; otherwise, the old hitpoints are retained. An {@link Attribute#ARMOR} amount is added
-	 * to the previous hero's armor, not replaced.
+	 * removed. When the hero card specifies a new {@link Attribute#MAX_HP} and {@link Attribute#HP}, the hitpoints of the
+	 * new hero are changed; otherwise, the old hitpoints are retained. An {@link Attribute#ARMOR} amount is added to the
+	 * previous hero's armor, not replaced.
 	 * <p>
 	 * Hero powers have their {@link net.demilich.metastone.game.cards.desc.CardDesc#passiveTrigger} processed, because
 	 * the hero power behaves like an extension of the hand, not a zone in play. Otherwise, the {@link
@@ -872,8 +871,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Removes entities for whom {@link Entity#isDestroyed()} is true, moving them to the {@link Zones#GRAVEYARD} and
 	 * triggering their deathrattles with {@link #resolveDeathrattles(Player, Actor)}.
 	 * <p>
-	 * Since deathrattles may destroy other entities (e.g., a {@link DamageSpell} deathrattle), this function calls
-	 * itself recursively until there are no more dead entities on the board.
+	 * Since deathrattles may destroy other entities (e.g., a {@link DamageSpell} deathrattle), this function calls itself
+	 * recursively until there are no more dead entities on the board.
 	 */
 	@Suspendable
 	public void endOfSequence() {
@@ -947,8 +946,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Clones the game logic. The only state in this instance is its debug history and the current ID of the ID
-	 * Factory.
+	 * Clones the game logic. The only state in this instance is its debug history and the current ID of the ID Factory.
 	 *
 	 * @return A clone of this logic.
 	 * @see IdFactoryImpl for the internal state of an {@link IdFactoryImpl}.
@@ -978,16 +976,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Deals damage to a target.
 	 * <p>
-	 * Damage is measured by a number which is deducted from the armor first, followed by hitpoints, of an {@link
-	 * Actor}. If the {@link Actor#getHp()} is reduced to zero (or below), it will be killed. Note that other types of
-	 * harm that can be inflicted to characters (such as a {@link DestroySpell}, freeze effects and the card Equality)
-	 * are not considered damage for game purposes and, although most damage is dealt through {@link #fight(Player,
-	 * Actor, Actor, PhysicalAttackAction)}, dealing damage is not considered an "fight" for game purposes.
+	 * Damage is measured by a number which is deducted from the armor first, followed by hitpoints, of an {@link Actor}.
+	 * If the {@link Actor#getHp()} is reduced to zero (or below), it will be killed. Note that other types of harm that
+	 * can be inflicted to characters (such as a {@link DestroySpell}, freeze effects and the card Equality) are not
+	 * considered damage for game purposes and, although most damage is dealt through {@link #fight(Player, Actor, Actor,
+	 * PhysicalAttackAction)}, dealing damage is not considered an "fight" for game purposes.
 	 * <p>
 	 * Damage can activate a number of triggered effects, both from receiving it (such as Acolyte of Pain's {@link
 	 * DamageReceivedTrigger}) and from dealing it (such as Lightning Automaton's {@link DamageCausedTrigger}). However,
-	 * damage negated by an {@link Actor} with {@link Attribute#DIVINE_SHIELD} or {@link Attribute#IMMUNE} effects is
-	 * not considered to have been successfully dealt, and thus will not trigger any on-damage triggered effects.
+	 * damage negated by an {@link Actor} with {@link Attribute#DIVINE_SHIELD} or {@link Attribute#IMMUNE} effects is not
+	 * considered to have been successfully dealt, and thus will not trigger any on-damage triggered effects.
 	 * <p>
 	 * A {@link Hero} with nonzero {@link Hero#getArmor()} will have any damage deducted from their armor before their
 	 * hitpoints: any damage beyond the {@link Actor}'s current Armor will be deducted from their hitpoints. Armor will
@@ -1017,18 +1015,20 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// Poisonous resolves in a queue with higher priority, and it stops Grim Patron spawning regardless of
 			// Dominant Player. However, Acidmaw can never stop Grim Patron spawning.
 			if (target.getEntityType() == EntityType.MINION
-					&& (source.hasAttribute(Attribute.POISONOUS)
+					&& ((source.hasAttribute(Attribute.POISONOUS) || source.hasAttribute(Attribute.AURA_POISONOUS))
 					|| (source instanceof Hero
 					&& ((Hero) source).getWeapon() != null
-					&& ((Hero) source).getWeapon().hasAttribute(Attribute.POISONOUS)))) {
+					&& (((Hero) source).getWeapon().hasAttribute(Attribute.POISONOUS)
+					|| ((Hero) source).getWeapon().hasAttribute(Attribute.AURA_POISONOUS))))) {
 				markAsDestroyed(target);
 			}
 
 			// Implement lifesteal
-			if (source.hasAttribute(Attribute.LIFESTEAL)
+			if ((source.hasAttribute(Attribute.LIFESTEAL) || source.hasAttribute(Attribute.AURA_LIFESTEAL))
 					|| (source instanceof Hero
 					&& ((Hero) source).getWeapon() != null
-					&& ((Hero) source).getWeapon().hasAttribute(Attribute.LIFESTEAL))) {
+					&& (((Hero) source).getWeapon().hasAttribute(Attribute.LIFESTEAL)
+					|| ((Hero) source).getWeapon().hasAttribute(Attribute.AURA_LIFESTEAL)))) {
 				Player sourceOwner = context.getPlayer(source.getOwner());
 				heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
 			}
@@ -1130,8 +1130,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Destroys the given targets, triggering their deathrattles if necessary.
 	 *
 	 * @param targets A list of {@link Actor} targets that should be destroyed.
-	 * @see #endOfSequence() for the code that actually finds dead entities as a result of effects and eventually
-	 * destroys them.
+	 * @see #endOfSequence() for the code that actually finds dead entities as a result of effects and eventually destroys
+	 * them.
 	 */
 	@Suspendable
 	public void destroy(Actor... targets) {
@@ -1208,18 +1208,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Discards a card from your hand, either through discard card effects or "overdraw" (forced destruction of cards
-	 * due to too many cards in your hand).
+	 * Discards a card from your hand, either through discard card effects or "overdraw" (forced destruction of cards due
+	 * to too many cards in your hand).
 	 * <p>
-	 * Discarded cards are removed from the game, without activating Deathrattles. Discard effects are most commonly
-	 * found on warlock cards. Discard effects are distinguished from overdraw, and Fel Reaver's remove from deck
-	 * effect, both of which remove cards directly from the deck without entering the hand; and from Tracking's
-	 * "discard" effect, which in fact removes cards directly from a special display zone without entering the hand.
-	 * While similar to discard effects, neither is considered a discard for game purposes, and will not activate
-	 * related effects.
+	 * Discarded cards are removed from the game, without activating Deathrattles. Discard effects are most commonly found
+	 * on warlock cards. Discard effects are distinguished from overdraw, and Fel Reaver's remove from deck effect, both
+	 * of which remove cards directly from the deck without entering the hand; and from Tracking's "discard" effect, which
+	 * in fact removes cards directly from a special display zone without entering the hand. While similar to discard
+	 * effects, neither is considered a discard for game purposes, and will not activate related effects.
 	 * <p>
-	 * This method handles all situations and correctly triggers a {@link DiscardEvent} only when a card is discarded
-	 * from the hand.
+	 * This method handles all situations and correctly triggers a {@link DiscardEvent} only when a card is discarded from
+	 * the hand.
 	 *
 	 * @param player The player that owns the card getting discarded.
 	 * @param card   The card to discard.
@@ -1271,8 +1270,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Checks if the player's deck is empty. If it is, increments the fatigue amount and deals fatigue damange.
 	 * <p>
-	 * Fatigue is a game mechanic that deals increasing damage to players who have already drawn all of the cards in
-	 * their deck, whenever they attempt to draw another card.
+	 * Fatigue is a game mechanic that deals increasing damage to players who have already drawn all of the cards in their
+	 * deck, whenever they attempt to draw another card.
 	 * <p>
 	 * Fatigue deals 1 damage to the hero, plus 1 damage for each time Fatigue has already dealt damage to the player.
 	 * Fatigue therefore deals damage cumulatively, steadily increasing in power each time it deals damage.
@@ -1349,7 +1348,35 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			context.fireGameEvent(new TurnEndEvent(context, playerId));
 		}
 
+		// Peacefully remove in-play entities with this attribute
+		for (Entity entity : context.getEntities()
+				.filter(Entity::isInPlay)
+				.filter(e -> e.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN))
+				.collect(toList())) {
+			removePeacefully(entity);
+		}
+
+
 		endOfSequence();
+	}
+
+	/**
+	 * Removes the specified entity peacefully. This will prevent its deathrattles from being triggered or a {@link
+	 * KillEvent} from being raised.
+	 * <p>
+	 * The entity will transition to the right zone after {@link #endOfSequence()} is called.
+	 *
+	 * @param entity The entity to remove peacefully.
+	 */
+	@Suspendable
+	public void removePeacefully(Entity entity) {
+		if (!entity.isInPlay()) {
+			return;
+		}
+
+		entity.setAttribute(Attribute.DESTROYED);
+		entity.getAttributes().remove(Attribute.DEATHRATTLES);
+		entity.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 	}
 
 	/**
@@ -1359,8 +1386,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param playerId         The player whose hero should equip the weapon.
 	 * @param weapon           The weapon to equip.
 	 * @param weaponCard
-	 * @param resolveBattlecry If {@code true}, the weapon's battlecry {@link Spell} should be cast. This is {@code
-	 *                         false} if the weapon was equipped due to some other effect (typically a random weapon
+	 * @param resolveBattlecry If {@code true}, the weapon's battlecry {@link Spell} should be cast. This is {@code false}
+	 *                         if the weapon was equipped due to some other effect (typically a random weapon
 	 */
 	@Suspendable
 	public void equipWeapon(int playerId, Weapon weapon, Card weaponCard, boolean resolveBattlecry) {
@@ -1401,18 +1428,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Hearthstone matches, especially those involving a large number of minions. The core combat mechanics are quite
 	 * simple, but the mathematics of multiple minions and heroes attacking each other can require deep strategic
 	 * analysis. Attacking can also activate a variety of triggered effects, making even a single attack a potentially
-	 * complex process. Some players use "attack" to describe any damage or negative action directed toward the enemy,
-	 * but in game terminology only the standard combat action described here counts as an attack and triggers related
-	 * effects. Attacking in Hearthstone is usually understood to represent physical combat, particularly melee combat,
-	 * in contrast to combat via spells. "Hit" and "swing" are other informal terms for attacking, as in "hit the face"
-	 * or "swing into a minion".
+	 * complex process. Some players use "attack" to describe any damage or negative action directed toward the enemy, but
+	 * in game terminology only the standard combat action described here counts as an attack and triggers related
+	 * effects. Attacking in Hearthstone is usually understood to represent physical combat, particularly melee combat, in
+	 * contrast to combat via spells. "Hit" and "swing" are other informal terms for attacking, as in "hit the face" or
+	 * "swing into a minion".
 	 * <p>
-	 * Each character involved in an attack deals {@link #damage(Player, Actor, int, Entity, boolean)} equal to its
-	 * {@link Actor#getAttack()} stat to the other. Combat is the primary way for most minions to affect the game, by
-	 * attacking either the enemy {@link Hero} or their {@link Minion}s. Minions deal their attack damage both
-	 * offensively and defensively, making them potentially dangerous on both sides of combat. Heroes can be involved in
-	 * combat as either an attacker or defender too, but all sources of hero attack power only apply on their own turn.
-	 * Therefore, enemy minions can hit the hero without harm during the opponent's turn.
+	 * Each character involved in an attack deals {@link #damage(Player, Actor, int, Entity, boolean)} equal to its {@link
+	 * Actor#getAttack()} stat to the other. Combat is the primary way for most minions to affect the game, by attacking
+	 * either the enemy {@link Hero} or their {@link Minion}s. Minions deal their attack damage both offensively and
+	 * defensively, making them potentially dangerous on both sides of combat. Heroes can be involved in combat as either
+	 * an attacker or defender too, but all sources of hero attack power only apply on their own turn. Therefore, enemy
+	 * minions can hit the hero without harm during the opponent's turn.
 	 *
 	 * @param player       The player who is initiating the fight.
 	 * @param attacker     The attacking {@link Actor}
@@ -1561,8 +1588,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * For heroes that have a {@link Card} that has automatic target selection, returns the hero power. It is not clear
-	 * if this is used by any hero power cards in the game.
+	 * For heroes that have a {@link Card} that has automatic target selection, returns the hero power. It is not clear if
+	 * this is used by any hero power cards in the game.
 	 *
 	 * @param playerId The player equipped with an auto hero power.
 	 * @return The action to play the hero power.
@@ -1653,8 +1680,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player The player whose point of view to query for secrets.
 	 * @return The secrets as {@link Trigger}
-	 * @see Player#getSecrets() for a more reliable way to get the {@link Secret} entities that are in play for a
-	 * player.
+	 * @see Player#getSecrets() for a more reliable way to get the {@link Secret} entities that are in play for a player.
 	 */
 	private List<Trigger> getSecrets(Player player) {
 		List<Trigger> secrets = context.getTriggersAssociatedWith(player.getHero().getReference());
@@ -1827,24 +1853,24 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Heals (restores hitpoints to) a target.
 	 * <p>
-	 * Healing an {@link Actor} will increase their {@link Actor#getHp()} by the stated amount, up to but not beyond
-	 * their current {@link Actor#getMaxHp()}.
+	 * Healing an {@link Actor} will increase their {@link Actor#getHp()} by the stated amount, up to but not beyond their
+	 * current {@link Actor#getMaxHp()}.
 	 * <p>
 	 * Healing comes from battlecries, deathrattles, spell triggers, hero powers and spell cards that cast a {@link
 	 * HealSpell}. Most healing effects affect a single {@link Actor} (these effects can be targetable or select the
 	 * target automatically or at random), while some others have an area of effect.
 	 * <p>
-	 * Healing is distinct from granting a minion increased hitpoints, which increases both the current and maximum
-	 * Health for the target. Increasing a minion's hitpoints is usually achieved through enchantments (or removing them
-	 * through {@link SilenceSpell}), while healing is usually achieved through effects.
+	 * Healing is distinct from granting a minion increased hitpoints, which increases both the current and maximum Health
+	 * for the target. Increasing a minion's hitpoints is usually achieved through enchantments (or removing them through
+	 * {@link SilenceSpell}), while healing is usually achieved through effects.
 	 * <p>
 	 * Although healing effects (including targetable ones) can target undamaged characters, attempting to restore
 	 * hitpoints to an {@link Actor} already at their current maximum Health will have no effect and will not count as
 	 * healing for game purposes (for example, on-heal triggers such as Lightwarden's {@link HealingTrigger} will not
 	 * trigger).
 	 * <p>
-	 * Healing a character to full hitpoints will remove its damaged status and thus any {@link Attribute#ENRAGED}
-	 * effect currently active, which can be very useful for denying enemy minions' Enrage effects.
+	 * Healing a character to full hitpoints will remove its damaged status and thus any {@link Attribute#ENRAGED} effect
+	 * currently active, which can be very useful for denying enemy minions' Enrage effects.
 	 *
 	 * @param player                    The player who chose the target of the healing.
 	 * @param target                    The target of the healing.
@@ -1925,8 +1951,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param playerId The player to start the game for.
 	 * @param begins   {@code true} if this player is starting the game and should start with {@link #STARTER_CARDS}
-	 *                 cards. {@code false} if this player is not starting the game and should get {@link
-	 *                 #STARTER_CARDS} + 1 cards.
+	 *                 cards. {@code false} if this player is not starting the game and should get {@link #STARTER_CARDS}
+	 *                 + 1 cards.
 	 */
 	@Suspendable
 	public List<Card> init(int playerId, boolean begins) {
@@ -2052,8 +2078,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Mind control moves a {@link Minion} from the opponent's {@link Zones#BATTLEFIELD} to their own battlefield and
-	 * puts it under control of the given {@link Player}.
+	 * Mind control moves a {@link Minion} from the opponent's {@link Zones#BATTLEFIELD} to their own battlefield and puts
+	 * it under control of the given {@link Player}.
 	 * <p>
 	 * Mind control effects or control effects are effects which allow a player to seize control of an enemy minion.
 	 * Controlled minions are treated as belonging to the controlling player for all purposes, can be directed to attack
@@ -2064,25 +2090,25 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * other means. The exceptions to this are Shadow Madness and Potion of Madness, which grant temporary control of a
 	 * minion through a one-turn enchantment.
 	 * <p>
-	 * If a player activates a mind control effect when their side of the battlefield is already full (i.e. they have
-	 * the maximum 7 minions), the mind controlled minion will be instantly destroyed. Any Deathrattle that activates as
-	 * a result of this will trigger as if their opponent still controlled the minion. It is often a good idea for a
-	 * player to choose to intentionally destroy one of their own minions in order to be able to seize control of one of
-	 * their opponent's, especially by sacrificing a weak minion in order to gain control of a very powerful one.
+	 * If a player activates a mind control effect when their side of the battlefield is already full (i.e. they have the
+	 * maximum 7 minions), the mind controlled minion will be instantly destroyed. Any Deathrattle that activates as a
+	 * result of this will trigger as if their opponent still controlled the minion. It is often a good idea for a player
+	 * to choose to intentionally destroy one of their own minions in order to be able to seize control of one of their
+	 * opponent's, especially by sacrificing a weak minion in order to gain control of a very powerful one.
 	 * <p>
-	 * As with summoning effects such as Mirror Image and Feral Spirit, mind controlled minions will always join the
-	 * board on the far right. Anticipating this can allow for superior placement of minions, important for positional
-	 * effects. When planning to summon other minions that turn, the player can use the timing of the mind control
-	 * effect to allow them to determine the final placement of the mind controlled minion. For example, a player with a
-	 * Shieldbearer already on the board may take control of a Flametongue Totem, before then summoning a Sludge Belcher
-	 * to the right of it, thereby ensuring the Totem's is placed between the two minions, making the most of its buff.
+	 * As with summoning effects such as Mirror Image and Feral Spirit, mind controlled minions will always join the board
+	 * on the far right. Anticipating this can allow for superior placement of minions, important for positional effects.
+	 * When planning to summon other minions that turn, the player can use the timing of the mind control effect to allow
+	 * them to determine the final placement of the mind controlled minion. For example, a player with a Shieldbearer
+	 * already on the board may take control of a Flametongue Totem, before then summoning a Sludge Belcher to the right
+	 * of it, thereby ensuring the Totem's is placed between the two minions, making the most of its buff.
 	 * <p>
 	 * Minions that have just been mind controlled are normally {@link Attribute#SUMMONING_SICKNESS} for one turn and
-	 * cannot attack, just as with minions that were summoned that turn. However, Shadow Madness and Potion of Madness
-	 * do not cause its target to be {@link Attribute#SUMMONING_SICKNESS}, allowing it to attack - the effect only lasts
-	 * until end of turn, and would otherwise be nearly useless. Charge affects mind control exhaustion just as it
-	 * affects {@link Attribute#SUMMONING_SICKNESS} - minions with that ability can attack on the same turn they are
-	 * mind controlled.
+	 * cannot attack, just as with minions that were summoned that turn. However, Shadow Madness and Potion of Madness do
+	 * not cause its target to be {@link Attribute#SUMMONING_SICKNESS}, allowing it to attack - the effect only lasts
+	 * until end of turn, and would otherwise be nearly useless. Charge affects mind control exhaustion just as it affects
+	 * {@link Attribute#SUMMONING_SICKNESS} - minions with that ability can attack on the same turn they are mind
+	 * controlled.
 	 *
 	 * @param player The new owner of a minion.
 	 * @param minion The minion to mind control.
@@ -2107,8 +2133,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Steals the card, transferring its owner and moving its current zones. Keeps all associated {@link Trigger}
-	 * objects and changes all trigger owners whose {@link Trigger#hasPersistentOwner()} property is {@code false}.
+	 * Steals the card, transferring its owner and moving its current zones. Keeps all associated {@link Trigger} objects
+	 * and changes all trigger owners whose {@link Trigger#hasPersistentOwner()} property is {@code false}.
 	 * <p>
 	 * Similar to {@link #mindControl(Player, Minion)} but for {@link Card} entities.
 	 * <p>
@@ -2297,9 +2323,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Performs a game action, or a selection of what to do by a player from a list of {@link #getValidActions(int)}.
 	 * <p>
 	 * This method is the primary entry point to turn a player's selected {@link GameAction} into modified game state.
-	 * Typically this method will call the action's {@link GameAction#execute(GameContext, int)} overrider, and the
-	 * {@link GameAction} will then call {@link GameLogic} methods again to do its business. This is a bit of a
-	 * rigamarole and should probably be changed.
+	 * Typically this method will call the action's {@link GameAction#execute(GameContext, int)} overrider, and the {@link
+	 * GameAction} will then call {@link GameLogic} methods again to do its business. This is a bit of a rigamarole and
+	 * should probably be changed.
 	 *
 	 * @param playerId The player performing the game action.
 	 * @param action   The game action to perform.
@@ -2363,9 +2389,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * {@link #playCard(int, EntityReference)} is always initiated by an action, like a {@link PlayCardAction}. It
 	 * represents playing a card from the hand. This method then deducts the appropriate amount of mana (or health,
 	 * depending on the card). Then, it will check if the {@link Card} was countered by Counter Spell (a {@link Secret}
-	 * which adds a {@link Attribute#COUNTERED} attribute to the card that was raised in the {@link CardPlayedEvent}).
-	 * It applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked next turn. Finally, it removes
-	 * the card from the player's {@link Zones#HAND} and puts it in the {@link Zones#GRAVEYARD}.
+	 * which adds a {@link Attribute#COUNTERED} attribute to the card that was raised in the {@link CardPlayedEvent}). It
+	 * applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked next turn. Finally, it removes the
+	 * card from the player's {@link Zones#HAND} and puts it in the {@link Zones#GRAVEYARD}.
 	 *
 	 * @param playerId        The player that is playing the card.
 	 * @param EntityReference The card that got played.
@@ -2406,6 +2432,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
+		if (card.hasAttribute(Attribute.ECHO)
+				|| card.hasAttribute(Attribute.AURA_ECHO)) {
+			Card copy = card.getCopy();
+			copy.setAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);
+			receiveCard(playerId, copy);
+		}
+
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
 			// Implements Snowfury Giant
@@ -2432,8 +2465,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * {@link Zones#SECRET} zone.
 	 * <p>
 	 * The caller is responsible for enforcing that fewer than {@link #MAX_SECRETS} are in play; that only distinct
-	 * secrets are active; and, that the {@link Card} is discarded. The {@link SecretPlayedEvent} is not censored here
-	 * and has sensitive information that cannot be shown to the opponent.
+	 * secrets are active; and, that the {@link Card} is discarded. The {@link SecretPlayedEvent} is not censored here and
+	 * has sensitive information that cannot be shown to the opponent.
 	 *
 	 * @param player   The player whose gaining the secret.
 	 * @param secret   The secret being played.
@@ -2573,8 +2606,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param playerId The player receiving the card.
 	 * @param card     The card to receive.
-	 * @param source   The {@link Entity} that caused the card to be received, or {@code null} if this is due to drawing
-	 *                 a card at the beginning of a turn.
+	 * @param source   The {@link Entity} that caused the card to be received, or {@code null} if this is due to drawing a
+	 *                 card at the beginning of a turn.
 	 * @see #receiveCard(int, Card, Entity, boolean) for more complete rules.
 	 */
 	@Suspendable
@@ -2583,29 +2616,29 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Receives a card into the player's hand, as though it was drawn. It moves a card from whatever current {@link
-	 * Zones} zone it is in into the {@link Zones#HAND} zone. Implements the "Draw a card" text.
+	 * Receives a card into the player's hand, as though it was drawn. It moves a card from whatever current {@link Zones}
+	 * zone it is in into the {@link Zones#HAND} zone. Implements the "Draw a card" text.
 	 * <p>
 	 * A card draw effect is an effect which causes the player to draw one or more cards directly from their deck. Cards
 	 * with card draw effects are sometimes called "cantrips", after similar effects in other games.
 	 * <p>
 	 * Card draw effects are distinguished from generate effects, which place new cards into your hand without removing
-	 * them from your deck; and from put into hand and put into battlefield effects, which place cards of a specific
-	 * type into the hand or the battlefield directly from the player's deck, rather than simply drawing the next card
-	 * in the deck. A few cards have special effects which trigger based on the drawing of cards.
+	 * them from your deck; and from put into hand and put into battlefield effects, which place cards of a specific type
+	 * into the hand or the battlefield directly from the player's deck, rather than simply drawing the next card in the
+	 * deck. A few cards have special effects which trigger based on the drawing of cards.
 	 * <p>
 	 * Attempting to draw a card when you already have 10 cards in your hand will result in the drawn card being removed
 	 * from play, something referred to as "overdraw". Overdrawn cards are revealed to both players, before the card is
 	 * visually destroyed.
 	 * <p>
 	 * Overdrawing is similar to discarding, but does not count as a discard for game purposes. While discard effects
-	 * remove cards from the hand, overdraw removes the card directly from the deck. Overdraw also does not count as
-	 * card draw for game purposes, since the game never attempts to draw the card into the hand, but rather destroys it
-	 * since there is no room.
+	 * remove cards from the hand, overdraw removes the card directly from the deck. Overdraw also does not count as card
+	 * draw for game purposes, since the game never attempts to draw the card into the hand, but rather destroys it since
+	 * there is no room.
 	 * <p>
-	 * Card draw effects draw from the top of the randomly ordered deck, unlike "put into battlefield" or "put into
-	 * hand" effects, resulting in an even chance of getting any card remaining in the deck. However, it is possible to
-	 * gain more control over drawing using Tracking, which gives the player a choice among the top three random draws.
+	 * Card draw effects draw from the top of the randomly ordered deck, unlike "put into battlefield" or "put into hand"
+	 * effects, resulting in an even chance of getting any card remaining in the deck. However, it is possible to gain
+	 * more control over drawing using Tracking, which gives the player a choice among the top three random draws.
 	 *
 	 * @param playerId
 	 * @param card
@@ -2696,7 +2729,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int attacks = 1;
 		if (entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
 			attacks = MEGA_WINDFURY_ATTACKS;
-		} else if (entity.hasAttribute(Attribute.WINDFURY)) {
+		} else if (entity.hasAttribute(Attribute.WINDFURY) || entity.hasAttribute(Attribute.AURA_WINDFURY)) {
 			attacks = WINDFURY_ATTACKS;
 		}
 		entity.setAttribute(Attribute.NUMBER_OF_ATTACKS, attacks);
@@ -2716,7 +2749,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (attr == Attribute.MEGA_WINDFURY && entity.hasAttribute(Attribute.WINDFURY)) {
 			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, WINDFURY_ATTACKS - MEGA_WINDFURY_ATTACKS);
 		}
-		if (attr == Attribute.WINDFURY && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
+		if ((attr == Attribute.WINDFURY || attr == Attribute.AURA_WINDFURY) && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
 			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, 1 - WINDFURY_ATTACKS);
 		} else if (attr == Attribute.MEGA_WINDFURY) {
 			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, 1 - MEGA_WINDFURY_ATTACKS);
@@ -2754,8 +2787,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Deathrattles are not triggered.
 	 *
 	 * @param actor      The actor to remove.
-	 * @param peacefully If {@code true}, remove the card typically due to a {@link ReturnTargetToHandSpell}--that is,
-	 *                   not due to a destruction of the minion. Otherwise, move the {@link Minion} to the {@link
+	 * @param peacefully If {@code true}, remove the card typically due to a {@link ReturnTargetToHandSpell}--that is, not
+	 *                   due to a destruction of the minion. Otherwise, move the {@link Minion} to the {@link
 	 *                   Zones#SET_ASIDE_ZONE} where it will be found by {@link #endOfSequence()}.
 	 * @see ReturnTargetToHandSpell for usage of {@link #removeActor(Actor, boolean)}. Note, this and {@link
 	 * net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell} appear to be the only two users of this function.
@@ -2923,6 +2956,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@Suspendable
 	protected void performBattlecryAction(int playerId, Actor actor, Player player, BattlecryAction battlecryAction) {
+		if (battlecryAction.getChooseOneOptionIndex() != null) {
+			// Add an attribute to the actor's source card, if it exists, specifying which action was taken
+			int choice = battlecryAction.getChooseOneOptionIndex();
+			if (actor.getSourceCard() != null) {
+				actor.getSourceCard().getAttributes().put(Attribute.CHOICE, choice);
+			}
+			actor.getAttributes().put(Attribute.CHOICE, choice);
+			//
+		}
+
 		if (hasAttribute(player, Attribute.DOUBLE_BATTLECRIES) && actor.getSourceCard().hasAttribute(Attribute.BATTLECRY)) {
 			// You need DOUBLE_BATTLECRIES before your battlecry action, not after.
 			EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
@@ -2994,8 +3037,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * This method is where the {@link GameLogic} handles the firing of a {@link Secret}. It removes the secret from
-	 * play and raises a {@link SecretRevealedEvent}.
+	 * This method is where the {@link GameLogic} handles the firing of a {@link Secret}. It removes the secret from play
+	 * and raises a {@link SecretRevealedEvent}.
 	 *
 	 * @param player The player that owns the secret.
 	 * @param secret The secret that got triggered.
@@ -3046,8 +3089,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Implements a "Shuffle into deck" text. This will select a random location for the card to go without shuffling
-	 * the deck (i.e., changing the existing order of the cards).
+	 * Implements a "Shuffle into deck" text. This will select a random location for the card to go without shuffling the
+	 * deck (i.e., changing the existing order of the cards).
 	 *
 	 * @param player The player whose deck this card is getting shuffled into.
 	 * @param card   The card to shuffle into that player's deck.
@@ -3088,12 +3131,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Silence is an ability which removes all current card text, enchantments, and abilities from the targeted minion.
-	 * It does not remove damage or minion type.
+	 * Silence is an ability which removes all current card text, enchantments, and abilities from the targeted minion. It
+	 * does not remove damage or minion type.
 	 *
 	 * @param playerId The ID of the player (typically the owner of the target). This is used by {@link
-	 *                 net.demilich.metastone.game.spells.custom.MindControlOneTurnSpell} to reverse the mind control of
-	 *                 a minion that somehow gets silenced during the turn that spell is cast.
+	 *                 net.demilich.metastone.game.spells.custom.MindControlOneTurnSpell} to reverse the mind control of a
+	 *                 minion that somehow gets silenced during the turn that spell is cast.
 	 * @param target   A {@link Minion} to silence.
 	 * @see <a href="http://hearthstone.gamepedia.com/Silence">Silence</a> for a complete description of the silencing
 	 * game rules.
@@ -3131,9 +3174,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * cards, using their Hero Power, and/or attacking with their minions or hero. Once all possible actions have been
 	 * taken, the "End Turn" button will light up.
 	 * <p>
-	 * All minions with {@link Attribute#SUMMONING_SICKNESS} will have that attribute cleared; {@link
-	 * Attribute#OVERLOAD} will cause the player's {@link Player#mana} to decline by {@link Player#getLockedMana()}; and
-	 * temporary bonuses like {@link Attribute#TEMPORARY_ATTACK_BONUS} will be lost.
+	 * All minions with {@link Attribute#SUMMONING_SICKNESS} will have that attribute cleared; {@link Attribute#OVERLOAD}
+	 * will cause the player's {@link Player#mana} to decline by {@link Player#getLockedMana()}; and temporary bonuses
+	 * like {@link Attribute#TEMPORARY_ATTACK_BONUS} will be lost.
 	 *
 	 * @param playerId The player that is starting their turn.
 	 */
@@ -3189,32 +3232,32 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Summons a {@link Minion}.
 	 * <p>
 	 * Playing a minion card places that minion onto the battlefield. This process is known as 'summoning'. Each minion
-	 * has a mana cost indicated by {@link Card#getManaCost(GameContext, Player)}, which shows the amount of mana you
-	 * must pay to summon the minion.
+	 * has a mana cost indicated by {@link Card#getManaCost(GameContext, Player)}, which shows the amount of mana you must
+	 * pay to summon the minion.
 	 * <p>
-	 * Successfully playing a minion card will transform the card into the minion itself, which will then appear upon
-	 * the battleground represented by a portrait. Once summoned the minion will stay on the battlefield until it is
-	 * destroyed or returned to the hand of its owner. Minions can be destroyed by reducing their hitpoints to zero, or
-	 * by using destroy effects such as Assassinate to remove them directly. Note that if a minion is returned to its
-	 * owner's hand, or shuffled back into the owner's deck, its Attack and Health will return to their original values,
-	 * and any enchantments will be removed. However, transformations will not be reversed by returning a minion to its
-	 * owner's hand or deck; the transformed minion is considered an entirely different card from what it was
-	 * transformed from, and that is what is "returned" to the deck.
+	 * Successfully playing a minion card will transform the card into the minion itself, which will then appear upon the
+	 * battleground represented by a portrait. Once summoned the minion will stay on the battlefield until it is destroyed
+	 * or returned to the hand of its owner. Minions can be destroyed by reducing their hitpoints to zero, or by using
+	 * destroy effects such as Assassinate to remove them directly. Note that if a minion is returned to its owner's hand,
+	 * or shuffled back into the owner's deck, its Attack and Health will return to their original values, and any
+	 * enchantments will be removed. However, transformations will not be reversed by returning a minion to its owner's
+	 * hand or deck; the transformed minion is considered an entirely different card from what it was transformed from,
+	 * and that is what is "returned" to the deck.
 	 * <p>
 	 * This method returns {@code false} if the summon failed, typically due to a rule violation. The caller is
 	 * responsible for handling a failed summon. Summons can fail because players can normally have a maximum of {@link
-	 * #MAX_MINIONS} minions on the battlefield at any time. Once {@link #MAX_MINIONS} friendly minions are on the
-	 * field, the player will not be able to summon further minions. Minion cards and summon effects such as Totemic
-	 * Call will not be playable, and any minion Battlecries and Deathrattles that summon other minions will be wasted.
+	 * #MAX_MINIONS} minions on the battlefield at any time. Once {@link #MAX_MINIONS} friendly minions are on the field,
+	 * the player will not be able to summon further minions. Minion cards and summon effects such as Totemic Call will
+	 * not be playable, and any minion Battlecries and Deathrattles that summon other minions will be wasted.
 	 * <p>
 	 * Minions summoned by a summon effect written on a card other than a {@link Card} are not played directly from the
-	 * hand, and therefore will not trigger Battlecries or Overload. However, they will work with triggered effects
-	 * which respond to the summoning of minions, like {@link MinionSummonedTrigger}.
+	 * hand, and therefore will not trigger Battlecries or Overload. However, they will work with triggered effects which
+	 * respond to the summoning of minions, like {@link MinionSummonedTrigger}.
 	 *
 	 * @param playerId         The player who will own the minion (not the initiator of the summon, which may be the
 	 *                         opponent).
-	 * @param minion           The minion to summon. Typically the result of a {@link Card#summon()} call, but other
-	 *                         cards have effects that summon minions on e.g., battlecry with a {@link SummonSpell}.
+	 * @param minion           The minion to summon. Typically the result of a {@link Card#summon()} call, but other cards
+	 *                         have effects that summon minions on e.g., battlecry with a {@link SummonSpell}.
 	 * @param source           The {@link Card} or {@link Entity} response for this minion.
 	 * @param index            The location on the {@link Zones#BATTLEFIELD} to place this minion.
 	 * @param resolveBattlecry If {@code true}, the battlecry should be cast. Battlecries are only cast when a {@link
@@ -3296,8 +3339,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Transforms a {@link Minion} into a new {@link Minion}.
 	 * <p>
-	 * The caller is responsible for making sure the new minion is created with {@link Minion#getCopy()} if the minion
-	 * was the result of targeting an existing minion on the battlefield.
+	 * The caller is responsible for making sure the new minion is created with {@link Minion#getCopy()} if the minion was
+	 * the result of targeting an existing minion on the battlefield.
 	 * <p>
 	 * Transform is an ability which irreversibly transforms a minion into something else. This removes all card text,
 	 * abilities and enchantments, and does not trigger any Deathrattles.
@@ -3305,16 +3348,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Transformation is not an {@link Aura} but rather a permanent change, which cannot be undone. {@link #silence(int,
 	 * Minion)}ing the transformed minion or returning it to its owner's hand will not revert the transformation.
 	 * <p>
-	 * While transform effects effectively create a new minion in place of the old one, they do not summon minions and
-	 * so will not trigger effects such as Knife Juggler or Starving Buzzard. The process appears to continue the
-	 * summoning process precisely, with the new minion in place of the old.
+	 * While transform effects effectively create a new minion in place of the old one, they do not summon minions and so
+	 * will not trigger effects such as Knife Juggler or Starving Buzzard. The process appears to continue the summoning
+	 * process precisely, with the new minion in place of the old.
 	 * <p>
 	 * Minions produced by transformations will have {@link Attribute#SUMMONING_SICKNESS}, as though they had just been
 	 * summoned. This is true even if the minion which was transformed was previously ready to attack. However, if the
 	 * resulting minion has {@link Attribute#CHARGE} it will not suffer from {@link Attribute#SUMMONING_SICKNESS}.
 	 * <p>
-	 * Minions removed from play due to being transformed are not considered to have died, and so cannot be resummoned
-	 * by effects like Resurrect or Kel'Thuzad.
+	 * Minions removed from play due to being transformed are not considered to have died, and so cannot be resummoned by
+	 * effects like Resurrect or Kel'Thuzad.
 	 *
 	 * @param minion    The original minion in play
 	 * @param newMinion The new minion to transform into

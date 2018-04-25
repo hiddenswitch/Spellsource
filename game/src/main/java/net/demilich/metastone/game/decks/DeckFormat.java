@@ -22,9 +22,6 @@ public class DeckFormat implements Serializable, Cloneable {
 					Collections.unmodifiableSet(EnumSet.of(
 							BASIC,
 							CLASSIC,
-							THE_OLD_GODS,
-							ONE_NIGHT_IN_KARAZHAN,
-							MEAN_STREETS_OF_GADGETZAN,
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,

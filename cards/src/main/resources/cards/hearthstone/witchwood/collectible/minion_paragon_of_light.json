@@ -7,6 +7,40 @@
   "baseHp": 5,
   "rarity": "RARE",
   "description": "While this minion has 3 or more Attack, it has <b>Taunt</b> and <b>Lifesteal</b>.",
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "SELF",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "SELF",
+        "value": 3,
+        "attribute": "ATTACK",
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "attribute": "AURA_TAUNT",
+      "secondaryTrigger": {
+        "class": "GameStateChangedTrigger",
+        "targetPlayer": "SELF"
+      }
+    },
+    {
+      "class": "AttributeAura",
+      "target": "SELF",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "SELF",
+        "value": 3,
+        "attribute": "ATTACK",
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "attribute": "AURA_LIFESTEAL",
+      "secondaryTrigger": {
+        "class": "GameStateChangedTrigger",
+        "targetPlayer": "SELF"
+      }
+    }
+  ],
   "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",

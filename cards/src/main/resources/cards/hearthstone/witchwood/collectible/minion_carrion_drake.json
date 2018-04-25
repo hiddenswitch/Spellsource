@@ -10,8 +10,31 @@
   "description": "<b>Battlecry:</b> If a minion died this turn, gain <b>Poisonous</b>.",
   "battlecry": {
     "targetSelection": "NONE",
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "ALL_ENTITIES",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "DIED_ON_TURN",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "operation": "EQUAL"
+          }
+        ]
+      }
+    },
     "spell": {
-      "class": "NullSpell"
+      "class": "AddAttributeSpell",
+      "attribute": "POISONOUS",
+      "target": "SELF"
     }
   },
   "attributes": {

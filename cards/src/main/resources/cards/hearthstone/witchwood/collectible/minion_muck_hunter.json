@@ -11,8 +11,8 @@
     "spell": {
       "class": "SummonSpell",
       "cards": [
-        "token_muck_monster",
-        "token_muck_monster"
+        "token_muckling",
+        "token_muckling"
       ],
       "targetPlayer": "OPPONENT"
     }

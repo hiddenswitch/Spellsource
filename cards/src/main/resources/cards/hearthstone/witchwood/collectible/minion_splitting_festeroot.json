@@ -8,7 +8,9 @@
   "rarity": "EPIC",
   "description": "<b>Deathrattle:</b> Summon two 2/2 Splitting Saplings.",
   "deathrattle": {
-    "class": "NullSpell"
+    "class": "SummonSpell",
+    "card": "token_splitting_sapling",
+    "value": 2
   },
   "attributes": {
     "DEATHRATTLES": true

@@ -6,11 +6,21 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "[x]<b>Battlecry:</b> Transform all\n1-Cost cards in your deck\n\u00a0into <b>Legendary</b> minions.",
+  "description": "<b>Battlecry:</b> Transform all\n1-Cost cards in your deck\n into <b>Legendary</b> minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "CardFilter",
+        "manaCost": 1
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "LEGENDARY",
+        "cardType": "MINION"
+      }
     }
   },
   "attributes": {

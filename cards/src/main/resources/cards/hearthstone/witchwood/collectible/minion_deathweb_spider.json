@@ -10,8 +10,17 @@
   "description": "<b>Battlecry:</b> If your hero\ntook damage this turn, gain <b>Lifesteal</b>.",
   "battlecry": {
     "targetSelection": "NONE",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_HERO",
+      "attribute": "DAMAGE_THIS_TURN",
+      "operation": "GREATER",
+      "value": 0
+    },
     "spell": {
-      "class": "NullSpell"
+      "class": "AddAttributeSpell",
+      "attribute": "LIFESTEAL",
+      "target": "SELF"
     }
   },
   "attributes": {

@@ -10,7 +10,14 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "RUSH",
+        "cardType": "MINION",
+        "operation": "HAS"
+      }
     }
   },
   "attributes": {

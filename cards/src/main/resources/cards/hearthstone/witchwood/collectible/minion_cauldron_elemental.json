@@ -10,8 +10,12 @@
   "description": "Your other Elementals have +2 Attack.",
   "aura": {
     "class": "BuffAura",
-    "target": "FRIENDLY_MINIONS",
-    "attackBonus": 0,
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "ELEMENTAL"
+    },
+    "attackBonus": 2,
     "hpBonus": 0
   },
   "attributes": {},

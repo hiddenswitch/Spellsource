@@ -10,11 +10,17 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "PutRandomSecretIntoPlaySpell",
+      "cardSource": {
+        "class": "DeckSource"
+      }
     }
   },
   "deathrattle": {
-    "class": "NullSpell"
+    "class": "PutRandomSecretIntoPlaySpell",
+    "cardSource": {
+      "class": "DeckSource"
+    }
   },
   "attributes": {
     "BATTLECRY": true,

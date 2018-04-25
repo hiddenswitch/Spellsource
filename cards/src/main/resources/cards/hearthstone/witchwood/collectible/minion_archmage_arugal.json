@@ -6,7 +6,21 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Whenever you draw a minion, add a copy of it to\u00a0your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "cardType": "MINION"
+      }
+    },
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "description": "Whenever you draw a minion, add a copy of it to your hand.",
   "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",

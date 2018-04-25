@@ -7,11 +7,20 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "description": "On each player's turn, the first card played costs (0).",
-  "aura": {
-    "class": "BuffAura",
-    "target": "FRIENDLY_MINIONS",
-    "attackBonus": 0,
-    "hpBonus": 0
+  "cardCostModifier": {
+    "class": "ToggleCostModifier",
+    "value": 0,
+    "operation": "SET",
+    "targetPlayer": "BOTH",
+    "toggleOffTrigger": {
+      "class": "CardPlayedTrigger",
+      "cardType": "MINION",
+      "targetPlayer": "BOTH"
+    },
+    "toggleOnTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "BOTH"
+    }
   },
   "attributes": {},
   "collectible": true,

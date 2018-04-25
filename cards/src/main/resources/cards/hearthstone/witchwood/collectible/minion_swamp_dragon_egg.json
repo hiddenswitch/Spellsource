@@ -8,7 +8,11 @@
   "rarity": "COMMON",
   "description": "<b>Deathrattle:</b> Add a random Dragon to your hand.",
   "deathrattle": {
-    "class": "NullSpell"
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "DRAGON"
+    }
   },
   "attributes": {
     "DEATHRATTLES": true

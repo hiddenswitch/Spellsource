@@ -10,35 +10,16 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "ReceiveCardSpell",
-          "cardFilter": {
-            "class": "CardFilter",
-            "rarity": "LEGENDARY",
-            "cardType": "MINION"
-          }
-        },
-        {
-          "class": "ReceiveCardSpell",
-          "spell": {
-            "class": "AddEnchantmentSpell",
-            "target": "OUTPUT",
-            "trigger": {
-              "eventTrigger": {
-                "class": "TurnEndTrigger"
-              },
-              "spell": {
-                "class": "RemoveCardSpell",
-                "target": "SELF"
-              }
-            }
-          },
-          "card": "minion_face_collector"
-        }
-      ]
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "LEGENDARY",
+        "cardType": "MINION"
+      }
     }
+  },
+  "attributes": {
+    "ECHO": true
   },
   "collectible": true,
   "set": "WITCHWOOD",

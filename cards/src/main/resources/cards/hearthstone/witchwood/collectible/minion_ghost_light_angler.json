@@ -8,6 +8,26 @@
   "rarity": "COMMON",
   "race": "MURLOC",
   "description": "<b>Echo</b>",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "OUTPUT",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger"
+          },
+          "spell": {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        }
+      },
+      "card": "minion_ghost_light_angler"
+    }
+  },
   "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",
