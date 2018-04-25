@@ -1,0 +1,17 @@
+{
+  "name": "Beast Within",
+  "baseManaCost": 1,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Hero Power</b>\nGive your minions +1\u00a0Attack.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

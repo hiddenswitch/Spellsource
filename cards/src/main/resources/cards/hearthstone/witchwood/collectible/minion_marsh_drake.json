@@ -1,0 +1,23 @@
+{
+  "name": "Marsh Drake",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "<b>Battlecry:</b> Summon a 2/1 <b>Poisonous</b> Drakeslayer for your opponent.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

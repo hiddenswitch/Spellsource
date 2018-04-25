@@ -1,0 +1,20 @@
+{
+  "name": "Duskfallen Aviana",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "On each player's turn, the first card played costs (0).",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

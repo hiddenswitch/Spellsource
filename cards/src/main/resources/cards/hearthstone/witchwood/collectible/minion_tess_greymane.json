@@ -1,0 +1,22 @@
+{
+  "name": "Tess Greymane",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "[x]<b>Battlecry:</b> Replay every card\nfrom another class you've\nplayed this game <i>(targets\nchosen randomly)</i>.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

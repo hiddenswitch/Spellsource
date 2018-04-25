@@ -1,0 +1,12 @@
+{
+  "name": "Grubb the Swampdrinker",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "<i>An iron gut, and quite the throwing arm.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

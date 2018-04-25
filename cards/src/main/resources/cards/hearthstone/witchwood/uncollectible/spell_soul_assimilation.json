@@ -1,0 +1,17 @@
+{
+  "name": "Soul Assimilation",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Destroy your Wisps.\nGain control of a random enemy minion for each Wisp destroyed.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

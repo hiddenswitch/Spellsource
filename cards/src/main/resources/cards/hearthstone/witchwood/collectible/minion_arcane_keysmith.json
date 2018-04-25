@@ -1,0 +1,22 @@
+{
+  "name": "Arcane Keysmith",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "<b>Battlecry:</b> <b>Discover</b> a <b>Secret</b>. Put it into the battlefield.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

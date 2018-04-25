@@ -1,0 +1,17 @@
+{
+  "name": "Echoes of the Witchwood",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Passive Hero Power</b>\nAll spells have <b>Echo</b>.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

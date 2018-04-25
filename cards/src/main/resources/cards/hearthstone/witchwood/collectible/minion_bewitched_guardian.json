@@ -1,0 +1,23 @@
+{
+  "name": "Bewitched Guardian",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Gain +1 Health\n\u00a0for each card in your hand.\u00a0",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

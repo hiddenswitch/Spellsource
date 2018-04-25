@@ -1,0 +1,23 @@
+{
+  "name": "Cutthroat Buccaneer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "<b>Combo:</b> Give your weapon +1 Attack.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

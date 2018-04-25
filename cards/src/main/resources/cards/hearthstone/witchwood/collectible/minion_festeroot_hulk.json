@@ -1,0 +1,14 @@
+{
+  "name": "Festeroot Hulk",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 2,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": "After a friendly minion attacks, gain +1 Attack.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

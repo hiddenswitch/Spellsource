@@ -1,0 +1,23 @@
+{
+  "name": "Lifedrinker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "[x]<b>Battlecry:</b> Deal 3 damage to\nthe enemy hero. Restore\n3 Health to your hero.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

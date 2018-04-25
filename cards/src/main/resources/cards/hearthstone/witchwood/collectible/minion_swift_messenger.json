@@ -1,0 +1,16 @@
+{
+  "name": "Swift Messenger",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "[x]<b>Rush</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

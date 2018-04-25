@@ -1,0 +1,17 @@
+{
+  "name": "First Aid Kit",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Passive</b>\nAt the end of your turn, restore 2\u00a0Health to all friendly characters.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

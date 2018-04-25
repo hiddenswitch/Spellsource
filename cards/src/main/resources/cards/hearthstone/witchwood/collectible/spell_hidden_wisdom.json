@@ -1,0 +1,17 @@
+{
+  "name": "Hidden Wisdom",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "EPIC",
+  "description": "[x]<b>Secret:</b> After your\nopponent plays three\ncards in a turn, draw\n2 cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

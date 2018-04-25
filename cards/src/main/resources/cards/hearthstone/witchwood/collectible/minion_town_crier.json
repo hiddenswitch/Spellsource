@@ -1,0 +1,22 @@
+{
+  "name": "Town Crier",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "<b>Battlecry:</b> Draw a <b>Rush</b> minion from your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Cathedral Gargoyle",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "<b>Battlecry:</b> If you're holding a Dragon, gain <b>Taunt</b> and <b>Divine Shield</b>.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

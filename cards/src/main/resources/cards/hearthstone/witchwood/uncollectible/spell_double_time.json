@@ -1,0 +1,17 @@
+{
+  "name": "Double Time",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Passive</b>\nAfter you cast your first spell in a turn, cast a copy of it\n(<i>targets chosen randomly</i>).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

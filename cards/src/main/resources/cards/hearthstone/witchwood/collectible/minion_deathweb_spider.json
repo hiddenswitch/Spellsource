@@ -1,0 +1,23 @@
+{
+  "name": "Deathweb Spider",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "<b>Battlecry:</b> If your hero\ntook damage this turn, gain <b>Lifesteal</b>.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

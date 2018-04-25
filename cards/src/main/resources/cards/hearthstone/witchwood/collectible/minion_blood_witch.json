@@ -1,0 +1,14 @@
+{
+  "name": "Blood Witch",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "At the start of your turn, deal 1 damage to your\u00a0hero.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

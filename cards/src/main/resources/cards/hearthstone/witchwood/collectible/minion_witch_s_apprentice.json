@@ -1,0 +1,24 @@
+{
+  "name": "Witch's Apprentice",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "<b>Taunt</b>\n<b>Battlecry:</b> Add a random Shaman spell to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

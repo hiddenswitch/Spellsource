@@ -1,0 +1,21 @@
+{
+  "name": "Witchwood Imp",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "[x]<b>Stealth</b>\n<b>Deathrattle:</b> Give a random\n  friendly minion +2 Health.",
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

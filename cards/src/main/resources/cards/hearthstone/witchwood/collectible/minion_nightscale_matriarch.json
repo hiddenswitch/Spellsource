@@ -1,0 +1,15 @@
+{
+  "name": "Nightscale Matriarch",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 4,
+  "baseHp": 9,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Whenever a friendly minion is healed, summon a 3/3\u00a0Whelp.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

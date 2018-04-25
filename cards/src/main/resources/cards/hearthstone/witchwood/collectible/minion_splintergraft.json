@@ -1,0 +1,22 @@
+{
+  "name": "Splintergraft",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "[x]<b>Battlecry:</b> Choose a friendly\nminion. Add a 10/10 copy to\nyour hand that costs (10).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

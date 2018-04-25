@@ -35,5 +35,6 @@
     }
   },
   "collectible": true,
+  "set": "WITCHWOOD",
   "fileFormatVersion": 1
 }

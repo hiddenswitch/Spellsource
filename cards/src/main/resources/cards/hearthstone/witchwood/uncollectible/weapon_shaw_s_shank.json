@@ -1,0 +1,12 @@
+{
+  "name": "Shaw's Shank",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Has +1\u00a0Attack for each friendly minion you control.",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

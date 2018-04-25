@@ -1,0 +1,14 @@
+{
+  "name": "Mistwraith",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Whenever you play an <b>Echo</b>\u00a0card, gain +1/+1.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

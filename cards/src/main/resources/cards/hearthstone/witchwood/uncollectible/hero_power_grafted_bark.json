@@ -1,0 +1,17 @@
+{
+  "name": "Grafted Bark",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Hero Power</b>\nChoose a minion. Add a 2/2 copy to your hand that costs (2).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

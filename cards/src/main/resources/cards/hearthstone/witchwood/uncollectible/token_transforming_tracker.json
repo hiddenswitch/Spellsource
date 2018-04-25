@@ -1,0 +1,16 @@
+{
+  "name": "Transforming Tracker",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "<b>Rush</b>\nAt the start of your turn, transform this into a 7/7 with <b>Windfury</b>.",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}
