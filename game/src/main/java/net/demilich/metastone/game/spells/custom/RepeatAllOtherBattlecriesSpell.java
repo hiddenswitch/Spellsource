@@ -8,6 +8,7 @@ import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.CastRandomSpellSpell;
 import net.demilich.metastone.game.spells.Spell;
@@ -93,7 +94,9 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 			}
 			// Actually execute the battlecry
 			context.getLogic().revealCard(player, card);
+			context.getEnvironment().put(Environment.TARGET, battlecryTarget);
 			context.getLogic().castSpell(castingPlayer.getId(), action.getSpell(), source.getReference(), battlecryTarget, action.getTargetRequirement(), false, action);
+			context.getEnvironment().remove(Environment.TARGET);
 			context.getLogic().endOfSequence();
 		}
 	}
