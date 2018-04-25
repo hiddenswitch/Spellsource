@@ -7,6 +7,10 @@
   "baseHp": 5,
   "rarity": "RARE",
   "description": "While this minion has 3 or more Attack, it has <b>Taunt</b> and <b>Lifesteal</b>.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1,
   "auras": [
     {
       "class": "AttributeAura",
@@ -40,9 +44,5 @@
         "targetPlayer": "SELF"
       }
     }
-  ],
-  "attributes": {},
-  "collectible": true,
-  "set": "WITCHWOOD",
-  "fileFormatVersion": 1
+  ]
 }

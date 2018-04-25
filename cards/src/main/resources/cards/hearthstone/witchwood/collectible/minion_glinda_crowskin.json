@@ -10,11 +10,11 @@
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_HAND",
+    "attribute": "AURA_ECHO",
     "filter": {
       "class": "CardFilter",
       "cardType": "MINION"
-    },
-    "attribute": "AURA_ECHO"
+    }
   },
   "collectible": true,
   "set": "WITCHWOOD",

@@ -5,10 +5,30 @@
   "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "Give a Beast +3/+3. Shuffle 3 copies into your deck with +3/+3.",
-  "targetSelection": "NONE",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "MetaSpell",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    },
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 3,
+        "hpBonus": 3
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "value": 3,
+        "spell": {
+          "class": "BuffSpell",
+          "target": "OUTPUT",
+          "attackBonus": 3,
+          "hpBonus": 3
+        }
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

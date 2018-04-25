@@ -3,14 +3,18 @@
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "WHITE",
-  "rarity": "EPIC",
-  "description": "[x]Choose a friendly minion.\nSummon a copy of it with\n1 Health remaining.",
-  "targetSelection": "NONE",
+  "rarity": "COMMON",
+  "description": "Choose a friendly minion. Summon a copy of it with 1 Health remaining.",
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "SummonSpell",
+    "spell": {
+      "class": "SetAttributeSpell",
+      "target": "OUTPUT",
+      "value": 1,
+      "attribute": "HP"
+    }
   },
-  "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

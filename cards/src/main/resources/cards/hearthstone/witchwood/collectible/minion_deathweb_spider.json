@@ -9,18 +9,18 @@
   "race": "BEAST",
   "description": "<b>Battlecry:</b> If your hero\ntook damage this turn, gain <b>Lifesteal</b>.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "AttributeCondition",
       "target": "FRIENDLY_HERO",
+      "value": 0,
       "attribute": "DAMAGE_THIS_TURN",
-      "operation": "GREATER",
-      "value": 0
+      "operation": "GREATER"
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
-      "attribute": "LIFESTEAL",
-      "target": "SELF"
+      "target": "SELF",
+      "attribute": "LIFESTEAL"
     }
   },
   "attributes": {

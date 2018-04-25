@@ -3,9 +3,29 @@
   "baseManaCost": 4,
   "type": "WEAPON",
   "heroClass": "BLACK",
+  "damage": 2,
+  "durability": 2,
   "rarity": "EPIC",
-  "description": "[x]<b>Lifesteal</b>\nWhenever you play a card\nfrom another class,\ngain +1 Durability.",
-  "attributes": {},
+  "description": "<b>Lifesteal</b>\nWhenever you play a card\nfrom another class,\ngain +1 Durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "fireCondition": {
+        "class": "HeroClassCondition",
+        "invert": true,
+        "targetPlayer": "OWNER"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ModifyDurabilitySpell",
+      "value": 1,
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "LIFESTEAL": true
+  },
   "collectible": true,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

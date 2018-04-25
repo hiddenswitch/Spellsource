@@ -22,9 +22,14 @@
           {
             "class": "CardFilter",
             "rarity": "LEGENDARY",
+            "cardType": "SPELL",
             "invert": true
           }
         ]
+      },
+      "cardSource": {
+        "class": "CatalogueSource",
+        "targetPlayer": "OPPONENT"
       }
     }
   },

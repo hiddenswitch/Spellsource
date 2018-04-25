@@ -12,14 +12,14 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "value": 1,
-      "cardSource": {
-        "class": "FormatCatalogueSource",
-        "format": "WILD"
-      },
       "cardFilter": {
         "class": "CardFilter",
         "rarity": "LEGENDARY",
         "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "FormatCatalogueSource",
+        "format": "WILD"
       }
     }
   },

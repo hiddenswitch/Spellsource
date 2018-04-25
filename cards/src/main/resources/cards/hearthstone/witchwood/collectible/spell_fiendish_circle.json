@@ -4,11 +4,12 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "[x]Summon four 1/1 Imps.",
+  "description": "Summon four 1/1 Imps.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "SummonSpell",
+    "value": 4,
+    "card": "token_imp"
   },
   "attributes": {},
   "collectible": true,

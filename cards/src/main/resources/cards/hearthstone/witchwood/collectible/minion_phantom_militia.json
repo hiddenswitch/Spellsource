@@ -8,8 +8,8 @@
   "rarity": "RARE",
   "description": "Echo. Taunt.",
   "attributes": {
-    "TAUNT": true,
-    "ECHO": true
+    "ECHO": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "WITCHWOOD",

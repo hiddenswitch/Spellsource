@@ -11,14 +11,14 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "CastRepeatedlySpell",
-      "howMany": 3,
       "target": "FRIENDLY_MINIONS",
-      "exclusive": true,
       "spell": {
         "class": "BuffSpell",
         "attackBonus": 1,
         "hpBonus": 1
-      }
+      },
+      "exclusive": true,
+      "howMany": 3
     }
   },
   "attributes": {

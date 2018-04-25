@@ -5,10 +5,21 @@
   "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "<b>Freeze</b> a minion.\nIf it's already <b>Frozen</b>, destroy it.",
-  "targetSelection": "NONE",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    },
+    "spell1": {
+      "class": "DestroySpell"
+    },
+    "spell2": {
+      "class": "AddAttributeSpell",
+      "attribute": "FROZEN"
+    }
   },
   "attributes": {},
   "collectible": true,

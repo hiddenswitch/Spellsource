@@ -8,8 +8,8 @@
   "rarity": "COMMON",
   "description": "Echo. Rush.",
   "attributes": {
-    "RUSH": true,
-    "ECHO": true
+    "ECHO": true,
+    "RUSH": true
   },
   "collectible": true,
   "set": "WITCHWOOD",

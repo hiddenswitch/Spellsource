@@ -10,11 +10,11 @@
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
-      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "CardPropertyCondition",
         "cardType": "MINION"
-      }
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "SummonSpell",

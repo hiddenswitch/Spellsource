@@ -9,14 +9,14 @@
   "race": "BEAST",
   "description": "<b>Battlecry:</b> If your hero took damage this turn, summon two 1/1 Bats.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "AttributeCondition",
-      "attribute": "DAMAGE_THIS_TURN",
-      "operation": "GREATER",
       "target": "FRIENDLY_HERO",
-      "value": 0
+      "value": 0,
+      "attribute": "DAMAGE_THIS_TURN",
+      "operation": "GREATER"
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
       "value": 2,
