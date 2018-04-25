@@ -6,7 +6,17 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "[x]<b>Rush</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "description": "<b>Rush</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SwapAttackAndHpSpell",
+      "target": "SELF"
+    }
+  },
   "attributes": {
     "RUSH": true
   },

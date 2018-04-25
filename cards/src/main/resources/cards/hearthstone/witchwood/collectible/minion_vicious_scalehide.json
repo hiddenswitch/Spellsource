@@ -9,6 +9,7 @@
   "race": "BEAST",
   "description": "<b>Lifesteal</b>\n<b>Rush</b>",
   "attributes": {
+    "LIFESTEAL": true,
     "RUSH": true
   },
   "collectible": true,

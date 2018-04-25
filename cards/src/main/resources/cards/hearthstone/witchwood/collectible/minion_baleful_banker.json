@@ -8,9 +8,9 @@
   "rarity": "EPIC",
   "description": "<b>Battlecry:</b> Choose a friendly minion. Shuffle a copy of it into your deck.",
   "battlecry": {
-    "targetSelection": "NONE",
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "NullSpell"
+      "class": "ShuffleToDeckSpell"
     }
   },
   "attributes": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Reduce the cost of all cards in your hand by\u00a0(3).",
+  "description": "Reduce the cost of all cards in your hand by (3).",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

@@ -7,6 +7,34 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "description": "After a friendly minion dies, add a random Shaman spell to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "heroClass": "SILVER",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "invert": true
+          }
+        ]
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
+    }
+  },
   "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",

@@ -7,32 +7,14 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "description": "Minions in your hand have Echo.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "CardPlayedTrigger",
-      "fireCondition": {
-        "class": "CardPropertyCondition",
-        "cardType": "MINION"
-      },
-      "targetPlayer": "SELF"
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_HAND",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
     },
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "spell": {
-        "class": "AddEnchantmentSpell",
-        "target": "OUTPUT",
-        "trigger": {
-          "eventTrigger": {
-            "class": "TurnEndTrigger"
-          },
-          "spell": {
-            "class": "RemoveCardSpell",
-            "target": "SELF"
-          }
-        }
-      },
-      "card": "PENDING_CARD"
-    }
+    "attribute": "AURA_ECHO"
   },
   "collectible": true,
   "set": "WITCHWOOD",

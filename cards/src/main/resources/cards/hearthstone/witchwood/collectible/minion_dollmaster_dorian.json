@@ -7,6 +7,34 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "description": "Whenever you draw a minion, summon a 1/1 copy of it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "cardType": "MINION"
+      }
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "target": "EVENT_TARGET",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "OUTPUT",
+        "spells": [
+          {
+            "class": "SetAttackSpell",
+            "value": 1
+          },
+          {
+            "class": "SetHpSpell",
+            "value": 1
+          }
+        ]
+      }
+    }
+  },
   "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",

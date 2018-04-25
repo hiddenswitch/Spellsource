@@ -39,13 +39,55 @@ public class CastRandomSpellSpell extends Spell {
 				logger.warn("onCast {} {}: An empty number of spells were found with the filter {} and source {}", context.getGameId(), source, desc.getCardFilter(), desc.getCardSource());
 				break;
 			}
+			DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, castingTargetPlayer);
+			if (!determineCastingPlayer.isSourceInPlay()) {
+				break;
+			}
+			Player castingPlayer = determineCastingPlayer.getCastingPlayer();
+
+			// Must retrieve a copy because castWithRandomTargets mutates the incoming spell card
+			Card randomCard = context.getLogic().getRandom(spells).getCopy();
+			logger.debug("onCast {} {}: Casting random spell {}", context.getGameId(), source, randomCard);
+			RandomCardTargetSpell.castCardWithRandomTargets(context, castingPlayer, source, randomCard);
+			context.getLogic().endOfSequence();
+		}
+
+		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+	}
+
+	public static DetermineCastingPlayer determineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
+		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();
+	}
+
+	public static class DetermineCastingPlayer {
+		private boolean sourceDestroyed;
+		private GameContext context;
+		private Player player;
+		private Entity source;
+		private TargetPlayer castingTargetPlayer;
+		private Player castingPlayer;
+
+		public DetermineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
+			this.context = context;
+			this.player = player;
+			this.source = source;
+			this.castingTargetPlayer = castingTargetPlayer;
+		}
+
+		public boolean isSourceInPlay() {
+			return !sourceDestroyed;
+		}
+
+		public Player getCastingPlayer() {
+			return castingPlayer;
+		}
+
+		public DetermineCastingPlayer invoke() {
 			// In case Yogg changes sides, this should case who the spells are being cast for.
-			Player castingPlayer;
 			switch (castingTargetPlayer) {
 				case BOTH:
-					logger.error("onCast {} {}: Cannot cast for both players yet. Using OWNER by default.", context.getGameId(), source);
-				default:
 				case OWNER:
+				default:
 					castingPlayer = context.getPlayer(source.getOwner());
 					break;
 				case SELF:
@@ -69,15 +111,11 @@ public class CastRandomSpellSpell extends Spell {
 					&& (source.getZone()
 					!= Zones.BATTLEFIELD
 					|| source.isDestroyed())) {
-				break;
+				sourceDestroyed = true;
+				return this;
 			}
-			// Must retrieve a copy because castWithRandomTargets mutates the incoming spell card
-			Card randomCard = context.getLogic().getRandom(spells).getCopy();
-			logger.debug("onCast {} {}: Casting random spell {}", context.getGameId(), source, randomCard);
-			RandomCardTargetSpell.castCardWithRandomTargets(context, castingPlayer, source, randomCard);
-			context.getLogic().endOfSequence();
+			sourceDestroyed = false;
+			return this;
 		}
-
-		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 	}
 }

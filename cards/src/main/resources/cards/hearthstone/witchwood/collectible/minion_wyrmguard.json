@@ -8,9 +8,26 @@
   "rarity": "COMMON",
   "description": "<b>Battlecry:</b> If you're holding a Dragon, gain +1 Attack and <b>Taunt</b>.",
   "battlecry": {
-    "targetSelection": "NONE",
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
     "spell": {
-      "class": "NullSpell"
+      "class": "MetaSpell",
+      "target": "SELF",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 1
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        }
+      ]
     }
   },
   "attributes": {

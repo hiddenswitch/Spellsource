@@ -168,7 +168,7 @@ public abstract class Actor extends Entity {
 	public int getMaxNumberOfAttacks() {
 		if (hasAttribute(Attribute.MEGA_WINDFURY)) {
 			return GameLogic.MEGA_WINDFURY_ATTACKS;
-		} else if (hasAttribute(Attribute.WINDFURY)) {
+		} else if (hasAttribute(Attribute.WINDFURY) || hasAttribute(Attribute.AURA_WINDFURY)) {
 			return GameLogic.WINDFURY_ATTACKS;
 		}
 		return 1;

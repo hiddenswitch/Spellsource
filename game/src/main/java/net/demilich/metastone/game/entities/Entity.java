@@ -146,8 +146,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Gets the name of the entity (typically the name of the card that created this entity). Or, overridden by the
-	 * {@link Attribute#NAME} attribute set in this entity's attributes.
+	 * Gets the name of the entity (typically the name of the card that created this entity). Or, overridden by the {@link
+	 * Attribute#NAME} attribute set in this entity's attributes.
 	 *
 	 * @return The name.
 	 */
@@ -180,8 +180,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Gets an {@link EntityReference} that points to this entity.
 	 *
 	 * @return An {@link EntityReference}.
-	 * @see EntityReference for a better understanding of how references can point to a specific entity or to some
-	 * notion of a group of entities (like {@link EntityReference#ENEMY_MINIONS}).
+	 * @see EntityReference for a better understanding of how references can point to a specific entity or to some notion
+	 * of a group of entities (like {@link EntityReference#ENEMY_MINIONS}).
 	 */
 	public EntityReference getReference() {
 		return EntityReference.pointTo(this);
@@ -243,9 +243,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Sets an attribute. This will remove silencing when it is called. Since boolean values are not stored in
-	 * attributes, attributes that are "boolean" are just set to 1. Setting the value to 0 is not equivalent to not
-	 * having the attribute.
+	 * Sets an attribute. This will remove silencing when it is called. Since boolean values are not stored in attributes,
+	 * attributes that are "boolean" are just set to 1. Setting the value to 0 is not equivalent to not having the
+	 * attribute.
 	 *
 	 * @param attribute The attribute to set.
 	 */
@@ -299,8 +299,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Overwrites all the entity's attributes with the specified {@link AttributeMap}. Does not copy the attribute map,
-	 * so be careful with multiple entities references the same map.
+	 * Overwrites all the entity's attributes with the specified {@link AttributeMap}. Does not copy the attribute map, so
+	 * be careful with multiple entities references the same map.
 	 *
 	 * @param attributes The {@link AttributeMap}
 	 */
@@ -310,8 +310,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Entities with persistent effects need their events to be processed differently in order to record those
-	 * persistent values to a database.
+	 * Entities with persistent effects need their events to be processed differently in order to record those persistent
+	 * values to a database.
 	 *
 	 * @return {@code true} if the entity needs to have its persistent effects persisted.
 	 * @see Attribute#LAST_MINION_DESTROYED_CARD_ID for an example of a persistent attribute that needs to be stored
@@ -375,8 +375,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	/**
 	 * Should not be called.
 	 * <p>
-	 * Resets the entity's location by setting it to {@link EntityLocation#UNASSIGNED}. Typically only called by an
-	 * {@link EntityZone}.
+	 * Resets the entity's location by setting it to {@link EntityLocation#UNASSIGNED}. Typically only called by an {@link
+	 * EntityZone}.
 	 */
 	public void resetEntityLocations() {
 		entityLocation = EntityLocation.UNASSIGNED;
@@ -434,8 +434,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Limits the number of transformations to follow to 89.
 	 *
 	 * @param context A {@link GameContext} to perform lookups in.
-	 * @return This entity if no transform is found, otherwise follows the chain of resolved entities until no
-	 * transformed entity is found.
+	 * @return This entity if no transform is found, otherwise follows the chain of resolved entities until no transformed
+	 * entity is found.
 	 */
 	public Entity transformResolved(GameContext context) {
 		return transformResolved(context, 89);
@@ -501,5 +501,20 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 
 	public Race getRace() {
 		return (Race) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
+	}
+
+	public boolean isInPlay() {
+		switch (getZone()) {
+			case HAND:
+			case QUEST:
+			case SECRET:
+			case HERO:
+			case HERO_POWER:
+			case BATTLEFIELD:
+			case WEAPON:
+				return true;
+		}
+
+		return false;
 	}
 }

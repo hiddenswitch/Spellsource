@@ -10,8 +10,17 @@
   "description": "<b>Battlecry:</b> If this is the only minion in the battlefield, gain +3/+3.",
   "battlecry": {
     "targetSelection": "NONE",
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 1,
+      "operation": "EQUAL",
+      "targetPlayer": "BOTH"
+    },
     "spell": {
-      "class": "NullSpell"
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 3,
+      "hpBonus": 3
     }
   },
   "attributes": {

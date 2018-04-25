@@ -10,7 +10,14 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "RecastSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardSource": {
+        "class": "SecretSource"
+      }
     }
   },
   "attributes": {

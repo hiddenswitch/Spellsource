@@ -6,11 +6,36 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "[x]<b>Battlecry:</b> Choose a friendly\nminion. Add a 10/10 copy to\nyour hand that costs (10).",
+  "description": "<b>Battlecry:</b> Choose a friendly\nminion. Add a 10/10 copy to\nyour hand that costs (10).",
   "battlecry": {
-    "targetSelection": "NONE",
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "NullSpell"
+      "class": "CopyCardSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "OUTPUT",
+        "spells": [
+          {
+            "class": "CardCostModifierSpell",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 10,
+              "operation": "SET"
+            }
+          },
+          {
+            "class": "SetAttackSpell",
+            "value": 10,
+            "exclusive": true
+          },
+          {
+            "class": "SetHpSpell",
+            "value": 10,
+            "exclusive": true
+          }
+        ]
+      }
     }
   },
   "attributes": {

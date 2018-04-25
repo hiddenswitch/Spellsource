@@ -11,7 +11,30 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "value": {
+            "class": "EntityCounter",
+            "target": "FRIENDLY_MINIONS",
+            "filter": {
+              "class": "RaceFilter",
+              "race": "TOTEM"
+            },
+            "multiplier": 2
+          }
+        },
+        {
+          "class": "DestroySpell",
+          "target": "FRIENDLY_MINIONS",
+          "filter": {
+            "class": "RaceFilter",
+            "race": "TOTEM"
+          }
+        }
+      ]
     }
   },
   "attributes": {

@@ -1446,6 +1446,14 @@ definitions:
         description: |
           When true, the entity can attack the same turn it is summoned.
         type: 'boolean'
+      lifesteal:
+        description: |
+          When true, the entity heals its owner when it deals damage.
+        type: 'boolean'
+      poisonous:
+        description: |
+          When true, the entity will destroy any target it damages.
+        type: 'boolean'
       enraged:
         description: |
           When true, this entity is under the influence of "enrage," or a bonus when it takes damage the first time.

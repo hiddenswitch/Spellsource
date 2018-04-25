@@ -8,7 +8,9 @@
   "rarity": "COMMON",
   "description": "<b>Deathrattle:</b> Restore 8 Health to your hero.",
   "deathrattle": {
-    "class": "NullSpell"
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 8
   },
   "attributes": {
     "DEATHRATTLES": true

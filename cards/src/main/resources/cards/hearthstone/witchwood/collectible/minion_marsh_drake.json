@@ -11,7 +11,9 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "SummonSpell",
+      "card": "token_drakeslayer",
+      "targetPlayer": "OPPONENT"
     }
   },
   "attributes": {

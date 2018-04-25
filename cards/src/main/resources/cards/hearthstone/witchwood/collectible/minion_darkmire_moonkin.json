@@ -7,7 +7,9 @@
   "baseHp": 8,
   "rarity": "COMMON",
   "description": "<b>Spell Damage +2</b>",
-  "attributes": {},
+  "attributes": {
+    "SPELL_DAMAGE": 2
+  },
   "collectible": true,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

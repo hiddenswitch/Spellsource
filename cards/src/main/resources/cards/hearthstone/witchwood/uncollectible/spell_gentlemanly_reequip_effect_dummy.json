@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "It is a dummy card for holding a effect to play when reequipping Gentleman's Top Hat (GILA\u00a0825)",
+  "description": "It is a dummy card for holding a effect to play when reequipping Gentleman's Top Hat (GILA 825)",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",
