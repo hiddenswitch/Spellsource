@@ -1,0 +1,16 @@
+{
+  "name": "Gilnean Tracker",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "[x]<b>Rush</b>\nAt the start of your turn,\ntransform this into a 5/5.",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

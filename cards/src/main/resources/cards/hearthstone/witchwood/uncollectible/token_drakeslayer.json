@@ -1,0 +1,16 @@
+{
+  "name": "Drakeslayer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "<b>Poisonous</b>",
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Vivid Nightmare",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "EPIC",
+  "description": "[x]Choose a friendly minion.\nSummon a copy of it with\n1 Health remaining.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

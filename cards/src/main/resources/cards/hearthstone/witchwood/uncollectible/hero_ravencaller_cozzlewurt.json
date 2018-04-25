@@ -1,0 +1,12 @@
+{
+  "name": "Ravencaller Cozzlewurt",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "<i>The feathered fiends of Gilneas flock to his sinister call.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

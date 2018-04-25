@@ -1,0 +1,12 @@
+{
+  "name": "Brushwood Centurion",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "<i>This once-stalwart defender of the woods now sows chaos.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

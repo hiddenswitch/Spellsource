@@ -1,0 +1,17 @@
+{
+  "name": "Tuskarr Raider",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 9,
+  "rarity": "FREE",
+  "race": "PIRATE",
+  "description": "<b>Rush</b>\nAfter this minion attacks, fire your Cannons.",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

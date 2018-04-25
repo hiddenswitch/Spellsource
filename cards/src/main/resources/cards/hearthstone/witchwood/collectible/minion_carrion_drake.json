@@ -1,0 +1,23 @@
+{
+  "name": "Carrion Drake",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "<b>Battlecry:</b> If a minion died this turn, gain <b>Poisonous</b>.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

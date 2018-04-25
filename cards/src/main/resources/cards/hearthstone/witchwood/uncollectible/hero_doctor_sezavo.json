@@ -1,0 +1,12 @@
+{
+  "name": "Doctor Sezavo",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "VIOLET",
+  "rarity": "FREE",
+  "description": "<i>It\u2019s good to give blood. But not to him. He\u2019s not a real doctor.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

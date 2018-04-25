@@ -1,0 +1,14 @@
+{
+  "name": "Archmage Arugal",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you draw a minion, add a copy of it to\u00a0your hand.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

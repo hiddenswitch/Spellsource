@@ -1,0 +1,12 @@
+{
+  "name": "Cragtorr",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BROWN",
+  "rarity": "FREE",
+  "description": "<i>Seeds sewn from hatred, sustained by dark magic.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

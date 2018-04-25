@@ -1,0 +1,15 @@
+{
+  "name": "Quartz Elemental",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Can't attack while damaged.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Duskbat",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "<b>Battlecry:</b> If your hero took damage this turn, summon two 1/1 Bats.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

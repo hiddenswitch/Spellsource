@@ -1,0 +1,12 @@
+{
+  "name": "Silver Sword",
+  "baseManaCost": 8,
+  "type": "WEAPON",
+  "heroClass": "GOLD",
+  "rarity": "RARE",
+  "description": "After your hero attacks, give your minions +1/+1.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

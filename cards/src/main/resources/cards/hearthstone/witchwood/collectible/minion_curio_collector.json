@@ -1,0 +1,14 @@
+{
+  "name": "Curio Collector",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Whenever you draw a card, gain +1/+1.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

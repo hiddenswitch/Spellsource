@@ -1,0 +1,17 @@
+{
+  "name": "Blazing Invocation",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "<b>Discover</b> a <b>Battlecry</b> minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

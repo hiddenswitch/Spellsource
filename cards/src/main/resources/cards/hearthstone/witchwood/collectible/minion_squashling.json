@@ -1,0 +1,22 @@
+{
+  "name": "Squashling",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "[x]<b>Echo</b>\n<b>Battlecry:</b> Restore 2 Health.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Gustave, the Gutripper",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "<i>Hagatha\u2019s pet eats his way from the bottom of the food chain up.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

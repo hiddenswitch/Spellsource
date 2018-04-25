@@ -1,0 +1,12 @@
+{
+  "name": "Sephira Dusktalon",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BROWN",
+  "rarity": "FREE",
+  "description": "<i>Even your own magic can be twisted by these woods.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Spectral Cutlass",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "BLACK",
+  "rarity": "EPIC",
+  "description": "[x]<b>Lifesteal</b>\nWhenever you play a card\nfrom another class,\ngain +1 Durability.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

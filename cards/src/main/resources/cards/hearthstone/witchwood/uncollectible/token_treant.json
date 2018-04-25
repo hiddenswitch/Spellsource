@@ -1,0 +1,14 @@
+{
+  "name": "Treant",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

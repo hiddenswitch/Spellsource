@@ -1,0 +1,15 @@
+{
+  "name": "Bogshaper",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Whenever you cast a spell, draw a minion from your\u00a0deck.",
+  "attributes": {},
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

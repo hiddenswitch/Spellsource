@@ -1,0 +1,23 @@
+{
+  "name": "Ratcatcher",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "<b>Rush</b>\n<b>Battlecry:</b> Destroy a friendly minion and gain its Attack and Health.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

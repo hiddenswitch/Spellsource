@@ -1,0 +1,17 @@
+{
+  "name": "Woodcutter's Axe",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "RED",
+  "rarity": "COMMON",
+  "description": "<b>Deathrattle:</b> Give +2/+1 to a random friendly <b>Rush</b> minion.",
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

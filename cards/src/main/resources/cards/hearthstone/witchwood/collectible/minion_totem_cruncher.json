@@ -1,0 +1,24 @@
+{
+  "name": "Totem Cruncher",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "<b>Taunt</b>\n<b>Battlecry:</b> Destroy your Totems. Gain +2/+2 for each destroyed.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

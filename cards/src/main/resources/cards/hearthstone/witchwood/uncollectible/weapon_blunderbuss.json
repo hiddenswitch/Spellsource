@@ -1,0 +1,12 @@
+{
+  "name": "Blunderbuss",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Also damages the minions next to whomever your hero\u00a0attacks.",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

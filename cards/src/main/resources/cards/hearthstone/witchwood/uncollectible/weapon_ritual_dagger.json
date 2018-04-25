@@ -1,0 +1,12 @@
+{
+  "name": "Ritual Dagger",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "[x]<b>Lifesteal</b>\nAfter you cast a spell, this\ngains +1 Durability.",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}
