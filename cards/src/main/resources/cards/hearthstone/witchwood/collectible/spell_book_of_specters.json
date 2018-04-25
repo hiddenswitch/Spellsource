@@ -7,8 +7,20 @@
   "description": "Draw 3 cards. Discard any spells drawn.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "DrawCardSpell",
+    "value": 3,
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "CardPropertyCondition",
+        "target": "OUTPUT",
+        "cardType": "SPELL"
+      },
+      "spell": {
+        "class": "DiscardSpell",
+        "target": "OUTPUT"
+      }
+    }
   },
   "attributes": {},
   "collectible": true,

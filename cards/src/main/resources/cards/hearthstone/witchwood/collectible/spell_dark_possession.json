@@ -4,11 +4,23 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "Deal $2 damage to a friendly character. <b>Discover</b> a Demon.",
-  "targetSelection": "NONE",
+  "description": "Deal 2 damage to a friendly character. <b>Discover</b> a Demon.",
+  "targetSelection": "FRIENDLY_CHARACTERS",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "DiscoverSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DEMON"
+        }
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

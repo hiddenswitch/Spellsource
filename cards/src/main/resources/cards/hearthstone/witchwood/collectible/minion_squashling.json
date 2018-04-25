@@ -15,8 +15,8 @@
     }
   },
   "attributes": {
-    "ECHO": true,
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "ECHO": true
   },
   "collectible": true,
   "set": "WITCHWOOD",

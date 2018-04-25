@@ -7,8 +7,21 @@
   "description": "Reveal a weapon from your deck. Deal its Attack to all minions.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "RevealCardSpell",
+    "target": "FRIENDLY_DECK",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "OUTPUT",
+        "attribute": "ATTACK"
+      }
+    },
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    }
   },
   "attributes": {},
   "collectible": true,

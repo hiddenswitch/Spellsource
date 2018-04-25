@@ -9,7 +9,6 @@
   "race": "DRAGON",
   "description": "<b>Battlecry:</b> If a minion died this turn, gain <b>Poisonous</b>.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "AnyMatchFilterCondition",
       "target": "ALL_ENTITIES",
@@ -22,19 +21,20 @@
           },
           {
             "class": "AttributeFilter",
-            "attribute": "DIED_ON_TURN",
             "value": {
               "class": "CurrentTurnValueProvider"
             },
+            "attribute": "DIED_ON_TURN",
             "operation": "EQUAL"
           }
         ]
       }
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
-      "attribute": "POISONOUS",
-      "target": "SELF"
+      "target": "SELF",
+      "attribute": "POISONOUS"
     }
   },
   "attributes": {

@@ -11,10 +11,6 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "custom.RepeatAllOtherBattlecriesSpell",
-      "cardSource": {
-        "class": "GraveyardCardsSource",
-        "targetPlayer": "SELF"
-      },
       "cardFilter": {
         "class": "AndFilter",
         "filters": [
@@ -28,6 +24,10 @@
             "attribute": "PLAYED_FROM_HAND_OR_DECK"
           }
         ]
+      },
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
       }
     }
   },

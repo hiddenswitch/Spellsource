@@ -15,8 +15,8 @@
       "filter": {
         "class": "AttributeFilter",
         "value": 2,
-        "operation": "LESS_OR_EQUAL",
-        "attribute": "ATTACK"
+        "attribute": "ATTACK",
+        "operation": "LESS_OR_EQUAL"
       }
     }
   },

@@ -9,8 +9,8 @@
   "description": "<b>Deathrattle:</b> Summon two 2/2 Splitting Saplings.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "token_splitting_sapling",
-    "value": 2
+    "value": 2,
+    "card": "token_splitting_sapling"
   },
   "attributes": {
     "DEATHRATTLES": true

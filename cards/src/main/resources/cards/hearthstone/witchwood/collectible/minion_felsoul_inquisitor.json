@@ -9,8 +9,8 @@
   "race": "DEMON",
   "description": "<b>Lifesteal</b>\n<b>Taunt</b>",
   "attributes": {
-    "TAUNT": true,
-    "LIFESTEAL": true
+    "LIFESTEAL": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "WITCHWOOD",

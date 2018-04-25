@@ -11,11 +11,11 @@
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",
-      "targetEntityType": "MINION",
       "fireCondition": {
         "class": "OwnedByPlayerCondition",
         "targetPlayer": "SELF"
-      }
+      },
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "SummonSpell",

@@ -7,8 +7,21 @@
   "description": "Draw a card.\nGain 1 Armor for each card in your hand.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell"
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "HAND_COUNT",
+          "targetPlayer": "SELF"
+        }
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

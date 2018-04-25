@@ -7,10 +7,6 @@
   "baseHp": 8,
   "rarity": "RARE",
   "description": "<b>Divine Shield</b>, <b>Rush</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
-  "attributes": {
-    "DIVINE_SHIELD": true,
-    "RUSH": true
-  },
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",
@@ -20,6 +16,10 @@
       "class": "SwapAttackAndHpSpell",
       "target": "SELF"
     }
+  },
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "RUSH": true
   },
   "collectible": true,
   "set": "WITCHWOOD",

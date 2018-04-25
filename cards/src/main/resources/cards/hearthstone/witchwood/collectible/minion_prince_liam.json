@@ -12,14 +12,14 @@
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_DECK",
-      "filter": {
-        "class": "CardFilter",
-        "manaCost": 1
-      },
       "cardFilter": {
         "class": "CardFilter",
         "rarity": "LEGENDARY",
         "cardType": "MINION"
+      },
+      "filter": {
+        "class": "CardFilter",
+        "manaCost": 1
       }
     }
   },

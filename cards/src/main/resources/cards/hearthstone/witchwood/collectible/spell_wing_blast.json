@@ -4,14 +4,40 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "description": "Deal $4 damage to a minion. If a minion died this turn, this costs (1).",
-  "targetSelection": "NONE",
+  "description": "Deal 4 damage to a minion. If a minion died this turn, this costs (1).",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "DamageSpell",
+    "value": 4
   },
   "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "ALL_ENTITIES",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "AttributeFilter",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "attribute": "DIED_ON_TURN",
+            "operation": "EQUAL"
+          }
+        ]
+      }
+    },
+    "ifFalse": 0,
+    "ifTrue": 3
+  }
 }

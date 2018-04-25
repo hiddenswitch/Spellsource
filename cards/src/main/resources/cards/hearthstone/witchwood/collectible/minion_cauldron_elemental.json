@@ -11,11 +11,11 @@
   "aura": {
     "class": "BuffAura",
     "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 2,
     "filter": {
       "class": "RaceFilter",
       "race": "ELEMENTAL"
     },
-    "attackBonus": 2,
     "hpBonus": 0
   },
   "attributes": {},

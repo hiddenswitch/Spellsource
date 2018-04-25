@@ -9,10 +9,10 @@
   "race": "PIRATE",
   "description": "<b>Combo:</b> Give your weapon +1 Attack.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "ComboCondition"
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_WEAPON",

@@ -4,11 +4,20 @@
   "type": "SPELL",
   "heroClass": "WHITE",
   "rarity": "RARE",
-  "description": "Deal $4 damage to a minion. If that kills it, add a copy of it to your hand.",
-  "targetSelection": "NONE",
+  "description": "Deal 4 damage to a minion. If that kills it, add a copy of it to your hand.",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 4
+    },
+    "spell2": {
+      "class": "CopyCardSpell"
+    }
   },
   "attributes": {},
   "collectible": true,

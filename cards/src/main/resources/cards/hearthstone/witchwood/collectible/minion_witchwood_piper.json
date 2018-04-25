@@ -27,10 +27,10 @@
                 "class": "CardFilter",
                 "cardType": "MINION"
               },
+              "operation": "MINIMUM",
               "value1": {
                 "class": "ManaCostProvider"
-              },
-              "operation": "MINIMUM"
+              }
             },
             "operation": "EQUAL"
           }

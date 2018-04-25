@@ -4,13 +4,15 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Deal $2 damage to a minion. <b>Overload:</b> (1)",
-  "targetSelection": "NONE",
+  "description": "Deal 2 damage to a minion. <b>Overload:</b> (1)",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "DamageSpell",
+    "value": 2
   },
-  "attributes": {},
+  "attributes": {
+    "OVERLOAD": 1
+  },
   "collectible": true,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

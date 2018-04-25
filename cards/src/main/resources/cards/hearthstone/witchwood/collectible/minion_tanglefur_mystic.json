@@ -11,15 +11,15 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "targetPlayer": "BOTH",
       "cardFilter": {
         "class": "CardFilter",
-        "manaCost": 2,
-        "cardType": "MINION"
+        "cardType": "MINION",
+        "manaCost": 2
       },
       "cardSource": {
         "class": "UnweightedCatalogueSource"
-      }
+      },
+      "targetPlayer": "BOTH"
     }
   },
   "attributes": {

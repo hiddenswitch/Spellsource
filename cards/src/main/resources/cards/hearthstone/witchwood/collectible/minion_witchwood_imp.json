@@ -11,8 +11,8 @@
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
-    "randomTarget": true,
-    "hpBonus": 2
+    "hpBonus": 2,
+    "randomTarget": true
   },
   "attributes": {
     "DEATHRATTLES": true,
