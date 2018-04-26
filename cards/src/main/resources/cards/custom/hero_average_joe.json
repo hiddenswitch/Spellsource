@@ -7,26 +7,26 @@
   "rarity": "FREE",
   "description": "Battlecry: Discover your Adventure Boss.",
   "battlecry": {
-  "spell": {
-		"class": "DiscoverSpell",
-		"spell": {
-			"class": "ChangeHeroSpell",
-			"targetPlayer": "SELF"
-		},
-		"cardFilter": {
-			"class": "CardFilter",
-			"cardType": "HERO",
-			"cardSet": "BLIZZARD_ADVENTURE"
-			 },
-        "cardSource": {
-          "class": "UncollectibleCatalogueSource"
-        }
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ChangeHeroSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardSet": "BLIZZARD_ADVENTURE",
+        "cardType": "HERO"
+      },
+      "cardSource": {
+        "class": "UncollectibleCatalogueSource"
       }
-    },
+    }
+  },
   "attributes": {
-  "BATTLECRY": true,
+    "ARMOR": 30,
+    "BATTLECRY": true,
     "HP": 30,
-	"ARMOR": 30,
     "MAX_HP": 30
   },
   "collectible": false,
