@@ -1,0 +1,31 @@
+{
+  "name": "Load and Lock",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "EPIC",
+  "description": "Each time you cast a spell this turn, add a random Marksman spell to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_barrage",
+          "spell_load_and_lock"
+        ],
+        "randomTarget": true
+      },
+      "oneTurn": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
