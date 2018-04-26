@@ -9,7 +9,7 @@
   "description": "Your other minions have Rush.",
   "aura": {
     "class": "AttributeAura",
-    "target": "FRIENDLY_MINIONS",
+    "target": "OTHER_FRIENDLY_MINIONS",
     "attribute": "AURA_RUSH"
   },
   "collectible": true,
