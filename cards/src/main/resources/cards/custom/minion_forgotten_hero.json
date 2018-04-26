@@ -1,28 +1,33 @@
 {
-	"name": "Forgotten Hero",
-	"baseManaCost": 4,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "LEGENDARY",
-	"description": "After a hero power is used, replace it with a random one.",
-	"trigger": {
-		"class": "InspireTrigger",
-		"targetPlayer": "BOTH"
-	},
-		"spell": {
-		"target": "EVENT_TARGET",
-		"class": "ChangeHeroPowerSpell",
-		"cardFilter": {
-						"class": "CardFilter",
-						"cardType": "HERO_POWER"
-						 },
-        "cardSource": {
-          "class": "UncollectibleCatalogueSource"
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "name": "Forgotten Hero",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "After a hero power is used, replace it with a random one.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "targetPlayer": "ACTIVE",
+      "class": "ChangeHeroPowerSpell",
+      "cards": [
+        "hero_power_shapeshift",
+        "hero_power_steady_shot",
+        "hero_power_fireblast",
+        "hero_power_reinforce",
+        "hero_power_lesser_heal",
+        "hero_power_dagger_mastery",
+        "hero_power_totemic_call",
+        "hero_power_armor_up"
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }
