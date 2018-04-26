@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Echo. Rush.",
   "attributes": {
     "ECHO": true,

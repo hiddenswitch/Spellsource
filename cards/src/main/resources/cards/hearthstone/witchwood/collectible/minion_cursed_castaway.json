@@ -6,6 +6,7 @@
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "RARE",
+  "race": "PIRATE",
   "description": "Rush. Deathrattle: Draw a Combo card from your deck.",
   "deathrattle": {
     "class": "FromDeckToHandSpell",
