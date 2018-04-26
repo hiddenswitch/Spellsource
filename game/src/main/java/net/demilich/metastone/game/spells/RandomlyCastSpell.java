@@ -11,6 +11,11 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Give a list of effects in {@link SpellArg#SPELLS}, randomly choose one to cast on each target.
+ * <p>
+ * Implements Enhance-o Mechano.
+ */
 public class RandomlyCastSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc... spells) {

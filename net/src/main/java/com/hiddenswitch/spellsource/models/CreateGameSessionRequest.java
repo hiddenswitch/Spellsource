@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.models;
 
 import com.hiddenswitch.spellsource.Games;
-import com.hiddenswitch.spellsource.impl.server.PregamePlayerConfiguration;
+import com.hiddenswitch.spellsource.impl.server.Configuration;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -11,36 +11,36 @@ public final class CreateGameSessionRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String gameId;
-	private PregamePlayerConfiguration pregame1;
-	private PregamePlayerConfiguration pregame2;
+	private Configuration pregame1;
+	private Configuration pregame2;
 	private Trigger customTriggers;
 	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
 
 	public CreateGameSessionRequest() {
 	}
 
-	public PregamePlayerConfiguration getPregame1() {
+	public Configuration getPregame1() {
 		return pregame1;
 	}
 
-	public void setPregame1(PregamePlayerConfiguration pregame1) {
+	public void setPregame1(Configuration pregame1) {
 		this.pregame1 = pregame1;
 	}
 
-	public PregamePlayerConfiguration getPregame2() {
+	public Configuration getPregame2() {
 		return pregame2;
 	}
 
-	public void setPregame2(PregamePlayerConfiguration pregame2) {
+	public void setPregame2(Configuration pregame2) {
 		this.pregame2 = pregame2;
 	}
 
-	public CreateGameSessionRequest withPregame1(PregamePlayerConfiguration pregame1) {
+	public CreateGameSessionRequest withPregame1(Configuration pregame1) {
 		setPregame1(pregame1);
 		return this;
 	}
 
-	public CreateGameSessionRequest withPregame2(PregamePlayerConfiguration pregame2) {
+	public CreateGameSessionRequest withPregame2(Configuration pregame2) {
 		setPregame2(pregame2);
 		return this;
 	}

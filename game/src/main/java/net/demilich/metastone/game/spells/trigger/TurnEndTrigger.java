@@ -25,7 +25,7 @@ public class TurnEndTrigger extends EventTrigger {
 
 	public TurnEndTrigger(TargetPlayer targetPlayer) {
 		this();
-		desc.put(EventTriggerArg.TARGET_PLAYER, targetPlayer);
+		getDesc().put(EventTriggerArg.TARGET_PLAYER, targetPlayer);
 	}
 
 	@Override

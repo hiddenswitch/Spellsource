@@ -29,6 +29,8 @@ Name | Type | Description | Notes
 **taunt** | **Boolean** | Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent&#39;s physical attack action targeting.  |  [optional]
 **spellDamage** | **Integer** | Indicates the amount of additional spell damage this entity gives its owning player.  |  [optional]
 **charge** | **Boolean** | When true, the entity can attack the same turn it is summoned.  |  [optional]
+**lifesteal** | **Boolean** | When true, the entity heals its owner when it deals damage.  |  [optional]
+**poisonous** | **Boolean** | When true, the entity will destroy any target it damages.  |  [optional]
 **enraged** | **Boolean** | When true, this entity is under the influence of \&quot;enrage,\&quot; or a bonus when it takes damage the first time.  |  [optional]
 **battlecry** | **Boolean** | When true, this entity has an effect that gets triggered when it is played from the hand.  |  [optional]
 **deathrattles** | **Boolean** | When true, this entity has an effect that gets triggered when it is destroyed.  |  [optional]

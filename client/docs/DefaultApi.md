@@ -4,6 +4,7 @@ All URIs are relative to *http://metastone-dev.us-west-2.elasticbeanstalk.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**acceptInvite**](DefaultApi.md#acceptInvite) | **POST** /invites/{inviteId} | 
 [**changePassword**](DefaultApi.md#changePassword) | **POST** /accounts-password | 
 [**createAccount**](DefaultApi.md#createAccount) | **PUT** /accounts | 
 [**decksDelete**](DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
@@ -11,6 +12,7 @@ Method | HTTP request | Description
 [**decksGetAll**](DefaultApi.md#decksGetAll) | **GET** /decks | 
 [**decksPut**](DefaultApi.md#decksPut) | **PUT** /decks | 
 [**decksUpdate**](DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
+[**deleteInvite**](DefaultApi.md#deleteInvite) | **DELETE** /invites/{inviteId} | 
 [**draftsChooseCard**](DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards | 
 [**draftsChooseHero**](DefaultApi.md#draftsChooseHero) | **PUT** /drafts/hero | 
 [**draftsGet**](DefaultApi.md#draftsGet) | **GET** /drafts | 
@@ -20,7 +22,8 @@ Method | HTTP request | Description
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
 [**getCards**](DefaultApi.md#getCards) | **GET** /cards | 
-[**getFriendConversation**](DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
+[**getInvite**](DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
+[**getInvites**](DefaultApi.md#getInvites) | **GET** /invites | 
 [**healthCheck**](DefaultApi.md#healthCheck) | **GET** / | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
 [**matchmakingConstructedDelete**](DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/{queueId} | 
@@ -28,8 +31,63 @@ Method | HTTP request | Description
 [**matchmakingConstructedQueueDelete**](DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking | 
 [**matchmakingConstructedQueuePut**](DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
 [**matchmakingGet**](DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
-[**sendFriendMessage**](DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
+[**postInvite**](DefaultApi.md#postInvite) | **POST** /invites | 
 
+
+<a name="acceptInvite"></a>
+# **acceptInvite**
+> AcceptInviteResponse acceptInvite(request)
+
+
+
+Accepts the invite. If this is an invite to friend the user, this method will perform the friending path for you. If this is an invite to play a match and a matchmaking queue put is specified (with the deck ID), this method will enter you into the special invite matchmaking queue. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+AcceptInviteRequest request = new AcceptInviteRequest(); // AcceptInviteRequest | 
+try {
+    AcceptInviteResponse result = apiInstance.acceptInvite(request);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#acceptInvite");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**AcceptInviteRequest**](AcceptInviteRequest.md)|  |
+
+### Return type
+
+[**AcceptInviteResponse**](AcceptInviteResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="changePassword"></a>
 # **changePassword**
@@ -393,6 +451,57 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**DecksGetResponse**](DecksGetResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="deleteInvite"></a>
+# **deleteInvite**
+> InviteResponse deleteInvite()
+
+
+
+When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+try {
+    InviteResponse result = apiInstance.deleteInvite();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#deleteInvite");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**InviteResponse**](InviteResponse.md)
 
 ### Authorization
 
@@ -884,13 +993,13 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="getFriendConversation"></a>
-# **getFriendConversation**
-> GetConversationResponse getFriendConversation(friendId)
+<a name="getInvite"></a>
+# **getInvite**
+> InviteResponse getInvite()
 
 
 
-get conversation with friend 
+Retrieves information about a specific invite, as long as this user is either the sender or recipient. 
 
 ### Example
 ```java
@@ -910,25 +1019,72 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
-String friendId = "friendId_example"; // String | id of friend
 try {
-    GetConversationResponse result = apiInstance.getFriendConversation(friendId);
+    InviteResponse result = apiInstance.getInvite();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling DefaultApi#getFriendConversation");
+    System.err.println("Exception when calling DefaultApi#getInvite");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **friendId** | **String**| id of friend |
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetConversationResponse**](GetConversationResponse.md)
+[**InviteResponse**](InviteResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getInvites"></a>
+# **getInvites**
+> InviteGetResponse getInvites()
+
+
+
+Retrieve all invites where this user is either the sender or recipient. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+try {
+    InviteGetResponse result = apiInstance.getInvites();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getInvites");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**InviteGetResponse**](InviteGetResponse.md)
 
 ### Authorization
 
@@ -1293,13 +1449,13 @@ This endpoint does not need any parameter.
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="sendFriendMessage"></a>
-# **sendFriendMessage**
-> SendMessageResponse sendFriendMessage(friendId, request)
+<a name="postInvite"></a>
+# **postInvite**
+> InviteResponse postInvite(request)
 
 
 
-send message to friend 
+Send an invite 
 
 ### Example
 ```java
@@ -1319,13 +1475,12 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
-String friendId = "friendId_example"; // String | id of friend
-SendMessageRequest request = new SendMessageRequest(); // SendMessageRequest | Send message request
+InvitePostRequest request = new InvitePostRequest(); // InvitePostRequest | 
 try {
-    SendMessageResponse result = apiInstance.sendFriendMessage(friendId, request);
+    InviteResponse result = apiInstance.postInvite(request);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling DefaultApi#sendFriendMessage");
+    System.err.println("Exception when calling DefaultApi#postInvite");
     e.printStackTrace();
 }
 ```
@@ -1334,12 +1489,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **friendId** | **String**| id of friend |
- **request** | [**SendMessageRequest**](SendMessageRequest.md)| Send message request |
+ **request** | [**InvitePostRequest**](InvitePostRequest.md)|  |
 
 ### Return type
 
-[**SendMessageResponse**](SendMessageResponse.md)
+[**InviteResponse**](InviteResponse.md)
 
 ### Authorization
 

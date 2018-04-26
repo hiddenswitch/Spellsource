@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.DestroySpell;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.utils.Attribute;
@@ -75,7 +77,23 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 	}
 
 	private static boolean isHardRemoval(Card card) {
-		return hardRemoval.contains(card.getCardId());
+		boolean isPoisonous = card.hasAttribute(Attribute.POISONOUS)
+				|| card.hasAttribute(Attribute.AURA_POISONOUS);
+		boolean destroySpell = false;
+		if (card.getDesc().battlecry != null
+				&& card.getDesc().battlecry.spell != null) {
+			SpellDesc spell = card.getDesc().battlecry.spell;
+			destroySpell |= DestroySpell.class.isAssignableFrom(spell.getDescClass())
+					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
+		}
+		if (card.getSpell() != null) {
+			SpellDesc spell = card.getSpell();
+			destroySpell |= DestroySpell.class.isAssignableFrom(spell.getDescClass())
+					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
+		}
+		return hardRemoval.contains(card.getCardId())
+				|| isPoisonous
+				|| destroySpell;
 	}
 
 	private final FeatureVector weights;
@@ -104,7 +122,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 			}
 		}
 
-		if (minion.hasAttribute(Attribute.WINDFURY)) {
+		if (minion.hasAttribute(Attribute.WINDFURY) || minion.hasAttribute(Attribute.AURA_WINDFURY)) {
 			minionScore += weights.get(WeightedFeature.MINION_WINDFURY_MODIFIER);
 		} else if (minion.hasAttribute(Attribute.MEGA_WINDFURY)) {
 			minionScore += 2 * weights.get(WeightedFeature.MINION_WINDFURY_MODIFIER);

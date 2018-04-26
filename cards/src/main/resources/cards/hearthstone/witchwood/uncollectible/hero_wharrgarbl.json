@@ -1,0 +1,12 @@
+{
+  "name": "Wharrgarbl",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "SILVER",
+  "rarity": "FREE",
+  "description": "<i>The Witchwood's curse has not been kind to the local Murlocs.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

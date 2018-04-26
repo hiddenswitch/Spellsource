@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TurnEndEvent;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
@@ -36,6 +39,44 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 
 public class AdvancedMechanicTests extends TestBase {
+
+	@Test
+	public void testShuffleToDeck() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_shuffle_to_deck");
+			Assert.assertEquals(player.getDeck().size(), 9);
+			String[] cards = (String[]) CardCatalogue.getCardById("spell_shuffle_to_deck").getDesc().spell.get(SpellArg.CARDS);
+
+			for (int i = 0; i < cards.length; i++) {
+				if (!player.getDeck().get(i).getCardId().equals(cards[i])) {
+					return;
+				}
+			}
+
+			Assert.fail();
+		});
+	}
+
+	@Test
+	public void testRush() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion opponentMinion = playMinionCard(context, opponent, "minion_black_test");
+			context.endTurn();
+			Minion rushMinion = playMinionCard(context, player, "minion_test_rush");
+			Assert.assertTrue(rushMinion.canAttackThisTurn());
+			Assert.assertTrue(context.getValidActions().stream().noneMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponent.getHero().getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponentMinion.getReference())));
+			context.endTurn();
+			context.endTurn();
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponent.getHero().getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponentMinion.getReference())));
+		});
+	}
 
 	@Test
 	public void testEndTurnEventAppearsOnce() {

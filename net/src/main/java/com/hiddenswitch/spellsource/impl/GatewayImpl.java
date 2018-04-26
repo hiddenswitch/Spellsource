@@ -17,8 +17,11 @@ import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
@@ -31,7 +34,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -41,22 +43,29 @@ import static java.util.stream.Collectors.toList;
  *
  * @see Gateway for a detailed description on how to add methods to the API gateway.
  */
-public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway {
+public class GatewayImpl extends SyncVerticle implements Gateway {
 	private static Logger logger = LoggerFactory.getLogger(Gateway.class);
 	private static final DateFormat dateTimeFormatter = Utils.createRFC1123DateTimeFormatter();
+	private final int port;
+	private HttpServer server;
+
+	public GatewayImpl(int port) {
+		this.port = port;
+	}
 
 
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
-		super.start();
-		Router router = Spellsource.spellsource().router(vertx);
+		server = vertx.createHttpServer(new HttpServerOptions().setHost("0.0.0.0").setPort(port));
+		Router router = Router.router(vertx);
 
 		logger.info("start: Configuring router...");
 
 		final AuthHandler authHandler = SpellsourceAuthHandler.create();
 		final BodyHandler bodyHandler = BodyHandler.create();
 
+		// Handle game messaging here
 		final String websocketPath = "/" + Games.WEBSOCKET_PATH + "-clustered";
 		router.route(websocketPath)
 				.method(HttpMethod.GET)
@@ -65,6 +74,21 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		router.route(websocketPath)
 				.method(HttpMethod.GET)
 				.handler(Games.createWebSocketHandler());
+
+		// Handle all realtime messaging here
+		router.route("/realtime")
+				.method(HttpMethod.GET)
+				.handler(authHandler);
+
+		router.route("/realtime")
+				.method(HttpMethod.GET)
+				.handler(Realtime.create());
+
+		// Enable realtime conversations
+		Conversations.realtime();
+
+		// Enable presence
+		Presence.realtime();
 
 		// Health check comes first
 		router.route("/")
@@ -190,6 +214,9 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("deckId", this::decksDelete));
 
+		// Enable matchmaking cancellation
+		Matchmaking.cancellation();
+
 		router.route("/matchmaking/:queueId")
 				.handler(bodyHandler);
 		router.route("/matchmaking/:queueId")
@@ -264,30 +291,15 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
 
-		router.route("/friends/:friendId/conversation")
+		router.route("/invites")
 				.handler(bodyHandler);
-		router.route("/friends/:friendId/conversation")
+		router.route("/invites")
 				.handler(authHandler);
-		router.route("/friends/:friendId/conversation")
-				.method(HttpMethod.PUT)
-				.handler(HandlerFactory.handler(SendMessageRequest.class, "friendId",
-						this::sendFriendMessage));
+		router.route("/invites")
+				.method(HttpMethod.POST);
 
-		router.route("/friends/:friendId/conversation")
-				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler("friendId", this::getFriendConversation));
-
-		Void listen = awaitResult(done -> {
-			try {
-				Spellsource.spellsource().httpServer(vertx).listen(then -> {
-					done.handle(Future.succeededFuture());
-				});
-			} catch (IllegalStateException alreadyListening) {
-				done.handle(Future.succeededFuture());
-			} catch (Exception e) {
-				done.handle(Future.failedFuture(e));
-			}
-		});
+		server.requestHandler(router::accept);
+		HttpServer listening = awaitResult(server::listen);
 
 		logger.info("start: Router configured.");
 	}
@@ -299,7 +311,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			final Account account = getAccount(userId);
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(account)));
 		} else {
-			UserRecord record = getAccounts().get(targetUserId);
+			UserRecord record = Accounts.get(targetUserId);
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(new Account()
 					.name(record.getUsername())
 					.id(targetUserId))));
@@ -314,7 +326,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<CreateAccountResponse> createAccount(RoutingContext context, CreateAccountRequest request) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.spellsource.models.CreateAccountResponse internalResponse = getAccounts()
+		com.hiddenswitch.spellsource.models.CreateAccountResponse internalResponse = Accounts
 				.createAccount(new com.hiddenswitch.spellsource.models.CreateAccountRequest()
 						.withEmailAddress(request.getEmail())
 						.withPassword(request.getPassword())
@@ -332,7 +344,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 		// Initialize the collection
 		final String userId = internalResponse.getUserId();
-		getLogic().initializeUser(InitializeUserRequest.create(userId));
+		Logic.initializeUser(InitializeUserRequest.create(userId));
 		final Account account = getAccount(userId);
 		return WebResult.succeeded(new CreateAccountResponse()
 				.loginToken(internalResponse.getLoginToken().getToken())
@@ -343,7 +355,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	public WebResult<LoginResponse> login(RoutingContext context, LoginRequest request) throws SuspendExecution, InterruptedException {
 		com.hiddenswitch.spellsource.models.LoginResponse internalResponse;
 		try {
-			internalResponse = getAccounts().login(
+			internalResponse = Accounts.login(
 					new com.hiddenswitch.spellsource.models.LoginRequest().withEmail(request.getEmail())
 							.withPassword(request.getPassword()));
 		} catch (Throwable ex) {
@@ -382,7 +394,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			}
 		}
 
-		DeckCreateResponse internalResponse = getDecks().createDeck(createRequest
+		DeckCreateResponse internalResponse = Decks.createDeck(createRequest
 				.withUserId(userId));
 
 		return WebResult.succeeded(new DecksPutResponse()
@@ -391,7 +403,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	}
 
 	private WebResult<DecksGetResponse> getDeck(String userId, String deckId) throws SuspendExecution, InterruptedException {
-		GetCollectionResponse updatedCollection = getInventory().getCollection(new GetCollectionRequest()
+		GetCollectionResponse updatedCollection = Inventory.getCollection(new GetCollectionRequest()
 				.withUserId(userId)
 				.withDeckId(deckId));
 
@@ -402,7 +414,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<DecksGetResponse> decksUpdate(RoutingContext context, String userId, String deckId, DecksUpdateCommand updateCommand) throws SuspendExecution, InterruptedException {
-		getDecks().updateDeck(DeckUpdateRequest.create(userId, deckId, updateCommand));
+		Decks.updateDeck(DeckUpdateRequest.create(userId, deckId, updateCommand));
 
 		// Get the updated collection
 		return getDeck(userId, deckId);
@@ -415,7 +427,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<DecksGetAllResponse> decksGetAll(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		List<String> decks = getAccounts().get(userId).getDecks();
+		List<String> decks = Accounts.get(userId).getDecks();
 
 		List<DecksGetResponse> responses = new ArrayList<>();
 		for (String deck : decks) {
@@ -427,34 +439,36 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException {
-		GetCollectionResponse collection = getInventory().getCollection(GetCollectionRequest.deck(deckId));
+		GetCollectionResponse collection = Inventory.getCollection(GetCollectionRequest.deck(deckId));
 		if (!collection.getUserId().equals(userId)) {
 			return WebResult.failed(new SecurityException("You can't delete someone else's deck!"));
 		}
-		return WebResult.succeeded(getDecks().deleteDeck(DeckDeleteRequest.create(deckId)));
+		return WebResult.succeeded(Decks.deleteDeck(DeckDeleteRequest.create(deckId)));
 	}
 
 	@Override
 	public WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext routingContext, String userId, String queueId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException {
-		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.isCasual());
-		MatchmakingResponse internalResponse;
+		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.isCasual())
+				.withBotDeckId(request.getBotDeckId());
+
+		GameId internalResponse = null;
 		try {
-			internalResponse = getMatchmaking().matchmakeAndJoin(internalRequest);
+			internalResponse = Matchmaking.matchmake(internalRequest);
 		} catch (Throwable ex) {
 			return WebResult.failed(500, ex);
 		}
 
 		// Compute the appropriate response
 		MatchmakingQueuePutResponse userResponse = new MatchmakingQueuePutResponse();
-		if (internalResponse.getRetry() == null) {
+		if (internalResponse != null) {
 			userResponse.unityConnection(new MatchmakingQueuePutResponseUnityConnection());
 		}
 
 		// Determine status code
 		int statusCode = 200;
-		if (internalResponse.getRetry() != null) {
+		if (internalResponse == null) {
 			userResponse.retry(new MatchmakingQueuePutRequest()
-					.deckId(internalResponse.getRetry().getDeckId()));
+					.deckId(request.getDeckId()));
 			statusCode = 202;
 		}
 
@@ -463,24 +477,32 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	@Override
 	public WebResult<com.hiddenswitch.spellsource.client.models.MatchCancelResponse> matchmakingConstructedQueueDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.spellsource.models.MatchCancelResponse internalResponse = getMatchmaking().cancel(MatchCancelRequest.create(userId));
+		Matchmaking.cancel(new UserId(userId));
 
 		com.hiddenswitch.spellsource.client.models.MatchCancelResponse response =
 				new com.hiddenswitch.spellsource.client.models.MatchCancelResponse()
-						.isCanceled(internalResponse.getCanceled());
+						.isCanceled(true);
 
 		return WebResult.succeeded(response);
 	}
 
 	@Override
 	public WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.spellsource.models.MatchCancelResponse response = getMatchmaking().cancel(MatchCancelRequest.create(userId));
-		if (response == null
-				|| response.getGameId() == null) {
-			return WebResult.failed(new RuntimeException("Could not concede the requested game."));
+		try {
+			UserId key = new UserId(userId);
+			GameId gameId = Games.getGames().get(key);
+			if (gameId == null) {
+				Matchmaking.cancel(key);
+				return WebResult.succeeded(new MatchConcedeResponse().isConceded(false));
+			} else {
+
+				getGames().concedeGameSession(ConcedeGameSessionRequest.request(gameId, key));
+				return WebResult.succeeded(new MatchConcedeResponse().isConceded(true));
+
+			}
+		} catch (Throwable t) {
+			return WebResult.failed(t);
 		}
-		getGames().concedeGameSession(ConcedeGameSessionRequest.request(response.getGameId(), response.getPlayerId()));
-		return WebResult.succeeded(new MatchConcedeResponse().isConceded(true));
 	}
 
 	@Override
@@ -489,7 +511,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			return WebResult.failed(400, new RuntimeException("Cannot retrieve a JSON game state this way in a clustered environment."));
 		}
 
-		CurrentMatchResponse response = getMatchmaking().getCurrentMatch(CurrentMatchRequest.request(userId));
+		CurrentMatchResponse response = Matchmaking.getCurrentMatch(CurrentMatchRequest.request(userId));
 		if (response.getGameId() == null) {
 			return WebResult.failed(404, new NullPointerException("Game not found."));
 		}
@@ -507,86 +529,42 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 								.tooltip("Play online with custom cards!")
 								.queueId("constructed")
 								.requires(new MatchmakingQueueItemRequires()
-										.deckIdChoices(getAccounts().get(userId).getDecks()))));
+										.deckIdChoices(Accounts.get(userId).getDecks()))));
 	}
 
 	@Override
 	public WebResult<FriendPutResponse> putFriend(RoutingContext context, String userId, FriendPutRequest req)
 			throws SuspendExecution, InterruptedException {
-		String friendId = req.getFriendId();
-
-		//lookup friend user record
-		UserRecord friendAccount = getAccounts().get(req.getFriendId());
-
-		//if no friend, return 404
-		if (friendAccount == null) {
-			return WebResult.failed(404, new Exception("Friend account not found"));
-		}
-
-		//lookup own user account
+		// lookup own user account
 		UserRecord myAccount = (UserRecord) context.user();
 
-
-		//check if already friends
-		if (myAccount.isFriend(friendId)) {
-			return WebResult.failed(409, new Exception("Friend already friend"));
+		try {
+			FriendPutResponse response = Friends.putFriend(myAccount, req);
+			return WebResult.succeeded(response);
+		} catch (NullPointerException ex) {
+			return WebResult.failed(404, ex);
+		} catch (IllegalArgumentException ex) {
+			return WebResult.failed(409, ex);
 		}
-
-		long startOfFriendship = System.currentTimeMillis();
-
-		FriendRecord friendRecord = new FriendRecord().setFriendId(friendId).setSince(startOfFriendship)
-				.setDisplayName(friendAccount.getUsername());
-		FriendRecord friendOfFriendRecord = new FriendRecord().setFriendId(userId).setSince(startOfFriendship)
-				.setDisplayName(friendAccount.getUsername());
-
-		//update both sides
-		Accounts.update(getMongo(), userId, json("$push", json("friends", json(friendRecord))));
-		Accounts.update(getMongo(), friendId, json("$push", json("friends",
-				json(friendOfFriendRecord))));
-
-
-		FriendPutResponse response = new FriendPutResponse().friend(friendRecord.toFriendDto());
-		return WebResult.succeeded(response);
 	}
 
 	@Override
 	public WebResult<UnfriendResponse> unFriend(RoutingContext context, String userId, String friendId)
 			throws SuspendExecution, InterruptedException {
 		UserRecord myAccount = (UserRecord) context.user();
-
-		//lookup friend user record
-		UserRecord friendAccount = getAccounts().get(friendId);
-
-		//doesn't exist?
-		if (friendAccount == null) {
-			return WebResult.failed(404, new Exception("Friend account not found"));
+		try {
+			UnfriendResponse response = Friends.unfriend(myAccount, friendId);
+			return WebResult.succeeded(response);
+		} catch (NullPointerException ex) {
+			return WebResult.failed(404, ex);
+		} catch (IllegalStateException ex) {
+			return WebResult.failed(418, ex);
 		}
-
-		//friends?
-		FriendRecord friendRecord = myAccount.getFriendById(friendId);
-		if (friendRecord == null) {
-			return WebResult.failed(404, new Exception("Not friends"));
-		}
-
-		//Oops
-		FriendRecord friendOfFriendRecord = friendAccount.getFriendById(userId);
-		if (friendOfFriendRecord == null) {
-			return WebResult.failed(418, new Exception("Friends not balanced. OOPS"));
-		}
-
-		//delete from both sides
-		Accounts.update(getMongo(), userId, json("$pull",
-				json("friends", json("friendId", friendId))));
-		Accounts.update(getMongo(), friendId, json("$pull",
-				json("friends", json("friendId", userId))));
-
-		UnfriendResponse response = new UnfriendResponse().deletedFriend(friendRecord.toFriendDto());
-		return WebResult.succeeded(response);
 	}
 
 	@Override
 	public WebResult<DraftState> draftsGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		DraftRecord record = getDrafts().get(new GetDraftRequest().withUserId(userId));
+		DraftRecord record = Draft.get(new GetDraftRequest().withUserId(userId));
 		if (record == null) {
 			return WebResult.failed(404, new NullPointerException("You have not started a draft. Start one first."));
 		}
@@ -601,7 +579,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 			try {
 				return WebResult.succeeded(
 						Draft.toDraftState(
-								getDrafts().doDraftAction(new DraftActionRequest().withUserId(userId))
+								Draft.doDraftAction(new DraftActionRequest().withUserId(userId))
 										.getPublicDraftState()));
 			} catch (NullPointerException unexpectedRequest) {
 				return WebResult.failed(400, unexpectedRequest);
@@ -610,7 +588,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 				&& request.isRetireEarly()) {
 			return WebResult.succeeded(
 					Draft.toDraftState(
-							getDrafts().retireDraftEarly(new RetireDraftRequest().withUserId(userId))
+							Draft.retireDraftEarly(new RetireDraftRequest().withUserId(userId))
 									.getRecord()
 									.getPublicDraftState()));
 
@@ -622,7 +600,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	@Override
 	public WebResult<DraftState> draftsChooseHero(RoutingContext context, String userId, DraftsChooseHeroRequest request) throws SuspendExecution, InterruptedException {
 		try {
-			DraftRecord record = getDrafts().doDraftAction(new DraftActionRequest()
+			DraftRecord record = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(userId)
 					.withHeroIndex(request.getHeroIndex()));
 
@@ -637,7 +615,7 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 	@Override
 	public WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException {
 		try {
-			DraftRecord record = getDrafts().doDraftAction(new DraftActionRequest()
+			DraftRecord record = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(userId)
 					.withCardIndex(request.getCardIndex()));
 
@@ -649,42 +627,15 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 		}
 	}
 
-	public WebResult<GetConversationResponse> getFriendConversation(
-			RoutingContext context, String userId, String friendId) throws SuspendExecution, InterruptedException {
-		UserRecord userAccount = (UserRecord) context.user();
-		if (!userAccount.isFriend(friendId)) {
-			return WebResult.failed(404, new Exception("Friend account not found"));
-		}
-
-		GetConversationResponse getConversationResponse = new GetConversationResponse().conversation(
-				Conversations.getCreateConversation(getMongo(), userId, friendId).toConversationDto());
-
-		return WebResult.succeeded(getConversationResponse);
-	}
-
 	@Override
 	public WebResult<Void> healthCheck(RoutingContext context) throws SuspendExecution, InterruptedException {
 		return WebResult.succeeded(200, null);
 	}
 
-	public WebResult<SendMessageResponse> sendFriendMessage(
-			RoutingContext context, String userId, String friendId, SendMessageRequest request)
-			throws SuspendExecution, InterruptedException {
-		UserRecord myAccount = (UserRecord) context.user();
-		if (!myAccount.isFriend(friendId)) {
-			return WebResult.failed(404, new Exception("Not friends"));
-		}
-
-		MessageRecord messageSent = Conversations.insertMessage(Mongo.mongo().client(), userId,
-				myAccount.getUsername(), friendId, request.getText());
-		SendMessageResponse response = new SendMessageResponse().message(messageSent.toMessageDto());
-		return WebResult.succeeded(response);
-	}
-
 	@Override
 	public WebResult<ChangePasswordResponse> changePassword(RoutingContext context, String userId, com.hiddenswitch.spellsource.client.models.ChangePasswordRequest request) throws SuspendExecution, InterruptedException {
 		try {
-			getAccounts().changePassword(ChangePasswordRequest.request(new UserId(userId), request.getPassword()));
+			Accounts.changePassword(ChangePasswordRequest.request(new UserId(userId), request.getPassword()));
 		} catch (RuntimeException ex) {
 			return WebResult.failed(ex);
 		}
@@ -731,11 +682,11 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {
 		// Get the personal collection
-		UserRecord record = getAccounts().get(userId);
-		GetCollectionResponse personalCollection = getInventory().getCollection(GetCollectionRequest.user(record.getId()));
+		UserRecord record = Accounts.get(userId);
+		GetCollectionResponse personalCollection = Inventory.getCollection(GetCollectionRequest.user(record.getId()));
 
 		// Get the decks
-		GetCollectionResponse deckCollections = getInventory().getCollection(GetCollectionRequest.decks(userId, record.getDecks()));
+		GetCollectionResponse deckCollections = Inventory.getCollection(GetCollectionRequest.decks(userId, record.getDecks()));
 
 		final String displayName = record.getUsername();
 		final List<GetCollectionResponse> responses = deckCollections.getResponses();
@@ -745,49 +696,21 @@ public class GatewayImpl extends AbstractService<GatewayImpl> implements Gateway
 						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getEmails().get(0).getAddress())
-				.inMatch(getMatchmaking().getCurrentMatch(CurrentMatchRequest.request(userId)).getGameId() != null)
+				.inMatch(Matchmaking.getCurrentMatch(CurrentMatchRequest.request(userId)).getGameId() != null)
 				.name(displayName);
 	}
 
-	public Cards getCards() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Cards.class, vertx.eventBus()).sync();
-	}
-
-	public Accounts getAccounts() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Accounts.class, vertx.eventBus()).sync();
-	}
 
 	public Games getGames() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Games.class, vertx.eventBus()).sync();
-	}
-
-	public Matchmaking getMatchmaking() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Matchmaking.class, vertx.eventBus()).sync();
-	}
-
-	public Bots getBots() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Bots.class, vertx.eventBus()).sync();
-	}
-
-	public Logic getLogic() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Logic.class, vertx.eventBus()).sync();
-	}
-
-	public Decks getDecks() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Decks.class, vertx.eventBus()).sync();
-	}
-
-	public Inventory getInventory() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Inventory.class, vertx.eventBus()).sync();
-	}
-
-	public Draft getDrafts() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Draft.class, vertx.eventBus()).sync();
+		return Rpc.connect(Games.class).sync();
 	}
 
 	@Override
 	@Suspendable
 	public void stop() throws Exception {
+		if (server != null) {
+			server.close();
+		}
 	}
 
 }

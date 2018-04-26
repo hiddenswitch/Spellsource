@@ -18,12 +18,12 @@ public class PreDamageTrigger extends EventTrigger {
 	protected boolean fire(GameEvent event, Entity host) {
 		PreDamageEvent preDamageEvent = (PreDamageEvent) event;
 
-		EntityType sourceEntityType = (EntityType) desc.get(EventTriggerArg.SOURCE_ENTITY_TYPE);
+		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
 		if (sourceEntityType != null && preDamageEvent.getSource().getEntityType() != sourceEntityType) {
 			return false;
 		}
 
-		EntityType targetEntityType = (EntityType) desc.get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
 		if (targetEntityType != null && preDamageEvent.getVictim().getEntityType() != targetEntityType) {
 			return false;
 		}

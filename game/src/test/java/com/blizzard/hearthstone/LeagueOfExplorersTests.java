@@ -67,7 +67,7 @@ public class LeagueOfExplorersTests extends TestBase {
 
 			playCardWithTarget(context, player, "spell_fireball", player.getHero());
 			numberOfSpellsPlayed++;
-			Assert.assertEquals(costOf(context, player, cards.get("minion_molten_giant")), 25 - 6);
+			Assert.assertEquals(costOf(context, player, cards.get("minion_molten_giant")), 20 - 6);
 
 			Assert.assertEquals(costOf(context, player, cards.get("minion_mountain_giant")), 12 - player.getHand().size() + 1);
 

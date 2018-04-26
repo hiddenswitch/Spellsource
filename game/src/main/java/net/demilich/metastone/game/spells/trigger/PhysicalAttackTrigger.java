@@ -18,12 +18,12 @@ public class PhysicalAttackTrigger extends EventTrigger {
 	protected boolean fire(GameEvent event, Entity host) {
 		PhysicalAttackEvent physicalAttackEvent = (PhysicalAttackEvent) event;
 
-		EntityType sourceEntityType = (EntityType) desc.get(EventTriggerArg.SOURCE_ENTITY_TYPE);
+		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
 		if (sourceEntityType != null && physicalAttackEvent.getAttacker().getEntityType() != sourceEntityType) {
 			return false;
 		}
 
-		EntityType targetEntityType = (EntityType) desc.get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
 		if (targetEntityType != null && physicalAttackEvent.getDefender().getEntityType() != targetEntityType) {
 			return false;
 		}

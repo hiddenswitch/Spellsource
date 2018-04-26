@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
 import com.hiddenswitch.spellsource.models.DeckDeleteResponse;
 import com.hiddenswitch.spellsource.util.WebResult;
 import com.hiddenswitch.spellsource.client.models.*;
+import io.vertx.core.Verticle;
 import io.vertx.core.VertxException;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -24,7 +25,7 @@ import java.util.Comparator;
  * each of these methods.
  * <p>
  * To create a new HTTP API endpoint:
- * <p>
+ *
  * <ul><li>Create an operation with its associated response and optionally request schemas in {@code
  * resources/server.yaml}. A new operation consists of an entry in the Swagger file's Definition section for its
  * response {@code R} and optionally request type {@code T}. It then consists of an entry in the Paths section. Use the
@@ -109,12 +110,13 @@ import java.util.Comparator;
  *         .method(HttpMethod.POST).handler(HandlerFactory.handler(MyMethodRequest.class, "objectId", this::myMethod));
  *     }
  * </pre></li></ul>
- *
- * Some new methods may require references to other services. In {@link GatewayImpl}, our default API gateway, services
- * are hosted locally as package-private fields (e.g., {@link GatewayImpl#getBots()}), and then actually deployed in the
- * {@link GatewayImpl#start()} method.
  */
-public interface Gateway {
+public interface Gateway extends Verticle {
+	static Gateway create() {
+		return new GatewayImpl(Port.port());
+	}
+	static Gateway create(int port) {return new GatewayImpl(port);}
+
 	WebResult<GetAccountsResponse> getAccount(RoutingContext context, String userId, String targetUserId) throws SuspendExecution, InterruptedException;
 
 	WebResult<GetAccountsResponse> getAccounts(RoutingContext context, String userId, GetAccountsRequest request) throws SuspendExecution, InterruptedException;
@@ -155,11 +157,7 @@ public interface Gateway {
 
 	WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException;
 
-	WebResult getFriendConversation(RoutingContext context, String userId, String friendId) throws SuspendExecution, InterruptedException;
-
 	WebResult<Void> healthCheck(RoutingContext context) throws SuspendExecution, InterruptedException;
-
-	WebResult<SendMessageResponse> sendFriendMessage(RoutingContext context, String userId, String friendId, SendMessageRequest request) throws SuspendExecution, InterruptedException;
 
 	WebResult<com.hiddenswitch.spellsource.models.ChangePasswordResponse> changePassword(RoutingContext context, String userId, ChangePasswordRequest request) throws SuspendExecution, InterruptedException;
 

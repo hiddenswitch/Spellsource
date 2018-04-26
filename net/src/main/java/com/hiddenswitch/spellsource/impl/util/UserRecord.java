@@ -16,6 +16,7 @@ import io.vertx.ext.auth.User;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,13 +35,14 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	public static final String SERVICES_RESUME_LOGIN_TOKENS = SERVICES + "." + RESUME + "." + LOGIN_TOKENS;
 	public static final String SERVICES_PASSWORD_SCRYPT = "services.password.scrypt";
 
-	private List<EmailRecord> emails;
+	private List<EmailRecord> emails = new ArrayList<>();
 	private String username;
 	private Date createdAt;
-	private List<String> decks;
-	private List<FriendRecord> friends;
-	private ServicesRecord services;
+	private List<String> decks = new ArrayList<>();
+	private List<FriendRecord> friends = new ArrayList<>();
+	private ServicesRecord services = new ServicesRecord();
 	private boolean bot;
+	private String privacyToken;
 
 	/**
 	 * A weak reference to the auth provider, automatically connected by Vertx.
@@ -204,5 +206,13 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getPrivacyToken() {
+		return privacyToken;
+	}
+
+	public void setPrivacyToken(String privacyToken) {
+		this.privacyToken = privacyToken;
 	}
 }

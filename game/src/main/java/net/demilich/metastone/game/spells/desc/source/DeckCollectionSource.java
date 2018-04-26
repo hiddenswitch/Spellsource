@@ -21,7 +21,7 @@ public class DeckCollectionSource extends CardSource implements Serializable, Ha
 	@Override
 	@Suspendable
 	protected CardList match(GameContext context, Entity source, Player player) {
-		final String collectionName = desc.getString(CardSourceArg.COLLECTION_NAME);
+		final String collectionName = getDesc().getString(CardSourceArg.COLLECTION_NAME);
 		final Deck deck = context.getDeck(player, collectionName);
 		if (deck != null) {
 			return deck.getCards();

@@ -1,10 +1,13 @@
 package com.hiddenswitch.spellsource.impl;
 
 import com.hiddenswitch.spellsource.Accounts;
+import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.Rpc;
+import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
@@ -13,7 +16,7 @@ import io.vertx.ext.web.handler.AuthHandler;
 
 import java.util.Set;
 
-class SpellsourceAuthHandler implements AuthHandler {
+public class SpellsourceAuthHandler implements AuthHandler {
 	private SpellsourceAuthHandler() {
 	}
 
@@ -73,23 +76,18 @@ class SpellsourceAuthHandler implements AuthHandler {
 			final String userId = credentials.result().getString("userId");
 			final String secret = credentials.result().getString("secret");
 			final String token = userId + ":" + secret;
-			EventBus bus = event.vertx().eventBus();
-			Rpc.connect(Accounts.class, bus)
-					.promise(accounts -> accounts.getWithToken(token))
-					.setHandler(getResult -> {
-						if (getResult.failed()) {
-							fail(event, "Try logging in again.");
-							return;
-						}
 
-						if (getResult.result() == null) {
-							fail(event, "Try logging in again.");
-							return;
-						}
-
-						event.setUser(getResult.result());
-						event.next();
-					});
+			Vertx.currentContext().runOnContext(v1 -> {
+				Vertx.currentContext().runOnContext(Sync.suspendableHandler(v2 -> {
+					UserRecord record = Accounts.getWithToken(token);
+					event.setUser(record);
+					if (record == null) {
+						fail(event, "Try logging in again.");
+						return;
+					}
+					event.next();
+				}));
+			});
 		});
 	}
 

@@ -1,0 +1,19 @@
+{
+  "name": "Stuffed Sack",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "<b>Deathrattle:</b> Return your stolen minion!",
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

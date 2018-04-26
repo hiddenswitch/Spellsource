@@ -48,13 +48,11 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	/**
 	 * The {@link RpcClient} for the {@link Logic} service.
 	 */
-	private transient final RpcClient<Logic> logic;
 	private transient final GameContext context;
 
 	private final String gameId;
 
-	public PersistenceTrigger(RpcClient<Logic> logic, GameContext context, String gameId) {
-		this.logic = logic;
+	public PersistenceTrigger(GameContext context, String gameId) {
 		this.gameId = gameId;
 		this.context = context;
 	}
@@ -67,16 +65,15 @@ public class PersistenceTrigger implements Trigger, Serializable {
 		}
 
 		try {
-			Spellsource.spellsource().persistence().persistenceTrigger(logic, event);
+			Spellsource.spellsource().persistence().persistenceTrigger(event);
 		} catch (VertxException e) {
-			logger.error("Failed a persistence call and silently continuing. Details:\n" + context.toLongString());
+			logger.error("onGameEvent: Failed a persistence call and silently continuing. {}", e);
 		}
-
 	}
 
 	@Override
 	public Trigger clone() {
-		return new PersistenceTrigger(logic, context, gameId);
+		return new PersistenceTrigger(context, gameId);
 	}
 
 	@Override
@@ -140,40 +137,4 @@ public class PersistenceTrigger implements Trigger, Serializable {
 		return true;
 	}
 
-
-	@Suspendable
-	public static EventLogicRequest<BeforeSummonEvent> beforeSummon(BeforeSummonEvent event) {
-		String gameId = event.getGameContext().getGameId();
-		final String cardInstanceId = event.getMinion().getCardInventoryId();
-		if (cardInstanceId == null) {
-			// Can't process a non-alliance card.
-			return null;
-		}
-
-		final EventLogicRequest<BeforeSummonEvent> request = new EventLogicRequest<>();
-		request.setEvent(event);
-		request.setCardInventoryId(cardInstanceId);
-		request.setGameId(gameId);
-		request.setUserId(event.getMinion().getUserId());
-		return request;
-	}
-
-	@Suspendable
-	public static EventLogicRequest<AfterPhysicalAttackEvent> afterPhysicalAttack(AfterPhysicalAttackEvent event) {
-		String gameId = event.getGameContext().getGameId();
-		final String attackerInstanceId = event.getAttacker().getCardInventoryId();
-		final String defenderInstanceId = event.getDefender().getCardInventoryId();
-		if (attackerInstanceId == null || defenderInstanceId == null) {
-			// Can't process a non-alliance card.
-			return null;
-		}
-
-		final EventLogicRequest<AfterPhysicalAttackEvent> request1 = new EventLogicRequest<>();
-		request1.setEvent(event);
-		request1.setCardInventoryId(attackerInstanceId);
-		request1.setGameId(gameId);
-		request1.setUserId(event.getAttacker().getUserId());
-		return request1;
-
-	}
 }

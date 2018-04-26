@@ -1,0 +1,12 @@
+{
+  "name": "Griselda",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "<i>Watch those lips, she'll kiss just about anything.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

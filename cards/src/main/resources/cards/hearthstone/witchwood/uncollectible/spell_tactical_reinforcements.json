@@ -1,0 +1,17 @@
+{
+  "name": "Tactical Reinforcements",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "[x]<b>Passive</b>\nWhenever you fire your\nCannons, reduce the cost of\na card in your hand by (2).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

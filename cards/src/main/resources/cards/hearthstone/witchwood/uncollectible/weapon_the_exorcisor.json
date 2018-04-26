@@ -1,0 +1,12 @@
+{
+  "name": "The Exorcisor",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Silence</b> any minion attacked by this weapon.",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

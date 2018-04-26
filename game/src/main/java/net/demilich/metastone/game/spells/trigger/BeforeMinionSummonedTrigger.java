@@ -18,12 +18,12 @@ public class BeforeMinionSummonedTrigger extends EventTrigger {
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		BeforeSummonEvent summonEvent = (BeforeSummonEvent) event;
-		Race race = (Race) desc.get(EventTriggerArg.RACE);
+		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
 		if (race != null && summonEvent.getMinion().getRace() != race) {
 			return false;
 		}
 
-		Attribute requiredAttribute = (Attribute) desc.get(EventTriggerArg.REQUIRED_ATTRIBUTE);
+		Attribute requiredAttribute = (Attribute) getDesc().get(EventTriggerArg.REQUIRED_ATTRIBUTE);
 		if (requiredAttribute != null && !summonEvent.getMinion().hasAttribute(requiredAttribute)) {
 			return false;
 		}

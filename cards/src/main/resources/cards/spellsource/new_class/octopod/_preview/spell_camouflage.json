@@ -11,8 +11,7 @@
     "cardFilter": {
       "class": "CardFilter",
       "heroClass": "VIOLET"
-    },
-    "manaModifier": -1
+    }
   },
   "collectible": true,
   "set": "SPELLSOURCE",

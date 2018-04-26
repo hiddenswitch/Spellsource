@@ -51,6 +51,17 @@ import static net.demilich.metastone.game.targeting.EntityReference.EVENT_TARGET
 public class TheOldGodsTests extends TestBase {
 
 	@Test
+	public void testThingFromBelow() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_mana_tide_totem");
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_bloodfen_raptor");
+			Card thing = receiveCard(context, player, "minion_thing_from_below");
+			Assert.assertEquals(costOf(context, player, thing), thing.getBaseManaCost() - 1);
+		});
+	}
+
+	@Test
 	public void testShadowcaster() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");

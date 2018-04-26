@@ -14,7 +14,7 @@
   "auras": [
     {
       "class": "AttributeAura",
-      "target": "MINIONS_TO_RIGHT",
+      "target": "MINIONS_TO_LEFT",
       "attribute": "AURA_CHARGE",
       "filter": {
         "class": "RaceFilter",
@@ -23,7 +23,7 @@
     },
     {
       "class": "AttributeAura",
-      "target": "MINIONS_TO_LEFT",
+      "target": "MINIONS_TO_RIGHT",
       "attribute": "AURA_TAUNT",
       "filter": {
         "class": "RaceFilter",

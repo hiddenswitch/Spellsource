@@ -1,0 +1,32 @@
+{
+  "name": "Toki, Time-Tinker",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "<b>Battlecry:</b> Add a random\n<b>Legendary</b> minion from\nthe past to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "LEGENDARY",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "FormatCatalogueSource",
+        "format": "WILD"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

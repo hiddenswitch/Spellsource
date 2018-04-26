@@ -201,8 +201,8 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	/**
-	 * Gets a copy of the card with some attributes like its attack or HP bonuses and mana cost modifiers removed. The
-	 * ID and owner is set to unassigned.
+	 * Gets a copy of the card with some attributes like its attack or HP bonuses and mana cost modifiers removed. The ID
+	 * and owner is set to unassigned.
 	 * <p>
 	 * Typically you should use the {@link net.demilich.metastone.game.logic.GameLogic#receiveCard(int, Card)} method in
 	 * order to put a copy into e.g. the player's hand.
@@ -238,7 +238,8 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * Gets a cleaned up description of the card. In the future, this description should "fill in the blanks" for cards
 	 * that have variables, like which minion will be summoned or how much spell damage the spell will deal.
 	 *
-	 * @return The description.
+	 * @return The value of the {@link Attribute#DESCRIPTION} on this {@link Card}, if it is not null. Otherwise, the
+	 * {@link CardDesc#description} field.
 	 */
 	public String getDescription() {
 		// Cleanup the html tags that appear in the description
@@ -262,8 +263,8 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * rules that are on the board.
 	 *
 	 * @param context The {@link GameContext} to compute the cost against.
-	 * @param player  The {@link Player} whose point of view should be considered for the cost. This is almost always
-	 *                the owner.
+	 * @param player  The {@link Player} whose point of view should be considered for the cost. This is almost always the
+	 *                owner.
 	 * @return The cost.
 	 * @see net.demilich.metastone.game.logic.GameLogic#getModifiedManaCost(Player, Card) for the best method to get the
 	 * cost of a card.
@@ -296,13 +297,13 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return A {@link Race}
 	 */
+	@Override
 	public Race getRace() {
 		return (Race) getAttributes().getOrDefault(Attribute.RACE, getDesc().race == null ? Race.NONE : getDesc().race);
 	}
 
 	/**
-	 * Checks if the hero class specified is in its list of hero classes when this card belongs to multiple hero
-	 * classes.
+	 * Checks if the hero class specified is in its list of hero classes when this card belongs to multiple hero classes.
 	 *
 	 * @param heroClass The {@link HeroClass} to search.
 	 * @return <code>True</code> if this card has the specified class.
@@ -496,25 +497,32 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	@Override
 	public PlayCardAction playBothOptions() {
+		PlayCardAction action = null;
 		switch (getCardType()) {
 			case HERO_POWER:
-				return new HeroPowerAction(CardCatalogue.getCardById(getChooseBothCardId()).getSpell(), this, getTargetSelection());
+				action = new HeroPowerAction(CardCatalogue.getCardById(getChooseBothCardId()).getSpell(), this, getTargetSelection());
+				break;
 			case CHOOSE_ONE:
 			case SPELL:
 				Card card = (Card) CardCatalogue.getCardById(getChooseBothCardId());
-				return new PlayChooseOneCardAction(card.getSpell(), this, getChooseBothCardId(), card.getTargetSelection());
+				action = new PlayChooseOneCardAction(card.getSpell(), this, getChooseBothCardId(), card.getTargetSelection());
+				break;
 			case WEAPON:
-				return new PlayWeaponCardAction(getReference(), getDesc().chooseBothBattlecry.toBattlecryAction());
+				action = new PlayWeaponCardAction(getReference(), getDesc().chooseBothBattlecry.toBattlecryAction());
+				break;
 			case HERO:
-				return new PlayHeroCardAction(getReference(), getDesc().chooseBothBattlecry.toBattlecryAction());
+				action = new PlayHeroCardAction(getReference(), getDesc().chooseBothBattlecry.toBattlecryAction());
+				break;
 			case MINION:
 				BattlecryDesc battlecryOption = getDesc().chooseBothBattlecry;
 				BattlecryAction battlecry = BattlecryAction.createBattlecry(battlecryOption.spell, battlecryOption.getTargetSelection());
-				return new PlayMinionCardAction(getReference(), battlecry);
+				action = new PlayMinionCardAction(getReference(), battlecry);
+				break;
 			case GROUP:
 				throw new UnsupportedOperationException("group");
 		}
-		throw new RuntimeException();
+		action.setChooseOneOptionIndex(-1);
+		return action;
 	}
 
 	public String getChooseBothCardId() {
@@ -831,6 +839,11 @@ public class Card extends Entity implements HasChooseOneActions {
 		return hasChoices();
 	}
 
+	/**
+	 * Determines how this card should be named.
+	 *
+	 * @return The value of the {@link Attribute#NAME} attribute, or the underlying {@link CardDesc#name} field.
+	 */
 	@Override
 	public String getName() {
 		return (String) getAttributes().getOrDefault(Attribute.NAME, getDesc().name);
@@ -845,5 +858,9 @@ public class Card extends Entity implements HasChooseOneActions {
 	public void setAttributes(AttributeMap attributes) {
 		this.attributes.clear();
 		this.attributes.putAll(attributes);
+	}
+
+	public boolean isHeroPower() {
+		return getCardType().isCardType(CardType.HERO_POWER);
 	}
 }

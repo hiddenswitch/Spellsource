@@ -18,6 +18,12 @@ import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.Map;
 
+/**
+ * Copies a {@code target} card.
+ * <p>
+ * Casts the {@link SpellArg#SPELL} sub-spell on each newly generated card as the {@link
+ * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
+ */
 public class CopyCardSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(CopyCardSpell.class);

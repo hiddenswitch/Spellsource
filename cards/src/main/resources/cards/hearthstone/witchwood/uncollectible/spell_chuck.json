@@ -1,0 +1,17 @@
+{
+  "name": "Chuck",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Discard all minions\nfrom your hand and\ndeal their Attack to\nthe enemy hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

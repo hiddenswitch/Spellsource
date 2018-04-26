@@ -8,6 +8,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
+ * This instance stores the definition of a {@link ValueProvider}.
+ */
 @JsonDeserialize(using = ValueProviderDescDeserializer.class)
 public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 
@@ -41,7 +44,7 @@ public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 
 	@Override
 	public ValueProviderDesc clone() {
-		return (ValueProviderDesc)copyTo(new ValueProviderDesc(getDescClass()));
+		return (ValueProviderDesc) copyTo(new ValueProviderDesc(getDescClass()));
 	}
 
 	public EntityReference getSource() {

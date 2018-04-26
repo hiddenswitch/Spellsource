@@ -309,6 +309,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		}
 
 		gameEnded = true;
+		getTriggerManager().expireAll();
 		logger.debug("{} endGame: Game is now ending", getGameId());
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
 		notifyPlayersGameOver();
@@ -1081,7 +1082,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	public Entity tryFind(EntityReference targetKey) {
 		try {
 			return resolveSingleTarget(targetKey);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 		return null;
 	}

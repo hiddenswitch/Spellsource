@@ -21,7 +21,7 @@ public class ModifyDamageSpell extends Spell {
 		int damage = context.getDamageStack().pop();
 		AlgebraicOperation operation = (AlgebraicOperation) desc.get(SpellArg.OPERATION);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-		int minDamage = desc.getInt(SpellArg.MIN_DAMAGE, 0);
+		int minDamage = 0;
 		switch(operation) {
 		case ADD:
 			if ((context.resolveSingleTarget(context.getEventTargetStack().peek())).hasAttribute(Attribute.TAKE_DOUBLE_DAMAGE)) {

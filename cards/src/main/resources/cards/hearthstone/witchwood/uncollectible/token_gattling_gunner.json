@@ -1,0 +1,14 @@
+{
+  "name": "Gattling Gunner",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Whenever you play a card, deal damage equal to its Cost to a random enemy minion.",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

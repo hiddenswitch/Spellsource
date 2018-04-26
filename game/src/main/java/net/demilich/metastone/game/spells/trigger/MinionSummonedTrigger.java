@@ -18,12 +18,12 @@ public class MinionSummonedTrigger extends EventTrigger {
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		SummonEvent summonEvent = (SummonEvent) event;
-		Race race = (Race) desc.get(EventTriggerArg.RACE);
-		if (race != null && summonEvent.getMinion().getRace() != race) {
+		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
+		if (race != null && !summonEvent.getMinion().getRace().hasRace(race)) {
 			return false;
 		}
 
-		Attribute requiredAttribute = (Attribute) desc.get(EventTriggerArg.REQUIRED_ATTRIBUTE);
+		Attribute requiredAttribute = (Attribute) getDesc().get(EventTriggerArg.REQUIRED_ATTRIBUTE);
 		// Special case DEATHRATTLES
 		if (requiredAttribute == Attribute.DEATHRATTLES
 				&& !summonEvent.getMinion().getSourceCard().hasAttribute(requiredAttribute)) {

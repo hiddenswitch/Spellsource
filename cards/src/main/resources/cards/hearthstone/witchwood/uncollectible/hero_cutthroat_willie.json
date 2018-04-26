@@ -1,0 +1,12 @@
+{
+  "name": "Cutthroat Willie",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BLACK",
+  "rarity": "FREE",
+  "description": "<i>WANTED: For doing exactly what his name suggests.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

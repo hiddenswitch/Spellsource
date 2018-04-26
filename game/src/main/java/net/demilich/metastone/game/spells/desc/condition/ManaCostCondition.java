@@ -19,7 +19,10 @@ public class ManaCostCondition extends Condition {
 	@Suspendable
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		if (!(target instanceof Card)) {
-			return false;
+			target = target.getSourceCard();
+			if (target == null) {
+				return false;
+			}
 		}
 
 		Card card = (Card) target;

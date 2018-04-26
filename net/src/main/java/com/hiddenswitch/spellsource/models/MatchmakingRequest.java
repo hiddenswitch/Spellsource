@@ -16,6 +16,9 @@ public class MatchmakingRequest implements Serializable {
 	private boolean botMatch;
 	private String deckId;
 	private String clientType;
+	private String botDeckId;
+	private int timeout = 45000;
+	private String queueId;
 
 	public MatchmakingRequest() {
 	}
@@ -109,5 +112,39 @@ public class MatchmakingRequest implements Serializable {
 	public MatchmakingRequest withBotMatch(final boolean botMatch) {
 		this.botMatch = botMatch;
 		return this;
+	}
+
+	public String getBotDeckId() {
+		return botDeckId;
+	}
+
+	public void setBotDeckId(String botDeckId) {
+		this.botDeckId = botDeckId;
+	}
+
+	public MatchmakingRequest withBotDeckId(String botDeckId) {
+		this.botDeckId = botDeckId;
+		return this;
+	}
+
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
+	public MatchmakingRequest withTimeout(int timeout) {
+		this.timeout = timeout;
+		return this;
+	}
+
+	public String getQueueId() {
+		return queueId;
+	}
+
+	public void setQueueId(String queueId) {
+		this.queueId = queueId;
 	}
 }

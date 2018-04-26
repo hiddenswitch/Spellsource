@@ -2,22 +2,36 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.impl.util.UserRecord;
+import com.hiddenswitch.spellsource.impl.UserId;
+import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.QuickJson;
+import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.web.RoutingContext;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.*;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 
@@ -29,6 +43,8 @@ public interface Accounts {
 	 * The USERS constant specifies the name of the collection in Mongo that contains the user data.
 	 */
 	String USERS = "accounts.users";
+	Pattern USERNAME_PATTERN = Pattern.compile("[A-Za-z0-9_]+");
+	Logger LOGGER = LoggerFactory.getLogger(Accounts.class);
 
 	/**
 	 * Updates an account. Useful for joining data into the account object, like deck or statistics information.
@@ -41,7 +57,7 @@ public interface Accounts {
 	 * @throws InterruptedException
 	 */
 	static MongoClientUpdateResult update(MongoClient client, String userId, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
-		return awaitResult(h -> client.updateCollection(Accounts.USERS, QuickJson.json("_id", userId), updateCommand, h));
+		return awaitResult(h -> client.updateCollection(Accounts.USERS, json("_id", userId), updateCommand, h));
 	}
 
 	/**
@@ -54,7 +70,7 @@ public interface Accounts {
 	 * @throws InterruptedException
 	 */
 	static MongoClientUpdateResult update(String userId, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
-		return Mongo.mongo().updateCollection(Accounts.USERS, QuickJson.json("_id", userId), updateCommand);
+		return mongo().updateCollection(Accounts.USERS, json("_id", userId), updateCommand);
 	}
 
 	/**
@@ -67,7 +83,7 @@ public interface Accounts {
 	 * @throws InterruptedException
 	 */
 	static MongoClientUpdateResult update(JsonObject query, JsonObject updateCommand) throws SuspendExecution {
-		return Mongo.mongo().updateCollectionWithOptions(Accounts.USERS, query, updateCommand, new UpdateOptions().setMulti(true));
+		return mongo().updateCollectionWithOptions(Accounts.USERS, query, updateCommand, new UpdateOptions().setMulti(true));
 	}
 
 	/**
@@ -93,7 +109,11 @@ public interface Accounts {
 	 * @throws InterruptedException
 	 */
 	static UserRecord findOne(String userId) throws SuspendExecution, InterruptedException {
-		return Mongo.mongo().findOne(Accounts.USERS, QuickJson.json("_id", userId), UserRecord.class);
+		return mongo().findOne(Accounts.USERS, json("_id", userId), UserRecord.class);
+	}
+
+	static UserRecord findOne(UserId userId) throws SuspendExecution, InterruptedException {
+		return findOne(userId.toString());
 	}
 
 	/**
@@ -129,18 +149,169 @@ public interface Accounts {
 	}
 
 	/**
+	 * Retrieves the userId from a routing context after it has been handled by an {@link
+	 * com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler}.
+	 *
+	 * @param context The routing context from which to retrieve the user ID
+	 * @return The User ID
+	 */
+	static String userId(RoutingContext context) {
+		return context.user().principal().getString("_id");
+	}
+
+	/**
 	 * Creates an account.
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
 	 * set to true, the account creation failed with the specified handled reason. On subsequent requests from a client
-	 * that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests.
-	 * The token and user ID should be saved.
+	 * that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests. The
+	 * token and user ID should be saved.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
+	@NotNull
+	static CreateAccountResponse createAccount(CreateAccountRequest request) throws SuspendExecution, InterruptedException {
+		CreateAccountResponse response = new CreateAccountResponse();
+
+		if (!isValidName(request.getName())) {
+			response.setInvalidName(true);
+			return response;
+		}
+
+		if (!isValidEmailAddress(request.getEmailAddress())
+				|| emailExists(request.getEmailAddress())) {
+			response.setInvalidEmailAddress(true);
+			return response;
+		}
+
+		final String password = request.getPassword();
+		if (!isValidPassword(password)) {
+			response.setInvalidPassword(true);
+			return response;
+		}
+
+		final String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
+		UserRecord record = new UserRecord(userId);
+		EmailRecord email = new EmailRecord();
+		email.setAddress(request.getEmailAddress());
+		record.setEmails(Collections.singletonList(email));
+		record.setDecks(new ArrayList<>());
+		record.setFriends(new ArrayList<>());
+		record.setUsername(request.getName());
+		record.setBot(request.isBot());
+		record.setCreatedAt(Date.from(Instant.now()));
+
+		final String scrypt = securedPassword(password);
+		LoginToken forUser = LoginToken.createSecure(userId);
+
+		HashedLoginTokenRecord loginToken = new HashedLoginTokenRecord(forUser);
+		record.setServices(new ServicesRecord());
+		ResumeRecord resume = new ResumeRecord();
+		resume.setLoginTokens(Collections.singletonList(loginToken));
+		record.getServices().setResume(resume);
+		PasswordRecord passwordRecord = new PasswordRecord();
+		passwordRecord.setScrypt(scrypt);
+		record.getServices().setPassword(passwordRecord);
+
+		mongo().insert(USERS, toJson(record));
+
+		response.setUserId(userId);
+		response.setLoginToken(forUser);
+
+		return response;
+	}
+
+	static String securedPassword(String password) {
+		return SCryptUtil.scrypt(password, 16384, 8, 1);
+	}
+
+	static boolean isValidPassword(String password) {
+		return password != null && password.length() >= 1;
+	}
+
+	static boolean emailExists(String emailAddress) throws SuspendExecution, InterruptedException {
+		Long count = mongo().count(USERS, json(UserRecord.EMAILS_ADDRESS, emailAddress));
+		return count != 0;
+	}
+
+	static boolean isValidEmailAddress(String emailAddress) {
+		return EmailValidator.getInstance().isValid(emailAddress);
+	}
+
+	static boolean isValidName(String name) {
+		return getUsernamePattern().matcher(name).matches()
+				&& !isVulgar(name);
+	}
+
+	static boolean isVulgar(String name) {
+		return false;
+	}
+
+	static Pattern getUsernamePattern() {
+		return USERNAME_PATTERN;
+	}
+
+	static CreateAccountResponse createAccount(String emailAddress, String password, String username) throws SuspendExecution, InterruptedException {
+		CreateAccountRequest request = new CreateAccountRequest();
+		request.setEmailAddress(emailAddress);
+		request.setPassword(password);
+		request.setName(username);
+		return Accounts.createAccount(request);
+	}
+
 	@Suspendable
-	CreateAccountResponse createAccount(CreateAccountRequest request) throws SuspendExecution, InterruptedException;
+	static UserRecord getWithEmail(String email) {
+		return mongo().findOne(USERS, json(UserRecord.EMAILS_ADDRESS, email), UserRecord.class);
+	}
+
+	@Suspendable
+	static LoginResponse login(String email, String password) {
+		LoginRequest request = new LoginRequest();
+		request.setPassword(password);
+		request.setEmail(email);
+		return login(request);
+	}
+
+	@SuppressWarnings("unchecked")
+	static boolean isAuthorizedWithToken(String userId, String secret) throws SuspendExecution, InterruptedException {
+		if (secret == null
+				|| userId == null) {
+			return false;
+		}
+		JsonObject result = mongo().findOne(USERS, json("_id", userId),
+				json(UserRecord.SERVICES_RESUME_LOGIN_TOKENS, 1));
+
+		if (result == null
+				|| result.isEmpty()) {
+			return false;
+		}
+
+		List<HashedLoginTokenRecord> tokens = fromJson(
+				result.getJsonObject(UserRecord.SERVICES).getJsonObject(UserRecord.RESUME).getJsonArray(UserRecord.LOGIN_TOKENS),
+				HashedLoginTokenRecord.class);
+
+		return isTokenInList(secret, tokens);
+	}
+
+	static boolean isAuthorizedWithToken(UserRecord record, String secret) {
+		if (record == null || record.getServices() == null || record.getServices().getResume() == null
+				|| record.getServices().getResume().getLoginTokens() == null
+				|| record.getServices().getResume().getLoginTokens().size() == 0) {
+			return false;
+		}
+		return isTokenInList(secret, record.getServices().getResume().getLoginTokens());
+	}
+
+	static boolean isTokenInList(String secret, List<HashedLoginTokenRecord> hashedSecrets) {
+		for (HashedLoginTokenRecord loginToken : hashedSecrets) {
+			if (loginToken.check(secret)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	/**
 	 * Login with the provided email and password to receive a login token. Pass the login token in the X-Auth-Token
@@ -151,31 +322,95 @@ public interface Accounts {
 	 * email or password).
 	 */
 	@Suspendable
-	LoginResponse login(LoginRequest request);
+	static LoginResponse login(LoginRequest request) {
+		if (request.getEmail() == null) {
+			return new LoginResponse(true, false);
+		}
+		if (request.getPassword() == null) {
+			return new LoginResponse(false, true);
+		}
 
-	/**
-	 * Gets a user record for the given token.
-	 *
-	 * @param token The token that was returned by a login or create account request.
-	 * @return The user record. or {@code null} if no user record for the specified token was found.
-	 */
-	@Suspendable
-	UserRecord getWithToken(String token);
+		final String email = request.getEmail();
+		UserRecord userRecord = getWithEmail(email);
 
-	/**
-	 * Gets a user record for the given user ID.
-	 *
-	 * @param userId The user's ID as returned by a login or create account request.
-	 * @return The user record, or {@code null} if no user record with the specified ID was found.
-	 */
-	@Suspendable
-	UserRecord get(String userId);
+		if (userRecord == null) {
+			return new LoginResponse(true, false);
+		}
 
-	/**
-	 * Changes the user's password.
-	 * @param request The
-	 * @return
-	 */
+		if (request.getPassword() != null
+				&& !SCryptUtil.check(request.getPassword(), userRecord.getServices().getPassword().getScrypt())) {
+			return new LoginResponse(false, true);
+		}
+
+		// Since we don't store the tokens unhashed, we have to add this token always. We slice down five tokens.
+		LoginToken token = LoginToken.createSecure(userRecord.getId());
+		HashedLoginTokenRecord hashedLoginTokenRecord = new HashedLoginTokenRecord(token);
+		final int sliceLastFiveElements = -5;
+
+		// Update the record with the new token.
+		MongoClientUpdateResult updateResult = mongo().updateCollection(USERS,
+				json("_id", userRecord.getId()),
+				json("$push",
+						json(UserRecord.SERVICES_RESUME_LOGIN_TOKENS,
+								json("$each",
+										Collections.singletonList(toJson(hashedLoginTokenRecord)),
+										"$slice",
+										sliceLastFiveElements))));
+
+		if (updateResult.getDocModified() == 0) {
+			throw new RuntimeException();
+		}
+
+		return new LoginResponse(token, userRecord);
+	}
+
 	@Suspendable
-	ChangePasswordResponse changePassword(ChangePasswordRequest request) throws SuspendExecution, InterruptedException;
+	static UserRecord getWithToken(String token) {
+		final String[] components = token.split(":");
+		final String userId = components[0];
+		final String secret = components[1];
+
+		UserRecord record = Accounts.get(userId);
+		if (Accounts.isAuthorizedWithToken(record, secret)) {
+			return record;
+		} else {
+			return null;
+		}
+	}
+
+	@Suspendable
+	static UserRecord get(String userId) {
+		return mongo().findOne(USERS, json("_id", userId), UserRecord.class);
+	}
+
+	@Suspendable
+	static ChangePasswordResponse changePassword(ChangePasswordRequest request) throws SuspendExecution, InterruptedException {
+		if (request.getUserId() == null) {
+			throw new NullPointerException("No user specified.");
+		}
+
+		UserRecord record = get(request.getUserId().toString());
+		if (record == null) {
+			throw new NullPointerException("User not found.");
+		}
+
+		if (!Accounts.isValidPassword(request.getPassword())) {
+			throw new SecurityException("Invalid password.");
+		}
+
+		final String scrypt = Accounts.securedPassword(request.getPassword());
+
+		MongoClientUpdateResult result = mongo().updateCollection(USERS,
+				json(MongoRecord.ID, record.getId()),
+				json("$set", json(
+						UserRecord.SERVICES_PASSWORD_SCRYPT, scrypt
+				)));
+		LOGGER.debug("changePassword: Changed password for userId={}, username={}", record.getId(), record.getUsername());
+
+		if (result.getDocModified() == 0) {
+			throw new IllegalStateException("Unable to save the password change at this time.");
+		}
+
+		return new ChangePasswordResponse();
+	}
 }

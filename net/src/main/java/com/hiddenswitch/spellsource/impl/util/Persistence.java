@@ -8,13 +8,10 @@ import com.hiddenswitch.spellsource.models.LogicResponse;
 import com.hiddenswitch.spellsource.models.PersistAttributeRequest;
 import com.hiddenswitch.spellsource.models.PersistAttributeResponse;
 import com.hiddenswitch.spellsource.impl.PersistenceContextImpl;
-import com.hiddenswitch.spellsource.util.RpcClient;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.spells.SetAttributeSpell;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
@@ -34,63 +31,15 @@ public class Persistence {
 
 	@SuppressWarnings("unchecked")
 	@Suspendable
-	public void persistenceTrigger(RpcClient<Logic> logic, GameEvent event) {
+	public void persistenceTrigger(GameEvent event) {
 		// First, execute the regular handlers. They will persist normally.
 		for (PersistenceHandler handler1 : spellsource.getPersistAttributeHandlers().values()) {
 			if (handler1.getType() != event.getEventType()) {
 				continue;
 			}
 
-			handler1.getHandler().handle(new PersistenceContextImpl(event, logic, handler1.getId(), handler1.getAttribute()));
-		}
-
-		// Now, execute the legacy handlers.
-		List<LogicResponse> responses = new ArrayList<>();
-		for (LegacyPersistenceHandler handler2 : spellsource.getLegacyPersistenceHandlers().values()) {
-			if (!handler2.getGameEvent().equals(event.getEventType())) {
-				continue;
-			}
-
-			EventLogicRequest request = handler2.onGameEvent(event);
-
-			if (request == null) {
-				continue;
-			}
-
-			PersistAttributeResponse response = logic.uncheckedSync().persistAttribute(new
-					PersistAttributeRequest()
-					.withId(handler2.getId()).withRequest(request));
-
-			if (response.getLogicResponse() != null) {
-				responses.add(response.getLogicResponse());
-			}
-		}
-
-		for (LogicResponse response : responses) {
-			GameContext context = event.getGameContext();
-			for (Map.Entry<EntityReference, Map<Attribute, Object>> entry : response.getModifiedAttributes()
-					.entrySet()) {
-
-				EntityReference target = entry.getKey();
-				Entity entity = context.tryFind(target);
-
-				if (entity == null) {
-					continue;
-				}
-
-				for (Map.Entry<Attribute, Object> kv : entry.getValue().entrySet()) {
-					if (!kv.getValue().getClass().isPrimitive()
-							|| !(kv.getValue() instanceof Serializable)) {
-						continue;
-					}
-
-					entity.setAttribute(kv.getKey(), kv.getValue());
-				}
-			}
+			handler1.getHandler().handle(new PersistenceContextImpl(event, handler1.getId(), handler1.getAttribute()));
 		}
 	}
 
-	public LegacyPersistenceHandler getLogicHandler(String id) {
-		return spellsource.getLegacyPersistenceHandlers().get(id);
-	}
 }

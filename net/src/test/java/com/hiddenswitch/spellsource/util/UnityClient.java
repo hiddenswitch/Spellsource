@@ -28,7 +28,8 @@ import java.util.stream.Collectors;
 
 public class UnityClient {
 	private static Logger logger = LoggerFactory.getLogger(UnityClient.class);
-	public static String basePath = "http://localhost:" + Integer.toString(Port.port());
+	public static final String BASE = "http://localhost:";
+	public static String basePath = BASE + Integer.toString(Port.port());
 	private ApiClient apiClient;
 	private DefaultApi api;
 	private boolean gameOver;
@@ -36,31 +37,32 @@ public class UnityClient {
 	private Account account;
 	private TestContext context;
 	private WebsocketClientEndpoint endpoint;
-	private String gameId;
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
+	private String thisUrl;
 
 
 	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
+		thisUrl = basePath;
 		apiClient.setBasePath(basePath);
-//		apiClient.getHttpClient().setConnectTimeout(2, TimeUnit.MINUTES);
-//		apiClient.getHttpClient().setWriteTimeout(2, TimeUnit.MINUTES);
-//		apiClient.getHttpClient().setReadTimeout(2, TimeUnit.MINUTES);
 		api = new DefaultApi(apiClient);
 		this.context = context;
 		List<UnityClient> clients = context.get("clients");
 		if (clients == null) {
-			clients = new Vector<>();
+			clients = new LinkedList<>();
 			context.put("clients", clients);
 		}
 		clients.add(this);
 	}
 
-	public UnityClient(TestContext context, int turnsToPlay) {
+	public UnityClient(TestContext context, int port) {
 		this(context);
-		this.turnsToPlay = new AtomicInteger(turnsToPlay);
+		apiClient = new ApiClient();
+		thisUrl = BASE + Integer.toString(port);
+		apiClient.setBasePath(thisUrl);
+		api = new DefaultApi(apiClient);
 	}
 
 	public UnityClient(TestContext context, String token) {
@@ -147,7 +149,7 @@ public class UnityClient {
 		// Get the port from the url
 		final URL basePathUrl;
 		try {
-			basePathUrl = new URL(basePath);
+			basePathUrl = new URL(thisUrl);
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
@@ -318,7 +320,7 @@ public class UnityClient {
 	public UnityClient waitUntilDone() {
 		logger.debug("waitUntilDone: UserId " + getUserId() + " is waiting");
 		float time = 0f;
-		while (!(time > 52f || this.isGameOver())) {
+		while (!(time > 90f || this.isGameOver())) {
 			try {
 				Strand.sleep(1000);
 			} catch (SuspendExecution | InterruptedException suspendExecution) {

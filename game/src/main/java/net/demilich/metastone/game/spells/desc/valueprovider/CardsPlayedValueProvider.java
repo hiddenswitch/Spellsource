@@ -17,7 +17,7 @@ public class CardsPlayedValueProvider extends ValueProvider {
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
 		Map<String, Map<Integer, Integer>> cardIds = player.getStatistics().getCardsPlayed();
 		int count = 0;
-		EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
+		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
 		for (String cardId : cardIds.keySet()) {
 			Entity entity = context.getCardById(cardId);
 			if (filter == null || filter.matches(context, player, entity, host)) {

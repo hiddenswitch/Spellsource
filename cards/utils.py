@@ -2,13 +2,6 @@ from json import dump, load
 from os import walk, path
 from collections import deque
 
-try:
-    import objdict
-except ImportError:
-    import pip
-
-    pip.main(['install', '--user', 'objdict'])
-
 from objdict import ObjDict as OrderedDict
 from objdict import JsonEncoder
 

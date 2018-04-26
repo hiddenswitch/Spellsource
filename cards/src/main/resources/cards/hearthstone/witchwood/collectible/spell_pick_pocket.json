@@ -1,0 +1,37 @@
+{
+  "name": "Pick Pocket",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "RARE",
+  "description": "<b>Echo</b>\nAdd a random card to your hand <i>(from your opponent's class).</i>",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "heroClass": "OPPONENT"
+        },
+        {
+          "class": "CardFilter",
+          "rarity": "LEGENDARY",
+          "cardType": "SPELL",
+          "invert": true
+        }
+      ]
+    },
+    "cardSource": {
+      "class": "CatalogueSource",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

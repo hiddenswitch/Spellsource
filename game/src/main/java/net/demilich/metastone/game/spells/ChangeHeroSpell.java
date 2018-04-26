@@ -7,6 +7,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -15,7 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Changes the hero of {@link SpellArg#TARGET_PLAYER} to the specified hero card ID in {@link SpellArg#CARD}.
+ * Changes the hero of {@link SpellArg#TARGET_PLAYER} to the specified hero card ID in {@link SpellArg#CARD}. If {@link
+ * SpellArg#CARDS} or {@link SpellArg#CARD_FILTER} or {@link SpellArg#CARD_SOURCE} are specified, a random hero card
+ * will be chosen from the lists of cards.
+ * <p>
+ * This spell activates the {@link net.demilich.metastone.game.cards.desc.CardDesc#battlecry} by default. To disable it,
+ * set {@link SpellArg#EXCLUSIVE} to {@code true}.
  * <p>
  * For <b>example,</b> to turn the casting player's hero into Ragnaros:
  * <pre>
@@ -25,6 +31,8 @@ import org.slf4j.LoggerFactory;
  *         "targetPlayer": "SELF"
  *     }
  * </pre>
+ * Casts the {@link SpellArg#SPELL} sub-spell with the {@link net.demilich.metastone.game.targeting.EntityReference#OUTPUT}
+ * set to the new hero.
  */
 public class ChangeHeroSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(ChangeHeroSpell.class);
@@ -58,25 +66,20 @@ public class ChangeHeroSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.SPELL);
-		String heroCardId = (String) desc.get(SpellArg.CARD);
-		if (heroCardId == null) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARDS, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.SPELL, SpellArg.EXCLUSIVE);
+		CardList heroCards = SpellUtils.getCards(context, player, target, source, desc);
+		if (heroCards.size() == 0) {
 			logger.error("onCast {} {}: Requires hero card ID, none specified.", context.getGameId(), source);
 			return;
 		}
-		Card heroCard = (Card) context.getCardById(heroCardId);
-		if (heroCard == null) {
-			logger.error("onCast {} {}: Invalid heroCardId {}", context.getGameId(), source, heroCardId);
-			return;
-		}
 
+		Card heroCard = heroCards.get(0);
 		Hero hero = heroCard.createHero();
-		context.getLogic().changeHero(player, hero);
+		context.getLogic().changeHero(player, hero, !(boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false));
 
 		List<SpellDesc> spellDescs = desc.subSpells(0);
 		for (SpellDesc subSpell : spellDescs) {
 			SpellUtils.castChildSpell(context, player, subSpell, source, target, hero);
 		}
-		;
 	}
 }

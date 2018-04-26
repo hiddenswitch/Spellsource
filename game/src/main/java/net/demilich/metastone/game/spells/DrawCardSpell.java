@@ -8,6 +8,12 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * Draws {@link SpellArg#VALUE} cards from the player's deck.
+ * <p>
+ * Casts the {@link SpellArg#SPELL} sub-spell with the newly drawn card as the {@link
+ * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
+ */
 public class DrawCardSpell extends Spell {
 
 	@Override

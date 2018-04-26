@@ -12,6 +12,12 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Doubles the {@code target} {@link Actor}'s total attack.
+ * <p>
+ * If some amount of the actor's current attack is temporary (stored in {@link Attribute#TEMPORARY_ATTACK_BONUS}), the
+ * portion of the attack doubling that came from temporary attack is temporary too.
+ */
 public class DoubleAttackSpell extends Spell {
 
 	public static SpellDesc create() {

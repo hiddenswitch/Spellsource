@@ -23,7 +23,7 @@ public class PlayedLastTurnValueProvider extends ValueProvider {
 		} else {
 			turn -= 1;
 		}
-		EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
+		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
 		for (String cardId : cardIds.keySet()) {
 			Entity entity = context.getCardById(cardId);
 			if (filter == null || filter.matches(context, player, entity, host)) {

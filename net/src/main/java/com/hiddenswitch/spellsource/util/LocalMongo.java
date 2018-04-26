@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
 import ch.qos.logback.classic.Level;
+import com.mongodb.async.client.MongoClients;
 import de.flapdoodle.embed.mongo.Command;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
@@ -16,67 +17,107 @@ import de.flapdoodle.embed.process.io.directories.IDirectory;
 import de.flapdoodle.embed.process.runtime.Network;
 import de.flapdoodle.embed.process.store.Downloader;
 import de.flapdoodle.embed.process.store.ExtractedArtifactStoreBuilder;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import org.apache.commons.lang3.SystemUtils;
+import org.bson.BsonDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by bberman on 2/2/17.
  */
 public class LocalMongo {
-	/**
-	 * please store Starter or RuntimeConfig in a static final field if you want to use artifact store caching (or else
-	 * disable caching)
-	 */
-	private static final MongodStarter starter;
-	private static final Command command;
-	private static final ExtractedArtifactStoreBuilder artifactStoreBuilder;
-	private static final Storage replication;
-	private MongodExecutable mongodExecutable;
 	private MongodProcess mongodProcess;
 
-	static {
+	public void start() throws Throwable {
 		final String path = System.getProperty("user.dir") + "/.mongo";
 		final FixedPath fixedPath = new FixedPath(path);
-		replication = new Storage(path + "/db", null, 0);
-		System.out.println("An embedded mongod was successfully started.");
-		System.out.println("Path to database: " + replication.getDatabaseDir());
-		command = Command.MongoD;
-		artifactStoreBuilder = new ExtractedArtifactStoreBuilder()
-				.extractDir(fixedPath)
-				.tempDir(fixedPath)
-				.extractExecutableNaming(new UserTempNaming())
-				.executableNaming(new UUIDTempNaming())
-				.downloader(new Downloader())
-				.download(new DownloadConfigBuilder()
-						.defaultsForCommand(command)
-						.artifactStorePath(fixedPath)
-						.build());
+		Storage replication = new Storage(path + "/db", "localReplSet", 5000);
+		Command command = Command.MongoD;
+		ExtractedArtifactStoreBuilder artifactStoreBuilder = new ExtractedArtifactStoreBuilder()
+						.extractDir(fixedPath)
+						.tempDir(fixedPath)
+						.extractExecutableNaming(new UserTempNaming())
+						.executableNaming(new UUIDTempNaming())
+						.downloader(new Downloader())
+						.download(new DownloadConfigBuilder()
+										.defaultsForCommand(command)
+										.artifactStorePath(fixedPath)
+										.build());
 
 		ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Mongod.class);
 		logger.setLevel(Level.ERROR);
 
 		IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
-				.defaultsWithLogger(command, logger)
-				.artifactStore(artifactStoreBuilder)
-				.build();
+						.defaultsWithLogger(command, logger)
+						.artifactStore(artifactStoreBuilder)
+						.build();
 
-		starter = MongodStarter.getInstance(runtimeConfig);
-	}
-
-	public void start() throws Exception {
-		mongodExecutable = starter.prepare(new MongodConfigBuilder()
-				.replication(replication)
-				.version(SystemUtils.IS_OS_WINDOWS ? Version.Main.V3_5 : Version.Main.V3_6)
-				.net(new Net("localhost", 27017, Network.localhostIsIPv6()))
-				.build());
+		CountDownLatch latch = new CountDownLatch(1);
+		MongodExecutable mongodExecutable = MongodStarter.getInstance(runtimeConfig)
+						.prepare(new MongodConfigBuilder()
+										.replication(replication)
+										.version(Version.Main.V3_6)
+										.net(new Net("localhost", 27017, Network.localhostIsIPv6()))
+										.build());
 		mongodProcess = mongodExecutable.start();
+
+		final JsonObject replSetInitiateConfig = new JsonObject();
+		replSetInitiateConfig.put("replSetInitiate",
+						new JsonObject()
+										.put("_id", "localReplSet")
+										.put("members", new JsonArray(Collections.singletonList(new JsonObject()
+														.put("_id", 0).put("host", "localhost:27017")))));
+		com.mongodb.async.client.MongoClient client = MongoClients.create("mongodb://localhost:27017/");
+		AtomicReference<Throwable> err = new AtomicReference<>();
+		client.getDatabase("local").getCollection("system.replset")
+						.count((res, t1) -> {
+							if (t1 != null) {
+								err.set(t1);
+							}
+							if (res == null || res > 0L) {
+								latch.countDown();
+								client.close();
+							} else {
+								client.getDatabase("admin").runCommand(
+												BsonDocument.parse(replSetInitiateConfig.encode()), (result, t2) -> {
+													if (t2 != null) {
+														err.set(t2);
+													}
+													latch.countDown();
+													client.close();
+												});
+							}
+						});
+
+		latch.await(30L, TimeUnit.SECONDS);
+		if (err.get() != null) {
+			throw err.get();
+		}
 	}
 
 	public void stop() throws Exception {
-		mongodProcess.stop();
-		mongodExecutable.stop();
+		CountDownLatch latch = new CountDownLatch(1);
+		// Since this is a replica set mongo, force shutdown.
+		JsonObject shutdown = new JsonObject()
+						.put("shutdown", 1)
+						.put("force", true);
+		com.mongodb.async.client.MongoClient client = MongoClients.create("mongodb://localhost:27017/?replicaSet=localReplSet");
+		client.getDatabase("admin").runCommand(BsonDocument.parse(shutdown.encode()), (result, t) -> {
+			latch.countDown();
+			client.close();
+		});
+		latch.await(30L, TimeUnit.SECONDS);
+		try {
+			mongodProcess.stop();
+		} catch (RuntimeException ignored) {
+		}
 	}
 }

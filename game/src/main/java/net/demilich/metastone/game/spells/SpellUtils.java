@@ -328,7 +328,7 @@ public class SpellUtils {
 	public static int hasHowManyOfRace(Player player, Race race) {
 		int count = 0;
 		for (Minion minion : player.getMinions()) {
-			if (minion.getRace() == race) {
+			if (minion.getRace().hasRace(race)) {
 				count++;
 			}
 		}
@@ -337,24 +337,6 @@ public class SpellUtils {
 
 	public static boolean highlanderDeck(Player player) {
 		return player.getDeck().stream().map(Card::getCardId).distinct().count() == player.getDeck().getCount();
-	}
-
-	public static boolean holdsCardOfType(Player player, CardType cardType) {
-		for (Card card : player.getHand()) {
-			if (card.getCardType().isCardType(cardType)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean holdsMinionOfRace(Player player, Race race) {
-		for (Card card : player.getHand()) {
-			if (card.getAttribute(Attribute.RACE) == race) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Suspendable
@@ -479,21 +461,33 @@ public class SpellUtils {
 	 * @param target  The target, which can be {@code null}
 	 * @param source  The source or host {@link Entity}, typically the origin of this spell cast.
 	 * @param desc    The {@link SpellDesc} typically of the calling spell.
-	 * @param count   The number of cards to return, exclusively and randomly, from the generated card list.
+	 * @param count   The maximum number of cards to return, exclusively and randomly, from the generated card list. Or,
+	 *                returns all the cards if {@code count > cards.size()}, where {@code cards} is all the possible
+	 *                cards.
 	 * @return A list of cards.
 	 */
 	public static CardList getCards(GameContext context, Player player, Entity target, Entity source, SpellDesc desc, int count) {
 		CardList cards = new CardArrayList(Arrays.asList(getCards(context, desc)));
 		boolean hasCardSourceOrFilter = desc.containsKey(SpellArg.CARD_SOURCE) || desc.containsKey(SpellArg.CARD_FILTER);
-		if (cards.isEmpty()
-				&& target != null) {
+		if (cards.isEmpty()) {
 			if (hasCardSourceOrFilter) {
 				cards.addAll(desc.getFilteredCards(context, player, source));
-			} else {
+			} else if (target != null) {
 				cards.add(target.getSourceCard());
 			}
 		}
-		CardList shuffled = cards.shuffle(context.getLogic().getRandom());
-		return new CardArrayList(shuffled.subList(0, count));
+
+		if (count < cards.size()) {
+			CardList result = new CardArrayList();
+			int i = count;
+			while (cards.size() > 0
+					&& i > 0) {
+				result.add(context.getLogic().removeRandom(cards));
+				i--;
+			}
+			return result;
+		} else {
+			return cards;
+		}
 	}
 }
