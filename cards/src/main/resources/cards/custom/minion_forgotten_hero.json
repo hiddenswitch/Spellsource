@@ -1,0 +1,33 @@
+{
+  "name": "Forgotten Hero",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "After a hero power is used, replace it with a random one.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "ChangeHeroPowerSpell",
+      "cards": [
+        "hero_power_shapeshift",
+        "hero_power_steady_shot",
+        "hero_power_fireblast",
+        "hero_power_reinforce",
+        "hero_power_lesser_heal",
+        "hero_power_dagger_mastery",
+        "hero_power_totemic_call",
+        "hero_power_armor_up"
+      ],
+      "targetPlayer": "ACTIVE"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
