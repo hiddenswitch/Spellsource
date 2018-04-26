@@ -8,7 +8,6 @@ import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -689,28 +688,7 @@ public class JourneyToUngoroTests extends TestBase {
 			String name = card.getName();
 			Minion plant = player.getMinions().get(1);
 			Stream.of(voraxx, plant).forEach(minion -> {
-				if (name.equals("Crackling Shield")) {
-					Assert.assertTrue(minion.hasAttribute(Attribute.DIVINE_SHIELD));
-				} else if (name.equals("Flaming Claws")) {
-					Assert.assertEquals(minion.getAttack(), minion.getBaseAttack() + 3);
-				} else if (name.equals("Lightning Speed")) {
-					Assert.assertTrue(minion.hasAttribute(Attribute.WINDFURY));
-				} else if (name.equals("Liquid Membrane")) {
-					Assert.assertTrue(minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
-				} else if (name.equals("Living Spores")) {
-					Assert.assertEquals(minion.getDeathrattles().size(), 1);
-				} else if (name.equals("Massive")) {
-					Assert.assertTrue(minion.hasAttribute(Attribute.TAUNT));
-				} else if (name.equals("Poison Spit")) {
-					Assert.assertTrue(minion.hasAttribute(Attribute.POISONOUS));
-				} else if (name.equals("Rocky Carapace")) {
-					Assert.assertEquals(minion.getHp(), minion.getBaseHp() + 3);
-				} else if (name.equals("Shrouding Mist")) {
-					Assert.assertTrue(minion.hasAttribute(Attribute.STEALTH));
-				} else if (name.equals("Volcanic Might")) {
-					Assert.assertEquals(minion.getHp(), minion.getBaseHp() + 1);
-					Assert.assertEquals(minion.getAttack(), minion.getBaseAttack() + 1);
-				}
+				assertAdapted(name, minion);
 			});
 		});
 	}

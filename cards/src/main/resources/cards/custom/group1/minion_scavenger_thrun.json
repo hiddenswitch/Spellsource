@@ -14,37 +14,35 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "AdjacentEffectSpell",
-      "target": "TRIGGER_HOST",
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      },
+      "spell1": {
+        "class": "CastFromGroupSpell",
+        "target": "ADJACENT_MINIONS",
+        "group": "group_adapt"
+      },
       "spell2": {
-        "class": "EitherOrSpell",
-        "condition": {
-          "class": "OwnedByPlayerCondition",
-          "targetPlayer": "ACTIVE"
-        },
-        "spell1": {
-          "class": "CastFromGroupSpell",
-          "group": "group_adapt"
-        },
-        "spell2": {
-          "class": "MetaSpell",
-          "spells": [
-            {
-              "class": "AddAttributeSpell",
-              "target": "FRIENDLY_PLAYER",
-              "attribute": "RANDOM_CHOICES"
-            },
-            {
-              "class": "CastFromGroupSpell",
-              "group": "group_adapt"
-            },
-            {
-              "class": "RemoveAttributeSpell",
-              "target": "FRIENDLY_PLAYER",
-              "attribute": "RANDOM_CHOICES"
-            }
-          ]
-        }
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "RANDOM_CHOICES"
+          },
+          {
+            "class": "CastFromGroupSpell",
+            "target": "ADJACENT_MINIONS",
+            "group": "group_adapt"
+          },
+          {
+            "class": "RemoveAttributeSpell",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "RANDOM_CHOICES"
+          }
+        ]
       }
     }
   },
