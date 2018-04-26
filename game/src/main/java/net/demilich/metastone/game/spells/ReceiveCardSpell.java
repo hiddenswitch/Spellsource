@@ -179,6 +179,10 @@ public class ReceiveCardSpell extends Spell {
 				for (Card card : receivableCards) {
 					// Move at most one card from discover or create a card. Handled by get cards.
 					for (int i = 0; i < count; i++) {
+						if (card == null) {
+							logger.error("onCast {} {}: Error retrieving cards", context.getGameId(), source);
+							continue;
+						}
 						card = card.getCopy();
 						context.getLogic().receiveCard(player.getId(), card);
 						SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
