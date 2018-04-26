@@ -160,6 +160,19 @@ public class TheOldGodsTests extends TestBase {
 	}
 
 	@Test
+	public void testYshaarjRecruitsItself() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_yshaarj_rage_unbound");
+			playCard(context, player, "minion_end_of_turn_trigger");
+			shuffleToDeck(context, player, "minion_yshaarj_rage_unbound");
+			context.endTurn();
+			Assert.assertEquals(player.getDeck().size(), 1);
+			Assert.assertEquals(player.getDeck().get(0).getCardId(), "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getMinions().stream().filter(c -> c.getSourceCard().getCardId().equals("minion_yshaarj_rage_unbound")).count(), 2L);
+		});
+	}
+
+	@Test
 	public void testYshaarjRageUnboundShadowEssence() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_yshaarj_rage_unbound");
