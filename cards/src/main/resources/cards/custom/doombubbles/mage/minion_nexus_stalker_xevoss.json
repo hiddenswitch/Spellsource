@@ -1,12 +1,12 @@
 {
   "name": "Nexus Stalker Xevoss",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "BLUE",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "If you control a Secret at the end of your turn, summon a copy of this minion.",
+  "description": "If you control a Secret at the start of your turn, summon a copy of this minion.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
