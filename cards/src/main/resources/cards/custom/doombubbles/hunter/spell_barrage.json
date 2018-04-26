@@ -4,19 +4,19 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "description": "Deal 1 damage to all enemy minions twice.",
+  "description": "Deal 1 damage to all enemies twice.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "target": "ENEMY_MINIONS",
+        "target": "ENEMY_CHARACTERS",
         "value": 1
       },
       {
         "class": "DamageSpell",
-        "target": "ENEMY_MINIONS",
+        "target": "ENEMY_CHARACTERS",
         "value": 1
       }
     ]

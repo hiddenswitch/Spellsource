@@ -1,6 +1,6 @@
 {
   "name": "Chaos Bolt",
-  "baseManaCost": 7,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "EPIC",
