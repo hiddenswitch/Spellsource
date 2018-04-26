@@ -1,0 +1,12 @@
+{
+  "name": "Rottooth",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BROWN",
+  "rarity": "FREE",
+  "description": "<i>Incorporeal or not, those claws hurt!</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

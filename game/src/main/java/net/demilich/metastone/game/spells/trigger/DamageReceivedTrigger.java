@@ -18,7 +18,7 @@ public class DamageReceivedTrigger extends EventTrigger {
 	protected boolean fire(GameEvent event, Entity host) {
 		DamageEvent damageEvent = (DamageEvent) event;
 
-		EntityType targetEntityType = (EntityType) desc.get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
 		if (targetEntityType != null && damageEvent.getVictim().getEntityType() != targetEntityType) {
 			return false;
 		}

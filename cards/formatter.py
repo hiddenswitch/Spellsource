@@ -65,9 +65,16 @@ ORDER = [
 
 def main():
     for (card, filepath) in iter_cards():
+        if 'set' not in card:
+            if 'witchwood' in filepath:
+                card['set'] = 'WITCHWOOD'
+        if 'race' in card:
+            if card['race'] == 'MECHANICAL':
+                card['race'] = 'MECH'
         fixed_card = fix_dict(card)
-        if u'fileFormatVersion' not in fixed_card:
-            fixed_card[u'fileFormatVersion'] = 1
+        if 'fileFormatVersion' not in fixed_card:
+            fixed_card['fileFormatVersion'] = 1
+
         write_card(fixed_card, filepath)
 
 

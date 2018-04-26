@@ -19,19 +19,7 @@
     {
       "description": "Refresh Mana",
       "spell": {
-        "class": "GainManaSpell",
-        "value": {
-          "class": "AlgebraicValueProvider",
-          "operation": "SUBTRACT",
-          "value1": {
-            "class": "PlayerAttributeValueProvider",
-            "playerAttribute": "MAX_MANA"
-          },
-          "value2": {
-            "class": "PlayerAttributeValueProvider",
-            "playerAttribute": "MANA"
-          }
-        }
+        "class": "RefreshManaSpell"
       }
     }
   ],
@@ -46,19 +34,7 @@
           "armorBonus": 10
         },
         {
-          "class": "GainManaSpell",
-          "value": {
-            "class": "AlgebraicValueProvider",
-            "operation": "SUBTRACT",
-            "value1": {
-              "class": "PlayerAttributeValueProvider",
-              "playerAttribute": "MAX_MANA"
-            },
-            "value2": {
-              "class": "PlayerAttributeValueProvider",
-              "playerAttribute": "MANA"
-            }
-          }
+          "class": "RefreshManaSpell"
         }
       ]
     }

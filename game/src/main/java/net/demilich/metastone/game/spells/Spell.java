@@ -7,6 +7,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -22,7 +24,9 @@ import org.slf4j.Logger;
  * <p>
  * To browse all the possible effects, visit the deriving classes of this class.
  */
-public abstract class Spell implements Serializable {
+public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
+	private SpellDesc desc;
+
 	/**
 	 * Arguments common to all spells that should not be considered invalid.
 	 */
@@ -31,6 +35,14 @@ public abstract class Spell implements Serializable {
 
 	/**
 	 * Casts a spell for the given arguments.
+	 * <p>
+	 * If there is at least one valid target in {@code targets} and {@link SpellArg#RANDOM_TARGET} is {@code true}, a
+	 * single target from the list will be chosen at random.
+	 * <p>
+	 * If {@code targets} is {@code null}, this is a spell that does not ordinarily receive targets, so it will be cast
+	 * once.
+	 * <p>
+	 * If {@code targets.size()} is {@code 0}, this spell takes targets but none were found, so the spell is not cast.
 	 * <p>
 	 * This spell casting code is responsible for interpreting the {@link SpellArg#FILTER} and {@link
 	 * SpellArg#RANDOM_TARGET} attributes of a {@link SpellDesc}.
@@ -128,4 +140,15 @@ public abstract class Spell implements Serializable {
 			logger.warn("checkArguments {} {}: Unexpected arguments {}", context.getGameId(), source, unexpectedArgs);
 		}
 	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (SpellDesc) desc;
+	}
+
+	@Override
+	public SpellDesc getDesc() {
+		return desc;
+	}
 }
+

@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.SuspendablePump;
 import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
 import com.hiddenswitch.spellsource.impl.GameId;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.SharedData;
@@ -13,6 +14,7 @@ import com.hiddenswitch.spellsource.util.SuspendableAsyncMap;
 import com.hiddenswitch.spellsource.util.SuspendableMap;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Handler;
+import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
@@ -28,7 +30,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
@@ -65,10 +66,10 @@ import static java.util.stream.Collectors.toList;
 /**
  * A service that starts a game session, accepts connections from players and manages the state of the game.
  */
-public interface Games {
-	Logger gamesLogger = LoggerFactory.getLogger(Games.class);
-	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
+public interface Games extends Verticle {
+	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	String WEBSOCKET_PATH = "games";
+	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 
 	static Games create() {
 		return new ClusteredGamesImpl();
@@ -131,7 +132,8 @@ public interface Games {
 				.stream()
 				.map(kv -> {
 					SpellAction spellAction = new SpellAction()
-							.sourceId(kv.getKey());
+							.sourceId(kv.getKey())
+							.targetKeyToActions(new ArrayList<>());
 
 					// Targetable battlecry
 					kv.getValue().stream()
@@ -343,6 +345,25 @@ public interface Games {
 				.findFirst()
 				.ifPresent(endTurnAction1 -> clientActions.endTurn(endTurnAction1.getId()));
 
+		// Fix choose ones
+		clientActions.getChooseOnes().forEach(chooseOneOptions -> {
+			if (chooseOneOptions.getHeroes() == null) {
+				chooseOneOptions.setHeroes(Collections.emptyList());
+			}
+			if (chooseOneOptions.getEntities() == null) {
+				chooseOneOptions.setEntities(Collections.emptyList());
+			}
+			if (chooseOneOptions.getHeroPowers() == null) {
+				chooseOneOptions.setHeroPowers(Collections.emptyList());
+			}
+			if (chooseOneOptions.getSpells() == null) {
+				chooseOneOptions.setSpells(Collections.emptyList());
+			}
+			if (chooseOneOptions.getSummons() == null) {
+				chooseOneOptions.setSummons(Collections.emptyList());
+			}
+		});
+
 		// Add all the action indices for compatibility purposes
 		clientActions.compatibility(actions.stream()
 				.map(GameAction::getId)
@@ -421,7 +442,8 @@ public interface Games {
 	@Suspendable
 	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> playCardActions) {
 		SpellAction spellAction = new SpellAction()
-				.sourceId(sourceCardId);
+				.sourceId(sourceCardId)
+				.targetKeyToActions(new ArrayList<>());
 
 		// Targetable spell
 		if (playCardActions.size() == 1
@@ -580,8 +602,12 @@ public interface Games {
 	 * depending on whether or not the underlying {@link SharedData} is operating on a {@link Vertx#isClustered()}
 	 * instance.
 	 */
-	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections(Vertx vertx) throws SuspendExecution {
-		return SharedData.getClusterWideMap("ClusteredGamesImpl/connections", vertx);
+	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
+		return SharedData.getClusterWideMap("Games::connections");
+	}
+
+	static SuspendableMap<UserId, GameId> getGames() throws SuspendExecution {
+		return SharedData.getClusterWideMap("Games::players");
 	}
 
 	/**
@@ -921,16 +947,18 @@ public interface Games {
 				|| actor.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
 		entityState.frozen(actor.hasAttribute(Attribute.FROZEN));
-		entityState.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE));
+		entityState.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE) || actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
 		entityState.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING));
 		entityState.stealth(actor.hasAttribute(Attribute.STEALTH));
-		entityState.taunt(actor.hasAttribute(Attribute.TAUNT) | actor.hasAttribute(Attribute.AURA_TAUNT));
+		entityState.taunt(actor.hasAttribute(Attribute.TAUNT) || actor.hasAttribute(Attribute.AURA_TAUNT));
 		entityState.divineShield(actor.hasAttribute(Attribute.DIVINE_SHIELD));
 		entityState.enraged(actor.hasAttribute(Attribute.ENRAGED));
 		entityState.destroyed(actor.hasAttribute(Attribute.DESTROYED));
 		entityState.cannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK) || actor.hasAttribute(Attribute.AURA_CANNOT_ATTACK));
 		entityState.spellDamage(actor.getAttributeValue(Attribute.SPELL_DAMAGE));
-		entityState.windfury(actor.hasAttribute(Attribute.WINDFURY));
+		entityState.windfury(actor.hasAttribute(Attribute.WINDFURY) || actor.hasAttribute(Attribute.AURA_WINDFURY));
+		entityState.lifesteal(actor.hasAttribute(Attribute.LIFESTEAL) || actor.hasAttribute(Attribute.LIFESTEAL));
+		entityState.poisonous(actor.hasAttribute(Attribute.POISONOUS) || actor.hasAttribute(Attribute.AURA_POISONOUS));
 		entityState.summoningSickness(actor.hasAttribute(Attribute.SUMMONING_SICKNESS));
 		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
 		entityState.tribe(actor.getRace() != null ? actor.getRace().name() : null);
@@ -1140,13 +1168,13 @@ public interface Games {
 			final EventBus bus = vertx.eventBus();
 			try {
 				Lock lock = awaitResult(h -> vertx.sharedData().getLockWithTimeout("pipes-userId-" + userId, 200L, h));
-				gamesLogger.debug("createWebSocketHandler: Creating WebSocket to EventBus mapping for userId {}", userId);
+				LOGGER.debug("createWebSocketHandler: Creating WebSocket to EventBus mapping for userId {}", userId);
 				final ServerWebSocket socket;
 				final HttpServerRequest request = context.request();
 				try {
 					socket = request.upgrade();
 				} catch (IllegalStateException ex) {
-					gamesLogger.error("createWebSocketHandler: Failed to upgrade with error: {}. Request={}", new ToStringBuilder(request)
+					LOGGER.error("createWebSocketHandler: Failed to upgrade with error: {}. Request={}", new ToStringBuilder(request)
 							.append("headers", request.headers().entries())
 							.append("uri", request.uri())
 							.append("userId", userId).toString());
@@ -1165,13 +1193,13 @@ public interface Games {
 						consumer.unregister();
 						pump1.stop();
 					} catch (Throwable throwable) {
-						gamesLogger.warn("createWebSocketHandler socket closeHandler: Failed to clean up resources from a user {} socket due to an exception {}", userId, throwable);
+						LOGGER.warn("createWebSocketHandler socket closeHandler: Failed to clean up resources from a user {} socket due to an exception {}", userId, throwable);
 					} finally {
 						lock.release();
 					}
 				}));
 			} catch (VertxException timeout) {
-				gamesLogger.debug("createWebSocketHandler: Lock was not obtained for userId {}, user probably has another mapping already", userId);
+				LOGGER.debug("createWebSocketHandler: Lock was not obtained for userId {}, user probably has another mapping already", userId);
 				context.response().end();
 			}
 		});

@@ -1,0 +1,12 @@
+{
+  "name": "Crooked Pete",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "WHITE",
+  "rarity": "FREE",
+  "description": "<i>The locals report\nthat Pete is up to\nno good again.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

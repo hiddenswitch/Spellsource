@@ -1,0 +1,12 @@
+{
+  "name": "Forlorn Lovers",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "WHITE",
+  "rarity": "FREE",
+  "description": "<i>Bound by vows, she just won't let go.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

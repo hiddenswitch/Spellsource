@@ -105,6 +105,12 @@ public class EntityState implements Serializable {
   @JsonProperty("charge")
   private Boolean charge = null;
 
+  @JsonProperty("lifesteal")
+  private Boolean lifesteal = null;
+
+  @JsonProperty("poisonous")
+  private Boolean poisonous = null;
+
   @JsonProperty("enraged")
   private Boolean enraged = null;
 
@@ -722,6 +728,42 @@ public class EntityState implements Serializable {
     this.charge = charge;
   }
 
+  public EntityState lifesteal(Boolean lifesteal) {
+    this.lifesteal = lifesteal;
+    return this;
+  }
+
+   /**
+   * When true, the entity heals its owner when it deals damage. 
+   * @return lifesteal
+  **/
+  @ApiModelProperty(value = "When true, the entity heals its owner when it deals damage. ")
+  public Boolean isLifesteal() {
+    return lifesteal;
+  }
+
+  public void setLifesteal(Boolean lifesteal) {
+    this.lifesteal = lifesteal;
+  }
+
+  public EntityState poisonous(Boolean poisonous) {
+    this.poisonous = poisonous;
+    return this;
+  }
+
+   /**
+   * When true, the entity will destroy any target it damages. 
+   * @return poisonous
+  **/
+  @ApiModelProperty(value = "When true, the entity will destroy any target it damages. ")
+  public Boolean isPoisonous() {
+    return poisonous;
+  }
+
+  public void setPoisonous(Boolean poisonous) {
+    this.poisonous = poisonous;
+  }
+
   public EntityState enraged(Boolean enraged) {
     this.enraged = enraged;
     return this;
@@ -1243,6 +1285,8 @@ public class EntityState implements Serializable {
         Objects.equals(this.taunt, entityState.taunt) &&
         Objects.equals(this.spellDamage, entityState.spellDamage) &&
         Objects.equals(this.charge, entityState.charge) &&
+        Objects.equals(this.lifesteal, entityState.lifesteal) &&
+        Objects.equals(this.poisonous, entityState.poisonous) &&
         Objects.equals(this.enraged, entityState.enraged) &&
         Objects.equals(this.battlecry, entityState.battlecry) &&
         Objects.equals(this.deathrattles, entityState.deathrattles) &&
@@ -1274,7 +1318,7 @@ public class EntityState implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
   }
 
 
@@ -1308,6 +1352,8 @@ public class EntityState implements Serializable {
     sb.append("    taunt: ").append(toIndentedString(taunt)).append("\n");
     sb.append("    spellDamage: ").append(toIndentedString(spellDamage)).append("\n");
     sb.append("    charge: ").append(toIndentedString(charge)).append("\n");
+    sb.append("    lifesteal: ").append(toIndentedString(lifesteal)).append("\n");
+    sb.append("    poisonous: ").append(toIndentedString(poisonous)).append("\n");
     sb.append("    enraged: ").append(toIndentedString(enraged)).append("\n");
     sb.append("    battlecry: ").append(toIndentedString(battlecry)).append("\n");
     sb.append("    deathrattles: ").append(toIndentedString(deathrattles)).append("\n");

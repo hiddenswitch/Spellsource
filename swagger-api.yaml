@@ -23,31 +23,205 @@ securityDefinitions:
     in: header
     name: X-Auth-Token
 definitions:
-  Message:
+  Envelope:
+    description: |
+      A container for data to and from the server. This envelope is the type of every message sent through the
+      /realtime websocket endpoint.
     type: 'object'
     properties:
-      authorId:
+      added:
+        description: |
+          Indicates one of the records should be added to the client's ephemeral collections.
+        type: 'object'
+        properties:
+          chatMessage:
+            $ref: '#/definitions/ChatMessage'
+          friend:
+            $ref: '#/definitions/Friend'
+          invite:
+            $ref: '#/definitions/Invite'
+      changed:
+        description: |
+          Indicates that a record's fields have changed. In this model, the new document is a full replacement.
+        type: 'object'
+        properties:
+          friend:
+            $ref: '#/definitions/Friend'
+      removed:
+        description: |
+          Indicates that a record has been removed from the client's ephemeral collections.
+        type: 'object'
+        properties:
+          inviteId:
+            description: |
+              The unique ID of the invitation that should be removed.
+            type: 'string'
+      sub:
+        description: |
+          When populated by the client and sent to the server, subscribes to data of the specified kind.
+        type: 'object'
+        properties:
+          conversation:
+            description: |
+              Subscribe to messages in a specific conversation. Receives all past messages, followed by any new ones.
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+      method:
+        description: |
+          When populated by the client and sent to the server, indicates a method should be called. The side effects of
+          methods may include new data updates and a response.
+        type: 'object'
+        properties:
+          methodId:
+            description: |
+              The client-specified ID that will be used to mark the reply (the result) of this method call.
+            type: 'string'
+          sendMessage:
+            description: |
+              Send a change message to the indicated conversationId.
+            type: 'object'
+            properties:
+              conversationId:
+                description: |
+                  A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first
+                  lexicographically.
+                type: 'string'
+              message:
+                description: |
+                  The contents of the message to send to the conversation.
+                type: 'string'
+      result:
+        description: |
+          When populated on the server and sent to the client, indicates that a method call had a specific result.
+        type: 'object'
+        properties:
+          methodId:
+            description: |
+              The ID of the method this is a result for.
+            type: 'string'
+          sendMessage:
+            description: |
+              The result of sending a message.
+            type: 'object'
+            properties:
+              messageId:
+                description: |
+                  The new message ID.
+                type: 'string'
+  ChatMessage:
+    description: |
+      A chat message.
+    type: 'object'
+    properties:
+      messageId:
+        description: |
+          The ID of the message.
         type: 'string'
-      authorDisplayName:
+      conversationId:
+        description: |
+          A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first
+          lexicographically.
         type: 'string'
-      text:
+      senderName:
+        description: |
+          The text to render in the sender name field.
+        type: 'string'
+      senderUserId:
+        description: |
+          The user ID of the sender. Useful for looking up against the presence notifications.
         type: 'string'
       timestamp:
+        description: |
+          The timestamp of the message.
         type: 'integer'
         format: 'int64'
-  Conversation:
+      dateLabel:
+        description: |
+          The text that should be used to render when this message was sent.
+        type: 'string'
+      message:
+        description: |
+          The contents of this message.
+        type: 'string'
+  Invite:
+    description: |
+      An object that indicates the player has a pending invitation to a game.
     type: 'object'
     properties:
       _id:
+        description: |
+          The ID of the invite.
         type: 'string'
-      messages:
-        type: 'array'
-        items:
-          $ref: '#/definitions/Message'
+      fromUserId:
+        description: |
+          The user ID from whom the invite originates
+        type: 'string'
+      toUserId:
+        description: |
+          The user ID to whom the invite is addressed
+        type: 'string'
+      toName:
+        description: |
+          The name of the user to whom the invite is addressed
+        type: 'string'
+      fromName:
+        description: |
+          The user from whom the invite originates
+        type: 'string'
+      message:
+        description: |
+          The description of this invite. Typically includes the queue contents and possibly a note from the user.
+        type: 'string'
+      queueId:
+        description: |
+          When set, indicates this is an invitation to play a game. The queue ID to put into the matchmaking request to
+          fulfill this invite.
+        type: 'string'
+      friendId:
+        description: |
+          When set, indicates this is an invitation to become friends.
+        type: 'string'
+      expiresAt:
+        description: |
+          An expiration timestamp.
+        type: 'integer'
+        format: 'int64'
+      status:
+        description: |
+          Indicates the status of the invite.
+           * UNDELIVERED: The invitation was created and is awaiting delivery, either due to ordinary networking delay
+             or because the recipient is not yet online.
+           * PENDING: The invitation is delivered and awaiting a response.
+           * TIMEOUT: The recipient did not respond by the expiration time and the invitation expired.
+           * ACCEPTED: The recipient accepted the invitation. The sender should enter the queue if they haven't already
+             done so.
+           * REJECTED: The recipient rejected the invitation.
+           * CANCELLED: The sender cancelled the invitation.
+        type: 'string'
+        enum:
+          - 'UNDELIVERED'
+          - 'PENDING'
+          - 'TIMEOUT'
+          - 'ACCEPTED'
+          - 'REJECTED'
+          - 'CANCELLED'
+  PresenceEnum:
+    description: |
+      Indicates the current status of a friend.
+    type: 'string'
+    enum:
+      - 'UNKNOWN'
+      - 'OFFLINE'
+      - 'IN_GAME'
+      - 'ONLINE'
   Friend:
     type: 'object'
     properties:
-      friendid:
+      presence:
+        $ref: '#/definitions/PresenceEnum'
+      friendId:
         type: 'string'
       since:
         type: 'integer'
@@ -77,23 +251,6 @@ definitions:
           True if the client should attempt to connect to a match with its token.
       personalCollection:
         $ref: '#/definitions/InventoryCollection'
-  SendMessageRequest:
-    type: 'object'
-    required:
-      - text
-    properties:
-      text:
-        type: 'string'
-  SendMessageResponse:
-    type: 'object'
-    properties:
-      message:
-        $ref: '#/definitions/Message'
-  GetConversationResponse:
-    type: 'object'
-    properties:
-      conversation:
-        $ref: '#/definitions/Conversation'
   GetAccountsRequest:
     type: 'object'
     required:
@@ -848,6 +1005,10 @@ definitions:
         type: 'boolean'
       deckId:
         type: 'string'
+      botDeckId:
+        type: 'string'
+        description: |
+          When set, specifies that the bot should play the provided deck.
       deck:
         $ref: '#/definitions/MatchmakingDeck'
   MatchmakingQueuePutResponseUnityConnection:
@@ -1285,6 +1446,14 @@ definitions:
         description: |
           When true, the entity can attack the same turn it is summoned.
         type: 'boolean'
+      lifesteal:
+        description: |
+          When true, the entity heals its owner when it deals damage.
+        type: 'boolean'
+      poisonous:
+        description: |
+          When true, the entity will destroy any target it damages.
+        type: 'boolean'
       enraged:
         description: |
           When true, this entity is under the influence of "enrage," or a bonus when it takes damage the first time.
@@ -1479,14 +1648,14 @@ definitions:
             description: |
               Indicates that the player must choose from the specified deck IDs in the player's account.
   GetCardsResponse:
-    type: object
+    type: 'object'
     description: |
       A cacheable copy of the entire card catalogue.
     properties:
       version:
         description: |
           A token used in the If-None-Match argument when checking for new card catalogue content.
-        type: string
+        type: 'string'
       cards:
         description: |
           The actual array of cards representing the complete Spellsource catalogue.
@@ -1494,16 +1663,73 @@ definitions:
         items:
           $ref: '#/definitions/CardRecord'
   SpellsourceException:
-    type: object
+    type: 'object'
     description: |
       A server-side exception with content renderable to the client.
     properties:
       message:
         description: |
           A user-renderable message explaining the source of the error.
-        type: string
+        type: 'string'
     required:
       - message
+  InvitePostRequest:
+    type: 'object'
+    description: |
+      Requests to send an invite to play a 1v1 match, to friend a player, or both.
+    properties:
+      friend:
+        description: |
+          When true, indicates that this request is a friend invitation.
+        type: 'boolean'
+      queueId:
+        description: |
+          The queue that the player would like to 1v1 inside of. These may differ from the competitive queues.
+        type: 'string'
+      toUserId:
+        description: |
+          The user who should receive the invite
+        type: 'string'
+      toUserNameWithToken:
+        description: |
+          The username and privacy token (#1234 part) to send the request to
+        type: 'string'
+      message:
+        description: |
+          An optional message to add to the invite request
+        type: 'string'
+  InviteResponse:
+    type: 'object'
+    description: |
+      The invitation that was sent, or the updated invite
+    properties:
+      invite:
+        $ref: '#/definitions/Invite'
+  InviteGetResponse:
+    type: 'object'
+    description: |
+      The invites where this user is either the sender or recipient.
+    properties:
+      invites:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Invite'
+  AcceptInviteRequest:
+    type: 'object'
+    description: |
+      Accepts an invite to a match or a friend invite.
+    properties:
+      match:
+        $ref: '#/definitions/MatchmakingQueuePutRequest'
+  AcceptInviteResponse:
+    type: 'object'
+    properties:
+      friend:
+        $ref: '#/definitions/FriendPutResponse'
+      match:
+        $ref: '#/definitions/MatchmakingQueuePutResponse'
+      invite:
+        $ref: '#/definitions/Invite'
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.
@@ -1929,6 +2155,9 @@ paths:
         "404":
           description: |
             Not a friend
+        "418":
+          description: |
+            Another action has put this friend relationship into an invalid state (e.g., a ban or a user account change).
         default:
           $ref: '#/responses/InternalServerError'
   /drafts:
@@ -2021,57 +2250,114 @@ paths:
             An invalid option was chosen, or it's not time to choose a card (usually your draft is finished).
         default:
           $ref: '#/responses/InternalServerError'
-
-  /friends/{friendId}/conversation:
+  /invites:
     get:
       description: |
-        get conversation with friend
-      operationId: getFriendConversation
+        Retrieve all invites where this user is either the sender or recipient.
+      operationId: getInvites
       security:
         - TokenSecurity: []
-      parameters:
-        - name: friendId
-          in: path
-          required: true
-          description: id of friend
-          type: 'string'
       responses:
         "200":
           description: |
-            Succefully fetched conversation
+            The invites where this user is either the sender or recipient.
           schema:
-            $ref: '#/definitions/GetConversationResponse'
-        "404":
-          description: |
-            Friend not found
+            $ref: '#/definitions/InviteGetResponse'
         default:
-          $ref: '#/responses/InternalServerError'
-    put:
+          $ref: '#/definitions/InternalServerError'
+    post:
       description: |
-        send message to friend
-      operationId: sendFriendMessage
+        Send an invite
+      operationId: postInvite
       security:
         - TokenSecurity: []
       parameters:
-        - name: friendId
-          in: path
-          required: true
-          description: id of friend
-          type: 'string'
         - name: request
           in: body
-          description: Send message request
           required: true
           schema:
-            $ref: '#/definitions/SendMessageRequest'
+            $ref: '#/definitions/InvitePostRequest'
       responses:
         "200":
           description: |
-            Message sent
+            The invite that was sent.
           schema:
-            $ref: '#/definitions/SendMessageResponse'
+            $ref: '#/definitions/InviteResponse'
+        "403":
+          description: |
+            You did not have access to change this invite.
         "404":
           description: |
-            Friend not found
+            The specified user was not found. You can send invites to people other than your friends currently.
         default:
           $ref: '#/responses/InternalServerError'
+  /invites/{inviteId}:
+    post:
+      description: |
+        Accepts the invite. If this is an invite to friend the user, this method will perform the friending path for
+        you. If this is an invite to play a match and a matchmaking queue put is specified (with the deck ID), this
+        method will enter you into the special invite matchmaking queue.
+      operationId: acceptInvite
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AcceptInviteRequest'
+      responses:
+        "200":
+          description: |
+            An updated invite and the result of accepting the invitation. This may include a (currently empty) object
+            specifying that you can now connect to a game, or a friend record.
+          schema:
+            $ref: '#/definitions/AcceptInviteResponse'
+        "403":
+          description: |
+            You did not have access to change this invite.
+        "404":
+          description: |
+            The invite was not found.
+        "409":
+          description: |
+            The invite is already in an expired state.
+        default:
+          $ref: '#/responses/InternalServerError'
+    get:
+      description: |
+        Retrieves information about a specific invite, as long as this user is either the sender or recipient.
+      operationId: getInvite
+      security:
+        - TokenSecurity: []
+      responses:
+        "200":
+          description: |
+            The invite.
+          schema:
+            $ref: '#/definitions/InviteResponse'
+        "404":
+          description: |
+            The invite as not found.
+    delete:
+      description: |
+        When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite.
+      operationId: deleteInvite
+      security:
+        - TokenSecurity: []
+      parameters:
+      responses:
+        "200":
+          description: |
+            The changed invite.
+          schema:
+            $ref: '#/definitions/InviteResponse'
+        "403":
+          description: |
+            You did not have access to change this invite.
+        "404":
+          description: |
+            The invite was not found.
+        "409":
+          description: |
+            The invite is already in an expired state.

@@ -1,0 +1,12 @@
+{
+  "name": "Raeth Ghostsong",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "WHITE",
+  "rarity": "FREE",
+  "description": "<i>There's a reason you should burn the dead.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

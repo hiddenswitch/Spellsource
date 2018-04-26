@@ -1,0 +1,12 @@
+{
+  "name": "Blood Witch Gretta",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "VIOLET",
+  "rarity": "FREE",
+  "description": "<i>Magic is powerful in her grove\u2026 but it comes at a cost.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

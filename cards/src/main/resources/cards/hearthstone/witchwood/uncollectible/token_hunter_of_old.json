@@ -1,0 +1,14 @@
+{
+  "name": "Hunter of Old",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "Whenever you cast a spell, gain <b>Spell Damage +2</b>.",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

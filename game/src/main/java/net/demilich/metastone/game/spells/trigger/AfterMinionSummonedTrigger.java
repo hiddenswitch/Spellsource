@@ -18,12 +18,12 @@ public class AfterMinionSummonedTrigger extends EventTrigger {
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		AfterSummonEvent summonEvent = (AfterSummonEvent) event;
-		Race race = (Race) desc.get(EventTriggerArg.RACE);
-		if (race != null && summonEvent.getMinion().getRace() != race) {
+		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
+		if (race != null && !summonEvent.getMinion().getRace().hasRace(race)) {
 			return false;
 		}
 
-		Attribute requiredAttribute = (Attribute) desc.get(EventTriggerArg.REQUIRED_ATTRIBUTE);
+		Attribute requiredAttribute = (Attribute) getDesc().get(EventTriggerArg.REQUIRED_ATTRIBUTE);
 		if (requiredAttribute != null && !summonEvent.getMinion().hasAttribute(requiredAttribute)) {
 			return false;
 		}

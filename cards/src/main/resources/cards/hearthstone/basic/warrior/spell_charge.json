@@ -15,7 +15,7 @@
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "CANNOT_ATTACK_HERO_ON_SUMMON"
+        "attribute": "RUSH"
       }
     ]
   },

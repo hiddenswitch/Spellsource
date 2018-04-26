@@ -6,6 +6,8 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
@@ -41,7 +43,7 @@ import java.io.Serializable;
  * effects into play.
  * @see CardCostModifierArg for a list of arguments for card cost modification.
  */
-public class CardCostModifier extends CustomCloneable implements Trigger, Serializable {
+public class CardCostModifier extends CustomCloneable implements Trigger, Serializable, HasDesc<CardCostModifierDesc> {
 	private static Logger logger = LoggerFactory.getLogger(CardCostModifier.class);
 	private boolean expired;
 	private int owner;
@@ -129,7 +131,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 		// If a target race is specified, does it match?
 		applies &= !(getRequiredRace() != null
-				&& card.getAttribute(Attribute.RACE) != getRequiredRace());
+				&& !card.getRace().hasRace(getRequiredRace()));
 
 		// Is the enchantment owner / caster the same as the card owner?
 		switch (getTargetPlayer()) {
@@ -327,5 +329,15 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		return targetReference != null
 				&& (targetReference.equals(EntityReference.SELF)
 				|| targetReference.equals(hostReference));
+	}
+
+	@Override
+	public CardCostModifierDesc getDesc() {
+		return desc;
+	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (CardCostModifierDesc)desc;
 	}
 }

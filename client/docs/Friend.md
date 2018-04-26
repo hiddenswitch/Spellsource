@@ -4,7 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**friendid** | **String** |  |  [optional]
+**presence** | [**PresenceEnum**](PresenceEnum.md) |  |  [optional]
+**friendId** | **String** |  |  [optional]
 **since** | **Long** |  |  [optional]
 **friendName** | **String** |  |  [optional]
 

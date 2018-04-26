@@ -15,7 +15,7 @@ public class CardPropertyCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		target = desc.containsKey(ConditionArg.TARGET) ? context.resolveTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)).get(0) : target;
+		target = desc.containsKey(ConditionArg.TARGET) ? context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)) : target;
 
 		Card card = target.getSourceCard();
 

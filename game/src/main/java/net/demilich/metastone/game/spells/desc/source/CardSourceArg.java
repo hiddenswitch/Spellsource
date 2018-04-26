@@ -6,5 +6,6 @@ public enum CardSourceArg {
 	SOURCE,
 	INVERT,
 	DISTINCT,
+	FORMAT,
 	COLLECTION_NAME
 }

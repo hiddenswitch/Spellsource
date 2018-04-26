@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -14,6 +15,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+/**
+ * Causes the {@code source} or each entity in {@link SpellArg#SECONDARY_TARGET} to {@link
+ * net.demilich.metastone.game.logic.GameLogic#fight(Player, Actor, Actor, PhysicalAttackAction)} the {@code target}.
+ * <p>
+ * Activates the hero's weapon regardless of whose turn it is if a {@link Hero} is an attacker.
+ * <p>
+ * After the attack occurs, casts the {@link SpellArg#SPELL} sub-spell with the {@code source} as the source of this
+ * spell cast, the {@code target} as the defender, and the {@link EntityReference#OUTPUT} set to the attacker.
+ */
 public class FightSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(FightSpell.class);

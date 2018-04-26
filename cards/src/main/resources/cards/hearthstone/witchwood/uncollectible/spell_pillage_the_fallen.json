@@ -1,0 +1,17 @@
+{
+  "name": "Pillage the Fallen",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Passive</b>\nWhenever your weapon is destroyed, equip a random weapon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

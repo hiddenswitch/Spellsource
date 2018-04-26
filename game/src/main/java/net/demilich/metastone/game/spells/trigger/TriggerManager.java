@@ -163,4 +163,13 @@ public class TriggerManager implements Cloneable, Serializable {
 	public List<Trigger> getTriggers() {
 		return triggers;
 	}
+
+	/**
+	 * Expires all triggers in the game, to prevent end-of-game triggering from causing the game to glitch out
+	 */
+	public void expireAll() {
+		for (Trigger trigger : triggers) {
+			trigger.expire();
+		}
+	}
 }

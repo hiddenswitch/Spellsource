@@ -1,0 +1,16 @@
+{
+  "name": "Gain 10 Mana",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Gain 10 Mana",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "GainManaSpell",
+    "value": 10
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

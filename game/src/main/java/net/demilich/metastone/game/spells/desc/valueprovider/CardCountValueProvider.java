@@ -19,14 +19,14 @@ public class CardCountValueProvider extends ValueProvider {
 	@Override
 	@Suspendable
 	protected int provideValue(GameContext context, Player player, Entity target, Entity source) {
-		CardSource cardSource = (CardSource) desc.get(ValueProviderArg.CARD_SOURCE);
+		CardSource cardSource = (CardSource) getDesc().get(ValueProviderArg.CARD_SOURCE);
 		if (cardSource == null) {
 			cardSource = new CardSourceDesc(HandSource.class).create();
 		}
 
 		EntityFilter cardFilter;
-		if (desc.containsKey(ValueProviderArg.CARD_FILTER)) {
-			cardFilter = (EntityFilter) desc.get(ValueProviderArg.CARD_FILTER);
+		if (getDesc().containsKey(ValueProviderArg.CARD_FILTER)) {
+			cardFilter = (EntityFilter) getDesc().get(ValueProviderArg.CARD_FILTER);
 		} else {
 			cardFilter = AndFilter.create();
 		}

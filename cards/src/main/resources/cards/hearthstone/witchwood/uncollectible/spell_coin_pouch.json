@@ -1,0 +1,17 @@
+{
+  "name": "Coin Pouch",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Summon a random 3-Cost minion. Upgrade this and shuffle it into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

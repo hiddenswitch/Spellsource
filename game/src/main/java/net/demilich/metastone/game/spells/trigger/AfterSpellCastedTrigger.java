@@ -20,7 +20,7 @@ public class AfterSpellCastedTrigger extends AbstractCardTrigger {
 	protected boolean fire(GameEvent event, Entity host) {
 		AfterSpellCastedEvent spellCastedEvent = (AfterSpellCastedEvent) event;
 
-		EntityType targetEntityType = (EntityType) desc.get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
 		if (targetEntityType != null
 				&& (spellCastedEvent.getEventTarget() == null || targetEntityType != spellCastedEvent.getEventTarget().getEntityType())) {
 			return false;

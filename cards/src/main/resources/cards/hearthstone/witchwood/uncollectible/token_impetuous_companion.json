@@ -1,0 +1,22 @@
+{
+  "name": "Impetuous Companion",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "<b>Battlecry:</b> Swap hands with your opponent.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -14,11 +14,13 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -30,6 +32,34 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	@Ignore
+	public void testANewChallenger() {
+		runGym((context, player, opponent) -> {
+			overrideRandomCard(context, "hero_nefarian");
+			playCard(context, player, "spell_a_new_challenger");
+			Assert.assertEquals(player.getHero().getSourceCard().getCardId(), "hero_nefarian");
+			final String[] nefarianCards = (String[]) CardCatalogue.getCardById("hero_nefarian").getDesc()
+					.battlecry.spell.subSpells(0).get(1).get(SpellArg.CARDS);
+			final int drawnCards = (int) CardCatalogue.getCardById("hero_nefarian").getDesc()
+					.battlecry.spell.subSpells(0).get(2).get(SpellArg.VALUE);
+			// Draws a card
+			Assert.assertEquals(player.getDeck().size(), nefarianCards.length - drawnCards);
+		});
+	}
+
+	@Test
+	public void testPrinceTenris() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_prince_tenris");
+			Assert.assertEquals(player.getHero().getAttack(), 1);
+			context.endTurn();
+			Assert.assertEquals(player.getHero().getAttack(), 0);
+			context.endTurn();
+			Assert.assertEquals(player.getHero().getAttack(), 1);
+		});
+	}
 
 	@Test
 	public void testFelGiant() {

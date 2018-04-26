@@ -1,0 +1,17 @@
+{
+  "name": "Enchanting Tune",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Gain control of all enemy minions. Set their Attack and Health to 1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

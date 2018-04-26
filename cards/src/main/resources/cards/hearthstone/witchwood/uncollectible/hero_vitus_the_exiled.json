@@ -1,0 +1,12 @@
+{
+  "name": "Vitus the Exiled",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "GOLD",
+  "rarity": "FREE",
+  "description": "<i>Corrupted. Banished. Hungry.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

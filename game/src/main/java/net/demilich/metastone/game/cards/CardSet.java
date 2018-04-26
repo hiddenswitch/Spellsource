@@ -26,6 +26,8 @@ public enum CardSet {
 	JOURNEY_TO_UNGORO,
 	KNIGHTS_OF_THE_FROZEN_THRONE,
 	KOBOLDS_AND_CATACOMBS,
+	WITCHWOOD,
+	BLIZZARD_ADVENTURE,
 	HALL_OF_FAME,
 	CUSTOM,
 	BATTLE_FOR_ASHENVALE,
@@ -34,7 +36,7 @@ public enum CardSet {
 	SPELLSOURCE;
 
 	public static CardSet latestHearthstoneExpansion() {
-		return KOBOLDS_AND_CATACOMBS;
+		return WITCHWOOD;
 	}
 
 	public boolean isHearthstoneSet() {

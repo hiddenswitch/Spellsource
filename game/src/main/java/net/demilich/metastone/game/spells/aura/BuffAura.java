@@ -10,10 +10,25 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvi
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * A buff aura applies the specified {@link AuraArg#ATTACK_BONUS} and {@link AuraArg#HP_BONUS} to the target entities as
+ * long as the {@link AuraArg#CONDITION} is satisfied.
+ * <p>
+ * To support reevaluating the condition at different times, optionall specify an {@link AuraArg#SECONDARY_TRIGGER} that
+ * fires when the condition ought to change. Otherwise, the condition is evaluated at the same time auras are, which is
+ * whenever the board changes or a sequence ends.
+ * <p>
+ * The underlying attributes used for this buff are {@link net.demilich.metastone.game.utils.Attribute#AURA_ATTACK_BONUS}
+ * and {@link net.demilich.metastone.game.utils.Attribute#AURA_HP_BONUS}.
+ */
 public class BuffAura extends Aura {
 
 	public BuffAura(AuraDesc desc) {
 		this(desc.get(AuraArg.ATTACK_BONUS), desc.get(AuraArg.HP_BONUS), desc.getTarget(), desc.getFilter());
+		if (desc.getSecondaryTrigger() != null) {
+			triggers.add(desc.getSecondaryTrigger().create());
+		}
+		setCondition(desc.getCondition());
 	}
 
 	public BuffAura(Object attackBonus, Object hpBonus, EntityReference targetSelection, EntityFilter filter) {
@@ -26,6 +41,6 @@ public class BuffAura extends Aura {
 		super(new WillEndSequenceTrigger(), AuraBuffSpell.create(attackBonus, hpBonus), AuraBuffSpell.create(
 				AlgebraicValueProvider.create(attackBonus, null, AlgebraicOperation.NEGATE),
 				AlgebraicValueProvider.create(hpBonus, null, AlgebraicOperation.NEGATE)), targetSelection);
-		this.setEntityFilter(filter);
+		setEntityFilter(filter);
 	}
 }

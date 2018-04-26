@@ -4,7 +4,10 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.shareddata.Shareable;
 import io.vertx.core.shareddata.impl.ClusterSerializable;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.Objects;
 
 public abstract class StringEx implements Serializable,
@@ -13,6 +16,8 @@ public abstract class StringEx implements Serializable,
 		ClusterSerializable,
 		Shareable,
 		Cloneable {
+	private static final long serialVersionUID = -6849794470754667711L;
+
 	@Deprecated
 	public String id;
 
@@ -100,4 +105,36 @@ public abstract class StringEx implements Serializable,
 			return null;
 		}
 	}
+/*
+	private void writeObject(java.io.ObjectOutputStream out)
+			throws IOException {
+		if (id == null) {
+			out.write(0);
+			return;
+		}
+		final byte[] bytes = id.getBytes(Charset.defaultCharset());
+		out.write(bytes.length);
+		out.write(bytes);
+	}
+
+	private void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		int size = in.readInt();
+		if (size == 0) {
+			id = null;
+			return;
+		}
+		byte[] buf = new byte[size];
+		int read = in.read(buf, 0, size);
+		if (read != size) {
+			throw new IOException("invalid size");
+		}
+		id = new String(buf, Charset.defaultCharset());
+	}
+
+	private void readObjectNoData()
+			throws ObjectStreamException {
+		id = null;
+	}
+	*/
 }

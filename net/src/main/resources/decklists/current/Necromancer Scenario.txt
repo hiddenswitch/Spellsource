@@ -1,7 +1,7 @@
-### Necromancer (Tavern Brawl)
+### Necromancer (Scenario)
 # Class: Violet
 # Hero: Necromancer
-# Format: Wild
+# Format: Custom
 #
 # 1x (1) Tracking
 # 1x (2) Bear Trap

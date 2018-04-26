@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.models;
 
-import com.hiddenswitch.spellsource.impl.server.PregamePlayerConfiguration;
+import com.hiddenswitch.spellsource.impl.server.Configuration;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.utils.AttributeMap;
 
@@ -63,13 +63,13 @@ public class StartGameResponse implements Serializable {
 		}
 	}
 
-	public PregamePlayerConfiguration getPregamePlayerConfiguration1() {
+	public Configuration getConfig1() {
 		final Player p = players.get(0);
-		return new PregamePlayerConfiguration(p.getDeck(), p.getName()).withAttributes(p.attributes);
+		return new Configuration(p.getDeck(), p.getName()).withAttributes(p.attributes);
 	}
 
-	public PregamePlayerConfiguration getPregamePlayerConfiguration2() {
+	public Configuration getConfig2() {
 		final Player p = players.get(1);
-		return new PregamePlayerConfiguration(p.getDeck(), p.getName()).withAttributes(p.attributes);
+		return new Configuration(p.getDeck(), p.getName()).withAttributes(p.attributes);
 	}
 }

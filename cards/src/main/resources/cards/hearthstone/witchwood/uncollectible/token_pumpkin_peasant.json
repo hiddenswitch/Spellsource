@@ -1,0 +1,14 @@
+{
+  "name": "Pumpkin Peasant",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "[x]<b>Lifesteal</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

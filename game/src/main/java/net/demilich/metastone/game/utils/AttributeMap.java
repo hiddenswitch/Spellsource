@@ -7,7 +7,16 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by bberman on 2/4/17.
+ * An attribute map is a {@link Map} that contains {@link Attribute} as keys and {@link Object} (typically integers and
+ * booleans) as values.
+ * <p>
+ * Attributes should store whatever is meant to be persisted throughout the game. They can be affected by spells like
+ * {@link net.demilich.metastone.game.spells.AddAttributeSpell} and {@link net.demilich.metastone.game.spells.RemoveAttributeSpell};
+ * they are modified en-mass by {@link net.demilich.metastone.game.spells.SilenceSpell}. Some attributes, like {@link
+ * Attribute#MANA_COST_MODIFIER}, contain not an integer or boolean but a proper object, like a {@link
+ * net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider} in this case.
+ *
+ * @see Attribute for more about valid attributes here.
  */
 public class AttributeMap extends ConcurrentHashMap<Attribute, Object> implements Serializable, Cloneable {
 	public AttributeMap() {

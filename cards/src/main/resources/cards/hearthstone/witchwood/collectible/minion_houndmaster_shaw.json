@@ -1,0 +1,18 @@
+{
+  "name": "Houndmaster Shaw",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Your other minions have Rush.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_RUSH"
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

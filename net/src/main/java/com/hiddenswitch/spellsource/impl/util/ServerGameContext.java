@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl.util;
 
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.Spellsource;
@@ -102,7 +103,7 @@ public class ServerGameContext extends GameContext {
 	 * @see PersistenceTrigger for more about how this method is used.
 	 */
 	private void enablePersistenceEffects() {
-		this.getGameTriggers().add(new PersistenceTrigger(logic, this, this.gameId));
+		this.getGameTriggers().add(new PersistenceTrigger(this, this.gameId));
 	}
 
 	/**
@@ -440,7 +441,11 @@ public class ServerGameContext extends GameContext {
 		logger.debug("{} onActionReceived: Received action {} for callback {}", getGameId(), action, messageId);
 		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
 		requestCallbacks.remove(CallbackId.of(messageId));
-		Sync.fiberHandler((Handler<GameAction>) handler).handle(action);
+		if (!Fiber.isCurrentFiber()) {
+			Sync.fiberHandler((Handler<GameAction>) handler).handle(action);
+		} else {
+			((Handler<GameAction>) handler).handle(action);
+		}
 		logger.debug("{} onActionReceived: Executed action {} for callback {}", getGameId(), action, messageId);
 	}
 
@@ -612,7 +617,7 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public Deck getDeck(Player player, String name) {
-		GetCollectionResponse response = logic.uncheckedSync().getDeck(new LogicGetDeckRequest()
+		GetCollectionResponse response = Logic.getDeck(new LogicGetDeckRequest()
 				.withUserId(new UserId(player.getUserId()))
 				.withDeckName(name));
 

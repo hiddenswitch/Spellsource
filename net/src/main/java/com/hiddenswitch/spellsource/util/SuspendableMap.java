@@ -17,14 +17,14 @@ public interface SuspendableMap<K, V> {
 
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	boolean containsKey(Object key);
+	boolean containsKey(K key);
 
 	@Suspendable
-	boolean containsValue(Object value);
+	boolean containsValue(V value);
 
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	V get(Object key);
+	V get(K key);
 
 	@Suspendable
 	V put(K key, V value);
@@ -34,7 +34,7 @@ public interface SuspendableMap<K, V> {
 
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	V remove(Object key);
+	V remove(K key);
 
 	@Suspendable
 	void putAll(Map<? extends K, ? extends V> m);
@@ -72,7 +72,7 @@ public interface SuspendableMap<K, V> {
 	}
 
 	@Suspendable
-	default boolean remove(Object key, Object value) {
+	default boolean remove(K key, V value) {
 		Object curValue = get(key);
 		if (!Objects.equals(curValue, value) ||
 				(curValue == null && !containsKey(key))) {
@@ -82,3 +82,4 @@ public interface SuspendableMap<K, V> {
 		return true;
 	}
 }
+

@@ -1,0 +1,17 @@
+{
+  "name": "Trap Preparation",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Hero Power</b>\nPut a random <b>Secret</b> from your deck into the battlefield.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

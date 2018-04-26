@@ -10,6 +10,9 @@ import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Context;
+import io.vertx.core.Future;
+import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -25,12 +28,11 @@ import java.util.List;
 
 /**
  * Handles the marshalling between a {@link Writer} and the {@link Bots} service.
- *
+ * <p>
  * This method should typically not be overridden.
  */
 public class AIServiceConnection implements Writer {
 	final int playerId;
-	final RpcClient<Bots> bots;
 	final WeakReference<ServerGameContext> context;
 	static final Logger logger = LoggerFactory.getLogger(AIServiceConnection.class);
 	/**
@@ -39,7 +41,6 @@ public class AIServiceConnection implements Writer {
 	final long timeout = RpcClient.DEFAULT_TIMEOUT - 800;
 
 	public AIServiceConnection(ServerGameContext context, EventBus eventBus, int playerId) {
-		this.bots = Rpc.connect(Bots.class, eventBus);
 
 		this.context = new WeakReference<>(context);
 		this.playerId = playerId;
@@ -52,8 +53,6 @@ public class AIServiceConnection implements Writer {
 	@Override
 	@Suspendable
 	public void onGameEnd(GameState gameState, Player winner) {
-		final ServerGameContext gc = context.get();
-		bots.promise(service -> service.notifyGameOver(new NotifyGameOverRequest(gc.getGameId())));
 	}
 
 	@Override
@@ -71,8 +70,20 @@ public class AIServiceConnection implements Writer {
 	@Override
 	@Suspendable
 	public void onRequestAction(final String messageId, final GameState state, final List<GameAction> actions) {
-		final ServerGameContext gc = context.get();
-		bots.async(Sync.suspendableHandler((AsyncResult<RequestActionResponse> result) -> {
+		ServerGameContext gc = context.get();
+		if (gc == null) {
+			throw new NullPointerException();
+		}
+
+		final Context context = Vertx.currentContext();
+		context.executeBlocking(fut -> {
+			RequestActionRequest request = new RequestActionRequest(state, playerId, actions, gc.getDeckFormat());
+			try {
+				fut.complete(Bots.requestAction(request));
+			} catch (Throwable t) {
+				fut.fail(t);
+			}
+		}, false, (AsyncResult<RequestActionResponse> result) -> {
 			if (result.failed()) {
 				// End the turn, if possible, or pick the first action, if the AI glitched out.
 				GameAction action = actions.stream()
@@ -80,26 +91,22 @@ public class AIServiceConnection implements Writer {
 						.findFirst()
 						.orElse(actions.get(0));
 				gc.onActionReceived(messageId, action);
-				logger.error("The AI threw an exception while trying to get an action: ", result.cause());
+				logger.error("onRequestAction: The AI threw an exception while trying to get an action: ", result.cause());
 				return;
 			}
 
 			gc.onActionReceived(messageId, result.result().gameAction);
-		}), timeout).requestAction(new RequestActionRequest(state, playerId, actions, gc.getDeckFormat()));
+		});
 	}
 
 	@Override
 	@Suspendable
 	public void onMulligan(String messageId, GameState state, List<Card> cards, int playerId) {
 		final ServerGameContext gc = context.get();
-		bots.async(Sync.suspendableHandler((AsyncResult<MulliganResponse> result) -> {
-			if (result.failed()) {
-				throw (RuntimeException) result.cause();
-			}
-
-
-			gc.onMulliganReceived(messageId, gc.getPlayer(playerId), result.result().discardedCards);
-		}), timeout).mulligan(new MulliganRequest(cards));
+		if (gc == null) {
+			throw new NullPointerException();
+		}
+		gc.onMulliganReceived(messageId, gc.getPlayer(playerId), Bots.mulligan(new MulliganRequest(cards)).discardedCards);
 	}
 
 	@Override

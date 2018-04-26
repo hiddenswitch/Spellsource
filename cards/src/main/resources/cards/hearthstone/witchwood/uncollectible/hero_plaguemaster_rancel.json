@@ -1,0 +1,12 @@
+{
+  "name": "Plaguemaster Rancel",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "VIOLET",
+  "rarity": "FREE",
+  "description": "<i>Dying to his touch is terrible. Living is even worse.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

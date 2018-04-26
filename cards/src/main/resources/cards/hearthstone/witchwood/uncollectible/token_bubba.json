@@ -1,0 +1,23 @@
+{
+  "name": "Bubba",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 9,
+  "baseHp": 9,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "<b>Battlecry</b>: Summon six 1/1 Bloodhounds to attack an enemy minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

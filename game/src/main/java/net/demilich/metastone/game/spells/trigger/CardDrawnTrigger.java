@@ -18,7 +18,7 @@ public class CardDrawnTrigger extends EventTrigger {
 	protected boolean fire(GameEvent event, Entity host) {
 		DrawCardEvent drawEvent = (DrawCardEvent) event;
 		
-		CardType sourceType = (CardType) desc.get(EventTriggerArg.SOURCE_TYPE);
+		CardType sourceType = (CardType) getDesc().get(EventTriggerArg.SOURCE_TYPE);
 		if (sourceType != null && drawEvent.getSourceType() != sourceType) {
 			return false;
 		}

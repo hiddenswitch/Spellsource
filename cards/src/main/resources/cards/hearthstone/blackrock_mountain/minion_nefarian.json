@@ -13,7 +13,6 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "value": 2,
-      "card": "spell_tail_swipe",
       "cardFilter": {
         "class": "AndFilter",
         "filters": [

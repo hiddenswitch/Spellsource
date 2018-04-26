@@ -22,12 +22,10 @@ public class DeckFormat implements Serializable, Cloneable {
 					Collections.unmodifiableSet(EnumSet.of(
 							BASIC,
 							CLASSIC,
-							THE_OLD_GODS,
-							ONE_NIGHT_IN_KARAZHAN,
-							MEAN_STREETS_OF_GADGETZAN,
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
-							KOBOLDS_AND_CATACOMBS
+							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD
 					)));
 
 	public static final DeckFormat WILD = new DeckFormat()
@@ -49,6 +47,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
 							HALL_OF_FAME
 					))
 			);
@@ -72,6 +71,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
 							HALL_OF_FAME,
@@ -98,6 +98,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
 							HALL_OF_FAME,
 							PROCEDURAL_PREVIEW,
 							CardSet.SPELLSOURCE,
@@ -135,21 +136,24 @@ public class DeckFormat implements Serializable, Cloneable {
 		return FORMATS;
 	}
 
-	public static DeckFormat getSmallestSupersetFormat(Set<CardSet> cardSets) {
-		DeckFormat closestFormat = DeckFormat.STANDARD;
-		int lastCloseness = Integer.MAX_VALUE;
+	public static DeckFormat getSmallestSupersetFormat(Set<CardSet> requiredSets) {
+		DeckFormat smallestFormat = DeckFormat.ALL;
+		int minExcess = smallestFormat.sets.size();
 
 		for (Map.Entry<String, DeckFormat> format : DeckFormat.formats().entrySet()) {
 			Set<CardSet> formatSets = format.getValue().getCardSets();
-			Set<CardSet> common = Sets.intersection(cardSets, formatSets);
-			int closeness = formatSets.size() - common.size();
-			if (closeness < lastCloseness) {
-				closestFormat = format.getValue();
-				lastCloseness = closeness;
+			if (!formatSets.containsAll(requiredSets)) {
+				continue;
+			}
+
+			int excess = formatSets.size() - requiredSets.size();
+			if (excess < minExcess) {
+				smallestFormat = format.getValue();
+				minExcess = excess;
 			}
 		}
 
-		return closestFormat;
+		return smallestFormat;
 	}
 
 	public static DeckFormat getSmallestSupersetFormat(List<Deck> deckPair) {

@@ -6,10 +6,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.CustomCloneable;
-import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
-import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
-import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,17 +16,16 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 
 /**
- * A card or card component description base class.
- * <p>
- * This {@link Map} type has typed {@link Enum} keys and
+ * A map representing a complex type in Spellsource, like a {@link net.demilich.metastone.game.spells.Spell} or {@link
+ * net.demilich.metastone.game.spells.desc.condition.Condition}.
  *
- * @param <T>
+ * @param <T> The enum representing the parameters/arguments/fields in the abstract base class.
+ * @param <V> The abstract base class of the concrete type.
  */
 @JsonSerialize(using = DescSerializer.class)
-public abstract class Desc<T extends Enum<T>, V> extends ConcurrentHashMap<T, Object> implements Serializable, Cloneable {
+public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends ConcurrentHashMap<T, Object> implements Serializable, Cloneable, HasDesc<Desc<T, V>> {
 	protected Desc(Map<T, Object> arguments) {
 		super(arguments);
 	}
@@ -57,9 +52,15 @@ public abstract class Desc<T extends Enum<T>, V> extends ConcurrentHashMap<T, Ob
 			return clazz.getConstructor(getDescImplClass()).newInstance(this);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			// Try a no-args constructor and set the desc
+			try {
+				final V v = getDescClass().getConstructor().newInstance();
+				v.setDesc(this);
+				return v;
+			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e1) {
+				throw new RuntimeException(e1);
+			}
 		}
-		return null;
 	}
 
 	public abstract T getClassArg();
@@ -154,5 +155,16 @@ public abstract class Desc<T extends Enum<T>, V> extends ConcurrentHashMap<T, Ob
 			}
 		}
 		return clone;
+	}
+
+	@Override
+	public Desc<T, V> getDesc() {
+		return this;
+	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.clear();
+		this.putAll((Map) desc);
 	}
 }

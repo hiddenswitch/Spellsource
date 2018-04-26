@@ -1,0 +1,12 @@
+{
+  "name": "Splintergraft",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BROWN",
+  "rarity": "FREE",
+  "description": "<i>She'll take a piece of you and make it her own.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

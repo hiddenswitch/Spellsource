@@ -1,0 +1,12 @@
+{
+  "name": "The Whisperer",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BLACK",
+  "rarity": "FREE",
+  "description": "<i>Do you hear the echoes of his whispers?</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

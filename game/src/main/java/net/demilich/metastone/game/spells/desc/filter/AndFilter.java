@@ -24,7 +24,7 @@ public class AndFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		EntityFilter[] filters = (EntityFilter[]) desc.get(FilterArg.FILTERS);
+		EntityFilter[] filters = (EntityFilter[]) getDesc().get(FilterArg.FILTERS);
 		if (filters == null) {
 			return true;
 		}
