@@ -36,6 +36,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -65,6 +66,40 @@ public class TestBase {
 	protected static void destroy(GameContext context, Actor target) {
 		target.getAttributes().put(Attribute.DESTROYED, true);
 		context.getLogic().endOfSequence();
+	}
+
+	protected static void assertAdapted(String name, Minion minion) {
+		if (name.equals("Crackling Shield")) {
+			Assert.assertTrue(minion.hasAttribute(Attribute.DIVINE_SHIELD));
+		} else if (name.equals("Flaming Claws")) {
+			Assert.assertEquals(minion.getAttack(), minion.getBaseAttack() + 3);
+		} else if (name.equals("Lightning Speed")) {
+			Assert.assertTrue(minion.hasAttribute(Attribute.WINDFURY));
+		} else if (name.equals("Liquid Membrane")) {
+			Assert.assertTrue(minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+		} else if (name.equals("Living Spores")) {
+			Assert.assertEquals(minion.getDeathrattles().size(), 1);
+		} else if (name.equals("Massive")) {
+			Assert.assertTrue(minion.hasAttribute(Attribute.TAUNT));
+		} else if (name.equals("Poison Spit")) {
+			Assert.assertTrue(minion.hasAttribute(Attribute.POISONOUS));
+		} else if (name.equals("Rocky Carapace")) {
+			Assert.assertEquals(minion.getHp(), minion.getBaseHp() + 3);
+		} else if (name.equals("Shrouding Mist")) {
+			Assert.assertTrue(minion.hasAttribute(Attribute.STEALTH));
+		} else if (name.equals("Volcanic Might")) {
+			Assert.assertEquals(minion.getHp(), minion.getBaseHp() + 1);
+			Assert.assertEquals(minion.getAttack(), minion.getBaseAttack() + 1);
+		}
+	}
+
+	protected static void assertNotAdapted(String name, Minion minion) {
+		try {
+			assertAdapted(name, minion);
+		} catch (AssertionError ex) {
+			return;
+		}
+		throw new AssertionError("Adapted");
 	}
 
 	public static class OverrideHandle<T> {

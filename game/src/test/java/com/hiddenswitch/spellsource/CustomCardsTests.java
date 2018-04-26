@@ -25,6 +25,8 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.anyList;
@@ -32,6 +34,25 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testScavengerThrun() {
+		runGym((context, player, opponent) -> {
+			Minion bloodfen1 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion scavengerThrun = playMinionCard(context, player, "minion_scavenger_thrun");
+			Minion bloodfen2 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion killThis = playMinionCard(context, player, "minion_bloodfen_raptor");
+			AtomicReference<String> adapted = new AtomicReference<>(null);
+			overrideDiscover(player, discoverActions -> {
+				adapted.set(discoverActions.get(0).getCard().getName());
+				return discoverActions.get(0);
+			});
+			destroy(context, killThis);
+			assertNotAdapted(adapted.get(), scavengerThrun);
+			assertAdapted(adapted.get(), bloodfen1);
+			assertAdapted(adapted.get(), bloodfen2);
+		});
+	}
 
 	@Test
 	@Ignore
@@ -1402,6 +1423,7 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
+	@Test
 	public void testScorpidStinger() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "weapon_scorpid_stinger");
