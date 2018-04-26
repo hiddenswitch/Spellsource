@@ -19,6 +19,7 @@
     }
   },
   "attributes": {
+    "BATTLECRY": true,
     "ECHO": true
   },
   "collectible": true,
