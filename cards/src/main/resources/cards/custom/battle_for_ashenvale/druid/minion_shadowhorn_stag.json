@@ -19,7 +19,7 @@
     },
     "spell": {
       "class": "ModifyAttributeSpell",
-      "target": "SELF",
+      "target": "TRIGGER_HOST",
       "value": 1,
       "attribute": "EXTRA_ATTACKS"
     }
