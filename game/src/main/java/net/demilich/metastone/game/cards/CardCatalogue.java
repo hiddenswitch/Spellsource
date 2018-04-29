@@ -23,9 +23,9 @@ public class CardCatalogue {
 	private static Logger logger = LoggerFactory.getLogger(CardCatalogue.class);
 	private static int version = 1;
 
-	private final static Map<String, Card> cards = new HashMap<>();
-	private final static Map<String, CardCatalogueRecord> records = new HashMap<>();
-	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new HashMap<>();
+	private final static Map<String, Card> cards = new LinkedHashMap<>();
+	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>();
+	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>();
 
 	public static void add(Card card) {
 		cards.put(card.getCardId(), card);

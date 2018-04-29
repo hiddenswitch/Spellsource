@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Multiset;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
@@ -31,7 +32,6 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.game.utils.Attribute;
-import org.apache.commons.collections4.Bag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -2544,7 +2544,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param <T>             The item type
 	 * @return An item returned from the weighted options, or {@code null} if there were no options.
 	 */
-	public <T> T removeRandom(Bag<T> weightedOptions) {
+	public <T> T removeRandom(Multiset<T> weightedOptions) {
 		if (weightedOptions.size() == 0) {
 			return null;
 		}
