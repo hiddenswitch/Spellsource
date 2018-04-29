@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
@@ -142,7 +143,7 @@ public class TestBase {
 		};
 
 		Mockito.doAnswer(answer).when(spyLogic).getRandom(Mockito.anyList());
-		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.any(Bag.class));
+		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.any(Multiset.class));
 		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.anyList());
 		return handle;
 	}

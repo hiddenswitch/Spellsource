@@ -1,6 +1,8 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.LinkedHashMultiset;
+import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
@@ -12,14 +14,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
-import net.demilich.metastone.game.spells.desc.source.CardSource;
-import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
-import net.demilich.metastone.game.spells.desc.source.DeckSource;
-import net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects;
-import net.demilich.metastone.game.spells.desc.source.HasWeights;
+import net.demilich.metastone.game.spells.desc.source.*;
 import net.demilich.metastone.game.targeting.Zones;
-import org.apache.commons.collections4.Bag;
-import org.apache.commons.collections4.bag.HashBag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -308,11 +304,11 @@ public class DiscoverSpell extends Spell {
 			}
 
 			final HasWeights weightedSource = (HasWeights) cardSource;
-			final Bag<Card> weightedOptions = new HashBag<>();
+			final Multiset<Card> weightedOptions = LinkedHashMultiset.create();
 
 			final TargetPlayer targetPlayer = cardSource.getTargetPlayer();
 
-			allCards.forEach((final Card card) -> {
+			for (Card card : allCards) {
 				final int weight;
 				switch (targetPlayer) {
 					case SELF:
@@ -338,7 +334,7 @@ public class DiscoverSpell extends Spell {
 				if (weight > 0) {
 					weightedOptions.add(card, weight);
 				}
-			});
+			}
 
 			for (int i = 0; i < count; i++) {
 				choices.add(context.getLogic().removeRandom(weightedOptions));

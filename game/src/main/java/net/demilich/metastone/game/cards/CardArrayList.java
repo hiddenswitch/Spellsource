@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.decks.DeckFormat;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.*;
@@ -85,6 +86,7 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 		return cards.isEmpty();
 	}
 
+	@NotNull
 	@Override
 	public Iterator<Card> iterator() {
 		return cards.iterator();
