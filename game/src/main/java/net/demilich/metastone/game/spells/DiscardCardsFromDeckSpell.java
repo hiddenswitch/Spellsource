@@ -11,6 +11,19 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Discards or removes all cards from {@link SpellArg#TARGET_PLAYER}'s deck, up to {@link SpellArg#VALUE} random cards.
+ * <p>
+ * To discard the caster's entire deck:
+ * <pre>
+ *   {
+ *     "class": "DiscardCardsFromDeckSpell",
+ *     "value": 60,
+ *     "targetPlayer": "SELF"
+ *   }
+ * </pre>
+ * TODO: Fel Reaver currently incorrectly removes random cards from the deck instead of the top cards.
+ */
 public class DiscardCardsFromDeckSpell extends Spell {
 
 	public static SpellDesc create(int howMany) {

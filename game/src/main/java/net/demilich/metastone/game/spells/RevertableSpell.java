@@ -11,7 +11,7 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public abstract class RevertableSpell extends Spell {
+abstract class RevertableSpell extends Spell {
 
 	protected abstract SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target);
 

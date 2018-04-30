@@ -32,7 +32,8 @@ public class TargetLogic implements Serializable {
 
 	private boolean containsTaunters(List<Minion> minions) {
 		for (Entity entity : minions) {
-			if ((entity.hasAttribute(Attribute.TAUNT) || entity.hasAttribute(Attribute.AURA_TAUNT)) && !entity.hasAttribute(Attribute.STEALTH) && !entity.hasAttribute(Attribute.IMMUNE)) {
+			if ((entity.hasAttribute(Attribute.TAUNT) || entity.hasAttribute(Attribute.AURA_TAUNT))
+					&& !entity.hasAttribute(Attribute.STEALTH) && !entity.hasAttribute(Attribute.IMMUNE) && !entity.hasAttribute(Attribute.AURA_STEALTH)) {
 				return true;
 			}
 		}
@@ -66,7 +67,7 @@ public class TargetLogic implements Serializable {
 				continue;
 			}
 
-			if (entity.getOwner() != player.getId() && (entity.hasAttribute(Attribute.STEALTH) || entity.hasAttribute(Attribute.IMMUNE) || entity.hasAttribute(Attribute.AURA_IMMUNE))) {
+			if (entity.getOwner() != player.getId() && (entity.hasAttribute(Attribute.STEALTH) || entity.hasAttribute(Attribute.IMMUNE) || entity.hasAttribute(Attribute.AURA_IMMUNE) || entity.hasAttribute(Attribute.AURA_STEALTH))) {
 				continue;
 			}
 

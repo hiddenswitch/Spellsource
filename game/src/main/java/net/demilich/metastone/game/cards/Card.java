@@ -52,7 +52,6 @@ import java.util.*;
  * Card} in the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. This saves you from doing many kinds of
  * casts for {@link net.demilich.metastone.game.entities.Actor} objects.
  * @see CardDesc for the class that is the base of the serialized representation of cards.
- * @see CardParser#parseCard(JsonObject) to see how cards are deserialized from their JSON representation.
  */
 public class Card extends Entity implements HasChooseOneActions {
 	protected static final Set<Attribute> ignoredAttributes = new HashSet<>(

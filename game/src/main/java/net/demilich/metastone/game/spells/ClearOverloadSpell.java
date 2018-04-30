@@ -10,6 +10,18 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * @deprecated Use a {@link SetAttributeSpell} instead:
+ * <pre>
+ *   {
+ *     "class": "SetAttributeSpell",
+ *     "target": "FRIENDLY_PLAYER",
+ *     "attribute": "OVERLOAD",
+ *     "value": 0
+ *   }
+ * </pre>
+ * Resets the player's overload status.
+ */
 public class ClearOverloadSpell extends Spell {
 
 	public static SpellDesc create() {

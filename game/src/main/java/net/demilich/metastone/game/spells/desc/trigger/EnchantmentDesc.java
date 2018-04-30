@@ -14,7 +14,21 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 
 /**
- * Data specifying a trigger, including what event it reacts to, what spell it casts, and various options.
+ * Data specifying a trigger, including what event it reacts to, what spell it casts, and various options. Each field in
+ * this class corresponds directly to a field that appears in the JSON whenever an {@code EnchantmentDesc} is expected.
+ * In other words, an EnchantmentDesc looks like:
+ * <pre>
+ *   {
+ *    "eventTrigger": { An object corresponding to an {@link EventTriggerDesc} }
+ *    "spell": { An object corresponding to a {@link SpellDesc} }
+ *    "oneTurn": A boolean indicating that this Enchantment lasts one turn.
+ *    "maxFires": The maximum number of times this enchantment will fire until it expires.
+ *    "countUntilCast": The minimum number of times this enchantment must fire until its spell is cast
+ *    "persistentOwner": See {@link #persistentOwner}
+ *    "keepAfterTransform": See {@link #keepAfterTransform}
+ *    "countByValue": See {@link #countByValue}
+ *   }
+ * </pre>
  * <p>
  * This object is used to create an {@link Enchantment} using its {@link #create()} function whenever entities like
  * actors come into play with a {@link net.demilich.metastone.game.cards.desc.CardDesc#trigger} specified.
@@ -36,7 +50,9 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
  * </pre>
  * Note, this is distinct from an {@link EventTriggerDesc} or {@link net.demilich.metastone.game.spells.trigger.EventTrigger},
  * which defines how to react to which events in game.
+ *
  * @see Enchantment for more about enchantments.
+ * @see net.demilich.metastone.game.cards.desc.CardDesc to see where {@link EnchantmentDesc} can typically go.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class EnchantmentDesc implements Serializable, Cloneable {
@@ -63,8 +79,8 @@ public final class EnchantmentDesc implements Serializable, Cloneable {
 	 * argument of a {@link net.demilich.metastone.game.spells.Spell#onCast(GameContext, Player, SpellDesc, Entity,
 	 * Entity)} invocation shouldn't change if the owner of the {@link Enchantment#hostReference} changes.
 	 * <p>
-	 * This implements Blessing of Wisdom, Power Word: Glory and other effects whose text would change depending on
-	 * whose perspective the text is read from.
+	 * This implements Blessing of Wisdom, Power Word: Glory and other effects whose text would change depending on whose
+	 * perspective the text is read from.
 	 */
 	public boolean persistentOwner;
 	/**
@@ -101,10 +117,10 @@ public final class EnchantmentDesc implements Serializable, Cloneable {
 	/**
 	 * Creates an enchantment represented by this configuration.
 	 * <p>
-	 * The enchantment's {@link Enchantment#setHost(Entity)} call should be applied immediately afterwards to specify
-	 * the host of this enchantment. {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} and {@link
-	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} enchantments exist in play, and by convention they
-	 * have unspecified hosts.
+	 * The enchantment's {@link Enchantment#setHost(Entity)} call should be applied immediately afterwards to specify the
+	 * host of this enchantment. {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} and {@link
+	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} enchantments exist in play, and by convention they have
+	 * unspecified hosts.
 	 *
 	 * @return The enchantment
 	 */

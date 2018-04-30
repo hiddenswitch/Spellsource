@@ -8,14 +8,61 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.DiscardEvent;
+import net.demilich.metastone.game.events.MillEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.AndFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.DeckSource;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Discards cards from the {@link net.demilich.metastone.game.targeting.Zones#HAND} or from a {@link CardSource} like
+ * {@link DeckSource} which does not generate new cards (does not implement {@link
+ * net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects}), like {@link DeckSource}.
+ * <p>
+ * Discarding from the hand generates a {@link DiscardEvent}, while discarding from the deck generates a {@link
+ * MillEvent}.
+ * <p>
+ * To discard all cards, use a {@link SpellArg#VALUE} of {@code -1}.
+ * <p>
+ * Cards to discard are always chosen at random.
+ * <p>
+ * {@link SpellArg#CARD_FILTER} can be specified to filter which cards should be discarded.
+ * <p>
+ * For example, to implement "Battlecry: Discard a Banana to deal 3 damage to an enemy minion:"
+ * <pre>
+ *   "battlecry": {
+ *     "condition": {
+ *       "class": "HoldsCardCondition",
+ *       "cardFilter": {
+ *         "class": "SpecificCardFilter",
+ *         "cardId": "spell_bananas"
+ *       }
+ *     },
+ *     "targetSelection": "ENEMY_MINIONS",
+ *     "spell": {
+ *       "class": "MetaSpell",
+ *       "spells": [
+ *         {
+ *           "class": "DiscardSpell",
+ *           "cardFilter": {
+ *             "class": "SpecificCardFilter",
+ *             "cardId": "spell_bananas"
+ *           }
+ *         },
+ *         {
+ *           "class": "DamageSpell",
+ *           "value": 3
+ *         }
+ *       ]
+ *     }
+ *   }
+ * </pre>
+ */
 public class DiscardSpell extends Spell {
 
 	public static final int ALL_CARDS = -1;

@@ -16,6 +16,10 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * An internal spell used to implement {@link net.demilich.metastone.game.spells.aura.BuffAura}. Behaves like a {@link
+ * BuffSpell} that uses {@link Attribute#AURA_ATTACK_BONUS} and modifies the HP in a nuanced way.
+ */
 public class AuraBuffSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(AuraBuffSpell.class);
@@ -45,7 +49,7 @@ public class AuraBuffSpell extends Spell {
 		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		int hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
 		Actor targetActor = (Actor) target;
-		logger.debug("{} gains ({} from aura effect)", targetActor, attackBonus + "/" + hpBonus);
+		logger.debug("onCast {} {}: {} gains ({}) from aura effect", context.getGameId(), source, targetActor, attackBonus + "/" + hpBonus);
 		if (attackBonus != 0) {
 			targetActor.modifyAttribute(Attribute.AURA_ATTACK_BONUS, attackBonus);
 		}

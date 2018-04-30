@@ -5,6 +5,9 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.spells.desc.filter.CardFilter;
+import net.demilich.metastone.game.spells.desc.filter.SpecificCardFilter;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,44 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * Casts a random spell from the {@link SpellArg#CARD_SOURCE}, {@link SpellArg#CARD_FILTER} and {@link SpellArg#CARDS}
+ * provided.
+ * <p>
+ * For example, to implement "Whenever a player casts a spell, cast a copy of it for them with random targets.":
+ * <pre>
+ *   {
+ *     "eventTrigger": {
+ *       "class": "SpellCastedTrigger",
+ *       "sourcePlayer": "BOTH"
+ *     },
+ *     "spell": {
+ *       "class": "CastRandomSpellSpell",
+ *       "cardFilter": {
+ *         "class": "AndFilter",
+ *         "filters": [
+ *           {
+ *             "class": "SpecificCardFilter",
+ *             "secondaryTarget": "EVENT_SOURCE"
+ *           },
+ *           {
+ *             "class": "CardFilter",
+ *             "cardType": "SPELL"
+ *           }
+ *         ]
+ *       },
+ *       "cardSource": {
+ *         "class": "UncollectibleCatalogueSource"
+ *       },
+ *       "targetPlayer": "ACTIVE"
+ *     }
+ *   }
+ * </pre>
+ * Observe that the {@link CardFilter} is a {@link SpecificCardFilter} that is configured, using its {@code
+ * "secondaryTarget"} option, to only be {@code true} for cards that are equal to {@link EntityReference#EVENT_SOURCE},
+ * i.e., the card that was casted. Only one card (the card that was casted) will match, so that's the card that will be
+ * randomly cast.
+ */
 public class CastRandomSpellSpell extends Spell {
 	Logger logger = LoggerFactory.getLogger(CastRandomSpellSpell.class);
 

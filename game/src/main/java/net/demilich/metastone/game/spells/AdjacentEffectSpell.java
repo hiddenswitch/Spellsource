@@ -12,6 +12,35 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Casts {@link SpellArg#SPELL1} on the {@code target} minion, and {@link SpellArg#SPELL2} on the minions adjacent to
+ * the target.
+ * <p>
+ * Used to implement text like, "Also damages the minions next to whomever this attacks":
+ * <pre>
+ *   "trigger": {
+ *     "eventTrigger": {
+ *       "class": "AfterPhysicalAttackTrigger",
+ *       "hostTargetType": "IGNORE_OTHER_SOURCES",
+ *       "targetEntityType": "MINION"
+ *     },
+ *     "spell": {
+ *       "class": "AdjacentEffectSpell",
+ *       "target": "EVENT_TARGET",
+ *       "spell2": {
+ *         "class": "DamageSpell",
+ *         "value": {
+ *           "class": "AttributeValueProvider",
+ *           "target": "SELF",
+ *           "attribute": "ATTACK"
+ *         }
+ *       }
+ *     }
+ *   }
+ * </pre>
+ * Observe that "damaging next to" is implemented by querying this minion's attack and dealing damage to adjacent
+ * minions like a damage spell.
+ */
 public class AdjacentEffectSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc primarySpell, SpellDesc secondarySpell) {

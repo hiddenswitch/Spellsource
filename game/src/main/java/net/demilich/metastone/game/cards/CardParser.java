@@ -17,10 +17,8 @@ public class CardParser {
 	private static Logger logger = LoggerFactory.getLogger(CardParser.class);
 
 	public static CardCatalogueRecord parseCard(JsonObject card) throws IOException {
-		// Do something horrible: Serialize to json, then read it in with GSON. :(
 		final String id = card.getString("id");
 		CardDesc desc = card.mapTo(CardDesc.class);
-
 		if (desc.id == null) {
 			desc.id = id;
 		}

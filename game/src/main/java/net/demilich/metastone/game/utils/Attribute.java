@@ -280,6 +280,10 @@ public enum Attribute {
 	 */
 	STEALTH,
 	/**
+	 * The aura version of {@link #STEALTH}
+	 */
+	AURA_STEALTH,
+	/**
 	 * A {@link net.demilich.metastone.game.cards.Card} has this attribute to help spells find secrets in the deck.
 	 * <p>
 	 * Cards marked secret should not be revealed to the opponent.

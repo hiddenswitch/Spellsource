@@ -21,6 +21,19 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * GameLogic#endOfSequence()}, they are moved to the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD} "not
  * peacefully" (i.e., deathrattles will trigger).
  *
+ * For example, to destroy all frozen minions:
+ * <pre>
+ *   {
+ *     "class": "DestroySpell",
+ *     "target": "ALL_MINIONS",
+ *     "filter": {
+ *       "class": "AttributeFilter",
+ *       "attribute": "FROZEN",
+ *       "operation": "HAS"
+ *     }
+ *   }
+ * </pre>
+ *
  * @see GameLogic#markAsDestroyed(Actor) for the underlying effect that adds the {@link
  * net.demilich.metastone.game.utils.Attribute#DESTROYED} attribute.
  * @see GameLogic#endOfSequence() for more about how minions, heroes and weapons are removed from play.

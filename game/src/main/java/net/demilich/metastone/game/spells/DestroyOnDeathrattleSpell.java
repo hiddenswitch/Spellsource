@@ -7,6 +7,17 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * Implements "Battlecry: Choose a minion. Deathrattle: Destroy the chosen minion.":
+ * <pre>
+ *   "battlecry": {
+ *     "targetSelection": "MINIONS",
+ *     "spell": {
+ *       "class": "DestroyOnDeathrattleSpell"
+ *     }
+ *   }
+ * </pre>
+ */
 public class DestroyOnDeathrattleSpell extends AddDeathrattleSpell {
 
 	@Override

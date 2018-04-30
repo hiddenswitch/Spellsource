@@ -29,10 +29,10 @@ public class WeightedHeuristic implements Heuristic {
 		if (minion.hasAttribute(Attribute.ENRAGED)) {
 			minionScore += 1;
 		}
-		if (minion.hasAttribute(Attribute.STEALTH)) {
+		if (minion.hasAttribute(Attribute.STEALTH) || minion.hasAttribute(Attribute.AURA_STEALTH)) {
 			minionScore += 1;
 		}
-		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)) {
+		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS) || minion.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)) {
 			minionScore += 1.5f * baseScore;
 		}
 
