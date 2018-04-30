@@ -13,8 +13,12 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
+/**
+ * Destroys all minions except one. Respects {@link net.demilich.metastone.game.spells.desc.SpellArg#FILTER} if
+ * specified.
+ */
 public class DestroyAllExceptOneSpell extends DestroySpell {
-	
+
 	public static Logger logger = LoggerFactory.getLogger(DestroyAllExceptOneSpell.class);
 
 	@Override
@@ -28,9 +32,9 @@ public class DestroyAllExceptOneSpell extends DestroySpell {
 		List<Entity> potentialSurvivors = SpellUtils.getValidTargets(context, player, destroyedTargets, filter);
 		if (!potentialSurvivors.isEmpty()) {
 			Entity randomTarget = context.getLogic().getRandom(potentialSurvivors);
-			destroyedTargets.remove(randomTarget);	
+			destroyedTargets.remove(randomTarget);
 		}
-		
+
 		for (Entity entity : destroyedTargets) {
 			onCast(context, player, null, null, entity);
 		}

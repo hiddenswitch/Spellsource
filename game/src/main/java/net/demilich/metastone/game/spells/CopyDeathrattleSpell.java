@@ -15,6 +15,10 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Copies the {@code target} actor's deathrattles onto the {@code source} (i.e., result of {@link EntityReference#SELF})
+ * of this spell.
+ */
 public class CopyDeathrattleSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target) {

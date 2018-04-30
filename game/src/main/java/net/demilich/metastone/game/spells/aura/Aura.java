@@ -8,7 +8,9 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.BoardChangedEvent;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.WillEndSequenceEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -24,6 +26,27 @@ import net.demilich.metastone.game.targeting.Zones;
  * Auras represent ongoing effects applied to certain entities and is updated whenever (1) the board changes, (2) a
  * sequence ends, (3) a special secondary trigger is fired, or (4) a condition is changed during these earlier events.
  * <p>
+ * Auras have the following format (corresponding to {@link AuraDesc}):
+ * <pre>
+ *   {
+ *                "class": An Aura class. When the class is Aura, the apply and remove effects below are used. Otherwise,
+ *                         for classes like BuffAura, the apply and remove effects are provided by the class.
+ *               "target": An {@link EntityReference} for all the entities affected by this aura
+ *               "filter": A filter on those entities
+ *          "applyEffect": A {@link SpellDesc} that corresponds to the spell to cast on a given entity when it transitions
+ *                         from being affected to unaffected by this aura.
+ *         "removeEffect": A {@link SpellDesc} that corresponds to the spell to cast on an entity when it was previously
+ *                         affected and it is now transitioning into not being affected.
+ *            "condition": A condition that is evaluated whenever the {@link BoardChangedEvent} is raised; the
+ *                         {@link WillEndSequenceEvent} is raised; or "secondaryTrigger" is fired, against every entity that
+ *                         could be or currently is affected by this aura. When the condition is true, the entity that is
+ *                         affected remains affected; the entity that could not be affected is affected. When false, the entity
+ *                         that is affected stops being affected, and an entity that is not yet affected will still not be
+ *                         affected.
+ *     "secondaryTrigger": Another trigger that, when fired, will cause this aura to reevaluate which entities are affected.
+ *   }
+ * </pre>
+ * <p>
  * An aura is not an {@code abstract} class; it can be directly specified using an {@link AuraDesc} with a specific
  * {@link AuraArg#APPLY_EFFECT} and {@link AuraArg#REMOVE_EFFECT}. The remove effect should reverse the consequences of
  * the add effect. Since this is challenging to come up with without a background in software engineering, the {@link
@@ -32,6 +55,10 @@ import net.demilich.metastone.game.targeting.Zones;
  * The {@link #onGameEvent(GameEvent)} method actually implements the evaluation of the condition, the filter, the
  * target and the add/remove effects. Observe that unlike an {@link Enchantment}, which it inherits, auras do not
  * respect configuration features like {@link #maxFires}. It is unclear how such features should be interpreted.
+ *
+ * @see BuffAura for an aura that increases stats.
+ * @see AttributeAura for an aura that adds an attribute
+ * @see CardAura that temporarily makes one card behave like another
  */
 public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	private EntityReference targets;
@@ -177,7 +204,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 
 	@Override
 	public void setDesc(Desc<?, ?> desc) {
-		this.desc = (AuraDesc)desc;
+		this.desc = (AuraDesc) desc;
 	}
 }
 

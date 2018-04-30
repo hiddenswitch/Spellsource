@@ -10,8 +10,15 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * Puts the specified {@link SpellArg#SECRET} (an {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc})
+ * into play.
+ */
 public class AddSecretSpell extends Spell {
+	private static Logger logger = LoggerFactory.getLogger(AddSecretSpell.class);
 
 	public static SpellDesc create(Secret secret) {
 		return create(EntityReference.FRIENDLY_PLAYER, secret);
@@ -27,6 +34,7 @@ public class AddSecretSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.SECRET);
 		Secret secret = ((Secret) desc.get(SpellArg.SECRET)).clone();
 		if (secret.getSourceCard() == null) {
 			secret.setSourceCard(source.getSourceCard());

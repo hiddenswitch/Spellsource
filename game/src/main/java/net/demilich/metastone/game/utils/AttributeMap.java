@@ -8,7 +8,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * An attribute map is a {@link Map} that contains {@link Attribute} as keys and {@link Object} (typically integers and
- * booleans) as values.
+ * booleans) as values. For example, the attributes of a minion that has "Divine Shield. Spell Damage +1" looks like:
+ * <pre>
+ *   {
+ *     "DIVINE_SHIELD": true,
+ *     "SPELL_DAMAGE": 1
+ *   }
+ * </pre>
+ * Observe that the key names are capitalized and have underscores, exactly like they appear in {@link Attribute}.
  * <p>
  * Attributes should store whatever is meant to be persisted throughout the game. They can be affected by spells like
  * {@link net.demilich.metastone.game.spells.AddAttributeSpell} and {@link net.demilich.metastone.game.spells.RemoveAttributeSpell};

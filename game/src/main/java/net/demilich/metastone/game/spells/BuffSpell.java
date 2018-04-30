@@ -16,6 +16,61 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Gives the {@code target} a stats boost of either *+ {@link SpellArg#VALUE} / + {@link SpellArg#VALUE}) or (+ {@link
+ * SpellArg#ATTACK_BONUS} / + {@link SpellArg#HP_BONUS} ). If the target is a {@link Hero}, like {@link
+ * EntityReference#FRIENDLY_HERO}, {@link SpellArg#ARMOR_BONUS} will give the hero armor.
+ * <p>
+ * For example, this trigger implements "Whenever you cast a spell, gain Armor equal to its Cost:"
+ * <pre>
+ *   "trigger": {
+ *     "eventTrigger": {
+ *       "class": "SpellCastedTrigger",
+ *       "sourcePlayer": "SELF"
+ *     },
+ *     "spell": {
+ *       "class": "BuffSpell",
+ *       "target": "FRIENDLY_HERO",
+ *       "armorBonus": {
+ *         "class": "ManaCostProvider",
+ *         "target": "EVENT_TARGET"
+ *       }
+ *     }
+ *   }
+ * </pre>
+ * Observe that the {@code "armorBonus"} can be a {@link net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider}.
+ * <p>
+ * Or, in this example "Battlecry: Shuffle a friendly minion into your deck and give it +3/+3.":
+ * <pre>
+ *   "battlecry": {
+ *     "targetSelection": "FRIENDLY_MINIONS",
+ *     "spell": {
+ *       "class": "ShuffleMinionToDeckSpell",
+ *       "spell": {
+ *         "class": "BuffSpell",
+ *         "target": "OUTPUT",
+ *         "attackBonus": 3,
+ *         "hpBonus": 3
+ *       },
+ *       "howMany": 1
+ *     }
+ *   },
+ * </pre>
+ * Here, the target is {@link EntityReference#OUTPUT}, which refers to the card that was shuffled into the player's
+ * deck, and the bonuses are expressed as integer values.
+ * <p>
+ * Weapons will interpret the HP bonus as a benefit to durability. For example, "Give your weapon +1/+1":
+ * <pre>
+ *     "spell": {
+ *       "class": "BuffSpell",
+ *       "target": "FRIENDLY_WEAPON",
+ *       "attackBonus": 1,
+ *       "hpBonus": 1
+ *     }
+ * </pre>
+ *
+ * @see AddAttributeSpell to "buff" attributes.
+ */
 public class BuffSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(BuffSpell.class);

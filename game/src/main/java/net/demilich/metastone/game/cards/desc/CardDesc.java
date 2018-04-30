@@ -18,6 +18,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
@@ -37,6 +38,56 @@ import net.demilich.metastone.game.utils.AttributeMap;
  * <p>
  * All types of cards are encoded as a {@link CardDesc}; spells, secrets, hero cards, hero powers, minions, etc. This
  * class should only store the data related to the card, not card functionality itself.
+ * <p>
+ * Each of the fields in this class correspond exactly to the fields in a {@code .json} file located in the {@code
+ * cards} directory. A card JSON looks like:
+ *
+ * <pre>
+ *           {
+ *             "name": "Angry Primate",
+ *             "baseManaCost": 1,
+ *             "type": "MINION",
+ *             "heroClass": "ANY",
+ *             "baseAttack": 1,
+ *             "baseHp": 2,
+ *             "rarity": "COMMON",
+ *             "race": "BEAST",
+ *             "description": "Battlecry: Add a Banana to your hand.",
+ *  line 56:   "battlecry": {
+ *               "targetSelection": "NONE",
+ *               "spell": {
+ *                 "class": "ReceiveCardSpell",
+ *  line 60:       "cards": [
+ *                   "spell_bananas"
+ *                 ]
+ *               }
+ *             },
+ *  line 65:   "attributes": {
+ *               "BATTLECRY": true
+ *             },
+ *             "collectible": true,
+ *             "set": "CUSTOM",
+ *             "fileFormatVersion": 1
+ *           }
+ * </pre>
+ * Observe that each of the keys in the JSON, or the text matching the quotation marks, matches a field in this class.
+ * So {@code "name"} corresponds to the {@link #name} field, {@code "battlecry"} corresponds to the {@link #battlecry}
+ * field, etc.
+ * <p>
+ * To figure out the format of the value of complex objects like "battlecry" on line 56 in the example above, look at
+ * the <b>type</b> of the field in this class. In the case of battlecry, the type is a {@link BattlecryDesc}, and it
+ * appears to also have fields that exactly correspond to the keys that appear in the JSON object that is the value of
+ * "battlecry."
+ * <p>
+ * Some objects, like {@code "spell"}, are {@link Desc} classes: these use a corresponding "argument" enumeration to
+ * determine the names and types of the fields. In the case of {@link SpellDesc}, the keys are {@link SpellArg} names,
+ * except written in camelcase. In the example of Angry Primate above, the {@code "cards"} key on line 60 inside the
+ * {@link SpellDesc} corresponds to the {@link SpellArg#CARDS} enum name. Observe that {@code "cards"} is just {@link
+ * SpellArg#CARDS} except lowercase.
+ * <p>
+ * The only exception to this rule is the {@link AttributeMap} object located on line 65 in the example above. The keys
+ * (left hand part in quotation marks of the JSON object) should always be capitalized, and correspond exactly to the
+ * names in {@link Attribute}.
  *
  * @see Card for the gameplay functionality of a card that consults data stored in a {@link CardDesc}.
  */
@@ -356,11 +407,10 @@ public final class CardDesc implements Serializable, Cloneable {
 	 * <p>
 	 * Typically, choose one battlecries that put a "different" minion into play will be implemented using a {@link
 	 * net.demilich.metastone.game.spells.TransformMinionSpell}. In this common situation, the client will render the
-	 * choice card as the {@link net.demilich.metastone.game.spells.desc.SpellArg#CARD} argument of the spell, i.e., the
-	 * minion the base minion will transform into.
+	 * choice card as the {@link SpellArg#CARD} argument of the spell, i.e., the minion the base minion will transform
+	 * into.
 	 * <p>
-	 * The {@link net.demilich.metastone.game.spells.desc.SpellArg#CARD} specified by the transform spell should not be
-	 * {@link #collectible}.
+	 * The {@link SpellArg#CARD} specified by the transform spell should not be {@link #collectible}.
 	 */
 	public BattlecryDesc[] chooseOneBattlecries;
 	/**
@@ -413,7 +463,7 @@ public final class CardDesc implements Serializable, Cloneable {
 	/**
 	 * Indicates what kind of target selection this {@link CardType#SPELL} or {@link CardType#HERO_POWER} has. Any choice
 	 * other than {@link TargetSelection#NONE} will prompt the user to pick a target as filtered by the {@link #spell}
-	 * field's {@link net.demilich.metastone.game.spells.desc.SpellArg#FILTER} field.
+	 * field's {@link SpellArg#FILTER} field.
 	 * <p>
 	 * For example, to indicate a spell should prompt the user to choose any Murloc on the battlefield:
 	 * <pre>

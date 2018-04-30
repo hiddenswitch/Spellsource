@@ -93,13 +93,6 @@ public abstract class Actor extends Entity {
 		return clone;
 	}
 
-	protected boolean displayGameTag(Attribute tag) {
-		return tag == Attribute.CHARGE || tag == Attribute.ENRAGED || tag == Attribute.FROZEN || tag == Attribute.DIVINE_SHIELD
-				|| tag == Attribute.WINDFURY || tag == Attribute.SPELL_DAMAGE || tag == Attribute.STEALTH || tag == Attribute.TAUNT
-				|| tag == Attribute.CANNOT_ATTACK || tag == Attribute.UNTARGETABLE_BY_SPELLS || tag == Attribute.AURA_UNTARGETABLE_BY_SPELLS
-				|| tag == Attribute.MEGA_WINDFURY;
-	}
-
 	public int getArmor() {
 		return getAttributeValue(Attribute.ARMOR);
 	}
@@ -273,7 +266,7 @@ public abstract class Actor extends Entity {
 		result += getAttack() + "/" + getHp();
 		String prefix = " ";
 		for (Attribute tag : getAttributes().keySet()) {
-			if (displayGameTag(tag)) {
+			if (false) {
 				result += prefix + tag;
 				prefix = ", ";
 			}

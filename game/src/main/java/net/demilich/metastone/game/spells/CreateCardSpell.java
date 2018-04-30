@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.spells.custom.CreateCardFromChoicesSpell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,11 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+/**
+ * @deprecated This spell is fairly brittle and you will be better off implementing the intended effects directly. See
+ * {@link CreateCardFromChoicesSpell} for an example.
+ */
+@Deprecated
 public class CreateCardSpell extends Spell {
 
 	Logger logger = LoggerFactory.getLogger(CreateCardSpell.class);

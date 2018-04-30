@@ -9,6 +9,12 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * Shorthand for a {@link ConditionalEffectSpell} that only plays the spell if the player has activated a combo (i.e.,
+ * previously played a card earlier this turn).
+ *
+ * @see ConditionalEffectSpell for how to write this spell.
+ */
 public class ComboSpell extends ConditionalEffectSpell {
 
 	public static SpellDesc create(SpellDesc either, SpellDesc or, boolean exclusive) {

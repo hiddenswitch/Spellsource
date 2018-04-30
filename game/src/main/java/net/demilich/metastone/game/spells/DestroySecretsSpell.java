@@ -10,6 +10,9 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Destroys all the secrets belonging to {@link SpellArg#TARGET_PLAYER}.
+ */
 public class DestroySecretsSpell extends Spell {
 
 	public static SpellDesc create(TargetPlayer targetPlayer) {

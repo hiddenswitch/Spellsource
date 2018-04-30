@@ -1,14 +1,14 @@
 {
   "id": "spell_mc_brawl",
-  "name": "MC Bender",
+  "name": "Mind Control Bender",
   "baseManaCost": 10,
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "COMMON",
-  "description": "Destroy all minions except one. Keep control of that minion. (chosen randomly)",
+  "description": "Destroy all minions except one. Take control of that minion. (chosen randomly)",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DestroyAllExceptOneAndMindControlSpell",
+    "class": "custom.DestroyAllExceptOneAndMindControlSpell",
     "target": "ALL_MINIONS"
   },
   "collectible": true,

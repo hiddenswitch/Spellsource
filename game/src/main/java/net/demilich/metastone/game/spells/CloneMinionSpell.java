@@ -8,6 +8,18 @@ import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * @deprecated Use {@link SummonSpell} instead:
+ * <pre>
+ *   {
+ *     "class": "SummonSpell",
+ *     "target": The target that you would like to clone.
+ *   }
+ * </pre>
+ * <p>
+ * Clones a specified minion.
+ */
+@Deprecated
 public class CloneMinionSpell extends Spell {
 
 	@Override

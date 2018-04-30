@@ -101,7 +101,7 @@ public class Weapon extends Actor {
 		result += getWeaponDamage() + "/" + getDurability();
 		String prefix = " ";
 		for (Attribute tag : getAttributes().keySet()) {
-			if (displayGameTag(tag)) {
+			if (false) {
 				result += prefix + tag;
 				prefix = ", ";
 			}

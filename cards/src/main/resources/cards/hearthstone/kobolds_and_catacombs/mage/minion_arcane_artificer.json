@@ -15,6 +15,7 @@
     },
     "spell": {
       "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
       "armorBonus": {
         "class": "ManaCostProvider",
         "target": "EVENT_TARGET"

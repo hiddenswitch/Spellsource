@@ -1,10 +1,13 @@
-package net.demilich.metastone.game.spells;
+package net.demilich.metastone.game.spells.custom;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.DestroyAllExceptOneSpell;
+import net.demilich.metastone.game.spells.DestroySpell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import org.slf4j.Logger;
