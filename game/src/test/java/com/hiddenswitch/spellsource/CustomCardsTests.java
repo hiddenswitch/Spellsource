@@ -15,6 +15,7 @@ import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
@@ -40,6 +41,7 @@ public class CustomCardsTests extends TestBase {
 	public void testShadowhornStag() {
 		runGym((context, player, opponent) -> {
 			Minion stag = playMinionCard(context, player, "minion_shadowhorn_stag");
+			context.getLogic().setHpAndMaxHp(stag, 100);
 			context.endTurn();
 			Minion target1 = playMinionCard(context, opponent, "minion_wisp");
 			Minion target2 = playMinionCard(context, opponent, "minion_wisp");
@@ -51,7 +53,10 @@ public class CustomCardsTests extends TestBase {
 			attack(context, player, stag, target2);
 			assertTrue(context.getLogic().getValidActions(player.getId()).stream().anyMatch(ga -> ga.getSourceReference().equals(stag.getReference())));
 			attack(context, player, stag, opponent.getHero());
-			assertFalse(context.getLogic().getValidActions(player.getId()).stream().anyMatch(ga -> ga.getSourceReference().equals(stag.getReference())));
+			assertFalse(context.getLogic().getValidActions(player.getId()).stream().anyMatch(ga -> {
+				EntityReference sourceReference = ga.getSourceReference();
+				return sourceReference != null && sourceReference.equals(stag.getReference());
+			}));
 		});
 	}
 
