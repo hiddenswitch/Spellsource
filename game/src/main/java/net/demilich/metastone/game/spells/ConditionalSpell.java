@@ -7,6 +7,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Casts the {@link SpellArg#SPELL} if the {@link Condition} in {@link SpellArg#CONDITION} is met; or, when a {@link
@@ -84,10 +86,12 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
  * condition is false.
  */
 public class ConditionalSpell extends Spell {
+	private static Logger logger = LoggerFactory.getLogger(ConditionalSpell.class);
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2, SpellArg.CONDITION, SpellArg.EXCLUSIVE);
 		// case 1 - only one condition
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 		if (condition != null) {

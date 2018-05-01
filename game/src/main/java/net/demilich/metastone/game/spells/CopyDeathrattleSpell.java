@@ -14,12 +14,15 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Copies the {@code target} actor's deathrattles onto the {@code source} (i.e., result of {@link EntityReference#SELF})
  * of this spell.
  */
 public class CopyDeathrattleSpell extends Spell {
+	private static Logger logger = LoggerFactory.getLogger(CopyDeathrattleSpell.class);
 
 	public static SpellDesc create(EntityReference target) {
 		Map<SpellArg, Object> arguments = new SpellDesc(CopyDeathrattleSpell.class);
@@ -40,6 +43,9 @@ public class CopyDeathrattleSpell extends Spell {
 			}
 		} else if (target instanceof Actor) {
 			deathrattles.addAll(((Actor) target).getDeathrattles());
+		} else {
+			logger.error("onCast {} {}: Cannot copy target from {}", context.getGameId(), source, target);
+			return;
 		}
 		for (SpellDesc deathrattle : deathrattles) {
 			copyTo.addDeathrattle(deathrattle.clone());

@@ -6,6 +6,9 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * @deprecated Use {@link BuffSpell} instead.
+ */
 @Deprecated
 public class BuffHeroSpell extends BuffSpell {
 	public static SpellDesc create(int attackBonus, int armorBonus) {

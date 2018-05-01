@@ -43,6 +43,7 @@ public class CopyCardSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD_LOCATION, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.SPELL);
 		int numberOfCardsToCopy = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		if (target != null) {
 			Card targetCard = target.getSourceCard();

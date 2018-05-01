@@ -31,6 +31,7 @@ public class ChangeHeroPowerSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARDS, SpellArg.CARD_SOURCE, SpellArg.CARD_FILTER);
 		List<Card> cards = SpellUtils.getCards(context, player, target, source, desc, 1);
 		Hero hero = player.getHero();
 

@@ -15,6 +15,11 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * @deprecated The discover option spell is fairly brittle. You should use {@link DiscoverSpell} instead, discovering a
+ * sequence of cards and playing one by casting or summoning it.
+ */
+@Deprecated
 public class DiscoverOptionSpell extends Spell {
 
 	Logger logger = LoggerFactory.getLogger(DiscoverOptionSpell.class);
