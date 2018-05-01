@@ -1376,6 +1376,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		entity.setAttribute(Attribute.DESTROYED);
 		entity.getAttributes().remove(Attribute.DEATHRATTLES);
+		removeEnchantments(entity, true);
 		entity.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 	}
 
