@@ -9,11 +9,14 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Destroys all the secrets belonging to {@link SpellArg#TARGET_PLAYER}.
  */
 public class DestroySecretsSpell extends Spell {
+	public static Logger logger = LoggerFactory.getLogger(DestroySecretsSpell.class);
 
 	public static SpellDesc create(TargetPlayer targetPlayer) {
 		Map<SpellArg, Object> arguments = new SpellDesc(DestroySecretsSpell.class);
@@ -25,6 +28,7 @@ public class DestroySecretsSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc);
 		context.getLogic().removeSecrets(player);
 	}
 

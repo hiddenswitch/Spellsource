@@ -8,6 +8,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Shorthand for a {@link ConditionalEffectSpell} that only plays the spell if the player has activated a combo (i.e.,

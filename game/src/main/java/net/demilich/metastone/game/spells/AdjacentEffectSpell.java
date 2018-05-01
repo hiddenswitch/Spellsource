@@ -11,6 +11,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Casts {@link SpellArg#SPELL1} on the {@code target} minion, and {@link SpellArg#SPELL2} on the minions adjacent to
@@ -42,6 +44,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * minions like a damage spell.
  */
 public class AdjacentEffectSpell extends Spell {
+	private static Logger logger = LoggerFactory.getLogger(AdjacentEffectSpell.class);
 
 	public static SpellDesc create(EntityReference target, SpellDesc primarySpell, SpellDesc secondarySpell) {
 		Map<SpellArg, Object> arguments = new SpellDesc(AdjacentEffectSpell.class);
@@ -65,6 +68,7 @@ public class AdjacentEffectSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2);
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		List<Actor> adjacentMinions = context.getAdjacentMinions(target.getReference());
 

@@ -20,7 +20,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * An internal spell used to implement {@link net.demilich.metastone.game.spells.aura.BuffAura}. Behaves like a {@link
  * BuffSpell} that uses {@link Attribute#AURA_ATTACK_BONUS} and modifies the HP in a nuanced way.
  */
-public class AuraBuffSpell extends Spell {
+class AuraBuffSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(AuraBuffSpell.class);
 

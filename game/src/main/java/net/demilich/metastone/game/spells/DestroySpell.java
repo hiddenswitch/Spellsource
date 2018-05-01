@@ -12,6 +12,8 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Destroys the {@code target} {@link Actor}.
@@ -20,7 +22,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * receive the {@link net.demilich.metastone.game.utils.Attribute#DESTROYED} attribute, and during an {@link
  * GameLogic#endOfSequence()}, they are moved to the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD} "not
  * peacefully" (i.e., deathrattles will trigger).
- *
+ * <p>
  * For example, to destroy all frozen minions:
  * <pre>
  *   {
@@ -39,6 +41,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * @see GameLogic#endOfSequence() for more about how minions, heroes and weapons are removed from play.
  */
 public class DestroySpell extends Spell {
+	public static Logger logger = LoggerFactory.getLogger(DestroySpell.class);
 
 	public static SpellDesc create() {
 		return create(null);
@@ -65,6 +68,7 @@ public class DestroySpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc);
 		context.getLogic().markAsDestroyed((Actor) target);
 	}
 
