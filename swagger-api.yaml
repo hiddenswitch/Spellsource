@@ -1,18 +1,25 @@
 swagger: "2.0"
 info:
-  version: 1.0.1
+  version: 1.1.0
   title: Hidden Switch Spellsource API
-  description: The Spellsource API for matchmaking, user accounts, collections management and more
+  description: |
+    The Spellsource API for matchmaking, user accounts, collections management and more.
+
+    To get started, create a user account and make sure to include the entirety of the returned login token as the
+    X-Auth-Token header. You can reuse this token, or login for a new one.
+
+    ClientToServerMessage and ServerToClientMessage are used for the realtime game state and actions two-way websocket
+    interface for actually playing a game. Envelope is used for the realtime API services.
   contact:
     name: Benjamin Berman
-    email: benjamin.s.berman@gmail.com
+    email: ben@hiddenswitch.com
     url: http://hiddenswitch.com
   license:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
-host: metastone-dev.us-west-2.elasticbeanstalk.com
+host: api-1.hiddenswitch.com
 schemes:
-  - http
+  - https
 consumes:
   - application/json
 produces:
