@@ -45,6 +45,7 @@
         "hero_power_bladestorm",
         "hero_power_die_insect",
         "hero_power_inferno",
+        "hero_power_the_tidal_hand",
         "hero_power_bewitch"
       ],
       "targetPlayer": "ACTIVE"
