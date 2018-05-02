@@ -80,6 +80,11 @@ public abstract class PlayCardAction extends GameAction {
 	}
 
 	@Override
+	public EntityReference getSourceReference() {
+		return entityReference;
+	}
+
+	@Override
 	public String getDescription(GameContext context, int playerId) {
 		Card playedCard = (Card) context.resolveSingleTarget(getEntityReference());
 		String cardName = playedCard != null ? playedCard.getName() : "an unknown card";
