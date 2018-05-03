@@ -17,9 +17,9 @@ info:
   license:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
-host: metastone-dev.us-west-2.elasticbeanstalk.com
+host: api-3.hiddenswitch.com
 schemes:
-  - http
+  - https
 consumes:
   - application/json
 produces:
