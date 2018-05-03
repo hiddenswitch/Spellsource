@@ -56,7 +56,7 @@ import com.hiddenswitch.spellsource.client.auth.OAuth;
 
 public class ApiClient {
   private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
-  private String basePath = "https://api-1.hiddenswitch.com";
+  private String basePath = "http://metastone-dev.us-west-2.elasticbeanstalk.com";
   private boolean debugging = false;
   private int connectionTimeout = 0;
 

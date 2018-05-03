@@ -1,6 +1,6 @@
 # DefaultApi
 
-All URIs are relative to *https://api-1.hiddenswitch.com*
+All URIs are relative to *http://metastone-dev.us-west-2.elasticbeanstalk.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
