@@ -79,6 +79,7 @@ public class TestBase {
 		} else if (name.equals("Liquid Membrane")) {
 			Assert.assertTrue(minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
 		} else if (name.equals("Living Spores")) {
+			Assert.assertNotNull(minion.getDeathrattles());
 			Assert.assertEquals(minion.getDeathrattles().size(), 1);
 		} else if (name.equals("Massive")) {
 			Assert.assertTrue(minion.hasAttribute(Attribute.TAUNT));
