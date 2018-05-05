@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power:</b>\nDestroy a friendly minion, then draw 3 cards.",
+  "description": "<b>Hero Power:</b> Destroy a friendly minion, then draw 3 cards.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

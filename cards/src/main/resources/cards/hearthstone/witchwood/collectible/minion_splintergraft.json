@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "<b>Battlecry:</b> Choose a friendly\nminion. Add a 10/10 copy to\nyour hand that costs (10).",
+  "description": "<b>Battlecry:</b> Choose a friendly minion. Add a 10/10 copy to your hand that costs (10).",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nDeal $1 damage to all minions. If any die, refresh this.",
+  "description": "<b>Hero Power</b> Deal $1 damage to all minions. If any die, refresh this.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

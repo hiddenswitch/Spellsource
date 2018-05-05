@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "[x]<b>Passive</b>\nWhenever you fire your\nCannons, reduce the cost of\na card in your hand by (2).",
+  "description": "<b>Passive</b> Whenever you fire your Cannons, reduce the cost of a card in your hand by (2).",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

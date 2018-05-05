@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "[x]<b>Divine Shield</b>, <b>Rush</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "description": "<b>Divine Shield</b>, <b>Rush</b> Each turn this is in your hand, swap its Attack and Health.",
   "attributes": {
     "DIVINE_SHIELD": true,
     "RUSH": true

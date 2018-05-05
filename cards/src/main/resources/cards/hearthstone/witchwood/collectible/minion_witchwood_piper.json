@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "<b>Battlecry:</b> Draw the lowest\nCost minion from your deck.",
+  "description": "<b>Battlecry:</b> Draw the lowest Cost minion from your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

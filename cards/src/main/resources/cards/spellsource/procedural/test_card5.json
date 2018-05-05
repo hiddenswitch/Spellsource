@@ -7,7 +7,7 @@
   "baseAttack": 6.0,
   "baseHp": 4.0,
   "rarity": "COMMON",
-  "description": "[x]Divine Shield\nBattlecry: Give your C'Thun\n+2/+2 (wherever it is).",
+  "description": "Divine Shield Battlecry: Give your C'Thun +2/+2 (wherever it is).",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

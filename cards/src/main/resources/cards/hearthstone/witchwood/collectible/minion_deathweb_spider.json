@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "<b>Battlecry:</b> If your hero\ntook damage this turn, gain <b>Lifesteal</b>.",
+  "description": "<b>Battlecry:</b> If your hero took damage this turn, gain <b>Lifesteal</b>.",
   "battlecry": {
     "condition": {
       "class": "AttributeCondition",

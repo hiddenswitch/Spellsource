@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "<b>Stealth</b>\n<b>Deathrattle:</b> Give a random\n  friendly minion +2 Health.",
+  "description": "<b>Stealth</b> <b>Deathrattle:</b> Give a random   friendly minion +2 Health.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",

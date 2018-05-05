@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "FREE",
-  "description": "[x]<b>Rush</b>\nAfter this attacks a minion\nand survives, transform\nthis into an 8/8.",
+  "description": "<b>Rush</b> After this attacks a minion and survives, transform this into an 8/8.",
   "attributes": {
     "RUSH": true
   },

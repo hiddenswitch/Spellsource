@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nGain control of enemy minions with 1 or less Attack.",
+  "description": "<b>Hero Power</b> Gain control of enemy minions with 1 or less Attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

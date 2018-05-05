@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nDeal $2 damage to a minion and the minions next to it.",
+  "description": "<b>Hero Power</b> Deal $2 damage to a minion and the minions next to it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

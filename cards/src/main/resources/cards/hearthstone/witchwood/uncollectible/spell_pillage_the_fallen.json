@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive</b>\nWhenever your weapon is destroyed, equip a random weapon.",
+  "description": "<b>Passive</b> Whenever your weapon is destroyed, equip a random weapon.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nPut a random <b>Secret</b> from your deck into the battlefield.",
+  "description": "<b>Hero Power</b> Put a random <b>Secret</b> from your deck into the battlefield.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

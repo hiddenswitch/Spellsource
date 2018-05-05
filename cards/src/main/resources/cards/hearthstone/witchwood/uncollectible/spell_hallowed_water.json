@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Restore your hero\nto full Health.\n Draw 5 cards.",
+  "description": "Restore your hero to full Health.  Draw 5 cards.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

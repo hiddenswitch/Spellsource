@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "<b>Taunt</b>\n<b>Battlecry:</b> Gain +1 Health\n for each card in your hand. ",
+  "description": "<b>Taunt</b> <b>Battlecry:</b> Gain +1 Health  for each card in your hand. ",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

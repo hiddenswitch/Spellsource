@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive</b>\nAfter you cast your first spell in a turn, cast a copy of it\n(<i>targets chosen randomly</i>).",
+  "description": "<b>Passive</b> After you cast your first spell in a turn, cast a copy of it (<i>targets chosen randomly</i>).",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

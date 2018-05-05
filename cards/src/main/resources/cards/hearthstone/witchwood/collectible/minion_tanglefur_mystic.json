@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "<b>Battlecry:</b> Add a random\n2-Cost minion to each player's hand.",
+  "description": "<b>Battlecry:</b> Add a random 2-Cost minion to each player's hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

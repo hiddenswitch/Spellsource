@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "ALL",
-  "description": "[x]<i>This is an Elemental, Mech,\nDemon, Murloc, Dragon,\nBeast, Pirate and Totem.</i>",
+  "description": "<i>This is an Elemental, Mech, Demon, Murloc, Dragon, Beast, Pirate and Totem.</i>",
   "attributes": {},
   "collectible": false,
   "set": "WITCHWOOD",

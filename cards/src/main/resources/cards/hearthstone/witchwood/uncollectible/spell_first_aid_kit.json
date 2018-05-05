@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive</b>\nAt the end of your turn, restore 2 Health to all friendly characters.",
+  "description": "<b>Passive</b> At the end of your turn, restore 2 Health to all friendly characters.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

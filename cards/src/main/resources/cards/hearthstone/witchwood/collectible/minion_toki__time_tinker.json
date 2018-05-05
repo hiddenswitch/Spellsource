@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "<b>Battlecry:</b> Add a random\n<b>Legendary</b> minion from\nthe past to your hand.",
+  "description": "<b>Battlecry:</b> Add a random <b>Legendary</b> minion from the past to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

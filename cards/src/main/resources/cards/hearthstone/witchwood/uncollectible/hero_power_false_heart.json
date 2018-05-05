@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive Hero Power</b>\nWhile you control\na minion, your hero\nis <b>Immune</b>.",
+  "description": "<b>Passive Hero Power</b> While you control a minion, your hero is <b>Immune</b>.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

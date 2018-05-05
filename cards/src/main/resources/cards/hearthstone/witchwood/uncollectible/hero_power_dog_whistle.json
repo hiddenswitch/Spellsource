@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nSummon a 1/1 Bloodhound with <b>Rush</b>.",
+  "description": "<b>Hero Power</b> Summon a 1/1 Bloodhound with <b>Rush</b>.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

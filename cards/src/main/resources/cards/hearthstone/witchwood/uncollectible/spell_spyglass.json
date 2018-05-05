@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Echo</b>\nPut a copy of a random card in your opponent's hand into yours. It costs (3) less.",
+  "description": "<b>Echo</b> Put a copy of a random card in your opponent's hand into yours. It costs (3) less.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

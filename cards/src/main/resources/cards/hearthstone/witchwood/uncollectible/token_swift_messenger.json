@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "[x]<b>Rush</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "description": "<b>Rush</b> Each turn this is in your hand, swap its Attack and Health.",
   "attributes": {
     "RUSH": true
   },

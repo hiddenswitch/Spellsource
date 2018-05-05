@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nPut an enemy minion into a sack.",
+  "description": "<b>Hero Power</b> Put an enemy minion into a sack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

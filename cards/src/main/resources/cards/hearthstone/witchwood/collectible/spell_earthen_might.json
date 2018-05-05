@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "RARE",
-  "description": "Give a minion +2/+2.\nIf it's an Elemental, add\na random Elemental\nto your hand.",
+  "description": "Give a minion +2/+2. If it's an Elemental, add a random Elemental to your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",

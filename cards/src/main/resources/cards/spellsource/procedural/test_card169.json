@@ -8,7 +8,7 @@
   "baseHp": 1.0,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Battlecry: Gain +1 Attack for each other card\nin your hand.",
+  "description": "Battlecry: Gain +1 Attack for each other card in your hand.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

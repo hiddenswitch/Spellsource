@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "<b>Choose One -</b> Transform\ninto a 4/2 with <b>Rush</b>;\nor a 2/4 with <b>Taunt</b>.",
+  "description": "<b>Choose One -</b> Transform into a 4/2 with <b>Rush</b>; or a 2/4 with <b>Taunt</b>.",
   "chooseOneBattlecries": [
     {
       "spell": {

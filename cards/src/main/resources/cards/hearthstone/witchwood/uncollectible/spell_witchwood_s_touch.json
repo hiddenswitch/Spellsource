@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Draw 3 cards.\nGain 10 Armor.",
+  "description": "Draw 3 cards. Gain 10 Armor.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

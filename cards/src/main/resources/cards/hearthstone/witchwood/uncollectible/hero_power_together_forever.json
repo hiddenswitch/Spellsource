@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive Hero Power</b>\nWhenever a friendly minion dies, shuffle a copy into your deck.",
+  "description": "<b>Passive Hero Power</b> Whenever a friendly minion dies, shuffle a copy into your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

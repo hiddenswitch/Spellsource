@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive Hero Power</b>\nSpells cost Health instead of Mana.",
+  "description": "<b>Passive Hero Power</b> Spells cost Health instead of Mana.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

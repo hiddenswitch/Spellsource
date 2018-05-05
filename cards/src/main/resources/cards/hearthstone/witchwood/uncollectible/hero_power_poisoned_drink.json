@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "[x]<b>Passive Hero Power</b>\nWhenever a player\ndraws a card, deal 1\ndamage to them.",
+  "description": "<b>Passive Hero Power</b> Whenever a player draws a card, deal 1 damage to them.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

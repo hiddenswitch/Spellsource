@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "<b>Divine Shield</b>\nWhenever you restore Health,\ngain <b>Divine Shield</b>.",
+  "description": "<b>Divine Shield</b> Whenever you restore Health, gain <b>Divine Shield</b>.",
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",

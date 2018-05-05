@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nDeal $2 damage to a minion. If it survives, give it <b>Poisonous</b>.",
+  "description": "<b>Hero Power</b> Deal $2 damage to a minion. If it survives, give it <b>Poisonous</b>.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

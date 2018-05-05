@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "FREE",
-  "description": "<b>Rush</b>\nAt the start of your turn, transform this into a 7/7 with <b>Windfury</b>.",
+  "description": "<b>Rush</b> At the start of your turn, transform this into a 7/7 with <b>Windfury</b>.",
   "attributes": {
     "RUSH": true
   },

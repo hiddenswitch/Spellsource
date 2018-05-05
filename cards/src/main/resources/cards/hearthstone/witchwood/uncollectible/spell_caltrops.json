@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive</b>\nAfter your opponent\nplays a minion, deal 1\ndamage to it.",
+  "description": "<b>Passive</b> After your opponent plays a minion, deal 1 damage to it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

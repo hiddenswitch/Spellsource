@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\n<b>Silence</b> a minion.",
+  "description": "<b>Hero Power</b> <b>Silence</b> a minion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

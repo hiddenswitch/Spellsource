@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive Hero Power</b>\nWhenever a friendly Beast dies, draw a card.",
+  "description": "<b>Passive Hero Power</b> Whenever a friendly Beast dies, draw a card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

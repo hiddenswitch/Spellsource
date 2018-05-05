@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "<b>Deathrattle:</b>\nDeal 1 damage to all characters.",
+  "description": "<b>Deathrattle:</b> Deal 1 damage to all characters.",
   "deathrattle": {
     "class": "NullSpell"
   },

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "[x]<b>Spell Damage +1</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "description": "<b>Spell Damage +1</b> Each turn this is in your hand, swap its Attack and Health.",
   "attributes": {},
   "collectible": false,
   "set": "WITCHWOOD",

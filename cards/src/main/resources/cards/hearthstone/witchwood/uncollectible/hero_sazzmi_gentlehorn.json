@@ -4,7 +4,7 @@
   "type": "HERO",
   "heroClass": "WHITE",
   "rarity": "FREE",
-  "description": "[x]<i>This satyr has a\ntendency to attract\nmore than just rats.</i>",
+  "description": "<i>This satyr has a tendency to attract more than just rats.</i>",
   "attributes": {},
   "collectible": false,
   "set": "WITCHWOOD",

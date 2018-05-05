@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Destroy all minions. Summon an Amalgamation with the combined\nAttack and Health.",
+  "description": "Destroy all minions. Summon an Amalgamation with the combined Attack and Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

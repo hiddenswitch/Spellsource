@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "[x]<b>Hero Power</b>\nShuffle a minion into\nits owner's deck.\nIt costs (4) less.",
+  "description": "<b>Hero Power</b> Shuffle a minion into its owner's deck. It costs (4) less.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "<b>Battlecry:</b> Randomly toss\n3 hats to other minions.\nEach hat gives +1/+1.",
+  "description": "<b>Battlecry:</b> Randomly toss 3 hats to other minions. Each hat gives +1/+1.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

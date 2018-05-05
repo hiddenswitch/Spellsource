@@ -6,7 +6,7 @@
   "baseAttack": 9,
   "baseHp": 9,
   "rarity": "FREE",
-  "description": "[x]<b>Divine Shield</b>. <b>Taunt</b>.\nAfter this minion survives\n damage, gain <b>Divine Shield</b>.",
+  "description": "<b>Divine Shield</b>. <b>Taunt</b>. After this minion survives  damage, gain <b>Divine Shield</b>.",
   "attributes": {
     "DIVINE_SHIELD": true,
     "TAUNT": true

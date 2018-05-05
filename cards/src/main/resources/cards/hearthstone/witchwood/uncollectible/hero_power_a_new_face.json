@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nTransform a minion into a random one that costs (2) more.",
+  "description": "<b>Hero Power</b> Transform a minion into a random one that costs (2) more.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "[x]<b>Rush</b>\nAt the start of your turn,\ntransform this into a 5/5.",
+  "description": "<b>Rush</b> At the start of your turn, transform this into a 5/5.",
   "attributes": {
     "RUSH": true
   },

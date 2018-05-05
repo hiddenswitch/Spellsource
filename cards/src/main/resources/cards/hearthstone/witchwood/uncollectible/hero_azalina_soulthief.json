@@ -4,7 +4,7 @@
   "type": "HERO",
   "heroClass": "VIOLET",
   "rarity": "FREE",
-  "description": "[x]<i>Her children's safety\nis her top priority.\nAt any cost.</i>",
+  "description": "<i>Her children's safety is her top priority. At any cost.</i>",
   "attributes": {},
   "collectible": false,
   "set": "WITCHWOOD",

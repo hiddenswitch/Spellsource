@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Choose a minion and put it into your hand.\nIt costs (0).",
+  "description": "Choose a minion and put it into your hand. It costs (0).",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

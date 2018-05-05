@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive Hero Power</b>\nAll <b>Battlecries</b> trigger twice.",
+  "description": "<b>Passive Hero Power</b> All <b>Battlecries</b> trigger twice.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

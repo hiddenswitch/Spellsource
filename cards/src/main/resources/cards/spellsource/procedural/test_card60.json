@@ -7,7 +7,7 @@
   "baseAttack": 6.0,
   "baseHp": 8.0,
   "rarity": "EPIC",
-  "description": "Choose One -\n+5 Attack; or +5 Health and Taunt.",
+  "description": "Choose One - +5 Attack; or +5 Health and Taunt.",
   "chooseOneBattlecries": [
     {
       "description": "+5 Attack",

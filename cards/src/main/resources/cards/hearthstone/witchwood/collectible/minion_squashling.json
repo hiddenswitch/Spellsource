@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "<b>Echo</b>\n<b>Battlecry:</b> Restore 2 Health.",
+  "description": "<b>Echo</b> <b>Battlecry:</b> Restore 2 Health.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nStart your turn over.",
+  "description": "<b>Hero Power</b> Start your turn over.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

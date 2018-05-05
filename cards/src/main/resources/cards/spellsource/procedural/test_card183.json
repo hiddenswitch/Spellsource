@@ -7,7 +7,7 @@
   "baseAttack": 2.0,
   "baseHp": 2.0,
   "rarity": "EPIC",
-  "description": "Also damages the minions next to whomever\nhe attacks.",
+  "description": "Also damages the minions next to whomever he attacks.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
