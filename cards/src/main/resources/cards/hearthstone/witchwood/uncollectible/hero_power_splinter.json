@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nTake 2 damage.\nSummon a 2/2 Treant.",
+  "description": "<b>Hero Power</b> Take 2 damage. Summon a 2/2 Treant.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

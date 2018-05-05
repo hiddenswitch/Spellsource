@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nDestroy a friendly minion. Restore 8 Health to your hero.",
+  "description": "<b>Hero Power</b> Destroy a friendly minion. Restore 8 Health to your hero.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

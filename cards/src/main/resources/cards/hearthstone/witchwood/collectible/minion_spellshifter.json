@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "<b>Spell Damage +1</b>\nEach turn this is in your hand,\nswap its Attack and Health.",
+  "description": "<b>Spell Damage +1</b> Each turn this is in your hand, swap its Attack and Health.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

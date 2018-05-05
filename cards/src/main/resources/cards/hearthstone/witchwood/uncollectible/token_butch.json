@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "<b>Rush</b>\nHas +1/+1 for each\nfriendly Beast that\ndied this game.",
+  "description": "<b>Rush</b> Has +1/+1 for each friendly Beast that died this game.",
   "attributes": {
     "RUSH": true
   },

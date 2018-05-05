@@ -7,7 +7,7 @@
   "baseHp": 5.0,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Choose One -\n+1 Attack; or +1 Health.",
+  "description": "Choose One - +1 Attack; or +1 Health.",
   "chooseOneBattlecries": [
     {
       "description": "+1 Attack",

@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nGive your minions +1 Attack.",
+  "description": "<b>Hero Power</b> Give your minions +1 Attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

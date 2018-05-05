@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "FREE",
-  "description": "<b>Rush</b>\n<b>Windfury</b>",
+  "description": "<b>Rush</b> <b>Windfury</b>",
   "attributes": {
     "RUSH": true,
     "WINDFURY": true

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "[x]Your Cannons do 2\nextra damage this turn.",
+  "description": "Your Cannons do 2 extra damage this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

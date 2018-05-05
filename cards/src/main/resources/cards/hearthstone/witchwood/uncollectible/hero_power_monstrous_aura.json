@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive Hero Power</b>\nYour minions have +1/+1.",
+  "description": "<b>Passive Hero Power</b> Your minions have +1/+1.",
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_MINIONS",

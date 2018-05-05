@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "EPIC",
-  "description": "<b>Lifesteal</b>\nWhenever you play a card\nfrom another class,\ngain +1 Durability.",
+  "description": "<b>Lifesteal</b> Whenever you play a card from another class, gain +1 Durability.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",

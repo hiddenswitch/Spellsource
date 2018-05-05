@@ -7,7 +7,7 @@
   "baseAttack": 4.0,
   "baseHp": 1.0,
   "rarity": "COMMON",
-  "description": "(2) Overload. At the start of your turn, reduce this card's\nCost by (1).",
+  "description": "(2) Overload. At the start of your turn, reduce this card's Cost by (1).",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

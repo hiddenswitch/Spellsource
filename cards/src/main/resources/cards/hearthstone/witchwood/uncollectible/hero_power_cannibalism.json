@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive Hero Power</b>\nWhenever a minion dies, give the adjacent minions +1 Attack.",
+  "description": "<b>Passive Hero Power</b> Whenever a minion dies, give the adjacent minions +1 Attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

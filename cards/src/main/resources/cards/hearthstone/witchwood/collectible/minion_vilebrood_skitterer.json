@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "<b>Poisonous</b>\n<b>Rush</b>",
+  "description": "<b>Poisonous</b> <b>Rush</b>",
   "attributes": {
     "POISONOUS": true,
     "RUSH": true

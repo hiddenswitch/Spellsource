@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive</b>\nAfter you play a minion, trigger its <b>Deathrattle</b> effect.",
+  "description": "<b>Passive</b> After you play a minion, trigger its <b>Deathrattle</b> effect.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

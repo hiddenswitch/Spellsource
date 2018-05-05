@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Destroy your Wisps.\nGain control of a random enemy minion for each Wisp destroyed.",
+  "description": "Destroy your Wisps. Gain control of a random enemy minion for each Wisp destroyed.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

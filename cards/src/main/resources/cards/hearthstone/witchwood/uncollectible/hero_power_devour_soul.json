@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nHalve the enemy hero's Health.",
+  "description": "<b>Hero Power</b> Halve the enemy hero's Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

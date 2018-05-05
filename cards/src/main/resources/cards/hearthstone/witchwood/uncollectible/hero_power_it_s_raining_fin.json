@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nDraw 3 Murlocs from your deck.",
+  "description": "<b>Hero Power</b> Draw 3 Murlocs from your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

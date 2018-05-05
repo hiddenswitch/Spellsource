@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nDestroy a friendly minion and deal its Attack to the enemy hero.",
+  "description": "<b>Hero Power</b> Destroy a friendly minion and deal its Attack to the enemy hero.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

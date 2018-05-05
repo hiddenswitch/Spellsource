@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "EPIC",
-  "description": "Summon a 1/1 Wisp for\neach card in your hand.",
+  "description": "Summon a 1/1 Wisp for each card in your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

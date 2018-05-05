@@ -4,7 +4,7 @@
   "type": "HERO",
   "heroClass": "BLACK",
   "rarity": "LEGENDARY",
-  "description": "[x]<b>Battlecry:</b> Deal 8 damage\nto all minions and choose\na <b>Passive</b> Treasure.",
+  "description": "<b>Battlecry:</b> Deal 8 damage to all minions and choose a <b>Passive</b> Treasure.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

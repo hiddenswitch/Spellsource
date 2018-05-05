@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "[x]Give a minion +2/+2\nand \"<b>Deathrattle:</b> Give\nyour Top Hat to another\nrandom friendly minion.\"",
+  "description": "Give a minion +2/+2 and \"<b>Deathrattle:</b> Give your Top Hat to another random friendly minion.\"",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

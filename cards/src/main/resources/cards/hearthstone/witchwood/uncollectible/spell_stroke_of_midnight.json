@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Echo</b>\nDestroy a random enemy minion.",
+  "description": "<b>Echo</b> Destroy a random enemy minion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

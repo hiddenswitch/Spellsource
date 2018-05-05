@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nFire your Cannons!\nIf they kill any minions, refresh this.",
+  "description": "<b>Hero Power</b> Fire your Cannons! If they kill any minions, refresh this.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

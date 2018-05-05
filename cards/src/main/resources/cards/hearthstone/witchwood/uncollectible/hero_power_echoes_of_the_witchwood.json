@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive Hero Power</b>\nAll spells have <b>Echo</b>.",
+  "description": "<b>Passive Hero Power</b> All spells have <b>Echo</b>.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

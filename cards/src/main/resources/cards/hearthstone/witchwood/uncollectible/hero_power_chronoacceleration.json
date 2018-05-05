@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "[x]<b>Hero Power</b>\nGive a friendly minion\n<b>Mega-Windfury</b>. At the\nend of your turn, it dies.",
+  "description": "<b>Hero Power</b> Give a friendly minion <b>Mega-Windfury</b>. At the end of your turn, it dies.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

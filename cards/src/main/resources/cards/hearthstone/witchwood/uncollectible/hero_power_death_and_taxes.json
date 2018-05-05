@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nDeal 1 damage to your opponent for each minion they control.",
+  "description": "<b>Hero Power</b> Deal 1 damage to your opponent for each minion they control.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

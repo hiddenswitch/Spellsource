@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Discard all minions\nfrom your hand and\ndeal their Attack to\nthe enemy hero.",
+  "description": "Discard all minions from your hand and deal their Attack to the enemy hero.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

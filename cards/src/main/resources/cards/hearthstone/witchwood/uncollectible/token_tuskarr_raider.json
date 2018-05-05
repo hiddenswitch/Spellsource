@@ -7,7 +7,7 @@
   "baseHp": 9,
   "rarity": "FREE",
   "race": "PIRATE",
-  "description": "<b>Rush</b>\nAfter this minion attacks, fire your Cannons.",
+  "description": "<b>Rush</b> After this minion attacks, fire your Cannons.",
   "attributes": {
     "RUSH": true
   },

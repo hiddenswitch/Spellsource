@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "<b>Echo</b>\nGive all enemy minions -2 Attack until your next turn.",
+  "description": "<b>Echo</b> Give all enemy minions -2 Attack until your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ModifyAttributeSpell",

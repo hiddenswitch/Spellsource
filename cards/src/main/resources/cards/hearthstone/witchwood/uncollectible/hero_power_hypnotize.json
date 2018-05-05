@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "[x]<b>Hero Power</b>\nEach player shuffles their\nhand into their deck and\ndraws that many cards.",
+  "description": "<b>Hero Power</b> Each player shuffles their hand into their deck and draws that many cards.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

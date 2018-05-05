@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive</b>\nWhen your hero dies, restart the game and remove this from your Dungeon Deck.",
+  "description": "<b>Passive</b> When your hero dies, restart the game and remove this from your Dungeon Deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

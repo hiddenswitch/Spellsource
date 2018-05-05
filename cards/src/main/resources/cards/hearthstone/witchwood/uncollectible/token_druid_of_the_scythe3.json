@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "<b>Rush</b>\n<b>Taunt</b>",
+  "description": "<b>Rush</b> <b>Taunt</b>",
   "attributes": {
     "RUSH": true,
     "TAUNT": true

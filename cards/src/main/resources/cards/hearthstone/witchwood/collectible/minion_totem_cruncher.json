@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "<b>Taunt</b>\n<b>Battlecry:</b> Destroy your Totems. Gain +2/+2 for each destroyed.",
+  "description": "<b>Taunt</b> <b>Battlecry:</b> Destroy your Totems. Gain +2/+2 for each destroyed.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

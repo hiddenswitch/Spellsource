@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nAll minions attack random enemy minions.",
+  "description": "<b>Hero Power</b> All minions attack random enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

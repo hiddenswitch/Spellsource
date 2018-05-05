@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nGive a friendly minion <b>Stealth</b> until your next turn.",
+  "description": "<b>Hero Power</b> Give a friendly minion <b>Stealth</b> until your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

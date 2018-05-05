@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nDestroy a minion with the lowest Attack.",
+  "description": "<b>Hero Power</b> Destroy a minion with the lowest Attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

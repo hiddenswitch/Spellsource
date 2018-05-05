@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Hero Power</b>\nChoose a minion. Add a 2/2 copy to your hand that costs (2).",
+  "description": "<b>Hero Power</b> Choose a minion. Add a 2/2 copy to your hand that costs (2).",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

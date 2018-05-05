@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "<b>Battlecry:</b> Transform all\n1-Cost cards in your deck\n into <b>Legendary</b> minions.",
+  "description": "<b>Battlecry:</b> Transform all 1-Cost cards in your deck  into <b>Legendary</b> minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

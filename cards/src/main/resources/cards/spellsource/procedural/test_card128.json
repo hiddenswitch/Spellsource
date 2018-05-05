@@ -8,7 +8,7 @@
   "baseHp": 5.0,
   "rarity": "EPIC",
   "race": "MECH",
-  "description": "Battlecry: Give your other minions Windfury, Taunt, or Divine Shield.\n(at random)",
+  "description": "Battlecry: Give your other minions Windfury, Taunt, or Divine Shield. (at random)",
   "battlecry": {
     "spell": {
       "class": "RandomlyCastSpell",

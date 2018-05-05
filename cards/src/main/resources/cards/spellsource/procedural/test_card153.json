@@ -7,7 +7,7 @@
   "baseAttack": 3.0,
   "baseHp": 5.0,
   "rarity": "COMMON",
-  "description": "Whenever a character is healed, give your\nC'Thun +1/+1 (wherever it is).",
+  "description": "Whenever a character is healed, give your C'Thun +1/+1 (wherever it is).",
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger"

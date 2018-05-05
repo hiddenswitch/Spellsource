@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "[x]<b>Hero Power</b>\n<b>Discover</b> a class spell\nthat has been played\nthis game.",
+  "description": "<b>Hero Power</b> <b>Discover</b> a class spell that has been played this game.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

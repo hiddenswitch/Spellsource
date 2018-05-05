@@ -8,7 +8,7 @@
   "baseHp": 3.0,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "[x]When the game starts,\nadd 5 extra Legendary\nminions to your deck.",
+  "description": "When the game starts, add 5 extra Legendary minions to your deck.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "GameStartTrigger",

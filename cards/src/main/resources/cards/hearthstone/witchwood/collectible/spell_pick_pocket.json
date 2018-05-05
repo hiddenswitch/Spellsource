@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "RARE",
-  "description": "<b>Echo</b>\nAdd a random card to your hand <i>(from your opponent's class).</i>",
+  "description": "<b>Echo</b> Add a random card to your hand <i>(from your opponent's class).</i>",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",

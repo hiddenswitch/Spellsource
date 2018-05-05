@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "<b>Passive</b>\nCards that didn't start in your deck cost (1) less.",
+  "description": "<b>Passive</b> Cards that didn't start in your deck cost (1) less.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",
