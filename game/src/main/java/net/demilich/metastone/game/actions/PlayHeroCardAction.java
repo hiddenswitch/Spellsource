@@ -5,7 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class PlayHeroCardAction extends PlayCardAction {
+public class PlayHeroCardAction extends PlayCardAction implements HasBattlecry {
 	protected BattlecryAction battlecryAction;
 
 	public PlayHeroCardAction(EntityReference EntityReference) {
@@ -28,5 +28,15 @@ public class PlayHeroCardAction extends PlayCardAction {
 			hero.setBattlecry(battlecryAction);
 		}
 		context.getLogic().changeHero(context.getPlayer(playerId), hero, true);
+	}
+
+	@Override
+	public BattlecryAction getBattlecryAction() {
+		return battlecryAction;
+	}
+
+	@Override
+	public void setBattlecryAction(BattlecryAction action) {
+		battlecryAction = action;
 	}
 }

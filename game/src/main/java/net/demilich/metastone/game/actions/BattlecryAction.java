@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -15,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class BattlecryAction extends GameAction {
+	public static final BattlecryAction NONE = new BattlecryAction(NullSpell.create());
 	private static final String BATTLECRY_NAME = "Battlecry";
 
 	public static BattlecryAction createBattlecry(SpellDesc spell) {

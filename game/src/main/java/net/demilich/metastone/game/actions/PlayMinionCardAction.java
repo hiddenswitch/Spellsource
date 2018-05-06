@@ -20,7 +20,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  * will retrieve the battlecry that appears once the minion is summoned. Choose one minion cards override the battlecry
  * using {@link #PlayMinionCardAction(net.demilich.metastone.game.targeting.EntityReference, BattlecryAction)}.
  */
-public class PlayMinionCardAction extends PlayCardAction {
+public class PlayMinionCardAction extends PlayCardAction implements HasBattlecry {
 
 	private BattlecryAction overrideBattlecry;
 
@@ -55,4 +55,13 @@ public class PlayMinionCardAction extends PlayCardAction {
 		context.getLogic().summon(playerId, minion, card, index, true);
 	}
 
+	@Override
+	public BattlecryAction getBattlecryAction() {
+		return overrideBattlecry;
+	}
+
+	@Override
+	public void setBattlecryAction(BattlecryAction action) {
+		overrideBattlecry = action;
+	}
 }

@@ -855,7 +855,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			hero.setHp(previousHp);
 		}
 
-		if (resolveBattlecry && hero.getBattlecry() != null) {
+		if (resolveBattlecry && hero.getBattlecry() != null && hero.getBattlecry() != BattlecryAction.NONE) {
 			resolveBattlecry(player.getId(), hero);
 			endOfSequence();
 		}
@@ -1397,7 +1397,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Player player = preEquipWeapon.getPlayer();
 
 		if (resolveBattlecry
-				&& weapon.getBattlecry() != null) {
+				&& weapon.getBattlecry() != null
+				&& weapon.getBattlecry() != BattlecryAction.NONE) {
 			resolveBattlecry(playerId, weapon);
 			endOfSequence();
 		}
@@ -3285,7 +3286,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new BeforeSummonEvent(context, minion, source));
 		context.fireGameEvent(new BoardChangedEvent(context));
 
-		if (resolveBattlecry && minion.getBattlecry() != null) {
+		if (resolveBattlecry && minion.getBattlecry() != null && minion.getBattlecry() != BattlecryAction.NONE) {
 			resolveBattlecry(player.getId(), minion);
 			endOfSequence();
 		}
@@ -3467,22 +3468,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void initAsync(int playerId, boolean begins, Handler<List<Card>> callback) {
 		throw new RuntimeException("Cannot call GameLogic::initAsync from a non-async GameLogic instance.");
-	}
-
-	@Suspendable
-	protected void resolveBattlecryAsync(int playerId, Actor actor, Handler<AsyncResult<Boolean>> result) {
-		throw new RuntimeException("Cannot call GameLogic::resolveBattlecryAsync from a non-async GameLogic instance.");
-
-	}
-
-	@Suspendable
-	public void equipWeaponAsync(int playerId, Weapon weapon, Card weaponCard, Handler<AsyncResult<Boolean>> result, boolean resolveBattlecry) {
-		throw new RuntimeException("Cannot call GameLogic::equipWeaponAsync from a non-async GameLogic instance.");
-	}
-
-	@Suspendable
-	protected void summonAsync(int playerId, Minion minion, Card source, int index, boolean resolveBattlecry, Handler<AsyncResult<Boolean>> summoned) {
-		throw new RuntimeException("Cannot call GameLogic::summonAsync from a non-async GameLogic instance.");
 	}
 
 	public Random getRandom() {

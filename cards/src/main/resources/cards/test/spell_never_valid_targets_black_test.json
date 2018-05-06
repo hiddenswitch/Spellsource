@@ -1,0 +1,19 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "spell": {
+    "class": "AddAttributeSpell",
+    "attribute": "RESERVED_BOOLEAN_3",
+    "filter": {
+      "class": "OrFilter"
+    }
+  },
+  "targetSelection": "ANY",
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

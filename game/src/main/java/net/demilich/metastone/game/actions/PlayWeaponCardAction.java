@@ -6,11 +6,11 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class PlayWeaponCardAction extends PlayCardAction {
+public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry {
 	private BattlecryAction battlecry;
 
 	private PlayWeaponCardAction() {
-		setTargetReference(entityReference.NONE);
+		setTargetReference(EntityReference.NONE);
 		setActionType(ActionType.EQUIP_WEAPON);
 	}
 
@@ -37,4 +37,13 @@ public class PlayWeaponCardAction extends PlayCardAction {
 		context.getLogic().equipWeapon(playerId, weapon, weaponCard, true);
 	}
 
+	@Override
+	public BattlecryAction getBattlecryAction() {
+		return battlecry;
+	}
+
+	@Override
+	public void setBattlecryAction(BattlecryAction action) {
+		battlecry = action;
+	}
 }
