@@ -3283,7 +3283,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			player.getMinions().add(index, minion);
 		}
 
-		context.fireGameEvent(new BeforeSummonEvent(context, minion, source));
+		if (!minion.hasAttribute(Attribute.PERMANENT)) {
+			context.fireGameEvent(new BeforeSummonEvent(context, minion, source));
+		}
+
 		context.fireGameEvent(new BoardChangedEvent(context));
 
 		if (resolveBattlecry && minion.getBattlecry() != null && minion.getBattlecry() != BattlecryAction.NONE) {
@@ -3300,15 +3303,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new BoardChangedEvent(context));
 
 		player.getStatistics().minionSummoned(minion);
+		SummonEvent summonEvent;
 		if (context.getEnvironment().get(Environment.TARGET_OVERRIDE) != null) {
 			Actor actor = (Actor) context.resolveTarget(player, source, (EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE)).get(0);
 			context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
-			SummonEvent summonEvent = new SummonEvent(context, actor, source);
-			context.fireGameEvent(summonEvent);
+			summonEvent = new SummonEvent(context, actor, source);
 		} else {
-			SummonEvent summonEvent = new SummonEvent(context, minion, source);
+			summonEvent = new SummonEvent(context, minion, source);
+		}
+
+		if (summonEvent.getMinion() != null && !summonEvent.getMinion().hasAttribute(Attribute.PERMANENT)) {
 			context.fireGameEvent(summonEvent);
 		}
+
 
 		applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
 		refreshAttacksPerRound(minion);
@@ -3322,7 +3329,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		handleEnrage(minion);
 
 		context.getSummonReferenceStack().pop();
-		if (player.getMinions().contains(minion)) {
+		if (player.getMinions().contains(minion)
+				&& !minion.hasAttribute(Attribute.PERMANENT)) {
 			context.fireGameEvent(new AfterSummonEvent(context, minion, source));
 		}
 		context.fireGameEvent(new BoardChangedEvent(context));

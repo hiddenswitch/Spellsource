@@ -328,6 +328,14 @@ public class TheOldGodsTests extends TestBase {
 			Assert.assertEquals(darkshireCouncilman2.getAttack(), darkshireCouncilman2.getBaseAttack());
 			Assert.assertEquals(opponentMinion.getAttack(), opponentMinion.getBaseAttack());
 		});
+
+		runGym((context, player, opponent) -> {
+			Minion darkshireCouncilman = playMinionCard(context, player, "minion_darkshire_councilman");
+			Assert.assertEquals(darkshireCouncilman.getAttack(), darkshireCouncilman.getBaseAttack());
+
+			playMinionCard(context, player, "permanent_test");
+			Assert.assertEquals(darkshireCouncilman.getAttack(), darkshireCouncilman.getBaseAttack());
+		});
 	}
 
 	@Test
