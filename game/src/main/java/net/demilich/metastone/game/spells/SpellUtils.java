@@ -1,12 +1,11 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -24,6 +23,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,13 +32,17 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static net.demilich.metastone.game.spells.CastRandomSpellSpell.determineCastingPlayer;
+
 /**
  * A set of utilities to help write spells.
  */
 public class SpellUtils {
+	private static Logger logger = LoggerFactory.getLogger(SpellUtils.class);
+
 	/**
-	 * Sets upu the source and target references for casting a child spell, typically an "effect" of a spell defined on
-	 * a card.
+	 * Sets upu the source and target references for casting a child spell, typically an "effect" of a spell defined on a
+	 * card.
 	 *
 	 * @param context The game context.
 	 * @param player  The player casting the spell.
@@ -55,6 +60,139 @@ public class SpellUtils {
 		}
 		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
 	}
+
+	@Suspendable
+	public static boolean playCardRandomly(GameContext context,
+	                                       Player player,
+	                                       Card card,
+	                                       Entity source,
+	                                       boolean summonRightmost,
+	                                       boolean resolveBattlecry,
+	                                       boolean onlyWhileSourceInPlay,
+	                                       boolean randomChooseOnes) {
+
+		CastRandomSpellSpell.DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
+		// Stop casting battlecries if Shudderwock is transformed or destroyed
+		if (onlyWhileSourceInPlay && !determineCastingPlayer.isSourceInPlay()) {
+			return false;
+		}
+
+		Player castingPlayer = determineCastingPlayer.getCastingPlayer();
+
+		player.getAttributes().put(Attribute.RANDOM_CHOICES, true);
+
+		PlayCardAction action = null;
+		if (card.isChooseOne()) {
+			if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS)) {
+				action = card.playBothOptions();
+			} else {
+				boolean doesNotContainChoice = !card.getAttributes().containsKey(Attribute.CHOICE)
+						&& card.getAttributes().containsKey(Attribute.PLAYED_FROM_HAND_OR_DECK);
+				if (randomChooseOnes || doesNotContainChoice) {
+					if (doesNotContainChoice) {
+						logger.warn("playCardRandomly {} {}: A choose one card {} played from the hand does not contain a choice. Choosing randomly.",
+								context.getGameId(), source, card);
+					}
+					PlayCardAction[] options = card.playOptions();
+					action = options[context.getLogic().random(options.length)];
+				} else if (card.getAttributes().containsKey(Attribute.CHOICE)) {
+					action = card.playOptions()[card.getAttributeValue(Attribute.CHOICE)];
+				}
+			}
+		} else {
+			action = card.play();
+		}
+
+		if (action == null) {
+			logger.error("playCardRandom {} {}: No action generated for card {}", context.getGameId(), source, card);
+			return false;
+		}
+
+		action = action.clone();
+
+		if (card.isActor()) {
+			if (!summonRightmost && card.getCardType() == CardType.MINION) {
+				int minionCount = player.getMinions().size();
+				int targetIndex = context.getLogic().random(minionCount + 1);
+				if (targetIndex == minionCount) {
+					// Summon at the rightmost spot (default)
+				} else {
+					// summon next to the specified target
+					action.setTargetReference(player.getMinions().get(targetIndex).getReference());
+				}
+			}
+
+			HasBattlecry actionWithBattlecry = ((HasBattlecry) action);
+			// Do we resolve battlecries?
+			if (resolveBattlecry) {
+				// The action either already has a battlecry specified because it was a choose one, or we have to retrieve
+				// the action from the actor that would be summoned.
+				BattlecryAction specifiedAction;
+				if (actionWithBattlecry.getBattlecryAction() == null) {
+					// Look at the actor
+					Actor actor = card.actor();
+					if (actor == null) {
+						logger.error("playCardRandom {} {}: The actor is missing from the card {}", context.getGameId(), source, card);
+						return false;
+					}
+					specifiedAction = actor.getBattlecry();
+				} else {
+					specifiedAction = actionWithBattlecry.getBattlecryAction();
+				}
+
+				if (specifiedAction != null) {
+					// We found a battlecry
+					specifiedAction = specifiedAction.clone();
+
+					// If a target is required then we'll see if there are valid targets and execute it. If a target isn't required,
+					// then the battlecry will do what it needs to do.
+					if (specifiedAction.getTargetRequirement() != null
+							&& specifiedAction.getTargetRequirement() != TargetSelection.NONE) {
+						List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), action);
+						if (targets.isEmpty()) {
+							// Don't execute the battlecry if there are no valid targets for one that requires targets but still
+							// put the actor into play
+							specifiedAction = BattlecryAction.NONE;
+						} else {
+							EntityReference battlecryTarget = context.getLogic().getRandom(targets).getReference();
+							specifiedAction.setTargetReference(battlecryTarget);
+						}
+						actionWithBattlecry.setBattlecryAction(specifiedAction);
+					}
+				}
+			} else {
+				// No matter what the battlecry, clear it. This way, when the action is executed, resolve battlecry can be
+				// true but this method's parameter to not resolve battlecries will be respected
+				actionWithBattlecry.setBattlecryAction(BattlecryAction.NONE);
+			}
+		} else if (card.isSpell() || card.isHeroPower()) {
+			// This is some other kind of action that takes a target
+			if (action.getTargetRequirement() != null && action.getTargetRequirement() != TargetSelection.NONE) {
+				List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
+				EntityReference randomTarget = null;
+				if (targets != null && !targets.isEmpty()) {
+					randomTarget = context.getLogic().getRandom(targets).getReference();
+					action.setTargetReference(randomTarget);
+				} else {
+					// Card should be revealed, but there were no valid targets so the spell isn't cast
+					// TODO: It's not obvious if cards with no valid targets should be uncastable if their conditions permit it
+					return true;
+				}
+			}
+
+			// Target requirement may have been none, but the action is still valid.
+		} else {
+			logger.error("playCardRandomly {} {}: Unsupported card type {} for card {}", context.getGameId(), source, card.getCardType(), card);
+			return false;
+		}
+
+		// Do the deed
+		action.execute(context, player.getId());
+
+		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+		return true;
+	}
+
 
 	/**
 	 * Given a filter {@link Operation}, return a boolean representing whether that operation is satisfied.
@@ -113,8 +251,8 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Consider the {@link Environment#PENDING_CARD} and {@link Environment#OUTPUTS}, and the {@link Zones#DISCOVER}
-	 * zone for the specified card
+	 * Consider the {@link Environment#PENDING_CARD} and {@link Environment#OUTPUTS}, and the {@link Zones#DISCOVER} zone
+	 * for the specified card
 	 *
 	 * @param context
 	 * @param cardId
@@ -179,15 +317,14 @@ public class SpellUtils {
 	 * This method makes a network request if required.
 	 *
 	 * @param context The game context that hosts the player and state for this request.
-	 * @param player  {@link Player#getBehaviour()} will be called to get the behaviour that will choose from the
-	 *                cards.
+	 * @param player  {@link Player#getBehaviour()} will be called to get the behaviour that will choose from the cards.
 	 * @param desc    For every card the player can discover, this method will create a {@link Spell} from this {@link
 	 *                SpellDesc} and set its {@link SpellArg#CARD} argument to the discoverable card. Typically, this
 	 *                {@link SpellDesc} defines a {@link ReceiveCardSpell}, {@link ReceiveCardAndDoSomethingSpell}, or a
 	 *                {@link ChangeHeroPowerSpell}. These spells all receive cards as arguments. This argument allows a
 	 *                {@link DiscoverAction} to do more sophisticated things than just put cards into hands.
-	 * @param cards   A {@link CardList} of cards that get copied, added to the {@link Zones#DISCOVER} zone of the
-	 *                player and shown in the discover card UI to the player.
+	 * @param cards   A {@link CardList} of cards that get copied, added to the {@link Zones#DISCOVER} zone of the player
+	 *                and shown in the discover card UI to the player.
 	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
 	 * @see DiscoverCardSpell for the spell that typically calls this method.
 	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link
@@ -255,8 +392,8 @@ public class SpellUtils {
 	 * @param spells  A list of spells from which to generate virtual cards.
 	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecry()} that initiated this
 	 *                call.
-	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected
-	 * card. To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
+	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
+	 * To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
 	 */
 	@Suspendable
 	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
@@ -433,8 +570,8 @@ public class SpellUtils {
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
 	 * SpellArg#CARDS} properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource}
-	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses
-	 * the target's {@link Entity#getSourceCard()} as the targeted card.
+	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the
+	 * target's {@link Entity#getSourceCard()} as the targeted card.
 	 * <p>
 	 * The number of cards randomly retrieved is equal to the {@link SpellArg#VALUE} specified in the {@code desc}
 	 * argument, defaulting to 1.
@@ -453,8 +590,8 @@ public class SpellUtils {
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
 	 * SpellArg#CARDS} properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource}
-	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses
-	 * the target's {@link Entity#getSourceCard()} as the targeted card.
+	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the
+	 * target's {@link Entity#getSourceCard()} as the targeted card.
 	 *
 	 * @param context The game context
 	 * @param player  The player from whose point of view these cards should be retrieved

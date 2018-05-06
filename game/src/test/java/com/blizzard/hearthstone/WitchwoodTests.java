@@ -1,19 +1,62 @@
 package com.blizzard.hearthstone;
 
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
+import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Set;
 import java.util.stream.Stream;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+
 public class WitchwoodTests extends TestBase {
+
+	@Test
+	public void testTessGreymane() {
+		runGym((context, player, opponent) -> {
+			Set<String> willReplay = Sets.newHashSet("spell_never_valid_targets_black_test", "minion_black_test", "minion_play_randomly_battlecry");
+			// Fireball should not be revealed
+			playCardWithTarget(context, player, "spell_any_blue_test", opponent.getHero());
+			// No valid targets should not be replayed, even if there were valid targets at the time
+			playCardWithTarget(context, player, "spell_never_valid_targets_black_test", opponent.getHero());
+			Assert.assertTrue(opponent.getHero().hasAttribute(Attribute.RESERVED_BOOLEAN_3));
+			opponent.getHero().getAttributes().remove(Attribute.RESERVED_BOOLEAN_3);
+			// Don't replay same color
+			destroy(context, playMinionCard(context, player, "minion_blue_test"));
+			// Play different color
+			Minion notBattlecryTarget = playMinionCard(context, player, "minion_black_test");
+			// Replay battlecry randomly
+			playMinionCardWithBattlecry(context, player, "minion_play_randomly_battlecry", notBattlecryTarget);
+			// Will not replay because this is a BLUE card
+			Minion battlecryTarget = playMinionCard(context, player, "minion_battlecry_target");
+			// Spy on reveal cards
+			GameLogic spyLogic = spy(context.getLogic());
+			context.setLogic(spyLogic);
+			Mockito.doAnswer(invocation -> {
+				Assert.assertTrue(willReplay.remove(((Card) invocation.getArgument(1)).getCardId()));
+				return invocation.callRealMethod();
+			}).when(spyLogic).revealCard(any(), any());
+			playMinionCard(context, player, "minion_tess_greymane");
+			Assert.assertEquals(willReplay.size(), 0);
+			Assert.assertFalse(battlecryTarget.hasAttribute(Attribute.RESERVED_BOOLEAN_2), "The battlecries should not have been resolved.");
+			Assert.assertFalse(context.getEntities().anyMatch(e -> e.hasAttribute(Attribute.RESERVED_BOOLEAN_3)), "There should have never been a valid target for the spell that adds this attribute.");
+		}, HeroClass.BLUE, HeroClass.BLUE);
+	}
 
 	@Test
 	public void testGennGreymane() {

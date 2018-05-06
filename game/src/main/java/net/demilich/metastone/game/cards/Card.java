@@ -1,11 +1,6 @@
 package net.demilich.metastone.game.cards;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.databind.JsonSerializable;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -434,12 +429,34 @@ public class Card extends Entity implements HasChooseOneActions {
 		return (TargetSelection) getAttributes().getOrDefault(Attribute.TARGET_SELECTION, getDesc().targetSelection == null ? TargetSelection.NONE : getDesc().targetSelection);
 	}
 
+	public boolean isActor() {
+		return getCardType() == CardType.MINION || getCardType() == CardType.WEAPON || getCardType() == CardType.HERO;
+	}
+
+	public Actor actor() {
+		switch (getCardType()) {
+			case MINION:
+				return summon();
+			case WEAPON:
+				return createWeapon();
+			case HERO:
+				return createHero();
+		}
+
+		return null;
+	}
+
 	@Override
 	public PlayCardAction[] playOptions() {
 		switch (getCardType()) {
 			case HERO_POWER:
 			case CHOOSE_ONE:
 			case SPELL:
+				if (getChooseOneCardIds() == null ||
+						getChooseOneCardIds().length == 0) {
+					break;
+				}
+
 				PlayCardAction[] spellActions = new PlayCardAction[getChooseOneCardIds().length];
 				for (int i = 0; i < getChooseOneCardIds().length; i++) {
 					String cardId = getChooseOneCardIds()[i];
@@ -462,6 +479,11 @@ public class Card extends Entity implements HasChooseOneActions {
 			case HERO:
 			case WEAPON:
 			case MINION:
+				if (getChooseOneBattlecries() == null ||
+						getChooseOneBattlecries().length == 0) {
+					break;
+				}
+
 				PlayCardAction[] actions = new PlayCardAction[getChooseOneBattlecries().length];
 				for (int i = 0; i < getChooseOneBattlecries().length; i++) {
 					BattlecryAction battlecry = getChooseOneBattlecries()[i].toBattlecryAction();
@@ -469,8 +491,8 @@ public class Card extends Entity implements HasChooseOneActions {
 					if (getCardType() == CardType.MINION) {
 						option = new PlayMinionCardAction(getReference(), battlecry);
 					} else if (getCardType() == CardType.HERO) {
-						option = new PlayHeroCardChooseOneAction(this, getReference());
-						((PlayHeroCardChooseOneAction) option).setBattlecryAction(battlecry);
+						option = new PlayHeroCardAction(getReference());
+						((HasBattlecry) option).setBattlecryAction(battlecry);
 					} else if (getCardType() == CardType.WEAPON) {
 						option = new PlayWeaponCardAction(getReference(), battlecry);
 					} else {
@@ -496,6 +518,11 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	@Override
 	public PlayCardAction playBothOptions() {
+		if (getChooseBothCardId() == null &&
+				getDesc().chooseBothBattlecry == null) {
+			return null;
+		}
+
 		PlayCardAction action = null;
 		switch (getCardType()) {
 			case HERO_POWER:

@@ -1,0 +1,15 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "spell": {
+    "class": "NullSpell"
+  },
+  "targetSelection": "NONE",
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

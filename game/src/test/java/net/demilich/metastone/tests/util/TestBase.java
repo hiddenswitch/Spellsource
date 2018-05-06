@@ -197,7 +197,9 @@ public class TestBase {
 
 	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, String cardId, Entity target) {
 		OverrideHandle<EntityReference> handle = overrideBattlecry(player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
-		return playMinionCard(context, player, cardId);
+		Minion result = playMinionCard(context, player, cardId);
+		handle.stop();
+		return result;
 	}
 
 	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, Card card, Entity target) {

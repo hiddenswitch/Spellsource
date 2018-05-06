@@ -94,4 +94,9 @@ public abstract class PlayCardAction extends GameAction {
 		}
 		return String.format("%s played %s.", context.getActivePlayer().getName(), cardName);
 	}
+
+	@Override
+	public PlayCardAction clone() {
+		return (PlayCardAction) super.clone();
+	}
 }
