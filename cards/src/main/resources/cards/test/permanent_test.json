@@ -1,0 +1,16 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "attributes": {
+    "PERMANENT": true
+  },
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
