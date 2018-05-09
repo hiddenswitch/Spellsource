@@ -1,9 +1,8 @@
 import contextlib
 import json
-import subprocess
-import pkg_resources
-import sys
 import os
+import subprocess
+import sys
 
 from py4j.java_gateway import JavaGateway, java_import, CallbackServerParameters
 
@@ -98,8 +97,8 @@ class Context(contextlib.AbstractContextManager):
         paths.append(os.path.join(os.path.dirname(
             os.path.realpath(__file__)), "../net/build/libs/" + jar_file))
         paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../share/pyspellsource/" + jar_file))
-        paths.append(os.path.join(sys.prefix, "share/pyspellsource/" + jar_file))
+            os.path.realpath(__file__)), "../share/spellsource/" + jar_file))
+        paths.append(os.path.join(sys.prefix, "share/spellsource/" + jar_file))
         # pip install py4j # On Ubuntu 16.04, where virtualenvepath=/usr/local
         #   this file is here:
         #     virtualenvpath/lib/pythonX/dist-packages/py4j/java_gateway.py
@@ -109,7 +108,7 @@ class Context(contextlib.AbstractContextManager):
         #     virtualenvpath/lib/pythonX/site-packages/py4j/java_gateway.py
         #   the jar file is here: virtualenvpath/share/py4j/py4j.jar
         paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../../../../share/pyspellsource/" + jar_file))
+            os.path.realpath(__file__)), "../../../../share/spellsource/" + jar_file))
         
         for path in paths:
             if os.path.exists(path):

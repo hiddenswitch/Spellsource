@@ -22,6 +22,30 @@ The project also contains adapters for Amazon Elastic MapReduce for processor-in
  2. Download the Spellsource Client from within the launcher and start it.
  3. Enter Quick Play to play against a bot, or Matchmaking to play against a random opponent.
 
+### Quick Start Python
+
+The `spellsource` package creates a bridge with the Java-based `Spellsource-Server` engine. It provides a direct 1-to-1 mapping with the Java API.
+
+ 1. Install the Java 8 SDK (JDK) from Oracle's website.
+ 2. `pip install spellsource` to install the latest version of the package.
+ 3. Start a game and play it with the specified bots:
+ 
+    ```python
+    from spellsource.context import Context
+    from spellsource.playrandombehaviour import PlayRandomBehaviour
+
+    with Context() as ctx:
+        game_context = ctx.game.GameContext.fromTwoRandomDecks()
+        behaviour1 = PlayRandomBehaviour()
+        behaviour2 = PlayRandomBehaviour()
+        game_context.getPlayer1().setBehaviour(behaviour1.wrap(ctx))
+        game_context.getPlayer2().setBehaviour(behaviour2.wrap(ctx))
+        game_context.play()
+        assert game_context.updateAndGetGameOver()
+    ```
+
+Visit [`GameStateValueBehaviour`](spellsource/gamestatevaluebehaviour.py) to see an implementation of a complex AI bot in Python. This is a direct port of the Java code. Unfortunately, on the Python platform, remoting (accessing the Java engine) in the particular way this bot does is slow. To implement more sophisticated bots, consider adding a method to `GameContext` that will extract the exact data, in a binary format, that you need in your Python implementation, to reduce the communication overhead between Java and Python.
+
 ### Quick Start Contributing Cards
 
 If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:

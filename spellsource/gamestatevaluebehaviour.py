@@ -1,7 +1,7 @@
 from typing import List
 
-from pyspellsource.behaviour import Behaviour, GameContext, Hero, Card, Minion, GameAction, Player
-from pyspellsource.context import Context
+from spellsource.behaviour import Behaviour, GameContext, Hero, Card, Minion, GameAction, Player
+from spellsource.context import Context
 from collections import OrderedDict, defaultdict
 
 
