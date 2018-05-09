@@ -1,7 +1,7 @@
 import unittest
-from pyspellsource.context import Context
-from pyspellsource.playrandombehaviour import PlayRandomBehaviour
-from pyspellsource.gamestatevaluebehaviour import GameStateValueBehaviour
+from spellsource.context import Context
+from spellsource.playrandombehaviour import PlayRandomBehaviour
+from spellsource.gamestatevaluebehaviour import GameStateValueBehaviour
 
 
 class BasicTest(unittest.TestCase):

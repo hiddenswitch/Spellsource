@@ -1,4 +1,4 @@
-from pyspellsource.behaviour import Behaviour
+from spellsource.behaviour import Behaviour
 
 
 class PlayRandomBehaviour(Behaviour):
