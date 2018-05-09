@@ -47,6 +47,7 @@ class Context(contextlib.AbstractContextManager):
             java_import(view, package)
             setattr(self, name, view)
         
+        # Include the important classes and enums
         self.GameAction = self.actions.GameAction
         self.Card = self.cards.CardCatalogue
         self.Deck = self.decks.Deck

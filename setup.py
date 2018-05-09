@@ -12,7 +12,7 @@ def build_net():
 build_net()
 
 setup(name='pyspellsource',
-      version='0.1',
+      version='0.2.0',
       description='Python Spellsource library',
       url='http://github.com/hiddenswitch/Spellsource-Server',
       author='Benjamin Berman',
