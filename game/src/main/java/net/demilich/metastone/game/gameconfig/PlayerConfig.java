@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.gameconfig;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.cards.Card;
@@ -26,6 +27,7 @@ public class PlayerConfig implements Cloneable, Serializable {
 		this.setBehaviour(behaviour);
 	}
 
+	@JsonIgnore
 	public Behaviour getBehaviour() {
 		return behaviour;
 	}

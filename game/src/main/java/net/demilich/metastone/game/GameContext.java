@@ -51,7 +51,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -379,7 +382,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * Fires a {@link GameEvent}.
 	 * <p>
 	 * Game events two purposes:
-	 * <p>
+	 *
 	 * <ol><li>They implement trigger-based gameplay like card text that reads, "Whenever a minion is healed, draw a
 	 * card." </li><li>They are changes in game state that are notable for a player to see. They can be interpreted as
 	 * checkpoints that need to be rendered to the client</li><li></ol>
@@ -1448,6 +1451,39 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 			return innerResult;
 		}).reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
+	}
+
+	public static void simulate(List<Deck> deckPair, List<Supplier<Behaviour>> behaviours, int numberOfGamesInBatch, Consumer<SimulationResult> computed) throws InterruptedException {
+		// Actually run the computation
+		Stream<Integer> stream = IntStream.range(0, numberOfGamesInBatch).boxed().parallel();
+
+		stream.forEach(i -> {
+			final GameConfig config;
+			if (behaviours.size() == 0) {
+				config = GameConfig.fromDecks(deckPair, PlayRandomBehaviour::new, PlayRandomBehaviour::new);
+			} else if (behaviours.size() == 1) {
+				config = GameConfig.fromDecks(deckPair, behaviours.get(0), PlayRandomBehaviour::new);
+			} else {
+				config = GameConfig.fromDecks(deckPair, behaviours.get(0), behaviours.get(1));
+			}
+
+			Player playerContext1 = new Player(config.getPlayerConfig1());
+			Player playerContext2 = new Player(config.getPlayerConfig2());
+			GameContext newGame = new GameContext(playerContext1, playerContext2, new GameLogic(), config.getDeckFormat());
+			SimulationResult innerResult = new SimulationResult(config);
+
+			try {
+				newGame.play();
+
+				innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
+				innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
+				innerResult.calculateMetaStatistics();
+			} finally {
+				newGame.dispose();
+			}
+
+			computed.accept(innerResult);
+		});
 	}
 
 	/**

@@ -1,22 +1,18 @@
 package com.hiddenswitch.cluster.models;
 
+import com.hiddenswitch.spellsource.util.Simulation;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
-import org.reflections.Reflections;
 
 import java.io.File;
 import java.io.PrintStream;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SimulationConfig implements Serializable {
 	private static final String DECKS = "decks";
@@ -82,10 +78,7 @@ public class SimulationConfig implements Serializable {
 
 	public SimulationConfig fromCommandLine(String... args) {
 		Map<String, Class<? extends Behaviour>> availableBehaviours =
-				Stream.of("com.hiddenswitch", "net.demilich")
-						.flatMap(packagePrefix -> new Reflections(packagePrefix).getSubTypesOf(Behaviour.class).stream())
-						.distinct()
-						.collect(Collectors.toMap(Class::getSimpleName, Function.identity()));
+				Simulation.getAllBehaviours();
 
 		Options options = new Options();
 		Option decksOption = new Option(Character.toString(DECKS.charAt(0)), DECKS, true, "A comma-separated list of paths to decks written in the conventional community decklist format.");
@@ -154,27 +147,7 @@ public class SimulationConfig implements Serializable {
 				twoDifferentBehaviours = true;
 			}
 
-			List<Supplier<Behaviour>> suppliers = behaviours.stream()
-					.map(availableBehaviours::get)
-					.map(behaviourClass -> {
-						try {
-							Constructor<? extends Behaviour> constructor = behaviourClass.getConstructor();
-							// Try to create a new instance
-							Behaviour testInstance = constructor.newInstance();
-
-							// Now return the supplier.
-							return (Supplier<Behaviour>) () -> {
-								try {
-									return constructor.newInstance();
-								} catch (Exception ex) {
-									return null;
-								}
-							};
-
-						} catch (Exception ex) {
-							return null;
-						}
-					}).collect(Collectors.toList());
+			List<Supplier<Behaviour>> suppliers = Simulation.getBehaviourSuppliers(availableBehaviours, behaviours);
 
 			for (int i = 0; i < behaviours.size(); i++) {
 				if (suppliers.get(i) == null) {
@@ -205,4 +178,5 @@ public class SimulationConfig implements Serializable {
 		invalid = false;
 		return this;
 	}
+
 }

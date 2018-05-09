@@ -29,7 +29,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		if (!deckList.startsWith("#")
 				&& !deckList.contains("\n")) {
 			try {
-				return new CommunityDeckStringSerializer().toDeckCreateRequest(null, null, deckList);
+				return new CommunityDeckStringSerializer().toDeckCreateRequest(null, "Decklist (" + deckList + ")", deckList);
 			} catch (Throwable ex) {
 				throw new DeckListParsingException(Collections.singletonList(ex));
 			}
